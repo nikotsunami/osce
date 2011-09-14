@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+ <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding: 4px 0px 15px 15px;
+    }
+  </ui:style>
+
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
+    <div id="name">
+            <div class="{style.label}">Name</div>
+            <div class="{style.value}" ui:field="name"/>
+        </div>
+    <div id="street">
+            <div class="{style.label}">Street</div>
+            <div class="{style.value}" ui:field="street"/>
+        </div>
+    <div id="city">
+            <div class="{style.label}">City</div>
+            <div class="{style.value}" ui:field="city"/>
+        </div>
+    <div id="postalCode">
+            <div class="{style.label}">Postal Code</div>
+            <div class="{style.value}" ui:field="postalCode"/>
+        </div>
+    <div id="doctors">
+            <div class="{style.label}">Doctors</div>
+            <div class="{style.value}" ui:field="doctors"/>
+        </div>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

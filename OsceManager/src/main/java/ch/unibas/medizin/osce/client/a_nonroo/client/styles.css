@@ -1,0 +1,275 @@
+.errors {
+      padding-left: 0.5em;
+      background-color: red;
+    }
+
+.panelHTML {
+	border: 0px solid #ddf;
+	height: 100%;
+	width: 100%;
+}
+
+.fields {
+	margin: 0.5em;
+	padding-right: 1em;
+	white-space: nowrap;
+}
+.fieldsFliestext {
+	white-space: normal;
+}
+
+.fields td {
+	padding: 0.1em;
+	white-space: nowrap;
+}
+
+.label {
+	min-height: 25px;
+	font-weight: bold;
+}
+
+.label2 {
+	float: left;
+}
+
+.button {
+	margin-left: 0.5em;
+	float: right;
+	background: none;
+	cursor: pointer;
+}
+
+.header {
+	padding: 3px;
+	color: #4B4A4A;
+	text-shadow: #ddf 1px 1px 0;
+	margin-bottom: 0;
+	background-color: #E6EDED;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.underline {
+	border-bottom: 1px solid #6F7277;
+}
+
+.boundary {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.bar {
+	padding: 3px;
+	background-color: #E6EDED;
+}
+
+.barPopup {
+	float: right;
+	width: 100%;
+	background-color: #E6EDED;
+}
+
+.right {
+	float: right;
+	margin: 3px;
+
+
+	display: inline;
+}
+
+.details {
+	border: 1px solid #E6EDED;
+	width: 100%;
+}
+
+.trenner {
+	border-bottom: 1px solid #E6EDED;
+}
+
+.panelHTML {
+	border: 0px solid #ddf;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 5px;
+	bottom: 0px;
+}
+
+.controls {
+	position: relative;
+	top: 3px;
+	height: 2em;
+	margin-left: 15px;
+}
+
+.controls table {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.controls button {
+	display: inline;
+}
+
+.listView {
+	position: relative;
+	padding-right: 5px;
+}
+
+.scroll1 {
+	width: 100%;
+}
+
+.listView  table {
+	
+}
+
+.content  table {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.content  button {
+	background: none;
+	cursor: pointer;
+}
+
+.buttonDetailsList {
+	float: left;
+	background: none;
+	cursor: pointer;
+}
+
+.headerLine {
+	background-color: #E6EDED;
+	height: 25px;
+}
+
+.barDetailsList {
+	padding: 3px;
+	float: right;
+	background-color: #E6EDED;
+}
+
+.content {
+	padding: 5px;
+}
+
+.nav {
+	border: 1px solid #E6EDED;
+	width: 100%;
+	background: #e3e8f3 url(images/hborder.png) repeat-x 0px -2003px;
+}
+
+.textarea {
+	border: 1px solid #E6EDED;
+	width: 100%;
+}
+
+@def contentWidth 850px;
+
+		.disabled {
+			color: gray;
+		}
+
+		.body {
+			overflow: auto;
+		}
+
+		.banner {
+			background-color: #777;
+			-moz-border-radius-topleft: 10px;
+			-webkit-border-top-left-radius: 10px;
+			-moz-border-radius-topright: 10px;
+			-webkit-border-top-right-radius: 10px;
+			margin-top: 1.5em;
+			height: 4em;
+		}
+
+		.title {
+			color: white;
+			padding: 1em;
+			position: absolute;
+			color: #def;
+		}
+
+		.title h2 {
+			margin: 0;
+		}
+
+		.error {
+			position: absolute;
+			left: 12%;
+			right: 12%;
+			text-align: center;
+			background-color: red;
+		}
+
+		.login {
+			position: absolute;
+			left: 75%;
+			right: 0%;
+			text-align: center;
+			color: #def;
+		}
+
+		.users {
+			position: absolute;
+			right: 0;
+		}
+
+		.centered {
+			width: contentWidth;
+			margin-right: auto;
+			margin-left: auto;
+		}
+
+		.content {
+			position: relative;
+			border: 1px solid #ddf;
+			overflow-y: auto;
+			overflow-x: hidden;
+			-moz-border-radius-bottomleft: 10px;
+			-webkit-border-bottom-left-radius: 10px;
+			-moz-border-radius-bottomright: 10px;
+			-webkit-border-bottom-right-radius: 10px;
+		}
+
+		.entities {
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			width: 11em;
+		}
+
+		.entitiesList {
+			border-right: 1px solid #ddf;
+			height: 100%;
+			outline: none;
+		}
+
+		.entitiesList > div > div {
+			padding-left: 1em;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+
+		.entityDetails {
+			/* dk, 2011-09-01: we don't want too much free space on the left
+			margin-left: 11em;
+			*/
+		}
+
+
+
+		.logos {
+			color: #aaa;
+			font-size: 0.8em;
+			width: 160px;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: right;
+		}

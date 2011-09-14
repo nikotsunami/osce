@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+  <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .error {
+      padding-left: 0.5em;
+      background-color: red;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding-bottom: 10px;
+    }
+  </ui:style>
+ 
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
+    
+    <div id="isPossibleStart">
+            <div class="{style.label}">Is Possible Start</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="isPossibleStart"/>
+            </div>
+        </div>
+    <div id="roleTopic">
+            <div class="{style.label}">Role Topic</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="roleTopic"/>
+            </div>
+        </div>
+    <div id="nextPost">
+            <div class="{style.label}">Next Post</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="nextPost"/>
+            </div>
+        </div>
+    <div id="oscePostRooms">
+            <div class="{style.label}">Osce Post Rooms</div>
+            <div class="{style.value}">
+                <a:OscePostRoomSetEditor ui:field="oscePostRooms"/>
+            </div>
+        </div>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

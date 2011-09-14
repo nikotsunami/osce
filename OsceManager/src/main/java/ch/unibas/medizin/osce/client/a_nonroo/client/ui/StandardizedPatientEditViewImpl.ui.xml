@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+
+<ui:style src="../styles.css" />
+ 
+  <g:HTMLPanel>
+    <div class='{style.underline}'>    
+      <h3 class='{style.header}' ui:field="editTitle">
+        <ui:msg>Edit StandardizedPatient</ui:msg>
+      </h3>
+      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New StandardizedPatient</ui:msg></h3>
+    </div>
+    <div ui:field='errors' class='{style.errors}'></div>
+
+    <table id='boundElementHolder' class="{style.fields}">
+      <tr id="gender"><td><div class="{style.label}">Gender:</div></td><td><g:ValueListBox ui:field="gender" /></td></tr>
+      <tr id='name'><td><div class='{style.label}'>Name:</div></td><td><g:TextBox ui:field='name'/></td></tr>
+      <tr id='preName'><td><div class='{style.label}'>Pre Name:</div></td><td><g:TextBox ui:field='preName'/></td></tr>
+      <tr id='street'><td><div class='{style.label}'>Street:</div></td><td><g:TextBox ui:field='street'/></td></tr>
+      <tr id='city'><td><div class='{style.label}'>City:</div></td><td><g:TextBox ui:field='city'/></td></tr>
+      <tr id='postalCode'><td><div class='{style.label}'>Postal Code:</div></td><td><g:IntegerBox ui:field='postalCode'/></td></tr>
+      <tr id='telephone'><td><div class='{style.label}'>Telephone:</div></td><td><g:TextBox ui:field='telephone'/></td></tr>
+      <tr id='mobile'><td><div class='{style.label}'>Mobile:</div></td><td><g:TextBox ui:field='mobile'/></td></tr>
+      <tr id='birthday'><td><div class='{style.label}'>Birthday:</div></td><td><d:DateBox ui:field='birthday'/></td></tr>
+      <tr id='email'><td><div class='{style.label}'>Email:</div></td><td><g:TextBox ui:field='email'/></td></tr>
+      <tr id='nationality'><td><div class='{style.label}'>Nationality:</div></td><td><g:ValueListBox ui:field='nationality'/></td></tr>
+      <tr id='profession'><td><div class='{style.label}'>Profession:</div></td><td><g:ValueListBox ui:field='profession'/></td></tr>
+      <tr id='langskills'><td><div class='{style.label}'>Langskills:</div></td><td><a:LangSkillSetEditor ui:field='langskills'/></td></tr>
+      <tr id='bankaccount'><td><div class='{style.label}'>Bank Account:</div></td><td><g:ValueListBox ui:field='bankAccount'/></td></tr>
+      <tr id='anamnesisForm'><td><div class='{style.label}'>Anamnesis Form:</div></td><td><g:ValueListBox ui:field='anamnesisForm'/></td></tr>
+    </table>
+
+		<g:SimplePanel ui:field="descriptionPanel"></g:SimplePanel>
+
+    <div class='{style.bar}'>
+      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
+      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
+    </div>
+  </g:HTMLPanel>
+</ui:UiBinder>

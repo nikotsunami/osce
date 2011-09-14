@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+  <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .error {
+      padding-left: 0.5em;
+      background-color: red;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding-bottom: 10px;
+    }
+  </ui:style>
+ 
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
+    
+    <div id="skill">
+            <div class="{style.label}">Skill</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="skill"/>
+            </div>
+        </div>
+    <div id="standardizedpatient">
+            <div class="{style.label}">Standardizedpatient</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="standardizedpatient"/>
+            </div>
+        </div>
+    <div id="spokenlanguage">
+            <div class="{style.label}">Spokenlanguage</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="spokenlanguage"/>
+            </div>
+        </div>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,61 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
+			 xmlns:c='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client'
+			 xmlns:s='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'>
+
+<ui:style src="styles.css" />
+
+	<g:DockLayoutPanel unit='EM'>
+		<g:north size='6'>
+			<g:HTMLPanel styleName='{style.centered}'>
+				<!-- <div class='{style.banner}'>
+					<div class='{style.error}' ui:field='error'></div>
+					<span class='{style.title}'>
+						<h2>Data Browser</h2>
+					</span>
+					<s:LoginWidget styleName='{style.login}' ui:field="loginWidget"/>
+				</div> -->
+			</g:HTMLPanel>
+		</g:north>
+		<!-- <g:south size='2'>
+			<g:HTML>
+				<div class='{style.logos}'>
+					<span>Powered by:</span>
+
+				</div>
+			</g:HTML>
+		</g:south>-->
+		<g:center>
+		<g:SplitLayoutPanel>
+			<g:west size="200">
+				<g:SimplePanel styleName='{style.entities}'>
+					<g:SimplePanel  ui:field='mainNav'/>
+				</g:SimplePanel>
+			</g:west>
+			<g:center >
+				<g:FlowPanel>					
+					<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole'></g:NotificationMole>
+					<g:SimplePanel styleName="{style.entityDetails}" ui:field='master'></g:SimplePanel>
+			</g:FlowPanel>
+			</g:center>
+			
+<!-- 			<g:center>
+			
+				<g:SimplePanel styleName="{style.entityDetails}" ui:field='details'></g:SimplePanel>
+				
+			</g:center> -->
+		</g:SplitLayoutPanel>
+			<!-- <g:FlowPanel styleName='{style.content} {style.centered}'>
+				<g:SimplePanel styleName='{style.entities}'>
+					<g:SimplePanel  ui:field='mainNav'/>
+				</g:SimplePanel>
+				<g:FlowPanel>
+					<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole'></g:NotificationMole>
+					<g:SimplePanel styleName="{style.entityDetails}" ui:field='master'></g:SimplePanel>
+				</g:FlowPanel>
+				<g:SimplePanel styleName="{style.entityDetails}" ui:field='details'></g:SimplePanel>
+			</g:FlowPanel> -->
+		</g:center>
+	</g:DockLayoutPanel>
+</ui:UiBinder> 

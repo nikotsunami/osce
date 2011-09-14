@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.2.0//EN"
+		"http://google-web-toolkit.googlecode.com/svn/tags/2.2.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="osMaEntry">
+	<inherits name='com.google.gwt.activity.Activity'/>
+	<inherits name='com.google.gwt.place.Place'/>
+	<inherits name="com.google.gwt.user.User"/>
+	<inherits name="com.google.gwt.user.theme.standard.Standard"/>
+	<inherits name='com.google.gwt.requestfactory.RequestFactory'/>
+	<inherits name="com.google.gwt.user.cellview.CellView"/>
+	<inherits name='com.google.gwt.logging.Logging'/>
+	<inherits name="com.google.gwt.inject.Inject"/>
+	<inherits name="com.google.gwt.text.Text"/>
+	
+	
+  <!-- For development, a default of `DEBUG` is recommended -->
+  	 <!-- 
+     Default to `Debug`, but allow selection of a specific log level,
+     say `INFO`, via the `log_level` URL parameter:
+     http[s]://hostame:port/yourmodule/Yourmodule.html?log_level=INFO
+  -->
+  
+  <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+  <extend-property name="log_level" values="INFO"/>
+	
+
+	<source path='client'/>
+	<source path='shared'/>
+
+	<public path="public"/>
+
+	<!-- Logging Configuration -->
+	<set-property name="gwt.logging.enabled" value="TRUE"/>
+	<set-property name="gwt.logging.logLevel" value="INFO"/>
+	<set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
+	<set-property name="gwt.logging.developmentModeHandler" value="ENABLED"/>
+	<set-property name="gwt.logging.firebugHandler" value="ENABLED"/>
+	<set-property name="gwt.logging.hasWidgetsHandler" value="DISABLED"/>
+	<set-property name="gwt.logging.popupHandler" value="DISABLED"/>
+	<set-property name="gwt.logging.systemHandler" value="ENABLED"/>
+	<set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
+
+	<!-- Uncomment if you are enabling server side deobfuscation of StackTraces
+		<set-property name="compiler.emulatedStack" value="true" />
+		<set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true" />
+		<set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true" />
+		-->
+
+
+	<entry-point class="ch.unibas.medizin.osce.client.a_nonroo.client.OsMaEntry"/>
+
+</module>

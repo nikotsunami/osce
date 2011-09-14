@@ -1,0 +1,73 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<ui:style src="styles.css" />
+
+
+	<g:HTMLPanel>
+		<g:DisclosurePanel ui:field="masterDataPanel" open="true">
+			<g:header>Stammdaten</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="people">Personen</g:Anchor>
+				<g:Anchor ui:field="scars">Narben</g:Anchor>
+				<g:Anchor ui:field="anamnesisForms">Anamnesewerte</g:Anchor>
+				<g:Anchor ui:field="clinics">Spitäler</g:Anchor>
+				<g:Anchor ui:field="doctors">Ärzte</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+
+		<g:DisclosurePanel ui:field="administrationPanel" open="true">
+			<g:header>Verwaltung</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="administrators">Benutzer</g:Anchor>
+				<g:Anchor ui:field="nationalities">Nationalitäten</g:Anchor>
+				<g:Anchor ui:field="languages">Sprachen</g:Anchor>
+				<g:Anchor ui:field="professions">Berufe</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+
+		<g:DisclosurePanel ui:field="examinationsPanel" open="true">
+			<g:header>Prüfungen</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="osces">OSCEs</g:Anchor>
+				<g:Anchor ui:field="course">Postenlauf</g:Anchor>
+				<g:Anchor ui:field="students">Studenten</g:Anchor>
+				<g:Anchor ui:field="examinationSchedule">Prüfungsplan</g:Anchor>
+				<g:Anchor ui:field="printIndividualSchedules">Individuelle Pläne drucken</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		
+		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true">
+			<g:header>Simulationspatienten</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="simulationPatients">Simulationspatienten</g:Anchor>
+				<g:Anchor ui:field="roles">Rollen</g:Anchor>
+				<g:Anchor ui:field="roleAssignment">Rollenzuweisung</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+
+		<!-- <g:DisclosurePanel ui:field="administratorPanel">
+			<g:header>alt Administratoren</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="administratorsOld">Administratoren</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		<g:DisclosurePanel ui:field="anamnesisPanel">
+			<g:header>alt Anamnese</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="anamnesisFormsOld">Anamneseformulare</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		<g:DisclosurePanel ui:field="patientPanel">
+			<g:header>alt Patient</g:header>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="patient">Patient</g:Anchor>
+				<g:Anchor ui:field="doctor">Doktor</g:Anchor>
+				<g:Anchor ui:field="clinic">Klinik</g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel> -->
+	</g:HTMLPanel>
+
+
+</ui:UiBinder> 

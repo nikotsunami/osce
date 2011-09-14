@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+  <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .error {
+      padding-left: 0.5em;
+      background-color: red;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding-bottom: 10px;
+    }
+  </ui:style>
+ 
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
+    
+    <div id="shortName">
+            <div class="{style.label}">Short Name</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="shortName"/>
+            </div>
+        </div>
+    <div id="longName">
+            <div class="{style.label}">Long Name</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="longName"/>
+            </div>
+        </div>
+    <div id="caseDescription">
+            <div class="{style.label}">Case Description</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="caseDescription"/>
+            </div>
+        </div>
+    <div id="roleScript">
+            <div class="{style.label}">Role Script</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="roleScript"/>
+            </div>
+        </div>
+    <div id="roleType">
+            <div class="{style.label}">Role Type</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="roleType"/>
+            </div>
+        </div>
+    <div id="roleTopic">
+            <div class="{style.label}">Role Topic</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="roleTopic"/>
+            </div>
+        </div>
+    <div id="author">
+            <div class="{style.label}">Author</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="author"/>
+            </div>
+        </div>
+    <div id="reviewer">
+            <div class="{style.label}">Reviewer</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="reviewer"/>
+            </div>
+        </div>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

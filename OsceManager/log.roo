@@ -1,0 +1,187 @@
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-08-30 10:14:04
+project --topLevelPackage ch.unibas.medizin.osce --projectName OsceManager --java 6
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2011-08-30 10:14:05
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-08-30 10:14:08
+persistence setup --database MYSQL --provider HIBERNATE --databaseName osce --userName root --hostName localhost
+entity --class ~.domain.Administrator --testAutomatically
+entity --class ~.domain.AnamnesisCheck --testAutomatically
+entity --class ~.domain.AnamnesisChecksValue --testAutomatically
+entity --class ~.domain.AnamnesisForm --testAutomatically
+entity --class ~.domain.Assignment --testAutomatically
+entity --class ~.domain.Bankaccount --testAutomatically
+entity --class ~.domain.Clinic --testAutomatically
+entity --class ~.domain.Course --testAutomatically
+entity --class ~.domain.Description --testAutomatically
+entity --class ~.domain.Doctor --testAutomatically
+entity --class ~.domain.EliminationCriterion --testAutomatically
+entity --class ~.domain.LangSkill --testAutomatically
+entity --class ~.domain.Nationality --testAutomatically
+entity --class ~.domain.Office --testAutomatically
+entity --class ~.domain.Osce --testAutomatically
+entity --class ~.domain.OsceDay --testAutomatically
+entity --class ~.domain.OscePost --testAutomatically
+entity --class ~.domain.OscePostRoom --testAutomatically
+entity --class ~.domain.PatientInRole --testAutomatically
+entity --class ~.domain.PatientInSemester --testAutomatically
+entity --class ~.domain.Profession --testAutomatically
+entity --class ~.domain.RoleTopic --testAutomatically
+entity --class ~.domain.Room --testAutomatically
+entity --class ~.domain.Scar --testAutomatically
+entity --class ~.domain.Semester --testAutomatically
+entity --class ~.domain.SpokenLanguage --testAutomatically
+entity --class ~.domain.StandardizedPatient --testAutomatically
+entity --class ~.domain.StandardizedRole --testAutomatically
+entity --class ~.domain.Student --testAutomatically
+enum type --class ~.shared.StudyYears
+enum constant --name SJ1
+enum constant --name SJ2
+enum constant --name SJ3
+enum constant --name SJ4
+enum constant --name SJ5
+enum constant --name SJ6
+enum type --class ~.shared.Gender
+enum constant --name man
+enum constant --name woman
+enum type --class ~.shared.AssignmentTypes
+enum constant --name Student
+enum constant --name Patient
+enum constant --name Examiner
+enum type --class ~.shared.Semesters
+enum constant --name HS
+enum constant --name FS
+field string --fieldName email --sizeMin 6 --sizeMax 40 --unique --notNull --class ~.domain.Administrator
+field string --fieldName name --sizeMax 40 --notNull
+field string --fieldName preName --sizeMax 40 --notNull
+field set --fieldName semesters --type ~.domain.Semester --cardinality MANY_TO_MANY
+field string --fieldName text --sizeMax 255 --class ~.domain.AnamnesisCheck
+field set --fieldName anamnesischecksvalues --type ~.domain.AnamnesisChecksValue --cardinality ONE_TO_MANY --mappedBy anamnesischeck
+field boolean --fieldName truth --class ~.domain.AnamnesisChecksValue
+field string --fieldName comment --sizeMax 255
+field number --fieldName anamnesisChecksValue --type java.lang.Integer
+field reference --fieldName anamnesisform --type ~.domain.AnamnesisForm
+field reference --fieldName anamnesischeck --type ~.domain.AnamnesisCheck
+field date --fieldName createDate --type java.util.Date --class ~.domain.AnamnesisForm
+field set --fieldName anamnesischecksvalues --type ~.domain.AnamnesisChecksValue --cardinality ONE_TO_MANY --mappedBy anamnesisform
+field set --fieldName scars --type ~.domain.Scar --cardinality MANY_TO_MANY
+field enum --fieldName type --type ~.shared.AssignmentTypes --class ~.domain.Assignment
+field number --fieldName slotNumber --type java.lang.Integer
+field date --fieldName timeStart --type java.util.Date --notNull
+field date --fieldName timeEnd --type java.util.Date --notNull
+field reference --fieldName osceDay --type ~.domain.OsceDay --notNull
+field reference --fieldName oscePostRoom --type ~.domain.OscePostRoom --notNull
+field reference --fieldName student --type ~.domain.Student
+field reference --fieldName patientInRole --type ~.domain.PatientInRole
+field reference --fieldName examiner --type ~.domain.Doctor
+field string --fieldName bankName --sizeMax 40 --class ~.domain.Bankaccount
+field string --fieldName IBAN --sizeMax 40
+field string --fieldName BIC --sizeMax 40
+field string --fieldName name --sizeMax 60 --unique --notNull  --class ~.domain.Clinic
+field string --fieldName street --sizeMax 60
+field string --fieldName city --sizeMax 30
+field number --fieldName postalCode --type java.lang.Integer 
+field set --fieldName doctors --type ~.domain.Doctor --cardinality ONE_TO_MANY --mappedBy clinic
+field string --fieldName color --notNull --class ~.domain.Course
+field reference --fieldName osce --type ~.domain.Osce
+field set --fieldName oscePostRooms --type ~.domain.OscePostRoom --cardinality ONE_TO_MANY --mappedBy course
+field string --fieldName description --sizeMax 40 --class ~.domain.Description
+field enum --fieldName gender --type ~.shared.Gender --class ~.domain.Doctor
+field string --fieldName title --sizeMax 40
+field string --fieldName name --sizeMax 40
+field string --fieldName preName --sizeMax 40
+field string --fieldName email --sizeMax 40 --regexp ^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$
+field string --fieldName telephone --sizeMax 30
+field reference --fieldName clinic --type ~.domain.Clinic
+field reference --fieldName office --type ~.domain.Office --cardinality ONE_TO_ONE
+field boolean --fieldName anamnesisCheckValue --class ~.domain.EliminationCriterion
+field reference --fieldName standardizedRole --type ~.domain.StandardizedRole
+field reference --fieldName scar --type ~.domain.Scar
+field reference --fieldName anamnesisCheck --type ~.domain.AnamnesisCheck
+field string --fieldName skill --sizeMax 40 --class ~.domain.LangSkill
+field reference --fieldName standardizedpatient --type ~.domain.StandardizedPatient
+field reference --fieldName spokenlanguage --type ~.domain.SpokenLanguage
+field string --fieldName nationality --sizeMax 40 --class ~.domain.Nationality
+field set --fieldName standardizedpatients --type ~.domain.StandardizedPatient --cardinality ONE_TO_MANY --mappedBy nationality
+field enum --fieldName gender --type ~.shared.Gender --class ~.domain.Office
+field string --fieldName title --sizeMax 40
+field string --fieldName name --sizeMax 40
+field string --fieldName preName --sizeMax 40
+field string --fieldName email --sizeMax 40
+field string --fieldName telephone --sizeMax 30
+field enum --fieldName studyYear --type ~.shared.StudyYears --class ~.domain.Osce
+field number --fieldName maxNumberStudents --type java.lang.Integer
+field number --fieldName numberPosts --type java.lang.Integer
+field number --fieldName numberCourses --type java.lang.Integer
+field number --fieldName postLength --type java.lang.Integer
+field boolean --fieldName isRepeOsce
+field reference --fieldName semester --type ~.domain.Semester --notNull
+field set --fieldName osce_days --type ~.domain.OsceDay --cardinality ONE_TO_MANY --mappedBy osce
+field set --fieldName courses --type ~.domain.Course --cardinality ONE_TO_MANY --mappedBy osce
+field set --fieldName students --type ~.domain.Student --cardinality MANY_TO_MANY
+field date --fieldName timeStart --type java.util.Date --class ~.domain.OsceDay
+field date --fieldName timeEnd --type java.util.Date
+field reference --fieldName osce --type ~.domain.Osce
+field set --fieldName assignments --type ~.domain.Assignment --cardinality ONE_TO_MANY --mappedBy osceDay
+field boolean --fieldName isPossibleStart --class ~.domain.OscePost
+field reference --fieldName roleTopic --type ~.domain.RoleTopic
+field reference --fieldName nextPost --type ~.domain.OscePost
+field set --fieldName oscePostRooms --type ~.domain.OscePostRoom --cardinality ONE_TO_MANY --mappedBy oscePost
+field reference --fieldName room --type ~.domain.Room --class ~.domain.OscePostRoom
+field reference --fieldName oscePost --type ~.domain.OscePost
+field reference --fieldName course --type ~.domain.Course
+field set --fieldName assignments --type ~.domain.Assignment --cardinality ONE_TO_MANY --mappedBy osceDay
+field reference --fieldName patientInSemester --type ~.domain.PatientInSemester --class ~.domain.PatientInRole
+field reference --fieldName standardizedRole --type ~.domain.StandardizedRole
+field reference --fieldName semester --type ~.domain.Semester --class ~.domain.PatientInSemester
+field reference --fieldName standardizedPatient --type ~.domain.StandardizedPatient
+field string --fieldName profession --sizeMax 60 --class ~.domain.Profession
+field set --fieldName standardizedpatients --type ~.domain.StandardizedPatient --cardinality ONE_TO_MANY --mappedBy profession
+field string --fieldName name --sizeMin 3 --sizeMax 45 --notNull --class ~.domain.RoleTopic
+field string --fieldName description --sizeMax 255
+field enum --fieldName studyYear --type ~.shared.StudyYears
+field number --fieldName slotsUntilChange --type java.lang.Integer --max 99 --notNull
+field set --fieldName standardizedRoles --type ~.domain.StandardizedRole --cardinality ONE_TO_MANY --mappedBy roleTopic
+field string --fieldName roomNumber --sizeMin 1 --sizeMax 20 --notNull --class ~.domain.Room
+field set --fieldName oscePostRooms --type ~.domain.OscePostRoom --cardinality ONE_TO_MANY --mappedBy room
+field string --fieldName bodypart --sizeMax 60 --class ~.domain.Scar
+field set --fieldName anamnesisForms --type ~.domain.AnamnesisForm --cardinality MANY_TO_MANY
+field enum --fieldName semester --type ~.shared.Semesters --notNull --class ~.domain.Semester
+field number --fieldName calYear --type java.lang.Integer
+field set --fieldName administrators --type ~.domain.Administrator --cardinality MANY_TO_MANY
+field set --fieldName osces --type ~.domain.Osce --cardinality ONE_TO_MANY --mappedBy semester
+field set --fieldName patientsInSemester --type ~.domain.PatientInSemester --cardinality ONE_TO_MANY --mappedBy semester
+field string --fieldName languageName --sizeMax 40 --class ~.domain.SpokenLanguage
+field set --fieldName langskills --type ~.domain.LangSkill --class ~.domain.SpokenLanguage --cardinality ONE_TO_MANY --mappedBy spokenlanguage
+field enum --fieldName gender --type ~.shared.Gender --class ~.domain.StandardizedPatient
+field string --fieldName name --sizeMax 40
+field string --fieldName preName --sizeMax 40
+field string --fieldName street --sizeMax 60
+field string --fieldName city --sizeMax 30
+field number --fieldName postalCode --type java.lang.Integer 
+field string --fieldName telephone --sizeMax 30
+field string --fieldName mobile --sizeMax 30
+field date --fieldName birthday --type java.util.Date
+field string --fieldName email --sizeMax 40 --regexp ^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$
+field reference --fieldName descriptions --type ~.domain.Description --cardinality ONE_TO_ONE
+field reference --fieldName bankAccount --type ~.domain.Bankaccount --cardinality ONE_TO_ONE
+field reference --fieldName nationality --type ~.domain.Nationality
+field reference --fieldName profession --type ~.domain.Profession
+field reference --fieldName anamnesisForm --type ~.domain.AnamnesisForm --cardinality ONE_TO_ONE
+field set --fieldName langskills --type ~.domain.LangSkill --cardinality ONE_TO_MANY --mappedBy standardizedpatient
+field string --fieldName shortName --sizeMin 2 --sizeMax 20 --notNull --class ~.domain.StandardizedRole
+field string --fieldName longName --sizeMin 2 --sizeMax 100 --notNull
+field string --fieldName caseDescription --sizeMax 999
+field string --fieldName roleScript --sizeMax 255
+field string --fieldName roleType --sizeMax 10
+field reference --fieldName roleTopic --type ~.domain.RoleTopic --notNull
+field reference --fieldName author --type ~.domain.Doctor --notNull
+field reference --fieldName reviewer --type ~.domain.Doctor --notNull
+field enum --fieldName gender --type ~.shared.Gender --class ~.domain.Student
+field string --fieldName name --sizeMax 40 --notNull
+field string --fieldName preName --sizeMax 40 --notNull
+field string --fieldName email --sizeMax 40  --regexp ^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$
+field set --fieldName osces --type ~.domain.Osce --cardinality MANY_TO_MANY
+// script --file /home/nikotsunami/osce_model.roo
+gwt setup
+logging setup --level INFO 
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2011-08-30 11:46:59
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-09-14 14:14:24

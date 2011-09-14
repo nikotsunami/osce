@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+ <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding: 4px 0px 15px 15px;
+    }
+  </ui:style>
+
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
+    <div id="type">
+            <div class="{style.label}">Type</div>
+            <div class="{style.value}" ui:field="type"/>
+        </div>
+    <div id="slotNumber">
+            <div class="{style.label}">Slot Number</div>
+            <div class="{style.value}" ui:field="slotNumber"/>
+        </div>
+    <div id="timeStart">
+            <div class="{style.label}">Time Start</div>
+            <div class="{style.value}" ui:field="timeStart"/>
+        </div>
+    <div id="timeEnd">
+            <div class="{style.label}">Time End</div>
+            <div class="{style.value}" ui:field="timeEnd"/>
+        </div>
+    <div id="osceDay">
+            <div class="{style.label}">Osce Day</div>
+            <div class="{style.value}" ui:field="osceDay"/>
+        </div>
+    <div id="oscePostRoom">
+            <div class="{style.label}">Osce Post Room</div>
+            <div class="{style.value}" ui:field="oscePostRoom"/>
+        </div>
+    <div id="student">
+            <div class="{style.label}">Student</div>
+            <div class="{style.value}" ui:field="student"/>
+        </div>
+    <div id="patientInRole">
+            <div class="{style.label}">Patient In Role</div>
+            <div class="{style.value}" ui:field="patientInRole"/>
+        </div>
+    <div id="examiner">
+            <div class="{style.label}">Examiner</div>
+            <div class="{style.value}" ui:field="examiner"/>
+        </div>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>
