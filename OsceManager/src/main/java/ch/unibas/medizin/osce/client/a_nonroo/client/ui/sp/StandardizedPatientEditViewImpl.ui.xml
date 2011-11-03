@@ -5,7 +5,7 @@
   xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
 
-<ui:style src="../styles.css" />
+<ui:style src="../../styles.css" />
  
   <g:HTMLPanel>
     <div class='{style.underline}'>    

@@ -28,7 +28,7 @@ INSERT INTO `osce`.`bankaccount` (`bic`, `iban`, `bank_name`, `version`) VALUES 
 
 INSERT INTO `osce`.`description` (`description`, `version`) VALUES ('sample description', '0');
 
-INSERT INTO `osce`.`standardized_patient` (`birthday`, `city`, `email`, `gender`, `mobile`, `name`, `postal_code`, `pre_name`, `street`, `telephone`, `version`, `nationality`, `profession`, `bank_account`, `descriptions`, `anamnesis_form`) VALUES ('2010-10-10', 'Basel', 'foo@bar.com', '1', '123456789', 'Bar', '4000', 'Foo', 'Samplestreet 42', '123456789', '0', '4', '1', '1', '1', '1');
+INSERT INTO `osce`.`standardized_patient` (`birthday`, `city`, `email`, `gender`, `mobile`, `name`, `postal_code`, `pre_name`, `street`, `telephone`, `version`, `nationality`, `profession`, `bank_account`, `descriptions`, `anamnesis_form`) VALUES ('2010-10-10', 'Basel', 'foo@bar.com', '1', '123456789', 'Bar', '4000', 'Foo', 'Samplestreet 42', '123456789', '0', '4', '1', '1', '1', 1);
 
 INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES ('gut', '1', '1', '0');
 INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES ('Muttersprache', '3', '1', '0');
@@ -39,3 +39,6 @@ INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Unterarm (links)', '0
 INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Unterarm (rechts)', '0');
 INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Knie (links)', '0');
 INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Knie (rechts)', '0');
+
+INSERT INTO `osce`.`anamnesis_form_scars` (`anamnesis_forms`, `scars`) VALUES (1, 1);
+INSERT INTO `osce`.`anamnesis_form_scars` (`anamnesis_forms`, `scars`) VALUES (1, 3);

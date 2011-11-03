@@ -64,7 +64,6 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setGender(obj, index);
         setMobile(obj, index);
         setName(obj, index);
-        setName2(obj, index);
         setNationality(obj, index);
         setPostalCode(obj, index);
         setPreName(obj, index);
@@ -129,14 +128,6 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 40);
         }
         obj.setName(name);
-    }
-    
-    public void StandardizedPatientDataOnDemand.setName2(StandardizedPatient obj, int index) {
-        String name2 = "name2_" + index;
-        if (name2.length() > 40) {
-            name2 = name2.substring(0, 40);
-        }
-        obj.setName2(name2);
     }
     
     public void StandardizedPatientDataOnDemand.setNationality(StandardizedPatient obj, int index) {

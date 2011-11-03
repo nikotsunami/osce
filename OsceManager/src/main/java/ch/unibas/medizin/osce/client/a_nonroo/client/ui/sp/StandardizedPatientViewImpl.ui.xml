@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	 xmlns:b="urn:import:com.google.gwt.user.cellview.client">
-<ui:style src="../styles.css" />
+<ui:style src="../../styles.css" />
 
 <g:SplitLayoutPanel ui:field="splitLayoutPanel">
 	<g:west size="500">

@@ -35,7 +35,7 @@ public abstract class StandardizedPatientMobileListView_Roo_Gwt extends MobilePr
 
     public void init() {
         paths.add("name");
-        paths.add("name2");
+        paths.add("preName");
         paths.add("birthday");
     }
 }

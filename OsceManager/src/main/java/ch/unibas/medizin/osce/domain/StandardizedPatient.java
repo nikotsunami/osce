@@ -34,9 +34,6 @@ public class StandardizedPatient {
 
     @Size(max = 40)
     private String name;
-    
-    @Size(max = 40)
-    private String name2;
 
     @Size(max = 40)
     private String preName;

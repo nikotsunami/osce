@@ -26,7 +26,7 @@ public class Semester {
 
     private Integer calYear;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "semesters")
     private Set<Administrator> administrators = new HashSet<Administrator>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semester")

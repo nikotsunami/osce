@@ -1,6 +1,6 @@
 
 
-package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
+package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
@@ -51,13 +52,13 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@UiField
 	Element createTitle;
 	
-//	@UiField(provided=true)
-//	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.client.shared.Gender>() {
-//
-//        public String render(ch.unibas.medizin.osce.client.shared.Gender obj) {
-//            return obj == null ? "" : String.valueOf(obj);
-//        }
-//    });
+    @UiField(provided = true)
+    ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
+
+        public String render(ch.unibas.medizin.osce.shared.Gender obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
     @UiField
     TextBox name;

@@ -49,12 +49,7 @@
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-        <div id="name2">
-            <div class="{style.label}">Name2</div>
-            <div class="{style.value}">
-                <g:TextBox ui:field="name2"/>
-            </div>
-        </div>
+        
         <div id="preName">
             <div class="{style.label}">Pre Name</div>
             <div class="{style.value}">

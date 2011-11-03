@@ -33,14 +33,6 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.name = name;
     }
     
-    public String StandardizedPatient.getName2() {
-        return this.name2;
-    }
-    
-    public void StandardizedPatient.setName2(String name2) {
-        this.name2 = name2;
-    }
-    
     public String StandardizedPatient.getPreName() {
         return this.preName;
     }

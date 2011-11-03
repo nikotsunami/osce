@@ -20,7 +20,6 @@ privileged aspect StandardizedPatient_Roo_ToString {
         sb.append("Langskills: ").append(getLangskills() == null ? "null" : getLangskills().size()).append(", ");
         sb.append("Mobile: ").append(getMobile()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
-        sb.append("Name2: ").append(getName2()).append(", ");
         sb.append("Nationality: ").append(getNationality()).append(", ");
         sb.append("PostalCode: ").append(getPostalCode()).append(", ");
         sb.append("PreName: ").append(getPreName()).append(", ");

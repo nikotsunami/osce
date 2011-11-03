@@ -42,9 +42,6 @@ public abstract class StandardizedPatientDetailsView_Roo_Gwt extends Composite i
     SpanElement name;
 
     @UiField
-    SpanElement name2;
-
-    @UiField
     SpanElement preName;
 
     @UiField
@@ -97,7 +94,6 @@ public abstract class StandardizedPatientDetailsView_Roo_Gwt extends Composite i
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
-        name2.setInnerText(proxy.getName2() == null ? "" : String.valueOf(proxy.getName2()));
         preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
         street.setInnerText(proxy.getStreet() == null ? "" : String.valueOf(proxy.getStreet()));
         city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));

@@ -45,6 +45,6 @@ public class Osce {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Course> courses = new HashSet<Course>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "osces")
     private Set<Student> students = new HashSet<Student>();
 }

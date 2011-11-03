@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
+package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
@@ -19,6 +19,8 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void editClicked();
 		void deleteClicked();
 	}
+	
+	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();
 	
     public void setValue(StandardizedPatientProxy proxy); 
   

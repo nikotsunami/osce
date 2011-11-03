@@ -39,8 +39,8 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return (StandardizedPatientPlace) place;
 
 		if (place instanceof StandardizedPatientDetailsPlace){
-			StandardizedPatientDetailsPlace StandardizedPatientDetailsPlace= (StandardizedPatientDetailsPlace)place;
-			return  new StandardizedPatientPlace(StandardizedPatientDetailsPlace.getToken());
+			StandardizedPatientDetailsPlace standardizedPatientDetailsPlace= (StandardizedPatientDetailsPlace)place;
+			return  new StandardizedPatientPlace(standardizedPatientDetailsPlace.getToken());
 		}
 		
 		/**

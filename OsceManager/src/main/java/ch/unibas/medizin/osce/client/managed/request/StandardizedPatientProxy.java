@@ -29,10 +29,6 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setName(String name);
 
-    abstract String getName2();
-
-    abstract void setName2(String name2);
-
     abstract String getPreName();
 
     abstract void setPreName(String preName);

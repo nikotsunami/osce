@@ -56,9 +56,6 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
     TextBox name;
 
     @UiField
-    TextBox name2;
-
-    @UiField
     TextBox preName;
 
     @UiField

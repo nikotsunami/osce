@@ -41,9 +41,6 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
     Element name;
 
     @UiField
-    Element name2;
-
-    @UiField
     Element preName;
 
     @UiField
@@ -93,7 +90,6 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
-        name2.setInnerText(proxy.getName2() == null ? "" : String.valueOf(proxy.getName2()));
         preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
         street.setInnerText(proxy.getStreet() == null ? "" : String.valueOf(proxy.getStreet()));
         city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));

@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
+package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Collection;
 

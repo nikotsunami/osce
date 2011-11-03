@@ -29,4 +29,11 @@ public class AnamnesisForm {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Scar> scars = new HashSet<Scar>();
+    
+    public void  persistNonRoo(){
+		if (this.entityManager == null) this.entityManager = entityManager();
+		this.entityManager.persist(this);
+		 this.flush();
+		 this.entityManager.refresh(this);
+	}
 }

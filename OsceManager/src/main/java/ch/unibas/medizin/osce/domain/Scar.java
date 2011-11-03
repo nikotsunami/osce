@@ -23,8 +23,17 @@ public class Scar {
     @Size(max = 60)
     private String bodypart;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "scars")
     private Set<AnamnesisForm> anamnesisForms = new HashSet<AnamnesisForm>();
+    
+    public static Long countScarsByAnamnesisForm(Long id) {
+    	EntityManager em = entityManager();
+    	AnamnesisForm anamnesisForm = AnamnesisForm.findAnamnesisForm(id);
+    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Scar o WHERE :anamnesisForm MEMBER OF o.anamnesisForms", Long.class);
+    	q.setParameter("anamnesisForm", anamnesisForm);
+    	
+    	return q.getSingleResult();
+    }
     
     public static Long countScarsByName(String name) {
     	EntityManager em = entityManager();
@@ -41,6 +50,28 @@ public class Scar {
         q.setParameter("name", "%" + name + "%");
         q.setFirstResult(firstResult);
         q.setMaxResults(maxResults);
+        
+        return q.getResultList();
+    }
+    
+    public static List<Scar> findScarEntriesByAnamnesisForm(Long id, int firstResult, int maxResults) {
+        if (id == null) throw new IllegalArgumentException("The id argument is required");
+        EntityManager em = entityManager();
+        AnamnesisForm anamnesisForm = AnamnesisForm.findAnamnesisForm(id);
+        TypedQuery<Scar> q = em.createQuery("SELECT o FROM Scar AS o WHERE :anamnesisForm MEMBER OF o.anamnesisForms", Scar.class);
+        q.setParameter("anamnesisForm", anamnesisForm);
+        q.setFirstResult(firstResult);
+        q.setMaxResults(maxResults);
+        
+        return q.getResultList();
+    }
+    
+    public static List<Scar> findScarEntriesByNotAnamnesisForm(Long id) {
+        if (id == null) throw new IllegalArgumentException("The id argument is required");
+        EntityManager em = entityManager();
+        AnamnesisForm anamnesisForm = AnamnesisForm.findAnamnesisForm(id);
+        TypedQuery<Scar> q = em.createQuery("SELECT o FROM Scar AS o WHERE :anamnesisForm NOT MEMBER OF o.anamnesisForms", Scar.class);
+        q.setParameter("anamnesisForm", anamnesisForm);
         
         return q.getResultList();
     }
