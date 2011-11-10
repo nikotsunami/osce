@@ -8,6 +8,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
@@ -32,7 +33,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class DoctorEditViewImpl extends Composite implements DoctorEditView, Editor<DoctorProxy> {
 
-
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	private static DoctorEditView instance;
@@ -52,13 +52,13 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	@UiField
 	Element createTitle;
 
-//	@UiField(provided=true)
-//	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.client.shared.Gender>() {
-//
-//        public String render(ch.unibas.medizin.osce.client.shared.Gender obj) {
-//            return obj == null ? "" : String.valueOf(obj);
-//        }
-//    });
+	@UiField(provided = true)
+    ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
+
+        public String render(ch.unibas.medizin.osce.shared.Gender obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
 	@UiField
 	TextBox title;
@@ -93,7 +93,7 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	
 	public DoctorEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
-//		gender.setAcceptableValues(Arrays.asList(Gender.values()));
+		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 	}
 
 

@@ -194,7 +194,6 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
-
 	}
 
 	@Override

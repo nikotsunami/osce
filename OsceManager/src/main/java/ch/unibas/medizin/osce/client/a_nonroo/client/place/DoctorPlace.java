@@ -62,6 +62,12 @@ public class DoctorPlace extends Place {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
+		// reload list after deleting an item
+		if(token != null){
+			if(token.contains("DoctorPlace!DELETED") || token.contains("DoctorPlace!CANCEL")){
+				return false;
+			}
+		}
 
 		return true;
 	}

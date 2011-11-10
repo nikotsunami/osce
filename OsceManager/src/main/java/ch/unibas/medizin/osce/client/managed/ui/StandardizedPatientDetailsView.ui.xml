@@ -53,7 +53,26 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -85,7 +104,6 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            
             <tr id="preName">
                 <td>
                     <span class="{style.label}">Pre Name:</span>
@@ -124,6 +142,14 @@
                 </td>
                 <td>
                     <span ui:field="telephone"/>
+                </td>
+            </tr>
+            <tr id="telephone2">
+                <td>
+                    <span class="{style.label}">Telephone2:</span>
+                </td>
+                <td>
+                    <span ui:field="telephone2"/>
                 </td>
             </tr>
             <tr id="mobile">

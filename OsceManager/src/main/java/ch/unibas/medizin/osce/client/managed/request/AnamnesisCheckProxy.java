@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
 import java.util.Set;
@@ -22,6 +23,18 @@ public interface AnamnesisCheckProxy extends EntityProxy {
     abstract String getText();
 
     abstract void setText(String text);
+
+    abstract String getValue();
+
+    abstract void setValue(String value);
+
+    abstract Integer getSort_order();
+
+    abstract void setSort_order(Integer sort_order);
+
+    abstract AnamnesisCheckTypes getType();
+
+    abstract void setType(AnamnesisCheckTypes type);
 
     abstract Set<ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy> getAnamnesischecksvalues();
 

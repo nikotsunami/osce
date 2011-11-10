@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class AdministratorDetailsActivity extends AbstractActivity implements
-		AdministratorDetailsView.Presenter, AdministratorDetailsView.Delegate {
+AdministratorDetailsView.Presenter, AdministratorDetailsView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -40,7 +40,6 @@ public class AdministratorDetailsActivity extends AbstractActivity implements
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
-
 	}
 
 	public void onStop() {
@@ -77,7 +76,6 @@ public class AdministratorDetailsActivity extends AbstractActivity implements
 	}
 
 	private void init(AdministratorProxy administratorProxy) {
-
 		this.administratorProxy = administratorProxy;
 
 		view.setValue(administratorProxy);
@@ -100,19 +98,18 @@ public class AdministratorDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-    public void deleteClicked() {
-        if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
-            return;
-        }
-        requests.administratorRequest().remove().using(this.administratorProxy).fire(new Receiver<Void>() {
+	public void deleteClicked() {
+		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}
+		requests.administratorRequest().remove().using(administratorProxy).fire(new Receiver<Void>() {
 
-            public void onSuccess(Void ignore) {
-                if (widget == null) {
-                    return;
-                }
-            	placeController.goTo(new AdministratorPlace("AdministratorPlace!DELETED"));
-            }
-        });
-    }
-
+			public void onSuccess(Void ignore) {
+				if (widget == null) {
+					return;
+				}
+				placeController.goTo(new AdministratorPlace("AdministratorPlace!DELETED"));
+			}
+		});
+	}
 }

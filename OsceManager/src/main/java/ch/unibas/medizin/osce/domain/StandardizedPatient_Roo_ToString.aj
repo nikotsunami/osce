@@ -26,6 +26,7 @@ privileged aspect StandardizedPatient_Roo_ToString {
         sb.append("Profession: ").append(getProfession()).append(", ");
         sb.append("Street: ").append(getStreet()).append(", ");
         sb.append("Telephone: ").append(getTelephone()).append(", ");
+        sb.append("Telephone2: ").append(getTelephone2()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

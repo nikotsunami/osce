@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -42,9 +43,27 @@ public abstract class AnamnesisCheckMobileEditView_Roo_Gwt extends Composite imp
     TextBox text;
 
     @UiField
+    TextBox value;
+
+    @UiField
+    IntegerBox sort_order;
+
+    @UiField(provided = true)
+    ValueListBox<AnamnesisCheckTypes> type = new ValueListBox<AnamnesisCheckTypes>(new AbstractRenderer<ch.unibas.medizin.osce.shared.AnamnesisCheckTypes>() {
+
+        public String render(ch.unibas.medizin.osce.shared.AnamnesisCheckTypes obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+
+    @UiField
     AnamnesisChecksValueSetEditor anamnesischecksvalues;
 
     public void setAnamnesischecksvaluesPickerValues(Collection<AnamnesisChecksValueProxy> values) {
         anamnesischecksvalues.setAcceptableValues(values);
+    }
+
+    public void setTypePickerValues(Collection<AnamnesisCheckTypes> values) {
+        type.setAcceptableValues(values);
     }
 }

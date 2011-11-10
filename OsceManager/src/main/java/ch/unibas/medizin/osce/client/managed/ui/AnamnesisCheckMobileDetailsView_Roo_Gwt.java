@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,6 +33,15 @@ public abstract class AnamnesisCheckMobileDetailsView_Roo_Gwt extends Composite 
     Element text;
 
     @UiField
+    Element value;
+
+    @UiField
+    Element sort_order;
+
+    @UiField
+    Element type;
+
+    @UiField
     Element anamnesischecksvalues;
 
     AnamnesisCheckProxy proxy;
@@ -41,6 +51,9 @@ public abstract class AnamnesisCheckMobileDetailsView_Roo_Gwt extends Composite 
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
+        value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
+        sort_order.setInnerText(proxy.getSort_order() == null ? "" : String.valueOf(proxy.getSort_order()));
+        type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
         anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
     }
 }

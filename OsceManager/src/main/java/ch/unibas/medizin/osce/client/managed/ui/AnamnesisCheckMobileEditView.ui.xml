@@ -19,19 +19,43 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  
+        
+        
+        
     <div id="text">
             <div class="{style.label}">Text</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="text"/>
             </div>
         </div>
-    <div id="anamnesischecksvalues">
+        <div id="value">
+            <div class="{style.label}">Value</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="value"/>
+            </div>
+        </div>
+        <div id="sort_order">
+            <div class="{style.label}">Sort_order</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="sort_order"/>
+            </div>
+        </div>
+        <div id="type">
+            <div class="{style.label}">Type</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="type"/>
+            </div>
+        </div>
+        <div id="anamnesischecksvalues">
             <div class="{style.label}">Anamnesischecksvalues</div>
             <div class="{style.value}">
                 <a:AnamnesisChecksValueSetEditor ui:field="anamnesischecksvalues"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

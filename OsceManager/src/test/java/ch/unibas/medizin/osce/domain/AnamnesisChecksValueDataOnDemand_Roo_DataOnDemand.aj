@@ -9,7 +9,6 @@ import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
 import ch.unibas.medizin.osce.domain.AnamnesisFormDataOnDemand;
 import java.lang.Boolean;
-import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -46,7 +45,10 @@ privileged aspect AnamnesisChecksValueDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AnamnesisChecksValueDataOnDemand.setAnamnesisChecksValue(AnamnesisChecksValue obj, int index) {
-        Integer anamnesisChecksValue = new Integer(index);
+        String anamnesisChecksValue = "anamnesisChecksValue_" + index;
+        if (anamnesisChecksValue.length() > 255) {
+            anamnesisChecksValue = anamnesisChecksValue.substring(0, 255);
+        }
         obj.setAnamnesisChecksValue(anamnesisChecksValue);
     }
     

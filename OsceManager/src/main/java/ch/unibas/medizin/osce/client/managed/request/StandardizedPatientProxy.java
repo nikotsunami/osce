@@ -49,6 +49,10 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setTelephone(String telephone);
 
+    abstract String getTelephone2();
+
+    abstract void setTelephone2(String telephone2);
+
     abstract String getMobile();
 
     abstract void setMobile(String mobile);

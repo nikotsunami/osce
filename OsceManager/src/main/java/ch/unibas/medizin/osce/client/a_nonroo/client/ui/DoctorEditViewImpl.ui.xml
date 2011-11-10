@@ -9,12 +9,8 @@
 
 	<g:HTMLPanel>
 		<div class="{style.underline}">
-			<h3 class="{style.header}" ui:field="editTitle">
-				<ui:msg>Edit Doctor</ui:msg>
-			</h3>
-			<h3 class="{style.header}" ui:field="createTitle">
-				<ui:msg>New Doctor</ui:msg>
-			</h3>
+			<h3 class="{style.header}" ui:field="editTitle"><ui:msg>Edit Doctor</ui:msg></h3>
+			<h3 class="{style.header}" ui:field="createTitle"><ui:msg>New Doctor</ui:msg></h3>
 		</div>
 		<div class="{style.errors}" ui:field="errors" />
 

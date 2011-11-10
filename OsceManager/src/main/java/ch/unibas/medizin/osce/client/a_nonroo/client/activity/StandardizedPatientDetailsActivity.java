@@ -78,7 +78,7 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
 		view.setDelegate(this);
 		standardizedPatientScarSubView.setDelegate(this);
 		
-		requests.find(place.getProxyId()).with("anamnesisForm", "anamnesisForm.scars").fire(new Receiver<Object>() {
+		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new Receiver<Object>() {
 
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
@@ -183,7 +183,7 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
             return;
         }
 		
-        requests.standardizedPatientRequest().remove().using(this.standardizedPatientProxy).fire(new Receiver<Void>() {
+        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
 
             public void onSuccess(Void ignore) {
                 if (widget == null) {

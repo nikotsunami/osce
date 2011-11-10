@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
 import java.util.Set;
@@ -22,6 +23,10 @@ public interface ScarProxy extends EntityProxy {
     abstract String getBodypart();
 
     abstract void setBodypart(String bodypart);
+
+    abstract TraitTypes getType();
+
+    abstract void setType(TraitTypes type);
 
     abstract Set<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy> getAnamnesisForms();
 

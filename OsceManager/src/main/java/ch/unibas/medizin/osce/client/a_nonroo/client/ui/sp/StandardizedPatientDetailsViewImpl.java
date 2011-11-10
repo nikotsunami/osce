@@ -61,9 +61,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement id;
 
 	@UiField
-	SpanElement version;
-
-	@UiField
 	SpanElement gender;
 
 	@UiField
@@ -121,7 +118,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public void setValue(StandardizedPatientProxy proxy) {
 		this.proxy = proxy;
 		id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+		//version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
 		gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
 		name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
 		preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
@@ -176,7 +173,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	@Override
 	public ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl() {
-		// TODO Auto-generated method stub
 		return standardizedPatientScarSubViewImpl;
 	}
 }

@@ -70,6 +70,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setProfession(obj, index);
         setStreet(obj, index);
         setTelephone(obj, index);
+        setTelephone2(obj, index);
         return obj;
     }
     
@@ -167,6 +168,14 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
             telephone = telephone.substring(0, 30);
         }
         obj.setTelephone(telephone);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setTelephone2(StandardizedPatient obj, int index) {
+        String telephone2 = "telephone2_" + index;
+        if (telephone2.length() > 30) {
+            telephone2 = telephone2.substring(0, 30);
+        }
+        obj.setTelephone2(telephone2);
     }
     
     public StandardizedPatient StandardizedPatientDataOnDemand.getSpecificStandardizedPatient(int index) {

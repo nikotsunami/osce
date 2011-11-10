@@ -9,12 +9,10 @@
 
  
   <g:HTMLPanel>
-    <div class='{style.underline}'>    
-      <h3 class='{style.header}' ui:field="editTitle">
-        <ui:msg>Edit Description</ui:msg>
-      </h3>
+    <!-- <div class='{style.underline}'>    
+      <h3 class='{style.header}' ui:field="editTitle"><ui:msg>Edit Description</ui:msg></h3>
       <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New Description</ui:msg></h3>
-    </div>
+    </div>-->
     <div ui:field='errors' class='{style.errors}'></div>
 
     <table id='boundElementHolder' class="{style.fields}">

@@ -48,6 +48,9 @@ public class StandardizedPatient {
 
     @Size(max = 30)
     private String telephone;
+    
+    @Size(max = 30)
+    private String telephone2;
 
     @Size(max = 30)
     private String mobile;
@@ -57,13 +60,13 @@ public class StandardizedPatient {
     private Date birthday;
 
     @Size(max = 40)
-    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Description descriptions;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Bankaccount bankAccount;
 
     @ManyToOne
@@ -72,7 +75,7 @@ public class StandardizedPatient {
     @ManyToOne
     private Profession profession;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private AnamnesisForm anamnesisForm;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient")

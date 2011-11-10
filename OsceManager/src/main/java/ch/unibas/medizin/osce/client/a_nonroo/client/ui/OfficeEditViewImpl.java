@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.Arrays;
 
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
@@ -23,13 +24,13 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 
 	private static OfficeEditView instance;
 	
-//	@UiField(provided=true)
-//	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.client.shared.Gender>() {
-//
-//        public String render(ch.unibas.medizin.osce.client.shared.Gender obj) {
-//            return obj == null ? "" : String.valueOf(obj);
-//        }
-//    });
+	@UiField(provided=true)
+	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
+
+        public String render(ch.unibas.medizin.osce.shared.Gender obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
     @UiField
     TextBox title;
@@ -50,7 +51,7 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 
 	public OfficeEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
-//		gender.setAcceptableValues(Arrays.asList(Gender.values()));
+		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 	}
     
 	interface Binder extends UiBinder<Widget, OfficeEditViewImpl> {

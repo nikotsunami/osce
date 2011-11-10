@@ -101,7 +101,7 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
-		
+
 		DescriptionEditView descriptionView = new DescriptionEditViewImpl();
 		view.getDescriptionPanel().add(descriptionView);
 		descriptionDriver = descriptionView.createEditorDriver();
@@ -157,10 +157,10 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 				view.setAnamnesisFormPickerValues(values);
 			}
 		});
-
+		
 		if (this.place.getOperation()==StandardizedPatientDetailsPlace.Operation.EDIT){
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("standardizedPatient", "nationality", "profession", "langSkill", "bankAccount", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
+			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
 
 				public void onFailure(ServerFailure error){
 					Log.error(error.getMessage());
@@ -173,8 +173,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 						standardizedPatient=(StandardizedPatientProxy)response;
 						init();
 					}
-
-
 				}
 			});
 		}
@@ -187,12 +185,7 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 		//		view.initialiseDriver(requests);
 		widget.setWidget(standardizedPatientEditView.asWidget());
 		//setTable(view.getTable());
-
-
 	}
-
-
-
 
 	private void init() {
 
@@ -209,27 +202,20 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 
 			view.setEditTitle(true);
 		}
-		
-
-		
-
 
 		Log.info("edit");
-		
+
 		//request.edit(standardizedPatient);
 		editorDriver.edit(standardizedPatient, request);
 		if(standardizedPatient.getDescriptions()==null){
 			DescriptionProxy descriptionProxy = request.create(DescriptionProxy.class);
 			standardizedPatient.setDescriptions(descriptionProxy);
-					
 		}
 		descriptionDriver.edit(standardizedPatient.getDescriptions(), descriptionRequest);
 
 		Log.info("persist");
 		request.persist().using(standardizedPatient);
 		descriptionRequest.persist().using(standardizedPatient.getDescriptions());
-
-	
 
 		Log.info("flush");
 		editorDriver.flush();

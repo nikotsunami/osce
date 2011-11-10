@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace.Operation;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;

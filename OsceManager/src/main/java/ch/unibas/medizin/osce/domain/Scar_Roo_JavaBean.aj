@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import java.lang.String;
 import java.util.Set;
 
@@ -15,6 +16,14 @@ privileged aspect Scar_Roo_JavaBean {
     
     public void Scar.setBodypart(String bodypart) {
         this.bodypart = bodypart;
+    }
+    
+    public TraitTypes Scar.getType() {
+        return this.type;
+    }
+    
+    public void Scar.setType(TraitTypes type) {
+        this.type = type;
     }
     
     public Set<AnamnesisForm> Scar.getAnamnesisForms() {

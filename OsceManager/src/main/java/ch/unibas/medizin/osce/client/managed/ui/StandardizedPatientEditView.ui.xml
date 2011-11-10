@@ -59,7 +59,24 @@
       
       
       
-    <tr id="gender">
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="gender">
                 <td>
                     <div class="{style.label}">Gender:</div>
                 </td>
@@ -75,7 +92,6 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-            
             <tr id="preName">
                 <td>
                     <div class="{style.label}">Pre Name:</div>
@@ -114,6 +130,14 @@
                 </td>
                 <td>
                     <g:TextBox ui:field="telephone"/>
+                </td>
+            </tr>
+            <tr id="telephone2">
+                <td>
+                    <div class="{style.label}">Telephone2:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="telephone2"/>
                 </td>
             </tr>
             <tr id="mobile">

@@ -4,6 +4,8 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -24,8 +26,16 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
     
     public AnamnesisCheck AnamnesisCheckDataOnDemand.getNewTransientAnamnesisCheck(int index) {
         AnamnesisCheck obj = new AnamnesisCheck();
+        setSort_order(obj, index);
         setText(obj, index);
+        setType(obj, index);
+        setValue(obj, index);
         return obj;
+    }
+    
+    public void AnamnesisCheckDataOnDemand.setSort_order(AnamnesisCheck obj, int index) {
+        Integer sort_order = new Integer(index);
+        obj.setSort_order(sort_order);
     }
     
     public void AnamnesisCheckDataOnDemand.setText(AnamnesisCheck obj, int index) {
@@ -34,6 +44,19 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
             text = text.substring(0, 255);
         }
         obj.setText(text);
+    }
+    
+    public void AnamnesisCheckDataOnDemand.setType(AnamnesisCheck obj, int index) {
+        AnamnesisCheckTypes type = AnamnesisCheckTypes.class.getEnumConstants()[0];
+        obj.setType(type);
+    }
+    
+    public void AnamnesisCheckDataOnDemand.setValue(AnamnesisCheck obj, int index) {
+        String value = "value_" + index;
+        if (value.length() > 255) {
+            value = value.substring(0, 255);
+        }
+        obj.setValue(value);
     }
     
     public AnamnesisCheck AnamnesisCheckDataOnDemand.getSpecificAnamnesisCheck(int index) {

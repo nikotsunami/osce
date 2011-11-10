@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -74,6 +75,21 @@ public abstract class ScarListView_Roo_Gwt extends AbstractProxyListView<ScarPro
                 return renderer.render(object.getBodypart());
             }
         }, "Bodypart");
+        paths.add("type");
+        table.addColumn(new TextColumn<ScarProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.shared.TraitTypes> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.TraitTypes>() {
+
+                public String render(ch.unibas.medizin.osce.shared.TraitTypes obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(ScarProxy object) {
+                return renderer.render(object.getType());
+            }
+        }, "Type");
         paths.add("anamnesisForms");
         table.addColumn(new TextColumn<ScarProxy>() {
 

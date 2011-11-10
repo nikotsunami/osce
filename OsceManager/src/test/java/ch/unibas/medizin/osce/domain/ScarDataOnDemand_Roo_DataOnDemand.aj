@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Scar;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ privileged aspect ScarDataOnDemand_Roo_DataOnDemand {
     public Scar ScarDataOnDemand.getNewTransientScar(int index) {
         Scar obj = new Scar();
         setBodypart(obj, index);
+        setType(obj, index);
         return obj;
     }
     
@@ -34,6 +36,11 @@ privileged aspect ScarDataOnDemand_Roo_DataOnDemand {
             bodypart = bodypart.substring(0, 60);
         }
         obj.setBodypart(bodypart);
+    }
+    
+    public void ScarDataOnDemand.setType(Scar obj, int index) {
+        TraitTypes type = TraitTypes.class.getEnumConstants()[0];
+        obj.setType(type);
     }
     
     public Scar ScarDataOnDemand.getSpecificScar(int index) {

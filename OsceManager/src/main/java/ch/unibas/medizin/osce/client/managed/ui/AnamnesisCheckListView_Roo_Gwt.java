@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -74,6 +75,51 @@ public abstract class AnamnesisCheckListView_Roo_Gwt extends AbstractProxyListVi
                 return renderer.render(object.getText());
             }
         }, "Text");
+        paths.add("value");
+        table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(AnamnesisCheckProxy object) {
+                return renderer.render(object.getValue());
+            }
+        }, "Value");
+        paths.add("sort_order");
+        table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(AnamnesisCheckProxy object) {
+                return renderer.render(object.getSort_order());
+            }
+        }, "Sort_order");
+        paths.add("type");
+        table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.shared.AnamnesisCheckTypes> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.AnamnesisCheckTypes>() {
+
+                public String render(ch.unibas.medizin.osce.shared.AnamnesisCheckTypes obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(AnamnesisCheckProxy object) {
+                return renderer.render(object.getType());
+            }
+        }, "Type");
         paths.add("anamnesischecksvalues");
         table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 

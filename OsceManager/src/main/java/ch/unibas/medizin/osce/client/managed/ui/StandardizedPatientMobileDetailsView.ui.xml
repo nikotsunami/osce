@@ -33,7 +33,26 @@
     
 
     <g:Button ui:field="delete">Delete</g:Button>
-  <div id="id">
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
@@ -49,7 +68,6 @@
             <div class="{style.label}">Name</div>
             <div class="{style.value}" ui:field="name"/>
         </div>
-        
         <div id="preName">
             <div class="{style.label}">Pre Name</div>
             <div class="{style.value}" ui:field="preName"/>
@@ -69,6 +87,10 @@
         <div id="telephone">
             <div class="{style.label}">Telephone</div>
             <div class="{style.value}" ui:field="telephone"/>
+        </div>
+        <div id="telephone2">
+            <div class="{style.label}">Telephone2</div>
+            <div class="{style.value}" ui:field="telephone2"/>
         </div>
         <div id="mobile">
             <div class="{style.label}">Mobile</div>

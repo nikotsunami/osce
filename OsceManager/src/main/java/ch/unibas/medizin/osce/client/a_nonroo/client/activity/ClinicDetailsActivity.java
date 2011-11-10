@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsViewImpl;
@@ -15,13 +16,14 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ClinicDetailsActivity extends AbstractActivity implements
 ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
-	
-    private OsMaRequestFactory requests;
+
+	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private ClinicDetailsView view;
@@ -31,20 +33,17 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
 
 	private ClinicDetailsPlace place;
 	private ClinicProxy clinicProxy;
-	
 
 	public ClinicDetailsActivity(ClinicDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
-    	this.requests = requests;
-    	this.placeController = placeController;
-
-		
-    	
-    }
+		this.requests = requests;
+		this.placeController = placeController;
+	}
 
 	public void onStop(){
 
 	}
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("ClinicDetailsActivity.start()");
@@ -53,40 +52,37 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
 		this.widget = panel;
 		this.view = ClinicDetailsView;
 		widget.setWidget(ClinicDetailsView.asWidget());
-		
+
 		view.setDelegate(this);
-		
+
 		requests.find(place.getProxyId()).fire(new Receiver<Object>() {
 
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
 			}
+			
 			@Override
 			public void onSuccess(Object response) {
 				if(response instanceof ClinicProxy){
 					Log.info(((ClinicProxy) response).getName());
 					init((ClinicProxy) response);
 				}
-
-				
 			}
-		    });
-		
-	}
-	
-	private void init(ClinicProxy ClinicProxy) {
+		});
 
+	}
+
+	private void init(ClinicProxy ClinicProxy) {
 		this.clinicProxy = ClinicProxy;
-		
+
 		view.setValue(ClinicProxy);
-		
-		
+
+		view.setDelegate(this);
 	}
 
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
-		
 	}
 
 	@Override
@@ -97,8 +93,17 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
 
 	@Override
 	public void deleteClicked() {
-		// TODO Auto-generated method stub
-		
-	}
+		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}
+		requests.clinicRequest().remove().using(clinicProxy).fire(new Receiver<Void>() {
 
+			public void onSuccess(Void ignore) {
+				if (widget == null) {
+					return;
+				}
+				placeController.goTo(new ClinicPlace("ClinicPlace!DELETED"));
+			}
+		});
+	}
 }

@@ -73,6 +73,14 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.telephone = telephone;
     }
     
+    public String StandardizedPatient.getTelephone2() {
+        return this.telephone2;
+    }
+    
+    public void StandardizedPatient.setTelephone2(String telephone2) {
+        this.telephone2 = telephone2;
+    }
+    
     public String StandardizedPatient.getMobile() {
         return this.mobile;
     }

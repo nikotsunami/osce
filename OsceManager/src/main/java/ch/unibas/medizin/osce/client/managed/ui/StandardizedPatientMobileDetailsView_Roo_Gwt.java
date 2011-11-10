@@ -56,6 +56,9 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
     Element telephone;
 
     @UiField
+    Element telephone2;
+
+    @UiField
     Element mobile;
 
     @UiField
@@ -95,6 +98,7 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
         city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
         postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
         telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
+        telephone2.setInnerText(proxy.getTelephone2() == null ? "" : String.valueOf(proxy.getTelephone2()));
         mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
         birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getBirthday()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));

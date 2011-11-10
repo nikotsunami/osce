@@ -4,6 +4,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import ch.unibas.medizin.osce.shared.Gender;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Pattern;
@@ -30,7 +32,7 @@ public class Doctor {
     private String preName;
 
     @Size(max = 40)
-    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
     private String email;
 
     @Size(max = 30)
@@ -39,6 +41,6 @@ public class Doctor {
     @ManyToOne
     private Clinic clinic;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Office office;
 }

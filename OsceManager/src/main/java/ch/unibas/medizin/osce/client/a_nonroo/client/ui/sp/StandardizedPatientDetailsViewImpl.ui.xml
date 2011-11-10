@@ -23,14 +23,6 @@
 					<span ui:field="id" />
 				</td>
 			</tr>
-			<tr id="version">
-				<td>
-					<span class="{style.label}">Version:</span>
-				</td>
-				<td>
-					<span ui:field="version" />
-				</td>
-			</tr>
 			<tr id="gender">
 				<td>
 					<span class="{style.label}">Gender:</span>
@@ -145,7 +137,7 @@
 			</tr>
 			<tr id="descriptions">
 				<td>
-					<span class="{style.label}">Descriptions:</span>
+					<span class="{style.label}">Description:</span>
 				</td>
 				<td>
 					<span ui:field="descriptions" />
@@ -164,7 +156,7 @@
 		<div class="{style.bar}">
 			<g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
 			<g:Button addStyleNames="{style.button}" ui:field="delete">Delete</g:Button>
-			<!-- <g:Anchor ui:field="delete">Delete</g:Anchor>-->
+			<!-- <g:Anchor ui:field="delete">Delete</g:Anchor> -->
 		</div>
 
 		<n:StandardizedPatientScarSubViewImpl

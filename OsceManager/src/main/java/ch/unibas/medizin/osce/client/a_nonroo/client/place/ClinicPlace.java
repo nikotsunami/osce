@@ -12,7 +12,7 @@ public class ClinicPlace extends Place {
 	private String token;
 
 	public ClinicPlace(){
-		Log.debug("ClinicPlace");
+		Log.debug("ClinicPlace.ClinicPlace");
 		this.token = "ClinicPlace";
 	}
 	
@@ -61,6 +61,12 @@ public class ClinicPlace extends Place {
 		}
 		if (getClass() != obj.getClass()) {
 			return false;
+		}
+		// reload list after deleting an item
+		if(token != null){
+			if(token.contains("ClinicPlace!DELETED") || token.contains("ClinicPlace!CANCEL")){
+				return false;
+			}
 		}
 
 		return true;

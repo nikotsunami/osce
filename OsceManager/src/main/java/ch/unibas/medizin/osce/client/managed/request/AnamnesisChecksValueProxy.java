@@ -26,9 +26,9 @@ public interface AnamnesisChecksValueProxy extends EntityProxy {
 
     abstract void setComment(String comment);
 
-    abstract Integer getAnamnesisChecksValue();
+    abstract String getAnamnesisChecksValue();
 
-    abstract void setAnamnesisChecksValue(Integer anamnesisChecksValue);
+    abstract void setAnamnesisChecksValue(String anamnesisChecksValue);
 
     abstract AnamnesisFormProxy getAnamnesisform();
 

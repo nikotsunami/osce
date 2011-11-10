@@ -62,6 +62,12 @@ public class StandardizedPatientPlace extends Place {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
+		// reload list after deleting an item
+		if(token != null){
+			if(token.contains("StandardizedPatientPlace!DELETED") || token.contains("StandardizedPatientPlace!CANCEL")){
+				return false;
+			}
+		}
 
 		return true;
 	}

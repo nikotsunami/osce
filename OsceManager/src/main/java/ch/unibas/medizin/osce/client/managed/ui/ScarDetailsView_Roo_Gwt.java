@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -33,6 +34,9 @@ public abstract class ScarDetailsView_Roo_Gwt extends Composite implements Proxy
     SpanElement bodypart;
 
     @UiField
+    SpanElement type;
+
+    @UiField
     SpanElement anamnesisForms;
 
     ScarProxy proxy;
@@ -45,6 +49,7 @@ public abstract class ScarDetailsView_Roo_Gwt extends Composite implements Proxy
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         bodypart.setInnerText(proxy.getBodypart() == null ? "" : String.valueOf(proxy.getBodypart()));
+        type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
         anamnesisForms.setInnerText(proxy.getAnamnesisForms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance()).render(proxy.getAnamnesisForms()));
         displayRenderer.setInnerText(ScarProxyRenderer.instance().render(proxy));
     }

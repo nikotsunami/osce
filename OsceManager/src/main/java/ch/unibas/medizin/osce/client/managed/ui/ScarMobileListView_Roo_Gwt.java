@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;

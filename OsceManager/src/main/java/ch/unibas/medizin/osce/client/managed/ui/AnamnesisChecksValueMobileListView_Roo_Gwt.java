@@ -30,6 +30,6 @@ public abstract class AnamnesisChecksValueMobileListView_Roo_Gwt extends MobileP
 
     public void init() {
         paths.add("comment");
-        paths.add("id");
+        paths.add("anamnesisChecksValue");
     }
 }

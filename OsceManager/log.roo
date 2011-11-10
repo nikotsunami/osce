@@ -200,3 +200,20 @@ logging setup --level INFO
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2011-10-19 23:25:03
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-10-28 16:22:26
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2011-10-28 17:13:46
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-11-04 16:15:06
+enum type --class ch.unibas.medizin.osce.shared.AnamnesisCheckTypes
+// [failed] enum constant --name Open
+enum constant --name QuestionOpen
+enum constant --name QuestionYesNo
+enum constant --name QuestionMultS
+enum constant --name QuestionMultM
+enum constant --name Title
+// [failed] enum type --class ch.unibas.medizin.osce.shared.AnamnesisCheckTypes
+enum type --class ch.unibas.medizin.osce.shared.TraitTypes
+enum constant --name Scar
+enum constant --name Tattoo
+enum constant --name NotToExamine
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2011-11-04 17:30:45
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-11-10 15:21:55
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2011-11-10 15:25:21
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2011-11-10 15:31:14

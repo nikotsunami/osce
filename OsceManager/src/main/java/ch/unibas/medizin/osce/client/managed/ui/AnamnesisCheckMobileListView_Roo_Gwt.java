@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -29,6 +30,6 @@ public abstract class AnamnesisCheckMobileListView_Roo_Gwt extends MobileProxyLi
 
     public void init() {
         paths.add("text");
-        paths.add("id");
+        paths.add("value");
     }
 }

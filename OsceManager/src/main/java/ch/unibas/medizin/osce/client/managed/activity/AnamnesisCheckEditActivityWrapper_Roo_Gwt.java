@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -34,6 +35,7 @@ public abstract class AnamnesisCheckEditActivityWrapper_Roo_Gwt implements Activ
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
+        view.setTypePickerValues(Arrays.asList(AnamnesisCheckTypes.values()));
         view.setAnamnesischecksvaluesPickerValues(Collections.<AnamnesisChecksValueProxy>emptyList());
         requests.anamnesisChecksValueRequest().findAnamnesisChecksValueEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisChecksValueProxy>>() {
 
@@ -48,6 +50,8 @@ public abstract class AnamnesisCheckEditActivityWrapper_Roo_Gwt implements Activ
     }
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy, V>> extends ProxyEditView<AnamnesisCheckProxy, V> {
+
+        void setTypePickerValues(Collection<AnamnesisCheckTypes> values);
 
         void setAnamnesischecksvaluesPickerValues(Collection<AnamnesisChecksValueProxy> values);
     }

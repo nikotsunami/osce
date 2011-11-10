@@ -50,7 +50,7 @@ public abstract class AnamnesisChecksValueMobileEditView_Roo_Gwt extends Composi
     TextBox comment;
 
     @UiField
-    IntegerBox anamnesisChecksValue;
+    TextBox anamnesisChecksValue;
 
     @UiField(provided = true)
     ValueListBox<AnamnesisFormProxy> anamnesisform = new ValueListBox<AnamnesisFormProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>());

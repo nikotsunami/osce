@@ -18,7 +18,8 @@ public class AnamnesisChecksValue {
     @Size(max = 255)
     private String comment;
 
-    private Integer anamnesisChecksValue;
+    @Size(max = 255)
+    private String anamnesisChecksValue;
 
     @ManyToOne
     private AnamnesisForm anamnesisform;

@@ -37,11 +37,11 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 	@UiField
 	DivElement errors;
 
-	@UiField
-	Element editTitle;
-
-	@UiField
-	Element createTitle;
+//	@UiField
+//	Element editTitle;
+//
+//	@UiField
+//	Element createTitle;
 
 	@UiField
 	TextBox description;

@@ -170,6 +170,21 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getTelephone());
             }
         }, "Telephone");
+        paths.add("telephone2");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getTelephone2());
+            }
+        }, "Telephone2");
         paths.add("mobile");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsViewImpl;
@@ -18,6 +19,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
 
@@ -104,8 +106,18 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 
 	@Override
 	public void deleteClicked() {
-		// TODO Auto-generated method stub
-		
+		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}
+		requests.doctorRequest().remove().using(doctorProxy).fire(new Receiver<Void>() {
+
+			public void onSuccess(Void ignore) {
+				if (widget == null) {
+					return;
+				}
+				placeController.goTo(new DoctorPlace("DoctorPlace!DELETED"));
+			}
+		});
 	}
 
 }

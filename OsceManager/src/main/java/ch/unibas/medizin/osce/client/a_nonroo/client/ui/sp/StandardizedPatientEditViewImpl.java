@@ -77,6 +77,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
     @UiField
     TextBox telephone;
+    
+    @UiField
+    TextBox telephone2;
 
     @UiField
     TextBox mobile;
@@ -123,7 +126,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	
 	public StandardizedPatientEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
-//		gender.setAcceptableValues(Arrays.asList(Gender.values()));
+		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 	}
 
 	@Override

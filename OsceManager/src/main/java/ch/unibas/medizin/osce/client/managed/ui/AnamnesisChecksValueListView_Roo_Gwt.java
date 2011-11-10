@@ -93,9 +93,9 @@ public abstract class AnamnesisChecksValueListView_Roo_Gwt extends AbstractProxy
         paths.add("anamnesisChecksValue");
         table.addColumn(new TextColumn<AnamnesisChecksValueProxy>() {
 
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
-                public String render(java.lang.Integer obj) {
+                public String render(java.lang.String obj) {
                     return obj == null ? "" : String.valueOf(obj);
                 }
             };

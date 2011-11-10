@@ -37,7 +37,24 @@
     
 
     <g:Button ui:field="save">Save</g:Button>
-  <div id="gender">
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div id="gender">
             <div class="{style.label}">Gender</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="gender"/>
@@ -49,7 +66,6 @@
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-        
         <div id="preName">
             <div class="{style.label}">Pre Name</div>
             <div class="{style.value}">
@@ -78,6 +94,12 @@
             <div class="{style.label}">Telephone</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="telephone"/>
+            </div>
+        </div>
+        <div id="telephone2">
+            <div class="{style.label}">Telephone2</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="telephone2"/>
             </div>
         </div>
         <div id="mobile">

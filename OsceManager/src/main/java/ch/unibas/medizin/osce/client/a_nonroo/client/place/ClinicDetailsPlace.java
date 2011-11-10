@@ -27,7 +27,6 @@ public class ClinicDetailsPlace extends Place {
 	}
 
 	public ClinicDetailsPlace(){
-		
 		this.token = "SystemStartPlace";
 	}
 	public ClinicDetailsPlace(EntityProxyId<?> record) {

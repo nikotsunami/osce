@@ -6,7 +6,6 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
 import java.lang.Boolean;
-import java.lang.Integer;
 import java.lang.String;
 
 privileged aspect AnamnesisChecksValue_Roo_JavaBean {
@@ -27,11 +26,11 @@ privileged aspect AnamnesisChecksValue_Roo_JavaBean {
         this.comment = comment;
     }
     
-    public Integer AnamnesisChecksValue.getAnamnesisChecksValue() {
+    public String AnamnesisChecksValue.getAnamnesisChecksValue() {
         return this.anamnesisChecksValue;
     }
     
-    public void AnamnesisChecksValue.setAnamnesisChecksValue(Integer anamnesisChecksValue) {
+    public void AnamnesisChecksValue.setAnamnesisChecksValue(String anamnesisChecksValue) {
         this.anamnesisChecksValue = anamnesisChecksValue;
     }
     

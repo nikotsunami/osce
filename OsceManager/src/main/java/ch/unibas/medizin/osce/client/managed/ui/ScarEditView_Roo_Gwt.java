@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -41,10 +42,22 @@ public abstract class ScarEditView_Roo_Gwt extends Composite implements View<Sca
     @UiField
     TextBox bodypart;
 
+    @UiField(provided = true)
+    ValueListBox<TraitTypes> type = new ValueListBox<TraitTypes>(new AbstractRenderer<ch.unibas.medizin.osce.shared.TraitTypes>() {
+
+        public String render(ch.unibas.medizin.osce.shared.TraitTypes obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+
     @UiField
     AnamnesisFormSetEditor anamnesisForms;
 
     public void setAnamnesisFormsPickerValues(Collection<AnamnesisFormProxy> values) {
         anamnesisForms.setAcceptableValues(values);
+    }
+
+    public void setTypePickerValues(Collection<TraitTypes> values) {
+        type.setAcceptableValues(values);
     }
 }
