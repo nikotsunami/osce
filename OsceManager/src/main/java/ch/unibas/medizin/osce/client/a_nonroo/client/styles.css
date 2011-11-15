@@ -272,7 +272,7 @@
 	text-align: right;
 }
 
-  /***********************/
+  /**********************/
  /* Important classes! */
 /**********************/
 
@@ -281,10 +281,20 @@ body {
 }
 
 .mainNav {
-	
+	padding-left:8px;
+	padding-right: 8px;
+}
+
+.mainNav a {
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    width: 100%;
 }
 
 .mainNavPanel {
+	margin-top: 1px;
+	margin-bottom: 1px;
 	width: 100%;
 }
 

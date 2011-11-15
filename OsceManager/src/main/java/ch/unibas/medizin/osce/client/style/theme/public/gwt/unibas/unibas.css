@@ -13,9 +13,7 @@
  */
  
 body,table td,select {
-	font-size: 62.5%;
 	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
-	line-height: 1.3;
 }
 
 pre {
@@ -24,6 +22,8 @@ pre {
 }
 
 body {
+	font-size: 0.75em;
+	line-height: 1.3;
 	color: #222;
 	margin: 0px;
 	border: 0px;
@@ -32,8 +32,15 @@ body {
 	background-color: #fff;
 }
 
-a,a:visited,a:hover {
-	color: #000;
+a,a:visited, .gwt-Anchor {
+	cursor: hand;
+	color: #212121;
+	text-decoration: underline;
+}
+
+a:hover, .gwt-Anchor:hover {
+	cursor: hand;
+	text-decoration: none; 
 }
 
 /**
@@ -51,14 +58,17 @@ a,a:visited,a:hover {
 .gwt-Button {
 	margin: 0;
 	padding: 3px 5px;
-	text-decoration: none;
+	text-decoration: none !important;
 	cursor: pointer;
 	cursor: hand;
 	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 	border: 1px solid #999;
+	
+	-moz-border-radius: 4px;
 }
 
 .gwt-Button:active {
+	outline-style: none;
 	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
@@ -72,7 +82,6 @@ a,a:visited,a:hover {
 }
 
 .gwt-Button[disabled]:hover {
-	border: 1px outset #ccc;
 }
 
 .gwt-CheckBox {
@@ -225,10 +234,20 @@ a,a:visited,a:hover {
 }
 
 .gwt-DisclosurePanel {
+	-moz-border-radius: 4px;
+	border: 1px solid #AAA;
 }
 
-.gwt-DisclosurePanel .header {
-	margin-top: 1px;
+.gwt-DisclosurePanel .header, .gwt-DisclosurePanel .header:hover, .gwt-DisclosurePanel .header:active {
+	margin: 0;
+	
+	text-decoration: none; /* Remove underline from header */
+	color: black;
+	cursor: pointer;
+	cursor: hand;
+	
+	border: 0;
+	outline-style: none;
 }
 
 .gwt-DisclosurePanel-open .header {
@@ -239,34 +258,12 @@ a,a:visited,a:hover {
 	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
-.gwt-DisclosurePanel .header,.gwt-DisclosurePanel .header a,.gwt-DisclosurePanel .header td
-	{
-	text-decoration: none; /* Remove underline from header */
-	color: black;
-	cursor: pointer;
-	cursor: hand;
-	
-	border-left: 1px solid #AAAAAA;
-	border-right: 1px solid #AAAAAA;
-	border-top: 1px solid #AAAAAA;
-	border-bottom: 0;
-	
-	-moz-border-radius-topright: 2px;
-	-moz-border-radius-topleft: 2px;
+.gwt-DisclosurePanel-closed .header:hover {
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
 .gwt-DisclosurePanel .content {
-	border-left: 3px solid #e3e3e3;
-	padding: 4px 0px 4px 8px;
-	margin-left: 6px;
 	
-	border-top: 0;
-	border-left: 1px solid #AAAAAA;
-	border-right: 1px solid #AAAAAA;
-	border-bottom: 1px solid #AAAAAA;
-	
-	-moz-border-radius-bottomright: 2px;
-	-moz-border-radius-bottomleft: 2px;
 }
 
 .gwt-FileUpload {

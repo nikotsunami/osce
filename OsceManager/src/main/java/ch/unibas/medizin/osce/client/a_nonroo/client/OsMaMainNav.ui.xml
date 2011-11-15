@@ -5,8 +5,9 @@
 	<ui:style src="styles.css" />
 
 	<g:HTMLPanel>
-		<g:DisclosurePanel ui:styleName='{style.mainNavPanel}' ui:field="masterDataPanel" open="true">
+		<g:DisclosurePanel ui:field="masterDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Stammdaten</g:header>
+			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel>
 				<g:Anchor ui:field="people">Personen</g:Anchor>
 				<g:Anchor ui:field="scars">Narben</g:Anchor>
@@ -16,7 +17,7 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
-		<g:DisclosurePanel ui:styleName='{style.mainNavPanel}' ui:field="administrationPanel" open="true">
+		<g:DisclosurePanel ui:field="administrationPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Verwaltung</g:header>
 			<g:VerticalPanel>
 				<g:Anchor ui:field="administrators">Benutzer</g:Anchor>
@@ -26,7 +27,7 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
-		<g:DisclosurePanel ui:styleName='{style.mainNavPanel}' ui:field="examinationsPanel" open="true">
+		<g:DisclosurePanel ui:field="examinationsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Prüfungen</g:header>
 			<g:VerticalPanel>
 				<g:Anchor ui:field="osces">OSCEs</g:Anchor>
@@ -37,7 +38,7 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		
-		<g:DisclosurePanel ui:styleName='{style.mainNavPanel}' ui:field="simulationPatientsPanel" open="true">
+		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Simulationspatienten</g:header>
 			<g:VerticalPanel>
 				<g:Anchor ui:field="simulationPatients">Simulationspatienten</g:Anchor>
