@@ -169,107 +169,123 @@
 }
 
 @def contentWidth 850px;
+.disabled {
+	color: gray;
+}
 
-		.disabled {
-			color: gray;
-		}
+.body {
+	overflow: auto;
+}
 
-		.body {
-			overflow: auto;
-		}
+.banner {
+	background-color: #777;
+	-moz-border-radius-topleft: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	-webkit-border-top-right-radius: 10px;
+	margin-top: 1.5em;
+	height: 4em;
+}
 
-		.banner {
-			background-color: #777;
-			-moz-border-radius-topleft: 10px;
-			-webkit-border-top-left-radius: 10px;
-			-moz-border-radius-topright: 10px;
-			-webkit-border-top-right-radius: 10px;
-			margin-top: 1.5em;
-			height: 4em;
-		}
+.title {
+	color: white;
+	padding: 1em;
+	position: absolute;
+	color: #def;
+}
 
-		.title {
-			color: white;
-			padding: 1em;
-			position: absolute;
-			color: #def;
-		}
+.title h2 {
+	margin: 0;
+}
 
-		.title h2 {
-			margin: 0;
-		}
+.error {
+	position: absolute;
+	left: 12%;
+	right: 12%;
+	text-align: center;
+	background-color: red;
+}
 
-		.error {
-			position: absolute;
-			left: 12%;
-			right: 12%;
-			text-align: center;
-			background-color: red;
-		}
+.login {
+	position: absolute;
+	left: 75%;
+	right: 0%;
+	text-align: center;
+	color: #def;
+}
 
-		.login {
-			position: absolute;
-			left: 75%;
-			right: 0%;
-			text-align: center;
-			color: #def;
-		}
+.users {
+	position: absolute;
+	right: 0;
+}
 
-		.users {
-			position: absolute;
-			right: 0;
-		}
+.centered {
+	width: contentWidth;
+	margin-right: auto;
+	margin-left: auto;
+}
 
-		.centered {
-			width: contentWidth;
-			margin-right: auto;
-			margin-left: auto;
-		}
+.content {
+	position: relative;
+	border: 1px solid #ddf;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+}
 
-		.content {
-			position: relative;
-			border: 1px solid #ddf;
-			overflow-y: auto;
-			overflow-x: hidden;
-			-moz-border-radius-bottomleft: 10px;
-			-webkit-border-bottom-left-radius: 10px;
-			-moz-border-radius-bottomright: 10px;
-			-webkit-border-bottom-right-radius: 10px;
-		}
+.entities {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 11em;
+}
 
-		.entities {
-			position: absolute;
-			left: 0;
-			top: 0;
-			bottom: 0;
-			width: 11em;
-		}
+.entitiesList {
+	border-right: 1px solid #ddf;
+	height: 100%;
+	outline: none;
+}
 
-		.entitiesList {
-			border-right: 1px solid #ddf;
-			height: 100%;
-			outline: none;
-		}
+.entitiesList>div>div {
+	padding-left: 1em;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
 
-		.entitiesList > div > div {
-			padding-left: 1em;
-			padding-top: 5px;
-			padding-bottom: 5px;
-		}
-
-		.entityDetails {
-			/* dk, 2011-09-01: we don't want too much free space on the left
+.entityDetails {
+	/* dk, 2011-09-01: we don't want too much free space on the left
 			margin-left: 11em;
 			*/
-		}
+	
+}
 
+.logos {
+	color: #aaa;
+	font-size: 0.8em;
+	width: 160px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: right;
+}
 
+  /***********************/
+ /* Important classes! */
+/**********************/
 
-		.logos {
-			color: #aaa;
-			font-size: 0.8em;
-			width: 160px;
-			margin-left: auto;
-			margin-right: auto;
-			text-align: right;
-		}
+body {	
+  background: none repeat scroll 0 0 #ffffff;
+}
+
+.mainNav {
+	border: 1px solid #555;
+	background-color: #e8e8e8;
+	padding: 2px;
+}
+
+.mainNavHeaders {
+	
+}

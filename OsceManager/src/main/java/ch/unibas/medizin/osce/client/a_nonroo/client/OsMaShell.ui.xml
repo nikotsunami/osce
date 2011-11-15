@@ -6,56 +6,20 @@
 
 <ui:style src="styles.css" />
 
-	<g:DockLayoutPanel unit='EM'>
-		<g:north size='6'>
-			<g:HTMLPanel styleName='{style.centered}'>
-				<!-- <div class='{style.banner}'>
-					<div class='{style.error}' ui:field='error'></div>
-					<span class='{style.title}'>
-						<h2>Data Browser</h2>
-					</span>
-					<s:LoginWidget styleName='{style.login}' ui:field="loginWidget"/>
-				</div> -->
-			</g:HTMLPanel>
+	<g:DockLayoutPanel unit='PX' ui:field="dockPanel">
+		<g:north size='80'>
+			<g:HTMLPanel styleName='{style.centered}'></g:HTMLPanel>
 		</g:north>
-		<!-- <g:south size='2'>
-			<g:HTML>
-				<div class='{style.logos}'>
-					<span>Powered by:</span>
-
-				</div>
-			</g:HTML>
-		</g:south>-->
+		
+		<g:west size="200" styleName='{style.mainNav}'>
+			<g:SimplePanel  ui:field='mainNav' styleName='{style.mainNav}'/>
+		</g:west>
+		
 		<g:center>
-		<g:SplitLayoutPanel>
-			<g:west size="200">
-				<g:SimplePanel styleName='{style.entities}'>
-					<g:SimplePanel  ui:field='mainNav'/>
-				</g:SimplePanel>
-			</g:west>
-			<g:center >
-				<g:FlowPanel>					
-					<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole'></g:NotificationMole>
-					<g:SimplePanel styleName="{style.entityDetails}" ui:field='master'></g:SimplePanel>
+			<g:FlowPanel>
+				<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole'></g:NotificationMole>
+				<g:SimplePanel styleName="{style.entityDetails}" ui:field='master'></g:SimplePanel>
 			</g:FlowPanel>
-			</g:center>
-			
-<!-- 			<g:center>
-			
-				<g:SimplePanel styleName="{style.entityDetails}" ui:field='details'></g:SimplePanel>
-				
-			</g:center> -->
-		</g:SplitLayoutPanel>
-			<!-- <g:FlowPanel styleName='{style.content} {style.centered}'>
-				<g:SimplePanel styleName='{style.entities}'>
-					<g:SimplePanel  ui:field='mainNav'/>
-				</g:SimplePanel>
-				<g:FlowPanel>
-					<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole'></g:NotificationMole>
-					<g:SimplePanel styleName="{style.entityDetails}" ui:field='master'></g:SimplePanel>
-				</g:FlowPanel>
-				<g:SimplePanel styleName="{style.entityDetails}" ui:field='details'></g:SimplePanel>
-			</g:FlowPanel> -->
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

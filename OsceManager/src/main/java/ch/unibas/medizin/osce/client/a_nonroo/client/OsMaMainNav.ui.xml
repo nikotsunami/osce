@@ -4,7 +4,6 @@
 
 	<ui:style src="styles.css" />
 
-
 	<g:HTMLPanel>
 		<g:DisclosurePanel ui:field="masterDataPanel" open="true">
 			<g:header>Stammdaten</g:header>
