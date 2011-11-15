@@ -13,8 +13,9 @@
  */
  
 body,table td,select {
-	font-family: Arial Unicode MS, Arial, sans-serif;
-	font-size: small;
+	font-size: 62.5%;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	line-height: 1.3;
 }
 
 pre {
@@ -23,18 +24,16 @@ pre {
 }
 
 body {
-	color: black;
+	color: #222;
 	margin: 0px;
 	border: 0px;
 	padding: 0px;
 	direction: ltr;
-	background-color: #d8d8d8;
-	background-image: url('images/background.gif');
-	background-repeat: repeat;
+	background-color: #fff;
 }
 
 a,a:visited,a:hover {
-	color: #0000AA;
+	color: #000;
 }
 
 /**
@@ -53,19 +52,18 @@ a,a:visited,a:hover {
 	margin: 0;
 	padding: 3px 5px;
 	text-decoration: none;
-	font-size: small;
 	cursor: pointer;
 	cursor: hand;
-	background: url("images/hborder.png") repeat-x 0px -27px;
-	border: 1px outset #ccc;
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	border: 1px solid #999;
 }
 
 .gwt-Button:active {
-	border: 1px inset #ccc;
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
 .gwt-Button:hover {
-	border-color: #9cf #69e #69e #7af;
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
 .gwt-Button[disabled] {
@@ -229,12 +227,16 @@ a,a:visited,a:hover {
 .gwt-DisclosurePanel {
 }
 
-.gwt-DisclosurePanel-open {
-	
+.gwt-DisclosurePanel .header {
+	margin-top: 1px;
 }
 
-.gwt-DisclosurePanel-closed {
-	
+.gwt-DisclosurePanel-open .header {
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
+}
+
+.gwt-DisclosurePanel-closed .header {
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
 .gwt-DisclosurePanel .header,.gwt-DisclosurePanel .header a,.gwt-DisclosurePanel .header td
@@ -243,12 +245,28 @@ a,a:visited,a:hover {
 	color: black;
 	cursor: pointer;
 	cursor: hand;
+	
+	border-left: 1px solid #AAAAAA;
+	border-right: 1px solid #AAAAAA;
+	border-top: 1px solid #AAAAAA;
+	border-bottom: 0;
+	
+	-moz-border-radius-topright: 2px;
+	-moz-border-radius-topleft: 2px;
 }
 
 .gwt-DisclosurePanel .content {
 	border-left: 3px solid #e3e3e3;
 	padding: 4px 0px 4px 8px;
 	margin-left: 6px;
+	
+	border-top: 0;
+	border-left: 1px solid #AAAAAA;
+	border-right: 1px solid #AAAAAA;
+	border-bottom: 1px solid #AAAAAA;
+	
+	-moz-border-radius-bottomright: 2px;
+	-moz-border-radius-bottomleft: 2px;
 }
 
 .gwt-FileUpload {
