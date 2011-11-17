@@ -11,7 +11,7 @@
 			<g:HTMLPanel styleName='{style.centered}'></g:HTMLPanel>
 		</g:north>
 		
-		<g:west size="200" addStyleNames='{style.mainNav}'>
+		<g:west size="160" addStyleNames='{style.mainNav}'>
 			<g:SimplePanel  ui:field='mainNav' addStyleNames='{style.mainNav}'/>
 		</g:west>
 		

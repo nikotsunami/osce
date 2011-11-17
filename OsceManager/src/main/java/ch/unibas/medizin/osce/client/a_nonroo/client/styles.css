@@ -276,20 +276,16 @@
  /* Important classes! */
 /**********************/
 
-body {	
-  background: none repeat scroll 0 0 #ffffff;
+body {
+	background: none repeat scroll 0 0 #ffffff;
 }
 
+  /**************/
+ /* NAVIGATION */
+/**************/
 .mainNav {
 	padding-left:8px;
 	padding-right: 8px;
-}
-
-.mainNav a {
-    display: block;
-    text-decoration: none;
-    font-weight: bold;
-    width: 100%;
 }
 
 .mainNavPanel {
@@ -298,6 +294,32 @@ body {
 	width: 100%;
 }
 
+.mainNavPanel table {
+	width: 100%;
+}
+
+.mainNavPanelContent a {
+    display: block;
+    /* font-weight: bold; */
+    width: 100%;
+    padding: 2px 2px 2px 2px;
+}
+
+.mainNavPanelContent a:hover {
+    background-color: #e6e6e6;
+}
+
 .mainNavHeaders {
 	
+}
+
+  /*********/
+ /* TABLE */
+/*********/
+
+.cellTable th {
+	text-shadow: none;
+	border-bottom: 1px solid #212121;
+	color: #212121;
+	font-weight: bold;
 }

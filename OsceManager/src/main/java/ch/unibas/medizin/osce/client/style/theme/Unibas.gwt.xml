@@ -17,4 +17,5 @@
 <!-- Includes the source files for the Chrome theme. -->
 <module>
       <stylesheet src="gwt/unibas/unibas.css"/>
+     <!--  <entry-point class="ch.unibas.medizin.osce.client.style.theme.Unibas" /> -->
 </module>

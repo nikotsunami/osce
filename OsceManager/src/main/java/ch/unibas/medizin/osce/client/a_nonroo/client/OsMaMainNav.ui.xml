@@ -8,7 +8,7 @@
 		<g:DisclosurePanel ui:field="masterDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Stammdaten</g:header>
 			<!-- Style name für VerticalPanel -->
-			<g:VerticalPanel>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="people">Personen</g:Anchor>
 				<g:Anchor ui:field="scars">Narben</g:Anchor>
 				<g:Anchor ui:field="anamnesisForms">Anamnesewerte</g:Anchor>
@@ -19,7 +19,7 @@
 
 		<g:DisclosurePanel ui:field="administrationPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Verwaltung</g:header>
-			<g:VerticalPanel>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="administrators">Benutzer</g:Anchor>
 				<g:Anchor ui:field="nationalities">Nationalitäten</g:Anchor>
 				<g:Anchor ui:field="languages">Sprachen</g:Anchor>
@@ -29,7 +29,7 @@
 
 		<g:DisclosurePanel ui:field="examinationsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Prüfungen</g:header>
-			<g:VerticalPanel>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="osces">OSCEs</g:Anchor>
 				<g:Anchor ui:field="course">Postenlauf</g:Anchor>
 				<g:Anchor ui:field="students">Studenten</g:Anchor>
@@ -40,7 +40,7 @@
 		
 		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header>Simulationspatienten</g:header>
-			<g:VerticalPanel>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="simulationPatients">Simulationspatienten</g:Anchor>
 				<g:Anchor ui:field="roles">Rollen</g:Anchor>
 				<g:Anchor ui:field="roleAssignment">Rollenzuweisung</g:Anchor>
