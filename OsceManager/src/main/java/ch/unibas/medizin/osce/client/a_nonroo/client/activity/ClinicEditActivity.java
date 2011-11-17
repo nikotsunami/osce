@@ -45,9 +45,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
-
-
-
 	}
 
 	public ClinicEditActivity(ClinicDetailsPlace place,
@@ -58,9 +55,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		this.placeController = placeController;
 		//this.operation=operation;
 	}
-
-
-
 	public void onStop(){
 
 	}
@@ -72,7 +66,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		else
 			return null;
 	}
-
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -88,7 +81,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-
 				//updateSelection(event.getNewPlace());
 				// TODO implement
 			}
@@ -118,16 +110,14 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 					if(response instanceof ClinicProxy){
 						Log.info(((ClinicProxy) response).getName());
 						//init((ClinicProxy) response);
-						clinic=(ClinicProxy)response;
+						clinic = (ClinicProxy)response;
 						init();
 					}
 
 
 				}
 			});
-		}
-		else{
-
+		} else {
 			Log.info("new Clinic");
 			//clinicPlace.setProxyId(clinic.stableId());
 			init();
@@ -135,25 +125,16 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		//		view.initialiseDriver(requests);
 		widget.setWidget(clinicEditView.asWidget());
 		//setTable(view.getTable());
-
-
 	}
-
-
-
 
 	private void init() {
 
 		ClinicRequest request = requests.clinicRequest();
 
-		if(clinic==null){
-
-			ClinicProxy clinic = request.create(ClinicProxy.class);
-			this.clinic=clinic;
+		if(clinic == null){
+			clinic = request.create(ClinicProxy.class);
 			view.setEditTitle(false);
-
-		}else{
-
+		} else {
 			view.setEditTitle(true);
 		}
 
@@ -168,13 +149,9 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		Log.debug("Create für: "+clinic.getName());
 	}
 
-
-
-
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
-
 	}
 
 	@Override
@@ -183,12 +160,13 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 			placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), ClinicDetailsPlace.Operation.DETAILS));
 		else
 			placeController.goTo(new ClinicPlace("ClinicPlace!CANCEL"));
-
 	}
 
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
+		
+		// TODO: bug(2011-11-17) - selected doctors are not saved
 
 		editorDriver.flush().fire(new Receiver<Void>() {
 			
@@ -206,8 +184,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 				Log.warn(" in Clinic -" + message);
 
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
-
-
 			}
 			@Override
 			public void onSuccess(Void response) {
@@ -217,10 +193,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 				
 				placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), ClinicDetailsPlace.Operation.DETAILS));		
 			}
-
 		}); 
-
 	}
-
-
 }

@@ -175,17 +175,12 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 	private void init() {
 
 		StandardizedPatientRequest request = requests.standardizedPatientRequest();
-		DescriptionRequest descriptionRequest = requests.descriptionRequest();
+//		DescriptionRequest descriptionRequest = requests.descriptionRequest();
 
 		if(standardizedPatient == null) {
 			standardizedPatient = request.create(StandardizedPatientProxy.class);
-			description = descriptionRequest.create(DescriptionProxy.class);
+			description = request.create(DescriptionProxy.class);
 			standardizedPatient.setDescriptions(description);
-			
-			request.persist().using(standardizedPatient);
-			descriptionRequest.persist().using(description);
-			
-			description = descriptionRequest.edit(description);
 			
 			view.setEditTitle(false);
 			Log.info("create");
@@ -195,17 +190,17 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 			Log.info("edit");
 		}
 		
-		//request.edit(standardizedPatient);
+		Log.info("edit");
 		editorDriver.edit(standardizedPatient, request);
-		descriptionDriver.edit(description, descriptionRequest);
+		descriptionDriver.edit(description, request);
 
 		Log.info("persist");
 		request.persist().using(standardizedPatient);
-		descriptionRequest.persist().using(description);
+//		request.persist().using(description);
 
-		Log.info("flush");
-		editorDriver.flush();
-		descriptionDriver.flush();
+//		Log.info("flush");
+//		editorDriver.flush();
+//		descriptionDriver.flush();
 		
 		Log.debug("Create für: "+standardizedPatient.getName());
 	}
@@ -227,6 +222,10 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 	public void saveClicked() {
 		Log.info("saveClicked");
 
+		// FIX bug(2011-11-12) - description is NOT saved the first time!
+		// description data is read from view (data save is cascaded, therefore description has to be updated before SP is saved!)
+		descriptionDriver.flush();
+		
 		editorDriver.flush().fire(new Receiver<Void>() {
 
 			public void onFailure(ServerFailure error){
@@ -247,30 +246,32 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 				Log.info("StandardizedPatient successfully saved.");
 
 				save = true;
+				
+				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));
 
-				saveDescription();
+				//saveDescription();
 			}
 		}); 
 	}
 
-	private void saveDescription() {
-		// TODO: bug(2011-11-12) - description is NOT saved the first time!
-		
-		descriptionDriver.flush().fire(new Receiver<Void>() {
-
-			@Override
-			public void onSuccess(Void response) {
-				Log.info("Description successfully saved.");
-
-				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));		
-			}
-
-			public void onFailure(ServerFailure error){
-				Log.error(error.getMessage());
-			}
-
-		});
-
-		save = true;
-	}
+//	private void saveDescription() {
+//		// TODO: bug(2011-11-12) - description is NOT saved the first time!
+//		
+//		descriptionDriver.flush().fire(new Receiver<Void>() {
+//
+//			@Override
+//			public void onSuccess(Void response) {
+//				Log.info("Description successfully saved.");
+//
+//				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));		
+//			}
+//
+//			public void onFailure(ServerFailure error){
+//				Log.error(error.getMessage());
+//			}
+//
+//		});
+//
+//		save = true;
+//	}
 }

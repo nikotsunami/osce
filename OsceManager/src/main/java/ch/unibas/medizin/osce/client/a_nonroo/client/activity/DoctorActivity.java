@@ -31,7 +31,7 @@ public class DoctorActivity extends AbstractActivity implements
 DoctorView.Presenter, DoctorView.Delegate {
 	
     private OsMaRequestFactory requests;
-	private PlaceController placeControler;
+	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private DoctorView view;
 	private CellTable<DoctorProxy> table;
@@ -43,7 +43,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	public DoctorActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
-    	this.placeControler = placeController;
+    	this.placeController = placeController;
     	DoctorDetailsActivityMapper = new DoctorDetailsActivityMapper(requests, placeController);
 		this.activityManger = new ActivityManager(DoctorDetailsActivityMapper, requests.getEventBus());
     }
@@ -196,7 +196,8 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
+		Log.info("create clicked");
+		placeController.goTo(new DoctorDetailsPlace(DoctorDetailsPlace.Operation.CREATE));
 	}
 	
 	@Override
@@ -207,7 +208,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	@Override
 	public void goTo(Place place) {
-		placeControler.goTo(place);
+		placeController.goTo(place);
 		
 	}
 

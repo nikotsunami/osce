@@ -19,10 +19,8 @@ public class ClinicDetailsPlace extends Place {
 	}
 	private static final String SEPARATOR = "!";
 
-
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
-	
 	
 	public EntityProxyId<?> getProxyId() {
 		return proxyId;

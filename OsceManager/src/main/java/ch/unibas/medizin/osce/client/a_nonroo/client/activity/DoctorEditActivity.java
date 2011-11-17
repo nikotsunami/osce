@@ -52,6 +52,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 	private RequestFactoryEditorDriver<DoctorProxy,DoctorEditViewImpl> editorDriver;
 	private DoctorProxy doctor;
+	private OfficeProxy office;
 	private OfficeEditView officeEditView;
 	private RequestFactoryEditorDriver<OfficeProxy, OfficeEditViewImpl> officeDriver;
 	//private RequestFactoryEditorDriver<OfficeProxy, OfficeEditViewImpl> officeEditorDriver;
@@ -61,9 +62,6 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
-
-
-
 	}
 
 	public DoctorEditActivity(DoctorDetailsPlace place,
@@ -74,8 +72,6 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		this.placeController = placeController;
 		//this.operation=operation;
 	}
-
-
 
 	public void onStop(){
 
@@ -89,7 +85,6 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 			return null;
 	}
 
-
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
@@ -98,11 +93,11 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 		this.widget = panel;
 		this.view = doctorEditView;
-		
+
 		OfficeEditView officeView = new OfficeEditViewImpl();
 		view.getOfficePanel().add(officeView);
 		officeDriver = officeView.createEditorDriver();
-		
+
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
@@ -118,38 +113,33 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 			}
 		});
 
-
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-
 				//updateSelection(event.getNewPlace());
 				// TODO implement
 			}
 		});
 		//init();
 
-		if (this.place.getOperation()==DoctorDetailsPlace.Operation.EDIT){
+		if (this.place.getOperation() == DoctorDetailsPlace.Operation.EDIT) {
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("office","clinic").fire(new Receiver<Object>() {
 
 				public void onFailure(ServerFailure error){
 					Log.error(error.getMessage());
 				}
+				
 				@Override
 				public void onSuccess(Object response) {
 					if(response instanceof DoctorProxy){
 						Log.info(((DoctorProxy) response).getEmail());
 						//init((DoctorProxy) response);
-						doctor=(DoctorProxy)response;
+						doctor = (DoctorProxy)response;
 						init();
 					}
-
-
 				}
 			});
-		}
-		else{
-
+		} else {
 			Log.info("new Doctor");
 			//doctorPlace.setProxyId(doctor.stableId());
 			init();
@@ -157,26 +147,22 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		//		view.initialiseDriver(requests);
 		widget.setWidget(doctorEditView.asWidget());
 		//setTable(view.getTable());
-
-
 	}
-
-
-
 
 	private void init() {
 
 		DoctorRequest request = requests.doctorRequest();
-		OfficeRequest requestOffice = requests.officeRequest();
+//		OfficeRequest requestOffice = requests.officeRequest();
 
-		if(doctor==null){
-
-			DoctorProxy doctor = request.create(DoctorProxy.class);
-			this.doctor=doctor;
+		if(doctor == null) {
+			doctor = request.create(DoctorProxy.class);
+			office = request.create(OfficeProxy.class);
+			doctor.setOffice(office);
+			
+			//this.doctor = doctor;
 			view.setEditTitle(false);
-
-		}else{
-
+		} else {
+			office = doctor.getOffice();
 			view.setEditTitle(true);
 		}
 
@@ -184,30 +170,23 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 		Log.info("persist");
 		request.persist().using(doctor);
-		requestOffice.persist().using(doctor.getOffice());
-		
+//		requestOffice.persist().using(office);
+
 		editorDriver.edit(doctor, request);
-		officeDriver.edit(doctor.getOffice(), requestOffice);
+		officeDriver.edit(office, request);
 		//officeEditorDriver.edit(doctor.getOffice(), request);
 
-		Log.info("flush");
-		editorDriver.flush();
-		officeDriver.flush();
+//		Log.info("flush");
+//		editorDriver.flush();
+//		officeDriver.flush();
 		//officeEditorDriver.flush();
 		Log.debug("Create für: "+doctor.getEmail());
 		//		view.setValue(doctor);
-
-
-
 	}
-
-
-
 
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
-
 	}
 
 	@Override
@@ -216,25 +195,28 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 			placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));
 		else
 			placeController.goTo(new DoctorPlace("DoctorPlace!CANCEL"));
-
 	}
 
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
 
+		// FIX bug(2011-11-17) - office is NOT saved the first time!
+		// office data is read from view (data save is cascaded, therefore office has to be updated before doctor is saved!)
+		officeDriver.flush();
+		
 		editorDriver.flush().fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Doctor successfully saved.");
 
-				saveOffice();
-				//placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));
-				//	goTo(new DoctorPlace(doctor.stableId()));
+				//saveOffice();
+				save = true;
+				
+				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));
 			}
 
-
-
+			@Override
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
 
@@ -249,36 +231,29 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 				Log.warn(" in Doctor -" + message);
 
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
-
-
 			}
-
 		}); 
-
-
-
 	}
 
-	private void saveOffice() {
-		officeDriver.flush().fire(new Receiver<Void>() {
-
-			@Override
-			public void onSuccess(Void response) {
-				Log.info("Office successfully saved.");
-
-				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));				
-			}
-
-			public void onFailure(ServerFailure error){
-				Log.error(error.getMessage());
-			}
-
-		});
-
-		save=true;
-
-	}
-
-
+//	private void saveOffice() {
+//		// TODO: bug(2011-11-17) - office is NOT saved the first time!
+//		
+//		officeDriver.flush().fire(new Receiver<Void>() {
+//
+//			@Override
+//			public void onSuccess(Void response) {
+//				Log.info("Office successfully saved.");
+//
+//				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));				
+//			}
+//
+//			public void onFailure(ServerFailure error){
+//				Log.error(error.getMessage());
+//			}
+//
+//		});
+//
+//		save = true;
+//	}
 
 }
