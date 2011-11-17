@@ -35,7 +35,7 @@ public abstract class ScarEditActivityWrapper_Roo_Gwt implements Activity, IsSca
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
-        view.setTypePickerValues(Arrays.asList(TraitTypes.values()));
+        view.setTraitTypePickerValues(Arrays.asList(TraitTypes.values()));
         view.setAnamnesisFormsPickerValues(Collections.<AnamnesisFormProxy>emptyList());
         requests.anamnesisFormRequest().findAnamnesisFormEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisFormProxy>>() {
 
@@ -51,7 +51,7 @@ public abstract class ScarEditActivityWrapper_Roo_Gwt implements Activity, IsSca
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.ScarProxy, V>> extends ProxyEditView<ScarProxy, V> {
 
-        void setTypePickerValues(Collection<TraitTypes> values);
+        void setTraitTypePickerValues(Collection<TraitTypes> values);
 
         void setAnamnesisFormsPickerValues(Collection<AnamnesisFormProxy> values);
     }

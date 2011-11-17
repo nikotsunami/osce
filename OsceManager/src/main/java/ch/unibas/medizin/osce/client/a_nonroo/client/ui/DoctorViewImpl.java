@@ -9,7 +9,13 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -22,6 +28,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -40,6 +47,9 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
+	
+	@UiField
+	TextBox searchBox;
 	
 	@UiField
 	Button newButton;
@@ -80,6 +90,28 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	}
 
 	public void init() {
+		searchBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent arg0) {
+				searchBox.setValue("");
+			}
+		});
+		searchBox.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent arg0) {
+				if(searchBox.getValue().isEmpty()) {
+					searchBox.setValue("Suche...");
+				}
+			}
+		});
+		searchBox.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				String q = searchBox.getValue();
+				delegate.performSearch(q);
+			}
+		});
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 

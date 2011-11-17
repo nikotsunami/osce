@@ -32,7 +32,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 
 	private OsMaRequestFactory requests;
-	private PlaceController placeControler;
+	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private StandardizedPatientView view;
 	private CellTable<StandardizedPatientProxy> table;
@@ -44,7 +44,7 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 
 	public StandardizedPatientActivity(OsMaRequestFactory requests, PlaceController placeController) {
 		this.requests = requests;
-		this.placeControler = placeController;
+		this.placeController = placeController;
 		StandardizedPatientDetailsActivityMapper = new StandardizedPatientDetailsActivityMapper(requests, placeController);
 		this.activityManger = new ActivityManager(StandardizedPatientDetailsActivityMapper, requests.getEventBus());
 	}
@@ -97,20 +97,24 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		view.setDelegate(this);
 
 	}
-
+	
 	private void init() {
+		init2("");
+	}
 
-		fireCountRequest(new Receiver<Long>() {
+	private void init2(final String q) {
+
+		fireCountRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
 					// This activity is dead
 					return;
 				}
-				Log.debug("Geholte Intitution aus der Datenbank: " + response);
+				Log.debug("Geholte Patienten aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged();
+				onRangeChanged(q);
 			}
 
 		});
@@ -118,7 +122,7 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						StandardizedPatientActivity.this.onRangeChanged();
+						StandardizedPatientActivity.this.onRangeChanged(q);
 					}
 				});
 	}
@@ -132,7 +136,7 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	}
 
 
-	protected void onRangeChanged() {
+	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
@@ -142,16 +146,6 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 					// This activity is dead
 					return;
 				}
-				//				idToRow.clear();
-				//				idToProxy.clear();
-				//				for (int i = 0, row = range.getStart(); i < values.size(); i++, row++) {
-				//					StandardizedPatientProxy StandardizedPatient = values.get(i);
-				//					@SuppressWarnings("unchecked")
-				//					// Why is this cast needed?
-				//					EntityProxyId<StandardizedPatientProxy> proxyId = (EntityProxyId<StandardizedPatientProxy>) StandardizedPatient
-				//							.stableId();
-				//
-				//				}
 				table.setRowData(range.getStart(), values);
 
 				// finishPendingSelection();
@@ -161,21 +155,23 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 			}
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(q, range, callback);
 
 	}
 
-	private void fireRangeRequest(final Range range, final Receiver<List<StandardizedPatientProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(String q, final Range range, final Receiver<List<StandardizedPatientProxy>> callback) {
+		createRangeRequest(q, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 
-	protected Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy>> createRangeRequest(Range range) {
-		return requests.standardizedPatientRequest().findStandardizedPatientEntries(range.getStart(), range.getLength());
+	protected Request<List<StandardizedPatientProxy>> createRangeRequest(String q, Range range) {
+//		return requests.standardizedPatientRequest().findStandardizedPatientEntries(range.getStart(), range.getLength());
+		return requests.standardizedPatientRequestNonRoo().findPatientsBySearch(q, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(Receiver<Long> callback) {
-		requests.standardizedPatientRequest().countStandardizedPatients().fire(callback);
+	protected void fireCountRequest(String q, Receiver<Long> callback) {
+//		requests.standardizedPatientRequest().countStandardizedPatients().fire(callback);
+		requests.standardizedPatientRequestNonRoo().countPatientsBySearch(q).fire(callback);
 	}
 
 	private void setTable(CellTable<StandardizedPatientProxy> table) {
@@ -184,12 +180,19 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
+		Log.info("create clicked");
+		placeController.goTo(new StandardizedPatientDetailsPlace(StandardizedPatientDetailsPlace.Operation.CREATE));
+	}
+	
+	@Override
+	public void performSearch(String q) {
+		Log.debug("Search for " + q);
+		init2(q);
 	}
 
 	@Override
 	public void goTo(Place place) {
-		placeControler.goTo(place);
+		placeController.goTo(place);
 	}
 
 }

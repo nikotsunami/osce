@@ -5,8 +5,7 @@
 	
 	<ui:style src="../styles.css" />
 
-	<g:SplitLayoutPanel
-		ui:field="splitLayoutPanel">
+	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
 		<g:west size="500">
 			<g:ScrollPanel>
 				<g:HTMLPanel>
@@ -19,7 +18,7 @@
 					<b:CellTable pageSize="8" ui:field="table" width="100%" />
 					<div class="{style.controls}">
 						<g:TextBox ui:field="newProfession"></g:TextBox>
-						<g:Button ui:field="newButton">Create Profession</g:Button>
+						<g:Button ui:field="newButton">add</g:Button>
 						<!-- <b:SimplePager display="{table}" location="RIGHT" /> -->
 					</div>
 					<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
@@ -28,7 +27,7 @@
 		</g:west>
 		<g:center>
 			<g:ScrollPanel>
-				<g:SimplePanel ui:field="detailsPanel"></g:SimplePanel>
+				<g:SimplePanel></g:SimplePanel>
 			</g:ScrollPanel>
 		</g:center>
 	</g:SplitLayoutPanel>

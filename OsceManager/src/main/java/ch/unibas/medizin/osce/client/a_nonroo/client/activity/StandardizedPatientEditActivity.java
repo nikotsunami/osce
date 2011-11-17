@@ -6,15 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeEditView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeEditViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -25,11 +22,9 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
-import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -51,6 +46,7 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 
 	private RequestFactoryEditorDriver<StandardizedPatientProxy,StandardizedPatientEditViewImpl> editorDriver;
 	private StandardizedPatientProxy standardizedPatient;
+	private DescriptionProxy description;
 	private boolean save;
 	private RequestFactoryEditorDriver<DescriptionProxy, DescriptionEditViewImpl> descriptionDriver;
 
@@ -58,9 +54,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
-
-
-
 	}
 
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place,
@@ -71,8 +64,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 		this.placeController = placeController;
 		//this.operation=operation;
 	}
-
-
 
 	public void onStop(){
 
@@ -86,7 +77,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 			return null;
 	}
 
-
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
@@ -95,8 +85,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 
 		this.widget = panel;
 		this.view = standardizedPatientEditView;
-
-
 
 		editorDriver = view.createEditorDriver();
 
@@ -107,7 +95,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 		descriptionDriver = descriptionView.createEditorDriver();
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-
 				//updateSelection(event.getNewPlace());
 				// TODO implement
 			}
@@ -175,9 +162,7 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 					}
 				}
 			});
-		}
-		else{
-
+		} else {
 			Log.info("new StandardizedPatient");
 			//standardizedPatientPlace.setProxyId(standardizedPatient.stableId());
 			init();
@@ -190,55 +175,52 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 	private void init() {
 
 		StandardizedPatientRequest request = requests.standardizedPatientRequest();
-		DescriptionRequest descriptionRequest=requests.descriptionRequest();
+		DescriptionRequest descriptionRequest = requests.descriptionRequest();
 
-		if(standardizedPatient==null){
-
-			StandardizedPatientProxy standardizedPatient = request.create(StandardizedPatientProxy.class);
-			this.standardizedPatient=standardizedPatient;
+		if(standardizedPatient == null) {
+			standardizedPatient = request.create(StandardizedPatientProxy.class);
+			description = descriptionRequest.create(DescriptionProxy.class);
+			standardizedPatient.setDescriptions(description);
+			
+			request.persist().using(standardizedPatient);
+			descriptionRequest.persist().using(description);
+			
+			description = descriptionRequest.edit(description);
+			
 			view.setEditTitle(false);
-
-		}else{
-
+			Log.info("create");
+		} else {
+			description = standardizedPatient.getDescriptions();
 			view.setEditTitle(true);
+			Log.info("edit");
 		}
-
-		Log.info("edit");
-
+		
 		//request.edit(standardizedPatient);
 		editorDriver.edit(standardizedPatient, request);
-		if(standardizedPatient.getDescriptions()==null){
-			DescriptionProxy descriptionProxy = request.create(DescriptionProxy.class);
-			standardizedPatient.setDescriptions(descriptionProxy);
-		}
-		descriptionDriver.edit(standardizedPatient.getDescriptions(), descriptionRequest);
+		descriptionDriver.edit(description, descriptionRequest);
 
 		Log.info("persist");
 		request.persist().using(standardizedPatient);
-		descriptionRequest.persist().using(standardizedPatient.getDescriptions());
+		descriptionRequest.persist().using(description);
 
 		Log.info("flush");
 		editorDriver.flush();
 		descriptionDriver.flush();
+		
 		Log.debug("Create für: "+standardizedPatient.getName());
 	}
-
-
-
 
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
-
 	}
 
 	@Override
 	public void cancelClicked() {
-		if(this.place.getOperation()==StandardizedPatientDetailsPlace.Operation.EDIT)
+		if(this.place.getOperation() == StandardizedPatientDetailsPlace.Operation.EDIT)
 			placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));
 		else
 			placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!CANCEL"));
-
 	}
 
 	@Override
@@ -259,25 +241,21 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 					message += iter.next().getMessage() + "<br>";
 				}
 				Log.warn(" in StandardizedPatient -" + message);
-
-				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
-
-
 			}
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("StandardizedPatient successfully saved.");
 
-				save=true;
+				save = true;
 
 				saveDescription();
 			}
-
 		}); 
-
 	}
 
 	private void saveDescription() {
+		// TODO: bug(2011-11-12) - description is NOT saved the first time!
+		
 		descriptionDriver.flush().fire(new Receiver<Void>() {
 
 			@Override
@@ -293,9 +271,6 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 
 		});
 
-		save=true;
-
+		save = true;
 	}
-
-
 }

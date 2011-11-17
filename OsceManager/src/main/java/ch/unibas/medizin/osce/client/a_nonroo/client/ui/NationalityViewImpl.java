@@ -3,21 +3,39 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 
+import com.google.gwt.cell.client.AbstractEditableCell;
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -51,8 +69,8 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
     @UiField
     Button newButton;
     
-    @UiField
-    SimplePanel detailsPanel;
+//    @UiField
+//    SimplePanel detailsPanel;
     
     @UiField
     CellTable<NationalityProxy> table;
@@ -63,7 +81,8 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
     
     @UiHandler ("newButton")
     public void newButtonClicked(ClickEvent event) {
-    		delegate.newClicked();
+    	delegate.newClicked(newNationality.getValue());
+    	newNationality.setValue("");
     }
 
 	/**
@@ -87,9 +106,40 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 	}
 
 	public void init() {
+		searchBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent arg0) {
+				searchBox.setValue("");
+			}
+		});
+		searchBox.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent arg0) {
+				if(searchBox.getValue().isEmpty()) {
+					searchBox.setValue("Suche...");
+				}
+			}
+		});
+		searchBox.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				String q = searchBox.getValue();
+				delegate.performSearch(q);
+			}
+		});
+		newNationality.addKeyDownHandler(new KeyDownHandler() {
+		    @Override
+		    public void onKeyDown(KeyDownEvent event) {
+		        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+		        	newButtonClicked(null);
+		    }
+		});
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 
+		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
+		
 //        paths.add("id");
 //        table.addColumn(new TextColumn<NationalityProxy>() {
 //
@@ -145,8 +195,53 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 //                return renderer.render(object.getStandardizedpatients());
 //            }
 //        }, "Standardized Patient");
+		addColumn(new ActionCell<NationalityProxy>(
+				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<NationalityProxy>() {
+					public void execute(NationalityProxy nation) {
+						//Window.alert("You clicked " + institution.getInstitutionName());
+						if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(nation);
+					}
+				}), "", new GetValue<NationalityProxy>() {
+			public NationalityProxy getValue(NationalityProxy nation) {
+				return nation;
+			}
+		}, null);
 	}
 
+	/**
+	 * Add a column with a header.
+	 *
+	 * @param <C> the cell type
+	 * @param cell the cell used to render the column
+	 * @param headerText the header string
+	 * @param getter the value getter for the cell
+	 */
+	private <C> void addColumn(Cell<C> cell, String headerText,
+			final GetValue<C> getter, FieldUpdater<NationalityProxy, C> fieldUpdater) {
+		Column<NationalityProxy, C> column = new Column<NationalityProxy, C>(cell) {
+			@Override
+			public C getValue(NationalityProxy object) {
+				return getter.getValue(object);
+			}
+		};
+		column.setFieldUpdater(fieldUpdater);
+		if (cell instanceof AbstractEditableCell<?, ?>) {
+			editableCells.add((AbstractEditableCell<?, ?>) cell);
+		}
+		table.addColumn(column, headerText);
+	}
+	
+	/**
+	 * Get a cell value from a record.
+	 *
+	 * @param <C> the cell type
+	 */
+	private static interface GetValue<C> {
+		C getValue(NationalityProxy contact);
+	}
+
+	private List<AbstractEditableCell<?, ?>> editableCells;
 
 	@Override
 	public CellTable<NationalityProxy> getTable() {
@@ -158,11 +253,10 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		this.delegate = delegate;
 	}
 
-	@Override
-	public SimplePanel getDetailsPanel() {
-
-		return detailsPanel;
-	}
+//	@Override
+//	public SimplePanel getDetailsPanel() {
+//		return detailsPanel;
+//	}
 
 	@Override
 	public void setPresenter(Presenter presenter) {

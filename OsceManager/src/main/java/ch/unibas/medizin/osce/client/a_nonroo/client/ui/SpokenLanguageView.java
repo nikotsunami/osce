@@ -20,7 +20,11 @@ public interface SpokenLanguageView  extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void newClicked();
+		void newClicked(String name);
+		
+		void deleteClicked(SpokenLanguageProxy lang);
+		
+		void performSearch(String q);
 	}
 
     CellTable<SpokenLanguageProxy> getTable();
@@ -28,6 +32,6 @@ public interface SpokenLanguageView  extends IsWidget{
     
     void setDelegate(Delegate delegate);
     
-	SimplePanel getDetailsPanel();
+//	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
 }

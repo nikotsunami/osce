@@ -7,6 +7,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -69,7 +72,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 //				});
 		init();
 
-		activityManger.setDisplay(view.getDetailsPanel());
+//		activityManger.setDisplay(view.getDetailsPanel());
 
 		// Inherit the view's key provider
 		ProvidesKey<NationalityProxy> keyProvider = ((AbstractHasData<NationalityProxy>) table)
@@ -95,18 +98,22 @@ NationalityView.Presenter, NationalityView.Delegate {
 	}
 	
 	private void init() {
+		init2("");
+	}
+	
+	private void init2(final String q) {
 
-		fireCountRequest(new Receiver<Long>() {
+		fireCountRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
 					// This activity is dead
 					return;
 				}
-				Log.debug("Geholte Intitution aus der Datenbank: " + response);
+				Log.debug("Geholte Nationalitäten aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged();
+				onRangeChanged(q);
 			}
 
 		});
@@ -114,7 +121,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						NationalityActivity.this.onRangeChanged();
+						NationalityActivity.this.onRangeChanged(q);
 					}
 				});
 	}
@@ -128,7 +135,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 	}
 	
 
-	protected void onRangeChanged() {
+	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<NationalityProxy>> callback = new Receiver<List<NationalityProxy>>() {
@@ -138,16 +145,6 @@ NationalityView.Presenter, NationalityView.Delegate {
 					// This activity is dead
 					return;
 				}
-//				idToRow.clear();
-//				idToProxy.clear();
-//				for (int i = 0, row = range.getStart(); i < values.size(); i++, row++) {
-//					NationalityProxy nationality = values.get(i);
-//					@SuppressWarnings("unchecked")
-//					// Why is this cast needed?
-//					EntityProxyId<NationalityProxy> proxyId = (EntityProxyId<NationalityProxy>) nationality
-//							.stableId();
-//
-//				}
 				table.setRowData(range.getStart(), values);
 
 				// finishPendingSelection();
@@ -157,24 +154,23 @@ NationalityView.Presenter, NationalityView.Delegate {
 			}
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(q, range, callback);
 
 	}
 	
-	private void fireRangeRequest(final Range range,
-			final Receiver<List<NationalityProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(String name, final Range range, final Receiver<List<NationalityProxy>> callback) {
+		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>> createRangeRequest(
-			Range range) {
-		return requests.nationalityRequest().findNationalityEntries(range.getStart(), range.getLength());
+	protected Request<List<NationalityProxy>> createRangeRequest(String name, Range range) {
+//		return requests.nationalityRequest().findNationalityEntries(range.getStart(), range.getLength());
+		return requests.nationalityRequestNonRoo().findNationalitiesByName(name, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(Receiver<Long> callback) {
-		requests.nationalityRequest()
-				.countNationalitys().fire(callback);
+	protected void fireCountRequest(String name, Receiver<Long> callback) {
+//		requests.nationalityRequest().countNationalitys().fire(callback);
+		requests.nationalityRequestNonRoo().countNationalitiesByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<NationalityProxy> table) {
@@ -183,9 +179,34 @@ NationalityView.Presenter, NationalityView.Delegate {
 	}
 
 	@Override
-	public void newClicked() {
-		// TODO Auto-generated method stub
+	public void newClicked(String name) {
+		Log.debug("Add nationality");
+		NationalityRequest nationReq = requests.nationalityRequest();
+		NationalityProxy nation = nationReq.create(NationalityProxy.class);
+		nation.setNationality(name);
 		
+		nationReq.persist().using(nation).fire(new Receiver<Void>(){
+			@Override
+			public void onSuccess(Void arg0) {
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void deleteClicked(NationalityProxy nation) {
+		requests.nationalityRequest().remove().using(nation).fire(new Receiver<Void>() {
+			public void onSuccess(Void ignore) {
+				Log.debug("Sucessfully deleted");
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void performSearch(String q) {
+		Log.debug("Search for " + q);
+		init2(q);
 	}
 
 	@Override

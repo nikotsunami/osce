@@ -17,6 +17,8 @@ public interface DoctorView  extends IsWidget{
 	 */
 	interface Delegate {
 		void newClicked();
+		
+		void performSearch(String q);
 	}
 
     CellTable<DoctorProxy> getTable();

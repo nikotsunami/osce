@@ -6,7 +6,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetails
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageRequest;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -69,7 +72,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 //				});
 		init();
 
-		activityManger.setDisplay(view.getDetailsPanel());
+//		activityManger.setDisplay(view.getDetailsPanel());
 
 		// Inherit the view's key provider
 		ProvidesKey<SpokenLanguageProxy> keyProvider = ((AbstractHasData<SpokenLanguageProxy>) table)
@@ -95,18 +98,22 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	}
 	
 	private void init() {
+		init2("");
+	}
+	
+	private void init2(final String q) {
 
-		fireCountRequest(new Receiver<Long>() {
+		fireCountRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
 					// This activity is dead
 					return;
 				}
-				Log.debug("Geholte Intitution aus der Datenbank: " + response);
+				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged();
+				onRangeChanged(q);
 			}
 
 		});
@@ -114,7 +121,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						SpokenLanguageActivity.this.onRangeChanged();
+						SpokenLanguageActivity.this.onRangeChanged(q);
 					}
 				});
 	}
@@ -128,7 +135,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	}
 	
 
-	protected void onRangeChanged() {
+	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<SpokenLanguageProxy>> callback = new Receiver<List<SpokenLanguageProxy>>() {
@@ -138,16 +145,6 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 					// This activity is dead
 					return;
 				}
-//				idToRow.clear();
-//				idToProxy.clear();
-//				for (int i = 0, row = range.getStart(); i < values.size(); i++, row++) {
-//					SpokenLanguageProxy SpokenLanguage = values.get(i);
-//					@SuppressWarnings("unchecked")
-//					// Why is this cast needed?
-//					EntityProxyId<SpokenLanguageProxy> proxyId = (EntityProxyId<SpokenLanguageProxy>) SpokenLanguage
-//							.stableId();
-//
-//				}
 				table.setRowData(range.getStart(), values);
 
 				// finishPendingSelection();
@@ -157,24 +154,23 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 			}
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(q, range, callback);
 
 	}
 	
-	private void fireRangeRequest(final Range range,
-			final Receiver<List<SpokenLanguageProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(String name, final Range range, final Receiver<List<SpokenLanguageProxy>> callback) {
+		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy>> createRangeRequest(
-			Range range) {
-		return requests.spokenLanguageRequest().findSpokenLanguageEntries(range.getStart(), range.getLength());
+	protected Request<List<SpokenLanguageProxy>> createRangeRequest(String name, Range range) {
+//		return requests.spokenLanguageRequest().findSpokenLanguageEntries(range.getStart(), range.getLength());
+		return requests.languageRequestNonRoo().findLanguagesByName(name, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(Receiver<Long> callback) {
-		requests.spokenLanguageRequest()
-				.countSpokenLanguages().fire(callback);
+	protected void fireCountRequest(String name, Receiver<Long> callback) {
+//		requests.spokenLanguageRequest().countSpokenLanguages().fire(callback);
+		requests.languageRequestNonRoo().countLanguagesByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<SpokenLanguageProxy> table) {
@@ -183,9 +179,35 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	}
 
 	@Override
-	public void newClicked() {
-		// TODO Auto-generated method stub
+	public void newClicked(String name) {
+		Log.debug("Add language");
+		SpokenLanguageRequest langReq = requests.spokenLanguageRequest();
+		SpokenLanguageProxy lang = langReq.create(SpokenLanguageProxy.class);
+		//reques.edit(scar);
+		lang.setLanguageName(name);
 		
+		langReq.persist().using(lang).fire(new Receiver<Void>(){
+			@Override
+			public void onSuccess(Void arg0) {
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void deleteClicked(SpokenLanguageProxy lang) {
+		requests.spokenLanguageRequest().remove().using(lang).fire(new Receiver<Void>() {
+			public void onSuccess(Void ignore) {
+				Log.debug("Sucessfully deleted");
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void performSearch(String q) {
+		Log.debug("Search for " + q);
+		init2(q);
 	}
 
 	@Override

@@ -38,12 +38,12 @@ INSERT INTO `osce`.`standardized_patient` (`birthday`, `city`, `email`, `gender`
 INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES ('gut', '1', '1', '0');
 INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES ('Muttersprache', '3', '1', '0');
 
-INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Oberarm (links)', '0');
-INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Oberarm (rechts)', '0');
-INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Unterarm (links)', '0');
-INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Unterarm (rechts)', '0');
-INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Knie (links)', '0');
-INSERT INTO `osce`.`scar` (`bodypart`, `version`) VALUES ('Knie (rechts)', '0');
+INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Oberarm (links)', '0', '0');
+INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Oberarm (rechts)', '0', '0');
+INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Unterarm (links)', '0', '0');
+INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Unterarm (rechts)', '0', '0');
+INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Knie (links)', '0', '0');
+INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Knie (rechts)', '0', '0');
 
 INSERT INTO `osce`.`anamnesis_form_scars` (`anamnesis_forms`, `scars`) VALUES (1, 1);
 INSERT INTO `osce`.`anamnesis_form_scars` (`anamnesis_forms`, `scars`) VALUES (1, 3);

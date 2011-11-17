@@ -162,8 +162,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	@UiHandler("delete")
 	public void onDeleteClicked(ClickEvent e) {
-		if(confirm("are you sure?"))
-			delegate.deleteClicked();
+		delegate.deleteClicked();
 	}
 
 	@UiHandler("edit")

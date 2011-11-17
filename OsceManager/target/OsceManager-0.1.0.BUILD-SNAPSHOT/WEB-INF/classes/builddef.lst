@@ -198,8 +198,8 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/OscePostListView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/activity/ApplicationMainActivitiesMapper.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/AnamnesisCheck_Roo_ToString.aj
-/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/scaffold/place/ProxyListPlace.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/scaffold/place/ProxyDetailsView.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/scaffold/place/ProxyListPlace.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/LangSkillMobileDetailsView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/StandardizedPatientDetailsView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/EliminationCriterionEditActivityWrapper_Roo_Gwt.java
@@ -276,8 +276,8 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/DescriptionActivitiesMapper.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/BankaccountProxyRenderer.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/OscePostRoomEditActivityWrapper.java
-/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/ProfessionMobileDetailsView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/StandardizedPatient_Roo_JavaBean.aj
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/ProfessionMobileDetailsView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/SpokenLanguageMobileDetailsView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/EliminationCriterionListActivity.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AnamnesisFormMobileEditView_Roo_Gwt.java
@@ -353,6 +353,7 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/LangSkill_Roo_Entity.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AnamnesisChecksValueMobileEditView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/PatientInSemesterMobileDetailsView_Roo_Gwt.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Scar_Roo_Configurable.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/EliminationCriterionSetEditor_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AssignmentMobileEditView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/StandardizedRoleSetEditor_Roo_Gwt.java
@@ -568,9 +569,9 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/ioc/OsMaGinModule.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/ClinicListActivity.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AnamnesisChecksValueDetailsView_Roo_Gwt.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AdministratorEditView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/OsceDayMobileEditView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/RoleTopicProxyRenderer.java
-/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AdministratorEditView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/scaffold/place/ProxyListPlacePicker.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/request/RoomRequest.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/EliminationCriterionEditView_Roo_Gwt.java
@@ -705,6 +706,7 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/PatientInRole_Roo_JavaBean.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AdministratorProxyRenderer.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/SpokenLanguage_Roo_Configurable.aj
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Scar_Roo_Entity.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/CourseActivitiesMapper.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/ui/SpokenLanguageView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AdministratorListEditor.java
@@ -934,6 +936,7 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/AnamnesisFormDetailsActivity.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/SpokenLanguage.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/SpokenLanguageListEditor_Roo_Gwt.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/shared/TraitTypes.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/StandardizedRoleMobileDetailsView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/activity/AnamnesisFormDetailsActivity.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AnamnesisCheckListView.java
@@ -959,6 +962,7 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/OsceActivitiesMapper.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Nationality.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/request/EliminationCriterionRequest.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Scar_Roo_JavaBean.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/AnamnesisCheckActivitiesMapper.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/DoctorListEditor.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/ui/AdministratorEditView.java
@@ -977,7 +981,6 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/StandardizedRoleEditActivityWrapper_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/DescriptionListEditor_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/StandardizedRoleMobileEditView_Roo_Gwt.java
-/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Trait.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/AssignmentDetailsActivity_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/OscePostEditView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/PatientInRoleEditActivityWrapper.java
@@ -1003,14 +1006,15 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/ProfessionDetailsActivity_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/ClinicProxyRenderer.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/BankaccountListView.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AnamnesisChecksValueMobileListView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/LangSkillListView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/DoctorMobileEditView.java
-/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AnamnesisChecksValueMobileListView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AssignmentMobileDetailsView.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/ui/sp/StandardizedPatientEditViewImpl.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/scaffold/ScaffoldMobileApp.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Assignment_Roo_Configurable.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AdministratorDetailsView_Roo_Gwt.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Scar.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/AdministratorMobileListView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/activity/PatientInRoleEditActivityWrapper_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/request/DoctorRequest.java
@@ -1020,6 +1024,7 @@ UTF-8
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/a_nonroo/client/activity/NationalityDetailsActivityMapper.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/EliminationCriterionListEditor.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/OscePostRoomMobileDetailsView_Roo_Gwt.java
+/home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/domain/Scar_Roo_ToString.aj
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/OfficeMobileListView_Roo_Gwt.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/LangSkillSetEditor.java
 /home/dk/git/osce/OsceManager/src/main/java/ch/unibas/medizin/osce/client/managed/ui/DoctorProxyRenderer.java

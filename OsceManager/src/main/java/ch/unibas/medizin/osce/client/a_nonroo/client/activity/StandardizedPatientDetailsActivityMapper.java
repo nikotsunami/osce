@@ -32,11 +32,9 @@ public class StandardizedPatientDetailsActivityMapper  implements ActivityMapper
 			 if(((StandardizedPatientDetailsPlace) place).getOperation() == StandardizedPatientDetailsPlace.Operation.EDIT)
 				 return new StandardizedPatientEditActivity((StandardizedPatientDetailsPlace) place, requests, placeController);
 			 if(((StandardizedPatientDetailsPlace) place).getOperation() == StandardizedPatientDetailsPlace.Operation.CREATE)
-				 return new StandardizedPatientEditActivity((StandardizedPatientDetailsPlace) place, requests, placeController,  StandardizedPatientDetailsPlace.Operation.CREATE);
+				 return new StandardizedPatientEditActivity((StandardizedPatientDetailsPlace) place, requests, placeController, StandardizedPatientDetailsPlace.Operation.CREATE);
 		 }
-	            
 
-
-		return null;
+		 return null;
 	}
 }

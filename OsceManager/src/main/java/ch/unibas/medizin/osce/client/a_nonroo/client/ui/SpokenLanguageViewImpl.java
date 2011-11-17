@@ -3,21 +3,39 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 
+import com.google.gwt.cell.client.AbstractEditableCell;
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -46,10 +64,13 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 	TextBox searchBox;
 	
 	@UiField
-	Button newButton;
+	TextBox newLanguage;
 	
 	@UiField
-	SimplePanel detailsPanel;
+	Button newButton;
+	
+//	@UiField
+//	SimplePanel detailsPanel;
 
 	@UiField
 	CellTable<SpokenLanguageProxy> table;
@@ -60,7 +81,8 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
-		delegate.newClicked();
+		delegate.newClicked(newLanguage.getValue());
+		newLanguage.setValue("");
 	}
 
 	/**
@@ -84,8 +106,39 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 	}
 
 	public void init() {
+		searchBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent arg0) {
+				searchBox.setValue("");
+			}
+		});
+		searchBox.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent arg0) {
+				if(searchBox.getValue().isEmpty()) {
+					searchBox.setValue("Suche...");
+				}
+			}
+		});
+		searchBox.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				String q = searchBox.getValue();
+				delegate.performSearch(q);
+			}
+		});
+		newLanguage.addKeyDownHandler(new KeyDownHandler() {
+		    @Override
+		    public void onKeyDown(KeyDownEvent event) {
+		        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+		        	newButtonClicked(null);
+		    }
+		});
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		
+		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
 //		paths.add("id");
 //		table.addColumn(new TextColumn<SpokenLanguageProxy>() {
@@ -142,7 +195,53 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 //				return renderer.render(object.getLangskills());
 //			}
 //		}, "Langskills");
+		addColumn(new ActionCell<SpokenLanguageProxy>(
+				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<SpokenLanguageProxy>() {
+					public void execute(SpokenLanguageProxy lang) {
+						//Window.alert("You clicked " + institution.getInstitutionName());
+						if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(lang);
+					}
+				}), "", new GetValue<SpokenLanguageProxy>() {
+			public SpokenLanguageProxy getValue(SpokenLanguageProxy lang) {
+				return lang;
+			}
+		}, null);
 	}
+	
+	/**
+	 * Add a column with a header.
+	 *
+	 * @param <C> the cell type
+	 * @param cell the cell used to render the column
+	 * @param headerText the header string
+	 * @param getter the value getter for the cell
+	 */
+	private <C> void addColumn(Cell<C> cell, String headerText,
+			final GetValue<C> getter, FieldUpdater<SpokenLanguageProxy, C> fieldUpdater) {
+		Column<SpokenLanguageProxy, C> column = new Column<SpokenLanguageProxy, C>(cell) {
+			@Override
+			public C getValue(SpokenLanguageProxy object) {
+				return getter.getValue(object);
+			}
+		};
+		column.setFieldUpdater(fieldUpdater);
+		if (cell instanceof AbstractEditableCell<?, ?>) {
+			editableCells.add((AbstractEditableCell<?, ?>) cell);
+		}
+		table.addColumn(column, headerText);
+	}
+	
+	/**
+	 * Get a cell value from a record.
+	 *
+	 * @param <C> the cell type
+	 */
+	private static interface GetValue<C> {
+		C getValue(SpokenLanguageProxy contact);
+	}
+
+	private List<AbstractEditableCell<?, ?>> editableCells;
 
 	@Override
 	public CellTable<SpokenLanguageProxy> getTable() {
@@ -155,10 +254,10 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 
 	}
 
-	@Override
-	public SimplePanel getDetailsPanel() {
-		return detailsPanel;
-	}
+//	@Override
+//	public SimplePanel getDetailsPanel() {
+//		return detailsPanel;
+//	}
 
 	@Override
 	public void setPresenter(Presenter presenter) {

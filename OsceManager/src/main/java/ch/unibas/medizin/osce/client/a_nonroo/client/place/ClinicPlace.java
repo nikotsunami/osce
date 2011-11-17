@@ -8,7 +8,6 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
 
 public class ClinicPlace extends Place {
 	
-	
 	private String token;
 
 	public ClinicPlace(){

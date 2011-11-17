@@ -27,16 +27,17 @@ public class StandardizedPatientDetailsPlace extends Place {
 	}
 
 	public StandardizedPatientDetailsPlace(){
-		
 		this.token = "SystemStartPlace";
 	}
 	public StandardizedPatientDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
-		
+	}
+	
+	public StandardizedPatientDetailsPlace(Operation operation) {
+		this.operation = operation;
 	}
 
     public StandardizedPatientDetailsPlace(EntityProxyId<?> stableId, Operation operation) {
-
 		this.operation = operation;
 		proxyId = stableId;
 	}
@@ -80,7 +81,7 @@ public class StandardizedPatientDetailsPlace extends Place {
 				return new StandardizedPatientDetailsPlace(requests.getProxyId(bits[0]), Operation.EDIT);
 			}
 			if (Operation.CREATE == operation) {
-				return new StandardizedPatientDetailsPlace(requests.getProxyId(bits[0]), Operation.CREATE);
+				return new StandardizedPatientDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
 
 			return new StandardizedPatientDetailsPlace(token);
@@ -95,9 +96,8 @@ public class StandardizedPatientDetailsPlace extends Place {
 				return place.getProxyId() + SEPARATOR + StandardizedPatientDetailsPlace.Operation.EDIT;
 			}
 			if (Operation.CREATE == place.getOperation()) {
-				return place.getProxyId() + SEPARATOR + StandardizedPatientDetailsPlace.Operation.CREATE;
+				return /*place.getProxyId() + SEPARATOR + */StandardizedPatientDetailsPlace.Operation.CREATE.toString();
 			}
-
         
 			return place.getToken();
 		}

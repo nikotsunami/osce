@@ -43,7 +43,7 @@ public abstract class ScarEditView_Roo_Gwt extends Composite implements View<Sca
     TextBox bodypart;
 
     @UiField(provided = true)
-    ValueListBox<TraitTypes> type = new ValueListBox<TraitTypes>(new AbstractRenderer<ch.unibas.medizin.osce.shared.TraitTypes>() {
+    ValueListBox<TraitTypes> traitType = new ValueListBox<TraitTypes>(new AbstractRenderer<ch.unibas.medizin.osce.shared.TraitTypes>() {
 
         public String render(ch.unibas.medizin.osce.shared.TraitTypes obj) {
             return obj == null ? "" : String.valueOf(obj);
@@ -53,11 +53,11 @@ public abstract class ScarEditView_Roo_Gwt extends Composite implements View<Sca
     @UiField
     AnamnesisFormSetEditor anamnesisForms;
 
-    public void setAnamnesisFormsPickerValues(Collection<AnamnesisFormProxy> values) {
-        anamnesisForms.setAcceptableValues(values);
+    public void setTraitTypePickerValues(Collection<TraitTypes> values) {
+        traitType.setAcceptableValues(values);
     }
 
-    public void setTypePickerValues(Collection<TraitTypes> values) {
-        type.setAcceptableValues(values);
+    public void setAnamnesisFormsPickerValues(Collection<AnamnesisFormProxy> values) {
+        anamnesisForms.setAcceptableValues(values);
     }
 }

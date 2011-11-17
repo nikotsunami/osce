@@ -9,7 +9,13 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -45,7 +51,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	SplitLayoutPanel splitLayoutPanel;
 	
 	@UiField
-	TextBox searchScar;
+	TextBox searchBox;
 	
 	@UiField
 	Button newButton;
@@ -86,6 +92,28 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
+		searchBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent arg0) {
+				searchBox.setValue("");
+			}
+		});
+		searchBox.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent arg0) {
+				if(searchBox.getValue().isEmpty()) {
+					searchBox.setValue("Suche...");
+				}
+			}
+		});
+		searchBox.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				String q = searchBox.getValue();
+				delegate.performSearch(q);
+			}
+		});
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 

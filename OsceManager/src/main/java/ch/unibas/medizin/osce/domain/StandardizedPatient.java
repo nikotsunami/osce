@@ -7,8 +7,13 @@ import ch.unibas.medizin.osce.shared.Gender;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Pattern;
 import ch.unibas.medizin.osce.domain.Description;
@@ -80,4 +85,23 @@ public class StandardizedPatient {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient")
     private Set<LangSkill> langskills = new HashSet<LangSkill>();
+    
+    public static Long countPatientsBySearch(String q) {
+    	EntityManager em = entityManager();
+    	TypedQuery<Long> query = em.createQuery("SELECT COUNT(o) FROM StandardizedPatient o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Long.class);
+    	query.setParameter("q", "%" + q + "%");
+    	
+    	return query.getSingleResult();
+    }
+    
+    public static List<StandardizedPatient> findPatientsBySearch(String q, int firstResult, int maxResults) {
+        if (q == null) throw new IllegalArgumentException("The q argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<StandardizedPatient> query = em.createQuery("SELECT o FROM StandardizedPatient AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", StandardizedPatient.class);
+        query.setParameter("q", "%" + q + "%");
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        
+        return query.getResultList();
+    }
 }

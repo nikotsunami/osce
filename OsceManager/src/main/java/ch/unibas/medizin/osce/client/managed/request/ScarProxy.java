@@ -24,9 +24,9 @@ public interface ScarProxy extends EntityProxy {
 
     abstract void setBodypart(String bodypart);
 
-    abstract TraitTypes getType();
+    abstract TraitTypes getTraitType();
 
-    abstract void setType(TraitTypes type);
+    abstract void setTraitType(TraitTypes traitType);
 
     abstract Set<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy> getAnamnesisForms();
 

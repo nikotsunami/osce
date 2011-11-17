@@ -10,7 +10,7 @@
 			<g:header>Stammdaten</g:header>
 			<g:VerticalPanel>
 				<g:Anchor ui:field="people">Personen</g:Anchor>
-				<g:Anchor ui:field="scars">Narben</g:Anchor>
+				<g:Anchor ui:field="scars">Merkmale</g:Anchor>
 				<g:Anchor ui:field="anamnesisForms">Anamnesewerte</g:Anchor>
 				<g:Anchor ui:field="clinics">Spitäler</g:Anchor>
 				<g:Anchor ui:field="doctors">Ärzte</g:Anchor>

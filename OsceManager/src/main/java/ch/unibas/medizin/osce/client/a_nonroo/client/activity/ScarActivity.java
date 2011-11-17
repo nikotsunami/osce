@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -150,13 +151,12 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		fireRangeRequest(q, range, callback);
 	}
 	
-	private void fireRangeRequest(String name, final Range range,
-			final Receiver<List<ScarProxy>> callback) {
+	private void fireRangeRequest(String name, final Range range, final Receiver<List<ScarProxy>> callback) {
 		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<java.util.List<ScarProxy>> createRangeRequest(String name, Range range) {
+	protected Request<List<ScarProxy>> createRangeRequest(String name, Range range) {
 		//return requests.scarRequest().findScarEntries(range.getStart(), range.getLength());
 		return requests.scarRequestNonRoo().findScarEntriesByName(name, range.getStart(), range.getLength());
 	}
@@ -171,12 +171,13 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	}
 
 	@Override
-	public void newClicked(String name) {
+	public void newClicked(TraitTypes traitType, String name) {
 		Log.debug("Add scar");
 		ScarRequest scarReq = requests.scarRequest();
 		ScarProxy scar = scarReq.create(ScarProxy.class);
 		//reques.edit(scar);
 		scar.setBodypart(name);
+		scar.setTraitType(traitType);
 		
 		scarReq.persist().using(scar).fire(new Receiver<Void>(){
 			@Override
@@ -188,11 +189,9 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	
 	@Override
 	public void deleteClicked(ScarProxy scar) {
-		requests.scarRequest().remove()
-		.using(scar).fire(new Receiver<Void>() {
-
+		requests.scarRequest().remove().using(scar).fire(new Receiver<Void>() {
 			public void onSuccess(Void ignore) {
-				Log.debug("Sucessfull deleted");
+				Log.debug("Sucessfully deleted");
 				init();
 			}
 		});

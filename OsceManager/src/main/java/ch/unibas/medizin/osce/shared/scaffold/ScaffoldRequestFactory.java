@@ -15,5 +15,11 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	 */
 	LoggingRequest loggingRequest();
 	AdministratorRequestNonRoo administratorRequestNonRoo();
+	ClinicRequestNonRoo clinicRequestNonRoo();
+	DoctorRequestNonRoo doctorRequestNonRoo();
 	ScarRequestNonRoo scarRequestNonRoo();
+	ProfessionRequestNonRoo professionRequestNonRoo();
+	SpokenLanguageRequestNonRoo languageRequestNonRoo();
+	NationalityRequestNonRoo nationalityRequestNonRoo();
+	StandardizedPatientRequestNonRoo standardizedPatientRequestNonRoo();
 }

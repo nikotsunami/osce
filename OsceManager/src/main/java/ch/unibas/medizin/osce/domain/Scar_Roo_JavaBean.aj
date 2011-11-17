@@ -18,12 +18,12 @@ privileged aspect Scar_Roo_JavaBean {
         this.bodypart = bodypart;
     }
     
-    public TraitTypes Scar.getType() {
-        return this.type;
+    public TraitTypes Scar.getTraitType() {
+        return this.traitType;
     }
     
-    public void Scar.setType(TraitTypes type) {
-        this.type = type;
+    public void Scar.setTraitType(TraitTypes traitType) {
+        this.traitType = traitType;
     }
     
     public Set<AnamnesisForm> Scar.getAnamnesisForms() {

@@ -6,12 +6,15 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
@@ -47,6 +50,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -71,6 +75,14 @@ public class ScarViewImpl extends Composite implements ScarView {
 
 	@UiField
 	TextBox newBodypart;
+	
+	@UiField(provided = true)
+    ValueListBox<TraitTypes> traitTypeBox = new ValueListBox<TraitTypes>(new AbstractRenderer<TraitTypes>() {
+
+        public String render(TraitTypes obj) {
+            return obj == null ? "" : String.valueOf(obj.toString());
+        }
+    });
 
 	@UiField
 	Button newButton;
@@ -87,7 +99,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
-		delegate.newClicked(newBodypart.getValue());
+		delegate.newClicked(traitTypeBox.getValue(), newBodypart.getValue());
 		newBodypart.setValue("");
 	}
 	
@@ -104,6 +116,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 	 */
 	public ScarViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		traitTypeBox.setAcceptableValues(Arrays.asList(TraitTypes.values()));
 		init();
 	}
 
@@ -147,36 +160,21 @@ public class ScarViewImpl extends Composite implements ScarView {
 		
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
-//        paths.add("id");
-//        table.addColumn(new TextColumn<ScarProxy>() {
-//
-//            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-//
-//                public String render(java.lang.Long obj) {
-//                    return obj == null ? "" : String.valueOf(obj);
-//                }
-//            };
-//
-//            @Override
-//            public String getValue(ScarProxy object) {
-//                return renderer.render(object.getId());
-//            }
-//        }, "Id");
-//        paths.add("version");
-//        table.addColumn(new TextColumn<ScarProxy>() {
-//
-//            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-//
-//                public String render(java.lang.Integer obj) {
-//                    return obj == null ? "" : String.valueOf(obj);
-//                }
-//            };
-//
-//            @Override
-//            public String getValue(ScarProxy object) {
-//                return renderer.render(object.getVersion());
-//            }
-//        }, "Version");
+		paths.add("trait_type");
+		table.addColumn(new TextColumn<ScarProxy>() {
+
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(ScarProxy object) {
+				return renderer.render(object.getTraitType().toString());
+			}
+		}, "Typ");
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
