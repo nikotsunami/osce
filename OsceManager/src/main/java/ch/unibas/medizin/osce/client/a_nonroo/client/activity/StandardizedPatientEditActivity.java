@@ -71,10 +71,15 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 
 	@Override
 	public String mayStop() {
-		if(!save)
+		if (!save && changed())
 			return "Changes will be discarded!";
 		else
 			return null;
+	}
+	
+	// use this to check if some value has changed since editing has started
+	private boolean changed() {
+		return editorDriver != null && editorDriver.flush().isChanged();
 	}
 
 	@Override
