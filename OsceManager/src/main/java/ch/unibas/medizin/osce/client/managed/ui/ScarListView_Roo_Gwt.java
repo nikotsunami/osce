@@ -75,7 +75,7 @@ public abstract class ScarListView_Roo_Gwt extends AbstractProxyListView<ScarPro
                 return renderer.render(object.getBodypart());
             }
         }, "Bodypart");
-        paths.add("type");
+        paths.add("traitType");
         table.addColumn(new TextColumn<ScarProxy>() {
 
             Renderer<ch.unibas.medizin.osce.shared.TraitTypes> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.TraitTypes>() {
@@ -87,9 +87,9 @@ public abstract class ScarListView_Roo_Gwt extends AbstractProxyListView<ScarPro
 
             @Override
             public String getValue(ScarProxy object) {
-                return renderer.render(object.getType());
+                return renderer.render(object.getTraitType());
             }
-        }, "Type");
+        }, "Trait Type");
         paths.add("anamnesisForms");
         table.addColumn(new TextColumn<ScarProxy>() {
 

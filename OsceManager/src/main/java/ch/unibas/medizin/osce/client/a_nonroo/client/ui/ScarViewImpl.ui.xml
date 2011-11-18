@@ -17,6 +17,7 @@
 					<div style="height:1em;" />
 					<b:CellTable pageSize="8" ui:field="table" width="100%" />
 					<div class="{style.controls}">
+						<g:ValueListBox ui:field="traitTypeBox"></g:ValueListBox>
 						<g:TextBox ui:field="newBodypart"></g:TextBox>
 						<g:Button ui:field="newButton">hinzufügen</g:Button>
 						<!-- <b:SimplePager display="{table}" location="RIGHT" /> -->

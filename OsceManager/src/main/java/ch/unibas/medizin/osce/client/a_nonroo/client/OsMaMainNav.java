@@ -52,7 +52,7 @@ public class OsMaMainNav extends Composite {
 			@UiField
 			Anchor people;					// Personen
 			@UiField
-			Anchor scars;					// Narben
+			Anchor scars;					// Merkmale
 			@UiField
 			Anchor anamnesisForms;			// Anamnesewerte
 			@UiField

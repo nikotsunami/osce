@@ -24,6 +24,11 @@
         
         
         
+    
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -36,9 +41,9 @@
             <div class="{style.label}">Bodypart</div>
             <div class="{style.value}" ui:field="bodypart"/>
         </div>
-        <div id="type">
-            <div class="{style.label}">Type</div>
-            <div class="{style.value}" ui:field="type"/>
+        <div id="traitType">
+            <div class="{style.label}">Trait Type</div>
+            <div class="{style.value}" ui:field="traitType"/>
         </div>
         <div id="anamnesisForms">
             <div class="{style.label}">Anamnesis Forms</div>

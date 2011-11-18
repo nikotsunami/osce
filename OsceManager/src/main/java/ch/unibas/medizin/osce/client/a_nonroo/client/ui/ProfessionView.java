@@ -16,7 +16,11 @@ public interface ProfessionView  extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void newClicked();
+		void newClicked(String string);
+		
+		void deleteClicked(ProfessionProxy prof);
+		
+		void performSearch(String q);
 	}
 
 	CellTable<ProfessionProxy> getTable();
@@ -24,6 +28,6 @@ public interface ProfessionView  extends IsWidget{
 
 	void setDelegate(Delegate delegate);
 
-	SimplePanel getDetailsPanel();
+//	SimplePanel getDetailsPanel();
 	void setPresenter(Presenter systemStartActivity);
 }

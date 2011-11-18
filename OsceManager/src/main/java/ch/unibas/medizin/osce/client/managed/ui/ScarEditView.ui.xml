@@ -48,6 +48,9 @@
     
             
             
+        
+            
+            
         <tr id="bodypart">
                 <td>
                     <div class="{style.label}">Bodypart:</div>
@@ -56,12 +59,12 @@
                     <g:TextBox ui:field="bodypart"/>
                 </td>
             </tr>
-            <tr id="type">
+            <tr id="traitType">
                 <td>
-                    <div class="{style.label}">Type:</div>
+                    <div class="{style.label}">Trait Type:</div>
                 </td>
                 <td>
-                    <g:ValueListBox ui:field="type"/>
+                    <g:ValueListBox ui:field="traitType"/>
                 </td>
             </tr>
             <tr id="anamnesisForms">

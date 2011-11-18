@@ -34,7 +34,7 @@ public abstract class ScarDetailsView_Roo_Gwt extends Composite implements Proxy
     SpanElement bodypart;
 
     @UiField
-    SpanElement type;
+    SpanElement traitType;
 
     @UiField
     SpanElement anamnesisForms;
@@ -49,7 +49,7 @@ public abstract class ScarDetailsView_Roo_Gwt extends Composite implements Proxy
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         bodypart.setInnerText(proxy.getBodypart() == null ? "" : String.valueOf(proxy.getBodypart()));
-        type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
+        traitType.setInnerText(proxy.getTraitType() == null ? "" : String.valueOf(proxy.getTraitType()));
         anamnesisForms.setInnerText(proxy.getAnamnesisForms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance()).render(proxy.getAnamnesisForms()));
         displayRenderer.setInnerText(ScarProxyRenderer.instance().render(proxy));
     }

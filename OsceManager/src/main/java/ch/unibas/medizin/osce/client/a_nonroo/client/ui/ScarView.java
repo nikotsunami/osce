@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -19,7 +20,7 @@ public interface ScarView extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void newClicked(String name);
+		void newClicked(TraitTypes traitType, String name);
 
 		void deleteClicked(ScarProxy scar);
 		

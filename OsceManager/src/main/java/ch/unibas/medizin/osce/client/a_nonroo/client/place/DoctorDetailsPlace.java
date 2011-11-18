@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace.Operation;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
@@ -17,26 +19,25 @@ public class DoctorDetailsPlace extends Place {
 	}
 	private static final String SEPARATOR = "!";
 
-
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
-	
 	
 	public EntityProxyId<?> getProxyId() {
 		return proxyId;
 	}
 
 	public DoctorDetailsPlace(){
-		
 		this.token = "SystemStartPlace";
 	}
 	public DoctorDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
-		
+	}
+	
+	public DoctorDetailsPlace(Operation operation) {
+		this.operation = operation;
 	}
 
     public DoctorDetailsPlace(EntityProxyId<?> stableId, Operation operation) {
-
 		this.operation = operation;
 		proxyId = stableId;
 	}
@@ -80,7 +81,7 @@ public class DoctorDetailsPlace extends Place {
 				return new DoctorDetailsPlace(requests.getProxyId(bits[0]), Operation.EDIT);
 			}
 			if (Operation.CREATE == operation) {
-				return new DoctorDetailsPlace(requests.getProxyId(bits[0]), Operation.CREATE);
+				return new DoctorDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
 
 			return new DoctorDetailsPlace(token);
@@ -95,9 +96,8 @@ public class DoctorDetailsPlace extends Place {
 				return place.getProxyId() + SEPARATOR + DoctorDetailsPlace.Operation.EDIT;
 			}
 			if (Operation.CREATE == place.getOperation()) {
-				return place.getProxyId() + SEPARATOR + DoctorDetailsPlace.Operation.CREATE;
+				return /*place.getProxyId() + SEPARATOR + */DoctorDetailsPlace.Operation.CREATE.toString();
 			}
-
         
 			return place.getToken();
 		}

@@ -31,7 +31,7 @@ public class ClinicActivity extends AbstractActivity implements
 ClinicView.Presenter, ClinicView.Delegate {
 	
     private OsMaRequestFactory requests;
-	private PlaceController placeControler;
+	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private ClinicView view;
 	private CellTable<ClinicProxy> table;
@@ -43,7 +43,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 
 	public ClinicActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
-    	this.placeControler = placeController;
+    	this.placeController = placeController;
     	ClinicDetailsActivityMapper = new ClinicDetailsActivityMapper(requests, placeController);
 		this.activityManger = new ActivityManager(ClinicDetailsActivityMapper, requests.getEventBus());
     }
@@ -99,8 +99,12 @@ ClinicView.Presenter, ClinicView.Delegate {
 	}
 	
 	private void init() {
+		init2("");
+	}
+	
+	private void init2(final String q) {
 
-		fireCountRequest(new Receiver<Long>() {
+		fireCountRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -110,7 +114,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 				Log.debug("Geholte Intitution aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged();
+				onRangeChanged(q);
 			}
 
 		});
@@ -118,7 +122,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						ClinicActivity.this.onRangeChanged();
+						ClinicActivity.this.onRangeChanged(q);
 					}
 				});
 	}
@@ -132,7 +136,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 	}
 	
 
-	protected void onRangeChanged() {
+	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<ClinicProxy>> callback = new Receiver<List<ClinicProxy>>() {
@@ -161,24 +165,23 @@ ClinicView.Presenter, ClinicView.Delegate {
 			}
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(q, range, callback);
 
 	}
 	
-	private void fireRangeRequest(final Range range,
-			final Receiver<List<ClinicProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(String q, final Range range, final Receiver<List<ClinicProxy>> callback) {
+		createRangeRequest(q, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ClinicProxy>> createRangeRequest(
-			Range range) {
-		return requests.clinicRequest().findClinicEntries(range.getStart(), range.getLength());
+	protected Request<List<ClinicProxy>> createRangeRequest(String q, Range range) {
+//		return requests.clinicRequest().findClinicEntries(range.getStart(), range.getLength());
+		return requests.clinicRequestNonRoo().findClinicsBySearch(q, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(Receiver<Long> callback) {
-		requests.clinicRequest()
-				.countClinics().fire(callback);
+	protected void fireCountRequest(String q, Receiver<Long> callback) {
+//		requests.clinicRequest().countClinics().fire(callback);
+		requests.clinicRequestNonRoo().countClinicsBySearch(q).fire(callback);
 	}
 
 	private void setTable(CellTable<ClinicProxy> table) {
@@ -188,14 +191,19 @@ ClinicView.Presenter, ClinicView.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
-		
+		Log.info("create clicked");
+		placeController.goTo(new ClinicDetailsPlace(ClinicDetailsPlace.Operation.CREATE));
+	}
+	
+	@Override
+	public void performSearch(String q) {
+		Log.debug("Search for " + q);
+		init2(q);
 	}
 
 	@Override
 	public void goTo(Place place) {
-		placeControler.goTo(place);
-		
+		placeController.goTo(place);
 	}
 
 }

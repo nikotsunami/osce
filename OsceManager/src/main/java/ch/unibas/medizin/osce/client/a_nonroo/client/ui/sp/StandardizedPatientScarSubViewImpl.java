@@ -49,7 +49,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
     ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new AbstractRenderer<ScarProxy>() {
 
         public String render(ScarProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getBodypart());
+            return obj == null ? "" : String.valueOf(obj.getTraitType()) + ": " + String.valueOf(obj.getBodypart());
         }
     });
 
@@ -69,6 +69,21 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	public void init() {
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
+		paths.add("trait_type");
+		table.addColumn(new TextColumn<ScarProxy>() {
+
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(ScarProxy object) {
+				return renderer.render(object.getTraitType().toString());
+			}
+		}, "Merkmale");
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
@@ -83,7 +98,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, "Narben");
+		}, "");
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {

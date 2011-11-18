@@ -51,7 +51,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	SplitLayoutPanel splitLayoutPanel;
 	
 	@UiField
-	TextBox searchScar;
+	TextBox searchBox;
 	
 	@UiField
 	Button newButton;
@@ -92,6 +92,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
+<<<<<<< HEAD
 		searchScar.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent arg0) {
@@ -106,6 +107,29 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 				}
 			}
 		});
+=======
+		searchBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent arg0) {
+				searchBox.setValue("");
+			}
+		});
+		searchBox.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent arg0) {
+				if(searchBox.getValue().isEmpty()) {
+					searchBox.setValue("Suche...");
+				}
+			}
+		});
+		searchBox.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				String q = searchBox.getValue();
+				delegate.performSearch(q);
+			}
+		});
+>>>>>>> b0eb5f946ea21be44798a5af3e75566d67caafa0
 		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");

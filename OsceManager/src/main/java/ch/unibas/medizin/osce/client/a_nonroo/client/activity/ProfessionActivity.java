@@ -7,6 +7,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -30,7 +33,7 @@ public class ProfessionActivity extends AbstractActivity implements
 ProfessionView.Presenter, ProfessionView.Delegate {
 	
     private OsMaRequestFactory requests;
-	private PlaceController placeControler;
+	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private ProfessionView view;
 	private CellTable<ProfessionProxy> table;
@@ -42,7 +45,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 
 	public ProfessionActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
-    	this.placeControler = placeController;
+    	this.placeController = placeController;
     	ProfessionDetailsActivityMapper = new ProfessionDetailsActivityMapper(requests, placeController);
 		this.activityManger = new ActivityManager(ProfessionDetailsActivityMapper, requests.getEventBus());
     }
@@ -69,7 +72,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 //				});
 		init();
 
-		activityManger.setDisplay(view.getDetailsPanel());
+//		activityManger.setDisplay(view.getDetailsPanel());
 
 		// Inherit the view's key provider
 		ProvidesKey<ProfessionProxy> keyProvider = ((AbstractHasData<ProfessionProxy>) table)
@@ -95,18 +98,27 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	}
 	
 	private void init() {
+		init2("");
+	}
+	
+	private void init2(final String q) {
 
-		fireCountRequest(new Receiver<Long>() {
+		// fix to avoid having multiple rangeChangeHandlers attached
+		if (rangeChangeHandler != null){
+			rangeChangeHandler.removeHandler();
+		}
+		
+		fireCountRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
 					// This activity is dead
 					return;
 				}
-				Log.debug("Geholte Intitution aus der Datenbank: " + response);
+				Log.debug("Geholte Berufe aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged();
+				onRangeChanged(q);
 			}
 
 		});
@@ -114,7 +126,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						ProfessionActivity.this.onRangeChanged();
+						ProfessionActivity.this.onRangeChanged(q);
 					}
 				});
 	}
@@ -128,7 +140,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	}
 	
 
-	protected void onRangeChanged() {
+	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<ProfessionProxy>> callback = new Receiver<List<ProfessionProxy>>() {
@@ -138,16 +150,6 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 					// This activity is dead
 					return;
 				}
-//				idToRow.clear();
-//				idToProxy.clear();
-//				for (int i = 0, row = range.getStart(); i < values.size(); i++, row++) {
-//					ProfessionProxy Profession = values.get(i);
-//					@SuppressWarnings("unchecked")
-//					// Why is this cast needed?
-//					EntityProxyId<ProfessionProxy> proxyId = (EntityProxyId<ProfessionProxy>) Profession
-//							.stableId();
-//
-//				}
 				table.setRowData(range.getStart(), values);
 
 				// finishPendingSelection();
@@ -157,24 +159,24 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 			}
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(q, range, callback);
 
 	}
 	
-	private void fireRangeRequest(final Range range,
+	private void fireRangeRequest(String name, final Range range,
 			final Receiver<List<ProfessionProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>> createRangeRequest(
-			Range range) {
-		return requests.professionRequest().findProfessionEntries(range.getStart(), range.getLength());
+	protected Request<List<ProfessionProxy>> createRangeRequest(String name, Range range) {
+//		return requests.professionRequest().findProfessionEntries(range.getStart(), range.getLength());
+		return requests.professionRequestNonRoo().findProfessionsByName(name, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(Receiver<Long> callback) {
-		requests.professionRequest()
-				.countProfessions().fire(callback);
+	protected void fireCountRequest(String name, Receiver<Long> callback) {
+//		requests.professionRequest().countProfessions().fire(callback);
+		requests.professionRequestNonRoo().countProfessionsByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<ProfessionProxy> table) {
@@ -183,14 +185,39 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	}
 
 	@Override
-	public void newClicked() {
-		// TODO Auto-generated method stub
+	public void newClicked(String name) {
+		Log.debug("Add profession");
+		ProfessionRequest profReq = requests.professionRequest();
+		ProfessionProxy profession = profReq.create(ProfessionProxy.class);
+		profession.setProfession(name);
 		
+		profReq.persist().using(profession).fire(new Receiver<Void>(){
+			@Override
+			public void onSuccess(Void arg0) {
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void deleteClicked(ProfessionProxy prof) {
+		requests.professionRequest().remove().using(prof).fire(new Receiver<Void>() {
+			public void onSuccess(Void ignore) {
+				Log.debug("Sucessfully deleted");
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void performSearch(String q) {
+		Log.debug("Search for " + q);
+		init2(q);
 	}
 
 	@Override
 	public void goTo(Place place) {
-		placeControler.goTo(place);
+		placeController.goTo(place);
 		
 	}
 

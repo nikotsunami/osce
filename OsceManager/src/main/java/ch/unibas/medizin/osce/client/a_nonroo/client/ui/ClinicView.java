@@ -17,6 +17,8 @@ public interface ClinicView  extends IsWidget{
 	 */
 	interface Delegate {
 		void newClicked();
+		
+		void performSearch(String q);
 	}
 
     CellTable<ClinicProxy> getTable();

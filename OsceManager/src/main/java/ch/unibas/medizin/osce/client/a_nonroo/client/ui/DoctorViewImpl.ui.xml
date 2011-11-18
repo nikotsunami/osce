@@ -11,7 +11,7 @@
 				<g:HTMLPanel>
 					<div style="height:1em;" />
 					<div class="{style.controls}">
-						<g:TextBox ui:field="searchScar">Suche...</g:TextBox>
+						<g:TextBox ui:field="searchBox">Suche...</g:TextBox>
 						<b:SimplePager display="{table}" location="RIGHT" />
 					</div>
 					<div style="height:1em;" />

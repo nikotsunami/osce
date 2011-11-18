@@ -44,6 +44,11 @@
             
             
             
+        
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -68,12 +73,12 @@
                     <span ui:field="bodypart"/>
                 </td>
             </tr>
-            <tr id="type">
+            <tr id="traitType">
                 <td>
-                    <span class="{style.label}">Type:</span>
+                    <span class="{style.label}">Trait Type:</span>
                 </td>
                 <td>
-                    <span ui:field="type"/>
+                    <span ui:field="traitType"/>
                 </td>
             </tr>
             <tr id="anamnesisForms">

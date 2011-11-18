@@ -26,7 +26,7 @@ privileged aspect ScarDataOnDemand_Roo_DataOnDemand {
     public Scar ScarDataOnDemand.getNewTransientScar(int index) {
         Scar obj = new Scar();
         setBodypart(obj, index);
-        setType(obj, index);
+        setTraitType(obj, index);
         return obj;
     }
     
@@ -38,9 +38,9 @@ privileged aspect ScarDataOnDemand_Roo_DataOnDemand {
         obj.setBodypart(bodypart);
     }
     
-    public void ScarDataOnDemand.setType(Scar obj, int index) {
-        TraitTypes type = TraitTypes.class.getEnumConstants()[0];
-        obj.setType(type);
+    public void ScarDataOnDemand.setTraitType(Scar obj, int index) {
+        TraitTypes traitType = TraitTypes.class.getEnumConstants()[0];
+        obj.setTraitType(traitType);
     }
     
     public Scar ScarDataOnDemand.getSpecificScar(int index) {

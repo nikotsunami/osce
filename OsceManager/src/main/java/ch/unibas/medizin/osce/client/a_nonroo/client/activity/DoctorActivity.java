@@ -31,7 +31,7 @@ public class DoctorActivity extends AbstractActivity implements
 DoctorView.Presenter, DoctorView.Delegate {
 	
     private OsMaRequestFactory requests;
-	private PlaceController placeControler;
+	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private DoctorView view;
 	private CellTable<DoctorProxy> table;
@@ -43,7 +43,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	public DoctorActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
-    	this.placeControler = placeController;
+    	this.placeController = placeController;
     	DoctorDetailsActivityMapper = new DoctorDetailsActivityMapper(requests, placeController);
 		this.activityManger = new ActivityManager(DoctorDetailsActivityMapper, requests.getEventBus());
     }
@@ -99,13 +99,17 @@ DoctorView.Presenter, DoctorView.Delegate {
 	}
 	
 	private void init() {
+		init2("");
+	}
+	
+	private void init2(final String q) {
 		
 		if(rangeChangeHandler!=null){
 			rangeChangeHandler.removeHandler();
 			rangeChangeHandler=null;
 		}
 
-		fireCountRequest(new Receiver<Long>() {
+		fireCountRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -115,7 +119,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 				Log.debug("Geholte Intitution aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged();
+				onRangeChanged(q);
 			}
 
 		});
@@ -123,7 +127,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						DoctorActivity.this.onRangeChanged();
+						DoctorActivity.this.onRangeChanged(q);
 					}
 				});
 	}
@@ -137,7 +141,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 	}
 	
 
-	protected void onRangeChanged() {
+	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<DoctorProxy>> callback = new Receiver<List<DoctorProxy>>() {
@@ -166,24 +170,23 @@ DoctorView.Presenter, DoctorView.Delegate {
 			}
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(q, range, callback);
 
 	}
 	
-	private void fireRangeRequest(final Range range,
-			final Receiver<List<DoctorProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(String q, final Range range, final Receiver<List<DoctorProxy>> callback) {
+		createRangeRequest(q, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.DoctorProxy>> createRangeRequest(
-			Range range) {
-		return requests.doctorRequest().findDoctorEntries(range.getStart(), range.getLength());
+	protected Request<List<DoctorProxy>> createRangeRequest(String q, Range range) {
+//		return requests.doctorRequest().findDoctorEntries(range.getStart(), range.getLength());
+		return requests.doctorRequestNonRoo().findDoctorsBySearch(q, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(Receiver<Long> callback) {
-		requests.doctorRequest()
-				.countDoctors().fire(callback);
+	protected void fireCountRequest(String q, Receiver<Long> callback) {
+//		requests.doctorRequest().countDoctors().fire(callback);
+		requests.doctorRequestNonRoo().countDoctorsBySearch(q).fire(callback);
 	}
 
 	private void setTable(CellTable<DoctorProxy> table) {
@@ -193,13 +196,19 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
-		
+		Log.info("create clicked");
+		placeController.goTo(new DoctorDetailsPlace(DoctorDetailsPlace.Operation.CREATE));
+	}
+	
+	@Override
+	public void performSearch(String q) {
+		Log.debug("Search for " + q);
+		init2(q);
 	}
 
 	@Override
 	public void goTo(Place place) {
-		placeControler.goTo(place);
+		placeController.goTo(place);
 		
 	}
 

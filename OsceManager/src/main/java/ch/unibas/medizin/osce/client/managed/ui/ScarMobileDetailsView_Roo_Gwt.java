@@ -33,7 +33,7 @@ public abstract class ScarMobileDetailsView_Roo_Gwt extends Composite implements
     Element bodypart;
 
     @UiField
-    Element type;
+    Element traitType;
 
     @UiField
     Element anamnesisForms;
@@ -45,7 +45,7 @@ public abstract class ScarMobileDetailsView_Roo_Gwt extends Composite implements
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         bodypart.setInnerText(proxy.getBodypart() == null ? "" : String.valueOf(proxy.getBodypart()));
-        type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
+        traitType.setInnerText(proxy.getTraitType() == null ? "" : String.valueOf(proxy.getTraitType()));
         anamnesisForms.setInnerText(proxy.getAnamnesisForms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance()).render(proxy.getAnamnesisForms()));
     }
 }
