@@ -92,22 +92,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
-<<<<<<< HEAD
-		searchScar.addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent arg0) {
-				searchScar.setValue("");
-			}
-		});
-		searchScar.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent arg0) {
-				if(searchScar.getValue().isEmpty()) {
-					searchScar.setValue("Suche...");
-				}
-			}
-		});
-=======
 		searchBox.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent arg0) {
@@ -129,7 +113,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 				delegate.performSearch(q);
 			}
 		});
->>>>>>> b0eb5f946ea21be44798a5af3e75566d67caafa0
 		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
