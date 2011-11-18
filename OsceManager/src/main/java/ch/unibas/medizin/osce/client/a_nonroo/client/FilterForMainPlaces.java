@@ -4,8 +4,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
@@ -52,14 +52,14 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		// no details place for scars needed
 		
 		/**
-		 * anamnesisForm
+		 * anamnesisCheck
 		 */
-		if (place instanceof AnamnesisFormPlace)
-			return (AnamnesisFormPlace) place;
+		if (place instanceof AnamnesisCheckPlace)
+			return (AnamnesisCheckPlace) place;
 
-		if (place instanceof AnamnesisFormDetailsPlace){
-			AnamnesisFormDetailsPlace AnamnesisFormDetailsPlace= (AnamnesisFormDetailsPlace)place;
-			return  new AnamnesisFormPlace(AnamnesisFormDetailsPlace.getToken());
+		if (place instanceof AnamnesisCheckDetailsPlace){
+			AnamnesisCheckDetailsPlace AnamnesisCheckDetailsPlace = (AnamnesisCheckDetailsPlace)place;
+			return  new AnamnesisCheckPlace(AnamnesisCheckDetailsPlace.getToken());
 		}
 		
 		/**

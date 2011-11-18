@@ -1,7 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
@@ -43,9 +43,9 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new ScarActivity(requests, placeController);
 		}
 		
-		if (place instanceof AnamnesisFormPlace){
-			Log.debug("is AnamnesisFormPlace");
-			return new AnamnesisFormActivity(requests, placeController);
+		if (place instanceof AnamnesisCheckPlace){
+			Log.debug("is AnamnesisCheckPlace");
+			return new AnamnesisCheckActivity(requests, placeController);
 		}
 		
 		if (place instanceof ClinicPlace){

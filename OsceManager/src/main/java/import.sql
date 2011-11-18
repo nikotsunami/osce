@@ -29,6 +29,9 @@ INSERT INTO `osce`.`spoken_language` (`language_name`, `version`) VALUES ('Tsche
 
 INSERT INTO `osce`.`anamnesis_form` (`create_date`, `version`) VALUES ('2011-03-12', '0');
 
+INSERT INTO `osce`.`anamnesis_check` (`type`, `text`, `value`, `version`) VALUES ('0', 'Question 1', 'some values 1', '0');
+INSERT INTO `osce`.`anamnesis_check` (`type`, `text`, `value`,`version`) VALUES ('1', 'Question 2', 'some values 2', '0');
+
 INSERT INTO `osce`.`bankaccount` (`bic`, `iban`, `bank_name`, `version`) VALUES ('1234', 'CH12 3456 7890 1234 ABC', 'UBS', '0');
 
 INSERT INTO `osce`.`description` (`description`, `version`) VALUES ('sample description', '0');

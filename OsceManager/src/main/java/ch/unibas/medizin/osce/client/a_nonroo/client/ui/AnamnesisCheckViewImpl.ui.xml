@@ -1,0 +1,32 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	 xmlns:b="urn:import:com.google.gwt.user.cellview.client">
+<ui:style src="../styles.css" />
+
+<g:SplitLayoutPanel ui:field="splitLayoutPanel">
+	<g:west size="500">
+		<g:ScrollPanel>
+			<g:HTMLPanel>
+				<div style="height:1em;" />
+				<div class="{style.controls}">
+					<g:TextBox ui:field="searchBox">Suche...</g:TextBox>
+					<b:SimplePager display="{table}" location="RIGHT" />
+				</div>
+				<div style="height:1em;" />
+				<b:CellTable pageSize="8" ui:field="table" width="100%" />
+				<div class="{style.controls}">
+					<g:Button ui:field="newButton">create anamnesis value</g:Button>
+					<!-- <b:SimplePager display="{table}" location="RIGHT" />-->
+				</div>
+				<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
+			</g:HTMLPanel>
+		</g:ScrollPanel>
+	</g:west>
+	<g:center>
+		<g:ScrollPanel>
+			<g:SimplePanel ui:field="detailsPanel"></g:SimplePanel>
+		</g:ScrollPanel>
+	</g:center>
+</g:SplitLayoutPanel>
+</ui:UiBinder> 
