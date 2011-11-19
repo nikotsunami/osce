@@ -116,7 +116,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
-
 //    	paths.add("id");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //

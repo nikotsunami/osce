@@ -5,12 +5,14 @@
 	<inherits name='com.google.gwt.activity.Activity'/>
 	<inherits name='com.google.gwt.place.Place'/>
 	<inherits name="com.google.gwt.user.User"/>
-	<inherits name="com.google.gwt.user.theme.standard.Standard"/>
 	<inherits name='com.google.gwt.requestfactory.RequestFactory'/>
 	<inherits name="com.google.gwt.user.cellview.CellView"/>
 	<inherits name='com.google.gwt.logging.Logging'/>
 	<inherits name="com.google.gwt.inject.Inject"/>
 	<inherits name="com.google.gwt.text.Text"/>
+	
+	<!--  <inherits name="com.google.gwt.user.theme.chrome.Chrome"/> --> 
+	<inherits name="ch.unibas.medizin.osce.client.style.theme.Unibas"/>
 	
 	
   <!-- For development, a default of `DEBUG` is recommended -->

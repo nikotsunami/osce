@@ -3,13 +3,18 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
+
+
 import ch.unibas.medizin.osce.client.scaffold.ui.LoginWidget;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.NotificationMole;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,8 +43,12 @@ public class OsMaShell extends Composite  {
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	@UiField
+	DockLayoutPanel dockPanel;
 	public OsMaShell() {
 		initWidget(uiBinder.createAndBindUi(this));
+		DOM.setElementAttribute(dockPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;");
 	}
 
 	
@@ -90,9 +99,4 @@ public class OsMaShell extends Composite  {
 		mainNav.add(nav);
 		
 	}
-
-
-
-
-
 }

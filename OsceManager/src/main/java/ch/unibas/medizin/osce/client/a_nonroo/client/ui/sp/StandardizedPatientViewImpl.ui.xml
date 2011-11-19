@@ -14,7 +14,7 @@
 					<b:SimplePager display="{table}" location="RIGHT" />
 				</div>
 				<div style="height:1em;" />
-				<b:CellTable pageSize="8" ui:field="table" width="100%" />
+				<b:CellTable pageSize="15" ui:field="table" width="100%" addStyleNames="{style.cellTable}"/>
 				<div class="{style.controls}">
 					<g:Button ui:field="newButton">Create Patient</g:Button>
 					<!-- <b:SimplePager display="{table}" location="RIGHT" /> -->
