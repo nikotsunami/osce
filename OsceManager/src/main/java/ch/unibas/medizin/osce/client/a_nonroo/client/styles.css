@@ -323,3 +323,7 @@ body {
 	color: #212121;
 	font-weight: bold;
 }
+
+.cellTableOddRow {
+  background: #00ff00;
+}

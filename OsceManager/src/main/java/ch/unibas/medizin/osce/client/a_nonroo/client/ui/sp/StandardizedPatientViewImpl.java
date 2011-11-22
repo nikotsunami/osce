@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -59,7 +61,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@UiField
 	SimplePanel detailsPanel;
 
-	@UiField
+	@UiField(provided = true)
 	CellTable<StandardizedPatientProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -83,6 +85,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	 * implement HasHTML instead of HasText.
 	 */
 	public StandardizedPatientViewImpl() {
+		CellTable.Resources resources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<StandardizedPatientProxy>(15, resources);
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 	}
@@ -92,6 +96,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
+		StyleInjector.inject(".cellTableOddRow {background: #00ff00;}");
 		searchBox.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent arg0) {
