@@ -65,7 +65,7 @@
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
-    <g:Anchor ui:field="delete">Delete</g:Anchor>
+    <g:Button addStyleNames="{style.button}" ui:field="delete">Delete</g:Button>
    </div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

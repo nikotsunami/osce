@@ -3,14 +3,14 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.Iterator;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace.Operation;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace.Operation;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorEditView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorEditViewImpl;
-import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
-import ch.unibas.medizin.osce.client.managed.request.AdministratorRequest;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -24,28 +24,27 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class AdministratorEditActivity extends AbstractActivity implements
-		AdministratorEditView.Presenter, AdministratorEditView.Delegate {
+public class AnamnesisCheckEditActivity extends AbstractActivity implements
+AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
-	private AdministratorEditView view;
-	private AdministratorDetailsPlace place;
+	private AnamnesisCheckEditView view;
+	private AnamnesisCheckDetailsPlace place;
 
-	private RequestFactoryEditorDriver<AdministratorProxy, AdministratorEditViewImpl> editorDriver;
-	private AdministratorProxy administrator;
+	private RequestFactoryEditorDriver<AnamnesisCheckProxy, AnamnesisCheckEditViewImpl> editorDriver;
+	private AnamnesisCheckProxy anamnesisCheck;
 	private boolean save;
 
-	public AdministratorEditActivity(AdministratorDetailsPlace place,
+	public AnamnesisCheckEditActivity(AnamnesisCheckDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
-
 	}
 
-	public AdministratorEditActivity(AdministratorDetailsPlace place,
+	public AnamnesisCheckEditActivity(AnamnesisCheckDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController,
 			Operation operation) {
 		this.place = place;
@@ -75,64 +74,63 @@ public class AdministratorEditActivity extends AbstractActivity implements
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
 		Log.info("start");
-		AdministratorEditView administratorEditView = new AdministratorEditViewImpl();
+		AnamnesisCheckEditView anamnesisCheckEditView = new AnamnesisCheckEditViewImpl();
 
 		this.widget = panel;
-		this.view = administratorEditView;
+		this.view = anamnesisCheckEditView;
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
 
 		eventBus.addHandler(PlaceChangeEvent.TYPE,
 				new PlaceChangeEvent.Handler() {
-					public void onPlaceChange(PlaceChangeEvent event) {
+			public void onPlaceChange(PlaceChangeEvent event) {
 
-						// updateSelection(event.getNewPlace());
-						// TODO implement
-					}
-				});
+				// updateSelection(event.getNewPlace());
+				// TODO implement
+			}
+		});
 		// init();
 
-		if (this.place.getOperation() == AdministratorDetailsPlace.Operation.EDIT) {
+		if (this.place.getOperation() == AnamnesisCheckDetailsPlace.Operation.EDIT) {
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("administrator")
-					.fire(new Receiver<Object>() {
+			requests.find(place.getProxyId()).with("anamnesisForm")
+			.fire(new Receiver<Object>() {
 
-						public void onFailure(ServerFailure error) {
-							Log.error(error.getMessage());
-						}
+				public void onFailure(ServerFailure error) {
+					Log.error(error.getMessage());
+				}
 
-						@Override
-						public void onSuccess(Object response) {
-							if (response instanceof AdministratorProxy) {
-								Log.info(((AdministratorProxy) response).getName());
-								// init((AdministratorProxy) response);
-								administrator = (AdministratorProxy) response;
-								init();
-							}
+				@Override
+				public void onSuccess(Object response) {
+					if (response instanceof AnamnesisCheckProxy) {
+						Log.info(((AnamnesisCheckProxy) response).getId().toString());
+						// init((AnamnesisCheckProxy) response);
+						anamnesisCheck = (AnamnesisCheckProxy) response;
+						init();
+					}
 
-						}
-					});
+				}
+			});
 		} else {
 
-			Log.info("new Administrator");
-			// administratorPlace.setProxyId(administrator.stableId());
+			Log.info("new AnamnesisCheck");
+			// anamnesisCheckPlace.setProxyId(anamnesisCheck.stableId());
 			init();
 		}
 		// view.initialiseDriver(requests);
-		widget.setWidget(administratorEditView.asWidget());
+		widget.setWidget(anamnesisCheckEditView.asWidget());
 		// setTable(view.getTable());
-
 	}
 
 	private void init() {
 
-		AdministratorRequest request = requests.administratorRequest();
+		AnamnesisCheckRequest request = requests.anamnesisCheckRequest();
 
-		if (administrator == null) {
+		if (anamnesisCheck == null) {
 
-			AdministratorProxy administrator = request.create(AdministratorProxy.class);
-			this.administrator = administrator;
+			AnamnesisCheckProxy anamnesisCheck = request.create(AnamnesisCheckProxy.class);
+			this.anamnesisCheck = anamnesisCheck;
 			view.setEditTitle(false);
 
 		} else {
@@ -143,28 +141,26 @@ public class AdministratorEditActivity extends AbstractActivity implements
 		Log.info("edit");
 
 		Log.info("persist");
-		request.persist().using(administrator);
-		editorDriver.edit(administrator, request);
+		request.persist().using(anamnesisCheck);
+		editorDriver.edit(anamnesisCheck, request);
 
 		Log.info("flush");
 		editorDriver.flush();
-		Log.debug("Create für: " + administrator.getName());
+		Log.debug("Create für: " + anamnesisCheck.getId());
 	}
 
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
-
 	}
 
 	@Override
 	public void cancelClicked() {
-		if (this.place.getOperation() == AdministratorDetailsPlace.Operation.EDIT)
-			placeController.goTo(new AdministratorDetailsPlace(administrator.stableId(),
-					AdministratorDetailsPlace.Operation.DETAILS));
+		if (this.place.getOperation() == AnamnesisCheckDetailsPlace.Operation.EDIT)
+			placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
+					AnamnesisCheckDetailsPlace.Operation.DETAILS));
 		else
-			placeController.goTo(new AdministratorPlace("AdministratorPlace!CANCEL"));
-
+			placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace!CANCEL"));
 	}
 
 	@Override
@@ -185,7 +181,7 @@ public class AdministratorEditActivity extends AbstractActivity implements
 				while (iter.hasNext()) {
 					message += iter.next().getMessage() + "<br>";
 				}
-				Log.warn(" in Administrator -" + message);
+				Log.warn(" in AnamnesisCheck -" + message);
 
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
 
@@ -193,16 +189,13 @@ public class AdministratorEditActivity extends AbstractActivity implements
 
 			@Override
 			public void onSuccess(Void response) {
-				Log.info("Administrator successfully saved.");
+				Log.info("AnamnesisCheck successfully saved.");
 
 				save = true;
 
-				placeController.goTo(new AdministratorDetailsPlace(administrator.stableId(),
-						AdministratorDetailsPlace.Operation.DETAILS));
+				placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
+						AnamnesisCheckDetailsPlace.Operation.DETAILS));
 			}
-
 		});
-
 	}
-
 }

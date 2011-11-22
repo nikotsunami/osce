@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
@@ -130,7 +131,7 @@ public class OsMaMainNav extends Composite {
 	
 	@UiHandler("anamnesisForms")
 	void anamnesisClicked(ClickEvent event) {
-		placeController.goTo(new AnamnesisFormPlace("AnamnesisFormPlace"));
+		placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace"));
 	}
 	
 	@UiHandler("clinics")

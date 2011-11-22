@@ -273,17 +273,26 @@ a:hover, .gwt-Anchor:hover {
 
 .gwt-DisclosurePanel-open .header {
 	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
+<<<<<<< HEAD
 	color: #212121;
+=======
+>>>>>>> 4ab98c5e123024fdae56d9cedaea50a760412c0e
 }
 
 .gwt-DisclosurePanel-closed .header {
 	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+<<<<<<< HEAD
 	color: #555555;
+=======
+>>>>>>> 4ab98c5e123024fdae56d9cedaea50a760412c0e
 }
 
 .gwt-DisclosurePanel-closed .header:hover {
 	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
+<<<<<<< HEAD
 	color: #212121;
+=======
+>>>>>>> 4ab98c5e123024fdae56d9cedaea50a760412c0e
 }
 
 .gwt-DisclosurePanel .content {
@@ -1406,8 +1415,11 @@ td.datePickerMonth {
 	background: white url(images/splitPanelThumb.png) center center
 		no-repeat;
 	cursor: row-resize;
+<<<<<<< HEAD
 }
 
 .cellTableOddRow {
   background: #00ff00;
+=======
+>>>>>>> 4ab98c5e123024fdae56d9cedaea50a760412c0e
 }
