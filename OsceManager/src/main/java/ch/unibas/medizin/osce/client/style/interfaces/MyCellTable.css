@@ -40,7 +40,6 @@
 @sprite .cellTableHeader {
   gwt-image: 'cellTableHeaderBackground';
   
-  /* background-image: 'images/ui-bg_glass_75_dadada_1x400.png'; */
   background-color: #dadada;
   
   border-bottom: 1px solid #AAAAAA;
@@ -54,7 +53,8 @@
 
 .cellTableCell {
 	border: 0;
-	padding: 6px 10px;
+	height: 20px;
+	padding: 1px 10px;
 	overflow: hidden;
 }
 
@@ -141,5 +141,5 @@
 }
 
 .cellTableLoading {
-  margin: 30px;
+  margin: 40px auto;
 }

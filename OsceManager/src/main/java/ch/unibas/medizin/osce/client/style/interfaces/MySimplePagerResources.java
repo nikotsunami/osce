@@ -1,8 +1,12 @@
 package ch.unibas.medizin.osce.client.style.interfaces;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 
 public interface MySimplePagerResources extends SimplePager.Resources {
+	@Source("MySimplePager.css")
+	SimplePager.Style simplePagerStyle();
+	
 	@Source("images/fastForward.png")
 	ImageResource simplePagerFastForward();
 	

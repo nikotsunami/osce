@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.StyleInjector;
@@ -26,6 +27,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
@@ -62,6 +64,9 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	SimplePanel detailsPanel;
 
 	@UiField(provided = true)
+	SimplePager pager;
+	
+	@UiField(provided = true)
 	CellTable<StandardizedPatientProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -85,10 +90,15 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	 * implement HasHTML instead of HasText.
 	 */
 	public StandardizedPatientViewImpl() {
-		CellTable.Resources resources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<StandardizedPatientProxy>(15, resources);
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<StandardizedPatientProxy>(15, tableResources);
+		
+		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 360);
 	}
 
 	public String[] getPaths() {

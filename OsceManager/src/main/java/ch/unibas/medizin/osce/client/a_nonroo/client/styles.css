@@ -99,7 +99,7 @@
 	position: relative;
 	top: 3px;
 	height: 2em;
-	margin-left: 15px;
+	margin: 0 8px;
 }
 
 .controls table {
@@ -290,7 +290,7 @@ body {
 
 .mainNavPanel {
 	margin-top: 1px;
-	margin-bottom: 1px;
+	margin-bottom: 7px;
 	width: 100%;
 }
 
@@ -317,7 +317,28 @@ body {
  /* TABLE */
 /*********/
 
-.cellTable th {
+.standardTable {
+	position: relative;
+	margin: 8px 0;
+}
+
+.standardTable button {
+	margin: 0;
+	padding: 3px 2px 0;
+	width: 100%;
+	border: 0;
+	background: none;
+}
+
+.iconCell {
+	width: 20px;
+}
+
+.regularCell {
+	width: 50%;
+}
+
+/* .cellTable th {
 	text-shadow: none;
 	border-bottom: 1px solid #212121;
 	color: #212121;
@@ -326,4 +347,4 @@ body {
 
 .cellTableOddRow {
   background: #00ff00;
-}
+} */

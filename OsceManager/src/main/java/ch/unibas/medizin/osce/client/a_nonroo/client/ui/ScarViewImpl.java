@@ -13,6 +13,9 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
@@ -41,6 +44,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -87,10 +91,10 @@ public class ScarViewImpl extends Composite implements ScarView {
 	@UiField
 	Button newButton;
 	
-//    @UiField
-//    SimplePanel detailsPanel;
+	@UiField (provided = true)
+	SimplePager pager;
 
-	@UiField
+	@UiField (provided = true)
 	CellTable<ScarProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -115,9 +119,16 @@ public class ScarViewImpl extends Composite implements ScarView {
 	 * implement HasHTML instead of HasText.
 	 */
 	public ScarViewImpl() {
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<ScarProxy>(15, tableResources);
+		
+		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		traitTypeBox.setAcceptableValues(Arrays.asList(TraitTypes.values()));
 		init();
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 360);
 	}
 
 	public String[] getPaths() {
@@ -202,6 +213,10 @@ public class ScarViewImpl extends Composite implements ScarView {
 				return scar;
 			}
 		}, null);
+		
+		table.addColumnStyleName(0, "regularCell");
+		table.addColumnStyleName(1, "regularCell");
+		table.addColumnStyleName(2, "iconCell");
 	}
 	
 	/**

@@ -19,4 +19,7 @@ public interface MyCellTableResources extends CellTable.Resources {
 	@Source("images/ui-bg_glass_75_f1b532_1x400.png")
 	@ImageOptions(repeatStyle = RepeatStyle.Horizontal, flipRtl = true)
 	ImageResource cellTableSelectedBackground();
+	
+	@Source("images/loading.gif")
+	ImageResource cellTableLoading();
 }

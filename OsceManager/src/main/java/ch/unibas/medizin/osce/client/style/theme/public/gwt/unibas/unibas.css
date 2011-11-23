@@ -72,12 +72,12 @@ a:hover, .gwt-Anchor:hover {
 
 .gwt-Button:active {
 	outline-style: none;
-	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 }
 
 .gwt-Button:hover {
 	outline-style: none;
-	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 }
 
 .gwt-Button[disabled] {
