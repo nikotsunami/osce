@@ -14,62 +14,66 @@
  * the License.
  */
 .cellTableWidget {
-  
 }
 
 .cellTableFirstColumn {
-  
+	border-left: 1px solid #AAAAAA;
 }
 
 .cellTableLastColumn {
-  
+	border-right: 1px solid #AAAAAA;
 }
 
 @sprite .cellTableFooter {
   gwt-image: 'cellTableFooterBackground';
-  background-color: #b4d0f8;
-  border-top: 1px solid #88b0f2;
-  border-left: 1px solid #88b0f2;
-  border-right: 1px solid #eef;
+  background-color: #dadada;
+
+  border-bottom: 0;
+  border-right: 1px solid #AAAAAA;
+
   padding: 0px 10px;
   text-align: left;
   color: #4b4a4a;
-  text-shadow: #ddf 1px 1px 0;
   overflow: hidden;
 }
 
 @sprite .cellTableHeader {
   gwt-image: 'cellTableHeaderBackground';
-  background-color: #b4d0f8;
-  border-bottom: 1px solid #88b0f2;
-  border-left: 1px solid #88b0f2;
-  border-right: 1px solid #eef;
+  
+  /* background-image: 'images/ui-bg_glass_75_dadada_1x400.png'; */
+  background-color: #dadada;
+  
+  border-bottom: 1px solid #AAAAAA;
+  border-right: 1px solid #AAAAAA;
+  
   padding: 0px 10px;
   text-align: left;
-  color: #4b4a4a;
-  text-shadow: #ddf 1px 1px 0;
+  color: #212121;
   overflow: hidden;
 }
 
 .cellTableCell {
-  padding: 4px 10px;
-  overflow: hidden;
+	border: 0;
+	padding: 6px 10px;
+	overflow: hidden;
 }
 
 .cellTableFirstColumnFooter {
-  border-left: 0px;
+  -moz-border-radius-bottomleft: 8px;
 }
 
 .cellTableFirstColumnHeader {
-  border-left: 0px;
+  -moz-border-radius-topleft: 8px;
 }
 
 .cellTableLastColumnFooter {
-  
+  -moz-border-radius-bottomright: 8px;
+  border-right: 0;
 }
 
 .cellTableLastColumnHeader {
-  
+	border-right: 0;
+	-moz-border-radius-topright: 8px;
 }
 
 .cellTableSortableHeader {
@@ -92,18 +96,15 @@
 .cellTableEvenRow {
   background: #ffffff;
 }
-
 .cellTableEvenRowCell {
-  
+  background: #ffffff;
 }
 
 .cellTableOddRow {
-  /* background: #eef4fb; */
-  background: #0f0;
+  background: #eee;
 }
-
 .cellTableOddRowCell {
-  
+  background: #eee;
 }
 
 .cellTableHoveredRow {
@@ -111,11 +112,12 @@
 }
 
 .cellTableHoveredRowCell {
-  
+  background: #f1b532;
 }
 
 .cellTableKeyboardSelectedRow {
-  background: #ffc;
+  background: #d3ae50;
+  color: #000;
 }
 
 .cellTableKeyboardSelectedRowCell {
@@ -124,18 +126,18 @@
 
 @sprite .cellTableSelectedRow {
   gwt-image: 'cellTableSelectedBackground';
-  background-color: #628cd5;
-  color: white;
+  background-color: #d3ae50;
+  color: #000000;
   height: auto;
   overflow: auto;
 }
 
 .cellTableSelectedRowCell {
-  background: #628cd5;
+  background: #d3ae50;
 }
 
 .cellTableKeyboardSelectedCell {
-  background: #d7dde8;
+  background: #d3ae50;
 }
 
 .cellTableLoading {
