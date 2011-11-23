@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -22,6 +25,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
@@ -57,6 +61,9 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	@UiField
 	SimplePanel detailsPanel;
 
+	@UiField(provided = true)
+	SimplePager pager;
+	
 	@UiField
 	CellTable<DoctorProxy> table;
 
@@ -81,8 +88,15 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	 * implement HasHTML instead of HasText.
 	 */
 	public DoctorViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
-		init();
+	CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+	table = new CellTable<DoctorProxy>(15, tableResources);
+	
+	SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+	pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
+	
+	initWidget(uiBinder.createAndBindUi(this));
+	init();
+	splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
 	}
 
 	public String[] getPaths() {

@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -24,6 +27,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
@@ -58,8 +62,11 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	
 	@UiField
 	SimplePanel detailsPanel;
+	
+	@UiField (provided = true)
+	SimplePager pager;
 
-	@UiField
+	@UiField (provided=true)
 	CellTable<AnamnesisCheckProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -83,8 +90,15 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	 * implement HasHTML instead of HasText.
 	 */
 	public AnamnesisCheckViewImpl() {
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<AnamnesisCheckProxy>(15, tableResources);
+		
+		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
 	}
 
 	public String[] getPaths() {

@@ -8,13 +8,13 @@
 	<g:west size="500">
 		<g:ScrollPanel>
 			<g:HTMLPanel>
-				<div style="height:1em;" />
 				<div class="{style.controls}">
 					<g:TextBox ui:field="searchBox">Suche...</g:TextBox>
-					<b:SimplePager display="{table}" location="RIGHT" />
+					<b:SimplePager display="{table}" ui:field="pager"/>
 				</div>
-				<div style="height:1em;" />
-				<b:CellTable pageSize="8" ui:field="table" width="100%" />
+
+				<b:CellTable ui:field="table" width="100%" addStyleNames="{style.standardTable}"  />
+				
 				<div class="{style.controls}">
 					<g:Button ui:field="newButton">create anamnesis value</g:Button>
 					<!-- <b:SimplePager display="{table}" location="RIGHT" />-->

@@ -56,7 +56,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-Button {
-	outline-style: none;
+	outline-style: none !important;
 	margin: 0;
 	padding: 3px 5px;
 	text-decoration: none !important;

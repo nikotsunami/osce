@@ -98,7 +98,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 360);
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
 	}
 
 	public String[] getPaths() {

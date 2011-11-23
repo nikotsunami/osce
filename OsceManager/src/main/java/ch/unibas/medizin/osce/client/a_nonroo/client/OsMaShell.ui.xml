@@ -17,7 +17,7 @@
 		
 		<g:center>
 			<g:FlowPanel>
-				<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole'></g:NotificationMole>
+				<g:NotificationMole animationDuration='0' message='loading...' ui:field='mole' styleName="{style.loadingScreen}"></g:NotificationMole>
 				<g:SimplePanel styleName="{style.entityDetails}" ui:field='master'></g:SimplePanel>
 			</g:FlowPanel>
 		</g:center>

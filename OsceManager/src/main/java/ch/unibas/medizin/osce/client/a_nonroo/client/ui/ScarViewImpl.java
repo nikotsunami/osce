@@ -128,7 +128,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 		initWidget(uiBinder.createAndBindUi(this));
 		traitTypeBox.setAcceptableValues(Arrays.asList(TraitTypes.values()));
 		init();
-		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 360);
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
 	}
 
 	public String[] getPaths() {
