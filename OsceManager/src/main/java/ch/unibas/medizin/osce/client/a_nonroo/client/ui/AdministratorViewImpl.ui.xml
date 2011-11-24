@@ -8,11 +8,14 @@
 	<g:west size="500">
 		<g:ScrollPanel>
 			<g:HTMLPanel>
-				<div style="height:3em;" />
-				<b:CellTable pageSize="8" ui:field="table" width="100%" />
+				<div class="{style.controls}">
+					<b:SimplePager display="{table}" ui:field="pager" />
+				</div>
+				
+				<b:CellTable ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
+				
 				<div class="{style.controls}">
 					<g:Button ui:field="newButton">create administrator</g:Button>
-					<b:SimplePager display="{table}" location="RIGHT" />
 				</div>
 			</g:HTMLPanel>
 		</g:ScrollPanel>

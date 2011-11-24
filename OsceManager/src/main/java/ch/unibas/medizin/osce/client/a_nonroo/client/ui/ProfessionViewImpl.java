@@ -10,6 +10,9 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
@@ -33,6 +36,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -72,7 +76,10 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 //	@UiField
 //	SimplePanel detailsPanel;
 
-	@UiField
+	@UiField (provided = true)
+	SimplePager pager;
+	
+	@UiField (provided = true)
 	CellTable<ProfessionProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -97,8 +104,15 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 	 * implement HasHTML instead of HasText.
 	 */
 	public ProfessionViewImpl() {
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<ProfessionProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		
+		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 	}
 
 	public String[] getPaths() {

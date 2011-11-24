@@ -61,10 +61,10 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	@UiField
 	SimplePanel detailsPanel;
 
-	@UiField(provided = true)
+	@UiField (provided = true)
 	SimplePager pager;
 	
-	@UiField
+	@UiField (provided = true)
 	CellTable<DoctorProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();

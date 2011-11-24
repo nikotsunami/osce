@@ -64,7 +64,7 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 	@UiField (provided = true)
 	SimplePager pager;
 
-	@UiField
+	@UiField (provided = true)
 	CellTable<ClinicProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();

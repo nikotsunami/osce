@@ -3,10 +3,16 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,6 +22,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
@@ -47,7 +54,10 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	@UiField
 	SimplePanel detailsPanel;
 
-	@UiField
+	@UiField (provided = true)
+	SimplePager pager;
+	
+	@UiField (provided = true)
 	CellTable<AdministratorProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -71,8 +81,15 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	 * implement HasHTML instead of HasText.
 	 */
 	public AdministratorViewImpl() {
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<AdministratorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		
+		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 	}
 
 	public String[] getPaths() {
