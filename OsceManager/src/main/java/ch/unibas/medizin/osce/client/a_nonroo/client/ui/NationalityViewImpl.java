@@ -221,6 +221,8 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 				return nation;
 			}
 		}, null);
+
+		table.addColumnStyleName(1, "iconCol");
 	}
 
 	/**

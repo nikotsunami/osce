@@ -221,6 +221,8 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 				return lang;
 			}
 		}, null);
+
+		table.addColumnStyleName(1, "iconCol");
 	}
 	
 	/**

@@ -14,11 +14,11 @@
 						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>
 					
-					<b:CellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}" />
+					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
 					
 					<div class="{style.controls}">
 						<g:TextBox ui:field="newNationality"></g:TextBox>
-						<g:Button ui:field="newButton">add</g:Button>
+						<g:Button ui:field="newButton"><span class="ui-icon ui-icon-plusthick"></span></g:Button>
 						<!-- <b:SimplePager display="{table}" location="RIGHT" /> -->
 					</div>
 					<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->

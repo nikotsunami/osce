@@ -12,10 +12,10 @@
 					<b:SimplePager display="{table}" ui:field="pager" />
 				</div>
 				
-				<b:CellTable ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
+				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
 				
 				<div class="{style.controls}">
-					<g:Button ui:field="newButton">create administrator</g:Button>
+					<g:Button ui:field="newButton"><span class="ui-icon ui-icon-plusthick"></span></g:Button>
 				</div>
 			</g:HTMLPanel>
 		</g:ScrollPanel>

@@ -15,12 +15,12 @@
 						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>
 					
-					<b:CellTable pageSize="15" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
+					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
 					
 					<div class="{style.controls}">
 						<g:ValueListBox ui:field="traitTypeBox"></g:ValueListBox>
 						<g:TextBox ui:field="newBodypart"></g:TextBox>
-						<g:Button ui:field="newButton">hinzufügen</g:Button>
+						<g:Button ui:field="newButton"><span class="ui-icon ui-icon-plusthick"></span></g:Button>
 						<!-- <b:SimplePager display="{table}" location="RIGHT" /> -->
 					</div>
 					

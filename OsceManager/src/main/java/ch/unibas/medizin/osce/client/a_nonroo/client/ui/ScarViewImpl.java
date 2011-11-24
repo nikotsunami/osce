@@ -120,15 +120,15 @@ public class ScarViewImpl extends Composite implements ScarView {
 	 */
 	public ScarViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<ScarProxy>(15, tableResources);
+		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
-		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		traitTypeBox.setAcceptableValues(Arrays.asList(TraitTypes.values()));
 		init();
-		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 	}
 
 	public String[] getPaths() {
@@ -214,9 +214,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 			}
 		}, null);
 		
-		table.addColumnStyleName(0, "regularCell");
-		table.addColumnStyleName(1, "regularCell");
-		table.addColumnStyleName(2, "iconCell");
+		table.addColumnStyleName(2, "iconCol");
 	}
 	
 	/**

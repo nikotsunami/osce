@@ -14,10 +14,10 @@
 						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>
 					
-					<b:CellTable ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
+					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
 					<div class="{style.controls}">
 						<g:TextBox ui:field="newProfession"></g:TextBox>
-						<g:Button ui:field="newButton">add</g:Button>
+						<g:Button ui:field="newButton"><span class="ui-icon ui-icon-plusthick"></span></g:Button>
 					</div>
 					<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
 				</g:HTMLPanel>

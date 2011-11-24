@@ -97,19 +97,19 @@
 
 .controls {
 	position: relative;
-	top: 3px;
-	height: 2em;
-	margin: 0 8px;
+	width: 98%;
+	min-height: 26px;
 }
 
 .controls table {
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: 2px;
 }
 
-.controls button {
-	display: inline;
+.controls button, .controls select, .controls input {
+	float: left;
+	margin: 0 2px;
 }
 
 .listView {
@@ -293,7 +293,7 @@ body {
 /**************/
 .mainNav {
 	padding-left:8px;
-	padding-right: 8px;
+	padding-right: 20px;
 }
 
 .mainNavPanel {
@@ -308,8 +308,6 @@ body {
 
 .mainNavPanelContent a {
     display: block;
-    /* font-weight: bold; */
-    width: 100%;
     padding: 2px 2px 2px 2px;
 }
 
@@ -326,23 +324,20 @@ body {
 /*********/
 
 .standardTable {
+	clear: both;
 	position: relative;
 	margin: 8px 0;
+	width: 98%;
 }
 
 .standardTable button {
 	outline: none !important;
-	margin: 0;
+	margin: 0 0 0 -5px;
 	padding: 3px 2px 0;
-	width: 100%;
 	border: 0;
 	background: none;
 	cursor: pointer;
 	cursor: hand;
-}
-
-.standardTable button:hover {
-	background-color: #f1b532;
 }
 
 .standardTable button span {

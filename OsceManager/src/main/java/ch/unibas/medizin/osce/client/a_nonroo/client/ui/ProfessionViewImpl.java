@@ -221,6 +221,8 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 				return prof;
 			}
 		}, null);
+
+		table.addColumnStyleName(1, "iconCol");
 	}
 	
 	/**
