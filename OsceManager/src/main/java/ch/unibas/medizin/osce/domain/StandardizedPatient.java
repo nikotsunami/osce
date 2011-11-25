@@ -59,6 +59,10 @@ public class StandardizedPatient {
 
     @Size(max = 30)
     private String mobile;
+    
+    private Integer height;
+    
+    private Integer weight;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")

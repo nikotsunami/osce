@@ -77,6 +77,12 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
     TextBox mobile;
 
     @UiField
+    IntegerBox height;
+
+    @UiField
+    IntegerBox weight;
+
+    @UiField
     DateBox birthday;
 
     @UiField

@@ -86,6 +86,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	@UiField
 	SpanElement birthday;
+	
+	@UiField
+	SpanElement height;
+	
+	@UiField
+	SpanElement weight;
 
 	@UiField
 	SpanElement email;
@@ -128,6 +134,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
 		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getBirthday()));
+		height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
+		weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
 		email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
 		nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
 		profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));

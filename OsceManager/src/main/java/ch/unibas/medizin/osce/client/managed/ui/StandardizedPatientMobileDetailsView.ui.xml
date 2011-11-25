@@ -52,6 +52,25 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -95,6 +114,14 @@
         <div id="mobile">
             <div class="{style.label}">Mobile</div>
             <div class="{style.value}" ui:field="mobile"/>
+        </div>
+        <div id="height">
+            <div class="{style.label}">Height</div>
+            <div class="{style.value}" ui:field="height"/>
+        </div>
+        <div id="weight">
+            <div class="{style.label}">Weight</div>
+            <div class="{style.value}" ui:field="weight"/>
         </div>
         <div id="birthday">
             <div class="{style.label}">Birthday</div>

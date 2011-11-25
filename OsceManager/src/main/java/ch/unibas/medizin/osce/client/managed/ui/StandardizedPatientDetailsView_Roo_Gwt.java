@@ -63,6 +63,12 @@ public abstract class StandardizedPatientDetailsView_Roo_Gwt extends Composite i
     SpanElement mobile;
 
     @UiField
+    SpanElement height;
+
+    @UiField
+    SpanElement weight;
+
+    @UiField
     SpanElement birthday;
 
     @UiField
@@ -104,6 +110,8 @@ public abstract class StandardizedPatientDetailsView_Roo_Gwt extends Composite i
         telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
         telephone2.setInnerText(proxy.getTelephone2() == null ? "" : String.valueOf(proxy.getTelephone2()));
         mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
+        height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
+        weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
         birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getBirthday()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
         descriptions.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));

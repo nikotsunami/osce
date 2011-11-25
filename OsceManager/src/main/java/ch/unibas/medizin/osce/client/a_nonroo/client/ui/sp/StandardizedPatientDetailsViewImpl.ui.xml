@@ -95,6 +95,22 @@
 					<span ui:field="birthday" />
 				</td>
 			</tr>
+			<tr id="height">
+				<td>
+					<span class="{style.label}">Height:</span>
+				</td>
+				<td>
+					<span ui:field="height" />
+				</td>
+			</tr>
+			<tr id="weight">
+				<td>
+					<span class="{style.label}">Weight:</span>
+				</td>
+				<td>
+					<span ui:field="weight" />
+				</td>
+			</tr>
 			<tr id="email">
 				<td>
 					<span class="{style.label}">Email:</span>

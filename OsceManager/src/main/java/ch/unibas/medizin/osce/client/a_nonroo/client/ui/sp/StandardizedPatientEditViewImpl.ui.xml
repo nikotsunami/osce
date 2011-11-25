@@ -25,6 +25,8 @@
       <tr id='telephone2'><td><div class='{style.label}'>Telephone2:</div></td><td><g:TextBox ui:field='telephone2'/></td></tr>
       <tr id='mobile'><td><div class='{style.label}'>Mobile:</div></td><td><g:TextBox ui:field='mobile'/></td></tr>
       <tr id='birthday'><td><div class='{style.label}'>Birthday:</div></td><td><d:DateBox ui:field='birthday'/></td></tr>
+      <tr id='height'><td><div class='{style.label}'>Height:</div></td><td><g:IntegerBox ui:field='height'/></td></tr>
+      <tr id='weight'><td><div class='{style.label}'>Weight:</div></td><td><g:IntegerBox ui:field='weight'/></td></tr>
       <tr id='email'><td><div class='{style.label}'>Email:</div></td><td><g:TextBox ui:field='email'/></td></tr>
       <tr id='nationality'><td><div class='{style.label}'>Nationality:</div></td><td><g:ValueListBox ui:field='nationality'/></td></tr>
       <tr id='profession'><td><div class='{style.label}'>Profession:</div></td><td><g:ValueListBox ui:field='profession'/></td></tr>

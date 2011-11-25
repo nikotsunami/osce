@@ -51,79 +51,84 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	@UiField
 	Element createTitle;
-	
-    @UiField(provided = true)
-    ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
 
-        public String render(ch.unibas.medizin.osce.shared.Gender obj) {
-            return obj == null ? "" : String.valueOf(obj);
-        }
-    });
+	@UiField(provided = true)
+	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
 
-    @UiField
-    TextBox name;
+		public String render(ch.unibas.medizin.osce.shared.Gender obj) {
+			return obj == null ? "" : String.valueOf(obj);
+		}
+	});
 
-    @UiField
-    TextBox preName;
+	@UiField
+	TextBox name;
 
-    @UiField
-    TextBox street;
+	@UiField
+	TextBox preName;
 
-    @UiField
-    TextBox city;
+	@UiField
+	TextBox street;
 
-    @UiField
-    IntegerBox postalCode;
+	@UiField
+	TextBox city;
 
-    @UiField
-    TextBox telephone;
-    
-    @UiField
-    TextBox telephone2;
+	@UiField
+	IntegerBox postalCode;
 
-    @UiField
-    TextBox mobile;
+	@UiField
+	TextBox telephone;
 
-    @UiField
-    DateBox birthday;
+	@UiField
+	TextBox telephone2;
 
-    @UiField
-    TextBox email;
+	@UiField
+	TextBox mobile;
 
-    @UiField(provided = true)
-    ValueListBox<NationalityProxy> nationality = new ValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
+	@UiField
+	DateBox birthday;
 
-    @UiField(provided = true)
-    ValueListBox<ProfessionProxy> profession = new ValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
+	@UiField
+	IntegerBox height;
 
-    @UiField
-    LangSkillSetEditor langskills;
+	@UiField
+	IntegerBox weight;
 
-    @UiField(provided = true)
-    ValueListBox<BankaccountProxy> bankAccount = new ValueListBox<BankaccountProxy>(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy>());
+	@UiField
+	TextBox email;
 
+	@UiField(provided = true)
+	ValueListBox<NationalityProxy> nationality = new ValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
+
+	@UiField(provided = true)
+	ValueListBox<ProfessionProxy> profession = new ValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
+
+	@UiField
+	LangSkillSetEditor langskills;
+
+	@UiField(provided = true)
+	ValueListBox<BankaccountProxy> bankAccount = new ValueListBox<BankaccountProxy>(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy>());
 
 	@UiField
 	SimplePanel descriptionPanel;
-	
-    @UiField(provided = true)
-    ValueListBox<AnamnesisFormProxy> anamnesisForm = new ValueListBox<AnamnesisFormProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>());
 
-	
-		@UiField
-		Button cancel;
+	@UiField(provided = true)
+	ValueListBox<AnamnesisFormProxy> anamnesisForm = new ValueListBox<AnamnesisFormProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>());
 
-		@UiField
-		Button save;
-		
-		@UiField
-		DivElement errors;
-	    
+
+	@UiField
+	Button cancel;
+
+	@UiField
+	Button save;
+
+	@UiField
+	DivElement errors;
+
 	private Delegate delegate;
 
 	private Presenter presenter;
 
-	
+
 	public StandardizedPatientEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
@@ -181,14 +186,14 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	@Override
 	public void setEditTitle(boolean edit) {
-		
+
 		if (edit) {
-            editTitle.getStyle().clearDisplay();
-            createTitle.getStyle().setDisplay(Display.NONE);
-        } else {
-            editTitle.getStyle().setDisplay(Display.NONE);
-            createTitle.getStyle().clearDisplay();
-        }
+			editTitle.getStyle().clearDisplay();
+			createTitle.getStyle().setDisplay(Display.NONE);
+		} else {
+			editTitle.getStyle().setDisplay(Display.NONE);
+			createTitle.getStyle().clearDisplay();
+		}
 
 	}
 

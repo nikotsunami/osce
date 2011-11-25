@@ -72,6 +72,25 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -158,6 +177,22 @@
                 </td>
                 <td>
                     <span ui:field="mobile"/>
+                </td>
+            </tr>
+            <tr id="height">
+                <td>
+                    <span class="{style.label}">Height:</span>
+                </td>
+                <td>
+                    <span ui:field="height"/>
+                </td>
+            </tr>
+            <tr id="weight">
+                <td>
+                    <span class="{style.label}">Weight:</span>
+                </td>
+                <td>
+                    <span ui:field="weight"/>
                 </td>
             </tr>
             <tr id="birthday">

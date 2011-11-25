@@ -54,6 +54,23 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="gender">
             <div class="{style.label}">Gender</div>
             <div class="{style.value}">
@@ -106,6 +123,18 @@
             <div class="{style.label}">Mobile</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="mobile"/>
+            </div>
+        </div>
+        <div id="height">
+            <div class="{style.label}">Height</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="height"/>
+            </div>
+        </div>
+        <div id="weight">
+            <div class="{style.label}">Weight</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="weight"/>
             </div>
         </div>
         <div id="birthday">

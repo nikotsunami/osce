@@ -89,6 +89,22 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.mobile = mobile;
     }
     
+    public Integer StandardizedPatient.getHeight() {
+        return this.height;
+    }
+    
+    public void StandardizedPatient.setHeight(Integer height) {
+        this.height = height;
+    }
+    
+    public Integer StandardizedPatient.getWeight() {
+        return this.weight;
+    }
+    
+    public void StandardizedPatient.setWeight(Integer weight) {
+        this.weight = weight;
+    }
+    
     public Date StandardizedPatient.getBirthday() {
         return this.birthday;
     }

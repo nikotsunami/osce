@@ -57,6 +57,14 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setMobile(String mobile);
 
+    abstract Integer getHeight();
+
+    abstract void setHeight(Integer height);
+
+    abstract Integer getWeight();
+
+    abstract void setWeight(Integer weight);
+
     abstract Date getBirthday();
 
     abstract void setBirthday(Date birthday);

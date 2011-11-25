@@ -16,6 +16,7 @@ privileged aspect StandardizedPatient_Roo_ToString {
         sb.append("Descriptions: ").append(getDescriptions()).append(", ");
         sb.append("Email: ").append(getEmail()).append(", ");
         sb.append("Gender: ").append(getGender()).append(", ");
+        sb.append("Height: ").append(getHeight()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Langskills: ").append(getLangskills() == null ? "null" : getLangskills().size()).append(", ");
         sb.append("Mobile: ").append(getMobile()).append(", ");
@@ -27,7 +28,8 @@ privileged aspect StandardizedPatient_Roo_ToString {
         sb.append("Street: ").append(getStreet()).append(", ");
         sb.append("Telephone: ").append(getTelephone()).append(", ");
         sb.append("Telephone2: ").append(getTelephone2()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("Weight: ").append(getWeight());
         return sb.toString();
     }
     
