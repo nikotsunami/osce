@@ -6,44 +6,44 @@
 
 	<g:HTMLPanel>
 		<g:DisclosurePanel ui:field="masterDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header>Stammdaten</g:header>
+			<g:header ui:field=""></g:header>
 			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="people">Personen</g:Anchor>
-				<g:Anchor ui:field="scars">Merkmale</g:Anchor>
-				<g:Anchor ui:field="anamnesisForms">Anamnesewerte</g:Anchor>
-				<g:Anchor ui:field="clinics">Spitäler</g:Anchor>
-				<g:Anchor ui:field="doctors">Ärzte</g:Anchor>
+				<g:Anchor ui:field="people"></g:Anchor>
+				<g:Anchor ui:field="scars"></g:Anchor>
+				<g:Anchor ui:field="anamnesisForms"></g:Anchor>
+				<g:Anchor ui:field="clinics"></g:Anchor>
+				<g:Anchor ui:field="doctors"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
 		<g:DisclosurePanel ui:field="administrationPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header>Verwaltung</g:header>
+			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="administrators">Benutzer</g:Anchor>
-				<g:Anchor ui:field="nationalities">Nationalitäten</g:Anchor>
-				<g:Anchor ui:field="languages">Sprachen</g:Anchor>
-				<g:Anchor ui:field="professions">Berufe</g:Anchor>
+				<g:Anchor ui:field="administrators"></g:Anchor>
+				<g:Anchor ui:field="nationalities"></g:Anchor>
+				<g:Anchor ui:field="languages"></g:Anchor>
+				<g:Anchor ui:field="professions"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
 		<g:DisclosurePanel ui:field="examinationsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header>Prüfungen</g:header>
+			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="osces">OSCEs</g:Anchor>
-				<g:Anchor ui:field="course">Postenlauf</g:Anchor>
-				<g:Anchor ui:field="students">Studenten</g:Anchor>
-				<g:Anchor ui:field="examinationSchedule">Prüfungsplan</g:Anchor>
-				<g:Anchor ui:field="printIndividualSchedules">Individuelle Pläne drucken</g:Anchor>
+				<g:Anchor ui:field="osces"></g:Anchor>
+				<g:Anchor ui:field="course"></g:Anchor>
+				<g:Anchor ui:field="students"></g:Anchor>
+				<g:Anchor ui:field="examinationSchedule"></g:Anchor>
+				<g:Anchor ui:field="printIndividualSchedules"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		
 		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header>SimPat</g:header>
+			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="simulationPatients">Simulationspatienten</g:Anchor>
-				<g:Anchor ui:field="roles">Rollen</g:Anchor>
-				<g:Anchor ui:field="roleAssignment">Rollenzuweisung</g:Anchor>
+				<g:Anchor ui:field="simulationPatients"></g:Anchor>
+				<g:Anchor ui:field="roles"></g:Anchor>
+				<g:Anchor ui:field="roleAssignment"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 

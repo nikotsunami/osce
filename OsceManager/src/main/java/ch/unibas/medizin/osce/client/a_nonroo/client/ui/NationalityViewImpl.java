@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
@@ -113,6 +114,7 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		newButton.setText(Messages.ADD_NATIONALITY);
 	}
 	
 	public String[] getPaths() {
@@ -130,7 +132,7 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 			@Override
 			public void onBlur(BlurEvent arg0) {
 				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue("Suche...");
+					searchBox.setValue(Messages.SEARCHFIELD);
 				}
 			}
 		});

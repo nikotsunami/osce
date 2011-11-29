@@ -6,7 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Gender;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -23,6 +28,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -39,8 +45,15 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	}
 
 	public StandardizedPatientScarSubViewImpl() {
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		
+		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
-		init() ;
+		init();
+		scarAddButton.setText(Messages.ADD_TRAIT);
 	}
 
 	Delegate delegate;
@@ -54,15 +67,18 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
     });
 
 	@UiField
-	HasClickHandlers scarAddButton;
+	IconButton scarAddButton;
 
 	@UiHandler("scarAddButton")
 	public void scarAddButtonClicked(ClickEvent event){
 		delegate.scarAddButtonClicked();
 	}
 
-	@UiField
+	@UiField (provided = true)
 	CellTable<ScarProxy> table;
+	
+	@UiField (provided = true)
+	SimplePager pager;
 
 	protected Set<String> paths = new HashSet<String>();
 
@@ -111,6 +127,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 				return scar;
 			}
 		}, null);
+		table.addColumnStyleName(2, "iconCol");
 	}
 	
 	/**

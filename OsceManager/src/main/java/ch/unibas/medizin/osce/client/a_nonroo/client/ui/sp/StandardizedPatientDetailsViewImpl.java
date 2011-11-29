@@ -123,6 +123,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	public void setValue(StandardizedPatientProxy proxy) {
 		this.proxy = proxy;
+		// TODO: so gehts: proxy.getBankAccount().getBankName()
 		id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
 		//version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
 		gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));

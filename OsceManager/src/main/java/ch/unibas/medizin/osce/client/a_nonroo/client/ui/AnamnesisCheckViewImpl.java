@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
@@ -99,6 +100,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
+		newButton.setText(Messages.ADD_ANAMNESIS_VALUE);
 	}
 
 	public String[] getPaths() {
@@ -116,7 +118,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 			@Override
 			public void onBlur(BlurEvent arg0) {
 				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue("Suche...");
+					searchBox.setValue(Messages.SEARCHFIELD);
 				}
 			}
 		});

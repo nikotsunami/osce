@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
@@ -44,8 +45,30 @@ public class OsMaMainNav extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
     	this.requests = requests;
     	this.placeController = placeController;
+    	
+    	masterDataPanel.getHeaderTextAccessor().setText(Messages.MASTER_DATA);
+    	administrationPanel.getHeaderTextAccessor().setText(Messages.ADMINISTRATION);
+    	examinationsPanel.getHeaderTextAccessor().setText(Messages.EXAMS);
+    	simulationPatientsPanel.getHeaderTextAccessor().setText(Messages.SIM_PAT);
+    	
+    	people.setText(Messages.PERSONS);
+    	scars.setText(Messages.TRAITS);
+    	anamnesisForms.setText(Messages.ANAMNESIS_VALUES);
+    	clinics.setText(Messages.CLINICS);
+    	doctors.setText(Messages.DOCTORS);
+    	administrators.setText(Messages.USER);
+    	nationalities.setText(Messages.NATIONALITIES);
+    	languages.setText(Messages.LANGUAGES);
+    	professions.setText(Messages.PROFESSIONS);
+    	osces.setText(Messages.OSCES);
+    	course.setText(Messages.CIRCUIT);
+    	students.setText(Messages.STUDENTS);
+    	examinationSchedule.setText(Messages.EXAM_SCHEDULE);
+    	printIndividualSchedules.setText(Messages.PRINT_INDIVIDUAL_SCHEDULES);
+    	simulationPatients.setText(Messages.SIMULATION_PATIENTS);
+    	roles.setText(Messages.ROLES);
+    	roleAssignment.setText(Messages.ROLE_ASSIGNMENT);
    }
-
 	
 	@UiField
 	DisclosurePanel masterDataPanel;		// Stammdaten

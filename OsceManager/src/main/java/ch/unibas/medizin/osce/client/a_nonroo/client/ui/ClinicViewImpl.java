@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
@@ -97,6 +98,7 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
+		newButton.setText(Messages.ADD_CLINIC);
 	}
 
 	public String[] getPaths() {
@@ -114,7 +116,7 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 			@Override
 			public void onBlur(BlurEvent arg0) {
 				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue("Suche...");
+					searchBox.setValue(Messages.SEARCHFIELD);
 				}
 			}
 		});

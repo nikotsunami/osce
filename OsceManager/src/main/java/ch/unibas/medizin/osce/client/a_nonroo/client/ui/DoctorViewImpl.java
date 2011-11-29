@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
@@ -88,15 +89,19 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	 * implement HasHTML instead of HasText.
 	 */
 	public DoctorViewImpl() {
-	CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-	table = new CellTable<DoctorProxy>(15, tableResources);
-	
-	SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
-	pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
-	
-	initWidget(uiBinder.createAndBindUi(this));
-	init();
-	splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
+		CellTable.Resources tableResources = GWT
+				.create(MyCellTableResources.class);
+		table = new CellTable<DoctorProxy>(15, tableResources);
+
+		SimplePager.Resources pagerResources = GWT
+				.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources,
+				true, 30, true);
+
+		initWidget(uiBinder.createAndBindUi(this));
+		init();
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
+		newButton.setText(Messages.ADD_DOCTOR);
 	}
 
 	public String[] getPaths() {
@@ -114,7 +119,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			@Override
 			public void onBlur(BlurEvent arg0) {
 				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue("Suche...");
+					searchBox.setValue(Messages.SEARCHFIELD);
 				}
 			}
 		});
