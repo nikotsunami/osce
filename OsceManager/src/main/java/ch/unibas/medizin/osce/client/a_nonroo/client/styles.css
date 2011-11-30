@@ -99,6 +99,7 @@
 	position: relative;
 	width: 98%;
 	min-height: 26px;
+	margin: 4px auto;
 }
 
 .controls table {
@@ -326,7 +327,7 @@ body {
 .standardTable {
 	clear: both;
 	position: relative;
-	margin: 8px 0;
+	margin: 4px auto;
 	width: 98%;
 }
 
@@ -349,6 +350,15 @@ body {
 
 .regularCell {
 	width: 50%;
+}
+
+
+/* TODO rename und so... */
+.tabStyle {
+	position: relative;
+	height: 280px;
+	margin: 4px auto;
+	width: 98%
 }
 
 /* #loading {

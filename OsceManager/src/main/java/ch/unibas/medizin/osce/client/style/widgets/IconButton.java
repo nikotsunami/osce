@@ -24,6 +24,7 @@ public class IconButton extends Button {
 	
 	public void setIcon(String iconName) {
 		this.icon = iconName;
+		text = getText();
 		construct();
 	}
 	

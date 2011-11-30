@@ -6,13 +6,11 @@
 	<ui:style src="../../styles.css" />
 		
 	<g:HTMLPanel>
-		<div style="height:3em;" />
 		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
 		<div class="{style.controls}">
 			<g:ValueListBox ui:field="scarBox"></g:ValueListBox>
 			<my:IconButton ui:field="scarAddButton" icon="plusthick"></my:IconButton>
 			<b:SimplePager display="{table}" ui:field="pager" />
 		</div>
-
 	</g:HTMLPanel>
 </ui:UiBinder> 

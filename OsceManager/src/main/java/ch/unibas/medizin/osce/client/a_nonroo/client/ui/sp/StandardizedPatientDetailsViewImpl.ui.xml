@@ -1,182 +1,199 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp">
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../../styles.css" />
 		
 	<g:HTMLPanel>
-		<div class="{style.underline}">
-			<h3 class="{style.header}">
-				<ui:msg>
-					<span ui:field="displayRenderer" />
-				</ui:msg>
-			</h3>
+
+		<div class="{style.controls}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
+			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
+			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
 		</div>
 
+		<g:TabLayoutPanel barUnit="PX" barHeight="28" addStyleNames="{style.tabStyle}">
+			<g:tab>
+				<g:header>Test</g:header>
+				<g:HTMLPanel>
+					<table class="{style.fields}" id="boundElementHolder">
+						<tr id="id">
+							<td>
+								<span class="{style.label}">Id:</span>
+							</td>
+							<td>
+								<span ui:field="id" />
+							</td>
+						</tr>
+						<tr id="gender">
+							<td>
+								<span class="{style.label}">Gender:</span>
+							</td>
+							<td>
+								<span ui:field="gender" />
+							</td>
+						</tr>
+						<tr id="name">
+							<td>
+								<span class="{style.label}">Name:</span>
+							</td>
+							<td>
+								<span ui:field="name" />
+							</td>
+						</tr>
+						<tr id="preName">
+							<td>
+								<span class="{style.label}">Pre Name:</span>
+							</td>
+							<td>
+								<span ui:field="preName" />
+							</td>
+						</tr>
+						<tr id="street">
+							<td>
+								<span class="{style.label}">Street:</span>
+							</td>
+							<td>
+								<span ui:field="street" />
+							</td>
+						</tr>
+						<tr id="city">
+							<td>
+								<span class="{style.label}">City:</span>
+							</td>
+							<td>
+								<span ui:field="city" />
+							</td>
+						</tr>
+						<tr id="postalCode">
+							<td>
+								<span class="{style.label}">Postal Code:</span>
+							</td>
+							<td>
+								<span ui:field="postalCode" />
+							</td>
+						</tr>
+						<tr id="telephone">
+							<td>
+								<span class="{style.label}">Telephone:</span>
+							</td>
+							<td>
+								<span ui:field="telephone" />
+							</td>
+						</tr>
+						<tr id="mobile">
+							<td>
+								<span class="{style.label}">Mobile:</span>
+							</td>
+							<td>
+								<span ui:field="mobile" />
+							</td>
+						</tr>
+						<tr id="birthday">
+							<td>
+								<span class="{style.label}">Birthday:</span>
+							</td>
+							<td>
+								<span ui:field="birthday" />
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:tab>
 
-		<table class="{style.fields}" id="boundElementHolder">
-			<tr id="id">
-				<td>
-					<span class="{style.label}">Id:</span>
-				</td>
-				<td>
-					<span ui:field="id" />
-				</td>
-			</tr>
-			<tr id="gender">
-				<td>
-					<span class="{style.label}">Gender:</span>
-				</td>
-				<td>
-					<span ui:field="gender" />
-				</td>
-			</tr>
-			<tr id="name">
-				<td>
-					<span class="{style.label}">Name:</span>
-				</td>
-				<td>
-					<span ui:field="name" />
-				</td>
-			</tr>
-			<tr id="preName">
-				<td>
-					<span class="{style.label}">Pre Name:</span>
-				</td>
-				<td>
-					<span ui:field="preName" />
-				</td>
-			</tr>
-			<tr id="street">
-				<td>
-					<span class="{style.label}">Street:</span>
-				</td>
-				<td>
-					<span ui:field="street" />
-				</td>
-			</tr>
-			<tr id="city">
-				<td>
-					<span class="{style.label}">City:</span>
-				</td>
-				<td>
-					<span ui:field="city" />
-				</td>
-			</tr>
-			<tr id="postalCode">
-				<td>
-					<span class="{style.label}">Postal Code:</span>
-				</td>
-				<td>
-					<span ui:field="postalCode" />
-				</td>
-			</tr>
-			<tr id="telephone">
-				<td>
-					<span class="{style.label}">Telephone:</span>
-				</td>
-				<td>
-					<span ui:field="telephone" />
-				</td>
-			</tr>
-			<tr id="mobile">
-				<td>
-					<span class="{style.label}">Mobile:</span>
-				</td>
-				<td>
-					<span ui:field="mobile" />
-				</td>
-			</tr>
-			<tr id="birthday">
-				<td>
-					<span class="{style.label}">Birthday:</span>
-				</td>
-				<td>
-					<span ui:field="birthday" />
-				</td>
-			</tr>
-			<tr id="height">
-				<td>
-					<span class="{style.label}">Height:</span>
-				</td>
-				<td>
-					<span ui:field="height" />
-				</td>
-			</tr>
-			<tr id="weight">
-				<td>
-					<span class="{style.label}">Weight:</span>
-				</td>
-				<td>
-					<span ui:field="weight" />
-				</td>
-			</tr>
-			<tr id="email">
-				<td>
-					<span class="{style.label}">Email:</span>
-				</td>
-				<td>
-					<span ui:field="email" />
-				</td>
-			</tr>
-			<tr id="nationality">
-				<td>
-					<span class="{style.label}">Nationality:</span>
-				</td>
-				<td>
-					<span ui:field="nationality" />
-				</td>
-			</tr>
-			<tr id="profession">
-				<td>
-					<span class="{style.label}">Profession:</span>
-				</td>
-				<td>
-					<span ui:field="profession" />
-				</td>
-			</tr>
-			<tr id="langskills">
-				<td>
-					<span class="{style.label}">Langskills:</span>
-				</td>
-				<td>
-					<span ui:field="langskills" />
-				</td>
-			</tr>
-			<tr id="bankAccount">
-				<td>
-					<span class="{style.label}">Bank Account:</span>
-				</td>
-				<td>
-					<span ui:field="bankAccount" />
-				</td>
-			</tr>
-			<tr id="descriptions">
-				<td>
-					<span class="{style.label}">Description:</span>
-				</td>
-				<td>
-					<span ui:field="descriptions" />
-				</td>
-			</tr>
-			<tr id="anamnesisForm">
-				<td>
-					<span class="{style.label}">Anamnesis Form:</span>
-				</td>
-				<td>
-					<span ui:field="anamnesisForm" />
-				</td>
-			</tr>
-		</table>
-
-		<div class="{style.bar}">
-			<g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
-			<g:Button addStyleNames="{style.button}" ui:field="delete">Delete</g:Button>
-			<!-- <g:Anchor ui:field="delete">Delete</g:Anchor> -->
-		</div>
-
-		<n:StandardizedPatientScarSubViewImpl
-			ui:field="standardizedPatientScarSubViewImpl"></n:StandardizedPatientScarSubViewImpl>
+			<g:tab>
+				<g:header>Test</g:header>
+				<g:HTMLPanel>
+					<table class="{style.fields}" id="boundElementHolder">
+						<tr id="height">
+							<td>
+								<span class="{style.label}">Height:</span>
+							</td>
+							<td>
+								<span ui:field="height" />
+							</td>
+						</tr>
+						<tr id="weight">
+							<td>
+								<span class="{style.label}">Weight:</span>
+							</td>
+							<td>
+								<span ui:field="weight" />
+							</td>
+						</tr>
+						<tr id="email">
+							<td>
+								<span class="{style.label}">Email:</span>
+							</td>
+							<td>
+								<span ui:field="email" />
+							</td>
+						</tr>
+						<tr id="nationality">
+							<td>
+								<span class="{style.label}">Nationality:</span>
+							</td>
+							<td>
+								<span ui:field="nationality" />
+							</td>
+						</tr>
+						<tr id="profession">
+							<td>
+								<span class="{style.label}">Profession:</span>
+							</td>
+							<td>
+								<span ui:field="profession" />
+							</td>
+						</tr>
+						<tr id="langskills">
+							<td>
+								<span class="{style.label}">Langskills:</span>
+							</td>
+							<td>
+								<span ui:field="langskills" />
+							</td>
+						</tr>
+						<tr id="bankAccount">
+							<td>
+								<span class="{style.label}">Bank Account:</span>
+							</td>
+							<td>
+								<span ui:field="bankAccount" />
+							</td>
+						</tr>
+						<tr id="descriptions">
+							<td>
+								<span class="{style.label}">Description:</span>
+							</td>
+							<td>
+								<span ui:field="descriptions" />
+							</td>
+						</tr>
+						<tr id="anamnesisForm">
+							<td>
+								<span class="{style.label}">Anamnesis Form:</span>
+							</td>
+							<td>
+								<span ui:field="anamnesisForm" />
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:tab>
+		</g:TabLayoutPanel>
+		
+		<g:TabLayoutPanel barUnit="PX" barHeight="28" addStyleNames="{style.tabStyle}">
+			<g:tab>
+			<g:header>ScarSubViewImpl</g:header>
+				<n:StandardizedPatientScarSubViewImpl ui:field="standardizedPatientScarSubViewImpl"></n:StandardizedPatientScarSubViewImpl>
+			</g:tab>
+			
+			<g:tab>
+			<g:header>AnamnesisSubViewImpl</g:header>
+				<g:SimplePanel></g:SimplePanel>
+			</g:tab>
+		</g:TabLayoutPanel>
 
 	</g:HTMLPanel>
 </ui:UiBinder>

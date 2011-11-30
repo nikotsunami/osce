@@ -42,7 +42,7 @@ public class StandardizedPatientDetailsActivity extends StandardizedPatientDetai
         this.view = view;
     }
 
-    public void deleteClicked() {
+	public void deleteClicked() {
         if (!view.confirm("Really delete this entry? You cannot undo this change.")) {
             return;
         }

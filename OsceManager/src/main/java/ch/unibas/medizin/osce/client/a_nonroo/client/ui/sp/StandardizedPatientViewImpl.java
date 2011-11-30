@@ -14,7 +14,6 @@ import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -111,7 +110,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
-		StyleInjector.inject(".cellTableOddRow {background: #00ff00;}");
 		searchBox.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent arg0) {

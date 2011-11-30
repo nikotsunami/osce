@@ -6,7 +6,7 @@
 
 	<g:HTMLPanel>
 		<g:DisclosurePanel ui:field="masterDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header ui:field=""></g:header>
+			<g:header></g:header>
 			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="people"></g:Anchor>
