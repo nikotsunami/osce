@@ -352,13 +352,13 @@ body {
 	width: 50%;
 }
 
-
-/* TODO rename und so... */
-.tabStyle {
-	position: relative;
-	height: 280px;
-	margin: 4px auto;
-	width: 98%
+.detailsPanel {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height: 100%;
 }
 
 /* #loading {

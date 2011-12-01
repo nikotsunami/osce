@@ -40,4 +40,25 @@ public class Messages {
 			public static final String ADD_NATIONALITY = "Nationalität hinzufügen";
 			public static final String ADD_LANGUAGE = "Sprache hinzufügen";
 			public static final String ADD_PROFESSION = "Beruf hinzufügen";
+			
+			/* Standardized Patient Details */
+			public static final String NAME = "Name";
+			public static final String PRENAME = "Vorname";
+			public static final String STREET = "Strasse";
+			public static final String CITY = "Ort";
+			public static final String PLZ = "PLZ";
+			public static final String TELEPHONE = "Telefon";
+			public static final String MOBILE = "Mobiltelefon";
+			public static final String BIRTHDAY = "Geburtsdatum";
+			public static final String HEIGHT = "Grösse";
+			public static final String WEIGHT = "Gewicht";
+			public static final String EMAIL = "E-Mail";
+			public static final String NATIONALITY = "Nationalität";
+			public static final String PROFESSION = "Beruf";
+			public static final String LANGUAGE_SKILLS = "Sprachkenntnisse";
+			public static final String BANK_ACCOUNT = "Bankkonto";
+			public static final String DESCRIPTION = "Beschreibung";
+			public static final String ANAMNESIS_FORM = "Anamneseformular";
+			public static final String CONTACT_INFO = "Kontaktinformationen";
+			public static final String DETAILS = "Details";
 }

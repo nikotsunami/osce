@@ -3,19 +3,31 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	<ui:style src="../../styles.css" />
+	<ui:style src="../../styles.css">
+
+.tabStyle {
+	/*position: relative;*/
+	margin: 8px auto;
+	width: 98%;
+}
+
+.patientControls {
+	height: 5%;
+}
+	</ui:style>
 		
 	<g:HTMLPanel>
-
 		<div class="{style.controls}">
 			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
 			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
 			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
 		</div>
+		
+	<!-- 	<div style="height: 100%; overflow-y: scroll"> -->
 
-		<g:TabLayoutPanel barUnit="PX" barHeight="28" addStyleNames="{style.tabStyle}">
-			<g:tab>
-				<g:header>Test</g:header>
+		<g:TabPanel ui:field="patientPanel" addStyleNames="{style.tabStyle}">
+			<g:Tab>
+				<g:TabHTML>Test</g:TabHTML>
 				<g:HTMLPanel>
 					<table class="{style.fields}" id="boundElementHolder">
 						<tr id="id">
@@ -100,10 +112,10 @@
 						</tr>
 					</table>
 				</g:HTMLPanel>
-			</g:tab>
+			</g:Tab>
 
-			<g:tab>
-				<g:header>Test</g:header>
+			<g:Tab>
+				<g:TabHTML>Test</g:TabHTML>
 				<g:HTMLPanel>
 					<table class="{style.fields}" id="boundElementHolder">
 						<tr id="height">
@@ -180,20 +192,20 @@
 						</tr>
 					</table>
 				</g:HTMLPanel>
-			</g:tab>
-		</g:TabLayoutPanel>
+			</g:Tab>
+		</g:TabPanel>
 		
-		<g:TabLayoutPanel barUnit="PX" barHeight="28" addStyleNames="{style.tabStyle}">
-			<g:tab>
-			<g:header>ScarSubViewImpl</g:header>
+		<g:TabPanel ui:field="scarAnamnesisPanel" addStyleNames="{style.tabStyle}">
+			<g:Tab>
+			<g:TabHTML>ScarSubView</g:TabHTML>
 				<n:StandardizedPatientScarSubViewImpl ui:field="standardizedPatientScarSubViewImpl"></n:StandardizedPatientScarSubViewImpl>
-			</g:tab>
+			</g:Tab>
 			
-			<g:tab>
-			<g:header>AnamnesisSubViewImpl</g:header>
+			<g:Tab>
+			<g:TabHTML>AnamnesisSubView</g:TabHTML>
 				<g:SimplePanel></g:SimplePanel>
-			</g:tab>
-		</g:TabLayoutPanel>
-
+			</g:Tab>
+		</g:TabPanel>
+<!-- 	</div> -->
 	</g:HTMLPanel>
 </ui:UiBinder>

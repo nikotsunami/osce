@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -15,7 +16,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.dom.client.Node;
 
 /**
  * @author niko2
@@ -30,6 +33,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 	}
 
+	@UiField
+	TabPanel patientPanel;
+	
+	@UiField
+	TabPanel scarAnamnesisPanel;
 
 	@UiField 
 	StandardizedPatientScarSubViewImpl standardizedPatientScarSubViewImpl;
@@ -55,6 +63,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	 */
 	public StandardizedPatientDetailsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		patientPanel.selectTab(0);
+		scarAnamnesisPanel.selectTab(0);
+		
+		Node tabTable = patientPanel.getElement().getFirstChild();
+		Node contentPanel = tabTable.getLastChild();
+		tabTable.removeChild(contentPanel);
+		tabTable.insertFirst(contentPanel);
 	}
 
 	@UiField
