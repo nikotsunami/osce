@@ -35,16 +35,16 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientScarSubViewImpl extends Composite implements StandardizedPatientScarSubView  {
+public class StandardizedPatientAnamnesisSubViewImpl extends Composite implements StandardizedPatientScarSubView  {
 
 	private static StandardizedPatientScarSubViewImplUiBinder uiBinder = GWT
 			.create(StandardizedPatientScarSubViewImplUiBinder.class);
 
 	interface StandardizedPatientScarSubViewImplUiBinder extends
-	UiBinder<Widget, StandardizedPatientScarSubViewImpl> {
+	UiBinder<Widget, StandardizedPatientAnamnesisSubViewImpl> {
 	}
 
-	public StandardizedPatientScarSubViewImpl() {
+	public StandardizedPatientAnamnesisSubViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		

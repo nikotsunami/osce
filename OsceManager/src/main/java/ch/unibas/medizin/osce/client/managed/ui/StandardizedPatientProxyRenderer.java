@@ -30,6 +30,6 @@ public class StandardizedPatientProxyRenderer extends ProxyRenderer<Standardized
         if (object == null) {
             return "";
         }
-        return object.getName() + " (" + object.getId() + ")";
+        return " [" + object.getId() + "] " + object.getPreName() + " " + object.getName();
     }
 }

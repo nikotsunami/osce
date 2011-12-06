@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.a_nonroo.client.i18n;
+package ch.unibas.medizin.osce.client.i18n;
 
 public class Messages {
 			/* Navigationspunkte */
@@ -7,7 +7,7 @@ public class Messages {
 			public static final String TRAITS = "Merkmale";
 			public static final String ANAMNESIS_VALUES = "Anamnesewerte";
 			public static final String CLINICS = "Spitäler";
-			public static final String DOCTORS = "Arzte";
+			public static final String DOCTORS = "Ärzte";
 
 			public static final String ADMINISTRATION = "Verwaltung";
 			public static final String USER = "Benutzer";
@@ -61,4 +61,8 @@ public class Messages {
 			public static final String ANAMNESIS_FORM = "Anamneseformular";
 			public static final String CONTACT_INFO = "Kontaktinformationen";
 			public static final String DETAILS = "Details";
+			
+			public static final String BANK_IBAN = "IBAN";
+			public static final String BANK_BIC = "BIC";
+			public static final String BANK_NAME = "Bank";
 }

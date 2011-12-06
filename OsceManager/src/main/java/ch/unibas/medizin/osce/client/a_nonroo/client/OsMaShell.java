@@ -5,7 +5,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client;
 
 
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.i18n.MessageLoader;
+import ch.unibas.medizin.osce.client.i18n.MessageLoader;
 import ch.unibas.medizin.osce.client.scaffold.ui.LoginWidget;
 
 import com.allen_sauer.gwt.log.client.Log;

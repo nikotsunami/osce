@@ -17,178 +17,105 @@
 	</ui:style>
 		
 	<g:HTMLPanel>
-		<div class="{style.controls}">
-			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
-			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
-			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
-		</div>
-		
-	<!-- 	<div style="height: 100%; overflow-y: scroll"> -->
+					<div class="{style.patientControls} {style.controlsright}">
+						<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
+						<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
+						<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+					</div>
 
-		<g:TabPanel ui:field="patientPanel" addStyleNames="{style.tabStyle}">
+		<g:TabPanel ui:field="patientPanel" addStyleNames="gwt-InvertedTabPanel {style.tabStyle}">
 			<g:Tab>
-				<g:TabHTML>Test</g:TabHTML>
-				<g:HTMLPanel>
-					<table class="{style.fields}" id="boundElementHolder">
-						<tr id="id">
-							<td>
-								<span class="{style.label}">Id:</span>
-							</td>
-							<td>
-								<span ui:field="id" />
-							</td>
-						</tr>
-						<tr id="gender">
-							<td>
-								<span class="{style.label}">Gender:</span>
-							</td>
-							<td>
-								<span ui:field="gender" />
-							</td>
-						</tr>
-						<tr id="name">
-							<td>
-								<span class="{style.label}">Name:</span>
-							</td>
-							<td>
-								<span ui:field="name" />
-							</td>
-						</tr>
-						<tr id="preName">
-							<td>
-								<span class="{style.label}">Pre Name:</span>
-							</td>
-							<td>
-								<span ui:field="preName" />
-							</td>
-						</tr>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					
+					<table class="{style.fields}">
 						<tr id="street">
-							<td>
-								<span class="{style.label}">Street:</span>
-							</td>
-							<td>
-								<span ui:field="street" />
-							</td>
+							<td><span class="{style.label}" ui:field="labelStreet" /></td>
+							<td><span ui:field="street" /></td>
 						</tr>
 						<tr id="city">
-							<td>
-								<span class="{style.label}">City:</span>
-							</td>
-							<td>
-								<span ui:field="city" />
-							</td>
+							<td><span class="{style.label}" ui:field="labelCity" /></td>
+							<td><span ui:field="city" /></td>
 						</tr>
 						<tr id="postalCode">
-							<td>
-								<span class="{style.label}">Postal Code:</span>
-							</td>
-							<td>
-								<span ui:field="postalCode" />
-							</td>
+							<td><span class="{style.label}" ui:field="labelPLZ" /></td>
+							<td><span ui:field="postalCode" /></td>
 						</tr>
 						<tr id="telephone">
-							<td>
-								<span class="{style.label}">Telephone:</span>
-							</td>
-							<td>
-								<span ui:field="telephone" />
-							</td>
+							<td><span class="{style.label}" ui:field="labelTelephone" /></td>
+							<td><span ui:field="telephone" /></td>
 						</tr>
 						<tr id="mobile">
-							<td>
-								<span class="{style.label}">Mobile:</span>
-							</td>
-							<td>
-								<span ui:field="mobile" />
-							</td>
+							<td><span class="{style.label}" ui:field="labelMobile" /></td>
+							<td><span ui:field="mobile" /></td>
 						</tr>
-						<tr id="birthday">
-							<td>
-								<span class="{style.label}">Birthday:</span>
-							</td>
-							<td>
-								<span ui:field="birthday" />
-							</td>
+						<tr id="email">
+							<td><span class="{style.label}" ui:field="labelEmail" /></td>
+							<td><span ui:field="email" /></td>
 						</tr>
 					</table>
 				</g:HTMLPanel>
 			</g:Tab>
 
 			<g:Tab>
-				<g:TabHTML>Test</g:TabHTML>
-				<g:HTMLPanel>
-					<table class="{style.fields}" id="boundElementHolder">
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<table class="{style.fields}">
+						<tr id="birthday">
+							<td><span class="{style.label}" ui:field="labelBirthdate" /></td>
+							<td><span ui:field="birthday" /></td>
+						</tr>
+						<tr id="gender">
+							<td><span class="{style.label}">Gender:</span></td>
+							<td><span ui:field="gender" /></td>
+						</tr>
 						<tr id="height">
-							<td>
-								<span class="{style.label}">Height:</span>
+							<td><span class="{style.label}">Height:</span>
 							</td>
-							<td>
-								<span ui:field="height" />
-							</td>
+							<td><span ui:field="height" /></td>
 						</tr>
 						<tr id="weight">
-							<td>
-								<span class="{style.label}">Weight:</span>
-							</td>
-							<td>
-								<span ui:field="weight" />
-							</td>
-						</tr>
-						<tr id="email">
-							<td>
-								<span class="{style.label}">Email:</span>
-							</td>
-							<td>
-								<span ui:field="email" />
-							</td>
+							<td><span class="{style.label}">Weight:</span></td>
+							<td><span ui:field="weight" /></td>
 						</tr>
 						<tr id="nationality">
-							<td>
-								<span class="{style.label}">Nationality:</span>
-							</td>
-							<td>
-								<span ui:field="nationality" />
-							</td>
+							<td><span class="{style.label}">Nationality:</span></td>
+							<td><span ui:field="nationality" /></td>
 						</tr>
 						<tr id="profession">
-							<td>
-								<span class="{style.label}">Profession:</span>
-							</td>
-							<td>
-								<span ui:field="profession" />
-							</td>
+							<td><span class="{style.label}">Profession:</span></td>
+							<td><span ui:field="profession" /></td>
 						</tr>
 						<tr id="langskills">
-							<td>
-								<span class="{style.label}">Langskills:</span>
-							</td>
-							<td>
-								<span ui:field="langskills" />
-							</td>
-						</tr>
-						<tr id="bankAccount">
-							<td>
-								<span class="{style.label}">Bank Account:</span>
-							</td>
-							<td>
-								<span ui:field="bankAccount" />
-							</td>
+							<td><span class="{style.label}">Langskills:</span></td>
+							<td><span ui:field="langskills" /></td>
 						</tr>
 						<tr id="descriptions">
-							<td>
-								<span class="{style.label}">Description:</span>
-							</td>
-							<td>
-								<span ui:field="descriptions" />
-							</td>
+							<td><span class="{style.label}">Description:</span></td>
+							<td><span ui:field="descriptions" /></td>
 						</tr>
 						<tr id="anamnesisForm">
-							<td>
-								<span class="{style.label}">Anamnesis Form:</span>
-							</td>
-							<td>
-								<span ui:field="anamnesisForm" />
-							</td>
+							<td><span class="{style.label}">Anamnesis Form:</span></td>
+							<td><span ui:field="anamnesisForm" /></td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:Tab>
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<table class="{style.fields}" id="boundElementHolder">
+						<tr>
+							<td><span class="{style.label}" ui:field="labelBankName" /></td>
+							<td><span ui:field="bankName" /></td>
+						</tr>
+						<tr>
+							<td><span class="{style.label}" ui:field="labelBankBIC" /></td>
+							<td><span ui:field="bankBIC" /></td>
+						</tr>
+						<tr>
+							<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
+							<td><span ui:field="bankIBAN" /></td>
 						</tr>
 					</table>
 				</g:HTMLPanel>

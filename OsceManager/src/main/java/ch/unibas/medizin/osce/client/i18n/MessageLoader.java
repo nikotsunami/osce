@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.a_nonroo.client.i18n;
+package ch.unibas.medizin.osce.client.i18n;
 
 import java.util.Locale;
 import java.util.MissingResourceException;

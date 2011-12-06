@@ -299,7 +299,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-DisclosurePanel .header:hover {
-	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 	color: #454545;
 }
 
@@ -1009,7 +1009,6 @@ a:hover, .gwt-Anchor:hover {
 .gwt-TabBar {
     background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
     border: 1px solid #AAAAAA;
-    border-bottom: 0;
     color: #222222;
     font-weight: bold;
     padding: 8px 10px 0;
@@ -1029,15 +1028,13 @@ a:hover, .gwt-Anchor:hover {
     background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
     -moz-border-radius-topleft: 12px;
     -moz-border-radius-topright: 12px;
-    border-color: #AAAAAA #AAAAAA -moz-use-text-color;
-    border-style: solid solid none;
-    border-width: 1px 1px 0;
+    border: 1px solid #AAAAAA;
+    border-bottom: 0;
     color: #454545;
     cursor: pointer;
     font-size: 1.05em;
     font-weight: bold;
     line-height: 1em;
-    margin: 0 2px;
     outline-style: none;
     text-decoration: none;
     padding: 7px 20px;
@@ -1046,19 +1043,41 @@ a:hover, .gwt-Anchor:hover {
     margin: 0 -6px;
 }
 
-.gwt-TabBar .gwt-TabBarItem-selected {
-    background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
-    color: #555555;
+.gwt-TabBar .gwt-TabBarItem:hover {
+    background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
+    color: #454545;
 }
 
-.gwt-TabBar .gwt-TabBarItem:hover {
-    background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #DADADA;
+.gwt-TabBar .gwt-TabBarItem-selected, .gwt-TabBar .gwt-TabBarItem-selected:hover {
+    background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
     color: #454545;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected:hover {
+	cursor: default;
 }
 
 .gwt-TabBar .gwt-TabBarItem-disabled {
 	cursor: default;
 	color: #999999;
+}
+
+.gwt-InvertedTabPanel .gwt-TabBar {
+	border-bottom: 1px solid #AAAAAA;
+	padding: 0 10px 8px;
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-bottomleft: 16px;
+    -moz-border-radius-bottomright: 16px;
+}
+
+.gwt-InvertedTabPanel .gwt-TabBar .gwt-TabBarItem {
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-bottomleft: 12px;
+    -moz-border-radius-bottomright: 12px;
+    border: 1px solid #AAAAAA;
+    border-top: 0;
 }
 
 .gwt-TabPanel {
@@ -1075,6 +1094,14 @@ a:hover, .gwt-Anchor:hover {
 	overflow: hidden;
 	padding: 6px;
 	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
+}
+
+.gwt-InvertedTabPanel .gwt-TabPanelBottom {
+	border-width: 1px 1px 0 1px;
+	-moz-border-radius-bottomleft: 0;
+	-moz-border-radius-bottomright: 0;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;
 }
 
 .gwt-DecoratedTabBar {

@@ -3,7 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -16,6 +19,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.LabelBase;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.dom.client.Node;
@@ -43,10 +47,34 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	StandardizedPatientScarSubViewImpl standardizedPatientScarSubViewImpl;
 
 	@UiField
-	HasClickHandlers edit;
+	IconButton edit;
 
 	@UiField
-	HasClickHandlers delete;
+	IconButton delete;
+	
+	@UiField
+	SpanElement labelStreet;
+	
+	@UiField
+	SpanElement labelCity;
+	
+	@UiField
+	SpanElement labelPLZ;
+	
+	@UiField
+	SpanElement labelTelephone;
+	@UiField
+	SpanElement labelMobile;
+	
+	@UiField
+	SpanElement labelEmail;
+	
+	@UiField
+	SpanElement labelBankName;
+	@UiField
+	SpanElement labelBankIBAN;
+	@UiField
+	SpanElement labelBankBIC;
 
 	private Delegate delegate;
 
@@ -70,19 +98,28 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		Node contentPanel = tabTable.getLastChild();
 		tabTable.removeChild(contentPanel);
 		tabTable.insertFirst(contentPanel);
+		
+		edit.setText(Messages.EDIT);
+		delete.setText(Messages.DELETE);
+		
+		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
+		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
+		patientPanel.getTabBar().setTabText(2, Messages.BANK_ACCOUNT);
+		
+		labelCity.setInnerText(Messages.CITY + ":");
+		labelPLZ.setInnerText(Messages.PLZ + ":");
+		labelEmail.setInnerText(Messages.EMAIL + ":");
+		labelMobile.setInnerText(Messages.MOBILE + ":");
+		labelStreet.setInnerText(Messages.STREET + ":");
+		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		
+		labelBankName.setInnerText(Messages.BANK_NAME + ":");
+		labelBankIBAN.setInnerText(Messages.BANK_IBAN + ":");
+		labelBankBIC.setInnerText(Messages.BANK_BIC + ":");
 	}
 
 	@UiField
-	SpanElement id;
-
-	@UiField
 	SpanElement gender;
-
-	@UiField
-	SpanElement name;
-
-	@UiField
-	SpanElement preName;
 
 	@UiField
 	SpanElement street;
@@ -121,9 +158,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement langskills;
 
 	@UiField
-	SpanElement bankAccount;
-
-	@UiField
 	SpanElement descriptions;
 
 	@UiField
@@ -133,17 +167,20 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	@UiField
 	SpanElement displayRenderer;
+	
+	@UiField
+	SpanElement bankIBAN;
+	@UiField
+	SpanElement bankName;
+	@UiField
+	SpanElement bankBIC;
 
 	private Presenter presenter;
 
 	public void setValue(StandardizedPatientProxy proxy) {
 		this.proxy = proxy;
-		// TODO: so gehts: proxy.getBankAccount().getBankName()
-		id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
 		//version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
 		gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
-		name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
-		preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
 		street.setInnerText(proxy.getStreet() == null ? "" : String.valueOf(proxy.getStreet()));
 		city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
 		postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
@@ -156,10 +193,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
 		profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
 		langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
-		bankAccount.setInnerText(proxy.getBankAccount() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().render(proxy.getBankAccount()));
 		descriptions.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
 		anamnesisForm.setInnerText(proxy.getAnamnesisForm() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy.getAnamnesisForm()));
 		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
+		BankaccountProxy bank = proxy.getBankAccount();
+		bankName.setInnerText(bank == null ? "" : String.valueOf(bank.getBankName()));
+		bankIBAN.setInnerText(bank == null ? "" : String.valueOf(bank.getIBAN()));
+		bankBIC.setInnerText(bank == null ? "" : String.valueOf(bank.getBIC()));
 	}
 
 	@Override

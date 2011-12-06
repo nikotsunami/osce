@@ -40,13 +40,13 @@
 }
 
 .header {
-	padding: 3px;
-	color: #4B4A4A;
-	text-shadow: #ddf 1px 1px 0;
-	margin-bottom: 0;
-	background-color: #E6EDED;
-	font-size: 1.2em;
-	font-weight: bold;
+	color: #555555;
+    float: left;
+    font-weight: bold;
+    height: 100%;
+    margin: 2px 0 0;
+    padding: 3px;
+    vertical-align: bottom;
 }
 
 .underline {
@@ -109,7 +109,15 @@
 }
 
 .controls button, .controls select, .controls input {
+	margin: 0 2px;
+}
+
+.controlsleft button, .controlsleft select, .controlsleft input {
 	float: left;
+}
+
+.controlsright button, .controlsright select, .controlsright input {
+	float: right;
 	margin: 0 2px;
 }
 
@@ -359,6 +367,22 @@ body {
 	bottom: 0;
 	right: 0;
 	height: 100%;
+}
+
+.patientDetails {
+	margin-top: 26px;
+}
+
+.patientControls {
+	padding: 4px 10px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    -moz-border-radius: 12px 12px 12px 12px;
+    background-color: #EBEBEB;
+    max-height: 26px;
+    min-height: 26px;
 }
 
 /* #loading {
