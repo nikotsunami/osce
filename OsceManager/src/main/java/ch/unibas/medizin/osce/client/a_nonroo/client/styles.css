@@ -9,11 +9,6 @@
 	width: 100%;
 }
 
-.fields {
-	margin: 0.5em;
-	padding-right: 1em;
-	white-space: nowrap;
-}
 .fieldsFliestext {
 	white-space: normal;
 }
@@ -316,6 +311,7 @@ body {
 }
 
 .mainNavPanelContent a {
+	text-decoration: none !important;
     display: block;
     padding: 2px 2px 2px 2px;
 }
@@ -370,7 +366,12 @@ body {
 }
 
 .patientDetails {
-	margin-top: 26px;
+	margin: 38px 16px 0;
+	height: 130px !important;
+}
+
+.patientDetails col {
+	min-width: 140px;
 }
 
 .patientControls {

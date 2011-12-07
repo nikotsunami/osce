@@ -57,12 +57,17 @@ public class Messages {
 			public static final String PROFESSION = "Beruf";
 			public static final String LANGUAGE_SKILLS = "Sprachkenntnisse";
 			public static final String BANK_ACCOUNT = "Bankkonto";
-			public static final String DESCRIPTION = "Beschreibung";
+			public static final String DESCRIPTION = "Kommentar";
 			public static final String ANAMNESIS_FORM = "Anamneseformular";
 			public static final String CONTACT_INFO = "Kontaktinformationen";
 			public static final String DETAILS = "Details";
+			public static final String GENDER = "Geschlecht";
+			
+			public static final String GOOGLE_MAPS = "Auf Google Maps anschauen";
 			
 			public static final String BANK_IBAN = "IBAN";
 			public static final String BANK_BIC = "BIC";
 			public static final String BANK_NAME = "Bank";
+			
+			public static final String DATE_TIME_FORMAT = "dd. MMMM yyyy";
 }

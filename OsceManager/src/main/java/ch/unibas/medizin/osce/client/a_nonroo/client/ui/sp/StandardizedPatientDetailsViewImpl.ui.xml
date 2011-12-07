@@ -28,10 +28,17 @@
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
 					
-					<table class="{style.fields}">
+					<table>
+						<colgroup>
+							<col></col>
+							<col></col>
+							<col></col>
+						</colgroup>
+						<tbody>
 						<tr id="street">
 							<td><span class="{style.label}" ui:field="labelStreet" /></td>
 							<td><span ui:field="street" /></td>
+							<td><my:IconButton ui:field="maps" icon="search"></my:IconButton></td>
 						</tr>
 						<tr id="city">
 							<td><span class="{style.label}" ui:field="labelCity" /></td>
@@ -51,8 +58,9 @@
 						</tr>
 						<tr id="email">
 							<td><span class="{style.label}" ui:field="labelEmail" /></td>
-							<td><span ui:field="email" /></td>
+							<td><g:Anchor ui:field="email" /></td>
 						</tr>
+						</tbody>
 					</table>
 				</g:HTMLPanel>
 			</g:Tab>
@@ -60,51 +68,56 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table class="{style.fields}">
+					<table>
+						<colgroup>
+							<col></col>
+							<col></col>
+							<col></col>
+						</colgroup>
+						<tbody>
 						<tr id="birthday">
 							<td><span class="{style.label}" ui:field="labelBirthdate" /></td>
 							<td><span ui:field="birthday" /></td>
 						</tr>
 						<tr id="gender">
-							<td><span class="{style.label}">Gender:</span></td>
+							<td><span class="{style.label}" ui:field="labelGender"></span></td>
 							<td><span ui:field="gender" /></td>
 						</tr>
 						<tr id="height">
-							<td><span class="{style.label}">Height:</span>
+							<td><span class="{style.label}" ui:field="labelHeight"></span>
 							</td>
 							<td><span ui:field="height" /></td>
 						</tr>
 						<tr id="weight">
-							<td><span class="{style.label}">Weight:</span></td>
+							<td><span class="{style.label}" ui:field="labelWeight"></span></td>
 							<td><span ui:field="weight" /></td>
 						</tr>
-						<tr id="nationality">
-							<td><span class="{style.label}">Nationality:</span></td>
-							<td><span ui:field="nationality" /></td>
-						</tr>
 						<tr id="profession">
-							<td><span class="{style.label}">Profession:</span></td>
+							<td><span class="{style.label}" ui:field="labelProfession"></span></td>
 							<td><span ui:field="profession" /></td>
 						</tr>
+						<tr id="nationality">
+							<td><span class="{style.label}" ui:field="labelNationality"></span></td>
+							<td><span ui:field="nationality" /></td>
+						</tr>
 						<tr id="langskills">
-							<td><span class="{style.label}">Langskills:</span></td>
+							<td><span class="{style.label}" ui:field="labelLangskills"></span></td>
 							<td><span ui:field="langskills" /></td>
 						</tr>
-						<tr id="descriptions">
-							<td><span class="{style.label}">Description:</span></td>
-							<td><span ui:field="descriptions" /></td>
-						</tr>
-						<tr id="anamnesisForm">
-							<td><span class="{style.label}">Anamnesis Form:</span></td>
-							<td><span ui:field="anamnesisForm" /></td>
-						</tr>
+						</tbody>
 					</table>
 				</g:HTMLPanel>
 			</g:Tab>
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table class="{style.fields}" id="boundElementHolder">
+					<table>
+						<colgroup>
+							<col></col>
+							<col></col>
+							<col></col>
+						</colgroup>
+						<tbody>
 						<tr>
 							<td><span class="{style.label}" ui:field="labelBankName" /></td>
 							<td><span ui:field="bankName" /></td>
@@ -117,7 +130,15 @@
 							<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
 							<td><span ui:field="bankIBAN" /></td>
 						</tr>
+						</tbody>
 					</table>
+				</g:HTMLPanel>
+			</g:Tab>
+			
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<p><span ui:field="description" /></p>
 				</g:HTMLPanel>
 			</g:Tab>
 		</g:TabPanel>
@@ -130,7 +151,7 @@
 			
 			<g:Tab>
 			<g:TabHTML>AnamnesisSubView</g:TabHTML>
-				<g:SimplePanel></g:SimplePanel>
+				<n:StandardizedPatientAnamnesisSubViewImpl ui:field="standardizedPatientAnamneisSubViewImpl"></n:StandardizedPatientAnamnesisSubViewImpl>
 			</g:Tab>
 		</g:TabPanel>
 <!-- 	</div> -->

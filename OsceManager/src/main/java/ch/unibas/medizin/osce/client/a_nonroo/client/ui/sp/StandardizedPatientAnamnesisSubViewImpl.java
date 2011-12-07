@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientAnamnesisSubViewImpl extends Composite implements StandardizedPatientScarSubView  {
+public class StandardizedPatientAnamnesisSubViewImpl extends Composite implements StandardizedPatientAnamnesisSubView  {
 
 	private static StandardizedPatientScarSubViewImplUiBinder uiBinder = GWT
 			.create(StandardizedPatientScarSubViewImplUiBinder.class);

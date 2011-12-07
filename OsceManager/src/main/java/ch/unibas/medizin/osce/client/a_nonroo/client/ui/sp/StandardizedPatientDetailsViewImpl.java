@@ -18,6 +18,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.LabelBase;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -45,12 +46,17 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	@UiField 
 	StandardizedPatientScarSubViewImpl standardizedPatientScarSubViewImpl;
+	@UiField
+	StandardizedPatientAnamnesisSubViewImpl standardizedPatientAnamneisSubViewImpl;
 
 	@UiField
 	IconButton edit;
 
 	@UiField
 	IconButton delete;
+	
+	@UiField
+	IconButton maps;
 	
 	@UiField
 	SpanElement labelStreet;
@@ -75,6 +81,21 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement labelBankIBAN;
 	@UiField
 	SpanElement labelBankBIC;
+	
+	@UiField
+	SpanElement labelBirthdate;
+	@UiField
+	SpanElement labelGender;
+	@UiField
+	SpanElement labelHeight;
+	@UiField
+	SpanElement labelWeight;
+	@UiField
+	SpanElement labelNationality;
+	@UiField
+	SpanElement labelProfession;
+	@UiField
+	SpanElement labelLangskills;
 
 	private Delegate delegate;
 
@@ -101,11 +122,33 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 		edit.setText(Messages.EDIT);
 		delete.setText(Messages.DELETE);
+		maps.setText(Messages.GOOGLE_MAPS);
 		
 		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
 		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
 		patientPanel.getTabBar().setTabText(2, Messages.BANK_ACCOUNT);
+		patientPanel.getTabBar().setTabText(3, Messages.DESCRIPTION);
 		
+		setLabelTexts();
+		
+		reorderTabs(patientPanel);
+		reorderTabs(scarAnamnesisPanel);
+	}
+	
+	/**
+	 * Hack to reorder z-index layering of tabs in tabbar so that the leftmost tab is on top.
+	 * @param panel
+	 */
+	private void reorderTabs(TabPanel panel) {
+		Element tabBar = panel.getTabBar().getElement();
+		int numChildren = panel.getTabBar().getTabCount();
+		for (int i=0; i < numChildren; i++) {
+			Element tab = (Element)tabBar.getChild(0).getChild(0).getChild(i+1).getChild(0);
+			tab.setAttribute("style", tab.getAttribute("style") + "; z-index: " + (numChildren - i) + ";");
+		}
+	}
+	
+	private void setLabelTexts() {
 		labelCity.setInnerText(Messages.CITY + ":");
 		labelPLZ.setInnerText(Messages.PLZ + ":");
 		labelEmail.setInnerText(Messages.EMAIL + ":");
@@ -116,6 +159,14 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelBankName.setInnerText(Messages.BANK_NAME + ":");
 		labelBankIBAN.setInnerText(Messages.BANK_IBAN + ":");
 		labelBankBIC.setInnerText(Messages.BANK_BIC + ":");
+		
+		labelBirthdate.setInnerText(Messages.BIRTHDAY + ":");
+		labelGender.setInnerText(Messages.GENDER + ":");
+		labelHeight.setInnerText(Messages.HEIGHT + ":");
+		labelWeight.setInnerText(Messages.WEIGHT + ":");
+		labelNationality.setInnerText(Messages.NATIONALITY + ":");
+		labelProfession.setInnerText(Messages.PROFESSION + ":");
+		labelLangskills.setInnerText(Messages.LANGUAGE_SKILLS + ":");
 	}
 
 	@UiField
@@ -146,7 +197,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement weight;
 
 	@UiField
-	SpanElement email;
+	Anchor email;
 
 	@UiField
 	SpanElement nationality;
@@ -158,10 +209,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement langskills;
 
 	@UiField
-	SpanElement descriptions;
-
-	@UiField
-	SpanElement anamnesisForm;
+	SpanElement description;
 
 	StandardizedPatientProxy proxy;
 
@@ -186,20 +234,26 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
-		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getBirthday()));
+		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(Messages.DATE_TIME_FORMAT).format(proxy.getBirthday()));
 		height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
 		weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
-		email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
+		
+		email.setHref("mailto:" + (proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
+		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
+		
 		nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
 		profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
 		langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
-		descriptions.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
-		anamnesisForm.setInnerText(proxy.getAnamnesisForm() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy.getAnamnesisForm()));
+		description.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
 		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
 		BankaccountProxy bank = proxy.getBankAccount();
 		bankName.setInnerText(bank == null ? "" : String.valueOf(bank.getBankName()));
 		bankIBAN.setInnerText(bank == null ? "" : String.valueOf(bank.getIBAN()));
 		bankBIC.setInnerText(bank == null ? "" : String.valueOf(bank.getBIC()));
+	}
+	
+	private String createGoogleMapsLink(StandardizedPatientProxy proxy) {
+		return "http://maps.google.com/maps?q=" + proxy.getStreet() + ",+" + proxy.getPostalCode() + "+" + proxy.getCity();
 	}
 
 	@Override
@@ -223,6 +277,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public StandardizedPatientProxy getValue() {
 		return proxy;
 	}
+	
+	@UiHandler("maps")
+	public void onMapsClicked(ClickEvent e) {
+		Window.open(createGoogleMapsLink(this.proxy), "_blank", "");
+	}
 
 	@UiHandler("delete")
 	public void onDeleteClicked(ClickEvent e) {
@@ -232,6 +291,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
 		delegate.editClicked();
+	}
+	
+
+	@Override
+	public ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubViewImpl getStandardizedPatientAnamnesisSubViewImpl() {
+		return standardizedPatientAnamneisSubViewImpl;
 	}
 
 	@Override

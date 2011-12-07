@@ -35,7 +35,7 @@ body {
 a,a:visited, .gwt-Anchor {
 	cursor: pointer;
 	color: #212121;
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 a:hover, .gwt-Anchor:hover {
@@ -1029,7 +1029,6 @@ a:hover, .gwt-Anchor:hover {
     -moz-border-radius-topleft: 12px;
     -moz-border-radius-topright: 12px;
     border: 1px solid #AAAAAA;
-    border-bottom: 0;
     color: #454545;
     cursor: pointer;
     font-size: 1.05em;
@@ -1040,12 +1039,19 @@ a:hover, .gwt-Anchor:hover {
     padding: 7px 20px;
     
     position: relative;
+    bottom: -1px;
     margin: 0 -6px;
 }
 
 .gwt-TabBar .gwt-TabBarItem:hover {
     background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
     color: #454545;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+	border-bottom: 0 none;
+    padding: 7px 20px 8px;
+    z-index: 100 !important;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected, .gwt-TabBar .gwt-TabBarItem-selected:hover {
@@ -1077,7 +1083,12 @@ a:hover, .gwt-Anchor:hover {
     -moz-border-radius-bottomleft: 12px;
     -moz-border-radius-bottomright: 12px;
     border: 1px solid #AAAAAA;
-    border-top: 0;
+    top: -1px;
+}
+
+.gwt-InvertedTabPanel .gwt-TabBar .gwt-TabBarItem-selected {
+	border-top: 0 none;
+    padding: 8px 20px 7px;
 }
 
 .gwt-TabPanel {

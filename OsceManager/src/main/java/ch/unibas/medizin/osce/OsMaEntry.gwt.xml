@@ -49,6 +49,6 @@
 		-->
 
 
+	<extend-property name="locale" values="de"/>
 	<entry-point class="ch.unibas.medizin.osce.client.a_nonroo.client.OsMaEntry"/>
-
 </module>
