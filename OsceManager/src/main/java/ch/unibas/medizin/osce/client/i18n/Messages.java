@@ -70,6 +70,4 @@ public class Messages {
 			public static final String BANK_NAME = "Bank";
 			
 			public static final String DATE_TIME_FORMAT = "dd. MMMM yyyy";
-			
-			public static final String 
 }
