@@ -46,9 +46,9 @@
 		<set-property name="compiler.emulatedStack" value="true" />
 		<set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true" />
 		<set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true" />
-		-->
+		
 
 
-	<extend-property name="locale" values="de"/>
+	<extend-property name="locale" values="de"/>-->
 	<entry-point class="ch.unibas.medizin.osce.client.a_nonroo.client.OsMaEntry"/>
 </module>
