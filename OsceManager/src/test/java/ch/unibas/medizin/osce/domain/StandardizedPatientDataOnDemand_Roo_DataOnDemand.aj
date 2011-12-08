@@ -62,6 +62,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setDescriptions(obj, index);
         setEmail(obj, index);
         setGender(obj, index);
+        setHeight(obj, index);
         setMobile(obj, index);
         setName(obj, index);
         setNationality(obj, index);
@@ -71,6 +72,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setStreet(obj, index);
         setTelephone(obj, index);
         setTelephone2(obj, index);
+        setWeight(obj, index);
         return obj;
     }
     
@@ -113,6 +115,11 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     public void StandardizedPatientDataOnDemand.setGender(StandardizedPatient obj, int index) {
         Gender gender = Gender.class.getEnumConstants()[0];
         obj.setGender(gender);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setHeight(StandardizedPatient obj, int index) {
+        Integer height = new Integer(index);
+        obj.setHeight(height);
     }
     
     public void StandardizedPatientDataOnDemand.setMobile(StandardizedPatient obj, int index) {
@@ -176,6 +183,11 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
             telephone2 = telephone2.substring(0, 30);
         }
         obj.setTelephone2(telephone2);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setWeight(StandardizedPatient obj, int index) {
+        Integer weight = new Integer(index);
+        obj.setWeight(weight);
     }
     
     public StandardizedPatient StandardizedPatientDataOnDemand.getSpecificStandardizedPatient(int index) {

@@ -94,8 +94,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement labelNationality;
 	@UiField
 	SpanElement labelProfession;
-	@UiField
-	SpanElement labelLangskills;
 
 	private Delegate delegate;
 
@@ -124,15 +122,22 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		delete.setText(Messages.DELETE);
 		maps.setText(Messages.GOOGLE_MAPS);
 		
-		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
-		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
-		patientPanel.getTabBar().setTabText(2, Messages.BANK_ACCOUNT);
-		patientPanel.getTabBar().setTabText(3, Messages.DESCRIPTION);
-		
-		setLabelTexts();
-		
 		reorderTabs(patientPanel);
 		reorderTabs(scarAnamnesisPanel);
+		
+		setTabTexts();
+		setLabelTexts();
+	}
+	
+	private void setTabTexts() {
+		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
+		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
+		patientPanel.getTabBar().setTabText(2, Messages.LANGUAGE_SKILLS);
+		patientPanel.getTabBar().setTabText(3, Messages.BANK_ACCOUNT);
+		patientPanel.getTabBar().setTabText(4, Messages.DESCRIPTION);
+		
+		scarAnamnesisPanel.getTabBar().setTabText(0, Messages.TRAITS);
+		scarAnamnesisPanel.getTabBar().setTabText(1, Messages.ANAMNESIS_VALUES);
 	}
 	
 	/**
@@ -166,7 +171,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelWeight.setInnerText(Messages.WEIGHT + ":");
 		labelNationality.setInnerText(Messages.NATIONALITY + ":");
 		labelProfession.setInnerText(Messages.PROFESSION + ":");
-		labelLangskills.setInnerText(Messages.LANGUAGE_SKILLS + ":");
 	}
 
 	@UiField

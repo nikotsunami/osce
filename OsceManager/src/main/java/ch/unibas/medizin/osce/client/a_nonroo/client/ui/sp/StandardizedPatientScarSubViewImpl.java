@@ -99,7 +99,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getTraitType().toString());
 			}
-		}, "Merkmale");
+		}, Messages.TRAITS);
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
