@@ -8,6 +8,7 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
  * new custom request types here without fear of them
  * being managed away by Roo.
  */
+@SuppressWarnings("deprecation")
 public interface ScaffoldRequestFactory extends RequestFactory {
 	
 	/**

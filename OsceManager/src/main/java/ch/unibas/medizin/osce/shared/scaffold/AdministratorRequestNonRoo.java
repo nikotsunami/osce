@@ -10,6 +10,7 @@ import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
 
 
+@SuppressWarnings("deprecation")
 @Service(Administrator.class)
 public interface  AdministratorRequestNonRoo extends RequestContext  {
 

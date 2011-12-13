@@ -10,6 +10,7 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
 
+@SuppressWarnings("deprecation")
 @Service(SpokenLanguage.class)
 public interface SpokenLanguageRequestNonRoo extends RequestContext {
 	

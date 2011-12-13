@@ -10,6 +10,7 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
 
+@SuppressWarnings("deprecation")
 @Service(AnamnesisCheck.class)
 public interface AnamnesisCheckRequestNonRoo extends RequestContext {
 	
