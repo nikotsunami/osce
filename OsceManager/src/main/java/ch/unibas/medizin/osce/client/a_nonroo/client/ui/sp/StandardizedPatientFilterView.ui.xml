@@ -1,0 +1,62 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+	.popupPanel {
+		margin: 6px 6px;
+	}
+	
+	.popupCheckboxes {
+		width: 120px;
+	}
+	
+	.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+	
+	.floatRight {
+		float: right;
+	}
+	</ui:style>
+	
+	<g:FocusPanel addStyleNames="{style.noOutline}" ui:field="filterPanelRoot">
+		<g:HTMLPanel addStyleNames="{style.popupPanel}">
+				<span class="ui-icon ui-icon-wrench" style="margin: 0 10px 6px 0; float:left"></span>
+				<span style="margin-left: 20px"><strong ui:field="labelSearch">Suche nach...</strong></span>
+				<my:IconButton icon="arrowreturnthick-1-w" ui:field="resetButton" addStyleNames="{style.floatRight}"></my:IconButton>
+			<div style="clear:both">
+			<g:HorizontalPanel>
+				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+					<g:CheckBox ui:field="name"></g:CheckBox>
+					<g:CheckBox ui:field="prename"></g:CheckBox>
+					<g:CheckBox ui:field="postalCode"></g:CheckBox>
+					<g:CheckBox ui:field="city"></g:CheckBox>
+					<g:CheckBox ui:field="street"></g:CheckBox>
+					<g:CheckBox ui:field="telephone"></g:CheckBox>
+					<g:CheckBox ui:field="mobile"></g:CheckBox>
+					<g:CheckBox ui:field="email"></g:CheckBox>
+				</g:VerticalPanel>
+				
+				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+					<g:CheckBox ui:field="birthday"></g:CheckBox>
+					<g:CheckBox ui:field="gender"></g:CheckBox>
+					<g:CheckBox ui:field="height"></g:CheckBox>
+					<g:CheckBox ui:field="weight"></g:CheckBox>
+					<g:CheckBox ui:field="profession"></g:CheckBox>
+					<g:CheckBox ui:field="nationality"></g:CheckBox>
+					<g:CheckBox ui:field="languageSkills"></g:CheckBox>
+				</g:VerticalPanel>
+				
+				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+					<g:CheckBox ui:field="bankName"></g:CheckBox>
+					<g:CheckBox ui:field="bankBIC"></g:CheckBox>
+					<g:CheckBox ui:field="bankIBAN"></g:CheckBox>
+					<g:CheckBox ui:field="description"></g:CheckBox>
+				</g:VerticalPanel>
+			</g:HorizontalPanel>
+			</div>
+		</g:HTMLPanel>
+	</g:FocusPanel>
+</ui:UiBinder> 

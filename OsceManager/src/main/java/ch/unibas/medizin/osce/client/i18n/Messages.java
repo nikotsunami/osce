@@ -70,4 +70,8 @@ public class Messages {
 			public static final String BANK_NAME = "Bank";
 			
 			public static final String DATE_TIME_FORMAT = "dd. MMMM yyyy";
+			
+			/* Filter Popup */
+			public static final String SEARCH_FOR = "Suchen nach...";
+			public static final String RESET_FILTERS = "Filter zurücksetzen";
 }

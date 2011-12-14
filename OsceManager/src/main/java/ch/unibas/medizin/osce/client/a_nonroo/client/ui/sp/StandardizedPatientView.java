@@ -17,12 +17,12 @@ public interface StandardizedPatientView  extends IsWidget{
 	 */
 	interface Delegate {
 		void newClicked();
-		
 		void performSearch(String q);
 	}
 
     CellTable<StandardizedPatientProxy> getTable();
     String[] getPaths();
+    String[] getSearchFilters();
     
     void setDelegate(Delegate delegate);
     

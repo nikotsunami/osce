@@ -3,20 +3,38 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
+import com.google.gwt.cell.client.AbstractEditableCell;
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -38,50 +56,54 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 	}
 
+	private Presenter presenter;
+	StandardizedPatientProxy proxy;
+
+	// Panels
 	@UiField
 	TabPanel patientPanel;
-	
 	@UiField
 	TabPanel scarAnamnesisPanel;
 
+	// SubViews
 	@UiField 
 	StandardizedPatientScarSubViewImpl standardizedPatientScarSubViewImpl;
 	@UiField
 	StandardizedPatientAnamnesisSubViewImpl standardizedPatientAnamneisSubViewImpl;
+	
+	// CellTable (for Langskills)
+	@UiField (provided = true)
+	public CellTable<LangSkillProxy>langTable;
+	private List<AbstractEditableCell<?, ?>> editableCells;
+	protected Set<String> paths = new HashSet<String>();
 
+	// Buttons
 	@UiField
 	IconButton edit;
-
 	@UiField
 	IconButton delete;
-	
 	@UiField
 	IconButton maps;
 	
+	// Labels (Fieldnames)
 	@UiField
 	SpanElement labelStreet;
-	
 	@UiField
 	SpanElement labelCity;
-	
 	@UiField
 	SpanElement labelPLZ;
-	
 	@UiField
 	SpanElement labelTelephone;
 	@UiField
 	SpanElement labelMobile;
-	
 	@UiField
 	SpanElement labelEmail;
-	
 	@UiField
 	SpanElement labelBankName;
 	@UiField
 	SpanElement labelBankIBAN;
 	@UiField
 	SpanElement labelBankBIC;
-	
 	@UiField
 	SpanElement labelBirthdate;
 	@UiField
@@ -94,6 +116,44 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement labelNationality;
 	@UiField
 	SpanElement labelProfession;
+
+	// Fields
+	@UiField
+	SpanElement gender;
+	@UiField
+	SpanElement street;
+	@UiField
+	SpanElement city;
+	@UiField
+	SpanElement postalCode;
+	@UiField
+	SpanElement telephone;
+	@UiField
+	SpanElement mobile;
+	@UiField
+	SpanElement birthday;
+	@UiField
+	SpanElement height;
+	@UiField
+	SpanElement weight;
+	@UiField
+	Anchor email;
+	@UiField
+	SpanElement nationality;
+	@UiField
+	SpanElement profession;
+	@UiField
+	SpanElement langskills;
+	@UiField
+	SpanElement description;
+	@UiField
+	SpanElement displayRenderer;
+	@UiField
+	SpanElement bankIBAN;
+	@UiField
+	SpanElement bankName;
+	@UiField
+	SpanElement bankBIC;
 
 	private Delegate delegate;
 
@@ -109,7 +169,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	 * implement HasHTML instead of HasText.
 	 */
 	public StandardizedPatientDetailsViewImpl() {
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		langTable = new CellTable<LangSkillProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		
 		initWidget(uiBinder.createAndBindUi(this));
+		initTable();
+		
 		patientPanel.selectTab(0);
 		scarAnamnesisPanel.selectTab(0);
 		
@@ -172,62 +237,74 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelNationality.setInnerText(Messages.NATIONALITY + ":");
 		labelProfession.setInnerText(Messages.PROFESSION + ":");
 	}
-
-	@UiField
-	SpanElement gender;
-
-	@UiField
-	SpanElement street;
-
-	@UiField
-	SpanElement city;
-
-	@UiField
-	SpanElement postalCode;
-
-	@UiField
-	SpanElement telephone;
-
-	@UiField
-	SpanElement mobile;
-
-	@UiField
-	SpanElement birthday;
 	
-	@UiField
-	SpanElement height;
+	private void initTable() {
+		langTable.addColumn(new TextColumn<LangSkillProxy>() {
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+				public String render(String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+			
+			@Override
+			public String getValue(LangSkillProxy object) {
+				return renderer.render(object.getSpokenlanguage().getLanguageName().toString());
+			}
+			
+		}, Messages.LANGUAGES);
+
+		langTable.addColumn(new TextColumn<LangSkillProxy>() {
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+				public String render(String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(LangSkillProxy object) {
+				return renderer.render(object.getSkill().toString());
+			}
+		}, Messages.LANGUAGE_SKILLS);
+		
+		addColumn(new ActionCell<LangSkillProxy>(
+				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<LangSkillProxy>() {
+					public void execute(LangSkillProxy langSkill) {
+						if(Window.confirm("wirklich löschen?"))
+							delegate.deleteLangSkillClicked(langSkill);
+					}
+				}), "", new GetValue<LangSkillProxy>() {
+					public LangSkillProxy getValue(LangSkillProxy skill) {
+						return skill;
+					}
+		}, null);
+	}
 	
-	@UiField
-	SpanElement weight;
-
-	@UiField
-	Anchor email;
-
-	@UiField
-	SpanElement nationality;
-
-	@UiField
-	SpanElement profession;
-
-	@UiField
-	SpanElement langskills;
-
-	@UiField
-	SpanElement description;
-
-	StandardizedPatientProxy proxy;
-
-	@UiField
-	SpanElement displayRenderer;
+	/**
+	 * Add a column with a header.
+	 *
+	 * @param <C> the cell type
+	 * @param cell the cell used to render the column
+	 * @param headerText the header string
+	 * @param getter the value getter for the cell
+	 */
+	private <C> void addColumn(Cell<C> cell, String headerText,
+			final GetValue<C> getter, FieldUpdater<LangSkillProxy, C> fieldUpdater) {
+		Column<LangSkillProxy, C> column = new Column<LangSkillProxy, C>(cell) {
+			@Override
+			public C getValue(LangSkillProxy object) {
+				return getter.getValue(object);
+			}
+		};
+		column.setFieldUpdater(fieldUpdater);
+		if (cell instanceof AbstractEditableCell<?, ?>) {
+			editableCells.add((AbstractEditableCell<?, ?>) cell);
+		}
+		langTable.addColumn(column, headerText);
+	}
 	
-	@UiField
-	SpanElement bankIBAN;
-	@UiField
-	SpanElement bankName;
-	@UiField
-	SpanElement bankBIC;
-
-	private Presenter presenter;
+	private static interface GetValue<C> {
+		C getValue(LangSkillProxy contact);
+	}
 
 	public void setValue(StandardizedPatientProxy proxy) {
 		this.proxy = proxy;
@@ -248,8 +325,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
 		profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
 		langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
+		
+		Set<LangSkillProxy> langSkillSet = proxy.getLangskills();
+		
 		description.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
 		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
+		
 		BankaccountProxy bank = proxy.getBankAccount();
 		bankName.setInnerText(bank == null ? "" : String.valueOf(bank.getBankName()));
 		bankIBAN.setInnerText(bank == null ? "" : String.valueOf(bank.getIBAN()));
@@ -296,7 +377,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public void onEditClicked(ClickEvent e) {
 		delegate.editClicked();
 	}
-	
 
 	@Override
 	public ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubViewImpl getStandardizedPatientAnamnesisSubViewImpl() {

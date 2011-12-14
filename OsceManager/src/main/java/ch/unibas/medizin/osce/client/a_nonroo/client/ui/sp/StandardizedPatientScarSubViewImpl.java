@@ -44,6 +44,29 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	UiBinder<Widget, StandardizedPatientScarSubViewImpl> {
 	}
 
+	@UiField (provided = true)
+	CellTable<ScarProxy> table;
+	
+	@UiField (provided = true)
+	SimplePager pager;
+
+	protected Set<String> paths = new HashSet<String>();
+	
+	@UiField
+	IconButton scarAddButton;
+	
+	Delegate delegate;
+	
+	private List<AbstractEditableCell<?, ?>> editableCells;
+	
+	@UiField(provided = true)
+    ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new AbstractRenderer<ScarProxy>() {
+
+        public String render(ScarProxy obj) {
+            return obj == null ? "" : String.valueOf(obj.getTraitType()) + ": " + String.valueOf(obj.getBodypart());
+        }
+    });
+
 	public StandardizedPatientScarSubViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -56,31 +79,11 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		scarAddButton.setText(Messages.ADD_TRAIT);
 	}
 
-	Delegate delegate;
-
-	@UiField(provided = true)
-    ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new AbstractRenderer<ScarProxy>() {
-
-        public String render(ScarProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getTraitType()) + ": " + String.valueOf(obj.getBodypart());
-        }
-    });
-
-	@UiField
-	IconButton scarAddButton;
-
 	@UiHandler("scarAddButton")
 	public void scarAddButtonClicked(ClickEvent event){
 		delegate.scarAddButtonClicked();
 	}
 
-	@UiField (provided = true)
-	CellTable<ScarProxy> table;
-	
-	@UiField (provided = true)
-	SimplePager pager;
-
-	protected Set<String> paths = new HashSet<String>();
 
 	public void init() {
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
@@ -118,7 +121,6 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {
-						//Window.alert("You clicked " + institution.getInstitutionName());
 						if(Window.confirm("wirklich löschen?"))
 							delegate.deleteScarClicked(scar);
 					}
@@ -161,8 +163,6 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	private static interface GetValue<C> {
 		C getValue(ScarProxy contact);
 	}
-	
-	private List<AbstractEditableCell<?, ?>> editableCells;
 	
 	public ValueListBox<ScarProxy> getScarBox() {
 		return scarBox;

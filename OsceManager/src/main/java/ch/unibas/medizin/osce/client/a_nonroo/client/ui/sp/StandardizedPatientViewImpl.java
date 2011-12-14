@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -35,6 +36,8 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -53,32 +56,37 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	private Delegate delegate;
-
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
-	
 	@UiField
 	TextBox searchBox;
-	
+	@UiField
+	IconButton filterButton;
 	@UiField
 	IconButton newButton;
-	
 	@UiField
 	SimplePanel detailsPanel;
-
 	@UiField(provided = true)
 	SimplePager pager;
-	
 	@UiField(provided = true)
 	CellTable<StandardizedPatientProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
-
+	private StandardizedPatientFilterView filterPanel;
 	private Presenter presenter;
-
+	
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
 		delegate.newClicked();
+	}
+	
+	@UiHandler ("filterButton")
+	public void filterButtonClicked(ClickEvent event) {
+		Widget source = (Widget) event.getSource();
+		int x = source.getAbsoluteLeft();
+		int y = source.getAbsoluteTop();
+		filterPanel.setPopupPosition(x, y);
+		filterPanel.show();
 	}
 
 	/**
@@ -98,6 +106,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
+
+		filterPanel = new StandardizedPatientFilterView();
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
@@ -369,6 +379,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //                return renderer.render(object.getAnamnesisForm());
 //            }
 //        }, "Anamnesis Form");
+	}
+	
+	public String[] getSearchFilters() {
+		return filterPanel.getFilters();
 	}
 
 	@Override

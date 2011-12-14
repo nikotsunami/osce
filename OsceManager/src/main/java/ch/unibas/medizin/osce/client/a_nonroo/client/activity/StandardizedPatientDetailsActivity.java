@@ -9,11 +9,14 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
+import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
@@ -36,7 +39,10 @@ import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class StandardizedPatientDetailsActivity extends AbstractActivity implements
-StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegate, StandardizedPatientScarSubView.Delegate  {
+StandardizedPatientDetailsView.Presenter, 
+StandardizedPatientDetailsView.Delegate, 
+StandardizedPatientScarSubView.Delegate,
+StandardizedPatientAnamnesisSubView.Delegate {
 	
     private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -65,6 +71,9 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
 	private ValueListBox<ScarProxy> scarBox;
 	private HandlerRegistration rangeChangeHandlerScars;
 	
+	StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
+	private CellTable<AnamnesisFormProxy> anamnesisTable;
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
@@ -73,10 +82,13 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
 		this.widget = panel;
 		this.view = standardizedPatientDetailsView;
 		standardizedPatientScarSubView = view.getStandardizedPatientScarSubViewImpl();
+		standardizedPatientAnamnesisSubView = view.getStandardizedPatientAnamnesisSubViewImpl();
 		widget.setWidget(standardizedPatientDetailsView.asWidget());
+		
 		
 		view.setDelegate(this);
 		standardizedPatientScarSubView.setDelegate(this);
+		standardizedPatientAnamnesisSubView.setDelegate(this);
 		
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new Receiver<Object>() {
 
@@ -93,6 +105,14 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
 				}
 			}
 		});
+	}
+	
+	protected void initAnamnesis() {
+//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+	}
+	
+	protected void initLangSkills() {
+		
 	}
 	
 	protected void initScar() {
@@ -160,7 +180,6 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
 	private void init() {
 		view.setValue(standardizedPatientProxy);
 		anamnesisForm =  standardizedPatientProxy.getAnamnesisForm();
-
 	}
 	
 	@Override
@@ -193,6 +212,23 @@ StandardizedPatientDetailsView.Presenter, StandardizedPatientDetailsView.Delegat
             }
         });
 		
+	}
+	
+	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
+		Log.debug("Remove language Skill (id=" + langSkill.getId() + ", lang = " + langSkill.getSpokenlanguage().getLanguageName() + ", skill = " 
+				+ langSkill.getSkill() + ")");
+		Iterator<LangSkillProxy> iter = standardizedPatientProxy.getLangskills().iterator();
+		while (iter.hasNext()) {
+			LangSkillProxy langSkillProxy = (LangSkillProxy) iter.next();
+			if (langSkillProxy.getId() == langSkill.getId()) {
+				standardizedPatientProxy.getLangskills().remove(langSkillProxy);
+				break;
+			}
+		}
+		
+	}
+	
+	public void addLangSkillClicked(LangSkillProxy langSkill) {
 	}
 	
 	@Override

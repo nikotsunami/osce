@@ -91,7 +91,11 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-CheckBox {
-	
+}
+
+.gwt-CheckBox label {
+	bottom: 3px;
+    position: relative;
 }
 
 .gwt-CheckBox-disabled {
@@ -547,9 +551,14 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-PopupPanel {
-	border: 3px solid #e3e3e3;
-	padding: 3px;
-	background: white;
+	border: 1px solid #AAA;
+	-moz-border-radius: 4px;
+	/*padding: 6px;*/
+	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+	opacity: 0.9;
+	
+	/* Hack for compatibility with customized tabpanel */
+	z-index: 200;
 }
 
 .gwt-DecoratedPopupPanel .popupContent {
@@ -1509,6 +1518,18 @@ td.datePickerMonth {
 	width: 37px;
 }
 
+  /****************************************/
+ /******** BUTTON BORDER *****************/
+/****************************************/
+
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: none;
+}
+
  /************************************/
 /********* ICONS ********************/
 
@@ -1517,6 +1538,10 @@ td.datePickerMonth {
 	margin-left: 4px;
     margin-right: 4px;
     margin-top: 1px;
+}
+
+.ui-icononly {
+	margin-right: -3px !important;
 }
 
 .ui-icon {
@@ -1530,7 +1555,7 @@ td.datePickerMonth {
 }
 
 .ui-icon:hover {
-	background-image: url('images/ui-icons_cd0a0a.png');
+	background-image: url('images/ui-icons_222222.png');
 }
 
 .ui-icon-carat-1-n {

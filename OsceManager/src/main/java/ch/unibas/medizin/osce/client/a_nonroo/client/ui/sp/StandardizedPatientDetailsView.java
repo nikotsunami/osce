@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -18,6 +19,8 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 	interface Delegate {
 		void editClicked();
 		void deleteClicked();
+		void deleteLangSkillClicked(LangSkillProxy langSkill);
+		void addLangSkillClicked(LangSkillProxy langSkill);
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();
