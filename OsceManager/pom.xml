@@ -176,7 +176,7 @@
     <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.13</version>
+            <version>5.1.18</version>
             <classifier/>
         </dependency>
         <dependency>
@@ -403,12 +403,12 @@
             <version>20090211</version>
             <classifier/>
         </dependency>
-        <dependency>
-            <groupId>com.googlecode.gwt.inject</groupId>
-            <artifactId>gin</artifactId>
-            <version>1.5</version>
-            <classifier/>
-        </dependency>
+       <dependency>
+ <groupId>com.google.gwt.inject</groupId>
+<artifactId>gin</artifactId>
+<version>1.5.0</version>
+<classifier/>
+</dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
