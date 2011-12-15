@@ -112,7 +112,6 @@ StandardizedPatientAnamnesisSubView.Delegate {
 	}
 	
 	protected void initLangSkills() {
-		requests.langSkillRequest().
 	}
 	
 	protected void initScar() {
