@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -150,17 +151,15 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		patientPanel.selectTab(0);
 		scarAnamnesisPanel.selectTab(0);
 		
-		Node tabTable = patientPanel.getElement().getFirstChild();
-		Node contentPanel = tabTable.getLastChild();
-		tabTable.removeChild(contentPanel);
-		tabTable.insertFirst(contentPanel);
+		// reorder the Tab- and Content-Panels
+		TabPanelHelper.moveTabBarToBottom(patientPanel);
 		
 		edit.setText(Messages.EDIT);
 		delete.setText(Messages.DELETE);
 		maps.setText(Messages.GOOGLE_MAPS);
 		
-		reorderTabs(patientPanel);
-		reorderTabs(scarAnamnesisPanel);
+		TabPanelHelper.reorderTabs(patientPanel);
+		TabPanelHelper.reorderTabs(scarAnamnesisPanel);
 		
 		setTabTexts();
 		setLabelTexts();
@@ -175,19 +174,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 		scarAnamnesisPanel.getTabBar().setTabText(0, Messages.TRAITS);
 		scarAnamnesisPanel.getTabBar().setTabText(1, Messages.ANAMNESIS_VALUES);
-	}
-	
-	/**
-	 * Hack to reorder z-index layering of tabs in tabbar so that the leftmost tab is on top.
-	 * @param panel
-	 */
-	private void reorderTabs(TabPanel panel) {
-		Element tabBar = panel.getTabBar().getElement();
-		int numChildren = panel.getTabBar().getTabCount();
-		for (int i=0; i < numChildren; i++) {
-			Element tab = (Element)tabBar.getChild(0).getChild(0).getChild(i+1).getChild(0);
-			tab.setAttribute("style", tab.getAttribute("style") + "; z-index: " + (numChildren - i) + ";");
-		}
 	}
 	
 	private void setLabelTexts() {

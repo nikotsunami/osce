@@ -40,4 +40,5 @@ public interface StandardizedPatientEditView extends IsWidget {
 
 	SimplePanel getDescriptionPanel();
 	
+	StandardizedPatientLangSkillSubView getStandardizedPatientLangSkillSubView();
 }

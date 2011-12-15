@@ -378,8 +378,8 @@ body {
 	padding: 4px 10px;
     position: absolute;
     top: 12px;
-    left: 12px;
-    right: 12px;
+    left: 20px;
+    right: 20px;
     -moz-border-radius: 12px 12px 12px 12px;
     background-color: #EBEBEB;
     max-height: 26px;

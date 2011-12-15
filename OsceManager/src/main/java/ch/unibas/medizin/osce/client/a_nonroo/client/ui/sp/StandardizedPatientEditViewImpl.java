@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
@@ -15,12 +16,14 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
@@ -35,6 +38,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -45,6 +49,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	private static StandardizedPatientEditView instance;
+	
+	@UiField
+	TabPanel patientPanel;
 
 	@UiField
 	Element editTitle;
@@ -123,6 +130,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	@UiField
 	DivElement errors;
+	
+	@UiField
+	StandardizedPatientLangSkillSubViewImpl standardizedPatientLangSkillSubViewImpl;
 
 	private Delegate delegate;
 
@@ -132,6 +142,17 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	public StandardizedPatientEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
+		
+		patientPanel.selectTab(0);
+		
+		TabPanelHelper.moveTabBarToBottom(patientPanel);
+		TabPanelHelper.reorderTabs(patientPanel);
+		
+		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
+		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
+		patientPanel.getTabBar().setTabText(2, Messages.LANGUAGE_SKILLS);
+		patientPanel.getTabBar().setTabText(3, Messages.BANK_ACCOUNT);
+		patientPanel.getTabBar().setTabText(4, Messages.DESCRIPTION);
 	}
 
 	@Override
@@ -230,5 +251,10 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@Override
 	public void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values) {
 		anamnesisForm.setAcceptableValues(values);		
+	}
+
+	@Override
+	public StandardizedPatientLangSkillSubView getStandardizedPatientLangSkillSubView() {
+		return standardizedPatientLangSkillSubViewImpl;
 	}
 }

@@ -14,10 +14,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionRequest;
+import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -36,13 +38,17 @@ import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class StandardizedPatientEditActivity extends AbstractActivity implements
-StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
+StandardizedPatientEditView.Presenter, 
+StandardizedPatientEditView.Delegate,
+StandardizedPatientLangSkillSubView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private StandardizedPatientEditView view;
 	private StandardizedPatientDetailsPlace place;
+	
+	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView; 
 
 	private RequestFactoryEditorDriver<StandardizedPatientProxy,StandardizedPatientEditViewImpl> editorDriver;
 	private StandardizedPatientProxy standardizedPatient;
@@ -90,10 +96,12 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 
 		this.widget = panel;
 		this.view = standardizedPatientEditView;
+		this.standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubView();
 
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
+		standardizedPatientLangSkillSubView.setDelegate(this);
 
 		DescriptionEditView descriptionView = new DescriptionEditViewImpl();
 		view.getDescriptionPanel().add(descriptionView);
@@ -257,6 +265,18 @@ StandardizedPatientEditView.Presenter, StandardizedPatientEditView.Delegate {
 				//saveDescription();
 			}
 		}); 
+	}
+
+	@Override
+	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addLangSkillClicked() {
+		// TODO Auto-generated method stub
+		
 	}
 
 //	private void saveDescription() {
