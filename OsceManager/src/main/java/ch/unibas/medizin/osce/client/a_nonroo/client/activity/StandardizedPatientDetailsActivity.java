@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAn
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
@@ -42,7 +43,8 @@ public class StandardizedPatientDetailsActivity extends AbstractActivity impleme
 StandardizedPatientDetailsView.Presenter, 
 StandardizedPatientDetailsView.Delegate, 
 StandardizedPatientScarSubView.Delegate,
-StandardizedPatientAnamnesisSubView.Delegate {
+StandardizedPatientAnamnesisSubView.Delegate,
+StandardizedPatientLangSkillSubView.Delegate {
 	
     private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -74,6 +76,8 @@ StandardizedPatientAnamnesisSubView.Delegate {
 	StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
 	private CellTable<AnamnesisFormProxy> anamnesisTable;
 	
+	StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
@@ -83,12 +87,14 @@ StandardizedPatientAnamnesisSubView.Delegate {
 		this.view = standardizedPatientDetailsView;
 		standardizedPatientScarSubView = view.getStandardizedPatientScarSubViewImpl();
 		standardizedPatientAnamnesisSubView = view.getStandardizedPatientAnamnesisSubViewImpl();
-		widget.setWidget(standardizedPatientDetailsView.asWidget());
+		standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubViewImpl();
 		
+		widget.setWidget(standardizedPatientDetailsView.asWidget());
 		
 		view.setDelegate(this);
 		standardizedPatientScarSubView.setDelegate(this);
 		standardizedPatientAnamnesisSubView.setDelegate(this);
+		standardizedPatientLangSkillSubView.setDelegate(this);
 		
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new Receiver<Object>() {
 

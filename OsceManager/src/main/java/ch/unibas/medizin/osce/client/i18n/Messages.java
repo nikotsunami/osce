@@ -48,6 +48,7 @@ public class Messages {
 			public static final String STREET = "Strasse";
 			public static final String CITY = "Ort";
 			public static final String PLZ = "PLZ";
+			public static final String PLZCITY = "PLZ, Ort";
 			public static final String TELEPHONE = "Telefon";
 			public static final String MOBILE = "Mobiltelefon";
 			public static final String BIRTHDAY = "Geburtsdatum";

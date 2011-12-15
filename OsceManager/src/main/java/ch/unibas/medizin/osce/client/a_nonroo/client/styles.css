@@ -366,7 +366,7 @@ body {
 }
 
 .patientDetails {
-	margin: 38px 16px 0;
+	margin: 38px auto 0;
 	height: 130px !important;
 }
 
