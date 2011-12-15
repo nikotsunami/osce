@@ -4,7 +4,9 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ValueListBox;
 
 public interface StandardizedPatientDetailsView extends IsWidget{
 	
@@ -20,15 +22,17 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void editClicked();
 		void deleteClicked();
 		void deleteLangSkillClicked(LangSkillProxy langSkill);
-		void addLangSkillClicked(LangSkillProxy langSkill);
+		void addLangSkillClicked();
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();
 	StandardizedPatientAnamnesisSubViewImpl getStandardizedPatientAnamnesisSubViewImpl();
 	
     public void setValue(StandardizedPatientProxy proxy); 
-  
     void setDelegate(Delegate delegate);
-    
     void setPresenter(Presenter systemStartActivity);
+    
+	CellTable<LangSkillProxy> getLangSkillTable();
+	ValueListBox<LangSkillProxy> getLanguageBox();
+	ValueListBox<LangSkillProxy> getLangSkillBox();
 }

@@ -112,7 +112,7 @@ StandardizedPatientAnamnesisSubView.Delegate {
 	}
 	
 	protected void initLangSkills() {
-		
+		requests.langSkillRequest().
 	}
 	
 	protected void initScar() {
@@ -225,10 +225,9 @@ StandardizedPatientAnamnesisSubView.Delegate {
 				break;
 			}
 		}
-		
 	}
 	
-	public void addLangSkillClicked(LangSkillProxy langSkill) {
+	public void addLangSkillClicked() {
 	}
 	
 	@Override

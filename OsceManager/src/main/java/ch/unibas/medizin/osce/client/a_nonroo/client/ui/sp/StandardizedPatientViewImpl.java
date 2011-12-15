@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
@@ -72,7 +73,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	CellTable<StandardizedPatientProxy> table;
 
 	protected Set<String> paths = new HashSet<String>();
-	private StandardizedPatientFilterView filterPanel;
+	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;
 	
 	@UiHandler ("newButton")
@@ -80,11 +81,19 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		delegate.newClicked();
 	}
 	
-	@UiHandler ("filterButton")
-	public void filterButtonClicked(ClickEvent event) {
-		Widget source = (Widget) event.getSource();
-		int x = source.getAbsoluteLeft();
-		int y = source.getAbsoluteTop();
+//	@UiHandler ("filterButton")
+//	public void filterButtonClicked(ClickEvent event) {
+//		showFilterPanel((Widget) event.getSource());
+//	}
+	
+	@UiHandler("filterButton")
+	public void filterButtonHover(MouseOverEvent event) {
+		showFilterPanel((Widget) event.getSource());
+	}
+	
+	private void showFilterPanel(Widget eventSource) {
+		int x = eventSource.getAbsoluteLeft();
+		int y = eventSource.getAbsoluteTop();
 		filterPanel.setPopupPosition(x, y);
 		filterPanel.show();
 	}
@@ -107,7 +116,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 
-		filterPanel = new StandardizedPatientFilterView();
+		filterPanel = new StandardizedPatientFilterViewImpl();
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();

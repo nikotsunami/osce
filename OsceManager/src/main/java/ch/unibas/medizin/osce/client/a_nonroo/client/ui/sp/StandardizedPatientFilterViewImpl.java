@@ -32,12 +32,12 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientFilterView extends PopupPanel {
+public class StandardizedPatientFilterViewImpl extends PopupPanel {
 
 	private static StandardizedPatientFilterPopupUiBinder uiBinder = GWT.create(StandardizedPatientFilterPopupUiBinder.class);
 
 	interface StandardizedPatientFilterPopupUiBinder extends
-			UiBinder<Widget, StandardizedPatientFilterView> {
+			UiBinder<Widget, StandardizedPatientFilterViewImpl> {
 	}
 	
 	private class CheckBoxItem {
@@ -153,7 +153,7 @@ public class StandardizedPatientFilterView extends PopupPanel {
 		}
 	}
 	
-	public StandardizedPatientFilterView() {
+	public StandardizedPatientFilterViewImpl() {
 		super(true);
 		add(uiBinder.createAndBindUi(this));
 		filterPanelRoot.addMouseOutHandler(new MouseOutHandler() {

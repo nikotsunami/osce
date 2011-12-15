@@ -40,6 +40,7 @@ public class Messages {
 			public static final String ADD_NATIONALITY = "Nationalität hinzufügen";
 			public static final String ADD_LANGUAGE = "Sprache hinzufügen";
 			public static final String ADD_PROFESSION = "Beruf hinzufügen";
+			public static final String ADD_LANGSKILL = "Sprachkenntnis hinzufügen";
 			
 			/* Standardized Patient Details */
 			public static final String NAME = "Name";
@@ -74,4 +75,6 @@ public class Messages {
 			/* Filter Popup */
 			public static final String SEARCH_FOR = "Suchen nach...";
 			public static final String RESET_FILTERS = "Filter zurücksetzen";
+			
+			public static final String REALLY_DELETE = "Wirklich löschen?";
 }
