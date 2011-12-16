@@ -21,6 +21,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.dom.client.Node;
@@ -29,7 +30,7 @@ import com.google.gwt.dom.client.Node;
  * @author niko2
  *
  */
-public class StandardizedPatientDetailsViewImpl extends Composite implements  StandardizedPatientDetailsView{
+public class StandardizedPatientDetailsViewImpl extends Composite implements  StandardizedPatientDetailsView {
 
 	private static StandardizedPatientDetailsViewImplUiBinder uiBinder = GWT
 			.create(StandardizedPatientDetailsViewImplUiBinder.class);
@@ -157,10 +158,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		edit.setText(Messages.EDIT);
 		delete.setText(Messages.DELETE);
 		maps.setText(Messages.GOOGLE_MAPS);
-		
-		TabPanelHelper.reorderTabs(patientPanel);
-		TabPanelHelper.reorderTabs(scarAnamnesisPanel);
-		
+				
 		setTabTexts();
 		setLabelTexts();
 	}

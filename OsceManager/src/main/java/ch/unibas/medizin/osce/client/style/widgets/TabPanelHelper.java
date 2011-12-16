@@ -19,6 +19,7 @@ public class TabPanelHelper {
 		Node contentPanel = tabTable.getLastChild();
 		tabTable.removeChild(contentPanel);
 		tabTable.insertFirst(contentPanel);
+		panel.addStyleName("gwt-InvertedTabPanel");
 	}
 	
 	/**

@@ -78,4 +78,9 @@ public class Messages {
 			public static final String RESET_FILTERS = "Filter zurücksetzen";
 			
 			public static final String REALLY_DELETE = "Wirklich löschen?";
+			
+			public static final String SP_CREATE = "Patient hinzufügen";
+			public static final String SP_EDIT = "Patient bearbeiten";
+			public static final String CANCEL = "Abbrechen";
+			public static final String SAVE = "Speichern";
 }

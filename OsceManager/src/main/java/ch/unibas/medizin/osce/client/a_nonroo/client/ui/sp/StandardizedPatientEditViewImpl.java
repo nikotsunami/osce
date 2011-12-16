@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -16,18 +17,29 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -36,10 +48,12 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -52,12 +66,12 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	
 	@UiField
 	TabPanel patientPanel;
-
+//	@UiField
+//	Element editTitle;
+//	@UiField
+//	Element createTitle;
 	@UiField
-	Element editTitle;
-
-	@UiField
-	Element createTitle;
+	SpanElement title;
 
 	@UiField(provided = true)
 	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
@@ -69,46 +83,33 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	@UiField
 	TextBox name;
-
 	@UiField
 	TextBox preName;
-
 	@UiField
 	TextBox street;
-
 	@UiField
 	TextBox city;
-
 	@UiField
 	IntegerBox postalCode;
-
 	@UiField
 	TextBox telephone;
-
 	@UiField
 	TextBox telephone2;
-
 	@UiField
 	TextBox mobile;
-
 	@UiField
 	DateBox birthday;
-
 	@UiField
 	IntegerBox height;
-
 	@UiField
 	IntegerBox weight;
-
 	@UiField
 	TextBox email;
 
 	@UiField(provided = true)
 	ValueListBox<NationalityProxy> nationality = new ValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
-
 	@UiField(provided = true)
 	ValueListBox<ProfessionProxy> profession = new ValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
-
 	@UiField
 	LangSkillSetEditor langskills;
 
@@ -121,13 +122,44 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@UiField(provided = true)
 	ValueListBox<AnamnesisFormProxy> anamnesisForm = new ValueListBox<AnamnesisFormProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>());
 
+	// Labels (Fieldnames)
+	@UiField
+	SpanElement labelName;
+	@UiField
+	SpanElement labelPreName;
+	@UiField
+	SpanElement labelStreet;
+	@UiField
+	SpanElement labelPLZCity;
+	@UiField
+	SpanElement labelTelephone;
+	@UiField
+	SpanElement labelMobile;
+	@UiField
+	SpanElement labelEmail;
+	@UiField
+	SpanElement labelBankName;
+	@UiField
+	SpanElement labelBankIBAN;
+	@UiField
+	SpanElement labelBankBIC;
+	@UiField
+	SpanElement labelBirthdate;
+	@UiField
+	SpanElement labelGender;
+	@UiField
+	SpanElement labelHeight;
+	@UiField
+	SpanElement labelWeight;
+	@UiField
+	SpanElement labelNationality;
+	@UiField
+	SpanElement labelProfession;
 
 	@UiField
-	Button cancel;
-
+	IconButton cancel;
 	@UiField
-	Button save;
-
+	IconButton save;
 	@UiField
 	DivElement errors;
 	
@@ -135,7 +167,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	StandardizedPatientLangSkillSubViewImpl standardizedPatientLangSkillSubViewImpl;
 
 	private Delegate delegate;
-
 	private Presenter presenter;
 
 
@@ -143,16 +174,194 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		initWidget(BINDER.createAndBindUi(this));
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 		
-		patientPanel.selectTab(0);
-		
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
-		TabPanelHelper.reorderTabs(patientPanel);
+		
+		cancel.setText(Messages.CANCEL);
+		save.setText(Messages.SAVE);
 		
 		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
 		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
 		patientPanel.getTabBar().setTabText(2, Messages.LANGUAGE_SKILLS);
 		patientPanel.getTabBar().setTabText(3, Messages.BANK_ACCOUNT);
 		patientPanel.getTabBar().setTabText(4, Messages.DESCRIPTION);
+		
+		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				switch(event.getSelectedItem().intValue()) {
+				case 0:
+					preName.setFocus(true);
+					break;
+				case 1:
+					birthday.setFocus(true);
+					break;
+				case 3:
+//					bankName.setFocus(true);
+					break;
+				case 4:
+//					description.setFocus(true);
+					break;
+				default:
+				}
+			}
+			
+		});
+
+		setTabTexts();
+		setLabelTexts();
+		
+		createKeyHandlers();
+		createFocusHandlers();
+		
+		patientPanel.selectTab(0);
+		preName.setFocus(true);
+		preName.selectAll();
+	}
+	
+	private void createFocusHandlers() {
+		preName.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				preName.selectAll();
+			}
+		});
+		name.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				name.selectAll();
+			}
+		});
+		street.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				street.selectAll();
+			}
+		});
+		postalCode.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				postalCode.selectAll();
+			}
+		});
+		city.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				city.selectAll();
+			}
+		});
+		telephone.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				telephone.selectAll();
+			}
+		});
+		telephone2.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				telephone2.selectAll();
+			}
+		});
+		mobile.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				mobile.selectAll();
+			}
+		});
+		email.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				email.selectAll();
+			}
+		});
+	}
+	
+	private void createKeyHandlers() {		
+		preName.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					name.setFocus(true);
+					if (event.isControlKeyDown()) {
+						delegate.saveClicked();
+					}
+				} 
+			}
+		});
+		name.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					street.setFocus(true);
+			}
+		});
+		street.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					postalCode.setFocus(true);
+			}
+		});
+		postalCode.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					city.setFocus(true);
+			}
+		});
+		city.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					telephone.setFocus(true);
+			}
+		});
+		telephone.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					mobile.setFocus(true);
+			}
+		});
+		mobile.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					email.setFocus(true);
+			}	
+		});
+		email.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER || event.getNativeKeyCode() == KeyCodes.KEY_TAB)
+					patientPanel.selectTab(1);
+			}
+		});
+	}
+	
+	private void setFieldFocused(ValueBoxBase<?> field) {
+		field.setFocus(true);
+		field.selectAll();
+	}
+
+	private void setTabTexts() {
+		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
+		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
+		patientPanel.getTabBar().setTabText(2, Messages.LANGUAGE_SKILLS);
+		patientPanel.getTabBar().setTabText(3, Messages.BANK_ACCOUNT);
+		patientPanel.getTabBar().setTabText(4, Messages.DESCRIPTION);
+	}
+	
+	private void setLabelTexts() {
+		labelName.setInnerText(Messages.NAME + ":");
+		labelPreName.setInnerText(Messages.PRENAME + ":");
+		labelPLZCity.setInnerText(Messages.PLZCITY + ":");
+		labelEmail.setInnerText(Messages.EMAIL + ":");
+		labelMobile.setInnerText(Messages.MOBILE + ":");
+		labelStreet.setInnerText(Messages.STREET + ":");
+		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		
+		labelBankName.setInnerText(Messages.BANK_NAME + ":");
+		labelBankIBAN.setInnerText(Messages.BANK_IBAN + ":");
+		labelBankBIC.setInnerText(Messages.BANK_BIC + ":");
+		
+		labelBirthdate.setInnerText(Messages.BIRTHDAY + ":");
+		labelGender.setInnerText(Messages.GENDER + ":");
+		labelHeight.setInnerText(Messages.HEIGHT + ":");
+		labelWeight.setInnerText(Messages.WEIGHT + ":");
+		labelNationality.setInnerText(Messages.NATIONALITY + ":");
+		labelProfession.setInnerText(Messages.PROFESSION + ":");
 	}
 
 	@Override
@@ -164,11 +373,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			editTitle.getStyle().setDisplay(Display.NONE);
-			createTitle.getStyle().clearDisplay();
+			title.setInnerText(Messages.SP_CREATE);
 		} else {
-			editTitle.getStyle().clearDisplay();
-			createTitle.getStyle().setDisplay(Display.NONE);
+			title.setInnerText(Messages.SP_EDIT);
 		}
 	}
 
@@ -209,11 +416,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	public void setEditTitle(boolean edit) {
 
 		if (edit) {
-			editTitle.getStyle().clearDisplay();
-			createTitle.getStyle().setDisplay(Display.NONE);
+			title.setInnerText(Messages.SP_EDIT);
 		} else {
-			editTitle.getStyle().setDisplay(Display.NONE);
-			createTitle.getStyle().clearDisplay();
+			title.setInnerText(Messages.SP_CREATE);
 		}
 
 	}

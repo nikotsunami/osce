@@ -10,13 +10,19 @@
 
 <ui:style src="../../styles.css" />
  
-  <g:HTMLPanel>
+  <g:HTMLPanel><!-- 
     <div class='{style.underline}'>    
       <h3 class='{style.header}' ui:field="editTitle"><ui:msg>Edit StandardizedPatient</ui:msg></h3>
       <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New StandardizedPatient</ui:msg></h3>
-    </div>
+    </div> -->
     
-    <g:TabPanel ui:field="patientPanel" addStyleNames="gwt-InvertedTabPanel {style.tabStyle}">
+    <div class="{style.patientControls} {style.controlsright}">
+		<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
+		<my:IconButton ui:field="save" icon="disk"></my:IconButton>
+		<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
+	</div>
+    
+    <g:TabPanel ui:field="patientPanel" addStyleNames="{style.tabStyle}">
 		<g:Tab>
 			<g:TabHTML></g:TabHTML>
 			<g:HTMLPanel addStyleNames="{style.patientDetails}">
@@ -25,29 +31,25 @@
 					<colgroup>
 						<col></col>
 						<col></col>
+						<col></col>
+						<col></col>
 					</colgroup>
 					<tbody>
 					<tr>
-						<td><span class="{style.label}" ui:field="labelName" /></td>
-						<td><g:TextBox ui:field='name'/></td>
-					</tr>
-					<tr>
 						<td><span class="{style.label}" ui:field="labelPreName" /></td>
 						<td><g:TextBox ui:field='preName'/></td>
+						<td><span class="{style.label}" ui:field="labelName" /></td>
+						<td><g:TextBox ui:field='name'/></td>
 					</tr>
 					<tr id="street">
 						<td><span class="{style.label}" ui:field="labelStreet" /></td>
 						<td><g:TextBox ui:field='street'/></td>
-					</tr>
-					<tr id="city">
 						<td><span class="{style.label}" ui:field="labelPLZCity" /></td>
-						<td><g:IntegerBox ui:field='postalCode'/> <g:TextBox ui:field='city'/></td>
+						<td><g:IntegerBox ui:field='postalCode' width="40px" /> <g:TextBox ui:field='city'/></td>
 					</tr>
 					<tr id="telephone">
 						<td><span class="{style.label}" ui:field="labelTelephone" /></td>
 						<td><g:TextBox ui:field='telephone'/></td>
-					</tr>
-					<tr id="mobile">
 						<td><span class="{style.label}" ui:field="labelMobile" /></td>
 						<td><g:TextBox ui:field='mobile'/></td>
 					</tr>
@@ -146,10 +148,5 @@
       <tr id='anamnesisForm'><td><div class='{style.label}'>Anamnesis Form:</div></td><td><g:ValueListBox ui:field='anamnesisForm'/></td></tr>
       
     </table>
-
-    <div class='{style.bar}'>
-      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
-      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
-    </div>
   </g:HTMLPanel>
 </ui:UiBinder>
