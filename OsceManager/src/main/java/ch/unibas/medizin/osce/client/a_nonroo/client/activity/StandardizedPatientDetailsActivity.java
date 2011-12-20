@@ -116,7 +116,9 @@ StandardizedPatientLangSkillSubView.Delegate {
 	protected void initAnamnesis() {
 //		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
 	}
-	
+	//TODO: ###SIEBERS### implement initLangSkills, fill the data in table an pulldowns, delete lang skills, add langskills, 
+	// first you must make an new enum with langskills (A1, A2, B1, B2, C1, C2, native) and change the domain object
+	// have a look at the interface StandardizedPatientLangSkillSubView and in initScar you see how it is done usualy
 	protected void initLangSkills() {
 	}
 	

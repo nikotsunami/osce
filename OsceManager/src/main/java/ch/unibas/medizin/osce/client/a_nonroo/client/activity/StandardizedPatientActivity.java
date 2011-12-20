@@ -139,6 +139,8 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
+		
+		
 		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> values) {
@@ -163,6 +165,32 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		createRangeRequest(q, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
+	
+	//TODO: ###SIEBERS### implement findPatienBySearchAndSort
+	/*
+	 * Attributes
+	 * String sortColumn - name of the column to sort, at the moment only name, prename, email
+	 * String q, Range range - the same like now
+	 * String[] searchTrough - Stringarray with attributenames which should be searched, like 'name', 'prename'
+	 * 
+	 * Integer[][][][] searchKriteria
+	 * 		- first value is the ID of the Entity
+	 * 		- second value is if it should be AND or OR
+	 * 		- third value is the type, possible tipes are: anamnesisCheck, scar, birthday, gender, height, weight, bmi, nationality, profession, spoken_language 
+	 * 		- forth value is the comparator: 0-3   (<, >, =, like)
+	 * String [] searchedValue - possible values
+	 * 		* anamnesisCheck - 'string', '0|0|0|1|0', '0', '0|1|0|1|0'. The last one is special, if the type 
+	 * is QuestionMultM the value '0|0|0|1|0' is true for '0|1|0|1|0'.
+	 * 		* scar 0 or 1 
+	 * 		*birthday 22.12.1978, 1978
+	 * 		*gender 0 or 1 (male, female)
+	 * 		*height 180
+	 * 		*weight 90
+	 * 		*bmi 30
+	 * 		*nationality only id
+	 * 		*profession only id
+	 * 		*spoken_language A1, B2, native
+	 */
 
 	protected Request<List<StandardizedPatientProxy>> createRangeRequest(String q, Range range) {
 //		return requests.standardizedPatientRequest().findStandardizedPatientEntries(range.getStart(), range.getLength());
