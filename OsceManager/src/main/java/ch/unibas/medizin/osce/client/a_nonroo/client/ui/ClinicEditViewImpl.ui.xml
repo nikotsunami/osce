@@ -1,33 +1,56 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'
-  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
-  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 
- <ui:style src="../styles.css" />
-
- 
-  <g:HTMLPanel>
-    <div class='{style.underline}'>    
-      <h3 class='{style.header}' ui:field="editTitle">
-        <ui:msg>Edit Clinic</ui:msg>
-      </h3>
-      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New Clinic</ui:msg></h3>
-    </div>
-    <div ui:field='errors' class='{style.errors}'></div>
-
-    <table id='boundElementHolder' class="{style.fields}">
-      <tr id='name'><td><div class='{style.label}'>Name:</div></td><td><g:TextBox ui:field='name'/></td></tr>
-      <tr id='street'><td><div class='{style.label}'>Street:</div></td><td><g:TextBox ui:field='street'/></td></tr>
-      <tr id='city'><td><div class='{style.label}'>City:</div></td><td><g:TextBox ui:field='city'/></td></tr>
-      <tr id='postalCode'><td><div class='{style.label}'>Postal Code:</div></td><td><g:IntegerBox ui:field='postalCode'/></td></tr>
-      <tr id='doctors'><td><div class='{style.label}'>Doctors:</div></td><td><a:DoctorSetEditor ui:field='doctors'/></td></tr>
-    </table>
-
-    <div class='{style.bar}'>
-      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
-      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
-    </div>
-  </g:HTMLPanel>
+	<ui:style src="../styles.css" />
+		
+	<g:HTMLPanel>
+		<div class="{style.patientControls} {style.controlsright}">
+			<h3 class="{style.header}" style="display:inline">
+				<span ui:field="header"></span>
+			</h3>
+			<my:IconButton ui:field="save" icon="pencil"></my:IconButton>
+			<my:IconButton ui:field="cancel" icon="trash"></my:IconButton>
+		</div>
+		<g:TabPanel ui:field="clinicPanel" addStyleNames="gwt-InvertedTabPanel {style.tabStyle}">
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<table id='boundElementHolder'>
+					<colgroup>
+						<col></col>
+						<col></col>
+					</colgroup>
+					<tbody>
+						<tr id='name'>
+							<td><span class='{style.label}' ui:field="labelName" /></td>
+							<td><g:TextBox ui:field='name' /></td>
+						</tr>
+						<tr id='street'>
+							<td><span class='{style.label}' ui:field="labelStreet" /></td>
+							<td><g:TextBox ui:field='street' /></td>
+						</tr>
+						<tr id='city'>
+							<td><span class='{style.label}' ui:field="labelCity" /></td>
+							<td><g:IntegerBox ui:field='postalCode' width="40px" /><g:TextBox ui:field='city' /></td>
+						</tr>
+						<tr id='doctors'>
+							<td><span class='{style.label}' ui:field="labelDoctors" /></td>
+							<td></td>
+						</tr>
+						</tbody>
+					</table>
+				</g:HTMLPanel>
+			</g:Tab>
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<a:DoctorSetEditor ui:field='doctors' />
+				</g:HTMLPanel>
+			</g:Tab>
+		</g:TabPanel>
+		<div ui:field='errors' class='{style.errors}'></div>
+	</g:HTMLPanel>
 </ui:UiBinder>

@@ -24,6 +24,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -44,7 +45,7 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 //	Element createTitle;
 
 	@UiField
-	TextBox description;
+	RichTextArea description;
 
 	private Delegate delegate;
 

@@ -35,10 +35,9 @@ public interface StandardizedPatientEditView extends IsWidget {
 	
 	void setNationalityPickerValues(Collection<NationalityProxy> values);
 	void setProfessionPickerValues(Collection<ProfessionProxy> values);
-	void setBankaccountPickerValues(Collection<BankaccountProxy> values);
-	void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values);
+//	void setBankaccountPickerValues(Collection<BankaccountProxy> values);
+//	void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values);
 
 	SimplePanel getDescriptionPanel();
-	
-	StandardizedPatientLangSkillSubView getStandardizedPatientLangSkillSubView();
+	SimplePanel getBankEditPanel();
 }

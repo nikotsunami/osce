@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+<ui:style src="../../styles.css" />
+ 
+  <g:HTMLPanel addStyleNames="{style.patientDetails}">
+	<table>
+		<colgroup>
+			<col></col>
+			<col></col>
+		</colgroup>
+		<tbody>
+		<tr>
+			<td><span class="{style.label}" ui:field="labelBankName" /></td>
+			<td><g:TextBox ui:field='BankName'/></td>
+		</tr>
+		<tr>
+			<td><span class="{style.label}" ui:field="labelBankBIC" /></td>
+			<td><g:TextBox ui:field='BIC'/></td>
+		</tr>
+		<tr>
+			<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
+			<td><g:TextBox ui:field='IBAN'/></td>
+		</tr>
+		</tbody>
+	</table>
+  </g:HTMLPanel>
+</ui:UiBinder>

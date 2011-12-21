@@ -72,23 +72,11 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	@UiField
 	CheckBox telephone;
 	@UiField
+	CheckBox telephone2;
+	@UiField
 	CheckBox mobile;
 	@UiField
 	CheckBox email;
-	@UiField
-	CheckBox birthday;
-	@UiField
-	CheckBox gender;
-	@UiField
-	CheckBox height;
-	@UiField
-	CheckBox weight;
-	@UiField
-	CheckBox profession;
-	@UiField
-	CheckBox nationality;
-	@UiField
-	CheckBox languageSkills;
 	@UiField
 	CheckBox bankName;
 	@UiField
@@ -171,15 +159,9 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		initCheckBox(city, "city", Messages.CITY);
 		initCheckBox(postalCode, "postal_code", Messages.PLZ);
 		initCheckBox(telephone, "telephone", Messages.TELEPHONE);
-		initCheckBox(mobile, "telephone2", Messages.MOBILE);
+		initCheckBox(telephone2, "telephone2", Messages.TELEPHONE + " 2");
+		initCheckBox(mobile, "mobile", Messages.MOBILE);
 		initCheckBox(email, "email", Messages.EMAIL);
-		initCheckBox(birthday, "birthday", Messages.BIRTHDAY);
-		initCheckBox(gender, "gender", Messages.GENDER);
-		initCheckBox(height, "height", Messages.HEIGHT);
-		initCheckBox(weight, "weight", Messages.WEIGHT);
-		initCheckBox(profession, "profession", Messages.PROFESSION);
-		initCheckBox(nationality, "nationality", Messages.NATIONALITY);
-		initCheckBox(languageSkills, "lang_skill", Messages.LANGUAGE_SKILLS);
 		initCheckBox(bankName, "bank_account.bank_name", Messages.BANK_NAME);
 		initCheckBox(bankBIC, "bank_account.bic", Messages.BANK_BIC);
 		initCheckBox(bankIBAN, "bank_account.IBAN", Messages.BANK_IBAN);

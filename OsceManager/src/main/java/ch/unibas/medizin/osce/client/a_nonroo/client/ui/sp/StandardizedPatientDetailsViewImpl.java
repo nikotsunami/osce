@@ -72,6 +72,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiField
 	SpanElement labelTelephone;
 	@UiField
+	SpanElement labelTelephone2;
+	@UiField
 	SpanElement labelMobile;
 	@UiField
 	SpanElement labelEmail;
@@ -105,6 +107,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement postalCode;
 	@UiField
 	SpanElement telephone;
+	@UiField
+	SpanElement telephone2;
 	@UiField
 	SpanElement mobile;
 	@UiField
@@ -180,6 +184,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelMobile.setInnerText(Messages.MOBILE + ":");
 		labelStreet.setInnerText(Messages.STREET + ":");
 		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		labelTelephone2.setInnerText(Messages.TELEPHONE + " 2:");
 		
 		labelBankName.setInnerText(Messages.BANK_NAME + ":");
 		labelBankIBAN.setInnerText(Messages.BANK_IBAN + ":");
@@ -202,6 +207,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
+		telephone2.setInnerText(proxy.getTelephone2() == null ? "" : String.valueOf(proxy.getTelephone2()));
 		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(Messages.DATE_TIME_FORMAT).format(proxy.getBirthday()));
 		height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
 		weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));

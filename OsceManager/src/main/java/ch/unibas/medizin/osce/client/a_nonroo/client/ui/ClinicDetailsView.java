@@ -7,8 +7,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface ClinicDetailsView extends IsWidget{
 	
-	
-	
     public interface Presenter {
         void goTo(Place place);
     }
@@ -20,9 +18,7 @@ public interface ClinicDetailsView extends IsWidget{
 		void deleteClicked();
 	}
 	
-    public void setValue(ClinicProxy proxy); 
-  
+    public void setValue(ClinicProxy proxy);
     void setDelegate(Delegate delegate);
-    
     void setPresenter(Presenter systemStartActivity);
 }

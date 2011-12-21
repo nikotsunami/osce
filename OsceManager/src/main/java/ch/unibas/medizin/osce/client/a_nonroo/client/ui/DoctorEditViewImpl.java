@@ -6,14 +6,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
@@ -27,6 +30,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,22 +40,20 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	private static DoctorEditView instance;
+	
+	@UiField
+	TabPanel doctorPanel;
 
 	@UiField
 	Button cancel;
-
 	@UiField
 	Button save;
-
 	@UiField
 	DivElement errors;
 
 	@UiField
-	Element editTitle;
-
-	@UiField
-	Element createTitle;
-
+	SpanElement header;
+	
 	@UiField(provided = true)
     ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
 
@@ -62,29 +64,33 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 
 	@UiField
 	TextBox title;
-
 	@UiField
 	TextBox name;
-
 	@UiField
 	TextBox preName;
-
 	@UiField
 	TextBox email;
-
 	@UiField
 	TextBox telephone;
-
 	@UiField(provided = true)
 	ValueListBox<ClinicProxy> clinic = new ValueListBox<ClinicProxy>(ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ClinicProxy>());
-
 	@UiField
 	SimplePanel officePanel;
 	
-	@Override
-	public SimplePanel getOfficePanel(){
-		return officePanel;
-	}
+	@UiField
+    SpanElement labelGender;
+    @UiField
+    SpanElement labelTitle;
+    @UiField
+    SpanElement labelName;
+    @UiField
+    SpanElement labelPreName;
+    @UiField
+    SpanElement labelEmail;
+    @UiField
+    SpanElement labelTelephone;
+    @UiField
+    SpanElement labelClinic;
 	
 	private Delegate delegate;
 
@@ -94,6 +100,24 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	public DoctorEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
+		
+		doctorPanel.selectTab(0);
+
+		doctorPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
+		doctorPanel.getTabBar().setTabText(1, Messages.OFFICE_DETAILS);
+		
+		TabPanelHelper.moveTabBarToBottom(doctorPanel);
+		
+		save.setText(Messages.SAVE);
+		cancel.setText(Messages.CANCEL);
+		
+		labelGender.setInnerText(Messages.GENDER + ":");
+		labelTitle.setInnerText(Messages.TITLE + ":");
+		labelName.setInnerText(Messages.NAME + ":");
+		labelPreName.setInnerText(Messages.PRENAME + ":");
+		labelEmail.setInnerText(Messages.EMAIL + ":");
+		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		labelClinic.setInnerText(Messages.CLINIC + ":");
 	}
 
 
@@ -106,11 +130,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			editTitle.getStyle().setDisplay(Display.NONE);
-			createTitle.getStyle().clearDisplay();
+			header.setInnerText(Messages.DOCTOR_CREATE);
 		} else {
-			editTitle.getStyle().clearDisplay();
-			createTitle.getStyle().setDisplay(Display.NONE);
+			header.setInnerText(Messages.DOCTOR_EDIT);
 		}
 	}
 
@@ -151,11 +173,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	public void setEditTitle(boolean edit) {
 		
 		if (edit) {
-            editTitle.getStyle().clearDisplay();
-            createTitle.getStyle().setDisplay(Display.NONE);
+			header.setInnerText(Messages.DOCTOR_EDIT);
         } else {
-            editTitle.getStyle().setDisplay(Display.NONE);
-            createTitle.getStyle().clearDisplay();
+			header.setInnerText(Messages.DOCTOR_CREATE);
         }
 
 	}
@@ -170,4 +190,8 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		clinic.setAcceptableValues(clinicList);
 	}
 	
+	@Override
+	public SimplePanel getOfficePanel(){
+		return officePanel;
+	}
 }

@@ -56,6 +56,8 @@
 					<tr id="email">
 						<td><span class="{style.label}" ui:field="labelEmail" /></td>
 						<td><g:TextBox ui:field='email'/></td>
+						<td><span class="{style.label}" ui:field="labelTelephone2" /></td>
+						<td><g:TextBox ui:field='telephone2' /></td>
 					</tr>
 					</tbody>
 				</table>
@@ -67,6 +69,8 @@
 			<g:HTMLPanel addStyleNames="{style.patientDetails}">
 				<table>
 					<colgroup>
+						<col></col>
+						<col></col>
 						<col></col>
 						<col></col>
 					</colgroup>
@@ -74,27 +78,21 @@
 					<tr id="birthday">
 						<td><span class="{style.label}" ui:field="labelBirthdate" /></td>
 						<td><d:DateBox ui:field='birthday'/></td>
-					</tr>
-					<tr id="gender">
 						<td><span class="{style.label}" ui:field="labelGender"></span></td>
-						<td><g:ValueListBox ui:field="gender" /></td>
+						<td><my:FocusableValueListBox ui:field="gender" /></td>
 					</tr>
 					<tr id="height">
 						<td><span class="{style.label}" ui:field="labelHeight"></span>
 						</td>
 						<td><g:IntegerBox ui:field='height'/></td>
-					</tr>
-					<tr id="weight">
 						<td><span class="{style.label}" ui:field="labelWeight"></span></td>
 						<td><g:IntegerBox ui:field='weight'/></td>
 					</tr>
 					<tr id="profession">
 						<td><span class="{style.label}" ui:field="labelProfession"></span></td>
-						<td><g:ValueListBox ui:field='profession'/></td>
-					</tr>
-					<tr id="nationality">
+						<td><my:FocusableValueListBox ui:field='profession'/></td>
 						<td><span class="{style.label}" ui:field="labelNationality"></span></td>
-						<td><g:ValueListBox ui:field='nationality'/></td>
+						<td><my:FocusableValueListBox ui:field='nationality'/></td>
 					</tr>
 					</tbody>
 				</table>
@@ -102,51 +100,17 @@
 		</g:Tab>
 		<g:Tab>
 			<g:TabHTML></g:TabHTML>
-			<n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl>
-		</g:Tab>
-		<g:Tab>
-			<g:TabHTML></g:TabHTML>
-			<g:HTMLPanel addStyleNames="{style.patientDetails}">
-				<table>
-					<colgroup>
-						<col></col>
-						<col></col>
-					</colgroup>
-					<tbody>
-					<tr>
-						<td><span class="{style.label}" ui:field="labelBankName" /></td>
-						<td><span ui:field="bankName" /></td>
-					</tr>
-					<tr>
-						<td><span class="{style.label}" ui:field="labelBankBIC" /></td>
-						<td><span ui:field="bankBIC" /></td>
-					</tr>
-					<tr>
-						<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
-						<td><span ui:field="bankIBAN" /></td>
-					</tr>
-					</tbody>
-				</table>
-			</g:HTMLPanel>
+			<g:SimplePanel ui:field="bankEditPanel"></g:SimplePanel>
 		</g:Tab>
 		
 		<g:Tab>
 			<g:TabHTML></g:TabHTML>
 			<g:HTMLPanel addStyleNames="{style.patientDetails}">
-				<p><span ui:field="description" /></p>
 				<g:SimplePanel ui:field="descriptionPanel"></g:SimplePanel>
-				<a:LangSkillSetEditor ui:field="langskills"></a:LangSkillSetEditor>
 			</g:HTMLPanel>
 		</g:Tab>
 	</g:TabPanel>
     
     <div ui:field='errors' class='{style.errors}'></div>
-
-    <table id='boundElementHolder' class="{style.fields}">
-      <tr id='telephone2'><td><div class='{style.label}'>Telephone2:</div></td><td><g:TextBox ui:field='telephone2'/></td></tr>
-      <tr id='bankaccount'><td><div class='{style.label}'>Bank Account:</div></td><td><g:ValueListBox ui:field='bankAccount'/></td></tr>
-      <tr id='anamnesisForm'><td><div class='{style.label}'>Anamnesis Form:</div></td><td><g:ValueListBox ui:field='anamnesisForm'/></td></tr>
-      
-    </table>
   </g:HTMLPanel>
 </ui:UiBinder>

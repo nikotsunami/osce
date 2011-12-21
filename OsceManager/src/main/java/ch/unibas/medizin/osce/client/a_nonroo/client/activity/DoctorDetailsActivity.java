@@ -62,7 +62,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 		
 		view.setDelegate(this);
 
-		requests.find(place.getProxyId()).with("office").fire(new Receiver<Object>() {
+		requests.find(place.getProxyId()).with("office", "clinic").fire(new Receiver<Object>() {
 
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
@@ -76,8 +76,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 
 				
 			}
-		    });
-		
+		});
 	}
 	
 	private void init(DoctorProxy doctorProxy) {

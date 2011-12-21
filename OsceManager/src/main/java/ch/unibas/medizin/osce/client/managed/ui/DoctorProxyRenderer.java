@@ -25,6 +25,6 @@ public class DoctorProxyRenderer extends ProxyRenderer<DoctorProxy> {
         if (object == null) {
             return "";
         }
-        return object.getTitle() + " (" + object.getId() + ")";
+        return "[" + object.getId() + "] " + object.getTitle() + " " + object.getPreName() + " " + object.getName() ;
     }
 }

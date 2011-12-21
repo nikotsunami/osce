@@ -42,6 +42,10 @@
 							<td><span class="{style.label}" ui:field="labelMobile" /></td>
 							<td><span ui:field="mobile" /></td>
 						</tr>
+						<tr id="telephone2">
+							<td><span class="{style.label}" ui:field="labelTelephone2" /></td>
+							<td><span ui:field="telephone2" /></td>
+						</tr>
 						<tr id="email">
 							<td><span class="{style.label}" ui:field="labelEmail" /></td>
 							<td><g:Anchor ui:field="email" /></td>

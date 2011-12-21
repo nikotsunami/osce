@@ -1237,7 +1237,7 @@ a:hover, .gwt-Anchor:hover {
 	color: #888;
 }
 
-.gwt-TextBox {
+.gwt-TextBox, input {
 	padding: 0 2px;
 	-moz-border-radius: 4px;
 	
