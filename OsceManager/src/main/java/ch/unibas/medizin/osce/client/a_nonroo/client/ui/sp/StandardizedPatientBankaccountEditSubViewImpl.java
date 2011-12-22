@@ -57,5 +57,4 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 		driver.initialize(this);
 		return driver;
 	}
-
 }
