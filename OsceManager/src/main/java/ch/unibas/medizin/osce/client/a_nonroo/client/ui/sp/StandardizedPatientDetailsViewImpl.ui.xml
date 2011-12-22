@@ -18,7 +18,7 @@
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
 					
-					<table>
+					<table class="{style.fields}">
 						<colgroup>
 							<col></col>
 							<col></col>
@@ -58,7 +58,7 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table>
+					<table class="{style.fields}">
 						<colgroup>
 							<col></col>
 							<col></col>
@@ -100,7 +100,7 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table>
+					<table class="{style.fields}">
 						<colgroup>
 							<col></col>
 							<col></col>

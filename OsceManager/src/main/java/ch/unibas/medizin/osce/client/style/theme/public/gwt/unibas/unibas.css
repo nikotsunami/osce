@@ -761,10 +761,6 @@ a:hover, .gwt-Anchor:hover {
 	margin: 0px;
 }
 
-.gwt-RichTextToolbar td {
-	padding: 0 !important;
-}
-
 .gwt-RichTextToolbar .gwt-PushButton-up {
 	padding: 0px 1px 0px 0px;
 	margin-right: 4px;

@@ -5,7 +5,7 @@
 <ui:style src="../../styles.css" />
  
   <g:HTMLPanel addStyleNames="{style.patientDetails}">
-	<table>
+	<table class="{style.fields}">
 		<colgroup>
 			<col></col>
 			<col></col>

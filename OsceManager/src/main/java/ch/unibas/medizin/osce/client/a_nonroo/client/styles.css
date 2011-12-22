@@ -13,11 +13,6 @@
 	white-space: normal;
 }
 
-.fields td {
-	padding: 0.1em;
-	white-space: nowrap;
-}
-
 .label {
 	min-height: 25px;
 	font-weight: bold;
@@ -365,14 +360,6 @@ body {
 	min-height: 130px !important;
 }
 
-.patientDetails col {
-	min-width: 100px;
-}
-
-.patientDetails td {
-	padding-right: 20px;
-}
-
 .patientControls {
 	padding: 4px 10px;
     position: absolute;
@@ -389,6 +376,15 @@ body {
 	/*position: relative;*/
 	margin: 8px auto;
 	width: 98%;
+}
+
+.fields col {
+	min-width: 100px;
+}
+
+.fields td {
+	padding-right: 20px;
+	white-space: nowrap;
 }
 
 /* #loading {
