@@ -41,6 +41,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.ejb.HibernateEntityManager;
+import org.hibernate.loader.criteria.CriteriaQueryTranslator;
 import org.hibernate.mapping.Map;
 import org.hibernate.criterion.Restrictions;
 
@@ -173,13 +174,14 @@ public class StandardizedPatient {
         HashMap<String, String> map = new HashMap<String,String>();
         
         map.put("name", "name");
-        map.put("pre_name", "preName");
+        // put another fields
         
         for (String col : searchThrough) {
 
         	if(map.get(col)!=null) {
         	
         		crit.add(Restrictions.like(map.get(col), q+"%"));
+        		Log.debug("\""+map.get(col)+"\" like \""+q+"%\"");
         		
         	}
         	
@@ -235,7 +237,7 @@ public class StandardizedPatient {
         	}
         	
         }
-
+        
     	return crit;
     }
     

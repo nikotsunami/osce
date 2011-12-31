@@ -152,7 +152,6 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 				StandardizedPatientDetailsPlace.Operation.DETAILS));
 	}
 
-
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 		

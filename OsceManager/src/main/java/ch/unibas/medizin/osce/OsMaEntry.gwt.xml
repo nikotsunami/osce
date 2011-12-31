@@ -62,7 +62,9 @@
 	<set-property name="gwt.logging.popupHandler" value="DISABLED"/>
 	<set-property name="gwt.logging.systemHandler" value="ENABLED"/>
 	<set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
-	<set-property name="user.agent" value="safari"/>
+	
+	<!-- Uncomment this if you want to build only specified permutations -->
+	<!--set-property name="user.agent" value="safari"/-->
 
 		<set-property name="compiler.emulatedStack" value="true" />
 		<set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true" />
