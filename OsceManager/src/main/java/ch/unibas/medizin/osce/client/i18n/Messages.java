@@ -65,6 +65,20 @@ public class Messages {
 			public static final String DETAILS = "Details";
 			public static final String GENDER = "Geschlecht";
 			
+			public static final String ALL = "Alle";
+			public static final String NO_MATTER = "Macht nichts";
+			
+			public static final String MALE = "Männlich";
+			public static final String FEMALE = "Weiblich";
+			
+			public static final String YES = "Ja";
+			public static final String NO = "Nein";
+			
+			public static final String FROM = "Von";
+			public static final String TO = "Zu";
+					
+			public static final String SCAR = "Narben";
+			
 			public static final String GOOGLE_MAPS = "Auf Google Maps anschauen";
 			
 			public static final String BANK_IBAN = "IBAN";

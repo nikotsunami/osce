@@ -1,10 +1,12 @@
 package ch.unibas.medizin.osce.client.i18n;
 
-import java.util.Locale;
+/*import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+*/
 
-import com.allen_sauer.gwt.log.client.Log;
+
+//import com.allen_sauer.gwt.log.client.Log;
 
 /**
  * Resourcen müssten in Classpath hinzugefügt werden.
@@ -12,6 +14,12 @@ import com.allen_sauer.gwt.log.client.Log;
  *
  */
 public class MessageLoader {
+	
+	//@Source("bundles.txt")
+	//public TextResource defaultText();
+	
+	/*
+	
 	private ResourceBundle messages = null;
 	private static MessageLoader instance;
 	
@@ -41,4 +49,6 @@ public class MessageLoader {
 		}
 		return messages;
 	}
+	
+	*/
 }

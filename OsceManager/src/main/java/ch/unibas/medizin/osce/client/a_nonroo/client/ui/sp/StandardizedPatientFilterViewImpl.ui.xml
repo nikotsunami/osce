@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:gg="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../../styles.css">
 	.popupPanel {
@@ -27,35 +28,64 @@
 				<span style="margin-left: 20px"><strong ui:field="labelSearch">Suche nach...</strong></span>
 				<my:IconButton icon="arrowreturnthick-1-w" ui:field="resetButton" addStyleNames="{style.floatRight}"></my:IconButton>
 			<div style="clear:both">
-			<g:HorizontalPanel>
-				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
-					<g:CheckBox ui:field="name"></g:CheckBox>
-					<g:CheckBox ui:field="prename"></g:CheckBox>
-					<g:CheckBox ui:field="postalCode"></g:CheckBox>
-					<g:CheckBox ui:field="city"></g:CheckBox>
-					<g:CheckBox ui:field="street"></g:CheckBox>
-					<g:CheckBox ui:field="telephone"></g:CheckBox>
-					<g:CheckBox ui:field="mobile"></g:CheckBox>
-					<g:CheckBox ui:field="email"></g:CheckBox>
-				</g:VerticalPanel>
-				
-				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
-					<g:CheckBox ui:field="birthday"></g:CheckBox>
-					<g:CheckBox ui:field="gender"></g:CheckBox>
-					<g:CheckBox ui:field="height"></g:CheckBox>
-					<g:CheckBox ui:field="weight"></g:CheckBox>
-					<g:CheckBox ui:field="profession"></g:CheckBox>
-					<g:CheckBox ui:field="nationality"></g:CheckBox>
-					<g:CheckBox ui:field="languageSkills"></g:CheckBox>
-				</g:VerticalPanel>
-				
-				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
-					<g:CheckBox ui:field="bankName"></g:CheckBox>
-					<g:CheckBox ui:field="bankBIC"></g:CheckBox>
-					<g:CheckBox ui:field="bankIBAN"></g:CheckBox>
-					<g:CheckBox ui:field="description"></g:CheckBox>
-				</g:VerticalPanel>
-			</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+						<g:CheckBox ui:field="name"></g:CheckBox>
+						<g:CheckBox ui:field="prename"></g:CheckBox>
+						<g:CheckBox ui:field="postalCode"></g:CheckBox>
+						<g:CheckBox ui:field="city"></g:CheckBox>
+						<g:CheckBox ui:field="street"></g:CheckBox>
+						<g:CheckBox ui:field="telephone"></g:CheckBox>
+						<g:CheckBox ui:field="mobile"></g:CheckBox>
+						<g:CheckBox ui:field="email"></g:CheckBox>
+					</g:VerticalPanel>
+					
+					<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+						<g:CheckBox ui:field="birthday"></g:CheckBox>
+						<g:CheckBox ui:field="gender"></g:CheckBox>
+						<g:CheckBox ui:field="height"></g:CheckBox>
+						<g:CheckBox ui:field="weight"></g:CheckBox>
+						<g:CheckBox ui:field="profession"></g:CheckBox>
+						<g:CheckBox ui:field="nationality"></g:CheckBox>
+						<g:CheckBox ui:field="languageSkills"></g:CheckBox>
+					</g:VerticalPanel>
+					
+					<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+						<g:CheckBox ui:field="bankName"></g:CheckBox>
+						<g:CheckBox ui:field="bankBIC"></g:CheckBox>
+						<g:CheckBox ui:field="bankIBAN"></g:CheckBox>
+						<g:CheckBox ui:field="description"></g:CheckBox>
+					</g:VerticalPanel>
+				</g:HorizontalPanel>
+				<div style="margin: 20px 0"><strong ui:field="labelAdvancedSearch">Erweiterte Suchkriterien</strong></div>
+				<g:HorizontalPanel>
+					<g:HTMLPanel>
+						<table>
+							<tr>
+								<td><g:Label ui:field="patientGenderLabel"></g:Label></td>
+								<td><g:ListBox ui:field="patientGender"></g:ListBox></td>
+							</tr>
+							<tr>
+								<td><g:Label ui:field="haveScarsLabel"></g:Label></td>
+								<td><g:ListBox ui:field="haveScars"></g:ListBox></td>
+							</tr>
+							<tr>
+								<td><g:Label ui:field="weightLabel"></g:Label></td><td><g:Label ui:field="weightFromLabel">von</g:Label> <g:TextBox ui:field="weightFrom"></g:TextBox> <g:Label ui:field="weightLabelTo">zu</g:Label> <g:TextBox ui:field="weightTo"></g:TextBox>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<g:Label ui:field="heightLabel"></g:Label></td><td><g:Label ui:field="heightFromLabel">von</g:Label> <g:TextBox ui:field="heightFrom"></g:TextBox> <g:Label ui:field="heightLabelTo">zu</g:Label> <g:TextBox ui:field="heightTo"></g:TextBox>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<g:Label ui:field="patientBirthdayLabel"></g:Label></td><td><gg:DateBox ui:field="patientBirthday"></gg:DateBox>
+								</td>
+							</tr>
+						</table>
+					</g:HTMLPanel>
+				</g:HorizontalPanel>
 			</div>
 		</g:HTMLPanel>
 	</g:FocusPanel>

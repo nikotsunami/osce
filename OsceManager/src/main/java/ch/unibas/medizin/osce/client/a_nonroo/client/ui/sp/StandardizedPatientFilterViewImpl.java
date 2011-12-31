@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.List;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.hibernate.dialect.function.StandardAnsiSqlAggregationFunctions.MinFunction;
 
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -26,11 +26,19 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.datepicker.client.DateBox;
+
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.client.a_nonroo.client.Comparison;
 
 public class StandardizedPatientFilterViewImpl extends PopupPanel {
 
@@ -55,10 +63,10 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	private int minApplicableFilters = 1;
 	private int checkedItems = 0;
 	
+	private SearchCriteria criteria;
+	
 	@UiField
 	FocusPanel filterPanelRoot;
-	
-	
 	@UiField
 	CheckBox name;
 	@UiField
@@ -101,6 +109,35 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	@UiField
 	IconButton resetButton;
 	
+	@UiField
+	ListBox patientGender;
+	@UiField
+	ListBox haveScars;
+	@UiField
+	TextBox weightFrom;
+	@UiField
+	TextBox weightTo;
+	@UiField
+	TextBox heightFrom;
+	@UiField
+	TextBox heightTo;
+	
+	@UiField
+	Label patientGenderLabel;
+	@UiField
+	Label haveScarsLabel;
+	@UiField
+	Label weightLabel;
+	@UiField
+	Label heightLabel;
+	
+	@UiField
+	DateBox patientBirthday;
+	@UiField
+	Label patientBirthdayLabel;
+	
+	
+
 	@UiHandler("resetButton")
 	void onClick(ClickEvent e) {
 		Iterator<CheckBoxItem> iter = fields.iterator();
@@ -155,10 +192,20 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	
 	public StandardizedPatientFilterViewImpl() {
 		super(true);
+		
+		criteria = new SearchCriteria();
+		
+		final StandardizedPatientView view = (StandardizedPatientView)this.getParent();
+		
 		add(uiBinder.createAndBindUi(this));
 		filterPanelRoot.addMouseOutHandler(new MouseOutHandler() {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
+				updateCriteria();
+
+				// TODO: handle it from view
+				//view.updateSearch();
+				
 				hide();
 			}
 		});
@@ -196,12 +243,63 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			CheckBox box = fieldIter.next().checkbox;
 			box.addValueChangeHandler(new CheckBoxChangeHandler());
 		}
+		
+		/* Advanced Search Items */
+		
+		// gender  
+		
+		patientGenderLabel.setText(Messages.GENDER);
+				
+		patientGender.addItem(Messages.ALL,"-1");
+		patientGender.addItem(Messages.MALE,"0");
+		patientGender.addItem(Messages.FEMALE,"1");
+		
+		// gender  
+		
+		haveScarsLabel.setText(Messages.SCAR);
+		
+		haveScars.setTitle(Messages.SCAR);
+		
+		haveScars.addItem(Messages.NO_MATTER,"-1");
+		haveScars.addItem(Messages.YES,"1");
+		haveScars.addItem(Messages.NO,"0");
+		
+		// weight
+		
+		weightLabel.setText(Messages.WEIGHT);
+		weightFrom.setTitle(Messages.FROM);
+		weightTo.setTitle(Messages.TO);
+		
+		// height
+		
+		heightLabel.setText(Messages.HEIGHT);
+		heightFrom.setTitle(Messages.FROM);
+		heightTo.setTitle(Messages.TO);
+		
+		// height
+		
+		patientBirthdayLabel.setText(Messages.BIRTHDAY);
+		patientBirthday.setTitle(Messages.BIRTHDAY);
+		
 	}
 	
 	private void initCheckBox(CheckBox uiField, String name, String text) {
 		uiField.setText(text);
 		fields.add(new CheckBoxItem(uiField, name));
 	}
+	
+	/*
+	private void initListBox(ListBox uiField, String name, String text) {
+		uiField.setText(text);
+		fields.add(new ListBoxItem(uiField, name));
+	}
+	
+	private void initFromTo(ListBox uiFieldFrom, ListBox uiFieldTo, String name, String text) {
+		uiFieldFrom.setText(Messages.FROM);
+		uiFieldTo.setText(Messages.TO);
+		fields.add(new CheckBoxItem(uiField, name));
+	}
+	*/
 	
 	/**
 	 * Sets the maximum number of filters that can be active at once.
@@ -221,6 +319,63 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		minApplicableFilters = n;
 	}
 
+	public void updateCriteria() {
+		
+		criteria.clean();
+		
+		// scars
+		
+		if(haveScars.getSelectedIndex() == 1) {
+			
+			criteria.add("scar",Comparison.EQUALS,"1");
+			
+		} else if(haveScars.getSelectedIndex() == 2) {
+			
+			criteria.add("scar",Comparison.EQUALS,"0");
+			
+		}
+		
+		// gender
+		
+		if(patientGender.getSelectedIndex() == 1) {
+			
+			criteria.add("gender",Comparison.EQUALS,"1");
+			
+		} else if(patientGender.getSelectedIndex() == 2) {
+			
+			criteria.add("gender",Comparison.EQUALS,"2");
+			
+		}
+		
+		// weight
+		Integer wf = null;
+		try { wf = Integer.parseInt(weightFrom.getValue()); } catch(Throwable e) {}
+		if(wf!=null) criteria.add("weight",Comparison.MORE, wf.toString());
+				
+		Integer wt = null;
+		try { wt = Integer.parseInt(weightTo.getValue()); } catch(Throwable e) {}
+		if(wt!=null) criteria.add("weight",Comparison.LESS, wt.toString());
+		
+		// height
+		Integer hf = null;
+		try { hf = Integer.parseInt(heightFrom.getValue()); } catch(Throwable e) {}
+		if(hf!=null) criteria.add("height",Comparison.MORE, hf.toString());
+				
+		Integer ht = null;
+		try { ht = Integer.parseInt(heightTo.getValue()); } catch(Throwable e) {}
+		if(ht!=null) criteria.add("height",Comparison.LESS, ht.toString());
+		
+		//birthday
+		Date d = patientBirthday.getValue();
+		
+
+		
+	}
+	
+	public SearchCriteria getCriteria() {
+		return criteria;
+	}
+	
 	/**
 	 * Returns a string array of all db fields to search in
 	 * @return
@@ -238,4 +393,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		
 		return filters;
 	}
+
+
 }

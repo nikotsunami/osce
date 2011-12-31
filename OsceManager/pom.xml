@@ -7,6 +7,7 @@
     <version>0.1.0.BUILD-SNAPSHOT</version>
     <name>OsceManager</name>
     <properties>
+        <jetty.app.path>${basedir}/target/OsceManager-0.1.0.BUILD-SNAPSHOT</jetty.app.path>
         <roo.version>1.1.5.RELEASE</roo.version>
         <spring.version>3.0.5.RELEASE</spring.version>
         <aspectj.version>1.6.11</aspectj.version>
@@ -39,6 +40,7 @@
             <url>http://maven.springframework.org/external</url>
             <name>SpringSource Maven Repository - External Releases</name>
         </repository>
+
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -56,16 +58,22 @@
             <name>Spring Roo Repository</name>
             <url>http://spring-roo-repository.springsource.org/release</url>
         </pluginRepository>
+		<pluginRepository>
+            <id>gwt-maven-plugins</id>
+			<name>GWT Repository</name>
+            <url>
+                http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/
+            </url>
+        </pluginRepository>
     </pluginRepositories>
     <dependencies>
        <!-- myOwn dependencies for standard applications -->
-            <dependency>
+        <dependency>
 		  <groupId>com.google.code.gwt-log</groupId>
 		  <artifactId>gwt-log</artifactId>
 		  <version>3.1.3</version>
 		  <scope>system</scope>
    			 <systemPath>${project.basedir}/lib/gwt-log-3.1.3.jar</systemPath>
-		  
 		</dependency> 
         <dependency>
 	            <groupId>com.google.code.gwt-dnd</groupId>
@@ -182,13 +190,13 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>3.6.4.Final</version>
+            <version>3.5.6-Final</version>
             <classifier/>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>3.6.4.Final</version>
+            <version>3.5.6-Final</version>
             <classifier/>
             <exclusions>
                 <exclusion>
@@ -427,6 +435,11 @@
             <version>1.5.1</version>
             <classifier/>
         </dependency>
+        <dependency>
+    <groupId>net.sourceforge.htmlunit</groupId>
+    <artifactId>htmlunit</artifactId>
+    <version>2.8</version>
+</dependency>
     </dependencies>
     <build>
         <plugins>
@@ -570,8 +583,10 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>7.4.2.v20110526</version>
                 <configuration>
+                    <webAppSourceDirectory>${jetty.app.path}</webAppSourceDirectory>
                     <webAppConfig>
                         <contextPath>/${project.name}</contextPath>
+                        <descriptor>${jetty.app.path}/WEB-INF/web.xml</descriptor>
                     </webAppConfig>
                 </configuration>
             </plugin>
@@ -585,7 +600,8 @@
                     <runTarget>/ApplicationScaffold.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <modules>
-                        <module>${project.groupId}.ApplicationScaffold</module>
+                        <!--module>${project.groupId}.ApplicationScaffold</module-->
+			<module>${project.groupId}.OsMaEntry</module>
                     </modules>
                     <copyWebapp>true</copyWebapp>
                 </configuration>
