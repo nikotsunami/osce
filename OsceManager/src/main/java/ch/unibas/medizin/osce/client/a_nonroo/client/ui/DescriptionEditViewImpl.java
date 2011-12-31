@@ -7,6 +7,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
+import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
@@ -24,6 +25,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,14 +44,22 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 //
 //	@UiField
 //	Element createTitle;
+	
+	@UiField (provided=true)
+	RichTextToolbar toolbar;
 
-	@UiField
-	TextBox description;
+	@UiField (provided = true)
+	RichTextArea description;
 
 	private Delegate delegate;
 
 	public DescriptionEditViewImpl() {
+		description = new RichTextArea();
+		description.setSize("100%", "14em");
+		toolbar = new RichTextToolbar(description);
+		toolbar.setWidth("100%");
 		initWidget(BINDER.createAndBindUi(this));
+//		toolbar.setRichText(description);
 	}
 
 	interface Binder extends UiBinder<Widget, DescriptionEditViewImpl> {

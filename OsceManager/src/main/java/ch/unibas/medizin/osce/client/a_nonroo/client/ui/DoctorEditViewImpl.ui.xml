@@ -2,85 +2,67 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui"
-	xmlns:l="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui">
+	xmlns:l="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 
-<ui:style src="../styles.css" />
-
-
+	<ui:style src="../styles.css" />
+		
 	<g:HTMLPanel>
-		<div class="{style.underline}">
-			<h3 class="{style.header}" ui:field="editTitle"><ui:msg>Edit Doctor</ui:msg></h3>
-			<h3 class="{style.header}" ui:field="createTitle"><ui:msg>New Doctor</ui:msg></h3>
+		<div class="{style.patientControls} {style.controlsright}">
+			<h3 class="{style.header}" style="display:inline">
+				<span ui:field="header"></span>
+			</h3>
+			<my:IconButton ui:field="save" icon="disk"></my:IconButton>
+			<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
 		</div>
+		<g:TabPanel ui:field="doctorPanel"
+			addStyleNames="gwt-InvertedTabPanel {style.tabStyle}">
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<table id="boundElementHolder">
+					<colgroup>
+						<col></col>
+						<col></col>					
+					</colgroup>
+					<tbody>
+						<tr id="title">
+							<td><span class="{style.label}" ui:field="labelTitle" /></td>
+							<td><g:TextBox ui:field="title" /></td>
+						</tr>
+						<tr id="name">
+							<td><span class="{style.label}" ui:field="labelName" /></td>
+							<td><g:TextBox ui:field="name" /></td>
+						</tr>
+						<tr id="preName">
+							<td><span class="{style.label}" ui:field="labelPreName" /></td>
+							<td><g:TextBox ui:field="preName" /></td>
+						</tr>
+						<tr id="gender">
+							<td><span class="{style.label}" ui:field="labelGender" /></td>
+							<td><g:ValueListBox ui:field="gender" /></td>
+						</tr>
+						<tr id="email">
+							<td><span class="{style.label}" ui:field="labelEmail" /></td>
+							<td><g:TextBox ui:field="email" /></td>
+						</tr>
+						<tr id="telephone">
+							<td><span class="{style.label}" ui:field="labelTelephone" /></td>
+							<td><g:TextBox ui:field="telephone" /></td>
+						</tr>
+						<tr id="clinic">
+							<td><span class="{style.label}" ui:field="labelClinic" /></td>
+							<td><g:ValueListBox ui:field="clinic" /></td>
+						</tr>
+					</tbody>
+					</table>
+				</g:HTMLPanel>
+			</g:Tab>
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:SimplePanel ui:field="officePanel" />
+			</g:Tab>
+		</g:TabPanel>
 		<div class="{style.errors}" ui:field="errors" />
-
-		<table class="{style.fields}" id="boundElementHolder">
-
-			<tr id="gender">
-				<td>
-					<div class="{style.label}">Gender:</div>
-				</td>
-				<td>
-					<g:ValueListBox ui:field="gender" />
-				</td>
-			</tr>
-			<tr id="title">
-				<td>
-					<div class="{style.label}">Title:</div>
-				</td>
-				<td>
-					<g:TextBox ui:field="title" />
-				</td>
-			</tr>
-			<tr id="name">
-				<td>
-					<div class="{style.label}">Name:</div>
-				</td>
-				<td>
-					<g:TextBox ui:field="name" />
-				</td>
-			</tr>
-			<tr id="preName">
-				<td>
-					<div class="{style.label}">Pre Name:</div>
-				</td>
-				<td>
-					<g:TextBox ui:field="preName" />
-				</td>
-			</tr>
-			<tr id="email">
-				<td>
-					<div class="{style.label}">Email:</div>
-				</td>
-				<td>
-					<g:TextBox ui:field="email" />
-				</td>
-			</tr>
-			<tr id="telephone">
-				<td>
-					<div class="{style.label}">Telephone:</div>
-				</td>
-				<td>
-					<g:TextBox ui:field="telephone" />
-				</td>
-			</tr>
-			<tr id="clinic">
-				<td>
-					<div class="{style.label}">Clinic:</div>
-				</td>
-				<td>
-					<g:ValueListBox ui:field="clinic" />
-				</td>
-			</tr>
-		</table>
-		<g:SimplePanel ui:field="officePanel"></g:SimplePanel>
-
-		<div class="{style.bar}">
-			<g:Button addStyleNames="{style.button}" ui:field="save">Save
-			</g:Button>
-			<g:Button addStyleNames="{style.button}" ui:field="cancel">Cancel
-			</g:Button>
-		</div>
-
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -1,17 +1,19 @@
-
-
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Collection;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
@@ -24,55 +26,67 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IntegerBox;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ClinicEditViewImpl extends Composite implements ClinicEditView, Editor<ClinicProxy> {
 
-
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	private static ClinicEditView instance;
-
-	@UiField
-	Element editTitle;
-
-	@UiField
-	Element createTitle;
-	
-	  @UiField
-	    TextBox name;
-
-	    @UiField
-	    TextBox street;
-
-	    @UiField
-	    TextBox city;
-
-	    @UiField
-	    IntegerBox postalCode;
-
-	    @UiField
-	    DoctorSetEditor doctors;
-	
-		@UiField
-		Button cancel;
-
-		@UiField
-		Button save;
-		
-		@UiField
-		DivElement errors;
-	    
 	private Delegate delegate;
-
 	private Presenter presenter;
-
 	
+	@UiField
+	TabPanel clinicPanel;
+	
+	@UiField
+	SpanElement header;
+
+	@UiField
+	TextBox name;
+	@UiField
+	TextBox street;
+	@UiField
+	TextBox city;
+	@UiField
+	IntegerBox postalCode;
+	@UiField
+	DoctorSetEditor doctors;
+
+	@UiField
+	IconButton cancel;
+	@UiField
+	IconButton save;
+
+	@UiField
+	DivElement errors;
+	
+	@UiField
+	SpanElement labelName;
+	@UiField
+	SpanElement labelStreet;
+	@UiField
+	SpanElement labelCity;
+
 	public ClinicEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
-	}
+		
+		clinicPanel.selectTab(0);
 
+		clinicPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
+		clinicPanel.getTabBar().setTabText(1, Messages.DOCTORS);
+
+		TabPanelHelper.moveTabBarToBottom(clinicPanel);
+
+		cancel.setText(Messages.CANCEL);
+		save.setText(Messages.SAVE);
+
+		labelName.setInnerText(Messages.NAME + ":");
+		labelStreet.setInnerText(Messages.STREET + ":");
+		labelCity.setInnerText(Messages.PLZ + ", " + Messages.CITY + ":");
+	}
 
 	@Override
 	public RequestFactoryEditorDriver<ClinicProxy, ClinicEditViewImpl> createEditorDriver() {
@@ -83,11 +97,9 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			editTitle.getStyle().setDisplay(Display.NONE);
-			createTitle.getStyle().clearDisplay();
+			header.setInnerText(Messages.CLINIC_CREATE);
 		} else {
-			editTitle.getStyle().clearDisplay();
-			createTitle.getStyle().setDisplay(Display.NONE);
+			header.setInnerText(Messages.CLINIC_EDIT);
 		}
 	}
 
@@ -126,25 +138,22 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 
 	@Override
 	public void setEditTitle(boolean edit) {
-		
 		if (edit) {
-            editTitle.getStyle().clearDisplay();
-            createTitle.getStyle().setDisplay(Display.NONE);
-        } else {
-            editTitle.getStyle().setDisplay(Display.NONE);
-            createTitle.getStyle().clearDisplay();
-        }
+			header.setInnerText(Messages.CLINIC_EDIT);
+		} else {
+			header.setInnerText(Messages.CLINIC_CREATE);
+		}
 
 	}
 
 	@Override
 	public void setPresenter(Presenter doctorEditActivity) {
-		this.presenter=doctorEditActivity;
+		this.presenter = doctorEditActivity;
 	}
 
 	@Override
-    public void setDoctorsPickerValues(Collection<DoctorProxy> values) {
-        doctors.setAcceptableValues(values);
-    }
-	
+	public void setDoctorsPickerValues(Collection<DoctorProxy> values) {
+		doctors.setAcceptableValues(values);
+	}
+
 }

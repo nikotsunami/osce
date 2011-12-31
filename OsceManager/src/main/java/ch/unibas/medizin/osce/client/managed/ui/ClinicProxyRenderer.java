@@ -24,6 +24,6 @@ public class ClinicProxyRenderer extends ProxyRenderer<ClinicProxy> {
         if (object == null) {
             return "";
         }
-        return object.getName() + " (" + object.getId() + ")";
+        return  "[" + object.getId() + "] " + object.getName();
     }
 }

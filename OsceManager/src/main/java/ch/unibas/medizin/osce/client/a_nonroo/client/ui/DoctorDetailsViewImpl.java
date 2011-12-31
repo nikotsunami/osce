@@ -3,7 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -13,8 +16,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -28,17 +33,53 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 
 	interface DoctorDetailsViewImplUiBinder extends
 			UiBinder<Widget, DoctorDetailsViewImpl> {
-	}
+	}	
 
-	
-
+	@UiField
+	TabPanel doctorPanel;
     @UiField
-    HasClickHandlers edit;
-
+    IconButton edit;
     @UiField
-    HasClickHandlers delete;
+    IconButton delete;
 
     private Delegate delegate;
+	
+
+//    @UiField
+//    SpanElement id;
+//    @UiField
+//    SpanElement version;
+    @UiField
+    SpanElement gender;
+    @UiField
+    SpanElement title;
+    @UiField
+    SpanElement name;
+    @UiField
+    SpanElement preName;
+    @UiField
+    Anchor email;
+    @UiField
+    SpanElement telephone;
+    @UiField
+    SpanElement clinic;
+    @UiField
+    SimplePanel officePanel;
+    
+    @UiField
+    SpanElement labelGender;
+    @UiField
+    SpanElement labelTitle;
+    @UiField
+    SpanElement labelName;
+    @UiField
+    SpanElement labelPreName;
+    @UiField
+    SpanElement labelEmail;
+    @UiField
+    SpanElement labelTelephone;
+    @UiField
+    SpanElement labelClinic;
     
 	/**
 	 * Because this class has a default constructor, it can
@@ -53,102 +94,88 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	 */
 	public DoctorDetailsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		doctorPanel.selectTab(0);
+
+		doctorPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
+		doctorPanel.getTabBar().setTabText(1, Messages.OFFICE_DETAILS);
+		
+		TabPanelHelper.moveTabBarToBottom(doctorPanel);
+		
+		edit.setText(Messages.EDIT);
+		delete.setText(Messages.DELETE);
+		
+		labelGender.setInnerText(Messages.GENDER + ":");
+		labelTitle.setInnerText(Messages.TITLE + ":");
+		labelName.setInnerText(Messages.NAME + ":");
+		labelPreName.setInnerText(Messages.PRENAME + ":");
+		labelEmail.setInnerText(Messages.EMAIL + ":");
+		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		labelClinic.setInnerText(Messages.CLINIC + ":");
 	}
-	
-
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
-    @UiField
-    SpanElement gender;
-
-    @UiField
-    SpanElement title;
-
-    @UiField
-    SpanElement name;
-
-    @UiField
-    SpanElement preName;
-
-    @UiField
-    SpanElement email;
-
-    @UiField
-    SpanElement telephone;
-
-    @UiField
-    SpanElement clinic;
-
-    @UiField
-    SimplePanel officePanel;
+  
 
     @Override
     public SimplePanel getOfficeDetailsPanel() {
 		return officePanel;
 	}
 
-
 	DoctorProxy proxy;
 
     @UiField
     SpanElement displayRenderer;
 
+	private Presenter presenter;
 
-
-
-		private Presenter presenter;
-
-	    public void setValue(DoctorProxy proxy) {
-	    	this.proxy = proxy;
-	        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-	        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-	        gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
-	        title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
-	        name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
-	        preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
-	        email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
-	        telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
-	        clinic.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getName()));
-//	        office.setInnerText(proxy.getOffice() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OfficeProxyRenderer.instance().render(proxy.getOffice()));
-	        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy));
-	    }
-
-		@Override
-		public void setDelegate(Delegate delegate) {
-			this.delegate = delegate;
-			
-		}
-
-		@Override
-		public void setPresenter(Presenter DoctorActivity) {
-			this.presenter =  DoctorActivity;
-			
-		}
+	public void setValue(DoctorProxy proxy) {
+		this.proxy = proxy;
+//		version.setInnerText(proxy.getVersion() == null ? "" : String
+//				.valueOf(proxy.getVersion()));
+		gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
+		title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
+		name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
+		preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
 		
-	    public Widget asWidget() {
-	        return this;
-	    }
+		email.setHref("mailto:" + (proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
+		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
+		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
+		clinic.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getName()));
+		// office.setInnerText(proxy.getOffice() == null ? "" :
+		// ch.unibas.medizin.osce.client.managed.ui.OfficeProxyRenderer.instance().render(proxy.getOffice()));
+		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy));
+	}
 
-	    public boolean confirm(String msg) {
-	        return Window.confirm(msg);
-	    }
+	@Override
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
 
-	    public DoctorProxy getValue() {
-	        return proxy;
-	    }
+	}
 
-	    @UiHandler("delete")
-	    public void onDeleteClicked(ClickEvent e) {
-	        delegate.deleteClicked();
-	    }
+	@Override
+	public void setPresenter(Presenter DoctorActivity) {
+		this.presenter = DoctorActivity;
 
-	    @UiHandler("edit")
-	    public void onEditClicked(ClickEvent e) {
-	        delegate.editClicked();
-	    }
+	}
 
+	public Widget asWidget() {
+		return this;
+	}
+
+	public boolean confirm(String msg) {
+		return Window.confirm(msg);
+	}
+
+	public DoctorProxy getValue() {
+		return proxy;
+	}
+
+	@UiHandler("delete")
+	public void onDeleteClicked(ClickEvent e) {
+		delegate.deleteClicked();
+	}
+
+	@UiHandler("edit")
+	public void onEditClicked(ClickEvent e) {
+		delegate.editClicked();
+	}
 }

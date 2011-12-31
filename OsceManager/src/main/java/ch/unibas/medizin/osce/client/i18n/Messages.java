@@ -97,4 +97,15 @@ public class Messages {
 			public static final String SP_EDIT = "Patient bearbeiten";
 			public static final String CANCEL = "Abbrechen";
 			public static final String SAVE = "Speichern";
+			
+			/* Doctor Details */
+			public static final String TITLE = "Titel";
+			public static final String CLINIC = "Spital";
+			public static final String GENERAL_INFO = "Allgemeine Informationen";
+			public static final String OFFICE_DETAILS = "Sekretariat";
+			public static final String DOCTOR_CREATE = "Arzt erstellen";
+			public static final String DOCTOR_EDIT = "Arzt bearbeiten";
+			
+			public static final String CLINIC_CREATE = "Spital erstellen";
+			public static final String CLINIC_EDIT = "Spital bearbeiten";
 }

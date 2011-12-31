@@ -72,11 +72,6 @@
 	display: inline;
 }
 
-.details {
-	border: 1px solid #E6EDED;
-	width: 100%;
-}
-
 .trenner {
 	border-bottom: 1px solid #E6EDED;
 }
@@ -367,11 +362,15 @@ body {
 
 .patientDetails {
 	margin: 38px auto 0;
-	height: 130px !important;
+	min-height: 130px !important;
 }
 
 .patientDetails col {
-	min-width: 120px;
+	min-width: 100px;
+}
+
+.patientDetails td {
+	padding-right: 20px;
 }
 
 .patientControls {
@@ -391,6 +390,7 @@ body {
 	margin: 8px auto;
 	width: 98%;
 }
+
 /* #loading {
 	position: absolute;
 	margin: 100px auto;

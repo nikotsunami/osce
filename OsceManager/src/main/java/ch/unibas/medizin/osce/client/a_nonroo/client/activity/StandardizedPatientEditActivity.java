@@ -12,6 +12,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientBankaccountEditSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientBankaccountEditSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
@@ -39,22 +41,21 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class StandardizedPatientEditActivity extends AbstractActivity implements
 StandardizedPatientEditView.Presenter, 
-StandardizedPatientEditView.Delegate,
-StandardizedPatientLangSkillSubView.Delegate {
+StandardizedPatientEditView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private StandardizedPatientEditView view;
-	private StandardizedPatientDetailsPlace place;
-	
-	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView; 
+	private StandardizedPatientDetailsPlace place; 
 
 	private RequestFactoryEditorDriver<StandardizedPatientProxy,StandardizedPatientEditViewImpl> editorDriver;
 	private StandardizedPatientProxy standardizedPatient;
 	private DescriptionProxy description;
+	private BankaccountProxy bankAccount;
 	private boolean save;
 	private RequestFactoryEditorDriver<DescriptionProxy, DescriptionEditViewImpl> descriptionDriver;
+	private RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> bankaccountDriver;
 
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -90,19 +91,24 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
 		Log.info("start");
-		StandardizedPatientEditView standardizedPatientEditView = new StandardizedPatientEditViewImpl();
-
+		this.view = new StandardizedPatientEditViewImpl();
 		this.widget = panel;
-		this.view = standardizedPatientEditView;
-		this.standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubView();
 
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
-		standardizedPatientLangSkillSubView.setDelegate(this);
-
+		
+		StandardizedPatientBankaccountEditSubView bankaccountView = new StandardizedPatientBankaccountEditSubViewImpl();
+		view.getBankEditPanel().add(bankaccountView);
+		bankaccountDriver = bankaccountView.createEditorDriver();
+		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+			public void onPlaceChange(PlaceChangeEvent event) {
+				// TODO ??? => profit!
+			}
+		});
+		
+		
 		DescriptionEditView descriptionView = new DescriptionEditViewImpl();
 		view.getDescriptionPanel().add(descriptionView);
 		descriptionDriver = descriptionView.createEditorDriver();
@@ -112,7 +118,6 @@ StandardizedPatientLangSkillSubView.Delegate {
 				// TODO implement
 			}
 		});
-		//init();
 
 		view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
 		requests.nationalityRequest().findNationalityEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).fire(new Receiver<List<NationalityProxy>>() {
@@ -136,27 +141,27 @@ StandardizedPatientLangSkillSubView.Delegate {
 			}
 		});
 
-		view.setBankaccountPickerValues(Collections.<BankaccountProxy>emptyList());
-		requests.bankaccountRequest().findBankaccountEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().getPaths()).fire(new Receiver<List<BankaccountProxy>>() {
+//		view.setBankaccountPickerValues(Collections.<BankaccountProxy>emptyList());
+//		requests.bankaccountRequest().findBankaccountEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().getPaths()).fire(new Receiver<List<BankaccountProxy>>() {
+//
+//			public void onSuccess(List<BankaccountProxy> response) {
+//				List<BankaccountProxy> values = new ArrayList<BankaccountProxy>();
+//				values.add(null);
+//				values.addAll(response);
+//				view.setBankaccountPickerValues(values);
+//			}
+//		});
 
-			public void onSuccess(List<BankaccountProxy> response) {
-				List<BankaccountProxy> values = new ArrayList<BankaccountProxy>();
-				values.add(null);
-				values.addAll(response);
-				view.setBankaccountPickerValues(values);
-			}
-		});
-
-		view.setAnamnesisFormPickerValues(Collections.<AnamnesisFormProxy>emptyList());
-		requests.anamnesisFormRequest().findAnamnesisFormEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisFormProxy>>() {
-
-			public void onSuccess(List<AnamnesisFormProxy> response) {
-				List<AnamnesisFormProxy> values = new ArrayList<AnamnesisFormProxy>();
-				values.add(null);
-				values.addAll(response);
-				view.setAnamnesisFormPickerValues(values);
-			}
-		});
+//		view.setAnamnesisFormPickerValues(Collections.<AnamnesisFormProxy>emptyList());
+//		requests.anamnesisFormRequest().findAnamnesisFormEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisFormProxy>>() {
+//
+//			public void onSuccess(List<AnamnesisFormProxy> response) {
+//				List<AnamnesisFormProxy> values = new ArrayList<AnamnesisFormProxy>();
+//				values.add(null);
+//				values.addAll(response);
+//				view.setAnamnesisFormPickerValues(values);
+//			}
+//		});
 		
 		if (this.place.getOperation()==StandardizedPatientDetailsPlace.Operation.EDIT){
 			Log.info("edit");
@@ -181,7 +186,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 			init();
 		}
 		//		view.initialiseDriver(requests);
-		widget.setWidget(standardizedPatientEditView.asWidget());
+		widget.setWidget(view.asWidget());
 		//setTable(view.getTable());
 	}
 
@@ -195,10 +200,14 @@ StandardizedPatientLangSkillSubView.Delegate {
 			description = request.create(DescriptionProxy.class);
 			standardizedPatient.setDescriptions(description);
 			
+			bankAccount = request.create(BankaccountProxy.class);
+			standardizedPatient.setBankAccount(bankAccount);
+			
 			view.setEditTitle(false);
 			Log.info("create");
 		} else {
 			description = standardizedPatient.getDescriptions();
+			bankAccount = standardizedPatient.getBankAccount();
 			view.setEditTitle(true);
 			Log.info("edit");
 		}
@@ -206,6 +215,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		Log.info("edit");
 		editorDriver.edit(standardizedPatient, request);
 		descriptionDriver.edit(description, request);
+		bankaccountDriver.edit(bankAccount, request);
 
 		Log.info("persist");
 		request.persist().using(standardizedPatient);
@@ -265,18 +275,6 @@ StandardizedPatientLangSkillSubView.Delegate {
 				//saveDescription();
 			}
 		}); 
-	}
-
-	@Override
-	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addLangSkillClicked() {
-		// TODO Auto-generated method stub
-		
 	}
 
 //	private void saveDescription() {

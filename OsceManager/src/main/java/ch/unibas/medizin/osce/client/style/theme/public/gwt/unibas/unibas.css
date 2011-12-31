@@ -669,7 +669,7 @@ a:hover, .gwt-Anchor:hover {
 	{
 	margin: 0;
 	text-decoration: none;
-	background: url("images/hborder.png") repeat-x 0px -27px;
+	-moz-border-radius: 4px 4px 4px 4px;
 }
 
 .gwt-PushButton-up,.gwt-PushButton-up-hovering,.gwt-PushButton-up-disabled
@@ -678,12 +678,14 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-PushButton-up {
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 	border: 1px outset #ccc;
 	cursor: pointer;
 	cursor: hand;
 }
 
 .gwt-PushButton-up-hovering {
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 	border: 1px outset;
 	border-color: #9cf #69e #69e #7af;
 	cursor: pointer;
@@ -691,6 +693,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-PushButton-up-disabled {
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 	border: 1px outset #ccc;
 	cursor: default;
 	opacity: .5;
@@ -704,12 +707,14 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-PushButton-down {
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
 	border: 1px inset #666;
 	cursor: pointer;
 	cursor: hand;
 }
 
 .gwt-PushButton-down-hovering {
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 	border: 1px inset;
 	border-color: #9cf #69e #69e #7af;
 	cursor: pointer;
@@ -717,6 +722,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-PushButton-down-disabled {
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
 	border: 1px outset #ccc;
 	cursor: default;
 	opacity: 0.5;
@@ -737,14 +743,26 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .hasRichTextToolbar {
-	border: 0px;
+    border: 0;
+    background-color: #FFFFFF;
+    cursor: text;
+}
+
+.hasRichTextToolbar:hover {
+	cursor: text;
 }
 
 .gwt-RichTextToolbar {
-	background: #ebebeb url(images/hborder.png) repeat-x 0px -2003px;
-	border-bottom: 1px solid #BBBBBB;
-	padding: 3px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px; 
+	border: 1px solid #AAAAAA;
+	border-bottom: 1px solid #dddddd;
+	padding: 10px;
 	margin: 0px;
+}
+
+.gwt-RichTextToolbar td {
+	padding: 0 !important;
 }
 
 .gwt-RichTextToolbar .gwt-PushButton-up {
@@ -1237,7 +1255,7 @@ a:hover, .gwt-Anchor:hover {
 	color: #888;
 }
 
-.gwt-TextBox {
+.gwt-TextBox, input {
 	padding: 0 2px;
 	-moz-border-radius: 4px;
 	
@@ -1254,7 +1272,8 @@ a:hover, .gwt-Anchor:hover {
 	{
 	margin: 0;
 	text-decoration: none;
-	background: url("images/hborder.png") repeat-x 0px -27px;
+	-moz-border-radius: 4px 4px 4px 4px;
+    border: 1px solid #999999;
 }
 
 .gwt-ToggleButton-up,.gwt-ToggleButton-up-hovering,.gwt-ToggleButton-up-disabled
@@ -1263,12 +1282,14 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-ToggleButton-up {
+    background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 	border: 1px outset #ccc;
 	cursor: pointer;
 	cursor: hand;
 }
 
 .gwt-ToggleButton-up-hovering {
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 	border: 1px outset;
 	border-color: #9cf #69e #69e #7af;
 	cursor: pointer;
@@ -1276,6 +1297,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-ToggleButton-up-disabled {
+    background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 	border: 1px outset #ccc;
 	cursor: default;
 	opacity: .5;
@@ -1289,14 +1311,14 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-ToggleButton-down {
-	background-position: 0 -513px;
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
 	border: 1px inset #ccc;
 	cursor: pointer;
 	cursor: hand;
 }
 
 .gwt-ToggleButton-down-hovering {
-	background-position: 0 -513px;
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
 	border: 1px inset;
 	border-color: #9cf #69e #69e #7af;
 	cursor: pointer;
@@ -1304,6 +1326,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-ToggleButton-down-disabled {
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
 	background-position: 0 -513px;
 	border: 1px inset #ccc;
 	cursor: default;
