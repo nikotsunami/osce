@@ -93,8 +93,28 @@
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>
-    
-    
+<servlet>
+
+  <servlet-name>gwt-log-remote-logger-servlet</servlet-name>
+  <servlet-class>com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl</servlet-class>
+
+  <!--
+     The `symbolMaps` parameter specifies the server directory
+     containing the GWT compiler symbol maps output, which is used
+     for stack trace deobfuscation
+  -->
+  <init-param>
+    <!-- This value assumes a GWT compile with '-deploy war/WEB-INF/deploy/' -->
+    <param-name>symbolMaps</param-name>
+    <param-value>WEB-INF/deploy/OsMaEntry/symbolMaps/</param-value>
+  </init-param>
+
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>gwt-log-remote-logger-servlet</servlet-name>
+  <url-pattern>/your-module-name/gwt-log</url-pattern>
+</servlet-mapping>
     
     
 </web-app>

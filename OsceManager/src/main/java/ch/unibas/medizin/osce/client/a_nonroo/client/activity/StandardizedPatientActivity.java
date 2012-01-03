@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
+import java.util.Date;
+import java.util.ArrayList;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -8,6 +10,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -103,8 +108,20 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	}
 
 	private void init2(final String q) {
-
-		fireCountRequest(q, new Receiver<Long>() {
+		
+		// (1) Text search
+		
+		List<String> searchThrough = view.getSearchFilters();
+		
+		// (2) Advanced search
+		
+		fireCountRequest(
+				q, 
+				searchThrough, 
+				view.getCriteria().getFields(), 
+				view.getCriteria().getComparisons(), 
+				view.getCriteria().getValues(),
+				new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -135,12 +152,26 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 				StandardizedPatientDetailsPlace.Operation.DETAILS));
 	}
 
-
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
-
 		
+		// (1) Sorting
 		
+		Boolean asc = true;
+		String sortField = "name"; // TODO: handle sort change events
+		
+		if(table.getColumnSortList().size()>0) {
+		
+			asc = table.getColumnSortList().get(0).isAscending();
+		
+		}
+		
+		// (2) Text search
+		
+		List<String> searchThrough = view.getSearchFilters();
+		
+		// (3) Advanced search
+			
 		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> values) {
@@ -157,49 +188,30 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 			}
 		};
 
-		fireRangeRequest(q, range, callback);
-
+		fireRangeRequest(sortField, 
+				asc, q, 
+				new Integer(range.getStart()),
+				new Integer(range.getLength()),
+				searchThrough,
+				view.getCriteria().getFields(), 
+				view.getCriteria().getComparisons(), 
+				view.getCriteria().getValues(),
+				callback);
 	}
 
-	private void fireRangeRequest(String q, final Range range, final Receiver<List<StandardizedPatientProxy>> callback) {
-		createRangeRequest(q, range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(String sortField, Boolean asc, String q, Integer firstResult, Integer maxResults, List<String> searchThrough, List<String> fields, List<Integer> comparisons, List<String> values, final Receiver<List<StandardizedPatientProxy>> callback) {
+		createRangeRequest(sortField, asc, q, firstResult, maxResults, searchThrough, fields, comparisons, values).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	//TODO: ###SIEBERS### implement findPatienBySearchAndSort
-	/*
-	 * Attributes
-	 * String sortColumn - name of the column to sort, at the moment only name, prename, email
-	 * String q, Range range - the same like now
-	 * String[] searchTrough - Stringarray with attributenames which should be searched, like 'name', 'prename'
-	 * 
-	 * Integer[][][][] searchKriteria
-	 * 		- first value is the ID of the Entity
-	 * 		- second value is if it should be AND or OR
-	 * 		- third value is the type, possible tipes are: anamnesisCheck, scar, birthday, gender, height, weight, bmi, nationality, profession, spoken_language 
-	 * 		- forth value is the comparator: 0-3   (<, >, =, like)
-	 * String [] searchedValue - possible values
-	 * 		* anamnesisCheck - 'string', '0|0|0|1|0', '0', '0|1|0|1|0'. The last one is special, if the type 
-	 * is QuestionMultM the value '0|0|0|1|0' is true for '0|1|0|1|0'.
-	 * 		* scar 0 or 1 
-	 * 		*birthday 22.12.1978, 1978
-	 * 		*gender 0 or 1 (male, female)
-	 * 		*height 180
-	 * 		*weight 90
-	 * 		*bmi 30
-	 * 		*nationality only id
-	 * 		*profession only id
-	 * 		*spoken_language A1, B2, native
-	 */
-
-	protected Request<List<StandardizedPatientProxy>> createRangeRequest(String q, Range range) {
-//		return requests.standardizedPatientRequest().findStandardizedPatientEntries(range.getStart(), range.getLength());
-		return requests.standardizedPatientRequestNonRoo().findPatientsBySearch(q, range.getStart(), range.getLength());
+	protected Request<List<StandardizedPatientProxy>> createRangeRequest(String sortField, Boolean asc, String q, Integer firstResult, Integer maxResults, List<String> searchThrough, List<String> fields, List<Integer> comparisons, List<String> values) {
+		return requests.standardizedPatientRequestNonRoo().findPatientsBySearchAndSort(sortField, asc, q, firstResult, maxResults, searchThrough, fields, comparisons, values);
+		//return requests.standardizedPatientRequestNonRoo().findPatientsBySearch(q, firstResult, maxResults);
 	}
 
-	protected void fireCountRequest(String q, Receiver<Long> callback) {
-//		requests.standardizedPatientRequest().countStandardizedPatients().fire(callback);
-		requests.standardizedPatientRequestNonRoo().countPatientsBySearch(q).fire(callback);
+	protected void fireCountRequest(String q, List<String> searchThrough, List<String> fields, List<Integer> comparisons, List<String> values, Receiver<Long> callback) {
+		requests.standardizedPatientRequestNonRoo().countPatientsBySearchAndSort(q, searchThrough, fields, comparisons, values).fire(callback);
+		//requests.standardizedPatientRequestNonRoo().countPatientsBySearch(q).fire(callback);
 	}
 
 	private void setTable(CellTable<StandardizedPatientProxy> table) {

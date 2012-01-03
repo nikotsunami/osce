@@ -3,8 +3,12 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.Messages;
@@ -12,6 +16,9 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -44,6 +51,8 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.google.gwt.view.client.Range;
+
 /**
  * @author nikotsunami
  *
@@ -71,7 +80,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	SimplePager pager;
 	@UiField(provided = true)
 	CellTable<StandardizedPatientProxy> table;
-
+	
 	protected Set<String> paths = new HashSet<String>();
 	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;
@@ -79,6 +88,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
 		delegate.newClicked();
+	}
+	
+	public String getQuery() {
+		return searchBox.getValue();
 	}
 	
 //	@UiHandler ("filterButton")
@@ -97,7 +110,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		filterPanel.setPopupPosition(x, y);
 		filterPanel.show();
 	}
-
+	
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -200,6 +213,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //        }, "Gender");
 		paths.add("name");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+			
+			{ this.setSortable(true); }
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -215,6 +230,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		}, "Name");
 		paths.add("preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+			
+			{ this.setSortable(true); }
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -228,7 +245,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 				return renderer.render(object.getPreName());
 			}
 		}, "Pre Name");
-//        paths.add("street");
+		
+/*        paths.add("street");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //
 //            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
@@ -313,9 +331,12 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //                return renderer.render(object.getBirthday());
 //            }
 //        }, "Birthday");
+*/
 		paths.add("email");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
+			{ this.setSortable(true); }
+			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
 				public String render(java.lang.String obj) {
@@ -390,8 +411,12 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //        }, "Anamnesis Form");
 	}
 	
-	public String[] getSearchFilters() {
-		return filterPanel.getFilters();
+	public List<String> getSearchFilters() {
+		return Arrays.asList(filterPanel.getFilters());
+	}
+	
+	public SearchCriteria getCriteria() {
+		return filterPanel.getCriteria();
 	}
 
 	@Override
@@ -402,6 +427,12 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
+	}
+	
+	@Override
+	public void updateSearch() {
+		String q = searchBox.getValue();
+		delegate.performSearch(q);
 	}
 
 	@Override

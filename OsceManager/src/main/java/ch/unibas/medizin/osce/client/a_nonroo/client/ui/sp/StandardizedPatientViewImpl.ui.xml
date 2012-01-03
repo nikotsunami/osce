@@ -14,7 +14,7 @@
 					<my:IconButton ui:field="filterButton" icon="wrench"></my:IconButton>
 					<b:SimplePager ui:field="pager" display="{table}" />
 				</div>
-				
+		
 				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
 				
 				<div class="{style.controls} {style.controlsleft}">

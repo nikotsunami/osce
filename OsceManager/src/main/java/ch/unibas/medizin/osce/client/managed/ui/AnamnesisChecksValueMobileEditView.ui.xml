@@ -34,7 +34,7 @@
     <div id="anamnesisChecksValue">
             <div class="{style.label}">Anamnesis Checks Value</div>
             <div class="{style.value}">
-                <g:IntegerBox ui:field="anamnesisChecksValue"/>
+                <g:TextBox ui:field="anamnesisChecksValue"/>
             </div>
         </div>
     <div id="anamnesisform">
