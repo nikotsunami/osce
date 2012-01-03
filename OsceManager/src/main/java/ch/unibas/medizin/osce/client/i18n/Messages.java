@@ -94,4 +94,11 @@ public class Messages {
 			
 			public static final String CLINIC_CREATE = "Spital erstellen";
 			public static final String CLINIC_EDIT = "Spital bearbeiten";
+			
+			public static final String EDIT_ANAMNESIS_VALUE = "Anamnesewert bearbeiten";
+			public static final String TYPE = "Typ";
+			public static final String TEXT = "Text";
+			public static final String VALUE = "Wert";
+			public static final String ADD_ANSWER = "Antwort hinzufügen";
+			
 }

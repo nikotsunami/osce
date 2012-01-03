@@ -20,7 +20,7 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table id="boundElementHolder">
+					<table id="boundElementHolder" class="{style.fields}">
 					<colgroup>
 						<col></col>
 						<col></col>					

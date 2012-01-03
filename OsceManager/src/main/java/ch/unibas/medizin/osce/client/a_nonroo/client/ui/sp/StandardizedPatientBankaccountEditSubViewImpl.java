@@ -29,7 +29,7 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	SpanElement labelBankIBAN;
 	
 	@UiField
-	TextBox BankName;
+	TextBox bankName;
 	@UiField
 	TextBox BIC;
 	@UiField

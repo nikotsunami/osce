@@ -96,7 +96,7 @@ public class StandardizedPatientDetailsPlace extends Place {
 				return place.getProxyId() + SEPARATOR + StandardizedPatientDetailsPlace.Operation.EDIT;
 			}
 			if (Operation.CREATE == place.getOperation()) {
-				return /*place.getProxyId() + SEPARATOR + */StandardizedPatientDetailsPlace.Operation.CREATE.toString();
+				return /*place.getProxyId() +*/ SEPARATOR + StandardizedPatientDetailsPlace.Operation.CREATE.toString();
 			}
         
 			return place.getToken();

@@ -3,7 +3,7 @@
  <ui:style src="../styles.css" />
 
 <g:HTMLPanel addStyleNames="{style.patientDetails}">
-	<table id="boundElementHolder">
+	<table id="boundElementHolder" class="{style.fields}">
 	<colgroup>
 		<col></col>
 		<col></col>

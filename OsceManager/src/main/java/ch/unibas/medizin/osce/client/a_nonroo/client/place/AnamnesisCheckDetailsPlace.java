@@ -97,7 +97,7 @@ public class AnamnesisCheckDetailsPlace extends Place {
 				return place.getProxyId() + SEPARATOR + AnamnesisCheckDetailsPlace.Operation.EDIT;
 			}
 			if (Operation.CREATE == place.getOperation()) {
-				return /*place.getProxyId() + SEPARATOR + */AnamnesisCheckDetailsPlace.Operation.CREATE.toString();
+				return /*place.getProxyId() + */ SEPARATOR + AnamnesisCheckDetailsPlace.Operation.CREATE.toString();
 			}
 
         

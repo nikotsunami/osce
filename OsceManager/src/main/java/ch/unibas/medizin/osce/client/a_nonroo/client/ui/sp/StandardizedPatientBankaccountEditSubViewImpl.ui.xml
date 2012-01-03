@@ -13,7 +13,7 @@
 		<tbody>
 		<tr>
 			<td><span class="{style.label}" ui:field="labelBankName" /></td>
-			<td><g:TextBox ui:field='BankName'/></td>
+			<td><g:TextBox ui:field='bankName'/></td>
 		</tr>
 		<tr>
 			<td><span class="{style.label}" ui:field="labelBankBIC" /></td>
