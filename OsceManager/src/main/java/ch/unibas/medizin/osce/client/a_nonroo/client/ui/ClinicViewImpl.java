@@ -232,6 +232,10 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 //	            return renderer.render(object.getDoctors());
 //	        }
 //	    }, "Doctors");
+		
+		for (int i = 0; i< table.getColumnCount(); i++){
+			table.getColumn(i).setSortable(true);
+		}
 	}
 
 	@Override

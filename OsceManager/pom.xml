@@ -600,8 +600,7 @@
                     <runTarget>/ApplicationScaffold.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <modules>
-                        <!--module>${project.groupId}.ApplicationScaffold</module-->
-			<module>${project.groupId}.OsMaEntry</module>
+                        <module>${project.groupId}.ApplicationScaffold</module>
                     </modules>
                     <copyWebapp>true</copyWebapp>
                 </configuration>
