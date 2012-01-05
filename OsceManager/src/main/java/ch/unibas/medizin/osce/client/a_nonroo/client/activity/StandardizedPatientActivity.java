@@ -1,8 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -12,6 +15,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientVi
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Sorting;
 
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -24,6 +30,8 @@ import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -135,7 +143,10 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 			}
 
 		});
-
+		
+		
+		
+		
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
@@ -152,8 +163,52 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 				StandardizedPatientDetailsPlace.Operation.DETAILS));
 	}
 
+	@SuppressWarnings({ "deprecation", "deprecation" })
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
+		
+		
+		//TODO: ###david### test code
+		
+				List<String> fields =  Arrays.asList("weight", "height", "bmi");
+				List<String> values =  Arrays.asList("80", "180", "30");
+				List<String> comparations =  Arrays.asList(Comparison2.EQUALS, Comparison2.LESS, Comparison2.MORE);
+				List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
+				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment");
+				
+				
+				requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, fields, bindType, comparations, values).fire(
+						new Receiver<Long>() {
+
+
+
+							public void onFailure(ServerFailure error) {
+
+							Log.error(error.getMessage());
+							//onStop();
+							}
+
+							
+							public void onViolation(Set<Violation> errors) {
+							Iterator<Violation> iter = errors.iterator();
+							String message = "";
+							while (iter.hasNext()) {
+							message += iter.next().getMessage() + "<br>";
+							}
+							Log.warn(" in Simpat -" + message);
+
+							
+						
+							//onStop();
+
+							}
+
+							@Override
+							public void onSuccess(Long response) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
 		
 		// (1) Sorting
 		
@@ -166,9 +221,14 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		
 		}
 		
+		
+		
 		// (2) Text search
 		
-		List<String> searchThrough = view.getSearchFilters();
+		/*List<String> */searchThrough = view.getSearchFilters();
+		
+		
+		
 		
 		// (3) Advanced search
 			

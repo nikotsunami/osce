@@ -4,6 +4,9 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Sorting;
 
 
 import com.google.gwt.requestfactory.shared.InstanceRequest;
@@ -24,4 +27,14 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 	abstract Request<List<StandardizedPatientProxy>> findPatientsBySearch(String q, Integer firstResult, Integer maxResults);
 	
 	abstract Request<List<StandardizedPatientProxy>> findPatientsBySearchAndSort(String sortField, Boolean asc, String q, Integer firstResult, Integer maxResults, List<String> searchThrough, List<String> fields, List<Integer> comparisons, List<String> values);
+
+	abstract Request<Long > countPatientsByAdvancedSearchAndSort(
+    		String sortColumn,
+    		Sorting order,
+    		String searchWord, 
+    		List<String> searchThrough,
+    		List<String> fields,
+    		List<String> bindType,
+    		List<String> comparations,
+    		List<String> values);
 }
