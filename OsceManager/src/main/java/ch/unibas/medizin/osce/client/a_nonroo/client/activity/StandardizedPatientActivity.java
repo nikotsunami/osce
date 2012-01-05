@@ -12,12 +12,17 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
+import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -176,8 +181,29 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 				List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
 				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment");
 				
+				List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 				
-				requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, fields, bindType, comparations, values).fire(
+				StandardizedPatientRequestNonRoo requestStd = requests.standardizedPatientRequestNonRoo();
+				
+				AdvancedSearchCriteriaProxy criteria = requestStd.create(AdvancedSearchCriteriaProxy.class);
+				requestStd.edit(criteria);
+				criteria.setBindType(BindType.AND);
+				criteria.setComparation(Comparison2.EQUALS);
+				criteria.setField(PossibleFields.weight);
+				criteria.setValue("80");
+				
+				searchCriteria.add(criteria);
+				/*searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.weight, BindType.AND,
+						Comparison2.EQUALS, "80"));
+				searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.height, BindType.OR,
+						Comparison2.LESS, "180"));
+				searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.bmi, BindType.AND,
+						Comparison2.MORE, "30"));*/
+				
+
+				
+				
+				requestStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, searchCriteria /*fields, bindType, comparations, values*/).fire(
 						new Receiver<Long>() {
 
 

@@ -2,8 +2,11 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.Sorting;
@@ -33,8 +36,9 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
     		Sorting order,
     		String searchWord, 
     		List<String> searchThrough,
-    		List<String> fields,
+    		List<AdvancedSearchCriteriaProxy> searchCriteria
+    		/*List<String> fields,
     		List<String> bindType,
     		List<String> comparations,
-    		List<String> values);
+    		List<String> values*/);
 }

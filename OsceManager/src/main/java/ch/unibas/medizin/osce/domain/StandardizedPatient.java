@@ -4,9 +4,11 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 
 import javax.persistence.Enumerated;
@@ -312,10 +314,11 @@ public class StandardizedPatient {
     		Sorting order,
     		String searchWord, 
     		List<String> searchThrough,
-    		List<String> fields,
+    		List<AdvancedSearchCriteria> searchCriteria
+    		/*List<String> fields,
     		List<String> bindType,
     		List<String> comparations,
-    		List<String> values) {
+    		List<String> values*/) {
     	
     	log.info("countPatientsByAdvancedSearchAndSort");
     	log.error("beginn");
@@ -329,21 +332,21 @@ public class StandardizedPatient {
     	simpatSearch.makeSortig(sortColumn, order);
     	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
     	
-    	Iterator<String> iter = fields.iterator();
+    	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
     	int i =0;
     	while (iter.hasNext()) {
-			String fieldName = (String) iter.next();
+    		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
 			
-			log.warn(fieldName);
+			log.warn(criterium.getValue());
 			
-			if (fieldName.equals("weight") ){
-				simpatSearch.searchWeight(Integer.parseInt(values.get(i)), bindType.get(i), comparations.get(i));
+			if (criterium.getField() == PossibleFields.height ){
+				simpatSearch.searchWeight(Integer.parseInt(criterium.getValue()), criterium.getBindType(), criterium.getComparation());
 			}
-			else if (fieldName.equals( "height")){
-				simpatSearch.searchHeight(Integer.parseInt(values.get(i)), bindType.get(i), comparations.get(i));
+			else if (criterium.getField() == PossibleFields.weight){
+				simpatSearch.searchHeight(Integer.parseInt(criterium.getValue()), criterium.getBindType(), criterium.getComparation());
 			}
-			else if (fieldName.equals( "bmi")){
-				simpatSearch.searchBMI(Integer.parseInt(values.get(i)), bindType.get(i), comparations.get(i));
+			else if (criterium.getField() == PossibleFields.bmi){
+				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType(), criterium.getComparation());
 			}
 			
 			
