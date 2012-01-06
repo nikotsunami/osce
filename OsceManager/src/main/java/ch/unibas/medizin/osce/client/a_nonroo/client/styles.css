@@ -387,6 +387,10 @@ body {
 	white-space: nowrap;
 }
 
+.AnamnesisMCValueSubPanel table {
+	margin: 2px 0;
+}
+
 /* #loading {
 	position: absolute;
 	margin: 100px auto;
