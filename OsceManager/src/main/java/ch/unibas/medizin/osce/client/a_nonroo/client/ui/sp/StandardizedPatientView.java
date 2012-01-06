@@ -37,4 +37,5 @@ public interface StandardizedPatientView  extends IsWidget{
     
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+	StandartizedPatientAdvancedSearchSubView getStandartizedPatientAdvancedSearchSubViewImpl();
 }

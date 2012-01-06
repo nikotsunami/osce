@@ -81,6 +81,13 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@UiField(provided = true)
 	CellTable<StandardizedPatientProxy> table;
 	
+	@UiField
+	StandartizedPatientAdvancedSearchSubViewImpl standartizedPatientAdvancedSearchSubViewImpl;
+	
+	public StandartizedPatientAdvancedSearchSubViewImpl getStandartizedPatientAdvancedSearchSubViewImpl() {
+		return standartizedPatientAdvancedSearchSubViewImpl;
+	}
+
 	protected Set<String> paths = new HashSet<String>();
 	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;

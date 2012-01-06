@@ -113,7 +113,7 @@
 
 <servlet-mapping>
   <servlet-name>gwt-log-remote-logger-servlet</servlet-name>
-  <url-pattern>/your-module-name/gwt-log</url-pattern>
+  <url-pattern>/OsMaEntry/gwt-log</url-pattern>
 </servlet-mapping>
     
     

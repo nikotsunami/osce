@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
@@ -47,7 +48,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class StandardizedPatientActivity extends AbstractActivity implements
-StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
+StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, StandartizedPatientAdvancedSearchSubView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -58,6 +59,8 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private StandardizedPatientDetailsActivityMapper StandardizedPatientDetailsActivityMapper;
+	private StandartizedPatientAdvancedSearchSubView standartizedPatientAdvancedSearchSubView;
+	private CellTable<AdvancedSearchCriteriaProxy> criteriaTable;
 
 
 	public StandardizedPatientActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -75,10 +78,18 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		Log.info("SystemStartActivity.start()");
 		StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		systemStartView.setPresenter(this);
+		
+
+		
 		this.widget = panel;
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
+		standartizedPatientAdvancedSearchSubView.setDelegate(this);
+		
+		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
@@ -193,6 +204,8 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 				criteria.setValue("80");
 				
 				searchCriteria.add(criteria);
+				
+				criteriaTable.setRowData(searchCriteria);
 				/*searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.weight, BindType.AND,
 						Comparison2.EQUALS, "80"));
 				searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.height, BindType.OR,
@@ -231,7 +244,7 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 
 							@Override
 							public void onSuccess(Long response) {
-								// TODO Auto-generated method stub
+								//table.setRowData(range.getStart(), values);
 								
 							}
 						});
@@ -319,6 +332,24 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
+	}
+
+	@Override
+	public void filterTableClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addBasicCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addScarCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
