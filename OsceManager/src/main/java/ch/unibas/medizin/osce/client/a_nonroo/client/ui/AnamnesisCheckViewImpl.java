@@ -11,9 +11,9 @@ import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
-import ch.unibas.medizin.osce.client.style.interfaces.QuestionTypeImages;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.resources.QuestionTypeImages;
 
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.cell.client.ImageResourceCell;

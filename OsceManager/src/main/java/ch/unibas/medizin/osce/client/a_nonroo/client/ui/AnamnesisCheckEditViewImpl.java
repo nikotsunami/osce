@@ -23,6 +23,8 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
@@ -123,10 +125,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		labelText.setInnerText(Messages.TEXT + ":");
 		labelValue.setInnerText(Messages.VALUE + ":");
 		
-		HorizontalPanel valueSubPanel = new HorizontalPanel();
-		valueSubPanel.add(new TextBox());
-		valueSubPanel.add(addButton);
-		valuePanel.add(valueSubPanel);
+		addValueField();
 		
 		addButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -154,8 +153,14 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		if (type.getValue() == AnamnesisCheckTypes.QuestionMultM || type.getValue() == AnamnesisCheckTypes.QuestionMultS) {
 			setMultipleFields(true);
-			
 		}
+		
+		text.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				text.selectAll();
+			}
+		});
 	}
 	
 	private IconButton createDeleteButton() {
@@ -181,8 +186,15 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	private void addValueField() {
 		HorizontalPanel newPanel = new HorizontalPanel();
 		TextBox textBox = new TextBox();
+		textBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				((TextBox) event.getSource()).selectAll();
+			}
+		});
 		newPanel.add(textBox);
-		newPanel.add(createDeleteButton());
+		if (valuePanel.getWidgetCount() > 0)
+			newPanel.add(createDeleteButton());
 		newPanel.add(addButton);
 		valuePanel.add(newPanel);
 		textBox.setFocus(true);
