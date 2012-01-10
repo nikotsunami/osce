@@ -4,7 +4,8 @@
 	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 
-	<ui:style src="../styles.css" />
+	<ui:style src="../styles.css">
+	</ui:style>
 		
 	<g:HTMLPanel>
 		<div class="{style.patientControls} {style.controlsright}">
