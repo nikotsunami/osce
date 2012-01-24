@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	 xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
-	 xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp" 
+	 xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria" 
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 <ui:style src="../../styles.css" />
 

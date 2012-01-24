@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 
 
 import com.google.gwt.core.client.GWT;

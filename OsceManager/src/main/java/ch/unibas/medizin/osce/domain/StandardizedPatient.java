@@ -246,9 +246,9 @@ public class StandardizedPatient {
     	
     	public void endStringAppend(String bindType, String string){
     		if (endSearchString.length() == 0)
-    				endSearchString.append(string);
+    				endSearchString.append(" " + string);
     		else
-    			endSearchString.append(bindType + string);
+    			endSearchString.append(" " + bindType + string);
     	}
     	
 	//	public void finalyzeBaseSQL() {
@@ -331,22 +331,32 @@ public class StandardizedPatient {
     	log.error("add sorting");
     	simpatSearch.makeSortig(sortColumn, order);
     	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
+    	String comparitionSign = "";
     	
     	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
     	int i =0;
     	while (iter.hasNext()) {
     		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
+    		if (criterium.getComparation() == Comparison2.EQUALS){
+    			comparitionSign = " = ";
+    		}
+    		else if (criterium.getComparation() == Comparison2.LESS){
+    			comparitionSign = " < ";
+    		}
+    		else if (criterium.getComparation() == Comparison2.MORE){
+    			comparitionSign = " > ";
+    		}
 			
 			log.warn(criterium.getValue());
 			
 			if (criterium.getField() == PossibleFields.height ){
-				simpatSearch.searchWeight(Integer.parseInt(criterium.getValue()), criterium.getBindType(), criterium.getComparation());
+				simpatSearch.searchWeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
 			else if (criterium.getField() == PossibleFields.weight){
-				simpatSearch.searchHeight(Integer.parseInt(criterium.getValue()), criterium.getBindType(), criterium.getComparation());
+				simpatSearch.searchHeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
 			else if (criterium.getField() == PossibleFields.bmi){
-				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType(), criterium.getComparation());
+				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
 			
 			

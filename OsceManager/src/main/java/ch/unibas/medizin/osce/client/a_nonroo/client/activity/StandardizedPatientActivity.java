@@ -12,7 +12,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
@@ -41,6 +43,7 @@ import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -48,7 +51,8 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class StandardizedPatientActivity extends AbstractActivity implements
-StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, StandartizedPatientAdvancedSearchSubView.Delegate {
+StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, StandartizedPatientAdvancedSearchSubView.Delegate, 
+StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -99,6 +103,8 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, Standartize
 				}
 			}
 		});
+		
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
 		init();
 
@@ -178,8 +184,10 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, Standartize
 		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(),
 				StandardizedPatientDetailsPlace.Operation.DETAILS));
 	}
+	
+	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 
-	@SuppressWarnings({ "deprecation", "deprecation" })
+	@SuppressWarnings({ "deprecation"})
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 		
@@ -188,24 +196,24 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, Standartize
 		
 				List<String> fields =  Arrays.asList("weight", "height", "bmi");
 				List<String> values =  Arrays.asList("80", "180", "30");
-				List<String> comparations =  Arrays.asList(Comparison2.EQUALS, Comparison2.LESS, Comparison2.MORE);
-				List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
+				//List<String> comparations =  Arrays.asList(Comparison2.EQUALS, Comparison2.LESS, Comparison2.MORE);
+				//List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
 				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment");
 				
-				List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 				
-				StandardizedPatientRequestNonRoo requestStd = requests.standardizedPatientRequestNonRoo();
 				
-				AdvancedSearchCriteriaProxy criteria = requestStd.create(AdvancedSearchCriteriaProxy.class);
-				requestStd.edit(criteria);
-				criteria.setBindType(BindType.AND);
-				criteria.setComparation(Comparison2.EQUALS);
-				criteria.setField(PossibleFields.weight);
-				criteria.setValue("80");
-				
-				searchCriteria.add(criteria);
-				
-				criteriaTable.setRowData(searchCriteria);
+				requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+//				
+//				AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//				requestAdvSeaCritStd.edit(criteria);
+//				criteria.setBindType(BindType.AND);
+//				criteria.setComparation(Comparison2.EQUALS);
+//				criteria.setField(PossibleFields.weight);
+//				criteria.setValue("80");
+//				
+//				searchCriteria.add(criteria);
+//				
+//				criteriaTable.setRowData(searchCriteria);
 				/*searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.weight, BindType.AND,
 						Comparison2.EQUALS, "80"));
 				searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.height, BindType.OR,
@@ -216,7 +224,7 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, Standartize
 
 				
 				
-				requestStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, searchCriteria /*fields, bindType, comparations, values*/).fire(
+				requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, searchCriteria /*fields, bindType, comparations, values*/).fire(
 						new Receiver<Long>() {
 
 
@@ -341,14 +349,57 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, Standartize
 	}
 
 	@Override
-	public void addBasicCriteriaClicked() {
-		// TODO Auto-generated method stub
+	public void addBasicCriteriaClicked(Button addBasicData) {
+		StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
+		basicCriteriaPopUp.setDelegate(this);
+		basicCriteriaPopUp.display(addBasicData);
+		
 		
 	}
 
 	@Override
 	public void addScarCriteriaClicked() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addAnamnesisCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addLanguageCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addBasicCriteriaPopUpClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
+
+	@Override
+	public void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
+		
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		
+		AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		criteria = requestAdvSeaCritStd.edit(criteria);
+		criteria.setBindType(bindType);
+		criteria.setComparation(comparition);
+		criteria.setField(possibleFields);
+		criteria.setValue(string);
+		requestAdvSeaCritStd.fire();
+		searchCriteria.add(criteria);
+		
+		
+		criteriaTable.setRowData(searchCriteria);
+		
+		
 		
 	}
 

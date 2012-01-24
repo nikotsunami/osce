@@ -4,14 +4,19 @@
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	 
-	<ui:style src="../../styles.css" />
+	<ui:style src="../../../styles.css" />
 	
 	
 <g:HTMLPanel styleName="{style.listView}">
     <div style="height:3em;"/>
+<table>
+    <tr><td><g:Button ui:field="addBasicData">Basisfilter...</g:Button> </td>
+    <td><g:Button ui:field="addScar">Merkmale...</g:Button> </td>
+    <td><g:Button ui:field="addAnamnesis">Anamnesiswerte...</g:Button> </td>
+    <td><g:Button ui:field="addLanguage">Sprachen...</g:Button> </td></tr>
+  </table>
     <b:CellTable pageSize="8" ui:field="table" width="100%"/>
     <div class="{style.controls}">      
-      <g:Button  ui:field="newButton">Create AdvancedSearchCriteria</g:Button>
       <b:SimplePager display="{table}" location="RIGHT"/>
     </div>
   </g:HTMLPanel>

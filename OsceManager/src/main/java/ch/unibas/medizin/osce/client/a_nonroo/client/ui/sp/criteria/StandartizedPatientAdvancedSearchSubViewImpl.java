@@ -1,6 +1,6 @@
-package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
+package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandartizedPatientAdvancedSearchSubView.Delegate;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView.Delegate;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 
@@ -35,7 +35,34 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		init();
 	}
 
+	@UiField
+    Button addBasicData;
+    @UiField
+    Button addScar;
+    @UiField
+    Button addAnamnesis;
+    @UiField
+    Button addLanguage;
 
+	@UiHandler("addBasicData")
+	void onAddBasicDataClick(ClickEvent e) {
+		delegate.addBasicCriteriaClicked(addBasicData);
+	}
+	
+	@UiHandler("addScar")
+	void onAddScarClick(ClickEvent e) {
+		delegate.addScarCriteriaClicked();
+	}
+	
+	@UiHandler("addAnamnesis")
+	void onAddAnamnesisClick(ClickEvent e) {
+		delegate.addAnamnesisCriteriaClicked();
+	}
+	
+	@UiHandler("addLanguage")
+	void onAddLanguageClick(ClickEvent e) {
+		delegate.addLanguageCriteriaClicked();
+	}
 	
 	@UiField
 	CellTable<AdvancedSearchCriteriaProxy> table;
@@ -54,7 +81,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	
 	 public void init() {
 	       
-	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
+	    /*    table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
 	            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
 
@@ -82,7 +109,23 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getVersion());
 	            }
-	        }, "Version");
+	        }, "Version");*/
+		 
+		 table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
+
+	            Renderer<ch.unibas.medizin.osce.shared.BindType> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
+
+	                public String render(ch.unibas.medizin.osce.shared.BindType obj) {
+	                    return obj == null ? "" : String.valueOf(obj);
+	                }
+	            };
+
+	            @Override
+	            public String getValue(AdvancedSearchCriteriaProxy object) {
+	                return renderer.render(object.getBindType());
+	            }
+	        }, "Bind Type");
+		 
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
@@ -99,26 +142,13 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            }
 	        }, "Field");
 	        
-	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-
-	            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-	                public String render(java.lang.String obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
-
-	            @Override
-	            public String getValue(AdvancedSearchCriteriaProxy object) {
-	                return renderer.render(object.getBindType());
-	            }
-	        }, "Bind Type");
+	       
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
-	            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+	            Renderer<ch.unibas.medizin.osce.shared.Comparison2> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
 
-	                public String render(java.lang.String obj) {
+	                public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
 	                    return obj == null ? "" : String.valueOf(obj);
 	                }
 	            };
