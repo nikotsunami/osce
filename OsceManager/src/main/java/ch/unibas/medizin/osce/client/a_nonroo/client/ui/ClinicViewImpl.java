@@ -175,7 +175,7 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 			public String getValue(ClinicProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, "Name");
+		}, Messages.NAME);
 //        paths.add("street");
 //        table.addColumn(new TextColumn<ClinicProxy>() {
 //
@@ -206,7 +206,7 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 			public String getValue(ClinicProxy object) {
 				return renderer.render(object.getPostalCode() + " " + object.getCity());
 			}
-		}, "City");
+		}, Messages.CITY);
 //	    paths.add("postalCode");
 //	    table.addColumn(new TextColumn<ClinicProxy>() {
 //	

@@ -21,6 +21,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -136,7 +137,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
-
+		
 		filterPanel = new StandardizedPatientFilterViewImpl();
 		
 		initWidget(uiBinder.createAndBindUi(this));
@@ -221,7 +222,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //        }, "Gender");
 		paths.add("name");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
-			
 			{ this.setSortable(true); }
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
@@ -235,7 +235,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, "Name");
+		}, Messages.NAME);
 		paths.add("preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			
@@ -252,7 +252,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getPreName());
 			}
-		}, "Pre Name");
+		}, Messages.PRENAME);
 		
 /*        paths.add("street");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
@@ -356,7 +356,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getEmail());
 			}
-		}, "Email");
+		}, Messages.EMAIL);
 //        paths.add("nationality");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //

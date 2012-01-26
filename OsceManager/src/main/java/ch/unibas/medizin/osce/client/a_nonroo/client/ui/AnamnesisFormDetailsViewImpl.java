@@ -75,53 +75,47 @@ public class AnamnesisFormDetailsViewImpl extends Composite implements  Anamnesi
     @UiField
     SpanElement displayRenderer;
 
+	private Presenter presenter;
 
+    public void setValue(AnamnesisFormProxy proxy) {
+    	 this.proxy = proxy;
+         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+         createDate.setInnerText(proxy.getCreateDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getCreateDate()));
+         anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
+         scars.setInnerText(proxy.getScars() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance()).render(proxy.getScars()));
+         displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy));
+    }
 
-		private Presenter presenter;
+	@Override
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
 
-	    public void setValue(AnamnesisFormProxy proxy) {
-	    	 this.proxy = proxy;
-	         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-	         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-	         createDate.setInnerText(proxy.getCreateDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getCreateDate()));
-	         anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
-	         scars.setInnerText(proxy.getScars() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance()).render(proxy.getScars()));
-	         displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy));
-	    }
+	@Override
+	public void setPresenter(Presenter AnamnesisFormActivity) {
+		this.presenter = AnamnesisFormActivity;
+	}
 
-		@Override
-		public void setDelegate(Delegate delegate) {
-			this.delegate = delegate;
-			
-		}
+	public Widget asWidget() {
+		return this;
+	}
 
-		@Override
-		public void setPresenter(Presenter AnamnesisFormActivity) {
-			this.presenter =  AnamnesisFormActivity;
-			
-		}
-		
-	    public Widget asWidget() {
-	        return this;
-	    }
+	public boolean confirm(String msg) {
+		return Window.confirm(msg);
+	}
 
-	    public boolean confirm(String msg) {
-	        return Window.confirm(msg);
-	    }
+	public AnamnesisFormProxy getValue() {
+		return proxy;
+	}
 
-	    public AnamnesisFormProxy getValue() {
-	        return proxy;
-	    }
+	@UiHandler("delete")
+	public void onDeleteClicked(ClickEvent e) {
+		delegate.deleteClicked();
+	}
 
-	    @UiHandler("delete")
-	    public void onDeleteClicked(ClickEvent e) {
-	        delegate.deleteClicked();
-	    }
-
-	    @UiHandler("edit")
-	    public void onEditClicked(ClickEvent e) {
-	        delegate.editClicked();
-	    }
-
-
+	@UiHandler("edit")
+	public void onEditClicked(ClickEvent e) {
+		delegate.editClicked();
+	}
 }

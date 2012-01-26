@@ -208,7 +208,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			public String getValue(DoctorProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, "Name");
+		}, Messages.NAME);
 		paths.add("preName");
 		table.addColumn(new TextColumn<DoctorProxy>() {
 
@@ -223,7 +223,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			public String getValue(DoctorProxy object) {
 				return renderer.render(object.getPreName());
 			}
-		}, "Pre Name");
+		}, Messages.PRENAME);
 //        paths.add("email");
 //        table.addColumn(new TextColumn<DoctorProxy>() {
 //
@@ -273,7 +273,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			public String getValue(DoctorProxy object) {
 				return renderer.render(object.getOffice());
 			}
-		}, "Office");
+		}, Messages.OFFICE_DETAILS);
 	}
 
 	@Override

@@ -17,7 +17,7 @@
   </table>
     <b:CellTable pageSize="8" ui:field="table" width="100%"/>
     <div class="{style.controls}">      
-      <b:SimplePager display="{table}" location="RIGHT"/>
+      <b:SimplePager ui:field="pager" display="{table}"/>
     </div>
   </g:HTMLPanel>
 </ui:UiBinder> 

@@ -200,7 +200,7 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 			public String getValue(ProfessionProxy object) {
 				return renderer.render(object.getProfession());
 			}
-		}, "Profession");
+		}, Messages.PROFESSION);
 //		paths.add("standardizedPatient");
 //		table.addColumn(new TextColumn<ProfessionProxy>() {
 //

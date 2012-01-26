@@ -205,7 +205,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 							html += "<li>" + values[i] + "</li>";
 						}
 						html += "</ul>";
-					} else {
+					} else { 
 						html = values[0];
 					}
 				}

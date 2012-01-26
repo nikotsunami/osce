@@ -123,7 +123,6 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 		labelType.setInnerText(Messages.TYPE + ":");
 		labelText.setInnerText(Messages.TEXT + ":");
-		labelValue.setInnerText(Messages.VALUE + ":");
 		
 		addValueField();
 		
@@ -153,6 +152,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		if (type.getValue() == AnamnesisCheckTypes.QuestionMultM || type.getValue() == AnamnesisCheckTypes.QuestionMultS) {
 			setMultipleFields(true);
+		} else {
+			setMultipleFields(false);
 		}
 		
 		text.addFocusHandler(new FocusHandler() {
@@ -206,10 +207,15 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		// removes the additional fields...
 		if (!multipleFields) {
+			labelValue.setInnerText("");
 			for (int i = valuePanel.getWidgetCount() - 1; i > 0; i--) {
 				valuePanel.remove(i);
 			}
 			((HorizontalPanel) valuePanel.getWidget(0)).add(addButton);
+			valuePanel.setVisible(false);
+		} else {
+			valuePanel.setVisible(true);
+			labelValue.setInnerText(Messages.VALUE + ":");
 		}
 	}
 

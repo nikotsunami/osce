@@ -116,11 +116,18 @@ public class Messages {
 			public static final String ADD_ANSWER = "Antwort hinzufügen";
 			
 			
-			
 			public static final String ANAMNESIS_QUESTION_MULTM = "Multiple-Choice mit Mehrfachauswahl";
 			public static final String ANAMNESIS_QUESTION_MULTS = "Multiple-Choice mit Einfachauswahl";
 			public static final String ANAMNESIS_QUESTION_YESNO = "Ja/Nein-Frage";
 			public static final String ANAMNESIS_QUESTION_OPEN = "Offene Frage";
 			public static final String ANAMNESIS_QUESTION_TITLE = "Trenntitel";
+			
+
+			public static final String LOCATION = "Ort";
+			public static final String LANGUAGE = "Sprache";
+			
+			public static final String COMPARISON = "Vergleich";
+			public static final String FIELD = "Feld";
+			public static final String BIND_TYPE = "Bind Type";
 			
 }

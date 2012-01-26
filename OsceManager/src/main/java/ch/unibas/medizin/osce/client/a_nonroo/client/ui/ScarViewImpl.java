@@ -187,7 +187,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getTraitType().toString());
 			}
-		}, "Typ");
+		}, Messages.TYPE);
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
@@ -202,7 +202,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, "Ort");
+		}, Messages.LOCATION);
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {

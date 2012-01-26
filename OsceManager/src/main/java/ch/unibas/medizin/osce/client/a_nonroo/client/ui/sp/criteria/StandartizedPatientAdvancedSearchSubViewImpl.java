@@ -1,8 +1,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView.Delegate;
+import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,6 +17,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
@@ -31,6 +37,9 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	}
 
 	public StandartizedPatientAdvancedSearchSubViewImpl() {
+		table = new CellTable<AdvancedSearchCriteriaProxy>(OsMaConstant.TABLE_PAGE_SIZE, (CellTable.Resources) GWT.create(MyCellTableResources.class));
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, (SimplePager.Resources) GWT.create(MySimplePagerResources.class), true, OsMaConstant.TABLE_JUMP_SIZE, true);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 	}
@@ -64,11 +73,11 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		delegate.addLanguageCriteriaClicked();
 	}
 	
-	@UiField
+	@UiField (provided = true)
 	CellTable<AdvancedSearchCriteriaProxy> table;
 	
-//	@UiField (provided = true)
-//	SimplePager pager;
+	@UiField (provided = true)
+	SimplePager pager;
 
 	private Delegate delegate;
 	
@@ -80,6 +89,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 
 	
 	 public void init() {
+		 
 	       
 	    /*    table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
@@ -124,7 +134,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getBindType());
 	            }
-	        }, "Bind Type");
+	        }, Messages.BIND_TYPE);
 		 
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
@@ -140,7 +150,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getField());
 	            }
-	        }, "Field");
+	        }, Messages.FIELD);
 	        
 	       
 	        
@@ -157,7 +167,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getComparation());
 	            }
-	        }, "Comparation");
+	        }, Messages.COMPARISON);
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
@@ -172,7 +182,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getValue());
 	            }
-	        }, "Value");
+	        }, Messages.VALUE);
 	    }
 
 

@@ -99,7 +99,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getTraitType().toString());
 			}
-		}, "Merkmale");
+		}, Messages.TRAITS);
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
@@ -114,7 +114,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, "");
+		}, Messages.LOCATION);
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {

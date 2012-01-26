@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -69,13 +70,15 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		delete.setText(Messages.DELETE);
 		
 		labelType.setInnerText(Messages.TYPE + ":");
-		labelValue.setInnerText(Messages.VALUE + ":");
+		labelText.setInnerText(Messages.TEXT + ":");
 	}
 	
 	@UiField
 	SpanElement labelType;
 	@UiField
 	SpanElement labelValue;
+	@UiField
+	SpanElement labelText;
 	
 	@UiField
 	SpanElement header;
@@ -84,8 +87,8 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 	@UiField
 	VerticalPanel valuePanel;
 	
-//	@UiField
-//	SpanElement text;
+	@UiField
+	SpanElement text;
 
 //	@UiField
 //	SpanElement version;
@@ -115,12 +118,18 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		header.setInnerText(headerText);
 		
 		type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
+		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
 		
-		if (proxy.getValue() != null) {
-			String substrs[] = proxy.getValue().split("\\|");
-			for (int i = 0; i < substrs.length; i++) {
-				valuePanel.add(new Label(substrs[i]));
+		if (proxy.getType() == AnamnesisCheckTypes.QuestionMultM || proxy.getType() == AnamnesisCheckTypes.QuestionMultS) {
+			labelValue.setInnerText(Messages.VALUE + ":");
+			if (proxy.getValue() != null) {
+				String substrs[] = proxy.getValue().split("\\|");
+				for (int i = 0; i < substrs.length; i++) {
+					valuePanel.add(new Label(substrs[i]));
+				}
 			}
+		} else {
+			labelValue.setInnerText("");
 		}
 		
 //		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));

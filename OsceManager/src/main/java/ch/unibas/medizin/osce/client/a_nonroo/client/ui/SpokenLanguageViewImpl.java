@@ -201,7 +201,7 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 			public String getValue(SpokenLanguageProxy object) {
 				return renderer.render(object.getLanguageName());
 			}
-		}, "Sprache");
+		}, Messages.LANGUAGE);
 //		paths.add("langskills");
 //		table.addColumn(new TextColumn<SpokenLanguageProxy>() {
 //

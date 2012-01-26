@@ -27,10 +27,10 @@
 								<td><span class="{style.label}" ui:field="labelType" /></td>
 								<td><span ui:field="type" /></td>
 							</tr>
-							<!-- <tr id='text'>
+							<tr id='text'>
 								<td><span class='{style.label}' ui:field="labelText" /></td>
 								<td><span ui:field='text' /></td>
-							</tr> -->
+							</tr>
 							<tr id='value'>
 								<td valign="top"><span class='{style.label}' ui:field="labelValue" /></td>
 								<td><g:VerticalPanel ui:field="valuePanel" addStyleNames="{style.AnamnesisMCValueSubPanel}" /></td>

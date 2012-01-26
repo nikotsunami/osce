@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -46,7 +48,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	}
 
 	@UiField
-	Button closeBoxButton;
+	IconButton closeBoxButton;
 	
 	@UiHandler ("closeBoxButton")
 	public void closeBoxButtonClicked(ClickEvent e) {
@@ -112,9 +114,12 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 
 	@Override
 	public void display(Button addBasicData) {
-
-		this.showRelativeTo(addBasicData);
-		
+		if (this.isShowing()) {
+			return;
+		}
+		this.show();
+		this.setPopupPosition(addBasicData.getAbsoluteLeft(), addBasicData.getAbsoluteTop() - getOffsetHeight());
+		Log.info("addBasicData OffsetHeight: " + addBasicData.getOffsetHeight() + "; offsetHeight: " + getOffsetHeight());
 	}
 
 }

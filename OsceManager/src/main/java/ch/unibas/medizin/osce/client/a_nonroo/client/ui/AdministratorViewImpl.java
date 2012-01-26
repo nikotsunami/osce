@@ -146,7 +146,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			public String getValue(AdministratorProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, "Name");
+		}, Messages.NAME);
 		paths.add("preName");
 		table.addColumn(new TextColumn<AdministratorProxy>() {
 
@@ -161,7 +161,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			public String getValue(AdministratorProxy object) {
 				return renderer.render(object.getPreName());
 			}
-		}, "Pre Name");
+		}, Messages.PRENAME);
 		paths.add("email");
 		table.addColumn(new TextColumn<AdministratorProxy>() {
 
@@ -176,7 +176,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			public String getValue(AdministratorProxy object) {
 				return renderer.render(object.getEmail());
 			}
-		}, "Email");
+		}, Messages.EMAIL);
 //	        paths.add("responsibilities");
 //	        table.addColumn(new TextColumn<AdministratorProxy>() {
 //

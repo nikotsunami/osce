@@ -117,7 +117,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, "");
+		}, Messages.LOCATION);
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {

@@ -200,7 +200,7 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 			public String getValue(NationalityProxy object) {
 				return renderer.render(object.getNationality());
 			}
-		}, "Nationality");
+		}, Messages.NATIONALITY);
 //        paths.add("standardizedPatient");
 //        table.addColumn(new TextColumn<NationalityProxy>() {
 //
