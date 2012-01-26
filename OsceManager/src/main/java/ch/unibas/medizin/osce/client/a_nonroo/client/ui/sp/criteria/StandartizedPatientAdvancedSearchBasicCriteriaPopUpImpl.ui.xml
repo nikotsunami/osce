@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+	<g:ValueListBox ui:field="bindType"></g:ValueListBox>
+	 <g:ValueListBox ui:field="field"/>
+	 	 <g:ValueListBox ui:field="comparition"/>
+	 <g:TextBox  ui:field="value"></g:TextBox>
+	 <g:Button ui:field="addAdvSeaBasicButton">Hinzufügen</g:Button>
+	 <br />
+	 	 <g:Button ui:field="closeBoxButton">Schliessen</g:Button>
+	
+	</g:HTMLPanel>
+</ui:UiBinder> 

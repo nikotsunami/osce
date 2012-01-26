@@ -42,6 +42,7 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.ProvidesKey;
@@ -175,6 +176,14 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 						StandardizedPatientActivity.this.onRangeChanged(q);
 					}
 				});
+		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				StandardizedPatientActivity.this.onRangeChanged(q);
+				
+			}
+		});
 	}
 
 	protected void showDetails(StandardizedPatientProxy StandardizedPatient) {
