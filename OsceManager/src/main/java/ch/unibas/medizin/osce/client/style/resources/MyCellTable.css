@@ -54,8 +54,14 @@
 .cellTableCell {
 	border: 0;
 	height: 20px;
-	padding: 1px 10px;
+	padding: 4px 10px;
 	overflow: hidden;
+	vertical-align: top;
+}
+
+.cellTableCell ul {
+	margin: 0;
+	padding-left: 12px;
 }
 
 .cellTableFirstColumnFooter {

@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.style.interfaces;
+package ch.unibas.medizin.osce.client.style.resources;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;

@@ -12,8 +12,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
-import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;

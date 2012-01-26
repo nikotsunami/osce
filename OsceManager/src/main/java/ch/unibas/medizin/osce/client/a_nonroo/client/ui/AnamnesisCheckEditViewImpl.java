@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +23,9 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -34,6 +38,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -67,11 +72,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	TextBox text;
 	@UiField
 	VerticalPanel valuePanel;
-//	@UiField
-//	TextBox value;
 	
 	// TODO: Fill
-//	String value = "";
+	public String value = "";
 	
 	@UiField
 	SpanElement labelType;
@@ -101,6 +104,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 	private Delegate delegate;
 	private Presenter presenter;
+	
+	ArrayList<HorizontalPanel> mCFields = new ArrayList<HorizontalPanel>();
 
 	public AnamnesisCheckEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
@@ -120,22 +125,13 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		labelText.setInnerText(Messages.TEXT + ":");
 		labelValue.setInnerText(Messages.VALUE + ":");
 		
-		HorizontalPanel valueThing = new HorizontalPanel();
-		valueThing.add(new TextBox());
-		valueThing.add(addButton);
-		valuePanel.add(valueThing);
+		addValueField();
 		
 		addButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				IndexedPanel lastPanel = (IndexedPanel) valuePanel.getWidget(valuePanel.getWidgetCount() - 1);
-				lastPanel.getWidget(1).removeFromParent();
-				HorizontalPanel newPanel = new HorizontalPanel();
-				newPanel.add(new TextBox());
-				newPanel.add(addButton);
-				valuePanel.add(newPanel);
+				addValueField();
 			}
-			
 		});
 		
 		type.addValueChangeHandler(new ValueChangeHandler<AnamnesisCheckTypes>() {
@@ -153,11 +149,55 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			}
 		});
 		
+		Log.info("type.getValue() = " + type.getValue());
+		
 		if (type.getValue() == AnamnesisCheckTypes.QuestionMultM || type.getValue() == AnamnesisCheckTypes.QuestionMultS) {
 			setMultipleFields(true);
-			
 		}
-//		Log.info("value = " + value);
+		
+		text.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				text.selectAll();
+			}
+		});
+	}
+	
+	private IconButton createDeleteButton() {
+		IconButton button = new IconButton();
+		button.setIcon("trash");
+		button.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				deleteValueField((HorizontalPanel) ((Widget) event.getSource()).getParent());
+			}
+		});
+		return button;
+	}
+	
+	private void deleteValueField(HorizontalPanel parentPanel) {
+		// Check if last field
+		if (valuePanel.getWidget(valuePanel.getWidgetCount() - 1).equals(parentPanel)) {
+			((HorizontalPanel)valuePanel.getWidget(valuePanel.getWidgetCount() - 2)).add(addButton);
+		}
+		valuePanel.remove(parentPanel);
+	}
+	
+	private void addValueField() {
+		HorizontalPanel newPanel = new HorizontalPanel();
+		TextBox textBox = new TextBox();
+		textBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				((TextBox) event.getSource()).selectAll();
+			}
+		});
+		newPanel.add(textBox);
+		if (valuePanel.getWidgetCount() > 0)
+			newPanel.add(createDeleteButton());
+		newPanel.add(addButton);
+		valuePanel.add(newPanel);
+		textBox.setFocus(true);
 	}
 	
 	private void setMultipleFields(boolean multipleFields) {
@@ -204,10 +244,11 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 	@UiHandler("save")
 	void onSave(ClickEvent event) {
-//		value = ((TextBox)((IndexedPanel) valuePanel.getWidget(0)).getWidget(0)).getText();
+		value = ((TextBox)((IndexedPanel) valuePanel.getWidget(0)).getWidget(0)).getText();
+		value.replace('|', '/');
 		if (multipleFields) {
 			for (int i=1; i < valuePanel.getWidgetCount(); i++) {
-//				value += "|" + ((TextBox)((IndexedPanel) valuePanel.getWidget(i)).getWidget(0)).getText();
+				value += "|" + ((TextBox)((IndexedPanel) valuePanel.getWidget(i)).getWidget(0)).getText().replace('|', '/');
 			}
 		}
 		delegate.saveClicked();
@@ -241,5 +282,34 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	@Override
+	public String getValue() {
+		return value;
+	}
+	
+	@Override
+	public void update(String value) {
+		if (type.getValue() == AnamnesisCheckTypes.QuestionMultM || type.getValue() == AnamnesisCheckTypes.QuestionMultS)
+			setMultipleFields(true);
+		else
+			setMultipleFields(false);
+		
+		if (value == null) {
+			this.value = "";
+			return;
+		}
+		
+		this.value = value;
+		String substr[] = value.split("\\|");
 
+		IndexedPanel lastPanel = (IndexedPanel) valuePanel.getWidget(valuePanel.getWidgetCount() - 1);
+		((HasText)lastPanel.getWidget(0)).setText(substr[0]);
+		
+		for (int i=1; i < substr.length; i++) {
+			addValueField();
+			lastPanel = (IndexedPanel) valuePanel.getWidget(valuePanel.getWidgetCount() - 1);
+			((HasText)lastPanel.getWidget(0)).setText(substr[i]);
+		}
+	}
 }

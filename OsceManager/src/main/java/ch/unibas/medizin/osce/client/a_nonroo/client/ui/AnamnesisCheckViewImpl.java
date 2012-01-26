@@ -6,12 +6,18 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
+
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.resources.QuestionTypeImages;
 
+import com.google.gwt.cell.client.ImageCell;
+import com.google.gwt.cell.client.ImageResourceCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -21,6 +27,10 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -28,11 +38,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -134,20 +146,33 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 
 		paths.add("type");
-		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-				public String render(java.lang.String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
-
+		
+		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
 			@Override
-			public String getValue(AnamnesisCheckProxy object) {
-				return renderer.render(object.getType().toString());
+			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+				QuestionTypeImages resources = GWT.create(QuestionTypeImages.class);
+				String html = "";
+				switch (proxy.getType()) {
+				case Title:
+					html = "<img src=\"" + resources.title().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_TITLE + "\" />";
+					break;
+				case QuestionMultM:
+					html = "<img src=\"" + resources.questionMultM().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_MULTM + "\" />";
+					break;
+				case QuestionMultS:
+					html = "<img src=\"" + resources.questionMultS().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_MULTS + "\" />";
+					break;
+				case QuestionYesNo:
+					html = "<img src=\"" + resources.questionYesNo().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_YESNO + "\" />";
+					break;
+				case QuestionOpen:
+				default:
+					html = "<img src=\"" + resources.questionOpen().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_OPEN + "\" />";
+				}
+				return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
 			}
-		}, "Type");
+		}, Messages.TYPE);
+		
 		paths.add("text");
 		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 
@@ -162,22 +187,50 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 			public String getValue(AnamnesisCheckProxy object) {
 				return renderer.render(object.getText());
 			}
-		}, "Text");
+		}, Messages.TEXT);
 		paths.add("value");
-		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-				public String render(java.lang.String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
-
+		
+		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
 			@Override
-			public String getValue(AnamnesisCheckProxy object) {
-				return renderer.render(object.getValue());
+			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+				// TODO Auto-generated method stub
+				String html = "";
+				String[] values;
+				
+				if (proxy != null) {
+					values = proxy.getValue().split("\\|");
+					if (values.length > 1) {
+						html = "<ul>";
+						for (int i=0; i < values.length; i++) {
+							html += "<li>" + values[i] + "</li>";
+						}
+						html += "</ul>";
+					} else {
+						html = values[0];
+					}
+				}
+				
+				return (new SafeHtmlBuilder().appendHtmlConstant(html)).toSafeHtml();
 			}
-		}, "Value");
+			
+		}, Messages.VALUE);
+		
+//		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
+//
+//			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+//
+//				public String render(java.lang.String obj) {
+//					return obj == null ? "" : String.valueOf(obj);
+//				}
+//			};
+//
+//			@Override
+//			public String getValue(AnamnesisCheckProxy object) {
+//				return renderer.render(object.getValue());
+//			}
+//		}, "Value");
+		
+		table.addColumnStyleName(0, "iconCol");
 //		paths.add("createDate");
 //		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 //

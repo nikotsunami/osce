@@ -189,12 +189,20 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		filterPanelRoot.addMouseOutHandler(new MouseOutHandler() {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
-				updateCriteria();
-
-				// TODO: handle it from view
-				//view.updateSearch();
+				int mouseX = event.getClientX();
+				int mouseY = event.getClientY();
 				
-				hide();
+				Log.info("mouseX: " + mouseX + ", mouseY: " + mouseY);
+				Log.info("getOffsetWIdth(): " + getOffsetWidth() + ", getAbsoluteTop(): "+ getAbsoluteTop() + ", getAbsoluteLeft(): " + getAbsoluteLeft());
+				
+				if (mouseX < getAbsoluteLeft() || mouseX > getAbsoluteLeft() + getOffsetWidth() 
+						|| mouseY < getAbsoluteTop() || mouseY > getAbsoluteTop() + getOffsetHeight()) {
+					updateCriteria();
+
+					// TODO: handle it from view
+					//view.updateSearch();
+					hide();
+				}
 			}
 		});
 		
@@ -302,31 +310,20 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	}
 
 	public void updateCriteria() {
-		
 		criteria.clean();
 		
 		// scars
-		
 		if(haveScars.getSelectedIndex() == 1) {
-			
 			criteria.add("scar",Comparison.EQUALS,"1");
-			
 		} else if(haveScars.getSelectedIndex() == 2) {
-			
 			criteria.add("scar",Comparison.EQUALS,"0");
-			
 		}
 		
 		// gender
-		
 		if(patientGender.getSelectedIndex() == 1) {
-			
 			criteria.add("gender",Comparison.EQUALS,"1");
-			
 		} else if(patientGender.getSelectedIndex() == 2) {
-			
 			criteria.add("gender",Comparison.EQUALS,"2");
-			
 		}
 		
 		// weight
@@ -349,9 +346,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		
 		//birthday
 		Date d = patientBirthday.getValue();
-		
-
-		
 	}
 	
 	public SearchCriteria getCriteria() {

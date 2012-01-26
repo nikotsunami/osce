@@ -4,7 +4,8 @@
 	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 
-	<ui:style src="../styles.css" />
+	<ui:style src="../styles.css">
+	</ui:style>
 		
 	<g:HTMLPanel>
 		<div class="{style.patientControls} {style.controlsright}">
@@ -36,7 +37,7 @@
 							</tr>
 							<tr id='value'>
 								<td valign="top"><span class='{style.label}' ui:field="labelValue" /></td>
-								<td><g:VerticalPanel ui:field="valuePanel" /></td>
+								<td><g:VerticalPanel ui:field="valuePanel" addStyleNames="{style.AnamnesisMCValueSubPanel}" /></td>
 							</tr>
 						</tbody>
 					</table>

@@ -13,8 +13,8 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.style.interfaces.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.interfaces.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;

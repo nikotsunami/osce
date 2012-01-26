@@ -56,7 +56,7 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
         if (value.length() > 255) {
             value = value.substring(0, 255);
         }
-        obj.setValue(value);
+      //  obj.setValue(value);
     }
     
     public AnamnesisCheck AnamnesisCheckDataOnDemand.getSpecificAnamnesisCheck(int index) {

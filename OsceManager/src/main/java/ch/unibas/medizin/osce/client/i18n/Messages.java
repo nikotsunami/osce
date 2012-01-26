@@ -115,4 +115,12 @@ public class Messages {
 			public static final String VALUE = "Wert";
 			public static final String ADD_ANSWER = "Antwort hinzufügen";
 			
+			
+			
+			public static final String ANAMNESIS_QUESTION_MULTM = "Multiple-Choice mit Mehrfachauswahl";
+			public static final String ANAMNESIS_QUESTION_MULTS = "Multiple-Choice mit Einfachauswahl";
+			public static final String ANAMNESIS_QUESTION_YESNO = "Ja/Nein-Frage";
+			public static final String ANAMNESIS_QUESTION_OPEN = "Offene Frage";
+			public static final String ANAMNESIS_QUESTION_TITLE = "Trenntitel";
+			
 }

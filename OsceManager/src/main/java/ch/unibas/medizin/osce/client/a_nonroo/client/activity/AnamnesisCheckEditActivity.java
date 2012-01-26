@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
+import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -36,6 +37,8 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	private RequestFactoryEditorDriver<AnamnesisCheckProxy, AnamnesisCheckEditViewImpl> editorDriver;
 	private AnamnesisCheckProxy anamnesisCheck;
 	private boolean save;
+	
+	private AnamnesisCheckRequest request;
 
 	public AnamnesisCheckEditActivity(AnamnesisCheckDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
@@ -78,6 +81,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 		this.widget = panel;
 		this.view = anamnesisCheckEditView;
+		
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
@@ -94,9 +98,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 		if (this.place.getOperation() == AnamnesisCheckDetailsPlace.Operation.EDIT) {
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("anamnesisForm")
-			.fire(new Receiver<Object>() {
-
+			requests.find(place.getProxyId()).with("anamnesisForm").fire(new Receiver<Object>() {
 				public void onFailure(ServerFailure error) {
 					Log.error(error.getMessage());
 				}
@@ -124,19 +126,17 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	}
 
 	private void init() {
-
-		AnamnesisCheckRequest request = requests.anamnesisCheckRequest();
+		request = requests.anamnesisCheckRequest();
 
 		if (anamnesisCheck == null) {
-
 			AnamnesisCheckProxy anamnesisCheck = request.create(AnamnesisCheckProxy.class);
 			this.anamnesisCheck = anamnesisCheck;
 			view.setEditTitle(false);
-
 		} else {
-
+			// cannot be set via editor...
 			view.setEditTitle(true);
 		}
+		
 
 		Log.info("edit");
 
@@ -145,8 +145,11 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		editorDriver.edit(anamnesisCheck, request);
 
 		Log.info("flush");
-		editorDriver.flush();
+//		editorDriver.flush();
 		Log.debug("Create für: " + anamnesisCheck.getId());
+		
+		// manually update value fields... (no editor support)
+		view.update(anamnesisCheck.getValue());
 	}
 
 	@Override
@@ -162,12 +165,17 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		else
 			placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace!CANCEL"));
 	}
+	
+
 
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
-
-		editorDriver.flush().fire(new Receiver<Void>() {
+		request = (AnamnesisCheckRequest) editorDriver.flush();
+		anamnesisCheck = request.edit(anamnesisCheck);
+		anamnesisCheck.setValue(view.getValue());
+		
+		request.fire(new Receiver<Void>() {
 
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
@@ -184,7 +192,6 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 				Log.warn(" in AnamnesisCheck -" + message);
 
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
-
 			}
 
 			@Override

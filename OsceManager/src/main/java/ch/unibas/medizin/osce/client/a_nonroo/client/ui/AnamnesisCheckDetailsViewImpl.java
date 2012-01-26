@@ -3,7 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -15,6 +18,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -31,10 +37,13 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 	}
 
 	@UiField
-	HasClickHandlers edit;
+	IconButton edit;
 
 	@UiField
-	HasClickHandlers delete;
+	IconButton delete;
+	
+	@UiField
+	TabPanel anamnesisPanel;
 
 	private Delegate delegate;
 
@@ -51,16 +60,32 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 	 */
 	public AnamnesisCheckDetailsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		anamnesisPanel.selectTab(0);
+		anamnesisPanel.getTabBar().setTabText(0, Messages.ANAMNESIS_VALUES);
+		TabPanelHelper.moveTabBarToBottom(anamnesisPanel);
+		
+		edit.setText(Messages.EDIT);
+		delete.setText(Messages.DELETE);
+		
+		labelType.setInnerText(Messages.TYPE + ":");
+		labelValue.setInnerText(Messages.VALUE + ":");
 	}
-
-	@UiField
-	SpanElement id;
 	
 	@UiField
-	SpanElement value;
+	SpanElement labelType;
+	@UiField
+	SpanElement labelValue;
 	
 	@UiField
-	SpanElement text;
+	SpanElement header;
+	@UiField
+	SpanElement type;
+	@UiField
+	VerticalPanel valuePanel;
+	
+//	@UiField
+//	SpanElement text;
 
 //	@UiField
 //	SpanElement version;
@@ -76,21 +101,33 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 
 	AnamnesisCheckProxy proxy;
 
-	@UiField
-	SpanElement displayRenderer;
+//	@UiField
+//	SpanElement displayRenderer;
 
 	private Presenter presenter;
 
 	public void setValue(AnamnesisCheckProxy proxy) {
 		this.proxy = proxy;
-		id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-		value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
-		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
+		String headerText = "[";
+		headerText += proxy.getId() == null ? "" : String.valueOf(proxy.getId());
+		headerText += "] ";
+		headerText += proxy.getText() == null ? "" : String.valueOf(proxy.getText());
+		header.setInnerText(headerText);
+		
+		type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
+		
+		if (proxy.getValue() != null) {
+			String substrs[] = proxy.getValue().split("\\|");
+			for (int i = 0; i < substrs.length; i++) {
+				valuePanel.add(new Label(substrs[i]));
+			}
+		}
+		
 //		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
 //		createDate.setInnerText(proxy.getCreateDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getCreateDate()));
 //		anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
 //		scars.setInnerText(proxy.getScars() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance()).render(proxy.getScars()));
-		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy));
+//		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy));
 	}
 
 	@Override
