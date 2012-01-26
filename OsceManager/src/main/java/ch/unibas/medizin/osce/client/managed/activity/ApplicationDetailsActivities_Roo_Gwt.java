@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -191,6 +192,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleAnamnesisCheck(AnamnesisCheckProxy proxy) {
                 setResult(new AnamnesisCheckActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleAdvancedSearchCriteria(AdvancedSearchCriteriaProxy proxy) {
+                setResult(new AdvancedSearchCriteriaActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 
 import java.util.List;
 
@@ -37,4 +38,5 @@ public interface StandardizedPatientView  extends IsWidget{
     
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+	StandartizedPatientAdvancedSearchSubView getStandartizedPatientAdvancedSearchSubViewImpl();
 }

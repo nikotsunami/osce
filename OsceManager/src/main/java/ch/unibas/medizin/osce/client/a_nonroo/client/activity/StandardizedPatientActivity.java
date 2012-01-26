@@ -1,17 +1,31 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
+import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
+import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -24,9 +38,13 @@ import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -34,7 +52,8 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class StandardizedPatientActivity extends AbstractActivity implements
-StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
+StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, StandartizedPatientAdvancedSearchSubView.Delegate, 
+StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -45,6 +64,8 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private StandardizedPatientDetailsActivityMapper StandardizedPatientDetailsActivityMapper;
+	private StandartizedPatientAdvancedSearchSubView standartizedPatientAdvancedSearchSubView;
+	private CellTable<AdvancedSearchCriteriaProxy> criteriaTable;
 
 
 	public StandardizedPatientActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -62,10 +83,18 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		Log.info("SystemStartActivity.start()");
 		StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		systemStartView.setPresenter(this);
+		
+
+		
 		this.widget = panel;
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
+		standartizedPatientAdvancedSearchSubView.setDelegate(this);
+		
+		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
@@ -75,6 +104,8 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 				}
 			}
 		});
+		
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
 		init();
 
@@ -135,13 +166,24 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 			}
 
 		});
-
+		
+		
+		
+		
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
 						StandardizedPatientActivity.this.onRangeChanged(q);
 					}
 				});
+		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				StandardizedPatientActivity.this.onRangeChanged(q);
+				
+			}
+		});
 	}
 
 	protected void showDetails(StandardizedPatientProxy StandardizedPatient) {
@@ -151,9 +193,78 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(),
 				StandardizedPatientDetailsPlace.Operation.DETAILS));
 	}
+	
+	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 
+	@SuppressWarnings({ "deprecation"})
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
+		
+		
+		//TODO: ###david### test code
+		
+				List<String> fields =  Arrays.asList("weight", "height", "bmi");
+				List<String> values =  Arrays.asList("80", "180", "30");
+				//List<String> comparations =  Arrays.asList(Comparison2.EQUALS, Comparison2.LESS, Comparison2.MORE);
+				//List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
+				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment");
+				
+				
+				
+				requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+//				
+//				AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//				requestAdvSeaCritStd.edit(criteria);
+//				criteria.setBindType(BindType.AND);
+//				criteria.setComparation(Comparison2.EQUALS);
+//				criteria.setField(PossibleFields.weight);
+//				criteria.setValue("80");
+//				
+//				searchCriteria.add(criteria);
+//				
+//				criteriaTable.setRowData(searchCriteria);
+				/*searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.weight, BindType.AND,
+						Comparison2.EQUALS, "80"));
+				searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.height, BindType.OR,
+						Comparison2.LESS, "180"));
+				searchCriteria.add(new AdvancesSearchCriteriumOld (PossibleFields.bmi, BindType.AND,
+						Comparison2.MORE, "30"));*/
+				
+
+				
+				
+				requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, searchCriteria /*fields, bindType, comparations, values*/).fire(
+						new Receiver<Long>() {
+
+
+
+							public void onFailure(ServerFailure error) {
+
+							Log.error(error.getMessage());
+							//onStop();
+							}
+
+							
+							public void onViolation(Set<Violation> errors) {
+							Iterator<Violation> iter = errors.iterator();
+							String message = "";
+							while (iter.hasNext()) {
+							message += iter.next().getMessage() + "<br>";
+							}
+							Log.warn(" in Simpat -" + message);
+
+							
+						
+							//onStop();
+
+							}
+
+							@Override
+							public void onSuccess(Long response) {
+								//table.setRowData(range.getStart(), values);
+								
+							}
+						});
 		
 		// (1) Sorting
 		
@@ -166,9 +277,14 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 		
 		}
 		
+		
+		
 		// (2) Text search
 		
-		List<String> searchThrough = view.getSearchFilters();
+		/*List<String> */searchThrough = view.getSearchFilters();
+		
+		
+		
 		
 		// (3) Advanced search
 			
@@ -233,6 +349,67 @@ StandardizedPatientView.Presenter, StandardizedPatientView.Delegate {
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
+	}
+
+	@Override
+	public void filterTableClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addBasicCriteriaClicked(Button addBasicData) {
+		StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
+		basicCriteriaPopUp.setDelegate(this);
+		basicCriteriaPopUp.display(addBasicData);
+		
+		
+	}
+
+	@Override
+	public void addScarCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addAnamnesisCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addLanguageCriteriaClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addBasicCriteriaPopUpClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
+
+	@Override
+	public void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
+		
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		
+		AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		criteria = requestAdvSeaCritStd.edit(criteria);
+		criteria.setBindType(bindType);
+		criteria.setComparation(comparition);
+		criteria.setField(possibleFields);
+		criteria.setValue(string);
+		requestAdvSeaCritStd.fire();
+		searchCriteria.add(criteria);
+		
+		
+		criteriaTable.setRowData(searchCriteria);
+		
+		
+		
 	}
 
 }

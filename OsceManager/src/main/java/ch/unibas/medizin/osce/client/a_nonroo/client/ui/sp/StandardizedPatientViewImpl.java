@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 
 
 import com.google.gwt.core.client.GWT;
@@ -81,6 +82,13 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@UiField(provided = true)
 	CellTable<StandardizedPatientProxy> table;
 	
+	@UiField
+	StandartizedPatientAdvancedSearchSubViewImpl standartizedPatientAdvancedSearchSubViewImpl;
+	
+	public StandartizedPatientAdvancedSearchSubViewImpl getStandartizedPatientAdvancedSearchSubViewImpl() {
+		return standartizedPatientAdvancedSearchSubViewImpl;
+	}
+
 	protected Set<String> paths = new HashSet<String>();
 	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;
