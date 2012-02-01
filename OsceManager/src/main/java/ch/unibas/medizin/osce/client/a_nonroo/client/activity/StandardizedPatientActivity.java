@@ -207,7 +207,7 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 				List<String> values =  Arrays.asList("80", "180", "30");
 				//List<String> comparations =  Arrays.asList(Comparison2.EQUALS, Comparison2.LESS, Comparison2.MORE);
 				//List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
-				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment");
+				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment", "BIC", "IBAN", "bankName");
 				
 				
 				

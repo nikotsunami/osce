@@ -5,6 +5,6 @@ public enum Comparison2 {
 	EQUALS , LESS, MORE
 	/*public static String EQUALS = " = ";
 	public static String LESS =  " < ";
-	public static String MORE =  " > ";*/
+	public static String MORE =  " > ";*/, NOTEQUALS
 	
 }
