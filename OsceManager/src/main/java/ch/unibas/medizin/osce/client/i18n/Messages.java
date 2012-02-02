@@ -129,7 +129,7 @@ public class Messages {
 			public static final String COMPARISON = "Vergleich";
 			public static final String FIELD = "Feld";
 			public static final String BIND_TYPE = "Bind Type";
-			public static final String ADD = "Hiinzufügen";
+			public static final String ADD = "Hinzufügen";
 			public static final String BASIC_FILTER = "Basisfilter";
 			
 }

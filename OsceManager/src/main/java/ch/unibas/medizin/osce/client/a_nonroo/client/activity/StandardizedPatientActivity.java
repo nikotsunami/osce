@@ -19,6 +19,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standartized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
@@ -421,18 +423,18 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 	}
 	
 	private void initLanguageCriteriaSubView() {
-//		requests.languageRequestNonRoo().countLanguagesByName("").fire(new Receiver<Long>() {
-//			@Override
-//			public void onSuccess(Long response) {
-//				if (languagePopup == null) {
-//					return;
-//				}
-//				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
-////				response.
-////				languagePopup.getTable().setRowCount(response.intValue(), true);
-//
-////				onRangeChanged(q);
-//			}
-//		});
+		requests.spokenLanguageRequest().findAllSpokenLanguages().fire(new Receiver<List<SpokenLanguageProxy>>() {
+			@Override
+			public void onSuccess(List<SpokenLanguageProxy> response) {
+				if (languagePopup == null) {
+					return;
+				}
+				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
+				List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
+				values.addAll(response);
+				languagePopup.setLanguagePickerValues(values);
+			}
+			
+		});
 	}
 }

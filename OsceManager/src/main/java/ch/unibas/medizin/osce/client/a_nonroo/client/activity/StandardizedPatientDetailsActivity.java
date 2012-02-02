@@ -19,7 +19,10 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.domain.SpokenLanguage;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -77,6 +80,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private CellTable<AnamnesisFormProxy> anamnesisTable;
 	
 	StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
+	private CellTable<LangSkillProxy> langSkillTable;
 	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -108,6 +112,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 					standardizedPatientProxy = (StandardizedPatientProxy) response;
 					init();
 					initScar();
+					initLangSkills();
 				}
 			}
 		});
@@ -120,6 +125,21 @@ StandardizedPatientLangSkillSubView.Delegate {
 	// first you must make an new enum with langskills (A1, A2, B1, B2, C1, C2, native) and change the domain object
 	// have a look at the interface StandardizedPatientLangSkillSubView and in initScar you see how it is done usualy
 	protected void initLangSkills() {
+		this.langSkillTable = standardizedPatientLangSkillSubView.getLangSkillTable();
+		
+		// TODO: fill table, add button functionality
+		
+		// Fill ValueListBoxes
+		requests.spokenLanguageRequest().findAllSpokenLanguages().fire(new Receiver<List<SpokenLanguageProxy>>() {
+			@Override
+			public void onSuccess(List<SpokenLanguageProxy> response) {
+				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
+				List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
+				values.addAll(response);
+				standardizedPatientLangSkillSubView.setLanguagePickerValues(values);
+			}
+			
+		});
 	}
 	
 	protected void initScar() {
@@ -234,9 +254,6 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 	
-	public void addLangSkillClicked() {
-	}
-	
 	@Override
 	public void deleteScarClicked(ScarProxy scar) {
 		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
@@ -287,4 +304,8 @@ StandardizedPatientLangSkillSubView.Delegate {
 		});
 	}
 
+	@Override
+	public void addLangSkillClicked(SpokenLanguageProxy lang, LangSkillLevel skill) {
+		// TODO Auto-generated method stub
+	}
 }

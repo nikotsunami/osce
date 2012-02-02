@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,9 +8,11 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
@@ -54,18 +57,16 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	private Delegate delegate;
 	
 	@UiField(provided = true)
-    ValueListBox<LangSkillProxy> languageBox = new ValueListBox<LangSkillProxy>(new AbstractRenderer<LangSkillProxy>() {
-
-        public String render(LangSkillProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getSpokenlanguage());
+    ValueListBox<SpokenLanguageProxy> languageBox = new ValueListBox<SpokenLanguageProxy>(new AbstractRenderer<SpokenLanguageProxy>() {
+        public String render(SpokenLanguageProxy obj) {
+            return obj == null ? "" : String.valueOf(obj.getLanguageName());
         }
     });
 	
 	@UiField(provided = true)
-    ValueListBox<LangSkillProxy> langSkillBox = new ValueListBox<LangSkillProxy>(new AbstractRenderer<LangSkillProxy>() {
-
-        public String render(LangSkillProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getSkill());
+    ValueListBox<LangSkillLevel> langSkillBox = new ValueListBox<LangSkillLevel>(new AbstractRenderer<LangSkillLevel>() {
+        public String render(LangSkillLevel obj) {
+            return obj == null ? "" : String.valueOf(obj.toString());
         }
     });
 	
@@ -80,6 +81,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		
 		initTable();
 		langSkillAddButton.setText(Messages.ADD_LANGSKILL);
+		langSkillBox.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
 	}
 	
 	private void initTable() {
@@ -153,7 +155,8 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	
 	@UiHandler("langSkillAddButton")
 	public void langSkillAddButtonClicked(ClickEvent e) {
-		delegate.addLangSkillClicked();
+		// TODO send relevant data...
+//		delegate.addLangSkillClicked();
 	}
 
 
@@ -163,17 +166,22 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	}
 
 	@Override
-	public ValueListBox<LangSkillProxy> getLanguageBox() {
+	public ValueListBox<SpokenLanguageProxy> getLanguageBox() {
 		return languageBox;
 	}
 
 	@Override
-	public ValueListBox<LangSkillProxy> getLangSkillBox() {
+	public ValueListBox<LangSkillLevel> getLangSkillBox() {
 		return langSkillBox;
 	}
 
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
+	}
+
+	@Override
+	public void setLanguagePickerValues(List<SpokenLanguageProxy> values) {
+		languageBox.setAcceptableValues(values);
 	}
 }
