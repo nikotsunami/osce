@@ -394,3 +394,7 @@ body {
 .AnamnesisMCValueSubPanel table {
 	margin: 2px 0;
 }
+
+.popupParent {
+	border: 10px solid #000;
+}

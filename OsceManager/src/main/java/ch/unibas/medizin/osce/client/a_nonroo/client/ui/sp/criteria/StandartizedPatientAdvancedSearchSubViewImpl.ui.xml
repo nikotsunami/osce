@@ -6,15 +6,14 @@
 	 
 	<ui:style src="../../../styles.css" />
 	
-	
 <g:HTMLPanel styleName="{style.listView}">
     <div style="height:3em;"/>
-<table>
-    <tr><td><g:Button ui:field="addBasicData">Basisfilter...</g:Button> </td>
-    <td><g:Button ui:field="addScar">Merkmale...</g:Button> </td>
-    <td><g:Button ui:field="addAnamnesis">Anamnesiswerte...</g:Button> </td>
-    <td><g:Button ui:field="addLanguage">Sprachen...</g:Button> </td></tr>
-  </table>
+	<g:HorizontalPanel spacing ="4">
+		<my:IconButton ui:field="addBasicData" icon="wrench"/>
+	    <my:IconButton ui:field="addScar" icon="search"/>
+	    <my:IconButton ui:field="addAnamnesis" icon="pencil"/>
+	    <my:IconButton ui:field="addLanguage" icon="flag"/>
+  	</g:HorizontalPanel>
     <b:CellTable pageSize="8" ui:field="table" width="100%"/>
     <div class="{style.controls}">      
       <b:SimplePager ui:field="pager" display="{table}"/>

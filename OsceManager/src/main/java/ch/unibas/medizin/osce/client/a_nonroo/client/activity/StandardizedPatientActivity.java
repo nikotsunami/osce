@@ -12,6 +12,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup.Delegate;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
@@ -52,8 +55,11 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class StandardizedPatientActivity extends AbstractActivity implements
-StandardizedPatientView.Presenter, StandardizedPatientView.Delegate, StandartizedPatientAdvancedSearchSubView.Delegate, 
-StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
+	StandardizedPatientView.Presenter, 
+	StandardizedPatientView.Delegate, 
+	StandartizedPatientAdvancedSearchSubView.Delegate, 
+	StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate, 
+	StandardizedPatientAdvancedSearchLanguagePopup.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -167,9 +173,6 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 
 		});
 		
-		
-		
-		
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
@@ -233,61 +236,52 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 
 				
 				
-				requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, searchCriteria /*fields, bindType, comparations, values*/).fire(
-						new Receiver<Long>() {
+		requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name",
+				Sorting.ASC, q, searchThrough, searchCriteria /*
+															 * fields, bindType,
+															 * comparations,
+															 * values
+															 */).fire(
+				new Receiver<Long>() {
+					public void onFailure(ServerFailure error) {
+						Log.error(error.getMessage());
+						// onStop();
+					}
 
-
-
-							public void onFailure(ServerFailure error) {
-
-							Log.error(error.getMessage());
-							//onStop();
-							}
-
-							
-							public void onViolation(Set<Violation> errors) {
-							Iterator<Violation> iter = errors.iterator();
-							String message = "";
-							while (iter.hasNext()) {
+					public void onViolation(Set<Violation> errors) {
+						Iterator<Violation> iter = errors.iterator();
+						String message = "";
+						while (iter.hasNext()) {
 							message += iter.next().getMessage() + "<br>";
-							}
-							Log.warn(" in Simpat -" + message);
+						}
+						Log.warn(" in Simpat -" + message);
+						// onStop();
+					}
 
-							
-						
-							//onStop();
+					@Override
+					public void onSuccess(Long response) {
+						// table.setRowData(range.getStart(), values);
 
-							}
-
-							@Override
-							public void onSuccess(Long response) {
-								//table.setRowData(range.getStart(), values);
-								
-							}
-						});
+					}
+				});
 		
 		// (1) Sorting
-		
+
 		Boolean asc = true;
 		String sortField = "name"; // TODO: handle sort change events
-		
-		if(table.getColumnSortList().size()>0) {
-		
+
+		if (table.getColumnSortList().size() > 0) {
+
 			asc = table.getColumnSortList().get(0).isAscending();
-		
+
 		}
-		
-		
-		
+
 		// (2) Text search
-		
-		/*List<String> */searchThrough = view.getSearchFilters();
-		
-		
-		
-		
+
+		/* List<String> */searchThrough = view.getSearchFilters();
+
 		// (3) Advanced search
-			
+
 		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> values) {
@@ -357,13 +351,17 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 		
 	}
 
+	StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp; 
+	
 	@Override
 	public void addBasicCriteriaClicked(Button addBasicData) {
-		StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
+		if (basicCriteriaPopUp != null && basicCriteriaPopUp.isShowing()) {
+			basicCriteriaPopUp.hide();
+			return;
+		}
+		basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
 		basicCriteriaPopUp.setDelegate(this);
 		basicCriteriaPopUp.display(addBasicData);
-		
-		
 	}
 
 	@Override
@@ -378,10 +376,19 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 		
 	}
 
+	StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
+	
 	@Override
-	public void addLanguageCriteriaClicked() {
-		// TODO Auto-generated method stub
+	public void addLanguageCriteriaClicked(Button addLanguageButton) {
+		initLanguageCriteriaSubView();
 		
+		if (languagePopup != null && languagePopup.isShowing()) {
+			languagePopup.hide();
+			return;
+		}
+		languagePopup = new StandardizedPatientAdvancedSearchLanguagePopupImpl();
+		languagePopup.setDelegate(this);
+		languagePopup.display(addLanguageButton);
 	}
 
 	@Override
@@ -405,11 +412,27 @@ StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate {
 		requestAdvSeaCritStd.fire();
 		searchCriteria.add(criteria);
 		
-		
 		criteriaTable.setRowData(searchCriteria);
-		
-		
+	}
+	
+	@Override
+	public void addLanguageButtonClicked(String language, String skill) {
 		
 	}
-
+	
+	private void initLanguageCriteriaSubView() {
+//		requests.languageRequestNonRoo().countLanguagesByName("").fire(new Receiver<Long>() {
+//			@Override
+//			public void onSuccess(Long response) {
+//				if (languagePopup == null) {
+//					return;
+//				}
+//				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
+////				response.
+////				languagePopup.getTable().setRowCount(response.intValue(), true);
+//
+////				onRangeChanged(q);
+//			}
+//		});
+	}
 }
