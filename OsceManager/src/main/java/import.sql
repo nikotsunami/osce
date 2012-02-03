@@ -52,8 +52,8 @@ INSERT INTO `osce`.`standardized_patient` (`birthday`, `city`, `email`, `gender`
 INSERT INTO `osce`.`standardized_patient` (`birthday`, `city`, `email`, `gender`, `mobile`, `name`, `postal_code`, `pre_name`, `street`, `telephone`, `version`, `nationality`, `profession`, `bank_account`, `descriptions`, `anamnesis_form`) VALUES ('2010-10-10', 'Basel', 'foo@bar.com', '1', '123456789', 'Bar', '4000', 'Foo', 'Samplestreet 42', '123456789', '0', '4', '1', '1', '1', 1);
 INSERT INTO `osce`.`standardized_patient` (`birthday`, `city`, `email`, `gender`, `mobile`, `name`, `postal_code`, `pre_name`, `street`, `telephone`, `version`, `nationality`, `profession`, `bank_account`, `descriptions`, `anamnesis_form`) VALUES ('2010-10-10', 'Basel', 'foo@bar.com', '1', '123456789', 'Bar', '4000', 'Foo', 'Samplestreet 42', '123456789', '0', '4', '1', '1', '1', 1);
 
-INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES ('gut', '1', '1', '0');
-INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES ('Muttersprache', '3', '1', '0');
+INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES (1, '1', '1', '0');
+INSERT INTO `osce`.`lang_skill` (`skill`, `spokenlanguage`, `standardizedpatient`, `version`) VALUES (2, '3', '1', '0');
 
 INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Oberarm (links)', '0', '0');
 INSERT INTO `osce`.`scar` (`bodypart`, `trait_type`, `version`) VALUES ('Oberarm (rechts)', '0', '0');

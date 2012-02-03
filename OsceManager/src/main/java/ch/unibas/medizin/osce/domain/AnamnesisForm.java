@@ -30,7 +30,7 @@ public class AnamnesisForm {
     private Set<AnamnesisChecksValue> anamnesischecksvalues = new HashSet<AnamnesisChecksValue>();
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name ="scars")//"anamnesis_forms_scars"
+ //   @JoinTable(name ="scars")//"anamnesis_forms_scars"
 //    		joinColumns = { @JoinColumn(name="anamnesis_forms") } 
 //    		, inverseJoinColumns = { @JoinColumn(name = "scars") })
     private Set<Scar> scars = new HashSet<Scar>();

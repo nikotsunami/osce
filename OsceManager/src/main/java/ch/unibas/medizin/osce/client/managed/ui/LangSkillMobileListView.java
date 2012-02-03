@@ -64,7 +64,7 @@ public class LangSkillMobileListView extends LangSkillMobileListView_Roo_Gwt {
             }
             SafeHtmlBuilder sb = new SafeHtmlBuilder();
             if (value.getSkill() != null) {
-                sb.appendEscaped(primaryRenderer.render(value.getSkill()));
+                //sb.appendEscaped(primaryRenderer.render(value.getSkill()));
             }
             sb.appendHtmlConstant("<div style=\"position:relative;\">");
             sb.appendHtmlConstant("<div class=\"" + secondaryStyle + "\">");
