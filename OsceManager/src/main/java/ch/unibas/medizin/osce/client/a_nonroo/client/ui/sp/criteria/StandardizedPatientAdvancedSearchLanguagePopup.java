@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import com.google.gwt.place.shared.Place;
@@ -22,7 +23,7 @@ public interface StandardizedPatientAdvancedSearchLanguagePopup {
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void addLanguageButtonClicked(String language, String skill);
+		void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill);
 //		void addLanguagePopupClicked();
 //		void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition);
 	}

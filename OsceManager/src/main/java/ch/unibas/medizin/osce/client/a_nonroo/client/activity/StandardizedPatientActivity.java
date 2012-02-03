@@ -28,6 +28,7 @@ import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
@@ -418,8 +419,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 	}
 	
 	@Override
-	public void addLanguageButtonClicked(String language, String skill) {
-		
+	public void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill) {
+		// TODO implement
 	}
 	
 	private void initLanguageCriteriaSubView() {
@@ -429,12 +430,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 				if (languagePopup == null) {
 					return;
 				}
-				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
 				List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
 				values.addAll(response);
 				languagePopup.setLanguagePickerValues(values);
 			}
-			
 		});
 	}
 }

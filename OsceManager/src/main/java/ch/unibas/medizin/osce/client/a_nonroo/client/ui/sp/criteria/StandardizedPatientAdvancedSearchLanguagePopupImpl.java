@@ -66,7 +66,7 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 	@UiHandler("addLanguageButton")
 	public void addLanguageButtonClicked(ClickEvent event) {
 		// TODO delegate.clickedyclick();
-		delegate.addLanguageButtonClicked("1", "2");
+		delegate.addLanguageButtonClicked(language.getValue(), skill.getValue());
 		this.hide();
 	}
 
