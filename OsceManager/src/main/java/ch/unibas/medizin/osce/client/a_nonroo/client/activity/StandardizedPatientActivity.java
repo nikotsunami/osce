@@ -12,6 +12,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchPopup;
@@ -69,7 +71,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 		StandartizedPatientAdvancedSearchSubView.Delegate, 
 		StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate, 
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate,
-		StandardizedPatientAdvancedSearchScarPopup.Delegate {
+		StandardizedPatientAdvancedSearchScarPopup.Delegate, 
+		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -362,6 +365,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 	}
 
 	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
+	private StandardizedPatientAdvancedSearchAnamnesisPopup anamnesisPopup;
 	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
 	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
 	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
@@ -400,10 +404,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 	public void addAnamnesisCriteriaClicked(Button parentButton) {
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
-//			if (advancedSearchPopup == scarPopup) {
-//				return;
-//			}
+			if (advancedSearchPopup == anamnesisPopup) {
+				return;
+			}
 		}
+		anamnesisPopup = new StandardizedPatientAdvancedSearchAnamnesisPopupImpl();
+		anamnesisPopup.setDelegate(this);
+		anamnesisPopup.display(parentButton);
+		advancedSearchPopup = anamnesisPopup;
 	}
 	
 	@Override
@@ -486,5 +494,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 	public void addScarButtonClicked(ScarProxy scarType, BindType bindType, Comparison2 comparison) {
 		// TODO Auto-generated method stub
 		Log.info("ScarType:" + scarType.getTraitType().toString() + ": " + scarType.getBodypart());
+	}
+
+	@Override
+	public void addAnamnesisValueButtonClicked() {
+		// TODO Auto-generated method stub
+		
 	}
 }
