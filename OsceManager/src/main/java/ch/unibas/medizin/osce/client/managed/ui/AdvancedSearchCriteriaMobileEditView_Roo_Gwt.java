@@ -47,6 +47,9 @@ public abstract class AdvancedSearchCriteriaMobileEditView_Roo_Gwt extends Compo
         }
     });
 
+    @UiField
+    LongBox objectId;
+
     @UiField(provided = true)
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
 

@@ -26,6 +26,9 @@ public class AdvancedSearchCriteria {
     
     @NotNull
 	private PossibleFields field;
+    
+	private Long objectId;
+    
     @NotNull
 	private BindType bindType;
     @NotNull

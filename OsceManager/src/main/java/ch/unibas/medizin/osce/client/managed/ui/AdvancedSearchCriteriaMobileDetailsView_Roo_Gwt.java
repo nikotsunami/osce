@@ -33,6 +33,9 @@ public abstract class AdvancedSearchCriteriaMobileDetailsView_Roo_Gwt extends Co
     Element field;
 
     @UiField
+    Element objectId;
+
+    @UiField
     Element bindType;
 
     @UiField
@@ -48,6 +51,7 @@ public abstract class AdvancedSearchCriteriaMobileDetailsView_Roo_Gwt extends Co
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         field.setInnerText(proxy.getField() == null ? "" : String.valueOf(proxy.getField()));
+        objectId.setInnerText(proxy.getObjectId() == null ? "" : String.valueOf(proxy.getObjectId()));
         bindType.setInnerText(proxy.getBindType() == null ? "" : String.valueOf(proxy.getBindType()));
         comparation.setInnerText(proxy.getComparation() == null ? "" : String.valueOf(proxy.getComparation()));
         value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));

@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
@@ -18,9 +19,9 @@ public interface LangSkillProxy extends EntityProxy {
 
     abstract void setVersion(Integer version);
 
-    abstract String getSkill();
+    abstract LangSkillLevel getSkill();
 
-    abstract void setSkill(String skill);
+    abstract void setSkill(LangSkillLevel skill);
 
     abstract StandardizedPatientProxy getStandardizedpatient();
 

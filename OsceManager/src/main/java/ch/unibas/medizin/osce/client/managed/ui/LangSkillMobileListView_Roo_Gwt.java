@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -29,7 +30,7 @@ public abstract class LangSkillMobileListView_Roo_Gwt extends MobileProxyListVie
     }
 
     public void init() {
-        paths.add("skill");
         paths.add("id");
+        paths.add("version");
     }
 }

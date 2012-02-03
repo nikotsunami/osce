@@ -50,12 +50,24 @@
     
             
             
-            <tr id="field">
+            
+            
+            
+            
+        <tr id="field">
                 <td>
                     <div class="{style.label}">Field:</div>
                 </td>
                 <td>
                     <g:ValueListBox ui:field="field"/>
+                </td>
+            </tr>
+            <tr id="objectId">
+                <td>
+                    <div class="{style.label}">Object Id:</div>
+                </td>
+                <td>
+                    <g:LongBox ui:field="objectId"/>
                 </td>
             </tr>
             <tr id="bindType">

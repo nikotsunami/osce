@@ -76,6 +76,21 @@ public abstract class AdvancedSearchCriteriaListView_Roo_Gwt extends AbstractPro
                 return renderer.render(object.getField());
             }
         }, "Field");
+        paths.add("objectId");
+        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(AdvancedSearchCriteriaProxy object) {
+                return renderer.render(object.getObjectId());
+            }
+        }, "Object Id");
         paths.add("bindType");
         table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 

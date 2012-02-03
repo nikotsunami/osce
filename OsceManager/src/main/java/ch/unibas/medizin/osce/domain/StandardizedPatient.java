@@ -1,64 +1,42 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
-import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.client.a_nonroo.client.Comparison;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
-
-import javax.persistence.Enumerated;
-import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import javax.validation.constraints.Pattern;
-import ch.unibas.medizin.osce.domain.Description;
-import javax.persistence.OneToOne;
-import ch.unibas.medizin.osce.domain.Bankaccount;
-import ch.unibas.medizin.osce.domain.Nationality;
-import javax.persistence.ManyToOne;
-import ch.unibas.medizin.osce.domain.Profession;
-import ch.unibas.medizin.osce.domain.AnamnesisForm;
-import java.util.Set;
-import ch.unibas.medizin.osce.domain.LangSkill;
-
-
-import com.google.gwt.view.client.Range;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Root;
-
-import org.apache.log4j.Logger;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.ejb.HibernateEntityManager;
-import org.hibernate.loader.criteria.CriteriaQueryTranslator;
-import org.hibernate.mapping.Map;
-import org.hibernate.criterion.Restrictions;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.Comparison;
+import ch.unibas.medizin.osce.shared.StandardizedPatientSearhField;
 
 
 @RooJavaBean
@@ -123,12 +101,15 @@ public class StandardizedPatient {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient")
     private Set<LangSkill> langskills = new HashSet<LangSkill>();
-    
+
+    /**
+     * @param q search term
+     * @return number of matches in the db found
+     */
     public static Long countPatientsBySearch(String q) {
     	EntityManager em = entityManager();
     	TypedQuery<Long> query = em.createQuery("SELECT COUNT(o) FROM StandardizedPatient o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Long.class);
     	query.setParameter("q", "%" + q + "%");
-    	
     	return query.getSingleResult();
     }
 
@@ -159,9 +140,6 @@ public class StandardizedPatient {
      */
     
     
-  	//TODO: ###SIEBERS### How i would do it
-    
-   
     private static class PatientSearch {
     	
     	private static StringBuilder wholeSearchString;
@@ -170,6 +148,8 @@ public class StandardizedPatient {
     	//semafors
     	private static boolean firstTime=true;
     	private static boolean firstComment=true;
+		//TODO: ***Changes david 
+    	private static boolean firstAnamnesisForm = true;
     	
     	//requesttype
     	private static String countRequest = "COUNT(StandardizedPatient)";
@@ -181,15 +161,15 @@ public class StandardizedPatient {
     	private static String whereKeyword = " where ";
     	private static String sorting;
     	
-    	//Comments
-    	private static final String COMMENT_TYPE = "###COMMENT_TYPE###";
-    	private static String joinComment = " LEFT JOIN stdPat.descriptions  ";
-    	private static String searchComment = " stdPat.descriptions LIKE '%" + COMMENT_TYPE + "%'" ;
+    	//scar
+    	//TODO: ***Changes david 
+    	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm  ";
     	
     	
-    	
-    	
-    	//contructor
+    	/**
+    	 * Search form reset
+    	 * @param requesttype count of records request if true; item search otherwise.
+    	 */
     	public PatientSearch(boolean requesttype){
     		
     		firstTime = true;
@@ -203,14 +183,9 @@ public class StandardizedPatient {
     			setCountrequest();
     		else
     			setNomalRequest();
-    		
-    		
-    			
     	}
     	
     	//basics
-    	
-    	
     	private void setCountrequest(){
     		if(firstTime){
     			wholeSearchString = new StringBuilder();
@@ -231,20 +206,19 @@ public class StandardizedPatient {
     			firstTime=false;
        		}
     	}
-    	
-    	public String getSQLString(){
+
+    	/**
+    	 * @return request string, the final combination of select , where and order by clause
+    	 */
+    	private String getSQLString(){
     		return wholeSearchString.append((endSearchString.length() > 0 ? whereKeyword + endSearchString : " ") + sorting ).toString();
     	}
     	
-    	public void printString() {
-    		log.error(wholeSearchString + (endSearchString.length() > 0 ? whereKeyword + endSearchString  : " ") + sorting );
+    	private void makeSortig(String sortColumn, Sorting sort){
+    		sorting = " ORDER BY " + sortColumn + " " + sort;
     	}
     	
-    	public void makeSortig(String sortColumn, Sorting sort){
-    		sorting = " ORDER BY " + sortColumn + " " + (sort == Sorting.ASC ? " ASC " : " DSC ");
-    	}
-    	
-    	public void endStringAppend(String bindType, String string){
+    	private void endStringAppend(String bindType, String string){
     		if (endSearchString.length() == 0)
     				endSearchString.append(" " + string);
     		else
@@ -256,59 +230,117 @@ public class StandardizedPatient {
 			
 	//	}
     	
-    	//comments
-    	
-    	public void addCommentSearch(String searchString){
-    		if (firstComment){
-    			wholeSearchString.append(joinComment);
-    			firstComment=false;
-    			endStringAppend( " OR ", searchComment.replace(COMMENT_TYPE, searchString));
-    		}
-    		
-    	}
-    	
+
     	//basic data
-    	
-    	public void searchWeight(Integer weight, String bindType,  String comparition){
+    	/**
+    	 * Search for scalable criteria
+    	 * @param weight - numeric vailue
+    	 * @param bindType co
+    	 * @param comparition
+    	 */
+    	void searchWeight(Integer weight, String bindType,  String comparition){
     		endStringAppend(bindType , " stdPat.weight " + comparition + weight );   		
     	}
     	
-    	public void searchBMI(Integer bmi, String bindType,  String comparition){
+    	void searchBMI(Integer bmi, String bindType,  String comparition){
     		endStringAppend(bindType ,  " stdPat.weight / (stdPat.height/100*stdPat.height/100) " + comparition + bmi );   		
     	}
+ //   	private searchScar(Long scarId, String bindType,  String comparition){
+  //  	}
     	
-    	public void searchHeight(Integer height, String bindType,  String comparition){
+    	void searchHeight(Integer height, String bindType,  String comparition){
     		endStringAppend(bindType , " stdPat.height " + comparition + height );   		
     	}
-    	
-    	public void makeSearchTextFileds (String searchWord, List<String> searchThrough){
+
+    	/**
+    	 * New build of context search approach
+    	 * @param searchWord
+    	 * @param searchThrough
+    	 */
+    	private void makeSearchTextFileds 
+    	(String searchWord, List<String> searchThrough){
     		Iterator<String> iter = searchThrough.iterator();
         	while (iter.hasNext()) {
-        		
-        		
     			String fieldname = (String) iter.next();
-    			
-    			log.info(fieldname);
-    			
-    			if (fieldname.equals("comment")){
-    				addCommentSearch(searchWord);
-    			}
-    			else if (fieldname.equals("name")){
-    				
-    			
-    			}
+    			log.info("PS: field inside iterator ["+fieldname+"]");
+    			StandardizedPatientSearhField field = StandardizedPatientSearhField.valueOf(fieldname);
+    			if(field == null)
+    				throw new SecurityException("Wrong search option "+fieldname+". Please set the correct one into the right list ");
+  	    		if (firstComment){
+   	    			firstComment=false;
+   	    		}
+  	    		else {
+  	    			endSearchString.append(" OR ");
+  	    		}
+  	    		endSearchString.append(field.getQueryPart());
     			
     		}
     	}
 
 
+    	/**
+    	 * psfixme: not done yet
+    	 * @param em
+    	 * @return
+    	 */
+		public TypedQuery<Long> makeQuery(EntityManager em) {
+			
+			TypedQuery<Long> q = em.createQuery(getSQLString(), Long.class);
+			Iterator<Scar> scarIter = scars.iterator();
+			int counter = 0;
+			while (scarIter.hasNext()) {
+				Scar scar = (Scar) scarIter.next();
+				q.setParameter(":scar"+ counter++, scar);
+			}
+			return q;
+			
+		}
     	
+    	// scar search
+		//TODO: ***Changes david 
+    	
+    	private int scarCounter = 0;
+    	private List<Scar> scars = new ArrayList<Scar>();
+
+		public void searchScar(long scarID, String bindType,  String comparitionSign) {
+    		if (firstAnamnesisForm){
+    			wholeSearchString.append(joinAnamnesisForm);
+    			firstAnamnesisForm=false;
+    			
+    		}
+    		
+    		if (comparitionSign.equals(" = ")){
+    			comparitionSign = " MEMBER OF ";
+    		} else if (comparitionSign.equals(" != ")){
+    			comparitionSign = " NOT MEMBER OF ";
+    		}
+    		
+    		Scar scar = Scar.findScar(scarID);
+    		// ":scar MEMBER OF stdPat.scars"
+    		endStringAppend( bindType, " :scar" + scarCounter++  + comparitionSign + " stdPat.scars ");
+    		scars.add(scar);
+
+    		
+    		// ":scar.id MEMBER OF stdPat.scars.id"
+    		//endStringAppend( " OR ", searchComment.replace(COMMENT_TYPE, searchString));
+			
+		}
+
+
     }
     
     
     
-    
- 	//TODO: ###SIEBERS### How I would do it
+
+    /**
+     * Counting of patients. Advanced Search
+     * @param sortColumn sorting option
+     * @param order order option (ASC - DESC)
+     * @param searchWord search item
+     * @param searchThrough search target
+     * @param searchCriteria criteria 
+     * @return
+     */
     public static Long countPatientsByAdvancedSearchAndSort(
     		String sortColumn,
     		Sorting order,
@@ -320,22 +352,25 @@ public class StandardizedPatient {
     		List<String> comparations,
     		List<String> values*/) {
     	
-    	log.info("countPatientsByAdvancedSearchAndSort");
-    	log.error("beginn");
     	
-    	EntityManager em = entityManager();;
-    	//make new Object
-    	log.error("make new object");
+    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
+    	log.debug("ps: countPatientsByAdvancedSearchAndSort");
+    	log.debug("parameters received: sortColumn "+sortColumn);
+    	log.debug("parameters received: order "+order);
+    	log.debug("parameters received: searchWord "+searchWord);
+    	log.debug("parameters received: searchThrough "+searchThrough);
+    	log.debug("parameters received: searchCriteria "+searchCriteria);
+    	
+    	EntityManager em = entityManager();
     	PatientSearch simpatSearch = new PatientSearch(true);
     	//add sorting
-    	log.error("add sorting");
+    	log.debug("add sorting");
     	simpatSearch.makeSortig(sortColumn, order);
     	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
-    	String comparitionSign = "";
     	
     	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
-    	int i =0;
     	while (iter.hasNext()) {
+        	String comparitionSign = "";
     		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
     		if (criterium.getComparation() == Comparison2.EQUALS){
     			comparitionSign = " = ";
@@ -346,8 +381,11 @@ public class StandardizedPatient {
     		else if (criterium.getComparation() == Comparison2.MORE){
     			comparitionSign = " > ";
     		}
+       		else if (criterium.getComparation() == Comparison2.NOTEQUALS){
+    			comparitionSign = " != ";
+    		}
 			
-			log.warn(criterium.getValue());
+			log.info("PS criterium: value is["+criterium.getValue()+"]");
 			
 			if (criterium.getField() == PossibleFields.height ){
 				simpatSearch.searchWeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
@@ -359,26 +397,27 @@ public class StandardizedPatient {
 				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
 			
-			
-			i++;
-			
+			//TODO: ***Changes david 
+			else if (criterium.getField() == PossibleFields.scar){
+				simpatSearch.searchScar(criterium.getId(), criterium.getBindType().toString(), comparitionSign);
+			}
 		}
-    	log.error("done");
+    	log.info("done");
     	
     	//simpatSearch.finalyzeBaseSQL();
     	
-    	simpatSearch.printString();
-    	
-    	log.info("SerchString: " + simpatSearch.getSQLString());
+    	log.info("PS: -----SearchString: " + simpatSearch.getSQLString());
     	
     	
     	TypedQuery<Long> q = em.createQuery(simpatSearch.getSQLString(), Long.class);
+    	q.setParameter("q", "%" + searchWord + "%");
     	
+//    	return simpatSearch.makeQuery(em).getSingleResult();
     	return q.getSingleResult();
     }
     	
 
-    
+    // ###OLD Code programmen by siebers, dont use
     /*
      * Get hibernate search criteria
      */
@@ -425,49 +464,51 @@ public class StandardizedPatient {
         }
         
         // (3) Advanced search
-        
         for(int i = 0; i<fields.size(); i++) {
         	
-        	String f = fields.get(i);
+        	String field = fields.get(i);
+    		Object value = values.get(i);
+        	log.info(field+", "+comparations.get(i)+", "+values.get(i));
         	
-        	log.info(f+", "+comparations.get(i)+", "+values.get(i));
-        
-        }
-        
-        for(int i = 0; i<fields.size(); i++) {
+        	if(field.equals("scar")) {
+        		//psfixme: scar search v is dangerous - parsing exception 
+        		/*Long scarId = Long.parseLong((String)value);
+        		 //first find Scar by ID
+                Scar scar = Scar.findScar(scarId);
+                Criteria scarCriteria = se.createCriteria(Scar.class);
+                scarCriteria.add(associationPath, "anamForm", joinType, withClause).;
+                "LEFT JOIN stdPat.anamnesisForm AS  " ... Where ... " :scar1 " +
+                		"MEMBER OF anamForm.scars" / " :scar1 NOT MEMBER OF anamForm.scars"
+                //at the end you must set the parameter
+                q.setParameter("scar1" , scar);
+                //thats all for scars, naturaly you have to check if possible fields is scar       */ 		
         	
-        	String f = fields.get(i);
-        	
-        	if(f.equals("scar")) {
-        		
-        		// TODO: implement scar search
-        		
         	} else { // ordinary table field
         		
-        		Object v = values.get(i);
         		
         		
         		// Temporary. Use an mapping type instead of this
-        		if(f.equals("weight") || f.equals("height")) {
-        			v = Integer.parseInt((String)v);
-        		} else if(f.equals("gender")) {
-        			if(((String)v).equals("1")) v = Gender.man;
-        			else v = Gender.woman;
-        		} else if(f.equals("birthday")) {
-        			v = Date.parse((String)v);
+        		if(field.equals("weight") || field.equals("height")) {
+        			value = Integer.parseInt((String)value);
+        		} else if(field.equals("gender")) {
+        			if(value.equals("1")) value = Gender.man;
+        			else value = Gender.woman;
+        		} else if(field.equals("birthday")) {
+        			//psfixme
+        			value = Date.parse((String)value);
         		}
         		    		
         		if(comparations.get(i) == Comparison.EQUALS) {
 
-        			crit.add(Restrictions.eq(f, v));
+        			crit.add(Restrictions.eq(field, value));
         		
         		} else if(comparations.get(i) == Comparison.MORE) {
         		
-        			crit.add(Restrictions.ge(f, v));
+        			crit.add(Restrictions.ge(field, value));
         			
         		} else if(comparations.get(i) == Comparison.LESS) {
         			
-        			crit.add(Restrictions.le(f, v));
+        			crit.add(Restrictions.le(field, value));
         			
         		}
         		
@@ -477,6 +518,8 @@ public class StandardizedPatient {
         
     	return crit;
     }
+    
+    // ###OLD Code programmen by siebers, dont use
     
     /*
      *  Get list by a criteria, paging and order
@@ -518,6 +561,7 @@ public class StandardizedPatient {
     }
     
     
+    // ###OLD Code programmen by siebers, dont use
     /*
      * Get count of results by criteria
      * 

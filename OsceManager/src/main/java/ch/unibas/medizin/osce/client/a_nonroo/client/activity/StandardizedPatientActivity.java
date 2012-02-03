@@ -13,7 +13,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup.Delegate;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
@@ -213,7 +212,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 				List<String> values =  Arrays.asList("80", "180", "30");
 				//List<String> comparations =  Arrays.asList(Comparison2.EQUALS, Comparison2.LESS, Comparison2.MORE);
 				//List<String> bindType =  Arrays.asList(BindType.AND, BindType.AND, BindType.AND);
-				List<String> searchThrough  =  Arrays.asList("name", "pre_name", "comment");
+				List<String> searchThrough  =  Arrays.asList("name", "preName", "comment", "BIC", "IBAN", "bankName");
 				
 				
 				

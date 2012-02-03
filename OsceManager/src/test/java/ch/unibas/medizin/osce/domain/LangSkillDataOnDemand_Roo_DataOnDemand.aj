@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.domain.SpokenLanguage;
 import ch.unibas.medizin.osce.domain.SpokenLanguageDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedPatientDataOnDemand;
-import java.lang.String;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,23 +36,20 @@ privileged aspect LangSkillDataOnDemand_Roo_DataOnDemand {
     public LangSkill LangSkillDataOnDemand.getNewTransientLangSkill(int index) {
         LangSkill obj = new LangSkill();
         setSkill(obj, index);
-        setSpokenlanguage(obj, index);
+        //setSpokenlanguage(obj, index);
         setStandardizedpatient(obj, index);
         return obj;
     }
     
     public void LangSkillDataOnDemand.setSkill(LangSkill obj, int index) {
-        String skill = "skill_" + index;
-        if (skill.length() > 40) {
-            skill = skill.substring(0, 40);
-        }
+        LangSkillLevel skill = LangSkillLevel.class.getEnumConstants()[0];
         obj.setSkill(skill);
     }
     
-    public void LangSkillDataOnDemand.setSpokenlanguage(LangSkill obj, int index) {
-        SpokenLanguage spokenlanguage = spokenLanguageDataOnDemand.getRandomSpokenLanguage();
-        obj.setSpokenlanguage(spokenlanguage);
-    }
+//    public void LangSkillDataOnDemand.setSpokenlanguage(LangSkill obj, int index) {
+//        SpokenLanguage spokenlanguage = spokenLanguageDataOnDemand.getRandomSpokenLanguage();
+//        obj.setSpokenlanguage(spokenlanguage);
+//    }
     
     public void LangSkillDataOnDemand.setStandardizedpatient(LangSkill obj, int index) {
         StandardizedPatient standardizedpatient = standardizedPatientDataOnDemand.getRandomStandardizedPatient();

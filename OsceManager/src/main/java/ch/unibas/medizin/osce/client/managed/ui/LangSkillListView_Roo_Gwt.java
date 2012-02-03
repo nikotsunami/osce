@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -63,9 +64,9 @@ public abstract class LangSkillListView_Roo_Gwt extends AbstractProxyListView<La
         paths.add("skill");
         table.addColumn(new TextColumn<LangSkillProxy>() {
 
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+            Renderer<ch.unibas.medizin.osce.shared.LangSkillLevel> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.LangSkillLevel>() {
 
-                public String render(java.lang.String obj) {
+                public String render(ch.unibas.medizin.osce.shared.LangSkillLevel obj) {
                     return obj == null ? "" : String.valueOf(obj);
                 }
             };
