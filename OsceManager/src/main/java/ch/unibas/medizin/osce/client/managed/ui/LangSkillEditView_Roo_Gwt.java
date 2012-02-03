@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -38,8 +39,13 @@ import java.util.List;
 
 public abstract class LangSkillEditView_Roo_Gwt extends Composite implements View<LangSkillEditView> {
 
-    @UiField
-    TextBox skill;
+    @UiField(provided = true)
+    ValueListBox<LangSkillLevel> skill = new ValueListBox<LangSkillLevel>(new AbstractRenderer<ch.unibas.medizin.osce.shared.LangSkillLevel>() {
+
+        public String render(ch.unibas.medizin.osce.shared.LangSkillLevel obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
     @UiField(provided = true)
     ValueListBox<StandardizedPatientProxy> standardizedpatient = new ValueListBox<StandardizedPatientProxy>(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy>());
@@ -53,5 +59,9 @@ public abstract class LangSkillEditView_Roo_Gwt extends Composite implements Vie
 
     public void setSpokenlanguagePickerValues(Collection<SpokenLanguageProxy> values) {
         spokenlanguage.setAcceptableValues(values);
+    }
+
+    public void setSkillPickerValues(Collection<LangSkillLevel> values) {
+        skill.setAcceptableValues(values);
     }
 }

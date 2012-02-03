@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,16 +43,20 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
+		addBasicData.setText(Messages.BASIC_FILTER);
+		addScar.setText(Messages.TRAITS);
+		addAnamnesis.setText(Messages.ANAMNESIS_VALUES);
+		addLanguage.setText(Messages.LANGUAGES);
 	}
 
 	@UiField
-    Button addBasicData;
+    IconButton addBasicData;
     @UiField
-    Button addScar;
+    IconButton addScar;
     @UiField
-    Button addAnamnesis;
+    IconButton addAnamnesis;
     @UiField
-    Button addLanguage;
+    IconButton addLanguage;
 
 	@UiHandler("addBasicData")
 	void onAddBasicDataClick(ClickEvent e) {
@@ -70,7 +75,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	
 	@UiHandler("addLanguage")
 	void onAddLanguageClick(ClickEvent e) {
-		delegate.addLanguageCriteriaClicked();
+		delegate.addLanguageCriteriaClicked(addLanguage);
 	}
 	
 	@UiField (provided = true)

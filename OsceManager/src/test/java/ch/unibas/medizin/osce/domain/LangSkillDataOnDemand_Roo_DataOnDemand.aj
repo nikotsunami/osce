@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.domain.SpokenLanguage;
 import ch.unibas.medizin.osce.domain.SpokenLanguageDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedPatientDataOnDemand;
-import java.lang.String;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;

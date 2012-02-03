@@ -5,15 +5,15 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.SpokenLanguage;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
-import java.lang.String;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 privileged aspect LangSkill_Roo_JavaBean {
     
-    public String LangSkill.getSkill() {
+    public LangSkillLevel LangSkill.getSkill() {
         return this.skill;
     }
     
-    public void LangSkill.setSkill(String skill) {
+    public void LangSkill.setSkill(LangSkillLevel skill) {
         this.skill = skill;
     }
     

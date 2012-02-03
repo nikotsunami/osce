@@ -245,6 +245,7 @@ hint
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-01-10 11:24:57
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-25 11:12:56
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-01-25 17:01:58
+
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-27 09:30:07
 finder list --class ch.unibas.medizin.osce.domain.Administrator
 finder list --class ch.unibas.medizin.osce.domain.Administrator
@@ -252,3 +253,8 @@ finder list --class ~.domain.Administrator
 finder add --finderName findAdministratorsByNameNotEquals
 finder list --class ~.domain.Administrator
 finder add --finderName findAdministratorsByNameNotEqualsAndPreNameLikeOrSemesters
+
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-01 14:01:41
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-01 16:32:01
+
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-03 11:18:06
