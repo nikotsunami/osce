@@ -21,7 +21,16 @@
     
 
     <g:Button ui:field="delete">Delete</g:Button>
-  <div id="id">
+  
+        
+        
+        
+        
+        
+        
+        
+        
+    <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
@@ -29,12 +38,13 @@
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-        
-        
-        
         <div id="field">
             <div class="{style.label}">Field</div>
             <div class="{style.value}" ui:field="field"/>
+        </div>
+        <div id="objectId">
+            <div class="{style.label}">Object Id</div>
+            <div class="{style.value}" ui:field="objectId"/>
         </div>
         <div id="bindType">
             <div class="{style.label}">Bind Type</div>

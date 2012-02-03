@@ -43,7 +43,11 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="email">
+      
+      
+      
+      
+    <tr id="email">
                 <td>
                     <div class="{style.label}">Email:</div>
                 </td>
@@ -51,7 +55,7 @@
                     <g:TextBox ui:field="email"/>
                 </td>
             </tr>
-      <tr id="name">
+            <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -59,7 +63,8 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-      <tr id="preName">
+            
+            <tr id="preName">
                 <td>
                     <div class="{style.label}">Pre Name:</div>
                 </td>
@@ -67,7 +72,7 @@
                     <g:TextBox ui:field="preName"/>
                 </td>
             </tr>
-      <tr id="semesters">
+            <tr id="semesters">
                 <td>
                     <div class="{style.label}">Semesters:</div>
                 </td>
@@ -75,7 +80,7 @@
                     <a:SemesterSetEditor ui:field="semesters"/>
                 </td>
             </tr>
-    </table>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

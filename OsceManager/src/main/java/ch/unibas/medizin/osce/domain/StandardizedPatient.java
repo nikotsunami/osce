@@ -161,15 +161,6 @@ public class StandardizedPatient {
     	private static String whereKeyword = " where ";
     	private static String sorting;
     	
-    	//Comments
-    	private static final String COMMENT_TYPE = "###COMMENT_TYPE###";
-    	private static String joinComment = " LEFT JOIN stdPat.descriptions  ";
-    	private static String searchComment = " stdPat.descriptions LIKE '%" + COMMENT_TYPE + "%'" ;
-    	//Bank account
-    	//???
-    	private static String joinBank = " LEFT JOIN stdPat.bankAccount  ";
-    	
-    	
     	//scar
     	//TODO: ***Changes david 
     	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm  ";
@@ -239,19 +230,6 @@ public class StandardizedPatient {
 			
 	//	}
     	
-    	/**
-    	 * Search in comments
-    	 * @param searchString item to find
-    	 */
-    	private void addCommentSearch(String searchString){
-    		if (firstComment){
-    			wholeSearchString.append(joinComment);
-    			firstComment=false;
-    			
-    		}
-    		endStringAppend( " OR ", searchComment.replace(COMMENT_TYPE, searchString));
-    		
-    	}
 
     	//basic data
     	/**
@@ -274,62 +252,37 @@ public class StandardizedPatient {
     		endStringAppend(bindType , " stdPat.height " + comparition + height );   		
     	}
 
+    	/**
+    	 * New build of context search approach
+    	 * @param searchWord
+    	 * @param searchThrough
+    	 */
     	private void makeSearchTextFileds 
     	(String searchWord, List<String> searchThrough){
     		Iterator<String> iter = searchThrough.iterator();
         	while (iter.hasNext()) {
-        		
-        		
     			String fieldname = (String) iter.next();
-    			
     			log.info("PS: field inside iterator ["+fieldname+"]");
-    			
-    			if (fieldname.equals("comment")){
-    				addCommentSearch(searchWord);
-    			}
-    			else if (fieldname.equals("name")){
-    				addNameSearch(searchWord);
-    			}
-    			else if (fieldname.equals("prename")){
-    				addPrenameSearch(searchWord);
-    			}
-    			else if (fieldname.equals("BIC")){
-    				addBICSearch(searchWord);
-    			}
-    			else if (fieldname.equals("IBAN")){
-    				addIBANSearch(searchWord);
-    			}
-    			else if (fieldname.equals("bankName")){
-    				addBankNameSearch(searchWord);
-    			}
+    			StandardizedPatientSearhField field = StandardizedPatientSearhField.valueOf(fieldname);
+    			if(field == null)
+    				throw new SecurityException("Wrong search option "+fieldname+". Please set the correct one into the right list ");
+  	    		if (firstComment){
+   	    			firstComment=false;
+   	    		}
+  	    		else {
+  	    			endSearchString.append(" OR ");
+  	    		}
+  	    		endSearchString.append(field.getQueryPart());
     			
     		}
     	}
 
+
     	/**
-    	 * Bank account and search through outer join connection
-    	 * @param searchWord
+    	 * psfixme: not done yet
+    	 * @param em
+    	 * @return
     	 */
-    	private void addBICSearch(String searchWord) {
-			endStringAppend(" OR ", " stdPat.bankAccount.BIC LIKE '%" + searchWord + "%' ");
-		}
-    	private void addIBANSearch(String searchWord) {
-			endStringAppend(" OR ", " stdPat.bankAccount.IBAN LIKE '%" + searchWord + "%' ");
-    		
-    	}
-    	private void addBankNameSearch(String searchWord) {
-			endStringAppend(" OR ", " stdPat.bankAccount.bankName LIKE '%" + searchWord + "%' ");
-    	}
-
-		private void addPrenameSearch(String searchWord) {
-			endStringAppend(" OR ", " stdPat.preName LIKE '%" + searchWord + "%' ");
-		}
-
-		private void addNameSearch(String searchWord) {
-			endStringAppend(" OR ", " stdPat.name LIKE '%" + searchWord + "%' ");
-			
-		}
-
 		public TypedQuery<Long> makeQuery(EntityManager em) {
 			
 			TypedQuery<Long> q = em.createQuery(getSQLString(), Long.class);
@@ -408,11 +361,7 @@ public class StandardizedPatient {
     	log.debug("parameters received: searchThrough "+searchThrough);
     	log.debug("parameters received: searchCriteria "+searchCriteria);
     	
-    	// for testing you cad add parameters directly here, searchCriteria.add(xy)
-    	
     	EntityManager em = entityManager();
-    	//make new Object
-    	log.debug("make new object");
     	PatientSearch simpatSearch = new PatientSearch(true);
     	//add sorting
     	log.debug("add sorting");
@@ -457,14 +406,14 @@ public class StandardizedPatient {
     	
     	//simpatSearch.finalyzeBaseSQL();
     	
-    	log.info("SerchString: " + simpatSearch.getSQLString());
+    	log.info("PS: -----SearchString: " + simpatSearch.getSQLString());
     	
     	
-    	//TypedQuery<Long> q = em.createQuery(simpatSearch.getSQLString(), Long.class);
+    	TypedQuery<Long> q = em.createQuery(simpatSearch.getSQLString(), Long.class);
+    	q.setParameter("q", "%" + searchWord + "%");
     	
-    	
-    	
-    	return simpatSearch.makeQuery(em).getSingleResult();
+//    	return simpatSearch.makeQuery(em).getSingleResult();
+    	return q.getSingleResult();
     }
     	
 

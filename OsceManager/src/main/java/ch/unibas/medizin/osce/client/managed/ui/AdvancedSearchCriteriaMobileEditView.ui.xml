@@ -28,10 +28,20 @@
   
         
         
-        <div id="field">
+        
+        
+        
+        
+    <div id="field">
             <div class="{style.label}">Field</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="field"/>
+            </div>
+        </div>
+        <div id="objectId">
+            <div class="{style.label}">Object Id</div>
+            <div class="{style.value}">
+                <g:LongBox ui:field="objectId"/>
             </div>
         </div>
         <div id="bindType">

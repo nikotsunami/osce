@@ -25,6 +25,10 @@ public interface AdvancedSearchCriteriaProxy extends EntityProxy {
 
     abstract void setField(PossibleFields field);
 
+    abstract Long getObjectId();
+
+    abstract void setObjectId(Long objectId);
+
     abstract BindType getBindType();
 
     abstract void setBindType(BindType bindType);

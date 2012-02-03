@@ -41,7 +41,16 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -57,15 +66,20 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            
-            
-            
             <tr id="field">
                 <td>
                     <span class="{style.label}">Field:</span>
                 </td>
                 <td>
                     <span ui:field="field"/>
+                </td>
+            </tr>
+            <tr id="objectId">
+                <td>
+                    <span class="{style.label}">Object Id:</span>
+                </td>
+                <td>
+                    <span ui:field="objectId"/>
                 </td>
             </tr>
             <tr id="bindType">
