@@ -65,12 +65,12 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	
 	@UiHandler("addScar")
 	void onAddScarClick(ClickEvent e) {
-		delegate.addScarCriteriaClicked();
+		delegate.addScarCriteriaClicked(addScar);
 	}
 	
 	@UiHandler("addAnamnesis")
 	void onAddAnamnesisClick(ClickEvent e) {
-		delegate.addAnamnesisCriteriaClicked();
+		delegate.addAnamnesisCriteriaClicked(addAnamnesis);
 	}
 	
 	@UiHandler("addLanguage")

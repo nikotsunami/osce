@@ -12,9 +12,10 @@ import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 
-public interface StandardizedPatientAdvancedSearchLanguagePopup {
+public interface StandardizedPatientAdvancedSearchLanguagePopup extends IsWidget, StandardizedPatientAdvancedSearchPopup {
     public interface Presenter {
         void goTo(Place place);
     }
@@ -23,15 +24,12 @@ public interface StandardizedPatientAdvancedSearchLanguagePopup {
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill);
+		void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill, BindType bindType, Comparison2 comparison);
 //		void addLanguagePopupClicked();
 //		void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition);
 	}
   
     void setDelegate(Delegate delegate);
 	void display(Button addLanguage);
-	void hide();
-	boolean isShowing();
-	ValueListBox<SpokenLanguageProxy> getLanguage();
-	void setLanguagePickerValues(List<SpokenLanguageProxy> values);
+	ValueListBox<SpokenLanguageProxy> getLanguageBox();
 }

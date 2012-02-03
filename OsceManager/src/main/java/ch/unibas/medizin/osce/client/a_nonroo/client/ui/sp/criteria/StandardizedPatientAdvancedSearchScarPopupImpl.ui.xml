@@ -8,14 +8,13 @@
 	<g:VerticalPanel>
 		<g:HorizontalPanel ui:field="parentPanel" spacing="4">
 			<g:ValueListBox ui:field="bindType"/>
-			<g:ValueListBox ui:field="language"/>
 			<g:ValueListBox ui:field="comparison"/>
-			<g:ValueListBox ui:field="skill"/>
-			<my:IconButton ui:field="addLanguageButton" icon="plusthick"/>
+			<g:ValueListBox ui:field="scarBox"/>
+			<my:IconButton ui:field="addScarButton" icon="plusthick"/>
 			<my:IconButton ui:field="closeBoxButton" icon="closethick" />
 		</g:HorizontalPanel>
 		<g:HorizontalPanel spacing ="4">
-			<my:IconButton ui:field="languageButton" icon="flag"/>
+			<my:IconButton ui:field="scarButton" icon="search"/>
 		</g:HorizontalPanel>
 	</g:VerticalPanel>
-</ui:UiBinder> 
+</ui:UiBinder>

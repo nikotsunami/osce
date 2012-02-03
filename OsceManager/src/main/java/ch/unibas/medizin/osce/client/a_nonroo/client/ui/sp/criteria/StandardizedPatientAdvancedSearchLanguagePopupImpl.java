@@ -7,8 +7,11 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.domain.LangSkill;
+import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
@@ -25,13 +28,12 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPanel 
-	implements StandardizedPatientAdvancedSearchLanguagePopup {
+		implements StandardizedPatientAdvancedSearchLanguagePopup {
 
 	private static StandardizedPatientAdvancedSearchLanguagePopupImplUiBinder uiBinder = GWT
 			.create(StandardizedPatientAdvancedSearchLanguagePopupImplUiBinder.class);
 
-	interface StandardizedPatientAdvancedSearchLanguagePopupImplUiBinder
-			extends
+	interface StandardizedPatientAdvancedSearchLanguagePopupImplUiBinder extends
 			UiBinder<Widget, StandardizedPatientAdvancedSearchLanguagePopupImpl> {
 	}
 	
@@ -55,18 +57,33 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
             return obj == null ? "" : String.valueOf(obj.toString());
         }
     });
+	
+	@UiField(provided = true)
+    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
+        public String render(ch.unibas.medizin.osce.shared.BindType obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+    
+    @UiField(provided = true)
+    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
+        public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
 		skill.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
+		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
+		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
 		addLanguageButton.setText(Messages.ADD);
 		languageButton.setText(Messages.LANGUAGES);
 	}
 	
 	@UiHandler("addLanguageButton")
 	public void addLanguageButtonClicked(ClickEvent event) {
-		// TODO delegate.clickedyclick();
-		delegate.addLanguageButtonClicked(language.getValue(), skill.getValue());
+		delegate.addLanguageButtonClicked(language.getValue(), skill.getValue(), bindType.getValue(), comparison.getValue());
 		this.hide();
 	}
 
@@ -93,12 +110,7 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 	}
 
 	@Override
-	public ValueListBox<SpokenLanguageProxy> getLanguage() {
+	public ValueListBox<SpokenLanguageProxy> getLanguageBox() {
 		return language;
-	}
-
-	@Override
-	public void setLanguagePickerValues(List<SpokenLanguageProxy> values) {
-		language.setAcceptableValues(values);
 	}
 }

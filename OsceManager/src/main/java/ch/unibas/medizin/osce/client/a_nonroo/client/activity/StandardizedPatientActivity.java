@@ -14,11 +14,16 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientVi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopup.Delegate;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
@@ -30,6 +35,7 @@ import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 
@@ -50,6 +56,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -57,11 +64,12 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class StandardizedPatientActivity extends AbstractActivity implements
-	StandardizedPatientView.Presenter, 
-	StandardizedPatientView.Delegate, 
-	StandartizedPatientAdvancedSearchSubView.Delegate, 
-	StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate, 
-	StandardizedPatientAdvancedSearchLanguagePopup.Delegate {
+		StandardizedPatientView.Presenter, 
+		StandardizedPatientView.Delegate, 
+		StandartizedPatientAdvancedSearchSubView.Delegate, 
+		StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate, 
+		StandardizedPatientAdvancedSearchLanguagePopup.Delegate,
+		StandardizedPatientAdvancedSearchScarPopup.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -353,44 +361,65 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 		
 	}
 
-	StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp; 
+	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
+	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
+	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
+	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
 	
 	@Override
 	public void addBasicCriteriaClicked(Button addBasicData) {
-		if (basicCriteriaPopUp != null && basicCriteriaPopUp.isShowing()) {
-			basicCriteriaPopUp.hide();
-			return;
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == basicCriteriaPopUp) {
+				return;
+			}
 		}
+		
 		basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
 		basicCriteriaPopUp.setDelegate(this);
 		basicCriteriaPopUp.display(addBasicData);
+		advancedSearchPopup = basicCriteriaPopUp;
 	}
 
 	@Override
-	public void addScarCriteriaClicked() {
-		// TODO Auto-generated method stub
-		
+	public void addScarCriteriaClicked(Button parentButton) {
+		initScarCriteriaSubView();
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == scarPopup) {
+				return;
+			}
+		}
+		scarPopup = new StandardizedPatientAdvancedSearchScarPopupImpl();
+		scarPopup.setDelegate(this);
+		scarPopup.display(parentButton);
+		advancedSearchPopup = scarPopup;
 	}
 
 	@Override
-	public void addAnamnesisCriteriaClicked() {
-		// TODO Auto-generated method stub
-		
+	public void addAnamnesisCriteriaClicked(Button parentButton) {
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+//			if (advancedSearchPopup == scarPopup) {
+//				return;
+//			}
+		}
 	}
-
-	StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
 	
 	@Override
 	public void addLanguageCriteriaClicked(Button addLanguageButton) {
 		initLanguageCriteriaSubView();
 		
-		if (languagePopup != null && languagePopup.isShowing()) {
-			languagePopup.hide();
-			return;
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == languagePopup) {
+				return;
+			}
 		}
 		languagePopup = new StandardizedPatientAdvancedSearchLanguagePopupImpl();
 		languagePopup.setDelegate(this);
 		languagePopup.display(addLanguageButton);
+		advancedSearchPopup = languagePopup;
 	}
 
 	@Override
@@ -418,10 +447,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 	}
 	
 	@Override
-	public void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill) {
+	public void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
 		// TODO implement
 	}
-	
+
 	private void initLanguageCriteriaSubView() {
 		requests.spokenLanguageRequest().findAllSpokenLanguages().fire(new Receiver<List<SpokenLanguageProxy>>() {
 			@Override
@@ -431,8 +460,31 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 				}
 				List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
 				values.addAll(response);
-				languagePopup.setLanguagePickerValues(values);
+				languagePopup.getLanguageBox().setAcceptableValues(values);
 			}
 		});
+	}
+	
+	private void initScarCriteriaSubView() {
+		requests.scarRequest().findAllScars().fire(new Receiver<List<ScarProxy>>() {
+
+			@Override
+			public void onSuccess(List<ScarProxy> response) {
+				if (scarPopup == null) {
+					return;
+				}
+				
+				List<ScarProxy> values = new ArrayList<ScarProxy>();
+				values.addAll(response);
+				scarPopup.getScarBox().setAcceptableValues(values);
+			}
+			
+		});
+	}
+
+	@Override
+	public void addScarButtonClicked(ScarProxy scarType, BindType bindType, Comparison2 comparison) {
+		// TODO Auto-generated method stub
+		Log.info("ScarType:" + scarType.getTraitType().toString() + ": " + scarType.getBodypart());
 	}
 }

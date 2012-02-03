@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp  extends IsWidget {
+public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsWidget, StandardizedPatientAdvancedSearchPopup {
     public interface Presenter {
         void goTo(Place place);
     }
@@ -30,6 +30,4 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp  extends Is
   
     void setDelegate(Delegate delegate);
 	void display(Button addBasicData);
-	void hide();
-	boolean isShowing();
 }

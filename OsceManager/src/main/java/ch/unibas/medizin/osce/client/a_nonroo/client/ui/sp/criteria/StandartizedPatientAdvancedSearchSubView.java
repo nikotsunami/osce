@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget{
+public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget {
 	
     public interface Presenter {
         void goTo(Place place);
@@ -23,10 +23,10 @@ public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget{
 	 */
 	interface Delegate {
 		void filterTableClicked();
-		void addBasicCriteriaClicked(Button addBasicData);
-		void addScarCriteriaClicked();
-		void addAnamnesisCriteriaClicked();
-		void addLanguageCriteriaClicked(Button addLanguageButton);
+		void addBasicCriteriaClicked(Button parentButton);
+		void addScarCriteriaClicked(Button parentButton);
+		void addAnamnesisCriteriaClicked(Button parentButton);
+		void addLanguageCriteriaClicked(Button parentButton);
 	}
 
     CellTable<AdvancedSearchCriteriaProxy> getTable();

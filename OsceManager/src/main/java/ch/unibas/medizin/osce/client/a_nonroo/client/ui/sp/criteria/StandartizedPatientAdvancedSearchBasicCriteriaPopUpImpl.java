@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
- PopupPanel implements StandartizedPatientAdvancedSearchBasicCriteriaPopUp, MouseUpHandler {
+ PopupPanel implements StandartizedPatientAdvancedSearchBasicCriteriaPopUp {
 
 	private static StandartizedPatientAdvancedSearchBasicCriteriaPopUpImplUiBinder uiBinder = GWT
 			.create(StandartizedPatientAdvancedSearchBasicCriteriaPopUpImplUiBinder.class);
@@ -130,18 +130,4 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		this.setPopupPosition(addBasicData.getAbsoluteLeft() - 5, addBasicData.getAbsoluteTop() - getOffsetHeight()/2 - 4);
 		Log.info("addBasicData OffsetHeight: " + addBasicData.getOffsetHeight() + "; offsetHeight: " + getOffsetHeight());
 	}
-
-	@Override
-	public void onMouseUp(MouseUpEvent event) {
-		int mouseX = event.getClientX();
-		int mouseY = event.getClientY();
-		
-		Log.info("mouseX = " + mouseX + "; mouseY = " + mouseY);
-		
-		if (mouseX < getAbsoluteLeft() || mouseX > getAbsoluteLeft() + getOffsetWidth() || mouseY < getAbsoluteTop() 
-				|| mouseY > getAbsoluteTop() + getOffsetHeight()) {
-			this.hide();
-		}
-	}
-
 }
