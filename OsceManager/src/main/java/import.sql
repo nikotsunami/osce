@@ -2,6 +2,7 @@ INSERT INTO `osce`.`administrator` (`email`, `name`, `pre_name`, `version`) VALU
 INSERT INTO `osce`.`administrator` (`email`, `name`, `pre_name`, `version`) VALUES ('bar@foo.com', 'Foo', 'Bar', '0');
 INSERT INTO `osce`.`administrator` (`email`, `name`, `pre_name`, `version`) VALUES ('hansruedi.meier@gmail.com', 'Meier', 'Hansruedi', '0');
 
+
 INSERT INTO `osce`.`semester` (`semester`, `cal_year`, `version`) VALUES ('0', '2011', '0');
 
 INSERT INTO `osce`.`administrator_semesters` (`administrators`, `semesters`) VALUES ('1', '1');

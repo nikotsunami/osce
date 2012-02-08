@@ -162,8 +162,8 @@ public class StandardizedPatient {
     	private static String sorting;
     	
     	//scar
-    	//TODO: ***Changes david 
-    	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm  ";
+    	//PS applicable for scar search only: double left join 
+    	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm aForm LEFT JOIN anamnesisForm.scars scars ";
     	
     	
     	/**
@@ -262,10 +262,10 @@ public class StandardizedPatient {
     		Iterator<String> iter = searchThrough.iterator();
         	while (iter.hasNext()) {
     			String fieldname = (String) iter.next();
-    			log.info("PS: field inside iterator ["+fieldname+"]");
+    			log.debug("PS: field inside iterator simple search ["+fieldname+"]");
     			StandardizedPatientSearhField field = StandardizedPatientSearhField.valueOf(fieldname);
     			if(field == null)
-    				throw new SecurityException("Wrong search option "+fieldname+". Please set the correct one into the right list ");
+    				throw new SecurityException("Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
   	    		if (firstComment){
    	    			firstComment=false;
    	    		}
@@ -283,7 +283,7 @@ public class StandardizedPatient {
     	 * @param em
     	 * @return
     	 */
-		public TypedQuery<Long> makeQuery(EntityManager em) {
+		private TypedQuery<Long> makeQuery(EntityManager em) {
 			
 			TypedQuery<Long> q = em.createQuery(getSQLString(), Long.class);
 			Iterator<Scar> scarIter = scars.iterator();
@@ -302,23 +302,30 @@ public class StandardizedPatient {
     	private int scarCounter = 0;
     	private List<Scar> scars = new ArrayList<Scar>();
 
-		public void searchScar(long scarID, String bindType,  String comparitionSign) {
+		private void searchScar(long scarID, String bindType,  String comparitionSign) {
     		if (firstAnamnesisForm){
     			wholeSearchString.append(joinAnamnesisForm);
     			firstAnamnesisForm=false;
     			
     		}
-    		
-    		if (comparitionSign.equals(" = ")){
-    			comparitionSign = " MEMBER OF ";
-    		} else if (comparitionSign.equals(" != ")){
-    			comparitionSign = " NOT MEMBER OF ";
-    		}
-    		
-    		Scar scar = Scar.findScar(scarID);
+    		String compareClause = "";
+//------------------- begin - uncomment after testing    		
+//    		if (comparitionSign.equals(" = ")){
+    			compareClause = " GROUP BY aForm HAVING count (scars) > 0 ";
+//    		} else if (comparitionSign.equals(" != ")){
+//    			//no scars
+//    			compareClause = " GROUP BY aForm HAVING count (scars) == 0 ";
+//    		} else
+//    			throw new SecurityException("Comparing sign: ["+comparitionSign+"] is not supported");
+    			
+//----end - uncomment after testing    			
+  //the first search with scar/no scar option without 'value' specified
+  //if we know scarId, "scars.id = :scarId"  		
+//    		Scar scar = Scar.findScar(scarID);
     		// ":scar MEMBER OF stdPat.scars"
-    		endStringAppend( bindType, " :scar" + scarCounter++  + comparitionSign + " stdPat.scars ");
-    		scars.add(scar);
+//    		endStringAppend( bindType, " :scar" + scarCounter++  + comparitionSign + " stdPat.scars ");
+    		endStringAppend( "", compareClause);
+//    		scars.add(scar);
 
     		
     		// ":scar.id MEMBER OF stdPat.scars.id"
@@ -370,8 +377,9 @@ public class StandardizedPatient {
     	
     	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
     	while (iter.hasNext()) {
-        	String comparitionSign = "";
+			//Scar search policy has different approach 
     		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
+			String comparitionSign = "";
     		if (criterium.getComparation() == Comparison2.EQUALS){
     			comparitionSign = " = ";
     		}
@@ -396,13 +404,11 @@ public class StandardizedPatient {
 			else if (criterium.getField() == PossibleFields.bmi){
 				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
-			
-			//TODO: ***Changes david 
-			else if (criterium.getField() == PossibleFields.scar){
+			if (criterium.getField() == PossibleFields.scar){
 				simpatSearch.searchScar(criterium.getId(), criterium.getBindType().toString(), comparitionSign);
 			}
 		}
-    	log.info("done");
+    	log.debug("done");
     	
     	//simpatSearch.finalyzeBaseSQL();
     	
@@ -521,8 +527,9 @@ public class StandardizedPatient {
     
     // ###OLD Code programmen by siebers, dont use
     
-    /*
+    /**
      *  Get list by a criteria, paging and order
+     * @deprecated 
      */
     public static List<StandardizedPatient> 
         findPatientsBySearchAndSort(
