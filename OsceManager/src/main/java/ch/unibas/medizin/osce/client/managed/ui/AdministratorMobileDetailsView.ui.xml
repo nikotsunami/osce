@@ -21,7 +21,14 @@
     
 
     <g:Button ui:field="delete">Delete</g:Button>
-  <div id="id">
+  
+        
+        
+        
+        
+        
+        
+    <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
@@ -37,7 +44,6 @@
             <div class="{style.label}">Name</div>
             <div class="{style.value}" ui:field="name"/>
         </div>
-        
         <div id="preName">
             <div class="{style.label}">Pre Name</div>
             <div class="{style.value}" ui:field="preName"/>
@@ -45,6 +51,10 @@
         <div id="semesters">
             <div class="{style.label}">Semesters</div>
             <div class="{style.value}" ui:field="semesters"/>
+        </div>
+        <div id="tasks">
+            <div class="{style.label}">Tasks</div>
+            <div class="{style.value}" ui:field="tasks"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

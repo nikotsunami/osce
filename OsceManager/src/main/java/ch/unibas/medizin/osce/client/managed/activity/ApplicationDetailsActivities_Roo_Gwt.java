@@ -34,6 +34,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -53,6 +54,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
         }
         final ProxyPlace proxyPlace = (ProxyPlace) place;
         return new ApplicationEntityTypesProcessor<Activity>() {
+
+            @Override
+            public void handleTask(TaskProxy proxy) {
+                setResult(new TaskActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
 
             @Override
             public void handleStudent(StudentProxy proxy) {

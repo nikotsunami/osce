@@ -40,6 +40,20 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -95,6 +109,10 @@
         <div id="students">
             <div class="{style.label}">Students</div>
             <div class="{style.value}" ui:field="students"/>
+        </div>
+        <div id="tasks">
+            <div class="{style.label}">Tasks</div>
+            <div class="{style.value}" ui:field="tasks"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -69,6 +70,9 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
     @UiField
     SpanElement students;
 
+    @UiField
+    SpanElement tasks;
+
     OsceProxy proxy;
 
     @UiField
@@ -90,6 +94,7 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
         osce_days.setInnerText(proxy.getOsce_days() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance()).render(proxy.getOsce_days()));
         courses.setInnerText(proxy.getCourses() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.CourseProxyRenderer.instance()).render(proxy.getCourses()));
         students.setInnerText(proxy.getStudents() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentProxyRenderer.instance()).render(proxy.getStudents()));
+        tasks.setInnerText(proxy.getTasks() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance()).render(proxy.getTasks()));
         displayRenderer.setInnerText(OsceProxyRenderer.instance().render(proxy));
     }
 }

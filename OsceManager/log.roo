@@ -265,3 +265,16 @@ finder add --finderName findAdministratorsByNameNotEqualsAndPreNameLikeOrSemeste
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-09 11:21:29
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-09 11:58:21
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-09 12:38:42
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-09 13:48:57
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-09 13:49:55
+entity --class ~.domain.Task --testAutomatically
+// [failed] field string --fieldName name --sizeMin 3 --sizeMax 255 --notNull --class ~.domain.Task
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-09 14:24:40
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-09 14:25:06
+field string --fieldName name --sizeMin 3 --sizeMax 255 --notNull --class ~.domain.Task
+field date --fieldName deadline --type java.util.Date
+field boolean --fieldName isDone
+field reference --fieldName osce --type ~domain.Task
+field set --fieldName tasks --type ~domain.Task --cardinality ONE_TO_MANY --mappedBy osce --class ~.domain.Osce
+field reference --fieldName administrator --type ~.domain.Administrator --class ~.domain.Task
+field set --fieldName tasks --type ~domain.Task --cardinality ONE_TO_MANY --mappedBy administrator --class ~.domain.Administrator

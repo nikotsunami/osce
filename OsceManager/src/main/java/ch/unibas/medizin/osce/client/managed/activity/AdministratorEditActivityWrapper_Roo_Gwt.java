@@ -6,7 +6,9 @@ import ch.unibas.medizin.osce.client.managed.activity.AdministratorEditActivityW
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.ui.SemesterSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -44,11 +46,23 @@ public abstract class AdministratorEditActivityWrapper_Roo_Gwt implements Activi
                 view.setSemestersPickerValues(values);
             }
         });
+        view.setTasksPickerValues(Collections.<TaskProxy>emptyList());
+        requests.taskRequest().findTaskEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance().getPaths()).fire(new Receiver<List<TaskProxy>>() {
+
+            public void onSuccess(List<TaskProxy> response) {
+                List<TaskProxy> values = new ArrayList<TaskProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setTasksPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy, V>> extends ProxyEditView<AdministratorProxy, V> {
 
         void setSemestersPickerValues(Collection<SemesterProxy> values);
+
+        void setTasksPickerValues(Collection<TaskProxy> values);
     }
 }

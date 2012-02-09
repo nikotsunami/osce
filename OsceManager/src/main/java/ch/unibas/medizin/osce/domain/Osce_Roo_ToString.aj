@@ -22,6 +22,7 @@ privileged aspect Osce_Roo_ToString {
         sb.append("Semester: ").append(getSemester()).append(", ");
         sb.append("Students: ").append(getStudents() == null ? "null" : getStudents().size()).append(", ");
         sb.append("StudyYear: ").append(getStudyYear()).append(", ");
+        sb.append("Tasks: ").append(getTasks() == null ? "null" : getTasks().size()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

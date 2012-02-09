@@ -33,6 +33,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import com.google.gwt.text.shared.AbstractRenderer;
 
@@ -40,6 +41,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
 
     public String render(ProxyListPlace object) {
         return new ApplicationEntityTypesProcessor<String>() {
+
+            @Override
+            public void handleTask(TaskProxy isNull) {
+                setResult("Tasks");
+            }
 
             @Override
             public void handleStudent(StudentProxy isNull) {

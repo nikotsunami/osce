@@ -64,6 +64,18 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
@@ -158,6 +170,14 @@
                 </td>
                 <td>
                     <a:StudentSetEditor ui:field="students"/>
+                </td>
+            </tr>
+            <tr id="tasks">
+                <td>
+                    <div class="{style.label}">Tasks:</div>
+                </td>
+                <td>
+                    <a:TaskSetEditor ui:field="tasks"/>
                 </td>
             </tr>
         </table>

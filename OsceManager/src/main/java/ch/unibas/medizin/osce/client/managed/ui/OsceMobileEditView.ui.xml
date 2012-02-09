@@ -42,6 +42,18 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}">
@@ -112,6 +124,12 @@
             <div class="{style.label}">Students</div>
             <div class="{style.value}">
                 <a:StudentSetEditor ui:field="students"/>
+            </div>
+        </div>
+        <div id="tasks">
+            <div class="{style.label}">Tasks</div>
+            <div class="{style.value}">
+                <a:TaskSetEditor ui:field="tasks"/>
             </div>
         </div>
     </g:HTMLPanel>

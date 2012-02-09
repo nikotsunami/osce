@@ -9,9 +9,11 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.ui.CourseSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.OsceDaySetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.StudentSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -81,6 +83,16 @@ public abstract class OsceEditActivityWrapper_Roo_Gwt implements Activity, IsSca
                 view.setStudentsPickerValues(values);
             }
         });
+        view.setTasksPickerValues(Collections.<TaskProxy>emptyList());
+        requests.taskRequest().findTaskEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance().getPaths()).fire(new Receiver<List<TaskProxy>>() {
+
+            public void onSuccess(List<TaskProxy> response) {
+                List<TaskProxy> values = new ArrayList<TaskProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setTasksPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -95,5 +107,7 @@ public abstract class OsceEditActivityWrapper_Roo_Gwt implements Activity, IsSca
         void setCoursesPickerValues(Collection<CourseProxy> values);
 
         void setStudentsPickerValues(Collection<StudentProxy> values);
+
+        void setTasksPickerValues(Collection<TaskProxy> values);
     }
 }

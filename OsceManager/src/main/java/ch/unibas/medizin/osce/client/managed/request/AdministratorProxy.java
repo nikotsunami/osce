@@ -34,4 +34,8 @@ public interface AdministratorProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.SemesterProxy> getSemesters();
 
     abstract void setSemesters(Set<SemesterProxy> semesters);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.TaskProxy> getTasks();
+
+    abstract void setTasks(Set<TaskProxy> tasks);
 }

@@ -34,6 +34,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorListView;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaListView;
@@ -94,6 +95,8 @@ import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleListView;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.StudentListView;
 import ch.unibas.medizin.osce.client.managed.ui.StudentMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.TaskListView;
+import ch.unibas.medizin.osce.client.managed.ui.TaskMobileListView;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldApp;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import com.google.gwt.activity.shared.Activity;
@@ -114,6 +117,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
         }
         ProxyListPlace listPlace = (ProxyListPlace) place;
         return new ApplicationEntityTypesProcessor<Activity>() {
+
+            @Override
+            public void handleTask(TaskProxy isNull) {
+                setResult(new TaskListActivity(requests, ScaffoldApp.isMobile() ? TaskMobileListView.instance() : TaskListView.instance(), placeController));
+            }
 
             @Override
             public void handleStudent(StudentProxy isNull) {

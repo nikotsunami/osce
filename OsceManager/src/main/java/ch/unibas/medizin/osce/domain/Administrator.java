@@ -15,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
 import javax.persistence.TypedQuery;
+import ch.unibas.medizin.osce.domain.Task;
+import javax.persistence.OneToMany;
 
 @RooJavaBean
 @RooToString
@@ -30,13 +32,15 @@ public class Administrator {
     @Size(max = 40)
     private String name;
 
-
     @NotNull
     @Size(max = 40)
     private String preName;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Semester> semesters = new HashSet<Semester>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "administrator")
+    private Set<Task> tasks = new HashSet<Task>();
 
     public static Long countAdministratorsByName(String name) {
         return null;

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+  <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .error {
+      padding-left: 0.5em;
+      background-color: red;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding-bottom: 10px;
+    }
+  </ui:style>
+ 
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  
+    
+        
+    
+        
+        
+    
+        
+        
+        
+    <div id="name">
+            <div class="{style.label}">Name</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="name"/>
+            </div>
+        </div>
+        <div id="deadline">
+            <div class="{style.label}">Deadline</div>
+            <div class="{style.value}">
+                <d:DateBox ui:field="deadline"/>
+            </div>
+        </div>
+        <div id="isDone">
+            <div class="{style.label}">Is Done</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="isDone"/>
+            </div>
+        </div>
+        <div id="osce">
+            <div class="{style.label}">Osce</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="osce"/>
+            </div>
+        </div>
+        <div id="administrator">
+            <div class="{style.label}">Administrator</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="administrator"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

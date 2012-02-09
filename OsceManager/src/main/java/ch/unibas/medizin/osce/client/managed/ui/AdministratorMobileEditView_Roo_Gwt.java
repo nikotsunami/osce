@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.activity.AdministratorEditActivityW
 import ch.unibas.medizin.osce.client.managed.activity.AdministratorEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import com.google.gwt.core.client.GWT;
@@ -49,6 +50,13 @@ public abstract class AdministratorMobileEditView_Roo_Gwt extends Composite impl
 
     @UiField
     SemesterSetEditor semesters;
+
+    @UiField
+    TaskSetEditor tasks;
+
+    public void setTasksPickerValues(Collection<TaskProxy> values) {
+        tasks.setAcceptableValues(values);
+    }
 
     public void setSemestersPickerValues(Collection<SemesterProxy> values) {
         semesters.setAcceptableValues(values);

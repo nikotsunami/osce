@@ -41,7 +41,14 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -73,7 +80,6 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            
             <tr id="preName">
                 <td>
                     <span class="{style.label}">Pre Name:</span>
@@ -88,6 +94,14 @@
                 </td>
                 <td>
                     <span ui:field="semesters"/>
+                </td>
+            </tr>
+            <tr id="tasks">
+                <td>
+                    <span class="{style.label}">Tasks:</span>
+                </td>
+                <td>
+                    <span ui:field="tasks"/>
                 </td>
             </tr>
         </table>

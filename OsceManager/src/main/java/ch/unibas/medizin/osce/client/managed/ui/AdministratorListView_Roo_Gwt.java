@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -114,5 +115,15 @@ public abstract class AdministratorListView_Roo_Gwt extends AbstractProxyListVie
                 return renderer.render(object.getSemesters());
             }
         }, "Semesters");
+        paths.add("tasks");
+        table.addColumn(new TextColumn<AdministratorProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance());
+
+            @Override
+            public String getValue(AdministratorProxy object) {
+                return renderer.render(object.getTasks());
+            }
+        }, "Tasks");
     }
 }

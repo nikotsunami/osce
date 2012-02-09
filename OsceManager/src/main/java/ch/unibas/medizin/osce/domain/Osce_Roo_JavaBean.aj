@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.Student;
+import ch.unibas.medizin.osce.domain.Task;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Boolean;
 import java.lang.Integer;
@@ -108,6 +109,14 @@ privileged aspect Osce_Roo_JavaBean {
     
     public void Osce.setStudents(Set<Student> students) {
         this.students = students;
+    }
+    
+    public Set<Task> Osce.getTasks() {
+        return this.tasks;
+    }
+    
+    public void Osce.setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
     
 }

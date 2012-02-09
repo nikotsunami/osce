@@ -60,6 +60,20 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -170,6 +184,14 @@
                 </td>
                 <td>
                     <span ui:field="students"/>
+                </td>
+            </tr>
+            <tr id="tasks">
+                <td>
+                    <span class="{style.label}">Tasks:</span>
+                </td>
+                <td>
+                    <span ui:field="tasks"/>
                 </td>
             </tr>
         </table>

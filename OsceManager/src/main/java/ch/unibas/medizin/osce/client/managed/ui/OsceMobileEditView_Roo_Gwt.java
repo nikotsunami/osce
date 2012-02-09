@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -93,6 +94,9 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     @UiField
     StudentSetEditor students;
 
+    @UiField
+    TaskSetEditor tasks;
+
     public void setStudentsPickerValues(Collection<StudentProxy> values) {
         students.setAcceptableValues(values);
     }
@@ -103,6 +107,10 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
 
     public void setSemesterPickerValues(Collection<SemesterProxy> values) {
         semester.setAcceptableValues(values);
+    }
+
+    public void setTasksPickerValues(Collection<TaskProxy> values) {
+        tasks.setAcceptableValues(values);
     }
 
     public void setCoursesPickerValues(Collection<CourseProxy> values) {

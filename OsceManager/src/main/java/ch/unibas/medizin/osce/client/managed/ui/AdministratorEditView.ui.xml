@@ -47,7 +47,12 @@
       
       
       
-    <tr id="email">
+    
+            
+            
+            
+            
+        <tr id="email">
                 <td>
                     <div class="{style.label}">Email:</div>
                 </td>
@@ -63,7 +68,6 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-            
             <tr id="preName">
                 <td>
                     <div class="{style.label}">Pre Name:</div>
@@ -78,6 +82,14 @@
                 </td>
                 <td>
                     <a:SemesterSetEditor ui:field="semesters"/>
+                </td>
+            </tr>
+            <tr id="tasks">
+                <td>
+                    <div class="{style.label}">Tasks:</div>
+                </td>
+                <td>
+                    <a:TaskSetEditor ui:field="tasks"/>
                 </td>
             </tr>
         </table>

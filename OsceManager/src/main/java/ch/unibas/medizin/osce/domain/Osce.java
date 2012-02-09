@@ -16,6 +16,7 @@ import javax.persistence.CascadeType;
 import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Student;
 import javax.persistence.ManyToMany;
+import ch.unibas.medizin.osce.domain.Task;
 
 @RooJavaBean
 @RooToString
@@ -34,9 +35,9 @@ public class Osce {
     private Integer postLength;
 
     private Boolean isRepeOsce;
-    
+
     private Integer numberRooms;
-    
+
     private Boolean isValid;
 
     @NotNull
@@ -51,4 +52,7 @@ public class Osce {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "osces")
     private Set<Student> students = new HashSet<Student>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
+    private Set<Task> tasks = new HashSet<Task>();
 }

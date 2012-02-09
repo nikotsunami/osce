@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Semester;
+import ch.unibas.medizin.osce.domain.Task;
 import java.lang.String;
 import java.util.Set;
 
@@ -39,6 +40,14 @@ privileged aspect Administrator_Roo_JavaBean {
     
     public void Administrator.setSemesters(Set<Semester> semesters) {
         this.semesters = semesters;
+    }
+    
+    public Set<Task> Administrator.getTasks() {
+        return this.tasks;
+    }
+    
+    public void Administrator.setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
     
 }

@@ -23,6 +23,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public static Set<java.lang.Class<? extends com.google.gwt.requestfactory.shared.EntityProxy>> getAll() {
         Set<Class<? extends EntityProxy>> rtn = new HashSet<Class<? extends EntityProxy>>();
+        rtn.add(TaskProxy.class);
         rtn.add(StudentProxy.class);
         rtn.add(StandardizedRoleProxy.class);
         rtn.add(StandardizedPatientProxy.class);
@@ -57,6 +58,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Class<?> clazz) {
+        if (TaskProxy.class.equals(clazz)) {
+            processor.handleTask((TaskProxy) null);
+            return;
+        }
         if (StudentProxy.class.equals(clazz)) {
             processor.handleStudent((StudentProxy) null);
             return;
@@ -181,6 +186,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Object proxy) {
+        if (proxy instanceof TaskProxy) {
+            processor.handleTask((TaskProxy) proxy);
+            return;
+        }
         if (proxy instanceof StudentProxy) {
             processor.handleStudent((StudentProxy) proxy);
             return;
@@ -306,6 +315,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public void handleNonProxy(Object object) {
     }
+
+    public abstract void handleTask(TaskProxy proxy);
 
     public abstract void handleStudent(StudentProxy proxy);
 

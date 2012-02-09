@@ -14,6 +14,7 @@ privileged aspect Administrator_Roo_ToString {
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("PreName: ").append(getPreName()).append(", ");
         sb.append("Semesters: ").append(getSemesters() == null ? "null" : getSemesters().size()).append(", ");
+        sb.append("Tasks: ").append(getTasks() == null ? "null" : getTasks().size()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

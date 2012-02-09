@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -40,6 +41,9 @@ public abstract class AdministratorMobileDetailsView_Roo_Gwt extends Composite i
     @UiField
     Element semesters;
 
+    @UiField
+    Element tasks;
+
     AdministratorProxy proxy;
 
     public void setValue(AdministratorProxy proxy) {
@@ -50,5 +54,6 @@ public abstract class AdministratorMobileDetailsView_Roo_Gwt extends Composite i
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
         semesters.setInnerText(proxy.getSemesters() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance()).render(proxy.getSemesters()));
+        tasks.setInnerText(proxy.getTasks() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance()).render(proxy.getTasks()));
     }
 }

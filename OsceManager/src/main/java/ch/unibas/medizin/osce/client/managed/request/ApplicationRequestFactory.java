@@ -6,6 +6,8 @@ import ch.unibas.medizin.osce.shared.scaffold.ScaffoldRequestFactory;
 
 public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
+    TaskRequest taskRequest();
+
     StudentRequest studentRequest();
 
     StandardizedRoleRequest standardizedRoleRequest();
