@@ -34,6 +34,10 @@ public class Osce {
     private Integer postLength;
 
     private Boolean isRepeOsce;
+    
+    private Integer numberRooms;
+    
+    private Boolean isValid;
 
     @NotNull
     @ManyToOne

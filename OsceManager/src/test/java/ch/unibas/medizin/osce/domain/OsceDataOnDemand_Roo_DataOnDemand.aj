@@ -33,9 +33,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public Osce OsceDataOnDemand.getNewTransientOsce(int index) {
         Osce obj = new Osce();
         setIsRepeOsce(obj, index);
+        setIsValid(obj, index);
         setMaxNumberStudents(obj, index);
         setNumberCourses(obj, index);
         setNumberPosts(obj, index);
+        setNumberRooms(obj, index);
         setPostLength(obj, index);
         setSemester(obj, index);
         setStudyYear(obj, index);
@@ -45,6 +47,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public void OsceDataOnDemand.setIsRepeOsce(Osce obj, int index) {
         Boolean isRepeOsce = Boolean.TRUE;
         obj.setIsRepeOsce(isRepeOsce);
+    }
+    
+    public void OsceDataOnDemand.setIsValid(Osce obj, int index) {
+        Boolean isValid = Boolean.TRUE;
+        obj.setIsValid(isValid);
     }
     
     public void OsceDataOnDemand.setMaxNumberStudents(Osce obj, int index) {
@@ -60,6 +67,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public void OsceDataOnDemand.setNumberPosts(Osce obj, int index) {
         Integer numberPosts = new Integer(index);
         obj.setNumberPosts(numberPosts);
+    }
+    
+    public void OsceDataOnDemand.setNumberRooms(Osce obj, int index) {
+        Integer numberRooms = new Integer(index);
+        obj.setNumberRooms(numberRooms);
     }
     
     public void OsceDataOnDemand.setPostLength(Osce obj, int index) {

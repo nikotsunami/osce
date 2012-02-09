@@ -36,7 +36,7 @@ privileged aspect LangSkillDataOnDemand_Roo_DataOnDemand {
     public LangSkill LangSkillDataOnDemand.getNewTransientLangSkill(int index) {
         LangSkill obj = new LangSkill();
         setSkill(obj, index);
-        //setSpokenlanguage(obj, index);
+        setSpokenlanguage(obj, index);
         setStandardizedpatient(obj, index);
         return obj;
     }
@@ -46,10 +46,10 @@ privileged aspect LangSkillDataOnDemand_Roo_DataOnDemand {
         obj.setSkill(skill);
     }
     
-//    public void LangSkillDataOnDemand.setSpokenlanguage(LangSkill obj, int index) {
-//        SpokenLanguage spokenlanguage = spokenLanguageDataOnDemand.getRandomSpokenLanguage();
-//        obj.setSpokenlanguage(spokenlanguage);
-//    }
+    public void LangSkillDataOnDemand.setSpokenlanguage(LangSkill obj, int index) {
+        SpokenLanguage spokenlanguage = spokenLanguageDataOnDemand.getRandomSpokenLanguage();
+        obj.setSpokenlanguage(spokenlanguage);
+    }
     
     public void LangSkillDataOnDemand.setStandardizedpatient(LangSkill obj, int index) {
         StandardizedPatient standardizedpatient = standardizedPatientDataOnDemand.getRandomStandardizedPatient();

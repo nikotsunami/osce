@@ -43,7 +43,28 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="studyYear">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
                 </td>
@@ -51,7 +72,7 @@
                     <g:ValueListBox ui:field="studyYear"/>
                 </td>
             </tr>
-      <tr id="maxNumberStudents">
+            <tr id="maxNumberStudents">
                 <td>
                     <div class="{style.label}">Max Number Students:</div>
                 </td>
@@ -59,7 +80,7 @@
                     <g:IntegerBox ui:field="maxNumberStudents"/>
                 </td>
             </tr>
-      <tr id="numberPosts">
+            <tr id="numberPosts">
                 <td>
                     <div class="{style.label}">Number Posts:</div>
                 </td>
@@ -67,7 +88,7 @@
                     <g:IntegerBox ui:field="numberPosts"/>
                 </td>
             </tr>
-      <tr id="numberCourses">
+            <tr id="numberCourses">
                 <td>
                     <div class="{style.label}">Number Courses:</div>
                 </td>
@@ -75,7 +96,7 @@
                     <g:IntegerBox ui:field="numberCourses"/>
                 </td>
             </tr>
-      <tr id="postLength">
+            <tr id="postLength">
                 <td>
                     <div class="{style.label}">Post Length:</div>
                 </td>
@@ -83,7 +104,7 @@
                     <g:IntegerBox ui:field="postLength"/>
                 </td>
             </tr>
-      <tr id="isRepeOsce">
+            <tr id="isRepeOsce">
                 <td>
                     <div class="{style.label}">Is Repe Osce:</div>
                 </td>
@@ -91,7 +112,23 @@
                     <g:CheckBox ui:field="isRepeOsce"/>
                 </td>
             </tr>
-      <tr id="semester">
+            <tr id="numberRooms">
+                <td>
+                    <div class="{style.label}">Number Rooms:</div>
+                </td>
+                <td>
+                    <g:IntegerBox ui:field="numberRooms"/>
+                </td>
+            </tr>
+            <tr id="isValid">
+                <td>
+                    <div class="{style.label}">Is Valid:</div>
+                </td>
+                <td>
+                    <g:CheckBox ui:field="isValid"/>
+                </td>
+            </tr>
+            <tr id="semester">
                 <td>
                     <div class="{style.label}">Semester:</div>
                 </td>
@@ -99,7 +136,7 @@
                     <g:ValueListBox ui:field="semester"/>
                 </td>
             </tr>
-      <tr id="osce_days">
+            <tr id="osce_days">
                 <td>
                     <div class="{style.label}">Osce_days:</div>
                 </td>
@@ -107,7 +144,7 @@
                     <a:OsceDaySetEditor ui:field="osce_days"/>
                 </td>
             </tr>
-      <tr id="courses">
+            <tr id="courses">
                 <td>
                     <div class="{style.label}">Courses:</div>
                 </td>
@@ -115,7 +152,7 @@
                     <a:CourseSetEditor ui:field="courses"/>
                 </td>
             </tr>
-      <tr id="students">
+            <tr id="students">
                 <td>
                     <div class="{style.label}">Students:</div>
                 </td>
@@ -123,7 +160,7 @@
                     <a:StudentSetEditor ui:field="students"/>
                 </td>
             </tr>
-    </table>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

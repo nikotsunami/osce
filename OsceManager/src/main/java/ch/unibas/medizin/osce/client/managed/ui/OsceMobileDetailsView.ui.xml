@@ -13,55 +13,88 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-    <div id="version">
+        <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-    <div id="studyYear">
+        <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}" ui:field="studyYear"/>
         </div>
-    <div id="maxNumberStudents">
+        <div id="maxNumberStudents">
             <div class="{style.label}">Max Number Students</div>
             <div class="{style.value}" ui:field="maxNumberStudents"/>
         </div>
-    <div id="numberPosts">
+        <div id="numberPosts">
             <div class="{style.label}">Number Posts</div>
             <div class="{style.value}" ui:field="numberPosts"/>
         </div>
-    <div id="numberCourses">
+        <div id="numberCourses">
             <div class="{style.label}">Number Courses</div>
             <div class="{style.value}" ui:field="numberCourses"/>
         </div>
-    <div id="postLength">
+        <div id="postLength">
             <div class="{style.label}">Post Length</div>
             <div class="{style.value}" ui:field="postLength"/>
         </div>
-    <div id="isRepeOsce">
+        <div id="isRepeOsce">
             <div class="{style.label}">Is Repe Osce</div>
             <div class="{style.value}" ui:field="isRepeOsce"/>
         </div>
-    <div id="semester">
+        <div id="numberRooms">
+            <div class="{style.label}">Number Rooms</div>
+            <div class="{style.value}" ui:field="numberRooms"/>
+        </div>
+        <div id="isValid">
+            <div class="{style.label}">Is Valid</div>
+            <div class="{style.value}" ui:field="isValid"/>
+        </div>
+        <div id="semester">
             <div class="{style.label}">Semester</div>
             <div class="{style.value}" ui:field="semester"/>
         </div>
-    <div id="osce_days">
+        <div id="osce_days">
             <div class="{style.label}">Osce_days</div>
             <div class="{style.value}" ui:field="osce_days"/>
         </div>
-    <div id="courses">
+        <div id="courses">
             <div class="{style.label}">Courses</div>
             <div class="{style.value}" ui:field="courses"/>
         </div>
-    <div id="students">
+        <div id="students">
             <div class="{style.label}">Students</div>
             <div class="{style.value}" ui:field="students"/>
         </div>
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  </g:HTMLPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

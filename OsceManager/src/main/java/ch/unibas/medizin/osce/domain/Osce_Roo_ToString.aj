@@ -12,9 +12,11 @@ privileged aspect Osce_Roo_ToString {
         sb.append("Courses: ").append(getCourses() == null ? "null" : getCourses().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsRepeOsce: ").append(getIsRepeOsce()).append(", ");
+        sb.append("IsValid: ").append(getIsValid()).append(", ");
         sb.append("MaxNumberStudents: ").append(getMaxNumberStudents()).append(", ");
         sb.append("NumberCourses: ").append(getNumberCourses()).append(", ");
         sb.append("NumberPosts: ").append(getNumberPosts()).append(", ");
+        sb.append("NumberRooms: ").append(getNumberRooms()).append(", ");
         sb.append("Osce_days: ").append(getOsce_days() == null ? "null" : getOsce_days().size()).append(", ");
         sb.append("PostLength: ").append(getPostLength()).append(", ");
         sb.append("Semester: ").append(getSemester()).append(", ");

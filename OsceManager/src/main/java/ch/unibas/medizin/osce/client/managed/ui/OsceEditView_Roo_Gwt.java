@@ -70,6 +70,17 @@ public abstract class OsceEditView_Roo_Gwt extends Composite implements View<Osc
         }
     };
 
+    @UiField
+    IntegerBox numberRooms;
+
+    @UiField(provided = true)
+    CheckBox isValid = new CheckBox() {
+
+        public void setValue(Boolean value) {
+            super.setValue(value == null ? Boolean.FALSE : value);
+        }
+    };
+
     @UiField(provided = true)
     ValueListBox<SemesterProxy> semester = new ValueListBox<SemesterProxy>(ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.SemesterProxy>());
 

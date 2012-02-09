@@ -153,6 +153,36 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getIsRepeOsce());
             }
         }, "Is Repe Osce");
+        paths.add("numberRooms");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getNumberRooms());
+            }
+        }, "Number Rooms");
+        paths.add("isValid");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Boolean> renderer = new AbstractRenderer<java.lang.Boolean>() {
+
+                public String render(java.lang.Boolean obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getIsValid());
+            }
+        }, "Is Valid");
         paths.add("semester");
         table.addColumn(new TextColumn<OsceProxy>() {
 

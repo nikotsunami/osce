@@ -52,6 +52,12 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
     SpanElement isRepeOsce;
 
     @UiField
+    SpanElement numberRooms;
+
+    @UiField
+    SpanElement isValid;
+
+    @UiField
     SpanElement semester;
 
     @UiField
@@ -78,6 +84,8 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
         numberCourses.setInnerText(proxy.getNumberCourses() == null ? "" : String.valueOf(proxy.getNumberCourses()));
         postLength.setInnerText(proxy.getPostLength() == null ? "" : String.valueOf(proxy.getPostLength()));
         isRepeOsce.setInnerText(proxy.getIsRepeOsce() == null ? "" : String.valueOf(proxy.getIsRepeOsce()));
+        numberRooms.setInnerText(proxy.getNumberRooms() == null ? "" : String.valueOf(proxy.getNumberRooms()));
+        isValid.setInnerText(proxy.getIsValid() == null ? "" : String.valueOf(proxy.getIsValid()));
         semester.setInnerText(proxy.getSemester() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance().render(proxy.getSemester()));
         osce_days.setInnerText(proxy.getOsce_days() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance()).render(proxy.getOsce_days()));
         courses.setInnerText(proxy.getCourses() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.CourseProxyRenderer.instance()).render(proxy.getCourses()));

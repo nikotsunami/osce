@@ -44,6 +44,14 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setIsRepeOsce(Boolean isRepeOsce);
 
+    abstract Integer getNumberRooms();
+
+    abstract void setNumberRooms(Integer numberRooms);
+
+    abstract Boolean getIsValid();
+
+    abstract void setIsValid(Boolean isValid);
+
     abstract SemesterProxy getSemester();
 
     abstract void setSemester(SemesterProxy semester);

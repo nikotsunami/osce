@@ -62,6 +62,22 @@ privileged aspect Osce_Roo_JavaBean {
         this.isRepeOsce = isRepeOsce;
     }
     
+    public Integer Osce.getNumberRooms() {
+        return this.numberRooms;
+    }
+    
+    public void Osce.setNumberRooms(Integer numberRooms) {
+        this.numberRooms = numberRooms;
+    }
+    
+    public Boolean Osce.getIsValid() {
+        return this.isValid;
+    }
+    
+    public void Osce.setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
+    
     public Semester Osce.getSemester() {
         return this.semester;
     }

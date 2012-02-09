@@ -19,67 +19,100 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="studyYear"/>
             </div>
         </div>
-    <div id="maxNumberStudents">
+        <div id="maxNumberStudents">
             <div class="{style.label}">Max Number Students</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="maxNumberStudents"/>
             </div>
         </div>
-    <div id="numberPosts">
+        <div id="numberPosts">
             <div class="{style.label}">Number Posts</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="numberPosts"/>
             </div>
         </div>
-    <div id="numberCourses">
+        <div id="numberCourses">
             <div class="{style.label}">Number Courses</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="numberCourses"/>
             </div>
         </div>
-    <div id="postLength">
+        <div id="postLength">
             <div class="{style.label}">Post Length</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="postLength"/>
             </div>
         </div>
-    <div id="isRepeOsce">
+        <div id="isRepeOsce">
             <div class="{style.label}">Is Repe Osce</div>
             <div class="{style.value}">
                 <g:CheckBox ui:field="isRepeOsce"/>
             </div>
         </div>
-    <div id="semester">
+        <div id="numberRooms">
+            <div class="{style.label}">Number Rooms</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="numberRooms"/>
+            </div>
+        </div>
+        <div id="isValid">
+            <div class="{style.label}">Is Valid</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="isValid"/>
+            </div>
+        </div>
+        <div id="semester">
             <div class="{style.label}">Semester</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="semester"/>
             </div>
         </div>
-    <div id="osce_days">
+        <div id="osce_days">
             <div class="{style.label}">Osce_days</div>
             <div class="{style.value}">
                 <a:OsceDaySetEditor ui:field="osce_days"/>
             </div>
         </div>
-    <div id="courses">
+        <div id="courses">
             <div class="{style.label}">Courses</div>
             <div class="{style.value}">
                 <a:CourseSetEditor ui:field="courses"/>
             </div>
         </div>
-    <div id="students">
+        <div id="students">
             <div class="{style.label}">Students</div>
             <div class="{style.value}">
                 <a:StudentSetEditor ui:field="students"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

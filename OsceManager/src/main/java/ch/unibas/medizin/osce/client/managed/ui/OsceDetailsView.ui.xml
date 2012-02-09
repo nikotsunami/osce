@@ -35,7 +35,32 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +68,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +76,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="studyYear">
+            <tr id="studyYear">
                 <td>
                     <span class="{style.label}">Study Year:</span>
                 </td>
@@ -59,7 +84,7 @@
                     <span ui:field="studyYear"/>
                 </td>
             </tr>
-      <tr id="maxNumberStudents">
+            <tr id="maxNumberStudents">
                 <td>
                     <span class="{style.label}">Max Number Students:</span>
                 </td>
@@ -67,7 +92,7 @@
                     <span ui:field="maxNumberStudents"/>
                 </td>
             </tr>
-      <tr id="numberPosts">
+            <tr id="numberPosts">
                 <td>
                     <span class="{style.label}">Number Posts:</span>
                 </td>
@@ -75,7 +100,7 @@
                     <span ui:field="numberPosts"/>
                 </td>
             </tr>
-      <tr id="numberCourses">
+            <tr id="numberCourses">
                 <td>
                     <span class="{style.label}">Number Courses:</span>
                 </td>
@@ -83,7 +108,7 @@
                     <span ui:field="numberCourses"/>
                 </td>
             </tr>
-      <tr id="postLength">
+            <tr id="postLength">
                 <td>
                     <span class="{style.label}">Post Length:</span>
                 </td>
@@ -91,7 +116,7 @@
                     <span ui:field="postLength"/>
                 </td>
             </tr>
-      <tr id="isRepeOsce">
+            <tr id="isRepeOsce">
                 <td>
                     <span class="{style.label}">Is Repe Osce:</span>
                 </td>
@@ -99,7 +124,23 @@
                     <span ui:field="isRepeOsce"/>
                 </td>
             </tr>
-      <tr id="semester">
+            <tr id="numberRooms">
+                <td>
+                    <span class="{style.label}">Number Rooms:</span>
+                </td>
+                <td>
+                    <span ui:field="numberRooms"/>
+                </td>
+            </tr>
+            <tr id="isValid">
+                <td>
+                    <span class="{style.label}">Is Valid:</span>
+                </td>
+                <td>
+                    <span ui:field="isValid"/>
+                </td>
+            </tr>
+            <tr id="semester">
                 <td>
                     <span class="{style.label}">Semester:</span>
                 </td>
@@ -107,7 +148,7 @@
                     <span ui:field="semester"/>
                 </td>
             </tr>
-      <tr id="osce_days">
+            <tr id="osce_days">
                 <td>
                     <span class="{style.label}">Osce_days:</span>
                 </td>
@@ -115,7 +156,7 @@
                     <span ui:field="osce_days"/>
                 </td>
             </tr>
-      <tr id="courses">
+            <tr id="courses">
                 <td>
                     <span class="{style.label}">Courses:</span>
                 </td>
@@ -123,7 +164,7 @@
                     <span ui:field="courses"/>
                 </td>
             </tr>
-      <tr id="students">
+            <tr id="students">
                 <td>
                     <span class="{style.label}">Students:</span>
                 </td>
@@ -131,7 +172,7 @@
                     <span ui:field="students"/>
                 </td>
             </tr>
-    </table>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
