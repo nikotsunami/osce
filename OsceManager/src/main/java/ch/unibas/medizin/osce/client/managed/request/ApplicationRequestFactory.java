@@ -42,6 +42,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     NationalityRequest nationalityRequest();
 
+    LogEntryRequest logEntryRequest();
+
     LangSkillRequest langSkillRequest();
 
     EliminationCriterionRequest eliminationCriterionRequest();

@@ -41,6 +41,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(OsceDayProxy.class);
         rtn.add(OfficeProxy.class);
         rtn.add(NationalityProxy.class);
+        rtn.add(LogEntryProxy.class);
         rtn.add(LangSkillProxy.class);
         rtn.add(EliminationCriterionProxy.class);
         rtn.add(DoctorProxy.class);
@@ -128,6 +129,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (NationalityProxy.class.equals(clazz)) {
             processor.handleNationality((NationalityProxy) null);
+            return;
+        }
+        if (LogEntryProxy.class.equals(clazz)) {
+            processor.handleLogEntry((LogEntryProxy) null);
             return;
         }
         if (LangSkillProxy.class.equals(clazz)) {
@@ -258,6 +263,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleNationality((NationalityProxy) proxy);
             return;
         }
+        if (proxy instanceof LogEntryProxy) {
+            processor.handleLogEntry((LogEntryProxy) proxy);
+            return;
+        }
         if (proxy instanceof LangSkillProxy) {
             processor.handleLangSkill((LangSkillProxy) proxy);
             return;
@@ -351,6 +360,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleOffice(OfficeProxy proxy);
 
     public abstract void handleNationality(NationalityProxy proxy);
+
+    public abstract void handleLogEntry(LogEntryProxy proxy);
 
     public abstract void handleLangSkill(LangSkillProxy proxy);
 

@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -61,6 +62,8 @@ import ch.unibas.medizin.osce.client.managed.ui.EliminationCriterionListView;
 import ch.unibas.medizin.osce.client.managed.ui.EliminationCriterionMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.LogEntryListView;
+import ch.unibas.medizin.osce.client.managed.ui.LogEntryMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.NationalityListView;
 import ch.unibas.medizin.osce.client.managed.ui.NationalityMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.OfficeListView;
@@ -206,6 +209,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleNationality(NationalityProxy isNull) {
                 setResult(new NationalityListActivity(requests, ScaffoldApp.isMobile() ? NationalityMobileListView.instance() : NationalityListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleLogEntry(LogEntryProxy isNull) {
+                setResult(new LogEntryListActivity(requests, ScaffoldApp.isMobile() ? LogEntryMobileListView.instance() : LogEntryListView.instance(), placeController));
             }
 
             @Override

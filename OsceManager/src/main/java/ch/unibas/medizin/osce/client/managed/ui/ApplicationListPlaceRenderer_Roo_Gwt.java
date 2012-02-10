@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -130,6 +131,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleNationality(NationalityProxy isNull) {
                 setResult("Nationalitys");
+            }
+
+            @Override
+            public void handleLogEntry(LogEntryProxy isNull) {
+                setResult("LogEntrys");
             }
 
             @Override

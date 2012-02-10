@@ -278,3 +278,10 @@ field reference --fieldName osce --type ~domain.Task
 field set --fieldName tasks --type ~domain.Task --cardinality ONE_TO_MANY --mappedBy osce --class ~.domain.Osce
 field reference --fieldName administrator --type ~.domain.Administrator --class ~.domain.Task
 field set --fieldName tasks --type ~domain.Task --cardinality ONE_TO_MANY --mappedBy administrator --class ~.domain.Administrator
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-09 15:53:40
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-10 09:14:21
+entity --class ~.domain.LogEntry --testAutomatically 
+field number --fieldName shibId --type java.lang.Integer --class ~.domain.LogEntry
+field date --fieldName logtime --type java.util.Date
+field string --fieldName oldValue --sizeMax 255
+field string --fieldName newValue --sizeMax 255
