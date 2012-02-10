@@ -13,8 +13,8 @@ privileged aspect Student_Roo_ToString {
         sb.append("Gender: ").append(getGender()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
-        sb.append("Osces: ").append(getOsces() == null ? "null" : getOsces().size()).append(", ");
         sb.append("PreName: ").append(getPreName()).append(", ");
+        sb.append("StudentOsces: ").append(getStudentOsces() == null ? "null" : getStudentOsces().size()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

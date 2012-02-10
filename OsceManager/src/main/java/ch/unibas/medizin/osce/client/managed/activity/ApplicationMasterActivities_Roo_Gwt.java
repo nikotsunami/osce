@@ -34,6 +34,7 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorListView;
@@ -98,6 +99,8 @@ import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleListView;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.StudentListView;
 import ch.unibas.medizin.osce.client.managed.ui.StudentMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.StudentOscesListView;
+import ch.unibas.medizin.osce.client.managed.ui.StudentOscesMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.TaskListView;
 import ch.unibas.medizin.osce.client.managed.ui.TaskMobileListView;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldApp;
@@ -129,6 +132,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleStudent(StudentProxy isNull) {
                 setResult(new StudentListActivity(requests, ScaffoldApp.isMobile() ? StudentMobileListView.instance() : StudentListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleStudentOsces(StudentOscesProxy isNull) {
+                setResult(new StudentOscesListActivity(requests, ScaffoldApp.isMobile() ? StudentOscesMobileListView.instance() : StudentOscesListView.instance(), placeController));
             }
 
             @Override

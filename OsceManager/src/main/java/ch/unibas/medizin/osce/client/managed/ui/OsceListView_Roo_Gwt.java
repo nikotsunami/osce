@@ -6,7 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -214,16 +214,6 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getCourses());
             }
         }, "Courses");
-        paths.add("students");
-        table.addColumn(new TextColumn<OsceProxy>() {
-
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentProxyRenderer.instance());
-
-            @Override
-            public String getValue(OsceProxy object) {
-                return renderer.render(object.getStudents());
-            }
-        }, "Students");
         paths.add("tasks");
         table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -234,5 +224,15 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getTasks());
             }
         }, "Tasks");
+        paths.add("osceStudents");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance());
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getOsceStudents());
+            }
+        }, "Osce Students");
     }
 }

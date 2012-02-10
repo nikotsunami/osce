@@ -36,7 +36,7 @@ public interface StudentProxy extends EntityProxy {
 
     abstract void setEmail(String email);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.OsceProxy> getOsces();
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy> getStudentOsces();
 
-    abstract void setOsces(Set<OsceProxy> osces);
+    abstract void setStudentOsces(Set<StudentOscesProxy> studentOsces);
 }

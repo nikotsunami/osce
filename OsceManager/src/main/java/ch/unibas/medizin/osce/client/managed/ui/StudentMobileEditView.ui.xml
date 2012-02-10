@@ -19,37 +19,42 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="gender">
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="gender">
             <div class="{style.label}">Gender</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="gender"/>
             </div>
         </div>
-    <div id="name">
+        <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-    <div id="preName">
+        <div id="preName">
             <div class="{style.label}">Pre Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="preName"/>
             </div>
         </div>
-    <div id="email">
+        <div id="email">
             <div class="{style.label}">Email</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="email"/>
             </div>
         </div>
-    <div id="osces">
-            <div class="{style.label}">Osces</div>
+        <div id="studentOsces">
+            <div class="{style.label}">Student Osces</div>
             <div class="{style.value}">
-                <a:OsceSetEditor ui:field="osces"/>
+                <a:StudentOscesSetEditor ui:field="studentOsces"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

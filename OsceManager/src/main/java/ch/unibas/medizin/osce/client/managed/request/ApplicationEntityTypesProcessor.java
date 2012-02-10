@@ -25,6 +25,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         Set<Class<? extends EntityProxy>> rtn = new HashSet<Class<? extends EntityProxy>>();
         rtn.add(TaskProxy.class);
         rtn.add(StudentProxy.class);
+        rtn.add(StudentOscesProxy.class);
         rtn.add(StandardizedRoleProxy.class);
         rtn.add(StandardizedPatientProxy.class);
         rtn.add(SpokenLanguageProxy.class);
@@ -65,6 +66,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (StudentProxy.class.equals(clazz)) {
             processor.handleStudent((StudentProxy) null);
+            return;
+        }
+        if (StudentOscesProxy.class.equals(clazz)) {
+            processor.handleStudentOsces((StudentOscesProxy) null);
             return;
         }
         if (StandardizedRoleProxy.class.equals(clazz)) {
@@ -199,6 +204,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleStudent((StudentProxy) proxy);
             return;
         }
+        if (proxy instanceof StudentOscesProxy) {
+            processor.handleStudentOsces((StudentOscesProxy) proxy);
+            return;
+        }
         if (proxy instanceof StandardizedRoleProxy) {
             processor.handleStandardizedRole((StandardizedRoleProxy) proxy);
             return;
@@ -328,6 +337,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleTask(TaskProxy proxy);
 
     public abstract void handleStudent(StudentProxy proxy);
+
+    public abstract void handleStudentOsces(StudentOscesProxy proxy);
 
     public abstract void handleStandardizedRole(StandardizedRoleProxy proxy);
 

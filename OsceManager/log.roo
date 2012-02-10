@@ -285,3 +285,7 @@ field number --fieldName shibId --type java.lang.Integer --class ~.domain.LogEnt
 field date --fieldName logtime --type java.util.Date
 field string --fieldName oldValue --sizeMax 255
 field string --fieldName newValue --sizeMax 255
+entity --class ~.domain.StudentOsces --testAutomatically
+field boolean --fieldName isEnrolled --class ~.domain.StudentOsces
+field reference --fieldName osce --type ~.domain.Osce --class ~.domain.StudentOsces
+field reference --fieldName student --type ~.domain.Student --class ~.domain.StudentOsces

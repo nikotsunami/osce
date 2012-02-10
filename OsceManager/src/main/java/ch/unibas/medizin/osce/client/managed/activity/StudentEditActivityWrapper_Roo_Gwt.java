@@ -4,9 +4,9 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.StudentEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
-import ch.unibas.medizin.osce.client.managed.ui.OsceSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.StudentOscesSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -36,14 +36,14 @@ public abstract class StudentEditActivityWrapper_Roo_Gwt implements Activity, Is
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
         view.setGenderPickerValues(Arrays.asList(Gender.values()));
-        view.setOscesPickerValues(Collections.<OsceProxy>emptyList());
-        requests.osceRequest().findOsceEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().getPaths()).fire(new Receiver<List<OsceProxy>>() {
+        view.setStudentOscesPickerValues(Collections.<StudentOscesProxy>emptyList());
+        requests.studentOscesRequest().findStudentOscesEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance().getPaths()).fire(new Receiver<List<StudentOscesProxy>>() {
 
-            public void onSuccess(List<OsceProxy> response) {
-                List<OsceProxy> values = new ArrayList<OsceProxy>();
+            public void onSuccess(List<StudentOscesProxy> response) {
+                List<StudentOscesProxy> values = new ArrayList<StudentOscesProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setOscesPickerValues(values);
+                view.setStudentOscesPickerValues(values);
             }
         });
         wrapped.start(display, eventBus);
@@ -53,6 +53,6 @@ public abstract class StudentEditActivityWrapper_Roo_Gwt implements Activity, Is
 
         void setGenderPickerValues(Collection<Gender> values);
 
-        void setOscesPickerValues(Collection<OsceProxy> values);
+        void setStudentOscesPickerValues(Collection<StudentOscesProxy> values);
     }
 }

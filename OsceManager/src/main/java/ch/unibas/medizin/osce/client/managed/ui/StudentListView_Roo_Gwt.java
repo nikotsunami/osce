@@ -2,7 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.Gender;
@@ -120,15 +120,15 @@ public abstract class StudentListView_Roo_Gwt extends AbstractProxyListView<Stud
                 return renderer.render(object.getEmail());
             }
         }, "Email");
-        paths.add("osces");
+        paths.add("studentOsces");
         table.addColumn(new TextColumn<StudentProxy>() {
 
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance());
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance());
 
             @Override
             public String getValue(StudentProxy object) {
-                return renderer.render(object.getOsces());
+                return renderer.render(object.getStudentOsces());
             }
-        }, "Osces");
+        }, "Student Osces");
     }
 }

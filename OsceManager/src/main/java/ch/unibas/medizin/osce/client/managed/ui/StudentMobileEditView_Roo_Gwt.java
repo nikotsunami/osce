@@ -4,7 +4,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.StudentEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.StudentEditActivityWrapper.View;
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
@@ -57,13 +57,13 @@ public abstract class StudentMobileEditView_Roo_Gwt extends Composite implements
     TextBox email;
 
     @UiField
-    OsceSetEditor osces;
+    StudentOscesSetEditor studentOsces;
+
+    public void setStudentOscesPickerValues(Collection<StudentOscesProxy> values) {
+        studentOsces.setAcceptableValues(values);
+    }
 
     public void setGenderPickerValues(Collection<Gender> values) {
         gender.setAcceptableValues(values);
-    }
-
-    public void setOscesPickerValues(Collection<OsceProxy> values) {
-        osces.setAcceptableValues(values);
     }
 }

@@ -3,7 +3,7 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.shared.Gender;
 import java.lang.String;
 import java.util.Set;
@@ -42,12 +42,12 @@ privileged aspect Student_Roo_JavaBean {
         this.email = email;
     }
     
-    public Set<Osce> Student.getOsces() {
-        return this.osces;
+    public Set<StudentOsces> Student.getStudentOsces() {
+        return this.studentOsces;
     }
     
-    public void Student.setOsces(Set<Osce> osces) {
-        this.osces = osces;
+    public void Student.setStudentOsces(Set<StudentOsces> studentOsces) {
+        this.studentOsces = studentOsces;
     }
     
 }

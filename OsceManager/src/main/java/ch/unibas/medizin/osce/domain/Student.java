@@ -9,10 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Pattern;
 import java.util.Set;
-import ch.unibas.medizin.osce.domain.Osce;
 import java.util.HashSet;
-import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 
 @RooJavaBean
 @RooToString
@@ -34,6 +33,12 @@ public class Student {
     @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$")
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Osce> osces = new HashSet<Osce>();
+    // dk, 2012-02-10: split up m to n relationship since students
+    // need flag whether they are enrolled or not
+    //
+    // @ManyToMany(cascade = CascadeType.ALL)
+    // private Set<Osce> osces = new HashSet<Osce>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
+    private Set<StudentOsces> studentOsces = new HashSet<StudentOsces>();
 }

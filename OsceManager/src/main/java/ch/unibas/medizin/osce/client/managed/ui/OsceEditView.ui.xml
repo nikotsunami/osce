@@ -76,6 +76,19 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
@@ -164,20 +177,20 @@
                     <a:CourseSetEditor ui:field="courses"/>
                 </td>
             </tr>
-            <tr id="students">
-                <td>
-                    <div class="{style.label}">Students:</div>
-                </td>
-                <td>
-                    <a:StudentSetEditor ui:field="students"/>
-                </td>
-            </tr>
             <tr id="tasks">
                 <td>
                     <div class="{style.label}">Tasks:</div>
                 </td>
                 <td>
                     <a:TaskSetEditor ui:field="tasks"/>
+                </td>
+            </tr>
+            <tr id="osceStudents">
+                <td>
+                    <div class="{style.label}">Osce Students:</div>
+                </td>
+                <td>
+                    <a:StudentOscesSetEditor ui:field="osceStudents"/>
                 </td>
             </tr>
         </table>

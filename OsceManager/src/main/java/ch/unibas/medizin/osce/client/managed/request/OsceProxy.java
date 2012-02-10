@@ -64,11 +64,11 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setCourses(Set<CourseProxy> courses);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.StudentProxy> getStudents();
-
-    abstract void setStudents(Set<StudentProxy> students);
-
     abstract Set<ch.unibas.medizin.osce.client.managed.request.TaskProxy> getTasks();
 
     abstract void setTasks(Set<TaskProxy> tasks);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy> getOsceStudents();
+
+    abstract void setOsceStudents(Set<StudentOscesProxy> osceStudents);
 }

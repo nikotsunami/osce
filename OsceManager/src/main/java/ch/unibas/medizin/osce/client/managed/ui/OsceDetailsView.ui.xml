@@ -74,6 +74,21 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -178,20 +193,20 @@
                     <span ui:field="courses"/>
                 </td>
             </tr>
-            <tr id="students">
-                <td>
-                    <span class="{style.label}">Students:</span>
-                </td>
-                <td>
-                    <span ui:field="students"/>
-                </td>
-            </tr>
             <tr id="tasks">
                 <td>
                     <span class="{style.label}">Tasks:</span>
                 </td>
                 <td>
                     <span ui:field="tasks"/>
+                </td>
+            </tr>
+            <tr id="osceStudents">
+                <td>
+                    <span class="{style.label}">Osce Students:</span>
+                </td>
+                <td>
+                    <span ui:field="osceStudents"/>
                 </td>
             </tr>
         </table>

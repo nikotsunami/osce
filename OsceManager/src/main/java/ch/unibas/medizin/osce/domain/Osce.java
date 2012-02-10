@@ -14,8 +14,6 @@ import java.util.HashSet;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 import ch.unibas.medizin.osce.domain.Course;
-import ch.unibas.medizin.osce.domain.Student;
-import javax.persistence.ManyToMany;
 import ch.unibas.medizin.osce.domain.Task;
 
 @RooJavaBean
@@ -50,9 +48,15 @@ public class Osce {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Course> courses = new HashSet<Course>();
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "osces")
-    private Set<Student> students = new HashSet<Student>();
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Task> tasks = new HashSet<Task>();
+    
+    // dk, 2012-02-10: split up m to n relationship since students
+    // need flag whether they are enrolled or not
+    //
+    // @ManyToMany(cascade = CascadeType.ALL, mappedBy = "osces")
+    // private Set<Student> students = new HashSet<Student>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
+    private Set<StudentOsces> osceStudents = new HashSet<StudentOsces>();
 }

@@ -2,7 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
@@ -43,7 +43,7 @@ public abstract class StudentDetailsView_Roo_Gwt extends Composite implements Pr
     SpanElement email;
 
     @UiField
-    SpanElement osces;
+    SpanElement studentOsces;
 
     StudentProxy proxy;
 
@@ -58,7 +58,7 @@ public abstract class StudentDetailsView_Roo_Gwt extends Composite implements Pr
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
-        osces.setInnerText(proxy.getOsces() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance()).render(proxy.getOsces()));
+        studentOsces.setInnerText(proxy.getStudentOsces() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance()).render(proxy.getStudentOsces()));
         displayRenderer.setInnerText(StudentProxyRenderer.instance().render(proxy));
     }
 }

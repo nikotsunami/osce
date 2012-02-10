@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
@@ -92,14 +92,10 @@ public abstract class OsceEditView_Roo_Gwt extends Composite implements View<Osc
     CourseSetEditor courses;
 
     @UiField
-    StudentSetEditor students;
-
-    @UiField
     TaskSetEditor tasks;
 
-    public void setStudentsPickerValues(Collection<StudentProxy> values) {
-        students.setAcceptableValues(values);
-    }
+    @UiField
+    StudentOscesSetEditor osceStudents;
 
     public void setOsce_daysPickerValues(Collection<OsceDayProxy> values) {
         osce_days.setAcceptableValues(values);
@@ -115,6 +111,10 @@ public abstract class OsceEditView_Roo_Gwt extends Composite implements View<Osc
 
     public void setCoursesPickerValues(Collection<CourseProxy> values) {
         courses.setAcceptableValues(values);
+    }
+
+    public void setOsceStudentsPickerValues(Collection<StudentOscesProxy> values) {
+        osceStudents.setAcceptableValues(values);
     }
 
     public void setStudyYearPickerValues(Collection<StudyYears> values) {

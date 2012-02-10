@@ -54,6 +54,19 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}">
@@ -120,16 +133,16 @@
                 <a:CourseSetEditor ui:field="courses"/>
             </div>
         </div>
-        <div id="students">
-            <div class="{style.label}">Students</div>
-            <div class="{style.value}">
-                <a:StudentSetEditor ui:field="students"/>
-            </div>
-        </div>
         <div id="tasks">
             <div class="{style.label}">Tasks</div>
             <div class="{style.value}">
                 <a:TaskSetEditor ui:field="tasks"/>
+            </div>
+        </div>
+        <div id="osceStudents">
+            <div class="{style.label}">Osce Students</div>
+            <div class="{style.value}">
+                <a:StudentOscesSetEditor ui:field="osceStudents"/>
             </div>
         </div>
     </g:HTMLPanel>

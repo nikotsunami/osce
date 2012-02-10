@@ -10,6 +10,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     StudentRequest studentRequest();
 
+    StudentOscesRequest studentOscesRequest();
+
     StandardizedRoleRequest standardizedRoleRequest();
 
     StandardizedPatientRequest standardizedPatientRequest();
