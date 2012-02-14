@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -41,6 +42,11 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof ScarPlace){
 			Log.debug("is ScarPlace");
 			return new ScarActivity(requests, placeController);
+		}
+		
+		if (place instanceof RoomPlace){
+			Log.debug("is RoomPlace");
+			return new RoomActivity(requests, placeController);
 		}
 		
 		if (place instanceof AnamnesisCheckPlace){

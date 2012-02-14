@@ -32,6 +32,8 @@ public class OscePlaceHistoryFactory {
 	private final StandardizedPatientDetailsPlace.Tokenizer standardizedPatientDetailsPlaceTokenizer;
 
 	private final ScarPlace.Tokenizer scarPlaceTokenizer;
+	
+	private final RoomPlace.Tokenizer roomPlaceTokenizer;
 
 
 	@Inject
@@ -61,6 +63,8 @@ public class OscePlaceHistoryFactory {
 		this.standardizedPatientDetailsPlaceTokenizer = new StandardizedPatientDetailsPlace.Tokenizer(requestFactory);
 
 		this.scarPlaceTokenizer = new ScarPlace.Tokenizer(requestFactory);
+		
+		this.roomPlaceTokenizer = new RoomPlace.Tokenizer(requestFactory);
 	}
 
 
@@ -129,6 +133,10 @@ public class OscePlaceHistoryFactory {
 
 	public PlaceTokenizer<ScarPlace> getScarPlaceTokenizer() {
 		return scarPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<RoomPlace> getRoomPlaceTokenizer() {
+		return roomPlaceTokenizer;
 	}
 
 	//	public PlaceTokenizer<ProxyPlace> getProxyPlaceTokenizer() {

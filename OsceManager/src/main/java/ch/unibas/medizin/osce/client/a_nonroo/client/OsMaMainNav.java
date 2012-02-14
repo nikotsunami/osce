@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -60,6 +61,7 @@ public class OsMaMainNav extends Composite {
     	nationalities.setText(Messages.NATIONALITIES);
     	languages.setText(Messages.LANGUAGES);
     	professions.setText(Messages.PROFESSIONS);
+    	rooms.setText(Messages.ROOMS);
     	osces.setText(Messages.OSCES);
     	course.setText(Messages.CIRCUIT);
     	students.setText(Messages.STUDENTS);
@@ -96,6 +98,8 @@ public class OsMaMainNav extends Composite {
 			Anchor languages;				// Sprachen
 			@UiField
 			Anchor professions;				// Berufe
+			@UiField
+			Anchor rooms;					// Räume
 	
 	@UiField
 	DisclosurePanel examinationsPanel;		// Prüfungen
@@ -185,6 +189,11 @@ public class OsMaMainNav extends Composite {
 	@UiHandler("professions")
 	void professionsClicked(ClickEvent event) {
 		placeController.goTo(new ProfessionPlace("ProfessionPlace"));
+	}
+	
+	@UiHandler("rooms")
+	void roomsClicked(ClickEvent event) {
+		placeController.goTo(new RoomPlace("RoomPlace"));
 	}
 	
 	// TODO: UiHandler for nationalities

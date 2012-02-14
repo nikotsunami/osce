@@ -5,11 +5,16 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.util.List;
 import java.util.Set;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import java.util.HashSet;
+
+import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+import javax.persistence.TypedQuery;
 
 @RooJavaBean
 @RooToString
@@ -26,4 +31,23 @@ public class Room {
     private Double length;
 
     private Double width;
+    
+    public static Long countRoomsByName(String name) {
+    	EntityManager em = entityManager();
+    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Room o WHERE o.roomNumber LIKE :name", Long.class);
+    	q.setParameter("name", "%" + name + "%");
+    	
+    	return q.getSingleResult();
+    }
+    
+    public static List<Room> findRoomEntriesByName(String name, int firstResult, int maxResults) {
+        if (name == null) throw new IllegalArgumentException("The name argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Room> q = em.createQuery("SELECT o FROM Room AS o WHERE o.roomNumber LIKE :name", Room.class);
+        q.setParameter("name", "%" + name + "%");
+        q.setFirstResult(firstResult);
+        q.setMaxResults(maxResults);
+        
+        return q.getResultList();
+    }
 }

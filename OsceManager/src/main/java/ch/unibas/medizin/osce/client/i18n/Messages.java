@@ -14,6 +14,7 @@ public class Messages {
 			public static final String NATIONALITIES = "Nationalitäten";
 			public static final String PROFESSIONS = "Berufe";
 			public static final String LANGUAGES = "Sprachen";
+			public static final String ROOMS = "Räume";
 
 			public static final String EXAMS = "Prüfungen";
 			public static final String OSCES = "OSCEs";
@@ -41,6 +42,7 @@ public class Messages {
 			public static final String ADD_LANGUAGE = "Sprache hinzufügen";
 			public static final String ADD_PROFESSION = "Beruf hinzufügen";
 			public static final String ADD_LANGSKILL = "Sprachkenntnis hinzufügen";
+			public static final String ADD_ROOM = "Raum hinzufügen";
 			
 			/* Standardized Patient Details */
 			public static final String NAME = "Name";
@@ -131,5 +133,9 @@ public class Messages {
 			public static final String BIND_TYPE = "Bind Type";
 			public static final String ADD = "Hinzufügen";
 			public static final String BASIC_FILTER = "Basisfilter";
+			
+			public static final String ROOMNUMBER = "Raum-Nr.";
+			public static final String ROOMLENGTH = "Länge";
+			public static final String ROOMWIDTH = "Breite";
 			
 }
