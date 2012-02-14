@@ -11,14 +11,24 @@ INSERT INTO `nationality` (id,nationality,version) VALUES (5,'Schweiz',0);
 INSERT INTO `nationality` (id,nationality,version) VALUES (6,'Deutschland',0);
 INSERT INTO `nationality` (id,nationality,version) VALUES (7,'Frankreich',0);
 
-INSERT INTO `osce`.`clinic` (`city`, `name`, `postal_code`, `street`, `version`) VALUES ('Basel', 'UKBB xx', '4000', 'UKBB-Strasse 1', '0');
-INSERT INTO `osce`.`clinic` (`city`, `name`, `postal_code`, `street`, `version`) VALUES ('Liestal', 'Kantonsspital xx', '1', 'Hauptstrasse x', '0');
+INSERT INTO `clinic` (id,city,name,postal_code,street,version) VALUES (3,'Basel','Unispital',4031,'Spitalstr. 21',0);
+INSERT INTO `clinic` (id,city,name,postal_code,street,version) VALUES (4,'Basel','FelixPlatter-Spital',4055,'Burgfelderstrasse 101',0);
+INSERT INTO `clinic` (id,city,name,postal_code,street,version) VALUES (5,'Liestal','Kantonsspital Liestal',4010,'Rheinstrasse 26',0);
+INSERT INTO `clinic` (id,city,name,postal_code,street,version) VALUES (6,'Bruderholz','Bruderholz Spital',4101,'Bruderholz',0);
 
-INSERT INTO `osce`.`office` (`email`, `gender`, `name`, `pre_name`, `telephone`, `title`, `version`) VALUES ('bar@foo.com', '1', 'Office', 'Officer', '987654321', '1', '0');
-INSERT INTO `osce`.`office` (`email`, `gender`, `name`, `pre_name`, `telephone`, `title`, `version`) VALUES ('foo@bar.com', '1', 'Blah', 'Blubb', '123456789', '1', '0');
+INSERT INTO `office` (id,email,gender,name,pre_name,telephone,title,version) VALUES (3,'okr@hospital.ch',0,'Aebischer','Hannes','054 852 75 75','Herr',0);
+INSERT INTO `office` (id,email,gender,name,pre_name,telephone,title,version) VALUES (4,'oms@krankenhaus.ch',0,'Licht','Rudolf','057 584 52 54','Herr',0);
+INSERT INTO `office` (id,email,gender,name,pre_name,telephone,title,version) VALUES (5,'ogk@spital.ch',1,'Heiligenknust','Marianne','078 525 21 58','Frau',0);
+INSERT INTO `office` (id,email,gender,name,pre_name,telephone,title,version) VALUES (6,'ocg@samsam.ch',1,'Carolin','Caroline','045 258 52 58','Frau',0);
+INSERT INTO `office` (id,email,gender,name,pre_name,telephone,title,version) VALUES (7,'ohb@hospital.ch',1,'Walter','Hans','085 528 54 54','Herr',0);
+INSERT INTO `office` (id,email,gender,name,pre_name,telephone,title,version) VALUES (8,'ofg@krankenhaus.ch',0,'Holz','Sebastian','058 545 25 15','Herr',0);
 
-INSERT INTO `osce`.`doctor` (`email`, `gender`, `name`, `pre_name`, `telephone`, `title`, `version`, `office`, `clinic`) VALUES ('dr.who@who.com', '1', 'Who', 'Doctor', '123456', 'Dr. Med. Dent.', '0', '1', '2');
-INSERT INTO `osce`.`doctor` (`email`, `gender`, `name`, `pre_name`, `telephone`, `title`, `version`, `office`, `clinic`) VALUES ('dr.house@house.com', '1', 'House', 'Gregory', '123456', 'Dr.', '0', '2', '1');
+INSERT INTO `doctor` (id,email,gender,name,pre_name,telephone,title,version,clinic,office) VALUES (5,'karl.rath@hospital.ch',0,'Rath','Karl','054 452 54 85','Dr. med.',0,3,3);
+INSERT INTO `doctor` (id,email,gender,name,pre_name,telephone,title,version,clinic,office) VALUES (6,'Manuela.Scharrer@krank.ch',1,'Scharrer','Manuela','057 586 25 25','Prof. Dr. med.',0,4,4);
+INSERT INTO `doctor` (id,email,gender,name,pre_name,telephone,title,version,clinic,office) VALUES (7,'Gertrude.Kummerlaus@spital.ch',1,'Kummerlaus','Gertrude','075 542 54 25','Dr. med.',0,5,5);
+INSERT INTO `doctor` (id,email,gender,name,pre_name,telephone,title,version,clinic,office) VALUES (8,'Cornelius.Grabenschänke@samsam.ch',0,'Grabenschänke','Cornelius','025 525 25 25','Dr. med.',0,6,6);
+INSERT INTO `doctor` (id,email,gender,name,pre_name,telephone,title,version,clinic,office) VALUES (9,'Hannes.Bratdurst@hospital.ch',0,'Bratdurst','Hannes','058 856 98 28','Dr. med.',0,3,7);
+INSERT INTO `doctor` (id,email,gender,name,pre_name,telephone,title,version,clinic,office) VALUES (10,'Franziska.Grödel@krank.ch',1,'Grödel','Franziska','085 258 25 15','Prof. Dr. med.',0,4,8);
 
 INSERT INTO `profession` (id,profession,version) VALUES (2,'Student/in',0);
 INSERT INTO `profession` (id,profession,version) VALUES (3,'Bauarbeiter/in',0);
