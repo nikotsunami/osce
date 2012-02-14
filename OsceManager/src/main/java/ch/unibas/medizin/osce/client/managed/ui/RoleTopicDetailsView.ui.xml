@@ -35,7 +35,14 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +50,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +58,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="name">
+            <tr id="name">
                 <td>
                     <span class="{style.label}">Name:</span>
                 </td>
@@ -59,7 +66,7 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-      <tr id="description">
+            <tr id="description">
                 <td>
                     <span class="{style.label}">Description:</span>
                 </td>
@@ -67,7 +74,7 @@
                     <span ui:field="description"/>
                 </td>
             </tr>
-      <tr id="studyYear">
+            <tr id="studyYear">
                 <td>
                     <span class="{style.label}">Study Year:</span>
                 </td>
@@ -75,7 +82,7 @@
                     <span ui:field="studyYear"/>
                 </td>
             </tr>
-      <tr id="slotsUntilChange">
+            <tr id="slotsUntilChange">
                 <td>
                     <span class="{style.label}">Slots Until Change:</span>
                 </td>
@@ -83,7 +90,7 @@
                     <span ui:field="slotsUntilChange"/>
                 </td>
             </tr>
-      <tr id="standardizedRoles">
+            <tr id="standardizedRoles">
                 <td>
                     <span class="{style.label}">Standardized Roles:</span>
                 </td>
@@ -91,7 +98,15 @@
                     <span ui:field="standardizedRoles"/>
                 </td>
             </tr>
-    </table>
+            <tr id="specialisation">
+                <td>
+                    <span class="{style.label}">Specialisation:</span>
+                </td>
+                <td>
+                    <span ui:field="specialisation"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

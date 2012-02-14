@@ -9,15 +9,18 @@ privileged aspect StandardizedRole_Roo_ToString {
     
     public String StandardizedRole.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Author: ").append(getAuthor()).append(", ");
         sb.append("CaseDescription: ").append(getCaseDescription()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Keywords: ").append(getKeywords() == null ? "null" : getKeywords().size()).append(", ");
         sb.append("LongName: ").append(getLongName()).append(", ");
-        sb.append("Reviewer: ").append(getReviewer()).append(", ");
+        sb.append("MainVersion: ").append(getMainVersion()).append(", ");
+        sb.append("RoleParticipants: ").append(getRoleParticipants() == null ? "null" : getRoleParticipants().size()).append(", ");
         sb.append("RoleScript: ").append(getRoleScript()).append(", ");
         sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");
         sb.append("RoleType: ").append(getRoleType()).append(", ");
         sb.append("ShortName: ").append(getShortName()).append(", ");
+        sb.append("StudyYear: ").append(getStudyYear()).append(", ");
+        sb.append("SubVersion: ").append(getSubVersion()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

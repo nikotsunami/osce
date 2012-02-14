@@ -26,4 +26,12 @@ public interface RoomProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy> getOscePostRooms();
 
     abstract void setOscePostRooms(Set<OscePostRoomProxy> oscePostRooms);
+
+    abstract Double getLength();
+
+    abstract void setLength(Double length);
+
+    abstract Double getWidth();
+
+    abstract void setWidth(Double width);
 }

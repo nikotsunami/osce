@@ -5,8 +5,12 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Clinic;
 import ch.unibas.medizin.osce.domain.Office;
+import ch.unibas.medizin.osce.domain.RoleParticipant;
+import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.shared.Gender;
+import java.lang.Boolean;
 import java.lang.String;
+import java.util.Set;
 
 privileged aspect Doctor_Roo_JavaBean {
     
@@ -72,6 +76,30 @@ privileged aspect Doctor_Roo_JavaBean {
     
     public void Doctor.setOffice(Office office) {
         this.office = office;
+    }
+    
+    public Boolean Doctor.getIsActive() {
+        return this.isActive;
+    }
+    
+    public void Doctor.setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+    
+    public Specialisation Doctor.getSpecialisation() {
+        return this.specialisation;
+    }
+    
+    public void Doctor.setSpecialisation(Specialisation specialisation) {
+        this.specialisation = specialisation;
+    }
+    
+    public Set<RoleParticipant> Doctor.getRoleParticipants() {
+        return this.roleParticipants;
+    }
+    
+    public void Doctor.setRoleParticipants(Set<RoleParticipant> roleParticipants) {
+        this.roleParticipants = roleParticipants;
     }
     
 }

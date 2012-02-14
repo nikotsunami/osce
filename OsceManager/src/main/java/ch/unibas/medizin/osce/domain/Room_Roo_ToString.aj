@@ -10,9 +10,11 @@ privileged aspect Room_Roo_ToString {
     public String Room.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Length: ").append(getLength()).append(", ");
         sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
         sb.append("RoomNumber: ").append(getRoomNumber()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("Width: ").append(getWidth());
         return sb.toString();
     }
     

@@ -4,6 +4,8 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.RoleTopic;
+import ch.unibas.medizin.osce.domain.Specialisation;
+import ch.unibas.medizin.osce.domain.SpecialisationDataOnDemand;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Integer;
 import java.lang.String;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect RoleTopicDataOnDemand_Roo_DataOnDemand {
@@ -24,11 +27,15 @@ privileged aspect RoleTopicDataOnDemand_Roo_DataOnDemand {
     
     private List<RoleTopic> RoleTopicDataOnDemand.data;
     
+    @Autowired
+    private SpecialisationDataOnDemand RoleTopicDataOnDemand.specialisationDataOnDemand;
+    
     public RoleTopic RoleTopicDataOnDemand.getNewTransientRoleTopic(int index) {
         RoleTopic obj = new RoleTopic();
         setDescription(obj, index);
         setName(obj, index);
         setSlotsUntilChange(obj, index);
+        setSpecialisation(obj, index);
         setStudyYear(obj, index);
         return obj;
     }
@@ -55,6 +62,11 @@ privileged aspect RoleTopicDataOnDemand_Roo_DataOnDemand {
             slotsUntilChange = 99;
         }
         obj.setSlotsUntilChange(slotsUntilChange);
+    }
+    
+    public void RoleTopicDataOnDemand.setSpecialisation(RoleTopic obj, int index) {
+        Specialisation specialisation = specialisationDataOnDemand.getRandomSpecialisation();
+        obj.setSpecialisation(specialisation);
     }
     
     public void RoleTopicDataOnDemand.setStudyYear(RoleTopic obj, int index) {

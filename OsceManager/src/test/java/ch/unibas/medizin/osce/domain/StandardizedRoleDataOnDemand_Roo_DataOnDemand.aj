@@ -3,11 +3,11 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.Doctor;
-import ch.unibas.medizin.osce.domain.DoctorDataOnDemand;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.domain.RoleTopicDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.shared.StudyYears;
+import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -28,27 +28,21 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
     private List<StandardizedRole> StandardizedRoleDataOnDemand.data;
     
     @Autowired
-    private DoctorDataOnDemand StandardizedRoleDataOnDemand.doctorDataOnDemand;
-    
-    @Autowired
     private RoleTopicDataOnDemand StandardizedRoleDataOnDemand.roleTopicDataOnDemand;
     
     public StandardizedRole StandardizedRoleDataOnDemand.getNewTransientStandardizedRole(int index) {
         StandardizedRole obj = new StandardizedRole();
-        setAuthor(obj, index);
         setCaseDescription(obj, index);
         setLongName(obj, index);
-        setReviewer(obj, index);
+        setMainVersion(obj, index);
+        setPreviousVersion(obj, index);
         setRoleScript(obj, index);
         setRoleTopic(obj, index);
         setRoleType(obj, index);
         setShortName(obj, index);
+        setStudyYear(obj, index);
+        setSubVersion(obj, index);
         return obj;
-    }
-    
-    public void StandardizedRoleDataOnDemand.setAuthor(StandardizedRole obj, int index) {
-        Doctor author = doctorDataOnDemand.getRandomDoctor();
-        obj.setAuthor(author);
     }
     
     public void StandardizedRoleDataOnDemand.setCaseDescription(StandardizedRole obj, int index) {
@@ -67,9 +61,14 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
         obj.setLongName(longName);
     }
     
-    public void StandardizedRoleDataOnDemand.setReviewer(StandardizedRole obj, int index) {
-        Doctor reviewer = doctorDataOnDemand.getRandomDoctor();
-        obj.setReviewer(reviewer);
+    public void StandardizedRoleDataOnDemand.setMainVersion(StandardizedRole obj, int index) {
+        Integer mainVersion = new Integer(index);
+        obj.setMainVersion(mainVersion);
+    }
+    
+    public void StandardizedRoleDataOnDemand.setPreviousVersion(StandardizedRole obj, int index) {
+        StandardizedRole previousVersion = obj;
+        obj.setPreviousVersion(previousVersion);
     }
     
     public void StandardizedRoleDataOnDemand.setRoleScript(StandardizedRole obj, int index) {
@@ -99,6 +98,16 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
             shortName = shortName.substring(0, 20);
         }
         obj.setShortName(shortName);
+    }
+    
+    public void StandardizedRoleDataOnDemand.setStudyYear(StandardizedRole obj, int index) {
+        StudyYears studyYear = StudyYears.class.getEnumConstants()[0];
+        obj.setStudyYear(studyYear);
+    }
+    
+    public void StandardizedRoleDataOnDemand.setSubVersion(StandardizedRole obj, int index) {
+        Integer subVersion = new Integer(index);
+        obj.setSubVersion(subVersion);
     }
     
     public StandardizedRole StandardizedRoleDataOnDemand.getSpecificStandardizedRole(int index) {

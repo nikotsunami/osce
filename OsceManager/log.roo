@@ -289,3 +289,28 @@ entity --class ~.domain.StudentOsces --testAutomatically
 field boolean --fieldName isEnrolled --class ~.domain.StudentOsces
 field reference --fieldName osce --type ~.domain.Osce --class ~.domain.StudentOsces
 field reference --fieldName student --type ~.domain.Student --class ~.domain.StudentOsces
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-10 17:15:00
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-10 17:19:04
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-10 17:26:54
+field boolean --fieldName isActive --class ~.domain.Doctor
+field number --fieldName length --type java.lang.Double --class ~.domain.Room
+field number --fieldName width --type java.lang.Double --class ~.domain.Room
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-10 17:42:15
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-14 08:11:49
+field reference --fieldName previousVersion --type ~.domain.StandardizedRole --class ~.domain.StandardizedRole
+field enum --fieldName studyYear --type ~.shared.StudyYears
+field number --fieldName mainVersion --type java.lang.Integer
+field number --fieldName subVersion --type java.lang.Integer
+entity --class ~.domain.Keyword --testAutomatically 
+field string --fieldName name --sizeMin 2 --sizeMax 255 --notNull
+entity --class ~.domain.Specialisation --testAutomatically 
+field string --fieldName name --sizeMin 2 --sizeMax 255 --notNull
+field reference --fieldName specialisation --type ~.domain.Specialisation --class ~.domain.RoleTopic
+field reference --fieldName specialisation --type ~.domain.Specialisation --class ~.domain.Doctor
+entity --class ~.domain.RoleParticipant --testAutomatically 
+enum type --class ~.shared.RoleParticipantTypes
+enum constant --name Author
+enum constant --name Reviewer
+field reference --fieldName standardizedRole --type ~.domain.StandardizedRole --class ~.domain.RoleParticipant
+field reference --fieldName doctor --type ~.domain.Doctor --class ~.domain.RoleParticipant
+field enum --fieldName type --type ~.shared.RoleParticipantType --class ~.domain.RoleParticipant

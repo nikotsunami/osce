@@ -43,7 +43,12 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="name">
+      
+      
+      
+      
+      
+    <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -51,7 +56,7 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-      <tr id="description">
+            <tr id="description">
                 <td>
                     <div class="{style.label}">Description:</div>
                 </td>
@@ -59,7 +64,7 @@
                     <g:TextBox ui:field="description"/>
                 </td>
             </tr>
-      <tr id="studyYear">
+            <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
                 </td>
@@ -67,7 +72,7 @@
                     <g:ValueListBox ui:field="studyYear"/>
                 </td>
             </tr>
-      <tr id="slotsUntilChange">
+            <tr id="slotsUntilChange">
                 <td>
                     <div class="{style.label}">Slots Until Change:</div>
                 </td>
@@ -75,7 +80,7 @@
                     <g:IntegerBox ui:field="slotsUntilChange"/>
                 </td>
             </tr>
-      <tr id="standardizedRoles">
+            <tr id="standardizedRoles">
                 <td>
                     <div class="{style.label}">Standardized Roles:</div>
                 </td>
@@ -83,7 +88,15 @@
                     <a:StandardizedRoleSetEditor ui:field="standardizedRoles"/>
                 </td>
             </tr>
-    </table>
+            <tr id="specialisation">
+                <td>
+                    <div class="{style.label}">Specialisation:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="specialisation"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

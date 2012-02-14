@@ -5,6 +5,8 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.Gender;
 import com.google.gwt.core.client.GWT;
@@ -171,5 +173,40 @@ public abstract class DoctorListView_Roo_Gwt extends AbstractProxyListView<Docto
                 return renderer.render(object.getOffice());
             }
         }, "Office");
+        paths.add("isActive");
+        table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.lang.Boolean> renderer = new AbstractRenderer<java.lang.Boolean>() {
+
+                public String render(java.lang.Boolean obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getIsActive());
+            }
+        }, "Is Active");
+        paths.add("specialisation");
+        table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance();
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getSpecialisation());
+            }
+        }, "Specialisation");
+        paths.add("roleParticipants");
+        table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance());
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getRoleParticipants());
+            }
+        }, "Role Participants");
     }
 }

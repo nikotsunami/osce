@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -26,10 +27,12 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -75,6 +78,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleSpecialisation(SpecialisationProxy isNull) {
+                setResult("Specialisations");
+            }
+
+            @Override
             public void handleSemester(SemesterProxy isNull) {
                 setResult("Semesters");
             }
@@ -92,6 +100,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleRoleTopic(RoleTopicProxy isNull) {
                 setResult("RoleTopics");
+            }
+
+            @Override
+            public void handleRoleParticipant(RoleParticipantProxy isNull) {
+                setResult("RoleParticipants");
             }
 
             @Override
@@ -147,6 +160,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleLangSkill(LangSkillProxy isNull) {
                 setResult("LangSkills");
+            }
+
+            @Override
+            public void handleKeyword(KeywordProxy isNull) {
+                setResult("Keywords");
             }
 
             @Override

@@ -4,11 +4,13 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.StandardizedRoleEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.StandardizedRoleEditActivityWrapper.View;
-import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -35,6 +37,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.datepicker.client.DateBox;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public abstract class StandardizedRoleEditView_Roo_Gwt extends Composite implements View<StandardizedRoleEditView> {
 
@@ -56,21 +59,46 @@ public abstract class StandardizedRoleEditView_Roo_Gwt extends Composite impleme
     @UiField(provided = true)
     ValueListBox<RoleTopicProxy> roleTopic = new ValueListBox<RoleTopicProxy>(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy>());
 
-    @UiField(provided = true)
-    ValueListBox<DoctorProxy> author = new ValueListBox<DoctorProxy>(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.DoctorProxy>());
+    @UiField
+    RoleParticipantSetEditor roleParticipants;
 
     @UiField(provided = true)
-    ValueListBox<DoctorProxy> reviewer = new ValueListBox<DoctorProxy>(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.DoctorProxy>());
+    ValueListBox<StandardizedRoleProxy> previousVersion = new ValueListBox<StandardizedRoleProxy>(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>());
 
-    public void setAuthorPickerValues(Collection<DoctorProxy> values) {
-        author.setAcceptableValues(values);
+    @UiField(provided = true)
+    ValueListBox<StudyYears> studyYear = new ValueListBox<StudyYears>(new AbstractRenderer<ch.unibas.medizin.osce.shared.StudyYears>() {
+
+        public String render(ch.unibas.medizin.osce.shared.StudyYears obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+
+    @UiField
+    IntegerBox mainVersion;
+
+    @UiField
+    IntegerBox subVersion;
+
+    @UiField
+    KeywordSetEditor keywords;
+
+    public void setRoleParticipantsPickerValues(Collection<RoleParticipantProxy> values) {
+        roleParticipants.setAcceptableValues(values);
     }
 
-    public void setReviewerPickerValues(Collection<DoctorProxy> values) {
-        reviewer.setAcceptableValues(values);
+    public void setKeywordsPickerValues(Collection<KeywordProxy> values) {
+        keywords.setAcceptableValues(values);
     }
 
     public void setRoleTopicPickerValues(Collection<RoleTopicProxy> values) {
         roleTopic.setAcceptableValues(values);
+    }
+
+    public void setStudyYearPickerValues(Collection<StudyYears> values) {
+        studyYear.setAcceptableValues(values);
+    }
+
+    public void setPreviousVersionPickerValues(Collection<StandardizedRoleProxy> values) {
+        previousVersion.setAcceptableValues(values);
     }
 }

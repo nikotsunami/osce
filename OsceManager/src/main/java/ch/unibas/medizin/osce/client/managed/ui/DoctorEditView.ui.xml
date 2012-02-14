@@ -43,7 +43,34 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="gender">
+      
+      
+      
+      
+      
+      
+      
+      
+    
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="gender">
                 <td>
                     <div class="{style.label}">Gender:</div>
                 </td>
@@ -51,7 +78,7 @@
                     <g:ValueListBox ui:field="gender"/>
                 </td>
             </tr>
-      <tr id="title">
+            <tr id="title">
                 <td>
                     <div class="{style.label}">Title:</div>
                 </td>
@@ -59,7 +86,7 @@
                     <g:TextBox ui:field="title"/>
                 </td>
             </tr>
-      <tr id="name">
+            <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -67,7 +94,7 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-      <tr id="preName">
+            <tr id="preName">
                 <td>
                     <div class="{style.label}">Pre Name:</div>
                 </td>
@@ -75,7 +102,7 @@
                     <g:TextBox ui:field="preName"/>
                 </td>
             </tr>
-      <tr id="email">
+            <tr id="email">
                 <td>
                     <div class="{style.label}">Email:</div>
                 </td>
@@ -83,7 +110,7 @@
                     <g:TextBox ui:field="email"/>
                 </td>
             </tr>
-      <tr id="telephone">
+            <tr id="telephone">
                 <td>
                     <div class="{style.label}">Telephone:</div>
                 </td>
@@ -91,7 +118,7 @@
                     <g:TextBox ui:field="telephone"/>
                 </td>
             </tr>
-      <tr id="clinic">
+            <tr id="clinic">
                 <td>
                     <div class="{style.label}">Clinic:</div>
                 </td>
@@ -99,7 +126,7 @@
                     <g:ValueListBox ui:field="clinic"/>
                 </td>
             </tr>
-      <tr id="office">
+            <tr id="office">
                 <td>
                     <div class="{style.label}">Office:</div>
                 </td>
@@ -107,7 +134,31 @@
                     <g:ValueListBox ui:field="office"/>
                 </td>
             </tr>
-    </table>
+            <tr id="isActive">
+                <td>
+                    <div class="{style.label}">Is Active:</div>
+                </td>
+                <td>
+                    <g:CheckBox ui:field="isActive"/>
+                </td>
+            </tr>
+            <tr id="specialisation">
+                <td>
+                    <div class="{style.label}">Specialisation:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="specialisation"/>
+                </td>
+            </tr>
+            <tr id="roleParticipants">
+                <td>
+                    <div class="{style.label}">Role Participants:</div>
+                </td>
+                <td>
+                    <a:RoleParticipantSetEditor ui:field="roleParticipants"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

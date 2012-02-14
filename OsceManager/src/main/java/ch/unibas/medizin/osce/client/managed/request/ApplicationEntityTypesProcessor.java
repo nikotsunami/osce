@@ -29,10 +29,12 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(StandardizedRoleProxy.class);
         rtn.add(StandardizedPatientProxy.class);
         rtn.add(SpokenLanguageProxy.class);
+        rtn.add(SpecialisationProxy.class);
         rtn.add(SemesterProxy.class);
         rtn.add(ScarProxy.class);
         rtn.add(RoomProxy.class);
         rtn.add(RoleTopicProxy.class);
+        rtn.add(RoleParticipantProxy.class);
         rtn.add(ProfessionProxy.class);
         rtn.add(PatientInSemesterProxy.class);
         rtn.add(PatientInRoleProxy.class);
@@ -44,6 +46,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(NationalityProxy.class);
         rtn.add(LogEntryProxy.class);
         rtn.add(LangSkillProxy.class);
+        rtn.add(KeywordProxy.class);
         rtn.add(EliminationCriterionProxy.class);
         rtn.add(DoctorProxy.class);
         rtn.add(DescriptionProxy.class);
@@ -84,6 +87,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleSpokenLanguage((SpokenLanguageProxy) null);
             return;
         }
+        if (SpecialisationProxy.class.equals(clazz)) {
+            processor.handleSpecialisation((SpecialisationProxy) null);
+            return;
+        }
         if (SemesterProxy.class.equals(clazz)) {
             processor.handleSemester((SemesterProxy) null);
             return;
@@ -98,6 +105,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (RoleTopicProxy.class.equals(clazz)) {
             processor.handleRoleTopic((RoleTopicProxy) null);
+            return;
+        }
+        if (RoleParticipantProxy.class.equals(clazz)) {
+            processor.handleRoleParticipant((RoleParticipantProxy) null);
             return;
         }
         if (ProfessionProxy.class.equals(clazz)) {
@@ -142,6 +153,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (LangSkillProxy.class.equals(clazz)) {
             processor.handleLangSkill((LangSkillProxy) null);
+            return;
+        }
+        if (KeywordProxy.class.equals(clazz)) {
+            processor.handleKeyword((KeywordProxy) null);
             return;
         }
         if (EliminationCriterionProxy.class.equals(clazz)) {
@@ -220,6 +235,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleSpokenLanguage((SpokenLanguageProxy) proxy);
             return;
         }
+        if (proxy instanceof SpecialisationProxy) {
+            processor.handleSpecialisation((SpecialisationProxy) proxy);
+            return;
+        }
         if (proxy instanceof SemesterProxy) {
             processor.handleSemester((SemesterProxy) proxy);
             return;
@@ -234,6 +253,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (proxy instanceof RoleTopicProxy) {
             processor.handleRoleTopic((RoleTopicProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleParticipantProxy) {
+            processor.handleRoleParticipant((RoleParticipantProxy) proxy);
             return;
         }
         if (proxy instanceof ProfessionProxy) {
@@ -278,6 +301,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (proxy instanceof LangSkillProxy) {
             processor.handleLangSkill((LangSkillProxy) proxy);
+            return;
+        }
+        if (proxy instanceof KeywordProxy) {
+            processor.handleKeyword((KeywordProxy) proxy);
             return;
         }
         if (proxy instanceof EliminationCriterionProxy) {
@@ -346,6 +373,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleSpokenLanguage(SpokenLanguageProxy proxy);
 
+    public abstract void handleSpecialisation(SpecialisationProxy proxy);
+
     public abstract void handleSemester(SemesterProxy proxy);
 
     public abstract void handleScar(ScarProxy proxy);
@@ -353,6 +382,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleRoom(RoomProxy proxy);
 
     public abstract void handleRoleTopic(RoleTopicProxy proxy);
+
+    public abstract void handleRoleParticipant(RoleParticipantProxy proxy);
 
     public abstract void handleProfession(ProfessionProxy proxy);
 
@@ -375,6 +406,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleLogEntry(LogEntryProxy proxy);
 
     public abstract void handleLangSkill(LangSkillProxy proxy);
+
+    public abstract void handleKeyword(KeywordProxy proxy);
 
     public abstract void handleEliminationCriterion(EliminationCriterionProxy proxy);
 

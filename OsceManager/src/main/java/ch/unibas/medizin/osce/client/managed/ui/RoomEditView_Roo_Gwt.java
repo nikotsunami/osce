@@ -44,6 +44,12 @@ public abstract class RoomEditView_Roo_Gwt extends Composite implements View<Roo
     @UiField
     OscePostRoomSetEditor oscePostRooms;
 
+    @UiField
+    DoubleBox length;
+
+    @UiField
+    DoubleBox width;
+
     public void setOscePostRoomsPickerValues(Collection<OscePostRoomProxy> values) {
         oscePostRooms.setAcceptableValues(values);
     }

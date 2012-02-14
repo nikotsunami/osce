@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.activity.RoleTopicEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
@@ -46,6 +47,16 @@ public abstract class RoleTopicEditActivityWrapper_Roo_Gwt implements Activity, 
                 view.setStandardizedRolesPickerValues(values);
             }
         });
+        view.setSpecialisationPickerValues(Collections.<SpecialisationProxy>emptyList());
+        requests.specialisationRequest().findSpecialisationEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance().getPaths()).fire(new Receiver<List<SpecialisationProxy>>() {
+
+            public void onSuccess(List<SpecialisationProxy> response) {
+                List<SpecialisationProxy> values = new ArrayList<SpecialisationProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setSpecialisationPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -54,5 +65,7 @@ public abstract class RoleTopicEditActivityWrapper_Roo_Gwt implements Activity, 
         void setStudyYearPickerValues(Collection<StudyYears> values);
 
         void setStandardizedRolesPickerValues(Collection<StandardizedRoleProxy> values);
+
+        void setSpecialisationPickerValues(Collection<SpecialisationProxy> values);
     }
 }

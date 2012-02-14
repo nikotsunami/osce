@@ -39,4 +39,8 @@ public interface RoleTopicProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> getStandardizedRoles();
 
     abstract void setStandardizedRoles(Set<StandardizedRoleProxy> standardizedRoles);
+
+    abstract SpecialisationProxy getSpecialisation();
+
+    abstract void setSpecialisation(SpecialisationProxy specialisation);
 }

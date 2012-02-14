@@ -2,10 +2,12 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -145,25 +147,80 @@ public abstract class StandardizedRoleListView_Roo_Gwt extends AbstractProxyList
                 return renderer.render(object.getRoleTopic());
             }
         }, "Role Topic");
-        paths.add("author");
+        paths.add("roleParticipants");
         table.addColumn(new TextColumn<StandardizedRoleProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.DoctorProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance();
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance());
 
             @Override
             public String getValue(StandardizedRoleProxy object) {
-                return renderer.render(object.getAuthor());
+                return renderer.render(object.getRoleParticipants());
             }
-        }, "Author");
-        paths.add("reviewer");
+        }, "Role Participants");
+        paths.add("previousVersion");
         table.addColumn(new TextColumn<StandardizedRoleProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.DoctorProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance();
+            Renderer<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance();
 
             @Override
             public String getValue(StandardizedRoleProxy object) {
-                return renderer.render(object.getReviewer());
+                return renderer.render(object.getPreviousVersion());
             }
-        }, "Reviewer");
+        }, "Previous Version");
+        paths.add("studyYear");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.shared.StudyYears> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.StudyYears>() {
+
+                public String render(ch.unibas.medizin.osce.shared.StudyYears obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getStudyYear());
+            }
+        }, "Study Year");
+        paths.add("mainVersion");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getMainVersion());
+            }
+        }, "Main Version");
+        paths.add("subVersion");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getSubVersion());
+            }
+        }, "Sub Version");
+        paths.add("keywords");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer.instance());
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getKeywords());
+            }
+        }, "Keywords");
     }
 }

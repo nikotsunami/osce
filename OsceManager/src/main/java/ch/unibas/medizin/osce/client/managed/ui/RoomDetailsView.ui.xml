@@ -35,7 +35,16 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+    
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +52,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +60,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="roomNumber">
+            <tr id="roomNumber">
                 <td>
                     <span class="{style.label}">Room Number:</span>
                 </td>
@@ -59,7 +68,7 @@
                     <span ui:field="roomNumber"/>
                 </td>
             </tr>
-      <tr id="oscePostRooms">
+            <tr id="oscePostRooms">
                 <td>
                     <span class="{style.label}">Osce Post Rooms:</span>
                 </td>
@@ -67,7 +76,23 @@
                     <span ui:field="oscePostRooms"/>
                 </td>
             </tr>
-    </table>
+            <tr id="length">
+                <td>
+                    <span class="{style.label}">Length:</span>
+                </td>
+                <td>
+                    <span ui:field="length"/>
+                </td>
+            </tr>
+            <tr id="width">
+                <td>
+                    <span class="{style.label}">Width:</span>
+                </td>
+                <td>
+                    <span ui:field="width"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

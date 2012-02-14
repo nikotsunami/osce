@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import java.util.HashSet;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+import ch.unibas.medizin.osce.domain.Specialisation;
+import javax.persistence.ManyToOne;
 
 @RooJavaBean
 @RooToString
@@ -35,4 +37,7 @@ public class RoleTopic {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleTopic")
     private Set<StandardizedRole> standardizedRoles = new HashSet<StandardizedRole>();
+
+    @ManyToOne
+    private Specialisation specialisation;
 }

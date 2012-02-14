@@ -84,5 +84,35 @@ public abstract class RoomListView_Roo_Gwt extends AbstractProxyListView<RoomPro
                 return renderer.render(object.getOscePostRooms());
             }
         }, "Osce Post Rooms");
+        paths.add("length");
+        table.addColumn(new TextColumn<RoomProxy>() {
+
+            Renderer<java.lang.Double> renderer = new AbstractRenderer<java.lang.Double>() {
+
+                public String render(java.lang.Double obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(RoomProxy object) {
+                return renderer.render(object.getLength());
+            }
+        }, "Length");
+        paths.add("width");
+        table.addColumn(new TextColumn<RoomProxy>() {
+
+            Renderer<java.lang.Double> renderer = new AbstractRenderer<java.lang.Double>() {
+
+                public String render(java.lang.Double obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(RoomProxy object) {
+                return renderer.render(object.getWidth());
+            }
+        }, "Width");
     }
 }

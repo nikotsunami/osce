@@ -35,7 +35,82 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +118,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +126,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="shortName">
+            <tr id="shortName">
                 <td>
                     <span class="{style.label}">Short Name:</span>
                 </td>
@@ -59,7 +134,7 @@
                     <span ui:field="shortName"/>
                 </td>
             </tr>
-      <tr id="longName">
+            <tr id="longName">
                 <td>
                     <span class="{style.label}">Long Name:</span>
                 </td>
@@ -67,7 +142,7 @@
                     <span ui:field="longName"/>
                 </td>
             </tr>
-      <tr id="caseDescription">
+            <tr id="caseDescription">
                 <td>
                     <span class="{style.label}">Case Description:</span>
                 </td>
@@ -75,7 +150,7 @@
                     <span ui:field="caseDescription"/>
                 </td>
             </tr>
-      <tr id="roleScript">
+            <tr id="roleScript">
                 <td>
                     <span class="{style.label}">Role Script:</span>
                 </td>
@@ -83,7 +158,7 @@
                     <span ui:field="roleScript"/>
                 </td>
             </tr>
-      <tr id="roleType">
+            <tr id="roleType">
                 <td>
                     <span class="{style.label}">Role Type:</span>
                 </td>
@@ -91,7 +166,7 @@
                     <span ui:field="roleType"/>
                 </td>
             </tr>
-      <tr id="roleTopic">
+            <tr id="roleTopic">
                 <td>
                     <span class="{style.label}">Role Topic:</span>
                 </td>
@@ -99,23 +174,55 @@
                     <span ui:field="roleTopic"/>
                 </td>
             </tr>
-      <tr id="author">
+            <tr id="roleParticipants">
                 <td>
-                    <span class="{style.label}">Author:</span>
+                    <span class="{style.label}">Role Participants:</span>
                 </td>
                 <td>
-                    <span ui:field="author"/>
-                </td>
-            </tr>
-      <tr id="reviewer">
-                <td>
-                    <span class="{style.label}">Reviewer:</span>
-                </td>
-                <td>
-                    <span ui:field="reviewer"/>
+                    <span ui:field="roleParticipants"/>
                 </td>
             </tr>
-    </table>
+            <tr id="previousVersion">
+                <td>
+                    <span class="{style.label}">Previous Version:</span>
+                </td>
+                <td>
+                    <span ui:field="previousVersion"/>
+                </td>
+            </tr>
+            <tr id="studyYear">
+                <td>
+                    <span class="{style.label}">Study Year:</span>
+                </td>
+                <td>
+                    <span ui:field="studyYear"/>
+                </td>
+            </tr>
+            <tr id="mainVersion">
+                <td>
+                    <span class="{style.label}">Main Version:</span>
+                </td>
+                <td>
+                    <span ui:field="mainVersion"/>
+                </td>
+            </tr>
+            <tr id="subVersion">
+                <td>
+                    <span class="{style.label}">Sub Version:</span>
+                </td>
+                <td>
+                    <span ui:field="subVersion"/>
+                </td>
+            </tr>
+            <tr id="keywords">
+                <td>
+                    <span class="{style.label}">Keywords:</span>
+                </td>
+                <td>
+                    <span ui:field="keywords"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

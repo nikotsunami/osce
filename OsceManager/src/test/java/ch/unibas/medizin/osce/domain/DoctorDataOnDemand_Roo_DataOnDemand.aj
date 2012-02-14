@@ -8,7 +8,10 @@ import ch.unibas.medizin.osce.domain.ClinicDataOnDemand;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.Office;
 import ch.unibas.medizin.osce.domain.OfficeDataOnDemand;
+import ch.unibas.medizin.osce.domain.Specialisation;
+import ch.unibas.medizin.osce.domain.SpecialisationDataOnDemand;
 import ch.unibas.medizin.osce.shared.Gender;
+import java.lang.Boolean;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -34,14 +37,19 @@ privileged aspect DoctorDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private OfficeDataOnDemand DoctorDataOnDemand.officeDataOnDemand;
     
+    @Autowired
+    private SpecialisationDataOnDemand DoctorDataOnDemand.specialisationDataOnDemand;
+    
     public Doctor DoctorDataOnDemand.getNewTransientDoctor(int index) {
         Doctor obj = new Doctor();
         setClinic(obj, index);
         setEmail(obj, index);
         setGender(obj, index);
+        setIsActive(obj, index);
         setName(obj, index);
         setOffice(obj, index);
         setPreName(obj, index);
+        setSpecialisation(obj, index);
         setTelephone(obj, index);
         setTitle(obj, index);
         return obj;
@@ -65,6 +73,11 @@ privileged aspect DoctorDataOnDemand_Roo_DataOnDemand {
         obj.setGender(gender);
     }
     
+    public void DoctorDataOnDemand.setIsActive(Doctor obj, int index) {
+        Boolean isActive = Boolean.TRUE;
+        obj.setIsActive(isActive);
+    }
+    
     public void DoctorDataOnDemand.setName(Doctor obj, int index) {
         String name = "name_" + index;
         if (name.length() > 40) {
@@ -84,6 +97,11 @@ privileged aspect DoctorDataOnDemand_Roo_DataOnDemand {
             preName = preName.substring(0, 40);
         }
         obj.setPreName(preName);
+    }
+    
+    public void DoctorDataOnDemand.setSpecialisation(Doctor obj, int index) {
+        Specialisation specialisation = specialisationDataOnDemand.getRandomSpecialisation();
+        obj.setSpecialisation(specialisation);
     }
     
     public void DoctorDataOnDemand.setTelephone(Doctor obj, int index) {

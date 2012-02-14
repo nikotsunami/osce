@@ -22,4 +22,8 @@ public class Room {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
     private Set<OscePostRoom> oscePostRooms = new HashSet<OscePostRoom>();
+
+    private Double length;
+
+    private Double width;
 }

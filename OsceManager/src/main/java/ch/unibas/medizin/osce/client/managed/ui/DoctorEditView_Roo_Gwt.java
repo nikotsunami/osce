@@ -7,6 +7,8 @@ import ch.unibas.medizin.osce.client.managed.activity.DoctorEditActivityWrapper.
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import ch.unibas.medizin.osce.shared.Gender;
@@ -36,6 +38,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.datepicker.client.DateBox;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public abstract class DoctorEditView_Roo_Gwt extends Composite implements View<DoctorEditView> {
 
@@ -68,6 +71,20 @@ public abstract class DoctorEditView_Roo_Gwt extends Composite implements View<D
     @UiField(provided = true)
     ValueListBox<OfficeProxy> office = new ValueListBox<OfficeProxy>(ch.unibas.medizin.osce.client.managed.ui.OfficeProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OfficeProxy>());
 
+    @UiField(provided = true)
+    CheckBox isActive = new CheckBox() {
+
+        public void setValue(Boolean value) {
+            super.setValue(value == null ? Boolean.FALSE : value);
+        }
+    };
+
+    @UiField(provided = true)
+    ValueListBox<SpecialisationProxy> specialisation = new ValueListBox<SpecialisationProxy>(ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy>());
+
+    @UiField
+    RoleParticipantSetEditor roleParticipants;
+
     public void setClinicPickerValues(Collection<ClinicProxy> values) {
         clinic.setAcceptableValues(values);
     }
@@ -76,7 +93,15 @@ public abstract class DoctorEditView_Roo_Gwt extends Composite implements View<D
         office.setAcceptableValues(values);
     }
 
+    public void setRoleParticipantsPickerValues(Collection<RoleParticipantProxy> values) {
+        roleParticipants.setAcceptableValues(values);
+    }
+
     public void setGenderPickerValues(Collection<Gender> values) {
         gender.setAcceptableValues(values);
+    }
+
+    public void setSpecialisationPickerValues(Collection<SpecialisationProxy> values) {
+        specialisation.setAcceptableValues(values);
     }
 }

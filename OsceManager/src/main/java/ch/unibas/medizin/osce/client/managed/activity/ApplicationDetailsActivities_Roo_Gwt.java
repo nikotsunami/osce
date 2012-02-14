@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -27,10 +28,12 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -88,6 +91,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleSpecialisation(SpecialisationProxy proxy) {
+                setResult(new SpecialisationActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleSemester(SemesterProxy proxy) {
                 setResult(new SemesterActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
@@ -105,6 +113,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleRoleTopic(RoleTopicProxy proxy) {
                 setResult(new RoleTopicActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleRoleParticipant(RoleParticipantProxy proxy) {
+                setResult(new RoleParticipantActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
@@ -160,6 +173,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleLangSkill(LangSkillProxy proxy) {
                 setResult(new LangSkillActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleKeyword(KeywordProxy proxy) {
+                setResult(new KeywordActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override

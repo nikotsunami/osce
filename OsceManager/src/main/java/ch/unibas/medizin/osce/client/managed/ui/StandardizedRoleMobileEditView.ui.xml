@@ -19,55 +19,142 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="shortName">
             <div class="{style.label}">Short Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="shortName"/>
             </div>
         </div>
-    <div id="longName">
+        <div id="longName">
             <div class="{style.label}">Long Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="longName"/>
             </div>
         </div>
-    <div id="caseDescription">
+        <div id="caseDescription">
             <div class="{style.label}">Case Description</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="caseDescription"/>
             </div>
         </div>
-    <div id="roleScript">
+        <div id="roleScript">
             <div class="{style.label}">Role Script</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="roleScript"/>
             </div>
         </div>
-    <div id="roleType">
+        <div id="roleType">
             <div class="{style.label}">Role Type</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="roleType"/>
             </div>
         </div>
-    <div id="roleTopic">
+        <div id="roleTopic">
             <div class="{style.label}">Role Topic</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="roleTopic"/>
             </div>
         </div>
-    <div id="author">
-            <div class="{style.label}">Author</div>
+        <div id="roleParticipants">
+            <div class="{style.label}">Role Participants</div>
             <div class="{style.value}">
-                <g:ValueListBox ui:field="author"/>
+                <a:RoleParticipantSetEditor ui:field="roleParticipants"/>
             </div>
         </div>
-    <div id="reviewer">
-            <div class="{style.label}">Reviewer</div>
+        <div id="previousVersion">
+            <div class="{style.label}">Previous Version</div>
             <div class="{style.value}">
-                <g:ValueListBox ui:field="reviewer"/>
+                <g:ValueListBox ui:field="previousVersion"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+        <div id="studyYear">
+            <div class="{style.label}">Study Year</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="studyYear"/>
+            </div>
+        </div>
+        <div id="mainVersion">
+            <div class="{style.label}">Main Version</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="mainVersion"/>
+            </div>
+        </div>
+        <div id="subVersion">
+            <div class="{style.label}">Sub Version</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="subVersion"/>
+            </div>
+        </div>
+        <div id="keywords">
+            <div class="{style.label}">Keywords</div>
+            <div class="{style.value}">
+                <a:KeywordSetEditor ui:field="keywords"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

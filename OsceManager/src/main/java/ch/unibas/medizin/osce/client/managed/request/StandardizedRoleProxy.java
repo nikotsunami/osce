@@ -2,8 +2,10 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.Set;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
 @RooGwtMirroredFrom("ch.unibas.medizin.osce.domain.StandardizedRole")
@@ -42,11 +44,27 @@ public interface StandardizedRoleProxy extends EntityProxy {
 
     abstract void setRoleTopic(RoleTopicProxy roleTopic);
 
-    abstract DoctorProxy getAuthor();
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy> getRoleParticipants();
 
-    abstract void setAuthor(DoctorProxy author);
+    abstract void setRoleParticipants(Set<RoleParticipantProxy> roleParticipants);
 
-    abstract DoctorProxy getReviewer();
+    abstract ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy getPreviousVersion();
 
-    abstract void setReviewer(DoctorProxy reviewer);
+    abstract void setPreviousVersion(ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy previousVersion);
+
+    abstract StudyYears getStudyYear();
+
+    abstract void setStudyYear(StudyYears studyYear);
+
+    abstract Integer getMainVersion();
+
+    abstract void setMainVersion(Integer mainVersion);
+
+    abstract Integer getSubVersion();
+
+    abstract void setSubVersion(Integer subVersion);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.KeywordProxy> getKeywords();
+
+    abstract void setKeywords(Set<KeywordProxy> keywords);
 }

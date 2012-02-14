@@ -2,10 +2,12 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,6 +21,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.Set;
 
 public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<StandardizedRoleProxy> {
 
@@ -47,10 +50,22 @@ public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composit
     Element roleTopic;
 
     @UiField
-    Element author;
+    Element roleParticipants;
 
     @UiField
-    Element reviewer;
+    Element previousVersion;
+
+    @UiField
+    Element studyYear;
+
+    @UiField
+    Element mainVersion;
+
+    @UiField
+    Element subVersion;
+
+    @UiField
+    Element keywords;
 
     StandardizedRoleProxy proxy;
 
@@ -64,7 +79,11 @@ public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composit
         roleScript.setInnerText(proxy.getRoleScript() == null ? "" : String.valueOf(proxy.getRoleScript()));
         roleType.setInnerText(proxy.getRoleType() == null ? "" : String.valueOf(proxy.getRoleType()));
         roleTopic.setInnerText(proxy.getRoleTopic() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().render(proxy.getRoleTopic()));
-        author.setInnerText(proxy.getAuthor() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy.getAuthor()));
-        reviewer.setInnerText(proxy.getReviewer() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy.getReviewer()));
+        roleParticipants.setInnerText(proxy.getRoleParticipants() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance()).render(proxy.getRoleParticipants()));
+        previousVersion.setInnerText(proxy.getPreviousVersion() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getPreviousVersion()));
+        studyYear.setInnerText(proxy.getStudyYear() == null ? "" : String.valueOf(proxy.getStudyYear()));
+        mainVersion.setInnerText(proxy.getMainVersion() == null ? "" : String.valueOf(proxy.getMainVersion()));
+        subVersion.setInnerText(proxy.getSubVersion() == null ? "" : String.valueOf(proxy.getSubVersion()));
+        keywords.setInnerText(proxy.getKeywords() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer.instance()).render(proxy.getKeywords()));
     }
 }

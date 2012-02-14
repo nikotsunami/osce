@@ -3,6 +3,7 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Integer;
@@ -49,6 +50,14 @@ privileged aspect RoleTopic_Roo_JavaBean {
     
     public void RoleTopic.setStandardizedRoles(Set<StandardizedRole> standardizedRoles) {
         this.standardizedRoles = standardizedRoles;
+    }
+    
+    public Specialisation RoleTopic.getSpecialisation() {
+        return this.specialisation;
+    }
+    
+    public void RoleTopic.setSpecialisation(Specialisation specialisation) {
+        this.specialisation = specialisation;
     }
     
 }

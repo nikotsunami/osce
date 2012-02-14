@@ -35,6 +35,12 @@ public abstract class RoomDetailsView_Roo_Gwt extends Composite implements Proxy
     @UiField
     SpanElement oscePostRooms;
 
+    @UiField
+    SpanElement length;
+
+    @UiField
+    SpanElement width;
+
     RoomProxy proxy;
 
     @UiField
@@ -46,6 +52,8 @@ public abstract class RoomDetailsView_Roo_Gwt extends Composite implements Proxy
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         roomNumber.setInnerText(proxy.getRoomNumber() == null ? "" : String.valueOf(proxy.getRoomNumber()));
         oscePostRooms.setInnerText(proxy.getOscePostRooms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance()).render(proxy.getOscePostRooms()));
+        length.setInnerText(proxy.getLength() == null ? "" : String.valueOf(proxy.getLength()));
+        width.setInnerText(proxy.getWidth() == null ? "" : String.valueOf(proxy.getWidth()));
         displayRenderer.setInnerText(RoomProxyRenderer.instance().render(proxy));
     }
 }

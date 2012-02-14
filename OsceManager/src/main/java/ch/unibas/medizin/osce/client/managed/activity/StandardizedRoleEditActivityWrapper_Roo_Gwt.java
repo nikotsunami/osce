@@ -4,13 +4,17 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.StandardizedRoleEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.KeywordSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -22,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public abstract class StandardizedRoleEditActivityWrapper_Roo_Gwt implements Activity, IsScaffoldMobileActivity {
 
@@ -33,6 +38,7 @@ public abstract class StandardizedRoleEditActivityWrapper_Roo_Gwt implements Act
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
+        view.setStudyYearPickerValues(Arrays.asList(StudyYears.values()));
         view.setRoleTopicPickerValues(Collections.<RoleTopicProxy>emptyList());
         requests.roleTopicRequest().findRoleTopicEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().getPaths()).fire(new Receiver<List<RoleTopicProxy>>() {
 
@@ -43,24 +49,34 @@ public abstract class StandardizedRoleEditActivityWrapper_Roo_Gwt implements Act
                 view.setRoleTopicPickerValues(values);
             }
         });
-        view.setAuthorPickerValues(Collections.<DoctorProxy>emptyList());
-        requests.doctorRequest().findDoctorEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().getPaths()).fire(new Receiver<List<DoctorProxy>>() {
+        view.setRoleParticipantsPickerValues(Collections.<RoleParticipantProxy>emptyList());
+        requests.roleParticipantRequest().findRoleParticipantEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance().getPaths()).fire(new Receiver<List<RoleParticipantProxy>>() {
 
-            public void onSuccess(List<DoctorProxy> response) {
-                List<DoctorProxy> values = new ArrayList<DoctorProxy>();
+            public void onSuccess(List<RoleParticipantProxy> response) {
+                List<RoleParticipantProxy> values = new ArrayList<RoleParticipantProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setAuthorPickerValues(values);
+                view.setRoleParticipantsPickerValues(values);
             }
         });
-        view.setReviewerPickerValues(Collections.<DoctorProxy>emptyList());
-        requests.doctorRequest().findDoctorEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().getPaths()).fire(new Receiver<List<DoctorProxy>>() {
+        view.setPreviousVersionPickerValues(Collections.<StandardizedRoleProxy>emptyList());
+        requests.standardizedRoleRequest().findStandardizedRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<StandardizedRoleProxy>>() {
 
-            public void onSuccess(List<DoctorProxy> response) {
-                List<DoctorProxy> values = new ArrayList<DoctorProxy>();
+            public void onSuccess(List<StandardizedRoleProxy> response) {
+                List<StandardizedRoleProxy> values = new ArrayList<StandardizedRoleProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setReviewerPickerValues(values);
+                view.setPreviousVersionPickerValues(values);
+            }
+        });
+        view.setKeywordsPickerValues(Collections.<KeywordProxy>emptyList());
+        requests.keywordRequest().findKeywordEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer.instance().getPaths()).fire(new Receiver<List<KeywordProxy>>() {
+
+            public void onSuccess(List<KeywordProxy> response) {
+                List<KeywordProxy> values = new ArrayList<KeywordProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setKeywordsPickerValues(values);
             }
         });
         wrapped.start(display, eventBus);
@@ -68,10 +84,14 @@ public abstract class StandardizedRoleEditActivityWrapper_Roo_Gwt implements Act
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy, V>> extends ProxyEditView<StandardizedRoleProxy, V> {
 
+        void setStudyYearPickerValues(Collection<StudyYears> values);
+
         void setRoleTopicPickerValues(Collection<RoleTopicProxy> values);
 
-        void setAuthorPickerValues(Collection<DoctorProxy> values);
+        void setRoleParticipantsPickerValues(Collection<RoleParticipantProxy> values);
 
-        void setReviewerPickerValues(Collection<DoctorProxy> values);
+        void setPreviousVersionPickerValues(Collection<StandardizedRoleProxy> values);
+
+        void setKeywordsPickerValues(Collection<KeywordProxy> values);
     }
 }

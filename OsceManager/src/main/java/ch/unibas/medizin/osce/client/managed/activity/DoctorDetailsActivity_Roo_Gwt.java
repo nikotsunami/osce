@@ -6,6 +6,9 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
@@ -31,6 +34,6 @@ public abstract class DoctorDetailsActivity_Roo_Gwt extends AbstractActivity imp
     protected EntityProxyId<DoctorProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("clinic", "office").fire(callback);
+        requests.find(proxyId).with("clinic", "office", "specialisation", "roleParticipants").fire(callback);
     }
 }

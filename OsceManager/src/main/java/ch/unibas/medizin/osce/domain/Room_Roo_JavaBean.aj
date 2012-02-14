@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.OscePostRoom;
+import java.lang.Double;
 import java.lang.String;
 import java.util.Set;
 
@@ -23,6 +24,22 @@ privileged aspect Room_Roo_JavaBean {
     
     public void Room.setOscePostRooms(Set<OscePostRoom> oscePostRooms) {
         this.oscePostRooms = oscePostRooms;
+    }
+    
+    public Double Room.getLength() {
+        return this.length;
+    }
+    
+    public void Room.setLength(Double length) {
+        this.length = length;
+    }
+    
+    public Double Room.getWidth() {
+        return this.width;
+    }
+    
+    public void Room.setWidth(Double width) {
+        this.width = width;
     }
     
 }

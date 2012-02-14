@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Room;
+import java.lang.Double;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -24,8 +25,15 @@ privileged aspect RoomDataOnDemand_Roo_DataOnDemand {
     
     public Room RoomDataOnDemand.getNewTransientRoom(int index) {
         Room obj = new Room();
+        setLength(obj, index);
         setRoomNumber(obj, index);
+        setWidth(obj, index);
         return obj;
+    }
+    
+    public void RoomDataOnDemand.setLength(Room obj, int index) {
+        Double length = new Integer(index).doubleValue();
+        obj.setLength(length);
     }
     
     public void RoomDataOnDemand.setRoomNumber(Room obj, int index) {
@@ -34,6 +42,11 @@ privileged aspect RoomDataOnDemand_Roo_DataOnDemand {
             roomNumber = roomNumber.substring(0, 20);
         }
         obj.setRoomNumber(roomNumber);
+    }
+    
+    public void RoomDataOnDemand.setWidth(Room obj, int index) {
+        Double width = new Integer(index).doubleValue();
+        obj.setWidth(width);
     }
     
     public Room RoomDataOnDemand.getSpecificRoom(int index) {

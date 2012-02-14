@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -27,10 +28,12 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -61,6 +64,8 @@ import ch.unibas.medizin.osce.client.managed.ui.DoctorListView;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.EliminationCriterionListView;
 import ch.unibas.medizin.osce.client.managed.ui.EliminationCriterionMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.KeywordListView;
+import ch.unibas.medizin.osce.client.managed.ui.KeywordMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.LogEntryListView;
@@ -83,6 +88,8 @@ import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterListView;
 import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.ProfessionListView;
 import ch.unibas.medizin.osce.client.managed.ui.ProfessionMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoomListView;
@@ -91,6 +98,8 @@ import ch.unibas.medizin.osce.client.managed.ui.ScarListView;
 import ch.unibas.medizin.osce.client.managed.ui.ScarMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.SemesterListView;
 import ch.unibas.medizin.osce.client.managed.ui.SemesterMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.SpecialisationListView;
+import ch.unibas.medizin.osce.client.managed.ui.SpecialisationMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.SpokenLanguageListView;
 import ch.unibas.medizin.osce.client.managed.ui.SpokenLanguageMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientListView;
@@ -155,6 +164,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
+            public void handleSpecialisation(SpecialisationProxy isNull) {
+                setResult(new SpecialisationListActivity(requests, ScaffoldApp.isMobile() ? SpecialisationMobileListView.instance() : SpecialisationListView.instance(), placeController));
+            }
+
+            @Override
             public void handleSemester(SemesterProxy isNull) {
                 setResult(new SemesterListActivity(requests, ScaffoldApp.isMobile() ? SemesterMobileListView.instance() : SemesterListView.instance(), placeController));
             }
@@ -172,6 +186,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleRoleTopic(RoleTopicProxy isNull) {
                 setResult(new RoleTopicListActivity(requests, ScaffoldApp.isMobile() ? RoleTopicMobileListView.instance() : RoleTopicListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleRoleParticipant(RoleParticipantProxy isNull) {
+                setResult(new RoleParticipantListActivity(requests, ScaffoldApp.isMobile() ? RoleParticipantMobileListView.instance() : RoleParticipantListView.instance(), placeController));
             }
 
             @Override
@@ -227,6 +246,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleLangSkill(LangSkillProxy isNull) {
                 setResult(new LangSkillListActivity(requests, ScaffoldApp.isMobile() ? LangSkillMobileListView.instance() : LangSkillListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleKeyword(KeywordProxy isNull) {
+                setResult(new KeywordListActivity(requests, ScaffoldApp.isMobile() ? KeywordMobileListView.instance() : KeywordListView.instance(), placeController));
             }
 
             @Override

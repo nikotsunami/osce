@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.request;
 import ch.unibas.medizin.osce.shared.Gender;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.Set;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
 @RooGwtMirroredFrom("ch.unibas.medizin.osce.domain.Doctor")
@@ -50,4 +51,16 @@ public interface DoctorProxy extends EntityProxy {
     abstract OfficeProxy getOffice();
 
     abstract void setOffice(OfficeProxy office);
+
+    abstract Boolean getIsActive();
+
+    abstract void setIsActive(Boolean isActive);
+
+    abstract SpecialisationProxy getSpecialisation();
+
+    abstract void setSpecialisation(SpecialisationProxy specialisation);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy> getRoleParticipants();
+
+    abstract void setRoleParticipants(Set<RoleParticipantProxy> roleParticipants);
 }

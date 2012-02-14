@@ -7,6 +7,9 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -23,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public abstract class DoctorEditActivityWrapper_Roo_Gwt implements Activity, IsScaffoldMobileActivity {
 
@@ -55,6 +59,26 @@ public abstract class DoctorEditActivityWrapper_Roo_Gwt implements Activity, IsS
                 view.setOfficePickerValues(values);
             }
         });
+        view.setSpecialisationPickerValues(Collections.<SpecialisationProxy>emptyList());
+        requests.specialisationRequest().findSpecialisationEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance().getPaths()).fire(new Receiver<List<SpecialisationProxy>>() {
+
+            public void onSuccess(List<SpecialisationProxy> response) {
+                List<SpecialisationProxy> values = new ArrayList<SpecialisationProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setSpecialisationPickerValues(values);
+            }
+        });
+        view.setRoleParticipantsPickerValues(Collections.<RoleParticipantProxy>emptyList());
+        requests.roleParticipantRequest().findRoleParticipantEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance().getPaths()).fire(new Receiver<List<RoleParticipantProxy>>() {
+
+            public void onSuccess(List<RoleParticipantProxy> response) {
+                List<RoleParticipantProxy> values = new ArrayList<RoleParticipantProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setRoleParticipantsPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -65,5 +89,9 @@ public abstract class DoctorEditActivityWrapper_Roo_Gwt implements Activity, IsS
         void setClinicPickerValues(Collection<ClinicProxy> values);
 
         void setOfficePickerValues(Collection<OfficeProxy> values);
+
+        void setSpecialisationPickerValues(Collection<SpecialisationProxy> values);
+
+        void setRoleParticipantsPickerValues(Collection<RoleParticipantProxy> values);
     }
 }

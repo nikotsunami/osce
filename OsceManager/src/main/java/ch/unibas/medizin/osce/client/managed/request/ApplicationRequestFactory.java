@@ -18,6 +18,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     SpokenLanguageRequest spokenLanguageRequest();
 
+    SpecialisationRequest specialisationRequest();
+
     SemesterRequest semesterRequest();
 
     ScarRequest scarRequest();
@@ -25,6 +27,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     RoomRequest roomRequest();
 
     RoleTopicRequest roleTopicRequest();
+
+    RoleParticipantRequest roleParticipantRequest();
 
     ProfessionRequest professionRequest();
 
@@ -47,6 +51,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     LogEntryRequest logEntryRequest();
 
     LangSkillRequest langSkillRequest();
+
+    KeywordRequest keywordRequest();
 
     EliminationCriterionRequest eliminationCriterionRequest();
 

@@ -3,9 +3,14 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.Doctor;
+import ch.unibas.medizin.osce.domain.Keyword;
+import ch.unibas.medizin.osce.domain.RoleParticipant;
 import ch.unibas.medizin.osce.domain.RoleTopic;
+import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.shared.StudyYears;
+import java.lang.Integer;
 import java.lang.String;
+import java.util.Set;
 
 privileged aspect StandardizedRole_Roo_JavaBean {
     
@@ -57,20 +62,52 @@ privileged aspect StandardizedRole_Roo_JavaBean {
         this.roleTopic = roleTopic;
     }
     
-    public Doctor StandardizedRole.getAuthor() {
-        return this.author;
+    public Set<RoleParticipant> StandardizedRole.getRoleParticipants() {
+        return this.roleParticipants;
     }
     
-    public void StandardizedRole.setAuthor(Doctor author) {
-        this.author = author;
+    public void StandardizedRole.setRoleParticipants(Set<RoleParticipant> roleParticipants) {
+        this.roleParticipants = roleParticipants;
     }
     
-    public Doctor StandardizedRole.getReviewer() {
-        return this.reviewer;
+    public StandardizedRole StandardizedRole.getPreviousVersion() {
+        return this.previousVersion;
     }
     
-    public void StandardizedRole.setReviewer(Doctor reviewer) {
-        this.reviewer = reviewer;
+    public void StandardizedRole.setPreviousVersion(StandardizedRole previousVersion) {
+        this.previousVersion = previousVersion;
+    }
+    
+    public StudyYears StandardizedRole.getStudyYear() {
+        return this.studyYear;
+    }
+    
+    public void StandardizedRole.setStudyYear(StudyYears studyYear) {
+        this.studyYear = studyYear;
+    }
+    
+    public Integer StandardizedRole.getMainVersion() {
+        return this.mainVersion;
+    }
+    
+    public void StandardizedRole.setMainVersion(Integer mainVersion) {
+        this.mainVersion = mainVersion;
+    }
+    
+    public Integer StandardizedRole.getSubVersion() {
+        return this.subVersion;
+    }
+    
+    public void StandardizedRole.setSubVersion(Integer subVersion) {
+        this.subVersion = subVersion;
+    }
+    
+    public Set<Keyword> StandardizedRole.getKeywords() {
+        return this.keywords;
+    }
+    
+    public void StandardizedRole.setKeywords(Set<Keyword> keywords) {
+        this.keywords = keywords;
     }
     
 }
