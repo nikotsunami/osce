@@ -27,6 +27,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 
 import com.google.gwt.activity.shared.FilteredActivityMapper;
 import com.google.gwt.place.shared.Place;
@@ -164,6 +165,9 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		
 		if (place instanceof ExaminationSchedulePlace)
 			return (ExaminationSchedulePlace) place;
+		
+		if (place instanceof SummoningsPlace)
+			return (SummoningsPlace) place;
 		
 		if (place instanceof IndividualSchedulesPlace)
 			return (IndividualSchedulesPlace) place;

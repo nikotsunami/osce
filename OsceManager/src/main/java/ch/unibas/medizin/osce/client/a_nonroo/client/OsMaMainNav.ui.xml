@@ -35,7 +35,7 @@
 				<g:Anchor ui:field="circuit"></g:Anchor>
 				<g:Anchor ui:field="students"></g:Anchor>
 				<g:Anchor ui:field="examinationSchedule"></g:Anchor>
-				<g:Anchor ui:field="exportContingents"></g:Anchor>
+				<g:Anchor ui:field="summonings"></g:Anchor>
 				<g:Anchor ui:field="individualSchedules"></g:Anchor>
 				<g:Anchor ui:field="bellSchedule"></g:Anchor>
 			</g:VerticalPanel>

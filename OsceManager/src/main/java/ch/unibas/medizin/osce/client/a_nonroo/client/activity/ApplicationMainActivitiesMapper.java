@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -108,6 +109,11 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof ExaminationSchedulePlace){
 			Log.debug("is ExaminationSchedulePlace");
 			return new ExaminationScheduleActivity(requests, placeController);
+		}
+		
+		if (place instanceof SummoningsPlace){
+			Log.debug("is SummoningsPlace");
+			return new SummoningsActivity(requests, placeController);
 		}
 		
 		if (place instanceof IndividualSchedulesPlace){

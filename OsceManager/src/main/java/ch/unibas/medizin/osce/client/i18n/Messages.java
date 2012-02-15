@@ -21,7 +21,7 @@ public class Messages {
 			public static final String CIRCUIT = "Postenlauf";
 			public static final String STUDENTS = "Studenten";
 			public static final String EXAM_SCHEDULE = "Prüfungsplan";
-			public static final String EXPORT_CONTINGENTS = "Aufgebote versenden";
+			public static final String SUMMONINGS = "Aufgebote versenden";
 			public static final String PRINT_INDIVIDUAL_SCHEDULES = "Laufpläne erstellen";
 			public static final String EXPORT_BELL_SCHEDULE = "Klingelplan erstellen";
 
