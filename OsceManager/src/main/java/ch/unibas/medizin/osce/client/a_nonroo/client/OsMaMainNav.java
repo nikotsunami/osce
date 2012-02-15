@@ -52,22 +52,26 @@ public class OsMaMainNav extends Composite {
     	examinationsPanel.getHeaderTextAccessor().setText(Messages.EXAMS);
     	simulationPatientsPanel.getHeaderTextAccessor().setText(Messages.SIM_PAT);
     	
-    	people.setText(Messages.PERSONS);
+    	people.setText(Messages.SIMULATION_PATIENTS);
     	scars.setText(Messages.TRAITS);
-    	anamnesisForms.setText(Messages.ANAMNESIS_VALUES);
+    	anamnesisChecks.setText(Messages.ANAMNESIS_VALUES);
     	clinics.setText(Messages.CLINICS);
     	doctors.setText(Messages.DOCTORS);
+    	
     	administrators.setText(Messages.USER);
     	nationalities.setText(Messages.NATIONALITIES);
     	languages.setText(Messages.LANGUAGES);
     	professions.setText(Messages.PROFESSIONS);
     	rooms.setText(Messages.ROOMS);
+    	
     	osces.setText(Messages.OSCES);
     	course.setText(Messages.CIRCUIT);
     	students.setText(Messages.STUDENTS);
     	examinationSchedule.setText(Messages.EXAM_SCHEDULE);
+    	exportContingents.setText(Messages.EXPORT_CONTINGENTS);
     	printIndividualSchedules.setText(Messages.PRINT_INDIVIDUAL_SCHEDULES);
-    	simulationPatients.setText(Messages.SIMULATION_PATIENTS);
+    	exportBellSchedule.setText(Messages.EXPORT_BELL_SCHEDULE);
+
     	roles.setText(Messages.ROLES);
     	roleAssignment.setText(Messages.ROLE_ASSIGNMENT);
    }
@@ -80,7 +84,7 @@ public class OsMaMainNav extends Composite {
 			@UiField
 			Anchor scars;					// Merkmale
 			@UiField
-			Anchor anamnesisForms;			// Anamnesewerte
+			Anchor anamnesisChecks;			// Anamnesewerte
 			@UiField
 			Anchor clinics;					// Spitäler
 			@UiField
@@ -113,13 +117,15 @@ public class OsMaMainNav extends Composite {
 			@UiField
 			Anchor examinationSchedule;		// Prüfungsplan
 			@UiField
+			Anchor exportContingents;		// Aufgebote versenden
+			@UiField
 			Anchor printIndividualSchedules; // Individuelle Pläne drucken
+			@UiField
+			Anchor exportBellSchedule;		// Klingelplan erstellen
 	
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
 	
-			@UiField
-			Anchor simulationPatients;		// Simulationspatienten
 			@UiField
 			Anchor roles;					// Rollen
 			@UiField
@@ -156,8 +162,8 @@ public class OsMaMainNav extends Composite {
 		placeController.goTo(new ScarPlace("ScarPlace"));
 	}
 	
-	@UiHandler("anamnesisForms")
-	void anamnesisClicked(ClickEvent event) {
+	@UiHandler("anamnesisChecks")
+	void anamnesisChecksClicked(ClickEvent event) {
 		placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace"));
 	}
 	
@@ -196,9 +202,6 @@ public class OsMaMainNav extends Composite {
 		placeController.goTo(new RoomPlace("RoomPlace"));
 	}
 	
-	// TODO: UiHandler for nationalities
-	// TODO: UiHandler for languages
-	// TODO: UiHandler for professions
 	// TODO: UiHandler for osces
 	// TODO: UiHandler for course
 	// TODO: UiHandler for students

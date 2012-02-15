@@ -7,7 +7,7 @@
 	<ui:style src="../styles.css" />
 	
 	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
-		<g:west size="400">
+		<g:west size="600">
 			<g:ScrollPanel>
 				<g:HTMLPanel>
 				

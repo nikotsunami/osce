@@ -17,16 +17,18 @@ public class Messages {
 			public static final String ROOMS = "Räume";
 
 			public static final String EXAMS = "Prüfungen";
-			public static final String OSCES = "OSCEs";
+			public static final String OSCES = "OSCEs verwalten";
 			public static final String CIRCUIT = "Postenlauf";
 			public static final String STUDENTS = "Studenten";
 			public static final String EXAM_SCHEDULE = "Prüfungsplan";
-			public static final String PRINT_INDIVIDUAL_SCHEDULES = "Individuelle Pläne drucken";
+			public static final String EXPORT_CONTINGENTS = "Aufgebote versenden";
+			public static final String PRINT_INDIVIDUAL_SCHEDULES = "Laufpläne erstellen";
+			public static final String EXPORT_BELL_SCHEDULE = "Klingelplan erstellen";
 
 			public static final String SIM_PAT = "SimPat";
 			public static final String SIMULATION_PATIENTS = "Simulationspatienten";
 			public static final String ROLES = "Rollen";
-			public static final String ROLE_ASSIGNMENT = "Rollenzuweisung";
+			public static final String ROLE_ASSIGNMENT = "Rollenzuweisungen";
 
 			/* Buttons & Aktionen */
 			public static final String SEARCHFIELD = "Suche...";

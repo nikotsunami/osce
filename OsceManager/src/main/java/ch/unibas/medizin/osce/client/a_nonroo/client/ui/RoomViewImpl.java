@@ -235,14 +235,14 @@ public class RoomViewImpl extends Composite implements RoomView {
 		}, Messages.ROOMWIDTH);
 		addColumn(new ActionCell<RoomProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoomProxy>() {
-					public void execute(RoomProxy scar) {
+					public void execute(RoomProxy room) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(scar);
+							delegate.deleteClicked(room);
 					}
 				}), "", new GetValue<RoomProxy>() {
-			public RoomProxy getValue(RoomProxy scar) {
-				return scar;
+			public RoomProxy getValue(RoomProxy room) {
+				return room;
 			}
 		}, null);
 		

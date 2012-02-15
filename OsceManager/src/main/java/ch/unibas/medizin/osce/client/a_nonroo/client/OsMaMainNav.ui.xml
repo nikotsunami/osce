@@ -11,7 +11,7 @@
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="people"></g:Anchor>
 				<g:Anchor ui:field="scars"></g:Anchor>
-				<g:Anchor ui:field="anamnesisForms"></g:Anchor>
+				<g:Anchor ui:field="anamnesisChecks"></g:Anchor>
 				<g:Anchor ui:field="clinics"></g:Anchor>
 				<g:Anchor ui:field="doctors"></g:Anchor>
 			</g:VerticalPanel>
@@ -35,14 +35,15 @@
 				<g:Anchor ui:field="course"></g:Anchor>
 				<g:Anchor ui:field="students"></g:Anchor>
 				<g:Anchor ui:field="examinationSchedule"></g:Anchor>
+				<g:Anchor ui:field="exportContingents"></g:Anchor>
 				<g:Anchor ui:field="printIndividualSchedules"></g:Anchor>
+				<g:Anchor ui:field="exportBellSchedule"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		
 		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="simulationPatients"></g:Anchor>
 				<g:Anchor ui:field="roles"></g:Anchor>
 				<g:Anchor ui:field="roleAssignment"></g:Anchor>
 			</g:VerticalPanel>
