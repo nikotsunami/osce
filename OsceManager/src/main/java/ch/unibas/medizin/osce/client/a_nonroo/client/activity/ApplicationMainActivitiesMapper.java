@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
@@ -70,7 +71,7 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		}
 		
 		if (place instanceof NationalityPlace){
-			Log.debug("is SystemStartPlace");
+			Log.debug("is NationalityPlace");
 			return new NationalityActivity(requests, placeController);
 		}
 		
@@ -82,6 +83,11 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof ProfessionPlace){
 			Log.debug("is ProfessionPlace");
 			return new ProfessionActivity(requests, placeController);
+		}
+		
+		if (place instanceof OscePlace){
+			Log.debug("is OscePlace");
+			return new OsceActivity(requests, placeController);
 		}
 		
 		// TODO Auto-generated method stub

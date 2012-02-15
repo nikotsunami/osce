@@ -34,25 +34,25 @@ import com.google.gwt.view.client.SingleSelectionModel;
  *
  */
 public class RoomActivity extends AbstractActivity implements RoomView.Presenter, RoomView.Delegate {
-	
-    private OsMaRequestFactory requests;
+
+	private OsMaRequestFactory requests;
 	private PlaceController placeControler;
 	private AcceptsOneWidget widget;
 	private RoomView view;
 	private CellTable<RoomProxy> table;
 	private SingleSelectionModel<RoomProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
-	
+
 
 	public RoomActivity(OsMaRequestFactory requests, PlaceController placeController) {
-    	this.requests = requests;
-    	this.placeControler = placeController;
-    }
+		this.requests = requests;
+		this.placeControler = placeController;
+	}
 
 	public void onStop(){
-		
+
 	}
-	
+
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -62,16 +62,16 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
-		
+
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-				
+
 				if (event.getNewPlace() instanceof RoomPlace){
 					init();
 				}
 			}
 		});
-		
+
 		init();
 
 		// Inherit the view's key provider
@@ -81,25 +81,25 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		table.setSelectionModel(selectionModel);
 
 		selectionModel
-				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-					public void onSelectionChange(SelectionChangeEvent event) {
-						RoomProxy selectedObject = selectionModel.getSelectedObject();
-						if (selectedObject != null) {
-							Log.debug(selectedObject.getRoomNumber() + " selected!");
-							//showDetails(selectedObject);
-						}
-					}
-				});
+		.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+			public void onSelectionChange(SelectionChangeEvent event) {
+				RoomProxy selectedObject = selectionModel.getSelectedObject();
+				if (selectedObject != null) {
+					Log.debug(selectedObject.getRoomNumber() + " selected!");
+					//showDetails(selectedObject);
+				}
+			}
+		});
 
 		view.setDelegate(this);
 	}
-	
+
 	private void init() {
 		init2("");
 	}
-	
+
 	private void init2(final String q) {
-		
+
 		// fix to avoid having multiple rangeChangeHandlers attached
 		if (rangeChangeHandler!=null){
 			rangeChangeHandler.removeHandler();
@@ -127,7 +127,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 					}
 				});
 	}
-	
+
 
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
@@ -150,12 +150,12 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 
 		fireRangeRequest(q, range, callback);
 	}
-	
+
 	private void fireRangeRequest(String name, final Range range, final Receiver<List<RoomProxy>> callback) {
 		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
-	
+
 	protected Request<List<RoomProxy>> createRangeRequest(String name, Range range) {
 		//return requests.RoomRequest().findScarEntries(range.getStart(), range.getLength());
 		return requests.roomRequestNonRoo().findRoomEntriesByName(name, range.getStart(), range.getLength());
@@ -178,7 +178,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		room.setRoomNumber(name);
 		room.setLength(length);
 		room.setWidth(width);
-		
+
 		roomReq.persist().using(room).fire(new Receiver<Void>(){
 			@Override
 			public void onSuccess(Void arg0) {
@@ -186,7 +186,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 			}
 		});
 	}
-	
+
 	@Override
 	public void deleteClicked(RoomProxy room) {
 		requests.roomRequest().remove().using(room).fire(new Receiver<Void>() {
@@ -196,7 +196,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 			}
 		});
 	}
-	
+
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);

@@ -45,6 +45,7 @@ public class Messages {
 			public static final String ADD_PROFESSION = "Beruf hinzufügen";
 			public static final String ADD_LANGSKILL = "Sprachkenntnis hinzufügen";
 			public static final String ADD_ROOM = "Raum hinzufügen";
+			public static final String ADD_OSCE = "OSCE hinzufügen";
 			
 			/* Standardized Patient Details */
 			public static final String NAME = "Name";
@@ -140,4 +141,9 @@ public class Messages {
 			public static final String ROOMLENGTH = "Länge";
 			public static final String ROOMWIDTH = "Breite";
 			
+			/* OSCE Details */
+			public static final String STUDYYEAR = "SJ";
+			public static final String MAX_STUDENTS = "max. Studenten";
+			public static final String MAX_PARCOURS = "max. Parcours";
+			public static final String POSTLENGTH = "Postenlänge";
 }

@@ -12,6 +12,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
@@ -41,7 +43,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof StandardizedPatientDetailsPlace){
 			StandardizedPatientDetailsPlace standardizedPatientDetailsPlace= (StandardizedPatientDetailsPlace)place;
-			return  new StandardizedPatientPlace(standardizedPatientDetailsPlace.getToken());
+			return new StandardizedPatientPlace(standardizedPatientDetailsPlace.getToken());
 		}
 		
 		/**
@@ -68,7 +70,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof AnamnesisCheckDetailsPlace){
 			AnamnesisCheckDetailsPlace AnamnesisCheckDetailsPlace = (AnamnesisCheckDetailsPlace)place;
-			return  new AnamnesisCheckPlace(AnamnesisCheckDetailsPlace.getToken());
+			return new AnamnesisCheckPlace(AnamnesisCheckDetailsPlace.getToken());
 		}
 		
 		/**
@@ -79,7 +81,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof ClinicDetailsPlace){
 			ClinicDetailsPlace ClinicDetailsPlace= (ClinicDetailsPlace)place;
-			return  new ClinicPlace(ClinicDetailsPlace.getToken());
+			return new ClinicPlace(ClinicDetailsPlace.getToken());
 		}
 		
 		/**
@@ -90,7 +92,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof DoctorDetailsPlace){
 			DoctorDetailsPlace DoctorDetailsPlace= (DoctorDetailsPlace)place;
-			return  new DoctorPlace(DoctorDetailsPlace.getToken());
+			return new DoctorPlace(DoctorDetailsPlace.getToken());
 		}
 		
 		
@@ -102,7 +104,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof AdministratorDetailsPlace){
 			AdministratorDetailsPlace administratorDetailsPlace= (AdministratorDetailsPlace)place;
-			return  new AdministratorPlace(administratorDetailsPlace.getToken());
+			return new AdministratorPlace(administratorDetailsPlace.getToken());
 		}
 
 		/**
@@ -113,7 +115,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof NationalityDetailsPlace){
 			NationalityDetailsPlace nationalityDetailsPlace= (NationalityDetailsPlace)place;
-			return  new NationalityPlace(nationalityDetailsPlace.getToken());
+			return new NationalityPlace(nationalityDetailsPlace.getToken());
 		}
 		
 		/**
@@ -123,8 +125,8 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return (SpokenLanguagePlace) place;
 
 		if (place instanceof SpokenLanguageDetailsPlace){
-			SpokenLanguageDetailsPlace SpokenLanguageDetailsPlace= (SpokenLanguageDetailsPlace)place;
-			return  new SpokenLanguagePlace(SpokenLanguageDetailsPlace.getToken());
+			SpokenLanguageDetailsPlace spokenLanguageDetailsPlace= (SpokenLanguageDetailsPlace)place;
+			return new SpokenLanguagePlace(spokenLanguageDetailsPlace.getToken());
 		}
 
 		/**
@@ -134,11 +136,21 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return (ProfessionPlace) place;
 
 		if (place instanceof ProfessionDetailsPlace){
-			ProfessionDetailsPlace ProfessionDetailsPlace= (ProfessionDetailsPlace)place;
-			return  new ProfessionPlace(ProfessionDetailsPlace.getToken());
+			ProfessionDetailsPlace professionDetailsPlace= (ProfessionDetailsPlace)place;
+			return new ProfessionPlace(professionDetailsPlace.getToken());
 		}
 		
-		// TODO: osces
+		/**
+		 * osces
+		 */
+		if (place instanceof OscePlace)
+			return (OscePlace) place;
+
+		if (place instanceof OsceDetailsPlace){
+			OsceDetailsPlace osceDetailsPlace= (OsceDetailsPlace) place;
+			return new OscePlace(osceDetailsPlace.getToken());
+		}
+		
 		// TODO: course
 		// TODO: students
 		// TODO: examinationSchedule

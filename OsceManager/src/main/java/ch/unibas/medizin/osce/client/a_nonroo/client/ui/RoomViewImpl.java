@@ -67,7 +67,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 
 	interface RoomViewUiBinder extends UiBinder<Widget, RoomViewImpl> {
 	}
-	
+
 	private Delegate delegate;
 
 	@UiField
@@ -78,16 +78,16 @@ public class RoomViewImpl extends Composite implements RoomView {
 
 	@UiField
 	TextBox newRoomNumber;
-	
+
 	@UiField
 	TextBox newRoomLength;
-	
+
 	@UiField
 	TextBox newRoomWidth;
 
 	@UiField
 	Button newButton;
-	
+
 	@UiField (provided = true)
 	SimplePager pager;
 
@@ -100,16 +100,16 @@ public class RoomViewImpl extends Composite implements RoomView {
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
-		
+
 		double roomLength = newRoomLength.getValue().length() > 0 ? Double.parseDouble(newRoomLength.getValue()) : 0;
 		double roomWidth = newRoomWidth.getValue().length() > 0 ? Double.parseDouble(newRoomWidth.getValue()) : 0;
-		
+
 		delegate.newClicked(newRoomNumber.getValue(), roomLength, roomWidth);
 		newRoomNumber.setValue("");
 		newRoomLength.setValue("");
 		newRoomWidth.setValue("");
 	}
-	
+
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -124,13 +124,13 @@ public class RoomViewImpl extends Composite implements RoomView {
 	public RoomViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<RoomProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
-		
+
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		
+
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(Messages.ADD_ROOM);
 	}
@@ -162,33 +162,33 @@ public class RoomViewImpl extends Composite implements RoomView {
 			}
 		});
 		newRoomNumber.addKeyDownHandler(new KeyDownHandler() {
-		    @Override
-		    public void onKeyDown(KeyDownEvent event) {
-		        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-		        	newButtonClicked(null);
-		    }
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					newButtonClicked(null);
+			}
 		});
 		newRoomLength.addKeyDownHandler(new KeyDownHandler() {
-		    @Override
-		    public void onKeyDown(KeyDownEvent event) {
-		        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-		        	newButtonClicked(null);
-		    }
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					newButtonClicked(null);
+			}
 		});
 		newRoomWidth.addKeyDownHandler(new KeyDownHandler() {
-		    @Override
-		    public void onKeyDown(KeyDownEvent event) {
-		        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-		        	newButtonClicked(null);
-		    }
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					newButtonClicked(null);
+			}
 		});
 
-		
+
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
-		
+
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
-		
+
 		paths.add("room_number");
 		table.addColumn(new TextColumn<RoomProxy>() {
 
@@ -245,10 +245,10 @@ public class RoomViewImpl extends Composite implements RoomView {
 				return room;
 			}
 		}, null);
-		
+
 		table.addColumnStyleName(2, "iconCol");
 	}
-	
+
 	/**
 	 * Add a column with a header.
 	 *
@@ -271,7 +271,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 		}
 		table.addColumn(column, headerText);
 	}
-	
+
 	/**
 	 * Get a cell value from a record.
 	 *
@@ -293,10 +293,10 @@ public class RoomViewImpl extends Composite implements RoomView {
 		this.delegate = delegate;
 	}
 
-//	@Override
-//	public SimplePanel getDetailsPanel() {
-//		return detailsPanel;
-//	}
+	//	@Override
+	//	public SimplePanel getDetailsPanel() {
+	//		return detailsPanel;
+	//	}
 
 	@Override
 	public void setPresenter(Presenter presenter) {

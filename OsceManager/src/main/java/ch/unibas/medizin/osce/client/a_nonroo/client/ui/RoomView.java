@@ -12,10 +12,10 @@ import com.google.gwt.user.client.ui.IsWidget;
  *
  */
 public interface RoomView extends IsWidget{
-	
-    public interface Presenter {
-        void goTo(Place place);
-    }
+
+	public interface Presenter {
+		void goTo(Place place);
+	}
 	/**
 	 * Implemented by the owner of the view.
 	 */
@@ -23,15 +23,15 @@ public interface RoomView extends IsWidget{
 		void newClicked(String name, double length, double width);
 
 		void deleteClicked(RoomProxy room);
-		
+
 		void performSearch(String q);
 	}
 
-    CellTable<RoomProxy> getTable();
-    String[] getPaths();
-    
-    void setDelegate(Delegate delegate);
-    
-//	SimplePanel getDetailsPanel();
-    void setPresenter(Presenter systemStartActivity);
+	CellTable<RoomProxy> getTable();
+	String[] getPaths();
+
+	void setDelegate(Delegate delegate);
+
+	//	SimplePanel getDetailsPanel();
+	void setPresenter(Presenter systemStartActivity);
 }

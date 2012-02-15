@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
@@ -202,7 +203,11 @@ public class OsMaMainNav extends Composite {
 		placeController.goTo(new RoomPlace("RoomPlace"));
 	}
 	
-	// TODO: UiHandler for osces
+	@UiHandler("osces")
+	void oscesClicked(ClickEvent event) {
+		placeController.goTo(new OscePlace("OscePlace"));
+	}
+	
 	// TODO: UiHandler for course
 	// TODO: UiHandler for students
 	// TODO: UiHandler for examinationSchedule
