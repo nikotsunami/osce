@@ -32,7 +32,9 @@ public class AdministratorDetailsPlace extends Place {
 	}
 	public AdministratorDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
-		
+	}
+	public AdministratorDetailsPlace(Operation operation) {
+		this.operation = operation;
 	}
 
     public AdministratorDetailsPlace(EntityProxyId<?> stableId, Operation operation) {
@@ -80,7 +82,7 @@ public class AdministratorDetailsPlace extends Place {
 				return new AdministratorDetailsPlace(requests.getProxyId(bits[0]), Operation.EDIT);
 			}
 			if (Operation.CREATE == operation) {
-				return new AdministratorDetailsPlace(requests.getProxyId(bits[0]), Operation.CREATE);
+				return new AdministratorDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
 
 			return new AdministratorDetailsPlace(token);
@@ -95,7 +97,7 @@ public class AdministratorDetailsPlace extends Place {
 				return place.getProxyId() + SEPARATOR + AdministratorDetailsPlace.Operation.EDIT;
 			}
 			if (Operation.CREATE == place.getOperation()) {
-				return place.getProxyId() + SEPARATOR + AdministratorDetailsPlace.Operation.CREATE;
+				return /*place.getProxyId() + */SEPARATOR + AdministratorDetailsPlace.Operation.CREATE.toString();
 			}
 
         

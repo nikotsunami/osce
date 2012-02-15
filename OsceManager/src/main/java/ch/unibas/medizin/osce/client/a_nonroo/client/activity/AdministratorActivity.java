@@ -32,7 +32,7 @@ public class AdministratorActivity extends AbstractActivity implements
 AdministratorView.Presenter, AdministratorView.Delegate {
 	
     private OsMaRequestFactory requests;
-	private PlaceController placeControler;
+	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private AdministratorView view;
 	private CellTable<AdministratorProxy> table;
@@ -45,7 +45,7 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 	@Inject
 	public AdministratorActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
-    	this.placeControler = placeController;
+    	this.placeController = placeController;
     	administratorDetailsActivityMapper = new AdministratorDetailsActivityMapper(requests, placeController);
 		this.activityManger = new ActivityManager(administratorDetailsActivityMapper, requests.getEventBus());
     }
@@ -189,13 +189,13 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
-		
+		Log.info("new clicked");
+		placeController.goTo(new AdministratorDetailsPlace(AdministratorDetailsPlace.Operation.CREATE));
 	}
 
 	@Override
 	public void goTo(Place place) {
-		placeControler.goTo(place);
+		placeController.goTo(place);
 		
 	}
 
