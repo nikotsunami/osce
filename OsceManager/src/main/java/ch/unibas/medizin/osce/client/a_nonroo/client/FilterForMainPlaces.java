@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsP
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
@@ -166,6 +167,9 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		
 		if (place instanceof IndividualSchedulesPlace)
 			return (IndividualSchedulesPlace) place;
+		
+		if (place instanceof BellSchedulePlace)
+			return (BellSchedulePlace) place;
 		
 		// TODO: roles
 		// TODO: roleAssignment

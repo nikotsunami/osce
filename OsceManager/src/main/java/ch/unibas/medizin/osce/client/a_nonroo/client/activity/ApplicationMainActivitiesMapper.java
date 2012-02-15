@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
@@ -112,6 +113,11 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof IndividualSchedulesPlace){
 			Log.debug("is IndividualSchedulesPlace");
 			return new IndividualSchedulesActivity(requests, placeController);
+		}
+		
+		if (place instanceof BellSchedulePlace){
+			Log.debug("is BellSchedulePlace");
+			return new BellScheduleActivity(requests, placeController);
 		}
 		
 		return null;

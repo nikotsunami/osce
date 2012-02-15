@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
@@ -75,7 +76,7 @@ public class OsMaMainNav extends Composite {
     	examinationSchedule.setText(Messages.EXAM_SCHEDULE);
     	exportContingents.setText(Messages.EXPORT_CONTINGENTS);
     	individualSchedules.setText(Messages.PRINT_INDIVIDUAL_SCHEDULES);
-    	exportBellSchedule.setText(Messages.EXPORT_BELL_SCHEDULE);
+    	bellSchedule.setText(Messages.EXPORT_BELL_SCHEDULE);
 
     	roles.setText(Messages.ROLES);
     	roleAssignment.setText(Messages.ROLE_ASSIGNMENT);
@@ -126,7 +127,7 @@ public class OsMaMainNav extends Composite {
 			@UiField
 			Anchor individualSchedules; // Individuelle Pläne drucken
 			@UiField
-			Anchor exportBellSchedule;		// Klingelplan erstellen
+			Anchor bellSchedule;		// Klingelplan erstellen
 	
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
@@ -230,6 +231,11 @@ public class OsMaMainNav extends Composite {
 	@UiHandler("individualSchedules")
 	void individualSchedulesClicked(ClickEvent event) {
 		placeController.goTo(new IndividualSchedulesPlace("IndividualSchedulesPlace"));
+	}
+	
+	@UiHandler("bellSchedule")
+	void bellScheduleClicked(ClickEvent event) {
+		placeController.goTo(new BellSchedulePlace("BellSchedulePlace"));
 	}
 	
 	// TODO: UiHandler for roles
