@@ -43,6 +43,8 @@ public class OscePlaceHistoryFactory {
 	private final StudentsPlace.Tokenizer studentsPlaceTokenizer;
 	
 	private final ExaminationSchedulePlace.Tokenizer examinationSchedulePlaceTokenizer;
+	
+	private final IndividualSchedulesPlace.Tokenizer individualSchedulesPlaceTokenizer;
 
 
 	@Inject
@@ -83,6 +85,8 @@ public class OscePlaceHistoryFactory {
 		this.studentsPlaceTokenizer = new StudentsPlace.Tokenizer(requestFactory);
 		
 		this.examinationSchedulePlaceTokenizer = new ExaminationSchedulePlace.Tokenizer(requestFactory);
+		
+		this.individualSchedulesPlaceTokenizer = new IndividualSchedulesPlace.Tokenizer(requestFactory);
 	}
 
 
@@ -174,6 +178,10 @@ public class OscePlaceHistoryFactory {
 	
 	public PlaceTokenizer<ExaminationSchedulePlace> getExaminationSchedulePlaceTokenizer() {
 		return examinationSchedulePlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<IndividualSchedulesPlace> getIndividualSchedulesPlaceTokenizer() {
+		return individualSchedulesPlaceTokenizer;
 	}
 	
 	//	public PlaceTokenizer<ProxyPlace> getProxyPlaceTokenizer() {

@@ -36,7 +36,7 @@
 				<g:Anchor ui:field="students"></g:Anchor>
 				<g:Anchor ui:field="examinationSchedule"></g:Anchor>
 				<g:Anchor ui:field="exportContingents"></g:Anchor>
-				<g:Anchor ui:field="printIndividualSchedules"></g:Anchor>
+				<g:Anchor ui:field="individualSchedules"></g:Anchor>
 				<g:Anchor ui:field="exportBellSchedule"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
