@@ -6,10 +6,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsP
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
@@ -22,6 +24,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetails
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 
 import com.google.gwt.activity.shared.FilteredActivityMapper;
 import com.google.gwt.place.shared.Place;
@@ -151,9 +154,15 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return new OscePlace(osceDetailsPlace.getToken());
 		}
 		
-		// TODO: course
-		// TODO: students
-		// TODO: examinationSchedule
+		if (place instanceof CircuitPlace)
+			return (CircuitPlace) place;
+		
+		if (place instanceof StudentsPlace)
+			return (StudentsPlace) place;
+		
+		if (place instanceof ExaminationSchedulePlace)
+			return (ExaminationSchedulePlace) place;
+		
 		// TODO: printIndividualSchedules
 		// TODO: simulationPatients
 		// TODO: roles

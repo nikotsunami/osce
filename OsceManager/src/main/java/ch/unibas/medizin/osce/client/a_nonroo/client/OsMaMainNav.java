@@ -3,8 +3,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
@@ -12,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 
@@ -66,7 +69,7 @@ public class OsMaMainNav extends Composite {
     	rooms.setText(Messages.ROOMS);
     	
     	osces.setText(Messages.OSCES);
-    	course.setText(Messages.CIRCUIT);
+    	circuit.setText(Messages.CIRCUIT);
     	students.setText(Messages.STUDENTS);
     	examinationSchedule.setText(Messages.EXAM_SCHEDULE);
     	exportContingents.setText(Messages.EXPORT_CONTINGENTS);
@@ -112,7 +115,7 @@ public class OsMaMainNav extends Composite {
 			@UiField
 			Anchor osces;					// OSCEs
 			@UiField
-			Anchor course;					// Postenlauf
+			Anchor circuit;					// Postenlauf
 			@UiField
 			Anchor students;				// Studenten
 			@UiField
@@ -208,9 +211,21 @@ public class OsMaMainNav extends Composite {
 		placeController.goTo(new OscePlace("OscePlace"));
 	}
 	
-	// TODO: UiHandler for course
-	// TODO: UiHandler for students
-	// TODO: UiHandler for examinationSchedule
+	@UiHandler("circuit")
+	void circuitClicked(ClickEvent event) {
+		placeController.goTo(new CircuitPlace("CircuitPlace"));
+	}
+	
+	@UiHandler("students")
+	void studentsClicked(ClickEvent event) {
+		placeController.goTo(new StudentsPlace("StudentsPlace"));
+	}
+	
+	@UiHandler("examinationSchedule")
+	void examinationScheduleClicked(ClickEvent event) {
+		placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace"));
+	}
+	
 	// TODO: UiHandler for printIndividualSchedules
 	// TODO: UiHandler for simulationPatients
 	// TODO: UiHandler for roles

@@ -37,6 +37,12 @@ public class OscePlaceHistoryFactory {
 	
 	private final OscePlace.Tokenizer oscePlaceTokenizer;
 	private final OsceDetailsPlace.Tokenizer osceDetailsPlaceTokenizer;
+	
+	private final CircuitPlace.Tokenizer circuitPlaceTokenizer;
+	
+	private final StudentsPlace.Tokenizer studentsPlaceTokenizer;
+	
+	private final ExaminationSchedulePlace.Tokenizer examinationSchedulePlaceTokenizer;
 
 
 	@Inject
@@ -71,6 +77,12 @@ public class OscePlaceHistoryFactory {
 		
 		this.oscePlaceTokenizer = new OscePlace.Tokenizer(requestFactory);
 		this.osceDetailsPlaceTokenizer = new OsceDetailsPlace.Tokenizer(requestFactory);
+		
+		this.circuitPlaceTokenizer = new CircuitPlace.Tokenizer(requestFactory);
+		
+		this.studentsPlaceTokenizer = new StudentsPlace.Tokenizer(requestFactory);
+		
+		this.examinationSchedulePlaceTokenizer = new ExaminationSchedulePlace.Tokenizer(requestFactory);
 	}
 
 
@@ -151,7 +163,19 @@ public class OscePlaceHistoryFactory {
 	public PlaceTokenizer<OsceDetailsPlace> getOsceDetailsPlaceTokenizer() {
 		return osceDetailsPlaceTokenizer;
 	}
-
+	
+	public PlaceTokenizer<CircuitPlace> getCircuitPlaceTokenizer() {
+		return circuitPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<StudentsPlace> getStudentsPlaceTokenizer() {
+		return studentsPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<ExaminationSchedulePlace> getExaminationSchedulePlaceTokenizer() {
+		return examinationSchedulePlaceTokenizer;
+	}
+	
 	//	public PlaceTokenizer<ProxyPlace> getProxyPlaceTokenizer() {
 	//		return proxyPlaceTokenizer;
 	//	}

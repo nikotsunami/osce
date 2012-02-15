@@ -32,7 +32,7 @@
 			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="osces"></g:Anchor>
-				<g:Anchor ui:field="course"></g:Anchor>
+				<g:Anchor ui:field="circuit"></g:Anchor>
 				<g:Anchor ui:field="students"></g:Anchor>
 				<g:Anchor ui:field="examinationSchedule"></g:Anchor>
 				<g:Anchor ui:field="exportContingents"></g:Anchor>

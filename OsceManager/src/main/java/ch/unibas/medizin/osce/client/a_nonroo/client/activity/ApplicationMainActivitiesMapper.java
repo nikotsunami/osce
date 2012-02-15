@@ -2,8 +2,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
@@ -11,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -90,7 +93,21 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new OsceActivity(requests, placeController);
 		}
 		
-		// TODO Auto-generated method stub
+		if (place instanceof CircuitPlace){
+			Log.debug("is CircuitPlace");
+			return new CircuitActivity(requests, placeController);
+		}
+		
+		if (place instanceof StudentsPlace){
+			Log.debug("is StudentsPlace");
+			return new StudentsActivity(requests, placeController);
+		}
+		
+		if (place instanceof ExaminationSchedulePlace){
+			Log.debug("is ExaminationSchedulePlace");
+			return new ExaminationScheduleActivity(requests, placeController);
+		}
+		
 		return null;
 	}
 
