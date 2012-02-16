@@ -315,3 +315,5 @@ field reference --fieldName standardizedRole --type ~.domain.StandardizedRole --
 field reference --fieldName doctor --type ~.domain.Doctor --class ~.domain.RoleParticipant
 field enum --fieldName type --type ~.shared.RoleParticipantType --class ~.domain.RoleParticipant
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-14 17:36:17
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-16 16:36:14
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-16 16:39:42

@@ -37,7 +37,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	private CellTable<OsceProxy> table;
 	private SingleSelectionModel<OsceProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
-	private ActivityManager activityManger;
+	private ActivityManager activityManager;
 	private OsceDetailsActivityMapper osceDetailsActivityMapper;
 
 
@@ -46,11 +46,11 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		this.requests = requests;
 		this.placeController = placeController;
 		osceDetailsActivityMapper = new OsceDetailsActivityMapper(requests, placeController);
-		this.activityManger = new ActivityManager(osceDetailsActivityMapper, requests.getEventBus());
+		this.activityManager = new ActivityManager(osceDetailsActivityMapper, requests.getEventBus());
 	}
 
 	public void onStop(){
-		activityManger.setDisplay(null);
+		activityManager.setDisplay(null);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 
 		init();
 
-		activityManger.setDisplay(view.getDetailsPanel());
+		activityManager.setDisplay(view.getDetailsPanel());
 
 		// Inherit the view's key provider
 		ProvidesKey<OsceProxy> keyProvider = ((AbstractHasData<OsceProxy>) table).getKeyProvider();

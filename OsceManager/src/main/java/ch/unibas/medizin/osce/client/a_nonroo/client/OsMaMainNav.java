@@ -9,9 +9,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
@@ -70,6 +73,7 @@ public class OsMaMainNav extends Composite {
 		languages.setText(Messages.LANGUAGES);
 		professions.setText(Messages.PROFESSIONS);
 		rooms.setText(Messages.ROOMS);
+		log.setText(Messages.LOG);
 
 		osces.setText(Messages.OSCES);
 		circuit.setText(Messages.CIRCUIT);
@@ -80,7 +84,7 @@ public class OsMaMainNav extends Composite {
 		bellSchedule.setText(Messages.EXPORT_BELL_SCHEDULE);
 
 		roles.setText(Messages.ROLES);
-		roleAssignment.setText(Messages.ROLE_ASSIGNMENT);
+		roleAssignments.setText(Messages.ROLE_ASSIGNMENTS);
 	}
 
 	@UiField
@@ -111,6 +115,8 @@ public class OsMaMainNav extends Composite {
 	Anchor professions;				// Berufe
 	@UiField
 	Anchor rooms;					// Räume
+	@UiField
+	Anchor log;						// Log
 
 	@UiField
 	DisclosurePanel examinationsPanel;		// Prüfungen
@@ -136,7 +142,7 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor roles;					// Rollen
 	@UiField
-	Anchor roleAssignment;			// Rollenzuweisung
+	Anchor roleAssignments;			// Rollenzuweisung
 
 
 	@UiHandler("people")
@@ -188,6 +194,11 @@ public class OsMaMainNav extends Composite {
 	void roomsClicked(ClickEvent event) {
 		placeController.goTo(new RoomPlace("RoomPlace"));
 	}
+	
+	@UiHandler("log")
+	void logClicked(ClickEvent event) {
+		placeController.goTo(new LogPlace("LogPlace"));
+	}
 
 	@UiHandler("osces")
 	void oscesClicked(ClickEvent event) {
@@ -223,7 +234,14 @@ public class OsMaMainNav extends Composite {
 	void bellScheduleClicked(ClickEvent event) {
 		placeController.goTo(new BellSchedulePlace("BellSchedulePlace"));
 	}
-
-	// TODO: UiHandler for roles
-	// TODO: UiHandler for roleAssignment
+	
+	@UiHandler("roles")
+	void rolesClicked(ClickEvent event) {
+		placeController.goTo(new RolePlace("RolePlace"));
+	}
+	
+	@UiHandler("roleAssignments")
+	void roleAssignmentsClicked(ClickEvent event) {
+		placeController.goTo(new RoleAssignmentsPlace("RoleAssignmentsPlace"));
+	}
 }

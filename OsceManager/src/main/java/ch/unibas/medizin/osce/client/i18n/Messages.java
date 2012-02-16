@@ -15,6 +15,7 @@ public class Messages {
 			public static final String PROFESSIONS = "Berufe";
 			public static final String LANGUAGES = "Sprachen";
 			public static final String ROOMS = "Räume";
+			public static final String LOG = "Log";
 
 			public static final String EXAMS = "Prüfungen";
 			public static final String OSCES = "OSCEs verwalten";
@@ -28,7 +29,7 @@ public class Messages {
 			public static final String SIM_PAT = "SimPat";
 			public static final String SIMULATION_PATIENTS = "Simulationspatienten";
 			public static final String ROLES = "Rollen";
-			public static final String ROLE_ASSIGNMENT = "Rollenzuweisungen";
+			public static final String ROLE_ASSIGNMENTS = "Rollenzuweisungen";
 
 			/* Buttons & Aktionen */
 			public static final String SEARCHFIELD = "Suche...";
@@ -140,6 +141,11 @@ public class Messages {
 			public static final String ROOMNUMBER = "Raum-Nr.";
 			public static final String ROOMLENGTH = "Länge";
 			public static final String ROOMWIDTH = "Breite";
+			
+			/* LogEntry Details */
+			public static final String DATETIME = "Datum/Uhrzeit";
+			public static final String ADMINISTRATOR = "Benutzer";
+			public static final String LOGDETAILS = "Log-Details";
 			
 			/* OSCE Details */
 			public static final String STUDYYEAR = "SJ";

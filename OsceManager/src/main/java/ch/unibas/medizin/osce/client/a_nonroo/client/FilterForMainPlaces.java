@@ -20,8 +20,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -65,6 +70,12 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		 */
 		if (place instanceof RoomPlace)
 			return (RoomPlace) place;
+		
+		/**
+		 * log
+		 */
+		if (place instanceof LogPlace)
+			return (LogPlace) place;
 
 		// no details place for rooms needed
 		
@@ -141,8 +152,8 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		if (place instanceof ProfessionPlace)
 			return (ProfessionPlace) place;
 
-		if (place instanceof ProfessionDetailsPlace){
-			ProfessionDetailsPlace professionDetailsPlace= (ProfessionDetailsPlace)place;
+		if (place instanceof ProfessionDetailsPlace) {
+			ProfessionDetailsPlace professionDetailsPlace = (ProfessionDetailsPlace)place;
 			return new ProfessionPlace(professionDetailsPlace.getToken());
 		}
 		
@@ -153,7 +164,7 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return (OscePlace) place;
 
 		if (place instanceof OsceDetailsPlace){
-			OsceDetailsPlace osceDetailsPlace= (OsceDetailsPlace) place;
+			OsceDetailsPlace osceDetailsPlace = (OsceDetailsPlace) place;
 			return new OscePlace(osceDetailsPlace.getToken());
 		}
 		
@@ -175,9 +186,22 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		if (place instanceof BellSchedulePlace)
 			return (BellSchedulePlace) place;
 		
-		// TODO: roles
-		// TODO: roleAssignment
-
+		if (place instanceof RolePlace)
+			return (RolePlace) place;
+		
+		if (place instanceof RoleDetailsPlace){
+			RoleDetailsPlace roleDetailsPlace = (RoleDetailsPlace) place;
+			return new RolePlace(roleDetailsPlace.getToken());
+		}
+		
+		if (place instanceof RoleAssignmentsPlace)
+			return (RoleAssignmentsPlace) place;
+		
+		if (place instanceof RoleAssignmentsDetailsPlace){
+			RoleAssignmentsDetailsPlace roleAssignmentsDetailsPlace = (RoleAssignmentsDetailsPlace) place;
+			return new RoleAssignmentsPlace(roleAssignmentsDetailsPlace.getToken());
+		}
+		
 		return null;
 	}
 

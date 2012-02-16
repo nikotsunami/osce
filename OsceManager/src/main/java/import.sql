@@ -155,3 +155,14 @@ INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (10,12);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (11,14);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (12,13);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (13,15);
+
+INSERT INTO `room` (room_number, length, width, version) VALUES ('LZM - 101', '5.0', '4.3', 0);
+INSERT INTO `room` (room_number, length, width, version) VALUES ('LZM - 102', '3.4', '4.1', 0);
+INSERT INTO `room` (room_number, length, width, version) VALUES ('LZM - 103', '2.3', '6.3', 0);
+INSERT INTO `room` (room_number, length, width, version) VALUES ('LZM - 104', '6.4', '7.5', 0);
+
+INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert1', 'alter Wert1', '012345', 0);
+INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert2', 'alter Wert2', '012345', 0);
+INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert3', 'alter Wert3', '543210', 0);
+INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert4', 'alter Wert4', '543210', 0);
+INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert5', 'alter Wert5', '012345', 0);
