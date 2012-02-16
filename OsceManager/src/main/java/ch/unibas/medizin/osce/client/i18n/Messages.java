@@ -28,7 +28,7 @@ public class Messages {
 			public static final String SIM_PAT = "SimPat";
 			public static final String SIMULATION_PATIENTS = "Simulationspatienten";
 			public static final String ROLES = "Rollen";
-			public static final String ROLE_ASSIGNMENT = "Rollenzuweisungen";
+			public static final String ROLE_ASSIGNMENTS = "Rollenzuweisungen";
 
 			/* Buttons & Aktionen */
 			public static final String SEARCHFIELD = "Suche...";

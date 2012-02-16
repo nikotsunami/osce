@@ -37,19 +37,18 @@ public class OscePlaceHistoryFactory {
 	
 	private final OscePlace.Tokenizer oscePlaceTokenizer;
 	private final OsceDetailsPlace.Tokenizer osceDetailsPlaceTokenizer;
-	
 	private final CircuitPlace.Tokenizer circuitPlaceTokenizer;
-	
 	private final StudentsPlace.Tokenizer studentsPlaceTokenizer;
-	
 	private final ExaminationSchedulePlace.Tokenizer examinationSchedulePlaceTokenizer;
-	
 	private final SummoningsPlace.Tokenizer summoningsTokenizer;
-	
 	private final IndividualSchedulesPlace.Tokenizer individualSchedulesPlaceTokenizer;
-	
 	private final BellSchedulePlace.Tokenizer bellSchedulePlaceTokenizer;
-
+	
+	private final RolePlace.Tokenizer rolePlaceTokenizer;
+	private final RoleDetailsPlace.Tokenizer roleDetailsPlaceTokenizer;
+	private final RoleAssignmentsPlace.Tokenizer roleAssignmentsPlaceTokenizer;
+	private final RoleAssignmentsDetailsPlace.Tokenizer roleAssignmentsDetailsPlaceTokenizer;
+	
 
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
@@ -83,15 +82,18 @@ public class OscePlaceHistoryFactory {
 		
 		this.oscePlaceTokenizer = new OscePlace.Tokenizer(requestFactory);
 		this.osceDetailsPlaceTokenizer = new OsceDetailsPlace.Tokenizer(requestFactory);
-		
 		this.circuitPlaceTokenizer = new CircuitPlace.Tokenizer(requestFactory);
-		
 		this.studentsPlaceTokenizer = new StudentsPlace.Tokenizer(requestFactory);
-		
 		this.examinationSchedulePlaceTokenizer = new ExaminationSchedulePlace.Tokenizer(requestFactory);
 		this.summoningsTokenizer = new SummoningsPlace.Tokenizer(requestFactory);
 		this.individualSchedulesPlaceTokenizer = new IndividualSchedulesPlace.Tokenizer(requestFactory);
 		this.bellSchedulePlaceTokenizer = new BellSchedulePlace.Tokenizer(requestFactory);
+		
+		this.rolePlaceTokenizer = new RolePlace.Tokenizer(requestFactory);
+		this.roleDetailsPlaceTokenizer = new RoleDetailsPlace.Tokenizer(requestFactory);
+		
+		this.roleAssignmentsPlaceTokenizer = new RoleAssignmentsPlace.Tokenizer(requestFactory);
+		this.roleAssignmentsDetailsPlaceTokenizer = new RoleAssignmentsDetailsPlace.Tokenizer(requestFactory);
 	}
 
 
@@ -195,6 +197,20 @@ public class OscePlaceHistoryFactory {
 	
 	public PlaceTokenizer<BellSchedulePlace> getBellSchedulePlaceTokenizer() {
 		return bellSchedulePlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<RolePlace> getRolePlaceTokenizer() {
+		return rolePlaceTokenizer;
+	}
+	public PlaceTokenizer<RoleDetailsPlace> getRoleDetailsPlaceTokenizer() {
+		return roleDetailsPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<RoleAssignmentsPlace> getRoleAssignmentsPlaceTokenizer() {
+		return roleAssignmentsPlaceTokenizer;
+	}
+	public PlaceTokenizer<RoleAssignmentsDetailsPlace> getRoleAssignmentsDetailsPlaceTokenizer() {
+		return roleAssignmentsDetailsPlaceTokenizer;
 	}
 	
 	//	public PlaceTokenizer<ProxyPlace> getProxyPlaceTokenizer() {

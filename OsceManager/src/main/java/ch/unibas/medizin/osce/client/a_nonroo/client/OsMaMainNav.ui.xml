@@ -45,7 +45,7 @@
 			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="roles"></g:Anchor>
-				<g:Anchor ui:field="roleAssignment"></g:Anchor>
+				<g:Anchor ui:field="roleAssignments"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 

@@ -12,6 +12,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
@@ -80,7 +82,7 @@ public class OsMaMainNav extends Composite {
 		bellSchedule.setText(Messages.EXPORT_BELL_SCHEDULE);
 
 		roles.setText(Messages.ROLES);
-		roleAssignment.setText(Messages.ROLE_ASSIGNMENT);
+		roleAssignments.setText(Messages.ROLE_ASSIGNMENTS);
 	}
 
 	@UiField
@@ -136,7 +138,7 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor roles;					// Rollen
 	@UiField
-	Anchor roleAssignment;			// Rollenzuweisung
+	Anchor roleAssignments;			// Rollenzuweisung
 
 
 	@UiHandler("people")
@@ -223,7 +225,14 @@ public class OsMaMainNav extends Composite {
 	void bellScheduleClicked(ClickEvent event) {
 		placeController.goTo(new BellSchedulePlace("BellSchedulePlace"));
 	}
-
-	// TODO: UiHandler for roles
-	// TODO: UiHandler for roleAssignment
+	
+	@UiHandler("roles")
+	void rolesClicked(ClickEvent event) {
+		placeController.goTo(new RolePlace("RolePlace"));
+	}
+	
+	@UiHandler("roleAssignments")
+	void roleAssignmentsClicked(ClickEvent event) {
+		placeController.goTo(new RoleAssignmentsPlace("RoleAssignmentsPlace"));
+	}
 }
