@@ -25,6 +25,7 @@
 				<g:Anchor ui:field="languages"></g:Anchor>
 				<g:Anchor ui:field="professions"></g:Anchor>
 				<g:Anchor ui:field="rooms"></g:Anchor>
+				<g:Anchor ui:field="log"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 

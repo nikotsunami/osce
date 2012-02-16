@@ -34,7 +34,7 @@ public class Room {
     
     public static Long countRoomsByName(String name) {
     	EntityManager em = entityManager();
-    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Room o WHERE o.roomNumber LIKE :name", Long.class);
+    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Room o WHERE o.roomNumber LIKE :name OR o.length LIKE :name OR o.width LIKE :name", Long.class);
     	q.setParameter("name", "%" + name + "%");
     	
     	return q.getSingleResult();
@@ -43,7 +43,7 @@ public class Room {
     public static List<Room> findRoomEntriesByName(String name, int firstResult, int maxResults) {
         if (name == null) throw new IllegalArgumentException("The name argument is required");
         EntityManager em = entityManager();
-        TypedQuery<Room> q = em.createQuery("SELECT o FROM Room AS o WHERE o.roomNumber LIKE :name", Room.class);
+        TypedQuery<Room> q = em.createQuery("SELECT o FROM Room AS o WHERE o.roomNumber LIKE :name OR o.length LIKE :name OR o.width LIKE :name", Room.class);
         q.setParameter("name", "%" + name + "%");
         q.setFirstResult(firstResult);
         q.setMaxResults(maxResults);

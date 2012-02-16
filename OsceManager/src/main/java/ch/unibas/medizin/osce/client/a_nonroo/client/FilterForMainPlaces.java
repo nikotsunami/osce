@@ -26,6 +26,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -69,6 +70,12 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		 */
 		if (place instanceof RoomPlace)
 			return (RoomPlace) place;
+		
+		/**
+		 * log
+		 */
+		if (place instanceof LogPlace)
+			return (LogPlace) place;
 
 		// no details place for rooms needed
 		

@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
@@ -56,6 +57,11 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof RoomPlace) {
 			Log.debug("is RoomPlace");
 			return new RoomActivity(requests, placeController);
+		}
+		
+		if (place instanceof LogPlace) {
+			Log.debug("is LogPlace");
+			return new LogActivity(requests, placeController);
 		}
 		
 		if (place instanceof AnamnesisCheckPlace) {
