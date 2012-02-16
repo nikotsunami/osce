@@ -3,7 +3,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 import java.util.Arrays;
 
 import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 
@@ -14,7 +16,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -37,8 +38,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	@UiField
 	IconButton closeBoxButton;
 	
-	@UiField
-	SuggestBox anamnesisValue;
+	@UiField (provided = true)
+	SuggestBox anamnesisQuestionSuggestBox;
 	
 	@UiField(provided = true)
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
@@ -55,11 +56,21 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
     });
 
 	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
+		ProxySuggestOracle<AnamnesisCheckProxy> oracle = new ProxySuggestOracle<AnamnesisCheckProxy>(new AbstractRenderer<AnamnesisCheckProxy>() {
+			@Override
+			public String render(AnamnesisCheckProxy object) {
+				return object.getText();
+			}
+		});
+		anamnesisQuestionSuggestBox = new SuggestBox(oracle);
 		setWidget(uiBinder.createAndBindUi(this));
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		addAnamnesisValueButton.setText(Messages.ADD);
 		addAnamnesisValues.setText(Messages.ANAMNESIS_VALUES);
+		
+//		anamnesisQuestionSuggestBox.
+//		oracle.addAll(collection)
 	}
 	
 	@UiHandler("addAnamnesisValueButton")
@@ -87,5 +98,10 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	public void display(Button parentButton) {
 		this.show();
 		this.setPopupPosition(parentButton.getAbsoluteLeft() - 5, parentButton.getAbsoluteTop() - getOffsetHeight()/2 - 6);
+	}
+
+	@Override
+	public SuggestBox getAnamnesisQuestionSuggestBox() {
+		return anamnesisQuestionSuggestBox;
 	}
 }

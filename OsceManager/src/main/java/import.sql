@@ -58,14 +58,14 @@ INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (11,'2012-03-24 00:
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (12,'2010-12-24 00:00:00',0);
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (13,'2010-07-18 00:00:00',0);
 
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (1,1,'Rauchen Sie?',1,'',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (2,2,'Wie oft rauchen Sie?',2,'oft,mittel,selten',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (3,3,'Nehmen Sie zurzeit regelmässig Medikamente ein?',1,'',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (4,4,'Welche Medikamente nehmen Sie ein?',0,'Zygtoban, Bascurol',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (5,5,'Leiden Sie unter Diabetes?',1,'',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (6,6,'Wurde Ihnen der Blinddarm entfernt?',1,'',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (7,5,'Leiden Sie unter Diabetes?',1,'',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (8,6,'Ist Ihnen der Blinddarm entfernt worden?',1,'',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (1,1,'',1,'Rauchen Sie?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (2,2,'oft|mittel|selten',2,'Wie oft rauchen Sie?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (3,3,'',1,'Nehmen Sie zurzeit regelmässig Medikamente ein?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (4,4,'Zygtoban|Bascurol',0,'Welche Medikamente nehmen Sie ein?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (5,5,'',1,'Leiden Sie unter Diabetes?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (6,6,'',1,'Wurde Ihnen der Blinddarm entfernt?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (7,5,'',1,'Leiden Sie unter Diabetes?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (8,6,'',1,'Ist Ihnen der Blinddarm entfernt worden?',0);
 
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (1,'selten',NULL,0,0,2,2);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (7,NULL,NULL,0,0,3,2);

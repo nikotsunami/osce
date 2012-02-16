@@ -9,7 +9,7 @@
 		<g:HorizontalPanel ui:field="parentPanel" spacing="4">
 			<g:ValueListBox ui:field="bindType" />
 			<g:ValueListBox ui:field="comparison"/>
-			<g:SuggestBox ui:field="anamnesisValue" />
+			<g:SuggestBox ui:field="anamnesisQuestionSuggestBox" />
 			<my:IconButton ui:field="addAnamnesisValueButton" icon="plusthick"/>
 			<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>
 		</g:HorizontalPanel>

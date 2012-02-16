@@ -924,10 +924,6 @@ a:hover, .gwt-Anchor:hover {
 	background-color: white;
 }
 
-.gwt-SuggestBox {
-	padding: 2px;
-}
-
 .gwt-SuggestBoxPopup {
 	margin-left: 3px;
 }
@@ -1251,7 +1247,7 @@ a:hover, .gwt-Anchor:hover {
 	color: #888;
 }
 
-.gwt-TextBox, input {
+.gwt-TextBox, .gwt-SuggestBox, input {
 	padding: 0 2px;
 	-moz-border-radius: 4px;
 	

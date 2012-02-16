@@ -24,10 +24,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standartized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopup.Delegate;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
@@ -402,6 +404,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 
 	@Override
 	public void addAnamnesisCriteriaClicked(Button parentButton) {
+		initAnamnesisCriteriaSubView();
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
 			if (advancedSearchPopup == anamnesisPopup) {
@@ -487,6 +490,28 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 				scarPopup.getScarBox().setAcceptableValues(values);
 			}
 			
+		});
+	}
+	
+	
+	
+	private void initAnamnesisCriteriaSubView() {
+		requests.anamnesisCheckRequest().findAllAnamnesisChecks().fire(new Receiver<List<AnamnesisCheckProxy>>() {
+			public void onSuccess(List<AnamnesisCheckProxy> response) {
+				if (anamnesisPopup == null) {
+					return;
+				}
+				
+				List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
+				values.addAll(response);
+				
+				Iterator<AnamnesisCheckProxy> iter = values.iterator();
+				while (iter.hasNext()) {
+					Log.info("toString: " + iter.next().toString());
+				}
+				((ProxySuggestOracle<AnamnesisCheckProxy>)anamnesisPopup.getAnamnesisQuestionSuggestBox().getSuggestOracle())
+						.addAll(values);
+			}
 		});
 	}
 
