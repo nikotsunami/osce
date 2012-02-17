@@ -1,23 +1,37 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,6 +44,11 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	interface StandardizedPatientAdvancedSearchAnamnesisPopupImplUiBinder extends
 			UiBinder<Widget, StandardizedPatientAdvancedSearchAnamnesisPopupImpl> {
 	}
+	@UiField
+	HorizontalPanel parentPanel;
+	
+	@UiField
+	HorizontalPanel anamnesisAnswerPanel;
 	
 	@UiField
 	IconButton addAnamnesisValueButton;
@@ -40,6 +59,30 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	
 	@UiField (provided = true)
 	SuggestBox anamnesisQuestionSuggestBox;
+	
+	private ValueListBox<String> anamnesisAnswerMCSelector = new ValueListBox<String>(new AbstractRenderer<String>() {
+		@Override
+		public String render(String object) {
+			return (object == null) ? "" : object;
+		}
+		
+	});
+	
+	private ValueListBox<Boolean> anamnesisAnswerYesNoSelector = new ValueListBox<Boolean>(new AbstractRenderer<Boolean>() {
+		@Override
+		public String render(Boolean object) {
+			if (object == null)
+				return null;
+			return (object.booleanValue()) ? Messages.YES : Messages.NO;
+//			if (object == null || !object.booleanValue()) {
+//				return Messages.NO;
+//			}
+//			return Messages.YES;
+		}
+	});
+	
+	private TextBox anamnesisAnswerText = new TextBox();
+	private IsWidget currentAnswerWidget;
 	
 	@UiField(provided = true)
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
@@ -56,21 +99,99 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
     });
 
 	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
-		ProxySuggestOracle<AnamnesisCheckProxy> oracle = new ProxySuggestOracle<AnamnesisCheckProxy>(new AbstractRenderer<AnamnesisCheckProxy>() {
+		
+		anamnesisQuestionSuggestBox = new SuggestBox(new ProxySuggestOracle<AnamnesisCheckProxy>(new AbstractRenderer<AnamnesisCheckProxy>() {
 			@Override
 			public String render(AnamnesisCheckProxy object) {
 				return object.getText();
 			}
+		}, ",;:. \t?!_-/\\"));
+		
+		anamnesisQuestionSuggestBox.setText(Messages.ENTER_QUESTION);
+		anamnesisQuestionSuggestBox.getTextBox().addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (anamnesisQuestionSuggestBox.getText().equals(Messages.ENTER_QUESTION)) {
+					anamnesisQuestionSuggestBox.setText("");	
+				}
+			}
 		});
-		anamnesisQuestionSuggestBox = new SuggestBox(oracle);
+		anamnesisQuestionSuggestBox.getTextBox().addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				if (anamnesisQuestionSuggestBox.getText().equals("")) {
+					anamnesisQuestionSuggestBox.setText(Messages.ENTER_QUESTION);
+				}
+			}
+		});
+		anamnesisQuestionSuggestBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion> () {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event) {
+				changeQuestionFieldWidth(event.getSelectedItem().getReplacementString());
+				displayAnswerFieldForProxy((AnamnesisCheckProxy) ((ProxySuggestOracle<AnamnesisCheckProxy>.ProxySuggestion) 
+						event.getSelectedItem()).getProxy());
+			}
+
+			
+		});
+		
 		setWidget(uiBinder.createAndBindUi(this));
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		addAnamnesisValueButton.setText(Messages.ADD);
 		addAnamnesisValues.setText(Messages.ANAMNESIS_VALUES);
 		
-//		anamnesisQuestionSuggestBox.
-//		oracle.addAll(collection)
+		anamnesisAnswerText.setText(Messages.ENTER_ANSWER);
+		anamnesisAnswerText.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (anamnesisAnswerText.getText().equals(Messages.ENTER_ANSWER)) {
+					anamnesisAnswerText.setText("");
+				}
+			}
+		});
+		anamnesisAnswerText.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				if (anamnesisAnswerText.getText().equals("")) {
+					anamnesisAnswerText.setText(Messages.ENTER_ANSWER);
+				}
+			}
+		});
+		
+		ArrayList<Boolean> acceptableBooleanValues = new ArrayList<Boolean>();
+		acceptableBooleanValues.add(new Boolean(true));
+		acceptableBooleanValues.add(new Boolean(false));
+		anamnesisAnswerYesNoSelector.setAcceptableValues(acceptableBooleanValues);
+	}
+	
+	private void displayAnswerFieldForProxy(AnamnesisCheckProxy proxy) {
+		if (currentAnswerWidget != null) {
+			anamnesisAnswerPanel.remove(currentAnswerWidget);
+		}
+		
+		if (proxy == null) {
+			return;
+		} else if (proxy.getType() == AnamnesisCheckTypes.QuestionMultM || proxy.getType() == AnamnesisCheckTypes.QuestionMultS) {
+			currentAnswerWidget = anamnesisAnswerMCSelector;
+			Log.info("proxy.getValue() = " + proxy.getValue());
+			anamnesisAnswerMCSelector.setAcceptableValues(Arrays.asList(proxy.getValue().split("\\|")));
+		} else if (proxy.getType() == AnamnesisCheckTypes.QuestionYesNo) {
+			currentAnswerWidget = anamnesisAnswerYesNoSelector;
+		} else {
+			currentAnswerWidget = anamnesisAnswerText;
+		}
+		anamnesisAnswerPanel.add(currentAnswerWidget);
+	}
+
+
+
+	private void changeQuestionFieldWidth(String stringForOrientation) {
+		Label dummyLabel = new Label(stringForOrientation);
+		parentPanel.add(dummyLabel);
+		anamnesisQuestionSuggestBox.getTextBox().setWidth("" + (dummyLabel.getElement().getClientWidth() + 10) + "px");
+		parentPanel.remove(dummyLabel);
 	}
 	
 	@UiHandler("addAnamnesisValueButton")

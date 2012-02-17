@@ -925,24 +925,36 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-SuggestBoxPopup {
-	margin-left: 3px;
+	margin-left: 4px;
+}
+
+.gwt-SuggestBoxPopup strong {
+	background-color: #F1B532;
 }
 
 .gwt-SuggestBoxPopup .item {
-	padding: 2px 6px;
+	padding: 2px 4px;
 	color: #424242;
 	cursor: default;
 }
 
 .gwt-SuggestBoxPopup .item-selected {
-	background: #cdcdcd;
+	background: #F1B532;
+}
+
+.gwt-SuggestBoxPopup .item-selected strong {
+	background: #FCFDB5;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupContent {
 	background: white;
 }
 
-.gwt-SuggestBoxPopup .suggestPopupTopCenter {
+.gwt-SuggestBoxPopup {
+	border: 1px solid #aaa;
+}
+
+/* .gwt-SuggestBoxPopup .suggestPopupTopCenter {
 	background: url(images/hborder.png) repeat-x;
 }
 
@@ -1026,7 +1038,7 @@ a:hover, .gwt-Anchor:hover {
 	width: 8px;
 	height: 8px;
 	overflow: hidden;
-}
+} */
 
 .gwt-TabBar {
     background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;

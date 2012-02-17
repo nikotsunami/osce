@@ -161,7 +161,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			@Override
 			public void onBlur(BlurEvent arg0) {
 				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue("Suche...");
+					searchBox.setValue(Messages.SEARCHFIELD);
 				}
 			}
 		});

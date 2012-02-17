@@ -501,16 +501,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements
 				if (anamnesisPopup == null) {
 					return;
 				}
-				
-				List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
-				values.addAll(response);
-				
-				Iterator<AnamnesisCheckProxy> iter = values.iterator();
-				while (iter.hasNext()) {
-					Log.info("toString: " + iter.next().toString());
-				}
-				((ProxySuggestOracle<AnamnesisCheckProxy>)anamnesisPopup.getAnamnesisQuestionSuggestBox().getSuggestOracle())
-						.addAll(values);
+
+				((ProxySuggestOracle<AnamnesisCheckProxy>) anamnesisPopup.getAnamnesisQuestionSuggestBox().getSuggestOracle())
+						.addAll(response);
 			}
 		});
 	}

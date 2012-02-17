@@ -152,4 +152,8 @@ public class Messages {
 			public static final String MAX_STUDENTS = "max. Studenten";
 			public static final String MAX_PARCOURS = "max. Parcours";
 			public static final String POSTLENGTH = "Postenlänge";
+			
+			/* advanced search Popup specifics */
+			public static final String ENTER_QUESTION = "Bitte Frage eingeben...";
+			public static final String ENTER_ANSWER = "Bitte Antwort eingeben...";
 }
