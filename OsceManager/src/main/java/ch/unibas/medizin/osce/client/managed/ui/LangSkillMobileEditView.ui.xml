@@ -22,7 +22,7 @@
     <div id="skill">
             <div class="{style.label}">Skill</div>
             <div class="{style.value}">
-                <g:TextBox ui:field="skill"/>
+                <g:ValueListBox ui:field="skill"/>
             </div>
         </div>
     <div id="standardizedpatient">

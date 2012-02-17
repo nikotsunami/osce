@@ -24,7 +24,6 @@ import ch.unibas.medizin.osce.shared.Gender;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dev.shell.Jsni;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;

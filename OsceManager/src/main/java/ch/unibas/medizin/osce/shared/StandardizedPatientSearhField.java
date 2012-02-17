@@ -1,7 +1,7 @@
 package ch.unibas.medizin.osce.shared;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+//import javax.persistence.EntityManager;
+//import javax.persistence.TypedQuery;
 /**
  * Universal context search for patients
  */
@@ -32,7 +32,9 @@ public enum StandardizedPatientSearhField {
      * @param searchTerm target term to compare with
      * @return query to launch
      */
-    public static TypedQuery<Long> createSearchQuery(EntityManager em,
+    
+   //TODO: ###siebers### The Shared Package is compiled into gwt, the shouldn'd be spring classes lie Entity Manager!!!
+ /*   public static TypedQuery<Long> createSearchQuery(EntityManager em,
     		String searchTerm){
     	StringBuilder result = new StringBuilder("SELECT COUNT(o) FROM StandardizedPatient o " +
     			"WHERE ");
@@ -46,7 +48,7 @@ public enum StandardizedPatientSearhField {
     	TypedQuery<Long> query = em.createQuery(result.substring(0, result.length()-3), Long.class);
     	query.setParameter("q", "%" + searchTerm + "%");
     	return query;
-    }
+    }*/
 
     /**
      * Getter for static content 

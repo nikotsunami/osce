@@ -75,7 +75,7 @@
                     <div class="{style.label}">Bind Type:</div>
                 </td>
                 <td>
-                    <g:TextBox ui:field="bindType"/>
+                    <g:ValueListBox ui:field="bindType"/>
                 </td>
             </tr>
             <tr id="comparation">
@@ -83,7 +83,7 @@
                     <div class="{style.label}">Comparation:</div>
                 </td>
                 <td>
-                    <g:TextBox ui:field="comparation"/>
+                    <g:ValueListBox ui:field="comparation"/>
                 </td>
             </tr>
             <tr id="value">

@@ -48,7 +48,7 @@
                     <div class="{style.label}">Skill:</div>
                 </td>
                 <td>
-                    <g:TextBox ui:field="skill"/>
+                    <g:ValueListBox ui:field="skill"/>
                 </td>
             </tr>
       <tr id="standardizedpatient">
