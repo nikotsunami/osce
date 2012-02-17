@@ -21,4 +21,8 @@ public interface DescriptionEditView extends IsWidget {
 	}
 
 	RequestFactoryEditorDriver<DescriptionProxy, DescriptionEditViewImpl> createEditorDriver();
+
+	String getDescriptionContent();
+
+	void setDescriptionContent(String description);
 }

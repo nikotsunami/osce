@@ -84,6 +84,8 @@ StandardizedPatientEditView.Delegate {
 			return null;
 	}
 	
+	private DescriptionEditView descriptionView;
+	
 	// use this to check if some value has changed since editing has started
 	private boolean changed() {
 		return editorDriver != null && editorDriver.flush().isChanged();
@@ -109,7 +111,7 @@ StandardizedPatientEditView.Delegate {
 		});
 		
 		
-		DescriptionEditView descriptionView = new DescriptionEditViewImpl();
+		descriptionView = new DescriptionEditViewImpl();
 		view.getDescriptionPanel().add(descriptionView);
 		descriptionDriver = descriptionView.createEditorDriver();
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
@@ -197,6 +199,7 @@ StandardizedPatientEditView.Delegate {
 
 		if(standardizedPatient == null) {
 			standardizedPatient = request.create(StandardizedPatientProxy.class);
+			//editorDriver.edit(standardizedPatient, request);
 			description = request.create(DescriptionProxy.class);
 			standardizedPatient.setDescriptions(description);
 			
@@ -206,8 +209,25 @@ StandardizedPatientEditView.Delegate {
 			view.setEditTitle(false);
 			Log.info("create");
 		} else {
+			
+			standardizedPatient = request.edit(standardizedPatient);
+			//editorDriver.edit(standardizedPatient, request);
 			description = standardizedPatient.getDescriptions();
 			bankAccount = standardizedPatient.getBankAccount();
+			
+			if (description == null){
+				description = request.create(DescriptionProxy.class);
+				standardizedPatient.setDescriptions(description);
+				
+				
+			}
+			
+			if (bankAccount == null){
+				
+				bankAccount = request.create(BankaccountProxy.class);
+				standardizedPatient.setBankAccount(bankAccount);
+			}
+			
 			view.setEditTitle(true);
 			Log.info("edit");
 		}
@@ -216,6 +236,8 @@ StandardizedPatientEditView.Delegate {
 		editorDriver.edit(standardizedPatient, request);
 		descriptionDriver.edit(description, request);
 		bankaccountDriver.edit(bankAccount, request);
+		
+		descriptionView.setDescriptionContent(description.getDescription());
 
 		Log.info("persist");
 		request.persist().using(standardizedPatient);
@@ -247,7 +269,8 @@ StandardizedPatientEditView.Delegate {
 
 		// FIX bug(2011-11-12) - description is NOT saved the first time!
 		// description data is read from view (data save is cascaded, therefore description has to be updated before SP is saved!)
-		descriptionDriver.flush();
+		//descriptionDriver.flush();
+		description.setDescription(descriptionView.getDescriptionContent());
 		
 		editorDriver.flush().fire(new Receiver<Void>() {
 

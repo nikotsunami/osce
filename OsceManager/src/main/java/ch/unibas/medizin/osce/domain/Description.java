@@ -10,6 +10,6 @@ import javax.validation.constraints.Size;
 @RooEntity
 public class Description {
 
-    @Size(max = 40)
+    @Size(max = 999)
     private String description;
 }

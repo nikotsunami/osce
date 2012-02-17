@@ -40,4 +40,6 @@ public interface StandardizedPatientEditView extends IsWidget {
 
 	SimplePanel getDescriptionPanel();
 	SimplePanel getBankEditPanel();
+
+	
 }

@@ -463,4 +463,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	public void setProfessionPickerValues(Collection<ProfessionProxy> values) {
 		profession.setAcceptableValues(values);		
 	}
+
+
 }

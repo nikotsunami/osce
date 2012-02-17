@@ -78,4 +78,16 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 		driver.initialize(this);
 		return driver;
 	}
+
+	@Override
+	public String getDescriptionContent() {
+		// TODO Auto-generated method stub
+		return description.getHTML();
+	}
+
+	@Override
+	public void setDescriptionContent(String description) {
+		// TODO Auto-generated method stub
+		this.description.setHTML(description);
+	}
 }
