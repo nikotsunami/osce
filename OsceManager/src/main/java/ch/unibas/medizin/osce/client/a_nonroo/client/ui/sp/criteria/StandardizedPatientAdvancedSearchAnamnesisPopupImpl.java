@@ -94,6 +94,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
         }
     });
 
+	private AnamnesisCheckProxy selectedProxy;
+
 	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
 		
 		anamnesisQuestionSuggestBox = new SuggestBox(new ProxySuggestOracle<AnamnesisCheckProxy>(new AbstractRenderer<AnamnesisCheckProxy>() {
@@ -166,6 +168,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	}
 	
 	private void displayAnswerFieldForProxy(AnamnesisCheckProxy proxy) {
+		this.selectedProxy = proxy;
+		
 		if (currentAnswerWidget != null) {
 			anamnesisAnswerPanel.remove(currentAnswerWidget);
 		}
@@ -194,7 +198,16 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	
 	@UiHandler("addAnamnesisValueButton")
 	public void addAnamnesisValueButtonClicked(ClickEvent e) {
-		delegate.addAnamnesisValueButtonClicked();
+		String answer = "";
+		if (currentAnswerWidget == anamnesisAnswerMCSelector) {
+			answer = anamnesisAnswerMCSelector.getValue();
+		} else if (currentAnswerWidget == anamnesisAnswerYesNoSelector) {
+			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? Messages.NO : Messages.YES;
+		} else if (currentAnswerWidget == anamnesisAnswerText) {
+			answer = anamnesisAnswerText.getValue();
+		}
+		delegate.addAnamnesisValueButtonClicked(selectedProxy, answer, bindType.getValue(), comparison.getValue());
+		hide();
 	}
 	
 	@UiHandler("addAnamnesisValues")

@@ -504,8 +504,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	@Override
-	public void addAnamnesisValueButtonClicked() {
+	public void addAnamnesisValueButtonClicked(AnamnesisCheckProxy anamnesisCheck, String answer, BindType bindType, Comparison2 comparison) {
 		// TODO Auto-generated method stub
-
+		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
 	}
 }

@@ -22,6 +22,6 @@ public class DescriptionProxyRenderer extends ProxyRenderer<DescriptionProxy> {
         if (object == null) {
             return "";
         }
-        return object.getDescription() + " (" + object.getId() + ")";
+        return object.getDescription();
     }
 }

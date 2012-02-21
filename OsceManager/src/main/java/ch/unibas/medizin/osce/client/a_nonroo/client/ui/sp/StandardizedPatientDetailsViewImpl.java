@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -126,7 +127,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 //	@UiField
 //	SpanElement langskills;
 	@UiField
-	SpanElement description;
+	DivElement description;
 	@UiField
 	SpanElement displayRenderer;
 	@UiField
@@ -221,7 +222,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 //		Set<LangSkillProxy> langSkillSet = proxy.getLangskills();
 		
-		description.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
+		description.setInnerHTML(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
 		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
 		
 		BankaccountProxy bank = proxy.getBankAccount();

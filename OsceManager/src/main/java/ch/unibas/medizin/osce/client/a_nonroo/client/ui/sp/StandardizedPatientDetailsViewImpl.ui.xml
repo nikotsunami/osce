@@ -4,7 +4,9 @@
 	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	<ui:style src="../../styles.css" />
+	<ui:style src="../../styles.css">
+	.description {	}
+	</ui:style>
 		
 	<g:HTMLPanel>
 		<div class="{style.patientControls} {style.controlsright}">
@@ -126,7 +128,7 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<p><span ui:field="description" /></p>
+					<div ui:field="description" class="{style.description}"></div>
 				</g:HTMLPanel>
 			</g:Tab>
 		</g:TabPanel>
