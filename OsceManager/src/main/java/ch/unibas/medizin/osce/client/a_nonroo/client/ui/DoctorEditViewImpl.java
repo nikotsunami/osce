@@ -99,6 +99,7 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	
 	public DoctorEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		gender.setValue(Gender.values()[0]);
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 		
 		doctorPanel.selectTab(0);

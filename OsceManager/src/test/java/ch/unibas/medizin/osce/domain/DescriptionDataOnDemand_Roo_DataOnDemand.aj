@@ -30,8 +30,8 @@ privileged aspect DescriptionDataOnDemand_Roo_DataOnDemand {
     
     public void DescriptionDataOnDemand.setDescription(Description obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 40) {
-            description = description.substring(0, 40);
+        if (description.length() > 999) {
+            description = description.substring(0, 999);
         }
         obj.setDescription(description);
     }

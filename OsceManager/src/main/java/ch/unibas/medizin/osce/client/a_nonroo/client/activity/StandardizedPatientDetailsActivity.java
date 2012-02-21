@@ -150,7 +150,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 			
 			@Override
 			public void onSuccess(List<ScarProxy> scars) {
-				scarBox.setValue(null);
+				scarBox.setValue(scars.get(0));
 				scarBox.setAcceptableValues(scars);
 			}
 		});

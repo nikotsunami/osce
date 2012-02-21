@@ -60,7 +60,9 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
 
 	public StandardizedPatientAdvancedSearchScarPopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
+		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
+		comparison.setValue(Comparison2.values()[0]);
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
 		addScarButton.setText(Messages.ADD);
 		scarButton.setText(Messages.TRAITS);

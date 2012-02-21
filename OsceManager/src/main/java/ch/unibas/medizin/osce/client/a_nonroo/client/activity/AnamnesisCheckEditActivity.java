@@ -76,7 +76,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
-		Log.info("start");
+		Log.info("AnamnesisCheckEditActivity.start()");
 		AnamnesisCheckEditView anamnesisCheckEditView = new AnamnesisCheckEditViewImpl();
 
 		this.widget = panel;

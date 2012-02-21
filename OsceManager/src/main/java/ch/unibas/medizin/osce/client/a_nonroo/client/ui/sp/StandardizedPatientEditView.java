@@ -39,7 +39,5 @@ public interface StandardizedPatientEditView extends IsWidget {
 //	void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values);
 
 	SimplePanel getDescriptionPanel();
-	SimplePanel getBankEditPanel();
-
-	
+	SimplePanel getBankEditPanel();	
 }

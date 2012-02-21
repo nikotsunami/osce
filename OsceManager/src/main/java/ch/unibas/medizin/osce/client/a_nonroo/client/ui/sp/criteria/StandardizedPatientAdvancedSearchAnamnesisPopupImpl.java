@@ -74,10 +74,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 			if (object == null)
 				return null;
 			return (object.booleanValue()) ? Messages.YES : Messages.NO;
-//			if (object == null || !object.booleanValue()) {
-//				return Messages.NO;
-//			}
-//			return Messages.YES;
 		}
 	});
 	
@@ -132,13 +128,15 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 				displayAnswerFieldForProxy((AnamnesisCheckProxy) ((ProxySuggestOracle<AnamnesisCheckProxy>.ProxySuggestion) 
 						event.getSelectedItem()).getProxy());
 			}
-
-			
 		});
 		
 		setWidget(uiBinder.createAndBindUi(this));
+		comparison.setValue(Comparison2.values()[0]);
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
+		
+		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
+		
 		addAnamnesisValueButton.setText(Messages.ADD);
 		addAnamnesisValues.setText(Messages.ANAMNESIS_VALUES);
 		
@@ -163,6 +161,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		ArrayList<Boolean> acceptableBooleanValues = new ArrayList<Boolean>();
 		acceptableBooleanValues.add(new Boolean(true));
 		acceptableBooleanValues.add(new Boolean(false));
+		anamnesisAnswerYesNoSelector.setValue(true);
 		anamnesisAnswerYesNoSelector.setAcceptableValues(acceptableBooleanValues);
 	}
 	
@@ -176,6 +175,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		} else if (proxy.getType() == AnamnesisCheckTypes.QuestionMultM || proxy.getType() == AnamnesisCheckTypes.QuestionMultS) {
 			currentAnswerWidget = anamnesisAnswerMCSelector;
 			Log.info("proxy.getValue() = " + proxy.getValue());
+			anamnesisAnswerMCSelector.setValue(proxy.getValue().split("\\|")[0]);
 			anamnesisAnswerMCSelector.setAcceptableValues(Arrays.asList(proxy.getValue().split("\\|")));
 		} else if (proxy.getType() == AnamnesisCheckTypes.QuestionYesNo) {
 			currentAnswerWidget = anamnesisAnswerYesNoSelector;
@@ -184,8 +184,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		}
 		anamnesisAnswerPanel.add(currentAnswerWidget);
 	}
-
-
 
 	private void changeQuestionFieldWidth(String stringForOrientation) {
 		Label dummyLabel = new Label(stringForOrientation);

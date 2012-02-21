@@ -455,12 +455,18 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	@Override
 	public void setNationalityPickerValues(Collection<NationalityProxy> values) {
+//		if (values!= null) {
+//			nationality.setValue(values.iterator().next());
+//		}
 		nationality.setAcceptableValues(values);		
 	}
 
 
 	@Override
 	public void setProfessionPickerValues(Collection<ProfessionProxy> values) {
+//		if (values != null) {
+//			profession.setValue(values.iterator().next());
+//		}
 		profession.setAcceptableValues(values);		
 	}
 

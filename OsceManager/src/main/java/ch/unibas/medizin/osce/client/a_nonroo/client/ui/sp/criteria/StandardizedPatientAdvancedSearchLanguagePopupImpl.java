@@ -74,8 +74,11 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
+		skill.setValue(LangSkillLevel.values()[0]);
 		skill.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
+		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
+		comparison.setValue(Comparison2.values()[0]);
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
 		addLanguageButton.setText(Messages.ADD);
 		languageButton.setText(Messages.LANGUAGES);

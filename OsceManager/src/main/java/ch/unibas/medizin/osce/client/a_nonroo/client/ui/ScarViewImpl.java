@@ -127,6 +127,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
 		initWidget(uiBinder.createAndBindUi(this));
+		traitTypeBox.setValue(TraitTypes.values()[0]);
 		traitTypeBox.setAcceptableValues(Arrays.asList(TraitTypes.values()));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);

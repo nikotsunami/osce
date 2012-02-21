@@ -109,7 +109,6 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 	public AnamnesisCheckEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
-		type.setAcceptableValues(Arrays.asList(AnamnesisCheckTypes.values()));
 		
 		anamnesisPanel.selectTab(0);
 		anamnesisPanel.getTabBar().setTabText(0, Messages.ANAMNESIS_VALUES);
@@ -162,6 +161,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 				text.selectAll();
 			}
 		});
+		
+		type.setValue(AnamnesisCheckTypes.values()[0]);
+		type.setAcceptableValues(Arrays.asList(AnamnesisCheckTypes.values()));
 	}
 	
 	private IconButton createDeleteButton() {

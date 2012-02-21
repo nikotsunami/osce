@@ -100,8 +100,11 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 
 	public StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
+		bindType.setValue(BindType.values()[0]);
 		setBindTypePickerValues(Arrays.asList(BindType.values()));
+		field.setValue(PossibleFields.values()[0]);
 		setFieldPickerValues(Arrays.asList(PossibleFields.values()));
+		comparition.setValue(Comparison2.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison2.values()));
 		addAdvSeaBasicButton.setText(Messages.ADD);
 		addBasicData.setText(Messages.BASIC_FILTER);

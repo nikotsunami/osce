@@ -81,6 +81,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		
 		initTable();
 		langSkillAddButton.setText(Messages.ADD_LANGSKILL);
+		langSkillBox.setValue(LangSkillLevel.values()[0]);
 		langSkillBox.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
 	}
 	
@@ -182,6 +183,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 
 	@Override
 	public void setLanguagePickerValues(List<SpokenLanguageProxy> values) {
+		languageBox.setValue(values.get(0));
 		languageBox.setAcceptableValues(values);
 	}
 }
