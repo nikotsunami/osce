@@ -1,10 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -21,7 +18,6 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.domain.SpokenLanguage;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -36,7 +32,6 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -49,7 +44,7 @@ StandardizedPatientScarSubView.Delegate,
 StandardizedPatientAnamnesisSubView.Delegate,
 StandardizedPatientLangSkillSubView.Delegate {
 	
-    private OsMaRequestFactory requests;
+    private OsMaRequestFactory requestFactory;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private StandardizedPatientDetailsView view;
@@ -59,28 +54,29 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	private StandardizedPatientDetailsPlace place;
 	private StandardizedPatientProxy standardizedPatientProxy;
+
+	private StandardizedPatientScarSubView standardizedPatientScarSubView;
+	private CellTable<ScarProxy> scarTable;
+	private ValueListBox<ScarProxy> scarBox;
+	private HandlerRegistration rangeChangeHandlerScars;
 	
+	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
+	private CellTable<AnamnesisFormProxy> anamnesisTable;
+	
+	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
+	private CellTable<LangSkillProxy> langSkillTable;
+
+	private AnamnesisFormProxy anamnesisForm ;
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
-    	this.requests = requests;
+    	this.requestFactory = requests;
     	this.placeController = placeController;
     }
 
 	public void onStop(){
 
 	}
-	
-	StandardizedPatientScarSubView standardizedPatientScarSubView;
-	private CellTable<ScarProxy> scarTable;
-	private ValueListBox<ScarProxy> scarBox;
-	private HandlerRegistration rangeChangeHandlerScars;
-	
-	StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
-	private CellTable<AnamnesisFormProxy> anamnesisTable;
-	
-	StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
-	private CellTable<LangSkillProxy> langSkillTable;
 	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -100,7 +96,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		
-		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new Receiver<Object>() {
+		requestFactory.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new Receiver<Object>() {
 
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
@@ -112,51 +108,116 @@ StandardizedPatientLangSkillSubView.Delegate {
 					standardizedPatientProxy = (StandardizedPatientProxy) response;
 					init();
 					initScar();
+					initAnamnesis();
 					initLangSkills();
 				}
 			}
 		});
 	}
-	
-	protected void initAnamnesis() {
-//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+
+	private void init() {
+		view.setValue(standardizedPatientProxy);
+		anamnesisForm =  standardizedPatientProxy.getAnamnesisForm();
 	}
-	//TODO: ###SIEBERS### implement initLangSkills, fill the data in table an pulldowns, delete lang skills, add langskills, 
-	// first you must make an new enum with langskills (A1, A2, B1, B2, C1, C2, native) and change the domain object
-	// have a look at the interface StandardizedPatientLangSkillSubView and in initScar you see how it is done usualy
+	
+	/**
+	 * Loads languages, which the standardizedPatient does not speak and fills them into ValueListBoxe of the view.
+	 * Requests the number of languages spoken by the given patient and then calls onRangeChangedLanguageSkillTable() 
+	 * to fill the table.
+	 */
 	protected void initLangSkills() {
+		// FIXME maybe it should be discerned between stuff that has to be done once
+		// and stuff that has to be done multiple times? (handler, the class variable assignment vs. filling in values)
 		this.langSkillTable = standardizedPatientLangSkillSubView.getLangSkillTable();
 		
-		// TODO: fill table, add button functionality
-		
 		// Fill ValueListBoxes
-		requests.spokenLanguageRequest().findAllSpokenLanguages().fire(new Receiver<List<SpokenLanguageProxy>>() {
+		requestFactory.languageRequestNonRoo().findLanguagesByNotStandardizedPatient(standardizedPatientProxy.getId()).fire(new Receiver<List<SpokenLanguageProxy>>() {
 			@Override
 			public void onSuccess(List<SpokenLanguageProxy> response) {
-				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
-				List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
-				values.addAll(response);
-				standardizedPatientLangSkillSubView.setLanguagePickerValues(values);
+				Log.debug("Geholte Sprachen aus der Datenbank: " + response.size());
+				standardizedPatientLangSkillSubView.setLanguagePickerValues(response);
+			}
+			
+		});
+		
+		// Request number of Languages spoken by patient and call onRangeChangedLanguageSkillTable() to fill table
+		requestFactory.langSkillRequestNonRoo().countLangSkillsByPatientId(standardizedPatientProxy.getId()).fire(new Receiver<Long>() {
+			@Override
+			public void onSuccess(Long count) {
+				if (view == null) {
+					return;
+				}
+				
+				Log.debug(count.toString() + " language skills to load");
+				langSkillTable.setRowCount(count.intValue(), true);
+				onRangeChangedLanguageSkillTable();
+			}
+			
+		});
+		
+		// FIXME: this should not be added everytime initLangSkills() is called, right?
+		langSkillTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			@Override
+			public void onRangeChange(RangeChangeEvent event) {
+				Log.info("onRangeChangedLanguageSkillTable()");
+				onRangeChangedLanguageSkillTable();
+			}
+		});
+	}
+	
+	/**
+	 * Fills the Language Skill table with data from the DB-Request, by
+	 * firing the database request and providing a callback method.
+	 */
+	protected void onRangeChangedLanguageSkillTable() {
+		final Range range = langSkillTable.getVisibleRange();
+		
+		fireLangSkillRangeRequest(range, new Receiver<List<LangSkillProxy>>() {
+			@Override
+			public void onSuccess(List<LangSkillProxy> values) {
+				if (view == null) {
+					return;
+				}
+				langSkillTable.setRowData(range.getStart(), values);
 			}
 			
 		});
 	}
 	
+	/**
+	 * Fire database request for Language Skills
+	 * @param range defines which elements to fetch ("from element x on, take n elements...");
+	 * @param callback Method to call after the request is executed.
+	 */
+	private void fireLangSkillRangeRequest(final Range range, final Receiver<List<LangSkillProxy>> callback) {
+		requestFactory.langSkillRequestNonRoo().findLangSkillsByPatientId(standardizedPatientProxy.getId(), range.getStart(), range.getLength()).with("spokenlanguage").fire(callback);
+	}
+
+	protected void initAnamnesis() {
+		// TODO implement
+//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+	}
+	
+	/**
+	 * Fills the ValueListBox and Table of the ScarSubView
+	 */
 	protected void initScar() {
+		// FIXME maybe it should be discerned between stuff that has to be done once
+		// and stuff that has to be done multiple times? (handler, the class variable assignment vs. filling in values)
 		this.scarTable = standardizedPatientScarSubView.getTable();
 		this.scarBox = standardizedPatientScarSubView.getScarBox();
 		
-		requests.scarRequestNonRoo().findScarEntriesByNotAnamnesisForm(standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<List<ScarProxy>>() {
-			
+		// Finds all scars, that can still be added to the patient (i.e. the patient doesn't have them yet) 
+		// and fills the corresponding ValueListBox
+		requestFactory.scarRequestNonRoo().findScarEntriesByNotAnamnesisForm(standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<List<ScarProxy>>() {
 			@Override
-			public void onSuccess(List<ScarProxy> scars) {
-				scarBox.setValue(scars.get(0));
-				scarBox.setAcceptableValues(scars);
+			public void onSuccess(List<ScarProxy> response) {
+				standardizedPatientScarSubView.setScarBoxValues(response);
 			}
 		});
 
-		requests.scarRequestNonRoo().countScarsByAnamnesisForm(standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>(){
-
+		// Request number of scars the patient has and then fill the table by calling onRangeChangedScarTable()
+		requestFactory.scarRequestNonRoo().countScarsByAnamnesisForm(standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>(){
 			@Override
 			public void onSuccess(Long count) {
 				if (view == null) {
@@ -170,8 +231,22 @@ StandardizedPatientLangSkillSubView.Delegate {
 				onRangeChangedScarTable();
 			}
 		});
+		
+		// FIXME: should probably only be called once?
+		scarTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			@Override
+			public void onRangeChange(RangeChangeEvent event) {
+				Log.info("onRangeChangedScarTable()");
+				onRangeChangedScarTable();
+			}
+		});
 	}
 	
+	/**
+	 * Fills the scar table of the ScarSubView with values from the database.
+	 * Fires a database request and defines the callback-class for filling the
+	 * database.
+	 */
 	protected void onRangeChangedScarTable() {
 		final Range range = scarTable.getVisibleRange();
 
@@ -194,19 +269,22 @@ StandardizedPatientLangSkillSubView.Delegate {
 		fireScarRangeRequest(range, callback);
 	}
 	
+	/**
+	 * fires a request on the database to load the scars 
+	 * @param range defines which elements to fetch ("from element x on, take n elements...");
+	 * @param callback Class that handles the possible callbacks
+	 */
 	private void fireScarRangeRequest(final Range range, final Receiver<List<ScarProxy>> callback) {
 		createScarRangeRequest(range).with(standardizedPatientScarSubView.getPaths()).fire(callback);
 	}
 	
+	/**
+	 * 
+	 * @param range
+	 * @return
+	 */
 	protected Request<List<ScarProxy>> createScarRangeRequest(Range range) {
-		return requests.scarRequestNonRoo().findScarEntriesByAnamnesisForm(standardizedPatientProxy.getAnamnesisForm().getId(), range.getStart(), range.getLength());
-	}
-
-	private AnamnesisFormProxy anamnesisForm ;
-	
-	private void init() {
-		view.setValue(standardizedPatientProxy);
-		anamnesisForm =  standardizedPatientProxy.getAnamnesisForm();
+		return requestFactory.scarRequestNonRoo().findScarEntriesByAnamnesisForm(standardizedPatientProxy.getAnamnesisForm().getId(), range.getStart(), range.getLength());
 	}
 	
 	@Override
@@ -216,20 +294,19 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 
 	@Override
-	public void editClicked() {
+	public void editPatientClicked() {
 		Log.info("edit clicked");
 		goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(),
 				StandardizedPatientDetailsPlace.Operation.EDIT));
-		
 	}
 
 	@Override
-	public void deleteClicked() {
+	public void deletePatientClicked() {
 		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
             return;
         }
 		
-        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
+        requestFactory.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
 
             public void onSuccess(Void ignore) {
                 if (widget == null) {
@@ -241,30 +318,27 @@ StandardizedPatientLangSkillSubView.Delegate {
 		
 	}
 	
+	@Override
 	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
-		Log.debug("Remove language Skill (id=" + langSkill.getId() + ", lang = " + langSkill.getSpokenlanguage().getLanguageName() + ", skill = " 
-				+ langSkill.getSkill() + ")");
-		Iterator<LangSkillProxy> iter = standardizedPatientProxy.getLangskills().iterator();
-		while (iter.hasNext()) {
-			LangSkillProxy langSkillProxy = (LangSkillProxy) iter.next();
-			if (langSkillProxy.getId() == langSkill.getId()) {
-				standardizedPatientProxy.getLangskills().remove(langSkillProxy);
-				break;
+		requestFactory.langSkillRequest().remove().using(langSkill).fire(new Receiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				Log.debug("Language removed from langSkills");
+				initLangSkills();
 			}
-		}
+		});
 	}
 	
 	@Override
 	public void deleteScarClicked(ScarProxy scar) {
-		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
+		AnamnesisFormRequest anamReq = requestFactory.anamnesisFormRequest();
 		anamnesisForm =  anamReq.edit(anamnesisForm);
 		
 		Log.debug("Remove scar (" + scar.getId() + ") from anamnesis-form (" + standardizedPatientProxy.getAnamnesisForm().getId() + ")");
 		
-		Iterator<ScarProxy> it = anamnesisForm.getScars().iterator();
-		while (it.hasNext()) {
-			
-			ScarProxy scarProxy = (ScarProxy) it.next();
+		Iterator<ScarProxy> i = anamnesisForm.getScars().iterator();
+		while (i.hasNext()) {
+			ScarProxy scarProxy = (ScarProxy) i.next();
 			//Log.warn(scarProxy.stableId() + " ");
 			//Log.warn(scar.stableId() + " ");
 			if (scarProxy.getId() == scar.getId() ) {
@@ -272,7 +346,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 				break;
 			}
 		}
-		anamnesisForm.getScars().remove(scar);
+//		anamnesisForm.getScars().remove(scar);
 		
 		anamReq.persist().using(anamnesisForm).fire(new Receiver<Void>(){
 			@Override
@@ -284,11 +358,10 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 
 	@Override
-	public void scarAddButtonClicked() {
-		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
+	public void addScarClicked() {
+		AnamnesisFormRequest anamReq = requestFactory.anamnesisFormRequest();
 		
 		ScarProxy scar = scarBox.getValue();
-		
 		Log.debug("Add scar (" + scar.getBodypart() + " - id " + scar.getId() + ") to anamnesis-form (" + standardizedPatientProxy.getAnamnesisForm().getId() + ")");
 		
 		anamnesisForm = anamReq.edit(anamnesisForm);
@@ -303,9 +376,25 @@ StandardizedPatientLangSkillSubView.Delegate {
 			}
 		});
 	}
-
+	
 	@Override
-	public void addLangSkillClicked(SpokenLanguageProxy lang, LangSkillLevel skill) {
-		// TODO Auto-generated method stub
+	public void addLangSkillClicked(SpokenLanguageProxy spokenLanguageProxy, LangSkillLevel langSkillLevel) {
+		// get requestContext and initialize new langSkillProxy
+		LangSkillRequest langSkillRequest = requestFactory.langSkillRequest();
+		LangSkillProxy langSkillProxy = langSkillRequest.create(LangSkillProxy.class);
+		langSkillProxy.setSkill(langSkillLevel);
+		langSkillProxy.setSpokenlanguage(spokenLanguageProxy);
+		langSkillProxy.setStandardizedpatient(standardizedPatientProxy);
+		
+		Log.debug("add skill " + langSkillLevel.toString() + " in language " + spokenLanguageProxy.getLanguageName());
+		
+		// write new langSkill to database and re-initialize table
+		langSkillRequest.persist().using(langSkillProxy).fire(new Receiver<Void>() {
+			@Override
+			public void onSuccess(Void arg0) {
+				Log.debug("added language skill");
+				initLangSkills();
+			}
+		});
 	}
 }

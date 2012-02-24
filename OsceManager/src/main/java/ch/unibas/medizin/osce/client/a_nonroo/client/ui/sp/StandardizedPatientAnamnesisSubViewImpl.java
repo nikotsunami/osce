@@ -71,7 +71,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 
 	@UiHandler("scarAddButton")
 	public void scarAddButtonClicked(ClickEvent event){
-		delegate.scarAddButtonClicked();
+		delegate.addScarClicked();
 	}
 
 	@UiField (provided = true)

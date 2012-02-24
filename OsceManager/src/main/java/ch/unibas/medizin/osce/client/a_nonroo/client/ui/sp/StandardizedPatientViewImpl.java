@@ -69,22 +69,22 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 
 	private Delegate delegate;
 	@UiField
-	SplitLayoutPanel splitLayoutPanel;
+	public SplitLayoutPanel splitLayoutPanel;
 	@UiField
-	TextBox searchBox;
+	public TextBox searchBox;
 	@UiField
-	IconButton filterButton;
+	public IconButton filterButton;
 	@UiField
-	IconButton newButton;
+	public IconButton newButton;
 	@UiField
-	SimplePanel detailsPanel;
+	public SimplePanel detailsPanel;
 	@UiField(provided = true)
-	SimplePager pager;
+	public SimplePager pager;
 	@UiField(provided = true)
-	CellTable<StandardizedPatientProxy> table;
+	public CellTable<StandardizedPatientProxy> table;
 	
 	@UiField
-	StandartizedPatientAdvancedSearchSubViewImpl standartizedPatientAdvancedSearchSubViewImpl;
+	public StandartizedPatientAdvancedSearchSubViewImpl standartizedPatientAdvancedSearchSubViewImpl;
 	
 	public StandartizedPatientAdvancedSearchSubViewImpl getStandartizedPatientAdvancedSearchSubViewImpl() {
 		return standartizedPatientAdvancedSearchSubViewImpl;

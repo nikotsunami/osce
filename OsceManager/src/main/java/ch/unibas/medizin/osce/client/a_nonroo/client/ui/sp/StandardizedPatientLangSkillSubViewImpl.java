@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
@@ -43,18 +44,19 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 			UiBinder<Widget, StandardizedPatientLangSkillSubViewImpl> {
 	}
 
+	private List<AbstractEditableCell<?, ?>> editableCells;
+	protected Set<String> paths = new HashSet<String>();
+	private Delegate delegate;
+	private boolean addBoxesShown = true;
+	
 	// CellTable (for Langskills)
 	@UiField (provided = true)
 	public CellTable<LangSkillProxy>langTable;
 	@UiField (provided = true)
 	public SimplePager pager;
-	private List<AbstractEditableCell<?, ?>> editableCells;
-	protected Set<String> paths = new HashSet<String>();
 
 	@UiField
 	IconButton langSkillAddButton;
-	
-	private Delegate delegate;
 	
 	@UiField(provided = true)
     ValueListBox<SpokenLanguageProxy> languageBox = new ValueListBox<SpokenLanguageProxy>(new AbstractRenderer<SpokenLanguageProxy>() {
@@ -87,7 +89,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	
 	private void initTable() {
 		langTable.addColumn(new TextColumn<LangSkillProxy>() {
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+			Renderer<java.lang.String> renderer = new AbstractRenderer<String>() {
 				public String render(String obj) {
 					return obj == null ? "" : String.valueOf(obj);
 				}
@@ -95,7 +97,19 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 			
 			@Override
 			public String getValue(LangSkillProxy object) {
-				return renderer.render(object.getSpokenlanguage().getLanguageName().toString());
+				SpokenLanguageProxy lang;
+				String langName;
+				
+				if (object == null) {
+					Log.error("LangSkillProxy is null");
+				} else if ((lang = object.getSpokenlanguage()) == null) {
+					Log.error("SpokenLanguage = null");
+					Log.info("SP = " + ((object.getStandardizedpatient() == null) ? "null" : object.getStandardizedpatient().getId()));
+				} else if ((langName = lang.getLanguageName()) == null) {
+					Log.error("getLanguageName() = null");
+				} else {
+					return renderer.render(langName);
+				} return "";
 			}
 			
 		}, Messages.LANGUAGES);
@@ -156,8 +170,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	
 	@UiHandler("langSkillAddButton")
 	public void langSkillAddButtonClicked(ClickEvent e) {
-		// TODO send relevant data...
-//		delegate.addLangSkillClicked();
+		delegate.addLangSkillClicked(languageBox.getValue(), langSkillBox.getValue());
 	}
 
 
@@ -180,9 +193,33 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
 	}
+	
+	private void setAddBoxesShown(boolean show) {
+		if (addBoxesShown == show) {
+			return;
+		}
+		
+		langSkillBox.setVisible(show);
+		languageBox.setVisible(show);
+		langSkillAddButton.setVisible(show);
+		addBoxesShown = show;
+		
+	}
+	private void showAddBoxes() {
+		setAddBoxesShown(true);
+	}
+	
+	private void hideAddBoxes() {
+		setAddBoxesShown(false);
+	}
 
 	@Override
 	public void setLanguagePickerValues(List<SpokenLanguageProxy> values) {
+		if (values == null || values.size() == 0) {
+			hideAddBoxes();
+			return;
+		}
+		showAddBoxes();
 		languageBox.setValue(values.get(0));
 		languageBox.setAcceptableValues(values);
 	}

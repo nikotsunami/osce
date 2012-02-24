@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 	
 	interface Delegate {
-		void scarAddButtonClicked();
+		void addScarClicked();
 		
 		void deleteScarClicked(ScarProxy scar);
 	}

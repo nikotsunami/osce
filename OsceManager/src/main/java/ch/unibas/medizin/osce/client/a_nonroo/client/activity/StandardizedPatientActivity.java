@@ -46,7 +46,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
@@ -59,7 +58,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -77,7 +75,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientView view;
 	private CellTable<StandardizedPatientProxy> table;
 	private SingleSelectionModel<StandardizedPatientProxy> selectionModel;
-	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private StandardizedPatientDetailsActivityMapper StandardizedPatientDetailsActivityMapper;
 	private StandartizedPatientAdvancedSearchSubView standartizedPatientAdvancedSearchSubView;
@@ -152,13 +149,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	private void init2(final String q) {
-
 		// (1) Text search
-
 		List<String> searchThrough = view.getSearchFilters();
 
 		// (2) Advanced search
-
 		fireCountRequest(q, searchThrough, view.getCriteria().getFields(), view.getCriteria().getComparisons(), view.getCriteria().getValues(),
 				new Receiver<Long>() {
 					@Override
@@ -172,10 +166,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 						onRangeChanged(q);
 					}
-
 				});
 
-		rangeChangeHandler = table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
 				StandardizedPatientActivity.this.onRangeChanged(q);
 			}
@@ -235,15 +228,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
 		 */
 
-		requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, searchThrough, searchCriteria /*
-																														 * fields
-																														 * ,
-																														 * bindType
-																														 * ,
-																														 * comparations
-																														 * ,
-																														 * values
-																														 */).fire(new Receiver<Long>() {
+		requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
+				searchThrough, searchCriteria /*fields, bindType, comparations, values */).fire(new Receiver<Long>() {
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
 				// onStop();

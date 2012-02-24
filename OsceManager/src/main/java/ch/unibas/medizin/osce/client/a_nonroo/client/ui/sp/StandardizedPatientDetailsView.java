@@ -14,8 +14,8 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void editClicked();
-		void deleteClicked();
+		void editPatientClicked();
+		void deletePatientClicked();
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();

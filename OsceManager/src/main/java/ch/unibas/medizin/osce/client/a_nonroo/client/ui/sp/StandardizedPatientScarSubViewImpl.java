@@ -8,6 +8,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -64,6 +65,8 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
         }
     });
 
+	private boolean addBoxesShown = true;
+
 	public StandardizedPatientScarSubViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -78,7 +81,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 
 	@UiHandler("scarAddButton")
 	public void scarAddButtonClicked(ClickEvent event){
-		delegate.scarAddButtonClicked();
+		delegate.addScarClicked();
 	}
 
 
@@ -177,5 +180,37 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
+	}
+	
+	private void setAddBoxesShown(boolean show) {
+		if (addBoxesShown  == show) {
+			return;
+		}
+		
+		scarBox.setVisible(show);
+		scarAddButton.setVisible(show);
+		addBoxesShown = show;
+		
+	}
+	private void showAddBoxes() {
+		setAddBoxesShown(true);
+	}
+	
+	private void hideAddBoxes() {
+		setAddBoxesShown(false);
+	}
+
+	@Override
+	public void setScarBoxValues(List<ScarProxy> values) {
+		boolean areValuesValid = (values != null) && (values.size() > 0);
+		
+		if (!areValuesValid) {
+			hideAddBoxes();
+			return;
+		}
+		
+		showAddBoxes();
+		scarBox.setValue(values.get(0));
+		scarBox.setAcceptableValues(values);
 	}
 }

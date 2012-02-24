@@ -264,12 +264,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	@UiHandler("delete")
 	public void onDeleteClicked(ClickEvent e) {
-		delegate.deleteClicked();
+		delegate.deletePatientClicked();
 	}
 
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
-		delegate.editClicked();
+		delegate.editPatientClicked();
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -43,5 +44,27 @@ public class SpokenLanguage {
         q.setMaxResults(maxResults);
         
         return q.getResultList();
+    }
+    
+    // nur zum testen...
+    public static List<SpokenLanguage> findAllLanguages() {
+    	EntityManager em = entityManager();
+    	TypedQuery<SpokenLanguage> q = em.createQuery("SELECT o FROM SpokenLanguage o", SpokenLanguage.class);
+    	return q.getResultList();
+    }
+    
+    /**
+     * Finds all the languages not spoken by the given standardized patient.
+     * @param patientId ID of the relevant sp
+     * @return
+     */
+    public static List<SpokenLanguage> findLanguagesByNotStandardizedPatient(Long patientId) {
+    	EntityManager em = entityManager();
+    	StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(patientId);
+    	TypedQuery<SpokenLanguage> q = em.createQuery("SELECT o FROM SpokenLanguage AS o WHERE o.id NOT IN ( " + 
+    			"SELECT ls.spokenlanguage.id FROM LangSkill AS ls WHERE ls.standardizedpatient = :sp)" + 
+    			"ORDER BY o.languageName", SpokenLanguage.class);
+    	q.setParameter("sp", standardizedPatient);
+    	return q.getResultList();
     }
 }

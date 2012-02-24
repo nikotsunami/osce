@@ -15,28 +15,28 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public interface StandardizedPatientView  extends IsWidget{
 	
     public interface Presenter {
-        void goTo(Place place);
+    	public void goTo(Place place);
     }
 	/**
 	 * Implemented by the owner of the view.
 	 */
-	interface Delegate {
-		void newClicked();
-		void performSearch(String q);
+    public interface Delegate {
+    	public void newClicked();
+    	public void performSearch(String q);
 	}
 
-    CellTable<StandardizedPatientProxy> getTable();
-    String[] getPaths();
-    List<String> getSearchFilters();
+    public CellTable<StandardizedPatientProxy> getTable();
+    public String[] getPaths();
+    public List<String> getSearchFilters();
     
-    String getQuery();
+    public String getQuery();
     
-    SearchCriteria getCriteria();
+    public SearchCriteria getCriteria();
     
-    void setDelegate(Delegate delegate);
-    void updateSearch();
+    public void setDelegate(Delegate delegate);
+    public void updateSearch();
     
-	SimplePanel getDetailsPanel();
-    void setPresenter(Presenter systemStartActivity);
-	StandartizedPatientAdvancedSearchSubView getStandartizedPatientAdvancedSearchSubViewImpl();
+    public SimplePanel getDetailsPanel();
+    public void setPresenter(Presenter systemStartActivity);
+    public StandartizedPatientAdvancedSearchSubView getStandartizedPatientAdvancedSearchSubViewImpl();
 }
