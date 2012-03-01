@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.i18n;
 
+import com.google.gwt.user.cellview.client.Header;
+
 public class Messages {
 			/* Navigationspunkte */
 			public static final String MASTER_DATA = "Stammdaten";
@@ -157,4 +159,7 @@ public class Messages {
 			public static final String ENTER_QUESTION = "Bitte Frage eingeben...";
 			public static final String ENTER_ANSWER = "Bitte Antwort eingeben...";
 			public static final String ADD_QUESTION = "Frage hinzufügen";
+			public static final String QUESTION = "Frage";
+			public static final String ANSWER = "Antwort";
+			public static final String ANSWERED = "Beantwortet?";
 }

@@ -13,7 +13,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.client.style.resources.QuestionTypeImages;
+import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.cell.client.ImageResourceCell;
@@ -150,7 +150,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
 			@Override
 			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
-				QuestionTypeImages resources = GWT.create(QuestionTypeImages.class);
+				AnamnesisQuestionTypeImages resources = GWT.create(AnamnesisQuestionTypeImages.class);
 				String html = "";
 				switch (proxy.getType()) {
 				case Title:

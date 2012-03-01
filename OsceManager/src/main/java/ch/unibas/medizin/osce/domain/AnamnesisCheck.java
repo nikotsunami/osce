@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import org.mortbay.log.Log;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -54,5 +55,46 @@ public class AnamnesisCheck {
         query.setMaxResults(maxResults);
         
         return query.getResultList();
+    }
+    
+    public static Long countAnamnesisChecksByAnamnesisForm(Long anamnesisFormId) {
+    	if (anamnesisFormId == null) throw new IllegalArgumentException("anamnesisFormId required!");
+    	EntityManager em = entityManager();
+//    	String queryString = "SELECT COUNT(*) " + 
+//    			"FROM AnamnesisCheck AS checks " +
+//    			"LEFT OUTER JOIN " + 
+//    			"(SELECT * FROM AnamnesisChecksValue WHERE anamnesisform= :anamnesisFormId) AS values ON checks = values.anamnesischeck";
+    	String queryString = "SELECT COUNT(c) " +
+    			"FROM AnamnesisCheck AS c " +
+    			"LEFT OUTER JOIN c.anamnesischecksvalues AS v " +
+    			"WITH v.anamnesisform.id= :anamnesisFormId";
+    	
+
+    	AnamnesisForm anamnesisForm = AnamnesisForm.findAnamnesisForm(anamnesisFormId);
+    	TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+    	query.setParameter("anamnesisFormId", anamnesisFormId.longValue());
+    	Long result = query.getSingleResult();
+    	Log.info("COUNT(c)  LEFT OUTER JOIN result");
+    	return result;
+    }
+    
+    public static List<AnamnesisCheck> findAnamnesisChecksByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults) {
+    	if (anamnesisFormId == null) throw new IllegalArgumentException("anamnesisFormId required!");
+    	EntityManager em = entityManager();
+//    	String queryString = "SELECT * " + 
+//    			"FROM AnamnesisCheck AS checks" +
+//    			"LEFT OUTER JOIN " + 
+//    			"(SELECT * FROM AnamnesisChecksValue WHERE anamnesisform= :anamnesisFormId) " +
+//    			"AS values ON checks = values.anamnesischeck";
+    	String queryString = "SELECT c " +
+    			"FROM AnamnesisCheck AS c " +
+    			"LEFT OUTER JOIN c.anamnesischecksvalues AS v " +
+    			"WITH v.anamnesisform.id= :anamnesisFormId";
+    	AnamnesisForm anamnesisForm = AnamnesisForm.findAnamnesisForm(anamnesisFormId);
+    	TypedQuery<AnamnesisCheck> query = em.createQuery(queryString, AnamnesisCheck.class);
+    	query.setParameter("anamnesisFormId", anamnesisFormId.longValue());
+    	query.setFirstResult(firstResult);
+    	query.setMaxResults(maxResults);
+    	return query.getResultList();
     }
 }

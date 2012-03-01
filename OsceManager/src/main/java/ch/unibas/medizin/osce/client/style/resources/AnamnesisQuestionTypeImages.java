@@ -3,7 +3,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
 
-public interface QuestionTypeImages extends ClientBundle {
+public interface AnamnesisQuestionTypeImages extends ClientBundle {
 		@Source("images/questionOpen.png")
 		public ImageResource questionOpen();
 		@Source("images/questionYesNo.png")

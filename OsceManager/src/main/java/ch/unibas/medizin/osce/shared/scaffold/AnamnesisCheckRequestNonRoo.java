@@ -14,7 +14,8 @@ import com.google.gwt.requestfactory.shared.Service;
 @Service(AnamnesisCheck.class)
 public interface AnamnesisCheckRequestNonRoo extends RequestContext {
 	
-	abstract Request<Long> countAnamnesisChecksBySearch(String q);
-	
-	abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults);
+	public abstract Request<Long> countAnamnesisChecksBySearch(String q);
+	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults);
+	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
+	public abstract Request<Long> countAnamnesisChecksByAnamnesisForm(Long anamnesisFormId);
 }

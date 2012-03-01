@@ -21,6 +21,7 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
@@ -65,7 +66,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private HandlerRegistration rangeChangeHandlerScars;
 	
 	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
-	private CellTable<AnamnesisFormProxy> anamnesisTable;
+	private CellTable<AnamnesisCheckProxy> anamnesisTable;
 	
 	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
 	private CellTable<LangSkillProxy> langSkillTable;
@@ -123,6 +124,10 @@ StandardizedPatientLangSkillSubView.Delegate {
 		view.setValue(standardizedPatientProxy);
 		anamnesisForm =  standardizedPatientProxy.getAnamnesisForm();
 	}
+	
+	/*******************
+	 * LANGSKILL TABLE
+	 ******************/
 	
 	/**
 	 * Loads languages, which the standardizedPatient does not speak and fills them into ValueListBoxe of the view.
@@ -196,12 +201,64 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private void fireLangSkillRangeRequest(final Range range, final Receiver<List<LangSkillProxy>> callback) {
 		requestFactory.langSkillRequestNonRoo().findLangSkillsByPatientId(standardizedPatientProxy.getId(), range.getStart(), range.getLength()).with("spokenlanguage").fire(callback);
 	}
+	
+	/*******************
+	 * ANAMNESIS TABLE
+	 ******************/
 
 	protected void initAnamnesis() {
 		// TODO implement
-//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+		requestFactory.anamnesisCheckRequestNonRoo().countAnamnesisChecksByAnamnesisForm(
+				standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>() {
+					@Override
+					public void onSuccess(Long count) {
+						if (view == null) {
+							return;
+						}
+						
+						Log.debug(count.toString() + " scars loaded");
+						anamnesisTable.setRowCount(count.intValue(), true);
+						
+						onRangeChangedAnamnesisTable();
+					}
+				});
+	}
+
+	protected void onRangeChangedAnamnesisTable() {
+		final Range range = anamnesisTable.getVisibleRange();
+		
+		fireAnamnesisCheckRangeRequest(range, new Receiver<List<AnamnesisCheckProxy>>() {
+			@Override
+			public void onSuccess(List<AnamnesisCheckProxy> values) {
+				if (view == null) {
+					return;
+				}
+				// FIXME: ORacle should be filled with all anamnesisCheckProxyValues...
+				((ProxySuggestOracle<AnamnesisCheckProxy>) standardizedPatientAnamnesisSubView.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(values);
+				anamnesisTable.setRowData(range.getStart(), values);
+			}
+			
+		});
+	}
+
+	/**
+	 * Executes the request for filling the AnamnesisCheckProxy-table in the AnamnesisSubView.
+	 * @param range 
+	 * @param receiver Callback (which should fill the table)
+	 */
+	private void fireAnamnesisCheckRangeRequest(Range range, Receiver<List<AnamnesisCheckProxy>> receiver) {
+		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
+		Long anamnesisId = standardizedPatientProxy.getAnamnesisForm().getId();
+		
+		requestFactory.anamnesisCheckRequestNonRoo().findAnamnesisChecksByAnamnesisForm(anamnesisId, range.getStart(), range.getLength())
+				.with(paths).fire(receiver);
 	}
 	
+	/*******************
+	 * SCAR TABLE
+	 ******************/
+
 	/**
 	 * Fills the ValueListBox and Table of the ScarSubView
 	 */
@@ -409,7 +466,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 
 	@Override
-	public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy) {
+	public void searchAnamnesisQuestion(AnamnesisCheckProxy proxy) {
 		// TODO Auto-generated method stub
 		
 	}

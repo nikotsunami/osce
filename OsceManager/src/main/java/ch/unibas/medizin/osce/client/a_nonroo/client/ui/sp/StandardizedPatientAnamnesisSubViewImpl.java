@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle.ProxySuggestion;
@@ -37,6 +38,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -67,7 +69,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	private List<AbstractEditableCell<?, ?>> editableCells;
 
 	@UiField (provided = true)
-	CellTable<AnamnesisChecksValueProxy> table;
+	CellTable<AnamnesisCheckProxy> table;
 	
 	@UiField (provided = true)
 	SimplePager pager;
@@ -79,7 +81,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		initSuggestBox();
 		
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<AnamnesisChecksValueProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		table = new CellTable<AnamnesisCheckProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -118,9 +120,9 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			@Override
 			public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event) {
 				// TODO Auto-generated method stub
-				ProxySuggestOracle<AnamnesisChecksValueProxy>.ProxySuggestion suggestion = 
-						(ProxySuggestOracle<AnamnesisChecksValueProxy>.ProxySuggestion) event.getSelectedItem(); 
-				AnamnesisChecksValueProxy proxy = suggestion.getProxy();
+				ProxySuggestOracle<AnamnesisCheckProxy>.ProxySuggestion suggestion = 
+						(ProxySuggestOracle<AnamnesisCheckProxy>.ProxySuggestion) event.getSelectedItem(); 
+				AnamnesisCheckProxy proxy = suggestion.getProxy();
 				delegate.searchAnamnesisQuestion(proxy);
 			}
 		});
@@ -137,8 +139,24 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	private void initTable() {
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
-		paths.add("anamnesisCheck.text");
-		table.addColumn(new TextColumn<AnamnesisChecksValueProxy>() {
+		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
+			// TODO dependent background color thingy...
+			@Override
+			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+				String html = "";
+				if (proxy.getAnamnesischecksvalues() == null) {
+					// Question not yet answered
+					html = "<span class=\"ui-icon ui-icon-closethick\"></span>";
+				} else {
+					// Question answered
+					html = "<span class=\"ui-icon ui-icon-check\"></span>";
+				}
+				return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
+			}
+		}, Messages.ANSWERED);
+		
+		paths.add("text");
+		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 			Renderer<String> renderer = new AbstractRenderer<String>() {
 				public String render(String obj) {
 					return obj == null ? "" : String.valueOf(obj);
@@ -146,20 +164,27 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			};
 
 			@Override
-			public String getValue(AnamnesisChecksValueProxy proxy) {
-				return renderer.render(proxy.getAnamnesischeck().getText());
+			public String getValue(AnamnesisCheckProxy proxy) {
+				return renderer.render(proxy.getText());
 			}
-		}, Messages.TEXT);
-		paths.add("anamnesisCheck.type");
-		paths.add("anamnesisCheck.value");
-		paths.add("anamnesisChecksValue");
+		}, Messages.QUESTION);
+		paths.add("type");
+		paths.add("value");
+		paths.add("AnamnesisChecksValues.value");
 		
-		table.addColumn(new Column<AnamnesisChecksValueProxy, SafeHtml>(new SafeHtmlCell()){
+		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()){
 			@Override
-			public SafeHtml getValue(AnamnesisChecksValueProxy proxy) {
-				AnamnesisCheckTypes type = proxy.getAnamnesischeck().getType();
-				List<String> possibleValues = Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|"));
-				String value = proxy.getAnamnesisChecksValue();
+			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+				AnamnesisCheckTypes type = proxy.getType();
+				List<String> possibleValues = Arrays.asList(proxy.getValue().split("\\|"));
+				if (proxy.getAnamnesischecksvalues() == null) {
+					// TODO: Style für Zeile festlegen?
+					// display questions
+					
+				} else {
+					
+				}
+//				String value = proxy.getAnamnesischecksvalues().iterator().next().getAnamnesisChecksValue();
 				String html = "";
 				
 				switch (type) {
@@ -173,9 +198,9 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 				
 				return null;
 			}
-		});
+		}, Messages.ANSWER);
 		
-//		table.addColumn(new TextColumn<AnamnesisChecksValueProxy>() {
+//		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 //
 //			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 //
@@ -185,21 +210,21 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 //			};
 //
 //			@Override
-//			public String getValue(AnamnesisChecksValueProxy proxy) {
+//			public String getValue(AnamnesisCheckProxy proxy) {
 //				proxy.getAnamnesischeck().
 //				return "";
 //			}
 //		}, Messages.LOCATION);
-		addColumn(new ActionCell<AnamnesisChecksValueProxy>(
-				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<AnamnesisChecksValueProxy>() {
-					public void execute(AnamnesisChecksValueProxy scar) {
+		addColumn(new ActionCell<AnamnesisCheckProxy>(
+				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
+					public void execute(AnamnesisCheckProxy scar) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						if(Window.confirm("wirklich löschen?")) {
 //							delegate.deleteAnamnesisQuestionClicked(scar);
 						}
 					}
-				}), "", new GetValue<AnamnesisChecksValueProxy>() {
-			public AnamnesisChecksValueProxy getValue(AnamnesisChecksValueProxy scar) {
+				}), "", new GetValue<AnamnesisCheckProxy>() {
+			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy scar) {
 				// TODO implement
 				return null;
 			}
@@ -216,10 +241,10 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	 * @param getter the value getter for the cell
 	 */
 	private <C> void addColumn(Cell<C> cell, String headerText,
-			final GetValue<C> getter, FieldUpdater<AnamnesisChecksValueProxy, C> fieldUpdater) {
-		Column<AnamnesisChecksValueProxy, C> column = new Column<AnamnesisChecksValueProxy, C>(cell) {
+			final GetValue<C> getter, FieldUpdater<AnamnesisCheckProxy, C> fieldUpdater) {
+		Column<AnamnesisCheckProxy, C> column = new Column<AnamnesisCheckProxy, C>(cell) {
 			@Override
-			public C getValue(AnamnesisChecksValueProxy object) {
+			public C getValue(AnamnesisCheckProxy object) {
 				return getter.getValue(object);
 			}
 		};
@@ -236,11 +261,11 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	 * @param <C> the cell type
 	 */
 	private static interface GetValue<C> {
-		C getValue(AnamnesisChecksValueProxy contact);
+		C getValue(AnamnesisCheckProxy contact);
 	}
 
 	@Override
-	public CellTable<AnamnesisChecksValueProxy> getTable() {
+	public CellTable<AnamnesisCheckProxy> getTable() {
 		return table;
 	}
 	
