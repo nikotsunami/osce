@@ -63,8 +63,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	private int minApplicableFilters = 1;
 	private int checkedItems = 0;
 	
-	private SearchCriteria criteria;
-	
 	@UiField
 	FocusPanel filterPanelRoot;
 	@UiField
@@ -96,34 +94,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	
 	@UiField
 	IconButton resetButton;
-	
-	@UiField
-	ListBox patientGender;
-	@UiField
-	ListBox haveScars;
-	@UiField
-	TextBox weightFrom;
-	@UiField
-	TextBox weightTo;
-	@UiField
-	TextBox heightFrom;
-	@UiField
-	TextBox heightTo;
-	
-	@UiField
-	Label patientGenderLabel;
-	@UiField
-	Label haveScarsLabel;
-	@UiField
-	Label weightLabel;
-	@UiField
-	Label heightLabel;
-	
-	@UiField
-	DateBox patientBirthday;
-	@UiField
-	Label patientBirthdayLabel;
-	
 	
 
 	@UiHandler("resetButton")
@@ -171,17 +141,15 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			checkedItems = fields.size() - uncheckedBoxes;
 			
 			String msg = "Searching for: ";
-			String filters[] = getFilters();
-			for (int i=0; i < filters.length; i++)
-				msg = msg + filters[i] + ", ";
+			Iterator<String> i = getFilters().iterator();
+			while(i.hasNext())
+				msg = msg + i.next() + ", ";
 			Log.info(msg);
 		}
 	}
 	
 	public StandardizedPatientFilterViewImpl() {
 		super(true);
-		
-		criteria = new SearchCriteria();
 		
 		final StandardizedPatientView view = (StandardizedPatientView)this.getParent();
 		
@@ -197,7 +165,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 				
 				if (mouseX < getAbsoluteLeft() || mouseX > getAbsoluteLeft() + getOffsetWidth() 
 						|| mouseY < getAbsoluteTop() || mouseY > getAbsoluteTop() + getOffsetHeight()) {
-					updateCriteria();
 
 					// TODO: handle it from view
 					//view.updateSearch();
@@ -209,18 +176,18 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		resetButton.setText(Messages.RESET_FILTERS);
 		
 		initCheckBox(name, "name", Messages.NAME);
-		initCheckBox(prename, "pre_name", Messages.PRENAME);
+		initCheckBox(prename, "preName", Messages.PRENAME);
 		initCheckBox(street, "street", Messages.STREET);
 		initCheckBox(city, "city", Messages.CITY);
-		initCheckBox(postalCode, "postal_code", Messages.PLZ);
+		initCheckBox(postalCode, "postalCode", Messages.PLZ);
 		initCheckBox(telephone, "telephone", Messages.TELEPHONE);
 		initCheckBox(telephone2, "telephone2", Messages.TELEPHONE + " 2");
 		initCheckBox(mobile, "mobile", Messages.MOBILE);
 		initCheckBox(email, "email", Messages.EMAIL);
-		initCheckBox(bankName, "bank_account.bank_name", Messages.BANK_NAME);
-		initCheckBox(bankBIC, "bank_account.bic", Messages.BANK_BIC);
-		initCheckBox(bankIBAN, "bank_account.IBAN", Messages.BANK_IBAN);
-		initCheckBox(description, "description", Messages.DESCRIPTION);
+		initCheckBox(bankName, "bankAccount.bankName", Messages.BANK_NAME);
+		initCheckBox(bankBIC, "bankAccount.BIC", Messages.BANK_BIC);
+		initCheckBox(bankIBAN, "bankAccount.IBAN", Messages.BANK_IBAN);
+		initCheckBox(description, "descriptions", Messages.DESCRIPTION);
 		
 		name.setValue(true);
 		prename.setValue(true);
@@ -233,43 +200,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			CheckBox box = fieldIter.next().checkbox;
 			box.addValueChangeHandler(new CheckBoxChangeHandler());
 		}
-		
-		/* Advanced Search Items */
-		
-		// gender  
-		
-		patientGenderLabel.setText(Messages.GENDER);
-				
-		patientGender.addItem(Messages.ALL,"-1");
-		patientGender.addItem(Messages.MALE,"0");
-		patientGender.addItem(Messages.FEMALE,"1");
-		
-		// gender  
-		
-		haveScarsLabel.setText(Messages.SCAR);
-		
-		haveScars.setTitle(Messages.SCAR);
-		
-		haveScars.addItem(Messages.NO_MATTER,"-1");
-		haveScars.addItem(Messages.YES,"1");
-		haveScars.addItem(Messages.NO,"0");
-		
-		// weight
-		
-		weightLabel.setText(Messages.WEIGHT);
-		weightFrom.setTitle(Messages.FROM);
-		weightTo.setTitle(Messages.TO);
-		
-		// height
-		
-		heightLabel.setText(Messages.HEIGHT);
-		heightFrom.setTitle(Messages.FROM);
-		heightTo.setTitle(Messages.TO);
-		
-		// height
-		
-		patientBirthdayLabel.setText(Messages.BIRTHDAY);
-		patientBirthday.setTitle(Messages.BIRTHDAY);
 		
 	}
 	
@@ -308,65 +238,21 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			minApplicableFilters = fields.size();
 		minApplicableFilters = n;
 	}
-
-	public void updateCriteria() {
-		criteria.clean();
-		
-		// scars
-		if(haveScars.getSelectedIndex() == 1) {
-			criteria.add("scar",Comparison.EQUALS,"1");
-		} else if(haveScars.getSelectedIndex() == 2) {
-			criteria.add("scar",Comparison.EQUALS,"0");
-		}
-		
-		// gender
-		if(patientGender.getSelectedIndex() == 1) {
-			criteria.add("gender",Comparison.EQUALS,"1");
-		} else if(patientGender.getSelectedIndex() == 2) {
-			criteria.add("gender",Comparison.EQUALS,"2");
-		}
-		
-		// weight
-		Integer wf = null;
-		try { wf = Integer.parseInt(weightFrom.getValue()); } catch(Throwable e) {}
-		if(wf!=null) criteria.add("weight",Comparison.MORE, wf.toString());
-				
-		Integer wt = null;
-		try { wt = Integer.parseInt(weightTo.getValue()); } catch(Throwable e) {}
-		if(wt!=null) criteria.add("weight",Comparison.LESS, wt.toString());
-		
-		// height
-		Integer hf = null;
-		try { hf = Integer.parseInt(heightFrom.getValue()); } catch(Throwable e) {}
-		if(hf!=null) criteria.add("height",Comparison.MORE, hf.toString());
-				
-		Integer ht = null;
-		try { ht = Integer.parseInt(heightTo.getValue()); } catch(Throwable e) {}
-		if(ht!=null) criteria.add("height",Comparison.LESS, ht.toString());
-		
-		//birthday
-		Date d = patientBirthday.getValue();
-	}
-	
-	public SearchCriteria getCriteria() {
-		return criteria;
-	}
 	
 	/**
 	 * Returns a string array of all db fields to search in
 	 * @return
 	 */
-	public String[] getFilters() {
-		String filters[] = new String[checkedItems];
-		int i = 0;
+	public List<String> getFilters() {
+		List<String> filters = new ArrayList<String>();
 		
-		Iterator<CheckBoxItem> fieldIter = fields.iterator();
-		while (fieldIter.hasNext()) {
-			CheckBoxItem item = fieldIter.next();
-			if (item.checkbox.getValue())
-				filters[i++] = item.name;
+		Iterator<CheckBoxItem> i = fields.iterator();
+		while (i.hasNext()) {
+			CheckBoxItem checkBoxItem = i.next();
+			if (checkBoxItem.checkbox.getValue()) {
+				filters.add(checkBoxItem.name);
+			}
 		}
-		
 		return filters;
 	}
 

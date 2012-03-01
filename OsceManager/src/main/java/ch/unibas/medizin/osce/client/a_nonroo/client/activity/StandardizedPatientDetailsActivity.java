@@ -11,6 +11,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
@@ -18,6 +21,7 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -396,5 +400,23 @@ StandardizedPatientLangSkillSubView.Delegate {
 				initLangSkills();
 			}
 		});
+	}
+
+	@Override
+	public void saveAnamnesisQuestionChanges(AnamnesisChecksValueProxy proxy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void searchAnamnesisQuestion(String needle) {
+		// TODO Auto-generated method stub
+		
 	}
 }

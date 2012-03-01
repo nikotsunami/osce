@@ -239,7 +239,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		paths.add("preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			
-			{ this.setSortable(true); }
+//			{ this.setSortable(true); }
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -343,7 +343,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		paths.add("email");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
-			{ this.setSortable(true); }
+//			{ this.setSortable(true); }
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -400,7 +400,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //        paths.add("descriptions");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //
-//            Renderer<ch.unibas.medizin.osce.client.managed.request.DescriptionProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance();
+//            Renderer<DescriptionProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance();
 //
 //            @Override
 //            public String getValue(StandardizedPatientProxy object) {
@@ -410,8 +410,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //        paths.add("anamnesisForm");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //
-//            Renderer<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance();
-//
+//            Renderer<AnamnesisFormProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance();
 //            @Override
 //            public String getValue(StandardizedPatientProxy object) {
 //                return renderer.render(object.getAnamnesisForm());
@@ -420,11 +419,12 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 	
 	public List<String> getSearchFilters() {
-		return Arrays.asList(filterPanel.getFilters());
+		return filterPanel.getFilters();
 	}
 	
 	public SearchCriteria getCriteria() {
-		return filterPanel.getCriteria();
+		return new SearchCriteria();
+//		return filterPanel.getCriteria();
 	}
 
 	@Override

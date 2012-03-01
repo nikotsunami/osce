@@ -326,3 +326,8 @@ field enum --fieldName type --type ~.shared.RoleParticipantType --class ~.domain
 // Spring Roo UNKNOWN VERSION log opened at 2012-02-21 11:57:08
 // Spring Roo UNKNOWN VERSION log closed at 2012-02-21 12:05:03
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-21 12:11:02
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-21 18:48:44
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-23 17:16:16
+finder list --class ch.unibas.medizin.osce.domain.SpokenLanguage
+finder add findSpokenLanguagesByLangskills
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-23 21:06:55

@@ -41,7 +41,7 @@
   -->
   
   <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
-  <extend-property name="log_level" values="DEBUG"/>
+  <!-- <extend-property name="log_level" values="DEBUG"/> -->
 	
 
 	<source path='client'/>

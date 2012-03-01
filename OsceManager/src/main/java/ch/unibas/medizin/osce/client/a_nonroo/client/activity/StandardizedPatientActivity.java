@@ -264,11 +264,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}
 
 		// (2) Text search
-
-		/* List<String> */searchThrough = view.getSearchFilters();
+		searchThrough = view.getSearchFilters();
 
 		// (3) Advanced search
-
 		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> values) {
@@ -430,8 +428,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	@Override
-	public void addLanguageButtonClicked(SpokenLanguageProxy language, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
-		// TODO implement
+	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
+		addAdvSeaBasicButtonClicked(languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.language, comparison);
 	}
 
 	private void initLanguageCriteriaSubView() {
@@ -484,14 +482,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	@Override
-	public void addScarButtonClicked(ScarProxy scarType, BindType bindType, Comparison2 comparison) {
-		// TODO Auto-generated method stub
-		Log.info("ScarType:" + scarType.getTraitType().toString() + ": " + scarType.getBodypart());
+	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType, Comparison2 comparison) {
+		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart());
+		addAdvSeaBasicButtonClicked(scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.scar, comparison);
 	}
 
 	@Override
 	public void addAnamnesisValueButtonClicked(AnamnesisCheckProxy anamnesisCheck, String answer, BindType bindType, Comparison2 comparison) {
 		// TODO Auto-generated method stub
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
+		addAdvSeaBasicButtonClicked(anamnesisCheck.getText() + ": " + answer, bindType, PossibleFields.anamnesis, comparison);
 	}
 }

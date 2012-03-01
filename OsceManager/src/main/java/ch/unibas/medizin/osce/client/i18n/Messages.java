@@ -156,4 +156,5 @@ public class Messages {
 			/* advanced search Popup specifics */
 			public static final String ENTER_QUESTION = "Bitte Frage eingeben...";
 			public static final String ENTER_ANSWER = "Bitte Antwort eingeben...";
+			public static final String ADD_QUESTION = "Frage hinzufügen";
 }

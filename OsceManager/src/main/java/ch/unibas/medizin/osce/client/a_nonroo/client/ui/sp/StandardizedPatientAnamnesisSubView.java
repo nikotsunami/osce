@@ -1,26 +1,28 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 
 public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 	
 	interface Delegate {
-		void addScarClicked();
-		
-		void deleteScarClicked(ScarProxy scar);
+//		public void addAnamnesisQuestionClicked(AnamnesisCheckProxy questionProxy);
+		// TODO updateMethode (wenn Antwort geändert wird...)
+//		public void deleteAnamnesisQuestionClicked(AnamnesisChecksValueProxy anamnesisChecksValueProxy);
+		public void saveAnamnesisQuestionChanges(AnamnesisChecksValueProxy proxy);
+		public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy);
+		public void searchAnamnesisQuestion(String needle);
 	}
-
-//	CellTable<AnamnesisFormProxy> getTable();
-	CellTable<ScarProxy> getTable();
-
-	String[] getPaths();
 	
-	void setDelegate(Delegate delegate);
-
-	ValueListBox<ScarProxy> getScarBox();
+	public CellTable<AnamnesisChecksValueProxy> getTable();
+	public String[] getPaths();
+	public void setDelegate(Delegate delegate);
+	public SuggestBox getAnamnesisQuestionSuggestBox();
 }
