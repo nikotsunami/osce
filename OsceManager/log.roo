@@ -331,3 +331,7 @@ field enum --fieldName type --type ~.shared.RoleParticipantType --class ~.domain
 finder list --class ch.unibas.medizin.osce.domain.SpokenLanguage
 finder add findSpokenLanguagesByLangskills
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-23 21:06:55
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-05 11:33:51
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-03-05 11:40:08
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-05 11:41:07
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-03-05 12:22:24
