@@ -66,7 +66,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private HandlerRegistration rangeChangeHandlerScars;
 	
 	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
-	private CellTable<AnamnesisCheckProxy> anamnesisTable;
+	private CellTable<AnamnesisChecksValueProxy> anamnesisTable;
 	
 	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
 	private CellTable<LangSkillProxy> langSkillTable;
@@ -208,38 +208,47 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	protected void initAnamnesis() {
 		// TODO implement
-		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
-		requestFactory.anamnesisCheckRequestNonRoo().countAnamnesisChecksByAnamnesisForm(
-				standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>() {
-					@Override
-					public void onSuccess(Long count) {
-						if (view == null) {
-							return;
-						}
-						
-						Log.debug(count.toString() + " scars loaded");
-						anamnesisTable.setRowCount(count.intValue(), true);
-						
-						onRangeChangedAnamnesisTable();
-					}
-				});
+//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+//		requestFactory.anamnesisCheckRequestNonRoo().countAnamnesisChecksByAnamnesisForm(
+//				standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>() {
+//					@Override
+//					public void onSuccess(Long count) {
+//						if (view == null) {
+//							return;
+//						}
+//						
+//						Log.debug(count.toString() + " scars loaded");
+//						anamnesisTable.setRowCount(count.intValue(), true);
+//						
+//						onRangeChangedAnamnesisTable();
+//					}
+//					
+////					public void onFailure(ServerFailure error) {
+////						Log.error("failed on count");
+////					}
+//				});
 	}
 
 	protected void onRangeChangedAnamnesisTable() {
-		final Range range = anamnesisTable.getVisibleRange();
-		
-		fireAnamnesisCheckRangeRequest(range, new Receiver<List<AnamnesisCheckProxy>>() {
-			@Override
-			public void onSuccess(List<AnamnesisCheckProxy> values) {
-				if (view == null) {
-					return;
-				}
-				// FIXME: ORacle should be filled with all anamnesisCheckProxyValues...
-				((ProxySuggestOracle<AnamnesisCheckProxy>) standardizedPatientAnamnesisSubView.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(values);
-				anamnesisTable.setRowData(range.getStart(), values);
-			}
-			
-		});
+//		final Range range = anamnesisTable.getVisibleRange();
+//		
+//		fireAnamnesisCheckRangeRequest(range, new Receiver<List<AnamnesisCheckProxy>>() {
+//			@Override
+//			public void onSuccess(List<AnamnesisCheckProxy> values) {
+//				if (view == null) {
+//					return;
+//				}
+//				// FIXME: ORacle should be filled with all anamnesisCheckProxyValues...
+//				((ProxySuggestOracle<AnamnesisCheckProxy>) standardizedPatientAnamnesisSubView.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(values);
+//				anamnesisTable.setRowData(range.getStart(), values);
+//			}
+////			
+////			@Override
+////			public void onFailure(ServerFailure error) {
+////				Log.error("failed on exec");
+////			}
+//			
+//		});
 	}
 
 	/**
@@ -248,11 +257,11 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * @param receiver Callback (which should fill the table)
 	 */
 	private void fireAnamnesisCheckRangeRequest(Range range, Receiver<List<AnamnesisCheckProxy>> receiver) {
-		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
-		Long anamnesisId = standardizedPatientProxy.getAnamnesisForm().getId();
-		
-		requestFactory.anamnesisCheckRequestNonRoo().findAnamnesisChecksByAnamnesisForm(anamnesisId, range.getStart(), range.getLength())
-				.with(paths).fire(receiver);
+//		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
+//		Long anamnesisId = standardizedPatientProxy.getAnamnesisForm().getId();
+//		
+//		requestFactory.anamnesisCheckRequestNonRoo().findAnamnesisChecksByAnamnesisForm(anamnesisId, range.getStart(), range.getLength())
+//				.with(paths).fire(receiver);
 	}
 	
 	/*******************
@@ -466,7 +475,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 
 	@Override
-	public void searchAnamnesisQuestion(AnamnesisCheckProxy proxy) {
+	public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy) {
 		// TODO Auto-generated method stub
 		
 	}

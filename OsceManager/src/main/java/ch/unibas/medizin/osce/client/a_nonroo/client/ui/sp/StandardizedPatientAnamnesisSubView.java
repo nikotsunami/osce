@@ -17,11 +17,11 @@ public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 		// TODO updateMethode (wenn Antwort geändert wird...)
 //		public void deleteAnamnesisQuestionClicked(AnamnesisChecksValueProxy anamnesisChecksValueProxy);
 		public void saveAnamnesisQuestionChanges(AnamnesisChecksValueProxy proxy);
-		public void searchAnamnesisQuestion(AnamnesisCheckProxy proxy);
+		public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy);
 		public void searchAnamnesisQuestion(String needle);
 	}
 	
-	public CellTable<AnamnesisCheckProxy> getTable();
+	public CellTable<AnamnesisChecksValueProxy> getTable();
 	public String[] getPaths();
 	public void setDelegate(Delegate delegate);
 	public SuggestBox getAnamnesisQuestionSuggestBox();
