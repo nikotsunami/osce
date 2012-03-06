@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
-import org.mortbay.log.Log;
+
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -74,9 +75,11 @@ public class AnamnesisCheck {
     	TypedQuery<Long> query = em.createQuery(queryString, Long.class);
     	query.setParameter("anamnesisFormId", anamnesisFormId.longValue());
     	Long result = query.getSingleResult();
-    	Log.info("COUNT(c)  LEFT OUTER JOIN result");
+    	log.info("COUNT(c)  LEFT OUTER JOIN result");
     	return result;
     }
+    
+    private static Logger log = Logger.getLogger(AnamnesisCheck.class);
     
     public static List<AnamnesisCheck> findAnamnesisChecksByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults) {
     	if (anamnesisFormId == null) throw new IllegalArgumentException("anamnesisFormId required!");
