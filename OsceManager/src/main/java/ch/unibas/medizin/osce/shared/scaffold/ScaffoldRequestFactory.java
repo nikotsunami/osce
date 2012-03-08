@@ -24,6 +24,7 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	NationalityRequestNonRoo nationalityRequestNonRoo();
 	StandardizedPatientRequestNonRoo standardizedPatientRequestNonRoo();
 	AnamnesisCheckRequestNonRoo anamnesisCheckRequestNonRoo();
+	AnamnesisChecksValueRequestNonRoo anamnesisChecksValueRequestNonRoo();
 	RoomRequestNonRoo roomRequestNonRoo();
 	LogEntryRequestNonRoo logEntryRequestNonRoo();
 	LangSkillRequestNonRoo langSkillRequestNonRoo();

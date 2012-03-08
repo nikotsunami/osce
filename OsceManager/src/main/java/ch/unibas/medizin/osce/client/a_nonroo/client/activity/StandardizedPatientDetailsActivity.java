@@ -208,25 +208,34 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	protected void initAnamnesis() {
 		// TODO implement
-//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
-//		requestFactory.anamnesisCheckRequestNonRoo().countAnamnesisChecksByAnamnesisForm(
-//				standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>() {
-//					@Override
-//					public void onSuccess(Long count) {
-//						if (view == null) {
-//							return;
-//						}
-//						
-//						Log.debug(count.toString() + " scars loaded");
-//						anamnesisTable.setRowCount(count.intValue(), true);
-//						
-//						onRangeChangedAnamnesisTable();
+		
+		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+		requestFactory.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("update successful???");
+			}
+			
+		});
+		requestFactory.anamnesisChecksValueRequestNonRoo().countAnamnesisChecksValuesByAnamnesisForm(
+				standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>() {
+					@Override
+					public void onSuccess(Long count) {
+						if (view == null) {
+							return;
+						}
+						
+						Log.debug(count.toString() + " scars loaded");
+						anamnesisTable.setRowCount(count.intValue(), true);
+						
+						onRangeChangedAnamnesisTable();
+					}
+					
+//					public void onFailure(ServerFailure error) {
+//						Log.error("failed on count");
 //					}
-//					
-////					public void onFailure(ServerFailure error) {
-////						Log.error("failed on count");
-////					}
-//				});
+				});
 	}
 
 	protected void onRangeChangedAnamnesisTable() {

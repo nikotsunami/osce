@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -117,7 +118,6 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 
 				onRangeChanged(q);
 			}
-
 		});
 
 		rangeChangeHandler = table

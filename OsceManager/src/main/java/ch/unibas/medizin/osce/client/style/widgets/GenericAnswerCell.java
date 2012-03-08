@@ -41,7 +41,7 @@ public class GenericAnswerCell extends AbstractCell<GenericAnswerCell.Answer<?>>
 			return;
 		}
 		
-		if (possibleValues == null) 
+//		if (possibleValues == null) 
 	}
 
 }
