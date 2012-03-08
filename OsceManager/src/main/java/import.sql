@@ -64,8 +64,8 @@ INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (3,
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (4,4,'Zygtoban|Bascurol',0,'Welche Medikamente nehmen Sie ein?',0);
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (5,5,'',1,'Leiden Sie unter Diabetes?',0);
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (6,6,'',1,'Wurde Ihnen der Blinddarm entfernt?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (7,5,'',1,'Leiden Sie unter Diabetes?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (8,6,'',1,'Ist Ihnen der Blinddarm entfernt worden?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (7,5,'',1,'Leiden Sie unter Asthma?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (8,6,'',1,'Ist Ihnen der Blinddarm wirklich entfernt worden?',0);
 
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (1,'selten',NULL,0,0,2,2);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (7,NULL,NULL,0,0,3,2);

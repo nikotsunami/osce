@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle.ProxySuggestion;
+import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Gender;
 
@@ -46,6 +47,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
@@ -70,6 +72,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 
 	@UiField (provided = true)
 	CellTable<AnamnesisChecksValueProxy> table;
+	private MyCellTableResources tableResources = GWT.create(MyCellTableResources.class);
 	
 	@UiField (provided = true)
 	SimplePager pager;
@@ -80,7 +83,6 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	public StandardizedPatientAnamnesisSubViewImpl() {
 		initSuggestBox();
 		
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<AnamnesisChecksValueProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
@@ -139,24 +141,45 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 
 	private void initTable() {
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
+
+		paths.add("truth");
+		paths.add("comment");
+		paths.add("anamnesisChecksValue");
+		paths.add("anamnesischeck");
 		
-		table.addColumn(new Column<AnamnesisChecksValueProxy, SafeHtml>(new SafeHtmlCell()) {
-			// TODO dependent background color thingy...
+		String[] iconDescriptors = {"closethick", "check"};
+		String[] titles = {Messages.ANSWER_GIVEN, Messages.ANSWER_PENDING};
+		
+		// define row styles dependent on wether the question was answered or not
+		table.setRowStyles(new RowStyles<AnamnesisChecksValueProxy>() {
 			@Override
-			public SafeHtml getValue(AnamnesisChecksValueProxy proxy) {
-				String html = "";
-				if (proxy.getAnamnesisChecksValue() == null) {
-					// Question not yet answered
-					html = "<span class=\"ui-icon ui-icon-closethick\"></span>";
-				} else {
-					// Question answered
-					html = "<span class=\"ui-icon ui-icon-check\"></span>";
+			public String getStyleNames(AnamnesisChecksValueProxy proxy, int rowIndex) {
+				boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
+				boolean rowIsEven = (rowIndex % 2 == 0);
+				if (questionAnswered) {
+					if (rowIsEven) {
+						return tableResources.cellTableStyle().cellTableEvenYesRow();						
+					}
+					return tableResources.cellTableStyle().cellTableOddYesRow();
 				}
-				return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
+					
+				if (rowIsEven) {
+					return tableResources.cellTableStyle().cellTableEvenNoRow();
+				}
+				return tableResources.cellTableStyle().cellTableOddNoRow();
 			}
+		});
+			
+		// Icon cell displaying wether the question was answered or not
+		table.addColumn(new Column<AnamnesisChecksValueProxy, Integer>(new IconCell(iconDescriptors, titles)) {
+			@Override
+			public Integer getValue(AnamnesisChecksValueProxy proxy) {
+				boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
+				return (questionAnswered) ? 1 : 0;
+			}
+			
 		}, Messages.ANSWERED);
 		
-		paths.add("text");
 		table.addColumn(new TextColumn<AnamnesisChecksValueProxy>() {
 			Renderer<String> renderer = new AbstractRenderer<String>() {
 				public String render(String obj) {
@@ -170,9 +193,6 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 				return renderer.render(check.getText());
 			}
 		}, Messages.QUESTION);
-		paths.add("type");
-		paths.add("value");
-		paths.add("AnamnesisChecksValues.value");
 		
 		table.addColumn(new Column<AnamnesisChecksValueProxy, SafeHtml>(new SafeHtmlCell()){
 			@Override
@@ -208,22 +228,14 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			}
 		}, Messages.ANSWER);
 		
+		table.addColumn(new TextColumn<AnamnesisChecksValueProxy>() {
+			@Override
+			public String getValue(AnamnesisChecksValueProxy proxy) {
+				String comment = proxy.getComment();
+				return (comment != null) ? comment : "";
+			}
+		}, Messages.COMMENT);
 		
-//		table.addColumn(new TextColumn<AnamnesisChecksValueProxy>() {
-//
-//			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-//
-//				public String render(java.lang.String obj) {
-//					return obj == null ? "" : String.valueOf(obj);
-//				}
-//			};
-//
-//			@Override
-//			public String getValue(AnamnesisChecksValueProxy proxy) {
-//				proxy.getAnamnesischeck().
-//				return "";
-//			}
-//		}, Messages.LOCATION);
 		addColumn(new ActionCell<AnamnesisChecksValueProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<AnamnesisChecksValueProxy>() {
 					public void execute(AnamnesisChecksValueProxy scar) {
@@ -238,7 +250,8 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 				return null;
 			}
 		}, null);
-		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(0, "iconCol");
+		table.addColumnStyleName(table.getColumnCount()-1, "iconCol");
 	}
 	
 	/**

@@ -131,9 +131,11 @@ public class AnamnesisChecksValue {
      */
     private static boolean doAllChecksHaveValues(AnamnesisForm form) {
     	EntityManager em = entityManager();
-    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(DISTINCT c) - COUNT(DISTINCT v) FROM AnamnesisChecksValue AS v, AnamnesisCheck AS c WHERE v.anamnesisform = :anamnesisForm", Long.class);
+    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(v) FROM AnamnesisChecksValue AS v WHERE anamnesisform = :anamnesisForm", Long.class);
     	q.setParameter("anamnesisForm", form);
-    	long result = q.getSingleResult().longValue();
+    	long valueEntryCount = q.getSingleResult().longValue();
+    	long checkEntryCount = em.createQuery("SELECT COUNT(c) FROM AnamnesisCheck c", Long.class).getSingleResult().longValue();
+    	long result = checkEntryCount - valueEntryCount;
     	
 //    	EntityManager em = entityManager();
 //    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(v) FROM AnamneisChecksValues AS v WHERE v.anamnesisform = :anamnesisForm", Long.class);
@@ -156,9 +158,11 @@ public class AnamnesisChecksValue {
      * @return
      */
     private static List<AnamnesisCheck> findAnamnesisChecksWithoutAnamnesischecksvalues(List<AnamnesisChecksValue> anamnesischecksvalues) {
-    	if (anamnesischecksvalues == null) throw new IllegalArgumentException("The anamnesischecksvalues argument is required");
-        EntityManager em = entityManager();
-        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM AnamnesisCheck AS o WHERE");
+    	EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM AnamnesisCheck AS o");
+        if (anamnesischecksvalues != null && anamnesischecksvalues.size() > 0) {
+        	 queryBuilder.append(" WHERE");
+        }
         for (int i = 0; i < anamnesischecksvalues.size(); i++) {
             if (i > 0) queryBuilder.append(" AND");
             queryBuilder.append(" :anamnesischecksvalues_item").append(i).append(" NOT MEMBER OF o.anamnesischecksvalues");

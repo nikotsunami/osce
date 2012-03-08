@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.style.widgets;
+package ch.unibas.medizin.osce.client.style.widgets.cell;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.AbstractCell;

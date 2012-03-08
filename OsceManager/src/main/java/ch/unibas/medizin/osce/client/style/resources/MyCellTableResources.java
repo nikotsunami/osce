@@ -5,8 +5,14 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.user.cellview.client.CellTable;
 
 public interface MyCellTableResources extends CellTable.Resources {
+	public interface Style extends CellTable.Style {
+		String cellTableEvenYesRow();
+		String cellTableOddYesRow();
+		String cellTableEvenNoRow();
+		String cellTableOddNoRow();
+	}
 	@Source({CellTable.Style.DEFAULT_CSS, "MyCellTable.css"})
-	CellTable.Style cellTableStyle();
+	Style cellTableStyle();
 	
 	@Source("images/ui-bg_glass_75_dadada_1x400.png")
 	@ImageOptions(repeatStyle = RepeatStyle.Horizontal, flipRtl = true)

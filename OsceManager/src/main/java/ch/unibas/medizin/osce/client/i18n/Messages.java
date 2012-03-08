@@ -162,4 +162,7 @@ public class Messages {
 			public static final String QUESTION = "Frage";
 			public static final String ANSWER = "Antwort";
 			public static final String ANSWERED = "Beantwortet?";
+			public static final String ANSWER_GIVEN = "Wurde beantwortet";
+			public static final String ANSWER_PENDING = "Unbeantwortet";
+			public static final String COMMENT = "Kommentar";
 }

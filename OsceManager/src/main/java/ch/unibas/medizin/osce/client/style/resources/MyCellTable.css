@@ -103,22 +103,38 @@
   background: #ffffff;
 }
 .cellTableEvenRowCell {
-  background: #ffffff;
+  /* background: #ffffff; */
 }
 
 .cellTableOddRow {
   background: #eee;
 }
 .cellTableOddRowCell {
-  background: #eee;
+  /* background: #eee; */
 }
 
 .cellTableHoveredRow {
-  background: #eee;
+  background: #f1b532;
 }
 
 .cellTableHoveredRowCell {
   background: #f1b532;
+}
+
+.cellTableEvenYesRow {
+	background: #F2FFD6;
+}
+
+.cellTableOddYesRow {
+	background: #E6F7C1;
+}
+
+.cellTableEvenNoRow {
+	background: #FFE1DB;
+}
+
+.cellTableOddNoRow {
+	background: #FCD4CC;
 }
 
 .cellTableKeyboardSelectedRow {

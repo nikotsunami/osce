@@ -210,14 +210,18 @@ StandardizedPatientLangSkillSubView.Delegate {
 		// TODO implement
 		
 		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+		
+		// TODO make this request conditional (only execute if explicitly requested)
+		// fills the AnamnesisChecksValue table in the database with NULL-values for unanswered questions
 		requestFactory.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Void>() {
-
 			@Override
 			public void onSuccess(Void response) {
-				Log.info("update successful???");
+				Log.debug("Updated AnamnesisChecksValue.");
 			}
 			
 		});
+		
+		// requests the number of rows in AnamnesisChecksValue for the current patient
 		requestFactory.anamnesisChecksValueRequestNonRoo().countAnamnesisChecksValuesByAnamnesisForm(
 				standardizedPatientProxy.getAnamnesisForm().getId()).fire(new Receiver<Long>() {
 					@Override
@@ -231,33 +235,23 @@ StandardizedPatientLangSkillSubView.Delegate {
 						
 						onRangeChangedAnamnesisTable();
 					}
-					
-//					public void onFailure(ServerFailure error) {
-//						Log.error("failed on count");
-//					}
 				});
 	}
 
 	protected void onRangeChangedAnamnesisTable() {
-//		final Range range = anamnesisTable.getVisibleRange();
-//		
-//		fireAnamnesisCheckRangeRequest(range, new Receiver<List<AnamnesisCheckProxy>>() {
-//			@Override
-//			public void onSuccess(List<AnamnesisCheckProxy> values) {
-//				if (view == null) {
-//					return;
-//				}
-//				// FIXME: ORacle should be filled with all anamnesisCheckProxyValues...
-//				((ProxySuggestOracle<AnamnesisCheckProxy>) standardizedPatientAnamnesisSubView.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(values);
-//				anamnesisTable.setRowData(range.getStart(), values);
-//			}
-////			
-////			@Override
-////			public void onFailure(ServerFailure error) {
-////				Log.error("failed on exec");
-////			}
-//			
-//		});
+		final Range range = anamnesisTable.getVisibleRange();
+		
+		fireAnamnesisChecksValueRangeRequest(range, new Receiver<List<AnamnesisChecksValueProxy>>() {
+			@Override
+			public void onSuccess(List<AnamnesisChecksValueProxy> values) {
+				if (view == null) {
+					return;
+				}
+				// FIXME: ORacle should be filled with all anamnesisCheckProxyValues... and not be limited by range...
+				((ProxySuggestOracle<AnamnesisChecksValueProxy>) standardizedPatientAnamnesisSubView.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(values);
+				anamnesisTable.setRowData(range.getStart(), values);
+			}
+		});
 	}
 
 	/**
@@ -265,12 +259,12 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * @param range 
 	 * @param receiver Callback (which should fill the table)
 	 */
-	private void fireAnamnesisCheckRangeRequest(Range range, Receiver<List<AnamnesisCheckProxy>> receiver) {
-//		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
-//		Long anamnesisId = standardizedPatientProxy.getAnamnesisForm().getId();
-//		
-//		requestFactory.anamnesisCheckRequestNonRoo().findAnamnesisChecksByAnamnesisForm(anamnesisId, range.getStart(), range.getLength())
-//				.with(paths).fire(receiver);
+	private void fireAnamnesisChecksValueRangeRequest(Range range, Receiver<List<AnamnesisChecksValueProxy>> receiver) {
+		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
+		Long anamnesisId = standardizedPatientProxy.getAnamnesisForm().getId();
+		
+		requestFactory.anamnesisChecksValueRequestNonRoo().findAnamnesisChecksValuesByAnamnesisForm(anamnesisId, range.getStart(), range.getLength())
+				.with(paths).fire(receiver);
 	}
 	
 	/*******************
