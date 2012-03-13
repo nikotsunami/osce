@@ -122,6 +122,42 @@ public class AnamnesisChecksValue {
     	q.setMaxResults(maxResults);
     	return q.getResultList();
     }
+    
+    /**
+     * Returns all the entries in AnamnesisChecksValues, that exist for a given anamnesisForm id.
+     * @param anamnesisFormId the id of the relevant AnamnesisForm
+     * @param firstResult number of the first result
+     * @param maxResults number of maximum results
+     * @return all the entries in AnamnesisChecksValues for a given anamnesisForm
+     */
+    public static List<AnamnesisChecksValue> findUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults) {
+    	EntityManager em = entityManager();
+    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm AND truth = NULL AND anamnesisChecksValue = NULL", 
+    			AnamnesisChecksValue.class);
+    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	q.setFirstResult(firstResult);
+    	q.setMaxResults(maxResults);
+    	return q.getResultList();
+    }
+    
+    /**
+     * Returns all the entries in AnamnesisChecksValues, that exist for a given anamnesisForm id.
+     * @param anamnesisFormId the id of the relevant AnamnesisForm
+     * @param firstResult number of the first result
+     * @param maxResults number of maximum results
+     * @return all the entries in AnamnesisChecksValues for a given anamnesisForm
+     */
+    public static List<AnamnesisChecksValue> findAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults) {
+    	EntityManager em = entityManager();
+    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm AND (truth <> NULL OR anamnesisChecksValue <> NULL)", 
+    			AnamnesisChecksValue.class);
+    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	q.setFirstResult(firstResult);
+    	q.setMaxResults(maxResults);
+    	return q.getResultList();
+    }
 
     /**
      * Checks if there is a differnece in the count of rows in AnamnesisCheck and AnamnesisChecksValues.

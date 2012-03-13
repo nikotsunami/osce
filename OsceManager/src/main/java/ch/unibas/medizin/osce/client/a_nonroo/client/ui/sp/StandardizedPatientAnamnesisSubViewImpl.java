@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle.ProxySuggestion;
+import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell;
 import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Gender;
@@ -150,7 +151,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		String[] iconDescriptors = {"closethick", "check"};
 		String[] titles = {Messages.ANSWER_GIVEN, Messages.ANSWER_PENDING};
 		
-		// define row styles dependent on wether the question was answered or not
+		// define row styles dependent on whether the question was answered or not
 		table.setRowStyles(new RowStyles<AnamnesisChecksValueProxy>() {
 			@Override
 			public String getStyleNames(AnamnesisChecksValueProxy proxy, int rowIndex) {
@@ -170,7 +171,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			}
 		});
 			
-		// Icon cell displaying wether the question was answered or not
+		// Icon cell displaying whether the question was answered or not
 		table.addColumn(new Column<AnamnesisChecksValueProxy, Integer>(new IconCell(iconDescriptors, titles)) {
 			@Override
 			public Integer getValue(AnamnesisChecksValueProxy proxy) {
@@ -194,37 +195,44 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			}
 		}, Messages.QUESTION);
 		
-		table.addColumn(new Column<AnamnesisChecksValueProxy, SafeHtml>(new SafeHtmlCell()){
-			@Override
-			public SafeHtml getValue(AnamnesisChecksValueProxy proxy) {
-				AnamnesisCheckProxy checks = proxy.getAnamnesischeck();
-				
-				if (checks == null) {
-					return null;
-				}
-				
-				AnamnesisCheckTypes type = checks.getType();
-				List<String> possibleValues = Arrays.asList(checks.getValue().split("\\|"));
-				if (proxy.getAnamnesisChecksValue() == null) {
-					// TODO: Style für Zeile festlegen?
-					// display questions
-					
-				} else {
-					
-				}
-//				String value = proxy.getAnamnesischecksvalues().iterator().next().getAnamnesisChecksValue();
-				String html = "";
-				
-				switch (type) {
-				case QuestionMultM:
-					// TODO IST DAS NICHT EIN GRUUUSIGER HACK?
-					break;
+		table.addColumn(new Column<AnamnesisChecksValueProxy, GenericAnswerCell.Answer>(new GenericAnswerCell(GenericAnswerCell.Alignment.HORIZONTAL)) {
 
-				default:
-					break;
-				}
+			@Override
+			public GenericAnswerCell.Answer getValue(AnamnesisChecksValueProxy proxy) {
+				boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
+				GenericAnswerCell.Answer answer = new GenericAnswerCell.Answer();;
 				
-				return null;
+				AnamnesisCheckTypes type = proxy.getAnamnesischeck().getType();
+				answer.selectedAnswers = new ArrayList<String>();
+				if (type == AnamnesisCheckTypes.QuestionYesNo) {
+					answer.type = GenericAnswerCell.ElementType.RADIO;
+					answer.possibleAnswers = new ArrayList<String>();
+					answer.possibleAnswers.add(Messages.NO);
+					answer.possibleAnswers.add(Messages.YES);
+					if (questionAnswered && proxy.getTruth() == true) {
+						answer.selectedAnswers.add(Messages.YES);
+					} else if (questionAnswered) {
+						answer.selectedAnswers.add(Messages.NO);
+					}
+				} else if (type == AnamnesisCheckTypes.QuestionMultM) {
+					answer.type = GenericAnswerCell.ElementType.CHECKBOX;
+					answer.possibleAnswers = Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|"));
+					if (questionAnswered) {
+						answer.selectedAnswers = Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|"));
+					}
+				} else if (type == AnamnesisCheckTypes.QuestionMultS) {
+					answer.type = GenericAnswerCell.ElementType.RADIO;
+					answer.possibleAnswers = Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|"));
+					if (questionAnswered) {
+						answer.selectedAnswers = Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|"));
+					}
+				} else {
+					// It's an open question or title...
+					answer.type = GenericAnswerCell.ElementType.TEXT;
+					answer.possibleAnswers = null;
+					answer.selectedAnswers.add(proxy.getAnamnesisChecksValue());
+				}
+				return answer;
 			}
 		}, Messages.ANSWER);
 		

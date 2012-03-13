@@ -29,6 +29,12 @@ public class IconCell extends AbstractCell<Integer> {
 		
 		@SafeHtmlTemplates.Template("<span class=\"ui-icon ui-icon-{0}\" title=\"{1}\"></span>")
 		SafeHtml jqueryIcon(String iconDescriptor, String description);
+		
+		@SafeHtmlTemplates.Template("<img src=\"{0}\" />")
+		SafeHtml resourceIcon(String iconUrl);
+		
+		@SafeHtmlTemplates.Template("<img src=\"{0}\" title=\"{1}\" />")
+		SafeHtml resourceIcon(String iconUrl, String description);
 	}
 	
 	public IconCell(String[] iconDescriptors) {
@@ -41,8 +47,15 @@ public class IconCell extends AbstractCell<Integer> {
 	}
 	
 	public IconCell(ImageResource[] icons) {
-		// TODO: implement for image resource
+		this(icons, null);
+	}
+	
+	public IconCell(ImageResource[] icons, String[] descriptions) {
 		_icons = icons;
+		_descriptions = descriptions;
+		if (templates == null) {
+			GWT.create(Templates.class);
+		}
 	}
 	
 	@Override
@@ -73,14 +86,23 @@ public class IconCell extends AbstractCell<Integer> {
 			value = _iconDescriptors.length - 1;
 		}
 		
-		if (value >= _descriptions.length) {
+		if (_descriptions == null || value >= _descriptions.length) {
 			return templates.jqueryIcon(_iconDescriptors[value]);
 		}
 		return templates.jqueryIcon(_iconDescriptors[value], _descriptions[value]);
 	}
 
 	private SafeHtml renderImageResources(Integer value) {
-		return null;
+		if (value >= _icons.length) {
+			Log.warn("Value to represent is larger than available icon numbers");
+			value = _icons.length -1;
+		}
+		
+		if (_descriptions == null || value >= _descriptions.length) {
+			return templates.resourceIcon(_icons[value].getURL());
+		}
+
+		return templates.resourceIcon(_icons[value].getURL(), _descriptions[value]);
 	}
 	
 }

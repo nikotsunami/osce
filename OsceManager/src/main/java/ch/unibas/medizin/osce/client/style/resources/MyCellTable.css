@@ -122,19 +122,19 @@
 }
 
 .cellTableEvenYesRow {
-	background: #F2FFD6;
+  background: #ffffff;
 }
 
 .cellTableOddYesRow {
-	background: #E6F7C1;
+  background: #eee;
 }
 
 .cellTableEvenNoRow {
-	background: #FFE1DB;
+	background: #FFF2D1;
 }
 
 .cellTableOddNoRow {
-	background: #FCD4CC;
+	background: #F5DFA6;
 }
 
 .cellTableKeyboardSelectedRow {

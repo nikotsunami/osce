@@ -15,4 +15,7 @@ public interface AnamnesisChecksValueRequestNonRoo extends RequestContext {
 	public abstract Request<Void> fillAnamnesisChecksValues(Long anamnesisFormId);
 	public abstract Request<Long> countAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId);
     public abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
+    
+    public abstract Request<List<AnamnesisChecksValueProxy>> findAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
+    public abstract Request<List<AnamnesisChecksValueProxy>> findUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
 }
