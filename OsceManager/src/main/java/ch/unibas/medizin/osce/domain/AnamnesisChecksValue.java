@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -49,6 +48,13 @@ public class AnamnesisChecksValue {
 //    }
     
     private static Logger log = Logger.getLogger(AnamnesisChecksValue.class);
+    
+    public void  persistNonRoo(){
+		if (this.entityManager == null) this.entityManager = entityManager();
+		this.entityManager.persist(this);
+		this.flush();
+		this.entityManager.refresh(this);
+	}
     
     /**
      * Fills the AnamnesisChecksValue table for the given AnamnesisForm with data (that means,

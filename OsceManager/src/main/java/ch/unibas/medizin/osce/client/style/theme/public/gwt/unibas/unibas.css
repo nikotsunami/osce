@@ -734,6 +734,11 @@ a:hover, .gwt-Anchor:hover {
 	
 }
 
+.gwt-RadioButton label {
+	bottom: 3px;
+	position: relative;
+}
+
 .gwt-RadioButton-disabled {
 	color: #888;
 }

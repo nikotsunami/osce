@@ -1,15 +1,11 @@
 package ch.unibas.medizin.osce.client.style.widgets.cell;
 
-import java.util.HashMap;
 import java.util.List;
-
-import org.springframework.web.servlet.tags.form.InputTag;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractInputCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
-import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
@@ -20,9 +16,8 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
-public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answer, String> {
+public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answer, GenericAnswerCell.Answer> {
 	private static Templates templates = GWT.create(Templates.class);
-	private HashMap<Object, Answer> _answersByRowKeys = new HashMap<Object, Answer>();
 	private final Alignment _alignment;
 	
 	public enum ElementType {
@@ -33,10 +28,7 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		VERTICAL, HORIZONTAL
 	}
 	
-	public static interface Templates extends SafeHtmlTemplates {
-		//TODO : required?
-		
-		@SafeHtmlTemplates.Template("<select class=\"gwt-ListBox\" name=\"{0}\">")
+	public static interface Templates extends SafeHtmlTemplates {@SafeHtmlTemplates.Template("<select class=\"gwt-ListBox\" name=\"{0}\">")
 		SafeHtml selectTemplate(String key);
 		@SafeHtmlTemplates.Template("<option value=\"{0}\">{0}</option>")
 		SafeHtml optionTemplate(String value);
@@ -84,57 +76,80 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 	
 	@Override
 	public void onBrowserEvent(Cell.Context context, Element parent, Answer value, NativeEvent event, ValueUpdater<Answer> valueUpdater) {
+		if (value == null) {
+			return;
+		}
 		super.onBrowserEvent(context, parent, value, event, valueUpdater);
-		String eventType = event.getType();
-		if ("change".equals(eventType)) {
+		if ("change".equals(event.getType())) {
 			Object key = context.getKey();
 			Answer newValue;
 			switch(value.type) {
 			case CHECKBOX:
-				newValue = checkBoxInputEvent(context, parent, value);
+				newValue = checkBoxInputEvent(parent, value);
 				break;
 			case RADIO:
-				newValue = radioInputEvent(context, parent, value);
+				newValue = radioInputEvent(parent, value);
 				break;
 			case SELECT:
-				newValue = selectInputEvent(context, parent, value);
+				newValue = selectInputEvent(parent, value);
 				break;
 			default:
-				newValue = textInputEvent(context, parent, value);
+				newValue = textInputEvent(parent, value);
+			}
+			setViewData(key, newValue);
+			finishEditing(parent, newValue, key, valueUpdater);
+			if (valueUpdater != null) {
+				valueUpdater.update(newValue);
 			}
 		}
 	}
-
-	private Answer selectInputEvent(Cell.Context context, Element parent, Answer value) {
-		// TODO Auto-generated method stub
-		Log.info("selectInputEvent() -- " + parent.getInnerHTML());
-		SelectElement select = parent.getFirstChild().cast();
-		return null;
+	
+	@Override
+	public void onEnterKeyDown(Cell.Context context, Element parent, Answer value, NativeEvent event, ValueUpdater<Answer> valueUpdater) {
+		// TODO implement???
 	}
 
-	private Answer radioInputEvent(Cell.Context context, Element parent, Answer value) {
-		// TODO Auto-generated method stub
-		Log.info("radioInputEvent()" + parent.getInnerHTML());
+	private Answer selectInputEvent(Element parent, Answer value) {
+		Log.info("selectInputEvent() -- ");
+		SelectElement select = parent.getFirstChild().cast();
+		value.selectedAnswers.clear();
+		int index = select.getSelectedIndex();
+		String newSelectedAnswer = value.possibleAnswers.get(index);
+		value.selectedAnswers.add(newSelectedAnswer);
+		return value;
+	}
+
+	private Answer radioInputEvent(Element parent, Answer value) {
+		Log.info("radioInputEvent()");
 		for (int i=0; i < parent.getChildCount(); i++) {
 			InputElement input = parent.getChild(i).getFirstChild().cast();
 			if (input.isChecked()) {
-				// TODO mark as selected!
+				value.selectedAnswers.clear();
+				value.selectedAnswers.add(value.possibleAnswers.get(i));
 				break;
 			}
 		}
-		return null;
+		return value;
 	}
 
-	private Answer checkBoxInputEvent(Cell.Context context, Element parent, Answer value) {
-		// TODO Auto-generated method stub
-		Log.info("checkBoxInputEvent()" + parent.getInnerHTML());
-		return null;
+	private Answer checkBoxInputEvent(Element parent, Answer value) {
+		Log.info("checkBoxInputEvent()");
+		value.selectedAnswers.clear();
+		for (int i=0; i < parent.getChildCount(); i++) {
+			InputElement input = parent.getChild(i).getFirstChild().cast();
+			if (input.isChecked()) {
+				value.selectedAnswers.add(value.possibleAnswers.get(i));
+			}
+		}
+		return value;
 	}
 
-	private Answer textInputEvent(Cell.Context context, Element parent, Answer value) {
-		// TODO Auto-generated method stub
-		Log.info("textInputEvent()" + parent.getInnerHTML());
-		return null;
+	private Answer textInputEvent(Element parent, Answer value) {
+		Log.info("textInputEvent()");
+		value.selectedAnswers.clear();
+		InputElement input = parent.getFirstChild().cast();
+		value.selectedAnswers.add(input.getValue());
+		return value;
 	}
 
 	@Override
@@ -142,8 +157,6 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		if (answer == null) {
 			return;
 		}
-		
-		_answersByRowKeys.put(context.getKey(), answer);
 		
 		if (answer.type == ElementType.TEXT) {
 			// it's an open question (written text!)

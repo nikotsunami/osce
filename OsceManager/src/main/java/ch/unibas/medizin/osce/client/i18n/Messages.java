@@ -165,4 +165,6 @@ public class Messages {
 			public static final String ANSWER_GIVEN = "Wurde beantwortet";
 			public static final String ANSWER_PENDING = "Unbeantwortet";
 			public static final String COMMENT = "Kommentar";
+			public static final String SHOW_ANSWERED = "Zeige beantwortete Anamnesewerte";
+			public static final String SHOW_UNANSWERED = "Zeige unbeantwortete Anamnesewerte";
 }
