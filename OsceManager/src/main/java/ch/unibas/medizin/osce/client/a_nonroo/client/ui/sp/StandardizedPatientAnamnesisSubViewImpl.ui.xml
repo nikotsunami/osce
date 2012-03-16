@@ -7,7 +7,7 @@
 		
 	<g:HTMLPanel>
 		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
-		<div class="{style.controls} {style.controlsleft}">
+		<div class="{style.controls}">
 			<g:SuggestBox ui:field="anamnesisQuestionSuggestBox" />
 			<g:CheckBox ui:field="showAnswered"></g:CheckBox>
 			<g:CheckBox ui:field="showUnanswered"></g:CheckBox>

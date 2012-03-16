@@ -29,7 +29,7 @@ public class SpokenLanguage {
     
     public static Long countLanguagesByName(String name) {
     	EntityManager em = entityManager();
-    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM SpokenLanguage o WHERE o.languageName LIKE :name", Long.class);
+    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM SpokenLanguage o WHERE o.languageName LIKE :name ORDER BY o.languageName", Long.class);
     	q.setParameter("name", "%" + name + "%");
     	
     	return q.getSingleResult();
@@ -38,7 +38,7 @@ public class SpokenLanguage {
     public static List<SpokenLanguage> findLanguagesByName(String name, int firstResult, int maxResults) {
         if (name == null) throw new IllegalArgumentException("The name argument is required");
         EntityManager em = entityManager();
-        TypedQuery<SpokenLanguage> q = em.createQuery("SELECT o FROM SpokenLanguage AS o WHERE o.languageName LIKE :name", SpokenLanguage.class);
+        TypedQuery<SpokenLanguage> q = em.createQuery("SELECT o FROM SpokenLanguage AS o WHERE o.languageName LIKE :name ORDER BY o.languageName", SpokenLanguage.class);
         q.setParameter("name", "%" + name + "%");
         q.setFirstResult(firstResult);
         q.setMaxResults(maxResults);
@@ -49,7 +49,7 @@ public class SpokenLanguage {
     // nur zum testen...
     public static List<SpokenLanguage> findAllLanguages() {
     	EntityManager em = entityManager();
-    	TypedQuery<SpokenLanguage> q = em.createQuery("SELECT o FROM SpokenLanguage o", SpokenLanguage.class);
+    	TypedQuery<SpokenLanguage> q = em.createQuery("SELECT o FROM SpokenLanguage o ORDER BY o.languageName", SpokenLanguage.class);
     	return q.getResultList();
     }
     

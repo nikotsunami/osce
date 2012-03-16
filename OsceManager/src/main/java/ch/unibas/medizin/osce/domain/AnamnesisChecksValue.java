@@ -98,16 +98,29 @@ public class AnamnesisChecksValue {
 		}
     }
     
-    /**
-     * Returns the count of all the entries in AnamnesisChecksValues, that exist for a given anamnesisForm id.
-     * @param anamnesisFormId the id of the relevant AnamnesisForm
-     * @param firstResult number of the first result
-     * @param maxResults number of maximum results
-     * @return the number of all the entries in AnamnesisChecksValues for a given anamnesisForm
-     */
-    public static Long countAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId) {
+    public static Long countAllAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId) {
     	EntityManager em = entityManager();
     	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm", Long.class);
+    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	return q.getSingleResult();
+    }
+    
+    public static Long countAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId) {
+    	EntityManager em = entityManager();
+    	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm AND " +
+    			"(anamnesisChecksValue <> NULL OR truth <> NULL)";
+    	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	return q.getSingleResult();
+    }
+    
+    public static Long countUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId) {
+    	EntityManager em = entityManager();
+    	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm AND " +
+				"(anamnesisChecksValue = NULL AND truth = NULL)";
+    	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
     	return q.getSingleResult();
     }
