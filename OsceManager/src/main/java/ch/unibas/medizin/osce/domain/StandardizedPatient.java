@@ -1,8 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -22,21 +20,20 @@ import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.util.StringUtils;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.Comparison;
-import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearhField;
+
+import com.allen_sauer.gwt.log.client.Log;
 
 
 @RooJavaBean
@@ -142,203 +139,184 @@ public class StandardizedPatient {
     
     private static class PatientSearch {
     	
-    	private static StringBuilder wholeSearchString;
-    	private static StringBuilder endSearchString;
+    	private StringBuilder wholeSearchString;
+    	private StringBuilder endSearchString;
+    	private StringBuilder sorting;
     	
-    	//semafors
-    	private static boolean firstTime=true;
-    	private static boolean firstComment=true;
-		//TODO: ***Changes david 
-    	private static boolean firstAnamnesisForm = true;
+    	private boolean firstTime=true;
+    	private boolean firstComment=true;
     	
     	//requesttype
-    	private static String countRequest = "COUNT(StandardizedPatient)";
-      	private static String normalRequest = "StandardizedPatient";
+    	private static String countRequest = "COUNT(stdPat)";
+      	private static String normalRequest = "stdPat";
       	private static final String SEARCH_TYPE = "###REQUESTTYPE###";
       	
       	//basic strings
     	private static String queryBase = "SELECT "+ SEARCH_TYPE + " FROM StandardizedPatient stdPat ";
-    	private static String whereKeyword = " where ";
-    	private static String sorting;
-    	
-    	//scar
-    	//PS applicable for scar search only: double left join 
-    	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm aForm LEFT JOIN anamnesisForm.scars scars ";
+    	private static String whereKeyword = " WHERE ";
+
+    	//static select clause
+    	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm AS aForm ";
+    	private static String joinScars = " LEFT JOIN aForm.scars AS scars ";
+    	private static String joinSpokenLanguage = " LEFT JOIN stdPat.langskills AS langSkills LEFT JOIN langSkills.spokenlanguage AS language ";
+    	private static String joinAnamnesisValue = " LEFT JOIN aForm.anamnesischecksvalues AS aValues LEFT JOIN  aValues.anamnesischeck AS aCheck ";
     	
     	
     	/**
     	 * Search form reset
-    	 * @param requesttype count of records request if true; item search otherwise.
+    	 * @param requesttype count of records request if true; patient object search otherwise.
     	 */
     	public PatientSearch(boolean requesttype){
     		
-    		firstTime = true;
-    		firstComment = true;
-    		//endSearchString.setLength(0);
-    		//wholeSearchString.setLength(0);
 			wholeSearchString = new StringBuilder();
 			endSearchString = new StringBuilder();
-    		
     		if(requesttype)
-    			setCountrequest();
+    			wholeSearchString.append(queryBase.replace(SEARCH_TYPE, countRequest));
     		else
-    			setNomalRequest();
+    			wholeSearchString.append(queryBase.replace(SEARCH_TYPE, normalRequest));
     	}
     	
-    	//basics
-    	private void setCountrequest(){
-    		if(firstTime){
-    			wholeSearchString = new StringBuilder();
-    			endSearchString = new StringBuilder();
-    			wholeSearchString.append(queryBase.replace(SEARCH_TYPE, countRequest));
-    			// wholeSearchString.append(queryBase);
-    			firstTime=false;
-    		}
-    		
-    		
-    	}
-    	private void setNomalRequest(){
-       		if(firstTime){
-       			wholeSearchString = new StringBuilder();
-       			endSearchString = new StringBuilder();
-    			wholeSearchString.append(queryBase.replace(SEARCH_TYPE, normalRequest));
-       			//wholeSearchString.append(queryBase);
-    			firstTime=false;
-       		}
-    	}
-
     	/**
     	 * @return request string, the final combination of select , where and order by clause
     	 */
     	private String getSQLString(){
     		return wholeSearchString.append((endSearchString.length() > 0 ? whereKeyword + endSearchString : " ") + sorting ).toString();
     	}
-    	
+    	/**
+    	 * Order by statement appending
+    	 * @param sortColumn column to sort by
+    	 * @param sort sort direction: ASC / DESC
+    	 */
     	private void makeSortig(String sortColumn, Sorting sort){
-    		sorting = " ORDER BY " + sortColumn + " " + sort;
+    		sorting  = new StringBuilder();
+    		sorting.append(" ORDER BY ");
+    		sorting.append(sortColumn);
+    		sorting.append(" ");
+    		sorting.append(sort);
     	}
     	
-    	private void endStringAppend(String bindType, String string){
-    		if (endSearchString.length() == 0)
-    				endSearchString.append(" " + string);
-    		else
-    			endSearchString.append(" " + bindType + string);
-    	}
-    	
-	//	public void finalyzeBaseSQL() {
-	//		wholeSearchString.append(whereKeyword).append(endSearchString);
-			
-	//	}
-    	
-
     	//basic data
     	/**
     	 * Search for scalable criteria
-    	 * @param weight - numeric vailue
-    	 * @param bindType co
-    	 * @param comparition
+    	 * @param value of user's request
+    	 * @param bindType connection of clause in statement
+    	 * @param comparition sign of clause (== != and so on)
     	 */
-    	void searchWeight(Integer weight, String bindType,  String comparition){
-    		endStringAppend(bindType , " stdPat.weight " + comparition + weight );   		
+    	void search(PossibleFields field, String value, String bindType,  String comparition){
+    		Log.info("psremoveme: ------------- SEARCH ["+field+"] value ["+value+"]");
+    		//form header of request
+    		if ((field == PossibleFields.scar || field == PossibleFields.anamnesis) && wholeSearchString.indexOf(joinAnamnesisForm) == -1){
+				wholeSearchString.append(joinAnamnesisForm);
+    		}
+    		if (field == PossibleFields.scar && wholeSearchString.indexOf(joinScars) == -1){
+				wholeSearchString.append(joinScars);
+    		}
+    		if (field == PossibleFields.anamnesis && wholeSearchString.indexOf(joinAnamnesisValue) == -1){
+				wholeSearchString.append(joinAnamnesisValue);
+    		}
+    		if (field == PossibleFields.language && wholeSearchString.indexOf(joinSpokenLanguage) == -1){
+				wholeSearchString.append(joinSpokenLanguage);
+    		}
+    		if(firstTime){
+    			firstTime = false;
+    		} else {
+    			endSearchString.append(" "+bindType);
+    		}
+    		if(field == PossibleFields.anamnesis ){
+    			parseAmnesisForm(comparition, value);
+    		} else if(field == PossibleFields.language ){
+    			parseLanguage(comparition, value);
+    		} else {
+	    		//psfixme: screening (quoting) of value is mandatory to avoid code injection hack
+    			endSearchString.append(field.getClause() + comparition + value+" " );
+    		}
     	}
     	
-    	void searchBMI(Integer bmi, String bindType,  String comparition){
-    		endStringAppend(bindType ,  " stdPat.weight / (stdPat.height/100*stdPat.height/100) " + comparition + bmi );   		
-    	}
- //   	private searchScar(Long scarId, String bindType,  String comparition){
-  //  	}
+    	/**
+    	 * Language incoming value needs to be parsed
+    	 * @param comparition comparing sign
+    	 * @param value value "Deutsch: A1"
+    	 */
+    	private void parseLanguage(String comparition, String value) {
+    		//Deutsch
+			String languageText = value.substring(0, value.indexOf(":")).trim();
+			Log.info("psremoveme languageText "+languageText);
+			//A1
+			String priorityText = value.substring(value.indexOf(":")+1, value.length()).trim();
+			Log.info("psremoveme priorityText "+priorityText);
+			endSearchString.append(" ( language.languageName = " );
+			endSearchString.append(quote(languageText));
+			endSearchString.append(" AND langSkills.skill = ");
+			try{
+				endSearchString.append(quote(LangSkillLevel.valueOf(priorityText).getNumericLevel()) );
+			}
+			catch (Exception e) {
+				throw new SecurityException ("Prohibited constant value for LangSkillLevel : ["+priorityText+"]. Should it be included in the enum values? ");
+			}
+			endSearchString.append(" ) ");
+			
+		}
+
+		/**
+    	 * Amnesis form clause needs to be parsed
+    	 * @param comparition
+    	 * @param value includes question and answer:
+    	 * Leiden Sie unter Diabetes?: Nein
+    	 */
+    	private void parseAmnesisForm(String comparition, String value) {
+			String questionText = value.substring(0, value.indexOf(":")).trim();
+			Log.info("psremoveme questionText "+questionText);
+			String answerText = value.substring(value.indexOf(":")+1, value.length()).trim();
+			Log.info("psremoveme answerText "+answerText);
+			//accuracy
+			endSearchString.append(" ( aCheck.text = "+quote(questionText));
+			//psfixme : answer inclusion (YES/NO should be binded)
+			endSearchString.append(" AND aValues.anamnesischeck= "+quote(answerText));
+			endSearchString.append(" ) ");
+		}
     	
-    	void searchHeight(Integer height, String bindType,  String comparition){
-    		endStringAppend(bindType , " stdPat.height " + comparition + height );   		
+    	/**
+    	 * Sanitizing code injection hack
+    	 * @param toQuote
+    	 * @return
+    	 */
+    	private String quote(String toQuote){
+    		return "'"+StringUtils.replace(toQuote, "'", "''")+"'";
     	}
 
-    	/**
-    	 * New build of context search approach
+		/**
+    	 * Context search : checkbox values
     	 * @param searchWord
     	 * @param searchThrough
     	 */
     	private void makeSearchTextFileds 
     	(String searchWord, List<String> searchThrough){
+    		StringBuilder localSimpleSearchClause = new StringBuilder();
     		Iterator<String> iter = searchThrough.iterator();
         	while (iter.hasNext()) {
     			String fieldname = (String) iter.next();
-    			log.debug("PS: field inside iterator simple search ["+fieldname+"]");
     			StandardizedPatientSearhField field = StandardizedPatientSearhField.valueOf(fieldname);
     			if(field == null)
-    				throw new SecurityException("Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
-  	    		if (firstComment){
-   	    			firstComment=false;
+    				throw new SecurityException("SP: Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
+    			//search string OR statement group
+  	    		if (firstTime){
+   	    			firstTime=false;
+   	    			localSimpleSearchClause.append(" ( ");
    	    		}
   	    		else {
-  	    			endSearchString.append(" OR ");
+  	    			localSimpleSearchClause.append(" OR ");
   	    		}
-  	    		endSearchString.append(field.getQueryPart());
+  	    		localSimpleSearchClause.append(field.getQueryPart());
     			
     		}
+        	if(localSimpleSearchClause.length() > 0){
+        		localSimpleSearchClause.append(" ) ");
+        	}
+        	endSearchString.append(localSimpleSearchClause);
     	}
-
-
-    	/**
-    	 * psfixme: not done yet
-    	 * @param em
-    	 * @return
-    	 */
-		private TypedQuery<Long> makeQuery(EntityManager em) {
-			
-			TypedQuery<Long> q = em.createQuery(getSQLString(), Long.class);
-			Iterator<Scar> scarIter = scars.iterator();
-			int counter = 0;
-			while (scarIter.hasNext()) {
-				Scar scar = (Scar) scarIter.next();
-				q.setParameter(":scar"+ counter++, scar);
-			}
-			return q;
-			
-		}
-    	
-    	// scar search
-		//TODO: ***Changes david 
-    	
-    	private int scarCounter = 0;
-    	private List<Scar> scars = new ArrayList<Scar>();
-
-		private void searchScar(long scarID, String bindType,  String comparitionSign) {
-    		if (firstAnamnesisForm){
-    			wholeSearchString.append(joinAnamnesisForm);
-    			firstAnamnesisForm=false;
-    			
-    		}
-    		String compareClause = "";
-//------------------- begin - uncomment after testing    		
-//    		if (comparitionSign.equals(" = ")){
-    			compareClause = " GROUP BY aForm HAVING count (scars) > 0 ";
-//    		} else if (comparitionSign.equals(" != ")){
-//    			//no scars
-//    			compareClause = " GROUP BY aForm HAVING count (scars) == 0 ";
-//    		} else
-//    			throw new SecurityException("Comparing sign: ["+comparitionSign+"] is not supported");
-    			
-//----end - uncomment after testing    			
-  //the first search with scar/no scar option without 'value' specified
-  //if we know scarId, "scars.id = :scarId"  		
-//    		Scar scar = Scar.findScar(scarID);
-    		// ":scar MEMBER OF stdPat.scars"
-//    		endStringAppend( bindType, " :scar" + scarCounter++  + comparitionSign + " stdPat.scars ");
-    		endStringAppend( "", compareClause);
-//    		scars.add(scar);
-
-    		
-    		// ":scar.id MEMBER OF stdPat.scars.id"
-    		//endStringAppend( " OR ", searchComment.replace(COMMENT_TYPE, searchString));
-			
-		}
-
-
     }
     
     
-    
-
     /**
      * Counting of patients. Advanced Search
      * @param sortColumn sorting option
@@ -348,182 +326,41 @@ public class StandardizedPatient {
      * @param searchCriteria criteria 
      * @return
      */
-    public static Long countPatientsByAdvancedSearchAndSort(
+//    public static Long countPatientsByAdvancedSearchAndSort(
+    public static List<StandardizedPatient> findPatientsByAdvancedSearchAndSort(
     		String sortColumn,
     		Sorting order,
     		String searchWord, 
     		List<String> searchThrough,
     		List<AdvancedSearchCriteria> searchCriteria
-    		/*List<String> fields,
-    		List<String> bindType,
-    		List<String> comparations,
-    		List<String> values*/) {
-    	
+    		) {
     	
     	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
-    	log.debug("ps: countPatientsByAdvancedSearchAndSort");
-    	log.debug("parameters received: sortColumn "+sortColumn);
-    	log.debug("parameters received: order "+order);
-    	log.debug("parameters received: searchWord "+searchWord);
-    	log.debug("parameters received: searchThrough "+searchThrough);
-    	log.debug("parameters received: searchCriteria "+searchCriteria);
-    	
     	EntityManager em = entityManager();
-    	PatientSearch simpatSearch = new PatientSearch(true);
-    	//add sorting
-    	log.debug("add sorting");
+    	PatientSearch simpatSearch = new PatientSearch(false);
     	simpatSearch.makeSortig(sortColumn, order);
+    	//context (simple) search
     	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
     	
     	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
     	while (iter.hasNext()) {
-			//Scar search policy has different approach 
     		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
-			String comparitionSign = "";
-    		if (criterium.getComparation() == Comparison2.EQUALS){
-    			comparitionSign = " = ";
-    		}
-    		else if (criterium.getComparation() == Comparison2.LESS){
-    			comparitionSign = " < ";
-    		}
-    		else if (criterium.getComparation() == Comparison2.MORE){
-    			comparitionSign = " > ";
-    		}
-       		else if (criterium.getComparation() == Comparison2.NOTEQUALS){
-    			comparitionSign = " != ";
-    		}
+    		simpatSearch.search(criterium.getField(), criterium.getValue(), criterium.getBindType().toString(), criterium.getComparation().getStringValue());
 			
-			log.info("PS criterium: value is["+criterium.getValue()+"]");
-			
-			if (criterium.getField() == PossibleFields.height ){
-				simpatSearch.searchWeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
-			}
-			else if (criterium.getField() == PossibleFields.weight){
-				simpatSearch.searchHeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
-			}
-			else if (criterium.getField() == PossibleFields.bmi){
-				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
-			}
-			if (criterium.getField() == PossibleFields.scar){
-				simpatSearch.searchScar(criterium.getId(), criterium.getBindType().toString(), comparitionSign);
-			}
 		}
-    	log.debug("done");
-    	
-    	//simpatSearch.finalyzeBaseSQL();
-    	
-    	log.info("PS: -----SearchString: " + simpatSearch.getSQLString());
-    	
-    	
-    	TypedQuery<Long> q = em.createQuery(simpatSearch.getSQLString(), Long.class);
-    	q.setParameter("q", "%" + searchWord + "%");
-    	
-//    	return simpatSearch.makeQuery(em).getSingleResult();
-    	return q.getSingleResult();
+    	String queryString = simpatSearch.getSQLString();
+    	Log.info("psremoveme: [" + queryString+"]");
+    	TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
+    	//this parameter is not required if we have no q value in the request
+    	if(queryString.indexOf(":q") != -1){
+    		q.setParameter("q", "%" + searchWord + "%");
+        	Log.info("QUERY Q:[" + searchWord+"]");
+    	}
+    	List<StandardizedPatient> result  = q.getResultList(); 
+    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+    	return result;
     }
     	
-
-    // ###OLD Code programmen by siebers, dont use
-    /*
-     * Get hibernate search criteria
-     */
-    private static Criteria searchCriteria(           
-            String q, 
-            List<String> searchThrough,
-            List<String> fields,
-            List<Integer> comparations,
-            List<String> values) {
-    	
-     
-    	
-    	log.info("searchCriteria");
-    	
-    	
-    	// (1) Empty criteria
-    	
-        //EntityManager em = entityManager();
-        
-        //HibernateEntityManager em = (HibernateEntityManager)entityManager();
-        
-        Session se = (Session) entityManager().unwrap(Session.class);
-        
-        //Session se = em.getSession();
-                  
-        Criteria crit = se.createCriteria(StandardizedPatient.class);
-        
-        // (2) Text search
-        
-        HashMap<String, String> map = new HashMap<String,String>();
-        
-        map.put("name", "name");
-        // put another fields
-        
-        for (String col : searchThrough) {
-
-        	if(map.get(col)!=null) {
-        	
-        		crit.add(Restrictions.like(map.get(col), q+"%"));
-        		log.info("\""+map.get(col)+"\" like \""+q+"%\"");
-        		
-        	}
-        	
-        }
-        
-        // (3) Advanced search
-        for(int i = 0; i<fields.size(); i++) {
-        	
-        	String field = fields.get(i);
-    		Object value = values.get(i);
-        	log.info(field+", "+comparations.get(i)+", "+values.get(i));
-        	
-        	if(field.equals("scar")) {
-        		//psfixme: scar search v is dangerous - parsing exception 
-        		/*Long scarId = Long.parseLong((String)value);
-        		 //first find Scar by ID
-                Scar scar = Scar.findScar(scarId);
-                Criteria scarCriteria = se.createCriteria(Scar.class);
-                scarCriteria.add(associationPath, "anamForm", joinType, withClause).;
-                "LEFT JOIN stdPat.anamnesisForm AS  " ... Where ... " :scar1 " +
-                		"MEMBER OF anamForm.scars" / " :scar1 NOT MEMBER OF anamForm.scars"
-                //at the end you must set the parameter
-                q.setParameter("scar1" , scar);
-                //thats all for scars, naturaly you have to check if possible fields is scar       */ 		
-        	
-        	} else { // ordinary table field
-        		
-        		
-        		
-        		// Temporary. Use an mapping type instead of this
-        		if(field.equals("weight") || field.equals("height")) {
-        			value = Integer.parseInt((String)value);
-        		} else if(field.equals("gender")) {
-        			if(value.equals("1")) value = Gender.man;
-        			else value = Gender.woman;
-        		} else if(field.equals("birthday")) {
-        			//psfixme
-        			value = Date.parse((String)value);
-        		}
-        		    		
-        		if(comparations.get(i) == Comparison.EQUALS) {
-
-        			crit.add(Restrictions.eq(field, value));
-        		
-        		} else if(comparations.get(i) == Comparison.MORE) {
-        		
-        			crit.add(Restrictions.ge(field, value));
-        			
-        		} else if(comparations.get(i) == Comparison.LESS) {
-        			
-        			crit.add(Restrictions.le(field, value));
-        			
-        		}
-        		
-        	}
-        	
-        }
-        
-    	return crit;
-    }
     
     // ###OLD Code programmen by siebers, dont use
     
@@ -546,7 +383,7 @@ public class StandardizedPatient {
     	    	
     	// (1) Criteria
     	
-    	Criteria crit = searchCriteria(q, searchThrough, fields, comparisons, values);
+    	Criteria crit = null ;//searchCriteria(q, searchThrough, fields, comparisons, values);
     	log.info("findPatientsBySearchAndSort");
         // (2) Paging
         
@@ -568,11 +405,9 @@ public class StandardizedPatient {
     }
     
     
-    // ###OLD Code programmen by siebers, dont use
-    /*
+    /**
      * Get count of results by criteria
-     * 
-     * 
+     * @deprecated
      */
     public static Long countPatientsBySearchAndSort(String q, 
     		List<String> searchThrough,
@@ -580,12 +415,7 @@ public class StandardizedPatient {
     		List<Integer> comparations,
     		List<String> values) {
     	
-    	log.info("countPatientsBySearchAndSort");
-    	Criteria crit = searchCriteria(q, searchThrough, fields, comparations, values);
-    	
-    	crit.setProjection(Projections.rowCount());
-    	
-    	return (Long) crit.uniqueResult();
+    	return new Long(0);
     	
     }
 

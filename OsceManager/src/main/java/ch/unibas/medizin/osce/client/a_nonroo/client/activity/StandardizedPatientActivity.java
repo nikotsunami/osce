@@ -204,20 +204,54 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// Comparison2.LESS, Comparison2.MORE);
 		// List<String> bindType = Arrays.asList(BindType.AND, BindType.AND,
 		// BindType.AND);
+		//no need for testing now
 		List<String> searchThrough = Arrays.asList("name", "preName", "comment", "BIC", "IBAN", "bankName");
+		q = "y"; //testing
 
+//		searchCriteria.clear();//double click
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		//
-		// AdvancedSearchCriteriaProxy criteria =
-		// requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		// requestAdvSeaCritStd.edit(criteria);
-		// criteria.setBindType(BindType.AND);
-		// criteria.setComparation(Comparison2.EQUALS);
-		// criteria.setField(PossibleFields.weight);
-		// criteria.setValue("80");
-		//
-		// searchCriteria.add(criteria);
-		//
+		 AdvancedSearchCriteriaProxy criteria =
+		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		 requestAdvSeaCritStd.edit(criteria);
+		 criteria.setBindType(BindType.AND);
+		 criteria.setComparation(Comparison2.EQUALS);
+		 criteria.setField(PossibleFields.anamnesis);
+		 criteria.setValue("Nehmen Sie zurzeit regelmässig Medikamente ein?: 3"); //psfixme - Nein
+		
+		 searchCriteria.add(criteria);
+		 
+		 AdvancedSearchCriteriaProxy criteria1 =
+		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		 requestAdvSeaCritStd.edit(criteria1);
+		 criteria1.setBindType(BindType.AND);
+		 criteria1.setComparation(Comparison2.EQUALS);
+		 criteria1.setField(PossibleFields.scar);
+		 criteria1.setValue("9");
+		
+		 searchCriteria.add(criteria1);
+
+		 AdvancedSearchCriteriaProxy criteria2 =
+		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		 requestAdvSeaCritStd.edit(criteria2);
+		 criteria2.setBindType(BindType.AND);
+		 criteria2.setComparation(Comparison2.EQUALS);
+		 criteria2.setField(PossibleFields.language);
+		 //"Deutsch: A1"
+		 criteria2.setValue("Deutsch: nativeSpeaker");		
+		 searchCriteria.add(criteria2);
+
+//		 AdvancedSearchCriteriaProxy criteria =
+//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//		 requestAdvSeaCritStd.edit(criteria);
+//		 criteria.setBindType(BindType.AND);
+//		 criteria.setComparation(Comparison2.EQUALS);
+//		 criteria.setField(PossibleFields.weight);
+//		 criteria.setValue("80");
+//		
+//		 searchCriteria.add(criteria);
+
+		 //
 		// criteriaTable.setRowData(searchCriteria);
 		/*
 		 * searchCriteria.add(new AdvancesSearchCriteriumOld
@@ -227,14 +261,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 * searchCriteria.add(new AdvancesSearchCriteriumOld
 		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
 		 */
+		 //psfixme - added - to remove
+		criteriaTable.setRowData(searchCriteria);
 
-		requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
-				searchThrough, searchCriteria /*fields, bindType, comparations, values */).fire(new Receiver<Long>() {
+		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("stdPat.name", Sorting.ASC, q, 
+				searchThrough, searchCriteria /*fields, bindType, comparations, values */).fire(new Receiver<List<StandardizedPatientProxy>>() {
 			public void onFailure(ServerFailure error) {
-				Log.error(error.getMessage());
+				Log.error("psremoveme ERROR ON FAILURE "+error.getMessage());
 				// onStop();
 			}
-
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
@@ -246,8 +281,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}
 
 			@Override
-			public void onSuccess(Long response) {
-				// table.setRowData(range.getStart(), values);
+			public void onSuccess(List<StandardizedPatientProxy> response) {
+				Log.info("psremoveme - SUCCESS");
+				table.setRowData(range.getStart(), response);
 
 			}
 		});
@@ -421,6 +457,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		criteria.setComparation(comparition);
 		criteria.setField(possibleFields);
 		criteria.setValue(string);
+		
+//		Log.info("psremoveme search SPA criteria : [" + string + "] possibleFields: " + possibleFields+" comparition "+comparition);
 		requestAdvSeaCritStd.fire();
 		searchCriteria.add(criteria);
 
