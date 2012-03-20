@@ -12,16 +12,14 @@ public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 //		public void addAnamnesisQuestionClicked(AnamnesisCheckProxy questionProxy);
 		// TODO updateMethode (wenn Antwort geändert wird...)
 //		public void deleteAnamnesisQuestionClicked(AnamnesisChecksValueProxy anamnesisChecksValueProxy);
+		public void saveAnamnesisChecksValueProxyChanges(AnamnesisChecksValueProxy proxy, String comment);
 		public void saveAnamnesisChecksValueProxyChanges(AnamnesisChecksValueProxy proxy, String anamnesisChecksValue, Boolean truth);
-		public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy);
-		public void searchAnamnesisQuestion(String needle);
+		public void performAnamnesisSearch(String needle);
 	}
 	
 	public CellTable<AnamnesisChecksValueProxy> getTable();
 	public String[] getPaths();
 	public void setDelegate(Delegate delegate);
-	public SuggestBox getAnamnesisQuestionSuggestBox();
-
 	
 	public boolean areUnansweredQuestionsShown();
 	public boolean areAnsweredQuestionsShown();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,10 +32,13 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -43,11 +47,13 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandardizedPatientAnamnesisSubViewImpl extends Composite implements StandardizedPatientAnamnesisSubView  {
@@ -59,6 +65,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	UiBinder<Widget, StandardizedPatientAnamnesisSubViewImpl> {
 	}
 	
+	private String searchString = "";
 	private Set<String> paths = new HashSet<String>();
 	private Delegate delegate;
 	private List<AbstractEditableCell<?, ?>> editableCells;
@@ -69,17 +76,18 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	@UiField (provided = true)
 	SimplePager pager;
 
-	@UiField (provided = true)
-	SuggestBox anamnesisQuestionSuggestBox;
+	@UiField
+	TextBox searchBox;
 	
 	@UiField
 	CheckBox showAnswered;
 	
 	@UiField
 	CheckBox showUnanswered;
+	
+	Timer searchBoxTimer = new SearchBoxTimer();
 
 	public StandardizedPatientAnamnesisSubViewImpl() {
-		initSuggestBox();
 		MyCellTableResources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<AnamnesisChecksValueProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
@@ -88,59 +96,79 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		initTable();
+		initCheckBoxes();
+		initSearchBox();
+	}
+	
+	private class SearchBoxTimer extends Timer {
+
+		@Override
+		public void run() {
+			if (searchString.equals(searchBox.getText().trim())) {
+				delegate.performAnamnesisSearch(searchString);
+			} else {
+				schedule(500);
+			}
+		}
+	}
+	
+	private void initSearchBox() {
+		searchBox.setText(Messages.SEARCHFIELD);
+		searchBox.addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				Log.debug("getNativeKeyCode = " + event.getNativeKeyCode());
+				searchString = searchBox.getText().trim();
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					delegate.performAnamnesisSearch(searchString);
+				} else {
+					searchBoxTimer.schedule(500);
+				}
+			}
+		});
 		
+		searchBox.addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (searchBox.getText().equals(Messages.SEARCHFIELD)) {
+					searchBox.setText("");
+				}
+			}
+		});
+		
+		searchBox.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				if (searchBox.getText().equals("")) {
+					searchString = "";
+					searchBox.setText(Messages.SEARCHFIELD);
+				}
+			}
+		});
+		
+	}
+	
+	private void initCheckBoxes() {
 		showAnswered.setValue(true);
 		showAnswered.setText(Messages.SHOW_ANSWERED);
 		showUnanswered.setText(Messages.SHOW_UNANSWERED);
+		
+		showAnswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				delegate.performAnamnesisSearch(searchString);
+			}
+		});
+		showUnanswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				delegate.performAnamnesisSearch(searchString);
+			}
+		});
+		
 	}
 	
-	private void initSuggestBox() {
-		anamnesisQuestionSuggestBox = new SuggestBox(new ProxySuggestOracle<AnamnesisChecksValueProxy>(new AbstractRenderer<AnamnesisChecksValueProxy>() {
-			@Override
-			public String render(AnamnesisChecksValueProxy proxy) {
-				AnamnesisCheckProxy check = proxy.getAnamnesischeck();
-				return check.getText();
-			}
-		}, ",;:. \t?!_-/\\"));
-		
-		anamnesisQuestionSuggestBox.setText(Messages.ENTER_QUESTION);
-		anamnesisQuestionSuggestBox.getTextBox().addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent event) {
-				if (anamnesisQuestionSuggestBox.getText().equals(Messages.ENTER_QUESTION)) {
-					anamnesisQuestionSuggestBox.setText("");	
-				}
-			}
-		});
-		anamnesisQuestionSuggestBox.getTextBox().addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent event) {
-				if (anamnesisQuestionSuggestBox.getText().equals("")) {
-					anamnesisQuestionSuggestBox.setText(Messages.ENTER_QUESTION);
-				}
-			}
-		});
-		anamnesisQuestionSuggestBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion> () {
-			@SuppressWarnings("unchecked")
-			@Override
-			public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event) {
-				// TODO Auto-generated method stub
-				ProxySuggestOracle<AnamnesisChecksValueProxy>.ProxySuggestion suggestion = 
-						(ProxySuggestOracle<AnamnesisChecksValueProxy>.ProxySuggestion) event.getSelectedItem(); 
-				AnamnesisChecksValueProxy proxy = suggestion.getProxy();
-				delegate.searchAnamnesisQuestion(proxy);
-			}
-		});
-		anamnesisQuestionSuggestBox.getTextBox().addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				// TODO Auto-generated method stub
-				String query = anamnesisQuestionSuggestBox.getText().toLowerCase().trim();
-				delegate.searchAnamnesisQuestion(query);
-			}
-		});
-	}
-
 	private void initTable() {
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 
@@ -154,23 +182,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		table.addColumn(new QuestionColumn(), Messages.QUESTION);
 		table.addColumn(new AnswerColumn(), Messages.ANSWER);
 		table.addColumn(new CommentColumn(), Messages.COMMENT);
-		
-		addColumn(new ActionCell<AnamnesisChecksValueProxy>(
-				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<AnamnesisChecksValueProxy>() {
-					public void execute(AnamnesisChecksValueProxy scar) {
-						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?")) {
-//							delegate.deleteAnamnesisQuestionClicked(scar);
-						}
-					}
-				}), "", new GetValue<AnamnesisChecksValueProxy>() {
-			public AnamnesisChecksValueProxy getValue(AnamnesisChecksValueProxy scar) {
-				// TODO implement
-				return null;
-			}
-		}, null);
 		table.addColumnStyleName(0, "iconCol");
-		table.addColumnStyleName(table.getColumnCount()-1, "iconCol");
 	}
 
 	private static class CustomRowStyles implements RowStyles<AnamnesisChecksValueProxy> {
@@ -195,7 +207,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	
 	private static class StatusColumn extends Column<AnamnesisChecksValueProxy, Integer> {
 		private static final String[] ICON_DESCRIPTORS = {"closethick", "check"};
-		private static final String[] ICON_TITLES = {Messages.ANSWER_GIVEN, Messages.ANSWER_PENDING};
+		private static final String[] ICON_TITLES = {Messages.ANSWER_PENDING, Messages.ANSWER_GIVEN};
 		
 		public StatusColumn() {
 			super(new IconCell(ICON_DESCRIPTORS, ICON_TITLES));
@@ -275,15 +287,15 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 				}
 			} else if (type == AnamnesisCheckTypes.QuestionMultM) {
 				answer.type = GenericAnswerCell.ElementType.CHECKBOX;
-				answer.possibleAnswers = Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|"));
+				answer.possibleAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
 				if (questionAnswered) {
-					answer.selectedAnswers = Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|"));
+					answer.selectedAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
 				}
 			} else if (type == AnamnesisCheckTypes.QuestionMultS) {
 				answer.type = GenericAnswerCell.ElementType.RADIO;
-				answer.possibleAnswers = Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|"));
+				answer.possibleAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
 				if (questionAnswered) {
-					answer.selectedAnswers = Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|"));
+					answer.selectedAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
 				}
 			} else {
 				// It's an open question or title...
@@ -295,15 +307,15 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		}
 	}
 	
-	private static class CommentFieldUpdater implements FieldUpdater<AnamnesisChecksValueProxy, String> {
+	private class CommentFieldUpdater implements FieldUpdater<AnamnesisChecksValueProxy, String> {
 		@Override
-		public void update(int index, AnamnesisChecksValueProxy object, String value) {
-			// TODO Auto-generated method stub
+		public void update(int index, AnamnesisChecksValueProxy proxy, String value) {
 			Log.info("comment updated " + value);
+			delegate.saveAnamnesisChecksValueProxyChanges(proxy, value);
 		}
 	}
 	
-	private static class CommentColumn extends Column<AnamnesisChecksValueProxy, String> {
+	private class CommentColumn extends Column<AnamnesisChecksValueProxy, String> {
 		public CommentColumn() {
 			super(new TextInputCell());
 			setFieldUpdater(new CommentFieldUpdater());
@@ -313,29 +325,6 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			String comment = proxy.getComment();
 			return (comment != null) ? comment : "";
 		}
-	}
-
-	/**
-	 * Add a column with a header.
-	 *
-	 * @param <C> the cell type
-	 * @param cell the cell used to render the column
-	 * @param headerText the header string
-	 * @param getter the value getter for the cell
-	 */
-	private <C> void addColumn(Cell<C> cell, String headerText,
-			final GetValue<C> getter, FieldUpdater<AnamnesisChecksValueProxy, C> fieldUpdater) {
-		Column<AnamnesisChecksValueProxy, C> column = new Column<AnamnesisChecksValueProxy, C>(cell) {
-			@Override
-			public C getValue(AnamnesisChecksValueProxy object) {
-				return getter.getValue(object);
-			}
-		};
-		column.setFieldUpdater(fieldUpdater);
-		if (cell instanceof AbstractEditableCell<?, ?>) {
-			editableCells.add((AbstractEditableCell<?, ?>) cell);
-		}
-		table.addColumn(column, headerText);
 	}
 	
 	/**
@@ -350,11 +339,6 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	@Override
 	public CellTable<AnamnesisChecksValueProxy> getTable() {
 		return table;
-	}
-	
-	@Override
-	public SuggestBox getAnamnesisQuestionSuggestBox() {
-		return anamnesisQuestionSuggestBox;
 	}
 
 	@Override

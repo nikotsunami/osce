@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
@@ -179,15 +180,32 @@ StandardizedPatientLangSkillSubView.Delegate {
 	
 	@SuppressWarnings("deprecation")
 	private class AnamnesisChecksValueFillReceiver extends Receiver<Void> {
+		private String _query = "";
+		
+		public AnamnesisChecksValueFillReceiver() {
+			super();
+		}
+		
+		public AnamnesisChecksValueFillReceiver(String query) {
+			super();
+			_query = query;
+		}
+		
 		@Override
 		public void onSuccess(Void response) {
-			fireAnamnesisChecksValueCountRequest(new AnamnesisChecksValueCountReceiver());
+			fireAnamnesisChecksValueCountRequest(_query);
 		}
 		
 	}
 	
 	@SuppressWarnings("deprecation")
 	private class AnamnesisChecksValueCountReceiver extends Receiver<Long> {
+		private String _query = "";
+		
+		public AnamnesisChecksValueCountReceiver(String query) {
+			_query = query;
+		}
+		
 		@Override
 		public void onSuccess(Long count) {
 			if (view == null) {
@@ -195,7 +213,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 			}
 			Log.debug(count.toString() + " AnamnesisChecksValues found");
 			anamnesisTable.setRowCount(count.intValue(), true);
-			fireAnamnesisChecksValueRequest();
+			fireAnamnesisChecksValueRequest(_query);
 		}
 	}
 	
@@ -203,22 +221,9 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private class AnamnesisChecksValueReceiver extends Receiver<List<AnamnesisChecksValueProxy>> {
 		@Override
 		public void onSuccess(List<AnamnesisChecksValueProxy> response) {
-			// TODO: if performance or client memory issues appear, a different solution has to be found
-			// (Ajax ProxySuggestOracle...) ==> Right now, all
-			((ProxySuggestOracle<AnamnesisChecksValueProxy>) standardizedPatientAnamnesisSubView.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(response);
-			
 			Range range = anamnesisTable.getVisibleRange();
-			int fromIndex = range.getStart();
-			int toIndex = fromIndex + range.getLength();
-			
-			if (fromIndex >= response.size()) {
-				fromIndex = 0;
-				toIndex = 0;
-			} else if (toIndex > response.size()) {
-				toIndex = response.size();
-			}
-			
-			anamnesisTable.setRowData(response.subList(fromIndex, toIndex));
+			Log.debug("range.getStart():" + range.getStart() + "; range.getLength():" + range.getLength() + "; response.size():" + response.size());
+			anamnesisTable.setRowData(range.getStart(), response);
 		}
 	}
 	
@@ -348,54 +353,78 @@ StandardizedPatientLangSkillSubView.Delegate {
 	@SuppressWarnings("deprecation")
 	protected void initAnamnesis() {
 		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
-		
+//		anamnesisTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+//			
+//			@Override
+//			public void onRangeChange(RangeChangeEvent event) {
+//				// TODO Auto-generated method stub
+//				Log.info("onRangeChange() -- Anamnesis table");
+//				fireAnamnesisChecksValueRequest();
+//			}
+//		});
+		fillAnamnesis("");
+	}
+	
+	private void fillAnamnesis(final String query) {
 		// TODO Implementation mit Checkboxes korrekt machen
 		if (standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown()) {
-			// TODO make this request conditional (only execute if explicitly requested)
-			// fills the AnamnesisChecksValue table in the database with NULL-values for unanswered questions
-			requestFactory.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
+			// fills the AnamnesisChecksValue table in the database with
+			// NULL-values for unanswered questions
+			Log.info("unanswered questions are shown (fill table)");
+			requestFactory.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver(query));
 		} else {
-			// requests the number of rows in AnamnesisChecksValue for the current patient
-			fireAnamnesisChecksValueCountRequest(new AnamnesisChecksValueCountReceiver());
+			// requests the number of rows in AnamnesisChecksValue for the
+			// current patient
+			fireAnamnesisChecksValueCountRequest(query);
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void fireAnamnesisChecksValueCountRequest(Receiver<Long> receiver) {
+	private void fireAnamnesisChecksValueCountRequest(final String query) {
+		Receiver<Long> receiver = new AnamnesisChecksValueCountReceiver(query);
 		boolean answeredQuestions = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unansweredQuestions = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
 		AnamnesisChecksValueRequestNonRoo request = requestFactory.anamnesisChecksValueRequestNonRoo();
 		
 		if (answeredQuestions && unansweredQuestions) {
-			request.countAllAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId()).fire(receiver);
+			Log.debug("count -- show answered and unanswered");
+			request.countAllAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query).fire(receiver);
 		} else if (answeredQuestions) {
-			request.countAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId()).fire(receiver);
+			Log.debug("count -- show only answered");
+			request.countAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query).fire(receiver);
 		} else if (unansweredQuestions) {
-			request.countUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId()).fire(receiver);
+			Log.debug("count -- show only unanswered");
+			request.countUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query).fire(receiver);
 		} else {
+			Log.debug("count -- show none");
 			receiver.onSuccess(new Long(0));
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	protected void fireAnamnesisChecksValueRequest() {
+	protected void fireAnamnesisChecksValueRequest(final String query) {
 		boolean answered = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unanswered = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
 		
 		int totalRows = anamnesisTable.getRowCount();
 		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
 		
+		Log.debug("request -- rowCount: " + totalRows);
+		
 		AnamnesisChecksValueRequestNonRoo request = requestFactory.anamnesisChecksValueRequestNonRoo();
 		AnamnesisChecksValueReceiver receiver = new AnamnesisChecksValueReceiver();
 		
 		if (answered && unanswered) {
-			request.findAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), 0, totalRows)
+			Log.debug("request -- show answered and unanswered");
+			request.findAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, 0, totalRows)
 					.with(paths).fire(receiver);
 		} else if (answered) {
-			request.findAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), 0, totalRows)
+			Log.debug("request -- show only answered");
+			request.findAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, 0, totalRows)
 					.with(paths).fire(receiver);
 		} else {
-			request.findUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), 0, totalRows)
+			Log.debug("request -- show only unanswered");
+			request.findUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, 0, totalRows)
 					.with(paths).fire(receiver);
 		}
 	}
@@ -553,18 +582,6 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 
 	@Override
-	public void searchAnamnesisQuestion(AnamnesisChecksValueProxy proxy) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void searchAnamnesisQuestion(String needle) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void saveAnamnesisChecksValueProxyChanges(AnamnesisChecksValueProxy proxy, String anamnesisChecksValue, Boolean truth) {
 		// TODO Auto-generated method stub
 		Log.info("anamnesisChecksValue: " + anamnesisChecksValue);
@@ -574,31 +591,23 @@ StandardizedPatientLangSkillSubView.Delegate {
 			Log.info("truth: " + truth.toString());
 		}
 		
-		anamnesisForm = requestFactory.anamnesisFormRequest().edit(anamnesisForm);
-		// FIXME: this is stupid because of toooooooo many elements to iterate over...
-		// TODO: what about comment?
-		// TODO: what about empty checkbox selections?
-		Iterator<AnamnesisChecksValueProxy> i = anamnesisForm.getAnamnesischecksvalues().iterator();
-		while (i.hasNext()) {
-			AnamnesisChecksValueProxy iteratedProxy = i.next();
-			if (iteratedProxy.equals(proxy)) {
-				iteratedProxy.setAnamnesisChecksValue(anamnesisChecksValue);
-				iteratedProxy.setTruth(truth);
-			}
-		}
+		AnamnesisChecksValueRequest request = requestFactory.anamnesisChecksValueRequest();
 		
-		requestFactory.anamnesisFormRequest().persist().using(anamnesisForm).fire(new AnamnesisChecksValueUpdateReceiver());
-		
-		
-		// FIXME: How to go about this Attempting to edit an EntityProxy previously edited by another RequestContext issue?
-		
-//		anamnesisChecksValueRequest.persist().using(proxy).fire(new Receiver<Void>() {
-//
-//			@Override
-//			public void onSuccess(Void response) {
-//				initAnamnesis();
-//			}
-//			
-//		});
+		proxy = request.edit(proxy);
+		proxy.setTruth(truth);
+		proxy.setAnamnesisChecksValue(anamnesisChecksValue);
+		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver());
+	}
+	
+	public void saveAnamnesisChecksValueProxyChanges(AnamnesisChecksValueProxy proxy, String comment) {
+		AnamnesisChecksValueRequest request = requestFactory.anamnesisChecksValueRequest();
+		proxy = request.edit(proxy);
+		proxy.setComment(comment);
+		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver());
+	}
+	
+	public void performAnamnesisSearch(String needle) {
+		Log.info("needle = " + needle);
+		fillAnamnesis(needle);
 	}
 }
