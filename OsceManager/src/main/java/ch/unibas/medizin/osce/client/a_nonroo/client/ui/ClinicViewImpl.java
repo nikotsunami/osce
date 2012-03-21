@@ -8,18 +8,12 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -33,7 +27,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -53,8 +46,8 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
 	
-	@UiField
-	TextBox searchBox;
+	@UiField (provided = true)
+	QuickSearchBox searchBox;
 	
 	@UiField
 	Button newButton;
@@ -95,6 +88,13 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
 		
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
+			@Override
+			public void performAction() {
+				delegate.performSearch(searchBox.getValue());
+			}
+		});
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
@@ -106,27 +106,6 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 	}
 
 	public void init() {
-		searchBox.addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent arg0) {
-				searchBox.setValue("");
-			}
-		});
-		searchBox.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent arg0) {
-				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue(Messages.SEARCHFIELD);
-				}
-			}
-		});
-		searchBox.addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent arg0) {
-				String q = searchBox.getValue();
-				delegate.performSearch(q);
-			}
-		});
 		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");

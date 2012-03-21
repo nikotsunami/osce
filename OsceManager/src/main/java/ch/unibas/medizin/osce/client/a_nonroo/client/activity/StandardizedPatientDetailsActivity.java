@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,14 +21,12 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
@@ -39,8 +38,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 
+@SuppressWarnings("deprecation")
 public class StandardizedPatientDetailsActivity extends AbstractActivity implements
 StandardizedPatientDetailsView.Presenter, 
 StandardizedPatientDetailsView.Delegate, 
@@ -48,13 +47,10 @@ StandardizedPatientScarSubView.Delegate,
 StandardizedPatientAnamnesisSubView.Delegate,
 StandardizedPatientLangSkillSubView.Delegate {
 	
-    private OsMaRequestFactory requestFactory;
+    private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private StandardizedPatientDetailsView view;
-	// FIXME what could this be used for?
-	private SingleSelectionModel<StandardizedPatientProxy> selectionModel;
-	private HandlerRegistration rangeChangeHandler;
 
 	private StandardizedPatientDetailsPlace place;
 	private StandardizedPatientProxy standardizedPatientProxy;
@@ -62,7 +58,6 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private StandardizedPatientScarSubView standardizedPatientScarSubView;
 	private CellTable<ScarProxy> scarTable;
 	private ValueListBox<ScarProxy> scarBox;
-	private HandlerRegistration rangeChangeHandlerScars;
 	
 	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
 	private CellTable<AnamnesisChecksValueProxy> anamnesisTable;
@@ -74,7 +69,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
-    	this.requestFactory = requests;
+    	this.requests = requests;
     	this.placeController = placeController;
     }
 
@@ -82,7 +77,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
@@ -101,14 +96,14 @@ StandardizedPatientLangSkillSubView.Delegate {
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		
-		requestFactory.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
+		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
 	}
 	
 	/**
 	 * Used as a callback for the request that gets the @StandardizedPatientProxy
 	 * that is edited in this activities instance.
 	 */
-	@SuppressWarnings("deprecation")
+	
 	private class InitializeActivityReceiver extends Receiver<Object> {
 		@Override
 		public void onFailure(ServerFailure error){
@@ -129,7 +124,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * Callback for filling the language picker with all available @SpokenLanguageProxy
 	 * elements.
 	 */
-	@SuppressWarnings("deprecation")
+	
 	private class SpokenLanguageReceiver extends Receiver<List<SpokenLanguageProxy>> {
 		@Override
 		public void onSuccess(List<SpokenLanguageProxy> response) {
@@ -141,7 +136,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	/**
 	 * Callback for 
 	 */
-	@SuppressWarnings("deprecation")
+	
 	private class LangSkillCountReceiver extends Receiver<Long> {
 		@Override
 		public void onSuccess(Long count) {
@@ -156,7 +151,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class LangSkillReceiver extends  Receiver<List<LangSkillProxy>> {
 		
 		@Override
@@ -169,7 +164,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class LangSkillUpdateReceiver extends Receiver<Void> {
 		@Override
 		public void onSuccess(Void response) {
@@ -178,34 +173,17 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
-	private class AnamnesisChecksValueFillReceiver extends Receiver<Void> {
-		private String _query = "";
-		
-		public AnamnesisChecksValueFillReceiver() {
-			super();
-		}
-		
-		public AnamnesisChecksValueFillReceiver(String query) {
-			super();
-			_query = query;
-		}
-		
+	
+	private class AnamnesisChecksValueFillReceiver extends Receiver<Void> {		
 		@Override
 		public void onSuccess(Void response) {
-			fireAnamnesisChecksValueCountRequest(_query);
+			fireAnamnesisChecksValueCountRequest();
 		}
 		
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class AnamnesisChecksValueCountReceiver extends Receiver<Long> {
-		private String _query = "";
-		
-		public AnamnesisChecksValueCountReceiver(String query) {
-			_query = query;
-		}
-		
 		@Override
 		public void onSuccess(Long count) {
 			if (view == null) {
@@ -213,31 +191,39 @@ StandardizedPatientLangSkillSubView.Delegate {
 			}
 			Log.debug(count.toString() + " AnamnesisChecksValues found");
 			anamnesisTable.setRowCount(count.intValue(), true);
-			fireAnamnesisChecksValueRequest(_query);
+			fireAnamnesisChecksValueRequest();
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class AnamnesisChecksValueReceiver extends Receiver<List<AnamnesisChecksValueProxy>> {
 		@Override
 		public void onSuccess(List<AnamnesisChecksValueProxy> response) {
+			for (int i=0; i<response.size(); i++) {
+				AnamnesisChecksValueProxy proxy = response.get(i);
+				if (proxy == null) {
+					Log.warn("Proxy #" + i + " is null!");
+				} else {
+					Log.debug("Proxy #" + i + ", id=" + proxy.getId());
+				}
+			}
 			Range range = anamnesisTable.getVisibleRange();
-			Log.debug("range.getStart():" + range.getStart() + "; range.getLength():" + range.getLength() + "; response.size():" + response.size());
+			Log.debug("response.size(): " + response.size());
 			anamnesisTable.setRowData(range.getStart(), response);
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class AnamnesisChecksValueUpdateReceiver extends Receiver<Void> {
 
 		@Override
 		public void onSuccess(Void response) {
 			Log.info("AnamnesisChecksValue updated");
-			initAnamnesis();
+			onRangeChangedAnamnesis();
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class ScarBoxReceiver extends Receiver<List<ScarProxy>> {
 		@Override
 		public void onSuccess(List<ScarProxy> response) {
@@ -245,7 +231,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class ScarCountReceiver extends Receiver<Long> {
 		@Override
 		public void onSuccess(Long count) {
@@ -261,7 +247,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class ScarReceiver extends Receiver<List<ScarProxy>> {
 		
 		@Override
@@ -280,7 +266,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	private class ScarUpdateReceiver extends Receiver<Void>{
 		@Override
 		public void onSuccess(Void arg0) {
@@ -306,7 +292,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		langSkillTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			@Override
 			public void onRangeChange(RangeChangeEvent event) {
-				Log.info("onRangeChangedLanguageSkillTable()");
+				Log.info("onRangeChange() ==> onRangeChangedLanguageSkillTable()");
 				onRangeChangedLanguageSkillTable();
 			}
 		});
@@ -318,13 +304,13 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * Requests the number of languages spoken by the given patient and then calls onRangeChangedLanguageSkillTable() 
 	 * to fill the table.
 	 */
-	@SuppressWarnings("deprecation")
+	
 	protected void fillLangSkills() {
 		// Fill ValueListBoxes
-		requestFactory.languageRequestNonRoo().findLanguagesByNotStandardizedPatient(standardizedPatientProxy.getId()).fire(new SpokenLanguageReceiver());
+		requests.languageRequestNonRoo().findLanguagesByNotStandardizedPatient(standardizedPatientProxy.getId()).fire(new SpokenLanguageReceiver());
 		
 		// Request number of Languages spoken by patient and call onRangeChangedLanguageSkillTable() to fill table
-		requestFactory.langSkillRequestNonRoo().countLangSkillsByPatientId(standardizedPatientProxy.getId()).fire(new LangSkillCountReceiver());
+		requests.langSkillRequestNonRoo().countLangSkillsByPatientId(standardizedPatientProxy.getId()).fire(new LangSkillCountReceiver());
 	}
 	
 	/**
@@ -341,50 +327,49 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * @param range defines which elements to fetch ("from element x on, take n elements...");
 	 * @param callback Method to call after the request is executed.
 	 */
-	@SuppressWarnings("deprecation")
+	
 	private void fireLangSkillRangeRequest(final Range range, final Receiver<List<LangSkillProxy>> callback) {
-		requestFactory.langSkillRequestNonRoo().findLangSkillsByPatientId(standardizedPatientProxy.getId(), range.getStart(), range.getLength()).with("spokenlanguage").fire(callback);
+		requests.langSkillRequestNonRoo().findLangSkillsByPatientId(standardizedPatientProxy.getId(), range.getStart(), range.getLength()).with("spokenlanguage").fire(callback);
 	}
 	
 	/*******************
 	 * ANAMNESIS TABLE
 	 ******************/
 
-	@SuppressWarnings("deprecation")
 	protected void initAnamnesis() {
 		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
-//		anamnesisTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
-//			
-//			@Override
-//			public void onRangeChange(RangeChangeEvent event) {
-//				// TODO Auto-generated method stub
-//				Log.info("onRangeChange() -- Anamnesis table");
-//				fireAnamnesisChecksValueRequest();
-//			}
-//		});
-		fillAnamnesis("");
+		this.anamnesisTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			@Override
+			public void onRangeChange(RangeChangeEvent event) {
+				Log.debug("onRangeChange() ==> onRangeChangedAnamnesis()");
+				onRangeChangedAnamnesis();
+			}
+		});
+		onRangeChangedAnamnesis();
 	}
 	
-	private void fillAnamnesis(final String query) {
+	
+	private void onRangeChangedAnamnesis() {
 		// TODO Implementation mit Checkboxes korrekt machen
 		if (standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown()) {
 			// fills the AnamnesisChecksValue table in the database with
 			// NULL-values for unanswered questions
 			Log.info("unanswered questions are shown (fill table)");
-			requestFactory.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver(query));
+			requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
 		} else {
 			// requests the number of rows in AnamnesisChecksValue for the
 			// current patient
-			fireAnamnesisChecksValueCountRequest(query);
+			fireAnamnesisChecksValueCountRequest();
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
-	private void fireAnamnesisChecksValueCountRequest(final String query) {
-		Receiver<Long> receiver = new AnamnesisChecksValueCountReceiver(query);
+	
+	private void fireAnamnesisChecksValueCountRequest() {
+		String query = standardizedPatientAnamnesisSubView.getSearchString();
+		Receiver<Long> receiver = new AnamnesisChecksValueCountReceiver();
 		boolean answeredQuestions = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unansweredQuestions = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
-		AnamnesisChecksValueRequestNonRoo request = requestFactory.anamnesisChecksValueRequestNonRoo();
+		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo(); 
 		
 		if (answeredQuestions && unansweredQuestions) {
 			Log.debug("count -- show answered and unanswered");
@@ -401,31 +386,34 @@ StandardizedPatientLangSkillSubView.Delegate {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	protected void fireAnamnesisChecksValueRequest(final String query) {
+	
+	protected void fireAnamnesisChecksValueRequest() {
+		String query = standardizedPatientAnamnesisSubView.getSearchString();
 		boolean answered = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unanswered = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
 		
-		int totalRows = anamnesisTable.getRowCount();
 		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
-		
-		Log.debug("request -- rowCount: " + totalRows);
-		
-		AnamnesisChecksValueRequestNonRoo request = requestFactory.anamnesisChecksValueRequestNonRoo();
+				
+		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo();
 		AnamnesisChecksValueReceiver receiver = new AnamnesisChecksValueReceiver();
+		
+		Range range = anamnesisTable.getVisibleRange();
+		Log.debug("range.getStart():" + range.getStart() + "; range.getLength():" + range.getLength() + ";");
 		
 		if (answered && unanswered) {
 			Log.debug("request -- show answered and unanswered");
-			request.findAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, 0, totalRows)
+			request.findAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, range.getStart(), range.getLength())
 					.with(paths).fire(receiver);
 		} else if (answered) {
 			Log.debug("request -- show only answered");
-			request.findAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, 0, totalRows)
+			request.findAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, range.getStart(), range.getLength())
+					.with(paths).fire(receiver);
+		} else if (unanswered) {
+			Log.debug("request -- show only unanswered");
+			request.findUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, range.getStart(), range.getLength())
 					.with(paths).fire(receiver);
 		} else {
-			Log.debug("request -- show only unanswered");
-			request.findUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, 0, totalRows)
-					.with(paths).fire(receiver);
+			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
 		}
 	}
 	
@@ -441,7 +429,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		scarTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			@Override
 			public void onRangeChange(RangeChangeEvent event) {
-				Log.info("onRangeChangedScarTable()");
+				Log.info("onRangeChange() ==> onRangeChangedScarTable()");
 				onRangeChangedScarTable();
 			}
 		});
@@ -451,13 +439,13 @@ StandardizedPatientLangSkillSubView.Delegate {
 	/**
 	 * Fills the ValueListBox and Table of the ScarSubView
 	 */
-	@SuppressWarnings("deprecation")
+	
 	protected void fillScar() {
 		// Finds all scars, that can still be added to the patient (i.e. the patient doesn't have them yet) 
 		// and fills the corresponding ValueListBox
-		requestFactory.scarRequestNonRoo().findScarEntriesByNotAnamnesisForm(anamnesisForm.getId()).fire(new ScarBoxReceiver());
+		requests.scarRequestNonRoo().findScarEntriesByNotAnamnesisForm(anamnesisForm.getId()).fire(new ScarBoxReceiver());
 		// Request number of scars the patient has and then fill the table by calling onRangeChangedScarTable()
-		requestFactory.scarRequestNonRoo().countScarsByAnamnesisForm(anamnesisForm.getId()).fire(new ScarCountReceiver());
+		requests.scarRequestNonRoo().countScarsByAnamnesisForm(anamnesisForm.getId()).fire(new ScarCountReceiver());
 	}
 	
 	/**
@@ -475,7 +463,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * @param range defines which elements to fetch ("from element x on, take n elements...");
 	 * @param callback Class that handles the possible callbacks
 	 */
-	@SuppressWarnings("deprecation")
+	
 	private void fireScarRangeRequest(final Range range, final Receiver<List<ScarProxy>> callback) {
 		createScarRangeRequest(range).with(standardizedPatientScarSubView.getPaths()).fire(callback);
 	}
@@ -485,15 +473,14 @@ StandardizedPatientLangSkillSubView.Delegate {
 	 * @param range
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
+	
 	protected Request<List<ScarProxy>> createScarRangeRequest(Range range) {
-		return requestFactory.scarRequestNonRoo().findScarEntriesByAnamnesisForm(anamnesisForm.getId(), range.getStart(), range.getLength());
+		return requests.scarRequestNonRoo().findScarEntriesByAnamnesisForm(anamnesisForm.getId(), range.getStart(), range.getLength());
 	}
 	
 	@Override
 	public void goTo(Place place) {
-		placeController.goTo(place);
-		
+		placeController.goTo(place);		
 	}
 
 	@Override
@@ -505,12 +492,12 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	@Override
 	public void deletePatientClicked() {
+		// TODO replace with appropriate message
 		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
             return;
         }
 		
-        requestFactory.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
-
+        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
             public void onSuccess(Void ignore) {
                 if (widget == null) {
                     return;
@@ -522,15 +509,13 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
-		requestFactory.langSkillRequest().remove().using(langSkill).fire(new LangSkillUpdateReceiver());
+		requests.langSkillRequest().remove().using(langSkill).fire(new LangSkillUpdateReceiver());
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
 	public void deleteScarClicked(ScarProxy scar) {
-		AnamnesisFormRequest anamReq = requestFactory.anamnesisFormRequest();
+		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
 		anamnesisForm =  anamReq.edit(anamnesisForm);
 		
 		Log.debug("Remove scar (" + scar.getId() + ") from anamnesis-form (" + anamnesisForm.getId() + ")");
@@ -538,22 +523,16 @@ StandardizedPatientLangSkillSubView.Delegate {
 		Iterator<ScarProxy> i = anamnesisForm.getScars().iterator();
 		while (i.hasNext()) {
 			ScarProxy scarProxy = (ScarProxy) i.next();
-			//Log.warn(scarProxy.stableId() + " ");
-			//Log.warn(scar.stableId() + " ");
 			if (scarProxy.getId() == scar.getId() ) {
 				anamnesisForm.getScars().remove(scarProxy);
 				break;
 			}
-		}
-//		anamnesisForm.getScars().remove(scar);
-		
-		anamReq.persist().using(anamnesisForm).fire(new ScarUpdateReceiver());
+		}anamReq.persist().using(anamnesisForm).fire(new ScarUpdateReceiver());
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void addScarClicked() {
-		AnamnesisFormRequest anamReq = requestFactory.anamnesisFormRequest();
+		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
 		
 		ScarProxy scar = scarBox.getValue();
 		Log.debug("Add scar (" + scar.getBodypart() + " - id " + scar.getId() + ") to anamnesis-form (" + anamnesisForm.getId() + ")");
@@ -566,10 +545,9 @@ StandardizedPatientLangSkillSubView.Delegate {
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
 	public void addLangSkillClicked(SpokenLanguageProxy spokenLanguageProxy, LangSkillLevel langSkillLevel) {
 		// get requestContext and initialize new langSkillProxy
-		LangSkillRequest langSkillRequest = requestFactory.langSkillRequest();
+		LangSkillRequest langSkillRequest = requests.langSkillRequest();
 		LangSkillProxy langSkillProxy = langSkillRequest.create(LangSkillProxy.class);
 		langSkillProxy.setSkill(langSkillLevel);
 		langSkillProxy.setSpokenlanguage(spokenLanguageProxy);
@@ -583,31 +561,23 @@ StandardizedPatientLangSkillSubView.Delegate {
 
 	@Override
 	public void saveAnamnesisChecksValueProxyChanges(AnamnesisChecksValueProxy proxy, String anamnesisChecksValue, Boolean truth) {
-		// TODO Auto-generated method stub
-		Log.info("anamnesisChecksValue: " + anamnesisChecksValue);
-		if (truth == null) {
-			Log.info("truth: null");
-		} else {
-			Log.info("truth: " + truth.toString());
-		}
-		
-		AnamnesisChecksValueRequest request = requestFactory.anamnesisChecksValueRequest();
-		
+		AnamnesisChecksValueRequest request = requests.anamnesisChecksValueRequest();
 		proxy = request.edit(proxy);
 		proxy.setTruth(truth);
 		proxy.setAnamnesisChecksValue(anamnesisChecksValue);
 		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver());
 	}
 	
+	@Override
 	public void saveAnamnesisChecksValueProxyChanges(AnamnesisChecksValueProxy proxy, String comment) {
-		AnamnesisChecksValueRequest request = requestFactory.anamnesisChecksValueRequest();
+		AnamnesisChecksValueRequest request = requests.anamnesisChecksValueRequest();
 		proxy = request.edit(proxy);
 		proxy.setComment(comment);
 		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver());
 	}
 	
-	public void performAnamnesisSearch(String needle) {
-		Log.info("needle = " + needle);
-		fillAnamnesis(needle);
+	@Override
+	public void performAnamnesisSearch() {
+		onRangeChangedAnamnesis();
 	}
 }

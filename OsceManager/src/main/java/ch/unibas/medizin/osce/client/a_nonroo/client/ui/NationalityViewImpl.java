@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
@@ -65,8 +66,8 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
 	
-	@UiField
-	TextBox searchBox;
+	@UiField (provided = true)
+	QuickSearchBox searchBox;
 	
 	@UiField
 	TextBox newNationality;
@@ -111,6 +112,13 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
+			@Override
+			public void performAction() {
+				delegate.performSearch(searchBox.getValue());
+			}
+		});
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
@@ -122,27 +130,6 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 	}
 
 	public void init() {
-		searchBox.addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent arg0) {
-				searchBox.setValue("");
-			}
-		});
-		searchBox.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent arg0) {
-				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue(Messages.SEARCHFIELD);
-				}
-			}
-		});
-		searchBox.addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent arg0) {
-				String q = searchBox.getValue();
-				delegate.performSearch(q);
-			}
-		});
 		newNationality.addKeyDownHandler(new KeyDownHandler() {
 		    @Override
 		    public void onKeyDown(KeyDownEvent event) {

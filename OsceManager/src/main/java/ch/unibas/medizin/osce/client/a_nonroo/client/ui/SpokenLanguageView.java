@@ -5,7 +5,6 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * @author dk
@@ -21,10 +20,8 @@ public interface SpokenLanguageView  extends IsWidget{
 	 */
 	interface Delegate {
 		void newClicked(String name);
-		
 		void deleteClicked(SpokenLanguageProxy lang);
-		
-		void performSearch(String q);
+		void performSearch();
 	}
 
     CellTable<SpokenLanguageProxy> getTable();
@@ -34,4 +31,5 @@ public interface SpokenLanguageView  extends IsWidget{
     
 //	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+    String getSearchTerm();
 }

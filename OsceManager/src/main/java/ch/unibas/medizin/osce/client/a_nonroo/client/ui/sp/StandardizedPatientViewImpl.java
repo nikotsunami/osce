@@ -3,8 +3,6 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -16,25 +14,15 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -44,16 +32,10 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-
-import com.google.gwt.view.client.Range;
 
 /**
  * @author nikotsunami
@@ -70,8 +52,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	private Delegate delegate;
 	@UiField
 	public SplitLayoutPanel splitLayoutPanel;
-	@UiField
-	public TextBox searchBox;
+	@UiField (provided = true)
+	public QuickSearchBox searchBox;
 	@UiField
 	public IconButton filterButton;
 	@UiField
@@ -140,6 +122,13 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		
 		filterPanel = new StandardizedPatientFilterViewImpl();
 		
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
+			@Override
+			public void performAction() {
+				delegate.performSearch(searchBox.getValue());
+			}
+		});
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
@@ -151,28 +140,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
-		searchBox.addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent arg0) {
-				searchBox.setValue("");
-			}
-		});
-		searchBox.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent arg0) {
-				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue(Messages.SEARCHFIELD);
-				}
-			}
-		});
-		searchBox.addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent arg0) {
-				String q = searchBox.getValue();
-				delegate.performSearch(q);
-			}
-		});
-		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 //    	paths.add("id");

@@ -41,7 +41,6 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private SpokenLanguageDetailsActivityMapper SpokenLanguageDetailsActivityMapper;
-	
 
 	public SpokenLanguageActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
@@ -98,12 +97,18 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	}
 	
 	private void init() {
-		init2("");
+		rangeChangeHandler = table
+				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+					public void onRangeChange(RangeChangeEvent event) {
+						SpokenLanguageActivity.this.onRangeChanged();
+					}
+				});
+
+		startRequestChain();
 	}
 	
-	private void init2(final String q) {
-
-		fireCountRequest(q, new Receiver<Long>() {
+	private void startRequestChain() {
+		fireCountRequest(new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -113,17 +118,10 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged(q);
+				onRangeChanged();
 			}
 
 		});
-
-		rangeChangeHandler = table
-				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
-					public void onRangeChange(RangeChangeEvent event) {
-						SpokenLanguageActivity.this.onRangeChanged(q);
-					}
-				});
 	}
 	
 	protected void showDetails(SpokenLanguageProxy SpokenLanguage) {
@@ -135,7 +133,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	}
 	
 
-	protected void onRangeChanged(String q) {
+	protected void onRangeChanged() {
 		final Range range = table.getVisibleRange();
 
 		final Receiver<List<SpokenLanguageProxy>> callback = new Receiver<List<SpokenLanguageProxy>>() {
@@ -154,22 +152,23 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 			}
 		};
 
-		fireRangeRequest(q, range, callback);
+		fireRangeRequest(range, callback);
 
 	}
 	
-	private void fireRangeRequest(String name, final Range range, final Receiver<List<SpokenLanguageProxy>> callback) {
-		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(final Range range, final Receiver<List<SpokenLanguageProxy>> callback) {
+		createRangeRequest(range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
-	protected Request<List<SpokenLanguageProxy>> createRangeRequest(String name, Range range) {
-//		return requests.spokenLanguageRequest().findSpokenLanguageEntries(range.getStart(), range.getLength());
+	protected Request<List<SpokenLanguageProxy>> createRangeRequest(Range range) {
+		String name = view.getSearchTerm();
 		return requests.languageRequestNonRoo().findLanguagesByName(name, range.getStart(), range.getLength());
 	}
 
-	protected void fireCountRequest(String name, Receiver<Long> callback) {
+	protected void fireCountRequest(Receiver<Long> callback) {
 //		requests.spokenLanguageRequest().countSpokenLanguages().fire(callback);
+		String name = view.getSearchTerm();
 		requests.languageRequestNonRoo().countLanguagesByName(name).fire(callback);
 	}
 
@@ -205,9 +204,8 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	}
 	
 	@Override
-	public void performSearch(String q) {
-		Log.debug("Search for " + q);
-		init2(q);
+	public void performSearch() {
+		startRequestChain();
 	}
 
 	@Override

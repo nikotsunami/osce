@@ -8,7 +8,7 @@
 	<g:HTMLPanel>
 		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
 		<div class="{style.controls}">
-			<g:TextBox ui:field="searchBox"></g:TextBox>
+			<my:QuickSearchBox ui:field="searchBox" />
 			<g:CheckBox ui:field="showAnswered"></g:CheckBox>
 			<g:CheckBox ui:field="showUnanswered"></g:CheckBox>
 			<b:SimplePager display="{table}" ui:field="pager" />

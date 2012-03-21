@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.List;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,36 +8,19 @@ import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.gargoylesoftware.htmlunit.AlertHandler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.datepicker.client.DateBox;
-
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
-import ch.unibas.medizin.osce.client.a_nonroo.client.Comparison;
 
 public class StandardizedPatientFilterViewImpl extends PopupPanel {
 
@@ -61,7 +43,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	private ArrayList<CheckBoxItem> fields = new ArrayList<CheckBoxItem>();
 	private int maxApplicableFilters;
 	private int minApplicableFilters = 1;
-	private int checkedItems = 0;
 	
 	@UiField
 	FocusPanel filterPanelRoot;
@@ -104,7 +85,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		}
 		name.setValue(true);
 		prename.setValue(true);
-		checkedItems = 2;
 	}
 	
 	private class CheckBoxChangeHandler implements ValueChangeHandler<Boolean> {
@@ -138,8 +118,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 				}
 			}
 			
-			checkedItems = fields.size() - uncheckedBoxes;
-			
 			String msg = "Searching for: ";
 			Iterator<String> i = getFilters().iterator();
 			while(i.hasNext())
@@ -150,18 +128,12 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	
 	public StandardizedPatientFilterViewImpl() {
 		super(true);
-		
-		final StandardizedPatientView view = (StandardizedPatientView)this.getParent();
-		
 		add(uiBinder.createAndBindUi(this));
 		filterPanelRoot.addMouseOutHandler(new MouseOutHandler() {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				int mouseX = event.getClientX();
 				int mouseY = event.getClientY();
-				
-				Log.info("mouseX: " + mouseX + ", mouseY: " + mouseY);
-				Log.info("getOffsetWIdth(): " + getOffsetWidth() + ", getAbsoluteTop(): "+ getAbsoluteTop() + ", getAbsoluteLeft(): " + getAbsoluteLeft());
 				
 				if (mouseX < getAbsoluteLeft() || mouseX > getAbsoluteLeft() + getOffsetWidth() 
 						|| mouseY < getAbsoluteTop() || mouseY > getAbsoluteTop() + getOffsetHeight()) {
@@ -191,7 +163,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		
 		name.setValue(true);
 		prename.setValue(true);
-		checkedItems = 2;
 		
 		maxApplicableFilters = fields.size();
 		

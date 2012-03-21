@@ -3,10 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -17,44 +14,23 @@ import ch.unibas.medizin.osce.client.i18n.Messages;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.shared.TraitTypes;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
-import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -74,8 +50,8 @@ public class LogViewImpl extends Composite implements LogView {
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
 
-	@UiField
-	TextBox searchBox;
+	@UiField (provided = true)
+	QuickSearchBox searchBox;
 
 	@UiField (provided = true)
 	SimplePager pager;
@@ -104,6 +80,13 @@ public class LogViewImpl extends Composite implements LogView {
 
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
+		
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
+			@Override
+			public void performAction() {
+				delegate.performSearch(searchBox.getValue());
+			}
+		});
 
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
@@ -116,29 +99,6 @@ public class LogViewImpl extends Composite implements LogView {
 	}
 
 	public void init() {
-		searchBox.addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent arg0) {
-				searchBox.setValue("");
-			}
-		});
-		searchBox.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent arg0) {
-				if(searchBox.getValue().isEmpty()) {
-					searchBox.setValue(Messages.SEARCHFIELD);
-				}
-			}
-		});
-		searchBox.addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent arg0) {
-				String q = searchBox.getValue();
-				delegate.performSearch(q);
-			}
-		});
-
-
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 

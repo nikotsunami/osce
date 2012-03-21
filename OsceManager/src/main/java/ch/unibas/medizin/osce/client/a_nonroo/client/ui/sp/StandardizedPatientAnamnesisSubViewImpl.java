@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -14,7 +13,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell;
 import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell.Alignment;
 import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell.Answer;
@@ -22,24 +21,11 @@ import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.cell.client.AbstractEditableCell;
-import com.google.gwt.cell.client.ActionCell;
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -47,13 +33,8 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.SuggestOracle;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandardizedPatientAnamnesisSubViewImpl extends Composite implements StandardizedPatientAnamnesisSubView  {
@@ -65,10 +46,8 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	UiBinder<Widget, StandardizedPatientAnamnesisSubViewImpl> {
 	}
 	
-	private String searchString = "";
 	private Set<String> paths = new HashSet<String>();
 	private Delegate delegate;
-	private List<AbstractEditableCell<?, ?>> editableCells;
 
 	@UiField (provided = true)
 	CellTable<AnamnesisChecksValueProxy> table;
@@ -76,16 +55,14 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	@UiField (provided = true)
 	SimplePager pager;
 
-	@UiField
-	TextBox searchBox;
+	@UiField (provided = true)
+	QuickSearchBox searchBox;
 	
 	@UiField
 	CheckBox showAnswered;
 	
 	@UiField
 	CheckBox showUnanswered;
-	
-	Timer searchBoxTimer = new SearchBoxTimer();
 
 	public StandardizedPatientAnamnesisSubViewImpl() {
 		MyCellTableResources tableResources = GWT.create(MyCellTableResources.class);
@@ -94,59 +71,21 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
+		initSearchBox();
+		
 		initWidget(uiBinder.createAndBindUi(this));
+		
 		initTable();
 		initCheckBoxes();
-		initSearchBox();
-	}
-	
-	private class SearchBoxTimer extends Timer {
-
-		@Override
-		public void run() {
-			if (searchString.equals(searchBox.getText().trim())) {
-				delegate.performAnamnesisSearch(searchString);
-			} else {
-				schedule(500);
-			}
-		}
 	}
 	
 	private void initSearchBox() {
-		searchBox.setText(Messages.SEARCHFIELD);
-		searchBox.addKeyUpHandler(new KeyUpHandler() {
-			
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				Log.debug("getNativeKeyCode = " + event.getNativeKeyCode());
-				searchString = searchBox.getText().trim();
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					delegate.performAnamnesisSearch(searchString);
-				} else {
-					searchBoxTimer.schedule(500);
-				}
+			public void performAction() {
+				delegate.performAnamnesisSearch();
 			}
 		});
-		
-		searchBox.addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent event) {
-				if (searchBox.getText().equals(Messages.SEARCHFIELD)) {
-					searchBox.setText("");
-				}
-			}
-		});
-		
-		searchBox.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent event) {
-				if (searchBox.getText().equals("")) {
-					searchString = "";
-					searchBox.setText(Messages.SEARCHFIELD);
-				}
-			}
-		});
-		
 	}
 	
 	private void initCheckBoxes() {
@@ -157,21 +96,19 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		showAnswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				delegate.performAnamnesisSearch(searchString);
+				delegate.performAnamnesisSearch();
 			}
 		});
 		showUnanswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				delegate.performAnamnesisSearch(searchString);
+				delegate.performAnamnesisSearch();
 			}
 		});
 		
 	}
 	
 	private void initTable() {
-		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
-
 		paths.add("truth");
 		paths.add("comment");
 		paths.add("anamnesisChecksValue");
@@ -189,6 +126,12 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		private static MyCellTableResources tableResources = GWT.create(MyCellTableResources.class);
 		@Override
 		public String getStyleNames(AnamnesisChecksValueProxy proxy, int rowIndex) {
+			// TODO: find out why it happens that upon *PAGING BACK* in the table the proxy here may be null (and only here, not in columns)
+			if (proxy==null) {
+				Log.warn("(null proxy in CustomRowStyles)");
+				return null;
+			}
+			
 			boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
 			boolean rowIsEven = (rowIndex % 2 == 0);
 			if (questionAnswered) {
@@ -326,15 +269,6 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			return (comment != null) ? comment : "";
 		}
 	}
-	
-	/**
-	 * Get a cell value from a record.
-	 *
-	 * @param <C> the cell type
-	 */
-	private static interface GetValue<C> {
-		C getValue(AnamnesisChecksValueProxy contact);
-	}
 
 	@Override
 	public CellTable<AnamnesisChecksValueProxy> getTable() {
@@ -357,5 +291,9 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	
 	public boolean areAnsweredQuestionsShown() {
 		return showAnswered.getValue();
+	}
+	
+	public String getSearchString() {
+		return searchBox.getText();
 	}
 }
