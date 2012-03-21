@@ -48,7 +48,8 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
-		delegate.addAdvSeaBasicButtonClicked(value.getValue(), bindType.getValue(), field.getValue(), comparition.getValue());
+		delegate.addAdvSeaBasicButtonClicked(null,//no matter 
+				value.getValue(), bindType.getValue(), field.getValue(), comparition.getValue());
 		this.hide();
 	}
 	
@@ -103,7 +104,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		bindType.setValue(BindType.values()[0]);
 		setBindTypePickerValues(Arrays.asList(BindType.values()));
 		field.setValue(PossibleFields.values()[0]);
-		setFieldPickerValues(Arrays.asList(PossibleFields.values()));
+		setFieldPickerValues(PossibleFields.getPatientAdvancedSearchSubViewList());
 		comparition.setValue(Comparison2.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison2.values()));
 		addAdvSeaBasicButton.setText(Messages.ADD);

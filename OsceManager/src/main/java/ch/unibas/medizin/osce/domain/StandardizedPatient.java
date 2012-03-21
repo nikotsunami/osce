@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -144,8 +145,6 @@ public class StandardizedPatient {
     	private StringBuilder sorting;
     	
     	private boolean firstTime=true;
-    	private boolean firstComment=true;
-    	
     	//requesttype
     	private static String countRequest = "COUNT(stdPat)";
       	private static String normalRequest = "stdPat";
@@ -158,7 +157,8 @@ public class StandardizedPatient {
     	//static select clause
     	private static String joinAnamnesisForm = " LEFT JOIN stdPat.anamnesisForm AS aForm ";
     	private static String joinScars = " LEFT JOIN aForm.scars AS scars ";
-    	private static String joinSpokenLanguage = " LEFT JOIN stdPat.langskills AS langSkills LEFT JOIN langSkills.spokenlanguage AS language ";
+    	private static String joinSpokenLanguage = " LEFT JOIN stdPat.langskills AS langSkills " ;//+
+    			//"LEFT JOIN langSkills.spokenlanguage AS language ";
     	private static String joinAnamnesisValue = " LEFT JOIN aForm.anamnesischecksvalues AS aValues LEFT JOIN  aValues.anamnesischeck AS aCheck ";
     	
     	
@@ -198,12 +198,13 @@ public class StandardizedPatient {
     	//basic data
     	/**
     	 * Search for scalable criteria
+    	 * @param objectId target object id to connect into clause
     	 * @param value of user's request
     	 * @param bindType connection of clause in statement
     	 * @param comparition sign of clause (== != and so on)
     	 */
-    	void search(PossibleFields field, String value, String bindType,  String comparition){
-    		Log.info("psremoveme: ------------- SEARCH ["+field+"] value ["+value+"]");
+    	void search(PossibleFields field, Long objectId,  String value, String bindType,  String comparition){
+    		Log.error("psremoveme: ------------- SEARCH ["+objectId+"] : ["+field+"] value ["+value+"]");
     		//form header of request
     		if ((field == PossibleFields.scar || field == PossibleFields.anamnesis) && wholeSearchString.indexOf(joinAnamnesisForm) == -1){
 				wholeSearchString.append(joinAnamnesisForm);
@@ -223,9 +224,11 @@ public class StandardizedPatient {
     			endSearchString.append(" "+bindType);
     		}
     		if(field == PossibleFields.anamnesis ){
-    			parseAmnesisForm(comparition, value);
+    			parseAmnesisForm(comparition, objectId, value);
     		} else if(field == PossibleFields.language ){
-    			parseLanguage(comparition, value);
+    			parseLanguage(comparition, objectId, value);
+    		} else if(field == PossibleFields.scar) {
+    			parseScar(comparition, objectId);
     		} else {
 	    		//psfixme: screening (quoting) of value is mandatory to avoid code injection hack
     			endSearchString.append(field.getClause() + comparition + value+" " );
@@ -233,19 +236,38 @@ public class StandardizedPatient {
     	}
     	
     	/**
+    	 * Scar connection table
+    	 * @param comparition compare value sign
+    	 * @param scarId 0|1| or scar id
+    	 */
+    	private void parseScar(String comparition, Long scarId) {
+    		if(scarId != null && scarId >1){
+    			endSearchString.append("  scars.id "+ comparition +scarId );
+    		} else {
+    			//let's see do we need connection records or not
+    			//avoid in statement because it's very time consuming
+    			if(scarId == 0) {//no records is needed
+    				endSearchString.append(" ( select count(scars) from aForm.scars ) = 0 ");
+    			} else {// 1 - need scars
+    				endSearchString.append(" ( select count(scars) from aForm.scars ) > 0 ");
+    			}
+    		}
+    	}
+    	/**
     	 * Language incoming value needs to be parsed
     	 * @param comparition comparing sign
+    	 * @param languageId id of language
     	 * @param value value "Deutsch: A1"
     	 */
-    	private void parseLanguage(String comparition, String value) {
+    	private void parseLanguage(String comparition, Long languageId, String value) {
     		//Deutsch
 			String languageText = value.substring(0, value.indexOf(":")).trim();
 			Log.info("psremoveme languageText "+languageText);
 			//A1
 			String priorityText = value.substring(value.indexOf(":")+1, value.length()).trim();
 			Log.info("psremoveme priorityText "+priorityText);
-			endSearchString.append(" ( language.languageName = " );
-			endSearchString.append(quote(languageText));
+			endSearchString.append(" ( langSkills.id = " );
+			endSearchString.append(languageId);
 			endSearchString.append(" AND langSkills.skill = ");
 			try{
 				endSearchString.append(quote(LangSkillLevel.valueOf(priorityText).getNumericLevel()) );
@@ -258,12 +280,14 @@ public class StandardizedPatient {
 		}
 
 		/**
-    	 * Amnesis form clause needs to be parsed
+    	 * Amnesis form clause needs to be parsed. 
+    	 * @TODO 
     	 * @param comparition
+    	 * @param amnesisId id of connection
     	 * @param value includes question and answer:
     	 * Leiden Sie unter Diabetes?: Nein
     	 */
-    	private void parseAmnesisForm(String comparition, String value) {
+    	private void parseAmnesisForm(String comparition, Long amnesisId, String value) {
 			String questionText = value.substring(0, value.indexOf(":")).trim();
 			Log.info("psremoveme questionText "+questionText);
 			String answerText = value.substring(value.indexOf(":")+1, value.length()).trim();
@@ -334,31 +358,30 @@ public class StandardizedPatient {
     		List<String> searchThrough,
     		List<AdvancedSearchCriteria> searchCriteria
     		) {
-    	
-    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
-    	EntityManager em = entityManager();
-    	PatientSearch simpatSearch = new PatientSearch(false);
-    	simpatSearch.makeSortig(sortColumn, order);
-    	//context (simple) search
-    	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
-    	
-    	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
-    	while (iter.hasNext()) {
-    		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
-    		simpatSearch.search(criterium.getField(), criterium.getValue(), criterium.getBindType().toString(), criterium.getComparation().getStringValue());
-			
-		}
-    	String queryString = simpatSearch.getSQLString();
-    	Log.info("psremoveme: [" + queryString+"]");
-    	TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
-    	//this parameter is not required if we have no q value in the request
-    	if(queryString.indexOf(":q") != -1){
-    		q.setParameter("q", "%" + searchWord + "%");
-        	Log.info("QUERY Q:[" + searchWord+"]");
-    	}
-    	List<StandardizedPatient> result  = q.getResultList(); 
-    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
-    	return result;
+	    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
+	    	EntityManager em = entityManager();
+	    	PatientSearch simpatSearch = new PatientSearch(false);
+	    	simpatSearch.makeSortig(sortColumn, order);
+	    	//context (simple) search
+	    	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
+	    	
+	    	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
+	    	while (iter.hasNext()) {
+	    		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
+	    		simpatSearch.search(criterium.getField(), criterium.getObjectId(), criterium.getValue(), criterium.getBindType().toString(), criterium.getComparation().getStringValue());
+				
+			}
+	    	String queryString = simpatSearch.getSQLString();
+	    	Log.info("QQQQQ psremoveme: [" + queryString+"]");
+	    	TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
+	    	//this parameter is not required if we have no q value in the request
+	    	if(queryString.indexOf(":q") != -1){
+	    		q.setParameter("q", "%" + searchWord + "%");
+	        	Log.info("QUERY Q:[" + searchWord+"]");
+	    	}
+	    	List<StandardizedPatient> result  = q.getResultList(); 
+	    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+	    	return result;
     }
     	
     

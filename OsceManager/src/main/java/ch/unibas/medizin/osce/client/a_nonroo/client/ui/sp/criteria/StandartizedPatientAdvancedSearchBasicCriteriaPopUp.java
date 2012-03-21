@@ -25,7 +25,7 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
 	 */
 	interface Delegate {
 		void addBasicCriteriaPopUpClicked();
-		void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition);
+		void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition);
 	}
   
     void setDelegate(Delegate delegate);

@@ -211,15 +211,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 //		searchCriteria.clear();//double click
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		//
-		 AdvancedSearchCriteriaProxy criteria =
-		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		 requestAdvSeaCritStd.edit(criteria);
-		 criteria.setBindType(BindType.AND);
-		 criteria.setComparation(Comparison2.EQUALS);
-		 criteria.setField(PossibleFields.anamnesis);
-		 criteria.setValue("Nehmen Sie zurzeit regelmässig Medikamente ein?: 3"); //psfixme - Nein
-		
-		 searchCriteria.add(criteria);
+//		 AdvancedSearchCriteriaProxy criteria =
+//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//		 requestAdvSeaCritStd.edit(criteria);
+//		 criteria.setBindType(BindType.AND);
+//		 criteria.setComparation(Comparison2.EQUALS);
+//		 criteria.setField(PossibleFields.anamnesis);
+//		 criteria.setValue("Nehmen Sie zurzeit regelmässig Medikamente ein?: 3"); //psfixme - Nein
+//		
+//		 searchCriteria.add(criteria);
 		 
 		 AdvancedSearchCriteriaProxy criteria1 =
 		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -227,7 +227,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 criteria1.setBindType(BindType.AND);
 		 criteria1.setComparation(Comparison2.EQUALS);
 		 criteria1.setField(PossibleFields.scar);
-		 criteria1.setValue("9");
+		 criteria1.setValue(" NO SCARS, PLEASE ");
+		 //new
+		 criteria1.setObjectId(new Long(0));
 		
 		 searchCriteria.add(criteria1);
 
@@ -238,7 +240,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 criteria2.setComparation(Comparison2.EQUALS);
 		 criteria2.setField(PossibleFields.language);
 		 //"Deutsch: A1"
-		 criteria2.setValue("Deutsch: nativeSpeaker");		
+		 criteria2.setValue("Deutsch: nativeSpeaker");
+		 criteria2.setObjectId(new Long(6));
 		 searchCriteria.add(criteria2);
 
 //		 AdvancedSearchCriteriaProxy criteria =
@@ -264,7 +267,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 //psfixme - added - to remove
 		criteriaTable.setRowData(searchCriteria);
 
-		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("stdPat.name", Sorting.ASC, q, 
+		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
 				searchThrough, searchCriteria /*fields, bindType, comparations, values */).fire(new Receiver<List<StandardizedPatientProxy>>() {
 			public void onFailure(ServerFailure error) {
 				Log.error("psremoveme ERROR ON FAILURE "+error.getMessage());
@@ -273,10 +276,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
-				while (iter.hasNext()) {
-					message += iter.next().getMessage() + "<br>";
+				while (iter!=null && iter.hasNext()) {
+					Violation it = iter.next() ; 
+					message += "QQ message "+it.getMessage() + "\n";
+					message += "QQ path "+it.getPath() + "\n";
+					message += "QQ class "+it.getClass() + "\n";
+					message += "QQ INV "+it.getInvalidProxy() + "\n";
+					message += "QQ OR "+it.getOriginalProxy() + "\n";
+					message += "QQ ID "+it.getProxyId() + "<br>";
 				}
-				Log.warn(" in Simpat -" + message);
+				Log.warn(" Violation -" + message);
 				// onStop();
 			}
 
@@ -447,7 +456,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
 
 	@Override
-	public void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
+	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
 
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
@@ -457,8 +466,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		criteria.setComparation(comparition);
 		criteria.setField(possibleFields);
 		criteria.setValue(string);
+		criteria.setObjectId(objectId);
 		
-//		Log.info("psremoveme search SPA criteria : [" + string + "] possibleFields: " + possibleFields+" comparition "+comparition);
+		Log.info("psremoveme search SPA criteria ZZ object ID:["+objectId+"] value [" + string + "] possibleFields: " + possibleFields+
+				" comparition "+comparition);
 		requestAdvSeaCritStd.fire();
 		searchCriteria.add(criteria);
 
@@ -467,7 +478,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	@Override
 	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
-		addAdvSeaBasicButtonClicked(languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.language, comparison);
+		addAdvSeaBasicButtonClicked(languageProxy.getId(), languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.language, comparison);
 	}
 
 	private void initLanguageCriteriaSubView() {
@@ -521,14 +532,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	@Override
 	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType, Comparison2 comparison) {
-		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart());
-		addAdvSeaBasicButtonClicked(scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.scar, comparison);
+		Log.info("ScarType: ID "+scarProxy.getId() + scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart());
+		addAdvSeaBasicButtonClicked(scarProxy.getId(), scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.scar, comparison);
 	}
 
 	@Override
 	public void addAnamnesisValueButtonClicked(AnamnesisCheckProxy anamnesisCheck, String answer, BindType bindType, Comparison2 comparison) {
 		// TODO Auto-generated method stub
-		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
-		addAdvSeaBasicButtonClicked(anamnesisCheck.getText() + ": " + answer, bindType, PossibleFields.anamnesis, comparison);
+		Log.info("Question: ID "+anamnesisCheck.getId() + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
+		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), anamnesisCheck.getText() + ": " + answer, bindType, PossibleFields.anamnesis, comparison);
 	}
 }
