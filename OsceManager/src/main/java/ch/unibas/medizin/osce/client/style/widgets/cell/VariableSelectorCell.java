@@ -5,6 +5,8 @@ import java.util.List;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractInputCell;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.EditTextCell;
+import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -16,11 +18,13 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
-public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answer, GenericAnswerCell.Answer> {
+public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell.Choices, VariableSelectorCell.Choices> {
 	private static Templates templates = GWT.create(Templates.class);
 	private final Alignment _alignment;
+	private EditTextCell cell;
+	private TextInputCell cell2;
 	
-	public enum ElementType {
+	public enum SelectorType {
 		TEXT, RADIO, CHECKBOX, SELECT
 	}
 
@@ -58,31 +62,31 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		SafeHtml textBoxTemplate(String text);
 	}
 	
-	public static class Answer {
-		public List<String> selectedAnswers;
-		public List<String> possibleAnswers;
-		public ElementType type;
+	public static class Choices {
+		public List<String> selectedChoices;
+		public List<String> availableChoices;
+		public SelectorType type;
 	}
 	
-	public GenericAnswerCell() {
+	public VariableSelectorCell() {
 		this(Alignment.VERTICAL);
 	}
 	
-	public GenericAnswerCell(Alignment alignment) {
+	public VariableSelectorCell(Alignment alignment) {
 		// Register change event
 		super("change");
 		_alignment = alignment;
 	}
 	
 	@Override
-	public void onBrowserEvent(Cell.Context context, Element parent, Answer value, NativeEvent event, ValueUpdater<Answer> valueUpdater) {
+	public void onBrowserEvent(Cell.Context context, Element parent, Choices value, NativeEvent event, ValueUpdater<Choices> valueUpdater) {
 		if (value == null) {
 			return;
 		}
 		super.onBrowserEvent(context, parent, value, event, valueUpdater);
 		if ("change".equals(event.getType())) {
 			Object key = context.getKey();
-			Answer newValue;
+			Choices newValue;
 			switch(value.type) {
 			case CHECKBOX:
 				newValue = checkBoxInputEvent(parent, value);
@@ -105,66 +109,66 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 	}
 	
 	@Override
-	public void onEnterKeyDown(Cell.Context context, Element parent, Answer value, NativeEvent event, ValueUpdater<Answer> valueUpdater) {
+	public void onEnterKeyDown(Cell.Context context, Element parent, Choices value, NativeEvent event, ValueUpdater<Choices> valueUpdater) {
 		// TODO implement???
 	}
 
-	private Answer selectInputEvent(Element parent, Answer value) {
+	private Choices selectInputEvent(Element parent, Choices value) {
 		Log.info("selectInputEvent() -- ");
 		SelectElement select = parent.getFirstChild().cast();
-		value.selectedAnswers.clear();
+		value.selectedChoices.clear();
 		int index = select.getSelectedIndex();
-		String newSelectedAnswer = value.possibleAnswers.get(index);
-		value.selectedAnswers.add(newSelectedAnswer);
+		String newSelectedAnswer = value.availableChoices.get(index);
+		value.selectedChoices.add(newSelectedAnswer);
 		return value;
 	}
 
-	private Answer radioInputEvent(Element parent, Answer value) {
+	private Choices radioInputEvent(Element parent, Choices value) {
 		Log.info("radioInputEvent()");
 		for (int i=0; i < parent.getChildCount(); i++) {
 			InputElement input = parent.getChild(i).getFirstChild().cast();
 			if (input.isChecked()) {
-				value.selectedAnswers.clear();
-				value.selectedAnswers.add(value.possibleAnswers.get(i));
+				value.selectedChoices.clear();
+				value.selectedChoices.add(value.availableChoices.get(i));
 				break;
 			}
 		}
 		return value;
 	}
 
-	private Answer checkBoxInputEvent(Element parent, Answer value) {
+	private Choices checkBoxInputEvent(Element parent, Choices value) {
 		Log.info("checkBoxInputEvent()");
-		value.selectedAnswers.clear();
+		value.selectedChoices.clear();
 		for (int i=0; i < parent.getChildCount(); i++) {
 			InputElement input = parent.getChild(i).getFirstChild().cast();
 			if (input.isChecked()) {
-				value.selectedAnswers.add(value.possibleAnswers.get(i));
+				value.selectedChoices.add(value.availableChoices.get(i));
 			}
 		}
 		return value;
 	}
 
-	private Answer textInputEvent(Element parent, Answer value) {
+	private Choices textInputEvent(Element parent, Choices value) {
 		Log.info("textInputEvent()");
-		value.selectedAnswers.clear();
+		value.selectedChoices.clear();
 		InputElement input = parent.getFirstChild().cast();
-		value.selectedAnswers.add(input.getValue());
+		value.selectedChoices.add(input.getValue());
 		return value;
 	}
 
 	@Override
-	public void render(Cell.Context context, GenericAnswerCell.Answer answer, SafeHtmlBuilder sb) {
+	public void render(Cell.Context context, VariableSelectorCell.Choices answer, SafeHtmlBuilder sb) {
 		if (answer == null) {
 			return;
 		}
 		
-		if (answer.type == ElementType.TEXT) {
+		if (answer.type == SelectorType.TEXT) {
 			// it's an open question (written text!)
 			renderTextBox(answer, sb);
-		} else if (answer.type == ElementType.CHECKBOX) {
+		} else if (answer.type == SelectorType.CHECKBOX) {
 			// Multiple choices only possible with checkoxes
 			renderCheckBoxes(context, answer, sb);
-		} else if (answer.type == ElementType.SELECT) {
+		} else if (answer.type == SelectorType.SELECT) {
 			// a dropdown selection is preferred to radio buttons
 			renderSelectBox(context, answer, sb);
 		} else {
@@ -173,10 +177,10 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		}
 	}
 	
-	private void renderSelectBox(Cell.Context context, Answer answer, SafeHtmlBuilder sb) {
+	private void renderSelectBox(Cell.Context context, Choices answer, SafeHtmlBuilder sb) {
 		sb.append(templates.selectTemplate(context.getKey().toString()));
-		for (String possibleAnswer : answer.possibleAnswers) {
-			if (answer.selectedAnswers != null && answer.selectedAnswers.size() > 0 && possibleAnswer.equals(answer.selectedAnswers.get(0))) {
+		for (String possibleAnswer : answer.availableChoices) {
+			if (answer.selectedChoices != null && answer.selectedChoices.size() > 0 && possibleAnswer.equals(answer.selectedChoices.get(0))) {
 				sb.append(templates.optionTemplateSelected(possibleAnswer));
 			} else {
 				sb.append(templates.optionTemplate(possibleAnswer));
@@ -185,15 +189,15 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		sb.appendHtmlConstant("</select>");
 	}
 	
-	private void renderRadios(Cell.Context context, Answer answer, SafeHtmlBuilder sb) {
-		if (answer.possibleAnswers == null) {
+	private void renderRadios(Cell.Context context, Choices answer, SafeHtmlBuilder sb) {
+		if (answer.availableChoices == null) {
 			return;
 		}
 		
 		int i = 0;
 		
-		for (String element : answer.possibleAnswers) {
-			if (answer.selectedAnswers != null && answer.selectedAnswers.size() > 0 && element.equals(answer.selectedAnswers.get(0))) {
+		for (String element : answer.availableChoices) {
+			if (answer.selectedChoices != null && answer.selectedChoices.size() > 0 && element.equals(answer.selectedChoices.get(0))) {
 				sb.append(templates.radioTemplateChecked(context.getKey().toString(), i++, element));
 			} else {
 				sb.append(templates.radioTemplateUnchecked(context.getKey().toString(), i++, element));
@@ -204,17 +208,17 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		}
 	}
 	
-	private void renderCheckBoxes(Cell.Context context, Answer answer, SafeHtmlBuilder sb) {
-		if (answer.possibleAnswers == null) {
+	private void renderCheckBoxes(Cell.Context context, Choices answer, SafeHtmlBuilder sb) {
+		if (answer.availableChoices == null) {
 			return;
 		}
 		
 		boolean selectedAnswerFound = false;
 		int i=0;
 		
-		for (String possibleAnswer : answer.possibleAnswers) {
-			if (answer.selectedAnswers != null && answer.selectedAnswers.size() > 0) {
-				for (String selectedAnswer : answer.selectedAnswers) {
+		for (String possibleAnswer : answer.availableChoices) {
+			if (answer.selectedChoices != null && answer.selectedChoices.size() > 0) {
+				for (String selectedAnswer : answer.selectedChoices) {
 					if (selectedAnswer.equals(possibleAnswer)) {
 						selectedAnswerFound = true;
 					}
@@ -235,9 +239,9 @@ public class GenericAnswerCell extends AbstractInputCell<GenericAnswerCell.Answe
 		}
 	}
 
-	private void renderTextBox(Answer answer, SafeHtmlBuilder sb) {
-		if (answer.selectedAnswers != null && answer.selectedAnswers.size() > 0 && answer.selectedAnswers.get(0) != null) {
-			sb.append(templates.textBoxTemplate(answer.selectedAnswers.get(0)));
+	private void renderTextBox(Choices answer, SafeHtmlBuilder sb) {
+		if (answer.selectedChoices != null && answer.selectedChoices.size() > 0 && answer.selectedChoices.get(0) != null) {
+			sb.append(templates.textBoxTemplate(answer.selectedChoices.get(0)));
 		} else {
 			sb.append(SafeHtmlUtils.fromSafeConstant("<input class=\"gwt-TextBox\" type=\"text\"></input>"));
 		}

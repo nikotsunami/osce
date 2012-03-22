@@ -14,9 +14,9 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
-import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell;
-import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell.Alignment;
-import ch.unibas.medizin.osce.client.style.widgets.cell.GenericAnswerCell.Answer;
+import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell;
+import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Alignment;
+import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Choices;
 import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
@@ -171,14 +171,14 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		}
 	}
 	
-	private class AnswerFieldUpdater implements FieldUpdater<AnamnesisChecksValueProxy, GenericAnswerCell.Answer> {
+	private class AnswerFieldUpdater implements FieldUpdater<AnamnesisChecksValueProxy, VariableSelectorCell.Choices> {
 		@Override
-		public void update(int index, AnamnesisChecksValueProxy proxy, Answer answer) {
+		public void update(int index, AnamnesisChecksValueProxy proxy, Choices answer) {
 			String anamnesisChecksValue = null;
 			Boolean truth = null;
 			switch (proxy.getAnamnesischeck().getType()) {
 			case QuestionYesNo:
-				if (Messages.YES.equals(answer.selectedAnswers.get(0))) {
+				if (Messages.YES.equals(answer.selectedChoices.get(0))) {
 					truth = true;
 				} else {
 					truth = false;
@@ -186,7 +186,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 				break;
 			case QuestionMultM:
 				StringBuilder anamnesisChecksValueBuilder = new StringBuilder();
-				Iterator<String> i = answer.selectedAnswers.iterator();
+				Iterator<String> i = answer.selectedChoices.iterator();
 				
 				while (i.hasNext()) {
 					anamnesisChecksValueBuilder.append(i.next()).append("|");
@@ -197,54 +197,54 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 				}
 				break;
 			default:
-				if (answer.selectedAnswers.get(0) != null && answer.selectedAnswers.get(0).length() > 0) {
-					anamnesisChecksValue = answer.selectedAnswers.get(0);
+				if (answer.selectedChoices.get(0) != null && answer.selectedChoices.get(0).length() > 0) {
+					anamnesisChecksValue = answer.selectedChoices.get(0);
 				}
 			}
 			delegate.saveAnamnesisChecksValueProxyChanges(proxy, anamnesisChecksValue, truth);
 		}
 	}
 	
-	private class AnswerColumn extends Column<AnamnesisChecksValueProxy, Answer> {
+	private class AnswerColumn extends Column<AnamnesisChecksValueProxy, Choices> {
 		public AnswerColumn() {
-			super(new GenericAnswerCell(Alignment.HORIZONTAL));
+			super(new VariableSelectorCell(Alignment.HORIZONTAL));
 			setFieldUpdater(new AnswerFieldUpdater());
 		}
 		
 		@Override
-		public GenericAnswerCell.Answer getValue(AnamnesisChecksValueProxy proxy) {
+		public VariableSelectorCell.Choices getValue(AnamnesisChecksValueProxy proxy) {
 			boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
-			GenericAnswerCell.Answer answer = new GenericAnswerCell.Answer();;
+			VariableSelectorCell.Choices answer = new VariableSelectorCell.Choices();;
 			
 			AnamnesisCheckTypes type = proxy.getAnamnesischeck().getType();
-			answer.selectedAnswers = new ArrayList<String>();
+			answer.selectedChoices = new ArrayList<String>();
 			if (type == AnamnesisCheckTypes.QuestionYesNo) {
-				answer.type = GenericAnswerCell.ElementType.RADIO;
-				answer.possibleAnswers = new ArrayList<String>();
-				answer.possibleAnswers.add(Messages.NO);
-				answer.possibleAnswers.add(Messages.YES);
+				answer.type = VariableSelectorCell.SelectorType.RADIO;
+				answer.availableChoices = new ArrayList<String>();
+				answer.availableChoices.add(Messages.NO);
+				answer.availableChoices.add(Messages.YES);
 				if (questionAnswered && proxy.getTruth() == true) {
-					answer.selectedAnswers.add(Messages.YES);
+					answer.selectedChoices.add(Messages.YES);
 				} else if (questionAnswered) {
-					answer.selectedAnswers.add(Messages.NO);
+					answer.selectedChoices.add(Messages.NO);
 				}
 			} else if (type == AnamnesisCheckTypes.QuestionMultM) {
-				answer.type = GenericAnswerCell.ElementType.CHECKBOX;
-				answer.possibleAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
+				answer.type = VariableSelectorCell.SelectorType.CHECKBOX;
+				answer.availableChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
 				if (questionAnswered) {
-					answer.selectedAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
+					answer.selectedChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
 				}
 			} else if (type == AnamnesisCheckTypes.QuestionMultS) {
-				answer.type = GenericAnswerCell.ElementType.RADIO;
-				answer.possibleAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
+				answer.type = VariableSelectorCell.SelectorType.RADIO;
+				answer.availableChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
 				if (questionAnswered) {
-					answer.selectedAnswers = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
+					answer.selectedChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
 				}
 			} else {
 				// It's an open question or title...
-				answer.type = GenericAnswerCell.ElementType.TEXT;
-				answer.possibleAnswers = null;
-				answer.selectedAnswers.add(proxy.getAnamnesisChecksValue());
+				answer.type = VariableSelectorCell.SelectorType.TEXT;
+				answer.availableChoices = null;
+				answer.selectedChoices.add(proxy.getAnamnesisChecksValue());
 			}
 			return answer;
 		}
