@@ -199,14 +199,6 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private class AnamnesisChecksValueReceiver extends Receiver<List<AnamnesisChecksValueProxy>> {
 		@Override
 		public void onSuccess(List<AnamnesisChecksValueProxy> response) {
-			for (int i=0; i<response.size(); i++) {
-				AnamnesisChecksValueProxy proxy = response.get(i);
-				if (proxy == null) {
-					Log.warn("Proxy #" + i + " is null!");
-				} else {
-					Log.debug("Proxy #" + i + ", id=" + proxy.getId());
-				}
-			}
 			Range range = anamnesisTable.getVisibleRange();
 			Log.debug("response.size(): " + response.size());
 			anamnesisTable.setRowData(range.getStart(), response);

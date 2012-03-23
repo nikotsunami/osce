@@ -1,10 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -16,6 +12,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell;
 import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Alignment;
+import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Choice;
 import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Choices;
 import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
@@ -33,6 +30,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -48,7 +46,8 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	
 	private Set<String> paths = new HashSet<String>();
 	private Delegate delegate;
-
+	private Timer changeRequestTimer = new ChangeRequestTimer();
+	
 	@UiField (provided = true)
 	CellTable<AnamnesisChecksValueProxy> table;
 	
@@ -178,31 +177,59 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			Boolean truth = null;
 			switch (proxy.getAnamnesischeck().getType()) {
 			case QuestionYesNo:
-				if (Messages.YES.equals(answer.selectedChoices.get(0))) {
+				VariableSelectorCell.Choice selectedChoice = answer.getSelectedChoice();
+				if (selectedChoice != null && Messages.YES.equals(selectedChoice.getOption())) {
 					truth = true;
 				} else {
 					truth = false;
 				}
 				break;
 			case QuestionMultM:
+			case QuestionMultS:
 				StringBuilder anamnesisChecksValueBuilder = new StringBuilder();
-				Iterator<String> i = answer.selectedChoices.iterator();
-				
-				while (i.hasNext()) {
-					anamnesisChecksValueBuilder.append(i.next()).append("|");
+				for (Choice choice : answer.getChoices()) {
+					if (choice.isChecked()) {
+						anamnesisChecksValueBuilder.append("1-");
+					} else {
+						anamnesisChecksValueBuilder.append("0-");
+					}
 				}
-				
-				if (anamnesisChecksValueBuilder.length() > 0) {
-					anamnesisChecksValue = anamnesisChecksValueBuilder.toString();
-				}
+				anamnesisChecksValueBuilder.replace(anamnesisChecksValueBuilder.length()-1, anamnesisChecksValueBuilder.length(), "");
+				anamnesisChecksValue = anamnesisChecksValueBuilder.toString();
 				break;
 			default:
-				if (answer.selectedChoices.get(0) != null && answer.selectedChoices.get(0).length() > 0) {
-					anamnesisChecksValue = answer.selectedChoices.get(0);
-				}
+				anamnesisChecksValue = answer.getCustomChoice();
 			}
-			delegate.saveAnamnesisChecksValueProxyChanges(proxy, anamnesisChecksValue, truth);
+			saveProxyChanges(proxy,anamnesisChecksValue,truth);
 		}
+	}
+	
+	// TODO: rename into something meaningful...
+	
+	private AnamnesisChecksValueProxy proxyToBeChanged;
+	private String anamnesisChecksValueToBeChanged;
+	private Boolean truthToBeChanged;
+	
+	private class ChangeRequestTimer extends Timer {
+		@Override
+		public void run() {
+			delegate.saveAnamnesisChecksValueProxyChanges(proxyToBeChanged, anamnesisChecksValueToBeChanged, truthToBeChanged);
+			proxyToBeChanged = null;
+			anamnesisChecksValueToBeChanged = null;
+			truthToBeChanged = null;
+		}
+	}
+
+	private void saveProxyChanges(AnamnesisChecksValueProxy proxy, String anamnesisChecksValue, Boolean truth) {
+		changeRequestTimer.cancel();
+		if (proxyToBeChanged != null && !proxy.getId().equals(proxyToBeChanged.getId())) {
+			delegate.saveAnamnesisChecksValueProxyChanges(proxyToBeChanged, anamnesisChecksValueToBeChanged, truthToBeChanged);
+		}
+
+		proxyToBeChanged = proxy;
+		anamnesisChecksValueToBeChanged = anamnesisChecksValue;
+		truthToBeChanged = truth;
+		changeRequestTimer.schedule(1200);
 	}
 	
 	private class AnswerColumn extends Column<AnamnesisChecksValueProxy, Choices> {
@@ -214,37 +241,53 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		@Override
 		public VariableSelectorCell.Choices getValue(AnamnesisChecksValueProxy proxy) {
 			boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
-			VariableSelectorCell.Choices answer = new VariableSelectorCell.Choices();;
-			
+			VariableSelectorCell.Choices answer;
 			AnamnesisCheckTypes type = proxy.getAnamnesischeck().getType();
-			answer.selectedChoices = new ArrayList<String>();
 			if (type == AnamnesisCheckTypes.QuestionYesNo) {
-				answer.type = VariableSelectorCell.SelectorType.RADIO;
-				answer.availableChoices = new ArrayList<String>();
-				answer.availableChoices.add(Messages.NO);
-				answer.availableChoices.add(Messages.YES);
+				answer = new Choices(VariableSelectorCell.SelectorType.RADIO);
+				
 				if (questionAnswered && proxy.getTruth() == true) {
-					answer.selectedChoices.add(Messages.YES);
+					answer.addChoice(Messages.YES, true);
+					answer.addChoice(Messages.NO, false);
 				} else if (questionAnswered) {
-					answer.selectedChoices.add(Messages.NO);
+					answer.addChoice(Messages.YES, false);
+					answer.addChoice(Messages.NO, true);
+				} else {
+					answer.addChoice(Messages.YES, false);
+					answer.addChoice(Messages.NO, false);
 				}
 			} else if (type == AnamnesisCheckTypes.QuestionMultM) {
-				answer.type = VariableSelectorCell.SelectorType.CHECKBOX;
-				answer.availableChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
+				answer = new Choices(VariableSelectorCell.SelectorType.CHECKBOX, proxy.getAnamnesischeck().getValue().split("\\|"));
+				
 				if (questionAnswered) {
-					answer.selectedChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
+					int i = 0;
+					for (String selected : proxy.getAnamnesisChecksValue().split("-")) {
+						try {
+							boolean isSelected = (Integer.parseInt(selected) > 0) ? true : false;
+							if (isSelected) {
+								answer.setSelected(i);
+							}
+						} catch (NumberFormatException ex) {}
+						i++;
+					}
 				}
 			} else if (type == AnamnesisCheckTypes.QuestionMultS) {
-				answer.type = VariableSelectorCell.SelectorType.RADIO;
-				answer.availableChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesischeck().getValue().split("\\|")));
+				answer = new Choices(VariableSelectorCell.SelectorType.RADIO, proxy.getAnamnesischeck().getValue().split("\\|"));
 				if (questionAnswered) {
-					answer.selectedChoices = new LinkedList<String>(Arrays.asList(proxy.getAnamnesisChecksValue().split("\\|")));
+					int i = 0;
+					for (String selected : proxy.getAnamnesisChecksValue().split("-")) {
+						try {
+							boolean isSelected = (Integer.parseInt(selected) > 0) ? true : false;
+							if (isSelected) {
+								answer.setSelected(i);
+							}
+						} catch (NumberFormatException ex) {}
+						i++;
+					}
 				}
 			} else {
 				// It's an open question or title...
-				answer.type = VariableSelectorCell.SelectorType.TEXT;
-				answer.availableChoices = null;
-				answer.selectedChoices.add(proxy.getAnamnesisChecksValue());
+				answer = new Choices(proxy.getAnamnesisChecksValue());
 			}
 			return answer;
 		}

@@ -64,16 +64,16 @@ INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (3,
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (4,4,'',0,'Welche Medikamente nehmen Sie ein?',0);
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (5,5,'',1,'Leiden Sie unter Diabetes?',0);
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (6,6,'',1,'Wurde Ihnen der Blinddarm entfernt?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (7,7,'Marihuana|Kokain|Heroin|LSD|Speed|Jack Daniels|Johnny Walker|Talisker',3,'Nehmen Sie eine der aufgelisteten Drogen und wenn ja, welche?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (8,8,'Darmende, da irgendwo unterm Bauchnabel denk|Kopf|Fuss|Iris',2,'Woraus wurde Ihnen der Blinddarm entfernt?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (7,7,'Prozac|Ritalin|Aspirin|Ethanol',3,'Nehmen Sie eines der aufgelisteten Medikamete und wenn ja, welche?',0);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (8,8,'Darmende|Kopf|Fuss|Iris',2,'Woraus wurde Ihnen der Blinddarm entfernt?',0);
 INSERT INTO `anamnesis_check` (id,sort_order,value,type,text,version) VALUES (9,9,'Marlboro|Mary Long|Lucky Strike|Awesomesauce|Winfail',3,'Welche Zigarettenmarken haben Sie schon geraucht?',0);
 
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (1,'selten',NULL,NULL,0,2,2);
+INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (1,'0-0-1',NULL,NULL,0,2,2);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (7,NULL,NULL,0,0,3,2);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (8,NULL,NULL,1,0,1,3);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (9,NULL,NULL,0,0,3,3);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (10,NULL,NULL,1,0,1,4);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (11,'oft',NULL,NULL,0,2,4);
+INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (11,'1-0-0',NULL,NULL,0,2,4);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (12,NULL,NULL,0,0,5,5);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (13,NULL,NULL,1,0,6,5);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (14,NULL,NULL,0,0,1,6);
@@ -85,13 +85,13 @@ INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,ve
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (20,NULL,NULL,0,0,3,9);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (21,NULL,NULL,1,0,6,9);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (22,NULL,NULL,1,0,1,10);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (23,'mittel',NULL,0,0,2,10);
+INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (23,'0-1-0',NULL,0,0,2,10);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (24,NULL,NULL,1,0,3,11);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (25,'Aceton, Araldit',NULL,1,0,4,11);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (26,NULL,NULL,0,0,1,12);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (27,NULL,NULL,0,0,5,12);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (28,'Marlboro|Awesomesauce',NULL,NULL,0,9,11);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (29,'Darmende, da irgendwo unterm Bauchnabel denk',NULL,NULL,0,8,11);
+INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (28,'1-0-0-1-0',NULL,NULL,0,9,11);
+INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (29,'1-0-0-0',NULL,NULL,0,8,11);
 
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (2,'0123','CH00 0000 0000 000 000','UBS AG',0);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (20,'GENODEF1JEV','CH46 3948 4853 2029 3','Basler Kantonalbank',0);
