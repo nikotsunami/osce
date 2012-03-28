@@ -1,11 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-import java.util.Arrays;
-
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
-import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
-import ch.unibas.medizin.osce.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -40,9 +36,10 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	
 	public StandardizedPatientBankaccountEditSubViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
-		labelBankName.setInnerText(Messages.BANK_NAME);
-		labelBankBIC.setInnerText(Messages.BANK_BIC);
-		labelBankIBAN.setInnerText(Messages.BANK_IBAN);
+		OsceConstants constants = GWT.create(OsceConstants.class);
+		labelBankName.setInnerText(constants.bank());
+		labelBankBIC.setInnerText(constants.bic());
+		labelBankIBAN.setInnerText(constants.iban());
 	}
 	
 	

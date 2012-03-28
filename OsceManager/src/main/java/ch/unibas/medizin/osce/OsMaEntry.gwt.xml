@@ -40,6 +40,15 @@
      http[s]://hostame:port/yourmodule/Yourmodule.html?log_level=INFO
   -->
   
+  <inherits name="com.google.gwt.i18n.I18N"/>
+  <extend-property name="locale" values="en_US"/>
+  <extend-property name="locale" values="en_GB"/>
+  <extend-property name="locale" values="de_CH"/>
+  <extend-property name="locale" values="de_AT"/>
+  <extend-property name="locale" values="de_DE"/>
+  <set-property name="locale" value="de_CH" />
+  
+  
   <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
   <!-- <extend-property name="log_level" values="DEBUG"/> -->
 	

@@ -3,7 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
@@ -11,7 +11,6 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -94,24 +93,25 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	 */
 	public DoctorDetailsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		
 		doctorPanel.selectTab(0);
 
-		doctorPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
-		doctorPanel.getTabBar().setTabText(1, Messages.OFFICE_DETAILS);
+		doctorPanel.getTabBar().setTabText(0, constants.generalInformation());
+		doctorPanel.getTabBar().setTabText(1, constants.officeDetails());
 		
 		TabPanelHelper.moveTabBarToBottom(doctorPanel);
 		
-		edit.setText(Messages.EDIT);
-		delete.setText(Messages.DELETE);
+		edit.setText(constants.edit());
+		delete.setText(constants.delete());
 		
-		labelGender.setInnerText(Messages.GENDER + ":");
-		labelTitle.setInnerText(Messages.TITLE + ":");
-		labelName.setInnerText(Messages.NAME + ":");
-		labelPreName.setInnerText(Messages.PRENAME + ":");
-		labelEmail.setInnerText(Messages.EMAIL + ":");
-		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
-		labelClinic.setInnerText(Messages.CLINIC + ":");
+		labelGender.setInnerText(constants.gender() + ":");
+		labelTitle.setInnerText(constants.title() + ":");
+		labelName.setInnerText(constants.name() + ":");
+		labelPreName.setInnerText(constants.preName() + ":");
+		labelEmail.setInnerText(constants.email() + ":");
+		labelTelephone.setInnerText(constants.telephone() + ":");
+		labelClinic.setInnerText(constants.clinic() + ":");
 	}
   
 

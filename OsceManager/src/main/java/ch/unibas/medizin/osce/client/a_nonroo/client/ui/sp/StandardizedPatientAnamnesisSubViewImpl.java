@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -47,6 +47,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	private Set<String> paths = new HashSet<String>();
 	private Delegate delegate;
 	private Timer changeRequestTimer = new ChangeRequestTimer();
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField (provided = true)
 	CellTable<AnamnesisChecksValueProxy> table;
@@ -89,8 +90,8 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	
 	private void initCheckBoxes() {
 		showAnswered.setValue(true);
-		showAnswered.setText(Messages.SHOW_ANSWERED);
-		showUnanswered.setText(Messages.SHOW_UNANSWERED);
+		showAnswered.setText(constants.showAnswered());
+		showUnanswered.setText(constants.showUnanswered());
 		
 		showAnswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
@@ -114,10 +115,10 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		paths.add("anamnesischeck");
 		
 		table.setRowStyles(new CustomRowStyles());
-		table.addColumn(new StatusColumn(), Messages.ANSWERED);
-		table.addColumn(new QuestionColumn(), Messages.QUESTION);
-		table.addColumn(new AnswerColumn(), Messages.ANSWER);
-		table.addColumn(new CommentColumn(), Messages.COMMENT);
+		table.addColumn(new StatusColumn(), constants.answered());
+		table.addColumn(new QuestionColumn(), constants.question());
+		table.addColumn(new AnswerColumn(), constants.answer());
+		table.addColumn(new CommentColumn(), constants.comment());
 		table.addColumnStyleName(0, "iconCol");
 	}
 
@@ -147,12 +148,10 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 		}
 	}
 	
-	private static class StatusColumn extends Column<AnamnesisChecksValueProxy, Integer> {
-		private static final String[] ICON_DESCRIPTORS = {"closethick", "check"};
-		private static final String[] ICON_TITLES = {Messages.ANSWER_PENDING, Messages.ANSWER_GIVEN};
+	private class StatusColumn extends Column<AnamnesisChecksValueProxy, Integer> {
 		
 		public StatusColumn() {
-			super(new IconCell(ICON_DESCRIPTORS, ICON_TITLES));
+			super(new IconCell(new String[] {"closethick", "check"}, new String[] {constants.answerPending(), constants.answerGiven()}));
 		}
 		
 		@Override
@@ -176,16 +175,16 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			String anamnesisChecksValue = null;
 			Boolean truth = null;
 			switch (proxy.getAnamnesischeck().getType()) {
-			case QuestionYesNo:
+			case QUESTION_YES_NO:
 				VariableSelectorCell.Choice selectedChoice = answer.getSelectedChoice();
-				if (selectedChoice != null && Messages.YES.equals(selectedChoice.getOption())) {
+				if (selectedChoice != null && constants.yes().equals(selectedChoice.getOption())) {
 					truth = true;
 				} else {
 					truth = false;
 				}
 				break;
-			case QuestionMultM:
-			case QuestionMultS:
+			case QUESTION_MULT_M:
+			case QUESTION_MULT_S:
 				StringBuilder anamnesisChecksValueBuilder = new StringBuilder();
 				for (Choice choice : answer.getChoices()) {
 					if (choice.isChecked()) {
@@ -243,20 +242,20 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 			boolean questionAnswered = !(proxy.getTruth() == null && proxy.getAnamnesisChecksValue() == null);
 			VariableSelectorCell.Choices answer;
 			AnamnesisCheckTypes type = proxy.getAnamnesischeck().getType();
-			if (type == AnamnesisCheckTypes.QuestionYesNo) {
+			if (type == AnamnesisCheckTypes.QUESTION_YES_NO) {
 				answer = new Choices(VariableSelectorCell.SelectorType.RADIO);
 				
 				if (questionAnswered && proxy.getTruth() == true) {
-					answer.addChoice(Messages.YES, true);
-					answer.addChoice(Messages.NO, false);
+					answer.addChoice(constants.yes(), true);
+					answer.addChoice(constants.no(), false);
 				} else if (questionAnswered) {
-					answer.addChoice(Messages.YES, false);
-					answer.addChoice(Messages.NO, true);
+					answer.addChoice(constants.yes(), false);
+					answer.addChoice(constants.no(), true);
 				} else {
-					answer.addChoice(Messages.YES, false);
-					answer.addChoice(Messages.NO, false);
+					answer.addChoice(constants.yes(), false);
+					answer.addChoice(constants.no(), false);
 				}
-			} else if (type == AnamnesisCheckTypes.QuestionMultM) {
+			} else if (type == AnamnesisCheckTypes.QUESTION_MULT_M) {
 				answer = new Choices(VariableSelectorCell.SelectorType.CHECKBOX, proxy.getAnamnesischeck().getValue().split("\\|"));
 				
 				if (questionAnswered) {
@@ -271,7 +270,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 						i++;
 					}
 				}
-			} else if (type == AnamnesisCheckTypes.QuestionMultS) {
+			} else if (type == AnamnesisCheckTypes.QUESTION_MULT_S) {
 				answer = new Choices(VariableSelectorCell.SelectorType.RADIO, proxy.getAnamnesischeck().getValue().split("\\|"));
 				if (questionAnswered) {
 					int i = 0;

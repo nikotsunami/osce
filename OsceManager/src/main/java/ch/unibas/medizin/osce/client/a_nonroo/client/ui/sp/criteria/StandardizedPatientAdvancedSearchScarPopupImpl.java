@@ -2,13 +2,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.Arrays;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -59,13 +58,14 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
     });
 
 	public StandardizedPatientAdvancedSearchScarPopupImpl() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		setWidget(uiBinder.createAndBindUi(this));
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		comparison.setValue(Comparison2.values()[0]);
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
-		addScarButton.setText(Messages.ADD);
-		scarButton.setText(Messages.TRAITS);
+		addScarButton.setText(constants.add());
+		scarButton.setText(constants.traits());
 	}
 	
 	@UiHandler("addScarButton")

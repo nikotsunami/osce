@@ -3,8 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -12,7 +11,6 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -22,10 +20,8 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.dom.client.Node;
 
 /**
  * @author niko2
@@ -40,6 +36,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 	}
 
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private Presenter presenter;
 	StandardizedPatientProxy proxy;
 
@@ -160,43 +157,43 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		// reorder the Tab- and Content-Panels
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
 		
-		edit.setText(Messages.EDIT);
-		delete.setText(Messages.DELETE);
-		maps.setText(Messages.GOOGLE_MAPS);
+		edit.setText(constants.edit());
+		delete.setText(constants.delete());
+		maps.setText(constants.googleMaps());
 				
 		setTabTexts();
 		setLabelTexts();
 	}
 	
 	private void setTabTexts() {
-		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
-		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
-		patientPanel.getTabBar().setTabText(2, Messages.LANGUAGE_SKILLS);
-		patientPanel.getTabBar().setTabText(3, Messages.BANK_ACCOUNT);
-		patientPanel.getTabBar().setTabText(4, Messages.DESCRIPTION);
+		patientPanel.getTabBar().setTabText(0, constants.contactInfo());
+		patientPanel.getTabBar().setTabText(1, constants.details());
+		patientPanel.getTabBar().setTabText(2, constants.languageSkills());
+		patientPanel.getTabBar().setTabText(3, constants.bankAccount());
+		patientPanel.getTabBar().setTabText(4, constants.description());
 		
-		scarAnamnesisPanel.getTabBar().setTabText(0, Messages.TRAITS);
-		scarAnamnesisPanel.getTabBar().setTabText(1, Messages.ANAMNESIS_VALUES);
+		scarAnamnesisPanel.getTabBar().setTabText(0, constants.traits());
+		scarAnamnesisPanel.getTabBar().setTabText(1, constants.anamnesisValues());
 	}
 	
 	private void setLabelTexts() {
-		labelPLZCity.setInnerText(Messages.PLZCITY + ":");
-		labelEmail.setInnerText(Messages.EMAIL + ":");
-		labelMobile.setInnerText(Messages.MOBILE + ":");
-		labelStreet.setInnerText(Messages.STREET + ":");
-		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
-		labelTelephone2.setInnerText(Messages.TELEPHONE + " 2:");
+		labelPLZCity.setInnerText(constants.plzCity() + ":");
+		labelEmail.setInnerText(constants.email() + ":");
+		labelMobile.setInnerText(constants.mobile() + ":");
+		labelStreet.setInnerText(constants.street() + ":");
+		labelTelephone.setInnerText(constants.telephone() + ":");
+		labelTelephone2.setInnerText(constants.telephone() + " 2:");
 		
-		labelBankName.setInnerText(Messages.BANK_NAME + ":");
-		labelBankIBAN.setInnerText(Messages.BANK_IBAN + ":");
-		labelBankBIC.setInnerText(Messages.BANK_BIC + ":");
+		labelBankName.setInnerText(constants.bank() + ":");
+		labelBankIBAN.setInnerText(constants.iban() + ":");
+		labelBankBIC.setInnerText(constants.bic() + ":");
 		
-		labelBirthdate.setInnerText(Messages.BIRTHDAY + ":");
-		labelGender.setInnerText(Messages.GENDER + ":");
-		labelHeight.setInnerText(Messages.HEIGHT + ":");
-		labelWeight.setInnerText(Messages.WEIGHT + ":");
-		labelNationality.setInnerText(Messages.NATIONALITY + ":");
-		labelProfession.setInnerText(Messages.PROFESSION + ":");
+		labelBirthdate.setInnerText(constants.birthday() + ":");
+		labelGender.setInnerText(constants.gender() + ":");
+		labelHeight.setInnerText(constants.height() + ":");
+		labelWeight.setInnerText(constants.weight() + ":");
+		labelNationality.setInnerText(constants.nationality() + ":");
+		labelProfession.setInnerText(constants.profession() + ":");
 	}
 
 	public void setValue(StandardizedPatientProxy proxy) {
@@ -209,7 +206,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
 		telephone2.setInnerText(proxy.getTelephone2() == null ? "" : String.valueOf(proxy.getTelephone2()));
-		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(Messages.DATE_TIME_FORMAT).format(proxy.getBirthday()));
+		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(constants.dateTimeFormat()).format(proxy.getBirthday()));
 		height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
 		weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
 		

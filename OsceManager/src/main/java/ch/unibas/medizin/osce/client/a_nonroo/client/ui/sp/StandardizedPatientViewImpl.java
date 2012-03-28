@@ -9,7 +9,7 @@ import java.util.List;
 
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -48,6 +48,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 
 	interface SystemStartViewUiBinder extends UiBinder<Widget, StandardizedPatientViewImpl> {
 	}
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private Delegate delegate;
 	@UiField
@@ -132,7 +134,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_PATIENT);
+		newButton.setText(constants.addPatient());
 	}
 
 	public String[] getPaths() {
@@ -202,7 +204,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, Messages.NAME);
+		}, constants.name());
 		paths.add("preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			
@@ -219,7 +221,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getPreName());
 			}
-		}, Messages.PRENAME);
+		}, constants.preName());
 		
 /*        paths.add("street");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
@@ -323,7 +325,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getEmail());
 			}
-		}, Messages.EMAIL);
+		}, constants.email());
 //        paths.add("nationality");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //

@@ -3,14 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
-
-
-import ch.unibas.medizin.osce.client.i18n.MessageLoader;
-import ch.unibas.medizin.osce.client.scaffold.ui.LoginWidget;
-
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;

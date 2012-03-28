@@ -3,7 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Arrays;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.shared.Gender;
 //import ch.unibas.medizin.osce.client.shared.Gender;
@@ -23,8 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class OfficeEditViewImpl extends Composite implements OfficeEditView, Editor<OfficeProxy> {
 
 	private static final Binder BINDER = GWT.create(Binder.class);
-
-	private static OfficeEditView instance;
 	
 	@UiField(provided=true)
 	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
@@ -61,15 +59,16 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 	private Delegate delegate;
 
 	public OfficeEditViewImpl() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		initWidget(BINDER.createAndBindUi(this));
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 
-		labelGender.setInnerText(Messages.GENDER + ":");
-		labelTitle.setInnerText(Messages.TITLE + ":");
-		labelName.setInnerText(Messages.NAME + ":");
-		labelPreName.setInnerText(Messages.PRENAME + ":");
-		labelEmail.setInnerText(Messages.EMAIL + ":");
-		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		labelGender.setInnerText(constants.gender() + ":");
+		labelTitle.setInnerText(constants.title() + ":");
+		labelName.setInnerText(constants.name() + ":");
+		labelPreName.setInnerText(constants.preName() + ":");
+		labelEmail.setInnerText(constants.email() + ":");
+		labelTelephone.setInnerText(constants.telephone() + ":");
 	}
     
 	interface Binder extends UiBinder<Widget, OfficeEditViewImpl> {

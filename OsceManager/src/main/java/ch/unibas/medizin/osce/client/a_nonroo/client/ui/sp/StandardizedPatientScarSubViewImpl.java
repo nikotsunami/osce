@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -41,6 +40,8 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	interface StandardizedPatientScarSubViewImplUiBinder extends
 	UiBinder<Widget, StandardizedPatientScarSubViewImpl> {
 	}
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField (provided = true)
 	CellTable<ScarProxy> table;
@@ -76,7 +77,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		scarAddButton.setText(Messages.ADD_TRAIT);
+		scarAddButton.setText(constants.addTrait());
 	}
 
 	@UiHandler("scarAddButton")
@@ -102,7 +103,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getTraitType().toString());
 			}
-		}, Messages.TRAITS);
+		}, constants.traits());
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
@@ -117,7 +118,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, Messages.LOCATION);
+		}, constants.location());
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {

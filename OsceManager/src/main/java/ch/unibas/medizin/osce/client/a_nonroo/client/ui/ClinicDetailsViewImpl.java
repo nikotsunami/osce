@@ -3,7 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
@@ -11,13 +11,11 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -80,21 +78,22 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	 * HasHTML instead of HasText.
 	 */
 	public ClinicDetailsViewImpl() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		initWidget(uiBinder.createAndBindUi(this));
 
 		clinicPanel.selectTab(0);
 
-		clinicPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
-		clinicPanel.getTabBar().setTabText(1, Messages.DOCTORS);
+		clinicPanel.getTabBar().setTabText(0, constants.generalInformation());
+		clinicPanel.getTabBar().setTabText(1, constants.doctors());
 
 		TabPanelHelper.moveTabBarToBottom(clinicPanel);
 
-		edit.setText(Messages.EDIT);
-		delete.setText(Messages.DELETE);
+		edit.setText(constants.edit());
+		delete.setText(constants.delete());
 
-		labelName.setInnerText(Messages.NAME + ":");
-		labelStreet.setInnerText(Messages.STREET + ":");
-		labelCity.setInnerText(Messages.PLZ + ", " + Messages.CITY + ":");
+		labelName.setInnerText(constants.name() + ":");
+		labelStreet.setInnerText(constants.street() + ":");
+		labelCity.setInnerText(constants.plz() + ", " + constants.city() + ":");
 	}
 
 	public void setValue(ClinicProxy proxy) {

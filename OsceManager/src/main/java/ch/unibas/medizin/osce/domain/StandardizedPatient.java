@@ -389,22 +389,22 @@ public class StandardizedPatient {
     		else if (criterium.getComparation() == Comparison2.MORE){
     			comparitionSign = " > ";
     		}
-       		else if (criterium.getComparation() == Comparison2.NOTEQUALS){
+       		else if (criterium.getComparation() == Comparison2.NOT_EQUALS){
     			comparitionSign = " != ";
     		}
 			
 			log.info("PS criterium: value is["+criterium.getValue()+"]");
 			
-			if (criterium.getField() == PossibleFields.height ){
+			if (criterium.getField() == PossibleFields.HEIGHT ){
 				simpatSearch.searchWeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
-			else if (criterium.getField() == PossibleFields.weight){
+			else if (criterium.getField() == PossibleFields.WEIGHT){
 				simpatSearch.searchHeight(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
-			else if (criterium.getField() == PossibleFields.bmi){
+			else if (criterium.getField() == PossibleFields.BMI){
 				simpatSearch.searchBMI(Integer.parseInt(criterium.getValue()), criterium.getBindType().toString(), comparitionSign);
 			}
-			if (criterium.getField() == PossibleFields.scar){
+			if (criterium.getField() == PossibleFields.SCAR){
 				simpatSearch.searchScar(criterium.getId(), criterium.getBindType().toString(), comparitionSign);
 			}
 		}
@@ -497,8 +497,8 @@ public class StandardizedPatient {
         		if(field.equals("weight") || field.equals("height")) {
         			value = Integer.parseInt((String)value);
         		} else if(field.equals("gender")) {
-        			if(value.equals("1")) value = Gender.man;
-        			else value = Gender.woman;
+        			if(value.equals("1")) value = Gender.MALE;
+        			else value = Gender.FEMALE;
         		} else if(field.equals("birthday")) {
         			//psfixme
         			value = Date.parse((String)value);

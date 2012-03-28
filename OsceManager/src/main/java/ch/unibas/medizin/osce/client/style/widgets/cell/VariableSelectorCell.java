@@ -178,6 +178,44 @@ public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell
 		public void addChoice(String option, boolean checked) {
 			choices.add(new Choice(option, checked));
 		}
+		
+		@Override
+		public boolean equals (Object other) {
+			if (!(other instanceof Choices)) {
+				return false;
+			}
+			Choices otherChoices = (Choices) other;
+			return (selectorType.equals(otherChoices.selectorType) && 
+					equalsOrNull(customChoice, otherChoices.customChoice) &&
+					equalsOrNull(choices, otherChoices.choices));
+		}
+		
+		private static boolean equalsOrNull(Object a, Object b) {
+			if (a != null) {
+				return a.equals(b);
+			}
+			return (b == null);
+		}
+	}
+	
+	public static class ViewData {
+		private Choices currentChoices;
+		private Choices oldChoices;
+		
+		public ViewData(Choices choices) {
+			currentChoices = choices;
+			oldChoices = choices;
+		}
+		
+		@Override
+		public boolean equals(Object other) {
+			if (!(other instanceof ViewData)) {
+				return false;
+			}
+			ViewData otherViewData = (ViewData) other;
+			return otherViewData.currentChoices.equals(currentChoices) 
+					&& otherViewData.oldChoices.equals(oldChoices);
+		}
 	}
 	
 	public VariableSelectorCell() {

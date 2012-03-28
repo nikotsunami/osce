@@ -3,7 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.Collection;
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
@@ -12,9 +12,7 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,7 +21,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -34,9 +31,9 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 
 	private static final Binder BINDER = GWT.create(Binder.class);
 
-	private static ClinicEditView instance;
 	private Delegate delegate;
 	private Presenter presenter;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField
 	TabPanel clinicPanel;
@@ -75,17 +72,17 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 		
 		clinicPanel.selectTab(0);
 
-		clinicPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
-		clinicPanel.getTabBar().setTabText(1, Messages.DOCTORS);
+		clinicPanel.getTabBar().setTabText(0, constants.generalInformation());
+		clinicPanel.getTabBar().setTabText(1, constants.doctors());
 
 		TabPanelHelper.moveTabBarToBottom(clinicPanel);
 
-		cancel.setText(Messages.CANCEL);
-		save.setText(Messages.SAVE);
+		cancel.setText(constants.cancel());
+		save.setText(constants.save());
 
-		labelName.setInnerText(Messages.NAME + ":");
-		labelStreet.setInnerText(Messages.STREET + ":");
-		labelCity.setInnerText(Messages.PLZ + ", " + Messages.CITY + ":");
+		labelName.setInnerText(constants.name() + ":");
+		labelStreet.setInnerText(constants.street() + ":");
+		labelCity.setInnerText(constants.plz() + ", " + constants.city() + ":");
 	}
 
 	@Override
@@ -97,9 +94,9 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			header.setInnerText(Messages.CLINIC_CREATE);
+			header.setInnerText(constants.createClinic());
 		} else {
-			header.setInnerText(Messages.CLINIC_EDIT);
+			header.setInnerText(constants.editClinic());
 		}
 	}
 
@@ -139,9 +136,9 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 	@Override
 	public void setEditTitle(boolean edit) {
 		if (edit) {
-			header.setInnerText(Messages.CLINIC_EDIT);
+			header.setInnerText(constants.editClinic());
 		} else {
-			header.setInnerText(Messages.CLINIC_CREATE);
+			header.setInnerText(constants.createClinic());
 		}
 
 	}

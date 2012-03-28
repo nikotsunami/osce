@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -53,6 +53,7 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 	interface SystemStartViewUiBinder extends UiBinder<Widget, ProfessionViewImpl> {
 	}
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private Delegate delegate;
 
 	@UiField
@@ -114,7 +115,7 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_PROFESSION);
+		newButton.setText(constants.addProfession());
 	}
 
 	public String[] getPaths() {
@@ -179,7 +180,7 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 			public String getValue(ProfessionProxy object) {
 				return renderer.render(object.getProfession());
 			}
-		}, Messages.PROFESSION);
+		}, constants.profession());
 //		paths.add("standardizedPatient");
 //		table.addColumn(new TextColumn<ProfessionProxy>() {
 //

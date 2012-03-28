@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -145,21 +145,23 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			}
 		});
 		
-		resetButton.setText(Messages.RESET_FILTERS);
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		
-		initCheckBox(name, "name", Messages.NAME);
-		initCheckBox(prename, "preName", Messages.PRENAME);
-		initCheckBox(street, "street", Messages.STREET);
-		initCheckBox(city, "city", Messages.CITY);
-		initCheckBox(postalCode, "postalCode", Messages.PLZ);
-		initCheckBox(telephone, "telephone", Messages.TELEPHONE);
-		initCheckBox(telephone2, "telephone2", Messages.TELEPHONE + " 2");
-		initCheckBox(mobile, "mobile", Messages.MOBILE);
-		initCheckBox(email, "email", Messages.EMAIL);
-		initCheckBox(bankName, "bankAccount.bankName", Messages.BANK_NAME);
-		initCheckBox(bankBIC, "bankAccount.BIC", Messages.BANK_BIC);
-		initCheckBox(bankIBAN, "bankAccount.IBAN", Messages.BANK_IBAN);
-		initCheckBox(description, "descriptions", Messages.DESCRIPTION);
+		resetButton.setText(constants.resetFilters());
+		
+		initCheckBox(name, "name", constants.name());
+		initCheckBox(prename, "preName", constants.preName());
+		initCheckBox(street, "street", constants.street());
+		initCheckBox(city, "city", constants.city());
+		initCheckBox(postalCode, "postalCode", constants.plz());
+		initCheckBox(telephone, "telephone", constants.telephone());
+		initCheckBox(telephone2, "telephone2", constants.telephone() + " 2");
+		initCheckBox(mobile, "mobile", constants.mobile());
+		initCheckBox(email, "email", constants.email());
+		initCheckBox(bankName, "bankAccount.bankName", constants.bank());
+		initCheckBox(bankBIC, "bankAccount.BIC", constants.bic());
+		initCheckBox(bankIBAN, "bankAccount.IBAN", constants.iban());
+		initCheckBox(description, "descriptions", constants.description());
 		
 		name.setValue(true);
 		prename.setValue(true);
@@ -186,8 +188,8 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	}
 	
 	private void initFromTo(ListBox uiFieldFrom, ListBox uiFieldTo, String name, String text) {
-		uiFieldFrom.setText(Messages.FROM);
-		uiFieldTo.setText(Messages.TO);
+		uiFieldFrom.setText(constants.FROM);
+		uiFieldTo.setText(constants.TO);
 		fields.add(new CheckBoxItem(uiField, name));
 	}
 	*/

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
@@ -15,9 +15,7 @@ import ch.unibas.medizin.osce.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -38,8 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class DoctorEditViewImpl extends Composite implements DoctorEditView, Editor<DoctorProxy> {
 
 	private static final Binder BINDER = GWT.create(Binder.class);
-
-	private static DoctorEditView instance;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField
 	TabPanel doctorPanel;
@@ -104,21 +101,21 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		
 		doctorPanel.selectTab(0);
 
-		doctorPanel.getTabBar().setTabText(0, Messages.GENERAL_INFO);
-		doctorPanel.getTabBar().setTabText(1, Messages.OFFICE_DETAILS);
+		doctorPanel.getTabBar().setTabText(0, constants.generalInformation());
+		doctorPanel.getTabBar().setTabText(1, constants.officeDetails());
 		
 		TabPanelHelper.moveTabBarToBottom(doctorPanel);
 		
-		save.setText(Messages.SAVE);
-		cancel.setText(Messages.CANCEL);
+		save.setText(constants.save());
+		cancel.setText(constants.cancel());
 		
-		labelGender.setInnerText(Messages.GENDER + ":");
-		labelTitle.setInnerText(Messages.TITLE + ":");
-		labelName.setInnerText(Messages.NAME + ":");
-		labelPreName.setInnerText(Messages.PRENAME + ":");
-		labelEmail.setInnerText(Messages.EMAIL + ":");
-		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
-		labelClinic.setInnerText(Messages.CLINIC + ":");
+		labelGender.setInnerText(constants.gender() + ":");
+		labelTitle.setInnerText(constants.title() + ":");
+		labelName.setInnerText(constants.name() + ":");
+		labelPreName.setInnerText(constants.preName() + ":");
+		labelEmail.setInnerText(constants.email() + ":");
+		labelTelephone.setInnerText(constants.telephone() + ":");
+		labelClinic.setInnerText(constants.clinic() + ":");
 	}
 
 
@@ -131,9 +128,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			header.setInnerText(Messages.DOCTOR_CREATE);
+			header.setInnerText(constants.createDoctor());
 		} else {
-			header.setInnerText(Messages.DOCTOR_EDIT);
+			header.setInnerText(constants.editDoctor());
 		}
 	}
 
@@ -174,9 +171,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	public void setEditTitle(boolean edit) {
 		
 		if (edit) {
-			header.setInnerText(Messages.DOCTOR_EDIT);
+			header.setInnerText(constants.editDoctor());
         } else {
-			header.setInnerText(Messages.DOCTOR_CREATE);
+			header.setInnerText(constants.createDoctor());
         }
 
 	}

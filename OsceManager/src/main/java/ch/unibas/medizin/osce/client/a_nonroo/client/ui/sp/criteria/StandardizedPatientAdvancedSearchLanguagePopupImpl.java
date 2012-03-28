@@ -1,19 +1,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
-import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
-import ch.unibas.medizin.osce.domain.LangSkill;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
-import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,7 +16,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,6 +66,7 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
     });
 
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		setWidget(uiBinder.createAndBindUi(this));
 		skill.setValue(LangSkillLevel.values()[0]);
 		skill.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
@@ -80,8 +74,8 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		comparison.setValue(Comparison2.values()[0]);
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
-		addLanguageButton.setText(Messages.ADD);
-		languageButton.setText(Messages.LANGUAGES);
+		addLanguageButton.setText(constants.add());
+		languageButton.setText(constants.languages());
 	}
 	
 	@UiHandler("addLanguageButton")

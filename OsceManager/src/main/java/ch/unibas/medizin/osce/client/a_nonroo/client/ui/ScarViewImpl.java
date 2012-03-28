@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -56,6 +56,8 @@ public class ScarViewImpl extends Composite implements ScarView {
 	interface ScarViewUiBinder extends UiBinder<Widget, ScarViewImpl> {
 	}
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	private Delegate delegate;
 
 	@UiField
@@ -124,7 +126,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 		traitTypeBox.setAcceptableValues(Arrays.asList(TraitTypes.values()));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_TRAIT);
+		newButton.setText(constants.addTrait());
 	}
 
 	public String[] getPaths() {
@@ -160,7 +162,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getTraitType().toString());
 			}
-		}, Messages.TYPE);
+		}, constants.type());
 		paths.add("bodypart");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
@@ -175,7 +177,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, Messages.LOCATION);
+		}, constants.location());
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {

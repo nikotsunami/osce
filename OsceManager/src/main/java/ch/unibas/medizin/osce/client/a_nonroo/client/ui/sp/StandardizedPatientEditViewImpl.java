@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
@@ -64,6 +64,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	private static StandardizedPatientEditView instance;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField
 	TabPanel patientPanel;
@@ -165,13 +166,13 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
 		
-		cancel.setText(Messages.CANCEL);
-		save.setText(Messages.SAVE);
+		cancel.setText(constants.cancel());
+		save.setText(constants.save());
 		
-		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
-		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
-		patientPanel.getTabBar().setTabText(2, Messages.BANK_ACCOUNT);
-		patientPanel.getTabBar().setTabText(3, Messages.DESCRIPTION);
+		patientPanel.getTabBar().setTabText(0, constants.contactInfo());
+		patientPanel.getTabBar().setTabText(1, constants.details());
+		patientPanel.getTabBar().setTabText(2, constants.bankAccount());
+		patientPanel.getTabBar().setTabText(3, constants.description());
 		
 		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
@@ -353,28 +354,28 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	}
 
 	private void setTabTexts() {
-		patientPanel.getTabBar().setTabText(0, Messages.CONTACT_INFO);
-		patientPanel.getTabBar().setTabText(1, Messages.DETAILS);
-		patientPanel.getTabBar().setTabText(2, Messages.BANK_ACCOUNT);
-		patientPanel.getTabBar().setTabText(3, Messages.DESCRIPTION);
+		patientPanel.getTabBar().setTabText(0, constants.contactInfo());
+		patientPanel.getTabBar().setTabText(1, constants.details());
+		patientPanel.getTabBar().setTabText(2, constants.bankAccount());
+		patientPanel.getTabBar().setTabText(3, constants.description());
 	}
 	
 	private void setLabelTexts() {
-		labelName.setInnerText(Messages.NAME + ":");
-		labelPreName.setInnerText(Messages.PRENAME + ":");
-		labelPLZCity.setInnerText(Messages.PLZCITY + ":");
-		labelEmail.setInnerText(Messages.EMAIL + ":");
-		labelMobile.setInnerText(Messages.MOBILE + ":");
-		labelStreet.setInnerText(Messages.STREET + ":");
-		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
-		labelTelephone2.setInnerText(Messages.TELEPHONE + " 2:");
+		labelName.setInnerText(constants.name() + ":");
+		labelPreName.setInnerText(constants.preName() + ":");
+		labelPLZCity.setInnerText(constants.plzCity() + ":");
+		labelEmail.setInnerText(constants.email() + ":");
+		labelMobile.setInnerText(constants.mobile() + ":");
+		labelStreet.setInnerText(constants.street() + ":");
+		labelTelephone.setInnerText(constants.telephone() + ":");
+		labelTelephone2.setInnerText(constants.telephone() + " 2:");
 		
-		labelBirthdate.setInnerText(Messages.BIRTHDAY + ":");
-		labelGender.setInnerText(Messages.GENDER + ":");
-		labelHeight.setInnerText(Messages.HEIGHT + ":");
-		labelWeight.setInnerText(Messages.WEIGHT + ":");
-		labelNationality.setInnerText(Messages.NATIONALITY + ":");
-		labelProfession.setInnerText(Messages.PROFESSION + ":");
+		labelBirthdate.setInnerText(constants.birthday() + ":");
+		labelGender.setInnerText(constants.gender() + ":");
+		labelHeight.setInnerText(constants.height() + ":");
+		labelWeight.setInnerText(constants.weight() + ":");
+		labelNationality.setInnerText(constants.nationality() + ":");
+		labelProfession.setInnerText(constants.profession() + ":");
 	}
 
 	@Override
@@ -386,9 +387,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			title.setInnerText(Messages.SP_CREATE);
+			title.setInnerText(constants.addPatient());
 		} else {
-			title.setInnerText(Messages.SP_EDIT);
+			title.setInnerText(constants.editPatient());
 		}
 	}
 
@@ -427,13 +428,11 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	@Override
 	public void setEditTitle(boolean edit) {
-
 		if (edit) {
-			title.setInnerText(Messages.SP_EDIT);
+			title.setInnerText(constants.editPatient());
 		} else {
-			title.setInnerText(Messages.SP_CREATE);
+			title.setInnerText(constants.addPatient());
 		}
-
 	}
 
 	@Override

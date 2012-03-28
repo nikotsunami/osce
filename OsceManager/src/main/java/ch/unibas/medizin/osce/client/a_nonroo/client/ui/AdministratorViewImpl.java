@@ -3,17 +3,14 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,6 +42,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	}
 
 	private Delegate delegate;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
@@ -91,7 +89,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_USER);
+		newButton.setText(constants.addUser());
 	}
 
 	public String[] getPaths() {
@@ -146,7 +144,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			public String getValue(AdministratorProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, Messages.NAME);
+		}, constants.name());
 		paths.add("preName");
 		table.addColumn(new TextColumn<AdministratorProxy>() {
 
@@ -161,7 +159,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			public String getValue(AdministratorProxy object) {
 				return renderer.render(object.getPreName());
 			}
-		}, Messages.PRENAME);
+		}, constants.preName());
 		paths.add("email");
 		table.addColumn(new TextColumn<AdministratorProxy>() {
 
@@ -176,7 +174,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			public String getValue(AdministratorProxy object) {
 				return renderer.render(object.getEmail());
 			}
-		}, Messages.EMAIL);
+		}, constants.email());
 //	        paths.add("responsibilities");
 //	        table.addColumn(new TextColumn<AdministratorProxy>() {
 //

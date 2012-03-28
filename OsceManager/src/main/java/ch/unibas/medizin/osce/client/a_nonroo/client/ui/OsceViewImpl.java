@@ -3,17 +3,14 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,6 +42,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 	}
 
 	private Delegate delegate;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
@@ -91,7 +89,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_OSCE);
+		newButton.setText(constants.addOsce());
 	}
 
 	public String[] getPaths() {
@@ -131,7 +129,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getStudyYear().toString());
 			}
-		}, Messages.STUDYYEAR);
+		}, constants.studyYear());
 		paths.add("preName");
 		table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -146,7 +144,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getMaxNumberStudents());
 			}
-		}, Messages.MAX_STUDENTS);
+		}, constants.maxStudents());
 		paths.add("email");
 		table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -161,7 +159,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getNumberCourses());
 			}
-		}, Messages.MAX_PARCOURS);
+		}, constants.maxCircuits());
 		//	        paths.add("responsibilities");
 		//	        table.addColumn(new TextColumn<OsceProxy>() {
 		//

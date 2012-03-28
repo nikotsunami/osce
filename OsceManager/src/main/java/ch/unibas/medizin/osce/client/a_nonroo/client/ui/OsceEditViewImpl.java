@@ -29,16 +29,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IntegerBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<OsceProxy> {
-
-
 	private static final Binder BINDER = GWT.create(Binder.class);
-
-	private static OsceEditView instance;
 
 	@UiField
 	Element editTitle;

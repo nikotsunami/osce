@@ -1,11 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView.Delegate;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -18,13 +15,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
@@ -36,6 +29,8 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	interface StandartizedPatientAdvancedSearchSubViewImplUiBinder extends
 			UiBinder<Widget, StandartizedPatientAdvancedSearchSubViewImpl> {
 	}
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public StandartizedPatientAdvancedSearchSubViewImpl() {
 		table = new CellTable<AdvancedSearchCriteriaProxy>(OsMaConstant.TABLE_PAGE_SIZE, (CellTable.Resources) GWT.create(MyCellTableResources.class));
@@ -43,10 +38,10 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		addBasicData.setText(Messages.BASIC_FILTER);
-		addScar.setText(Messages.TRAITS);
-		addAnamnesis.setText(Messages.ANAMNESIS_VALUES);
-		addLanguage.setText(Messages.LANGUAGES);
+		addBasicData.setText(constants.basicFilter());
+		addScar.setText(constants.traits());
+		addAnamnesis.setText(constants.anamnesisValues());
+		addLanguage.setText(constants.languages());
 	}
 
 	@UiField
@@ -139,7 +134,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getBindType());
 	            }
-	        }, Messages.BIND_TYPE);
+	        }, constants.bindType());
 		 
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
@@ -155,7 +150,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getField());
 	            }
-	        }, Messages.FIELD);
+	        }, constants.field());
 	        
 	       
 	        
@@ -172,7 +167,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getComparation());
 	            }
-	        }, Messages.COMPARISON);
+	        }, constants.comparison());
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
@@ -187,7 +182,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getValue());
 	            }
-	        }, Messages.VALUE);
+	        }, constants.value());
 	    }
 
 

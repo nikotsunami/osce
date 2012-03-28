@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -54,6 +54,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 	}
 
 	private Delegate delegate;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
@@ -124,7 +125,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 		init();
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_ROOM);
+		newButton.setText(constants.addRoom());
 	}
 
 	public String[] getPaths() {
@@ -174,7 +175,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 			public String getValue(RoomProxy object) {
 				return renderer.render(object.getRoomNumber());
 			}
-		}, Messages.ROOMNUMBER);
+		}, constants.roomNumber());
 		paths.add("length");
 		table.addColumn(new TextColumn<RoomProxy>() {
 
@@ -189,7 +190,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 			public String getValue(RoomProxy object) {
 				return renderer.render(object.getLength());
 			}
-		}, Messages.ROOMLENGTH);
+		}, constants.roomLength());
 		table.addColumn(new TextColumn<RoomProxy>() {
 
 			Renderer<Double> renderer = new AbstractRenderer<Double>() {
@@ -203,7 +204,7 @@ public class RoomViewImpl extends Composite implements RoomView {
 			public String getValue(RoomProxy object) {
 				return renderer.render(object.getWidth());
 			}
-		}, Messages.ROOMWIDTH);
+		}, constants.roomWidth());
 		addColumn(new ActionCell<RoomProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoomProxy>() {
 					public void execute(RoomProxy room) {

@@ -6,7 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -41,6 +41,8 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	interface SystemStartViewUiBinder extends UiBinder<Widget, DoctorViewImpl> {
 	}
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	private Delegate delegate;
 
 	@UiField
@@ -101,7 +103,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
-		newButton.setText(Messages.ADD_DOCTOR);
+		newButton.setText(constants.addDoctor());
 	}
 
 	public String[] getPaths() {
@@ -186,7 +188,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			public String getValue(DoctorProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, Messages.NAME);
+		}, constants.name());
 		paths.add("preName");
 		table.addColumn(new TextColumn<DoctorProxy>() {
 
@@ -201,7 +203,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			public String getValue(DoctorProxy object) {
 				return renderer.render(object.getPreName());
 			}
-		}, Messages.PRENAME);
+		}, constants.preName());
 //        paths.add("email");
 //        table.addColumn(new TextColumn<DoctorProxy>() {
 //
@@ -251,7 +253,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 			public String getValue(DoctorProxy object) {
 				return renderer.render(object.getOffice());
 			}
-		}, Messages.OFFICE_DETAILS);
+		}, constants.officeDetails());
 	}
 
 	@Override

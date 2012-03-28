@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -54,6 +54,8 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 	}
 
 	private Delegate delegate;
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
@@ -114,7 +116,7 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(Messages.ADD_LANGUAGE);
+		newButton.setText(constants.addLanguage());
 		
 	}
 
@@ -180,7 +182,7 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 			public String getValue(SpokenLanguageProxy object) {
 				return renderer.render(object.getLanguageName());
 			}
-		}, Messages.LANGUAGE);
+		}, constants.language());
 //		paths.add("langskills");
 //		table.addColumn(new TextColumn<SpokenLanguageProxy>() {
 //

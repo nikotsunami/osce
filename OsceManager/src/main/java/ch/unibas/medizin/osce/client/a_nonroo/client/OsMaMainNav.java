@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
@@ -22,7 +21,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -53,38 +52,39 @@ public class OsMaMainNav extends Composite {
 
 	@Inject
 	public OsMaMainNav(OsMaRequestFactory requests, PlaceController placeController) {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		initWidget(uiBinder.createAndBindUi(this));
 		this.requests = requests;
 		this.placeController = placeController;
 
-		masterDataPanel.getHeaderTextAccessor().setText(Messages.MASTER_DATA);
-		administrationPanel.getHeaderTextAccessor().setText(Messages.ADMINISTRATION);
-		examinationsPanel.getHeaderTextAccessor().setText(Messages.EXAMS);
-		simulationPatientsPanel.getHeaderTextAccessor().setText(Messages.SIM_PAT);
+		masterDataPanel.getHeaderTextAccessor().setText(constants.masterData());
+		administrationPanel.getHeaderTextAccessor().setText(constants.administration());
+		examinationsPanel.getHeaderTextAccessor().setText(constants.exams());
+		simulationPatientsPanel.getHeaderTextAccessor().setText(constants.simPat());
 
-		people.setText(Messages.SIMULATION_PATIENTS);
-		scars.setText(Messages.TRAITS);
-		anamnesisChecks.setText(Messages.ANAMNESIS_VALUES);
-		clinics.setText(Messages.CLINICS);
-		doctors.setText(Messages.DOCTORS);
+		people.setText(constants.simulationPatients());
+		scars.setText(constants.traits());
+		anamnesisChecks.setText(constants.anamnesisValues());
+		clinics.setText(constants.clinics());
+		doctors.setText(constants.doctors());
 
-		administrators.setText(Messages.USER);
-		nationalities.setText(Messages.NATIONALITIES);
-		languages.setText(Messages.LANGUAGES);
-		professions.setText(Messages.PROFESSIONS);
-		rooms.setText(Messages.ROOMS);
-		log.setText(Messages.LOG);
+		administrators.setText(constants.user());
+		nationalities.setText(constants.nationalities());
+		languages.setText(constants.languages());
+		professions.setText(constants.professions());
+		rooms.setText(constants.rooms());
+		log.setText(constants.log());
 
-		osces.setText(Messages.OSCES);
-		circuit.setText(Messages.CIRCUIT);
-		students.setText(Messages.STUDENTS);
-		examinationSchedule.setText(Messages.EXAM_SCHEDULE);
-		summonings.setText(Messages.SUMMONINGS);
-		individualSchedules.setText(Messages.PRINT_INDIVIDUAL_SCHEDULES);
-		bellSchedule.setText(Messages.EXPORT_BELL_SCHEDULE);
+		osces.setText(constants.osces());
+		circuit.setText(constants.circuit());
+		students.setText(constants.students());
+		examinationSchedule.setText(constants.examinationSchedule());
+		summonings.setText(constants.sendSummonings());
+		individualSchedules.setText(constants.printIndividualSchedules());
+		bellSchedule.setText(constants.exportBellSchedule());
 
-		roles.setText(Messages.ROLES);
-		roleAssignments.setText(Messages.ROLE_ASSIGNMENTS);
+		roles.setText(constants.roles());
+		roleAssignments.setText(constants.roleAssignments());
 	}
 
 	@UiField

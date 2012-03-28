@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -48,6 +48,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	protected Set<String> paths = new HashSet<String>();
 	private Delegate delegate;
 	private boolean addBoxesShown = true;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	// CellTable (for Langskills)
 	@UiField (provided = true)
@@ -82,7 +83,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		initTable();
-		langSkillAddButton.setText(Messages.ADD_LANGSKILL);
+		langSkillAddButton.setText(constants.addLangSkill());
 		langSkillBox.setValue(LangSkillLevel.values()[0]);
 		langSkillBox.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
 	}
@@ -112,7 +113,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 				} return "";
 			}
 			
-		}, Messages.LANGUAGES);
+		}, constants.languages());
 
 		langTable.addColumn(new TextColumn<LangSkillProxy>() {
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
@@ -125,12 +126,12 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 			public String getValue(LangSkillProxy object) {
 				return renderer.render(object.getSkill().toString());
 			}
-		}, Messages.LANGUAGE_SKILLS);
+		}, constants.languageSkills());
 		
 		addColumn(new ActionCell<LangSkillProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<LangSkillProxy>() {
 					public void execute(LangSkillProxy langSkill) {
-						if(Window.confirm(Messages.REALLY_DELETE))
+						if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteLangSkillClicked(langSkill);
 					}
 				}), "", new GetValue<LangSkillProxy>() {

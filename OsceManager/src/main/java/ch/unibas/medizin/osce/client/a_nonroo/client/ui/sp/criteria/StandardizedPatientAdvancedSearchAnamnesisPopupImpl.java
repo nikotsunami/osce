@@ -3,7 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
@@ -60,6 +60,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	@UiField (provided = true)
 	SuggestBox anamnesisQuestionSuggestBox;
 	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	private ValueListBox<String> anamnesisAnswerMCSelector = new ValueListBox<String>(new AbstractRenderer<String>() {
 		@Override
 		public String render(String object) {
@@ -73,7 +75,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		public String render(Boolean object) {
 			if (object == null)
 				return null;
-			return (object.booleanValue()) ? Messages.YES : Messages.NO;
+			return (object.booleanValue()) ? constants.yes() : constants.no();
 		}
 	});
 	
@@ -105,11 +107,11 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 			}
 		}, ",;:. \t?!_-/\\"));
 		
-		anamnesisQuestionSuggestBox.setText(Messages.ENTER_QUESTION);
+		anamnesisQuestionSuggestBox.setText(constants.enterQuestion());
 		anamnesisQuestionSuggestBox.getTextBox().addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
-				if (anamnesisQuestionSuggestBox.getText().equals(Messages.ENTER_QUESTION)) {
+				if (anamnesisQuestionSuggestBox.getText().equals(constants.enterQuestion())) {
 					anamnesisQuestionSuggestBox.setText("");	
 				}
 			}
@@ -118,7 +120,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 			@Override
 			public void onBlur(BlurEvent event) {
 				if (anamnesisQuestionSuggestBox.getText().equals("")) {
-					anamnesisQuestionSuggestBox.setText(Messages.ENTER_QUESTION);
+					anamnesisQuestionSuggestBox.setText(constants.enterQuestion());
 				}
 			}
 		});
@@ -139,14 +141,14 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		
-		addAnamnesisValueButton.setText(Messages.ADD);
-		addAnamnesisValues.setText(Messages.ANAMNESIS_VALUES);
+		addAnamnesisValueButton.setText(constants.add());
+		addAnamnesisValues.setText(constants.anamnesisValues());
 		
-		anamnesisAnswerText.setText(Messages.ENTER_ANSWER);
+		anamnesisAnswerText.setText(constants.enterAnswer());
 		anamnesisAnswerText.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
-				if (anamnesisAnswerText.getText().equals(Messages.ENTER_ANSWER)) {
+				if (anamnesisAnswerText.getText().equals(constants.enterAnswer())) {
 					anamnesisAnswerText.setText("");
 				}
 			}
@@ -155,7 +157,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 			@Override
 			public void onBlur(BlurEvent event) {
 				if (anamnesisAnswerText.getText().equals("")) {
-					anamnesisAnswerText.setText(Messages.ENTER_ANSWER);
+					anamnesisAnswerText.setText(constants.enterAnswer());
 				}
 			}
 		});
@@ -176,12 +178,12 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		
 		if (proxy == null) {
 			return;
-		} else if (proxy.getType() == AnamnesisCheckTypes.QuestionMultM || proxy.getType() == AnamnesisCheckTypes.QuestionMultS) {
+		} else if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {
 			currentAnswerWidget = anamnesisAnswerMCSelector;
 			Log.info("proxy.getValue() = " + proxy.getValue());
 			anamnesisAnswerMCSelector.setValue(proxy.getValue().split("\\|")[0]);
 			anamnesisAnswerMCSelector.setAcceptableValues(Arrays.asList(proxy.getValue().split("\\|")));
-		} else if (proxy.getType() == AnamnesisCheckTypes.QuestionYesNo) {
+		} else if (proxy.getType() == AnamnesisCheckTypes.QUESTION_YES_NO) {
 			currentAnswerWidget = anamnesisAnswerYesNoSelector;
 		} else {
 			currentAnswerWidget = anamnesisAnswerText;
@@ -202,7 +204,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		if (currentAnswerWidget == anamnesisAnswerMCSelector) {
 			answer = anamnesisAnswerMCSelector.getValue();
 		} else if (currentAnswerWidget == anamnesisAnswerYesNoSelector) {
-			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? Messages.NO : Messages.YES;
+			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? constants.no() : constants.yes();
 		} else if (currentAnswerWidget == anamnesisAnswerText) {
 			answer = anamnesisAnswerText.getValue();
 		}

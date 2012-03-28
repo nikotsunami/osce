@@ -1,8 +1,9 @@
 package ch.unibas.medizin.osce.client.style.widgets;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -17,7 +18,8 @@ public class QuickSearchBox extends TextBox {
 	private final Timer _timer = new EntryTimer();
 	private final Delegate _delegate;
 	
-	private String _description = Messages.SEARCHFIELD;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	private String _description = constants.searchField();
 	private int _timeout = OsMaConstant.ENTRY_TIMEOUT_MS;
 	
 	private String _searchString;

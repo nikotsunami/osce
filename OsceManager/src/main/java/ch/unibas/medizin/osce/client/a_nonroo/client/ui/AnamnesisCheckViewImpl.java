@@ -6,7 +6,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -46,6 +47,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	interface SystemStartViewUiBinder extends UiBinder<Widget, AnamnesisCheckViewImpl> {
 	}
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private Delegate delegate;
 
 	@UiField
@@ -103,7 +105,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
-		newButton.setText(Messages.ADD_ANAMNESIS_VALUE);
+		newButton.setText(constants.addAnamnesisValue());
 	}
 
 	public String[] getPaths() {
@@ -111,7 +113,6 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	}
 
 	public void init() {
-		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 
@@ -120,28 +121,29 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
 			@Override
 			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+				OsceConstantsWithLookup constantsWithLookup = GWT.create(OsceConstantsWithLookup.class);
 				AnamnesisQuestionTypeImages resources = GWT.create(AnamnesisQuestionTypeImages.class);
 				String html = "";
 				switch (proxy.getType()) {
-				case Title:
-					html = "<img src=\"" + resources.title().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_TITLE + "\" />";
+				case QUESTION_TITLE:
+					html = "<img src=\"" + resources.title().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_TITLE() + "\" />";
 					break;
-				case QuestionMultM:
-					html = "<img src=\"" + resources.questionMultM().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_MULTM + "\" />";
+				case QUESTION_MULT_M:
+					html = "<img src=\"" + resources.questionMultM().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_M() + "\" />";
 					break;
-				case QuestionMultS:
-					html = "<img src=\"" + resources.questionMultS().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_MULTS + "\" />";
+				case QUESTION_MULT_S:
+					html = "<img src=\"" + resources.questionMultS().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_S() + "\" />";
 					break;
-				case QuestionYesNo:
-					html = "<img src=\"" + resources.questionYesNo().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_YESNO + "\" />";
+				case QUESTION_YES_NO:
+					html = "<img src=\"" + resources.questionYesNo().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_YES_NO()+ "\" />";
 					break;
-				case QuestionOpen:
+				case QUESTION_OPEN:
 				default:
-					html = "<img src=\"" + resources.questionOpen().getURL() + "\" title=\"" + Messages.ANAMNESIS_QUESTION_OPEN + "\" />";
+					html = "<img src=\"" + resources.questionOpen().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_OPEN() + "\" />";
 				}
 				return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
 			}
-		}, Messages.TYPE);
+		}, constants.type());
 		
 		paths.add("text");
 		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
@@ -157,7 +159,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 			public String getValue(AnamnesisCheckProxy object) {
 				return renderer.render(object.getText());
 			}
-		}, Messages.TEXT);
+		}, constants.text());
 		paths.add("value");
 		
 		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
@@ -183,7 +185,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 				return (new SafeHtmlBuilder().appendHtmlConstant(html)).toSafeHtml();
 			}
 			
-		}, Messages.VALUE);
+		}, constants.value());
 		
 //		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 //

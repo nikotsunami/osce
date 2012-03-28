@@ -3,7 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
@@ -12,8 +12,6 @@ import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -36,6 +34,8 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 	interface AnamnesisCheckDetailsViewImplUiBinder extends
 	UiBinder<Widget, AnamnesisCheckDetailsViewImpl> {
 	}
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField
 	IconButton edit;
@@ -63,14 +63,14 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		anamnesisPanel.selectTab(0);
-		anamnesisPanel.getTabBar().setTabText(0, Messages.ANAMNESIS_VALUES);
+		anamnesisPanel.getTabBar().setTabText(0, constants.anamnesisValues());
 		TabPanelHelper.moveTabBarToBottom(anamnesisPanel);
 		
-		edit.setText(Messages.EDIT);
-		delete.setText(Messages.DELETE);
+		edit.setText(constants.edit());
+		delete.setText(constants.delete());
 		
-		labelType.setInnerText(Messages.TYPE + ":");
-		labelText.setInnerText(Messages.TEXT + ":");
+		labelType.setInnerText(constants.type() + ":");
+		labelText.setInnerText(constants.text() + ":");
 	}
 	
 	@UiField
@@ -120,8 +120,8 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
 		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
 		
-		if (proxy.getType() == AnamnesisCheckTypes.QuestionMultM || proxy.getType() == AnamnesisCheckTypes.QuestionMultS) {
-			labelValue.setInnerText(Messages.VALUE + ":");
+		if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {
+			labelValue.setInnerText(constants.value() + ":");
 			if (proxy.getValue() != null) {
 				String substrs[] = proxy.getValue().split("\\|");
 				for (int i = 0; i < substrs.length; i++) {

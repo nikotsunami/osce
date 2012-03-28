@@ -1,29 +1,23 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
-
 import java.util.Arrays;
 import java.util.Collection;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
-import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
-
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -77,18 +71,16 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
     });
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparition = new ValueListBox<Comparison2>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
-
-        public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
-            return obj == null ? "" : String.valueOf(obj);
+    ValueListBox<Comparison2> comparition = new ValueListBox<Comparison2>(new AbstractRenderer<Comparison2>() {
+        public String render(Comparison2 obj) {
+            return obj == null ? "" : obj.toString();
         }
     });
     
     @UiField(provided = true)
-    ValueListBox<PossibleFields> field = new ValueListBox<PossibleFields>(new AbstractRenderer<ch.unibas.medizin.osce.shared.PossibleFields>() {
-
-        public String render(ch.unibas.medizin.osce.shared.PossibleFields obj) {
-            return obj == null ? "" : String.valueOf(obj);
+    ValueListBox<PossibleFields> field = new ValueListBox<PossibleFields>(new AbstractRenderer<PossibleFields>() {
+        public String render(PossibleFields obj) {
+            return obj == null ? "" : obj.toString();
         }
     });
 	
@@ -99,6 +91,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	HorizontalPanel parentPanel;
 
 	public StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		setWidget(uiBinder.createAndBindUi(this));
 		bindType.setValue(BindType.values()[0]);
 		setBindTypePickerValues(Arrays.asList(BindType.values()));
@@ -106,8 +99,8 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		setFieldPickerValues(Arrays.asList(PossibleFields.values()));
 		comparition.setValue(Comparison2.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison2.values()));
-		addAdvSeaBasicButton.setText(Messages.ADD);
-		addBasicData.setText(Messages.BASIC_FILTER);
+		addAdvSeaBasicButton.setText(constants.add());
+		addBasicData.setText(constants.basicFilter());
 	}
 	
     public void setBindTypePickerValues(Collection<BindType> values) {

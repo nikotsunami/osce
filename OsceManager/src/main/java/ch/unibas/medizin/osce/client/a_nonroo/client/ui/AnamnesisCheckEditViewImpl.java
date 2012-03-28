@@ -4,30 +4,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
-import ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueSetEditor;
-import ch.unibas.medizin.osce.client.managed.ui.ScarSetEditor;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
-import ch.unibas.medizin.osce.shared.Gender;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
@@ -36,7 +28,6 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -46,14 +37,14 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.datepicker.client.DateBox;
 
 public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCheckEditView, Editor<AnamnesisCheckProxy> {
 
 	private static final Binder BINDER = GWT.create(Binder.class);
 
-	private static AnamnesisCheckEditView instance;
 	private boolean multipleFields = false;
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	@UiField
 	TabPanel anamnesisPanel;
@@ -111,17 +102,17 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		initWidget(BINDER.createAndBindUi(this));
 		
 		anamnesisPanel.selectTab(0);
-		anamnesisPanel.getTabBar().setTabText(0, Messages.ANAMNESIS_VALUES);
+		anamnesisPanel.getTabBar().setTabText(0, constants.anamnesisValues());
 		TabPanelHelper.moveTabBarToBottom(anamnesisPanel);
 
-		cancel.setText(Messages.CANCEL);
-		save.setText(Messages.SAVE);
+		cancel.setText(constants.cancel());
+		save.setText(constants.save());
 		addButton.setIcon("plusthick");
-		addButton.setText(Messages.ADD_ANSWER);
+		addButton.setText(constants.addAnswer());
 		addButton.setVisible(false);
 
-		labelType.setInnerText(Messages.TYPE + ":");
-		labelText.setInnerText(Messages.TEXT + ":");
+		labelType.setInnerText(constants.type() + ":");
+		labelText.setInnerText(constants.text() + ":");
 		
 		addValueField();
 		
@@ -137,8 +128,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			public void onValueChange(ValueChangeEvent<AnamnesisCheckTypes> event) {
 				AnamnesisCheckTypes selectedValue = event.getValue();
 				switch(selectedValue) {
-					case QuestionMultM:
-					case QuestionMultS:
+					case QUESTION_MULT_M:
+					case QUESTION_MULT_S:
 						setMultipleFields(true);
 						break;
 					default:
@@ -149,7 +140,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		Log.info("type.getValue() = " + type.getValue());
 		
-		if (type.getValue() == AnamnesisCheckTypes.QuestionMultM || type.getValue() == AnamnesisCheckTypes.QuestionMultS) {
+		if (type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_M || type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_S) {
 			setMultipleFields(true);
 		} else {
 			setMultipleFields(false);
@@ -217,7 +208,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			valuePanel.setVisible(false);
 		} else {
 			valuePanel.setVisible(true);
-			labelValue.setInnerText(Messages.VALUE + ":");
+			labelValue.setInnerText(constants.value() + ":");
 		}
 	}
 
@@ -270,18 +261,18 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 	public void setCreating(boolean creating) {
 		if (creating) {
-			header.setInnerText(Messages.EDIT_ANAMNESIS_VALUE);
+			header.setInnerText(constants.editAnamnesisValue());
 		} else {
-			header.setInnerText(Messages.ADD_ANAMNESIS_VALUE);
+			header.setInnerText(constants.addAnamnesisValue());
 		}
 	}
 	
 	@Override
 	public void setEditTitle(boolean edit) {
 		if (edit) {
-			header.setInnerText(Messages.EDIT_ANAMNESIS_VALUE);
+			header.setInnerText(constants.editAnamnesisValue());
 		} else {
-			header.setInnerText(Messages.ADD_ANAMNESIS_VALUE);
+			header.setInnerText(constants.addAnamnesisValue());
 		}
 
 	}
@@ -298,7 +289,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	
 	@Override
 	public void update(String value) {
-		if (type.getValue() == AnamnesisCheckTypes.QuestionMultM || type.getValue() == AnamnesisCheckTypes.QuestionMultS)
+		if (type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_M || type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_S)
 			setMultipleFields(true);
 		else
 			setMultipleFields(false);

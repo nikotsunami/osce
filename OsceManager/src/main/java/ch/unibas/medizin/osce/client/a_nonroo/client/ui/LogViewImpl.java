@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -99,6 +99,7 @@ public class LogViewImpl extends Composite implements LogView {
 	}
 
 	public void init() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 
@@ -118,7 +119,7 @@ public class LogViewImpl extends Composite implements LogView {
 			public String getValue(LogEntryProxy object) {
 				return renderer.render(object.getLogtime());
 			}
-		}, Messages.DATETIME);
+		}, constants.dateTime());
 		paths.add("length");
 		table.addColumn(new TextColumn<LogEntryProxy>() {
 
@@ -133,7 +134,7 @@ public class LogViewImpl extends Composite implements LogView {
 			public String getValue(LogEntryProxy object) {
 				return renderer.render(object.getShibId());
 			}
-		}, Messages.ADMINISTRATOR);
+		}, constants.administrator());
 		table.addColumn(new TextColumn<LogEntryProxy>() {
 
 			Renderer<String> renderer = new AbstractRenderer<String>() {
@@ -147,7 +148,7 @@ public class LogViewImpl extends Composite implements LogView {
 			public String getValue(LogEntryProxy object) {
 				return renderer.render(object.getOldValue() + " > " + object.getNewValue());
 			}
-		}, Messages.LOGDETAILS);
+		}, constants.logDetails());
 		/*addColumn(new ActionCell<LogEntryProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<LogEntryProxy>() {
 					public void execute(LogEntryProxy room) {

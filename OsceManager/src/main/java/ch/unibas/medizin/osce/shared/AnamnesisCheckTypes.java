@@ -1,7 +1,5 @@
 package ch.unibas.medizin.osce.shared;
 
-
 public enum AnamnesisCheckTypes {
-
-    QuestionOpen, QuestionYesNo, QuestionMultS, QuestionMultM, Title
+	QUESTION_OPEN, QUESTION_YES_NO, QUESTION_MULT_S, QUESTION_MULT_M, QUESTION_TITLE;
 }

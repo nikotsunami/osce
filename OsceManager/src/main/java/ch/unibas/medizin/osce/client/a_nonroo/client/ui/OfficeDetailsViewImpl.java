@@ -3,7 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import ch.unibas.medizin.osce.client.i18n.Messages;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 
 import com.google.gwt.core.client.GWT;
@@ -70,14 +70,15 @@ public class OfficeDetailsViewImpl extends Composite implements OfficeDetailsVie
 	 * HasHTML instead of HasText.
 	 */
 	public OfficeDetailsViewImpl() {
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		labelGender.setInnerText(Messages.GENDER + ":");
-		labelTitle.setInnerText(Messages.TITLE + ":");
-		labelName.setInnerText(Messages.NAME + ":");
-		labelPreName.setInnerText(Messages.PRENAME + ":");
-		labelEmail.setInnerText(Messages.EMAIL + ":");
-		labelTelephone.setInnerText(Messages.TELEPHONE + ":");
+		labelGender.setInnerText(constants.gender() + ":");
+		labelTitle.setInnerText(constants.title() + ":");
+		labelName.setInnerText(constants.name() + ":");
+		labelPreName.setInnerText(constants.preName() + ":");
+		labelEmail.setInnerText(constants.email() + ":");
+		labelTelephone.setInnerText(constants.telephone() + ":");
 	}
 
 	private Presenter presenter;
