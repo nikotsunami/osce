@@ -13,13 +13,16 @@
 				<div class="{style.controls}  {style.controlsleft}">
 					<my:QuickSearchBox ui:field="searchBox" />
 					<my:IconButton ui:field="filterButton" icon="wrench"></my:IconButton>
-					<b:SimplePager ui:field="pager" display="{table}" />
+					<div class="{style.controlsright}">
+						<my:IconButton ui:field="exportButton" icon="extlink"/>
+					</div>
 				</div>
 		
 				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
 				
 				<div class="{style.controls} {style.controlsleft}">
 					<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
+					<b:SimplePager ui:field="pager" display="{table}" />
 				</div>
 				<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
 				

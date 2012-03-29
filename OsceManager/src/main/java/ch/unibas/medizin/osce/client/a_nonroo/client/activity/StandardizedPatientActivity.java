@@ -16,6 +16,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchNationalityPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchNationalityPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopupImpl;
@@ -26,9 +28,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
@@ -67,7 +71,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class StandardizedPatientActivity extends AbstractActivity implements StandardizedPatientView.Presenter, StandardizedPatientView.Delegate,
 		StandartizedPatientAdvancedSearchSubView.Delegate, StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
-		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate {
+		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -340,6 +344,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
 	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
 	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
+	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
 
 	@Override
 	public void addBasicCriteriaClicked(Button addBasicData) {
@@ -358,7 +363,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	@Override
 	public void addScarCriteriaClicked(Button parentButton) {
-		initScarCriteriaSubView();
+		requests.scarRequest().findAllScars().fire(new ScarCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
 			if (advancedSearchPopup == scarPopup) {
@@ -373,7 +378,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	@Override
 	public void addAnamnesisCriteriaClicked(Button parentButton) {
-		initAnamnesisCriteriaSubView();
+		requests.anamnesisCheckRequest().findAllAnamnesisChecks().fire(new AnamnesisCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
 			if (advancedSearchPopup == anamnesisPopup) {
@@ -388,8 +393,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	@Override
 	public void addLanguageCriteriaClicked(Button addLanguageButton) {
-		initLanguageCriteriaSubView();
-
+		requests.spokenLanguageRequest().findAllSpokenLanguages().fire(new LanguageCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
 			if (advancedSearchPopup == languagePopup) {
@@ -403,9 +407,18 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	@Override
-	public void addBasicCriteriaPopUpClicked() {
-		// TODO Auto-generated method stub
-
+	public void addNationalityCriteriaClicked(IconButton addNationalityButton) {
+		requests.nationalityRequest().findAllNationalitys().fire(new NationalityCriteriaReceiver());
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == nationalityPopup) {
+				return;
+			}
+		}
+		nationalityPopup = new StandardizedPatientAdvancedSearchNationalityPopupImpl();
+		nationalityPopup.setDelegate(this);
+		nationalityPopup.display(addNationalityButton);
+		advancedSearchPopup = nationalityPopup;
 	}
 
 	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
@@ -426,59 +439,64 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		criteriaTable.setRowData(searchCriteria);
 	}
+	
+	private class NationalityCriteriaReceiver extends Receiver<List<NationalityProxy>> {
 
-	@Override
-	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
-		addAdvSeaBasicButtonClicked(languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
+		@Override
+		public void onSuccess(List<NationalityProxy> response) {
+			if (nationalityPopup == null) {
+				return;
+			}
+			List<NationalityProxy> values = new ArrayList<NationalityProxy>();
+			values.addAll(response);
+			if (values.size() > 0 ) {
+				nationalityPopup.getNationalityBox().setValue(values.get(0));
+			}
+			nationalityPopup.getNationalityBox().setAcceptableValues(values);
+			
+		}
+		
+	}
+	
+	private class LanguageCriteriaReceiver extends Receiver<List<SpokenLanguageProxy>> {
+		@Override
+		public void onSuccess(List<SpokenLanguageProxy> response) {
+			if (languagePopup == null) {
+				return;
+			}
+			List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
+			values.addAll(response);
+			if (values.size() > 0 ) {
+				languagePopup.getLanguageBox().setValue(values.get(0));
+			}
+			languagePopup.getLanguageBox().setAcceptableValues(values);
+		}
+	}
+	
+	private class ScarCriteriaReceiver extends Receiver<List<ScarProxy>> {
+		@Override
+		public void onSuccess(List<ScarProxy> response) {
+			if (scarPopup == null) {
+				return;
+			}
+
+			List<ScarProxy> values = new ArrayList<ScarProxy>();
+			values.addAll(response);
+			if (values.size() > 0 ) {
+				scarPopup.getScarBox().setValue(values.get(0));
+			}
+			scarPopup.getScarBox().setAcceptableValues(values);
+		}
 	}
 
-	private void initLanguageCriteriaSubView() {
-		requests.spokenLanguageRequest().findAllSpokenLanguages().fire(new Receiver<List<SpokenLanguageProxy>>() {
-			@Override
-			public void onSuccess(List<SpokenLanguageProxy> response) {
-				if (languagePopup == null) {
-					return;
-				}
-				List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
-				values.addAll(response);
-				if (values.size() > 0 ) {
-					languagePopup.getLanguageBox().setValue(values.get(0));
-				}
-				languagePopup.getLanguageBox().setAcceptableValues(values);
-			}
-		});
-	}
-
-	private void initScarCriteriaSubView() {
-		requests.scarRequest().findAllScars().fire(new Receiver<List<ScarProxy>>() {
-
-			@Override
-			public void onSuccess(List<ScarProxy> response) {
-				if (scarPopup == null) {
-					return;
-				}
-
-				List<ScarProxy> values = new ArrayList<ScarProxy>();
-				values.addAll(response);
-				if (values.size() > 0 ) {
-					scarPopup.getScarBox().setValue(values.get(0));
-				}
-				scarPopup.getScarBox().setAcceptableValues(values);
+	private class AnamnesisCriteriaReceiver extends Receiver<List<AnamnesisCheckProxy>> {
+		public void onSuccess(List<AnamnesisCheckProxy> response) {
+			if (anamnesisPopup == null) {
+				return;
 			}
 
-		});
-	}
-
-	private void initAnamnesisCriteriaSubView() {
-		requests.anamnesisCheckRequest().findAllAnamnesisChecks().fire(new Receiver<List<AnamnesisCheckProxy>>() {
-			public void onSuccess(List<AnamnesisCheckProxy> response) {
-				if (anamnesisPopup == null) {
-					return;
-				}
-
-				((ProxySuggestOracle<AnamnesisCheckProxy>) anamnesisPopup.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(response);
-			}
-		});
+			((ProxySuggestOracle<AnamnesisCheckProxy>) anamnesisPopup.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(response);
+		}
 	}
 
 	@Override
@@ -492,5 +510,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// TODO Auto-generated method stub
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
 		addAdvSeaBasicButtonClicked(anamnesisCheck.getText() + ": " + answer, bindType, PossibleFields.ANAMNESIS, comparison);
+	}
+
+	@Override
+	public void addNationalityButtonClicked(NationalityProxy nationality,
+			BindType bindType, Comparison2 comparison) {
+		// TODO implement.
+	}
+
+	@Override
+	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
+		addAdvSeaBasicButtonClicked(languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
 	}
 }

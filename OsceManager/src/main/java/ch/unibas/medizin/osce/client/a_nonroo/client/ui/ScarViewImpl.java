@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -70,12 +71,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 	TextBox newBodypart;
 	
 	@UiField(provided = true)
-    ValueListBox<TraitTypes> traitTypeBox = new ValueListBox<TraitTypes>(new AbstractRenderer<TraitTypes>() {
-
-        public String render(TraitTypes obj) {
-            return obj == null ? "" : String.valueOf(obj.toString());
-        }
-    });
+    ValueListBox<TraitTypes> traitTypeBox = new ValueListBox<TraitTypes>(new EnumRenderer<TraitTypes>());
 
 	@UiField
 	Button newButton;
@@ -150,17 +146,11 @@ public class ScarViewImpl extends Composite implements ScarView {
 		
 		paths.add("trait_type");
 		table.addColumn(new TextColumn<ScarProxy>() {
-
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-				public String render(java.lang.String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
+			Renderer<TraitTypes> renderer = new EnumRenderer<TraitTypes>();
 
 			@Override
 			public String getValue(ScarProxy object) {
-				return renderer.render(object.getTraitType().toString());
+				return renderer.render(object.getTraitType());
 			}
 		}, constants.type());
 		paths.add("bodypart");

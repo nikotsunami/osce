@@ -161,4 +161,7 @@ public interface OsceConstants extends Constants {
 	public String showAnswered();
 	public String showUnanswered();
 	public String bmi();
+	
+	public String print();
+	public String export();
 }

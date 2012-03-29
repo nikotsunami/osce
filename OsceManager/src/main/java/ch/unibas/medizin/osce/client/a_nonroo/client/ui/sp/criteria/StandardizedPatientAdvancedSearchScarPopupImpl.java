@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.Arrays;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -37,11 +39,7 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
 	IconButton scarButton;
 	
 	@UiField(provided = true)
-    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
-        public String render(ch.unibas.medizin.osce.shared.BindType obj) {
-            return obj == null ? "" : String.valueOf(obj);
-        }
-    });
+    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
     ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
@@ -51,11 +49,7 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
     });
 	
 	@UiField (provided=true)
-	ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new AbstractRenderer<ScarProxy>() {
-        public String render(ScarProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getTraitType()) + ": " + String.valueOf(obj.getBodypart());
-        }
-    });
+	ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(ScarProxyRenderer.getInstance());
 
 	public StandardizedPatientAdvancedSearchScarPopupImpl() {
 		OsceConstants constants = GWT.create(OsceConstants.class);

@@ -61,6 +61,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@UiField
 	public IconButton newButton;
 	@UiField
+	public IconButton exportButton;
+	@UiField
 	public SimplePanel detailsPanel;
 	@UiField(provided = true)
 	public SimplePager pager;
@@ -77,6 +79,11 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	protected Set<String> paths = new HashSet<String>();
 	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;
+	
+	@UiHandler("exportButton")
+	public void exportButtonClicked(ClickEvent event) {
+		// TODO export action
+	}
 	
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
@@ -135,6 +142,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addPatient());
+		exportButton.setText(constants.export());
 	}
 
 	public String[] getPaths() {

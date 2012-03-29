@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 import java.util.Arrays;
 import java.util.Collection;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
@@ -42,7 +43,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
-		delegate.addAdvSeaBasicButtonClicked(value.getValue(), bindType.getValue(), field.getValue(), comparition.getValue());
+		delegate.addAdvSeaBasicButtonClicked(value.getValue(), bindType.getValue(), field.getValue(), comparison.getValue());
 		this.hide();
 	}
 	
@@ -63,27 +64,13 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	}
 	
     @UiField(provided = true)
-    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
-
-        public String render(ch.unibas.medizin.osce.shared.BindType obj) {
-            return obj == null ? "" : String.valueOf(obj);
-        }
-    });
+    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparition = new ValueListBox<Comparison2>(new AbstractRenderer<Comparison2>() {
-        public String render(Comparison2 obj) {
-            return obj == null ? "" : obj.toString();
-        }
-    });
+    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.NUMERIC));
     
     @UiField(provided = true)
-    ValueListBox<PossibleFields> field = new ValueListBox<PossibleFields>(new AbstractRenderer<PossibleFields>() {
-        public String render(PossibleFields obj) {
-            return obj == null ? "" : obj.toString();
-        }
-    });
-	
+    ValueListBox<PossibleFields> field = new ValueListBox<PossibleFields>(new EnumRenderer<PossibleFields>());
 	
 	private Delegate delegate;
 	
@@ -91,14 +78,20 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	HorizontalPanel parentPanel;
 
 	public StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl() {
-		OsceConstants constants = GWT.create(OsceConstants.class);
+		
 		setWidget(uiBinder.createAndBindUi(this));
+		
 		bindType.setValue(BindType.values()[0]);
 		setBindTypePickerValues(Arrays.asList(BindType.values()));
-		field.setValue(PossibleFields.values()[0]);
-		setFieldPickerValues(Arrays.asList(PossibleFields.values()));
-		comparition.setValue(Comparison2.values()[0]);
+		
+		field.setValue(PossibleFields.HEIGHT);
+		field.setAcceptableValues(Arrays.asList(new PossibleFields[] 
+				{PossibleFields.HEIGHT, PossibleFields.WEIGHT, PossibleFields.BMI}));
+		
+		comparison.setValue(Comparison2.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison2.values()));
+		
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		addAdvSeaBasicButton.setText(constants.add());
 		addBasicData.setText(constants.basicFilter());
 	}
@@ -108,7 +101,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
     }
     
     public void setComparisonPickerValues(Collection<Comparison2> values) {
-        comparition.setAcceptableValues(values);
+        comparison.setAcceptableValues(values);
     }
     
     public void setFieldPickerValues(Collection<PossibleFields> values) {
@@ -124,6 +117,5 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	public void display(Button addBasicData) {
 		this.show();
 		this.setPopupPosition(addBasicData.getAbsoluteLeft() - 5, addBasicData.getAbsoluteTop() - getOffsetHeight()/2 - 4);
-		Log.info("addBasicData OffsetHeight: " + addBasicData.getOffsetHeight() + "; offsetHeight: " + getOffsetHeight());
 	}
 }

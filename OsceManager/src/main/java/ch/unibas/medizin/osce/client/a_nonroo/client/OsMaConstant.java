@@ -11,6 +11,6 @@ public class OsMaConstant {
 	public static final SafeHtml PLUS_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-plusthick\"></span>").toSafeHtml();
 	public static final int TABLE_PAGE_SIZE = 15;
 	public static final int TABLE_JUMP_SIZE = 30;
-	public static final int SPLIT_PANEL_MINWIDTH = 400;
+	public static final int SPLIT_PANEL_MINWIDTH = 472;
 	public static final int ENTRY_TIMEOUT_MS = 700;
 }

@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.Arrays;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -30,6 +31,8 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 			UiBinder<Widget, StandardizedPatientAdvancedSearchLanguagePopupImpl> {
 	}
 	
+	private Delegate delegate;
+	
 	@UiField
 	IconButton addLanguageButton;
 	@UiField
@@ -45,28 +48,15 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
     });
 	
 	@UiField (provided=true)
-	ValueListBox<LangSkillLevel> skill = new ValueListBox<LangSkillLevel>(new AbstractRenderer<LangSkillLevel>() {
-        public String render(LangSkillLevel obj) {
-            return obj == null ? "" : String.valueOf(obj.toString());
-        }
-    });
+	ValueListBox<LangSkillLevel> skill = new ValueListBox<LangSkillLevel>(new EnumRenderer<LangSkillLevel>());
 	
 	@UiField(provided = true)
-    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
-        public String render(ch.unibas.medizin.osce.shared.BindType obj) {
-            return obj == null ? "" : String.valueOf(obj);
-        }
-    });
+    ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
-        public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
-            return obj == null ? "" : String.valueOf(obj);
-        }
-    });
+    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.LANGSKILL));
 
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
-		OsceConstants constants = GWT.create(OsceConstants.class);
 		setWidget(uiBinder.createAndBindUi(this));
 		skill.setValue(LangSkillLevel.values()[0]);
 		skill.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
@@ -74,6 +64,8 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		comparison.setValue(Comparison2.values()[0]);
 		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
+
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		addLanguageButton.setText(constants.add());
 		languageButton.setText(constants.languages());
 	}
@@ -94,7 +86,6 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 		this.hide();
 	}
 	
-	private Delegate delegate;
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;

@@ -56,6 +56,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	// Buttons
 	@UiField
+	IconButton print;
+	@UiField
 	IconButton edit;
 	@UiField
 	IconButton delete;
@@ -156,7 +158,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 		// reorder the Tab- and Content-Panels
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
-		
+
+		print.setText(constants.print());
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
 		maps.setText(constants.googleMaps());
@@ -252,6 +255,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	public StandardizedPatientProxy getValue() {
 		return proxy;
+	}
+	
+	@UiHandler("print")
+	public void onPrintClicked(ClickEvent e) {
+		// TODO print patient details...
 	}
 	
 	@UiHandler("maps")

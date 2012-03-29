@@ -20,6 +20,22 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String NOT_EQUALS();
 	public String LESS();
 	public String MORE();
+	public String ANAMNESIS_EQUALS();
+	public String ANAMNESIS_NOT_EQUALS();
+	public String ANAMNESIS_LESS();
+	public String ANAMNESIS_MORE();
+	public String NUMERIC_EQUALS();
+	public String NUMERIC_NOT_EQUALS();
+	public String NUMERIC_LESS();
+	public String NUMERIC_MORE();
+	public String LANGSKILL_EQUALS();
+	public String LANGSKILL_NOT_EQUALS();
+	public String LANGSKILL_LESS();
+	public String LANGSKILL_MORE();
+	public String NATIONALITY_EQUALS();
+	public String NATIONALITY_NOT_EQUALS();
+	public String NATIONALITY_LESS();
+	public String NATIONALITY_MORE();
 	
 	public String MALE();
 	public String FEMALE();

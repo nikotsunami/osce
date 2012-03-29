@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 
@@ -27,6 +28,7 @@ public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget {
 		void addScarCriteriaClicked(Button parentButton);
 		void addAnamnesisCriteriaClicked(Button parentButton);
 		void addLanguageCriteriaClicked(Button parentButton);
+		void addNationalityCriteriaClicked(IconButton parentButton);
 	}
 
     CellTable<AdvancedSearchCriteriaProxy> getTable();

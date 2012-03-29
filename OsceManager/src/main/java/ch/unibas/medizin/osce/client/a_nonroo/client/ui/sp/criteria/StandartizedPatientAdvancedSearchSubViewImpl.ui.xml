@@ -12,7 +12,8 @@
 		<my:IconButton ui:field="addBasicData" icon="wrench"/>
 	    <my:IconButton ui:field="addScar" icon="search"/>
 	    <my:IconButton ui:field="addAnamnesis" icon="pencil"/>
-	    <my:IconButton ui:field="addLanguage" icon="flag"/>
+	    <my:IconButton ui:field="addLanguage" icon="comment"/>
+	    <my:IconButton ui:field="addNationality" icon="flag" />
   	</g:HorizontalPanel>
     <b:CellTable pageSize="8" ui:field="table" width="100%"/>
     <div class="{style.controls}">      

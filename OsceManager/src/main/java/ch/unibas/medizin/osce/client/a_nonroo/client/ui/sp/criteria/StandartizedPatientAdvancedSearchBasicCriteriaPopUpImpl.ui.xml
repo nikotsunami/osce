@@ -8,7 +8,7 @@
 		<g:HorizontalPanel ui:field="parentPanel" spacing="4">
 			<g:ValueListBox ui:field="bindType"></g:ValueListBox>
 			<g:ValueListBox ui:field="field"/>
-			<g:ValueListBox ui:field="comparition"/>
+			<g:ValueListBox ui:field="comparison"/>
 			<g:TextBox  ui:field="value"></g:TextBox>
 			<my:IconButton ui:field="addAdvSeaBasicButton" icon="plusthick"/>
 			<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>

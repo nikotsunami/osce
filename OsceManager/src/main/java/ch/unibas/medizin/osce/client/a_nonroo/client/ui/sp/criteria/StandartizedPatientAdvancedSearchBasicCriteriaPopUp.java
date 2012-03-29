@@ -16,7 +16,6 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void addBasicCriteriaPopUpClicked();
 		void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition);
 	}
   

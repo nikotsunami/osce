@@ -42,6 +42,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		addScar.setText(constants.traits());
 		addAnamnesis.setText(constants.anamnesisValues());
 		addLanguage.setText(constants.languages());
+		addNationality.setText(constants.nationalities());
 	}
 
 	@UiField
@@ -52,6 +53,8 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
     IconButton addAnamnesis;
     @UiField
     IconButton addLanguage;
+    @UiField
+    IconButton addNationality;
 
 	@UiHandler("addBasicData")
 	void onAddBasicDataClick(ClickEvent e) {
@@ -71,6 +74,11 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	@UiHandler("addLanguage")
 	void onAddLanguageClick(ClickEvent e) {
 		delegate.addLanguageCriteriaClicked(addLanguage);
+	}
+	
+	@UiHandler("addNationality")
+	void onAddNationalityClick(ClickEvent e) {
+		delegate.addNationalityCriteriaClicked(addNationality);
 	}
 	
 	@UiField (provided = true)
