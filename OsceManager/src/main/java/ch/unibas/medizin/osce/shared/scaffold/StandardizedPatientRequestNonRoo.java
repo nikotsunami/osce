@@ -31,7 +31,7 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 	
 	abstract Request<List<StandardizedPatientProxy>> findPatientsBySearchAndSort(String sortField, Boolean asc, String q, Integer firstResult, Integer maxResults, List<String> searchThrough, List<String> fields, List<Integer> comparisons, List<String> values);
 
-	abstract Request<Long > countPatientsByAdvancedSearchAndSort(
+	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedSearchAndSort(
     		String sortColumn,
     		Sorting order,
     		String searchWord, 

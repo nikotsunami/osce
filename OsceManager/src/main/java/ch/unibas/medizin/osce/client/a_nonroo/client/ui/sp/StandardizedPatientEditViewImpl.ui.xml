@@ -110,7 +110,20 @@
 			</g:HTMLPanel>
 		</g:Tab>
 	</g:TabPanel>
-    
+	<g:FormPanel ui:field="uploadFormPanel">
+	
+	        <g:HorizontalPanel>
+	            <g:Label> File
+	                Upload: &nbsp;&nbsp;&nbsp;</g:Label>
+	            <g:FileUpload ui:field="fileUpload" name="fileUpload1" />
+	            <g:Hidden ui:field="patientId" name="patientId" ></g:Hidden>
+	
+	            <my:IconButton ui:field="uploadButton" title="Upload">
+	                Upload</my:IconButton>
+	        </g:HorizontalPanel>
+	
+	</g:FormPanel>			
+    <div ui:field="uploadMessage" />
     <div ui:field='errors' class='{style.errors}'></div>
   </g:HTMLPanel>
 </ui:UiBinder>

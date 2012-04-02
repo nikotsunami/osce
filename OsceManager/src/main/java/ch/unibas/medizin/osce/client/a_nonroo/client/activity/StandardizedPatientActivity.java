@@ -208,7 +208,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// Comparison2.LESS, Comparison2.MORE);
 		// List<String> bindType = Arrays.asList(BindType.AND, BindType.AND,
 		// BindType.AND);
-		List<String> searchThrough = Arrays.asList("name", "preName", "comment", "BIC", "IBAN", "bankName");
+		List<String> searchThrough = new ArrayList<String>();//Arrays.asList("name", "preName", "comment", "BIC", "IBAN", "bankName");
 
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		//
@@ -221,8 +221,56 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// criteria.setValue("80");
 		//
 		// searchCriteria.add(criteria);
-		//
-		// criteriaTable.setRowData(searchCriteria);
+		//WARNING: TEST: 
+		searchCriteria.clear();
+		 AdvancedSearchCriteriaProxy criteria2 =
+		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		 requestAdvSeaCritStd.edit(criteria2);
+		 criteria2.setBindType(BindType.AND);
+		 criteria2.setComparation(Comparison2.EQUALS);
+		 criteria2.setField(PossibleFields.LANGUAGE);
+		 //"Deutsch: A1"
+		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
+		 criteria2.setObjectId(new Long(6));
+		 searchCriteria.add(criteria2);
+
+//		 AdvancedSearchCriteriaProxy criteria3 =
+//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//		 requestAdvSeaCritStd.edit(criteria3);
+//		 criteria3.setBindType(BindType.OR);
+//		 criteria3.setComparation(Comparison2.NOTEQUALS);
+//		 criteria3.setField(PossibleFields.ANAMNESIS);
+//		 criteria3.setObjectId(new Long(7));//question ID
+//		 //Nehmen Sie eines der aufgelisteten Medikamete und wenn ja, welche?
+//		 criteria3.setValue("QuestionMultM: Prozac:Prozac|Ritalin|Aspirin|Ethanol");
+//		
+//		 searchCriteria.add(criteria3);
+//
+//		 AdvancedSearchCriteriaProxy criteria4 =
+//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//		 requestAdvSeaCritStd.edit(criteria4);
+//		 criteria4.setBindType(BindType.AND);
+//		 criteria4.setComparation(Comparison2.EQUALS);
+//		 criteria4.setField(PossibleFields.ANAMNESIS);
+//		 criteria4.setObjectId(new Long(1));//question ID
+//		 //Rauchen Sie? 
+//		 criteria4.setValue("QuestionYesNo: Nein:");//no options for answers: type = 1
+//		
+//		 searchCriteria.add(criteria4);
+//
+//		 AdvancedSearchCriteriaProxy criteria5 =
+//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//		 requestAdvSeaCritStd.edit(criteria5);
+//		 criteria5.setBindType(BindType.AND);
+//		 criteria5.setComparation(Comparison2.NOTEQUALS);
+//		 criteria5.setField(PossibleFields.anamnesis);
+//		 criteria5.setObjectId(new Long(2));//question ID
+//		 //Wie oft rauchen Sie? 
+//		 criteria5.setValue("QuestionMultS: oft:oft|mittel|selten");
+//		
+//		 searchCriteria.add(criteria5);
+		 //
+		 criteriaTable.setRowData(searchCriteria);
 		/*
 		 * searchCriteria.add(new AdvancesSearchCriteriumOld
 		 * (PossibleFields.weight, BindType.AND, Comparison2.EQUALS, "80"));
@@ -232,8 +280,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
 		 */
 
-		requestAdvSeaCritStd.countPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
-				searchThrough, searchCriteria /*fields, bindType, comparations, values */).fire(new Receiver<Long>() {
+		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
+				searchThrough, searchCriteria /*fields, bindType, comparations, values */).
+				fire(new Receiver<List<StandardizedPatientProxy>>() {
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
 				// onStop();
@@ -243,15 +292,21 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
 				while (iter.hasNext()) {
-					message += iter.next().getMessage() + "<br>";
+					Violation it = iter.next() ; 
+					message += "message "+it.getMessage() + "\n";
+					message += "path "+it.getPath() + "\n";
+					message += "class "+it.getClass() + "\n";
+					message += "INV "+it.getInvalidProxy() + "\n";
+					message += "OR "+it.getOriginalProxy() + "\n";
+					message += "ID "+it.getProxyId() + "<br>";
 				}
 				Log.warn(" in Simpat -" + message);
 				// onStop();
 			}
 
 			@Override
-			public void onSuccess(Long response) {
-				// table.setRowData(range.getStart(), values);
+			public void onSuccess(List<StandardizedPatientProxy> response) {
+				table.setRowData(range.getStart(), response);
 
 			}
 		});
@@ -424,7 +479,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
 
 	@Override
-	public void addAdvSeaBasicButtonClicked(String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
+	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
 
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
@@ -434,6 +489,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		criteria.setComparation(comparition);
 		criteria.setField(possibleFields);
 		criteria.setValue(string);
+		criteria.setObjectId(objectId);
 		requestAdvSeaCritStd.fire();
 		searchCriteria.add(criteria);
 
@@ -502,14 +558,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType, Comparison2 comparison) {
 		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart());
-		addAdvSeaBasicButtonClicked(scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.SCAR, comparison);
+		addAdvSeaBasicButtonClicked(scarProxy.getId(), scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.SCAR, comparison);
 	}
 
 	@Override
 	public void addAnamnesisValueButtonClicked(AnamnesisCheckProxy anamnesisCheck, String answer, BindType bindType, Comparison2 comparison) {
 		// TODO Auto-generated method stub
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
-		addAdvSeaBasicButtonClicked(anamnesisCheck.getText() + ": " + answer, bindType, PossibleFields.ANAMNESIS, comparison);
+		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), anamnesisCheck.getType() + ": " + answer+":"+anamnesisCheck.getValue(), bindType, PossibleFields.ANAMNESIS, comparison);
 	}
 
 	@Override
@@ -520,6 +576,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	@Override
 	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
-		addAdvSeaBasicButtonClicked(languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
+		addAdvSeaBasicButtonClicked(languageProxy.getId(), languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
 	}
 }
