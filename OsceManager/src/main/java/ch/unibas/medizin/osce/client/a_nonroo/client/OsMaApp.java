@@ -128,8 +128,11 @@ public class OsMaApp {
 //		detailsActivityManager.setDisplay(shell.getDetailsPanel());
 		
 		OsMaMainNav nav = new OsMaMainNav(requestFactory, placeController);
+		// TODO: dependency injection?
+		OsMaHeader header = new OsMaHeader();
 		
 		shell.setNavigation(nav);
+		shell.setHeader(header);
 
 
 		/* Browser history integration */

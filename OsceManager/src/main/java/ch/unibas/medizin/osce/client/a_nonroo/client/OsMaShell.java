@@ -57,6 +57,16 @@ public class OsMaShell extends Composite  {
 	SimplePanel master;
 	@UiField
 	NotificationMole mole;
+	@UiField
+	SimplePanel headerPanel;
+	
+	/**
+	 * 
+	 * @return panel with language selector, login/logout-button, breadcrumb navigation
+	 */
+	public SimplePanel getHeaderPanel() {
+		return headerPanel;
+	}
 	
 //	/**
 //	 * @return the panel to hold the details
@@ -92,5 +102,9 @@ public class OsMaShell extends Composite  {
 	public void setNavigation(OsMaMainNav nav) {
 		mainNav.add(nav);
 		
+	}
+
+	public void setHeader(OsMaHeader header) {
+		headerPanel.add(header);
 	}
 }

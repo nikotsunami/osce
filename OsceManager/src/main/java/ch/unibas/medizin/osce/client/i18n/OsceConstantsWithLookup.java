@@ -36,6 +36,10 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String NATIONALITY_NOT_EQUALS();
 	public String NATIONALITY_LESS();
 	public String NATIONALITY_MORE();
+	public String SCAR_EQUALS();
+	public String SCAR_NOT_EQUALS();
+	public String SCAR_MORE();
+	public String SCAR_LESS();
 	
 	public String MALE();
 	public String FEMALE();

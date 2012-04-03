@@ -10,6 +10,7 @@
 			<g:ValueListBox ui:field="field"/>
 			<g:ValueListBox ui:field="comparison"/>
 			<g:TextBox  ui:field="value"></g:TextBox>
+			<g:Label ui:field="unit" />
 			<my:IconButton ui:field="addAdvSeaBasicButton" icon="plusthick"/>
 			<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>
 		</g:HorizontalPanel>

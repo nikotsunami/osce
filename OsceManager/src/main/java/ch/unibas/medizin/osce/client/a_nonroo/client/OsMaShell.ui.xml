@@ -8,7 +8,7 @@
 
 	<g:DockLayoutPanel unit='PX' ui:field="dockPanel">
 		<g:north size='80'>
-			<g:HTMLPanel styleName='{style.centered}'></g:HTMLPanel>
+			<g:SimplePanel ui:field='headerPanel' />
 		</g:north>
 		
 		<g:west size="172" addStyleNames='{style.mainNav}'>

@@ -12,7 +12,6 @@ import ch.unibas.medizin.osce.shared.Comparison2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -42,11 +41,7 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
-        public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
-            return obj == null ? "" : String.valueOf(obj);
-        }
-    });
+    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.SCAR));
 	
 	@UiField (provided=true)
 	ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(ScarProxyRenderer.getInstance());
@@ -56,8 +51,8 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
 		setWidget(uiBinder.createAndBindUi(this));
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
-		comparison.setValue(Comparison2.values()[0]);
-		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
+		comparison.setValue(Comparison2.EQUALS);
+		comparison.setAcceptableValues(Comparison2.getNonNumericComparisons());
 		addScarButton.setText(constants.add());
 		scarButton.setText(constants.traits());
 	}

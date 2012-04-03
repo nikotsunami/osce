@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
@@ -59,12 +62,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	private List<AbstractEditableCell<?, ?>> editableCells;
 	
 	@UiField(provided = true)
-    ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new AbstractRenderer<ScarProxy>() {
-
-        public String render(ScarProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getTraitType()) + ": " + String.valueOf(obj.getBodypart());
-        }
-    });
+    ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(ScarProxyRenderer.getInstance());
 
 	private boolean addBoxesShown = true;
 
@@ -92,16 +90,11 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		paths.add("trait_type");
 		table.addColumn(new TextColumn<ScarProxy>() {
 
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-				public String render(java.lang.String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
+			Renderer<TraitTypes> renderer = new EnumRenderer<TraitTypes>(); 
 
 			@Override
 			public String getValue(ScarProxy object) {
-				return renderer.render(object.getTraitType().toString());
+				return renderer.render(object.getTraitType());
 			}
 		}, constants.traits());
 		paths.add("bodypart");

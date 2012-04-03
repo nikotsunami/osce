@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
@@ -67,11 +68,7 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
     });
 	
 	@UiField(provided = true)
-    ValueListBox<LangSkillLevel> langSkillBox = new ValueListBox<LangSkillLevel>(new AbstractRenderer<LangSkillLevel>() {
-        public String render(LangSkillLevel obj) {
-            return obj == null ? "" : String.valueOf(obj.toString());
-        }
-    });
+    ValueListBox<LangSkillLevel> langSkillBox = new ValueListBox<LangSkillLevel>(new EnumRenderer<LangSkillLevel>());
 	
 	public StandardizedPatientLangSkillSubViewImpl() {
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
@@ -116,15 +113,10 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		}, constants.languages());
 
 		langTable.addColumn(new TextColumn<LangSkillProxy>() {
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-				public String render(String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
-
+			EnumRenderer<LangSkillLevel> renderer = new EnumRenderer<LangSkillLevel>();
 			@Override
 			public String getValue(LangSkillProxy object) {
-				return renderer.render(object.getSkill().toString());
+				return renderer.render(object.getSkill());
 			}
 		}, constants.languageSkills());
 		

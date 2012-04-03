@@ -10,16 +10,17 @@ import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -40,6 +41,9 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	TextBox value;
 	@UiField
 	IconButton addAdvSeaBasicButton;
+	
+	@UiField
+	Label unit;
 		
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
@@ -78,7 +82,6 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	HorizontalPanel parentPanel;
 
 	public StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl() {
-		
 		setWidget(uiBinder.createAndBindUi(this));
 		
 		bindType.setValue(BindType.values()[0]);
@@ -94,6 +97,19 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addAdvSeaBasicButton.setText(constants.add());
 		addBasicData.setText(constants.basicFilter());
+		unit.setText("[cm]");
+		field.addValueChangeHandler(new ValueChangeHandler<PossibleFields>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<PossibleFields> event) {
+				if (event.getValue() == PossibleFields.BMI) {
+					unit.setText("");
+				} else if (event.getValue() == PossibleFields.HEIGHT) {
+					unit.setText("[cm]");
+				} else if (event.getValue() == PossibleFields.WEIGHT) {
+					unit.setText("[kg]");
+				}
+			}
+		});
 	}
 	
     public void setBindTypePickerValues(Collection<BindType> values) {
