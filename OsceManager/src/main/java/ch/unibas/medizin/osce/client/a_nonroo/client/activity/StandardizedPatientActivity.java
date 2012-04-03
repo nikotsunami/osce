@@ -311,39 +311,39 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}
 		});
 
-		// (1) Sorting
+		// OLD (1) Sorting
 
-		Boolean asc = true;
-		String sortField = "name"; // TODO: handle sort change events
-
-		if (table.getColumnSortList().size() > 0) {
-
-			asc = table.getColumnSortList().get(0).isAscending();
-
-		}
-
-		// (2) Text search
-		searchThrough = view.getSearchFilters();
-
-		// (3) Advanced search
-		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
-			@Override
-			public void onSuccess(List<StandardizedPatientProxy> values) {
-				if (view == null) {
-					// This activity is dead
-					return;
-				}
-				table.setRowData(range.getStart(), values);
-
-				// finishPendingSelection();
-				if (widget != null) {
-					widget.setWidget(view.asWidget());
-				}
-			}
-		};
-
-		fireRangeRequest(sortField, asc, q, new Integer(range.getStart()), new Integer(range.getLength()), searchThrough, view.getCriteria().getFields(), view
-				.getCriteria().getComparisons(), view.getCriteria().getValues(), callback);
+//		Boolean asc = true;
+//		String sortField = "name"; // TODO: handle sort change events
+//
+//		if (table.getColumnSortList().size() > 0) {
+//
+//			asc = table.getColumnSortList().get(0).isAscending();
+//
+//		}
+//
+//		// (2) Text search
+//		searchThrough = view.getSearchFilters();
+//
+//		// (3) Advanced search
+//		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
+//			@Override
+//			public void onSuccess(List<StandardizedPatientProxy> values) {
+//				if (view == null) {
+//					// This activity is dead
+//					return;
+//				}
+//				table.setRowData(range.getStart(), values);
+//
+//				// finishPendingSelection();
+//				if (widget != null) {
+//					widget.setWidget(view.asWidget());
+//				}
+//			}
+//		};
+//
+//		fireRangeRequest(sortField, asc, q, new Integer(range.getStart()), new Integer(range.getLength()), searchThrough, view.getCriteria().getFields(), view
+//				.getCriteria().getComparisons(), view.getCriteria().getValues(), callback);
 	}
 
 	private void fireRangeRequest(String sortField, Boolean asc, String q, Integer firstResult, Integer maxResults, List<String> searchThrough,
