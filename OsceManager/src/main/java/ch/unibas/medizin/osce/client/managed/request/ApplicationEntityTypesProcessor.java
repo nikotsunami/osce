@@ -44,6 +44,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(OsceDayProxy.class);
         rtn.add(OfficeProxy.class);
         rtn.add(NationalityProxy.class);
+        rtn.add(MediaContentTypeProxy.class);
+        rtn.add(MediaContentProxy.class);
         rtn.add(LogEntryProxy.class);
         rtn.add(LangSkillProxy.class);
         rtn.add(KeywordProxy.class);
@@ -145,6 +147,14 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (NationalityProxy.class.equals(clazz)) {
             processor.handleNationality((NationalityProxy) null);
+            return;
+        }
+        if (MediaContentTypeProxy.class.equals(clazz)) {
+            processor.handleMediaContentType((MediaContentTypeProxy) null);
+            return;
+        }
+        if (MediaContentProxy.class.equals(clazz)) {
+            processor.handleMediaContent((MediaContentProxy) null);
             return;
         }
         if (LogEntryProxy.class.equals(clazz)) {
@@ -295,6 +305,14 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleNationality((NationalityProxy) proxy);
             return;
         }
+        if (proxy instanceof MediaContentTypeProxy) {
+            processor.handleMediaContentType((MediaContentTypeProxy) proxy);
+            return;
+        }
+        if (proxy instanceof MediaContentProxy) {
+            processor.handleMediaContent((MediaContentProxy) proxy);
+            return;
+        }
         if (proxy instanceof LogEntryProxy) {
             processor.handleLogEntry((LogEntryProxy) proxy);
             return;
@@ -402,6 +420,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleOffice(OfficeProxy proxy);
 
     public abstract void handleNationality(NationalityProxy proxy);
+
+    public abstract void handleMediaContentType(MediaContentTypeProxy proxy);
+
+    public abstract void handleMediaContent(MediaContentProxy proxy);
 
     public abstract void handleLogEntry(LogEntryProxy proxy);
 

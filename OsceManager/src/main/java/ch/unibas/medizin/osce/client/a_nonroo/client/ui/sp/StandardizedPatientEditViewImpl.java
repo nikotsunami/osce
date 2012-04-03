@@ -48,7 +48,13 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
+import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -107,6 +113,21 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	IntegerBox weight;
 	@UiField
 	TextBox email;
+
+	//file upload
+	@UiField
+	FileUpload fileUpload;
+	@UiField
+	IconButton uploadButton;
+	@UiField
+	FormPanel uploadFormPanel;
+	@UiField
+	DivElement uploadMessage;
+	@UiField
+	@Ignore
+	Hidden patientId;
+	
+	//end file upload
 
 	@UiField(provided = true)
 	FocusableValueListBox<NationalityProxy> nationality = new FocusableValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
@@ -205,7 +226,42 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		patientPanel.selectTab(0);
 		preName.setFocus(true);
 		preName.selectAll();
+		//ps: upload
+	    uploadFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+	    uploadFormPanel.setMethod(FormPanel.METHOD_POST);
+	    uploadFormPanel.setAction(GWT.getHostPageBaseURL()+"UploadServlet");
+	    uploadFormPanel.addSubmitHandler(new FormPanel.SubmitHandler() {
+
+	        @Override
+	        public void onSubmit(SubmitEvent event) {
+	             if (!"".equalsIgnoreCase(fileUpload.getFilename())) { 
+	                 Log.info("PS UPLOADING");   
+	                 }  
+	             else{  
+	                 Log.info("PS UPLOADING cancel");   
+	                 event.cancel(); // cancel the event  
+	                 } 
+	             } 
+	         }); 
+
+	    uploadFormPanel
+	    .addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+	    	
+	        @Override
+	        public void onSubmitComplete(SubmitCompleteEvent event) {
+                Log.info("PS Submit is Complete "+event.getResults());
+                uploadMessage.setInnerHTML(event.getResults());
+	        }
+	    });
+		
 	}
+	//ps upload button handler
+	@UiHandler("uploadButton")
+	void onClickUploadButton(ClickEvent event) {
+	    Log.info("You selected: " + fileUpload.getFilename());
+	    uploadFormPanel.submit();
+	}
+	
 	
 	private void createFocusHandlers() {
 		preName.addFocusHandler(new FocusHandler() {
@@ -467,6 +523,15 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //			profession.setValue(values.iterator().next());
 //		}
 		profession.setAcceptableValues(values);		
+	}
+	@Override
+	public String getPatientId() {
+		return patientId.getValue();
+	}
+	@Override
+	public void setPatientId(String patientId) {
+		this.patientId.setValue(patientId);
+		
 	}
 
 

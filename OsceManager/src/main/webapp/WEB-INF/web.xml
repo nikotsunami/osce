@@ -115,6 +115,15 @@
   <servlet-name>gwt-log-remote-logger-servlet</servlet-name>
   <url-pattern>/osMaEntry/gwt-log</url-pattern>
 </servlet-mapping>
-    
+
+<!-- upload servlet -->    
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>ch.unibas.medizin.osce.server.upload.UploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/UploadServlet</url-pattern>
+  </servlet-mapping>
     
 </web-app>

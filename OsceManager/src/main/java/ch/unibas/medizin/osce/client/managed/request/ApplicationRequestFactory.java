@@ -48,6 +48,10 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     NationalityRequest nationalityRequest();
 
+    MediaContentTypeRequest mediaContentTypeRequest();
+
+    MediaContentRequest mediaContentRequest();
+
     LogEntryRequest logEntryRequest();
 
     LangSkillRequest langSkillRequest();

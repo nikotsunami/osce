@@ -346,3 +346,13 @@ finder add findAnamnesisChecksByAnamnesischecksvalues
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-03-08 09:38:12
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-08 09:45:46
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-03-08 17:36:10
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-29 14:58:31
+entity --class ~.domain.MediaContentType --testAutomatically
+field string --fieldName contentType --sizeMax 255 --notNull
+field string --fieldName comment --sizeMax 512
+
+entity --class ~.domain.MediaContent --testAutomatically
+field string --fieldName link --sizeMax 512 --notNull
+field string --fieldName comment --sizeMax 512
+field reference --fieldName standardizedPatient --type ~.domain.StandardizedPatient
+field reference --fieldName contentType --type ~.domain.MediaContentType

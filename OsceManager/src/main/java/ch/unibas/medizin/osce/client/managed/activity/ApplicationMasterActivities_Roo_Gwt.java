@@ -19,6 +19,8 @@ import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
+import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -70,6 +72,10 @@ import ch.unibas.medizin.osce.client.managed.ui.LangSkillListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.LogEntryListView;
 import ch.unibas.medizin.osce.client.managed.ui.LogEntryMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.MediaContentListView;
+import ch.unibas.medizin.osce.client.managed.ui.MediaContentMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.MediaContentTypeListView;
+import ch.unibas.medizin.osce.client.managed.ui.MediaContentTypeMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.NationalityListView;
 import ch.unibas.medizin.osce.client.managed.ui.NationalityMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.OfficeListView;
@@ -236,6 +242,16 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleNationality(NationalityProxy isNull) {
                 setResult(new NationalityListActivity(requests, ScaffoldApp.isMobile() ? NationalityMobileListView.instance() : NationalityListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleMediaContentType(MediaContentTypeProxy isNull) {
+                setResult(new MediaContentTypeListActivity(requests, ScaffoldApp.isMobile() ? MediaContentTypeMobileListView.instance() : MediaContentTypeListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleMediaContent(MediaContentProxy isNull) {
+                setResult(new MediaContentListActivity(requests, ScaffoldApp.isMobile() ? MediaContentMobileListView.instance() : MediaContentListView.instance(), placeController));
             }
 
             @Override
