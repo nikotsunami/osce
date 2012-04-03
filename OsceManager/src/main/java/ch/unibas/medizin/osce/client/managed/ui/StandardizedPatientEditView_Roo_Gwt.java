@@ -83,6 +83,12 @@ public abstract class StandardizedPatientEditView_Roo_Gwt extends Composite impl
     IntegerBox weight;
 
     @UiField
+    TextBox immagePath;
+
+    @UiField
+    TextBox videoPath;
+
+    @UiField
     DateBox birthday;
 
     @UiField

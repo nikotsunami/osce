@@ -27,7 +27,7 @@ import com.google.gwt.core.client.GWT;
  *
  */
 public class StandardizedPatientMediaSubViewImpl extends Composite 
-	implements StandardizedPatientMediaSubView, Editor<MediaContentProxy> {
+	implements StandardizedPatientMediaSubView {
 
 	private static final Binder BINDER = GWT.create(Binder.class);
 
@@ -75,6 +75,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	        public void onSubmitComplete(SubmitCompleteEvent event) {
                 Log.info("PS Submit is Complete "+event.getResults());
                 uploadMessage.setInnerHTML(event.getResults());
+                delegate.uploadSuccesfull(event.getResults());
 	        }
 	    });
 	}
@@ -89,19 +90,13 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	interface Binder extends UiBinder<Widget, StandardizedPatientMediaSubViewImpl> {
 	}
 
-	interface Driver extends RequestFactoryEditorDriver<MediaContentProxy, StandardizedPatientMediaSubViewImpl> {
-	}
+
 
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate=delegate;
 	}
 
-	@Override
-	public RequestFactoryEditorDriver<MediaContentProxy, StandardizedPatientMediaSubViewImpl> createEditorDriver() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String getMediaContent() {
