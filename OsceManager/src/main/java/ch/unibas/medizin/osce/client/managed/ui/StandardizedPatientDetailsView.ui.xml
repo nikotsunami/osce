@@ -91,6 +91,27 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -193,6 +214,22 @@
                 </td>
                 <td>
                     <span ui:field="weight"/>
+                </td>
+            </tr>
+            <tr id="immagePath">
+                <td>
+                    <span class="{style.label}">Immage Path:</span>
+                </td>
+                <td>
+                    <span ui:field="immagePath"/>
+                </td>
+            </tr>
+            <tr id="videoPath">
+                <td>
+                    <span class="{style.label}">Video Path:</span>
+                </td>
+                <td>
+                    <span ui:field="videoPath"/>
                 </td>
             </tr>
             <tr id="birthday">

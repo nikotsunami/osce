@@ -17,10 +17,12 @@ public interface StandardizedPatientMediaSubView extends IsWidget {
 	interface Delegate {
 		void newClicked();
 		void uploadClicked();
+		void uploadSuccesfull(String results);
+		
+		
 		
 	}
 
-	RequestFactoryEditorDriver<MediaContentProxy, StandardizedPatientMediaSubViewImpl> createEditorDriver();
 
 	String getMediaContent();
 

@@ -93,6 +93,25 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="gender">
                 <td>
                     <div class="{style.label}">Gender:</div>
@@ -179,6 +198,22 @@
                 </td>
                 <td>
                     <g:IntegerBox ui:field="weight"/>
+                </td>
+            </tr>
+            <tr id="immagePath">
+                <td>
+                    <div class="{style.label}">Immage Path:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="immagePath"/>
+                </td>
+            </tr>
+            <tr id="videoPath">
+                <td>
+                    <div class="{style.label}">Video Path:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="videoPath"/>
                 </td>
             </tr>
             <tr id="birthday">

@@ -71,6 +71,27 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -122,6 +143,14 @@
         <div id="weight">
             <div class="{style.label}">Weight</div>
             <div class="{style.value}" ui:field="weight"/>
+        </div>
+        <div id="immagePath">
+            <div class="{style.label}">Immage Path</div>
+            <div class="{style.value}" ui:field="immagePath"/>
+        </div>
+        <div id="videoPath">
+            <div class="{style.label}">Video Path</div>
+            <div class="{style.value}" ui:field="videoPath"/>
         </div>
         <div id="birthday">
             <div class="{style.label}">Birthday</div>

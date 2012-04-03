@@ -75,6 +75,13 @@ public class StandardizedPatient {
     private Integer height;
     
     private Integer weight;
+    
+    @Size(max = 255)
+    private String immagePath;
+    
+    @Size(max = 255)
+    private String videoPath;
+    
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")

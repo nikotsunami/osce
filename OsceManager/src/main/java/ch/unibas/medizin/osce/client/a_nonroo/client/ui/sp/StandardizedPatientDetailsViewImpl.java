@@ -53,6 +53,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	StandardizedPatientAnamnesisSubViewImpl standardizedPatientAnamneisSubViewImpl;
 	@UiField
 	StandardizedPatientLangSkillSubViewImpl standardizedPatientLangSkillSubViewImpl;
+	@UiField
+	StandardizedPatientMediaSubViewImpl standardizedPatientMediaSubViewImpl;
+
+	@Override
+	public StandardizedPatientMediaSubViewImpl getStandardizedPatientMediaSubViewImpl() {
+		return standardizedPatientMediaSubViewImpl;
+	}
 
 	// Buttons
 	@UiField

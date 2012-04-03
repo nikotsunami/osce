@@ -65,6 +65,14 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setWeight(Integer weight);
 
+    abstract String getImmagePath();
+
+    abstract void setImmagePath(String immagePath);
+
+    abstract String getVideoPath();
+
+    abstract void setVideoPath(String videoPath);
+
     abstract Date getBirthday();
 
     abstract void setBirthday(Date birthday);

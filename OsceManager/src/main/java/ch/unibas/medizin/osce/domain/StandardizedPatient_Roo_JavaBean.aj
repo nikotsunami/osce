@@ -105,6 +105,22 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.weight = weight;
     }
     
+    public String StandardizedPatient.getImmagePath() {
+        return this.immagePath;
+    }
+    
+    public void StandardizedPatient.setImmagePath(String immagePath) {
+        this.immagePath = immagePath;
+    }
+    
+    public String StandardizedPatient.getVideoPath() {
+        return this.videoPath;
+    }
+    
+    public void StandardizedPatient.setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+    
     public Date StandardizedPatient.getBirthday() {
         return this.birthday;
     }
