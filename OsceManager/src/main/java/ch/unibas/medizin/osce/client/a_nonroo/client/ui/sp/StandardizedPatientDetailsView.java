@@ -21,8 +21,11 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();
 	StandardizedPatientAnamnesisSubViewImpl getStandardizedPatientAnamnesisSubViewImpl();
 	StandardizedPatientLangSkillSubViewImpl getStandardizedPatientLangSkillSubViewImpl();
+	StandardizedPatientMediaSubViewImpl getStandardizedPatientMediaSubViewImpl();
+	
 	
     public void setValue(StandardizedPatientProxy proxy); 
     void setDelegate(Delegate delegate);
     void setPresenter(Presenter systemStartActivity);
+	
 }

@@ -63,6 +63,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setEmail(obj, index);
         setGender(obj, index);
         setHeight(obj, index);
+        setImmagePath(obj, index);
         setMobile(obj, index);
         setName(obj, index);
         setNationality(obj, index);
@@ -72,6 +73,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setStreet(obj, index);
         setTelephone(obj, index);
         setTelephone2(obj, index);
+        setVideoPath(obj, index);
         setWeight(obj, index);
         return obj;
     }
@@ -120,6 +122,14 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     public void StandardizedPatientDataOnDemand.setHeight(StandardizedPatient obj, int index) {
         Integer height = new Integer(index);
         obj.setHeight(height);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setImmagePath(StandardizedPatient obj, int index) {
+        String immagePath = "immagePath_" + index;
+        if (immagePath.length() > 255) {
+            immagePath = immagePath.substring(0, 255);
+        }
+        obj.setImmagePath(immagePath);
     }
     
     public void StandardizedPatientDataOnDemand.setMobile(StandardizedPatient obj, int index) {
@@ -183,6 +193,14 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
             telephone2 = telephone2.substring(0, 30);
         }
         obj.setTelephone2(telephone2);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setVideoPath(StandardizedPatient obj, int index) {
+        String videoPath = "videoPath_" + index;
+        if (videoPath.length() > 255) {
+            videoPath = videoPath.substring(0, 255);
+        }
+        obj.setVideoPath(videoPath);
     }
     
     public void StandardizedPatientDataOnDemand.setWeight(StandardizedPatient obj, int index) {

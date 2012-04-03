@@ -230,6 +230,36 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getWeight());
             }
         }, "Weight");
+        paths.add("immagePath");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getImmagePath());
+            }
+        }, "Immage Path");
+        paths.add("videoPath");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getVideoPath());
+            }
+        }, "Video Path");
         paths.add("birthday");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 

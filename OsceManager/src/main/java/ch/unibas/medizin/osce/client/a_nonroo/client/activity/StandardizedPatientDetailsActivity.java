@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
@@ -45,7 +46,8 @@ StandardizedPatientDetailsView.Presenter,
 StandardizedPatientDetailsView.Delegate, 
 StandardizedPatientScarSubView.Delegate,
 StandardizedPatientAnamnesisSubView.Delegate,
-StandardizedPatientLangSkillSubView.Delegate {
+StandardizedPatientLangSkillSubView.Delegate,
+StandardizedPatientMediaSubViewImpl.Delegate {
 	
     private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -60,6 +62,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 	private ValueListBox<ScarProxy> scarBox;
 	
 	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
+	private StandardizedPatientMediaSubViewImpl standardizedPatientMediaSubViewImpl;
 	private CellTable<AnamnesisChecksValueProxy> anamnesisTable;
 	
 	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
@@ -88,6 +91,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		standardizedPatientScarSubView = view.getStandardizedPatientScarSubViewImpl();
 		standardizedPatientAnamnesisSubView = view.getStandardizedPatientAnamnesisSubViewImpl();
 		standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubViewImpl();
+		standardizedPatientMediaSubViewImpl = view.getStandardizedPatientMediaSubViewImpl();
 		
 		widget.setWidget(standardizedPatientDetailsView.asWidget());
 		
@@ -95,6 +99,7 @@ StandardizedPatientLangSkillSubView.Delegate {
 		standardizedPatientScarSubView.setDelegate(this);
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
+		standardizedPatientMediaSubViewImpl.setDelegate(this);
 		
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
 	}
@@ -273,8 +278,14 @@ StandardizedPatientLangSkillSubView.Delegate {
 		initScar();
 		initAnamnesis();
 		initLangSkills();
+		initMediaView();
 	}
 	
+	private void initMediaView() {
+		standardizedPatientMediaSubViewImpl.setMediaContent(standardizedPatientProxy.getImmagePath());
+		
+	}
+
 	/*******************
 	 * LANGSKILL TABLE
 	 ******************/
@@ -571,5 +582,27 @@ StandardizedPatientLangSkillSubView.Delegate {
 	@Override
 	public void performAnamnesisSearch() {
 		onRangeChangedAnamnesis();
+	}
+
+	@Override
+	public void newClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void uploadClicked() {
+
+		
+	}
+
+	@Override
+	public void uploadSuccesfull(String results) {
+		// TODO ###SIEBERS### Auto-generated method stub
+		// Call edit on Proxy
+		// Edith path
+		// Persist object to server
+		// initImageView
+		
 	}
 }

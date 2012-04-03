@@ -356,3 +356,5 @@ field string --fieldName link --sizeMax 512 --notNull
 field string --fieldName comment --sizeMax 512
 field reference --fieldName standardizedPatient --type ~.domain.StandardizedPatient
 field reference --fieldName contentType --type ~.domain.MediaContentType
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-04-03 12:11:16
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-04-03 12:29:39

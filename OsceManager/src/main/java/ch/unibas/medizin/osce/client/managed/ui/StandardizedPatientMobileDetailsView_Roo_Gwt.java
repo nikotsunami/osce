@@ -68,6 +68,12 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
     Element weight;
 
     @UiField
+    Element immagePath;
+
+    @UiField
+    Element videoPath;
+
+    @UiField
     Element birthday;
 
     @UiField
@@ -108,6 +114,8 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
         mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
         height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
         weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
+        immagePath.setInnerText(proxy.getImmagePath() == null ? "" : String.valueOf(proxy.getImmagePath()));
+        videoPath.setInnerText(proxy.getVideoPath() == null ? "" : String.valueOf(proxy.getVideoPath()));
         birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getBirthday()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
         descriptions.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));

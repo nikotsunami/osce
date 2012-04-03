@@ -71,6 +71,25 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="gender">
             <div class="{style.label}">Gender</div>
             <div class="{style.value}">
@@ -135,6 +154,18 @@
             <div class="{style.label}">Weight</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="weight"/>
+            </div>
+        </div>
+        <div id="immagePath">
+            <div class="{style.label}">Immage Path</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="immagePath"/>
+            </div>
+        </div>
+        <div id="videoPath">
+            <div class="{style.label}">Video Path</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="videoPath"/>
             </div>
         </div>
         <div id="birthday">
