@@ -22,7 +22,7 @@ public interface StandardizedPatientView  extends IsWidget{
 	 */
     public interface Delegate {
     	public void newClicked();
-    	public void performSearch(String q);
+    	public void performSearch(String q, List<String> list);
 	}
 
     public CellTable<StandardizedPatientProxy> getTable();

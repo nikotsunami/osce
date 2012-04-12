@@ -88,6 +88,8 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	}
 	
 	private class CheckBoxChangeHandler implements ValueChangeHandler<Boolean> {
+		
+
 		@Override
 		public void onValueChange(ValueChangeEvent<Boolean> event) {
 			Iterator<CheckBoxItem> iter = fields.iterator();
@@ -123,6 +125,9 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			while(i.hasNext())
 				msg = msg + i.next() + ", ";
 			Log.info(msg);
+			
+			
+			
 		}
 	}
 	

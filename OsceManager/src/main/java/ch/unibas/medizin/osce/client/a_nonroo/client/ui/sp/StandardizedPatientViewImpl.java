@@ -134,7 +134,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
 			public void performAction() {
-				delegate.performSearch(searchBox.getValue());
+				delegate.performSearch(searchBox.getValue(), getSearchFilters());
 			}
 		});
 		
@@ -417,7 +417,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@Override
 	public void updateSearch() {
 		String q = searchBox.getValue();
-		delegate.performSearch(q);
+		delegate.performSearch(q, getSearchFilters());
 	}
 
 	@Override

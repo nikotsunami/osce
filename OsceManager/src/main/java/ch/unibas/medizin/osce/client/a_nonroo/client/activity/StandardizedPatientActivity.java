@@ -149,6 +149,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	private void init() {
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		init2("");
 	}
 
@@ -196,21 +197,23 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 
+	private List<String> searchThrough = Arrays.asList("name", "preName");
+	
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		// TODO: ###david### test code
 
-		List<String> fields = Arrays.asList("weight", "height", "bmi");
-		List<String> values = Arrays.asList("80", "180", "30");
+		//List<String> fields = Arrays.asList("weight", "height", "bmi");
+		//List<String> values = Arrays.asList("80", "180", "30");
 		// List<String> comparations = Arrays.asList(Comparison2.EQUALS,
 		// Comparison2.LESS, Comparison2.MORE);
 		// List<String> bindType = Arrays.asList(BindType.AND, BindType.AND,
 		// BindType.AND);
-		List<String> searchThrough = new ArrayList<String>();//Arrays.asList("name", "preName", "comment", "BIC", "IBAN", "bankName");
+		
 
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		//requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		//
 		// AdvancedSearchCriteriaProxy criteria =
 		// requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -222,8 +225,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		//
 		// searchCriteria.add(criteria);
 		//WARNING: TEST: 
-		searchCriteria.clear();
-		 AdvancedSearchCriteriaProxy criteria2 =
+		//searchCriteria.clear();
+		/* AdvancedSearchCriteriaProxy criteria2 =
 		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
 		 requestAdvSeaCritStd.edit(criteria2);
 		 criteria2.setBindType(BindType.AND);
@@ -232,7 +235,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 //"Deutsch: A1"
 		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
 		 criteria2.setObjectId(new Long(6));
-		 searchCriteria.add(criteria2);
+		 searchCriteria.add(criteria2);*/
 
 //		 AdvancedSearchCriteriaProxy criteria3 =
 //		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -279,6 +282,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 * searchCriteria.add(new AdvancesSearchCriteriumOld
 		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
 		 */
+		 
+		// searchThrough = new ArrayList<String>(); 
+		 
+		 // TODO: some bug about request
+		// requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
 		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
 				searchThrough, searchCriteria /*fields, bindType, comparations, values */).
@@ -378,7 +386,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	@Override
-	public void performSearch(String q) {
+	public void performSearch(String q, List<String> searchTrough) {
+		this.searchThrough = searchTrough;
 		Log.debug("Search for " + q);
 		init2(q);
 	}
@@ -481,7 +490,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
 
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		
 
 		AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
 		criteria = requestAdvSeaCritStd.edit(criteria);
