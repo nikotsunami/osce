@@ -16,6 +16,9 @@ public interface AnamnesisCheckView extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
+		void moveUp(AnamnesisCheckProxy proxy);
+		void moveDown(AnamnesisCheckProxy proxy);
+		void deleteClicked(AnamnesisCheckProxy proxy);
 		void newClicked();
 		void performSearch(String q);
 	}

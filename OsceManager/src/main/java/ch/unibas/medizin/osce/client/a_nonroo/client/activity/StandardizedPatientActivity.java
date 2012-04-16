@@ -68,6 +68,11 @@ import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+/**
+ * Activity that handles the search of standardized patients and the display of the search results.
+ * @author nikotsunami
+ *
+ */
 public class StandardizedPatientActivity extends AbstractActivity implements StandardizedPatientView.Presenter, StandardizedPatientView.Delegate,
 		StandartizedPatientAdvancedSearchSubView.Delegate, StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
@@ -82,8 +87,23 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private ActivityManager activityManger;
 	private StandardizedPatientDetailsActivityMapper StandardizedPatientDetailsActivityMapper;
 	private StandartizedPatientAdvancedSearchSubView standartizedPatientAdvancedSearchSubView;
+	
 	private CellTable<AdvancedSearchCriteriaProxy> criteriaTable;
+	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
+	private List<String> searchThrough = Arrays.asList("name", "preName");
+	
+	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
+	private StandardizedPatientAdvancedSearchAnamnesisPopup anamnesisPopup;
+	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
+	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
+	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
+	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
 
+	/**
+	 * Sets the dependencies of this activity and initializes the corresponding activity manager 
+	 * @param requests The request factory to use
+	 * @param placeController the place controller to use
+	 */
 	public StandardizedPatientActivity(OsMaRequestFactory requests, PlaceController placeController) {
 		this.requests = requests;
 		this.placeController = placeController;
@@ -91,6 +111,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		this.activityManger = new ActivityManager(StandardizedPatientDetailsActivityMapper, requests.getEventBus());
 	}
 
+	/**
+	 * Clean up activity on finish (close popups and disable display of current activities view)
+	 */
 	public void onStop() {
 		if (advancedSearchPopup != null) {
 			advancedSearchPopup.hide();
@@ -98,6 +121,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		activityManger.setDisplay(null);
 	}
 
+	/**
+	 * Initializes the corresponding view and initializes the tables.
+	 */
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -107,23 +133,21 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		this.widget = panel;
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
-		setTable(view.getTable());
+		this.table = view.getTable();
 
 		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
 		standartizedPatientAdvancedSearchSubView.setDelegate(this);
 
 		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 
+		// reinitializes the table if a place change event ist
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-
 				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
-					init();
+					// init();
 				}
 			}
 		});
-
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
 		init();
 
@@ -149,16 +173,18 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	private void init() {
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		
 		init2("");
 	}
 
-	private void init2(final String q) {
+	private void init2(String q) {
+		searchValue = q;
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
 
 		// (2) Advanced search
-		fireCountRequest(q, searchThrough, view.getCriteria().getFields(), view.getCriteria().getComparisons(), view.getCriteria().getValues(),
+		fireCountRequest(searchValue, searchThrough, view.getCriteria().getFields(), view.getCriteria().getComparisons(), view.getCriteria().getValues(),
 				new Receiver<Long>() {
 					@Override
 					public void onSuccess(Long response) {
@@ -169,20 +195,19 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 						Log.debug("Geholte Patienten aus der Datenbank: " + response);
 						view.getTable().setRowCount(response.intValue(), true);
 
-						onRangeChanged(q);
+						onRangeChanged(searchValue);
 					}
 				});
 
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
-				StandardizedPatientActivity.this.onRangeChanged(q);
+				StandardizedPatientActivity.this.onRangeChanged(searchValue);
 			}
 		});
 		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
-
 			@Override
 			public void onColumnSort(ColumnSortEvent event) {
-				StandardizedPatientActivity.this.onRangeChanged(q);
+				StandardizedPatientActivity.this.onRangeChanged(searchValue);
 
 			}
 		});
@@ -195,9 +220,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));
 	}
 
-	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
-
-	private List<String> searchThrough = Arrays.asList("name", "preName");
 	
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged(String q) {
@@ -375,18 +397,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// requests.standardizedPatientRequestNonRoo().countPatientsBySearch(q).fire(callback);
 	}
 
-	private void setTable(CellTable<StandardizedPatientProxy> table) {
-		this.table = table;
-	}
-
 	@Override
 	public void newClicked() {
 		Log.info("create clicked");
 		placeController.goTo(new StandardizedPatientDetailsPlace(StandardizedPatientDetailsPlace.Operation.CREATE));
 	}
 
+	private String searchValue;
 	@Override
 	public void performSearch(String q, List<String> searchTrough) {
+		searchValue = q;
 		this.searchThrough = searchTrough;
 		Log.debug("Search for " + q);
 		init2(q);
@@ -402,13 +422,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// TODO Auto-generated method stub
 
 	}
-
-	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
-	private StandardizedPatientAdvancedSearchAnamnesisPopup anamnesisPopup;
-	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
-	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
-	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
-	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
 
 	@Override
 	public void addBasicCriteriaClicked(Button addBasicData) {
@@ -490,7 +503,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
 
+	//	requestAdvSeaCritStd.fire();
 		
+		requestAdvSeaCritStd.fire();
 
 		AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
 		criteria = requestAdvSeaCritStd.edit(criteria);
