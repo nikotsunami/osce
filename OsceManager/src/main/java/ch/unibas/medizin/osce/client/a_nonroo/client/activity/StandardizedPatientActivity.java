@@ -179,6 +179,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	private void init2(String q) {
 		searchValue = q;
+		//TODO: @@@SPEC when declared here, the siple search work
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
@@ -505,6 +506,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	//	requestAdvSeaCritStd.fire();
 		
+		//TODO: @@@SPEC if requestAdvSeaCritStd declared here the advanced search work, but the simple part does't work any more. Probably not the best aproach to use a proxy which is never stored.
+		
 		requestAdvSeaCritStd.fire();
 
 		AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -568,6 +571,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			scarPopup.getScarBox().setAcceptableValues(values);
 		}
 	}
+	
+	//TODO: @@@SPEC at the moment all values are loaded, I saw a loading on demand in your presentation, would be probably nice to implement.
 
 	private class AnamnesisCriteriaReceiver extends Receiver<List<AnamnesisCheckProxy>> {
 		public void onSuccess(List<AnamnesisCheckProxy> response) {
@@ -591,6 +596,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
 		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), anamnesisCheck.getType() + ": " + answer+":"+anamnesisCheck.getValue(), bindType, PossibleFields.ANAMNESIS, comparison);
 	}
+	
+	//TODO: @@@SPEC implement nationality search
+			
 
 	@Override
 	public void addNationalityButtonClicked(NationalityProxy nationality,
