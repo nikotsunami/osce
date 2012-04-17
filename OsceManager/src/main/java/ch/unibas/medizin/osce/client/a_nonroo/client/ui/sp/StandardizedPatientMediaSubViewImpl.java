@@ -74,7 +74,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	        @Override
 	        public void onSubmitComplete(SubmitCompleteEvent event) {
                 Log.info("PS Submit is Complete "+event.getResults());
-                uploadMessage.setInnerHTML(event.getResults());
+                setMediaContent(event.getResults());
                 delegate.uploadSuccesfull(event.getResults());
 	        }
 	    });
@@ -105,6 +105,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 
 	@Override
 	public void setMediaContent(String description) {
+		uploadMessage.setInnerHTML(description);
 		
 	}
 
