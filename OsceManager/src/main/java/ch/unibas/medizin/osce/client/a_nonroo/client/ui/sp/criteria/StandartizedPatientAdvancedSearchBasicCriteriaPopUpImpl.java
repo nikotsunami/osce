@@ -7,7 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import com.google.gwt.core.client.GWT;
@@ -72,7 +72,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.NUMERIC));
+    ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC));
     
     @UiField(provided = true)
     ValueListBox<PossibleFields> field = new ValueListBox<PossibleFields>(new EnumRenderer<PossibleFields>());
@@ -92,8 +92,8 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		field.setAcceptableValues(Arrays.asList(new PossibleFields[] 
 				{PossibleFields.HEIGHT, PossibleFields.WEIGHT, PossibleFields.BMI}));
 		
-		comparison.setValue(Comparison2.values()[0]);
-		setComparisonPickerValues(Arrays.asList(Comparison2.values()));
+		comparison.setValue(Comparison.values()[0]);
+		setComparisonPickerValues(Arrays.asList(Comparison.values()));
 		
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addAdvSeaBasicButton.setText(constants.add());
@@ -117,7 +117,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
         bindType.setAcceptableValues(values);
     }
     
-    public void setComparisonPickerValues(Collection<Comparison2> values) {
+    public void setComparisonPickerValues(Collection<Comparison> values) {
         comparison.setAcceptableValues(values);
     }
     

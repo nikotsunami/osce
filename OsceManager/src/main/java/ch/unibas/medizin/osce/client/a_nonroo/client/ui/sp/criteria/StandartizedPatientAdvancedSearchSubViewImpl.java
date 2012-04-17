@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import com.google.gwt.cell.client.ActionCell;
@@ -118,7 +118,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 	        	// TODO verbesserung wg. unterschiedlicher Vergleichstypen
-	            Renderer<Comparison2> renderer = new EnumRenderer<Comparison2>();
+	            Renderer<Comparison> renderer = new EnumRenderer<Comparison>();
 
 	            @Override
 	            public String getValue(AdvancedSearchCriteriaProxy object) {

@@ -47,15 +47,6 @@ public class RoleAssignmentsActivity extends AbstractActivity implements RoleAss
 		this.view = roleAssignmentsView;
 		widget.setWidget(roleAssignmentsView.asWidget());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-
-				if (event.getNewPlace() instanceof RoleAssignmentsDetailsPlace){
-					init();
-				}
-			}
-		});
-
 		init();
 
 		activityManager.setDisplay(view.getDetailsPanel());

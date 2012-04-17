@@ -108,7 +108,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), 400);
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addAnamnesisValue());
 	}
 

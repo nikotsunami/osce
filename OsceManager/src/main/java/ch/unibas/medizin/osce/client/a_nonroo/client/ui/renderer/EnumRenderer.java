@@ -4,7 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.text.shared.AbstractRenderer;
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 
 public class EnumRenderer<T extends Enum<?>> extends AbstractRenderer<T>{
 	protected final OsceConstantsWithLookup constants = GWT.create(OsceConstantsWithLookup.class);
@@ -23,7 +23,7 @@ public class EnumRenderer<T extends Enum<?>> extends AbstractRenderer<T>{
 	}
 	
 	protected String getIdentifier(T object) {
-		if (!(object instanceof Comparison2 ) || rendererType == Type.DEFAULT) {
+		if (!(object instanceof Comparison ) || rendererType == Type.DEFAULT) {
 			return object.name();
 		} else {
 			return rendererType.name() + "_" + object.name();

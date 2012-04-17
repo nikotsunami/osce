@@ -42,15 +42,6 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-				
-				if (event.getNewPlace() instanceof ExaminationSchedulePlace){
-					init();
-				}
-			}
-		});
-		
 		init();
 
 		view.setDelegate(this);

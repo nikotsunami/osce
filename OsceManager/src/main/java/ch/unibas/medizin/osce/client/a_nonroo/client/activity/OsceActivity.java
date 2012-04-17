@@ -64,15 +64,6 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-
-				if (event.getNewPlace() instanceof OsceDetailsPlace){
-					init();
-				}
-			}
-		});
-
 		init();
 
 		activityManager.setDisplay(view.getDetailsPanel());

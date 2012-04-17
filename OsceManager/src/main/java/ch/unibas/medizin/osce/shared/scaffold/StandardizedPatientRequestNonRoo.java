@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Sorting;
 
 

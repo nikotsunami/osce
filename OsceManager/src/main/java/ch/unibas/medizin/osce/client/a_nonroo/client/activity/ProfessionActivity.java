@@ -64,13 +64,6 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 
-//		eventBus.addHandler(PlaceChangeEvent.TYPE,
-//				new PlaceChangeEvent.Handler() {
-//					public void onPlaceChange(PlaceChangeEvent event) {
-//						// updateSelection(event.getNewPlace());
-//						// TODO implement
-//					}
-//				});
 		init();
 
 //		activityManger.setDisplay(view.getDetailsPanel());

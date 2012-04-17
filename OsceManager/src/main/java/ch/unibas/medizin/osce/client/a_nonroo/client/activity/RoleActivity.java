@@ -47,15 +47,6 @@ public class RoleActivity extends AbstractActivity implements RoleView.Presenter
 		this.view = roleView;
 		widget.setWidget(roleView.asWidget());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-
-				if (event.getNewPlace() instanceof RoleDetailsPlace){
-					init();
-				}
-			}
-		});
-
 		init();
 
 		activityManager.setDisplay(view.getDetailsPanel());

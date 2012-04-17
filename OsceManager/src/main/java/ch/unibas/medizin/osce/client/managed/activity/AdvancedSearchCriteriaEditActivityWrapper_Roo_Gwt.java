@@ -10,7 +10,7 @@ import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
@@ -36,7 +36,7 @@ public abstract class AdvancedSearchCriteriaEditActivityWrapper_Roo_Gwt implemen
     public void start(AcceptsOneWidget display, EventBus eventBus) {
         view.setFieldPickerValues(Arrays.asList(PossibleFields.values()));
         view.setBindTypePickerValues(Arrays.asList(BindType.values()));
-        view.setComparationPickerValues(Arrays.asList(Comparison2.values()));
+        view.setComparationPickerValues(Arrays.asList(Comparison.values()));
         wrapped.start(display, eventBus);
     }
 
@@ -46,6 +46,6 @@ public abstract class AdvancedSearchCriteriaEditActivityWrapper_Roo_Gwt implemen
 
         void setBindTypePickerValues(Collection<BindType> values);
 
-        void setComparationPickerValues(Collection<Comparison2> values);
+        void setComparationPickerValues(Collection<Comparison> values);
     }
 }

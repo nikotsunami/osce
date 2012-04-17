@@ -11,7 +11,7 @@ import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace.Operation;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;

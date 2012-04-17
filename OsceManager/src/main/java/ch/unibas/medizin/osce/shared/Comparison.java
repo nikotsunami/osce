@@ -7,26 +7,26 @@ import java.util.List;
  * @author David, Michael, Pavel
  *
  */
-public enum Comparison2 {
+public enum Comparison {
 	EQUALS(" = "), NOT_EQUALS(" != "), LESS(" < "), MORE(" > ");
 	
 	private String stringValue;
 	
-	private Comparison2(String stringValue){
+	private Comparison(String stringValue){
 		this.stringValue = stringValue;
 	}
 
 	public String getStringValue() {
 		return stringValue;
 	}	
-	private static List<Comparison2> nonNumericComparisons = new ArrayList<Comparison2>();
+	private static List<Comparison> nonNumericComparisons = new ArrayList<Comparison>();
 	
 	static {
-		nonNumericComparisons.add(Comparison2.EQUALS);
+		nonNumericComparisons.add(Comparison.EQUALS);
 		nonNumericComparisons.add(NOT_EQUALS);
 	}
 	
-	public static List<Comparison2> getNonNumericComparisons() {
+	public static List<Comparison> getNonNumericComparisons() {
 		return nonNumericComparisons;
 	}
 }

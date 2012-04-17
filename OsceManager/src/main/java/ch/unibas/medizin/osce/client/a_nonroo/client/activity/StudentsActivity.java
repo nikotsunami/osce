@@ -42,15 +42,6 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-				
-				if (event.getNewPlace() instanceof StudentsPlace){
-					init();
-				}
-			}
-		});
-		
 		init();
 
 		view.setDelegate(this);

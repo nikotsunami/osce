@@ -3,7 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.request;
 
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
@@ -33,9 +33,9 @@ public interface AdvancedSearchCriteriaProxy extends EntityProxy {
 
     abstract void setBindType(BindType bindType);
 
-    abstract Comparison2 getComparation();
+    abstract Comparison getComparation();
 
-    abstract void setComparation(Comparison2 comparation);
+    abstract void setComparation(Comparison comparation);
 
     abstract String getValue();
 

@@ -10,7 +10,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -87,7 +87,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.ANAMNESIS));
+    ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.ANAMNESIS));
 
 	private AnamnesisCheckProxy selectedProxy;
 
@@ -128,8 +128,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		});
 		
 		setWidget(uiBinder.createAndBindUi(this));
-		comparison.setValue(Comparison2.EQUALS);
-		comparison.setAcceptableValues(Arrays.asList(new Comparison2[] {Comparison2.EQUALS, Comparison2.NOT_EQUALS}));
+		comparison.setValue(Comparison.EQUALS);
+		comparison.setAcceptableValues(Arrays.asList(new Comparison[] {Comparison.EQUALS, Comparison.NOT_EQUALS}));
 		
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));

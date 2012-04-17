@@ -42,15 +42,6 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-				
-				if (event.getNewPlace() instanceof CircuitPlace){
-					init();
-				}
-			}
-		});
-		
 		init();
 
 		view.setDelegate(this);

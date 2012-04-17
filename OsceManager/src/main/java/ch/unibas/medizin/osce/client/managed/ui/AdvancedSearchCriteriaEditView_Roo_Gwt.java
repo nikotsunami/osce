@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -59,9 +59,9 @@ public abstract class AdvancedSearchCriteriaEditView_Roo_Gwt extends Composite i
     });
 
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparation = new ValueListBox<Comparison2>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
+    ValueListBox<Comparison> comparation = new ValueListBox<Comparison>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison>() {
 
-        public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
+        public String render(ch.unibas.medizin.osce.shared.Comparison obj) {
             return obj == null ? "" : String.valueOf(obj);
         }
     });
@@ -69,7 +69,7 @@ public abstract class AdvancedSearchCriteriaEditView_Roo_Gwt extends Composite i
     @UiField
     TextBox value;
 
-    public void setComparationPickerValues(Collection<Comparison2> values) {
+    public void setComparationPickerValues(Collection<Comparison> values) {
         comparation.setAcceptableValues(values);
     }
 

@@ -4,7 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import java.lang.Long;
 import java.lang.String;
@@ -35,11 +35,11 @@ privileged aspect AdvancedSearchCriteria_Roo_JavaBean {
         this.bindType = bindType;
     }
     
-    public Comparison2 AdvancedSearchCriteria.getComparation() {
+    public Comparison AdvancedSearchCriteria.getComparation() {
         return this.comparation;
     }
     
-    public void AdvancedSearchCriteria.setComparation(Comparison2 comparation) {
+    public void AdvancedSearchCriteria.setComparation(Comparison comparation) {
         this.comparation = comparation;
     }
     

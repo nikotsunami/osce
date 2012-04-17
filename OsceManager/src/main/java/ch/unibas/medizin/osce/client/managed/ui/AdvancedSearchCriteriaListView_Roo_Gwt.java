@@ -5,7 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -109,9 +109,9 @@ public abstract class AdvancedSearchCriteriaListView_Roo_Gwt extends AbstractPro
         paths.add("comparation");
         table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.shared.Comparison2> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
+            Renderer<ch.unibas.medizin.osce.shared.Comparison> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison>() {
 
-                public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
+                public String render(ch.unibas.medizin.osce.shared.Comparison obj) {
                     return obj == null ? "" : String.valueOf(obj);
                 }
             };

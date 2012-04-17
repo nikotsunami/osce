@@ -63,15 +63,6 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-
-				if (event.getNewPlace() instanceof RoomPlace){
-					init();
-				}
-			}
-		});
-
 		init();
 
 		// Inherit the view's key provider

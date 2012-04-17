@@ -67,12 +67,9 @@ ClinicView.Presenter, ClinicView.Delegate {
 				ClinicDetailsPlace place;
 				if (event.getNewPlace() instanceof ClinicDetailsPlace){
 					place = (ClinicDetailsPlace) event.getNewPlace();
-					
-					if (place.getToken().contains("!DELETED")){
+					if (place.getToken() != null && place.getToken().contains("!DELETED")){
 						init();
 					}
-					
-					//init();
 				}
 			}
 		});

@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class AdvancedSearchCriteria {
     @NotNull
 	private BindType bindType;
     @NotNull
-	private Comparison2 comparation;
+	private Comparison comparation;
     @NotNull
     @Size(max = 255)
 	private String value;

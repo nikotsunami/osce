@@ -42,15 +42,6 @@ public class IndividualSchedulesActivity extends AbstractActivity implements Ind
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-				
-				if (event.getNewPlace() instanceof IndividualSchedulesPlace){
-					init();
-				}
-			}
-		});
-		
 		init();
 
 		view.setDelegate(this);

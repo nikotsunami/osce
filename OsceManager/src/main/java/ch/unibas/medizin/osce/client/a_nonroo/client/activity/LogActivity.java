@@ -63,15 +63,6 @@ public class LogActivity extends AbstractActivity implements LogView.Presenter, 
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-
-				if (event.getNewPlace() instanceof LogPlace){
-					init();
-				}
-			}
-		});
-
 		init();
 
 		// Inherit the view's key provider

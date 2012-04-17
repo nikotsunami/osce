@@ -1,7 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
 import com.google.gwt.place.shared.Place;
@@ -17,7 +17,7 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
 	 * TODO: PS: Pass two different values: for display purpose and for search (iterated values)
 	 */
 	interface Delegate {
-		void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition);
+		void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison comparition);
 	}
   
     void setDelegate(Delegate delegate);

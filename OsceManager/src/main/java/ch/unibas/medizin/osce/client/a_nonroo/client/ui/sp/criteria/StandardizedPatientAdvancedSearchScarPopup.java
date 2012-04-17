@@ -2,7 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
@@ -18,7 +18,7 @@ public interface StandardizedPatientAdvancedSearchScarPopup extends IsWidget, St
 		 * Implemented by the owner of the view.
 		 */
 		interface Delegate {
-			void addScarButtonClicked(ScarProxy scarType, BindType bindType, Comparison2 comparison);
+			void addScarButtonClicked(ScarProxy scarType, BindType bindType, Comparison comparison);
 		}
 	  
 	    void setDelegate(Delegate delegate);

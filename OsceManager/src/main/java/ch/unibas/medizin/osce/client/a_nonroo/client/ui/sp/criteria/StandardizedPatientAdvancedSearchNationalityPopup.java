@@ -2,7 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
@@ -19,7 +19,7 @@ public interface StandardizedPatientAdvancedSearchNationalityPopup extends IsWid
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void addNationalityButtonClicked(NationalityProxy nationality, BindType bindType, Comparison2 comparison);
+		void addNationalityButtonClicked(NationalityProxy nationality, BindType bindType, Comparison comparison);
 	}
 
 	void setDelegate(Delegate delegate);

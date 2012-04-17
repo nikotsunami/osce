@@ -7,7 +7,7 @@ import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -50,14 +50,14 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.NATIONALITY));
+    ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.NATIONALITY));
 
 	public StandardizedPatientAdvancedSearchNationalityPopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
-		comparison.setValue(Comparison2.EQUALS);
-		comparison.setAcceptableValues(Comparison2.getNonNumericComparisons());
+		comparison.setValue(Comparison.EQUALS);
+		comparison.setAcceptableValues(Comparison.getNonNumericComparisons());
 
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addNationalityButton.setText(constants.add());

@@ -7,7 +7,7 @@ import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 import com.google.gwt.core.client.GWT;
@@ -54,7 +54,7 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison2> comparison = new ValueListBox<Comparison2>(new EnumRenderer<Comparison2>(EnumRenderer.Type.LANGSKILL));
+    ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.LANGSKILL));
 
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
@@ -62,8 +62,8 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 		skill.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
-		comparison.setValue(Comparison2.values()[0]);
-		comparison.setAcceptableValues(Arrays.asList(Comparison2.values()));
+		comparison.setValue(Comparison.values()[0]);
+		comparison.setAcceptableValues(Arrays.asList(Comparison.values()));
 
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addLanguageButton.setText(constants.add());
