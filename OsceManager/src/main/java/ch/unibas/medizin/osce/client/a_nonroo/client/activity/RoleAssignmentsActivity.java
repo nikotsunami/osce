@@ -4,6 +4,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetail
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoleAssignmentsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoleAssignmentsViewImpl;
+import ch.unibas.medizin.osce.shared.Operation;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
@@ -72,6 +74,6 @@ public class RoleAssignmentsActivity extends AbstractActivity implements RoleAss
 
 	@Override
 	public void showSubviewClicked() {
-		goTo(new RoleAssignmentsDetailsPlace(RoleAssignmentsDetailsPlace.Operation.DETAILS));
+		goTo(new RoleAssignmentsDetailsPlace(Operation.DETAILS));
 	}
 }

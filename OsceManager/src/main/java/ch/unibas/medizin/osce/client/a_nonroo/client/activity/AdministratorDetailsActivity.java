@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorDetailsView
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorDetailsViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -93,7 +94,7 @@ AdministratorDetailsView.Presenter, AdministratorDetailsView.Delegate {
 	public void editClicked() {
 		Log.info("edit clicked");
 		goTo(new AdministratorDetailsPlace(administratorProxy.stableId(),
-				AdministratorDetailsPlace.Operation.EDIT));
+				Operation.EDIT));
 
 	}
 

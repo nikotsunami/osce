@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView.Presenter;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -100,7 +101,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 
 	@Override
 	public void editClicked() {
-		goTo(new DoctorDetailsPlace(doctorProxy.stableId(), DoctorDetailsPlace.Operation.EDIT));
+		goTo(new DoctorDetailsPlace(doctorProxy.stableId(), Operation.EDIT));
 	}
 
 	@Override

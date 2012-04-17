@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -29,12 +30,12 @@ public class OsceDetailsActivityMapper  implements ActivityMapper {
 	public Activity getActivity(Place place) {
 		Log.debug("im OsceDetailsActivityMapper.getActivity");
 		if (place instanceof OsceDetailsPlace){
-			if(((OsceDetailsPlace) place).getOperation() == OsceDetailsPlace.Operation.DETAILS)
+			if(((OsceDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new OsceDetailsActivity((OsceDetailsPlace) place, requests, placeController);
-			if(((OsceDetailsPlace) place).getOperation() == OsceDetailsPlace.Operation.EDIT)
+			if(((OsceDetailsPlace) place).getOperation() == Operation.EDIT)
 				return new OsceEditActivity((OsceDetailsPlace) place, requests, placeController);
-			if(((OsceDetailsPlace) place).getOperation() == OsceDetailsPlace.Operation.CREATE)
-				return new OsceEditActivity((OsceDetailsPlace) place, requests, placeController,  OsceDetailsPlace.Operation.CREATE);
+			if(((OsceDetailsPlace) place).getOperation() == Operation.CREATE)
+				return new OsceEditActivity((OsceDetailsPlace) place, requests, placeController,  Operation.CREATE);
 		}
 
 		return null;

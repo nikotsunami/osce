@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -29,7 +30,7 @@ public class RoleDetailsActivityMapper implements ActivityMapper {
 	public Activity getActivity(Place place) {
 		Log.debug("im RoleDetailsActivityMapper.getActivity");
 		if (place instanceof RoleDetailsPlace) {
-			if(((RoleDetailsPlace) place).getOperation() == RoleDetailsPlace.Operation.DETAILS)
+			if(((RoleDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new RoleDetailsActivity((RoleDetailsPlace) place, requests, placeController);
 			
 			// TODO uncomment and implement lines below!

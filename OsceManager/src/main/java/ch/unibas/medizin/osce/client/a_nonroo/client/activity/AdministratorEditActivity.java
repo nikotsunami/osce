@@ -4,13 +4,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -93,7 +93,7 @@ public class AdministratorEditActivity extends AbstractActivity implements
 				});
 		// init();
 
-		if (this.place.getOperation() == AdministratorDetailsPlace.Operation.EDIT) {
+		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("administrator")
 					.fire(new Receiver<Object>() {
@@ -159,9 +159,9 @@ public class AdministratorEditActivity extends AbstractActivity implements
 
 	@Override
 	public void cancelClicked() {
-		if (this.place.getOperation() == AdministratorDetailsPlace.Operation.EDIT)
+		if (this.place.getOperation() == Operation.EDIT)
 			placeController.goTo(new AdministratorDetailsPlace(administrator.stableId(),
-					AdministratorDetailsPlace.Operation.DETAILS));
+					Operation.DETAILS));
 		else
 			placeController.goTo(new AdministratorPlace("AdministratorPlace!CANCEL"));
 
@@ -198,7 +198,7 @@ public class AdministratorEditActivity extends AbstractActivity implements
 				save = true;
 
 				placeController.goTo(new AdministratorDetailsPlace(administrator.stableId(),
-						AdministratorDetailsPlace.Operation.DETAILS));
+						Operation.DETAILS));
 			}
 
 		});

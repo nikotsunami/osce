@@ -1,7 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace.Operation;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.place.shared.Place;
@@ -9,16 +9,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class ClinicDetailsPlace extends Place {
-	
-	
+public class ClinicDetailsPlace extends Place implements HasOperationOnProxy {
 	private String token;
-	
-	public enum Operation {
-		DETAILS, EDIT, CREATE
-	}
 	private static final String SEPARATOR = "!";
-
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
 	
@@ -91,13 +84,13 @@ public class ClinicDetailsPlace extends Place {
 		public String getToken(ClinicDetailsPlace place) {
 			Log.debug("ClinicDetailsPlace.Tokenizer.getToken");
 			if (Operation.DETAILS == place.getOperation()) {
-				return place.getProxyId() + SEPARATOR + ClinicDetailsPlace.Operation.DETAILS;
+				return place.getProxyId() + SEPARATOR + Operation.DETAILS;
 			}
 			if (Operation.EDIT == place.getOperation()) {
-				return place.getProxyId() + SEPARATOR + ClinicDetailsPlace.Operation.EDIT;
+				return place.getProxyId() + SEPARATOR + Operation.EDIT;
 			}
 			if (Operation.CREATE == place.getOperation()) {
-				return /*place.getProxyId() + SEPARATOR + */ClinicDetailsPlace.Operation.CREATE.toString();
+				return /*place.getProxyId() + SEPARATOR + */ Operation.CREATE.toString();
 			}
         
 			return place.getToken();

@@ -15,7 +15,7 @@
 	    <my:IconButton ui:field="addLanguage" icon="comment"/>
 	    <my:IconButton ui:field="addNationality" icon="flag" />
   	</g:HorizontalPanel>
-    <b:CellTable pageSize="8" ui:field="table" width="100%"/>
+    <b:CellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
     <div class="{style.controls}">      
       <b:SimplePager ui:field="pager" display="{table}"/>
     </div>

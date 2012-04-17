@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -131,7 +132,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		Log.debug(nationality.getNationality());
 		
 		goTo(new NationalityDetailsPlace(nationality.stableId(),
-				NationalityDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 	}
 	
 

@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OsceDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OsceDetailsViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -97,7 +98,7 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate {
 	public void editClicked() {
 		Log.info("edit clicked");
 		goTo(new OsceDetailsPlace(osceProxy.stableId(),
-				OsceDetailsPlace.Operation.EDIT));
+				Operation.EDIT));
 
 	}
 

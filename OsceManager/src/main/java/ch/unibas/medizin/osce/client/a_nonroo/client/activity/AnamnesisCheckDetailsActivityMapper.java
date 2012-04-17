@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -26,12 +27,12 @@ public class AnamnesisCheckDetailsActivityMapper  implements ActivityMapper{
 	public Activity getActivity(Place place) {
 		Log.debug("im AnamnesisCheckDetailsActivityMapper.getActivity");
 		if (place instanceof AnamnesisCheckDetailsPlace){
-			if(((AnamnesisCheckDetailsPlace) place).getOperation() == AnamnesisCheckDetailsPlace.Operation.DETAILS)
+			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new AnamnesisCheckDetailsActivity((AnamnesisCheckDetailsPlace) place, requests, placeController);
-			if(((AnamnesisCheckDetailsPlace) place).getOperation() == AnamnesisCheckDetailsPlace.Operation.EDIT)
+			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.EDIT)
 				return new AnamnesisCheckEditActivity((AnamnesisCheckDetailsPlace) place, requests, placeController);
-			if(((AnamnesisCheckDetailsPlace) place).getOperation() == AnamnesisCheckDetailsPlace.Operation.CREATE)
-				return new AnamnesisCheckEditActivity((AnamnesisCheckDetailsPlace) place, requests, placeController,  AnamnesisCheckDetailsPlace.Operation.CREATE);
+			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.CREATE)
+				return new AnamnesisCheckEditActivity((AnamnesisCheckDetailsPlace) place, requests, placeController,  Operation.CREATE);
 		}
 
 		return null;

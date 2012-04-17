@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -26,7 +27,7 @@ public class ProfessionDetailsActivityMapper  implements ActivityMapper{
 	public Activity getActivity(Place place) {
 		Log.debug("im ProfessionDetailsActivityMapper.getActivity");
 		 if (place instanceof ProfessionDetailsPlace){
-			 if(((ProfessionDetailsPlace) place).getOperation() == ProfessionDetailsPlace.Operation.DETAILS)
+			 if(((ProfessionDetailsPlace) place).getOperation() == Operation.DETAILS)
 				 return new ProfessionDetailsActivity((ProfessionDetailsPlace) place, requests, placeController);
 		 }
 	            

@@ -4,6 +4,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoleViewImpl;
+import ch.unibas.medizin.osce.shared.Operation;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
@@ -72,6 +74,6 @@ public class RoleActivity extends AbstractActivity implements RoleView.Presenter
 
 	@Override
 	public void showSubviewClicked() {
-		goTo(new RoleDetailsPlace(RoleDetailsPlace.Operation.DETAILS));
+		goTo(new RoleDetailsPlace(Operation.DETAILS));
 	}
 }

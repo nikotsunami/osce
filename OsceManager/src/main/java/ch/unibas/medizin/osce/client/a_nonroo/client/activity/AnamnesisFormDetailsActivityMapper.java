@@ -1,8 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -27,12 +27,12 @@ public class AnamnesisFormDetailsActivityMapper  implements ActivityMapper{
 	public Activity getActivity(Place place) {
 		Log.debug("im AnamnesisFormDetailsActivityMapper.getActivity");
 		 if (place instanceof AnamnesisFormDetailsPlace){
-			 if(((AnamnesisFormDetailsPlace) place).getOperation() == AnamnesisFormDetailsPlace.Operation.DETAILS)
+			 if(((AnamnesisFormDetailsPlace) place).getOperation() == Operation.DETAILS)
 				 return new AnamnesisFormDetailsActivity((AnamnesisFormDetailsPlace) place, requests, placeController);
-			 if(((AnamnesisFormDetailsPlace) place).getOperation() == AnamnesisFormDetailsPlace.Operation.EDIT)
+			 if(((AnamnesisFormDetailsPlace) place).getOperation() == Operation.EDIT)
 				 return new AnamnesisFormEditActivity((AnamnesisFormDetailsPlace) place, requests, placeController);
-			 if(((AnamnesisFormDetailsPlace) place).getOperation() == AnamnesisFormDetailsPlace.Operation.CREATE)
-				 return new AnamnesisFormEditActivity((AnamnesisFormDetailsPlace) place, requests, placeController,  AnamnesisFormDetailsPlace.Operation.CREATE);
+			 if(((AnamnesisFormDetailsPlace) place).getOperation() == Operation.CREATE)
+				 return new AnamnesisFormEditActivity((AnamnesisFormDetailsPlace) place, requests, placeController,  Operation.CREATE);
 		 }
 	            
 

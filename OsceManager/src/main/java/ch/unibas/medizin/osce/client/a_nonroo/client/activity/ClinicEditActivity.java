@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicEditView;
@@ -15,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicRequest;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -103,7 +103,7 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 	            }
 	        });
 		
-		if (this.place.getOperation()==ClinicDetailsPlace.Operation.EDIT){
+		if (this.place.getOperation()== Operation.EDIT){
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("clinic", "doctor").fire(new Receiver<Object>() {
 
@@ -161,8 +161,8 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 
 	@Override
 	public void cancelClicked() {
-		if(this.place.getOperation()==ClinicDetailsPlace.Operation.EDIT)
-			placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), ClinicDetailsPlace.Operation.DETAILS));
+		if(this.place.getOperation()== Operation.EDIT)
+			placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), Operation.DETAILS));
 		else
 			placeController.goTo(new ClinicPlace("ClinicPlace!CANCEL"));
 	}
@@ -196,7 +196,7 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 				
 				save=true;
 				
-				placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), ClinicDetailsPlace.Operation.DETAILS));		
+				placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), Operation.DETAILS));		
 			}
 		}); 
 	}

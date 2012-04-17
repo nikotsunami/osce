@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
@@ -12,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewIm
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -96,7 +96,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		});
 		// init();
 
-		if (this.place.getOperation() == AnamnesisCheckDetailsPlace.Operation.EDIT) {
+		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("anamnesisForm").fire(new Receiver<Object>() {
 				public void onFailure(ServerFailure error) {
@@ -159,9 +159,9 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 	@Override
 	public void cancelClicked() {
-		if (this.place.getOperation() == AnamnesisCheckDetailsPlace.Operation.EDIT)
+		if (this.place.getOperation() == Operation.EDIT)
 			placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
-					AnamnesisCheckDetailsPlace.Operation.DETAILS));
+					Operation.DETAILS));
 		else
 			placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace!CANCEL"));
 	}
@@ -201,7 +201,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 				save = true;
 
 				placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
-						AnamnesisCheckDetailsPlace.Operation.DETAILS));
+						Operation.DETAILS));
 			}
 		});
 	}

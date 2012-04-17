@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisFormView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisFormViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -127,7 +128,7 @@ AnamnesisFormView.Presenter, AnamnesisFormView.Delegate {
 		Log.debug(AnamnesisForm.getId().toString());
 		
 		goTo(new AnamnesisFormDetailsPlace(AnamnesisForm.stableId(),
-				AnamnesisFormDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 	}
 	
 

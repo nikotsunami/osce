@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -26,12 +27,12 @@ public class ClinicDetailsActivityMapper  implements ActivityMapper{
 	public Activity getActivity(Place place) {
 		Log.debug("im ClinicDetailsActivityMapper.getActivity");
 		 if (place instanceof ClinicDetailsPlace){
-			 if(((ClinicDetailsPlace) place).getOperation() == ClinicDetailsPlace.Operation.DETAILS)
+			 if(((ClinicDetailsPlace) place).getOperation() == Operation.DETAILS)
 				 return new ClinicDetailsActivity((ClinicDetailsPlace) place, requests, placeController);
-			 if(((ClinicDetailsPlace) place).getOperation() == ClinicDetailsPlace.Operation.EDIT)
+			 if(((ClinicDetailsPlace) place).getOperation() == Operation.EDIT)
 				 return new ClinicEditActivity((ClinicDetailsPlace) place, requests, placeController);
-			 if(((ClinicDetailsPlace) place).getOperation() == ClinicDetailsPlace.Operation.CREATE)
-				 return new ClinicEditActivity((ClinicDetailsPlace) place, requests, placeController,  ClinicDetailsPlace.Operation.CREATE);
+			 if(((ClinicDetailsPlace) place).getOperation() == Operation.CREATE)
+				 return new ClinicEditActivity((ClinicDetailsPlace) place, requests, placeController,  Operation.CREATE);
 		 }
 	            
 

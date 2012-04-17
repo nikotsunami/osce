@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -129,7 +130,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		Log.debug(SpokenLanguage.getLanguageName());
 		
 		goTo(new SpokenLanguageDetailsPlace(SpokenLanguage.stableId(),
-				SpokenLanguageDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 	}
 	
 

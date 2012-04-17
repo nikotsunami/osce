@@ -4,13 +4,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisFormPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisFormEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisFormEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -88,7 +88,7 @@ public class AnamnesisFormEditActivity extends AbstractActivity implements
 				});
 		// init();
 
-		if (this.place.getOperation() == AnamnesisFormDetailsPlace.Operation.EDIT) {
+		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("anamnesisForm")
 					.fire(new Receiver<Object>() {
@@ -154,9 +154,9 @@ public class AnamnesisFormEditActivity extends AbstractActivity implements
 
 	@Override
 	public void cancelClicked() {
-		if (this.place.getOperation() == AnamnesisFormDetailsPlace.Operation.EDIT)
+		if (this.place.getOperation() == Operation.EDIT)
 			placeController.goTo(new AnamnesisFormDetailsPlace(anamnesisForm.stableId(),
-					AnamnesisFormDetailsPlace.Operation.DETAILS));
+					Operation.DETAILS));
 		else
 			placeController.goTo(new AnamnesisFormPlace("AnamnesisFormPlace!CANCEL"));
 
@@ -193,7 +193,7 @@ public class AnamnesisFormEditActivity extends AbstractActivity implements
 				save = true;
 
 				placeController.goTo(new AnamnesisFormDetailsPlace(anamnesisForm.stableId(),
-						AnamnesisFormDetailsPlace.Operation.DETAILS));
+						Operation.DETAILS));
 			}
 
 		});

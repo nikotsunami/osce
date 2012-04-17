@@ -69,4 +69,8 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 //	public String SCAR();
 	public String TATTOO();
 	public String NOT_TO_EXAMINE();
+	
+	public String EDIT();
+	public String DETAILS();
+	public String CREATE();
 }

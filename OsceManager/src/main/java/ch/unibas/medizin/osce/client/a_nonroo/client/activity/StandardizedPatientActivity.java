@@ -41,6 +41,7 @@ import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison2;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TraitTypes;
@@ -191,7 +192,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		Log.debug(StandardizedPatient.getName());
 
-		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));
+		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), Operation.DETAILS));
 	}
 
 	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
@@ -222,17 +223,17 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		//
 		// searchCriteria.add(criteria);
 		//WARNING: TEST: 
-		searchCriteria.clear();
-		 AdvancedSearchCriteriaProxy criteria2 =
-		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		 requestAdvSeaCritStd.edit(criteria2);
-		 criteria2.setBindType(BindType.AND);
-		 criteria2.setComparation(Comparison2.EQUALS);
-		 criteria2.setField(PossibleFields.LANGUAGE);
-		 //"Deutsch: A1"
-		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
-		 criteria2.setObjectId(new Long(6));
-		 searchCriteria.add(criteria2);
+//		searchCriteria.clear();
+//		 AdvancedSearchCriteriaProxy criteria2 =
+//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+//		 requestAdvSeaCritStd.edit(criteria2);
+//		 criteria2.setBindType(BindType.AND);
+//		 criteria2.setComparation(Comparison2.EQUALS);
+//		 criteria2.setField(PossibleFields.LANGUAGE);
+//		 //"Deutsch: A1"
+//		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
+//		 criteria2.setObjectId(new Long(6));
+//		 searchCriteria.add(criteria2);
 
 //		 AdvancedSearchCriteriaProxy criteria3 =
 //		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -270,7 +271,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 //		
 //		 searchCriteria.add(criteria5);
 		 //
-		 criteriaTable.setRowData(searchCriteria);
+//		 criteriaTable.setRowData(searchCriteria);
 		/*
 		 * searchCriteria.add(new AdvancesSearchCriteriumOld
 		 * (PossibleFields.weight, BindType.AND, Comparison2.EQUALS, "80"));
@@ -374,7 +375,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void newClicked() {
 		Log.info("create clicked");
-		placeController.goTo(new StandardizedPatientDetailsPlace(StandardizedPatientDetailsPlace.Operation.CREATE));
+		placeController.goTo(new StandardizedPatientDetailsPlace(Operation.CREATE));
 	}
 
 	@Override
@@ -493,6 +494,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		requestAdvSeaCritStd.fire();
 		searchCriteria.add(criteria);
 
+		criteriaTable.setRowData(searchCriteria);
+		// TODO execute search.
+	}
+	
+	public void deleteAdvancedSearchCriteria(AdvancedSearchCriteriaProxy criterium) {
+		searchCriteria.remove(criterium);
+		// TODO execute search
 		criteriaTable.setRowData(searchCriteria);
 	}
 	

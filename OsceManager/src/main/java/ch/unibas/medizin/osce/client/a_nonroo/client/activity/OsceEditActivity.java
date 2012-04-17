@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OsceEditView;
@@ -20,6 +19,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -117,7 +117,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 		});
 		// init();
 
-		if (this.place.getOperation() == OsceDetailsPlace.Operation.EDIT) {
+		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("osce")
 			.fire(new Receiver<Object>() {
@@ -183,9 +183,9 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 
 	@Override
 	public void cancelClicked() {
-		if (this.place.getOperation() == OsceDetailsPlace.Operation.EDIT)
+		if (this.place.getOperation() == Operation.EDIT)
 			placeController.goTo(new OsceDetailsPlace(osce.stableId(),
-					OsceDetailsPlace.Operation.DETAILS));
+					Operation.DETAILS));
 		else
 			placeController.goTo(new OscePlace("OscePlace!CANCEL"));
 
@@ -222,7 +222,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 				save = true;
 
 				placeController.goTo(new OsceDetailsPlace(osce.stableId(),
-						OsceDetailsPlace.Operation.DETAILS));
+						Operation.DETAILS));
 			}
 
 		});

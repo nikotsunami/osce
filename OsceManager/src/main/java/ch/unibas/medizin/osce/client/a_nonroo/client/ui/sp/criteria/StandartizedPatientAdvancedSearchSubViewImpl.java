@@ -1,12 +1,17 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.Comparison2;
+import ch.unibas.medizin.osce.shared.PossibleFields;
 
+import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -15,6 +20,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
@@ -89,70 +95,20 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 
 	private Delegate delegate;
 	
-
-//	@UiHandler("button")
-//	void onClick(ClickEvent e) {
-//		Window.alert("Hello!");
-//	}
-
-	
 	 public void init() {
 		 
-	       
-	    /*    table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-
-	            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-	                public String render(java.lang.Long obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
-
-	            @Override
-	            public String getValue(AdvancedSearchCriteriaProxy object) {
-	                return renderer.render(object.getId());
-	            }
-	        }, "Id");
-	      
-	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-
-	            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-	                public String render(java.lang.Integer obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
-
-	            @Override
-	            public String getValue(AdvancedSearchCriteriaProxy object) {
-	                return renderer.render(object.getVersion());
-	            }
-	        }, "Version");*/
-		 
 		 table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-
-	            Renderer<ch.unibas.medizin.osce.shared.BindType> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.BindType>() {
-
-	                public String render(ch.unibas.medizin.osce.shared.BindType obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
+			 Renderer<BindType> renderer = new EnumRenderer<BindType>();
 
 	            @Override
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
 	                return renderer.render(object.getBindType());
 	            }
 	        }, constants.bindType());
-		 
 	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
-	            Renderer<ch.unibas.medizin.osce.shared.PossibleFields> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.PossibleFields>() {
-
-	                public String render(ch.unibas.medizin.osce.shared.PossibleFields obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
+	            Renderer<PossibleFields> renderer = new EnumRenderer<PossibleFields>();
 
 	            @Override
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
@@ -160,16 +116,9 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	            }
 	        }, constants.field());
 	        
-	       
-	        
 	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-
-	            Renderer<ch.unibas.medizin.osce.shared.Comparison2> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.Comparison2>() {
-
-	                public String render(ch.unibas.medizin.osce.shared.Comparison2 obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
+	        	// TODO verbesserung wg. unterschiedlicher Vergleichstypen
+	            Renderer<Comparison2> renderer = new EnumRenderer<Comparison2>();
 
 	            @Override
 	            public String getValue(AdvancedSearchCriteriaProxy object) {
@@ -191,15 +140,22 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	                return renderer.render(object.getValue());
 	            }
 	        }, constants.value());
+	        
+	        ActionCell.Delegate<AdvancedSearchCriteriaProxy> deleteDelegate = new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
+				@Override
+				public void execute(AdvancedSearchCriteriaProxy object) {
+					delegate.deleteAdvancedSearchCriteria(object);
+				}
+			};
+	        
+	        table.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(new ActionCell<AdvancedSearchCriteriaProxy>(OsMaConstant.DELETE_ICON, deleteDelegate)));
+			table.addColumnStyleName(table.getColumnCount() - 1, "iconCol");
 	    }
-
 
 	@Override
 	public CellTable<AdvancedSearchCriteriaProxy> getTable() {
-		// TODO Auto-generated method stub
 		return table;
 	}
-
 
 	@Override
 	public void setDelegate(Delegate delegate) {

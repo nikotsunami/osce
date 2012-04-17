@@ -1,19 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class OsMaHeader extends Composite {
-
-	private static OsMaHeaderUiBinder uiBinder = GWT.create(OsMaHeaderUiBinder.class);
-
-	interface OsMaHeaderUiBinder extends UiBinder<Widget, OsMaHeader> {
+public interface OsMaHeader extends IsWidget {
+	public interface Delegate {
+		
 	}
-
-	public OsMaHeader() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
-
+	
+	public void setDelegate(Delegate delegate);
 }

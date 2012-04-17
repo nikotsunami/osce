@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -136,7 +137,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		Log.debug(Profession.getProfession());
 		
 		goTo(new ProfessionDetailsPlace(Profession.stableId(),
-				ProfessionDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 	}
 	
 

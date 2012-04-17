@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -26,7 +27,7 @@ public class SpokenLanguageDetailsActivityMapper  implements ActivityMapper{
 	public Activity getActivity(Place place) {
 		Log.debug("im SpokenLanguageDetailsActivityMapper.getActivity");
 		 if (place instanceof SpokenLanguageDetailsPlace){
-			 if(((SpokenLanguageDetailsPlace) place).getOperation() == SpokenLanguageDetailsPlace.Operation.DETAILS)
+			 if(((SpokenLanguageDetailsPlace) place).getOperation() == Operation.DETAILS)
 				 return new SpokenLanguageDetailsActivity((SpokenLanguageDetailsPlace) place, requests, placeController);
 		 }
 	            

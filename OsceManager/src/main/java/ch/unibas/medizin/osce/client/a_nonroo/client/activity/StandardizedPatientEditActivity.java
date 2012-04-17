@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditView;
@@ -26,6 +25,7 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -165,7 +165,7 @@ StandardizedPatientEditView.Delegate {
 //			}
 //		});
 		
-		if (this.place.getOperation()==StandardizedPatientDetailsPlace.Operation.EDIT){
+		if (this.place.getOperation()== Operation.EDIT){
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
 
@@ -258,8 +258,8 @@ StandardizedPatientEditView.Delegate {
 
 	@Override
 	public void cancelClicked() {
-		if(this.place.getOperation() == StandardizedPatientDetailsPlace.Operation.EDIT)
-			placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));
+		if(this.place.getOperation() == Operation.EDIT)
+			placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
 		else
 			placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!CANCEL"));
 	}
@@ -294,7 +294,7 @@ StandardizedPatientEditView.Delegate {
 
 				save = true;
 				
-				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));
+				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
 
 				//saveDescription();
 			}

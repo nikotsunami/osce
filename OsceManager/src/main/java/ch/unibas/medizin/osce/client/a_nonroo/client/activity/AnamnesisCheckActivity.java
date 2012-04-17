@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -131,7 +132,7 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 		Log.debug(AnamnesisCheck.getId().toString());
 		
 		goTo(new AnamnesisCheckDetailsPlace(AnamnesisCheck.stableId(),
-				AnamnesisCheckDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 	}
 	
 
@@ -178,7 +179,7 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 
 	@Override
 	public void newClicked() {
-		goTo(new AnamnesisCheckDetailsPlace(AnamnesisCheckDetailsPlace.Operation.CREATE));
+		goTo(new AnamnesisCheckDetailsPlace(Operation.CREATE));
 	}
 	
 	@Override

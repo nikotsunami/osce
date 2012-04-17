@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -132,7 +133,7 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 		Log.debug(administrator.getEmail());
 		
 		goTo(new AdministratorDetailsPlace(administrator.stableId(),
-				AdministratorDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 		
 	}
 	
@@ -190,7 +191,7 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 	@Override
 	public void newClicked() {
 		Log.info("new clicked");
-		placeController.goTo(new AdministratorDetailsPlace(AdministratorDetailsPlace.Operation.CREATE));
+		placeController.goTo(new AdministratorDetailsPlace(Operation.CREATE));
 	}
 
 	@Override

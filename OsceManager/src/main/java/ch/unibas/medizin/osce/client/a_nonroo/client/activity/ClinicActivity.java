@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -132,7 +133,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 		Log.debug(Clinic.getName());
 		
 		goTo(new ClinicDetailsPlace(Clinic.stableId(),
-				ClinicDetailsPlace.Operation.DETAILS));
+				Operation.DETAILS));
 	}
 	
 
@@ -192,7 +193,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 	@Override
 	public void newClicked() {
 		Log.info("create clicked");
-		placeController.goTo(new ClinicDetailsPlace(ClinicDetailsPlace.Operation.CREATE));
+		placeController.goTo(new ClinicDetailsPlace(Operation.CREATE));
 	}
 	
 	@Override

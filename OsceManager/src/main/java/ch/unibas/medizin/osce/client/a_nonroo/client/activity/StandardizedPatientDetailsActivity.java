@@ -23,6 +23,7 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -490,7 +491,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	public void editPatientClicked() {
 		Log.info("edit clicked");
 		goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(),
-				StandardizedPatientDetailsPlace.Operation.EDIT));
+				Operation.EDIT));
 	}
 
 	@Override

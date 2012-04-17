@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OsceView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OsceViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -121,7 +122,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 
 	protected void showDetails(OsceProxy osce) {
 		Log.debug("show details for osce with id " + osce.getId());
-		goTo(new OsceDetailsPlace(osce.stableId(), OsceDetailsPlace.Operation.DETAILS));
+		goTo(new OsceDetailsPlace(osce.stableId(), Operation.DETAILS));
 	}
 
 
@@ -173,7 +174,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	@Override
 	public void newClicked() {
 		Log.info("create clicked");
-		placeController.goTo(new OsceDetailsPlace(OsceDetailsPlace.Operation.CREATE));
+		placeController.goTo(new OsceDetailsPlace(Operation.CREATE));
 	}
 
 	@Override

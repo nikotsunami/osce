@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace.Operation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorEditView;
@@ -19,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorRequest;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeRequest;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -126,7 +126,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		});
 		//init();
 
-		if (this.place.getOperation() == DoctorDetailsPlace.Operation.EDIT) {
+		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
 			requests.find(place.getProxyId()).with("office","clinic").fire(new Receiver<Object>() {
 
@@ -196,8 +196,8 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 	@Override
 	public void cancelClicked() {
-		if(this.place.getOperation()==DoctorDetailsPlace.Operation.EDIT)
-			placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));
+		if(this.place.getOperation()== Operation.EDIT)
+			placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), Operation.DETAILS));
 		else
 			placeController.goTo(new DoctorPlace("DoctorPlace!CANCEL"));
 	}
@@ -218,7 +218,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 				//saveOffice();
 				save = true;
 				
-				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), DoctorDetailsPlace.Operation.DETAILS));
+				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), Operation.DETAILS));
 			}
 
 			@Override
