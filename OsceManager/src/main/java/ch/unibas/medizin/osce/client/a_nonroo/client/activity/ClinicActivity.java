@@ -64,9 +64,15 @@ ClinicView.Presenter, ClinicView.Delegate {
 
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-				
+				ClinicDetailsPlace place;
 				if (event.getNewPlace() instanceof ClinicDetailsPlace){
-					init();
+					place = (ClinicDetailsPlace) event.getNewPlace();
+					
+					if (place.getToken().contains("!DELETED")){
+						init();
+					}
+					
+					//init();
 				}
 			}
 		});

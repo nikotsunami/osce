@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
@@ -599,11 +600,11 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 
 	@Override
 	public void uploadSuccesfull(String results) {
-		// TODO ###SIEBERS### Auto-generated method stub
-		// Call edit on Proxy
-		// Edith path
-		// Persist object to server
-		// initImageView
+	 StandardizedPatientRequest stdPatRequest = requests.standardizedPatientRequest();
+	 standardizedPatientProxy = stdPatRequest.edit(standardizedPatientProxy);
+	 standardizedPatientProxy.setImmagePath(results);
+	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
+	 
 		
 	}
 }

@@ -3,9 +3,11 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
@@ -14,13 +16,14 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.text.shared.AbstractRenderer;
-import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -29,6 +32,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -115,124 +119,135 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	public void init() {
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
-
 		paths.add("type");
-		
-		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
-			@Override
-			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
-				OsceConstantsWithLookup constantsWithLookup = GWT.create(OsceConstantsWithLookup.class);
-				AnamnesisQuestionTypeImages resources = GWT.create(AnamnesisQuestionTypeImages.class);
-				String html = "";
-				switch (proxy.getType()) {
-				case QUESTION_TITLE:
-					html = "<img src=\"" + resources.title().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_TITLE() + "\" />";
-					break;
-				case QUESTION_MULT_M:
-					html = "<img src=\"" + resources.questionMultM().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_M() + "\" />";
-					break;
-				case QUESTION_MULT_S:
-					html = "<img src=\"" + resources.questionMultS().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_S() + "\" />";
-					break;
-				case QUESTION_YES_NO:
-					html = "<img src=\"" + resources.questionYesNo().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_YES_NO()+ "\" />";
-					break;
-				case QUESTION_OPEN:
-				default:
-					html = "<img src=\"" + resources.questionOpen().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_OPEN() + "\" />";
-				}
-				return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
-			}
-		}, constants.type());
-		
+		table.addColumn(new QuestionTypeColumn(), constants.type());
 		paths.add("text");
-		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-				public String render(java.lang.String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
-
-			@Override
-			public String getValue(AnamnesisCheckProxy object) {
-				return renderer.render(object.getText());
-			}
-		}, constants.text());
+		table.addColumn(new SimpleTextColumn(), constants.text());
 		paths.add("value");
-		
-		table.addColumn(new Column<AnamnesisCheckProxy, SafeHtml>(new SafeHtmlCell()) {
-			@Override
-			public SafeHtml getValue(AnamnesisCheckProxy proxy) {
-				// TODO Auto-generated method stub
-				String html = "";
-				String[] values;
-				
-				if (proxy != null) {
-					values = proxy.getValue().split("\\|");
-					if (values.length > 1) {
-						html = "<ul>";
-						for (int i=0; i < values.length; i++) {
-							html += "<li>" + values[i] + "</li>";
-						}
-						html += "</ul>";
-					} else { 
-						html = values[0];
+		table.addColumn(new ValueColumn(), constants.value());
+		addColumn(new ActionCell<AnamnesisCheckProxy>(
+				OsMaConstant.DOWN_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
+					public void execute(AnamnesisCheckProxy proxy) {
+						delegate.moveDown(proxy);
 					}
+				}), "", new GetValue<AnamnesisCheckProxy>() {
+					public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
+						return proxy;
+					}
+		}, null);
+		addColumn(new ActionCell<AnamnesisCheckProxy>(
+				OsMaConstant.UP_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
+					public void execute(AnamnesisCheckProxy proxy) {
+						delegate.moveUp(proxy);
+					}
+				}), "", new GetValue<AnamnesisCheckProxy>() {
+					public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
+						return proxy;
+					}
+		}, null);
+
+		// TODO implement
+//		addColumn(new ActionCell<AnamnesisCheckProxy>(
+//				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
+//					public void execute(AnamnesisCheckProxy proxy) {
+//						if (Window.confirm(constants.reallyDelete())) {
+//							delegate.deleteClicked(proxy);
+//						}
+//					}
+//				}), "", new GetValue<AnamnesisCheckProxy>() {
+//					public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
+//						return proxy;
+//					}
+//		}, null);
+	}
+	
+	private <C> void addColumn(Cell<C> cell, String headerText,
+			final GetValue<C> getter, FieldUpdater<AnamnesisCheckProxy, C> fieldUpdater) {
+		Column<AnamnesisCheckProxy, C> column = new Column<AnamnesisCheckProxy, C>(cell) {
+			@Override
+			public C getValue(AnamnesisCheckProxy object) {
+				return getter.getValue(object);
+			}
+		};
+		column.setFieldUpdater(fieldUpdater);
+		table.addColumn(column, headerText);
+	}
+	
+	/**
+	 * Get a cell value from a record.
+	 * 
+	 * @param <C>
+	 *            the cell type
+	 */
+	private static interface GetValue<C> {
+		C getValue(AnamnesisCheckProxy proxy);
+	}
+	
+	private class QuestionTypeColumn extends Column<AnamnesisCheckProxy, SafeHtml> {
+		public QuestionTypeColumn() {
+			super(new SafeHtmlCell());
+		}
+		
+		@Override
+		public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+			OsceConstantsWithLookup constantsWithLookup = GWT.create(OsceConstantsWithLookup.class);
+			AnamnesisQuestionTypeImages resources = GWT.create(AnamnesisQuestionTypeImages.class);
+			String html = "";
+			switch (proxy.getType()) {
+			case QUESTION_TITLE:
+				html = "<img src=\"" + resources.title().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_TITLE() + "\" />";
+				break;
+			case QUESTION_MULT_M:
+				html = "<img src=\"" + resources.questionMultM().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_M() + "\" />";
+				break;
+			case QUESTION_MULT_S:
+				html = "<img src=\"" + resources.questionMultS().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_S() + "\" />";
+				break;
+			case QUESTION_YES_NO:
+				html = "<img src=\"" + resources.questionYesNo().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_YES_NO()+ "\" />";
+				break;
+			case QUESTION_OPEN:
+			default:
+				html = "<img src=\"" + resources.questionOpen().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_OPEN() + "\" />";
+			}
+			return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
+		}
+	}
+	
+	private class SimpleTextColumn extends TextColumn<AnamnesisCheckProxy> {
+		@Override
+		public String getValue(AnamnesisCheckProxy object) {
+			String text = object.getText();
+			return (text == null) ? "" : text;
+		}
+	}
+	
+	private class ValueColumn extends Column<AnamnesisCheckProxy, SafeHtml> {
+		public ValueColumn() {
+			super(new SafeHtmlCell());
+		}
+		
+		@Override
+		public SafeHtml getValue(AnamnesisCheckProxy proxy) {
+			// TODO Auto-generated method stub
+			String html = "";
+			String[] values;
+			
+			if (proxy != null) {
+				values = proxy.getValue().split("\\|");
+				if (values.length > 1) {
+					html = "<ul>";
+					for (int i=0; i < values.length; i++) {
+						html += "<li>" + values[i] + "</li>";
+					}
+					html += "</ul>";
+				} else { 
+					html = values[0];
 				}
-				
-				return (new SafeHtmlBuilder().appendHtmlConstant(html)).toSafeHtml();
 			}
 			
-		}, constants.value());
-		
-//		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-//
-//			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-//
-//				public String render(java.lang.String obj) {
-//					return obj == null ? "" : String.valueOf(obj);
-//				}
-//			};
-//
-//			@Override
-//			public String getValue(AnamnesisCheckProxy object) {
-//				return renderer.render(object.getValue());
-//			}
-//		}, "Value");
-		
-		table.addColumnStyleName(0, "iconCol");
-//		paths.add("createDate");
-//		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-//
-//			Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
-//
-//			@Override
-//			public String getValue(AnamnesisCheckProxy object) {
-//				return renderer.render(object.getCreateDate());
-//			}
-//		}, "Create Date");
-//		paths.add("anamnesischecksvalues");
-//		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-//
-//			Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance());
-//
-//			@Override
-//			public String getValue(AnamnesisCheckProxy object) {
-//				return renderer.render(object.getAnamnesischecksvalues());
-//			}
-//		}, "Anamnesischecksvalues");
-//		paths.add("scars");
-//		table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
-//
-//			Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance());
-//
-//			@Override
-//			public String getValue(AnamnesisCheckProxy object) {
-//				return renderer.render(object.getScars());
-//			}
-//		}, "Scars");
+			return (new SafeHtmlBuilder().appendHtmlConstant(html)).toSafeHtml();
+		}
 	}
 
 	@Override
@@ -253,7 +268,5 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
-
 	}
-
 }

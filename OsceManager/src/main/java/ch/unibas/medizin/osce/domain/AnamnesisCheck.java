@@ -45,12 +45,60 @@ public class AnamnesisCheck {
     public static List<AnamnesisCheck> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults) {
         if (q == null) throw new IllegalArgumentException("The q argument is required");
         EntityManager em = entityManager();
-        TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q", AnamnesisCheck.class);
+        TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q ORDER BY sort_order", AnamnesisCheck.class);
         query.setParameter("q", "%" + q + "%");
         query.setFirstResult(firstResult);
         query.setMaxResults(maxResults);
         return query.getResultList();
     }
+    
+	public void moveUp() {
+		if (this.entityManager == null) {
+			this.entityManager = entityManager();
+		}
+		AnamnesisCheck anamnesisCheck = findAnamnesisCheckByOrderSmaller(this.sort_order - 1);
+		if (anamnesisCheck == null) {
+			return;
+		}
+		anamnesisCheck.setSort_order(this.sort_order);
+		anamnesisCheck.persist();
+		setSort_order(sort_order - 1);
+		this.persist();
+    }
+	
+	public void moveDown() {
+		if (this.entityManager == null) {
+			this.entityManager = entityManager();
+		}
+		AnamnesisCheck anamnesisCheck = findAnamnesisCheckByOrderGreater(this.sort_order + 1);
+		if (anamnesisCheck == null) {
+			return;
+		}
+		anamnesisCheck.setSort_order(this.sort_order);
+		anamnesisCheck.persist();
+		setSort_order(sort_order + 1);
+		this.persist();
+    }
+	
+	public static AnamnesisCheck findAnamnesisCheckByOrderGreater(int sort_order) {
+		EntityManager em = entityManager();
+		TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.sort_order >= :sort_order ORDER BY sort_order ASC", AnamnesisCheck.class);
+		query.setParameter("sort_order", sort_order);
+		List<AnamnesisCheck> resultList = query.getResultList();
+		if (resultList == null || resultList.size() == 0)
+			return null;
+		return resultList.get(0);
+	}
+
+	public static AnamnesisCheck findAnamnesisCheckByOrderSmaller(int sort_order) {
+		EntityManager em = entityManager();
+		TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.sort_order <= :sort_order ORDER BY sort_order DESC", AnamnesisCheck.class);
+		query.setParameter("sort_order", sort_order);
+		List<AnamnesisCheck> resultList = query.getResultList();
+		if (resultList == null || resultList.size() == 0)
+			return null;
+		return resultList.get(0);
+	}
 
 //    public static Long countAnamnesisChecksByAnamnesisForm(Long anamnesisFormId) {
 //        if (anamnesisFormId == null) throw new IllegalArgumentException("anamnesisFormId required!");

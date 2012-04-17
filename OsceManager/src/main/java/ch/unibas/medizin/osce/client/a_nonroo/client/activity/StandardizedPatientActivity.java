@@ -10,6 +10,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
@@ -69,22 +70,64 @@ import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+/**
+ * Activity that handles the search of standardized patients and the display of the search results.
+ * @author nikotsunami
+ *
+ */
 public class StandardizedPatientActivity extends AbstractActivity implements StandardizedPatientView.Presenter, StandardizedPatientView.Delegate,
 		StandartizedPatientAdvancedSearchSubView.Delegate, StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
-		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate {
+		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate{
 
+	/** Holds the applications request factory */
 	private OsMaRequestFactory requests;
+	/** Holds the applications placeController */
 	private PlaceController placeController;
-	private AcceptsOneWidget widget;
-	private StandardizedPatientView view;
-	private CellTable<StandardizedPatientProxy> table;
-	private SingleSelectionModel<StandardizedPatientProxy> selectionModel;
+	/** Holds the applications' activityManager */
 	private ActivityManager activityManger;
+	/** Holds the panel in which the view will be displayed */
+	private AcceptsOneWidget widget;
+	/** Holds the main view managed by this activity */
+	private StandardizedPatientView view;
+	/** Holds the table with the standardized patients */
+	private CellTable<StandardizedPatientProxy> table;
+	/** holds the selection model of the standardized patient table */
+	private SingleSelectionModel<StandardizedPatientProxy> selectionModel;
+	
+	/** Holds this activities' activityMapper */
 	private StandardizedPatientDetailsActivityMapper StandardizedPatientDetailsActivityMapper;
+	/** Holds the SubView where the advanced search criteria can be defined by the user */
 	private StandartizedPatientAdvancedSearchSubView standartizedPatientAdvancedSearchSubView;
+	
+	/** Holds the table with the advanced search criteria */ 
 	private CellTable<AdvancedSearchCriteriaProxy> criteriaTable;
+	/** Holds the currently active advancedSearchCriteria */
+	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
+	
+	/** Holds the search string to use to find patients (quick search, looking through the fields defined in Filter panel */ 
+	private String quickSearchTerm;
+	/** List of fields that should be searched for the quickSearchTerm */
+	private List<String> searchThrough = Arrays.asList("name", "preName");
 
+	/** Holds a reference to the currently selected advancedSearchPopup */
+	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
+	/** Holds a reference to the anamnesisPopup if open */
+	private StandardizedPatientAdvancedSearchAnamnesisPopup anamnesisPopup;
+	/** Holds a reference to the basicCriteriaPopUp if open */
+	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
+	/** Holds a reference to the scarPopup if open */
+	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
+	/** Holds a reference to the nationalityPopup if open */
+	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
+	/** Holds a reference to the nationalityPopup if open */
+	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
+	
+	/**
+	 * Sets the dependencies of this activity and initializes the corresponding activity manager 
+	 * @param requests The request factory to use
+	 * @param placeController the place controller to use
+	 */
 	public StandardizedPatientActivity(OsMaRequestFactory requests, PlaceController placeController) {
 		this.requests = requests;
 		this.placeController = placeController;
@@ -92,6 +135,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		this.activityManger = new ActivityManager(StandardizedPatientDetailsActivityMapper, requests.getEventBus());
 	}
 
+	/**
+	 * Clean up activity on finish (close popups and disable display of current activities view)
+	 */
 	public void onStop() {
 		if (advancedSearchPopup != null) {
 			advancedSearchPopup.hide();
@@ -99,6 +145,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		activityManger.setDisplay(null);
 	}
 
+	/**
+	 * Initializes the corresponding view and initializes the tables.
+	 */
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -108,33 +157,33 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		this.widget = panel;
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
-		setTable(view.getTable());
+		this.table = view.getTable();
 
 		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
 		standartizedPatientAdvancedSearchSubView.setDelegate(this);
 
 		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
-
+		
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-
 				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
-					init();
+					// init();
 				}
 			}
 		});
-
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
-
+		
+		// 
 		init();
-
+		
 		activityManger.setDisplay(view.getDetailsPanel());
-
+		
 		// Inherit the view's key provider
 		ProvidesKey<StandardizedPatientProxy> keyProvider = ((AbstractHasData<StandardizedPatientProxy>) table).getKeyProvider();
 		selectionModel = new SingleSelectionModel<StandardizedPatientProxy>(keyProvider);
 		table.setSelectionModel(selectionModel);
 
+		// adds a selection handler to the table so that if a valid patient is selected,
+		// the corresponding details view is shown (via showDetails())
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
 				StandardizedPatientProxy selectedObject = selectionModel.getSelectedObject();
@@ -146,19 +195,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		});
 
 		view.setDelegate(this);
-
 	}
 
 	private void init() {
-		init2("");
-	}
-
-	private void init2(final String q) {
+		//TODO: @@@SPEC when declared here, the simple search works
+		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
 
 		// (2) Advanced search
-		fireCountRequest(q, searchThrough, view.getCriteria().getFields(), view.getCriteria().getComparisons(), view.getCriteria().getValues(),
+		fireCountRequest(quickSearchTerm, searchThrough, view.getCriteria().getFields(), view.getCriteria().getComparisons(), view.getCriteria().getValues(),
 				new Receiver<Long>() {
 					@Override
 					public void onSuccess(Long response) {
@@ -169,20 +215,19 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 						Log.debug("Geholte Patienten aus der Datenbank: " + response);
 						view.getTable().setRowCount(response.intValue(), true);
 
-						onRangeChanged(q);
+						onRangeChanged(quickSearchTerm);
 					}
 				});
 
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
-				StandardizedPatientActivity.this.onRangeChanged(q);
+				StandardizedPatientActivity.this.onRangeChanged(quickSearchTerm);
 			}
 		});
 		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
-
 			@Override
 			public void onColumnSort(ColumnSortEvent event) {
-				StandardizedPatientActivity.this.onRangeChanged(q);
+				StandardizedPatientActivity.this.onRangeChanged(quickSearchTerm);
 
 			}
 		});
@@ -195,23 +240,22 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), Operation.DETAILS));
 	}
 
-	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
-
+	
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
 
 		// TODO: ###david### test code
 
-		List<String> fields = Arrays.asList("weight", "height", "bmi");
-		List<String> values = Arrays.asList("80", "180", "30");
+		//List<String> fields = Arrays.asList("weight", "height", "bmi");
+		//List<String> values = Arrays.asList("80", "180", "30");
 		// List<String> comparations = Arrays.asList(Comparison2.EQUALS,
 		// Comparison2.LESS, Comparison2.MORE);
 		// List<String> bindType = Arrays.asList(BindType.AND, BindType.AND,
 		// BindType.AND);
-		List<String> searchThrough = new ArrayList<String>();//Arrays.asList("name", "preName", "comment", "BIC", "IBAN", "bankName");
+		
 
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		//requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		//
 		// AdvancedSearchCriteriaProxy criteria =
 		// requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -223,17 +267,18 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		//
 		// searchCriteria.add(criteria);
 		//WARNING: TEST: 
-//		searchCriteria.clear();
-//		 AdvancedSearchCriteriaProxy criteria2 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria2);
-//		 criteria2.setBindType(BindType.AND);
-//		 criteria2.setComparation(Comparison2.EQUALS);
-//		 criteria2.setField(PossibleFields.LANGUAGE);
-//		 //"Deutsch: A1"
-//		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
-//		 criteria2.setObjectId(new Long(6));
-//		 searchCriteria.add(criteria2);
+
+		//searchCriteria.clear();
+		/* AdvancedSearchCriteriaProxy criteria2 =
+		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
+		 requestAdvSeaCritStd.edit(criteria2);
+		 criteria2.setBindType(BindType.AND);
+		 criteria2.setComparation(Comparison2.EQUALS);
+		 criteria2.setField(PossibleFields.LANGUAGE);
+		 //"Deutsch: A1"
+		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
+		 criteria2.setObjectId(new Long(6));
+		 searchCriteria.add(criteria2);*/
 
 //		 AdvancedSearchCriteriaProxy criteria3 =
 //		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
@@ -280,6 +325,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		 * searchCriteria.add(new AdvancesSearchCriteriumOld
 		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
 		 */
+		 
+		// searchThrough = new ArrayList<String>(); 
+		 
+		 // TODO: some bug about request
+		// requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 
 		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, q, 
 				searchThrough, searchCriteria /*fields, bindType, comparations, values */).
@@ -368,10 +418,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// requests.standardizedPatientRequestNonRoo().countPatientsBySearch(q).fire(callback);
 	}
 
-	private void setTable(CellTable<StandardizedPatientProxy> table) {
-		this.table = table;
-	}
-
 	@Override
 	public void newClicked() {
 		Log.info("create clicked");
@@ -379,9 +425,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 
 	@Override
-	public void performSearch(String q) {
+	public void performSearch(String q, List<String> searchTrough) {
+		quickSearchTerm = q;
+		this.searchThrough = searchTrough;
 		Log.debug("Search for " + q);
-		init2(q);
+		init();
 	}
 
 	@Override
@@ -394,13 +442,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// TODO Auto-generated method stub
 
 	}
-
-	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
-	private StandardizedPatientAdvancedSearchAnamnesisPopup anamnesisPopup;
-	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
-	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
-	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
-	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
 
 	@Override
 	public void addBasicCriteriaClicked(Button addBasicData) {
@@ -482,7 +523,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison2 comparition) {
 
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+	//	requestAdvSeaCritStd.fire();
+		
+		//TODO: @@@SPEC if requestAdvSeaCritStd declared here the advanced search work, but the simple part does't work any more. Probably not the best aproach to use a proxy which is never stored.
+		
+		requestAdvSeaCritStd.fire();
 
 		AdvancedSearchCriteriaProxy criteria = requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
 		criteria = requestAdvSeaCritStd.edit(criteria);
@@ -552,6 +597,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			scarPopup.getScarBox().setAcceptableValues(values);
 		}
 	}
+	
+	//TODO: @@@SPEC at the moment all values are loaded, I saw a loading on demand in your presentation, would be probably nice to implement.
 
 	private class AnamnesisCriteriaReceiver extends Receiver<List<AnamnesisCheckProxy>> {
 		public void onSuccess(List<AnamnesisCheckProxy> response) {
@@ -575,6 +622,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
 		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), anamnesisCheck.getType() + ": " + answer+":"+anamnesisCheck.getValue(), bindType, PossibleFields.ANAMNESIS, comparison);
 	}
+	
+	//TODO: @@@SPEC implement nationality search
+			
 
 	@Override
 	public void addNationalityButtonClicked(NationalityProxy nationality,
@@ -586,4 +636,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison2 comparison) {
 		addAdvSeaBasicButtonClicked(languageProxy.getId(), languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
 	}
+
+
 }

@@ -119,9 +119,14 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 
 		});
 
+		if (rangeChangeHandler != null) {
+			rangeChangeHandler.removeHandler();
+		}
+		
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
+						Log.debug("onRangeChange() - " + q);
 						AnamnesisCheckActivity.this.onRangeChanged(q);
 					}
 				});
@@ -156,6 +161,33 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 		};
 
 		fireRangeRequest(q, range, callback);
+	}
+	
+	@Override
+	public void moveUp(AnamnesisCheckProxy proxy) {
+		requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy).fire(new Receiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("moved");
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void moveDown(AnamnesisCheckProxy proxy) {
+		requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy).fire(new Receiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("moved");
+				init();
+			}
+		});
+	}
+	
+	@Override
+	public void deleteClicked(AnamnesisCheckProxy proxy) {
+		// TODO implement
 	}
 	
 	private void fireRangeRequest(String q, final Range range, final Receiver<List<AnamnesisCheckProxy>> callback) {
