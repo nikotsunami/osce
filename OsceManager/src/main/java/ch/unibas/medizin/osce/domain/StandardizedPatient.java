@@ -154,6 +154,7 @@ public class StandardizedPatient {
     		
 			wholeSearchString = new StringBuilder();
 			endSearchString = new StringBuilder();
+			sorting = new StringBuilder();
     		if(requesttype)
     			wholeSearchString.append(queryBase.replace(SEARCH_TYPE, countRequest));
     		else
@@ -172,7 +173,6 @@ public class StandardizedPatient {
     	 * @param sort sort direction: ASC / DESC
     	 */
     	private void makeSortig(String sortColumn, Sorting sort){
-    		sorting  = new StringBuilder();
     		sorting.append(" ORDER BY ");
     		sorting.append(sortColumn);
     		sorting.append(" ");
@@ -414,7 +414,7 @@ public class StandardizedPatient {
     		Sorting order,
     		String searchWord, 
     		List<String> searchThrough,
-    		List<AdvancedSearchCriteria> searchCriteria
+    		List<AdvancedSearchCriteria> searchCriteria, Integer firstResult, Integer maxResults
     		) {
 	    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
 	    	EntityManager em = entityManager();
@@ -438,6 +438,8 @@ public class StandardizedPatient {
 	    		q.setParameter("q", "%" + searchWord + "%");
 	        	Log.info("Search :[" + searchWord+"]");
 	    	}
+	    	q.setFirstResult(firstResult);
+	    	q.setMaxResults(maxResults);
 	    	List<StandardizedPatient> result  = q.getResultList(); 
 	    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
 	    	return result;
@@ -487,18 +489,32 @@ public class StandardizedPatient {
     }
     
     
-    /**
-     * Get count of results by criteria
-     * @deprecated
-     */
-    public static Long countPatientsBySearchAndSort(String q, 
-    		List<String> searchThrough,
-    		List<String> fields,
-    		List<Integer> comparations,
-    		List<String> values) {
+    public static Long countPatientsByAdvancedSearchAndSort(String searchWord, 
+    		List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria) {
+    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
+    	EntityManager em = entityManager();
+    	PatientSearch simpatSearch = new PatientSearch(true);
+    	//context (simple) search
+    	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
     	
-    	return new Long(0);
-    	
+    	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
+    	while (iter.hasNext()) {
+    		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
+    		simpatSearch.search(criterium.getField(), criterium.getObjectId(), criterium.getValue(), 
+    				criterium.getBindType().toString(), criterium.getComparation().getStringValue());
+			
+		}
+    	String queryString = simpatSearch.getSQLString();
+    	Log.info("Query: [" + queryString+"]");
+    	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+    	//this parameter is not required if we have no q value in the request
+    	if(queryString.indexOf(":q") != -1){
+    		q.setParameter("q", "%" + searchWord + "%");
+        	Log.info("Search :[" + searchWord+"]");
+    	}
+    	Long result  = q.getSingleResult(); 
+    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+    	return result;
     }
 
     

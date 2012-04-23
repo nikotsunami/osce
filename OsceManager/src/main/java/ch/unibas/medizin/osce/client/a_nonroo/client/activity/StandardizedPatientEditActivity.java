@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +54,7 @@ StandardizedPatientEditView.Delegate {
 	private StandardizedPatientProxy standardizedPatient;
 	private DescriptionProxy description;
 	private BankaccountProxy bankAccount;
+	private AnamnesisFormProxy anamnesisForm;
 	private boolean save;
 	private RequestFactoryEditorDriver<DescriptionProxy, DescriptionEditViewImpl> descriptionDriver;
 	private RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> bankaccountDriver;
@@ -206,6 +208,10 @@ StandardizedPatientEditView.Delegate {
 			bankAccount = request.create(BankaccountProxy.class);
 			standardizedPatient.setBankAccount(bankAccount);
 			
+			anamnesisForm = request.create(AnamnesisFormProxy.class);
+			anamnesisForm.setCreateDate(new Date());
+			standardizedPatient.setAnamnesisForm(anamnesisForm);
+			
 			view.setEditTitle(false);
 			Log.info("create");
 		} else {
@@ -218,12 +224,9 @@ StandardizedPatientEditView.Delegate {
 			if (description == null){
 				description = request.create(DescriptionProxy.class);
 				standardizedPatient.setDescriptions(description);
-				
-				
 			}
 			
 			if (bankAccount == null){
-				
 				bankAccount = request.create(BankaccountProxy.class);
 				standardizedPatient.setBankAccount(bankAccount);
 			}
@@ -272,6 +275,7 @@ StandardizedPatientEditView.Delegate {
 		// description data is read from view (data save is cascaded, therefore description has to be updated before SP is saved!)
 		//descriptionDriver.flush();
 		description.setDescription(descriptionView.getDescriptionContent());
+		bankaccountDriver.flush();
 		
 		editorDriver.flush().fire(new Receiver<Void>() {
 

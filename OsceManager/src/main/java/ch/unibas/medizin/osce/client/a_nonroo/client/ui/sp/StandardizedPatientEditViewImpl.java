@@ -2,10 +2,13 @@
 
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.text.Format;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
@@ -40,6 +43,8 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -82,12 +87,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	SpanElement title;
 
 	@UiField(provided = true)
-	FocusableValueListBox<Gender> gender = new FocusableValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
-
-		public String render(ch.unibas.medizin.osce.shared.Gender obj) {
-			return obj == null ? "" : String.valueOf(obj);
-		}
-	});
+	FocusableValueListBox<Gender> gender = new FocusableValueListBox<Gender>(new EnumRenderer<Gender>());
 
 	@UiField
 	TextBox name;
@@ -187,6 +187,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
 		
+		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy");
+		birthday.setFormat(new DateBox.DefaultFormat(fmt));
+		
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
 		
@@ -220,8 +223,8 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		setTabTexts();
 		setLabelTexts();
 		
-		createKeyHandlers();
-		createFocusHandlers();
+//		createKeyHandlers();
+//		createFocusHandlers();
 		
 		patientPanel.selectTab(0);
 		preName.setFocus(true);

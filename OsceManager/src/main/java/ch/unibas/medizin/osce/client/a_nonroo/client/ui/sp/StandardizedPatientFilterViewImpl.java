@@ -12,8 +12,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -43,6 +45,7 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	private ArrayList<CheckBoxItem> fields = new ArrayList<CheckBoxItem>();
 	private int maxApplicableFilters;
 	private int minApplicableFilters = 1;
+	private boolean selectionChanged = false;
 	
 	@UiField
 	FocusPanel filterPanelRoot;
@@ -91,32 +94,25 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		
 
 		@Override
-		public void onValueChange(ValueChangeEvent<Boolean> event) {
-			Iterator<CheckBoxItem> iter = fields.iterator();
-			CheckBoxItem e;
-			
+		public void onValueChange(ValueChangeEvent<Boolean> event) {			
+			selectionChanged = true;
 			int uncheckedBoxes = 0;
-			while(iter.hasNext()) {
-				e = iter.next();
-				if (e.checkbox.getValue() == false) {
+			for (CheckBoxItem item : fields) {
+				if (item.checkbox.getValue() == false) {
 					uncheckedBoxes++;
 				}
-				e.checkbox.setEnabled(true);
+				item.checkbox.setEnabled(true);
 			}
 			
 			if (uncheckedBoxes >= fields.size() - minApplicableFilters) {
-				iter = fields.iterator();
-				while(iter.hasNext()) {
-					e = iter.next();
-					if (e.checkbox.getValue())
-						e.checkbox.setEnabled(false);
+				for (CheckBoxItem item : fields) {
+					if (item.checkbox.getValue())
+						item.checkbox.setEnabled(false);
 				}
 			} else if (fields.size() - uncheckedBoxes >= maxApplicableFilters) {
-				iter = fields.iterator();
-				while(iter.hasNext()) {
-					e = iter.next();
-					if (!e.checkbox.getValue())
-						e.checkbox.setEnabled(false);
+				for (CheckBoxItem item : fields) {
+					if (!item.checkbox.getValue())
+						item.checkbox.setEnabled(false);
 				}
 			}
 			
@@ -125,9 +121,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			while(i.hasNext())
 				msg = msg + i.next() + ", ";
 			Log.info(msg);
-			
-			
-			
 		}
 	}
 	
@@ -163,10 +156,11 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		initCheckBox(telephone2, "telephone2", constants.telephone() + " 2");
 		initCheckBox(mobile, "mobile", constants.mobile());
 		initCheckBox(email, "email", constants.email());
-		initCheckBox(bankName, "bankAccount.bankName", constants.bank());
-		initCheckBox(bankBIC, "bankAccount.BIC", constants.bic());
-		initCheckBox(bankIBAN, "bankAccount.IBAN", constants.iban());
-		initCheckBox(description, "descriptions", constants.description());
+		initCheckBox(bankName, "bankName", constants.bank());
+		initCheckBox(bankBIC, "BIC", constants.bic());
+		initCheckBox(bankIBAN, "IBAN", constants.iban());
+		// FIXME: if "comment" field is selected, quick search does not work anymore
+		initCheckBox(description, "comment", constants.description());
 		
 		name.setValue(true);
 		prename.setValue(true);
@@ -178,7 +172,6 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 			CheckBox box = fieldIter.next().checkbox;
 			box.addValueChangeHandler(new CheckBoxChangeHandler());
 		}
-		
 	}
 	
 	private void initCheckBox(CheckBox uiField, String name, String text) {
@@ -223,16 +216,23 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	 */
 	public List<String> getFilters() {
 		List<String> filters = new ArrayList<String>();
-		
-		Iterator<CheckBoxItem> i = fields.iterator();
-		while (i.hasNext()) {
-			CheckBoxItem checkBoxItem = i.next();
+		for(CheckBoxItem checkBoxItem : fields) {
 			if (checkBoxItem.checkbox.getValue()) {
 				filters.add(checkBoxItem.name);
 			}
 		}
 		return filters;
 	}
-
-
+	
+	public HandlerRegistration addCloseHandler(CloseHandler<PopupPanel> handler) {
+		return super.addCloseHandler(handler);
+	}
+	
+	public void clearSelectionChanged() {
+		selectionChanged = false;
+	}
+	
+	public boolean selectionChanged() {
+		return selectionChanged;
+	}
 }

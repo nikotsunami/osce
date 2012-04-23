@@ -14,12 +14,16 @@ public enum StandardizedPatientSearhField {
     preName(" stdPat.preName LIKE :q "),
     street(" stdPat.street LIKE :q "),
     city(" stdPat.city LIKE :q "),
-    postalCode(" stdPat.preName LIKE :q "),
+    // FIXME: postalCode search doesn't work bc. Integer...
+    postalCode(" stdPat.city LIKE :q "),
     email(" stdPat.email LIKE :q "),
     BIC(" stdPat.bankAccount.BIC LIKE :q "),
     IBAN(" stdPat.bankAccount.IBAN LIKE :q "),
     bankName(" stdPat.bankAccount.bankName LIKE :q "),
-    telephone(" stdPat.telephone LIKE :q ");
+    telephone(" stdPat.telephone LIKE :q "),
+    telephone2(" stdPat.telephone2 LIKE :q "),
+    mobile(" stdPat.mobile LIKE :q ");
+	
 
     String queryPart;
     

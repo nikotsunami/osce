@@ -31,6 +31,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -264,11 +265,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
 		SearchCriteria criteria = view.getCriteria();
+		Range range = table.getVisibleRange();
 
 		// (2) Advanced search
-		requests.standardizedPatientRequestNonRoo().countPatientsBySearchAndSort(
-				quickSearchTerm, searchThrough, criteria.getFields(), criteria.getComparisons(), 
-				criteria.getValues()).fire(new StandardizedPatientCountReceiver());	
+		requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
+	    		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());	
 	}
 
 	/**
@@ -376,9 +377,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		for (AdvancedSearchCriteriaProxy criterion : searchCriteria) {
 			Log.info("Criterion: " + criterion.getField().toString() + ": " + criterion.getValue());
 		}
+		
+		Range range = table.getVisibleRange();
 
 		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 
-				searchThrough, searchCriteria /*fields, bindType, comparations, values */).
+				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
 				fire(new StandardizedPatientReceiver());
 
 		// OLD (1) Sorting

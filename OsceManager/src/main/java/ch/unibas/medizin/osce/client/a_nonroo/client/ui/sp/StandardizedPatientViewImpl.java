@@ -23,6 +23,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standartized
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -33,6 +35,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -130,6 +133,17 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
 		filterPanel = new StandardizedPatientFilterViewImpl();
+		filterPanel.addCloseHandler(new CloseHandler<PopupPanel>() {
+
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				if (filterPanel.selectionChanged()) {
+					filterPanel.clearSelectionChanged();
+					delegate.performSearch(searchBox.getValue(), getSearchFilters());
+				}
+			}
+			
+		});
 		
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override

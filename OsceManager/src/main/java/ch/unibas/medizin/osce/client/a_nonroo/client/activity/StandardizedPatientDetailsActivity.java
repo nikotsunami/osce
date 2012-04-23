@@ -277,6 +277,8 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	private void init() {
 		view.setValue(standardizedPatientProxy);
 		anamnesisForm =  standardizedPatientProxy.getAnamnesisForm();
+		if (anamnesisForm == null) 
+			Log.warn("anamnesisForm is null!");
 		initScar();
 		initAnamnesis();
 		initLangSkills();
