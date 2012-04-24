@@ -114,20 +114,8 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@UiField
 	TextBox email;
 
-	//file upload
-	@UiField
-	FileUpload fileUpload;
-	@UiField
-	IconButton uploadButton;
-	@UiField
-	FormPanel uploadFormPanel;
-	@UiField
-	DivElement uploadMessage;
-	@UiField
-	@Ignore
-	Hidden patientId;
 	
-	//end file upload
+	
 
 	@UiField(provided = true)
 	FocusableValueListBox<NationalityProxy> nationality = new FocusableValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
@@ -229,7 +217,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		patientPanel.selectTab(0);
 		preName.setFocus(true);
 		preName.selectAll();
-		//ps: upload
+		/*//ps: upload
 	    uploadFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
 	    uploadFormPanel.setMethod(FormPanel.METHOD_POST);
 	    uploadFormPanel.setAction(GWT.getHostPageBaseURL()+"UploadServlet");
@@ -255,16 +243,16 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
                 Log.info("PS Submit is Complete "+event.getResults());
                 uploadMessage.setInnerHTML(event.getResults());
 	        }
-	    });
+	    });*/
 		
 	}
-	//ps upload button handler
+	/*//ps upload button handler
 	@UiHandler("uploadButton")
 	void onClickUploadButton(ClickEvent event) {
 	    Log.info("You selected: " + fileUpload.getFilename());
 	    uploadFormPanel.submit();
 	}
-	
+	*/
 	
 	private void createFocusHandlers() {
 		preName.addFocusHandler(new FocusHandler() {
@@ -527,15 +515,15 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //		}
 		profession.setAcceptableValues(values);		
 	}
-	@Override
-	public String getPatientId() {
-		return patientId.getValue();
-	}
-	@Override
-	public void setPatientId(String patientId) {
-		this.patientId.setValue(patientId);
-		
-	}
+//	@Override
+//	public String getPatientId() {
+//		return patientId.getValue();
+//	}
+//	@Override
+//	public void setPatientId(String patientId) {
+//		this.patientId.setValue(patientId);
+//		
+//	}
 
 
 }

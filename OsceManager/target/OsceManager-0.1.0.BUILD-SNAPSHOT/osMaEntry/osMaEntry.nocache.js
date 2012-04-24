@@ -340,18 +340,18 @@ function osMaEntry(){
   $stats && $stats({moduleName:'osMaEntry', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'selectingPermutation'});
   if (!isHostedMode()) {
     try {
-      unflattenKeylistIntoAnswers(['de_CH', 'gecko1_8'], '040E9111E048440A958AB020B57B1D5B');
-      unflattenKeylistIntoAnswers(['de', 'ie8'], '04F5C95BF620FBD947BC948C0020C1AF');
-      unflattenKeylistIntoAnswers(['de', 'ie6'], '0EFF099D78B9F897D3ED87556F857EA5');
-      unflattenKeylistIntoAnswers(['de_CH', 'safari'], '277CED89AA13D66296BBABCF0A30D679');
-      unflattenKeylistIntoAnswers(['de_CH', 'opera'], '41DE2F15A7119F25A6EBF68CB8A791B8');
-      unflattenKeylistIntoAnswers(['de_CH', 'ie9'], '4C737342D5DF3D3D40604DE5859CBD3E');
-      unflattenKeylistIntoAnswers(['de_CH', 'ie8'], '57834D8C6EAC6495CF9F4CF09AAD442D');
-      unflattenKeylistIntoAnswers(['de', 'gecko1_8'], '6738CB3EEF1484E83C737A20B707C247');
-      unflattenKeylistIntoAnswers(['de', 'ie9'], '98C57504C5A2C5D777DE689974C22FD2');
-      unflattenKeylistIntoAnswers(['de_CH', 'ie6'], 'A76221EE53C5CCABDFF40C9104F2F304');
-      unflattenKeylistIntoAnswers(['de', 'safari'], 'B7CA0E9DF8416F8A4C4A3A20E8D1D5EE');
-      unflattenKeylistIntoAnswers(['de', 'opera'], 'C71DDD2E5AEB0F4087ABFD42E2E42E63');
+      unflattenKeylistIntoAnswers(['de', 'ie6'], '0FF5C78B9CC4A91A75B09BCED2F52F51');
+      unflattenKeylistIntoAnswers(['de', 'gecko1_8'], '2DEB840821A7193F890C58657575E94E');
+      unflattenKeylistIntoAnswers(['de', 'opera'], '38D0AE91185FF74366D45B8D4C8520D7');
+      unflattenKeylistIntoAnswers(['de_CH', 'opera'], '4F4299C534661B5EE5B37F5E417F5541');
+      unflattenKeylistIntoAnswers(['de', 'ie8'], '7DBDD8711FF18E624BFA707967DE9551');
+      unflattenKeylistIntoAnswers(['de_CH', 'ie8'], '84259638985E89D37CAACC3FF5336199');
+      unflattenKeylistIntoAnswers(['de', 'ie9'], 'C06519B39CEB6A3F0EE7D19D383A7ECD');
+      unflattenKeylistIntoAnswers(['de_CH', 'ie9'], 'C9D705F056E0106D84DB0643BB336822');
+      unflattenKeylistIntoAnswers(['de_CH', 'safari'], 'CD48D095731CFF12124204B78D3F4846');
+      unflattenKeylistIntoAnswers(['de_CH', 'gecko1_8'], 'F468D9223BF30411D4A34539BF152BB3');
+      unflattenKeylistIntoAnswers(['de_CH', 'ie6'], 'F6E300C39755807E72296D684A79D88D');
+      unflattenKeylistIntoAnswers(['de', 'safari'], 'FEE415C8C0BBCAF3E694F1CD23DA91C7');
       strongName = answers[computePropValue('locale')][computePropValue('user.agent')];
       var idx = strongName.indexOf(':');
       if (idx != -1) {

@@ -64,7 +64,7 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String REVIEWER();
 	
 	public String ASC();
-	public String DSC();
+	public String DESC();
 	
 //	public String SCAR();
 	public String TATTOO();

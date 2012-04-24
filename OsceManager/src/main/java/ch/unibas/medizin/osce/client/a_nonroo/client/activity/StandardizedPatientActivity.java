@@ -31,7 +31,6 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
-import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -45,9 +44,9 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
+
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
+
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
@@ -57,8 +56,6 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
-import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.ProvidesKey;
@@ -397,6 +394,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}
 		
 		Range range = table.getVisibleRange();
+		Log.debug(range.getStart() + ": start : length " + range.getLength());
 
 		//By SPEC[Start		
 		//requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 

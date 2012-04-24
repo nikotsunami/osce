@@ -232,7 +232,7 @@ StandardizedPatientEditView.Delegate {
 			}
 			
 			view.setEditTitle(true);
-			view.setPatientId(""+standardizedPatient.getId());
+		//	view.setPatientId(""+standardizedPatient.getId());
 			Log.info("edit");
 		}
 		

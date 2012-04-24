@@ -467,7 +467,7 @@ public class StandardizedPatient {
     	    	
     	// (1) Criteria
     	
-    	Criteria crit = null ;//searchCriteria(q, searchThrough, fields, comparisons, values);
+    	/*Criteria crit = null ;//searchCriteria(q, searchThrough, fields, comparisons, values);
     	log.info("findPatientsBySearchAndSort");
         // (2) Paging
         
@@ -482,7 +482,8 @@ public class StandardizedPatient {
         	crit.addOrder(Order.desc(sortColumn));
         }
         
-        return crit.list();
+        return crit.list();*/
+    	return null;
         
         
         
