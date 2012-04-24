@@ -55,7 +55,10 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.ProvidesKey;
@@ -150,7 +153,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
-		StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
+		//By SPEC[Start 
+		//StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
+		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
+		//By SPEC] End
 		systemStartView.setPresenter(this);
 
 		this.widget = panel;
@@ -172,6 +178,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
 			@Override
 			public void onColumnSort(ColumnSortEvent event) {
+				//By SPEC[Start
+				Column<StandardizedPatientProxy,String> col = (Column<StandardizedPatientProxy,String>) event.getColumn();
+				int index = table.getColumnIndex(col); 
+				String[] path =	systemStartView.getPaths();	            			
+				sortname = path[index];
+				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;				
+				//By SPEC]end
 				StandardizedPatientActivity.this.onRangeChanged();
 			}
 		});
@@ -248,7 +261,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		@Override
 		public void onSuccess(List<StandardizedPatientProxy> response) {
-			final Range range = table.getVisibleRange();
+			final Range range = table.getVisibleRange();			
 			table.setRowData(range.getStart(), response);
 		}
 	}
@@ -260,6 +273,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@SuppressWarnings("deprecation")
 	private void initSearch() {
+		
 		//TODO: @@@SPEC when declared here, the simple search works
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		// (1) Text search
@@ -281,6 +295,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), Operation.DETAILS));
 	}
 	
+	//By SPEC[Start
+	public Sorting sortorder = Sorting.ASC;
+	public String sortname = "name";
+	//By SPEC]end
 	/**
 	 * Executes the search for a standardized patient based on 
 	 * advanced search criteria, quick search term and quick search
@@ -380,10 +398,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		Range range = table.getVisibleRange();
 
-		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 
+		//By SPEC[Start		
+		//requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 
+				//searchThrough, searchCriteria /*fields, bindType, comparations, values */).
+				//fire(new StandardizedPatientReceiver());
+		
+		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
 				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
-				fire(new StandardizedPatientReceiver());
-
+			   fire(new StandardizedPatientReceiver());
+		//By SPEC]End
 		// OLD (1) Sorting
 
 //		Boolean asc = true;
@@ -708,6 +731,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void addNationalityButtonClicked(NationalityProxy nationality,
 			BindType bindType, Comparison comparison) {
 		// TODO implement.
+		
 	}
 
 	/**

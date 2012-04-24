@@ -3,6 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -79,7 +80,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		return standartizedPatientAdvancedSearchSubViewImpl;
 	}
 
-	protected Set<String> paths = new HashSet<String>();
+	//By SPEC[Start
+	//protected Set<String> paths = new HashSet<String>();
+	protected ArrayList<String> paths = new ArrayList<String>();
+	//By SPEC]End
 	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;
 	
@@ -230,7 +234,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		paths.add("preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			
-//			{ this.setSortable(true); }
+			{ this.setSortable(true); }	//By SPEC
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -334,7 +338,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		paths.add("email");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
-//			{ this.setSortable(true); }
+			{ this.setSortable(true); }	//By SPEC
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 

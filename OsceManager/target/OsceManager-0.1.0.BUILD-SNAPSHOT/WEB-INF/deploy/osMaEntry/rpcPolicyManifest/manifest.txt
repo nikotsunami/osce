@@ -1,2 +1,4 @@
 # Module osMaEntry
 # RPC service class, partial path of RPC policy file
+com.allen_sauer.gwt.log.client.RemoteLoggerService, 0E2AE422F0EED097737052A53F3D79E2.gwt.rpc
+com.google.gwt.logging.shared.RemoteLoggingService, 5DD1ED76806B2EC17526F906A5300BC6.gwt.rpc
