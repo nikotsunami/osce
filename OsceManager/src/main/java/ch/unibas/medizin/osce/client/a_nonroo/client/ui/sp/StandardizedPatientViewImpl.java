@@ -433,4 +433,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+
+	@Override
+	public IconButton getExportButton() {
+		return exportButton;
+	}
+
 }

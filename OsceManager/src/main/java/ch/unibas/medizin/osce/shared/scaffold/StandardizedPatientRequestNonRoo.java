@@ -40,5 +40,15 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
     		/*List<String> fields,
     		List<String> bindType,
     		List<String> comparations,
-    		List<String> values*/);
+    		List<String> values*/, int firstResult, int maxResults);
+        
+         //By Spec[start
+         abstract Request<String> getCSVMapperFindPatientsByAdvancedSearchAndSort(
+			String sortColumn, Sorting order, String searchWord,
+			List<String> searchThrough,
+			List<AdvancedSearchCriteriaProxy> searchCriteria
+                         , int firstResult, int maxResults
+	);
+         //By Spec]End
+
 }

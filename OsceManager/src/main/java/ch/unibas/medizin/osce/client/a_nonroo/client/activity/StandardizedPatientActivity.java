@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -43,10 +44,13 @@ import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
+
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
+
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
@@ -56,7 +60,6 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
@@ -123,6 +126,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	/** Holds a reference to the nationalityPopup if open */
 	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
 	
+	// BY SPEC v(Start)
+
+	/** Holds a reference to the IconButton of StandardizedPatientViewImpl */
+	private IconButton iconButton;
+
+	// private final String filePath = "StandardizedPatientList.csv";
+
+	// BY SPEC v(End)
+
 	/**
 	 * Sets the dependencies of this activity and initializes the corresponding activity manager 
 	 * @param requests The request factory to use
@@ -145,6 +157,28 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		activityManger.setDisplay(null);
 	}
 
+	// By spec V(Start)
+	/**
+	 * Receiver for the csv format file creation of standardized patients that
+	 * met the search criteria. If execution was successful, the file will be
+	 * created.
+	 */
+	@SuppressWarnings("deprecation")
+	private class StandardizedPatientCsvFileReceiver extends Receiver<String> {
+		@Override
+		public void onFailure(ServerFailure error) {
+			Log.error(error.getMessage());
+			// onStop();
+		}
+
+		@Override
+		public void onSuccess(String response) {
+			Window.open(response, "_blank", "enabled");
+		}
+	}
+
+	// By spec V(Stop)
+
 	/**
 	 * Initializes the corresponding views and initializes the tables as well as their
 	 * corresponding handlers.
@@ -166,6 +200,26 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
 		standartizedPatientAdvancedSearchSubView.setDelegate(this);
 
+		// BY SPEC v(Start)
+		this.iconButton = this.view.getExportButton();
+
+		this.iconButton.addClickHandler(new ClickHandler() {
+
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent arg0) {
+				Range range = table.getVisibleRange();
+				requests.standardizedPatientRequestNonRoo()
+						.getCSVMapperFindPatientsByAdvancedSearchAndSort(
+								"name", Sorting.ASC, quickSearchTerm,
+								searchThrough, searchCriteria // , filePath
+								,range.getStart(),range.getLength()								
+						).fire(new StandardizedPatientCsvFileReceiver());
+
+			}
+		});
+
+		// BY SPEC v(Stop)
 		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 		
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
@@ -278,11 +332,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
 		SearchCriteria criteria = view.getCriteria();
+		Range range = table.getVisibleRange();
 
 		// (2) Advanced search
-		requests.standardizedPatientRequestNonRoo().countPatientsBySearchAndSort(
-				quickSearchTerm, searchThrough, criteria.getFields(), criteria.getComparisons(), 
-				criteria.getValues()).fire(new StandardizedPatientCountReceiver());	
+		//By SPEC[Satart
+		//requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
+	    //		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());
+		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
+				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
+			   fire(new StandardizedPatientReceiver());
+		//By SPEC]End
 	}
 
 	/**
@@ -394,6 +453,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		for (AdvancedSearchCriteriaProxy criterion : searchCriteria) {
 			Log.info("Criterion: " + criterion.getField().toString() + ": " + criterion.getValue());
 		}
+		
+		Range range = table.getVisibleRange();		
+		Log.debug(range.getStart() + ": start : length " + range.getLength());
 
 		//By SPEC[Start		
 		//requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 
@@ -401,8 +463,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				//fire(new StandardizedPatientReceiver());
 		
 		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
-				searchThrough, searchCriteria /*fields, bindType, comparations, values */).
-				fire(new StandardizedPatientReceiver());
+				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
+			   fire(new StandardizedPatientReceiver());
 		//By SPEC]End
 		// OLD (1) Sorting
 
@@ -728,7 +790,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void addNationalityButtonClicked(NationalityProxy nationality,
 			BindType bindType, Comparison comparison) {
 		// TODO implement.
-		
+						
 	}
 
 	/**

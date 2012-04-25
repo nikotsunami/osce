@@ -29,6 +29,9 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.server.util.file.CsvUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
@@ -144,7 +147,9 @@ public class StandardizedPatient {
     	private static String joinSpokenLanguage = " LEFT JOIN stdPat.langskills AS langSkills " ;//+
     			//"LEFT JOIN langSkills.spokenlanguage AS language ";
     	private static String joinAnamnesisValue = " LEFT JOIN aForm.anamnesischecksvalues AS aValues LEFT JOIN  aValues.anamnesischeck AS aCheck ";
-    	
+    	//BY SPEC[start
+    	private static String joinNationality = " LEFT JOIN nationality n on stdPat.nationality = n.id  ";
+    	//BY SPEC]end
     	
     	/**
     	 * Search form reset
@@ -415,6 +420,7 @@ public class StandardizedPatient {
     		String searchWord, 
     		List<String> searchThrough,
     		List<AdvancedSearchCriteria> searchCriteria
+    		,int firstResult, int maxResults	//By SPEC
     		) {
 	    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
 	    	EntityManager em = entityManager();
@@ -442,7 +448,30 @@ public class StandardizedPatient {
 	    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
 	    	return result;
     }
-    	
+     //By Spec[Start    	
+	public static String getCSVMapperFindPatientsByAdvancedSearchAndSort(
+			String sortColumn, Sorting order, String searchWord,
+			List<String> searchThrough,
+			List<AdvancedSearchCriteria> searchCriteria// , String filePath
+                        ,int firstResult, int maxResults	
+	) {
+
+		List<StandardizedPatient> standardizedPatients = findPatientsByAdvancedSearchAndSort(
+				sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults);
+
+		try {
+			CsvUtil csvUtil = new CsvUtil();
+			csvUtil.setSeparater(",");
+			csvUtil.open(OsMaConstant.FILENAME, false);
+			csvUtil.writeCsv(standardizedPatients, true, true);
+			csvUtil.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return OsMaConstant.FILENAME;
+
+	}
+        //By Spec]End
     
     // ###OLD Code programmen by siebers, dont use
     
