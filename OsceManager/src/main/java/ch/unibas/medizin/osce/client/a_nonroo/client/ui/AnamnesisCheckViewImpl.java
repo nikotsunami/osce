@@ -15,12 +15,15 @@ import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.VisibleRange;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -35,6 +38,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -71,14 +75,29 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 
 	@UiField (provided=true)
 	CellTable<AnamnesisCheckProxy> table;
-
+	
+	@UiField
+	ListBox rangeNum;
+	
+	@UiHandler ("rangeNum")
+	public void rangeNumChangeHandler(ChangeEvent event){
+		delegate.changeNumRowShown(rangeNum.getItemText(rangeNum.getSelectedIndex()));
+	}
+	
+	public void initList(){
+		for (VisibleRange range : VisibleRange.values()){
+			rangeNum.addItem(range.getName(),range.getName());
+		}
+		rangeNum.setItemSelected(1, true);
+	}
+	
 	protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
-		delegate.newClicked();
+		delegate.newClicked();		
 	}
 
 	/**
@@ -159,6 +178,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 //						return proxy;
 //					}
 //		}, null);
+		initList();
 	}
 	
 	private <C> void addColumn(Cell<C> cell, String headerText,

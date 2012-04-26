@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.VisibleRange;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -214,6 +215,52 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
+	}
+
+	@Override
+	public void changeNumRowShown(String selectedValue) {
+		//  Find matching VisibleRange enum value and set "table" range keeping the start value from the original range
+		if (VisibleRange.ALL.getName().equals(selectedValue)){
+			
+			// Show all the rows.
+			
+			fireCountRequest("", new Receiver<Long>(){
+
+				@Override
+				public void onSuccess(Long response) {
+					int start = table.getPageStart();
+					int rows = response.intValue();
+					
+					Range range = new Range(start,rows);
+					table.setVisibleRange(range);
+					
+					
+				}
+				
+			});
+			
+			return; 
+		} else {
+			int start = table.getPageStart();
+
+			VisibleRange selectedRange = null;
+			
+			for (VisibleRange range : VisibleRange.values()){
+				if (range.getName().equals(selectedValue)){
+					selectedRange = range;
+					
+				}
+			}
+			
+			
+			Range range = new Range(start,selectedRange.getValue());
+			table.setVisibleRange(range);
+			
+	
+			
+		}
+
+		
 	}
 
 }
