@@ -6,18 +6,21 @@ import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 
 
 public enum VisibleRange {
-	FIVE("5",5),TEN("10",10), TWENTY("20",20), THIRTY("30",30), FORTY("40",40), FIFTY("50",50), ONEHUNDRED("100",100), ALL();
+	FIVE(5),TEN(10), TWENTY(20), THIRTY(30), FORTY(40), FIFTY(50), ONEHUNDRED(100), ALL();
 		
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	
 	String name = null;
 	int value=-1;
-	private VisibleRange(String name,int value){
-		this.name = name;
+	private VisibleRange(Integer value){
+		this.name = value.toString();
 		this.value = value;
 	}
 	
+    /**
+     * Only used in the case of all
+     */
 	private VisibleRange(){
 		this.name = constants.all();
 	}
