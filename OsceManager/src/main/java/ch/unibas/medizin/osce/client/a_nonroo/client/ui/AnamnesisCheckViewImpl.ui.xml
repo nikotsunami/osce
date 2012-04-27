@@ -8,18 +8,25 @@
 		<g:west size="400">
 			<g:ScrollPanel>
 				<g:HTMLPanel>
-					<div class="{style.controls} {style.controlsleft}">
+					<div class="{style.controls} {style.controlsleft} ">
 						<my:QuickSearchBox ui:field="searchBox" />
 						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>
 
 					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
 
-					<div class="{style.controls} {style.controlsleft}">
+
+					<div class="{style.textBoxStyle} {style.controlsleft}">
 						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
-						<g:TextBox width="200px" />
-						<g:ListBox width="52px" ui:field="rangeNum" />
+						<div class="{style.textBoxStyle}">
+							<g:TextBox width="200px" />
+						</div>
+
 					</div>
+					<div class="{style.listBoxStyle}">
+						<g:ListBox width="50px" ui:field="rangeNum" />
+					</div>
+
 					<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
 				</g:HTMLPanel>
 			</g:ScrollPanel>

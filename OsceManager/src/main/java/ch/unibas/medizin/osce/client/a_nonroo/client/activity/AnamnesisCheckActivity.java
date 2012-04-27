@@ -6,13 +6,15 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetails
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.shared.Operation;
-import ch.unibas.medizin.osce.shared.VisibleRange;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.gargoylesoftware.htmlunit.javascript.host.Window;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -30,9 +32,9 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class AnamnesisCheckActivity extends AbstractActivity implements
-AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
-	
-    private OsMaRequestFactory requests;
+		AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
+
+	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private AnamnesisCheckView view;
@@ -41,18 +43,21 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private AnamnesisCheckDetailsActivityMapper anamnesisCheckDetailsActivityMapper;
-	
 
-	public AnamnesisCheckActivity(OsMaRequestFactory requests, PlaceController placeController) {
-    	this.requests = requests;
-    	this.placeController = placeController;
-    	anamnesisCheckDetailsActivityMapper = new AnamnesisCheckDetailsActivityMapper(requests, placeController);
-		this.activityManger = new ActivityManager(anamnesisCheckDetailsActivityMapper, requests.getEventBus());
-    }
+	public AnamnesisCheckActivity(OsMaRequestFactory requests,
+			PlaceController placeController) {
+		this.requests = requests;
+		this.placeController = placeController;
+		anamnesisCheckDetailsActivityMapper = new AnamnesisCheckDetailsActivityMapper(
+				requests, placeController);
+		this.activityManger = new ActivityManager(
+				anamnesisCheckDetailsActivityMapper, requests.getEventBus());
+	}
 
-	public void onStop(){
+	public void onStop() {
 		activityManger.setDisplay(null);
 	}
+
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -62,7 +67,7 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
-		
+
 		init();
 
 		activityManger.setDisplay(view.getDetailsPanel());
@@ -70,7 +75,8 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 		// Inherit the view's key provider
 		ProvidesKey<AnamnesisCheckProxy> keyProvider = ((AbstractHasData<AnamnesisCheckProxy>) table)
 				.getKeyProvider();
-		selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>(keyProvider);
+		selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>(
+				keyProvider);
 		table.setSelectionModel(selectionModel);
 
 		selectionModel
@@ -79,21 +85,20 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 						AnamnesisCheckProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
-							Log.debug(selectedObject.getId()
-									+ " selected!");
+							Log.debug(selectedObject.getId() + " selected!");
 							showDetails(selectedObject);
 						}
 					}
 				});
 
 		view.setDelegate(this);
-		
+
 	}
-	
+
 	private void init() {
 		init2("");
 	}
-	
+
 	private void init2(final String q) {
 
 		fireCountRequest(q, new Receiver<Long>() {
@@ -114,7 +119,7 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 		if (rangeChangeHandler != null) {
 			rangeChangeHandler.removeHandler();
 		}
-		
+
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
@@ -123,15 +128,14 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 					}
 				});
 	}
-	
+
 	protected void showDetails(AnamnesisCheckProxy AnamnesisCheck) {
-		
+
 		Log.debug(AnamnesisCheck.getId().toString());
-		
+
 		goTo(new AnamnesisCheckDetailsPlace(AnamnesisCheck.stableId(),
 				Operation.DETAILS));
 	}
-	
 
 	protected void onRangeChanged(String q) {
 		final Range range = table.getVisibleRange();
@@ -154,47 +158,56 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 
 		fireRangeRequest(q, range, callback);
 	}
-	
+
 	@Override
 	public void moveUp(AnamnesisCheckProxy proxy) {
-		requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy).fire(new Receiver<Void>() {
-			@Override
-			public void onSuccess(Void response) {
-				Log.info("moved");
-				init();
-			}
-		});
+		requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy)
+				.fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("moved");
+						init();
+					}
+				});
 	}
-	
+
 	@Override
 	public void moveDown(AnamnesisCheckProxy proxy) {
-		requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy).fire(new Receiver<Void>() {
-			@Override
-			public void onSuccess(Void response) {
-				Log.info("moved");
-				init();
-			}
-		});
+		requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy)
+				.fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("moved");
+						init();
+					}
+				});
 	}
-	
+
 	@Override
 	public void deleteClicked(AnamnesisCheckProxy proxy) {
 		// TODO implement
 	}
-	
-	private void fireRangeRequest(String q, final Range range, final Receiver<List<AnamnesisCheckProxy>> callback) {
+
+	private void fireRangeRequest(String q, final Range range,
+			final Receiver<List<AnamnesisCheckProxy>> callback) {
 		createRangeRequest(q, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
-	
-	protected Request<java.util.List<AnamnesisCheckProxy>> createRangeRequest(String q, Range range) {
-//		return requests.anamnesisCheckRequest().findAnamnesisCheckEntries(range.getStart(), range.getLength());
-		return requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySearch(q, range.getStart(), range.getLength());
+
+	protected Request<java.util.List<AnamnesisCheckProxy>> createRangeRequest(
+			String q, Range range) {
+		// return
+		// requests.anamnesisCheckRequest().findAnamnesisCheckEntries(range.getStart(),
+		// range.getLength());
+		return requests.anamnesisCheckRequestNonRoo()
+				.findAnamnesisChecksBySearch(q, range.getStart(),
+						range.getLength());
 	}
 
 	protected void fireCountRequest(String q, Receiver<Long> callback) {
-//		requests.anamnesisCheckRequest().countAnamnesisChecks().fire(callback);
-		requests.anamnesisCheckRequestNonRoo().countAnamnesisChecksBySearch(q).fire(callback);
+		// requests.anamnesisCheckRequest().countAnamnesisChecks().fire(callback);
+		requests.anamnesisCheckRequestNonRoo().countAnamnesisChecksBySearch(q)
+				.fire(callback);
 	}
 
 	private void setTable(CellTable<AnamnesisCheckProxy> table) {
@@ -205,7 +218,7 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 	public void newClicked() {
 		goTo(new AnamnesisCheckDetailsPlace(Operation.CREATE));
 	}
-	
+
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
@@ -219,48 +232,44 @@ AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
 
 	@Override
 	public void changeNumRowShown(String selectedValue) {
-		//  Find matching VisibleRange enum value and set "table" range keeping the start value from the original range
-		if (VisibleRange.ALL.getName().equals(selectedValue)){
-			
+		// Find matching VisibleRange enum value and set "table" range keeping
+		// the start value from the original range
+		if (VisibleRange.ALL.getName().equals(selectedValue)) {
+
 			// Show all the rows.
-			
-			fireCountRequest("", new Receiver<Long>(){
+
+			fireCountRequest("", new Receiver<Long>() {
 
 				@Override
 				public void onSuccess(Long response) {
 					int start = table.getPageStart();
 					int rows = response.intValue();
-					
-					Range range = new Range(start,rows);
+
+					Range range = new Range(start, rows);
 					table.setVisibleRange(range);
-					
-					
+
 				}
-				
+
 			});
-			
-			return; 
+
+			return;
 		} else {
 			int start = table.getPageStart();
 
 			VisibleRange selectedRange = null;
-			
-			for (VisibleRange range : VisibleRange.values()){
-				if (range.getName().equals(selectedValue)){
+
+			for (VisibleRange range : VisibleRange.values()) {
+				if (range.getName().equals(selectedValue)) {
 					selectedRange = range;
-					
+
 				}
 			}
-			
-			
-			Range range = new Range(start,selectedRange.getValue());
+
+			Range range = new Range(start, selectedRange.getValue());
 			table.setVisibleRange(range);
-			
-	
-			
+
 		}
 
-		
 	}
 
 }
