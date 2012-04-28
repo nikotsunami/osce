@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 import javax.persistence.TypedQuery;
+import javax.persistence.ManyToOne;
 
 @RooJavaBean
 @RooToString
@@ -34,6 +35,10 @@ public class AnamnesisCheck {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "anamnesischeck")
     private Set<AnamnesisChecksValue> anamnesischecksvalues = new HashSet<AnamnesisChecksValue>();
+
+    @ManyToOne
+    private ch.unibas.medizin.osce.domain.AnamnesisCheck title;
+
 
     public static Long countAnamnesisChecksBySearch(String q) {
         EntityManager em = entityManager();
