@@ -3,6 +3,22 @@
 	background-color: red;
 }
 
+//spec
+.arrowUp
+{
+	 background-image: url(images/arrowdownselect.png);
+	
+}
+.arrowDown
+{
+	background-image: url(images/arrowdown.png);
+}
+.left
+{
+	float:left;
+}
+//spec
+
 .panelHTML {
 	border: 0px solid #ddf;
 	height: 100%;
@@ -273,7 +289,7 @@ body {
 	background: none repeat scroll 0 0 #ffffff;
 }
 
-/* TODO: saubere Lösung für Ladebildschirm */
+/* TODO: saubere LA�sung fA?r Ladebildschirm */
 .loadingScreen {
 	position: absolute;
 	margin: 100px auto;
@@ -360,20 +376,38 @@ body {
 }
 
 .patientDetails {
-	margin: 38px auto 0;
+/* 	margin: 38px auto 0; */
 	min-height: 130px !important;
 }
 
 .patientControls {
-	padding: 4px 10px;
-	position: absolute;
-	top: 12px;
-	left: 20px;
-	right: 20px;
+/* By SPEC[start */
+/* 	margin: 16px auto; */
+/* 	padding: 4px 10px; */
+/*     position: absolute; */
+/*     top: 12px; */
+/*     left: 20px; */
+/*     right: 20px; */
+/* By SPEC] end */
 	-moz-border-radius: 12px 12px 12px 12px;
 	background-color: #EBEBEB;
 	max-height: 26px;
 	min-height: 26px;
+    border: 1px;
+    border-style: solid;
+    border-color: #808080; 
+}
+.patientTopContainer{
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;	
 }
 
 .tabStyle { /*position: relative;*/
@@ -381,7 +415,7 @@ body {
 	width: 98%;
 }
 
-/* Style für Details-Views-Inhalte */
+/* Style fA?r Details-Views-Inhalte */
 .fields col {
 	min-width: 100px;
 }
@@ -391,7 +425,7 @@ body {
 	white-space: nowrap;
 }
 
-/* Style für Anamnesis Details/Edit Panels mit Multiple-Choice-Antworten (Subpanels) */
+/* Style fA?r Anamnesis Details/Edit Panels mit Multiple-Choice-Antworten (Subpanels) */
 .AnamnesisMCValueSubPanel table {
 	margin: 2px 0;
 }
