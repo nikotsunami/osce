@@ -281,10 +281,20 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		initAnamnesis();
 		initLangSkills();
 		initMediaView();
+		
+		//spec
+		standardizedPatientMediaSubViewImpl.id.setValue(getIdOfStandardizedPatient().toString());
+		standardizedPatientMediaSubViewImpl.name.setValue(getNameOfStandardizedPatient());
+		standardizedPatientMediaSubViewImpl.vid.setValue(getIdOfStandardizedPatient().toString());
+		standardizedPatientMediaSubViewImpl.vname.setValue(getNameOfStandardizedPatient());
+		//spec
 	}
 	
 	private void initMediaView() {
 		standardizedPatientMediaSubViewImpl.setMediaContent(standardizedPatientProxy.getImmagePath());
+		//spec
+		standardizedPatientMediaSubViewImpl.setVideoMediaContent(standardizedPatientProxy.getVideoPath());
+		//spec
 		
 	}
 
@@ -607,4 +617,36 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 
 		
 	}
+	
+	//spec start
+	@Override
+	public void videoUploadSuccesfull(String results) {
+	 StandardizedPatientRequest stdPatRequest = requests.standardizedPatientRequest();
+	 standardizedPatientProxy = stdPatRequest.edit(standardizedPatientProxy);
+	
+	
+	 standardizedPatientProxy.setVideoPath(results);
+	 //spec end
+	 
+	 
+	 
+	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
+	 
+		
+	}
+	//spec end
+	
+	@Override
+	public String getNameOfStandardizedPatient()
+	{
+		
+		 return standardizedPatientProxy.getName();
+	}
+	public Long getIdOfStandardizedPatient()
+	{
+		return standardizedPatientProxy.getId();
+	}
+	
+
+	
 }

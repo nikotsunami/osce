@@ -3,15 +3,12 @@ package ch.unibas.medizin.osce.server.upload;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
-
 import java.util.List;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -20,18 +17,16 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
-
 import ch.unibas.medizin.osce.domain.MediaContent;
 
 import com.allen_sauer.gwt.log.client.Log;
 
-public class UploadServlet extends HttpServlet {
-
+public class VideoUploadServlet extends HttpServlet{
 	private static String UPLOAD_DIRECTORY=".";
 	/**
 	 * Generated 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	@Override
   protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		if(!ServletFileUpload.isMultipartContent(request)){
