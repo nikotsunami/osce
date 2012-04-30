@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
+import ch.unibas.medizin.osce.server.util.file.PdfUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
@@ -470,6 +471,21 @@ public class StandardizedPatient {
 		}
 		return OsMaConstant.FILENAME;
 
+	}
+	
+	
+	public static String getPdfPatientsBySearch(
+			StandardizedPatient standardizedPatient){
+		try{
+			PdfUtil pdfUtil = new PdfUtil();
+			Log.info("Message received in Pdfpatient by Search : "+standardizedPatient.name);
+			pdfUtil.writeFile(OsMaConstant.FILE_NAME_PDF_FORMAT,standardizedPatient);
+		}catch (Exception e) {
+				e.printStackTrace();
+				Log.error("Error in Satndized Patient getPdfPatientsBySearch"+e.getMessage());
+		}
+		
+		return OsMaConstant.FILE_NAME_PDF_FORMAT;
 	}
         //By Spec]End
     

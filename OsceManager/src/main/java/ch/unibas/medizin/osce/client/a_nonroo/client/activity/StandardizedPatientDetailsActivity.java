@@ -83,6 +83,24 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	
+	// By spec(Start)
+		
+		@SuppressWarnings("deprecation")
+		private class StandardizedPatientPdfFileReceiver extends Receiver<String> {
+			@Override
+			public void onFailure(ServerFailure error) {
+				Log.error(error.getMessage());
+				// onStop();
+			}
+
+			@Override
+			public void onSuccess(String response) {
+				Window.open(response, "_blank", "enabled");
+			}
+		}
+
+		// By spec(Stop)
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
@@ -498,6 +516,16 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		placeController.goTo(place);		
 	}
 
+	
+	//By SPEc [Start
+	@Override
+	public void printPatientClicked(){
+		Log.info("Print clicked");
+		requests.standardizedPatientRequestNonRoo()
+		.getPdfPatientsBySearch(standardizedPatientProxy).fire(new StandardizedPatientPdfFileReceiver());
+
+	}
+	//	by SPEC ] End
 	@Override
 	public void editPatientClicked() {
 		Log.info("edit clicked");

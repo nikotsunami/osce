@@ -280,7 +280,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	
 	@UiHandler("print")
 	public void onPrintClicked(ClickEvent e) {
-		// TODO print patient details...
+		delegate.printPatientClicked();
 	}
 	
 	@UiHandler("maps")

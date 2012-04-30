@@ -17,5 +17,6 @@ public class OsMaConstant {
 	public static final int ENTRY_TIMEOUT_MS = 700;
 	//By Spec[start
 	public static String FILENAME = "StandardizedPatientList.csv";
+	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
 	//By Spec]End
 }

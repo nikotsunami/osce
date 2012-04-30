@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -14,6 +15,7 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
+		void printPatientClicked();
 		void editPatientClicked();
 		void deletePatientClicked();
 	}
