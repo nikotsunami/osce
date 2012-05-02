@@ -17,6 +17,9 @@ public enum PossibleFields {
 	//clause is not in use - once we have multi part search
 	,LANGUAGE("")
 	,ANAMNESIS("")
+	//By SPEC[
+	,NATIONALITY(" stdPat.nationality ")
+	//By SPEC]
 	;
 	/**
 	 * Sublist for advanced search

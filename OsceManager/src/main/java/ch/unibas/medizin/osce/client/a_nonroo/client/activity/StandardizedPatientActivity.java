@@ -314,8 +314,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		@Override
 		public void onSuccess(List<StandardizedPatientProxy> response) {
-			final Range range = table.getVisibleRange();			
+			final Range range = table.getVisibleRange();
+			//By SPEC[
+			table.setRowCount(response.size());
+			//By SPEC]
 			table.setRowData(range.getStart(), response);
+			
 		}
 	}
 
@@ -679,6 +683,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		searchCriteria.remove(criterion);
 		// TODO execute search
 		criteriaTable.setRowData(searchCriteria);
+		
+		//By SPEC[
+		initSearch();
+		//By SPEC]
 	}
 	
 	/**
@@ -791,6 +799,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			BindType bindType, Comparison comparison) {
 		// TODO implement.
 						
+		//By Spec[
+		Log.info("Nationality:" + nationality.getId() + PossibleFields.NATIONALITY);		
+		addAdvSeaBasicButtonClicked(nationality.getId(), nationality.getId().toString() , bindType, PossibleFields.NATIONALITY, comparison);
+		//By Spec]
 	}
 
 	/**
