@@ -33,7 +33,7 @@
 							</tr>
 							<tr id='text'>
 								<td><span class='{style.label}' ui:field="labelText" /></td>
-								<td><g:TextBox ui:field='text' /></td>
+								<td ><g:TextBox ui:field='text' /></td>
 							</tr>
 							<tr id='value'>
 								<td valign="top"><span class='{style.label}' ui:field="labelValue" /></td>

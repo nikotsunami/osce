@@ -15,4 +15,8 @@ public class OsMaConstant {
 	public static final int TABLE_JUMP_SIZE = 30;
 	public static final int SPLIT_PANEL_MINWIDTH = 472;
 	public static final int ENTRY_TIMEOUT_MS = 700;
+	//By Spec[start
+	public static String FILENAME = "StandardizedPatientList.csv";
+	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
+	//By Spec]End
 }

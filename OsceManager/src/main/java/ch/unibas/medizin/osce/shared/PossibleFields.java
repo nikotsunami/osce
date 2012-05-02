@@ -17,8 +17,8 @@ public enum PossibleFields {
 	NATIONALITY(" stdPat.nationality.id "), 
 	//clause is not in use - once we have multi part search
 	LANGUAGE(""),
-	ANAMNESIS("")
-	;
+	ANAMNESIS("");
+	
 	/**
 	 * Sublist for advanced search
 	 */

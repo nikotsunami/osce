@@ -22,6 +22,8 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -42,6 +44,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	private Presenter presenter;
 	StandardizedPatientProxy proxy;
 
+	//SPEC START
+	@UiField
+	DisclosurePanel patientDisclosurePanel;
+	@UiField
+	Image arrow;
+	//SPEC End
+	
 	// Panels
 	@UiField
 	TabPanel patientPanel;
@@ -175,6 +184,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 				
 		setTabTexts();
 		setLabelTexts();
+		
+		//spec start
+		patientDisclosurePanel.setContent(patientPanel);
+		patientDisclosurePanel.setStyleName("");		
+		//spec end
 	}
 	
 	private void setTabTexts() {
@@ -268,7 +282,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	
 	@UiHandler("print")
 	public void onPrintClicked(ClickEvent e) {
-		// TODO print patient details...
+		delegate.printPatientClicked();
 	}
 	
 	@UiHandler("maps")
@@ -300,4 +314,23 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public StandardizedPatientLangSkillSubViewImpl getStandardizedPatientLangSkillSubViewImpl() {
 		return standardizedPatientLangSkillSubViewImpl;
 	}
+	
+	//spec start
+		@UiHandler("arrow")
+		void handleClick(ClickEvent e) {
+			
+			if(patientDisclosurePanel.isOpen())
+			{
+				patientDisclosurePanel.setOpen(false);
+				arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdown.png");//set url of up image
+				
+			}
+			else
+			{
+				patientDisclosurePanel.setOpen(true);
+				arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");//set url of down image
+			}
+		   
+		  }
+		//start
 }

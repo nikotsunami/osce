@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
@@ -41,7 +41,6 @@ import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
-import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -49,7 +48,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.google.gwt.place.shared.Place;
 
@@ -62,6 +62,7 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.ProvidesKey;
@@ -127,6 +128,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	/** Holds a reference to the nationalityPopup if open */
 	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
 	
+	// BY SPEC v(Start)
+
+	/** Holds a reference to the IconButton of StandardizedPatientViewImpl */
+	private IconButton iconButton;
+
+	// private final String filePath = "StandardizedPatientList.csv";
+
+	// BY SPEC v(End)
+
 	/**
 	 * Sets the dependencies of this activity and initializes the corresponding activity manager 
 	 * @param requests The request factory to use
@@ -149,6 +159,28 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		activityManger.setDisplay(null);
 	}
 
+	// By spec V(Start)
+	/**
+	 * Receiver for the csv format file creation of standardized patients that
+	 * met the search criteria. If execution was successful, the file will be
+	 * created.
+	 */
+	@SuppressWarnings("deprecation")
+	private class StandardizedPatientCsvFileReceiver extends Receiver<String> {
+		@Override
+		public void onFailure(ServerFailure error) {
+			Log.error(error.getMessage());
+			// onStop();
+		}
+
+		@Override
+		public void onSuccess(String response) {
+			Window.open(response, "_blank", "enabled");
+		}
+	}
+
+	// By spec V(Stop)
+
 	/**
 	 * Initializes the corresponding views and initializes the tables as well as their
 	 * corresponding handlers.
@@ -170,6 +202,26 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
 		standartizedPatientAdvancedSearchSubView.setDelegate(this);
 
+		// BY SPEC v(Start)
+		this.iconButton = this.view.getExportButton();
+
+		this.iconButton.addClickHandler(new ClickHandler() {
+
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent arg0) {
+				Range range = table.getVisibleRange();
+				requests.standardizedPatientRequestNonRoo()
+						.getCSVMapperFindPatientsByAdvancedSearchAndSort(
+								"name", Sorting.ASC, quickSearchTerm,
+								searchThrough, searchCriteria // , filePath
+								,range.getStart(),range.getLength()								
+						).fire(new StandardizedPatientCsvFileReceiver());
+
+			}
+		});
+
+		// BY SPEC v(Stop)
 		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 		
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
@@ -264,8 +316,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		@Override
 		public void onSuccess(List<StandardizedPatientProxy> response) {
-			final Range range = table.getVisibleRange();			
+			final Range range = table.getVisibleRange();
+			//By SPEC[
+			table.setRowCount(response.size());
+			//By SPEC]
 			table.setRowData(range.getStart(), response);
+			
 		}
 	}
 
@@ -286,7 +342,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		// (2) Advanced search
 		requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
-	    		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());	
+	    		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());
 	}
 
 	/**
@@ -309,89 +365,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged() {
-		// TODO: ###david### test code
-
-		//List<String> fields = Arrays.asList("weight", "height", "bmi");
-		//List<String> values = Arrays.asList("80", "180", "30");
-		// List<String> comparations = Arrays.asList(Comparison2.EQUALS,
-		// Comparison2.LESS, Comparison2.MORE);
-		// List<String> bindType = Arrays.asList(BindType.AND, BindType.AND,
-		// BindType.AND);
-		
-
-		//requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
-		//
-		// AdvancedSearchCriteriaProxy criteria =
-		// requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		// requestAdvSeaCritStd.edit(criteria);
-		// criteria.setBindType(BindType.AND);
-		// criteria.setComparation(Comparison2.EQUALS);
-		// criteria.setField(PossibleFields.weight);
-		// criteria.setValue("80");
-		//
-		// searchCriteria.add(criteria);
-		//WARNING: TEST: 
-
-		//searchCriteria.clear();
-		/* AdvancedSearchCriteriaProxy criteria2 =
-		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		 requestAdvSeaCritStd.edit(criteria2);
-		 criteria2.setBindType(BindType.AND);
-		 criteria2.setComparation(Comparison2.EQUALS);
-		 criteria2.setField(PossibleFields.LANGUAGE);
-		 //"Deutsch: A1"
-		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
-		 criteria2.setObjectId(new Long(6));
-		 searchCriteria.add(criteria2);*/
-
-//		 AdvancedSearchCriteriaProxy criteria3 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria3);
-//		 criteria3.setBindType(BindType.OR);
-//		 criteria3.setComparation(Comparison2.NOTEQUALS);
-//		 criteria3.setField(PossibleFields.ANAMNESIS);
-//		 criteria3.setObjectId(new Long(7));//question ID
-//		 //Nehmen Sie eines der aufgelisteten Medikamete und wenn ja, welche?
-//		 criteria3.setValue("QuestionMultM: Prozac:Prozac|Ritalin|Aspirin|Ethanol");
-//		
-//		 searchCriteria.add(criteria3);
-//
-//		 AdvancedSearchCriteriaProxy criteria4 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria4);
-//		 criteria4.setBindType(BindType.AND);
-//		 criteria4.setComparation(Comparison2.EQUALS);
-//		 criteria4.setField(PossibleFields.ANAMNESIS);
-//		 criteria4.setObjectId(new Long(1));//question ID
-//		 //Rauchen Sie? 
-//		 criteria4.setValue("QuestionYesNo: Nein:");//no options for answers: type = 1
-//		
-//		 searchCriteria.add(criteria4);
-//
-//		 AdvancedSearchCriteriaProxy criteria5 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria5);
-//		 criteria5.setBindType(BindType.AND);
-//		 criteria5.setComparation(Comparison2.NOTEQUALS);
-//		 criteria5.setField(PossibleFields.anamnesis);
-//		 criteria5.setObjectId(new Long(2));//question ID
-//		 //Wie oft rauchen Sie? 
-//		 criteria5.setValue("QuestionMultS: oft:oft|mittel|selten");
-//		
-//		 searchCriteria.add(criteria5);
-		 //
-//		 criteriaTable.setRowData(searchCriteria);
-		/*
-		 * searchCriteria.add(new AdvancesSearchCriteriumOld
-		 * (PossibleFields.weight, BindType.AND, Comparison2.EQUALS, "80"));
-		 * searchCriteria.add(new AdvancesSearchCriteriumOld
-		 * (PossibleFields.height, BindType.OR, Comparison2.LESS, "180"));
-		 * searchCriteria.add(new AdvancesSearchCriteriumOld
-		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
-		 */
-		 
-		// searchThrough = new ArrayList<String>(); 
-		 
 		 // TODO: some bug about request
 		 requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		
@@ -411,39 +384,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
 			   fire(new StandardizedPatientReceiver());
 		//By SPEC]End
-		// OLD (1) Sorting
-
-//		Boolean asc = true;
-//		String sortField = "name"; // TODO: handle sort change events
-//
-//		if (table.getColumnSortList().size() > 0) {
-//
-//			asc = table.getColumnSortList().get(0).isAscending();
-//
-//		}
-//
-//		// (2) Text search
-//		searchThrough = view.getSearchFilters();
-//
-//		// (3) Advanced search
-//		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
-//			@Override
-//			public void onSuccess(List<StandardizedPatientProxy> values) {
-//				if (view == null) {
-//					// This activity is dead
-//					return;
-//				}
-//				table.setRowData(range.getStart(), values);
-//
-//				// finishPendingSelection();
-//				if (widget != null) {
-//					widget.setWidget(view.asWidget());
-//				}
-//			}
-//		};
-//
-//		fireRangeRequest(sortField, asc, q, new Integer(range.getStart()), new Integer(range.getLength()), searchThrough, view.getCriteria().getFields(), view
-//				.getCriteria().getComparisons(), view.getCriteria().getValues(), callback);
 	}
 
 	/**
@@ -597,10 +537,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@Override
 	public void addAdvSeaBasicButtonClicked(Long objectId, String value, String shownValue, BindType bindType, PossibleFields possibleFields, Comparison comparison) {
-	//	requestAdvSeaCritStd.fire();
-//		requestAdvSeaCritStd.fire();
-//
-//
 		switch (possibleFields) {
 		case BMI:
 			shownValue = constants.bmi() + " "
@@ -642,7 +578,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void deleteAdvancedSearchCriteria(AdvancedSearchCriteriaProxy criterion) {
 		searchCriteria.remove(criterion);
 		criteriaTable.setRowData(searchCriteria);
+		//By SPEC[
 		initSearch();
+		//By SPEC]
 	}
 	
 	/**

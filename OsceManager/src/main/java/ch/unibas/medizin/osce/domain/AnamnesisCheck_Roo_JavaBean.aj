@@ -50,5 +50,13 @@ privileged aspect AnamnesisCheck_Roo_JavaBean {
     public void AnamnesisCheck.setAnamnesischecksvalues(Set<AnamnesisChecksValue> anamnesischecksvalues) {
         this.anamnesischecksvalues = anamnesischecksvalues;
     }
+
+    public AnamnesisCheck AnamnesisCheck.getTitle() {
+        return this.title;
+    }
+    
+    public void AnamnesisCheck.setTitle(AnamnesisCheck title) {
+        this.title = title;
+    }
     
 }

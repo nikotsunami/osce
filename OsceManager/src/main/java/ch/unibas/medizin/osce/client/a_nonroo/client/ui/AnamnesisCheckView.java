@@ -21,6 +21,7 @@ public interface AnamnesisCheckView extends IsWidget{
 		void deleteClicked(AnamnesisCheckProxy proxy);
 		void newClicked();
 		void performSearch(String q);
+		void changeNumRowShown(String selectedValue);
 	}
 
     CellTable<AnamnesisCheckProxy> getTable();

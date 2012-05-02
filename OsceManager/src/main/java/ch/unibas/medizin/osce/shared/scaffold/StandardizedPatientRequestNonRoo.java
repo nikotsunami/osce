@@ -4,11 +4,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
-import ch.unibas.medizin.osce.shared.AdvancesSearchCriteriumOld;
-import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Sorting;
 
 
@@ -24,6 +20,24 @@ import com.google.gwt.view.client.Range;
 public interface StandardizedPatientRequestNonRoo extends RequestContext {
 	abstract Request<Long> countPatientsByAdvancedSearchAndSort(String searchWord, List<String> searchThrough, List<AdvancedSearchCriteriaProxy> searchCriteria);
 	
-	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedSearchAndSort(String sortColumn, Sorting order, String searchWord, 
-    		List<String> searchThrough, List<AdvancedSearchCriteriaProxy> searchCriteria, Integer firstResult, Integer maxResults);
+	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedSearchAndSort(
+    		String sortColumn,
+    		Sorting order,
+    		String searchWord, 
+    		List<String> searchThrough,
+    		List<AdvancedSearchCriteriaProxy> searchCriteria,
+    		Integer firstResult, 
+    		Integer maxResults
+    );
+        
+         //By Spec[start
+         abstract Request<String> getCSVMapperFindPatientsByAdvancedSearchAndSort(
+			String sortColumn, Sorting order, String searchWord,
+			List<String> searchThrough,
+			List<AdvancedSearchCriteriaProxy> searchCriteria
+                         , int firstResult, int maxResults
+	);
+         abstract Request<String> getPdfPatientsBySearch(
+    			 StandardizedPatientProxy standardizedPatientProxy);
+         //By Spec]End
 }

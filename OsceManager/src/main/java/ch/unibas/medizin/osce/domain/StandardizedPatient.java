@@ -25,6 +25,10 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.server.util.file.CsvUtil;
+import ch.unibas.medizin.osce.server.util.file.PdfUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
@@ -128,7 +132,9 @@ public class StandardizedPatient {
     	private static String joinSpokenLanguage = " LEFT JOIN stdPat.langskills AS langSkills " ;//+
     			//"LEFT JOIN langSkills.spokenlanguage AS language ";
     	private static String joinAnamnesisValue = " LEFT JOIN aForm.anamnesischecksvalues AS aValues LEFT JOIN  aValues.anamnesischeck AS aCheck ";
-    	
+    	//BY SPEC[start
+    	private static String joinNationality = " LEFT JOIN nationality n on stdPat.nationality = n.id  ";
+    	//BY SPEC]end
     	
     	/**
     	 * Search form reset
@@ -364,8 +370,7 @@ public class StandardizedPatient {
     	private String quote(String toQuote){
     		return "'"+StringUtils.replace(toQuote, "'", "''")+"'";
     	}
-    }
-    
+    }   
     
     /**
      * Counting of patients. Advanced Search
@@ -376,7 +381,6 @@ public class StandardizedPatient {
      * @param searchCriteria criteria 
      * @return
      */
-//    public static Long countPatientsByAdvancedSearchAndSort(
     public static List<StandardizedPatient> findPatientsByAdvancedSearchAndSort(String sortColumn, Sorting order,
     		String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria, 
     		Integer firstResult, Integer maxResults) {
@@ -408,7 +412,46 @@ public class StandardizedPatient {
     	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
     	return result;
     }
-    
+
+     //By Spec[Start    	
+	public static String getCSVMapperFindPatientsByAdvancedSearchAndSort(
+			String sortColumn, Sorting order, String searchWord,
+			List<String> searchThrough,
+			List<AdvancedSearchCriteria> searchCriteria// , String filePath
+                        ,int firstResult, int maxResults	
+	) {
+
+		List<StandardizedPatient> standardizedPatients = findPatientsByAdvancedSearchAndSort(
+				sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults);
+
+		try {
+			CsvUtil csvUtil = new CsvUtil();
+			csvUtil.setSeparater(",");
+			csvUtil.open(OsMaConstant.FILENAME, false);
+			csvUtil.writeCsv(standardizedPatients, true, true);
+			csvUtil.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return OsMaConstant.FILENAME;
+
+	}
+	
+	public static String getPdfPatientsBySearch(
+			StandardizedPatient standardizedPatient){
+		try{
+			PdfUtil pdfUtil = new PdfUtil();
+			Log.info("Message received in Pdfpatient by Search : "+standardizedPatient.name);
+			pdfUtil.writeFile(OsMaConstant.FILE_NAME_PDF_FORMAT,standardizedPatient);
+		}catch (Exception e) {
+				e.printStackTrace();
+				Log.error("Error in Satndized Patient getPdfPatientsBySearch"+e.getMessage());
+		}
+		
+		return OsMaConstant.FILE_NAME_PDF_FORMAT;
+	}
+        //By Spec]End
+	
     public static Long countPatientsByAdvancedSearchAndSort(String searchWord, 
     		List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria) {
     	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click

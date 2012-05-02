@@ -6,18 +6,53 @@
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../../styles.css">
 	.description {	}
+	
+	.padleft5
+	{
+		padding-left: 5px;
+	}
+	
 	</ui:style>
-		
+	<!-- Spec added disclosure class above-->	
+	
 	<g:HTMLPanel>
-		<div class="{style.patientControls} {style.controlsright}">
+	
+<!--	<g:HTMLPanel>
+  	<div class='{style.arrowUp}' id="arrowUpDown"></div> -->
+	
+<!--	</g:HTMLPanel>  -->
+<!--  	<div class='{style.arrowDown}'></div>  -->
+<!-- 	<g:HTMLPanel> -->
+<!--  Spec End-->
+	
+<!-- 		<div class="{style.patientControls} {style.controlsright}"> -->
+<!-- 			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3> -->
+			
+<!-- 			<my:IconButton ui:field="print" icon="print"/> -->
+<!-- 			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton> -->
+<!-- 			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton> -->
+<!-- 		</div> -->
+		
+	
+<!-- 	</g:HTMLPanel> -->
+
+	<g:VerticalPanel addStyleNames="{style.tabStyle} {style.patientTopContainer}">
+		
+	<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
+		<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+	<g:HTMLPanel>
+		<div  class="{style.controlsright}">
 			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
 			
 			<my:IconButton ui:field="print" icon="print"/>
 			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
 			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
 		</div>
+		</g:HTMLPanel>
+	</g:HorizontalPanel>
 
-		<g:TabPanel ui:field="patientPanel" addStyleNames="gwt-InvertedTabPanel {style.tabStyle}">
+	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="patientDisclosurePanel"  width="100%">
+	<g:TabPanel ui:field="patientPanel" styleName="gwt-InvertedTabPanel" width="100%">
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
@@ -135,6 +170,9 @@
 				</g:HTMLPanel>
 			</g:Tab>
 		</g:TabPanel>
+		</g:DisclosurePanel>
+		</g:VerticalPanel>
+		<!--  Spec Start-->
 		
 		<g:TabPanel ui:field="scarAnamnesisPanel" addStyleNames="{style.tabStyle}">
 			<g:Tab>
@@ -147,6 +185,24 @@
 				<n:StandardizedPatientAnamnesisSubViewImpl ui:field="standardizedPatientAnamneisSubViewImpl"></n:StandardizedPatientAnamnesisSubViewImpl>
 			</g:Tab>
 		</g:TabPanel>
-<!-- 	</div> -->
+		
 	</g:HTMLPanel>
+	
+<!-- 	<g:HTMLPanel> -->
+<!-- 		<div class="{style.patientControls} {style.controlsright}"> -->
+	<!-- Spec Start -->
+<!-- 		<g:Image styleName="left"  ui:field="arrow" url="/ch/unibas/medizin/osce/client/style/images/arrowdownselect.png"  ></g:Image> -->
+		<!-- Spec End -->
+<!-- 			<h3 class="{style.header}" style="display:inline "><span ui:field="displayRenderer"></span></h3> -->
+			
+<!-- 			<my:IconButton ui:field="print" icon="print"/> -->
+<!-- 			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton> -->
+<!-- 			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton> -->
+<!-- 	</div> -->
+		
+	
+<!-- 	</g:HTMLPanel> -->
+	
+<!-- 	</div> -->
+	
 </ui:UiBinder>
