@@ -30,6 +30,13 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -57,6 +64,10 @@
         <div id="value">
             <div class="{style.label}">Value</div>
             <div class="{style.value}" ui:field="value"/>
+        </div>
+        <div id="shownValue">
+            <div class="{style.label}">Shown Value</div>
+            <div class="{style.value}" ui:field="shownValue"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -51,4 +51,12 @@ privileged aspect AdvancedSearchCriteria_Roo_JavaBean {
         this.value = value;
     }
     
+    public String AdvancedSearchCriteria.getShownValue() {
+        return this.shownValue;
+    }
+    
+    public void AdvancedSearchCriteria.setShownValue(String shownValue) {
+        this.shownValue = shownValue;
+    }
+    
 }

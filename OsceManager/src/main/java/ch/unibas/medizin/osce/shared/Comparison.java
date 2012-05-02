@@ -8,7 +8,7 @@ import java.util.List;
  *
  */
 public enum Comparison {
-	EQUALS(" = "), NOT_EQUALS(" != "), LESS(" < "), MORE(" > ");
+	EQUALS(" = "), NOT_EQUALS(" <> "), LESS(" < "), MORE(" > ");
 	
 	private String stringValue;
 	

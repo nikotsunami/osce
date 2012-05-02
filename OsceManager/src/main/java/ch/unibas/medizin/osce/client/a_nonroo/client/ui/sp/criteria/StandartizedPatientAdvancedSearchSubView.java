@@ -23,13 +23,9 @@ public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget {
 		void addAnamnesisCriteriaClicked(Button parentButton);
 		void addLanguageCriteriaClicked(Button parentButton);
 		void addNationalityCriteriaClicked(IconButton parentButton);
-		public void deleteAdvancedSearchCriteria(AdvancedSearchCriteriaProxy criterium);
+		public void deleteAdvancedSearchCriteria(AdvancedSearchCriteriaProxy criterion);
 	}
 
     CellTable<AdvancedSearchCriteriaProxy> getTable();
-  
-    
     void setDelegate(Delegate delegate);
-
-    
 }

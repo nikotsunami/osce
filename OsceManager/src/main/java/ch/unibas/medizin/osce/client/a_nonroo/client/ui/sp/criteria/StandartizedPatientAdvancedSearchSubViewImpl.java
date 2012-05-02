@@ -9,17 +9,23 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -96,6 +102,23 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	private Delegate delegate;
 	
 	 public void init() {
+		 table.addColumn(new Column<AdvancedSearchCriteriaProxy, SafeHtml>(new SafeHtmlCell()) {
+			 @Override
+			 public SafeHtml getValue(AdvancedSearchCriteriaProxy criterion) {
+				 switch (criterion.getField()) {
+				 case NATIONALITY:
+					 return new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-flag\"></span>").toSafeHtml();
+				 case LANGUAGE:
+					 return new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-comment\"></span>").toSafeHtml();
+				 case ANAMNESIS:
+					 return new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-pencil\"></span>").toSafeHtml();
+				 case SCAR:
+					 return new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-search\"></span>").toSafeHtml();
+				 default:
+					 return new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-wrench\"></span>").toSafeHtml();
+				 }
+			 }			 
+		 });
 		 
 		 table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 			 Renderer<BindType> renderer = new EnumRenderer<BindType>();
@@ -105,41 +128,13 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	                return renderer.render(object.getBindType());
 	            }
 	        }, constants.bindType());
-	        
-	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
-	            Renderer<PossibleFields> renderer = new EnumRenderer<PossibleFields>();
+		 table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
-	            @Override
-	            public String getValue(AdvancedSearchCriteriaProxy object) {
-	                return renderer.render(object.getField());
-	            }
-	        }, constants.field());
-	        
-	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-	        	// TODO verbesserung wg. unterschiedlicher Vergleichstypen
-	            Renderer<Comparison> renderer = new EnumRenderer<Comparison>();
-
-	            @Override
-	            public String getValue(AdvancedSearchCriteriaProxy object) {
-	                return renderer.render(object.getComparation());
-	            }
-	        }, constants.comparison());
-	        
-	        table.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
-
-	            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-	                public String render(java.lang.String obj) {
-	                    return obj == null ? "" : String.valueOf(obj);
-	                }
-	            };
-
-	            @Override
-	            public String getValue(AdvancedSearchCriteriaProxy object) {
-	                return renderer.render(object.getValue());
-	            }
-	        }, constants.value());
+			 public String getValue(AdvancedSearchCriteriaProxy criterion) {
+				 return criterion.getShownValue();
+			 }
+		 }, constants.criterion());
 	        
 	        ActionCell.Delegate<AdvancedSearchCriteriaProxy> deleteDelegate = new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
 				@Override

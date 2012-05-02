@@ -32,6 +32,11 @@
         
         
         
+    
+        
+        
+        
+        
     <div id="field">
             <div class="{style.label}">Field</div>
             <div class="{style.value}">
@@ -60,6 +65,12 @@
             <div class="{style.label}">Value</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="value"/>
+            </div>
+        </div>
+        <div id="shownValue">
+            <div class="{style.label}">Shown Value</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="shownValue"/>
             </div>
         </div>
     </g:HTMLPanel>

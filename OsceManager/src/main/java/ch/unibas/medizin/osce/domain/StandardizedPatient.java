@@ -1,12 +1,10 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -21,8 +19,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -30,11 +26,12 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
-import ch.unibas.medizin.osce.shared.StandardizedPatientSearhField;
+import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -108,19 +105,6 @@ public class StandardizedPatient {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient")
     private Set<LangSkill> langskills = new HashSet<LangSkill>();
-
-    /**
-     * @param q search term
-     * @return number of matches in the db found
-     */
-    public static Long countPatientsBySearch(String q) {
-    	EntityManager em = entityManager();
-    	TypedQuery<Long> query = em.createQuery("SELECT COUNT(o) FROM StandardizedPatient o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Long.class);
-    	query.setParameter("q", "%" + q + "%");
-    	return query.getSingleResult();
-    }
-
-
     
     private static class PatientSearch {
     	
@@ -128,10 +112,10 @@ public class StandardizedPatient {
     	private StringBuilder endSearchString;
     	private StringBuilder sorting;
     	
-    	private boolean firstTime=true;
+    	private boolean isFirstArgument=true;
     	//requesttype
-    	private static String countRequest = "COUNT(stdPat)";
-      	private static String normalRequest = "stdPat";
+    	private static String countRequest = "COUNT(DISTINCT stdPat)";
+      	private static String normalRequest = "DISTINCT stdPat";
       	private static final String SEARCH_TYPE = "###REQUESTTYPE###";
       	
       	//basic strings
@@ -151,8 +135,7 @@ public class StandardizedPatient {
     	 * @param requesttype count of records request if true; patient object search otherwise.
     	 */
     	public PatientSearch(boolean requesttype){
-    		
-			wholeSearchString = new StringBuilder();
+    		wholeSearchString = new StringBuilder();
 			endSearchString = new StringBuilder();
 			sorting = new StringBuilder();
     		if(requesttype)
@@ -172,11 +155,43 @@ public class StandardizedPatient {
     	 * @param sortColumn column to sort by
     	 * @param sort sort direction: ASC / DESC
     	 */
-    	private void makeSortig(String sortColumn, Sorting sort){
+    	private void initSortig(String sortColumn, Sorting sort){
     		sorting.append(" ORDER BY ");
     		sorting.append(sortColumn);
     		sorting.append(" ");
     		sorting.append(sort);
+    	}
+
+		/**
+    	 * Context search : checkbox values
+    	 * @param searchWord
+    	 * @param searchThrough
+    	 */
+    	private void initSimpleSearch (String searchWord, List<String> searchThrough) {
+    		if (searchWord.trim().isEmpty())
+    			return;
+    		StringBuilder localSimpleSearchClause = new StringBuilder();
+    		Iterator<String> iter = searchThrough.iterator();
+        	while (iter.hasNext()) {
+    			String fieldname = (String) iter.next();
+    			StandardizedPatientSearchField field = StandardizedPatientSearchField.valueOf(fieldname);
+    			if(field == null)
+    				throw new SecurityException("SP: Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
+    			//search string OR statement group
+  	    		if (isFirstArgument){
+   	    			isFirstArgument = false;
+   	    			localSimpleSearchClause.append(" ( ");
+   	    		}
+  	    		else {
+  	    			localSimpleSearchClause.append(" OR ");
+  	    		}
+  	    		localSimpleSearchClause.append(field.getQueryPart());
+    			
+    		}
+        	if(localSimpleSearchClause.length() > 0){
+        		localSimpleSearchClause.append(" ) ");
+        	}
+        	endSearchString.append(localSimpleSearchClause);
     	}
     	
     	//basic data
@@ -187,7 +202,7 @@ public class StandardizedPatient {
     	 * @param bindType connection of clause in statement
     	 * @param comparition sign of clause (== != and so on)
     	 */
-    	void search(PossibleFields field, Long objectId,  String value, String bindType,  String comparition){
+    	void addAdvancedCriterion(PossibleFields field, Long objectId,  String value, String bindType,  String comparition){
 //    		Log.info("psremoveme: ------------- SEARCH ["+objectId+"] : ["+field+"] value ["+value+"]");
     		//form header of request
     		if ((field == PossibleFields.SCAR || field == PossibleFields.ANAMNESIS) && wholeSearchString.indexOf(joinAnamnesisForm) == -1){
@@ -202,8 +217,8 @@ public class StandardizedPatient {
     		if (field == PossibleFields.LANGUAGE && wholeSearchString.indexOf(joinSpokenLanguage) == -1){
 				wholeSearchString.append(joinSpokenLanguage);
     		}
-    		if(firstTime){
-    			firstTime = false;
+    		if(isFirstArgument){
+    			isFirstArgument = false;
     		} else {
     			endSearchString.append(" "+bindType);
     		}
@@ -213,6 +228,8 @@ public class StandardizedPatient {
     			parseLanguage(comparition, objectId, value);
     		} else if(field == PossibleFields.SCAR) {
     			parseScar(comparition, objectId);
+    		} else if (field == PossibleFields.NATIONALITY) {
+    			parseNationality(comparition, objectId);
     		} else {
 	    		//psfixme: screening (quoting) of value is mandatory to avoid code injection hack
     			endSearchString.append(field.getClause() + comparition + value+" " );
@@ -244,24 +261,22 @@ public class StandardizedPatient {
     	 * @param value value "Deutsch: A1"
     	 */
     	private void parseLanguage(String comparition, Long languageId, String value) {
-    		//Deutsch
-			String languageText = value.substring(0, value.indexOf(":")).trim();
-			Log.info("psremoveme languageText "+languageText);
-			//A1
-			String priorityText = value.substring(value.indexOf(":")+1, value.length()).trim();
-			Log.info("psremoveme priorityText "+priorityText);
-			endSearchString.append(" ( langSkills.id = " );
+			endSearchString.append(" ( langSkills.spokenlanguage.id = " );
 			endSearchString.append(languageId);
-			endSearchString.append(" AND langSkills.skill = ");
+			endSearchString.append(" AND langSkills.skill ");
+			endSearchString.append(comparition);
 			try{
-				endSearchString.append(quote(LangSkillLevel.valueOf(priorityText).getNumericLevel()) );
+				endSearchString.append(quote(LangSkillLevel.valueOf(value).getNumericLevel()) );
 			}
 			catch (Exception e) {
-				throw new SecurityException ("Prohibited constant value for LangSkillLevel : ["+priorityText+"]. Should it be included in the enum values? ");
+				throw new SecurityException ("Prohibited constant value for LangSkillLevel : ["+value+"]. Should it be included in the enum values? ");
 			}
 			endSearchString.append(" ) ");
-			
 		}
+    	
+    	private void parseNationality(String comparison, Long NationalityId) {
+    		endSearchString.append(" stdPat.nationality.id " + comparison + NationalityId + " ");
+    	}
 
 		/**
     	 * Amnesis form clause needs to be parsed. 
@@ -271,91 +286,75 @@ public class StandardizedPatient {
     	 * @param value - all the information needed anamnesisCheck.getType() + ": " + answer+":"+anamnesisCheck.getValue()
     	 *  1: Nein
     	 */
-    	//should be restyled when reverse engineering is done
-    	private static final String NEIN ="Nein";
-    	private static final String JA ="Ja";
-    	
-    	private void parseAmnesisForm(String comparition, Long questionId, String value) {
-    		StringTokenizer token = new StringTokenizer(value,":");
-			String typeName = token.nextToken().trim();  //value.substring(0, value.indexOf(":")).trim();
-			AnamnesisCheckTypes type = AnamnesisCheckTypes.valueOf(typeName); 
-			Log.info("psremoveme questionType "+type);
-			String answerText = token.nextToken().trim(); //value.substring(value.indexOf(":")+1, value.length()).trim();
-			Log.info("psremoveme answerText "+answerText);
-			String answerValues = "";
-			//attention: ":" delimiter could be found in values 
-			while(token.hasMoreTokens()){
-				answerValues+=token.nextToken();
-			}
-			answerValues = answerValues.trim();
-			//accuracy
-			endSearchString.append(" ( aCheck.id =");
-			endSearchString.append(questionId);
-			switch(type.getTypeId()){
-				//ja/nein
-				case 1:
-					if(NEIN.equals(answerText))
-						endSearchString.append(" AND aValues.truth = 0 ");
-					else
-						endSearchString.append(" AND aValues.truth = 1 ");
-					break;
-				case 2:
-					String cRequest = parseAdvancedAnamnesisRequest(comparition, answerText, answerValues);
-					if(cRequest!=null)
-						endSearchString.append(" AND aValues.anamnesischeck LIKE "+cRequest);
-					break;
-				case 3:
-					String mRequest = parseAdvancedAnamnesisRequest(comparition, answerText, answerValues);
-					if(mRequest!=null)
-						endSearchString.append(" AND aValues.anamnesischeck LIKE "+mRequest);
-					break;
-					
-			}
-			endSearchString.append(" ) ");
-		}
-    	/**
-    	 * Forming of 0-1 logic from  Prozac|Ritalin answerValues
-    	 * @param comparition connection of values 
-    	 * @param answer answer of the patient could be simple for QuestionMultS and include | for QuestionMultM 
-    	 * @param answerValues sting of possible answers
-    	 * @return HQL request part for search
-    	 */
-    	private String parseAdvancedAnamnesisRequest(String comparition, String answer, String answerValues){
-    		StringTokenizer answerParsed = new StringTokenizer(answer,"|");
-    		StringTokenizer valuesParsed = new StringTokenizer(answerValues,"|");
-    		StringBuilder result = new StringBuilder();
-    		String valueToken = "0";
-    		//0 or 1 depends on compare sign  size 3 index 2 0|1|0
-    		if(" = ".equals(comparition)){
-    			valueToken = "1";
-    		}
-    		//table question values
-    		while (valuesParsed.hasMoreTokens()){
-    			//we expect multiple answers delimited
-    			String currentValue= valuesParsed.nextToken();
-    			Log.info("RR psremoveme currentValue ["+currentValue+"]");
-    			boolean isMatched = false;
-    			while(answerParsed.hasMoreElements()){
-        			String currentAnswer= answerParsed.nextToken();
-        			Log.info("RR psremoveme currentAnswer ["+currentAnswer+"]");
-    				if(currentValue.equals(currentAnswer)){
-    					isMatched = true;
-    				}
+    	private void parseAmnesisForm(String comparition, Long anamnesisCheckId, String value) {
+    		AnamnesisCheck anamnesisCheck = AnamnesisCheck.findAnamnesisCheck(anamnesisCheckId);
+    		if (anamnesisCheck == null)
+    			throw new SecurityException("PatientSearch - Invalid AnamnesisCheck.id supplied");
+    		if (!validateAnamnesisChecksValues(anamnesisCheck, value))
+    			throw new SecurityException("PatientSearch - Invalid values supplied as answers: " + value);
+    		
+    		AnamnesisCheckTypes type = anamnesisCheck.getType();
+    		endSearchString.append(" (aCheck.id = ");
+    		endSearchString.append(anamnesisCheckId);
+
+    		switch (type) {
+    		case QUESTION_MULT_M:
+    		case QUESTION_MULT_S:
+    			value = value.replace('0', '_');
+    			if (!comparition.equals(Comparison.EQUALS.getStringValue())) {
+    				value = value.replace('1', '0');
     			}
-				if(isMatched){
-					result.append(valueToken);
-				} else {
-					result.append("_");//any symbol
-				}
-				result.append("-");//connection for values
-    			Log.info("RR psremoveme RESULT ["+result+"]");
+    			endSearchString.append(" AND aValues.anamnesisChecksValue LIKE " + quote("%" + value + "%"));
+    			break;
+    		case QUESTION_OPEN:
+    			endSearchString.append(" AND aValues.anamnesisChecksValue LIKE ");
+    			endSearchString.append(quote("%" + value + "%"));
+    			break;
+    		case QUESTION_YES_NO:
+    			if (Integer.parseInt(value) > 0) {
+    				endSearchString.append(" AND aValues.truth = 1");
+    			} else {
+    				endSearchString.append(" AND aValues.truth = 0");
+    			}
+    			break;
     		}
-			//last - removal
-			if(result.length() >0){
-				return "'"+result.substring(0, result.length()-1)+"'";
-			}
-    		return null;
+    		endSearchString.append(")");
+		}
+    	
+    	private boolean validateAnamnesisChecksValues(AnamnesisCheck check, String values) {
+    		switch (check.getType()) {
+    		case QUESTION_MULT_M:
+    		case QUESTION_MULT_S:
+    			return validateMultipleChoice(check.getValue().split("\\|").length, values);
+    		case QUESTION_YES_NO:
+    			try {
+    				Integer.parseInt(values);
+    			} catch (NumberFormatException e) {
+    				return false;
+    			}
+    		default:
+    			return true;
+    		}
     	}
+
+    	private boolean validateMultipleChoice(int numOptions, String values) {
+    		String[] tokens = values.split("-");
+    		if (tokens.length != numOptions)
+    			return false;
+
+    		int value;
+    		for (String token : tokens) {
+    			try {
+    				value = Integer.parseInt(token);
+    			} catch (NumberFormatException e) {
+    				return false;
+    			}
+    			if (value > 1 || value < 0)
+    				return false;
+    		}
+    		return true;
+    	}
+
     	
     	/**
     	 * Sanitizing code injection hack
@@ -364,37 +363,6 @@ public class StandardizedPatient {
     	 */
     	private String quote(String toQuote){
     		return "'"+StringUtils.replace(toQuote, "'", "''")+"'";
-    	}
-
-		/**
-    	 * Context search : checkbox values
-    	 * @param searchWord
-    	 * @param searchThrough
-    	 */
-    	private void makeSearchTextFileds 
-    	(String searchWord, List<String> searchThrough){
-    		StringBuilder localSimpleSearchClause = new StringBuilder();
-    		Iterator<String> iter = searchThrough.iterator();
-        	while (iter.hasNext()) {
-    			String fieldname = (String) iter.next();
-    			StandardizedPatientSearhField field = StandardizedPatientSearhField.valueOf(fieldname);
-    			if(field == null)
-    				throw new SecurityException("SP: Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
-    			//search string OR statement group
-  	    		if (firstTime){
-   	    			firstTime=false;
-   	    			localSimpleSearchClause.append(" ( ");
-   	    		}
-  	    		else {
-  	    			localSimpleSearchClause.append(" OR ");
-  	    		}
-  	    		localSimpleSearchClause.append(field.getQueryPart());
-    			
-    		}
-        	if(localSimpleSearchClause.length() > 0){
-        		localSimpleSearchClause.append(" ) ");
-        	}
-        	endSearchString.append(localSimpleSearchClause);
     	}
     }
     
@@ -409,86 +377,37 @@ public class StandardizedPatient {
      * @return
      */
 //    public static Long countPatientsByAdvancedSearchAndSort(
-    public static List<StandardizedPatient> findPatientsByAdvancedSearchAndSort(
-    		String sortColumn,
-    		Sorting order,
-    		String searchWord, 
-    		List<String> searchThrough,
-    		List<AdvancedSearchCriteria> searchCriteria, Integer firstResult, Integer maxResults
-    		) {
-	    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
-	    	EntityManager em = entityManager();
-	    	PatientSearch simpatSearch = new PatientSearch(false);
-	    	simpatSearch.makeSortig(sortColumn, order);
-	    	//context (simple) search
-	    	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
-	    	
-	    	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
-	    	while (iter.hasNext()) {
-	    		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
-	    		simpatSearch.search(criterium.getField(), criterium.getObjectId(), criterium.getValue(), 
-	    				criterium.getBindType().toString(), criterium.getComparation().getStringValue());
-				
-			}
-	    	String queryString = simpatSearch.getSQLString();
-	    	Log.info("Query: [" + queryString+"]");
-	    	TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
-	    	//this parameter is not required if we have no q value in the request
-	    	if(queryString.indexOf(":q") != -1){
-	    		q.setParameter("q", "%" + searchWord + "%");
-	        	Log.info("Search :[" + searchWord+"]");
-	    	}
-	    	q.setFirstResult(firstResult);
-	    	q.setMaxResults(maxResults);
-	    	List<StandardizedPatient> result  = q.getResultList(); 
-	    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
-	    	return result;
+    public static List<StandardizedPatient> findPatientsByAdvancedSearchAndSort(String sortColumn, Sorting order,
+    		String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria, 
+    		Integer firstResult, Integer maxResults) {
+    	//you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
+    	EntityManager em = entityManager();
+    	PatientSearch simpatSearch = new PatientSearch(false);
+    	simpatSearch.initSortig(sortColumn, order);
+    	//context (simple) search
+    	simpatSearch.initSimpleSearch (searchWord, searchThrough);
+
+    	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
+    	while (iter.hasNext()) {
+    		AdvancedSearchCriteria criterion = (AdvancedSearchCriteria) iter.next();
+    		simpatSearch.addAdvancedCriterion(criterion.getField(), criterion.getObjectId(), criterion.getValue(), 
+    				criterion.getBindType().toString(), criterion.getComparation().getStringValue());
+
+    	}
+    	String queryString = simpatSearch.getSQLString();
+    	Log.info("Query: [" + queryString+"]");
+    	TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
+    	//this parameter is not required if we have no q value in the request
+    	if(queryString.indexOf(":q") != -1){
+    		q.setParameter("q", "%" + searchWord + "%");
+    		Log.info("Search :[" + searchWord+"]");
+    	}
+    	q.setFirstResult(firstResult);
+    	q.setMaxResults(maxResults);
+    	List<StandardizedPatient> result  = q.getResultList(); 
+    	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+    	return result;
     }
-    	
-    
-    // ###OLD Code programmen by siebers, dont use
-    
-    /**
-     *  Get list by a criteria, paging and order
-     * @deprecated 
-     */
-    public static List<StandardizedPatient> 
-        findPatientsBySearchAndSort(
-            String sortColumn,
-            Boolean asc,
-            String q, 
-            Integer firstResult,
-            Integer maxResults, 
-            List<String> searchThrough,
-            List<String> fields,
-            List<Integer> comparisons,
-            List<String> values) {
-    	
-    	    	
-    	// (1) Criteria
-    	
-    	/*Criteria crit = null ;//searchCriteria(q, searchThrough, fields, comparisons, values);
-    	log.info("findPatientsBySearchAndSort");
-        // (2) Paging
-        
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);        
-        
-        // (3) Order
-        
-        if(asc) {
-        	crit.addOrder(Order.asc(sortColumn));
-        } else {
-        	crit.addOrder(Order.desc(sortColumn));
-        }
-        
-        return crit.list();*/
-    	return null;
-        
-        
-        
-    }
-    
     
     public static Long countPatientsByAdvancedSearchAndSort(String searchWord, 
     		List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria) {
@@ -496,12 +415,12 @@ public class StandardizedPatient {
     	EntityManager em = entityManager();
     	PatientSearch simpatSearch = new PatientSearch(true);
     	//context (simple) search
-    	simpatSearch.makeSearchTextFileds (searchWord, searchThrough);
+    	simpatSearch.initSimpleSearch (searchWord, searchThrough);
     	
     	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
     	while (iter.hasNext()) {
     		AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
-    		simpatSearch.search(criterium.getField(), criterium.getObjectId(), criterium.getValue(), 
+    		simpatSearch.addAdvancedCriterion(criterium.getField(), criterium.getObjectId(), criterium.getValue(), 
     				criterium.getBindType().toString(), criterium.getComparation().getStringValue());
 			
 		}
@@ -516,19 +435,5 @@ public class StandardizedPatient {
     	Long result  = q.getSingleResult(); 
     	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
     	return result;
-    }
-
-    
-    public static List<StandardizedPatient> findPatientsBySearch(String q, Integer firstResult, Integer maxResults) {
-        if (q == null) throw new IllegalArgumentException("The q argument is required");
-        EntityManager em = entityManager();
-        TypedQuery<StandardizedPatient> query = em.createQuery("SELECT o FROM StandardizedPatient AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", StandardizedPatient.class);
-        query.setParameter("q", "%" + q + "%");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
-        
-    	log.info("findPatientsBySearch");
-        
-        return query.getResultList();
     }
 }

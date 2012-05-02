@@ -22,24 +22,8 @@ import com.google.gwt.view.client.Range;
 @SuppressWarnings("deprecation")
 @Service(StandardizedPatient.class)
 public interface StandardizedPatientRequestNonRoo extends RequestContext {
-	
-	abstract Request<Long> countPatientsBySearch(String q);
-	
 	abstract Request<Long> countPatientsByAdvancedSearchAndSort(String searchWord, List<String> searchThrough, List<AdvancedSearchCriteriaProxy> searchCriteria);
 	
-	abstract Request<List<StandardizedPatientProxy>> findPatientsBySearch(String q, Integer firstResult, Integer maxResults);
-	
-	abstract Request<List<StandardizedPatientProxy>> findPatientsBySearchAndSort(String sortField, Boolean asc, String q, Integer firstResult, Integer maxResults, List<String> searchThrough, List<String> fields, List<Integer> comparisons, List<String> values);
-
-	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedSearchAndSort(
-    		String sortColumn,
-    		Sorting order,
-    		String searchWord, 
-    		List<String> searchThrough,
-    		List<AdvancedSearchCriteriaProxy> searchCriteria,
-    		Integer firstResult, Integer maxResults
-    		/*List<String> fields,
-    		List<String> bindType,
-    		List<String> comparations,
-    		List<String> values*/);
+	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedSearchAndSort(String sortColumn, Sorting order, String searchWord, 
+    		List<String> searchThrough, List<AdvancedSearchCriteriaProxy> searchCriteria, Integer firstResult, Integer maxResults);
 }

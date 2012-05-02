@@ -50,6 +50,13 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -104,6 +111,14 @@
                 </td>
                 <td>
                     <span ui:field="value"/>
+                </td>
+            </tr>
+            <tr id="shownValue">
+                <td>
+                    <span class="{style.label}">Shown Value:</span>
+                </td>
+                <td>
+                    <span ui:field="shownValue"/>
                 </td>
             </tr>
         </table>

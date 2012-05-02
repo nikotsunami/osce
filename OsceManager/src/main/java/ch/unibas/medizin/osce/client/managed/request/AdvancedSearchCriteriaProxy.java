@@ -40,4 +40,8 @@ public interface AdvancedSearchCriteriaProxy extends EntityProxy {
     abstract String getValue();
 
     abstract void setValue(String value);
+
+    abstract String getShownValue();
+
+    abstract void setShownValue(String shownValue);
 }

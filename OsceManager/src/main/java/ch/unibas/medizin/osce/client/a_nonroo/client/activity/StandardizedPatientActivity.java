@@ -9,6 +9,8 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
@@ -23,6 +25,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -38,12 +41,15 @@ import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.i18n.client.Constants;
 
 import com.google.gwt.place.shared.Place;
 
@@ -584,28 +590,47 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	/**
 	 * adds a criterion selected in one of the AdvancedSearchPopups to the criteria table.
 	 * @param objectId
-	 * @param string
+	 * @param value
 	 * @param bindType wether the criteria to add should be used with an and or or conjunction
 	 * @param possibleFields 
 	 * @param comparison Which type of comparison applies to the criterion (equals, greater, smaller, not equals)
 	 */
 	@Override
-	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison comparison) {
+	public void addAdvSeaBasicButtonClicked(Long objectId, String value, String shownValue, BindType bindType, PossibleFields possibleFields, Comparison comparison) {
 	//	requestAdvSeaCritStd.fire();
 //		requestAdvSeaCritStd.fire();
 //
-//		
+//
+		switch (possibleFields) {
+		case BMI:
+			shownValue = constants.bmi() + " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value;
+			break;
+		case HEIGHT:
+			shownValue = constants.height() + " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "cm";
+			break;
+		case WEIGHT:
+			shownValue = constants.weight() + " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "kg";
+		}
 		StandardizedPatientRequestNonRoo req = requests.standardizedPatientRequestNonRoo();
 		AdvancedSearchCriteriaProxy criteria = req.create(AdvancedSearchCriteriaProxy.class);
 		criteria = req.edit(criteria);
 		criteria.setBindType(bindType);
 		criteria.setComparation(comparison);
 		criteria.setField(possibleFields);
-		criteria.setValue(string);
+		criteria.setValue(value);
 		criteria.setObjectId(objectId);
+		criteria.setShownValue(shownValue);
 		req.fire();
+		
+		Log.debug("Added criterion: value = " + value);
+		
 		searchCriteria.add(criteria);
-
 		criteriaTable.setRowData(searchCriteria);
 		initSearch();
 	}
@@ -616,8 +641,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	public void deleteAdvancedSearchCriteria(AdvancedSearchCriteriaProxy criterion) {
 		searchCriteria.remove(criterion);
-		// TODO execute search
 		criteriaTable.setRowData(searchCriteria);
+		initSearch();
 	}
 	
 	/**
@@ -705,7 +730,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType, Comparison comparison) {
 		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart());
-		addAdvSeaBasicButtonClicked(scarProxy.getId(), scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.SCAR, comparison);
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.SCAR).render(comparison) + " " 
+				+ new ScarProxyRenderer().render(scarProxy);
+		String value = scarProxy.getTraitType().toString() + ":" + scarProxy.getBodypart();
+		addAdvSeaBasicButtonClicked(scarProxy.getId(), value, displayValue, bindType, PossibleFields.SCAR, comparison);
 	}
 
 	/**
@@ -718,18 +746,41 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@Override
 	public void addAnamnesisValueButtonClicked(AnamnesisCheckProxy anamnesisCheck, String answer, BindType bindType, Comparison comparison) {
-		// TODO Auto-generated method stub
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
-		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), anamnesisCheck.getType() + ": " + answer+":"+anamnesisCheck.getValue(), bindType, PossibleFields.ANAMNESIS, comparison);
+		String displayValue = "\"" + anamnesisCheck.getText() + "\" "
+				+ new EnumRenderer<Comparison>(EnumRenderer.Type.ANAMNESIS).render(comparison) + " "
+				+ humanReadableAnamnesisAnswer(anamnesisCheck, answer);
+		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), answer, displayValue, bindType, PossibleFields.ANAMNESIS, comparison);
 	}
 	
-	//TODO: @@@SPEC implement nationality search
+	private OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	private String humanReadableAnamnesisAnswer(AnamnesisCheckProxy proxy, String answer) {
+		switch(proxy.getType()) {
+		case QUESTION_OPEN:
+		case QUESTION_TITLE:
+			return answer;
+		case QUESTION_YES_NO:
+			if ("1".equals(answer))
+				return constants.yes();
+			return constants.no();
+		case QUESTION_MULT_M:
+		case QUESTION_MULT_S:
+			String[] answerTokens = answer.split("-");
+			String[] questionTokens = proxy.getValue().split("\\|");
+			for (int i=0; i < answerTokens.length; i++) {
+				if (answerTokens[i].equals("1"))
+					return questionTokens[i];
+			}
+		}
+		return "";
+	}
 	
 	@Override
-	public void addNationalityButtonClicked(NationalityProxy nationality,
-			BindType bindType, Comparison comparison) {
-		// TODO implement.
-		
+	public void addNationalityButtonClicked(NationalityProxy nationality, BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.NATIONALITY).render(comparison) + " " 
+				+ nationality.getNationality();
+		addAdvSeaBasicButtonClicked(nationality.getId(), nationality.getNationality(), displayValue, bindType, PossibleFields.NATIONALITY, comparison);
 	}
 
 	/**
@@ -743,7 +794,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@Override
 	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison comparison) {
-		addAdvSeaBasicButtonClicked(languageProxy.getId(), languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
+		String displayValue = constants.patientSpeaks() + " "
+				+ languageProxy.getLanguageName() + " "
+				+ new EnumRenderer<Comparison>(EnumRenderer.Type.LANGSKILL).render(comparison) + " "
+				+ new EnumRenderer<LangSkillLevel>().render(skill);
+		String value = skill.toString();
+		addAdvSeaBasicButtonClicked(languageProxy.getId(), value, displayValue, bindType, PossibleFields.LANGUAGE, comparison);
 	}
 
 

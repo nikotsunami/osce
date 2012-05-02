@@ -14,6 +14,7 @@ privileged aspect AdvancedSearchCriteria_Roo_ToString {
         sb.append("Field: ").append(getField()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("ObjectId: ").append(getObjectId()).append(", ");
+        sb.append("ShownValue: ").append(getShownValue()).append(", ");
         sb.append("Value: ").append(getValue()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
