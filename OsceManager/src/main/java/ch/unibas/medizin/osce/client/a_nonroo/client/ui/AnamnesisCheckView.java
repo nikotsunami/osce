@@ -1,10 +1,15 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.List;
+
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public interface AnamnesisCheckView extends IsWidget{
@@ -22,6 +27,8 @@ public interface AnamnesisCheckView extends IsWidget{
 		void newClicked();
 		void performSearch(String q);
 		void changeNumRowShown(String selectedValue);
+		void changeFilterTitleShown(String selectedTitle);
+
 	}
 
     CellTable<AnamnesisCheckProxy> getTable();
@@ -31,4 +38,13 @@ public interface AnamnesisCheckView extends IsWidget{
     
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+    
+    void setListBoxItem(String length);
+    void setSearchBoxShown(String selectedValue);
+    String getSearchBoxShown();
+    
+    void setSearchFocus(boolean focused);
+	ListBox getFilterTitle();
+    
+    QuickSearchBox getSearchBox();
 }
