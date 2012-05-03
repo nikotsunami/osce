@@ -22,6 +22,7 @@ public interface AnamnesisCheckView extends IsWidget{
 		void newClicked();
 		void performSearch(String q);
 		void changeNumRowShown(String selectedValue);
+				
 	}
 
     CellTable<AnamnesisCheckProxy> getTable();
@@ -31,4 +32,10 @@ public interface AnamnesisCheckView extends IsWidget{
     
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+    
+    void setListBoxItem(String length);
+    void setSearchBoxShown(String selectedValue);
+    String getSearchBoxShown();
+    
+    void setSearchFocus(boolean focused);
 }

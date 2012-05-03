@@ -3,7 +3,6 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,9 +10,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.cell.client.ActionCell;
@@ -21,9 +20,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -35,7 +32,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
@@ -49,6 +45,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AnamnesisCheckViewImpl extends Composite implements
 		AnamnesisCheckView {
+
+	// private AnamnesisCheckPlace place = null;
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -85,9 +83,11 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	public void rangeNumChangeHandler(ChangeEvent event) {
 		delegate.changeNumRowShown(rangeNum.getItemText(rangeNum
 				.getSelectedIndex()));
+
 	}
 
 	public void initList() {
+
 		for (VisibleRange range : VisibleRange.values()) {
 			rangeNum.addItem(range.getName(), range.getName());
 		}
@@ -134,6 +134,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addAnamnesisValue());
+		// this.place = place;
+
 	}
 
 	public String[] getPaths() {
@@ -172,20 +174,6 @@ public class AnamnesisCheckViewImpl extends Composite implements
 			}
 		}, null);
 
-		// TODO implement
-		// addColumn(new ActionCell<AnamnesisCheckProxy>(
-		// OsMaConstant.DELETE_ICON, new
-		// ActionCell.Delegate<AnamnesisCheckProxy>() {
-		// public void execute(AnamnesisCheckProxy proxy) {
-		// if (Window.confirm(constants.reallyDelete())) {
-		// delegate.deleteClicked(proxy);
-		// }
-		// }
-		// }), "", new GetValue<AnamnesisCheckProxy>() {
-		// public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
-		// return proxy;
-		// }
-		// }, null);
 		initList();
 	}
 
@@ -312,5 +300,37 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void setListBoxItem(String length) {
+		int index = 0;
+		int selectedIndex = 0;
+		for (VisibleRange range : VisibleRange.values()) {
+			if (range.getName().equals(length)) {
+				selectedIndex = index;
+
+			}
+			index++;
+		}
+
+		rangeNum.setItemSelected(selectedIndex, true);
+	}
+
+	@Override
+	public void setSearchBoxShown(String selectedValue) {
+
+		searchBox.setText(selectedValue);
+	}
+
+	@Override
+	public String getSearchBoxShown() {
+
+		return searchBox.getValue();
+	}
+
+	@Override
+	public void setSearchFocus(boolean focused) {
+		searchBox.setFocus(focused);
 	}
 }
