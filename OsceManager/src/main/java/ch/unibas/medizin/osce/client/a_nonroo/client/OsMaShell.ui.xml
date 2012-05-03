@@ -7,7 +7,7 @@
 <ui:style src="styles.css" />
 
 	<g:DockLayoutPanel unit='PX' ui:field="dockPanel">
-		<g:north size='80'>
+		<g:north size='30'>
 			<g:SimplePanel ui:field='headerPanel' />
 		</g:north>
 		

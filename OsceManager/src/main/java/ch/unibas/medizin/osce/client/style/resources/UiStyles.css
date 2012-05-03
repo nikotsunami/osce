@@ -1,0 +1,30 @@
+@sprite .backgroundRegular {
+	gwt-image: 'backgroundRegular';
+	width: auto;
+	height: 100%;
+}
+
+@sprite .backgroundActive {
+	gwt-image: 'backgroundActive';
+	width: auto;
+	height: 100%;
+}
+
+@sprite .backgroundHilight {
+	gwt-image: 'backgroundHilight';
+	width: auto;
+	height: 100%;
+}
+
+.alignRight {
+	float: right;
+}
+
+.horizontalSpacing {
+	padding-top: 2px;
+}
+
+.horizontalSpacing td {
+	padding-left: 5px;
+	padding-right: 5px;
+}

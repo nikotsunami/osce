@@ -38,6 +38,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.shared.Locale;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -49,6 +50,8 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.inject.Inject;
 
 public class OsMaHeaderLogic implements OsMaHeader.Delegate {
@@ -57,6 +60,7 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private List<BreadCrumb> breadCrumbs = new ArrayList<BreadCrumb>();
 	private EnumRenderer<Operation> renderer = new EnumRenderer<Operation>();
+	private Place currentPlace;
 	
 	@Inject
 	public OsMaHeaderLogic(OsMaRequestFactory requestFactory, PlaceController placeController, EventBus eventBus) {
@@ -96,6 +100,7 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		public void onPlaceChange(PlaceChangeEvent event) {
 			Log.debug("onPlaceChange()");
 			Place newPlace = event.getNewPlace();
+			currentPlace = newPlace;
 			removeOldPlace(newPlace);
 			addNewPlace(newPlace);
 		}
@@ -275,5 +280,27 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			}
 			Log.debug(sb.toString());
 		}
+	}
+	
+	public void changeLocale(Locale locale) {
+		int indexOfHash;
+		String newLocaleString;
+		String url = Location.getHref();
+		
+		url = url.replaceAll("locale=[a-z]{2,2}", "locale=" + locale.toString());
+		if (url.indexOf("locale") < 0) {
+			if (url.indexOf("?") > -1) {
+				newLocaleString = "&locale=" + locale.toString();
+			} else {
+				newLocaleString = "?locale=" + locale.toString();
+			}
+			
+			if ((indexOfHash = url.indexOf("#")) > -1) {
+				url = url.substring(0, indexOfHash - 1) + newLocaleString + url.substring(indexOfHash);
+			} else {
+				url = url + newLocaleString;
+			}
+		}
+		Window.open(url, "_self", "");
 	}
 }

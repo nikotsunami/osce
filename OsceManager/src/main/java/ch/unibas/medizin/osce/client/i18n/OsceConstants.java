@@ -149,6 +149,8 @@ public interface OsceConstants extends Constants {
 
 	public String log();
 
+	public String logout();
+
 	public String logDetails();
 
 	public String male();
@@ -222,6 +224,8 @@ public interface OsceConstants extends Constants {
 	public String searchField();
 
 	public String searchFor();
+	
+	public String selectLanguage();
 
 	public String sendSummonings();
 	
