@@ -44,7 +44,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	private AnamnesisCheckDetailsActivityMapper anamnesisCheckDetailsActivityMapper;
 
 	private static final String placeToken = "AnamnesisCheckPlace";
-	private static final String tempValue = "&&&*(&";
 
 	private String listSelectedValue = "10";
 
