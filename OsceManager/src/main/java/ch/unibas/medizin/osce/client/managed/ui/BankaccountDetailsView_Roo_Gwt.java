@@ -36,6 +36,18 @@ public abstract class BankaccountDetailsView_Roo_Gwt extends Composite implement
     @UiField
     SpanElement bIC;
 
+    @UiField
+    SpanElement ownerName;
+
+    @UiField
+    SpanElement postalCode;
+
+    @UiField
+    SpanElement city;
+
+    @UiField
+    SpanElement country;
+
     BankaccountProxy proxy;
 
     @UiField
@@ -48,6 +60,10 @@ public abstract class BankaccountDetailsView_Roo_Gwt extends Composite implement
         bankName.setInnerText(proxy.getBankName() == null ? "" : String.valueOf(proxy.getBankName()));
         iBAN.setInnerText(proxy.getIBAN() == null ? "" : String.valueOf(proxy.getIBAN()));
         bIC.setInnerText(proxy.getBIC() == null ? "" : String.valueOf(proxy.getBIC()));
+        ownerName.setInnerText(proxy.getOwnerName() == null ? "" : String.valueOf(proxy.getOwnerName()));
+        postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
+        city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
+        country.setInnerText(proxy.getCountry() == null ? "" : String.valueOf(proxy.getCountry()));
         displayRenderer.setInnerText(BankaccountProxyRenderer.instance().render(proxy));
     }
 }

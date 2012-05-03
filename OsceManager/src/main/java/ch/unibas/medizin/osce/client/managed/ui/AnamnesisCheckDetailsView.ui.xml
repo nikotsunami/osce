@@ -45,6 +45,13 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -99,6 +106,14 @@
                 </td>
                 <td>
                     <span ui:field="anamnesischecksvalues"/>
+                </td>
+            </tr>
+            <tr id="title">
+                <td>
+                    <span class="{style.label}">Title:</span>
+                </td>
+                <td>
+                    <span ui:field="title"/>
                 </td>
             </tr>
         </table>

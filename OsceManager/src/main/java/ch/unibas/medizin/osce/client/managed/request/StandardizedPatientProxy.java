@@ -3,6 +3,8 @@
 package ch.unibas.medizin.osce.client.managed.request;
 
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
 import java.util.Date;
@@ -73,6 +75,18 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setVideoPath(String videoPath);
 
+    abstract NationalityProxy getNationality();
+
+    abstract void setNationality(NationalityProxy nationality);
+
+    abstract ProfessionProxy getProfession();
+
+    abstract void setProfession(ProfessionProxy profession);
+
+    abstract String getSocialInsuranceNo();
+
+    abstract void setSocialInsuranceNo(String socialInsuranceNo);
+
     abstract Date getBirthday();
 
     abstract void setBirthday(Date birthday);
@@ -89,13 +103,13 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setBankAccount(BankaccountProxy bankAccount);
 
-    abstract NationalityProxy getNationality();
+    abstract MaritalStatus getMaritalStatus();
 
-    abstract void setNationality(NationalityProxy nationality);
+    abstract void setMaritalStatus(MaritalStatus maritalStatus);
 
-    abstract ProfessionProxy getProfession();
+    abstract WorkPermission getWorkPermission();
 
-    abstract void setProfession(ProfessionProxy profession);
+    abstract void setWorkPermission(WorkPermission workPermission);
 
     abstract AnamnesisFormProxy getAnamnesisForm();
 

@@ -130,5 +130,15 @@ public abstract class AnamnesisCheckListView_Roo_Gwt extends AbstractProxyListVi
                 return renderer.render(object.getAnamnesischecksvalues());
             }
         }, "Anamnesischecksvalues");
+        paths.add("title");
+        table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance();
+
+            @Override
+            public String getValue(AnamnesisCheckProxy object) {
+                return renderer.render(object.getTitle());
+            }
+        }, "Title");
     }
 }

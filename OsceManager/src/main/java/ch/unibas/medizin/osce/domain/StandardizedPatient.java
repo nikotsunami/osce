@@ -33,9 +33,11 @@ import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -82,7 +84,16 @@ public class StandardizedPatient {
     
     @Size(max = 255)
     private String videoPath;
+
+    @Enumerated
+    private Nationality nationality;
+
+    @Enumerated
+    private Profession profession;
     
+    @Size(max = 13)
+    @Pattern(regexp = "^[0-9]{13,13}$")
+    private String socialInsuranceNo;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
@@ -97,12 +108,12 @@ public class StandardizedPatient {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Bankaccount bankAccount;
-
+    
     @ManyToOne
-    private Nationality nationality;
-
+    private MaritalStatus maritalStatus;
+    
     @ManyToOne
-    private Profession profession;
+    private WorkPermission workPermission;
 
     @OneToOne(cascade = CascadeType.ALL)
     private AnamnesisForm anamnesisForm;

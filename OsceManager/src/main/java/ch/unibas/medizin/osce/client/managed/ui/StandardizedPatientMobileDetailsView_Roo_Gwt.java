@@ -11,6 +11,8 @@ import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -74,6 +76,15 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
     Element videoPath;
 
     @UiField
+    Element nationality;
+
+    @UiField
+    Element profession;
+
+    @UiField
+    Element socialInsuranceNo;
+
+    @UiField
     Element birthday;
 
     @UiField
@@ -86,10 +97,10 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
     Element bankAccount;
 
     @UiField
-    Element nationality;
+    Element maritalStatus;
 
     @UiField
-    Element profession;
+    Element workPermission;
 
     @UiField
     Element anamnesisForm;
@@ -116,12 +127,15 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
         weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
         immagePath.setInnerText(proxy.getImmagePath() == null ? "" : String.valueOf(proxy.getImmagePath()));
         videoPath.setInnerText(proxy.getVideoPath() == null ? "" : String.valueOf(proxy.getVideoPath()));
+        nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
+        profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
+        socialInsuranceNo.setInnerText(proxy.getSocialInsuranceNo() == null ? "" : String.valueOf(proxy.getSocialInsuranceNo()));
         birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getBirthday()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
         descriptions.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
         bankAccount.setInnerText(proxy.getBankAccount() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().render(proxy.getBankAccount()));
-        nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
-        profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
+        maritalStatus.setInnerText(proxy.getMaritalStatus() == null ? "" : String.valueOf(proxy.getMaritalStatus()));
+        workPermission.setInnerText(proxy.getWorkPermission() == null ? "" : String.valueOf(proxy.getWorkPermission()));
         anamnesisForm.setInnerText(proxy.getAnamnesisForm() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy.getAnamnesisForm()));
         langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
     }

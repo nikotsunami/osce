@@ -17,6 +17,8 @@ import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -41,26 +43,8 @@ public abstract class StandardizedPatientEditActivityWrapper_Roo_Gwt implements 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
         view.setGenderPickerValues(Arrays.asList(Gender.values()));
-        view.setDescriptionsPickerValues(Collections.<DescriptionProxy>emptyList());
-        requests.descriptionRequest().findDescriptionEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().getPaths()).fire(new Receiver<List<DescriptionProxy>>() {
-
-            public void onSuccess(List<DescriptionProxy> response) {
-                List<DescriptionProxy> values = new ArrayList<DescriptionProxy>();
-                values.add(null);
-                values.addAll(response);
-                view.setDescriptionsPickerValues(values);
-            }
-        });
-        view.setBankAccountPickerValues(Collections.<BankaccountProxy>emptyList());
-        requests.bankaccountRequest().findBankaccountEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().getPaths()).fire(new Receiver<List<BankaccountProxy>>() {
-
-            public void onSuccess(List<BankaccountProxy> response) {
-                List<BankaccountProxy> values = new ArrayList<BankaccountProxy>();
-                values.add(null);
-                values.addAll(response);
-                view.setBankAccountPickerValues(values);
-            }
-        });
+        view.setMaritalStatusPickerValues(Arrays.asList(MaritalStatus.values()));
+        view.setWorkPermissionPickerValues(Arrays.asList(WorkPermission.values()));
         view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
         requests.nationalityRequest().findNationalityEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).fire(new Receiver<List<NationalityProxy>>() {
 
@@ -79,6 +63,26 @@ public abstract class StandardizedPatientEditActivityWrapper_Roo_Gwt implements 
                 values.add(null);
                 values.addAll(response);
                 view.setProfessionPickerValues(values);
+            }
+        });
+        view.setDescriptionsPickerValues(Collections.<DescriptionProxy>emptyList());
+        requests.descriptionRequest().findDescriptionEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().getPaths()).fire(new Receiver<List<DescriptionProxy>>() {
+
+            public void onSuccess(List<DescriptionProxy> response) {
+                List<DescriptionProxy> values = new ArrayList<DescriptionProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setDescriptionsPickerValues(values);
+            }
+        });
+        view.setBankAccountPickerValues(Collections.<BankaccountProxy>emptyList());
+        requests.bankaccountRequest().findBankaccountEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().getPaths()).fire(new Receiver<List<BankaccountProxy>>() {
+
+            public void onSuccess(List<BankaccountProxy> response) {
+                List<BankaccountProxy> values = new ArrayList<BankaccountProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setBankAccountPickerValues(values);
             }
         });
         view.setAnamnesisFormPickerValues(Collections.<AnamnesisFormProxy>emptyList());
@@ -108,13 +112,17 @@ public abstract class StandardizedPatientEditActivityWrapper_Roo_Gwt implements 
 
         void setGenderPickerValues(Collection<Gender> values);
 
-        void setDescriptionsPickerValues(Collection<DescriptionProxy> values);
+        void setMaritalStatusPickerValues(Collection<MaritalStatus> values);
 
-        void setBankAccountPickerValues(Collection<BankaccountProxy> values);
+        void setWorkPermissionPickerValues(Collection<WorkPermission> values);
 
         void setNationalityPickerValues(Collection<NationalityProxy> values);
 
         void setProfessionPickerValues(Collection<ProfessionProxy> values);
+
+        void setDescriptionsPickerValues(Collection<DescriptionProxy> values);
+
+        void setBankAccountPickerValues(Collection<BankaccountProxy> values);
 
         void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values);
 

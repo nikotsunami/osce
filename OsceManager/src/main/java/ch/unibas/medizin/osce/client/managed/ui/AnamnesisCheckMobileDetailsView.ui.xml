@@ -25,6 +25,13 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -52,6 +59,10 @@
         <div id="anamnesischecksvalues">
             <div class="{style.label}">Anamnesischecksvalues</div>
             <div class="{style.value}" ui:field="anamnesischecksvalues"/>
+        </div>
+        <div id="title">
+            <div class="{style.label}">Title</div>
+            <div class="{style.value}" ui:field="title"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

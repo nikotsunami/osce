@@ -10,11 +10,11 @@ import ch.unibas.medizin.osce.domain.BankaccountDataOnDemand;
 import ch.unibas.medizin.osce.domain.Description;
 import ch.unibas.medizin.osce.domain.DescriptionDataOnDemand;
 import ch.unibas.medizin.osce.domain.Nationality;
-import ch.unibas.medizin.osce.domain.NationalityDataOnDemand;
 import ch.unibas.medizin.osce.domain.Profession;
-import ch.unibas.medizin.osce.domain.ProfessionDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
@@ -47,12 +47,6 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private DescriptionDataOnDemand StandardizedPatientDataOnDemand.descriptionDataOnDemand;
     
-    @Autowired
-    private NationalityDataOnDemand StandardizedPatientDataOnDemand.nationalityDataOnDemand;
-    
-    @Autowired
-    private ProfessionDataOnDemand StandardizedPatientDataOnDemand.professionDataOnDemand;
-    
     public StandardizedPatient StandardizedPatientDataOnDemand.getNewTransientStandardizedPatient(int index) {
         StandardizedPatient obj = new StandardizedPatient();
         setAnamnesisForm(obj, index);
@@ -64,17 +58,20 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setGender(obj, index);
         setHeight(obj, index);
         setImmagePath(obj, index);
+        setMaritalStatus(obj, index);
         setMobile(obj, index);
         setName(obj, index);
         setNationality(obj, index);
         setPostalCode(obj, index);
         setPreName(obj, index);
         setProfession(obj, index);
+        setSocialInsuranceNo(obj, index);
         setStreet(obj, index);
         setTelephone(obj, index);
         setTelephone2(obj, index);
         setVideoPath(obj, index);
         setWeight(obj, index);
+        setWorkPermission(obj, index);
         return obj;
     }
     
@@ -132,6 +129,11 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         obj.setImmagePath(immagePath);
     }
     
+    public void StandardizedPatientDataOnDemand.setMaritalStatus(StandardizedPatient obj, int index) {
+        MaritalStatus maritalStatus = null;
+        obj.setMaritalStatus(maritalStatus);
+    }
+    
     public void StandardizedPatientDataOnDemand.setMobile(StandardizedPatient obj, int index) {
         String mobile = "mobile_" + index;
         if (mobile.length() > 30) {
@@ -149,7 +151,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.setNationality(StandardizedPatient obj, int index) {
-        Nationality nationality = nationalityDataOnDemand.getRandomNationality();
+        Nationality nationality = Nationality.class.getEnumConstants()[0];
         obj.setNationality(nationality);
     }
     
@@ -167,8 +169,16 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.setProfession(StandardizedPatient obj, int index) {
-        Profession profession = professionDataOnDemand.getRandomProfession();
+        Profession profession = Profession.class.getEnumConstants()[0];
         obj.setProfession(profession);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setSocialInsuranceNo(StandardizedPatient obj, int index) {
+        String socialInsuranceNo = "socialInsur_" + index;
+        if (socialInsuranceNo.length() > 13) {
+            socialInsuranceNo = socialInsuranceNo.substring(0, 13);
+        }
+        obj.setSocialInsuranceNo(socialInsuranceNo);
     }
     
     public void StandardizedPatientDataOnDemand.setStreet(StandardizedPatient obj, int index) {
@@ -206,6 +216,11 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     public void StandardizedPatientDataOnDemand.setWeight(StandardizedPatient obj, int index) {
         Integer weight = new Integer(index);
         obj.setWeight(weight);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setWorkPermission(StandardizedPatient obj, int index) {
+        WorkPermission workPermission = null;
+        obj.setWorkPermission(workPermission);
     }
     
     public StandardizedPatient StandardizedPatientDataOnDemand.getSpecificStandardizedPatient(int index) {

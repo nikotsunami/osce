@@ -11,6 +11,8 @@ import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -260,6 +262,41 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getVideoPath());
             }
         }, "Video Path");
+        paths.add("nationality");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.NationalityProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance();
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getNationality());
+            }
+        }, "Nationality");
+        paths.add("profession");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance();
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getProfession());
+            }
+        }, "Profession");
+        paths.add("socialInsuranceNo");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getSocialInsuranceNo());
+            }
+        }, "Social Insurance No");
         paths.add("birthday");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
@@ -305,26 +342,36 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getBankAccount());
             }
         }, "Bank Account");
-        paths.add("nationality");
+        paths.add("maritalStatus");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.NationalityProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance();
+            Renderer<ch.unibas.medizin.osce.shared.MaritalStatus> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.MaritalStatus>() {
+
+                public String render(ch.unibas.medizin.osce.shared.MaritalStatus obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
 
             @Override
             public String getValue(StandardizedPatientProxy object) {
-                return renderer.render(object.getNationality());
+                return renderer.render(object.getMaritalStatus());
             }
-        }, "Nationality");
-        paths.add("profession");
+        }, "Marital Status");
+        paths.add("workPermission");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance();
+            Renderer<ch.unibas.medizin.osce.shared.WorkPermission> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.WorkPermission>() {
+
+                public String render(ch.unibas.medizin.osce.shared.WorkPermission obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
 
             @Override
             public String getValue(StandardizedPatientProxy object) {
-                return renderer.render(object.getProfession());
+                return renderer.render(object.getWorkPermission());
             }
-        }, "Profession");
+        }, "Work Permission");
         paths.add("anamnesisForm");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 

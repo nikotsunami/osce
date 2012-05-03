@@ -46,6 +46,16 @@ public abstract class AnamnesisCheckEditActivityWrapper_Roo_Gwt implements Activ
                 view.setAnamnesischecksvaluesPickerValues(values);
             }
         });
+        view.setTitlePickerValues(Collections.<AnamnesisCheckProxy>emptyList());
+        requests.anamnesisCheckRequest().findAnamnesisCheckEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisCheckProxy>>() {
+
+            public void onSuccess(List<AnamnesisCheckProxy> response) {
+                List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setTitlePickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -54,5 +64,7 @@ public abstract class AnamnesisCheckEditActivityWrapper_Roo_Gwt implements Activ
         void setTypePickerValues(Collection<AnamnesisCheckTypes> values);
 
         void setAnamnesischecksvaluesPickerValues(Collection<AnamnesisChecksValueProxy> values);
+
+        void setTitlePickerValues(Collection<AnamnesisCheckProxy> values);
     }
 }

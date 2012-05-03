@@ -92,6 +92,29 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -152,6 +175,18 @@
             <div class="{style.label}">Video Path</div>
             <div class="{style.value}" ui:field="videoPath"/>
         </div>
+        <div id="nationality">
+            <div class="{style.label}">Nationality</div>
+            <div class="{style.value}" ui:field="nationality"/>
+        </div>
+        <div id="profession">
+            <div class="{style.label}">Profession</div>
+            <div class="{style.value}" ui:field="profession"/>
+        </div>
+        <div id="socialInsuranceNo">
+            <div class="{style.label}">Social Insurance No</div>
+            <div class="{style.value}" ui:field="socialInsuranceNo"/>
+        </div>
         <div id="birthday">
             <div class="{style.label}">Birthday</div>
             <div class="{style.value}" ui:field="birthday"/>
@@ -168,13 +203,13 @@
             <div class="{style.label}">Bank Account</div>
             <div class="{style.value}" ui:field="bankAccount"/>
         </div>
-        <div id="nationality">
-            <div class="{style.label}">Nationality</div>
-            <div class="{style.value}" ui:field="nationality"/>
+        <div id="maritalStatus">
+            <div class="{style.label}">Marital Status</div>
+            <div class="{style.value}" ui:field="maritalStatus"/>
         </div>
-        <div id="profession">
-            <div class="{style.label}">Profession</div>
-            <div class="{style.value}" ui:field="profession"/>
+        <div id="workPermission">
+            <div class="{style.label}">Work Permission</div>
+            <div class="{style.value}" ui:field="workPermission"/>
         </div>
         <div id="anamnesisForm">
             <div class="{style.label}">Anamnesis Form</div>

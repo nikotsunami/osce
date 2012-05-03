@@ -90,6 +90,27 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="gender">
             <div class="{style.label}">Gender</div>
             <div class="{style.value}">
@@ -168,6 +189,24 @@
                 <g:TextBox ui:field="videoPath"/>
             </div>
         </div>
+        <div id="nationality">
+            <div class="{style.label}">Nationality</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="nationality"/>
+            </div>
+        </div>
+        <div id="profession">
+            <div class="{style.label}">Profession</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="profession"/>
+            </div>
+        </div>
+        <div id="socialInsuranceNo">
+            <div class="{style.label}">Social Insurance No</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="socialInsuranceNo"/>
+            </div>
+        </div>
         <div id="birthday">
             <div class="{style.label}">Birthday</div>
             <div class="{style.value}">
@@ -192,16 +231,16 @@
                 <g:ValueListBox ui:field="bankAccount"/>
             </div>
         </div>
-        <div id="nationality">
-            <div class="{style.label}">Nationality</div>
+        <div id="maritalStatus">
+            <div class="{style.label}">Marital Status</div>
             <div class="{style.value}">
-                <g:ValueListBox ui:field="nationality"/>
+                <g:ValueListBox ui:field="maritalStatus"/>
             </div>
         </div>
-        <div id="profession">
-            <div class="{style.label}">Profession</div>
+        <div id="workPermission">
+            <div class="{style.label}">Work Permission</div>
             <div class="{style.value}">
-                <g:ValueListBox ui:field="profession"/>
+                <g:ValueListBox ui:field="workPermission"/>
             </div>
         </div>
         <div id="anamnesisForm">
