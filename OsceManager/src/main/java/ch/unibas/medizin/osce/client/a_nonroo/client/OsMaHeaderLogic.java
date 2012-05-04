@@ -19,12 +19,15 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -255,7 +258,20 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			placeDescription = constants.students();
 		} else if (place instanceof SummoningsPlace) {
 			placeDescription = constants.sendSummonings();
-		} else {
+		}
+		//By spec role management[
+		else if (place instanceof TopicsAndSpecPlace) {
+			placeDescription = constants.topicsAndSpec();
+		}
+		else if (place instanceof RoleScriptTemplatePlace) {
+			placeDescription = constants.roleScriptTemplate();
+		}
+		else if (place instanceof RoomMaterialsPlace) {
+			placeDescription = constants.roomMaterials();
+		}
+		
+		//By spec Role Management]
+		else {
 			Log.warn("Unknown instance of place");
 			placeDescription = "?";
 		}

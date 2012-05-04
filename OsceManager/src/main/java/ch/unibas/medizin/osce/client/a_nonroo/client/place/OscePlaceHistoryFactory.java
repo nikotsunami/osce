@@ -50,6 +50,17 @@ public class OscePlaceHistoryFactory {
 	private final RoleAssignmentsPlace.Tokenizer roleAssignmentsPlaceTokenizer;
 	private final RoleAssignmentsDetailsPlace.Tokenizer roleAssignmentsDetailsPlaceTokenizer;
 	
+	// By SPEC role management[
+	private final TopicsAndSpecPlace.Tokenizer topicsAndSpecPlaceTokenizer;
+	private final TopicsAndSpecDetailsPlace.Tokenizer topicsAndSpecDetailsPlaceTokenizer;
+	
+	private final RoleScriptTemplatePlace.Tokenizer roleScriptTemplatePlaceTokenizer;
+	private final RoleScriptTemplateDetailsPlace.Tokenizer roleScriptTemplateDetailsPlaceTokenizer;
+	
+	private final RoomMaterialsPlace.Tokenizer roomMaterialsPlaceTokenizer;
+	private final RoomMaterialsDetailsPlace.Tokenizer roomMaterialsDetailsPlaceTokenizer;
+	
+	//By SPEC role management]
 
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
@@ -96,6 +107,15 @@ public class OscePlaceHistoryFactory {
 		
 		this.roleAssignmentsPlaceTokenizer = new RoleAssignmentsPlace.Tokenizer(requestFactory);
 		this.roleAssignmentsDetailsPlaceTokenizer = new RoleAssignmentsDetailsPlace.Tokenizer(requestFactory);
+		
+		//By Spec Role Management[
+		this.topicsAndSpecPlaceTokenizer = new TopicsAndSpecPlace.Tokenizer(requestFactory);
+		this.topicsAndSpecDetailsPlaceTokenizer = new TopicsAndSpecDetailsPlace.Tokenizer(requestFactory);
+		this.roleScriptTemplatePlaceTokenizer = new RoleScriptTemplatePlace.Tokenizer(requestFactory);
+		this.roleScriptTemplateDetailsPlaceTokenizer = new RoleScriptTemplateDetailsPlace.Tokenizer(requestFactory);
+		this.roomMaterialsPlaceTokenizer = new RoomMaterialsPlace.Tokenizer(requestFactory);
+		this.roomMaterialsDetailsPlaceTokenizer = new RoomMaterialsDetailsPlace.Tokenizer(requestFactory);
+		//By Spec Role Management]
 	}
 
 
@@ -223,5 +243,38 @@ public class OscePlaceHistoryFactory {
 	//		return proxyPlaceTokenizer;
 	//	}
 
+	//By Spec Role Management[
+	
+	public PlaceTokenizer<TopicsAndSpecPlace> getTopicsAndSpecPlaceTokenizer() {
+		return topicsAndSpecPlaceTokenizer;
+	}
+
+
+	public PlaceTokenizer<TopicsAndSpecDetailsPlace> getTopicsAndSpecDetailsPlaceTokenizer() {
+		return topicsAndSpecDetailsPlaceTokenizer;
+	}
+
+
+	public PlaceTokenizer<RoleScriptTemplatePlace> getRoleScriptTemplatePlaceTokenizer() {
+		return roleScriptTemplatePlaceTokenizer;
+	}
+
+
+	public PlaceTokenizer<RoleScriptTemplateDetailsPlace>getRoleScriptTemplateDetailsPlaceTokenizer() {
+		return roleScriptTemplateDetailsPlaceTokenizer;
+	}
+
+
+	public PlaceTokenizer<RoomMaterialsPlace> getRoomMaterialsPlaceTokenizer() {
+		return roomMaterialsPlaceTokenizer;
+	}
+
+
+	public PlaceTokenizer<RoomMaterialsDetailsPlace> getRoomMaterialsDetailsPlaceTokenizer() {
+		return roomMaterialsDetailsPlaceTokenizer;
+	}
+	
+	//By SPec Role Management]
+	
 
 }
