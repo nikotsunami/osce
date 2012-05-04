@@ -313,7 +313,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	/**
 	 * change Rang Number ListBox value 
 	 */
-	@Override
+	 @Override
 	public void changeNumRowShown(String selectedValue) {
 
 		listSelectedValue = selectedValue;
@@ -384,13 +384,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	@Override
 	public void changeFilterTitleShown(String selectedtTitle) {
 
-		AnamnesisCheckProxy id = null;
+		AnamnesisCheckProxy id = getSelectedFilterTitle();
+	
 
-		for (AnamnesisCheckProxy checkId : anamnesisCheck) {
-			if (selectedtTitle.equals(checkId.getText())) {
-				id = checkId;
-			}
-		}
+//		for (AnamnesisCheckProxy checkId : anamnesisCheck) {
+//			if (selectedtTitle.equals(checkId.getText())) {
+//				id = checkId;
+//			}
+//		}
 
 		if (id != null) {
 			fireCheckValueRequest(view.getSearchBox().getText(), id,
@@ -420,7 +421,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	 */
 	private AnamnesisCheckProxy getSelectedFilterTitle() {
 		for (AnamnesisCheckProxy checkId : anamnesisCheck) {
-			if (view.getFilterTitle()
+	
+			if (view.getFilterTitle().getSelectedIndex() != -1 && view.getFilterTitle()
 					.getItemText(view.getFilterTitle().getSelectedIndex())
 					.equals(checkId.getText())) {
 				return checkId;
