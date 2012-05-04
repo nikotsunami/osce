@@ -296,7 +296,7 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			}
 			
 			if ((indexOfHash = url.indexOf("#")) > -1) {
-				url = url.substring(0, indexOfHash - 1) + newLocaleString + url.substring(indexOfHash);
+				url = url.substring(0, indexOfHash) + newLocaleString + url.substring(indexOfHash);
 			} else {
 				url = url + newLocaleString;
 			}
