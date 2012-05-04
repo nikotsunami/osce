@@ -35,7 +35,7 @@ public class AnamnesisCheckPlace extends Place {
 
 	private String filterTileId = "";
 
-	private String searchStr = DEFAULT_SEARCHSTR;
+	private String searchStr = "";
 
 	public int getPageStart() {
 		return pageStart;
@@ -168,8 +168,11 @@ public class AnamnesisCheckPlace extends Place {
 			} else {
 				pageLen = place.getPageLen();
 			}
-
-			searchStr = place.getSearchStr();
+			if (place.getSearchStr().equals("")) {
+				searchStr ="";
+			} else {
+				searchStr = place.getSearchStr();
+			}
 
 			return place.getToken() + SEPARATOR + pageStart + SEPARATOR
 					+ pageLen + SEPARATOR + place.getFilterTileId() + SEPARATOR

@@ -27,6 +27,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -45,6 +46,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	private CellTable<AnamnesisCheckProxy> table;
 	private SingleSelectionModel<AnamnesisCheckProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
+	private HandlerRegistration selectionChangeHandler;
 	private ActivityManager activityManger;
 	private AnamnesisCheckDetailsActivityMapper anamnesisCheckDetailsActivityMapper;
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
@@ -71,7 +73,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		activityManger.setDisplay(null);
 		if (rangeChangeHandler != null) {
 			rangeChangeHandler.removeHandler();
-            rangeChangeHandler = null;
+			rangeChangeHandler = null;
+		}
+
+		if (selectionChangeHandler != null) {
+			selectionChangeHandler.removeHandler();
+			selectionChangeHandler = null;
 		}
 
 	}
@@ -105,7 +112,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 				keyProvider);
 		table.setSelectionModel(selectionModel);
 
-		selectionModel
+		selectionChangeHandler = selectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						AnamnesisCheckProxy selectedObject = selectionModel
@@ -116,30 +123,31 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 						}
 					}
 				});
-
 		view.setDelegate(this);
-		view.setSearchFocus(true);
+		// view.setSearchFocus(true);
 	}
 
 	private void init() {
 
 		setStartAndVisiableRange(place.getPageStart(), place.getPageLen());
 
-		if (place.getSearchStr().equals(place.DEFAULT_SEARCHSTR)) {
+		if (place.getSearchStr().equals("")) {
 			view.setSearchBoxShown(place.DEFAULT_SEARCHSTR);
 			init2("");
-			view.setSearchFocus(false);
-		} else if (place.getSearchStr().equals("")) {
-			view.setSearchBoxShown(place.DEFAULT_SEARCHSTR);
-			init2("");
-			view.setSearchFocus(true);
+			if (place.getFilterTileId().equals("")) {
+				view.setSearchFocus(false);
+			} else {
+
+				view.setSearchFocus(true);
+			}
 		} else {
 			view.setSearchBoxShown(place.getSearchStr());
 			init2(view.getSearchBoxShown());
+			view.setSearchFocus(true);
 		}
 
 	}
-	
+
 	private void init2(final String q) {
 
 		fireCountRequest(q, getSelectedFilterTitle(), new Receiver<Long>() {
@@ -159,13 +167,17 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 		if (rangeChangeHandler != null) {
 			rangeChangeHandler.removeHandler();
-            rangeChangeHandler = null;
+			rangeChangeHandler = null;
+		}
+
+		if (selectionChangeHandler != null) {
+			selectionChangeHandler.removeHandler();
+			selectionChangeHandler = null;
 		}
 
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						Log.debug("onRangeChange() - " + q);
 						AnamnesisCheckActivity.this.onRangeChanged(q);
 					}
 				});
@@ -315,11 +327,11 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		placeController.goTo(place);
 
 	}
-	
+
 	/**
-	 * change Rang Number ListBox value 
+	 * change Rang Number ListBox value
 	 */
-	 @Override
+	@Override
 	public void changeNumRowShown(String selectedValue) {
 
 		listSelectedValue = selectedValue;
@@ -342,62 +354,80 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	 * Find matching VisibleRange enum value and set "table" range keeping the
 	 * start value from the original range
 	 **/
-	public void setStartAndVisiableRange(final int start, String selectedValue) {
+	public void setStartAndVisiableRange(final int start,
+			final String selectedValueP) {
 
-		if (VisibleRange.ALL.getName().equals(selectedValue)) {
+		String selectedValue = null;
+		if (selectedValueP == null) {
+			selectedValue = view.getRangNumBox().getValue(
+					view.getRangNumBox().getSelectedIndex());
+		} else {
+			selectedValue = selectedValueP;
+		}
+		final String selectedValueF = selectedValue;
 
-			// Show all the rows.
+		AnamnesisCheckProxy title = getSelectedFilterTitle();
 
-			if (getSelectedFilterTitle() != null) {
+		// Show all the rows.
 
-				fireCountRequest("", getSelectedFilterTitle(),
-						new Receiver<Long>() {
+		fireCountRequest(view.getSearchBox().getText(), title,
+				new Receiver<Long>() {
 
-							@Override
-							public void onSuccess(Long response) {
-								int start = table.getPageStart();
-								int rows = response.intValue();
+					@Override
+					public void onSuccess(Long response) {
 
-								Range range = new Range(start, rows);
-								table.setVisibleRange(range);
+						int start = 0;
+						int rows = response.intValue();
 
+						if (table.getPageStart() < rows) {
+							start = table.getPageStart();
+
+						}
+
+						if (VisibleRange.ALL.getName().equals(selectedValueF)) {
+
+							Range range = new Range(start, rows);
+							table.setVisibleRange(range);
+							table.setRowCount(rows, true);
+
+						} else {
+							VisibleRange selectedRange = null;
+
+							for (VisibleRange range : VisibleRange.values()) {
+								if (range.getName().equals(selectedValueF)) {
+									selectedRange = range;
+
+								}
 							}
 
-						});
-			}
+							Range range = new Range(start, selectedRange
+									.getValue());
+							table.setVisibleRange(range);
+							table.setRowCount(rows, true);
 
-			return;
-		} else {
-			VisibleRange selectedRange = null;
+						}
 
-			for (VisibleRange range : VisibleRange.values()) {
-				if (range.getName().equals(selectedValue)) {
-					selectedRange = range;
+					}
 
-				}
-			}
+				});
 
-			Range range = new Range(start, selectedRange.getValue());
-			table.setVisibleRange(range);
-
-		}
+		return;
 
 	}
-	
+
 	/**
 	 * change Filter Title ListBox selectedValue
 	 */
 	@Override
 	public void changeFilterTitleShown(String selectedtTitle) {
 
-		AnamnesisCheckProxy id = getSelectedFilterTitle();
-	
+		AnamnesisCheckProxy id = null;
 
-//		for (AnamnesisCheckProxy checkId : anamnesisCheck) {
-//			if (selectedtTitle.equals(checkId.getText())) {
-//				id = checkId;
-//			}
-//		}
+		for (AnamnesisCheckProxy checkId : anamnesisCheck) {
+			if (selectedtTitle.equals(checkId.getText())) {
+				id = checkId;
+			}
+		}
 
 		if (id != null) {
 			fireCheckValueRequest(view.getSearchBox().getText(), id,
@@ -420,17 +450,19 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		}
 
 	}
-	
+
 	/**
-	 * get Fileter Title  AnamnesisCheckProxy
+	 * get Fileter Title AnamnesisCheckProxy
+	 * 
 	 * @return AnamnesisCheckProxy
 	 */
 	private AnamnesisCheckProxy getSelectedFilterTitle() {
 		for (AnamnesisCheckProxy checkId : anamnesisCheck) {
-	
-			if (view.getFilterTitle().getSelectedIndex() != -1 && view.getFilterTitle()
-					.getItemText(view.getFilterTitle().getSelectedIndex())
-					.equals(checkId.getText())) {
+			if (view.getFilterTitle().getSelectedIndex() != -1
+					&& view.getFilterTitle()
+							.getItemText(
+									view.getFilterTitle().getSelectedIndex())
+							.equals(checkId.getText())) {
 				return checkId;
 			}
 		}
@@ -441,6 +473,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	/**
 	 * set Fileter Title ListBox install Value
+	 * 
 	 * @param type
 	 * 
 	 */
@@ -465,12 +498,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 							&& place.getFilterTileId().equals(
 									title.getId().toString())) {
 						view.getFilterTitle().setSelectedIndex(idx);
-
 					}
 
 					idx++;
 				}
 
+				setStartAndVisiableRange(0, null);
 			}
 
 		});
@@ -478,8 +511,10 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	}
 
 	static AnamnesisCheckView systemStartViewS = null;
+
 	/**
 	 * get AnamnesisCheckView
+	 * 
 	 * @return AnamnesisCheckView
 	 */
 	private static AnamnesisCheckView getAnamnesisCheckView() {
@@ -488,6 +523,5 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		}
 		return systemStartViewS;
 	}
-	
 
 }
