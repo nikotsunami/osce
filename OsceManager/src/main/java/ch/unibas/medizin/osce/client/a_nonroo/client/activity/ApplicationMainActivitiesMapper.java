@@ -14,12 +14,15 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -143,6 +146,23 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			Log.debug("is RoleAssignmentsPlace");
 			return new RoleAssignmentsActivity(requests, placeController);
 		}
+		
+		//By Spec role management functionality[
+		if (place instanceof TopicsAndSpecPlace) {
+			Log.debug("is TopicsAndSpecPlace");
+			return new TopicsAndSpecActivity(requests, placeController);
+		}
+		
+		if (place instanceof RoleScriptTemplatePlace) {
+			Log.debug("is RoleScriptTemplatePlace");
+			return new RoleScriptTemplateActivity(requests, placeController);
+		}
+		
+		if (place instanceof RoomMaterialsPlace) {
+			Log.debug("is RoomMaterialsPlace");
+			return new RoomMaterialsActivity(requests, placeController);
+		}
+		//By Spec]
 		
 		return null;
 	}

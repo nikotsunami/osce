@@ -14,12 +14,15 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 
@@ -59,8 +62,11 @@ public class OsMaMainNav extends Composite {
 
 		masterDataPanel.getHeaderTextAccessor().setText(constants.masterData());
 		administrationPanel.getHeaderTextAccessor().setText(constants.administration());
-		examinationsPanel.getHeaderTextAccessor().setText(constants.exams());
-		simulationPatientsPanel.getHeaderTextAccessor().setText(constants.simPat());
+		examinationsPanel.getHeaderTextAccessor().setText(constants.exams());		
+		//By Spec[
+		//simulationPatientsPanel.getHeaderTextAccessor().setText(constants.simPat());
+		rolePanel.getHeaderTextAccessor().setText(constants.role());
+		//By SPec]
 
 		people.setText(constants.simulationPatients());
 		scars.setText(constants.traits());
@@ -75,6 +81,12 @@ public class OsMaMainNav extends Composite {
 		rooms.setText(constants.rooms());
 		log.setText(constants.log());
 
+		//By Spec[
+		topicsAndSpec.setText(constants.topicsAndSpec());
+		roleScriptTemplate.setText(constants.roleScriptTemplate());
+		roomMaterials.setText(constants.roomMaterials());
+		//By Spec]
+		
 		osces.setText(constants.osces());
 		circuit.setText(constants.circuit());
 		students.setText(constants.students());
@@ -84,7 +96,9 @@ public class OsMaMainNav extends Composite {
 		bellSchedule.setText(constants.exportBellSchedule());
 
 		roles.setText(constants.roles());
+		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
+		*/
 	}
 
 	@UiField
@@ -118,6 +132,24 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor log;						// Log
 
+	
+	//By SPEC Role[
+	@UiField 
+	DisclosurePanel rolePanel;
+	
+	@UiField
+	Anchor roles;
+	
+	@UiField
+	Anchor topicsAndSpec;
+	
+	@UiField
+	Anchor roleScriptTemplate;
+	
+	@UiField
+	Anchor roomMaterials;
+	
+	//By SPEC Role]
 	@UiField
 	DisclosurePanel examinationsPanel;		// Prüfungen
 
@@ -135,15 +167,20 @@ public class OsMaMainNav extends Composite {
 	Anchor individualSchedules; 	// Individuelle Pläne drucken
 	@UiField
 	Anchor bellSchedule;			// Klingelplan erstellen
-
+	
+	/* commented by spec
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
-
-	@UiField
-	Anchor roles;					// Rollen
+	*/
+	//commented  by spec[
+	//@UiField
+	//Anchor roles;					// Rollen
+	//commented by spec]
+	
+	/* commented by spec
 	@UiField
 	Anchor roleAssignments;			// Rollenzuweisung
-
+	*/
 
 	@UiHandler("people")
 	void patientsClicked(ClickEvent event) {
@@ -200,6 +237,22 @@ public class OsMaMainNav extends Composite {
 		placeController.goTo(new LogPlace("LogPlace"));
 	}
 
+	//By Spec[
+	@UiHandler("topicsAndSpec")
+	void topicsAndSpecClicked(ClickEvent event) {
+		placeController.goTo(new TopicsAndSpecPlace("TopicsAndSpecPlace"));
+	}
+	
+	@UiHandler("roleScriptTemplate")
+	void roleScriptTemplateClicked(ClickEvent event) {
+		placeController.goTo(new RoleScriptTemplatePlace("RoleScriptTemplatePlace"));
+	}
+	
+	@UiHandler("roomMaterials")
+	void roomMaterialsClicked(ClickEvent event) {
+		placeController.goTo(new RoomMaterialsPlace("RoomMaterialsPlace"));
+	}
+	//By Spec]
 	@UiHandler("osces")
 	void oscesClicked(ClickEvent event) {
 		placeController.goTo(new OscePlace("OscePlace"));
@@ -240,8 +293,10 @@ public class OsMaMainNav extends Composite {
 		placeController.goTo(new RolePlace("RolePlace"));
 	}
 	
+	/* commented by spec
 	@UiHandler("roleAssignments")
 	void roleAssignmentsClicked(ClickEvent event) {
 		placeController.goTo(new RoleAssignmentsPlace("RoleAssignmentsPlace"));
 	}
+	*/
 }
