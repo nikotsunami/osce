@@ -139,14 +139,6 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.profession = profession;
     }
     
-    public String StandardizedPatient.getSocialInsuranceNo() {
-        return this.socialInsuranceNo;
-    }
-    
-    public void StandardizedPatient.setSocialInsuranceNo(String socialInsuranceNo) {
-        this.socialInsuranceNo = socialInsuranceNo;
-    }
-    
     public Date StandardizedPatient.getBirthday() {
         return this.birthday;
     }
@@ -193,6 +185,14 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
     
     public void StandardizedPatient.setWorkPermission(WorkPermission workPermission) {
         this.workPermission = workPermission;
+    }
+    
+    public String StandardizedPatient.getSocialInsuranceNo() {
+        return this.socialInsuranceNo;
+    }
+    
+    public void StandardizedPatient.setSocialInsuranceNo(String socialInsuranceNo) {
+        this.socialInsuranceNo = socialInsuranceNo;
     }
     
     public AnamnesisForm StandardizedPatient.getAnamnesisForm() {

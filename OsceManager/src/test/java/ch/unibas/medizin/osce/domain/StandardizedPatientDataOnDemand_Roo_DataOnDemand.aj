@@ -10,7 +10,9 @@ import ch.unibas.medizin.osce.domain.BankaccountDataOnDemand;
 import ch.unibas.medizin.osce.domain.Description;
 import ch.unibas.medizin.osce.domain.DescriptionDataOnDemand;
 import ch.unibas.medizin.osce.domain.Nationality;
+import ch.unibas.medizin.osce.domain.NationalityDataOnDemand;
 import ch.unibas.medizin.osce.domain.Profession;
+import ch.unibas.medizin.osce.domain.ProfessionDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
@@ -46,6 +48,12 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     private DescriptionDataOnDemand StandardizedPatientDataOnDemand.descriptionDataOnDemand;
+    
+    @Autowired
+    private NationalityDataOnDemand StandardizedPatientDataOnDemand.nationalityDataOnDemand;
+    
+    @Autowired
+    private ProfessionDataOnDemand StandardizedPatientDataOnDemand.professionDataOnDemand;
     
     public StandardizedPatient StandardizedPatientDataOnDemand.getNewTransientStandardizedPatient(int index) {
         StandardizedPatient obj = new StandardizedPatient();
@@ -130,7 +138,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.setMaritalStatus(StandardizedPatient obj, int index) {
-        MaritalStatus maritalStatus = null;
+        MaritalStatus maritalStatus = MaritalStatus.class.getEnumConstants()[0];
         obj.setMaritalStatus(maritalStatus);
     }
     
@@ -151,7 +159,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.setNationality(StandardizedPatient obj, int index) {
-        Nationality nationality = Nationality.class.getEnumConstants()[0];
+        Nationality nationality = nationalityDataOnDemand.getRandomNationality();
         obj.setNationality(nationality);
     }
     
@@ -169,7 +177,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.setProfession(StandardizedPatient obj, int index) {
-        Profession profession = Profession.class.getEnumConstants()[0];
+        Profession profession = professionDataOnDemand.getRandomProfession();
         obj.setProfession(profession);
     }
     
@@ -219,7 +227,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.setWorkPermission(StandardizedPatient obj, int index) {
-        WorkPermission workPermission = null;
+        WorkPermission workPermission = WorkPermission.class.getEnumConstants()[0];
         obj.setWorkPermission(workPermission);
     }
     

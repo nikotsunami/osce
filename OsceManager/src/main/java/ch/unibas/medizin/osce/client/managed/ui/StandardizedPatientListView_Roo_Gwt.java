@@ -282,21 +282,6 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getProfession());
             }
         }, "Profession");
-        paths.add("socialInsuranceNo");
-        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
-
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-                public String render(java.lang.String obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(StandardizedPatientProxy object) {
-                return renderer.render(object.getSocialInsuranceNo());
-            }
-        }, "Social Insurance No");
         paths.add("birthday");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
@@ -372,6 +357,21 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getWorkPermission());
             }
         }, "Work Permission");
+        paths.add("socialInsuranceNo");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getSocialInsuranceNo());
+            }
+        }, "Social Insurance No");
         paths.add("anamnesisForm");
         table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 

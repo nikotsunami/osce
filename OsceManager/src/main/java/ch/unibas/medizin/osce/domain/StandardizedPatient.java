@@ -85,15 +85,11 @@ public class StandardizedPatient {
     @Size(max = 255)
     private String videoPath;
 
-    @Enumerated
+    @ManyToOne
     private Nationality nationality;
 
-    @Enumerated
+    @ManyToOne
     private Profession profession;
-    
-    @Size(max = 13)
-    @Pattern(regexp = "^[0-9]{13,13}$")
-    private String socialInsuranceNo;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
@@ -109,11 +105,15 @@ public class StandardizedPatient {
     @OneToOne(cascade = CascadeType.ALL)
     private Bankaccount bankAccount;
     
-    @ManyToOne
+    @Enumerated
     private MaritalStatus maritalStatus;
     
-    @ManyToOne
+    @Enumerated
     private WorkPermission workPermission;
+    
+    @Size(max = 13)
+    @Pattern(regexp = "^[0-9]{13,13}$")
+    private String socialInsuranceNo;
 
     @OneToOne(cascade = CascadeType.ALL)
     private AnamnesisForm anamnesisForm;

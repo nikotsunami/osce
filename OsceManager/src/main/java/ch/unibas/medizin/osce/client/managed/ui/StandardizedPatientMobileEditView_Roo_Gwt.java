@@ -97,9 +97,6 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
     ValueListBox<ProfessionProxy> profession = new ValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
 
     @UiField
-    TextBox socialInsuranceNo;
-
-    @UiField
     DateBox birthday;
 
     @UiField
@@ -126,6 +123,9 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
             return obj == null ? "" : String.valueOf(obj);
         }
     });
+
+    @UiField
+    TextBox socialInsuranceNo;
 
     @UiField(provided = true)
     ValueListBox<AnamnesisFormProxy> anamnesisForm = new ValueListBox<AnamnesisFormProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>());

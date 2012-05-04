@@ -83,10 +83,6 @@ public interface StandardizedPatientProxy extends EntityProxy {
 
     abstract void setProfession(ProfessionProxy profession);
 
-    abstract String getSocialInsuranceNo();
-
-    abstract void setSocialInsuranceNo(String socialInsuranceNo);
-
     abstract Date getBirthday();
 
     abstract void setBirthday(Date birthday);
@@ -110,6 +106,10 @@ public interface StandardizedPatientProxy extends EntityProxy {
     abstract WorkPermission getWorkPermission();
 
     abstract void setWorkPermission(WorkPermission workPermission);
+
+    abstract String getSocialInsuranceNo();
+
+    abstract void setSocialInsuranceNo(String socialInsuranceNo);
 
     abstract AnamnesisFormProxy getAnamnesisForm();
 
