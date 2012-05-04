@@ -31,6 +31,6 @@ public abstract class AnamnesisCheckDetailsActivity_Roo_Gwt extends AbstractActi
     protected EntityProxyId<AnamnesisCheckProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("anamnesischecksvalues").fire(callback);
+        requests.find(proxyId).with("anamnesischecksvalues", "title").fire(callback);
     }
 }

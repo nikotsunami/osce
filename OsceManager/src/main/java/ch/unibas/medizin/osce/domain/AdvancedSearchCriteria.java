@@ -36,6 +36,6 @@ public class AdvancedSearchCriteria {
     @NotNull
     @Size(max = 255)
 	private String value;
-
-  
+    @Size(max = 255)
+	private String shownValue;
 }

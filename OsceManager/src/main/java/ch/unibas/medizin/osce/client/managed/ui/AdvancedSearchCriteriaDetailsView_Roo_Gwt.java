@@ -45,6 +45,9 @@ public abstract class AdvancedSearchCriteriaDetailsView_Roo_Gwt extends Composit
     @UiField
     SpanElement value;
 
+    @UiField
+    SpanElement shownValue;
+
     AdvancedSearchCriteriaProxy proxy;
 
     @UiField
@@ -59,6 +62,7 @@ public abstract class AdvancedSearchCriteriaDetailsView_Roo_Gwt extends Composit
         bindType.setInnerText(proxy.getBindType() == null ? "" : String.valueOf(proxy.getBindType()));
         comparation.setInnerText(proxy.getComparation() == null ? "" : String.valueOf(proxy.getComparation()));
         value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
+        shownValue.setInnerText(proxy.getShownValue() == null ? "" : String.valueOf(proxy.getShownValue()));
         displayRenderer.setInnerText(AdvancedSearchCriteriaProxyRenderer.instance().render(proxy));
     }
 }

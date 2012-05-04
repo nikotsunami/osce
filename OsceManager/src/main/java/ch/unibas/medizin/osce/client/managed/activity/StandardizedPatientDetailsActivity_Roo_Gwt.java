@@ -18,6 +18,8 @@ import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace.Operation;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -36,6 +38,6 @@ public abstract class StandardizedPatientDetailsActivity_Roo_Gwt extends Abstrac
     protected EntityProxyId<StandardizedPatientProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("descriptions", "bankAccount", "nationality", "profession", "anamnesisForm", "langskills").fire(callback);
+        requests.find(proxyId).with("nationality", "profession", "descriptions", "bankAccount", "anamnesisForm", "langskills").fire(callback);
     }
 }

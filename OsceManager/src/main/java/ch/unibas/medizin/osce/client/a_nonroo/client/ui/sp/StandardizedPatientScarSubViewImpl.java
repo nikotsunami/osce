@@ -62,7 +62,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	private List<AbstractEditableCell<?, ?>> editableCells;
 	
 	@UiField(provided = true)
-    ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(ScarProxyRenderer.getInstance());
+    ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new ScarProxyRenderer());
 
 	private boolean addBoxesShown = true;
 

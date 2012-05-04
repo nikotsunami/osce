@@ -17,7 +17,7 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
 	 * TODO: PS: Pass two different values: for display purpose and for search (iterated values)
 	 */
 	interface Delegate {
-		void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison comparition);
+		void addAdvSeaBasicButtonClicked(Long objectId, String value, String displayValue, BindType bindType, PossibleFields possibleFields, Comparison comparition);
 	}
   
     void setDelegate(Delegate delegate);

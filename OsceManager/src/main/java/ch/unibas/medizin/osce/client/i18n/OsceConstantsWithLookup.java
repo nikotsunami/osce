@@ -59,12 +59,15 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String SCAR();
 	public String LANGUAGE();
 	public String ANAMNESIS();
+	//By SPEC[
+	public String NATIONALITY();
+	//By SPEC]
 	
 	public String AUTHOR();
 	public String REVIEWER();
 	
 	public String ASC();
-	public String DSC();
+	public String DESC();
 	
 //	public String SCAR();
 	public String TATTOO();

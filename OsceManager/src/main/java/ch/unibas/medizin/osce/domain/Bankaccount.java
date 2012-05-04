@@ -18,4 +18,15 @@ public class Bankaccount {
 
     @Size(max = 40)
     private String BIC;
+    
+    @Size(max = 40)
+    private String ownerName;
+    
+    private Integer postalCode;
+    
+    @Size(max = 30)
+    private String city;
+    
+    @Size(max = 30)
+    private String country;
 }

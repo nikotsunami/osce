@@ -29,4 +29,20 @@ public interface BankaccountProxy extends EntityProxy {
     abstract String getBIC();
 
     abstract void setBIC(String bIC);
+
+    abstract String getOwnerName();
+
+    abstract void setOwnerName(String ownerName);
+
+    abstract Integer getPostalCode();
+
+    abstract void setPostalCode(Integer postalCode);
+
+    abstract String getCity();
+
+    abstract void setCity(String city);
+
+    abstract String getCountry();
+
+    abstract void setCountry(String country);
 }

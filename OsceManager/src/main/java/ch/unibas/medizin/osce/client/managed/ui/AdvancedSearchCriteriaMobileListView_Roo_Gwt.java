@@ -31,6 +31,6 @@ public abstract class AdvancedSearchCriteriaMobileListView_Roo_Gwt extends Mobil
 
     public void init() {
         paths.add("value");
-        paths.add("id");
+        paths.add("shownValue");
     }
 }

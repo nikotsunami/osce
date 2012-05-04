@@ -112,6 +112,29 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -232,6 +255,30 @@
                     <span ui:field="videoPath"/>
                 </td>
             </tr>
+            <tr id="nationality">
+                <td>
+                    <span class="{style.label}">Nationality:</span>
+                </td>
+                <td>
+                    <span ui:field="nationality"/>
+                </td>
+            </tr>
+            <tr id="profession">
+                <td>
+                    <span class="{style.label}">Profession:</span>
+                </td>
+                <td>
+                    <span ui:field="profession"/>
+                </td>
+            </tr>
+            <tr id="socialInsuranceNo">
+                <td>
+                    <span class="{style.label}">Social Insurance No:</span>
+                </td>
+                <td>
+                    <span ui:field="socialInsuranceNo"/>
+                </td>
+            </tr>
             <tr id="birthday">
                 <td>
                     <span class="{style.label}">Birthday:</span>
@@ -264,20 +311,20 @@
                     <span ui:field="bankAccount"/>
                 </td>
             </tr>
-            <tr id="nationality">
+            <tr id="maritalStatus">
                 <td>
-                    <span class="{style.label}">Nationality:</span>
+                    <span class="{style.label}">Marital Status:</span>
                 </td>
                 <td>
-                    <span ui:field="nationality"/>
+                    <span ui:field="maritalStatus"/>
                 </td>
             </tr>
-            <tr id="profession">
+            <tr id="workPermission">
                 <td>
-                    <span class="{style.label}">Profession:</span>
+                    <span class="{style.label}">Work Permission:</span>
                 </td>
                 <td>
-                    <span ui:field="profession"/>
+                    <span ui:field="workPermission"/>
                 </td>
             </tr>
             <tr id="anamnesisForm">

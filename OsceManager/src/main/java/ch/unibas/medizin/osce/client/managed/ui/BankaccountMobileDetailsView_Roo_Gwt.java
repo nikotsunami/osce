@@ -35,6 +35,18 @@ public abstract class BankaccountMobileDetailsView_Roo_Gwt extends Composite imp
     @UiField
     Element bIC;
 
+    @UiField
+    Element ownerName;
+
+    @UiField
+    Element postalCode;
+
+    @UiField
+    Element city;
+
+    @UiField
+    Element country;
+
     BankaccountProxy proxy;
 
     public void setValue(BankaccountProxy proxy) {
@@ -44,5 +56,9 @@ public abstract class BankaccountMobileDetailsView_Roo_Gwt extends Composite imp
         bankName.setInnerText(proxy.getBankName() == null ? "" : String.valueOf(proxy.getBankName()));
         iBAN.setInnerText(proxy.getIBAN() == null ? "" : String.valueOf(proxy.getIBAN()));
         bIC.setInnerText(proxy.getBIC() == null ? "" : String.valueOf(proxy.getBIC()));
+        ownerName.setInnerText(proxy.getOwnerName() == null ? "" : String.valueOf(proxy.getOwnerName()));
+        postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
+        city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
+        country.setInnerText(proxy.getCountry() == null ? "" : String.valueOf(proxy.getCountry()));
     }
 }

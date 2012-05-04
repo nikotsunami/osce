@@ -44,7 +44,7 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
     ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.SCAR));
 	
 	@UiField (provided=true)
-	ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(ScarProxyRenderer.getInstance());
+	ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new ScarProxyRenderer());
 
 	public StandardizedPatientAdvancedSearchScarPopupImpl() {
 		OsceConstants constants = GWT.create(OsceConstants.class);

@@ -112,6 +112,27 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="gender">
                 <td>
                     <div class="{style.label}">Gender:</div>
@@ -216,6 +237,30 @@
                     <g:TextBox ui:field="videoPath"/>
                 </td>
             </tr>
+            <tr id="nationality">
+                <td>
+                    <div class="{style.label}">Nationality:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="nationality"/>
+                </td>
+            </tr>
+            <tr id="profession">
+                <td>
+                    <div class="{style.label}">Profession:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="profession"/>
+                </td>
+            </tr>
+            <tr id="socialInsuranceNo">
+                <td>
+                    <div class="{style.label}">Social Insurance No:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="socialInsuranceNo"/>
+                </td>
+            </tr>
             <tr id="birthday">
                 <td>
                     <div class="{style.label}">Birthday:</div>
@@ -248,20 +293,20 @@
                     <g:ValueListBox ui:field="bankAccount"/>
                 </td>
             </tr>
-            <tr id="nationality">
+            <tr id="maritalStatus">
                 <td>
-                    <div class="{style.label}">Nationality:</div>
+                    <div class="{style.label}">Marital Status:</div>
                 </td>
                 <td>
-                    <g:ValueListBox ui:field="nationality"/>
+                    <g:ValueListBox ui:field="maritalStatus"/>
                 </td>
             </tr>
-            <tr id="profession">
+            <tr id="workPermission">
                 <td>
-                    <div class="{style.label}">Profession:</div>
+                    <div class="{style.label}">Work Permission:</div>
                 </td>
                 <td>
-                    <g:ValueListBox ui:field="profession"/>
+                    <g:ValueListBox ui:field="workPermission"/>
                 </td>
             </tr>
             <tr id="anamnesisForm">

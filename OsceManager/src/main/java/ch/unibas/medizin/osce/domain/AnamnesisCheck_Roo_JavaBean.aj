@@ -3,6 +3,7 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import java.lang.Integer;
@@ -50,7 +51,7 @@ privileged aspect AnamnesisCheck_Roo_JavaBean {
     public void AnamnesisCheck.setAnamnesischecksvalues(Set<AnamnesisChecksValue> anamnesischecksvalues) {
         this.anamnesischecksvalues = anamnesischecksvalues;
     }
-
+    
     public AnamnesisCheck AnamnesisCheck.getTitle() {
         return this.title;
     }

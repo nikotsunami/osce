@@ -3,7 +3,7 @@
 	background-color: red;
 }
 
-//spec
+/*spec*/
 .arrowUp
 {
 	 background-image: url(images/arrowdownselect.png);
@@ -17,7 +17,7 @@
 {
 	float:left;
 }
-//spec
+/*end spec*/
 
 .panelHTML {
 	border: 0px solid #ddf;
@@ -178,8 +178,9 @@
 	width: 100%;
 }
 
-@
-def contentWidth   850px  ; .disabled {
+@def contentWidth   850px  ; 
+
+.disabled {
 	color: gray;
 }
 
@@ -289,7 +290,7 @@ body {
 	background: none repeat scroll 0 0 #ffffff;
 }
 
-/* TODO: saubere LA¶sung fA?r Ladebildschirm */
+/* TODO: saubere Loesung fuer Ladebildschirm */
 .loadingScreen {
 	position: absolute;
 	margin: 100px auto;
@@ -415,7 +416,7 @@ body {
 	width: 98%;
 }
 
-/* Style fA?r Details-Views-Inhalte */
+/* Style fuer Details-Views-Inhalte */
 .fields col {
 	min-width: 100px;
 }

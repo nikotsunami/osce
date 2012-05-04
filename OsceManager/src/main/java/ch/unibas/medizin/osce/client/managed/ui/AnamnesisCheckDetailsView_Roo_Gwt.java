@@ -45,6 +45,9 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
     @UiField
     SpanElement anamnesischecksvalues;
 
+    @UiField
+    SpanElement title;
+
     AnamnesisCheckProxy proxy;
 
     @UiField
@@ -59,6 +62,7 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
         sort_order.setInnerText(proxy.getSort_order() == null ? "" : String.valueOf(proxy.getSort_order()));
         type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
         anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
+        title.setInnerText(proxy.getTitle() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy.getTitle()));
         displayRenderer.setInnerText(AnamnesisCheckProxyRenderer.instance().render(proxy));
     }
 }

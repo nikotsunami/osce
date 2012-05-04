@@ -49,6 +49,11 @@
             
             
             
+        
+            
+            
+            
+            
         <tr id="text">
                 <td>
                     <div class="{style.label}">Text:</div>
@@ -87,6 +92,14 @@
                 </td>
                 <td>
                     <a:AnamnesisChecksValueSetEditor ui:field="anamnesischecksvalues"/>
+                </td>
+            </tr>
+            <tr id="title">
+                <td>
+                    <div class="{style.label}">Title:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="title"/>
                 </td>
             </tr>
         </table>
