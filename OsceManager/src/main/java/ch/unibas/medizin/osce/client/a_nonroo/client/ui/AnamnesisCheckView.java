@@ -47,4 +47,6 @@ public interface AnamnesisCheckView extends IsWidget{
 	ListBox getFilterTitle();
     
     QuickSearchBox getSearchBox();
+    
+    ListBox getRangNumBox();
 }
