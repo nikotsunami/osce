@@ -88,6 +88,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	@UiHandler("filterTitle")
 	public void filterTitleChangeHandler(ChangeEvent event) {
+
 		delegate.changeFilterTitleShown(filterTitle.getItemText(filterTitle
 				.getSelectedIndex()));
 
@@ -354,6 +355,11 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	@Override
 	public QuickSearchBox getSearchBox() {
 		return searchBox;
+	}
+
+	@Override
+	public ListBox getRangNumBox() {
+		return rangeNum;
 	}
 
 }
