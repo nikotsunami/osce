@@ -69,6 +69,11 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	 */
 	public void onStop() {
 		activityManger.setDisplay(null);
+		if (rangeChangeHandler != null) {
+			rangeChangeHandler.removeHandler();
+            rangeChangeHandler = null;
+		}
+
 	}
 
 	/**
@@ -154,6 +159,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 		if (rangeChangeHandler != null) {
 			rangeChangeHandler.removeHandler();
+            rangeChangeHandler = null;
 		}
 
 		rangeChangeHandler = table
