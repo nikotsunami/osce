@@ -263,5 +263,7 @@ public interface OsceConstants extends Constants {
 	public String print();
 
 	public String export();
+	
+	public String filterTitle();
 
 }
