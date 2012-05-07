@@ -3,6 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -117,7 +118,7 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		headerText += proxy.getText() == null ? "" : String.valueOf(proxy.getText());
 		header.setInnerText(headerText);
 		
-		type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
+		type.setInnerText(proxy.getType() == null ? "" : new EnumRenderer<AnamnesisCheckTypes>().render(proxy.getType()));
 		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
 		
 		if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {

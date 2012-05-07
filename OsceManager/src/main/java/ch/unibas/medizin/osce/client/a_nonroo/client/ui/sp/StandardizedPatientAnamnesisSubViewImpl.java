@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableNoHilightResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
@@ -65,7 +66,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite implement
 	CheckBox showUnanswered;
 
 	public StandardizedPatientAnamnesisSubViewImpl() {
-		MyCellTableResources tableResources = GWT.create(MyCellTableResources.class);
+		MyCellTableNoHilightResources tableResources = GWT.create(MyCellTableNoHilightResources.class);
 		table = new CellTable<AnamnesisChecksValueProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
