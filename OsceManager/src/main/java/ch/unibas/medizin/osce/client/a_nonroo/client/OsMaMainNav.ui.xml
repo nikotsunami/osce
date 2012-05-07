@@ -29,6 +29,21 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
+		<!-- By Spec Start -->
+		<g:DisclosurePanel ui:field="rolePanel" open="true" addStyleNames='{style.mainNavPanel}'>
+			<g:header></g:header>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
+				<g:Anchor ui:field="roles"></g:Anchor>
+				<g:Anchor ui:field="topicsAndSpec"></g:Anchor>
+				<g:Anchor ui:field="roleScriptTemplate"></g:Anchor>
+				<g:Anchor ui:field="roomMaterials"></g:Anchor>
+				
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		<!-- By SPec End -->
+		
+		
+		
 		<g:DisclosurePanel ui:field="examinationsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
@@ -41,14 +56,16 @@
 				<g:Anchor ui:field="bellSchedule"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
-		
+		<!-- Commented by spec 
 		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="roles"></g:Anchor>
+			 <g:Anchor ui:field="roles"></g:Anchor>
+			 	
 				<g:Anchor ui:field="roleAssignments"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
+-->	
 
 		<!-- <g:DisclosurePanel ui:field="administratorPanel">
 			<g:header>alt Administratoren</g:header>

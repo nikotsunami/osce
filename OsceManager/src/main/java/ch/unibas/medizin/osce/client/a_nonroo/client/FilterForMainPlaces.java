@@ -26,6 +26,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetail
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplateDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
@@ -35,6 +39,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 
 import com.google.gwt.activity.shared.FilteredActivityMapper;
 import com.google.gwt.place.shared.Place;
@@ -204,6 +210,35 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return new RoleAssignmentsPlace(
 					roleAssignmentsDetailsPlace.getToken());
 		}
+		
+		//By spec role management[
+		if (place instanceof TopicsAndSpecPlace)
+			return (TopicsAndSpecPlace) place;
+		
+		if (place instanceof TopicsAndSpecDetailsPlace){
+			TopicsAndSpecDetailsPlace topicsAndSpecDetailsPlace = (TopicsAndSpecDetailsPlace) place;
+			return new TopicsAndSpecPlace(topicsAndSpecDetailsPlace.getToken());
+		}
+		
+		if (place instanceof RoleScriptTemplatePlace)
+			return (RoleScriptTemplatePlace) place;
+		
+		if (place instanceof RoleScriptTemplateDetailsPlace){
+			RoleScriptTemplateDetailsPlace roleScriptTemplateDetailsPlace = (RoleScriptTemplateDetailsPlace) place;
+			return new RoleScriptTemplatePlace(roleScriptTemplateDetailsPlace.getToken());
+		}
+		
+		if (place instanceof RoomMaterialsPlace)
+			return (RoomMaterialsPlace) place;
+		
+		if (place instanceof RoomMaterialsDetailsPlace){
+			RoomMaterialsDetailsPlace roomMaterialsDetailsPlace = (RoomMaterialsDetailsPlace) place;
+			return new RoomMaterialsPlace(roomMaterialsDetailsPlace.getToken());
+		}
+		
+	
+		
+		//by spec role management]
 
 		return null;
 	}

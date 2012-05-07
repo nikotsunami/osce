@@ -207,7 +207,7 @@ public interface OsceConstants extends Constants {
 
 	public String roleAssignments();
 
-	public String roles();
+	// public String roles(); //By SPEC
 
 	public String roomLength();
 
@@ -266,4 +266,15 @@ public interface OsceConstants extends Constants {
 	public String filterTitle();
 	public String yes();
 
+//by spec role menu[
+	public String roles();
+	
+	public String topicsAndSpec();
+	
+	public String roleScriptTemplate();
+	
+	public String roomMaterials();
+	
+	public String role();
+	//by spec role menu]
 }
