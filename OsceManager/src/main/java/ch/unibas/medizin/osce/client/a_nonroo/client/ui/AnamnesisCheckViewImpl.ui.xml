@@ -10,6 +10,7 @@
 				<g:HTMLPanel>
 					<div class="{style.controls} {style.controlsleft} ">
 						<my:QuickSearchBox ui:field="searchBox" />
+						<g:ListBox width="150px"  ui:field="filterTitle"/>
 						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>
 

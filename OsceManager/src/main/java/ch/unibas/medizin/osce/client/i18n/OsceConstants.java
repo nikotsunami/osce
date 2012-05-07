@@ -262,7 +262,8 @@ public interface OsceConstants extends Constants {
 	public String value();
 
 	public String weight();
-
+	
+	public String filterTitle();
 	public String yes();
 
 //by spec role menu[

@@ -38,110 +38,113 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
    private PlaceController placeController;
 
 	@Inject
-	    public ApplicationMainActivitiesMapper(OsMaRequestFactory requests, PlaceController placeController) {
-	        this.requests = requests;
-	        this.placeController = placeController;
-	    }
+	public ApplicationMainActivitiesMapper(OsMaRequestFactory requests,
+			PlaceController placeController) {
+		this.requests = requests;
+		this.placeController = placeController;
+	}
 
 	@Override
 	public Activity getActivity(Place place) {
-		Log.debug("ApplicationMainActivitiesMapper.getActivity" + placeController.getWhere());
-		
+		Log.debug("ApplicationMainActivitiesMapper.getActivity"
+				+ placeController.getWhere());
+
 		if (place instanceof StandardizedPatientPlace) {
 			Log.debug("is StandardizedPatientPlace");
 			return new StandardizedPatientActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof ScarPlace) {
 			Log.debug("is ScarPlace");
 			return new ScarActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof RoomPlace) {
 			Log.debug("is RoomPlace");
 			return new RoomActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof LogPlace) {
 			Log.debug("is LogPlace");
 			return new LogActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof AnamnesisCheckPlace) {
 			Log.debug("is AnamnesisCheckPlace");
-			return new AnamnesisCheckActivity(requests, placeController);
+			return new AnamnesisCheckActivity(requests, placeController,
+					(AnamnesisCheckPlace) place);
 		}
-		
+
 		if (place instanceof ClinicPlace) {
 			Log.debug("is ClinicPlace");
 			return new ClinicActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof DoctorPlace) {
 			Log.debug("is DoctorPlace");
 			return new DoctorActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof AdministratorPlace) {
 			Log.debug("is AdministratorPlace");
 			return new AdministratorActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof NationalityPlace) {
 			Log.debug("is NationalityPlace");
 			return new NationalityActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof SpokenLanguagePlace) {
 			Log.debug("is SpokenLanguagePlace");
 			return new SpokenLanguageActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof ProfessionPlace) {
 			Log.debug("is ProfessionPlace");
 			return new ProfessionActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof OscePlace) {
 			Log.debug("is OscePlace");
 			return new OsceActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof CircuitPlace) {
 			Log.debug("is CircuitPlace");
 			return new CircuitActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof StudentsPlace) {
 			Log.debug("is StudentsPlace");
 			return new StudentsActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof ExaminationSchedulePlace) {
 			Log.debug("is ExaminationSchedulePlace");
 			return new ExaminationScheduleActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof SummoningsPlace) {
 			Log.debug("is SummoningsPlace");
 			return new SummoningsActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof IndividualSchedulesPlace) {
 			Log.debug("is IndividualSchedulesPlace");
 			return new IndividualSchedulesActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof BellSchedulePlace) {
 			Log.debug("is BellSchedulePlace");
 			return new BellScheduleActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof RolePlace) {
 			Log.debug("is RolePlace");
 			return new RoleActivity(requests, placeController);
 		}
-		
+
 		if (place instanceof RoleAssignmentsPlace) {
 			Log.debug("is RoleAssignmentsPlace");
 			return new RoleAssignmentsActivity(requests, placeController);
@@ -163,7 +166,7 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new RoomMaterialsActivity(requests, placeController);
 		}
 		//By Spec]
-		
+
 		return null;
 	}
 
