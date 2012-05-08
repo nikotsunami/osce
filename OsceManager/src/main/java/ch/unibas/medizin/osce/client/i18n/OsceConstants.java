@@ -270,6 +270,7 @@ public interface OsceConstants extends Constants {
 	public String roles();
 	
 	public String topicsAndSpec();
+
 	
 	public String roleScriptTemplate();
 	
@@ -277,4 +278,7 @@ public interface OsceConstants extends Constants {
 	
 	public String role();
 	//by spec role menu]
+	public String order();
+	public String saveOrder();
+
 }
