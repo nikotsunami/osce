@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Bankaccount;
+import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -26,7 +27,11 @@ privileged aspect BankaccountDataOnDemand_Roo_DataOnDemand {
         Bankaccount obj = new Bankaccount();
         setBIC(obj, index);
         setBankName(obj, index);
+        setCity(obj, index);
+        setCountry(obj, index);
         setIBAN(obj, index);
+        setOwnerName(obj, index);
+        setPostalCode(obj, index);
         return obj;
     }
     
@@ -46,12 +51,41 @@ privileged aspect BankaccountDataOnDemand_Roo_DataOnDemand {
         obj.setBankName(bankName);
     }
     
+    public void BankaccountDataOnDemand.setCity(Bankaccount obj, int index) {
+        String city = "city_" + index;
+        if (city.length() > 30) {
+            city = city.substring(0, 30);
+        }
+        obj.setCity(city);
+    }
+    
+    public void BankaccountDataOnDemand.setCountry(Bankaccount obj, int index) {
+        String country = "country_" + index;
+        if (country.length() > 30) {
+            country = country.substring(0, 30);
+        }
+        obj.setCountry(country);
+    }
+    
     public void BankaccountDataOnDemand.setIBAN(Bankaccount obj, int index) {
         String IBAN = "IBAN_" + index;
         if (IBAN.length() > 40) {
             IBAN = IBAN.substring(0, 40);
         }
         obj.setIBAN(IBAN);
+    }
+    
+    public void BankaccountDataOnDemand.setOwnerName(Bankaccount obj, int index) {
+        String ownerName = "ownerName_" + index;
+        if (ownerName.length() > 40) {
+            ownerName = ownerName.substring(0, 40);
+        }
+        obj.setOwnerName(ownerName);
+    }
+    
+    public void BankaccountDataOnDemand.setPostalCode(Bankaccount obj, int index) {
+        Integer postalCode = new Integer(index);
+        obj.setPostalCode(postalCode);
     }
     
     public Bankaccount BankaccountDataOnDemand.getSpecificBankaccount(int index) {

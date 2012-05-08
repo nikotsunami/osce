@@ -41,6 +41,6 @@ public interface StandardizedPatientEditView extends IsWidget {
 	SimplePanel getDescriptionPanel();
 	SimplePanel getBankEditPanel();
 	
-	String getPatientId();
-	void setPatientId(String patientId);
+	//String getPatientId();
+	//void setPatientId(String patientId);
 }

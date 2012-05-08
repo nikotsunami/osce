@@ -44,6 +44,9 @@ public abstract class AdvancedSearchCriteriaMobileDetailsView_Roo_Gwt extends Co
     @UiField
     Element value;
 
+    @UiField
+    Element shownValue;
+
     AdvancedSearchCriteriaProxy proxy;
 
     public void setValue(AdvancedSearchCriteriaProxy proxy) {
@@ -55,5 +58,6 @@ public abstract class AdvancedSearchCriteriaMobileDetailsView_Roo_Gwt extends Co
         bindType.setInnerText(proxy.getBindType() == null ? "" : String.valueOf(proxy.getBindType()));
         comparation.setInnerText(proxy.getComparation() == null ? "" : String.valueOf(proxy.getComparation()));
         value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
+        shownValue.setInnerText(proxy.getShownValue() == null ? "" : String.valueOf(proxy.getShownValue()));
     }
 }

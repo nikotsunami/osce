@@ -44,4 +44,16 @@ public abstract class BankaccountMobileEditView_Roo_Gwt extends Composite implem
 
     @UiField
     TextBox bIC;
+
+    @UiField
+    TextBox ownerName;
+
+    @UiField
+    IntegerBox postalCode;
+
+    @UiField
+    TextBox city;
+
+    @UiField
+    TextBox country;
 }

@@ -69,6 +69,9 @@ public abstract class AdvancedSearchCriteriaMobileEditView_Roo_Gwt extends Compo
     @UiField
     TextBox value;
 
+    @UiField
+    TextBox shownValue;
+
     public void setComparationPickerValues(Collection<Comparison> values) {
         comparation.setAcceptableValues(values);
     }

@@ -14,6 +14,8 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -88,6 +90,12 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
     @UiField
     TextBox videoPath;
 
+    @UiField(provided = true)
+    ValueListBox<NationalityProxy> nationality = new ValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
+
+    @UiField(provided = true)
+    ValueListBox<ProfessionProxy> profession = new ValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
+
     @UiField
     DateBox birthday;
 
@@ -101,10 +109,23 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
     ValueListBox<BankaccountProxy> bankAccount = new ValueListBox<BankaccountProxy>(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy>());
 
     @UiField(provided = true)
-    ValueListBox<NationalityProxy> nationality = new ValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
+    ValueListBox<MaritalStatus> maritalStatus = new ValueListBox<MaritalStatus>(new AbstractRenderer<ch.unibas.medizin.osce.shared.MaritalStatus>() {
+
+        public String render(ch.unibas.medizin.osce.shared.MaritalStatus obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
     @UiField(provided = true)
-    ValueListBox<ProfessionProxy> profession = new ValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
+    ValueListBox<WorkPermission> workPermission = new ValueListBox<WorkPermission>(new AbstractRenderer<ch.unibas.medizin.osce.shared.WorkPermission>() {
+
+        public String render(ch.unibas.medizin.osce.shared.WorkPermission obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+
+    @UiField
+    TextBox socialInsuranceNo;
 
     @UiField(provided = true)
     ValueListBox<AnamnesisFormProxy> anamnesisForm = new ValueListBox<AnamnesisFormProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>());
@@ -114,6 +135,10 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
 
     public void setProfessionPickerValues(Collection<ProfessionProxy> values) {
         profession.setAcceptableValues(values);
+    }
+
+    public void setMaritalStatusPickerValues(Collection<MaritalStatus> values) {
+        maritalStatus.setAcceptableValues(values);
     }
 
     public void setLangskillsPickerValues(Collection<LangSkillProxy> values) {
@@ -134,6 +159,10 @@ public abstract class StandardizedPatientMobileEditView_Roo_Gwt extends Composit
 
     public void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values) {
         anamnesisForm.setAcceptableValues(values);
+    }
+
+    public void setWorkPermissionPickerValues(Collection<WorkPermission> values) {
+        workPermission.setAcceptableValues(values);
     }
 
     public void setNationalityPickerValues(Collection<NationalityProxy> values) {

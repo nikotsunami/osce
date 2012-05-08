@@ -47,8 +47,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
-		delegate.addAdvSeaBasicButtonClicked(null,//no matter 
-				value.getValue(), bindType.getValue(), field.getValue(), comparison.getValue());
+		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());
 		this.hide();
 	}
 	

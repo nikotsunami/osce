@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
@@ -24,6 +25,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -45,9 +47,9 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.EventBus;
 
 import com.google.gwt.place.shared.Place;
 
@@ -314,8 +316,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		@Override
 		public void onSuccess(List<StandardizedPatientProxy> response) {
-			final Range range = table.getVisibleRange();			
+			final Range range = table.getVisibleRange();
+			//By SPEC[
+			table.setRowCount(response.size());
+			//By SPEC]
 			table.setRowData(range.getStart(), response);
+			
 		}
 	}
 
@@ -335,13 +341,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		Range range = table.getVisibleRange();
 
 		// (2) Advanced search
-		//By SPEC[Satart
-		//requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
-	    //		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());
-		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
-				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
-			   fire(new StandardizedPatientReceiver());
-		//By SPEC]End
+		requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
+	    		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());
 	}
 
 	/**
@@ -364,89 +365,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged() {
-		// TODO: ###david### test code
-
-		//List<String> fields = Arrays.asList("weight", "height", "bmi");
-		//List<String> values = Arrays.asList("80", "180", "30");
-		// List<String> comparations = Arrays.asList(Comparison2.EQUALS,
-		// Comparison2.LESS, Comparison2.MORE);
-		// List<String> bindType = Arrays.asList(BindType.AND, BindType.AND,
-		// BindType.AND);
-		
-
-		//requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
-		//
-		// AdvancedSearchCriteriaProxy criteria =
-		// requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		// requestAdvSeaCritStd.edit(criteria);
-		// criteria.setBindType(BindType.AND);
-		// criteria.setComparation(Comparison2.EQUALS);
-		// criteria.setField(PossibleFields.weight);
-		// criteria.setValue("80");
-		//
-		// searchCriteria.add(criteria);
-		//WARNING: TEST: 
-
-		//searchCriteria.clear();
-		/* AdvancedSearchCriteriaProxy criteria2 =
-		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-		 requestAdvSeaCritStd.edit(criteria2);
-		 criteria2.setBindType(BindType.AND);
-		 criteria2.setComparation(Comparison2.EQUALS);
-		 criteria2.setField(PossibleFields.LANGUAGE);
-		 //"Deutsch: A1"
-		 criteria2.setValue("Deutsch: NATIVE_SPEAKER");
-		 criteria2.setObjectId(new Long(6));
-		 searchCriteria.add(criteria2);*/
-
-//		 AdvancedSearchCriteriaProxy criteria3 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria3);
-//		 criteria3.setBindType(BindType.OR);
-//		 criteria3.setComparation(Comparison2.NOTEQUALS);
-//		 criteria3.setField(PossibleFields.ANAMNESIS);
-//		 criteria3.setObjectId(new Long(7));//question ID
-//		 //Nehmen Sie eines der aufgelisteten Medikamete und wenn ja, welche?
-//		 criteria3.setValue("QuestionMultM: Prozac:Prozac|Ritalin|Aspirin|Ethanol");
-//		
-//		 searchCriteria.add(criteria3);
-//
-//		 AdvancedSearchCriteriaProxy criteria4 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria4);
-//		 criteria4.setBindType(BindType.AND);
-//		 criteria4.setComparation(Comparison2.EQUALS);
-//		 criteria4.setField(PossibleFields.ANAMNESIS);
-//		 criteria4.setObjectId(new Long(1));//question ID
-//		 //Rauchen Sie? 
-//		 criteria4.setValue("QuestionYesNo: Nein:");//no options for answers: type = 1
-//		
-//		 searchCriteria.add(criteria4);
-//
-//		 AdvancedSearchCriteriaProxy criteria5 =
-//		 requestAdvSeaCritStd.create(AdvancedSearchCriteriaProxy.class);
-//		 requestAdvSeaCritStd.edit(criteria5);
-//		 criteria5.setBindType(BindType.AND);
-//		 criteria5.setComparation(Comparison2.NOTEQUALS);
-//		 criteria5.setField(PossibleFields.anamnesis);
-//		 criteria5.setObjectId(new Long(2));//question ID
-//		 //Wie oft rauchen Sie? 
-//		 criteria5.setValue("QuestionMultS: oft:oft|mittel|selten");
-//		
-//		 searchCriteria.add(criteria5);
-		 //
-//		 criteriaTable.setRowData(searchCriteria);
-		/*
-		 * searchCriteria.add(new AdvancesSearchCriteriumOld
-		 * (PossibleFields.weight, BindType.AND, Comparison2.EQUALS, "80"));
-		 * searchCriteria.add(new AdvancesSearchCriteriumOld
-		 * (PossibleFields.height, BindType.OR, Comparison2.LESS, "180"));
-		 * searchCriteria.add(new AdvancesSearchCriteriumOld
-		 * (PossibleFields.bmi, BindType.AND, Comparison2.MORE, "30"));
-		 */
-		 
-		// searchThrough = new ArrayList<String>(); 
-		 
 		 // TODO: some bug about request
 		 requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		
@@ -454,7 +372,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			Log.info("Criterion: " + criterion.getField().toString() + ": " + criterion.getValue());
 		}
 		
-		Range range = table.getVisibleRange();		
+		Range range = table.getVisibleRange();
 		Log.debug(range.getStart() + ": start : length " + range.getLength());
 
 		//By SPEC[Start		
@@ -466,39 +384,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
 			   fire(new StandardizedPatientReceiver());
 		//By SPEC]End
-		// OLD (1) Sorting
-
-//		Boolean asc = true;
-//		String sortField = "name"; // TODO: handle sort change events
-//
-//		if (table.getColumnSortList().size() > 0) {
-//
-//			asc = table.getColumnSortList().get(0).isAscending();
-//
-//		}
-//
-//		// (2) Text search
-//		searchThrough = view.getSearchFilters();
-//
-//		// (3) Advanced search
-//		final Receiver<List<StandardizedPatientProxy>> callback = new Receiver<List<StandardizedPatientProxy>>() {
-//			@Override
-//			public void onSuccess(List<StandardizedPatientProxy> values) {
-//				if (view == null) {
-//					// This activity is dead
-//					return;
-//				}
-//				table.setRowData(range.getStart(), values);
-//
-//				// finishPendingSelection();
-//				if (widget != null) {
-//					widget.setWidget(view.asWidget());
-//				}
-//			}
-//		};
-//
-//		fireRangeRequest(sortField, asc, q, new Integer(range.getStart()), new Integer(range.getLength()), searchThrough, view.getCriteria().getFields(), view
-//				.getCriteria().getComparisons(), view.getCriteria().getValues(), callback);
 	}
 
 	/**
@@ -645,28 +530,43 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	/**
 	 * adds a criterion selected in one of the AdvancedSearchPopups to the criteria table.
 	 * @param objectId
-	 * @param string
+	 * @param value
 	 * @param bindType wether the criteria to add should be used with an and or or conjunction
 	 * @param possibleFields 
 	 * @param comparison Which type of comparison applies to the criterion (equals, greater, smaller, not equals)
 	 */
 	@Override
-	public void addAdvSeaBasicButtonClicked(Long objectId, String string, BindType bindType, PossibleFields possibleFields, Comparison comparison) {
-	//	requestAdvSeaCritStd.fire();
-//		requestAdvSeaCritStd.fire();
-//
-//		
+	public void addAdvSeaBasicButtonClicked(Long objectId, String value, String shownValue, BindType bindType, PossibleFields possibleFields, Comparison comparison) {
+		switch (possibleFields) {
+		case BMI:
+			shownValue = constants.bmi() + " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value;
+			break;
+		case HEIGHT:
+			shownValue = constants.height() + " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "cm";
+			break;
+		case WEIGHT:
+			shownValue = constants.weight() + " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "kg";
+		}
 		StandardizedPatientRequestNonRoo req = requests.standardizedPatientRequestNonRoo();
 		AdvancedSearchCriteriaProxy criteria = req.create(AdvancedSearchCriteriaProxy.class);
 		criteria = req.edit(criteria);
 		criteria.setBindType(bindType);
 		criteria.setComparation(comparison);
 		criteria.setField(possibleFields);
-		criteria.setValue(string);
+		criteria.setValue(value);
 		criteria.setObjectId(objectId);
+		criteria.setShownValue(shownValue);
 		req.fire();
+		
+		Log.debug("Added criterion: value = " + value);
+		
 		searchCriteria.add(criteria);
-
 		criteriaTable.setRowData(searchCriteria);
 		initSearch();
 	}
@@ -677,8 +577,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	public void deleteAdvancedSearchCriteria(AdvancedSearchCriteriaProxy criterion) {
 		searchCriteria.remove(criterion);
-		// TODO execute search
 		criteriaTable.setRowData(searchCriteria);
+		//By SPEC[
+		initSearch();
+		//By SPEC]
 	}
 	
 	/**
@@ -766,7 +668,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType, Comparison comparison) {
 		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart());
-		addAdvSeaBasicButtonClicked(scarProxy.getId(), scarProxy.getTraitType().toString() + ": " + scarProxy.getBodypart(), bindType, PossibleFields.SCAR, comparison);
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.SCAR).render(comparison) + " " 
+				+ new ScarProxyRenderer().render(scarProxy);
+		String value = scarProxy.getTraitType().toString() + ":" + scarProxy.getBodypart();
+		addAdvSeaBasicButtonClicked(scarProxy.getId(), value, displayValue, bindType, PossibleFields.SCAR, comparison);
 	}
 
 	/**
@@ -779,18 +684,41 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@Override
 	public void addAnamnesisValueButtonClicked(AnamnesisCheckProxy anamnesisCheck, String answer, BindType bindType, Comparison comparison) {
-		// TODO Auto-generated method stub
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:" + anamnesisCheck.getValue() + "; answer: " + answer);
-		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), anamnesisCheck.getType() + ": " + answer+":"+anamnesisCheck.getValue(), bindType, PossibleFields.ANAMNESIS, comparison);
+		String displayValue = "\"" + anamnesisCheck.getText() + "\" "
+				+ new EnumRenderer<Comparison>(EnumRenderer.Type.ANAMNESIS).render(comparison) + " "
+				+ humanReadableAnamnesisAnswer(anamnesisCheck, answer);
+		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), answer, displayValue, bindType, PossibleFields.ANAMNESIS, comparison);
 	}
 	
-	//TODO: @@@SPEC implement nationality search
+	private OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	private String humanReadableAnamnesisAnswer(AnamnesisCheckProxy proxy, String answer) {
+		switch(proxy.getType()) {
+		case QUESTION_OPEN:
+		case QUESTION_TITLE:
+			return answer;
+		case QUESTION_YES_NO:
+			if ("1".equals(answer))
+				return constants.yes();
+			return constants.no();
+		case QUESTION_MULT_M:
+		case QUESTION_MULT_S:
+			String[] answerTokens = answer.split("-");
+			String[] questionTokens = proxy.getValue().split("\\|");
+			for (int i=0; i < answerTokens.length; i++) {
+				if (answerTokens[i].equals("1"))
+					return questionTokens[i];
+			}
+		}
+		return "";
+	}
 	
 	@Override
-	public void addNationalityButtonClicked(NationalityProxy nationality,
-			BindType bindType, Comparison comparison) {
-		// TODO implement.
-						
+	public void addNationalityButtonClicked(NationalityProxy nationality, BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.NATIONALITY).render(comparison) + " " 
+				+ nationality.getNationality();
+		addAdvSeaBasicButtonClicked(nationality.getId(), nationality.getNationality(), displayValue, bindType, PossibleFields.NATIONALITY, comparison);
 	}
 
 	/**
@@ -804,7 +732,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 */
 	@Override
 	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy, LangSkillLevel skill, BindType bindType, Comparison comparison) {
-		addAdvSeaBasicButtonClicked(languageProxy.getId(), languageProxy.getLanguageName() + ": " + skill.toString(), bindType, PossibleFields.LANGUAGE, comparison);
+		String displayValue = constants.patientSpeaks() + " "
+				+ languageProxy.getLanguageName() + " "
+				+ new EnumRenderer<Comparison>(EnumRenderer.Type.LANGSKILL).render(comparison) + " "
+				+ new EnumRenderer<LangSkillLevel>().render(skill);
+		String value = skill.toString();
+		addAdvSeaBasicButtonClicked(languageProxy.getId(), value, displayValue, bindType, PossibleFields.LANGUAGE, comparison);
 	}
 
 

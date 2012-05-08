@@ -13,27 +13,48 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div id="id">
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-    <div id="version">
+        <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-    <div id="bankName">
+        <div id="bankName">
             <div class="{style.label}">Bank Name</div>
             <div class="{style.value}" ui:field="bankName"/>
         </div>
-    <div id="iBAN">
+        <div id="iBAN">
             <div class="{style.label}">I B A N</div>
             <div class="{style.value}" ui:field="iBAN"/>
         </div>
-    <div id="bIC">
+        <div id="bIC">
             <div class="{style.label}">B I C</div>
             <div class="{style.value}" ui:field="bIC"/>
         </div>
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  </g:HTMLPanel>
+        <div id="ownerName">
+            <div class="{style.label}">Owner Name</div>
+            <div class="{style.value}" ui:field="ownerName"/>
+        </div>
+        <div id="postalCode">
+            <div class="{style.label}">Postal Code</div>
+            <div class="{style.value}" ui:field="postalCode"/>
+        </div>
+        <div id="city">
+            <div class="{style.label}">City</div>
+            <div class="{style.value}" ui:field="city"/>
+        </div>
+        <div id="country">
+            <div class="{style.label}">Country</div>
+            <div class="{style.value}" ui:field="country"/>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

@@ -12,10 +12,8 @@
 	<inherits name="com.google.gwt.text.Text"/>
     <inherits name="com.google.gwt.i18n.I18N"/>
 	<inherits name="com.google.gwt.resources.Resources" />
+	<inherits name='fr.hd3d.html5.video.HTML5Video'/> <!-- By SPEC  -->
 	
-	
-	
-	<!--  <inherits name="com.google.gwt.user.theme.chrome.Chrome"/> --> 
 	<inherits name="ch.unibas.medizin.osce.client.style.theme.Unibas"/>
 	
 	  <!-- servlet>
@@ -41,12 +39,10 @@
   -->
   
   <inherits name="com.google.gwt.i18n.I18N"/>
-  <extend-property name="locale" values="en_US"/>
-  <extend-property name="locale" values="en_GB"/>
-  <extend-property name="locale" values="de_CH"/>
-  <extend-property name="locale" values="de_AT"/>
-  <extend-property name="locale" values="de_DE"/>
-  <set-property name="locale" value="de_CH" />
+  <extend-property name="locale" values="en"/>
+  <extend-property name="locale" values="de"/>
+  <!-- <set-property name="locale" value="de" /> -->
+  
   
   
   <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
@@ -79,6 +75,5 @@
 		<set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true" />
 		<set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true" />
 	
-	<extend-property name="locale" values="de"/>
 	<entry-point class="ch.unibas.medizin.osce.client.a_nonroo.client.OsMaEntry"/>
 </module>

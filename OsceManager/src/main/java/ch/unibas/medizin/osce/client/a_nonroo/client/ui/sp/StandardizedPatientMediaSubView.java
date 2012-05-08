@@ -19,7 +19,11 @@ public interface StandardizedPatientMediaSubView extends IsWidget {
 		void uploadClicked();
 		void uploadSuccesfull(String results);
 		
-		
+		//spec start
+		void videoUploadSuccesfull(String results);
+		String getNameOfStandardizedPatient();
+		 Long getIdOfStandardizedPatient();
+		 //spec end
 		
 	}
 
@@ -27,6 +31,8 @@ public interface StandardizedPatientMediaSubView extends IsWidget {
 	String getMediaContent();
 
 	void setMediaContent(String link);
-	
+	//spec
+	 void setVideoMediaContent(String description);
+	 //spec
 
 }

@@ -13,9 +13,10 @@ public class OsMaConstant {
 	public static final SafeHtml DOWN_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-triangle-1-s\"></span>").toSafeHtml();
 	public static final int TABLE_PAGE_SIZE = 15;
 	public static final int TABLE_JUMP_SIZE = 30;
-	public static final int SPLIT_PANEL_MINWIDTH = 472;
+	public static final int SPLIT_PANEL_MINWIDTH = 490;
 	public static final int ENTRY_TIMEOUT_MS = 700;
 	//By Spec[start
 	public static String FILENAME = "StandardizedPatientList.csv";
+	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
 	//By Spec]End
 }

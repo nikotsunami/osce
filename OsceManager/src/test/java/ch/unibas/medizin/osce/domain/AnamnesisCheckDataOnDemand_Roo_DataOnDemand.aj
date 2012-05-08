@@ -28,6 +28,7 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
         AnamnesisCheck obj = new AnamnesisCheck();
         setSort_order(obj, index);
         setText(obj, index);
+        setTitle(obj, index);
         setType(obj, index);
         setValue(obj, index);
         return obj;
@@ -44,6 +45,11 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
             text = text.substring(0, 255);
         }
         obj.setText(text);
+    }
+    
+    public void AnamnesisCheckDataOnDemand.setTitle(AnamnesisCheck obj, int index) {
+        AnamnesisCheck title = obj;
+        obj.setTitle(title);
     }
     
     public void AnamnesisCheckDataOnDemand.setType(AnamnesisCheck obj, int index) {

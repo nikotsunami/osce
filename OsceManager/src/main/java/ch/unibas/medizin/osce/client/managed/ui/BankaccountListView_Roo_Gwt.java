@@ -103,5 +103,65 @@ public abstract class BankaccountListView_Roo_Gwt extends AbstractProxyListView<
                 return renderer.render(object.getBIC());
             }
         }, "B I C");
+        paths.add("ownerName");
+        table.addColumn(new TextColumn<BankaccountProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(BankaccountProxy object) {
+                return renderer.render(object.getOwnerName());
+            }
+        }, "Owner Name");
+        paths.add("postalCode");
+        table.addColumn(new TextColumn<BankaccountProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(BankaccountProxy object) {
+                return renderer.render(object.getPostalCode());
+            }
+        }, "Postal Code");
+        paths.add("city");
+        table.addColumn(new TextColumn<BankaccountProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(BankaccountProxy object) {
+                return renderer.render(object.getCity());
+            }
+        }, "City");
+        paths.add("country");
+        table.addColumn(new TextColumn<BankaccountProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(BankaccountProxy object) {
+                return renderer.render(object.getCountry());
+            }
+        }, "Country");
     }
 }

@@ -10,6 +10,8 @@ import ch.unibas.medizin.osce.domain.LangSkill;
 import ch.unibas.medizin.osce.domain.Nationality;
 import ch.unibas.medizin.osce.domain.Profession;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.Date;
@@ -121,6 +123,22 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.videoPath = videoPath;
     }
     
+    public Nationality StandardizedPatient.getNationality() {
+        return this.nationality;
+    }
+    
+    public void StandardizedPatient.setNationality(Nationality nationality) {
+        this.nationality = nationality;
+    }
+    
+    public Profession StandardizedPatient.getProfession() {
+        return this.profession;
+    }
+    
+    public void StandardizedPatient.setProfession(Profession profession) {
+        this.profession = profession;
+    }
+    
     public Date StandardizedPatient.getBirthday() {
         return this.birthday;
     }
@@ -153,20 +171,28 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
         this.bankAccount = bankAccount;
     }
     
-    public Nationality StandardizedPatient.getNationality() {
-        return this.nationality;
+    public MaritalStatus StandardizedPatient.getMaritalStatus() {
+        return this.maritalStatus;
     }
     
-    public void StandardizedPatient.setNationality(Nationality nationality) {
-        this.nationality = nationality;
+    public void StandardizedPatient.setMaritalStatus(MaritalStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
     
-    public Profession StandardizedPatient.getProfession() {
-        return this.profession;
+    public WorkPermission StandardizedPatient.getWorkPermission() {
+        return this.workPermission;
     }
     
-    public void StandardizedPatient.setProfession(Profession profession) {
-        this.profession = profession;
+    public void StandardizedPatient.setWorkPermission(WorkPermission workPermission) {
+        this.workPermission = workPermission;
+    }
+    
+    public String StandardizedPatient.getSocialInsuranceNo() {
+        return this.socialInsuranceNo;
+    }
+    
+    public void StandardizedPatient.setSocialInsuranceNo(String socialInsuranceNo) {
+        this.socialInsuranceNo = socialInsuranceNo;
     }
     
     public AnamnesisForm StandardizedPatient.getAnamnesisForm() {

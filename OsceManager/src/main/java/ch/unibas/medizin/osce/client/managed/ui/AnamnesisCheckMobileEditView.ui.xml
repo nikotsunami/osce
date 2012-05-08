@@ -27,6 +27,11 @@
         
         
         
+    
+        
+        
+        
+        
     <div id="text">
             <div class="{style.label}">Text</div>
             <div class="{style.value}">
@@ -55,6 +60,12 @@
             <div class="{style.label}">Anamnesischecksvalues</div>
             <div class="{style.value}">
                 <a:AnamnesisChecksValueSetEditor ui:field="anamnesischecksvalues"/>
+            </div>
+        </div>
+        <div id="title">
+            <div class="{style.label}">Title</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="title"/>
             </div>
         </div>
     </g:HTMLPanel>

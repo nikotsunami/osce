@@ -18,8 +18,11 @@ public interface AnamnesisCheckRequestNonRoo extends RequestContext {
 	public abstract InstanceRequest<AnamnesisCheckProxy, Void> moveDown();
 	public abstract Request<AnamnesisCheckProxy> findAnamnesisCheckByOrderSmaller(int sort_order);
 	public abstract Request<AnamnesisCheckProxy> findAnamnesisCheckByOrderGreater(int sort_order);
-	public abstract Request<Long> countAnamnesisChecksBySearch(String q);
 	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults);
+	public abstract Request<Long> countAnamnesisChecksBySearch(String q,AnamnesisCheckProxy title);
+	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksBySearch(String q,AnamnesisCheckProxy title, int firstResult, int maxResults);
+	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksByType(AnamnesisCheckTypes type);
+	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksByTitle(String searchValue,AnamnesisCheckProxy title);
 	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksByType(AnamnesisCheckTypes type);
 	public abstract InstanceRequest<AnamnesisCheckProxy, Void> orderUpByPrevious(int preSortorder);
 	public abstract InstanceRequest<AnamnesisCheckProxy, Void> orderDownByPrevious(int preSortorder);

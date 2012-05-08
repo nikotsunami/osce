@@ -22,22 +22,49 @@ import javax.persistence.ManyToOne;
 @RooEntity
 public class AnamnesisCheck {
 
-    @Size(max = 255)
-    private String text;
+	@Size(max = 255)
+	private String text;
 
-    @Size(max = 255)
-    private String value;
+	@Size(max = 255)
+	private String value;
 
-    private Integer sort_order;
+	private Integer sort_order;
 
-    @Enumerated
-    private AnamnesisCheckTypes type;
+	@Enumerated
+	private AnamnesisCheckTypes type;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anamnesischeck")
-    private Set<AnamnesisChecksValue> anamnesischecksvalues = new HashSet<AnamnesisChecksValue>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "anamnesischeck")
+	private Set<AnamnesisChecksValue> anamnesischecksvalues = new HashSet<AnamnesisChecksValue>();
 
-    @ManyToOne
-    private ch.unibas.medizin.osce.domain.AnamnesisCheck title;
+	@ManyToOne
+	private ch.unibas.medizin.osce.domain.AnamnesisCheck title;
+
+
+	public static Long countAnamnesisChecksBySearchWithTitle(String q,
+			AnamnesisCheck title) {
+		if (q == null)
+			throw new IllegalArgumentException("The q argument is required");
+		EntityManager em = entityManager();
+
+		if (title == null) {
+			TypedQuery<Long> query = em
+					.createQuery(
+							"SELECT COUNT(o) FROM AnamnesisCheck o WHERE o.text LIKE :q",
+							Long.class);
+			query.setParameter("q", "%" + q + "%");
+			return query.getSingleResult();
+		} else {
+
+			TypedQuery<Long> query = em
+					.createQuery(
+							"SELECT COUNT(o) FROM AnamnesisCheck o WHERE o.text LIKE :q and o.title= :title",
+							Long.class);
+			query.setParameter("q", "%" + q + "%");
+			query.setParameter("title", title);
+			return query.getSingleResult();
+		}
+
+	}
 
 
     public static Long countAnamnesisChecksBySearch(String q) {
@@ -56,7 +83,35 @@ public class AnamnesisCheck {
     }
 
 
-    public static List<AnamnesisCheck> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults) {
+	public static List<AnamnesisCheck> findAnamnesisChecksBySearchWithTitle(String q,
+			AnamnesisCheck title, int firstResult, int maxResults) {
+		if (q == null)
+			throw new IllegalArgumentException("The q argument is required");
+		EntityManager em = entityManager();
+		if (title == null) {
+
+			TypedQuery<AnamnesisCheck> query = em
+					.createQuery(
+							"SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q ORDER BY sort_order",
+							AnamnesisCheck.class);
+			query.setParameter("q", "%" + q + "%");
+			query.setFirstResult(firstResult);
+			query.setMaxResults(maxResults);
+			return query.getResultList();
+		} else {
+			TypedQuery<AnamnesisCheck> query = em
+					.createQuery(
+							"SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q  and o.title= :title ORDER BY sort_order",
+							AnamnesisCheck.class);
+			query.setParameter("q", "%" + q + "%");
+			query.setParameter("title", title);
+			query.setFirstResult(firstResult);
+			query.setMaxResults(maxResults);
+			return query.getResultList();
+		}
+	}
+
+	public static List<AnamnesisCheck> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults) {
         if (q == null) throw new IllegalArgumentException("The q argument is required");
         EntityManager em = entityManager();
         TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q ORDER BY sort_order", AnamnesisCheck.class);
@@ -65,7 +120,7 @@ public class AnamnesisCheck {
         query.setMaxResults(maxResults);
         return query.getResultList();
     }
-    
+
 	public void moveUp() {
 		if (this.entityManager == null) {
 			this.entityManager = entityManager();
@@ -78,8 +133,8 @@ public class AnamnesisCheck {
 		anamnesisCheck.persist();
 		setSort_order(sort_order - 1);
 		this.persist();
-    }
-	
+	}
+
 	public void moveDown() {
 		if (this.entityManager == null) {
 			this.entityManager = entityManager();
@@ -92,11 +147,14 @@ public class AnamnesisCheck {
 		anamnesisCheck.persist();
 		setSort_order(sort_order + 1);
 		this.persist();
-    }
-	
+	}
+
 	public static AnamnesisCheck findAnamnesisCheckByOrderGreater(int sort_order) {
 		EntityManager em = entityManager();
-		TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.sort_order >= :sort_order ORDER BY sort_order ASC", AnamnesisCheck.class);
+		TypedQuery<AnamnesisCheck> query = em
+				.createQuery(
+						"SELECT o FROM AnamnesisCheck AS o WHERE o.sort_order >= :sort_order ORDER BY sort_order ASC",
+						AnamnesisCheck.class);
 		query.setParameter("sort_order", sort_order);
 		List<AnamnesisCheck> resultList = query.getResultList();
 		if (resultList == null || resultList.size() == 0)
@@ -106,13 +164,17 @@ public class AnamnesisCheck {
 
 	public static AnamnesisCheck findAnamnesisCheckByOrderSmaller(int sort_order) {
 		EntityManager em = entityManager();
-		TypedQuery<AnamnesisCheck> query = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.sort_order <= :sort_order ORDER BY sort_order DESC", AnamnesisCheck.class);
+		TypedQuery<AnamnesisCheck> query = em
+				.createQuery(
+						"SELECT o FROM AnamnesisCheck AS o WHERE o.sort_order <= :sort_order ORDER BY sort_order DESC",
+						AnamnesisCheck.class);
 		query.setParameter("sort_order", sort_order);
 		List<AnamnesisCheck> resultList = query.getResultList();
 		if (resultList == null || resultList.size() == 0)
 			return null;
 		return resultList.get(0);
 	}
+
 
 	public static List<AnamnesisCheck> findAnamnesisChecksByType(AnamnesisCheckTypes type) {
 	    if (type == null) throw new IllegalArgumentException("The type argument is required");
@@ -122,7 +184,10 @@ public class AnamnesisCheck {
 	    return q.getResultList();
 	}
 	
-	public static List<AnamnesisCheck> findAnamnesisChecksByTitle(String searchValue, AnamnesisCheck title) {
+
+	public static List<AnamnesisCheck> findAnamnesisChecksByTitle(
+			String searchValue, AnamnesisCheck title) {
+
 		if (title == null)
 			throw new IllegalArgumentException("The title argument is required");
 		EntityManager em = AnamnesisCheck.entityManager();
@@ -144,6 +209,7 @@ public class AnamnesisCheck {
 		}
 
 	}
+
 	
 	/**
 	 * Finds the check at the specified position. Assumes no 2 checks have the same sort_order
@@ -235,7 +301,7 @@ public class AnamnesisCheck {
 	}
 	
 	public void orderUpByPrevious(int preSortorder) {
-		try {
+
 			System.out.println("orderUpByPrevious preSortorder = " + preSortorder);
 			if (this.entityManager == null) {
 				this.entityManager = entityManager();
@@ -268,9 +334,7 @@ public class AnamnesisCheck {
 				this.persist();
 
 			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
+	
 	}
 
 	public void orderDownByPrevious(int preSortorder){
@@ -397,5 +461,5 @@ public class AnamnesisCheck {
 //        return q;
 //    }
     
-    
+
 }

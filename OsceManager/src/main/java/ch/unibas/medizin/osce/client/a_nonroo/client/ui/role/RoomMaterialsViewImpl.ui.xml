@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	 xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
+	 xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria" 
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+<ui:style src="../../styles.css" />
+
+<g:SplitLayoutPanel ui:field="splitLayoutPanel">
+	<g:west size="400">
+		<g:ScrollPanel>
+			<g:HTMLPanel >
+				
+		
+			
+				<h1>Room Material</h1>
+					<g:Button addStyleNames="{style.button}" ui:field="showSubview">Go To Detail</g:Button>
+				
+				
+			</g:HTMLPanel>
+		</g:ScrollPanel>
+	</g:west>
+	<g:center>
+		<g:ScrollPanel>
+			<g:SimplePanel ui:field="detailsPanel"></g:SimplePanel>
+		</g:ScrollPanel>
+	</g:center>
+</g:SplitLayoutPanel>
+</ui:UiBinder> 

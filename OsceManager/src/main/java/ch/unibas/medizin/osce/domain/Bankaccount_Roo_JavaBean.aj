@@ -3,6 +3,7 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import java.lang.Integer;
 import java.lang.String;
 
 privileged aspect Bankaccount_Roo_JavaBean {
@@ -29,6 +30,38 @@ privileged aspect Bankaccount_Roo_JavaBean {
     
     public void Bankaccount.setBIC(String BIC) {
         this.BIC = BIC;
+    }
+    
+    public String Bankaccount.getOwnerName() {
+        return this.ownerName;
+    }
+    
+    public void Bankaccount.setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+    
+    public Integer Bankaccount.getPostalCode() {
+        return this.postalCode;
+    }
+    
+    public void Bankaccount.setPostalCode(Integer postalCode) {
+        this.postalCode = postalCode;
+    }
+    
+    public String Bankaccount.getCity() {
+        return this.city;
+    }
+    
+    public void Bankaccount.setCity(String city) {
+        this.city = city;
+    }
+    
+    public String Bankaccount.getCountry() {
+        return this.country;
+    }
+    
+    public void Bankaccount.setCountry(String country) {
+        this.country = country;
     }
     
 }

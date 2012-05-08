@@ -13,11 +13,12 @@ public enum PossibleFields {
 	HEIGHT(" stdPat.height "), 
 	WEIGHT(" stdPat.weight "), 
 	BMI(" stdPat.weight / (stdPat.height/100*stdPat.height/100) "), 
-	SCAR(" scars.id ") 
+	SCAR(" scars.id "),
+	NATIONALITY(" stdPat.nationality.id "), 
 	//clause is not in use - once we have multi part search
-	,LANGUAGE("")
-	,ANAMNESIS("")
-	;
+	LANGUAGE(""),
+	ANAMNESIS("");
+	
 	/**
 	 * Sublist for advanced search
 	 */

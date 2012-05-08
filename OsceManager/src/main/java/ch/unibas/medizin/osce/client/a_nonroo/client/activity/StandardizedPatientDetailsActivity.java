@@ -83,6 +83,24 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	
+	// By spec(Start)
+		
+		@SuppressWarnings("deprecation")
+		private class StandardizedPatientPdfFileReceiver extends Receiver<String> {
+			@Override
+			public void onFailure(ServerFailure error) {
+				Log.error(error.getMessage());
+				// onStop();
+			}
+
+			@Override
+			public void onSuccess(String response) {
+				Window.open(response, "_blank", "enabled");
+			}
+		}
+
+		// By spec(Stop)
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
@@ -277,14 +295,26 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	private void init() {
 		view.setValue(standardizedPatientProxy);
 		anamnesisForm =  standardizedPatientProxy.getAnamnesisForm();
+		if (anamnesisForm == null) 
+			Log.warn("anamnesisForm is null!");
 		initScar();
 		initAnamnesis();
 		initLangSkills();
 		initMediaView();
+		
+		//spec
+		standardizedPatientMediaSubViewImpl.id.setValue(getIdOfStandardizedPatient().toString());
+		standardizedPatientMediaSubViewImpl.name.setValue(getNameOfStandardizedPatient());
+		standardizedPatientMediaSubViewImpl.vid.setValue(getIdOfStandardizedPatient().toString());
+		standardizedPatientMediaSubViewImpl.vname.setValue(getNameOfStandardizedPatient());
+		//spec
 	}
 	
 	private void initMediaView() {
 		standardizedPatientMediaSubViewImpl.setMediaContent(standardizedPatientProxy.getImmagePath());
+		//spec
+		standardizedPatientMediaSubViewImpl.setVideoMediaContent(standardizedPatientProxy.getVideoPath());
+		//spec
 		
 	}
 
@@ -488,6 +518,16 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		placeController.goTo(place);		
 	}
 
+	
+	//By SPEc [Start
+	@Override
+	public void printPatientClicked(){
+		Log.info("Print clicked");
+		requests.standardizedPatientRequestNonRoo()
+		.getPdfPatientsBySearch(standardizedPatientProxy).fire(new StandardizedPatientPdfFileReceiver());
+
+	}
+	//	by SPEC ] End
 	@Override
 	public void editPatientClicked() {
 		Log.info("edit clicked");
@@ -607,4 +647,36 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 
 		
 	}
+	
+	//spec start
+	@Override
+	public void videoUploadSuccesfull(String results) {
+	 StandardizedPatientRequest stdPatRequest = requests.standardizedPatientRequest();
+	 standardizedPatientProxy = stdPatRequest.edit(standardizedPatientProxy);
+	
+	
+	 standardizedPatientProxy.setVideoPath(results);
+	 //spec end
+	 
+	 
+	 
+	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
+	 
+		
+	}
+	//spec end
+	
+	@Override
+	public String getNameOfStandardizedPatient()
+	{
+		
+		 return standardizedPatientProxy.getName();
+	}
+	public Long getIdOfStandardizedPatient()
+	{
+		return standardizedPatientProxy.getId();
+	}
+	
+
+	
 }

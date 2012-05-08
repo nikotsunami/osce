@@ -3,11 +3,13 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -223,7 +225,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public void setValue(StandardizedPatientProxy proxy) {
 		this.proxy = proxy;
 		//version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-		gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
+		gender.setInnerText(new EnumRenderer<Gender>().render(proxy.getGender()));
 		street.setInnerText(proxy.getStreet() == null ? "" : String.valueOf(proxy.getStreet()));
 		city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
 		postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
@@ -280,7 +282,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	
 	@UiHandler("print")
 	public void onPrintClicked(ClickEvent e) {
-		// TODO print patient details...
+		delegate.printPatientClicked();
 	}
 	
 	@UiHandler("maps")

@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -63,12 +64,12 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
-	private ValueListBox<String> anamnesisAnswerMCSelector = new ValueListBox<String>(new AbstractRenderer<String>() {
+	private ValueListBox<Integer> anamnesisAnswerMCSelector = new ValueListBox<Integer>(new AbstractRenderer<Integer>() {
 		@Override
-		public String render(String object) {
-			return (object == null) ? "" : object;
+		public String render(Integer object) {
+			if (object == null) return "";
+			return possibleAnswers.get(object.intValue());
 		}
-		
 	});
 	
 	private ValueListBox<Boolean> anamnesisAnswerYesNoSelector = new ValueListBox<Boolean>(new AbstractRenderer<Boolean>() {
@@ -90,6 +91,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
     ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.ANAMNESIS));
 
 	private AnamnesisCheckProxy selectedProxy;
+	private List<String> possibleAnswers;
 
 	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
 		
@@ -174,14 +176,35 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		} else if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {
 			currentAnswerWidget = anamnesisAnswerMCSelector;
 			Log.info("proxy.getValue() = " + proxy.getValue());
-			anamnesisAnswerMCSelector.setValue(proxy.getValue().split("\\|")[0]);
-			anamnesisAnswerMCSelector.setAcceptableValues(Arrays.asList(proxy.getValue().split("\\|")));
+			possibleAnswers = Arrays.asList(proxy.getValue().split("\\|"));
+			int numAnswers = possibleAnswers.size();
+			List<Integer> numericAnswers = new ArrayList<Integer>();
+			for (int i=0; i < numAnswers; i++) {
+				numericAnswers.add(i);
+			}
+			anamnesisAnswerMCSelector.setValue(0);
+			anamnesisAnswerMCSelector.setAcceptableValues(numericAnswers);
+
 		} else if (proxy.getType() == AnamnesisCheckTypes.QUESTION_YES_NO) {
 			currentAnswerWidget = anamnesisAnswerYesNoSelector;
 		} else {
 			currentAnswerWidget = anamnesisAnswerText;
 		}
 		anamnesisAnswerPanel.add(currentAnswerWidget);
+	}
+	
+	private String createMultipleChoiceString(int selectedAnswerId, int numAnswers) {
+		StringBuilder builder = new StringBuilder();
+		for (int i=0; i < numAnswers; i++) {
+			if (i == selectedAnswerId) {
+				builder.append(1);
+			} else {
+				builder.append(0);
+			}
+			builder.append("-");
+		}
+		builder.deleteCharAt(builder.length()-1);
+		return builder.toString();
 	}
 
 	private void changeQuestionFieldWidth(String stringForOrientation) {
@@ -195,9 +218,9 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	public void addAnamnesisValueButtonClicked(ClickEvent e) {
 		String answer = "";
 		if (currentAnswerWidget == anamnesisAnswerMCSelector) {
-			answer = anamnesisAnswerMCSelector.getValue();
+			answer = createMultipleChoiceString(anamnesisAnswerMCSelector.getValue().intValue(), possibleAnswers.size());
 		} else if (currentAnswerWidget == anamnesisAnswerYesNoSelector) {
-			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? constants.no() : constants.yes();
+			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? "1" : "0";
 		} else if (currentAnswerWidget == anamnesisAnswerText) {
 			answer = anamnesisAnswerText.getValue();
 		}

@@ -1,0 +1,41 @@
+package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.shared.Operation;
+
+import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.inject.Inject;
+
+public class RoomMaterialsDetailsActivityMapper implements ActivityMapper{
+
+	   private OsMaRequestFactory requests;
+	   private PlaceController placeController;
+
+		@Inject
+		public RoomMaterialsDetailsActivityMapper(OsMaRequestFactory requests, PlaceController placeController) {
+			this.requests = requests;
+	        this.placeController = placeController;
+		}
+
+		@Override
+		public Activity getActivity(Place place) {
+			Log.debug("im RoomMaterialsDetailsActivityMapper.getActivity");
+			
+			if(place instanceof RoomMaterialsDetailsPlace)
+			{
+				 if(((RoomMaterialsDetailsPlace) place).getOperation() == Operation.DETAILS)
+					 return new RoomMaterialsDetailsActivity((RoomMaterialsDetailsPlace) place, requests, placeController);
+				 if(((RoomMaterialsDetailsPlace) place).getOperation() == Operation.EDIT)
+					 return null;
+				 if(((RoomMaterialsDetailsPlace) place).getOperation() == Operation.CREATE)			 
+					 return null;
+			}
+				
+			return null;
+		}
+}

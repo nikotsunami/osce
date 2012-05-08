@@ -35,7 +35,12 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +48,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +56,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="bankName">
+            <tr id="bankName">
                 <td>
                     <span class="{style.label}">Bank Name:</span>
                 </td>
@@ -59,7 +64,7 @@
                     <span ui:field="bankName"/>
                 </td>
             </tr>
-      <tr id="iBAN">
+            <tr id="iBAN">
                 <td>
                     <span class="{style.label}">I B A N:</span>
                 </td>
@@ -67,7 +72,7 @@
                     <span ui:field="iBAN"/>
                 </td>
             </tr>
-      <tr id="bIC">
+            <tr id="bIC">
                 <td>
                     <span class="{style.label}">B I C:</span>
                 </td>
@@ -75,7 +80,39 @@
                     <span ui:field="bIC"/>
                 </td>
             </tr>
-    </table>
+            <tr id="ownerName">
+                <td>
+                    <span class="{style.label}">Owner Name:</span>
+                </td>
+                <td>
+                    <span ui:field="ownerName"/>
+                </td>
+            </tr>
+            <tr id="postalCode">
+                <td>
+                    <span class="{style.label}">Postal Code:</span>
+                </td>
+                <td>
+                    <span ui:field="postalCode"/>
+                </td>
+            </tr>
+            <tr id="city">
+                <td>
+                    <span class="{style.label}">City:</span>
+                </td>
+                <td>
+                    <span ui:field="city"/>
+                </td>
+            </tr>
+            <tr id="country">
+                <td>
+                    <span class="{style.label}">Country:</span>
+                </td>
+                <td>
+                    <span ui:field="country"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
