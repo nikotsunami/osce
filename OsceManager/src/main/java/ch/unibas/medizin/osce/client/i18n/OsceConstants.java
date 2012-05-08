@@ -119,8 +119,6 @@ public interface OsceConstants extends Constants {
 
 	public String exams();
 
-	public String export();
-
 	public String exportBellSchedule();
 
 	public String female();
@@ -190,8 +188,6 @@ public interface OsceConstants extends Constants {
 	public String plzCity();
 
 	public String preName();
-
-	public String print();
 
 	public String printIndividualSchedules();
 	

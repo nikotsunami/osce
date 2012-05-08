@@ -271,14 +271,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	protected Request<java.util.List<AnamnesisCheckProxy>> createRangeRequest(
 			String q, AnamnesisCheckProxy title, Range range) {
 		return requests.anamnesisCheckRequestNonRoo()
-				.findAnamnesisChecksBySearch(q, title, range.getStart(),
+				.findAnamnesisChecksBySearchWithTitle(q, title, range.getStart(),
 						range.getLength());
 	}
 
 	protected void fireCountRequest(String q, AnamnesisCheckProxy title,
 			Receiver<Long> callback) {
 		requests.anamnesisCheckRequestNonRoo()
-				.countAnamnesisChecksBySearch(q, title).fire(callback);
+				.countAnamnesisChecksBySearchWithTitle(q, title).fire(callback);
 	}
 
 	protected void fireTitleValueRequest(AnamnesisCheckTypes type,
