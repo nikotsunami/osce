@@ -76,4 +76,5 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String EDIT();
 	public String DETAILS();
 	public String CREATE();
+	public String NEW();
 }

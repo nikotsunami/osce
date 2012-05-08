@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
@@ -22,6 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
@@ -54,6 +56,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	private static final String placeToken = "AnamnesisCheckPlace";
 
 	private String listSelectedValue = "10";
+	private String quickSearchTerm = "";
 
 	public AnamnesisCheckActivity(OsMaRequestFactory requests,
 			PlaceController placeController, AnamnesisCheckPlace place) {
@@ -124,6 +127,23 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 					}
 				});
 		view.setDelegate(this);
+		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+			
+			@Override
+			public void onPlaceChange(PlaceChangeEvent event) {
+				if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
+					AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
+					if (place.getOperation() == Operation.NEW) {
+						initSearch();
+					}
+				} else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {
+					AnamnesisCheckPlace place = (AnamnesisCheckPlace) event.getNewPlace();
+					if (place.getToken().contains("!DELETED")) {
+						initSearch();
+					}
+				}
+			}
+		});
 		// view.setSearchFocus(true);
 	}
 
@@ -133,7 +153,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 		if (place.getSearchStr().equals("")) {
 			view.setSearchBoxShown(place.DEFAULT_SEARCHSTR);
-			init2("");
+			initSearch();
 			if (place.getFilterTileId().equals("")) {
 				view.setSearchFocus(false);
 			} else {
@@ -142,15 +162,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			}
 		} else {
 			view.setSearchBoxShown(place.getSearchStr());
-			init2(view.getSearchBoxShown());
+			initSearch();
 			view.setSearchFocus(true);
 		}
 
 	}
 
-	private void init2(final String q) {
-
-		fireCountRequest(q, getSelectedFilterTitle(), new Receiver<Long>() {
+	private void initSearch() {
+		fireCountRequest(quickSearchTerm, getSelectedFilterTitle(), new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -160,9 +179,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 				Log.debug("Geholte Intitution aus der Datenbank: " + response);
 				setTableRowCount(response.intValue(), true);
 				view.setListBoxItem(place.getPageLen());
-				onRangeChanged(q);
+				onRangeChanged(quickSearchTerm);
 			}
-
 		});
 
 		if (rangeChangeHandler != null) {
@@ -178,7 +196,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						AnamnesisCheckActivity.this.onRangeChanged(q);
+						AnamnesisCheckActivity.this.onRangeChanged(quickSearchTerm);
 					}
 				});
 	}
@@ -308,11 +326,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
-
-		init2(q);
-
-		goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
-				.getStart(), listSelectedValue, q, getSelectedTitleId()));
+		quickSearchTerm = q;
+		initSearch();
 
 	}
 
@@ -446,7 +461,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 					});
 		} else {
-			init2(view.getSearchBox().getText());
+			initSearch();
 		}
 
 	}

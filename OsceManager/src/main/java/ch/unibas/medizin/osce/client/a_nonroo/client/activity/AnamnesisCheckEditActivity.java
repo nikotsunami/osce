@@ -242,11 +242,10 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 			}
 		}
 	}
-
 	
 	private void gotoDetailsPlace(){
 		placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
-				Operation.DETAILS));
+				Operation.NEW));
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -415,7 +414,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 							// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
 						}
-
+						
 						@Override
 						public void onSuccess(Void response) {
 							Log.info("AnamnesisCheck successfully saved.");
@@ -453,7 +452,6 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		}else{
 			getQuestionsByselected(anamnesisCheckType,null);
 		}
-		
 	}
 	
 }

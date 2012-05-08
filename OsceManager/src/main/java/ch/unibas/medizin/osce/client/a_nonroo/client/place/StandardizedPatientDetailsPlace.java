@@ -76,6 +76,9 @@ public class StandardizedPatientDetailsPlace extends Place implements HasOperati
 			if (Operation.CREATE == operation) {
 				return new StandardizedPatientDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
+			if (Operation.NEW == operation) {
+				return new StandardizedPatientDetailsPlace(requests.getProxyId(bits[0]), Operation.NEW);
+			}
 
 			return new StandardizedPatientDetailsPlace(token);
 		}
@@ -90,6 +93,9 @@ public class StandardizedPatientDetailsPlace extends Place implements HasOperati
 			}
 			if (Operation.CREATE == place.getOperation()) {
 				return /*place.getProxyId() +*/ SEPARATOR + Operation.CREATE.toString();
+			}
+			if (Operation.NEW == place.getOperation()) {
+				return place.getProxyId() + SEPARATOR + Operation.NEW;
 			}
         
 			return place.getToken();

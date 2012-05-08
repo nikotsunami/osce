@@ -33,10 +33,9 @@ public class DoctorDetailsActivityMapper  implements ActivityMapper{
 				 return new DoctorEditActivity((DoctorDetailsPlace) place, requests, placeController);
 			 if(((DoctorDetailsPlace) place).getOperation() == Operation.CREATE)
 				 return new DoctorEditActivity((DoctorDetailsPlace) place, requests, placeController,  Operation.CREATE);
+			 if(((DoctorDetailsPlace) place).getOperation() == Operation.NEW)
+				 return new DoctorDetailsActivity((DoctorDetailsPlace) place, requests, placeController);
 		 }
-	            
-
-
 		return null;
 	}
 }

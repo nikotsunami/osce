@@ -84,12 +84,6 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 
 		view.setDelegate(this);
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-				//updateSelection(event.getNewPlace());
-				// TODO implement
-			}
-		});
 		//init();
 
 	      view.setDoctorsPickerValues(Collections.<DoctorProxy>emptyList());
@@ -196,7 +190,7 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 				
 				save=true;
 				
-				placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), Operation.DETAILS));		
+				placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), Operation.NEW));		
 			}
 		}); 
 	}

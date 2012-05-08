@@ -218,7 +218,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 				//saveOffice();
 				save = true;
 				
-				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), Operation.DETAILS));
+				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), Operation.NEW));
 			}
 
 			@Override

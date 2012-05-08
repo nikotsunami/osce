@@ -76,6 +76,9 @@ public class DoctorDetailsPlace extends Place implements HasOperationOnProxy {
 			if (Operation.CREATE == operation) {
 				return new DoctorDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
+			if (Operation.NEW == operation) {
+				return new DoctorDetailsPlace(requests.getProxyId(bits[0]), Operation.NEW);
+			}
 
 			return new DoctorDetailsPlace(token);
 		}
@@ -90,6 +93,9 @@ public class DoctorDetailsPlace extends Place implements HasOperationOnProxy {
 			}
 			if (Operation.CREATE == place.getOperation()) {
 				return /*place.getProxyId() + SEPARATOR + */ Operation.CREATE.toString();
+			}
+			if (Operation.NEW == place.getOperation()) {
+				return place.getProxyId() + SEPARATOR + Operation.NEW;
 			}
         
 			return place.getToken();

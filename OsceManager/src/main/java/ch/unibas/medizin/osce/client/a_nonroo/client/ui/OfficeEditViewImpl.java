@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Arrays;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.shared.Gender;
@@ -26,9 +27,9 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 	
 	@UiField(provided=true)
 	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
-
+		EnumRenderer<Gender> renderer = new EnumRenderer<Gender>();
         public String render(ch.unibas.medizin.osce.shared.Gender obj) {
-            return obj == null ? "" : String.valueOf(obj);
+            return obj == null ? "" : renderer.render(obj);
         }
     });
 

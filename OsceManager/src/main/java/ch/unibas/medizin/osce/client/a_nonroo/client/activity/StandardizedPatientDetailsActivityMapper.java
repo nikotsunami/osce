@@ -34,6 +34,8 @@ public class StandardizedPatientDetailsActivityMapper  implements ActivityMapper
 				 return new StandardizedPatientEditActivity((StandardizedPatientDetailsPlace) place, requests, placeController);
 			 if(((StandardizedPatientDetailsPlace) place).getOperation() == Operation.CREATE)
 				 return new StandardizedPatientEditActivity((StandardizedPatientDetailsPlace) place, requests, placeController, Operation.CREATE);
+			 if(((StandardizedPatientDetailsPlace) place).getOperation() == Operation.NEW)
+				 return new StandardizedPatientDetailsActivity((StandardizedPatientDetailsPlace) place, requests, placeController);
 		 }
 
 		 return null;

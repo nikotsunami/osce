@@ -16,12 +16,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientBa
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientBankaccountEditSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
-import ch.unibas.medizin.osce.client.managed.request.DescriptionRequest;
-import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -295,11 +292,9 @@ StandardizedPatientEditView.Delegate {
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("StandardizedPatient successfully saved.");
-
-				save = true;
 				
-				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
-
+				save = true;
+				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.NEW));
 				//saveDescription();
 			}
 		}); 

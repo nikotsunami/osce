@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
@@ -52,6 +53,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
@@ -243,6 +245,26 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				StandardizedPatientActivity.this.onRangeChanged();
 			}
 		});
+		
+		PlaceChangeEvent.Handler eventHandler = new PlaceChangeEvent.Handler() {
+			@Override
+			public void onPlaceChange(PlaceChangeEvent event) {
+				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
+				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
+					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
+					Operation op = spdPlace.getOperation();
+					if (op == Operation.NEW) {
+						initSearch();
+					}
+				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
+					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
+					if (place.getToken().contains("DELETED")) {
+						initSearch();
+					}
+				}
+			}
+		};
+		eventBus.addHandler(PlaceChangeEvent.TYPE, eventHandler);
 		
 		initSearch();
 		

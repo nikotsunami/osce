@@ -10,19 +10,17 @@
 
 <ui:style src="../../styles.css" />
  
-  <g:HTMLPanel><!-- 
-    <div class='{style.underline}'>    
-      <h3 class='{style.header}' ui:field="editTitle"><ui:msg>Edit StandardizedPatient</ui:msg></h3>
-      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New StandardizedPatient</ui:msg></h3>
-    </div> -->
+  <g:VerticalPanel addStyleNames="{style.tabStyle}">
     
-    <div class="{style.patientControls} {style.controlsright}">
-		<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
-		<my:IconButton ui:field="save" icon="disk"></my:IconButton>
-		<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
-	</div>
+    <g:HTMLPanel styleName="{style.patientControls}">
+	    <div class="{style.controlsright}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
+			<my:IconButton ui:field="save" icon="disk"></my:IconButton>
+			<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
+		</div>
+    </g:HTMLPanel>
     
-    <g:TabPanel ui:field="patientPanel" addStyleNames="{style.tabStyle}">
+    <g:TabPanel ui:field="patientPanel" width="100%">
 		<g:Tab>
 			<g:TabHTML></g:TabHTML>
 			<g:HTMLPanel addStyleNames="{style.patientDetails}">
@@ -111,7 +109,8 @@
 		</g:Tab>
 	</g:TabPanel>
 		
-    
-    <div ui:field='errors' class='{style.errors}'></div>
-  </g:HTMLPanel>
+   	<g:HTMLPanel> 
+    	<div ui:field='errors' class='{style.errors}'></div>
+    </g:HTMLPanel>
+  </g:VerticalPanel>
 </ui:UiBinder>
