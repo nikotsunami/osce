@@ -339,9 +339,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		@Override
 		public void onSuccess(List<StandardizedPatientProxy> response) {
 			final Range range = table.getVisibleRange();
-			//By SPEC[
-			table.setRowCount(response.size());
-			//By SPEC]
+			// NOTE: If you set the Row count to the actually received responses,
+			// it is impossible to access anymore than the displayed number of
+			// patients! Therefore do not set the row count here! This is the
+			// reason we have a "count request"!
 			table.setRowData(range.getStart(), response);
 			
 		}
