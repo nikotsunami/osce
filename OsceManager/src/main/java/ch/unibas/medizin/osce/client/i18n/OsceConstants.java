@@ -191,6 +191,8 @@ public interface OsceConstants extends Constants {
 	public String text();
 
 	public String value();
+	
+//	public String insideTitle();
 
 	public String addAnswer();
 
@@ -263,5 +265,13 @@ public interface OsceConstants extends Constants {
 	public String print();
 
 	public String export();
+	
+	public String insideTitle();
+	
+	public String previousQuestion();
+	
+	public String previousTitle();
+	
+	public String noTitle();
 
 }

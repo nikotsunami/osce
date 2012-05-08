@@ -20,7 +20,7 @@ public interface AnamnesisCheckDetailsView extends IsWidget{
 		void deleteClicked();
 	}
 	
-    public void setValue(AnamnesisCheckProxy proxy); 
+    public void setValue(AnamnesisCheckProxy proxy, String previousAnamnesisCheckText); 
   
     void setDelegate(Delegate delegate);
     

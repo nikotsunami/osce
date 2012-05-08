@@ -75,7 +75,7 @@ public class AdministratorDetailsViewImpl extends Composite implements  Administ
 	    AdministratorProxy proxy;
 
 
-@Override
+        @Override
 	    public void setValue(AdministratorProxy proxy) {
 	        this.proxy = proxy;
 	        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));

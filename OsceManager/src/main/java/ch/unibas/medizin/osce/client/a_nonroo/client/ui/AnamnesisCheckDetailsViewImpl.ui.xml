@@ -35,6 +35,14 @@
 								<td valign="top"><span class='{style.label}' ui:field="labelValue" /></td>
 								<td><g:VerticalPanel ui:field="valuePanel" addStyleNames="{style.AnamnesisMCValueSubPanel}" /></td>
 							</tr>
+							<tr id='title'>
+                                <td><span class='{style.label}' ui:field="labelTitle" /></td>
+                                <td><span ui:field='title' /></td>
+                            </tr>
+                            <tr id='previous'>
+                                <td><span class='{style.label}' ui:field="labelPrevious" /></td>
+                                <td><span ui:field='previous' /></td>
+                            </tr>
 						</tbody>
 					</table>
 				</g:HTMLPanel>

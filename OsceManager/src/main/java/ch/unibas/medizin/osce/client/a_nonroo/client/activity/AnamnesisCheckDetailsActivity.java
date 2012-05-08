@@ -6,10 +6,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckDetailsViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -45,6 +47,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 	public void onStop(){
 
 	}
+	@SuppressWarnings("deprecation")
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("AnamnesisCheckDetailsActivity.start()");
@@ -56,24 +59,66 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 
 		view.setDelegate(this);
 
-		requests.find(place.getProxyId()).fire(new Receiver<Object>() {
+		requests.find(place.getProxyId()).with("title").fire(new Receiver<Object>() {
 
-			public void onFailure(ServerFailure error){
+			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
 			}
+
 			@Override
 			public void onSuccess(Object response) {
-				if(response instanceof AnamnesisCheckProxy){
+				if (response instanceof AnamnesisCheckProxy) {
 					Log.info(((AnamnesisCheckProxy) response).getId().toString());
-					init((AnamnesisCheckProxy) response);
+					final AnamnesisCheckProxy anamnesisCheckProxy = (AnamnesisCheckProxy) response;
+					int previousSortOrder = -1;
+					if (anamnesisCheckProxy.getSort_order() != null) {
+						previousSortOrder = anamnesisCheckProxy.getSort_order() - 1;
+					}
+					if (anamnesisCheckProxy.getType() != AnamnesisCheckTypes.QUESTION_TITLE) {
+						requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySortOder(previousSortOrder).fire(new Receiver<AnamnesisCheckProxy>() {
+							public void onFailure(ServerFailure error) {
+								Log.error(error.getMessage());
+							}
+
+							@Override
+							public void onSuccess(AnamnesisCheckProxy response) {
+								String previousAnamnesisCheckText = "";
+								if (response != null) {
+									previousAnamnesisCheckText = response.getText();
+								}
+								init(anamnesisCheckProxy, previousAnamnesisCheckText);
+
+							}
+						});
+					} else {
+						if(anamnesisCheckProxy.getSort_order()!=null){
+						requests.anamnesisCheckRequestNonRoo().findPreviousTitleBySortOder(anamnesisCheckProxy.getSort_order()).fire(new Receiver<AnamnesisCheckProxy>() {
+							public void onFailure(ServerFailure error) {
+								Log.error(error.getMessage());
+							}
+
+							@Override
+							public void onSuccess(AnamnesisCheckProxy response) {
+								String previousAnamnesisCheckText = "";
+								if (response != null) {
+									previousAnamnesisCheckText = response.getText();
+								}
+								init(anamnesisCheckProxy, previousAnamnesisCheckText);								
+							}
+						});
+						}else{
+							init(anamnesisCheckProxy, "");
+						}
+					}
+
 				}
 			}
 		});
 	}
 
-	private void init(AnamnesisCheckProxy anamnesisCheckProxy) {
+	private void init(AnamnesisCheckProxy anamnesisCheckProxy, String previousAnamnesisCheckText) {
 		this.anamnesisCheckProxy = anamnesisCheckProxy;
-		view.setValue(anamnesisCheckProxy);
+		view.setValue(anamnesisCheckProxy, previousAnamnesisCheckText);
 	}
 
 	@Override
@@ -84,8 +129,10 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 	@Override
 	public void editClicked() {
 		Log.info("edit clicked");
-		goTo(new AnamnesisCheckDetailsPlace(anamnesisCheckProxy.stableId(),
+		if(anamnesisCheckProxy!=null){
+			goTo(new AnamnesisCheckDetailsPlace(anamnesisCheckProxy.stableId(),
 				Operation.EDIT));
+		}
 	}
 
 	@Override

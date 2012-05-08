@@ -28,10 +28,12 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -73,6 +75,15 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	SpanElement labelText;
 	@UiField
 	SpanElement labelValue;
+	@UiField
+	SpanElement labelinsideTitle;
+	@UiField
+	SpanElement labelpreviousQuestion;
+
+	@UiField
+	ListBox insideTitleListBox;
+	@UiField
+	ListBox	previousQuestionListBox;
 
 //	@UiField
 //	DateBox createDate;
@@ -113,6 +124,11 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 		labelType.setInnerText(constants.type() + ":");
 		labelText.setInnerText(constants.text() + ":");
+//		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
+//		previousQuestionListBox.addItem(constants.previousQuestion(), "");
+		
+		insideTitleListBox.addItem(constants.insideTitle(), "");
+		insideTitleListBox.setVisible(false);
 		
 		addValueField();
 		
@@ -135,6 +151,30 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 					default:
 						setMultipleFields(false);
 				}
+				switch(selectedValue) {
+				case QUESTION_TITLE:
+					labelinsideTitle.setInnerText("");
+					insideTitleListBox.setVisible(false);
+					labelpreviousQuestion.setInnerText(constants.previousTitle() + ":");
+					break;
+				default:
+					labelinsideTitle.setInnerText(constants.insideTitle() + ":");
+					insideTitleListBox.setVisible(true);
+					labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
+			}
+				
+				//TODO
+				resetpreviousQuestion(selectedValue);
+			}
+			
+		});
+		
+		insideTitleListBox.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void onChange(Widget sender) {
+				//TODO
+				resetpreviousQuestion(type.getValue());
 			}
 		});
 		
@@ -146,6 +186,14 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			setMultipleFields(false);
 		}
 		
+		if(type.getValue() == AnamnesisCheckTypes.QUESTION_TITLE){
+			labelinsideTitle.setInnerText("");
+			insideTitleListBox.setVisible(false);
+		}else{
+			labelinsideTitle.setInnerText(constants.insideTitle() + ":");
+			insideTitleListBox.setVisible(true);
+		}
+		
 		text.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
@@ -155,6 +203,19 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		type.setValue(AnamnesisCheckTypes.values()[0]);
 		type.setAcceptableValues(Arrays.asList(AnamnesisCheckTypes.values()));
+		
+		
+	}
+	
+	private void resetpreviousQuestion(AnamnesisCheckTypes selectedValue){
+		previousQuestionListBox.clear();
+		if(selectedValue == AnamnesisCheckTypes.QUESTION_TITLE){
+			previousQuestionListBox.addItem(constants.previousTitle(), "");
+		}else{
+			previousQuestionListBox.addItem(constants.previousQuestion(), "");
+		}
+		delegate.changePreviousQuestion(selectedValue,insideTitleListBox.getValue(insideTitleListBox.getSelectedIndex()));
+
 	}
 	
 	private IconButton createDeleteButton() {
@@ -288,11 +349,27 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	}
 	
 	@Override
-	public void update(String value) {
-		if (type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_M || type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_S)
+	public void update(AnamnesisCheckProxy anamnesisCheckProxy) {
+		String value = anamnesisCheckProxy.getValue();
+	
+		if(anamnesisCheckProxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
+			labelinsideTitle.setInnerText("");
+			insideTitleListBox.setVisible(false);
+			labelpreviousQuestion.setInnerText(constants.previousTitle() + ":");
+			previousQuestionListBox.addItem(constants.previousTitle(), "");
+		}else{
+			labelinsideTitle.setInnerText(constants.insideTitle() + ":");
+			insideTitleListBox.setVisible(true);
+			labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
+			previousQuestionListBox.addItem(constants.previousQuestion(), "");
+		}
+		
+		if (type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_M || type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_S){
 			setMultipleFields(true);
-		else
+		}
+		else{
 			setMultipleFields(false);
+		}
 		
 		if (value == null) {
 			this.value = "";
@@ -300,8 +377,11 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		}
 		
 		this.value = value;
+		GWT.log("setMultipleFields false 3");
 		String substr[] = value.split("\\|");
-
+		
+		GWT.log("setMultipleFields false 4");
+		
 		IndexedPanel lastPanel = (IndexedPanel) valuePanel.getWidget(valuePanel.getWidgetCount() - 1);
 		((HasText)lastPanel.getWidget(0)).setText(substr[0]);
 		
@@ -310,5 +390,64 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			lastPanel = (IndexedPanel) valuePanel.getWidget(valuePanel.getWidgetCount() - 1);
 			((HasText)lastPanel.getWidget(0)).setText(substr[i]);
 		}
+		
 	}
+
+	@Override
+	public void setInsideTitleListBox(List<AnamnesisCheckProxy> titleList) {
+		for(AnamnesisCheckProxy title : titleList){
+			if (title != null) {
+				insideTitleListBox.addItem(title.getText(), String.valueOf(title.getId()));
+			}
+		}
+		
+	}
+
+
+	@Override
+	public void setPreviousQuestionListBox(List<AnamnesisCheckProxy> anamnesisCheckList) {
+		for(AnamnesisCheckProxy anamnesisCheck : anamnesisCheckList){
+			if (anamnesisCheck != null) {
+				previousQuestionListBox.addItem(anamnesisCheck.getText(), String.valueOf(anamnesisCheck.getSort_order()));
+			}
+		}
+		
+	}
+	
+	@Override
+	public String getSelectedInsideTitle() {
+		int selectedIndex = insideTitleListBox.getSelectedIndex();
+		String selectedInsideTitle = insideTitleListBox.getValue(selectedIndex);
+		return selectedInsideTitle;
+	}
+
+	@Override
+	public String getSelectedPreviousQuestion() {
+		int selectedIndex = previousQuestionListBox.getSelectedIndex();
+		String selectedPreviousQuestion = previousQuestionListBox.getValue(selectedIndex);
+		return selectedPreviousQuestion;
+	}
+
+	@Override
+	public void setSeletedInsideTitle(String anamnesisCheckTitleId) {
+		for (int i = 0; i < insideTitleListBox.getItemCount(); i++) {
+			GWT.log("insideTitleListBox.getValue(i) = "+insideTitleListBox.getValue(i));
+			if (insideTitleListBox.getValue(i).equals(anamnesisCheckTitleId)) {
+				insideTitleListBox.setSelectedIndex(i);
+			}
+		}
+		
+	}
+
+	@Override
+	public void setSeletedPreviousQuestion(String previousSortId) {
+		GWT.log("?????previousSortId = "+previousSortId);
+		for (int i = 0; i < previousQuestionListBox.getItemCount(); i++) {
+			GWT.log("previousQuestionListBox.getValue(i) = "+previousQuestionListBox.getValue(i));
+			if (previousQuestionListBox.getValue(i).equals(previousSortId)) {
+				previousQuestionListBox.setSelectedIndex(i);
+			}
+		}	
+	}
+
 }

@@ -71,6 +71,7 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		
 		labelType.setInnerText(constants.type() + ":");
 		labelText.setInnerText(constants.text() + ":");
+
 	}
 	
 	@UiField
@@ -89,6 +90,15 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 	
 	@UiField
 	SpanElement text;
+	
+	@UiField
+	SpanElement labelTitle;
+	@UiField
+	SpanElement title;
+	@UiField
+	SpanElement labelPrevious;
+	@UiField
+	SpanElement previous;
 
 //	@UiField
 //	SpanElement version;
@@ -109,7 +119,7 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 
 	private Presenter presenter;
 
-	public void setValue(AnamnesisCheckProxy proxy) {
+	public void setValue(AnamnesisCheckProxy proxy, String previousAnamnesisCheckText) {
 		this.proxy = proxy;
 		String headerText = "[";
 		headerText += proxy.getId() == null ? "" : String.valueOf(proxy.getId());
@@ -119,7 +129,7 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		
 		type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
 		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
-		
+
 		if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {
 			labelValue.setInnerText(constants.value() + ":");
 			if (proxy.getValue() != null) {
@@ -132,11 +142,35 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 			labelValue.setInnerText("");
 		}
 		
-//		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-//		createDate.setInnerText(proxy.getCreateDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getCreateDate()));
-//		anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
-//		scars.setInnerText(proxy.getScars() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance()).render(proxy.getScars()));
-//		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy));
+		if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
+			GWT.log("in AnamnesisCheckDetailsViewImpl setValue type is QUESTION_TITLE");
+			labelTitle.setInnerText("");
+			title.setInnerText("");
+		}else{
+			if(proxy.getTitle()!=null){
+				String titleTextString = proxy.getTitle().getText();
+				labelTitle.setInnerText(constants.insideTitle());
+			    title.setInnerText(titleTextString == null ? "" : String.valueOf(titleTextString));
+			}else{
+				labelTitle.setInnerText(constants.insideTitle());
+				title.setInnerText(constants.noTitle());
+			}
+		}
+		
+		
+	    if(proxy.getSort_order()!=null&&proxy.getSort_order()!=1){
+	    	if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
+	    	labelPrevious.setInnerText(constants.previousTitle());
+	    	}else{
+	    		labelPrevious.setInnerText(constants.previousQuestion());
+	    	}
+		    previous.setInnerText(previousAnamnesisCheckText == null ? "" : String.valueOf(previousAnamnesisCheckText));
+	    }else{
+	    	labelPrevious.setInnerText("");
+	    	previous.setInnerText("");
+	    }
+		
+		
 	}
 
 	@Override

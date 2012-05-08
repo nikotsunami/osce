@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.List;
+
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
@@ -18,11 +20,24 @@ public interface AnamnesisCheckEditView extends IsWidget {
 	interface Delegate {
 		void cancelClicked();
 		void saveClicked();
+		void changePreviousQuestion(AnamnesisCheckTypes anamnesisCheckTypes, String seletedTitleId);
 	}
 
 	RequestFactoryEditorDriver<AnamnesisCheckProxy, AnamnesisCheckEditViewImpl> createEditorDriver();
 	void setPresenter(Presenter presenter);
 	
 	String getValue();
-	void update(String value);
+	void update(AnamnesisCheckProxy anamnesisCheck);
+
+	void setInsideTitleListBox(List<AnamnesisCheckProxy> titleList);
+
+	void setPreviousQuestionListBox(List<AnamnesisCheckProxy> anamnesisCheckList);
+
+	void setSeletedInsideTitle(String anamnesisCheckTitleId);
+
+	void setSeletedPreviousQuestion(String previousSortId);
+
+	String getSelectedInsideTitle();
+
+	String getSelectedPreviousQuestion();
 }
