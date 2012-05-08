@@ -8,21 +8,13 @@
 	<g:HTMLPanel>
 		<g:FormPanel ui:field="uploadFormPanel">
 		
-		        <g:HorizontalPanel>
-		            <g:Label styleName="{style.label}"> Image
-		                Upload: &nbsp;&nbsp;&nbsp;</g:Label>
-		            <g:FileUpload ui:field="fileUpload" name="fileUpload1" />
-		
-		            <my:IconButton ui:field="uploadButton" title="Upload">
-		                Upload</my:IconButton>
-		              <g:TextBox ui:field="id"></g:TextBox>
-					<g:TextBox ui:field="name"></g:TextBox>
+	        <g:HorizontalPanel>
+	            <g:Label styleName="{style.label}"> Image Upload: </g:Label>
+	            <g:FileUpload ui:field="fileUpload" name="fileUpload1" />
+	            <g:TextBox ui:field="id"></g:TextBox>
+				<g:TextBox ui:field="name"></g:TextBox>
 
-		        </g:HorizontalPanel>
-		
-		       
-		   
-		   
+	        </g:HorizontalPanel>
 		</g:FormPanel>
 		 <g:HorizontalPanel>			
 	
@@ -31,18 +23,15 @@
 	    <!--spec video upload -->
 	    <g:FormPanel ui:field="videoUploadFormPanel">
 		
-		        <g:HorizontalPanel>
-		            <g:Label styleName="{style.label}"> Video
-		                Upload: &nbsp;&nbsp;&nbsp;&nbsp;</g:Label>
-		            <g:FileUpload ui:field="videoFileUpload" name="videoFileUpload1" />
-		
-		            <my:IconButton ui:field="videoUploadButton" title="VideoUpload">
-		                Upload</my:IconButton>
-		              <g:TextBox ui:field="vid"></g:TextBox>
-					<g:TextBox ui:field="vname"></g:TextBox>
+	        <g:HorizontalPanel>
+	            <g:Label styleName="{style.label}"> Video Upload: </g:Label>
+	            <g:FileUpload ui:field="videoFileUpload" name="videoFileUpload1" />
+	
+	            <g:TextBox ui:field="vid"></g:TextBox>
+				<g:TextBox ui:field="vname"></g:TextBox>
 
 
-		        </g:HorizontalPanel>
+	        </g:HorizontalPanel>
 		
 		</g:FormPanel>			
 	    <div ui:field="videoUploadMessage" />

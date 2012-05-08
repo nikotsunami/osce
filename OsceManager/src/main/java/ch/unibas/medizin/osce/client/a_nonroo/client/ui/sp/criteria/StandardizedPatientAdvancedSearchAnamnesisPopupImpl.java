@@ -224,7 +224,9 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		} else if (currentAnswerWidget == anamnesisAnswerText) {
 			answer = anamnesisAnswerText.getValue();
 		}
-		delegate.addAnamnesisValueButtonClicked(selectedProxy, answer, bindType.getValue(), comparison.getValue());
+		if (currentAnswerWidget != null) {
+			delegate.addAnamnesisValueButtonClicked(selectedProxy, answer, bindType.getValue(), comparison.getValue());
+		}
 		hide();
 	}
 	

@@ -99,8 +99,6 @@
 	width: 98%;
 	min-height: 26px;
 	margin: 4px auto;
-	float: left;
-	height: 50px;
 }
 
 .controls table {
@@ -392,23 +390,12 @@ body {
 /* By SPEC] end */
 	-moz-border-radius: 12px 12px 12px 12px;
 	background-color: #EBEBEB;
-	max-height: 26px;
-	min-height: 26px;
-    border: 1px;
-    border-style: solid;
-    border-color: #808080; 
-}
-.patientTopContainer{
-	border-color: #808080;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	-moz-border-radius-bottomleft: 16px;
-	-moz-border-radius-bottomright: 16px;
-	-moz-border-radius-topleft: 16px;
-	-moz-border-radius-topright: 16px;	
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
 }
 
 .tabStyle { /*position: relative;*/

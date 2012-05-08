@@ -59,6 +59,11 @@ public class OsMaMainNav extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.requests = requests;
 		this.placeController = placeController;
+		
+		masterDataPanel.setAnimationEnabled(true);
+		administrationPanel.setAnimationEnabled(true);
+		examinationsPanel.setAnimationEnabled(true);
+		rolePanel.setAnimationEnabled(true);
 
 		masterDataPanel.getHeaderTextAccessor().setText(constants.masterData());
 		administrationPanel.getHeaderTextAccessor().setText(constants.administration());

@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -47,6 +48,8 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 	private int minApplicableFilters = 1;
 	private boolean selectionChanged = false;
 	
+	@UiField
+	SpanElement labelSearch;
 	@UiField
 	FocusPanel filterPanelRoot;
 	@UiField
@@ -144,7 +147,7 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		});
 		
 		OsceConstants constants = GWT.create(OsceConstants.class);
-		
+		labelSearch.setInnerText(constants.searchFor());
 		resetButton.setText(constants.resetFilters());
 		
 		initCheckBox(name, "name", constants.name());
@@ -166,6 +169,7 @@ public class StandardizedPatientFilterViewImpl extends PopupPanel {
 		prename.setValue(true);
 		
 		maxApplicableFilters = fields.size();
+		
 		
 		Iterator<CheckBoxItem> fieldIter = fields.iterator();
 		while (fieldIter.hasNext()) {

@@ -11,6 +11,8 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -44,8 +46,6 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	@UiField
 	FileUpload fileUpload;
 	@UiField
-	IconButton uploadButton;
-	@UiField
 	FormPanel uploadFormPanel;
 	@UiField
 	Image uploadMessage;
@@ -69,8 +69,6 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	//file upload
 		@UiField
 		FileUpload videoFileUpload;
-		@UiField
-		IconButton videoUploadButton;
 		@UiField
 		FormPanel videoUploadFormPanel;
 		@UiField
@@ -104,6 +102,20 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	    uploadFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
 	    uploadFormPanel.setMethod(FormPanel.METHOD_POST);
 	    uploadFormPanel.setAction(GWT.getHostPageBaseURL()+"UploadServlet");
+	    
+	    fileUpload.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(ChangeEvent event) {
+				uploadFormPanel.submit();
+			}
+		});
+	    
+	    videoFileUpload.addChangeHandler(new ChangeHandler() {
+	    	@Override
+	    	public void onChange(ChangeEvent event) {
+	    		videoUploadFormPanel.submit();
+	    	}
+	    });
 	   
 	    //spec video upload[
 	 
@@ -178,18 +190,6 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		
 	   	 //spec
 	}
-
-	//ps upload button handler
-	@UiHandler(value={"uploadButton","videoUploadButton"})
-	
-	void onClickUploadButton(ClickEvent event) {
-	    Log.info("You selected: " + fileUpload.getFilename());
-	    //spec 
-	    if(event.getSource() == uploadButton)
-	        uploadFormPanel.submit();
-	    else
-	    	videoUploadFormPanel.submit();
-	}
 	
 	interface Binder extends UiBinder<Widget, StandardizedPatientMediaSubViewImpl> {
 	}
@@ -209,20 +209,32 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 
 	@Override
 	public void setMediaContent(String description) {
+		uploadMessage.setUrl(description);
+		int height = uploadMessage.getHeight();
+		int width = uploadMessage.getWidth();
+		double ratio = (double) width/height;
 		
-			uploadMessage.setWidth("60px");
-			uploadMessage.setHeight("80px");
-			uploadMessage.setUrl(description);		
+		Log.info("width, height, ratio: " + width + ", " + height + ", " + ratio);
 		
+		if (height > 100) {
+			height = 100;
+			uploadMessage.setHeight("" + height + "px");
+			uploadMessage.setWidth("" + Math.round(ratio * height) + "px");
+			width = uploadMessage.getWidth();
+		}
+		
+		if (width > 200) {
+			width = 200;
+			uploadMessage.setHeight("" + Math.round(width/ratio) + "px");
+			uploadMessage.setWidth("" + width + "px");
+		}		
 	}
 	
 	
 	//spec video upload
 	@Override 
 	public void setVideoMediaContent(String description) {
-		
-			
-		  //spec display video
+		//spec display video
 		if(description == null)
 			return;
 		 videoPlayer = new VideoWidget(true, true, "");

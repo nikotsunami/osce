@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -56,8 +57,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	
 	@UiField(provided = true)
     ValueListBox<AnamnesisCheckTypes> type = new ValueListBox<AnamnesisCheckTypes>(new AbstractRenderer<AnamnesisCheckTypes>() {
+    	EnumRenderer<AnamnesisCheckTypes> renderer = new EnumRenderer<AnamnesisCheckTypes>();
         public String render(AnamnesisCheckTypes obj) {
-            return obj == null ? "" : String.valueOf(obj);
+            return obj == null ? "" : renderer.render(obj);
         }
     });
 	

@@ -9,6 +9,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
@@ -247,12 +248,24 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 //        }, "Clinic");
 		paths.add("office");
 		table.addColumn(new TextColumn<DoctorProxy>() {
-
-			Renderer<ch.unibas.medizin.osce.client.managed.request.OfficeProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OfficeProxyRenderer.instance();
-
+			
 			@Override
-			public String getValue(DoctorProxy object) {
-				return renderer.render(object.getOffice());
+			public String getValue(DoctorProxy proxy) {
+				OfficeProxy office = proxy.getOffice();
+				StringBuilder sb = new StringBuilder();
+				
+				if (office != null) {
+					if (office.getTitle() != null) {
+						sb.append(office.getTitle());
+					}
+					if (office.getPreName() != null) {
+						sb.append(" " + office.getPreName());
+					}
+					if (office.getName() != null) {
+						sb.append(" " + office.getName());
+					}
+				}
+				return sb.toString();
 			}
 		}, constants.officeDetails());
 	}

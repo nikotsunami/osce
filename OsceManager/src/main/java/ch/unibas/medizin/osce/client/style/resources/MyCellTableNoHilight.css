@@ -1,0 +1,154 @@
+/*
+ * Copyright 2010 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+.cellTableWidget {
+}
+
+.cellTableFirstColumn {
+	border-left: 1px solid #AAAAAA;
+}
+
+.cellTableLastColumn {
+	border-right: 1px solid #AAAAAA;
+}
+
+@sprite .cellTableFooter {
+  gwt-image: 'cellTableFooterBackground';
+  background-color: #dadada;
+
+  border-bottom: 0;
+  border-right: 1px solid #AAAAAA;
+
+  padding: 0px 10px;
+  text-align: left;
+  color: #4b4a4a;
+  overflow: hidden;
+}
+
+@sprite .cellTableHeader {
+  gwt-image: 'cellTableHeaderBackground';
+  
+  background-color: #dadada;
+  
+  border-bottom: 1px solid #AAAAAA;
+  border-right: 1px solid #AAAAAA;
+  
+  padding: 0px 10px;
+  text-align: left;
+  color: #212121;
+  overflow: hidden;
+}
+
+.cellTableCell {
+	border: 0;
+	height: 20px;
+	padding: 4px 10px;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.cellTableCell ul {
+	margin: 0;
+	padding-left: 12px;
+}
+
+.cellTableFirstColumnFooter {
+  -moz-border-radius-bottomleft: 8px;
+}
+
+.cellTableFirstColumnHeader {
+  -moz-border-radius-topleft: 8px;
+}
+
+.cellTableLastColumnFooter {
+  -moz-border-radius-bottomright: 8px;
+  border-right: 0;
+}
+
+.cellTableLastColumnHeader {
+	border-right: 0;
+	-moz-border-radius-topright: 8px;
+}
+
+.cellTableSortableHeader {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.cellTableSortableHeader:hover {
+	
+}
+
+.cellTableSortedHeaderAscending {
+
+}
+
+.cellTableSortedHeaderDescending {
+
+}
+
+.cellTableEvenRow {
+  background: #ffffff;
+}
+.cellTableEvenRowCell {
+  /* background: #ffffff; */
+}
+
+.cellTableOddRow {
+  background: #eee;
+}
+.cellTableOddRowCell {
+  /* background: #eee; */
+}
+
+.cellTableHoveredRow {
+}
+
+.cellTableHoveredRowCell {
+}
+
+.cellTableEvenYesRow {
+  background: #ffffff;
+}
+
+.cellTableOddYesRow {
+  background: #eee;
+}
+
+.cellTableEvenNoRow {
+	background: #FFF2D1;
+}
+
+.cellTableOddNoRow {
+	background: #F5DFA6;
+}
+
+.cellTableKeyboardSelectedRow {
+	
+}
+
+.cellTableKeyboardSelectedRowCell {
+  
+}
+
+.cellTableSelectedRowCell {
+}
+
+.cellTableKeyboardSelectedCell {
+}
+
+.cellTableLoading {
+  margin: 10px auto 0;
+}

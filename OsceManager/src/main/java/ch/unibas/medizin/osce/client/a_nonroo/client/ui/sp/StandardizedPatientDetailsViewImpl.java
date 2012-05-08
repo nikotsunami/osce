@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
@@ -40,9 +41,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 	}
 
-	private OsceConstants constants = GWT.create(OsceConstants.class);
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private Presenter presenter;
 	StandardizedPatientProxy proxy;
+	private final UiIcons uiIcons = GWT.create(UiIcons.class);
 
 	//SPEC START
 	@UiField
@@ -318,17 +320,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	//spec start
 		@UiHandler("arrow")
 		void handleClick(ClickEvent e) {
-			
-			if(patientDisclosurePanel.isOpen())
-			{
+			if(patientDisclosurePanel.isOpen()) {
 				patientDisclosurePanel.setOpen(false);
-				arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdown.png");//set url of up image
-				
+				arrow.setResource(uiIcons.triangle1East());
 			}
-			else
-			{
+			else {
 				patientDisclosurePanel.setOpen(true);
-				arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");//set url of down image
+				arrow.setResource(uiIcons.triangle1South());
 			}
 		   
 		  }
