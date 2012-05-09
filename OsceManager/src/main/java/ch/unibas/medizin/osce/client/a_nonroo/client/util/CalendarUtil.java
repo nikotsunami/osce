@@ -19,12 +19,13 @@ public class CalendarUtil {
 	
 	public CalendarUtil(Date date) {
 		this.date = date;
-		if (this.date == null)
-			this.date = new Date();
 		extractDayMonthYear();
 	}
 	
 	private void extractDayMonthYear() {
+		if (this.date == null) {
+			this.date = new Date();
+		}
 		String parts[] = DateTimeFormat.getFormat(D_M_YYYY).format(date).split(DATE_SEPARATOR);
 		day = Integer.parseInt(parts[0]);
 		month = Integer.parseInt(parts[1]);
