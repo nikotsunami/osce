@@ -19,6 +19,8 @@ public class CalendarUtil {
 	
 	public CalendarUtil(Date date) {
 		this.date = date;
+		if (this.date == null)
+			this.date = new Date();
 		extractDayMonthYear();
 	}
 	
