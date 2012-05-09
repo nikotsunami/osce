@@ -2,13 +2,17 @@
 
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.text.DateFormat;
 import java.text.Format;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.CalendarUtil;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
@@ -43,8 +47,11 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -69,6 +76,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.impl.FocusImpl;
 import com.google.gwt.user.datepicker.client.DateBox;
+import com.ibm.icu.text.SimpleDateFormat;
 
 public class StandardizedPatientEditViewImpl extends Composite implements StandardizedPatientEditView, Editor<StandardizedPatientProxy> {
 
@@ -106,15 +114,40 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@UiField
 	TextBox mobile;
 	@UiField
-	DateBox birthday;
-	@UiField
 	IntegerBox height;
 	@UiField
 	IntegerBox weight;
 	@UiField
 	TextBox email;
-
 	
+	Date birthday;
+
+	@Editor.Ignore
+	@UiField (provided = true)
+	FocusableValueListBox<Integer> day = new FocusableValueListBox<Integer>(new AbstractRenderer<Integer>() {
+		@Override
+		public String render(Integer day) {
+			return (day == null) ? "" : day.toString();
+		}
+	});
+
+
+	@Editor.Ignore
+	@UiField (provided = true)
+	FocusableValueListBox<Integer> month = new FocusableValueListBox<Integer>(new AbstractRenderer<Integer>() {
+		@Override
+		public String render(Integer date) {
+			return (date == null) ? "" : date.toString();
+		}
+	});
+	@Editor.Ignore
+	@UiField (provided = true)
+	FocusableValueListBox<Integer> year = new FocusableValueListBox<Integer>(new AbstractRenderer<Integer>() {
+		@Override
+		public String render(Integer date) {
+			return (date == null) ? "" : date.toString();
+		}
+	});
 	
 
 	@UiField(provided = true)
@@ -167,16 +200,18 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 
 	private Delegate delegate;
 	private Presenter presenter;
+	private CalendarUtil cal = new CalendarUtil();
 
 
 	public StandardizedPatientEditViewImpl() {
+		
 		initWidget(BINDER.createAndBindUi(this));
 		gender.setAcceptableValues(Arrays.asList(Gender.values()));
 		
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
 		
-		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy");
-		birthday.setFormat(new DateBox.DefaultFormat(fmt));
+//		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy");
+//		birthday.setFormat(new DateBox.DefaultFormat(fmt));
 		
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
@@ -194,7 +229,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 					preName.setFocus(true);
 					break;
 				case 1:
-					birthday.setFocus(true);
+					/*birthday.setFocus(true);*/
 					break;
 				case 2:
 //					bankName.setFocus(true);
@@ -207,7 +242,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 			}
 			
 		});
-
+		
 		setTabTexts();
 		setLabelTexts();
 		
@@ -217,42 +252,37 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		patientPanel.selectTab(0);
 		preName.setFocus(true);
 		preName.selectAll();
-		/*//ps: upload
-	    uploadFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
-	    uploadFormPanel.setMethod(FormPanel.METHOD_POST);
-	    uploadFormPanel.setAction(GWT.getHostPageBaseURL()+"UploadServlet");
-	    uploadFormPanel.addSubmitHandler(new FormPanel.SubmitHandler() {
-
-	        @Override
-	        public void onSubmit(SubmitEvent event) {
-	             if (!"".equalsIgnoreCase(fileUpload.getFilename())) { 
-	                 Log.info("PS UPLOADING");   
-	                 }  
-	             else{  
-	                 Log.info("PS UPLOADING cancel");   
-	                 event.cancel(); // cancel the event  
-	                 } 
-	             } 
-	         }); 
-
-	    uploadFormPanel
-	    .addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-	    	
-	        @Override
-	        public void onSubmitComplete(SubmitCompleteEvent event) {
-                Log.info("PS Submit is Complete "+event.getResults());
-                uploadMessage.setInnerHTML(event.getResults());
-	        }
-	    });*/
 		
+		month.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Integer> event) {
+				cal.setMonth(month.getValue());
+				if (day.getValue() > cal.getDaysInMonth()) {
+					day.setValue(cal.getDaysInMonth());
+				}
+				day.setAcceptableValues(getIntegerList(1, cal.getDaysInMonth()));
+			}
+		});
+		
+		year.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Integer> event) {
+				cal.setYear(year.getValue());
+				if (day.getValue() > cal.getDaysInMonth()) {
+					day.setValue(cal.getDaysInMonth());
+				}
+				day.setAcceptableValues(getIntegerList(1, cal.getDaysInMonth()));
+			}
+		});
 	}
-	/*//ps upload button handler
-	@UiHandler("uploadButton")
-	void onClickUploadButton(ClickEvent event) {
-	    Log.info("You selected: " + fileUpload.getFilename());
-	    uploadFormPanel.submit();
+	
+	private List<Integer> getIntegerList(int minValue, int maxValue) {
+		List<Integer> values = new ArrayList<Integer>();
+		for (int i = minValue; i <= maxValue; i++) {
+			values.add(new Integer(i));
+		}
+		return values;
 	}
-	*/
 	
 	private void createFocusHandlers() {
 		preName.addFocusHandler(new FocusHandler() {
@@ -391,13 +421,13 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 					patientPanel.selectTab(1);
 			}
 		});
-		birthday.addHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					gender.setFocus(true);
-				}
-			}
-		}, KeyUpEvent.getType());
+//		birthday.addHandler(new KeyUpHandler() {
+//			public void onKeyUp(KeyUpEvent event) {
+//				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+//					gender.setFocus(true);
+//				}
+//			}
+//		}, KeyUpEvent.getType());
 	}
 
 	private void setTabTexts() {
@@ -524,6 +554,49 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //		this.patientId.setValue(patientId);
 //		
 //	}
-
-
+	
+	@Override
+	public Integer getDay() {
+		return day.getValue();
+	}
+	
+	@Override
+	public Integer getMonth() {
+		return month.getValue();
+	}
+	
+	@Override
+	public Integer getYear() {
+		return year.getValue();
+	}
+	
+	@Override
+	public void setAcceptableDays(List<Integer> days) {
+		day.setAcceptableValues(days);
+	}
+	
+	@Override
+	public void setAcceptableMonths(List<Integer> months) {
+		month.setAcceptableValues(months);
+	}
+	
+	@Override
+	public void setAcceptableYears(List<Integer> years) {
+		year.setAcceptableValues(years);
+	}
+	
+	@Override
+	public void setDay(int day) {
+		this.day.setValue(day);
+	}
+	
+	@Override
+	public void setMonth(int month) {
+		this.month.setValue(month);
+	}
+	
+	@Override
+	public void setYear(int year) {
+		this.year.setValue(year);
+	}
 }

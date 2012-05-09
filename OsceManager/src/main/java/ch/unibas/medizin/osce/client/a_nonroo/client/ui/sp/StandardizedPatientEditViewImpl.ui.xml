@@ -75,7 +75,11 @@
 					<tbody>
 					<tr id="birthday">
 						<td><span class="{style.label}" ui:field="labelBirthdate" /></td>
-						<td><d:DateBox ui:field='birthday'/></td>
+						<td>
+							<my:FocusableValueListBox ui:field="day" />
+							<my:FocusableValueListBox ui:field="month" />
+							<my:FocusableValueListBox ui:field="year" />
+						</td>
 						<td><span class="{style.label}" ui:field="labelGender"></span></td>
 						<td><my:FocusableValueListBox ui:field="gender" /></td>
 					</tr>

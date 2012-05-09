@@ -1,17 +1,20 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Collection;
+import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ValueListBox;
 
 public interface StandardizedPatientEditView extends IsWidget {
     void setDelegate(Delegate delegate);
@@ -40,6 +43,16 @@ public interface StandardizedPatientEditView extends IsWidget {
 
 	SimplePanel getDescriptionPanel();
 	SimplePanel getBankEditPanel();
+	
+	Integer getDay();
+	Integer getMonth();
+	Integer getYear();
+	void setAcceptableDays(List<Integer> days);
+	void setAcceptableYears(List<Integer> years);
+	void setDay(int day);
+	void setMonth(int month);
+	void setYear(int year);
+	void setAcceptableMonths(List<Integer> months);
 	
 	//String getPatientId();
 	//void setPatientId(String patientId);
