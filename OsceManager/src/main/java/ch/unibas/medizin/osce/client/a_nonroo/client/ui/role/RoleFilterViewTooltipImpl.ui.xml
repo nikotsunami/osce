@@ -1,0 +1,101 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+	.standardTable input {
+		width: 100%;
+		opacity: 0.8;
+	}
+	.popupPanel {
+		margin: 6px 6px;
+	}
+	
+	.popupCheckboxes {
+		width: 120px;
+	}
+	
+	.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+	
+	.floatRight {
+		float: right;
+	}
+	
+	.complexity {
+		padding-right: 10px;
+	}
+	
+	.text{
+		padding-right: 10px;
+	}
+	
+	.Author {
+		padding-right: 37px;
+	}
+	.Reviewer {
+		padding-right: 23px;
+	}
+	.Specification {
+		padding-right: 6px;
+	}
+	.StudyYear {
+		padding-right: 15px;
+	}
+	.Keywordlbl {
+		padding-right: 28px;
+	}
+	
+	</ui:style>
+	<g:FocusPanel ui:field="filterPanelRoot" addStyleNames="{style.noOutline}">	
+	<g:HTMLPanel addStyleNames="{style.popupPanel}">
+		<span class="ui-icon ui-icon-wrench" style="margin: 0 10px 6px 0; float:left"></span>
+				<span style="margin-left: 0px"><strong ui:field="labelSearch">Suche nach...</strong></span>
+			 	<my:IconButton icon="arrowreturnthick-1-w" ui:field="resetButton" addStyleNames="{style.floatRight}"></my:IconButton>
+			<div style="clear:both">
+			<g:HorizontalPanel>
+				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+					<g:CheckBox ui:field="TopicName" >Topic Name</g:CheckBox>
+					<g:CheckBox ui:field="Keyword">Keyword</g:CheckBox>
+					<g:CheckBox ui:field="ItemName">Item Name</g:CheckBox>
+				</g:VerticalPanel>
+				
+				<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+					<g:CheckBox ui:field="RoleName">Role Name</g:CheckBox>
+					<g:CheckBox ui:field="CheckListItem">Checklist Item</g:CheckBox>
+					<g:CheckBox ui:field="ItemValue">Item Value</g:CheckBox>
+				</g:VerticalPanel>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel styleName="{style.popupPanel}">
+					<g:Label ui:field="Complexity" styleName="{style.complexity}">Complexity  </g:Label>
+					<g:ListBox ui:field="ComplexityListBox" styleName="{style.listBoxStyle}"></g:ListBox>
+					<g:TextBox ui:field="ComplexityText" styleName="{style.text}"></g:TextBox>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel>
+					<g:Label ui:field="Author" styleName="{style.Author}">Author</g:Label>
+					<g:ListBox ui:field="AuthorListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ListBox>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel>
+					<g:Label ui:field="Reviewer" styleName="{style.Reviewer}">Reviewer</g:Label>
+					<g:ListBox ui:field="ReviewerListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ListBox>
+			</g:HorizontalPanel >
+			<g:HorizontalPanel>
+					<g:Label ui:field="Specification" styleName="{style.Specification}">Specification</g:Label>
+					<g:ListBox ui:field="SpecificationListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ListBox>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel>
+					<g:Label ui:field="StudyYear" styleName="{style.StudyYear}">Study Year</g:Label>
+					<g:ValueListBox ui:field="StudyYearListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ValueListBox>
+					
+			</g:HorizontalPanel>
+			<g:HorizontalPanel>
+					<g:Label ui:field="Keywordlbl" styleName="{style.Keywordlbl}">Keyword</g:Label>
+					<g:ListBox ui:field="KeywordListBox"  pixelSize="220,25" styleName="{style.listBoxStyle}"></g:ListBox>
+			</g:HorizontalPanel>
+		</div>
+	</g:HTMLPanel>
+	</g:FocusPanel>
+</ui:UiBinder> 

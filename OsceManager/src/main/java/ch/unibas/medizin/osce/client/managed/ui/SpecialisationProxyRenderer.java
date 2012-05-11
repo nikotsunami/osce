@@ -6,9 +6,9 @@ import com.google.gwt.requestfactory.ui.client.ProxyRenderer;
 public class SpecialisationProxyRenderer extends ProxyRenderer<SpecialisationProxy> {
 
     private static ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer INSTANCE;
-
-    protected SpecialisationProxyRenderer() {
-        super(new String[] { "id" });
+//change by spec
+    public SpecialisationProxyRenderer() {
+        super(new String[] { "name" });
     }
 
     public static ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer instance() {
@@ -22,6 +22,6 @@ public class SpecialisationProxyRenderer extends ProxyRenderer<SpecialisationPro
         if (object == null) {
             return "";
         }
-        return object.getId() + " (" + object.getId() + ")";
+        return object.getName() ;
     }
 }
