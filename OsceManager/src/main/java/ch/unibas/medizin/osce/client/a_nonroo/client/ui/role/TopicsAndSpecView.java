@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorView.Delegate;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorView.Presenter;
-import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -19,6 +19,11 @@ public interface TopicsAndSpecView extends IsWidget{
 	 */
 	interface Delegate {
 		void showSubviewClicked();
+	//	void deleteClicked(SpecialisationProxy specialization);
+		void newClicked(String value);
+		void deleteClicked(SpecialisationProxy specialization);
+		void editClicked(SpecialisationProxy specialization);
+		void performSearch(String value);
 	}
 
 
@@ -27,4 +32,7 @@ public interface TopicsAndSpecView extends IsWidget{
     
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter topicsAndSpecActivity);
+
+	CellTable<SpecialisationProxy> getTable();
+	String[] getPaths();
 }
