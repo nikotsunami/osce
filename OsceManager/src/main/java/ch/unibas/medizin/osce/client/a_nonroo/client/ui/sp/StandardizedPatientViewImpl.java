@@ -63,6 +63,8 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@UiField
 	public IconButton filterButton;
 	@UiField
+	public IconButton refreshButton;
+	@UiField
 	public IconButton newButton;
 	@UiField
 	public IconButton exportButton;
@@ -105,6 +107,11 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //	public void filterButtonClicked(ClickEvent event) {
 //		showFilterPanel((Widget) event.getSource());
 //	}
+	
+	@UiHandler("refreshButton")
+	public void refreshButtonClicked(ClickEvent event) {
+		delegate.performSearch(searchBox.getValue(), getSearchFilters());
+	}
 	
 	@UiHandler("filterButton")
 	public void filterButtonHover(MouseOverEvent event) {
@@ -451,6 +458,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@Override
 	public IconButton getExportButton() {
 		return exportButton;
+	}
+	
+	@Override public QuickSearchBox getSearchBox() {
+		return searchBox;
 	}
 
 }

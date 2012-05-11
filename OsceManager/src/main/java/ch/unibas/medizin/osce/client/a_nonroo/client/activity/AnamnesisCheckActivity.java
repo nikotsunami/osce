@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -25,6 +26,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -57,6 +59,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	private String listSelectedValue = "10";
 	private String quickSearchTerm = "";
+	
+	private HandlerRegistration placeChangeHandlerRegistration;
 
 	public AnamnesisCheckActivity(OsMaRequestFactory requests,
 			PlaceController placeController, AnamnesisCheckPlace place) {
@@ -84,6 +88,9 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			selectionChangeHandler = null;
 		}
 
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
+		}
 	}
 
 	/**
@@ -127,14 +134,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 					}
 				});
 		view.setDelegate(this);
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			
 			@Override
 			public void onPlaceChange(PlaceChangeEvent event) {
 				if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
 					AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
 					if (place.getOperation() == Operation.NEW) {
-						initSearch();
+						getSearchStringByEntityProxyId((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId());
 					}
 				} else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {
 					AnamnesisCheckPlace place = (AnamnesisCheckPlace) event.getNewPlace();
@@ -146,6 +153,26 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		});
 		// view.setSearchFocus(true);
 	}
+	
+	/**
+	  * Used to fill table and search field after creating new entity.
+	  * @param entityId
+	  */
+	 private void getSearchStringByEntityProxyId(EntityProxyId<AnamnesisCheckProxy> entityId) {
+		 requests.find(entityId).fire(new Receiver<AnamnesisCheckProxy>() {
+
+			@Override
+			public void onSuccess(AnamnesisCheckProxy proxy) {
+				if (proxy != null) {
+					List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
+					values.add(proxy);
+					view.getSearchBox().setText(proxy.getText());
+					table.setRowCount(1, true);
+					table.setRowData(0, values);
+				}
+			}
+		 });
+	 }
 
 	private void init() {
 
@@ -320,6 +347,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	@Override
 	public void newClicked() {
+		Log.debug("newClicked()");
 		goTo(new AnamnesisCheckDetailsPlace(Operation.CREATE));
 	}
 

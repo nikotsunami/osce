@@ -49,6 +49,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -56,6 +57,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
@@ -134,6 +136,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	/** Holds a reference to the IconButton of StandardizedPatientViewImpl */
 	private IconButton iconButton;
+	private HandlerRegistration placeChangeHandlerRegistration;
 
 	// private final String filePath = "StandardizedPatientList.csv";
 
@@ -157,6 +160,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void onStop() {
 		if (advancedSearchPopup != null) {
 			advancedSearchPopup.hide();
+		}
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
 		}
 		activityManger.setDisplay(null);
 	}
@@ -246,7 +252,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}
 		});
 		
-		PlaceChangeEvent.Handler eventHandler = new PlaceChangeEvent.Handler() {
+		PlaceChangeEvent.Handler placeChangeHandler = new PlaceChangeEvent.Handler() {
 			@Override
 			public void onPlaceChange(PlaceChangeEvent event) {
 				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
@@ -254,7 +260,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
 					Operation op = spdPlace.getOperation();
 					if (op == Operation.NEW) {
-						initSearch();
+						getSearchStringByEntityProxyId((EntityProxyId<StandardizedPatientProxy>)spdPlace.getProxyId());
 					}
 				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
 					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
@@ -264,7 +270,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				}
 			}
 		};
-		eventBus.addHandler(PlaceChangeEvent.TYPE, eventHandler);
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, placeChangeHandler);
 		
 		initSearch();
 		
@@ -347,6 +353,27 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			
 		}
 	}
+	 
+	 /**
+	  * Used to fill table and search field after creating new entity.
+	  * @param entityId
+	  */
+	 private void getSearchStringByEntityProxyId(EntityProxyId<StandardizedPatientProxy> entityId) {
+		 requests.find(entityId).with("name", "preName").fire(new Receiver<StandardizedPatientProxy>() {
+
+			@Override
+			public void onSuccess(StandardizedPatientProxy proxy) {
+				if (proxy != null) {
+					List<StandardizedPatientProxy> values = new ArrayList<StandardizedPatientProxy>();
+					values.add(proxy);
+					view.getSearchBox().setText(proxy.getPreName() + " " + proxy.getName());
+					table.setRowCount(1, true);
+					table.setRowData(0, values);
+				}
+			}
+			 
+		 });
+	 }
 
 	/**
 	 * Initializes the search for standardized patients, by first 
@@ -396,7 +423,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}
 		
 		Range range = table.getVisibleRange();
-		Log.debug(range.getStart() + ": start : length " + range.getLength());
 
 		//By SPEC[Start		
 		//requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 

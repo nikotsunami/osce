@@ -10,6 +10,7 @@
 				<g:HTMLPanel>
 					<div class="{style.controls} {style.controlsleft} ">
 						<my:QuickSearchBox ui:field="searchBox" />
+						<my:IconButton icon="arrowrefresh-1-w" ui:field="refreshButton" />
 						<g:ListBox width="150px"  ui:field="filterTitle"/>
 						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>

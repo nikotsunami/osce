@@ -41,6 +41,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 	private ActivityManager activityManger;
 	private DoctorDetailsActivityMapper DoctorDetailsActivityMapper;
 	private String quickSearchTerm = "";
+	private HandlerRegistration placeChangeHandlerRegistration;
 	
 
 	public DoctorActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -52,6 +53,10 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	public void onStop(){
 		activityManger.setDisplay(null);
+
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
+		}
 	}
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -87,7 +92,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 				});
 
 		view.setDelegate(this);
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			@Override
 			public void onPlaceChange(PlaceChangeEvent event) {
 				if (event.getNewPlace() instanceof DoctorDetailsPlace) {

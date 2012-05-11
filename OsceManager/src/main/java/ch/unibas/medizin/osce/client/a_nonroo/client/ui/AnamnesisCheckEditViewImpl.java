@@ -322,13 +322,14 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	interface Driver extends RequestFactoryEditorDriver<AnamnesisCheckProxy, AnamnesisCheckEditViewImpl> {
 	}
 
-	public void setCreating(boolean creating) {
-		if (creating) {
-			header.setInnerText(constants.editAnamnesisValue());
-		} else {
-			header.setInnerText(constants.addAnamnesisValue());
-		}
-	}
+//	public void setCreating(boolean creating) {
+//		Log.debug("setCreating()");
+//		if (creating) {
+//			header.setInnerText(constants.editAnamnesisValue());
+//		} else {
+//			header.setInnerText(constants.addAnamnesisValue());
+//		}
+//	}
 	
 	@Override
 	public void setEditTitle(boolean edit) {
@@ -336,6 +337,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			header.setInnerText(constants.editAnamnesisValue());
 		} else {
 			header.setInnerText(constants.addAnamnesisValue());
+			type.setValue(AnamnesisCheckTypes.values()[0]);
 		}
 
 	}
@@ -379,10 +381,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		}
 		
 		this.value = value;
-		GWT.log("setMultipleFields false 3");
 		String substr[] = value.split("\\|");
-		
-		GWT.log("setMultipleFields false 4");
 		
 		IndexedPanel lastPanel = (IndexedPanel) valuePanel.getWidget(valuePanel.getWidgetCount() - 1);
 		((HasText)lastPanel.getWidget(0)).setText(substr[0]);

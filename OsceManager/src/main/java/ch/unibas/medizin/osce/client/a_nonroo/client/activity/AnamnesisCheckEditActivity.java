@@ -7,6 +7,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewImpl;
@@ -89,16 +90,6 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
-
-		eventBus.addHandler(PlaceChangeEvent.TYPE,
-				new PlaceChangeEvent.Handler() {
-			public void onPlaceChange(PlaceChangeEvent event) {
-
-				// updateSelection(event.getNewPlace());
-				// TODO implement
-			}
-		});
-		// init();
 
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
@@ -421,8 +412,8 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 							save = true;
 
-							sortOderByPrevious();
-
+							//sortOderByPrevious();
+							placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(), Operation.NEW));
 						}
 					});
 					

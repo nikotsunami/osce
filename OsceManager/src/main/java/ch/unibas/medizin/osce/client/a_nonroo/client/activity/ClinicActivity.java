@@ -42,6 +42,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 	private ActivityManager activityManger;
 	private ClinicDetailsActivityMapper ClinicDetailsActivityMapper;
 	private String quickSearchTerm = "";
+	private HandlerRegistration placeChangeHandlerRegistration;
 	
 
 	public ClinicActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -52,6 +53,9 @@ ClinicView.Presenter, ClinicView.Delegate {
     }
 
 	public void onStop(){
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
+		}
 		activityManger.setDisplay(null);
 	}
 	@Override
@@ -64,7 +68,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
 				if (event.getNewPlace() instanceof ClinicDetailsPlace) {
 					ClinicDetailsPlace place = (ClinicDetailsPlace) event.getNewPlace();
