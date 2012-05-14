@@ -119,6 +119,8 @@ public interface OsceConstants extends Constants {
 
 	public String exams();
 
+	public String export();
+
 	public String exportBellSchedule();
 
 	public String female();
@@ -268,6 +270,7 @@ public interface OsceConstants extends Constants {
 	public String roles();
 	
 	public String topicsAndSpec();
+
 	
 	public String roleScriptTemplate();
 	
@@ -287,5 +290,8 @@ public interface OsceConstants extends Constants {
 	public String previousTitle();
 	
 	public String noTitle();
+
+	public String order();
+	public String saveOrder();
 
 }
