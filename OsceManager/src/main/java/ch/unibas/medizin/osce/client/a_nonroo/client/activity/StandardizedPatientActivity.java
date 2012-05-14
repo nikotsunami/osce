@@ -387,8 +387,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
-		SearchCriteria criteria = view.getCriteria();
-		Range range = table.getVisibleRange();
 
 		// (2) Advanced search
 		requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(

@@ -96,6 +96,16 @@
 						<td><span class="{style.label}" ui:field="labelNationality"></span></td>
 						<td><my:FocusableValueListBox ui:field='nationality'/></td>
 					</tr>
+					<tr>
+						<td><span class="{style.label}" ui:field="labelMaritalStatus"></span></td>
+						<td><my:FocusableValueListBox ui:field='maritalStatus'/></td>
+						<td><span class="{style.label}" ui:field="labelWorkPermission"></span></td>
+						<td><my:FocusableValueListBox ui:field='workPermission'/></td>
+					</tr>
+					<tr>
+						<td><span class="{style.label}" ui:field="labelSocialInsuranceNo" /></td>
+						<td><g:TextBox ui:field="socialInsuranceNo" /></td>
+					</tr>
 					</tbody>
 				</table>
 			</g:HTMLPanel>

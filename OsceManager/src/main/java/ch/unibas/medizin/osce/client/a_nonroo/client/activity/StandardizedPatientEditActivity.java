@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -24,7 +25,9 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -61,6 +64,7 @@ StandardizedPatientEditView.Delegate {
 	private RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> bankaccountDriver;
 	
 	private CalendarUtil cal = new CalendarUtil();
+	private StandardizedPatientBankaccountEditSubView bankaccountView;
 
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -106,7 +110,7 @@ StandardizedPatientEditView.Delegate {
 
 		view.setDelegate(this);
 		
-		StandardizedPatientBankaccountEditSubView bankaccountView = new StandardizedPatientBankaccountEditSubViewImpl();
+		bankaccountView = new StandardizedPatientBankaccountEditSubViewImpl();
 		view.getBankEditPanel().add(bankaccountView);
 		bankaccountDriver = bankaccountView.createEditorDriver();
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
@@ -126,7 +130,10 @@ StandardizedPatientEditView.Delegate {
 			}
 		});
 
+		view.setWorkPermissionPickerValues(Arrays.asList(WorkPermission.values()));
+		view.setMaritalStatusPickerValues(Arrays.asList(MaritalStatus.values()));
 		view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
+		bankaccountView.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
 		requests.nationalityRequest().findNationalityEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).fire(new Receiver<List<NationalityProxy>>() {
 
 			public void onSuccess(List<NationalityProxy> response) {
@@ -134,6 +141,7 @@ StandardizedPatientEditView.Delegate {
 				values.add(null);
 				values.addAll(response);
 				view.setNationalityPickerValues(values);
+				bankaccountView.setCountryPickerValues(values);
 			}
 		});
 
@@ -172,7 +180,7 @@ StandardizedPatientEditView.Delegate {
 		
 		if (this.place.getOperation()== Operation.EDIT){
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
+			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "bankAccount.country", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
 
 				public void onFailure(ServerFailure error){
 					Log.error(error.getMessage());

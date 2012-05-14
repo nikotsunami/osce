@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.activity.BankaccountEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -31,9 +32,21 @@ public abstract class BankaccountEditActivityWrapper_Roo_Gwt implements Activity
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
+        view.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
+        requests.nationalityRequest().findNationalityEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).fire(new Receiver<List<NationalityProxy>>() {
+
+            public void onSuccess(List<NationalityProxy> response) {
+                List<NationalityProxy> values = new ArrayList<NationalityProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setCountryPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy, V>> extends ProxyEditView<BankaccountProxy, V> {
+
+        void setCountryPickerValues(Collection<NationalityProxy> values);
     }
 }

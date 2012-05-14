@@ -121,7 +121,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		standardizedPatientMediaSubViewImpl.setDelegate(this);
 		
-		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
+		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
 	}
 	
 	/**

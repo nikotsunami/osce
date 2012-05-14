@@ -93,7 +93,7 @@ INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,ve
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (28,'1-0-0-1-0',NULL,NULL,0,9,11);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (29,'1-0-0-0',NULL,NULL,0,8,11);
 
-INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (2,'0123','CH00 0000 0000 000 000','UBS AG',0);
+INSERT INTO `bankaccount` (id,bic,iban,bank_name,version,country) VALUES (2,'0123','CH00 0000 0000 000 000','UBS AG',0,5);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (20,'GENODEF1JEV','CH46 3948 4853 2029 3','Basler Kantonalbank',0);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (29,'MIGRCHZZ80A','CH89 3940 4013 9483 3','Migros bank',0);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (30,'GENODEF1JEV','CH49 9494 9587 9387 0','BLKB',0);
@@ -102,7 +102,7 @@ INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (32,'VTGODEF4EV
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (33,'GVBDEF6ZHEV','CH28 9383 4847 3028 7','BW&S',0);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (34,'ZRWEODE4GEV','CH29 8474 9038 8933 4','Siga Bank',0);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (35,'BTZODEF3HEV','DE39 8476 4987 2987 8','Bank Auer',0);
-INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (36,'UERNODEC4EV','DE39 2811 2904 4343','Commerzbank',0);
+INSERT INTO `bankaccount` (id,bic,iban,bank_name,version, country) VALUES (36,'UERNODEC4EV','DE39 2811 2904 4343','Commerzbank',0, 5);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (37,'QWNODEG0EV','FR88 9388 3022 2393 12','Banque Telex',0);
 INSERT INTO `bankaccount` (id,bic,iban,bank_name,version) VALUES (38,'MKLODEF8FDV','FR93 2939 2938 9383 30','BBdP',0);
 

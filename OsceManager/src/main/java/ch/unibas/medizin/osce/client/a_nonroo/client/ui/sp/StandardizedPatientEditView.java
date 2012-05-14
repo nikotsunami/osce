@@ -9,6 +9,8 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
@@ -53,6 +55,8 @@ public interface StandardizedPatientEditView extends IsWidget {
 	void setMonth(int month);
 	void setYear(int year);
 	void setAcceptableMonths(List<Integer> months);
+	void setWorkPermissionPickerValues(List<WorkPermission> values);
+	void setMaritalStatusPickerValues(List<MaritalStatus> values);
 	
 	//String getPatientId();
 	//void setPatientId(String patientId);

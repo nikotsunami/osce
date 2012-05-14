@@ -42,7 +42,7 @@ public interface BankaccountProxy extends EntityProxy {
 
     abstract void setCity(String city);
 
-    abstract String getCountry();
+    abstract NationalityProxy getCountry();
 
-    abstract void setCountry(String country);
+    abstract void setCountry(NationalityProxy country);
 }

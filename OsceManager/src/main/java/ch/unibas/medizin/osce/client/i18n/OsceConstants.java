@@ -81,6 +81,8 @@ public interface OsceConstants extends Constants {
 
 	public String contactInfo();
 
+	public String country();
+
 	public String createClinic();
 
 	public String createDoctor();
@@ -152,6 +154,8 @@ public interface OsceConstants extends Constants {
 	public String logDetails();
 
 	public String male();
+	
+	public String maritalStatus();
 
 	public String masterData();
 
@@ -174,6 +178,8 @@ public interface OsceConstants extends Constants {
 	public String officeDetails();
 
 	public String osces();
+
+	public String ownerName();
 
 	public String patient();
 
@@ -234,6 +240,8 @@ public interface OsceConstants extends Constants {
 	public String simPat();
 
 	public String simulationPatients();
+	
+	public String socialInsuranceNo();
 
 	public String stationLength();
 
@@ -260,6 +268,8 @@ public interface OsceConstants extends Constants {
 	public String value();
 
 	public String weight();
+	
+	public String workPermission();
 	
 	public String filterTitle();
 	public String yes();
@@ -310,5 +320,4 @@ public interface OsceConstants extends Constants {
 	public String previousTitle();
 	
 	public String noTitle();
-
 }

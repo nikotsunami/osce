@@ -147,6 +147,18 @@
 								<td><span class="{style.label}" ui:field="labelNationality"></span></td>
 								<td><span ui:field="nationality" /></td>
 							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelWorkPermission"></span></td>
+								<td><span ui:field="workPermission" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelMaritalStatus"></span></td>
+								<td><span ui:field="maritalStatus" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelSocialInsuranceNo"></span></td>
+								<td><span ui:field="socialInsuranceNo" /></td>
+							</tr>
 							</tbody>
 						</table>
 					</g:HTMLPanel>
@@ -165,6 +177,14 @@
 							</colgroup>
 							<tbody>
 							<tr>
+								<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
+								<td><span ui:field="bankIBAN" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelOwnerName" /></td>
+								<td><span ui:field='bankOwnerName' /></td>
+							</tr>
+							<tr>
 								<td><span class="{style.label}" ui:field="labelBankName" /></td>
 								<td><span ui:field="bankName" /></td>
 							</tr>
@@ -173,8 +193,16 @@
 								<td><span ui:field="bankBIC" /></td>
 							</tr>
 							<tr>
-								<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
-								<td><span ui:field="bankIBAN" /></td>
+								<td><span class="{style.label}" ui:field="labelBankPlz" /></td>
+								<td><span ui:field="bankPostalCode" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankCity" /></td>
+								<td><span ui:field="bankCity" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankCountry" /></td>
+								<td><span ui:field="bankCountry" /></td>
 							</tr>
 							</tbody>
 						</table>

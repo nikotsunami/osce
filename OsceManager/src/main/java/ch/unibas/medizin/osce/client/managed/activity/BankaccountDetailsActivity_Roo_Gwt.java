@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
@@ -28,6 +29,6 @@ public abstract class BankaccountDetailsActivity_Roo_Gwt extends AbstractActivit
     protected EntityProxyId<BankaccountProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with().fire(callback);
+        requests.find(proxyId).with("country").fire(callback);
     }
 }

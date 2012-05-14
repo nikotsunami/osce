@@ -3,6 +3,8 @@ package ch.unibas.medizin.osce.domain;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
 @RooJavaBean
@@ -27,6 +29,6 @@ public class Bankaccount {
     @Size(max = 30)
     private String city;
     
-    @Size(max = 30)
-    private String country;
+    @ManyToOne
+    private Nationality country;
 }

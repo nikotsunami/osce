@@ -84,4 +84,15 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String SJ4();
 	public String SJ5();
 	public String SJ6();
+	
+	public String B();
+	public String C();
+	public String L();
+	
+	public String UNMARRIED();
+	public String MARRIED();
+	public String CIVIL_UNION();
+	public String DIVORCED();
+	public String SEPARATED();
+	public String WIDOWED();
 }

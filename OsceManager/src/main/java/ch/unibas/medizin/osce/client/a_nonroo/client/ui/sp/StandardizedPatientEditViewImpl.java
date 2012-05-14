@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.NationalityProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.CalendarUtil;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -27,6 +28,8 @@ import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 //import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -151,9 +154,15 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	
 
 	@UiField(provided = true)
-	FocusableValueListBox<NationalityProxy> nationality = new FocusableValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
+	FocusableValueListBox<NationalityProxy> nationality = new FocusableValueListBox<NationalityProxy>(new NationalityProxyRenderer());
 	@UiField(provided = true)
 	FocusableValueListBox<ProfessionProxy> profession = new FocusableValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
+	@UiField(provided = true)
+	FocusableValueListBox<MaritalStatus> maritalStatus = new FocusableValueListBox<MaritalStatus>(new EnumRenderer<MaritalStatus>());
+	@UiField(provided = true)
+	FocusableValueListBox<WorkPermission> workPermission = new FocusableValueListBox<WorkPermission>(new EnumRenderer<WorkPermission>());
+	@UiField
+	TextBox socialInsuranceNo;
 
 	@UiField
 	SimplePanel descriptionPanel;
@@ -190,6 +199,12 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	SpanElement labelNationality;
 	@UiField
 	SpanElement labelProfession;
+	@UiField
+	SpanElement labelWorkPermission;
+	@UiField
+	SpanElement labelMaritalStatus;
+	@UiField
+	SpanElement labelSocialInsuranceNo;
 
 	@UiField
 	IconButton cancel;
@@ -453,6 +468,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		labelWeight.setInnerText(constants.weight() + ":");
 		labelNationality.setInnerText(constants.nationality() + ":");
 		labelProfession.setInnerText(constants.profession() + ":");
+		labelSocialInsuranceNo.setInnerText(constants.socialInsuranceNo() + ":");
+		labelWorkPermission.setInnerText(constants.workPermission() + ":");
+		labelMaritalStatus.setInnerText(constants.maritalStatus() + ":");
 	}
 
 	@Override
@@ -534,7 +552,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //		if (values!= null) {
 //			nationality.setValue(values.iterator().next());
 //		}
-		nationality.setAcceptableValues(values);		
+		nationality.setAcceptableValues(values);
 	}
 
 
@@ -598,5 +616,15 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@Override
 	public void setYear(int year) {
 		this.year.setValue(year);
+	}
+
+	@Override
+	public void setWorkPermissionPickerValues(List<WorkPermission> values) {
+		workPermission.setAcceptableValues(values);
+	}
+
+	@Override
+	public void setMaritalStatusPickerValues(List<MaritalStatus> values) {
+		maritalStatus.setAcceptableValues(values);
 	}
 }

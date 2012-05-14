@@ -85,7 +85,7 @@ public class AnamnesisCheckDetailsPlace extends Place implements HasOperationOnP
 		}
 
 		public String getToken(AnamnesisCheckDetailsPlace place) {
-			Log.debug("AnamnesisFormDetailsPlace.Tokenizer.getToken");
+			Log.debug("AnamnesisCheckDetailsPlace.Tokenizer.getToken");
 			if (Operation.DETAILS == place.getOperation()) {
 				return place.getProxyId() + SEPARATOR + Operation.DETAILS;
 			}
