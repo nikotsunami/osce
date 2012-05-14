@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.client.managed.activity.AdministratorEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -102,6 +103,12 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				.getSelectedIndex()));
 
 	}
+	
+	@UiHandler("saveOrder")
+	public void onSaveOrder(ClickEvent event) {
+		GWT.log("onSaveOrder delegate = "+delegate);
+		delegate.saveOrder();
+	}
 
 	public void initList() {
 
@@ -173,9 +180,36 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				new TextInputCell()) {
 			@Override
 			public String getValue(AnamnesisCheckProxy object) {
-				return null;
+				if(object.getUserSpecifiedOrder() !=null ){
+					return String.valueOf(object.getUserSpecifiedOrder());
+				}else{
+					return "";
+				}
 			}
 		};
+		checkOrderColumn.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
+
+			@Override
+			public void update(int index, AnamnesisCheckProxy object, String value) {
+				try {
+					GWT.log("??????checkOrderColumn.setFieldUpdater value = "+value);
+					GWT.log("????object type= "+object.getType());
+					GWT.log("????object sortoder= "+object.getSort_order());
+					GWT.log("????object value= "+value);
+//					GWT.log("????object UserSpecifiedOrder= "+object.getUserSpecifiedOrder());
+//					Integer userSpecifiedOrder = Integer.valueOf(value);
+//					delegate.resetUserSpecifiedOrder(object, value);
+					if(value != null && !value.equals("")){
+						delegate.orderEdited(object,value);
+					}
+//					object.setUserSpecifiedOrder(userSpecifiedOrder);
+				} catch (Exception e) {
+					GWT.log(value + e);
+				}
+				
+				
+			}
+		});
 		table.addColumn(checkOrderColumn, constants.order());
 		table.setColumnWidth(checkOrderColumn,"10px");
 

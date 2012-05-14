@@ -28,7 +28,9 @@ public interface AnamnesisCheckRequestNonRoo extends RequestContext {
 	public abstract InstanceRequest<AnamnesisCheckProxy, Void> orderDownByPrevious(int preSortorder);
 	public abstract InstanceRequest<AnamnesisCheckProxy, Void> insertNewSortOder(int preSortorder);
 	public abstract Request<AnamnesisCheckProxy> findAnamnesisChecksBySortOder(int sort_order);
-	public abstract Request<AnamnesisCheckProxy> findPreviousTitleBySortOder(int sort_order);	
+	public abstract Request<AnamnesisCheckProxy> findPreviousTitleBySortOder(int sort_order);
+//	public abstract Request<Void> normalizeOrder(Long id, Integer userOder);
+//	public abstract Request<Void> normalizeOrder();
 //	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
 //	public abstract Request<Long> countAnamnesisChecksByAnamnesisForm(Long anamnesisFormId);
 }

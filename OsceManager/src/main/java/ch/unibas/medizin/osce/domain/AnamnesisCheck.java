@@ -5,11 +5,15 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import javax.validation.constraints.Size;
-import java.util.List;
-import java.util.Set;
+
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
@@ -38,6 +42,21 @@ public class AnamnesisCheck {
 
 	@ManyToOne
 	private ch.unibas.medizin.osce.domain.AnamnesisCheck title;
+	
+	
+	transient Integer userSpecifiedOrder;
+
+
+	public Integer getUserSpecifiedOrder() {
+		return userSpecifiedOrder;
+	}
+
+
+	public void setUserSpecifiedOrder(Integer userSpecifiedOrder) {
+		System.err.println("Setting userSpecifiedOrder to " + userSpecifiedOrder);
+		this.userSpecifiedOrder = userSpecifiedOrder;
+		this.normalizeThisOrder();
+	}
 
 
 	public static Long countAnamnesisChecksBySearchWithTitle(String q,
@@ -179,7 +198,7 @@ public class AnamnesisCheck {
 	public static List<AnamnesisCheck> findAnamnesisChecksByType(AnamnesisCheckTypes type) {
 	    if (type == null) throw new IllegalArgumentException("The type argument is required");
 	    EntityManager em = AnamnesisCheck.entityManager();
-	    TypedQuery<AnamnesisCheck> q = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.type = :type", AnamnesisCheck.class);
+	    TypedQuery<AnamnesisCheck> q = em.createQuery("SELECT o FROM AnamnesisCheck AS o WHERE o.type = :type ORDER BY sort_order ASC", AnamnesisCheck.class);
 	    q.setParameter("type", type);
 	    return q.getResultList();
 	}
@@ -193,7 +212,7 @@ public class AnamnesisCheck {
 		EntityManager em = AnamnesisCheck.entityManager();
 		if (searchValue == null || searchValue.equals("")) {
 			TypedQuery<AnamnesisCheck> q = em.createQuery(
-					"SELECT o FROM AnamnesisCheck AS o WHERE o.title = :title",
+					"SELECT o FROM AnamnesisCheck AS o WHERE o.title = :title ORDER BY sort_order ASC",
 					AnamnesisCheck.class);
 			q.setParameter("title", title);
 			return q.getResultList();
@@ -201,7 +220,7 @@ public class AnamnesisCheck {
 
 			TypedQuery<AnamnesisCheck> q = em
 					.createQuery(
-							"SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q and o.title = :title",
+							"SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q and o.title = :title ORDER BY sort_order ASC",
 							AnamnesisCheck.class);
 			q.setParameter("q", "%" + searchValue + "%");
 			q.setParameter("title", title);
@@ -313,7 +332,7 @@ public class AnamnesisCheck {
 
 			if (preSortorder != -1) {
 
-				if (this.type == AnamnesisCheckTypes.QUESTION_TITLE) {
+				if (this.type == AnamnesisCheckTypes.QUESTION_TITLE && preSortorder!=0) {
 					// locate the last question under the previous title
 					AnamnesisCheck previousTitle = findAnamnesisChecksBySortOder(preSortorder);
 					AnamnesisCheck lastAnamnesisCheckInTitle = findLastAnamnesisCheckInTitle(previousTitle);
@@ -323,13 +342,15 @@ public class AnamnesisCheck {
 					System.out.println("orderUpByPrevious preSortorder = " + preSortorder);
 				}
 
+				System.out.println("orderUpByPrevious this.sort_order = " + this.sort_order);
+				if(preSortorder + 1 < this.sort_order){
 				List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(preSortorder + 1, this.sort_order - 1);
 				for (AnamnesisCheck check : checksBelow) {
 					check.sort_order = check.sort_order + 1;
 					check.persist();
 				}
-
-
+				}
+				System.out.println("persist");
 				setSort_order(preSortorder + 1);
 				this.persist();
 
@@ -384,8 +405,9 @@ public class AnamnesisCheck {
 			Integer maxSortOrder = findMaxSortOrder();
 			System.out.println("maxSortOrder = " + maxSortOrder);
 			setSort_order(maxSortOrder.intValue() + 1);
+			System.out.println("title = " + title);
 			if (preSortorder == -1) {
-				if (title != null) {					
+				if (title != null) {				
 					orderUpByPrevious(getPreviousSortOder(this.title));
 				} else {
 					System.out.println("title = " + title);
@@ -416,7 +438,215 @@ public class AnamnesisCheck {
 		
 		return previousTitleAnamnesisCheck;
 	}
+	
+//	public static void normalizeOrder(Long id, Integer userOder){
+////		for(AnamnesisCheck editAnamnesisCheck : orderEdited){
+////			if(editAnamnesisCheck.type!=null)
+////				if(editAnamnesisCheck.type != AnamnesisCheckTypes.QUESTION_TITLE){
+////					if(editAnamnesisCheck.sort_order > editAnamnesisCheck.userSpecifiedOrder){
+////						//up
+////					}else if(editAnamnesisCheck.sort_order < editAnamnesisCheck.userSpecifiedOrder){
+////						//down
+////					}
+////				}else{
+////					
+////				}
+////		}
+//	}
 
+	
+//	public static void normalizeOrder(){
+//		
+//	}
+	
+	protected void normalizeThisOrder() {
+	
+		System.out.println("#############normalizeOrder this = " + this.text);
+		Integer previousSortOder = null;
+		//get previousSortOder
+		if (this.type != AnamnesisCheckTypes.QUESTION_TITLE && this.title != null) {
+			previousSortOder = getPreviousAnamnesisCheckSortOder(this.title, userSpecifiedOrder);
+		} else if (this.type == AnamnesisCheckTypes.QUESTION_TITLE) {
+			 previousSortOder = getPreviousTitleSortOder(userSpecifiedOrder);			
+		}
+		//remove this AnamnesisCheck
+		if (previousSortOder != null) {
+			if (this.sort_order > previousSortOder + 1) {
+				orderUpByPrevious(previousSortOder);
+				if (this.type == AnamnesisCheckTypes.QUESTION_TITLE) {
+					List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksByTitle("", this);
+					System.out.println("in normalizeOrder anamnesisChecks = "+anamnesisChecks);
+					Integer titleSortOder = this.sort_order;
+					System.out.println("in normalizeOrder titleSortOder = "+titleSortOder);
+					for (int i = anamnesisChecks.size() - 1; i >= 0; i--) {
+						if(titleSortOder + 1 > this.sort_order){
+						List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(titleSortOder + 1, anamnesisChecks.get(i).sort_order - 1);
+						for (AnamnesisCheck check : checksBelow) {
+							check.sort_order = check.sort_order + 1;
+							check.persist();
+						}
+						}
+
+						anamnesisChecks.get(i).setSort_order(titleSortOder + 1);
+						anamnesisChecks.get(i).persist();
+					}
+				}
+			} else if (this.sort_order < previousSortOder) {
+				orderDownByPrevious(previousSortOder);
+				if (this.type == AnamnesisCheckTypes.QUESTION_TITLE) {
+					List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksByTitle("", this);
+					System.out.println("in normalizeOrder anamnesisChecks = "+anamnesisChecks);
+					Integer titleSortOder = this.sort_order;
+					System.out.println("in normalizeOrder titleSortOder = "+titleSortOder);
+					for (int i = 0; i < anamnesisChecks.size(); i++) {
+						List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(anamnesisChecks.get(i).sort_order + 1,titleSortOder);
+						System.out.println("in normalizeOrder checksBelow = "+checksBelow);
+						for (AnamnesisCheck check : checksBelow){
+							check.sort_order = check.sort_order - 1 ;
+							check.persist();
+						}
+						
+						anamnesisChecks.get(i).setSort_order(titleSortOder);
+						anamnesisChecks.get(i).persist();
+					}
+				}
+			}
+		}
+		//if this AnamnesisCheck is a title ,remove AnamnesisCheck in this title 
+//		System.out.println("#############this.type = " + this.type);
+//		if (this.type == AnamnesisCheckTypes.QUESTION_TITLE) {
+//			List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksByTitle("", this);
+//			System.out.println("in normalizeOrder anamnesisChecks = "+anamnesisChecks);
+//			Integer titleSortOder = this.sort_order;
+//			System.out.println("in normalizeOrder titleSortOder = "+titleSortOder);
+//			for (int i = anamnesisChecks.size() - 1; i >= 0; i--) {
+//				if (titleSortOder != null) {
+//					if (anamnesisChecks.get(i).sort_order > titleSortOder + 1) {
+////						orderUpByPrevious(titleSortOder);
+//						//TODO
+//						List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(titleSortOder + 1, anamnesisChecks.get(i).sort_order - 1);
+//						for (AnamnesisCheck check : checksBelow) {
+//							check.sort_order = check.sort_order + 1;
+//							check.persist();
+//						}
+//
+//
+//						anamnesisChecks.get(i).setSort_order(titleSortOder + 1);
+//						anamnesisChecks.get(i).persist();
+//					} else if (anamnesisChecks.get(i).sort_order < titleSortOder) {
+////						orderDownByPrevious(titleSortOder);
+//						//TODO
+//						List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(anamnesisChecks.get(i).sort_order + 1,titleSortOder);
+//						System.out.println("in normalizeOrder checksBelow = "+checksBelow);
+//						for (AnamnesisCheck check : checksBelow){
+//							check.sort_order = check.sort_order - 1 ;
+//							check.persist();
+//						}
+//						
+//						anamnesisChecks.get(i).setSort_order(titleSortOder);
+//						anamnesisChecks.get(i).persist();
+//					}
+//					
+//				}
+//			}
+//
+//		}
+		
+	}
+
+	
+	private Integer getPreviousAnamnesisCheckSortOder(AnamnesisCheck title, Integer userOder) {
+		Integer previousAnamnesisCheckSortOder = null;
+		List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksByTitle("", title);
+		System.out.println("???????getPreviousAnamnesisCheckSortOder anamnesisChecks = " + anamnesisChecks);
+		System.out.println("???????getPreviousAnamnesisCheckSortOder anamnesisChecks size= " + anamnesisChecks.size());
+		if (userOder == 1) {
+			previousAnamnesisCheckSortOder = title.sort_order;
+			System.out.println("previousAnamnesisCheckSortOder = " + previousAnamnesisCheckSortOder);
+		} else if (userOder > 1) {
+			if (userOder > anamnesisChecks.size()) {
+				userOder = anamnesisChecks.size();
+			}
+			// dbSortOder is sort_oder in database
+			int dbSortOder = anamnesisChecks.get(userOder - 1).sort_order;
+			System.out.println(">>>>>dbSortOder = " + dbSortOder);
+			if (this.sort_order > dbSortOder) {
+				// up
+				previousAnamnesisCheckSortOder = anamnesisChecks.get(userOder - 2).sort_order;
+			} else if (this.sort_order < dbSortOder) {
+				// down
+				previousAnamnesisCheckSortOder = anamnesisChecks.get(userOder - 1).sort_order;
+			}
+
+			// if this anamnesisChecks is not under its title ,find the sort oder of its title
+			Integer currentPreviousSortOder = this.sort_order - 1;
+			if (currentPreviousSortOder > 0) {
+				AnamnesisCheck previousAnamnesisCheck = findAnamnesisChecksBySortOder(currentPreviousSortOder);
+				if (isUnderItsTitle() == false) {
+					Integer myTitleSortOderInteger = title.sort_order;
+					if (myTitleSortOderInteger > this.sort_order) {
+						// down
+						previousAnamnesisCheckSortOder = anamnesisChecks.get(userOder - 1).sort_order;
+					} else if (myTitleSortOderInteger < this.sort_order) {
+						// up
+						previousAnamnesisCheckSortOder = anamnesisChecks.get(userOder - 2).sort_order;
+					}
+				}
+			} else {
+				previousAnamnesisCheckSortOder = anamnesisChecks.get(userOder - 1).sort_order;
+			}
+
+			System.out.println("previousAnamnesisCheckSortOder = " + previousAnamnesisCheckSortOder);
+		}
+
+		return previousAnamnesisCheckSortOder;
+	}
+	
+	private boolean isUnderItsTitle(){
+		boolean isUnderItsTitle = true;
+		if(this.title!= null && this.sort_order > this.title.sort_order){
+			List<AnamnesisCheck>  anamnesisChecks = findAnamnesisChecksBySortOderBetween(this.title.sort_order+1, this.sort_order);
+			System.out.println("isUnderItsTitle anamnesisChecks ="+anamnesisChecks);
+			for(AnamnesisCheck anamnesisCheck : anamnesisChecks){
+				if(anamnesisCheck.type == AnamnesisCheckTypes.QUESTION_TITLE){
+					isUnderItsTitle = false;
+				}
+			}
+		}else if(this.title!= null && this.sort_order < this.title.sort_order){
+			isUnderItsTitle = false;
+		}
+		
+		System.out.println("isUnderItsTitle isUnderItsTitle ="+isUnderItsTitle);
+		return isUnderItsTitle;
+		
+	}
+
+	private Integer getPreviousTitleSortOder(Integer userOder){
+		Integer previousTitleSortOder = null;
+		List<AnamnesisCheck> titles = findAnamnesisChecksByType(AnamnesisCheckTypes.QUESTION_TITLE);
+		System.out.println(">>>>>>>>>>>>>titles = "+titles);
+		System.out.println(">>>>>>>>>>>>>titles size= "+titles.size());
+		if(titles.size()>1 && userOder >= 2){
+			if(userOder>titles.size()){
+				userOder = titles.size();
+			}
+			//dbSortOder is this AnamnesisCheck sort_oder in database
+			Integer dbSortOder = titles.get(userOder-1).sort_order;
+			System.out.println(">>>>>dbSortOder = "+dbSortOder);
+			if(this.sort_order > dbSortOder){
+				//up
+				previousTitleSortOder = titles.get(userOder-2).sort_order;
+			}else if(sort_order < dbSortOder){
+				//down
+				previousTitleSortOder = titles.get(userOder-1).sort_order;
+			}
+		}else if(titles.size()>1 && userOder == 1){
+			previousTitleSortOder = 0;
+		}
+		System.out.println(">>>>>>>>>>>>>previousTitleSortOder = "+previousTitleSortOder);
+		
+		return previousTitleSortOder;
+	}
 	
 //    public static Long countAnamnesisChecksByAnamnesisForm(Long anamnesisFormId) {
 //        if (anamnesisFormId == null) throw new IllegalArgumentException("anamnesisFormId required!");

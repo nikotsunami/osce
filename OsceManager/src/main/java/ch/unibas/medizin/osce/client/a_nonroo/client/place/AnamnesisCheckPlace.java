@@ -1,7 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -36,6 +40,12 @@ public class AnamnesisCheckPlace extends Place {
 	private String filterTileId = "";
 
 	private String searchStr = "";
+	
+	// holds  the ids of Checks that have been edited
+	private Map<Long, Integer> orderEditedMap = new HashMap<Long, Integer>(); // TODO delete
+	
+	private AnamnesisCheckRequest req = null; 
+	
 
 	public int getPageStart() {
 		return pageStart;
@@ -96,6 +106,26 @@ public class AnamnesisCheckPlace extends Place {
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+	
+	
+	public Map<Long, Integer> getOrderEditedMap() {
+		return orderEditedMap;
+	}
+
+	public void setOrderEditedMap(Map<Long, Integer> orderEditedMap) {
+		this.orderEditedMap = orderEditedMap;
+	}
+
+	
+
+
+	public AnamnesisCheckRequest getReq() {
+		return req;
+	}
+
+
+
 
 	/**
 	 * Tokenizer.
