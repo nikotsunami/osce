@@ -65,14 +65,13 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     private ActivityManager activityManger;
     private AnamnesisCheckDetailsActivityMapper anamnesisCheckDetailsActivityMapper;
     private final OsceConstants constants = GWT.create(OsceConstants.class);
-    // private List<AnamnesisCheckProxy> tableData = null;
+
 
 
     static AnamnesisCheckRequest request = null;
 
     private static final String placeToken = "AnamnesisCheckPlace";
 
-    // private String listSelectedValue = "10";
     private String quickSearchTerm = "";
 
     private HandlerRegistration placeChangeHandlerRegistration;
@@ -424,8 +423,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     }
 
     private void goToAnamesisCheckPlace() {
-        // goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
-        // .getStart(), place.getPageLen(),searchText, getSelectedTitleId()));
+
         goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
                 .getStart(), view.getRangNumBox().getItemText(
                 view.getRangNumBox().getSelectedIndex()),
@@ -628,136 +626,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         return systemStartViewS;
     }
 
-    // @SuppressWarnings("deprecation")
-    // @Override
-    // public void saveOrder() {
-    // for (final Entry<Long, Integer> entry :
-    // place.getOrderEditedMap().entrySet()) {
-    // GWT.log(">>>>>>>>orderEditedMap size = " +
-    // place.getOrderEditedMap().size());
-    // GWT.log("?????????" + entry.getKey() + "--->" + entry.getValue());
-    // // if(entry.getKey() != null &&entry.getValue() !=null &&
-    // // !entry.getValue().equals("")){
-    // requests.anamnesisCheckRequest().findAnamnesisCheck(entry.getKey()).fire(new
-    // Receiver<AnamnesisCheckProxy>() {
-    // public void onFailure(ServerFailure error) {
-    // GWT.log("findAnamnesisCheck error = " + error);
-    // }
-    //
-    // @Override
-    // public void onSuccess(AnamnesisCheckProxy response) {
-    // GWT.log("response = " + response);
-    // if (response != null) {
-    // requests.anamnesisCheckRequestNonRoo().normalizeOrder(entry.getValue()).using(response).fire(new
-    // Receiver<Void>() {
-    // public void onFailure(ServerFailure error) {
-    // GWT.log("normalizeOrder error = " + error);
-    // }
-    //
-    // @Override
-    // public void onSuccess(Void response) {
-    // // TODO Auto-generated method stub
-    //
-    // }
-    // });
-    // }
-    // }
-    // });
-    // // }
-    //
-    // }
-
-    // requests.anamnesisCheckRequestNonRoo().normalizeOrder(orderEditedMap).fire(new
-    // Receiver<Void>() {
-    //
-    // @Override
-    // public void onSuccess(Void response) {
-    // // TODO Auto-generated method stub
-    //
-    // }
-    // });
-
-    // @Override
-    // public void resetUserSpecifiedOrder(AnamnesisCheckProxy
-    // selectedAnamnesisCheck, String value) {
-    // try {
-    // Integer userSpecifiedOrder = Integer.valueOf(value);
-    // if( tableData!=null ){
-    // for(AnamnesisCheckProxy anamnesisCheckProxy : tableData){
-    // if(anamnesisCheckProxy.getId() == selectedAnamnesisCheck.getId()){
-    // anamnesisCheckProxy.setUserSpecifiedOrder(userSpecifiedOrder);
-    // }
-    // }
-    // }
-    // } catch (Exception e) {
-    // GWT.log("resetUserSpecifiedOrder Exception = "+e);
-    // e.printStackTrace();
-    // }
-    //
-    // test();
-    // }
-
-    // @Override
-    // public void orderEdited(AnamnesisCheckProxy proxy, String
-    // userSpecifiedOrderStr) {
-    // // TODO
-    // if (proxy != null && userSpecifiedOrderStr != null) {
-    // try {
-    // Integer userSpecifiedOrder = Integer.valueOf(userSpecifiedOrderStr);
-    // boolean isExist = false;
-    //
-    // for (AnamnesisCheckProxy edited : orderEdited) {
-    // GWT.log("*******edited.getId() = " + edited.getId());
-    // GWT.log("*******proxy.getId() = " + proxy.getId());
-    // if (edited.getId() == proxy.getId()) {
-    // GWT.log("*******proxy isExist");
-    // isExist = true;
-    // edited.setUserSpecifiedOrder(userSpecifiedOrder);
-    // break;
-    // }
-    // }
-    // if (isExist == false) {
-    // GWT.log("*******proxy not isExist");
-    // edituserSpecifiedOrder(proxy,userSpecifiedOrder);
-    // proxy.setUserSpecifiedOrder(userSpecifiedOrder);
-    // orderEdited.add(proxy);
-    // }
-    //
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
-    // }
-
-    // @Override
-    // public void orderEdited(AnamnesisCheckProxy proxy, String
-    // userSpecifiedOrderStr){
-    // GWT.log("??????????????? proxy= "+proxy.getId());
-    // //TODO
-    // try {
-    // Integer userSpecifiedOrder = Integer.valueOf(userSpecifiedOrderStr);
-    // boolean isExist = false;
-    // for(Entry<Long, Integer> entry : place.getOrderEditedMap().entrySet()){
-    // GWT.log("?????????"+entry.getKey()+"--->"+entry.getValue());
-    // if(entry.getKey()==proxy.getId()){
-    // GWT.log("*******proxy isExist");
-    // isExist = true;
-    // entry.setValue(userSpecifiedOrder);
-    // }
-    // }
-    // if (isExist == false) {
-    // GWT.log("*******proxy not isExist");
-    // place.getOrderEditedMap().put(proxy.getId(),
-    // Integer.valueOf(userSpecifiedOrder));
-    // GWT.log("orderEditedMap.put");
-    // }
-    //
-    //
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    //
-    // }
 
     @Override
     public void orderEdited(AnamnesisCheckProxy proxy,
