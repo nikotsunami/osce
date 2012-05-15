@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.ValueListBox;
 
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
-import ch.unibas.medizin.osce.domain.SpokenLanguage;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 public interface StandardizedPatientLangSkillSubView {
