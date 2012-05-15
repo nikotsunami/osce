@@ -29,6 +29,8 @@ public class ClinicDetailsActivityMapper  implements ActivityMapper{
 		 if (place instanceof ClinicDetailsPlace){
 			 if(((ClinicDetailsPlace) place).getOperation() == Operation.DETAILS)
 				 return new ClinicDetailsActivity((ClinicDetailsPlace) place, requests, placeController);
+			 if (((ClinicDetailsPlace) place).getOperation() == Operation.NEW)
+				 return new ClinicDetailsActivity((ClinicDetailsPlace) place, requests, placeController);
 			 if(((ClinicDetailsPlace) place).getOperation() == Operation.EDIT)
 				 return new ClinicEditActivity((ClinicDetailsPlace) place, requests, placeController);
 			 if(((ClinicDetailsPlace) place).getOperation() == Operation.CREATE)

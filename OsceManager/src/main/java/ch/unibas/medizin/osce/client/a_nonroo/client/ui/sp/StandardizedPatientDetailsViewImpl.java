@@ -7,9 +7,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -40,9 +43,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 	}
 
-	private OsceConstants constants = GWT.create(OsceConstants.class);
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private Presenter presenter;
 	StandardizedPatientProxy proxy;
+	private final UiIcons uiIcons = GWT.create(UiIcons.class);
 
 	//SPEC START
 	@UiField
@@ -102,6 +106,14 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiField
 	SpanElement labelBankBIC;
 	@UiField
+	SpanElement labelBankCity;
+	@UiField
+	SpanElement labelBankPlz;
+	@UiField
+	SpanElement labelBankCountry;
+	@UiField
+	SpanElement labelOwnerName;
+	@UiField
 	SpanElement labelBirthdate;
 	@UiField
 	SpanElement labelGender;
@@ -113,6 +125,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement labelNationality;
 	@UiField
 	SpanElement labelProfession;
+	@UiField
+	SpanElement labelWorkPermission;
+	@UiField
+	SpanElement labelMaritalStatus;
+	@UiField
+	SpanElement labelSocialInsuranceNo;
 
 	// Fields
 	@UiField
@@ -153,6 +171,20 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement bankName;
 	@UiField
 	SpanElement bankBIC;
+	@UiField
+	SpanElement bankCountry;
+	@UiField
+	SpanElement bankPostalCode;
+	@UiField
+	SpanElement bankCity;
+	@UiField
+	SpanElement bankOwnerName;
+	@UiField
+	SpanElement workPermission;
+	@UiField
+	SpanElement maritalStatus;
+	@UiField
+	SpanElement socialInsuranceNo;
 
 	private Delegate delegate;
 
@@ -213,6 +245,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelBankName.setInnerText(constants.bank() + ":");
 		labelBankIBAN.setInnerText(constants.iban() + ":");
 		labelBankBIC.setInnerText(constants.bic() + ":");
+		labelBankCountry.setInnerText(constants.country() + ":");
+		labelBankCity.setInnerText(constants.city());
+		labelBankPlz.setInnerText(constants.plz());
+		labelOwnerName.setInnerText(constants.ownerName());
 		
 		labelBirthdate.setInnerText(constants.birthday() + ":");
 		labelGender.setInnerText(constants.gender() + ":");
@@ -220,6 +256,9 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelWeight.setInnerText(constants.weight() + ":");
 		labelNationality.setInnerText(constants.nationality() + ":");
 		labelProfession.setInnerText(constants.profession() + ":");
+		labelWorkPermission.setInnerText(constants.workPermission() + ":");
+		labelMaritalStatus.setInnerText(constants.maritalStatus() + ":");
+		labelSocialInsuranceNo.setInnerText(constants.socialInsuranceNo() + ":");
 	}
 
 	public void setValue(StandardizedPatientProxy proxy) {
@@ -235,6 +274,9 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(constants.dateTimeFormat()).format(proxy.getBirthday()));
 		height.setInnerText(proxy.getHeight() == null ? "" : String.valueOf(proxy.getHeight()));
 		weight.setInnerText(proxy.getWeight() == null ? "" : String.valueOf(proxy.getWeight()));
+		workPermission.setInnerText(new EnumRenderer<WorkPermission>().render(proxy.getWorkPermission()));
+		maritalStatus.setInnerText(new EnumRenderer<MaritalStatus>().render(proxy.getMaritalStatus()));
+		socialInsuranceNo.setInnerText((proxy.getSocialInsuranceNo() == null) ? "" : proxy.getSocialInsuranceNo());
 		
 		email.setHref("mailto:" + (proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
@@ -249,9 +291,17 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
 		
 		BankaccountProxy bank = proxy.getBankAccount();
-		bankName.setInnerText(bank == null ? "" : String.valueOf(bank.getBankName()));
-		bankIBAN.setInnerText(bank == null ? "" : String.valueOf(bank.getIBAN()));
-		bankBIC.setInnerText(bank == null ? "" : String.valueOf(bank.getBIC()));
+		bankName.setInnerText((bank == null || bank.getBankName() == null) ? "" : String.valueOf(bank.getBankName()));
+		bankIBAN.setInnerText((bank == null || bank.getIBAN() == null) ? "" : String.valueOf(bank.getIBAN()));
+		bankBIC.setInnerText((bank == null || bank.getBIC() == null) ? "" : String.valueOf(bank.getBIC()));
+		if (bank == null || bank.getCountry() == null) {
+			bankCountry.setInnerText("");
+		} else {
+			bankCountry.setInnerText(String.valueOf(bank.getCountry().getNationality()));
+		}
+		bankCity.setInnerText((bank == null || bank.getCity() == null) ? "" : String.valueOf(bank.getCity()));
+		bankPostalCode.setInnerText((bank == null || bank.getPostalCode() == null) ? "" : String.valueOf(bank.getPostalCode()));
+		bankOwnerName.setInnerText((bank == null || bank.getOwnerName() == null) ? "" : String.valueOf(bank.getOwnerName()));
 	}
 	
 	private String createGoogleMapsLink(StandardizedPatientProxy proxy) {
@@ -318,17 +368,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	//spec start
 		@UiHandler("arrow")
 		void handleClick(ClickEvent e) {
-			
-			if(patientDisclosurePanel.isOpen())
-			{
+			if(patientDisclosurePanel.isOpen()) {
 				patientDisclosurePanel.setOpen(false);
-				arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdown.png");//set url of up image
-				
+				arrow.setResource(uiIcons.triangle1East());
 			}
-			else
-			{
+			else {
 				patientDisclosurePanel.setOpen(true);
-				arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");//set url of down image
+				arrow.setResource(uiIcons.triangle1South());
 			}
 		   
 		  }

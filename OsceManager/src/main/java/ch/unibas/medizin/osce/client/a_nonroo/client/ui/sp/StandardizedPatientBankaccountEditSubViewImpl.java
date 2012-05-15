@@ -1,7 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import java.util.Collection;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.NationalityProxyRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -10,7 +14,9 @@ import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandardizedPatientBankaccountEditSubViewImpl extends Composite implements StandardizedPatientBankaccountEditSubView, Editor<BankaccountProxy> {
@@ -23,6 +29,14 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	SpanElement labelBankBIC;
 	@UiField
 	SpanElement labelBankIBAN;
+	@UiField
+	SpanElement labelBankPlz;
+	@UiField
+	SpanElement labelBankCity;
+	@UiField
+	SpanElement labelBankCountry;
+	@UiField
+	SpanElement labelOwnerName;
 	
 	@UiField
 	TextBox bankName;
@@ -30,6 +44,14 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	TextBox BIC;
 	@UiField
 	TextBox IBAN;
+	@UiField
+	IntegerBox postalCode;
+	@UiField
+	TextBox city;
+	@UiField (provided = true)
+	ValueListBox<NationalityProxy> country = new ValueListBox<NationalityProxy>(new NationalityProxyRenderer());
+	@UiField
+	TextBox ownerName;
 	
 	interface Binder extends UiBinder<Widget, StandardizedPatientBankaccountEditSubViewImpl> {}
 	interface Driver extends RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> {}
@@ -40,6 +62,10 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 		labelBankName.setInnerText(constants.bank());
 		labelBankBIC.setInnerText(constants.bic());
 		labelBankIBAN.setInnerText(constants.iban());
+		labelBankPlz.setInnerText(constants.plz());
+		labelBankCity.setInnerText(constants.city());
+		labelBankCountry.setInnerText(constants.country());
+		labelOwnerName.setInnerText(constants.ownerName());
 	}
 	
 	
@@ -53,5 +79,11 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 		RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> driver = GWT.create(Driver.class);
 		driver.initialize(this);
 		return driver;
+	}
+
+
+	@Override
+	public void setCountryPickerValues(Collection<NationalityProxy> values) {
+		country.setAcceptableValues(values);
 	}
 }

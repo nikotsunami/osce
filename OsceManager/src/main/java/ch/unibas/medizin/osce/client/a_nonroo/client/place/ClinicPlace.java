@@ -63,7 +63,7 @@ public class ClinicPlace extends Place {
 		}
 		// reload list after deleting an item
 		if(token != null){
-			if(/*token.contains("ClinicPlace!DELETED") ||*/ token.contains("ClinicPlace!CANCEL")){
+			if(token.contains("ClinicPlace!DELETED") || token.contains("ClinicPlace!CANCEL")){
 				return false;
 			}
 		}

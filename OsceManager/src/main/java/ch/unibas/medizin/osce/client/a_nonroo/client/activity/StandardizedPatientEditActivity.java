@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,20 +17,22 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientBa
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientBankaccountEditSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.CalendarUtil;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
-import ch.unibas.medizin.osce.client.managed.request.DescriptionRequest;
-import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -39,6 +42,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.ValueListBox;
 
 public class StandardizedPatientEditActivity extends AbstractActivity implements
 StandardizedPatientEditView.Presenter, 
@@ -58,6 +62,9 @@ StandardizedPatientEditView.Delegate {
 	private boolean save;
 	private RequestFactoryEditorDriver<DescriptionProxy, DescriptionEditViewImpl> descriptionDriver;
 	private RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> bankaccountDriver;
+	
+	private CalendarUtil cal = new CalendarUtil();
+	private StandardizedPatientBankaccountEditSubView bankaccountView;
 
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -103,7 +110,7 @@ StandardizedPatientEditView.Delegate {
 
 		view.setDelegate(this);
 		
-		StandardizedPatientBankaccountEditSubView bankaccountView = new StandardizedPatientBankaccountEditSubViewImpl();
+		bankaccountView = new StandardizedPatientBankaccountEditSubViewImpl();
 		view.getBankEditPanel().add(bankaccountView);
 		bankaccountDriver = bankaccountView.createEditorDriver();
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
@@ -123,7 +130,10 @@ StandardizedPatientEditView.Delegate {
 			}
 		});
 
+		view.setWorkPermissionPickerValues(Arrays.asList(WorkPermission.values()));
+		view.setMaritalStatusPickerValues(Arrays.asList(MaritalStatus.values()));
 		view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
+		bankaccountView.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
 		requests.nationalityRequest().findNationalityEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).fire(new Receiver<List<NationalityProxy>>() {
 
 			public void onSuccess(List<NationalityProxy> response) {
@@ -131,6 +141,7 @@ StandardizedPatientEditView.Delegate {
 				values.add(null);
 				values.addAll(response);
 				view.setNationalityPickerValues(values);
+				bankaccountView.setCountryPickerValues(values);
 			}
 		});
 
@@ -169,7 +180,7 @@ StandardizedPatientEditView.Delegate {
 		
 		if (this.place.getOperation()== Operation.EDIT){
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
+			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "bankAccount.country", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
 
 				public void onFailure(ServerFailure error){
 					Log.error(error.getMessage());
@@ -242,6 +253,7 @@ StandardizedPatientEditView.Delegate {
 		bankaccountDriver.edit(bankAccount, request);
 		
 		descriptionView.setDescriptionContent(description.getDescription());
+		initBirthDate();
 
 		Log.info("persist");
 		request.persist().using(standardizedPatient);
@@ -252,6 +264,33 @@ StandardizedPatientEditView.Delegate {
 //		descriptionDriver.flush();
 		
 		Log.debug("Create für: "+standardizedPatient.getName());
+	}
+	
+	private void initBirthDate() {
+		CalendarUtil cal = new CalendarUtil();
+		int currentYear = cal.getYear();
+		int oldestYear = currentYear - 123;
+		
+		cal.setDate(standardizedPatient.getBirthday());
+		view.setDay(cal.getDay());
+		view.setMonth(cal.getMonth());
+		view.setYear(cal.getYear());
+		
+		if (view.getYear() < oldestYear) {
+			oldestYear = view.getYear();
+		}
+		
+		view.setAcceptableDays(getIntegerList(1, cal.getDaysInMonth()));
+		view.setAcceptableMonths(getIntegerList(1, 12));
+		view.setAcceptableYears(getIntegerList(oldestYear, currentYear));
+	}
+	
+	private List<Integer> getIntegerList(int minValue, int maxValue) {
+		List<Integer> values = new ArrayList<Integer>();
+		for (int i = minValue; i <= maxValue; i++) {
+			values.add(new Integer(i));
+		}
+		return values;
 	}
 
 	@Override
@@ -276,7 +315,10 @@ StandardizedPatientEditView.Delegate {
 		//descriptionDriver.flush();
 		description.setDescription(descriptionView.getDescriptionContent());
 		bankaccountDriver.flush();
-		
+		cal.setMonth(view.getMonth());
+		cal.setYear(view.getYear());
+		cal.setDay(view.getDay());
+		standardizedPatient.setBirthday(cal.getDate());
 		editorDriver.flush().fire(new Receiver<Void>() {
 
 			public void onFailure(ServerFailure error){
@@ -295,34 +337,11 @@ StandardizedPatientEditView.Delegate {
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("StandardizedPatient successfully saved.");
-
-				save = true;
 				
-				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
-
+				save = true;
+				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.NEW));
 				//saveDescription();
 			}
-		}); 
+		});
 	}
-
-//	private void saveDescription() {
-//		// TODO: bug(2011-11-12) - description is NOT saved the first time!
-//		
-//		descriptionDriver.flush().fire(new Receiver<Void>() {
-//
-//			@Override
-//			public void onSuccess(Void response) {
-//				Log.info("Description successfully saved.");
-//
-//				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), StandardizedPatientDetailsPlace.Operation.DETAILS));		
-//			}
-//
-//			public void onFailure(ServerFailure error){
-//				Log.error(error.getMessage());
-//			}
-//
-//		});
-//
-//		save = true;
-//	}
 }

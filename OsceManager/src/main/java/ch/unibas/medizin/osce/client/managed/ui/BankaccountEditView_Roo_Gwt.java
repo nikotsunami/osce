@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.activity.BankaccountEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.BankaccountEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import com.google.gwt.core.client.GWT;
@@ -54,6 +55,10 @@ public abstract class BankaccountEditView_Roo_Gwt extends Composite implements V
     @UiField
     TextBox city;
 
-    @UiField
-    TextBox country;
+    @UiField(provided = true)
+    ValueListBox<NationalityProxy> country = new ValueListBox<NationalityProxy>(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>());
+
+    public void setCountryPickerValues(Collection<NationalityProxy> values) {
+        country.setAcceptableValues(values);
+    }
 }

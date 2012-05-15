@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
@@ -48,12 +49,15 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
@@ -132,6 +136,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	/** Holds a reference to the IconButton of StandardizedPatientViewImpl */
 	private IconButton iconButton;
+	private HandlerRegistration placeChangeHandlerRegistration;
 
 	// private final String filePath = "StandardizedPatientList.csv";
 
@@ -155,6 +160,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void onStop() {
 		if (advancedSearchPopup != null) {
 			advancedSearchPopup.hide();
+		}
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
 		}
 		activityManger.setDisplay(null);
 	}
@@ -244,6 +252,26 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}
 		});
 		
+		PlaceChangeEvent.Handler placeChangeHandler = new PlaceChangeEvent.Handler() {
+			@Override
+			public void onPlaceChange(PlaceChangeEvent event) {
+				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
+				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
+					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
+					Operation op = spdPlace.getOperation();
+					if (op == Operation.NEW) {
+						getSearchStringByEntityProxyId((EntityProxyId<StandardizedPatientProxy>)spdPlace.getProxyId());
+					}
+				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
+					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
+					if (place.getToken().contains("DELETED")) {
+						initSearch();
+					}
+				}
+			}
+		};
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, placeChangeHandler);
+		
 		initSearch();
 		
 		activityManger.setDisplay(view.getDetailsPanel());
@@ -317,13 +345,35 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		@Override
 		public void onSuccess(List<StandardizedPatientProxy> response) {
 			final Range range = table.getVisibleRange();
-			//By SPEC[
-			table.setRowCount(response.size());
-			//By SPEC]
+			// NOTE: If you set the Row count to the actually received responses,
+			// it is impossible to access anymore than the displayed number of
+			// patients! Therefore do not set the row count here! This is the
+			// reason we have a "count request"!
 			table.setRowData(range.getStart(), response);
 			
 		}
 	}
+	 
+	 /**
+	  * Used to fill table and search field after creating new entity.
+	  * @param entityId
+	  */
+	 private void getSearchStringByEntityProxyId(EntityProxyId<StandardizedPatientProxy> entityId) {
+		 requests.find(entityId).with("name", "preName").fire(new Receiver<StandardizedPatientProxy>() {
+
+			@Override
+			public void onSuccess(StandardizedPatientProxy proxy) {
+				if (proxy != null) {
+					List<StandardizedPatientProxy> values = new ArrayList<StandardizedPatientProxy>();
+					values.add(proxy);
+					view.getSearchBox().setText(proxy.getPreName() + " " + proxy.getName());
+					table.setRowCount(1, true);
+					table.setRowData(0, values);
+				}
+			}
+			 
+		 });
+	 }
 
 	/**
 	 * Initializes the search for standardized patients, by first 
@@ -337,8 +387,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
-		SearchCriteria criteria = view.getCriteria();
-		Range range = table.getVisibleRange();
 
 		// (2) Advanced search
 		requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
@@ -373,7 +421,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}
 		
 		Range range = table.getVisibleRange();
-		Log.debug(range.getStart() + ": start : length " + range.getLength());
 
 		//By SPEC[Start		
 		//requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 

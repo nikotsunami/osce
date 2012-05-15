@@ -40,6 +40,8 @@ DoctorView.Presenter, DoctorView.Delegate {
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private DoctorDetailsActivityMapper DoctorDetailsActivityMapper;
+	private String quickSearchTerm = "";
+	private HandlerRegistration placeChangeHandlerRegistration;
 	
 
 	public DoctorActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -51,6 +53,10 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 	public void onStop(){
 		activityManger.setDisplay(null);
+
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
+		}
 	}
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -62,8 +68,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 		
-		
-		init();
+		initSearch();
 
 		activityManger.setDisplay(view.getDetailsPanel());
 
@@ -87,21 +92,28 @@ DoctorView.Presenter, DoctorView.Delegate {
 				});
 
 		view.setDelegate(this);
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+			@Override
+			public void onPlaceChange(PlaceChangeEvent event) {
+				if (event.getNewPlace() instanceof DoctorDetailsPlace) {
+					DoctorDetailsPlace place = (DoctorDetailsPlace) event.getNewPlace();
+					if (place.getOperation() == Operation.NEW) {
+						initSearch();
+					}
+				}
+			}
+		});
 		
 	}
 	
-	private void init() {
-		init2("");
-	}
-	
-	private void init2(final String q) {
+	private void initSearch() {
 		
 		if(rangeChangeHandler!=null){
 			rangeChangeHandler.removeHandler();
 			rangeChangeHandler=null;
 		}
 
-		fireCountRequest(q, new Receiver<Long>() {
+		fireCountRequest(quickSearchTerm, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -111,7 +123,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 				Log.debug("Geholte Intitution aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged(q);
+				onRangeChanged(quickSearchTerm);
 			}
 
 		});
@@ -119,7 +131,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						DoctorActivity.this.onRangeChanged(q);
+						DoctorActivity.this.onRangeChanged(quickSearchTerm);
 					}
 				});
 	}
@@ -194,8 +206,9 @@ DoctorView.Presenter, DoctorView.Delegate {
 	
 	@Override
 	public void performSearch(String q) {
+		quickSearchTerm = q;
 		Log.debug("Search for " + q);
-		init2(q);
+		initSearch();
 	}
 
 	@Override

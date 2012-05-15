@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicViewImpl;
@@ -40,6 +41,8 @@ ClinicView.Presenter, ClinicView.Delegate {
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
 	private ClinicDetailsActivityMapper ClinicDetailsActivityMapper;
+	private String quickSearchTerm = "";
+	private HandlerRegistration placeChangeHandlerRegistration;
 	
 
 	public ClinicActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -50,6 +53,9 @@ ClinicView.Presenter, ClinicView.Delegate {
     }
 
 	public void onStop(){
+		if (placeChangeHandlerRegistration != null) {
+			placeChangeHandlerRegistration.removeHandler();
+		}
 		activityManger.setDisplay(null);
 	}
 	@Override
@@ -62,14 +68,13 @@ ClinicView.Presenter, ClinicView.Delegate {
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 
-		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
-				ClinicDetailsPlace place;
-				if (event.getNewPlace() instanceof ClinicDetailsPlace){
-					place = (ClinicDetailsPlace) event.getNewPlace();
-					if (place.getToken() != null && place.getToken().contains("!DELETED")){
-						init();
-					}
+				if (event.getNewPlace() instanceof ClinicDetailsPlace) {
+					ClinicDetailsPlace place = (ClinicDetailsPlace) event.getNewPlace();
+					if (place.getOperation() == Operation.NEW) {
+						initSearch();
+					} 
 				}
 			}
 		});
@@ -103,12 +108,12 @@ ClinicView.Presenter, ClinicView.Delegate {
 	}
 	
 	private void init() {
-		init2("");
+		initSearch();
 	}
 	
-	private void init2(final String q) {
+	private void initSearch() {
 
-		fireCountRequest(q, new Receiver<Long>() {
+		fireCountRequest(quickSearchTerm, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
 				if (view == null) {
@@ -118,7 +123,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 				Log.debug("Geholte Intitution aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
 
-				onRangeChanged(q);
+				onRangeChanged(quickSearchTerm);
 			}
 
 		});
@@ -126,7 +131,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {
-						ClinicActivity.this.onRangeChanged(q);
+						ClinicActivity.this.onRangeChanged(quickSearchTerm);
 					}
 				});
 	}
@@ -135,8 +140,7 @@ ClinicView.Presenter, ClinicView.Delegate {
 		
 		Log.debug(Clinic.getName());
 		
-		goTo(new ClinicDetailsPlace(Clinic.stableId(),
-				Operation.DETAILS));
+		goTo(new ClinicDetailsPlace(Clinic.stableId(), Operation.DETAILS));
 	}
 	
 
@@ -202,7 +206,8 @@ ClinicView.Presenter, ClinicView.Delegate {
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
-		init2(q);
+		quickSearchTerm = q;
+		initSearch();
 	}
 
 	@Override

@@ -3,6 +3,7 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.Nationality;
 import java.lang.Integer;
 import java.lang.String;
 
@@ -56,11 +57,11 @@ privileged aspect Bankaccount_Roo_JavaBean {
         this.city = city;
     }
     
-    public String Bankaccount.getCountry() {
+    public Nationality Bankaccount.getCountry() {
         return this.country;
     }
     
-    public void Bankaccount.setCountry(String country) {
+    public void Bankaccount.setCountry(Nationality country) {
         this.country = country;
     }
     

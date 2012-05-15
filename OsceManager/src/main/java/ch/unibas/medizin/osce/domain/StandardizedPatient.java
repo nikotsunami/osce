@@ -132,6 +132,7 @@ public class StandardizedPatient {
     	private static String countRequest = "COUNT(DISTINCT stdPat)";
       	private static String normalRequest = "DISTINCT stdPat";
       	private static final String SEARCH_TYPE = "###REQUESTTYPE###";
+		private static final String TOKEN_SPLIT_REGEX = "[\\s|,|;]";
       	
       	//basic strings
     	private static String queryBase = "SELECT "+ SEARCH_TYPE + " FROM StandardizedPatient stdPat ";
@@ -146,6 +147,8 @@ public class StandardizedPatient {
     	//BY SPEC[start
     	private static String joinNationality = " LEFT JOIN nationality n on stdPat.nationality = n.id  ";
     	//BY SPEC]end
+    	
+    	private String[] tokens;
     	
     	/**
     	 * Search form reset
@@ -178,6 +181,14 @@ public class StandardizedPatient {
     		sorting.append(" ");
     		sorting.append(sort);
     	}
+    	
+    	/**
+    	 * Returns every substring of the searchWord
+    	 * @return
+    	 */
+    	public String[] getTokens() {
+    		return tokens;
+    	}
 
 		/**
     	 * Context search : checkbox values
@@ -185,25 +196,29 @@ public class StandardizedPatient {
     	 * @param searchThrough
     	 */
     	private void initSimpleSearch (String searchWord, List<String> searchThrough) {
-    		if (searchWord.trim().isEmpty())
+    		if (searchWord.trim().isEmpty()) {
+    			tokens = null;
     			return;
+    		}
+    		tokens = searchWord.split(TOKEN_SPLIT_REGEX);
     		StringBuilder localSimpleSearchClause = new StringBuilder();
     		Iterator<String> iter = searchThrough.iterator();
         	while (iter.hasNext()) {
-    			String fieldname = (String) iter.next();
-    			StandardizedPatientSearchField field = StandardizedPatientSearchField.valueOf(fieldname);
-    			if(field == null)
-    				throw new SecurityException("SP: Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
-    			//search string OR statement group
-  	    		if (isFirstArgument){
-   	    			isFirstArgument = false;
-   	    			localSimpleSearchClause.append(" ( ");
-   	    		}
-  	    		else {
-  	    			localSimpleSearchClause.append(" OR ");
-  	    		}
-  	    		localSimpleSearchClause.append(field.getQueryPart());
-    			
+        		String fieldname = (String) iter.next();
+        		for (int i=0; i < tokens.length; i++) {
+	    			StandardizedPatientSearchField field = StandardizedPatientSearchField.valueOf(fieldname);
+	    			if(field == null)
+	    				throw new SecurityException("SP: Wrong search option ["+fieldname+"] or possible harmful data substitued. Please set the correct one into the right list ");
+	    			//search string OR statement group
+	  	    		if (isFirstArgument){
+	   	    			isFirstArgument = false;
+	   	    			localSimpleSearchClause.append(" ( ");
+	   	    		}
+	  	    		else {
+	  	    			localSimpleSearchClause.append(" OR ");
+	  	    		}
+	  	    		localSimpleSearchClause.append(field.getQueryPart(i));
+        		}
     		}
         	if(localSimpleSearchClause.length() > 0){
         		localSimpleSearchClause.append(" ) ");
@@ -413,9 +428,12 @@ public class StandardizedPatient {
     	Log.info("Query: [" + queryString+"]");
     	TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
     	//this parameter is not required if we have no q value in the request
-    	if(queryString.indexOf(":q") != -1){
-    		q.setParameter("q", "%" + searchWord + "%");
-    		Log.info("Search :[" + searchWord+"]");
+    	String[] tokens = simpatSearch.getTokens();
+    	if (tokens != null) {
+	    	for(int i=0; queryString.indexOf(":q" + i) != -1; i++) {
+	    		q.setParameter("q" + i, "%" + tokens[i] + "%");
+	    		Log.info("Search :[" + tokens[i] + "]");
+	    	}
     	}
     	q.setFirstResult(firstResult);
     	q.setMaxResults(maxResults);
@@ -469,7 +487,7 @@ public class StandardizedPatient {
     	EntityManager em = entityManager();
     	PatientSearch simpatSearch = new PatientSearch(true);
     	//context (simple) search
-    	simpatSearch.initSimpleSearch (searchWord, searchThrough);
+    	simpatSearch.initSimpleSearch(searchWord, searchThrough);
     	
     	Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
     	while (iter.hasNext()) {
@@ -482,9 +500,12 @@ public class StandardizedPatient {
     	Log.info("Query: [" + queryString+"]");
     	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
     	//this parameter is not required if we have no q value in the request
-    	if(queryString.indexOf(":q") != -1){
-    		q.setParameter("q", "%" + searchWord + "%");
-        	Log.info("Search :[" + searchWord+"]");
+    	String[] tokens = simpatSearch.getTokens();
+    	if (tokens != null) {
+	    	for(int i=0; queryString.indexOf(":q" + i) != -1; i++) {
+	    		q.setParameter("q" + i, "%" + tokens[i] + "%");
+	    		Log.info("Search :[" + tokens[i] + "]");
+	    	}
     	}
     	Long result  = q.getSingleResult(); 
     	Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);

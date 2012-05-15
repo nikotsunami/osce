@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
@@ -87,6 +88,12 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	ListBox filterTitle;
 	@UiField
 	Button saveOrder;
+	IconButton refreshButton;
+	
+	@UiHandler("refreshButton")
+	public void refreshButtonClicked(ClickEvent event) {
+		delegate.performSearch(searchBox.getValue());
+	}
 
 	@UiHandler("filterTitle")
 	public void filterTitleChangeHandler(ChangeEvent event) {

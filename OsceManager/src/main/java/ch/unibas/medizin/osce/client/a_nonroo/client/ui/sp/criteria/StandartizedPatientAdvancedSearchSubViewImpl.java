@@ -27,10 +27,14 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.IdentityColumn;
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent;
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent.LoadingState;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.gwt.view.client.RowCountChangeEvent;
 
 public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		implements StandartizedPatientAdvancedSearchSubView {
@@ -145,6 +149,23 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	        
 	        table.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(new ActionCell<AdvancedSearchCriteriaProxy>(OsMaConstant.DELETE_ICON, deleteDelegate)));
 			table.addColumnStyleName(table.getColumnCount() - 1, "iconCol");
+			
+			table.addRowCountChangeHandler(new RowCountChangeEvent.Handler() {
+				
+				@Override
+				public void onRowCountChange(RowCountChangeEvent event) {
+					if (event.getNewRowCount() > 0) {
+						table.setVisible(true);
+						pager.setVisible(true);
+					} else {
+						table.setVisible(false);
+						pager.setVisible(false);
+					}
+				}
+			});
+			
+			table.setVisible(false);
+			pager.setVisible(false);
 	    }
 
 	@Override

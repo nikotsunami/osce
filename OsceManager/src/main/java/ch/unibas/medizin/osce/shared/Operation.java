@@ -1,5 +1,5 @@
 package ch.unibas.medizin.osce.shared;
 
 public enum Operation {
-	DETAILS, EDIT, CREATE
+	DETAILS, EDIT, CREATE, NEW
 }

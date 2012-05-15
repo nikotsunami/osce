@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -63,7 +64,7 @@ public abstract class BankaccountDetailsView_Roo_Gwt extends Composite implement
         ownerName.setInnerText(proxy.getOwnerName() == null ? "" : String.valueOf(proxy.getOwnerName()));
         postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
         city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
-        country.setInnerText(proxy.getCountry() == null ? "" : String.valueOf(proxy.getCountry()));
+        country.setInnerText(proxy.getCountry() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getCountry()));
         displayRenderer.setInnerText(BankaccountProxyRenderer.instance().render(proxy));
     }
 }

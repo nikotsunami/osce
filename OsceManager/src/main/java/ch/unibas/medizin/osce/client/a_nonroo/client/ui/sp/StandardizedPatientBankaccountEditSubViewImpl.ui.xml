@@ -12,16 +12,28 @@
 		</colgroup>
 		<tbody>
 		<tr>
-			<td><span class="{style.label}" ui:field="labelBankName" /></td>
-			<td><g:TextBox ui:field='bankName'/></td>
+			<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
+			<td><g:TextBox ui:field='IBAN'/></td>
+			<td><span class="{style.label}" ui:field="labelOwnerName" /></td>
+			<td><g:TextBox ui:field='ownerName' /></td>
 		</tr>
 		<tr>
+			<td><span class="{style.label}" ui:field="labelBankName" /></td>
+			<td><g:TextBox ui:field='bankName'/></td>
 			<td><span class="{style.label}" ui:field="labelBankBIC" /></td>
 			<td><g:TextBox ui:field='BIC'/></td>
 		</tr>
 		<tr>
-			<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
-			<td><g:TextBox ui:field='IBAN'/></td>
+			<td><span class="{style.label}" ui:field="labelBankPlz" /></td>
+			<td><g:IntegerBox ui:field="postalCode" /></td>
+			<td><span class="{style.label}" ui:field="labelBankCity" /></td>
+			<td><g:TextBox ui:field="city" /></td>
+		</tr>
+		<tr>
+			<td><span class="{style.label}" ui:field="labelBankCountry" /></td>
+			<td><g:ValueListBox ui:field="country" /></td>
+		</tr>
+		<tr>
 		</tr>
 		</tbody>
 	</table>

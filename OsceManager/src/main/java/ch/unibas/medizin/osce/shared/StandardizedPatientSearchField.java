@@ -38,4 +38,8 @@ public enum StandardizedPatientSearchField {
     public String getQueryPart() {
 		return queryPart;
 	}
+    
+    public String getQueryPart(int tokenNo) {
+    	return queryPart.replace(":q", ":q" + tokenNo);
+    }
 }

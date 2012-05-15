@@ -77,12 +77,15 @@ public class AnamnesisCheckDetailsPlace extends Place implements HasOperationOnP
 			if (Operation.CREATE == operation) {
 				return new AnamnesisCheckDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
+			if (Operation.NEW == operation) {
+				return new AnamnesisCheckDetailsPlace(requests.getProxyId(bits[0]), Operation.NEW);
+			}
 
 			return new AnamnesisCheckDetailsPlace(token);
 		}
 
 		public String getToken(AnamnesisCheckDetailsPlace place) {
-			Log.debug("AnamnesisFormDetailsPlace.Tokenizer.getToken");
+			Log.debug("AnamnesisCheckDetailsPlace.Tokenizer.getToken");
 			if (Operation.DETAILS == place.getOperation()) {
 				return place.getProxyId() + SEPARATOR + Operation.DETAILS;
 			}
@@ -92,7 +95,9 @@ public class AnamnesisCheckDetailsPlace extends Place implements HasOperationOnP
 			if (Operation.CREATE == place.getOperation()) {
 				return /*place.getProxyId() + */ SEPARATOR + Operation.CREATE.toString();
 			}
-
+			if (Operation.NEW == place.getOperation()) {
+				return place.getProxyId() + SEPARATOR + Operation.NEW;
+			}
         
 			return place.getToken();
 		}

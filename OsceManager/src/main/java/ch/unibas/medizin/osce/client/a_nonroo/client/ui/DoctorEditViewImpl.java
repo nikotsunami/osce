@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -53,9 +54,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	
 	@UiField(provided = true)
     ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
-
+    	EnumRenderer<Gender> renderer = new EnumRenderer<Gender>();
         public String render(ch.unibas.medizin.osce.shared.Gender obj) {
-            return obj == null ? "" : String.valueOf(obj);
+            return obj == null ? "" : renderer.render(obj);
         }
     });
 

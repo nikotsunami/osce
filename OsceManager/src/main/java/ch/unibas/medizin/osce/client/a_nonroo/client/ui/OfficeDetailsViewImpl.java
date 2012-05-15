@@ -3,8 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -87,7 +89,7 @@ public class OfficeDetailsViewImpl extends Composite implements OfficeDetailsVie
 		this.proxy = proxy;
 //		id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
 //		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-		gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
+		gender.setInnerText(proxy.getGender() == null ? "" : new EnumRenderer<Gender>().render(proxy.getGender()));
 		title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
 		name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
 		preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));

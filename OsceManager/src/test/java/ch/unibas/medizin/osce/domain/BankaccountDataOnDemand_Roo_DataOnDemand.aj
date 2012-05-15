@@ -4,6 +4,8 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Bankaccount;
+import ch.unibas.medizin.osce.domain.Nationality;
+import ch.unibas.medizin.osce.domain.NationalityDataOnDemand;
 import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect BankaccountDataOnDemand_Roo_DataOnDemand {
@@ -22,6 +25,9 @@ privileged aspect BankaccountDataOnDemand_Roo_DataOnDemand {
     private Random BankaccountDataOnDemand.rnd = new SecureRandom();
     
     private List<Bankaccount> BankaccountDataOnDemand.data;
+    
+    @Autowired
+    private NationalityDataOnDemand BankaccountDataOnDemand.nationalityDataOnDemand;
     
     public Bankaccount BankaccountDataOnDemand.getNewTransientBankaccount(int index) {
         Bankaccount obj = new Bankaccount();
@@ -60,10 +66,7 @@ privileged aspect BankaccountDataOnDemand_Roo_DataOnDemand {
     }
     
     public void BankaccountDataOnDemand.setCountry(Bankaccount obj, int index) {
-        String country = "country_" + index;
-        if (country.length() > 30) {
-            country = country.substring(0, 30);
-        }
+        Nationality country = nationalityDataOnDemand.getRandomNationality();
         obj.setCountry(country);
     }
     

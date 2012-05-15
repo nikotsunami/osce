@@ -31,6 +31,8 @@ public class AnamnesisCheckDetailsActivityMapper  implements ActivityMapper{
 		if (place instanceof AnamnesisCheckDetailsPlace){
 			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new AnamnesisCheckDetailsActivity((AnamnesisCheckDetailsPlace) place, requests, placeController);
+			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.NEW)
+				return new AnamnesisCheckDetailsActivity((AnamnesisCheckDetailsPlace) place, requests, placeController);
 			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.EDIT)
 				return new AnamnesisCheckEditActivity((AnamnesisCheckDetailsPlace) place, requests, placeController);
 			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.CREATE)

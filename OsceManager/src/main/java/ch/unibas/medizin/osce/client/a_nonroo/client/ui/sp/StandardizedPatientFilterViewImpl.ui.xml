@@ -25,7 +25,7 @@
 	<g:FocusPanel addStyleNames="{style.noOutline}" ui:field="filterPanelRoot">
 		<g:HTMLPanel addStyleNames="{style.popupPanel}">
 				<span class="ui-icon ui-icon-wrench" style="margin: 0 10px 6px 0; float:left"></span>
-				<span style="margin-left: 0px"><strong ui:field="labelSearch">Suche nach...</strong></span>
+				<strong><span style="margin-left: 0px" ui:field="labelSearch"></span></strong>
 				<my:IconButton icon="arrowreturnthick-1-w" ui:field="resetButton" addStyleNames="{style.floatRight}"></my:IconButton>
 			<div style="clear:both">
 			<g:HorizontalPanel>
