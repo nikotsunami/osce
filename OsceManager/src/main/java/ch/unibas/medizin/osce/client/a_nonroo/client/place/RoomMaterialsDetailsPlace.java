@@ -76,6 +76,10 @@ public class RoomMaterialsDetailsPlace  extends Place implements HasOperationOnP
 			if (Operation.CREATE == operation) {
 				return new RoomMaterialsDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
+			
+			if (Operation.NEW == operation) {
+				return new RoomMaterialsDetailsPlace(requests.getProxyId(bits[0]), Operation.NEW);
+			}
 
 			return new RoomMaterialsDetailsPlace(token);
 		}
@@ -90,6 +94,9 @@ public class RoomMaterialsDetailsPlace  extends Place implements HasOperationOnP
 			}
 			if (Operation.CREATE == place.getOperation()) {
 				return /*place.getProxyId() +*/ SEPARATOR + Operation.CREATE.toString();
+			}
+			if (Operation.NEW == place.getOperation()) {
+				return place.getProxyId() + SEPARATOR + Operation.NEW;
 			}
 
 			return place.getToken();

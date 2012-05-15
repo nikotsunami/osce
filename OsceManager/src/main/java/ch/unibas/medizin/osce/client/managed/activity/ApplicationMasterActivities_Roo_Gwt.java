@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -42,6 +43,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorListView;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaListView;
@@ -72,6 +74,8 @@ import ch.unibas.medizin.osce.client.managed.ui.LangSkillListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.LogEntryListView;
 import ch.unibas.medizin.osce.client.managed.ui.LogEntryMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.MaterialListListView;
+import ch.unibas.medizin.osce.client.managed.ui.MaterialListMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.MediaContentListView;
 import ch.unibas.medizin.osce.client.managed.ui.MediaContentMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.MediaContentTypeListView;
@@ -118,6 +122,8 @@ import ch.unibas.medizin.osce.client.managed.ui.StudentOscesListView;
 import ch.unibas.medizin.osce.client.managed.ui.StudentOscesMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.TaskListView;
 import ch.unibas.medizin.osce.client.managed.ui.TaskMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.UsedMaterialListView;
+import ch.unibas.medizin.osce.client.managed.ui.UsedMaterialMobileListView;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldApp;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import com.google.gwt.activity.shared.Activity;
@@ -138,6 +144,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
         }
         ProxyListPlace listPlace = (ProxyListPlace) place;
         return new ApplicationEntityTypesProcessor<Activity>() {
+
+            @Override
+            public void handleUsedMaterial(UsedMaterialProxy isNull) {
+                setResult(new UsedMaterialListActivity(requests, ScaffoldApp.isMobile() ? UsedMaterialMobileListView.instance() : UsedMaterialListView.instance(), placeController));
+            }
 
             @Override
             public void handleTask(TaskProxy isNull) {
@@ -252,6 +263,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleMediaContent(MediaContentProxy isNull) {
                 setResult(new MediaContentListActivity(requests, ScaffoldApp.isMobile() ? MediaContentMobileListView.instance() : MediaContentListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleMaterialList(MaterialListProxy isNull) {
+                setResult(new MaterialListListActivity(requests, ScaffoldApp.isMobile() ? MaterialListMobileListView.instance() : MaterialListListView.instance(), placeController));
             }
 
             @Override

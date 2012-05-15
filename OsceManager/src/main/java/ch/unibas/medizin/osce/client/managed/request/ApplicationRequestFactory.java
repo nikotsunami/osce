@@ -6,6 +6,8 @@ import ch.unibas.medizin.osce.shared.scaffold.ScaffoldRequestFactory;
 
 public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
+    UsedMaterialRequest usedMaterialRequest();
+
     TaskRequest taskRequest();
 
     StudentRequest studentRequest();
@@ -51,6 +53,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     MediaContentTypeRequest mediaContentTypeRequest();
 
     MediaContentRequest mediaContentRequest();
+
+    MaterialListRequest materialListRequest();
 
     LogEntryRequest logEntryRequest();
 

@@ -8,9 +8,9 @@ public interface OsceConstants extends Constants {
 	public String addAnamnesisValue();
 
 	public String addAnswer();
-	
+
 	public String addClinic();
-	
+
 	public String addDoctor();
 
 	public String addLangSkill();
@@ -81,6 +81,8 @@ public interface OsceConstants extends Constants {
 
 	public String contactInfo();
 
+	public String country();
+
 	public String createClinic();
 
 	public String createDoctor();
@@ -119,6 +121,8 @@ public interface OsceConstants extends Constants {
 
 	public String exams();
 
+	public String export();
+
 	public String exportBellSchedule();
 
 	public String female();
@@ -153,6 +157,8 @@ public interface OsceConstants extends Constants {
 
 	public String male();
 
+	public String maritalStatus();
+
 	public String masterData();
 
 	public String maxCircuits();
@@ -175,6 +181,8 @@ public interface OsceConstants extends Constants {
 
 	public String osces();
 
+	public String ownerName();
+
 	public String patient();
 
 	public String patientHas();
@@ -189,9 +197,11 @@ public interface OsceConstants extends Constants {
 
 	public String preName();
 
+	public String print();
+
 	public String printIndividualSchedules();
-	
-//	public String insideTitle();
+
+	// public String insideTitle();
 
 	public String profession();
 
@@ -222,18 +232,20 @@ public interface OsceConstants extends Constants {
 	public String searchField();
 
 	public String searchFor();
-	
+
 	public String selectLanguage();
 
 	public String sendSummonings();
-	
+
 	public String showAnswered();
-	
+
 	public String showUnanswered();
 
 	public String simPat();
 
 	public String simulationPatients();
+
+	public String socialInsuranceNo();
 
 	public String stationLength();
 
@@ -260,55 +272,84 @@ public interface OsceConstants extends Constants {
 	public String value();
 
 	public String weight();
+
+	public String workPermission();
 	
 	public String filterTitle();
+
 	public String yes();
 
 //by spec role management functionality[
 	public String roles();
-	
+
 	public String topicsAndSpec();
-	
+
 	public String roleScriptTemplate();
-	
+
 	public String roomMaterials();
-	
+
 	public String role();
+
 	public String roletopic();
-	
+
 	public String slotUntilChange();
-	
+
 	public String studyYears();
-	
+
 	public String clinicalSpecialisation();
-	
-	//By spec for popup position
+
+	// By spec for popup position
 	public String TopicsAndSpecViewPopupXPosition();
+
 	public String TopicsAndSpecViewPopupYPosition();
-	
+
 	public String TopicsAndSpecDetailsViewPopupXPosition();
+
 	public String TopicsAndSpecDetailsViewPopupYPosition();
 
-        public String topic(); 
+	// By Spec Assignment L
+	public String addMaterial();
+
+	public String editMaterial();
+
+	public String roomMaterialName();
+
+	public String roomMaterialPrice();
+
+	public String roomMaterialPriceType();
+
+	public String roomMaterialPricePerPiece();
+
+	public String roomMaterialPricePerDay();
+
+
+
+	public String topic();
+
 	public String aviableRole();
-        public String keyword();
+
+	public String keyword();
+
 	public String itemName();
+
 	public String roleName();
+
 	public String checkListItem();
+
 	public String itemValue();
+
 	public String addRoleTopic();
-	//by spec role management functionality]
+//by spec role management functionality]
 
-	public String print();
-
-	public String export();
-	
 	public String insideTitle();
-	
+
 	public String previousQuestion();
-	
+
 	public String previousTitle();
-	
+
 	public String noTitle();
+
+    public String order();
+    public String saveOrder();
 
 }
