@@ -342,6 +342,9 @@ body {
 	margin: 4px auto;
 	width: 98%;
 }
+.standardTable input{
+    width: 20px;
+}
 
 /* Style for Buttons in CellTables (like delete Buttons) */
 .standardTable button {

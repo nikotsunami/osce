@@ -11,13 +11,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.client.managed.activity.AdministratorEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
-import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.google.gwt.cell.client.ActionCell;
@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.cell.client.TextInputCell;
 
 /**
  * @author dk
@@ -53,8 +54,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	// private AnamnesisCheckPlace place = null;
 
-	private static SystemStartViewUiBinder uiBinder = GWT
-			.create(SystemStartViewUiBinder.class);
+	private static SystemStartViewUiBinder uiBinder = GWT.create(SystemStartViewUiBinder.class);
 
 	interface SystemStartViewUiBinder extends
 			UiBinder<Widget, AnamnesisCheckViewImpl> {
@@ -87,6 +87,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	@UiField
 	ListBox filterTitle;
 	@UiField
+	Button saveOrder;
 	IconButton refreshButton;
 	
 	@UiHandler("refreshButton")
@@ -107,6 +108,12 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		delegate.changeNumRowShown(rangeNum.getItemText(rangeNum
 				.getSelectedIndex()));
 
+	}
+	
+	@UiHandler("saveOrder")
+	public void onSaveOrder(ClickEvent event) {
+		GWT.log("onSaveOrder delegate = "+delegate);
+		delegate.saveOrder();
 	}
 
 	public void initList() {
@@ -174,6 +181,44 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		table.addColumn(new SimpleTextColumn(), constants.question());
 		paths.add("value");
 		table.addColumn(new ValueColumn(), constants.possibleAnswers());
+		
+		Column<AnamnesisCheckProxy, String> checkOrderColumn = new Column<AnamnesisCheckProxy, String>(
+				new TextInputCell()) {
+			@Override
+			public String getValue(AnamnesisCheckProxy object) {
+				if(object.getUserSpecifiedOrder() !=null ){
+					return String.valueOf(object.getUserSpecifiedOrder());
+				}else{
+					return "";
+				}
+			}
+		};
+		checkOrderColumn.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
+
+			@Override
+			public void update(int index, AnamnesisCheckProxy object, String value) {
+				try {
+					GWT.log("??????checkOrderColumn.setFieldUpdater value = "+value);
+					GWT.log("????object type= "+object.getType());
+					GWT.log("????object sortoder= "+object.getSort_order());
+					GWT.log("????object value= "+value);
+//					GWT.log("????object UserSpecifiedOrder= "+object.getUserSpecifiedOrder());
+//					Integer userSpecifiedOrder = Integer.valueOf(value);
+//					delegate.resetUserSpecifiedOrder(object, value);
+					if(value != null && !value.equals("")){
+						delegate.orderEdited(object,value);
+					}
+//					object.setUserSpecifiedOrder(userSpecifiedOrder);
+				} catch (Exception e) {
+					GWT.log(value + e);
+				}
+				
+				
+			}
+		});
+		table.addColumn(checkOrderColumn, constants.order());
+		table.setColumnWidth(checkOrderColumn,"10px");
+
 		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<AnamnesisCheckProxy>() {
 					public void execute(AnamnesisCheckProxy proxy) {

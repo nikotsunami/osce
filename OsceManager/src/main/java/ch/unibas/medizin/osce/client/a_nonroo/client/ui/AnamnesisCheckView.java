@@ -28,6 +28,10 @@ public interface AnamnesisCheckView extends IsWidget{
 		void performSearch(String q);
 		void changeNumRowShown(String selectedValue);
 		void changeFilterTitleShown(String selectedTitle);
+		void saveOrder();
+		void orderEdited(AnamnesisCheckProxy proxy, String userSpecifiedOrder); // paul
+//		void resetUserSpecifiedOrder(AnamnesisCheckProxy anamnesisCheck, String value);
+		
 
 	}
 
