@@ -3,295 +3,293 @@ package ch.unibas.medizin.osce.client.i18n;
 import com.google.gwt.i18n.client.Constants;
 
 public interface OsceConstants extends Constants {
-	public String add();
+    public String add();
 
-	public String addAnamnesisValue();
+    public String addAnamnesisValue();
 
-	public String addAnswer();
-	
-	public String addClinic();
-	
-	public String addDoctor();
+    public String addAnswer();
 
-	public String addLangSkill();
+    public String addClinic();
 
-	public String addLanguage();
+    public String addDoctor();
 
-	public String addNationality();
+    public String addLangSkill();
 
-	public String addOsce();
+    public String addLanguage();
 
-	public String addPatient();
+    public String addNationality();
 
-	public String addProfession();
+    public String addOsce();
 
-	public String addQuestion();
+    public String addPatient();
 
-	public String addRoom();
+    public String addProfession();
 
-	public String addTrait();
+    public String addQuestion();
 
-	public String addUser();
+    public String addRoom();
 
-	public String administration();
+    public String addTrait();
 
-	public String administrator();
+    public String addUser();
 
-	public String all();
+    public String administration();
 
-	public String anamnesisForm();
+    public String administrator();
 
-	public String anamnesisValues();
+    public String all();
 
-	public String answer();
+    public String anamnesisForm();
 
-	public String answered();
+    public String anamnesisValues();
 
-	public String answerGiven();
+    public String answer();
 
-	public String answerPending();
+    public String answered();
 
-	public String bank();
+    public String answerGiven();
 
-	public String bankAccount();
+    public String answerPending();
 
-	public String basicFilter();
+    public String bank();
 
-	public String bic();
+    public String bankAccount();
 
-	public String bindType();
+    public String basicFilter();
 
-	public String birthday();
+    public String bic();
 
-	public String bmi();
+    public String bindType();
 
-	public String cancel();
+    public String birthday();
 
-	public String circuit();
+    public String bmi();
 
-	public String city();
+    public String cancel();
 
-	public String clinic();
+    public String circuit();
 
-	public String clinics();
+    public String city();
 
-	public String comment();
+    public String clinic();
 
-	public String comparison();
+    public String clinics();
 
-	public String contactInfo();
+    public String comment();
 
-	public String createClinic();
+    public String comparison();
 
-	public String createDoctor();
+    public String contactInfo();
 
-	public String criterion();
+    public String createClinic();
 
-	public String dateTime();
+    public String createDoctor();
 
-	public String dateTimeFormat();
+    public String criterion();
 
-	public String delete();
+    public String dateTime();
 
-	public String description();
+    public String dateTimeFormat();
 
-	public String details();
+    public String delete();
 
-	public String doctors();
+    public String description();
 
-	public String edit();
+    public String details();
 
-	public String editAnamnesisValue();
+    public String doctors();
 
-	public String editClinic();
+    public String edit();
 
-	public String editDoctor();
+    public String editAnamnesisValue();
 
-	public String editPatient();
+    public String editClinic();
 
-	public String email();
+    public String editDoctor();
 
-	public String enterAnswer();
+    public String editPatient();
 
-	public String enterQuestion();
+    public String email();
 
-	public String examinationSchedule();
+    public String enterAnswer();
 
-	public String exams();
+    public String enterQuestion();
 
-	public String export();
+    public String examinationSchedule();
 
-	public String exportBellSchedule();
+    public String exams();
 
-	public String female();
+    public String export();
 
-	public String field();
+    public String exportBellSchedule();
 
-	public String from();
+    public String female();
 
-	public String gender();
+    public String field();
 
-	public String generalInformation();
+    public String from();
 
-	public String googleMaps();
+    public String gender();
 
-	public String height();
+    public String generalInformation();
 
-	public String iban();
+    public String googleMaps();
 
-	public String language();
+    public String height();
 
-	public String languages();
+    public String iban();
 
-	public String languageSkills();
+    public String language();
 
-	public String location();
+    public String languages();
 
-	public String log();
+    public String languageSkills();
 
-	public String logout();
+    public String location();
 
-	public String logDetails();
+    public String log();
 
-	public String male();
+    public String logout();
 
-	public String masterData();
+    public String logDetails();
 
-	public String maxCircuits();
+    public String male();
 
-	public String maxStudents();
+    public String masterData();
 
-	public String mobile();
+    public String maxCircuits();
 
-	public String name();
+    public String maxStudents();
 
-	public String nationalities();
+    public String mobile();
 
-	public String nationality();
+    public String name();
 
-	public String no();
+    public String nationalities();
 
-	public String noMatter();
+    public String nationality();
 
-	public String officeDetails();
+    public String no();
 
-	public String osces();
+    public String noMatter();
 
-	public String patient();
+    public String officeDetails();
 
-	public String patientHas();
+    public String osces();
 
-	public String patientSpeaks();
+    public String patient();
 
-	public String persons();
+    public String patientHas();
 
-	public String plz();
+    public String patientSpeaks();
 
-	public String plzCity();
+    public String persons();
 
-	public String preName();
+    public String plz();
 
-	public String printIndividualSchedules();
-	
-//	public String insideTitle();
+    public String plzCity();
 
-	public String profession();
+    public String preName();
 
-	public String professions();
+    public String printIndividualSchedules();
 
-	public String question();
+//  public String insideTitle();
 
-	public String reallyDelete();
+    public String profession();
 
-	public String resetFilters();
+    public String professions();
 
-	public String roleAssignments();
+    public String question();
 
-	// public String roles(); //By SPEC
+    public String reallyDelete();
 
-	public String roomLength();
+    public String resetFilters();
 
-	public String roomNumber();
+    public String roleAssignments();
 
-	public String rooms();
+    // public String roles(); //By SPEC
 
-	public String roomWidth();
+    public String roomLength();
 
-	public String save();
+    public String roomNumber();
 
-	public String scars();
+    public String rooms();
 
-	public String searchField();
+    public String roomWidth();
 
-	public String searchFor();
-	
-	public String selectLanguage();
+    public String save();
 
-	public String sendSummonings();
-	
-	public String showAnswered();
-	
-	public String showUnanswered();
+    public String scars();
 
-	public String simPat();
+    public String searchField();
 
-	public String simulationPatients();
+    public String searchFor();
 
-	public String stationLength();
+    public String selectLanguage();
 
-	public String street();
+    public String sendSummonings();
 
-	public String students();
+    public String showAnswered();
 
-	public String studyYear();
+    public String showUnanswered();
 
-	public String telephone();
+    public String simPat();
 
-	public String text();
+    public String simulationPatients();
 
-	public String title();
+    public String stationLength();
 
-	public String to();
+    public String street();
 
-	public String traits();
+    public String students();
 
-	public String type();
+    public String studyYear();
 
-	public String user();
+    public String telephone();
 
-	public String value();
+    public String text();
 
-	public String weight();
-	
-	public String filterTitle();
-	public String yes();
+    public String title();
+
+    public String to();
+
+    public String traits();
+
+    public String type();
+
+    public String user();
+
+    public String value();
+
+    public String weight();
+
+    public String filterTitle();
+    public String yes();
 
 //by spec role menu[
-	public String roles();
-	
-	public String topicsAndSpec();
+    public String roles();
 
-	
-	public String roleScriptTemplate();
-	
-	public String roomMaterials();
-	
-	public String role();
-	//by spec role menu]
+    public String topicsAndSpec();
 
-	public String print();
 
-	public String export();
-	
-	public String insideTitle();
-	
-	public String previousQuestion();
-	
-	public String previousTitle();
-	
-	public String noTitle();
+    public String roleScriptTemplate();
 
-	public String order();
-	public String saveOrder();
+    public String roomMaterials();
+
+    public String role();
+    //by spec role menu]
+
+    public String print();
+
+    public String insideTitle();
+
+    public String previousQuestion();
+
+    public String previousTitle();
+
+    public String noTitle();
+
+    public String order();
+    public String saveOrder();
 
 }

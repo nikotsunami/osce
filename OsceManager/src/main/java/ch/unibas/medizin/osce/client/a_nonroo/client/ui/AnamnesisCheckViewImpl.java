@@ -17,7 +17,6 @@ import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
-import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.google.gwt.cell.client.ActionCell;
