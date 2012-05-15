@@ -171,9 +171,9 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		paths.add("type");
 		table.addColumn(new QuestionTypeColumn(), constants.type());
 		paths.add("text");
-		table.addColumn(new SimpleTextColumn(), constants.text());
+		table.addColumn(new SimpleTextColumn(), constants.question());
 		paths.add("value");
-		table.addColumn(new ValueColumn(), constants.value());
+		table.addColumn(new ValueColumn(), constants.possibleAnswers());
 		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<AnamnesisCheckProxy>() {
 					public void execute(AnamnesisCheckProxy proxy) {

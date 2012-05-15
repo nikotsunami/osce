@@ -50,6 +50,8 @@ public interface OsceConstants extends Constants {
 	public String answerGiven();
 
 	public String answerPending();
+	
+	public String author();
 
 	public String bank();
 
@@ -78,6 +80,8 @@ public interface OsceConstants extends Constants {
 	public String comment();
 
 	public String comparison();
+	
+	public String complexity();
 
 	public String contactInfo();
 
@@ -192,6 +196,8 @@ public interface OsceConstants extends Constants {
 	public String plz();
 
 	public String plzCity();
+	
+	public String possibleAnswers();
 
 	public String preName();
 
@@ -206,8 +212,12 @@ public interface OsceConstants extends Constants {
 	public String question();
 
 	public String reallyDelete();
+	
+	public String responsibilities();
 
 	public String resetFilters();
+	
+	public String reviewer();
 
 	public String roleAssignments();
 
@@ -242,6 +252,8 @@ public interface OsceConstants extends Constants {
 	public String simulationPatients();
 	
 	public String socialInsuranceNo();
+	
+	public String specification();
 
 	public String stationLength();
 
