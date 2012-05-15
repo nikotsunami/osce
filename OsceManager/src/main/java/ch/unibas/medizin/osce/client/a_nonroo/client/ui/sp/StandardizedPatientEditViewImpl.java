@@ -79,7 +79,6 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.impl.FocusImpl;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.ibm.icu.text.SimpleDateFormat;
 
 public class StandardizedPatientEditViewImpl extends Composite implements StandardizedPatientEditView, Editor<StandardizedPatientProxy> {
 

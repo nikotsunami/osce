@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Operation;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -49,7 +50,8 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class AnamnesisCheckActivity extends AbstractActivity implements
-        AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
+        AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate,
+        PlaceChangeEvent.Handler {
 
     private OsMaRequestFactory requests;
     private PlaceController placeController;
@@ -63,15 +65,17 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     private ActivityManager activityManger;
     private AnamnesisCheckDetailsActivityMapper anamnesisCheckDetailsActivityMapper;
     private final OsceConstants constants = GWT.create(OsceConstants.class);
+    // private List<AnamnesisCheckProxy> tableData = null;
+
 
     static AnamnesisCheckRequest request = null;
 
     private static final String placeToken = "AnamnesisCheckPlace";
 
-    private String listSelectedValue = "10";
-	private String quickSearchTerm = "";
-	
-	private HandlerRegistration placeChangeHandlerRegistration;
+    // private String listSelectedValue = "10";
+    private String quickSearchTerm = "";
+
+    private HandlerRegistration placeChangeHandlerRegistration;
 
     public AnamnesisCheckActivity(OsMaRequestFactory requests,
             PlaceController placeController, AnamnesisCheckPlace place) {
@@ -82,6 +86,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         this.activityManger = new ActivityManager(
                 anamnesisCheckDetailsActivityMapper, requests.getEventBus());
         this.place = place;
+
 
     }
 
@@ -100,13 +105,13 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             selectionChangeHandler.removeHandler();
             selectionChangeHandler = null;
         }
-        request = null;
-        
-   	if (placeChangeHandlerRegistration != null) {
-	    placeChangeHandlerRegistration.removeHandler();
-	}
 
-        
+
+    if (placeChangeHandlerRegistration != null) {
+        placeChangeHandlerRegistration.removeHandler();
+    }
+
+    request = null;
     }
 
     @Override
@@ -133,6 +138,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         view.getFilterTitle().clear();
         anamnesisCheckTitleList(AnamnesisCheckTypes.QUESTION_TITLE);
 
+        eventBus.addHandler(PlaceChangeEvent.TYPE,
+                new PlaceChangeEvent.Handler() {
+                    public void onPlaceChange(PlaceChangeEvent event) {
+                        if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
+                            init();
+                        }
+                    }
+                });
         init();
 
         activityManger.setDisplay(view.getDetailsPanel());
@@ -156,44 +169,44 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
                     }
                 });
         view.setDelegate(this);
-		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-			
-			@Override
-			public void onPlaceChange(PlaceChangeEvent event) {
-				if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
-					AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
-					if (place.getOperation() == Operation.NEW) {
-						getSearchStringByEntityProxyId((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId());
-					}
-				} else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {
-					AnamnesisCheckPlace place = (AnamnesisCheckPlace) event.getNewPlace();
-					if (place.getToken().contains("!DELETED")) {
-						initSearch();
-					}
-				}
-			}
-		});
-    }
-	
-	/**
-	  * Used to fill table and search field after creating new entity.
-	  * @param entityId
-	  */
-	 private void getSearchStringByEntityProxyId(EntityProxyId<AnamnesisCheckProxy> entityId) {
-		 requests.find(entityId).fire(new Receiver<AnamnesisCheckProxy>() {
+        placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 
-			@Override
-			public void onSuccess(AnamnesisCheckProxy proxy) {
-				if (proxy != null) {
-					List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
-					values.add(proxy);
-					view.getSearchBox().setText(proxy.getText());
-					table.setRowCount(1, true);
-					table.setRowData(0, values);
-				}
-			}
-		 });
-	 }
+            @Override
+            public void onPlaceChange(PlaceChangeEvent event) {
+                if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
+                    AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
+                    if (place.getOperation() == Operation.NEW) {
+                        getSearchStringByEntityProxyId((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId());
+                    }
+                } else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {
+                    AnamnesisCheckPlace place = (AnamnesisCheckPlace) event.getNewPlace();
+                    if (place.getToken().contains("!DELETED")) {
+                        initSearch();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+      * Used to fill table and search field after creating new entity.
+      * @param entityId
+      */
+     private void getSearchStringByEntityProxyId(EntityProxyId<AnamnesisCheckProxy> entityId) {
+         requests.find(entityId).fire(new Receiver<AnamnesisCheckProxy>() {
+
+            @Override
+            public void onSuccess(AnamnesisCheckProxy proxy) {
+                if (proxy != null) {
+                    List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
+                    values.add(proxy);
+                    view.getSearchBox().setText(proxy.getText());
+                    table.setRowCount(1, true);
+                    table.setRowData(0, values);
+                }
+            }
+         });
+     }
 
     private void init() {
 
@@ -201,7 +214,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
         if (place.getSearchStr().equals("")) {
             view.setSearchBoxShown(place.DEFAULT_SEARCHSTR);
-			initSearch();
+            initSearch();
             if (place.getFilterTileId().equals("")) {
                 view.setSearchFocus(false);
             } else {
@@ -210,14 +223,32 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             }
         } else {
             view.setSearchBoxShown(place.getSearchStr());
-			initSearch();
+            initSearch();
             view.setSearchFocus(true);
         }
+        ProvidesKey<AnamnesisCheckProxy> keyProvider = ((AbstractHasData<AnamnesisCheckProxy>) table)
+                .getKeyProvider();
+        selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>(
+                keyProvider);
+        table.setSelectionModel(selectionModel);
+
+        selectionChangeHandler = selectionModel
+                .addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+                    public void onSelectionChange(SelectionChangeEvent event) {
+                        AnamnesisCheckProxy selectedObject = selectionModel
+                                .getSelectedObject();
+                        if (selectedObject != null) {
+                            Log.debug(selectedObject.getId() + " selected!");
+                            showDetails(selectedObject);
+                        }
+                    }
+                });
+        view.setDelegate(this);
 
     }
 
-	private void initSearch() {
-		fireCountRequest(quickSearchTerm, getSelectedFilterTitle(), new Receiver<Long>() {
+    private void initSearch() {
+        fireCountRequest(quickSearchTerm, getSelectedFilterTitle(), new Receiver<Long>() {
             @Override
             public void onSuccess(Long response) {
                 if (view == null) {
@@ -227,7 +258,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
                 Log.debug("Geholte Intitution aus der Datenbank: " + response);
                 setTableRowCount(response.intValue(), true);
                 view.setListBoxItem(place.getPageLen());
-				onRangeChanged(quickSearchTerm);
+                onRangeChanged(quickSearchTerm);
             }
         });
 
@@ -244,7 +275,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         rangeChangeHandler = table
                 .addRangeChangeHandler(new RangeChangeEvent.Handler() {
                     public void onRangeChange(RangeChangeEvent event) {
-						AnamnesisCheckActivity.this.onRangeChanged(quickSearchTerm);
+                        AnamnesisCheckActivity.this.onRangeChanged(quickSearchTerm);
                     }
                 });
     }
@@ -368,16 +399,16 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     @Override
     public void newClicked() {
-		Log.debug("newClicked()");
+        Log.debug("newClicked()");
         goTo(new AnamnesisCheckDetailsPlace(Operation.CREATE));
     }
 
     @Override
     public void performSearch(String q) {
         Log.debug("Search for " + q);
-		quickSearchTerm = q;
-		initSearch();
-
+        quickSearchTerm = q;
+        initSearch();
+        goToAnamesisCheckPlace();
     }
 
     String getSelectedTitleId() {
@@ -392,13 +423,22 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     }
 
+    private void goToAnamesisCheckPlace() {
+        // goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
+        // .getStart(), place.getPageLen(),searchText, getSelectedTitleId()));
+        goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
+                .getStart(), view.getRangNumBox().getItemText(
+                view.getRangNumBox().getSelectedIndex()),
+                view.getSearchBoxShown(), getSelectedTitleId()));
+    }
+
     /**
      * change Rang Number ListBox value
      */
     @Override
     public void changeNumRowShown(String selectedValue) {
 
-        listSelectedValue = selectedValue;
+        // listSelectedValue = selectedValue;
 
         goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
                 .getStart(), selectedValue, view.getSearchBoxShown(),
@@ -510,7 +550,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
                     });
         } else {
-			initSearch();
+            initSearch();
         }
 
     }
@@ -588,6 +628,159 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         return systemStartViewS;
     }
 
+    // @SuppressWarnings("deprecation")
+    // @Override
+    // public void saveOrder() {
+    // for (final Entry<Long, Integer> entry :
+    // place.getOrderEditedMap().entrySet()) {
+    // GWT.log(">>>>>>>>orderEditedMap size = " +
+    // place.getOrderEditedMap().size());
+    // GWT.log("?????????" + entry.getKey() + "--->" + entry.getValue());
+    // // if(entry.getKey() != null &&entry.getValue() !=null &&
+    // // !entry.getValue().equals("")){
+    // requests.anamnesisCheckRequest().findAnamnesisCheck(entry.getKey()).fire(new
+    // Receiver<AnamnesisCheckProxy>() {
+    // public void onFailure(ServerFailure error) {
+    // GWT.log("findAnamnesisCheck error = " + error);
+    // }
+    //
+    // @Override
+    // public void onSuccess(AnamnesisCheckProxy response) {
+    // GWT.log("response = " + response);
+    // if (response != null) {
+    // requests.anamnesisCheckRequestNonRoo().normalizeOrder(entry.getValue()).using(response).fire(new
+    // Receiver<Void>() {
+    // public void onFailure(ServerFailure error) {
+    // GWT.log("normalizeOrder error = " + error);
+    // }
+    //
+    // @Override
+    // public void onSuccess(Void response) {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    // });
+    // }
+    // }
+    // });
+    // // }
+    //
+    // }
+
+    // requests.anamnesisCheckRequestNonRoo().normalizeOrder(orderEditedMap).fire(new
+    // Receiver<Void>() {
+    //
+    // @Override
+    // public void onSuccess(Void response) {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    // });
+
+    // @Override
+    // public void resetUserSpecifiedOrder(AnamnesisCheckProxy
+    // selectedAnamnesisCheck, String value) {
+    // try {
+    // Integer userSpecifiedOrder = Integer.valueOf(value);
+    // if( tableData!=null ){
+    // for(AnamnesisCheckProxy anamnesisCheckProxy : tableData){
+    // if(anamnesisCheckProxy.getId() == selectedAnamnesisCheck.getId()){
+    // anamnesisCheckProxy.setUserSpecifiedOrder(userSpecifiedOrder);
+    // }
+    // }
+    // }
+    // } catch (Exception e) {
+    // GWT.log("resetUserSpecifiedOrder Exception = "+e);
+    // e.printStackTrace();
+    // }
+    //
+    // test();
+    // }
+
+    // @Override
+    // public void orderEdited(AnamnesisCheckProxy proxy, String
+    // userSpecifiedOrderStr) {
+    // // TODO
+    // if (proxy != null && userSpecifiedOrderStr != null) {
+    // try {
+    // Integer userSpecifiedOrder = Integer.valueOf(userSpecifiedOrderStr);
+    // boolean isExist = false;
+    //
+    // for (AnamnesisCheckProxy edited : orderEdited) {
+    // GWT.log("*******edited.getId() = " + edited.getId());
+    // GWT.log("*******proxy.getId() = " + proxy.getId());
+    // if (edited.getId() == proxy.getId()) {
+    // GWT.log("*******proxy isExist");
+    // isExist = true;
+    // edited.setUserSpecifiedOrder(userSpecifiedOrder);
+    // break;
+    // }
+    // }
+    // if (isExist == false) {
+    // GWT.log("*******proxy not isExist");
+    // edituserSpecifiedOrder(proxy,userSpecifiedOrder);
+    // proxy.setUserSpecifiedOrder(userSpecifiedOrder);
+    // orderEdited.add(proxy);
+    // }
+    //
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // }
+    // }
+
+    // @Override
+    // public void orderEdited(AnamnesisCheckProxy proxy, String
+    // userSpecifiedOrderStr){
+    // GWT.log("??????????????? proxy= "+proxy.getId());
+    // //TODO
+    // try {
+    // Integer userSpecifiedOrder = Integer.valueOf(userSpecifiedOrderStr);
+    // boolean isExist = false;
+    // for(Entry<Long, Integer> entry : place.getOrderEditedMap().entrySet()){
+    // GWT.log("?????????"+entry.getKey()+"--->"+entry.getValue());
+    // if(entry.getKey()==proxy.getId()){
+    // GWT.log("*******proxy isExist");
+    // isExist = true;
+    // entry.setValue(userSpecifiedOrder);
+    // }
+    // }
+    // if (isExist == false) {
+    // GWT.log("*******proxy not isExist");
+    // place.getOrderEditedMap().put(proxy.getId(),
+    // Integer.valueOf(userSpecifiedOrder));
+    // GWT.log("orderEditedMap.put");
+    // }
+    //
+    //
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    //
+    // }
+
+    @Override
+    public void orderEdited(AnamnesisCheckProxy proxy,
+            String userSpecifiedOrderStr) {
+        AnamnesisCheckRequest req = getRequest();
+        AnamnesisCheckProxy editableProxy = req.edit(proxy);
+        try {
+            editableProxy.setUserSpecifiedOrder(Integer
+                    .valueOf(userSpecifiedOrderStr));
+            req.persist().using(editableProxy);
+
+        } catch (Exception e) {
+
+            System.err.println(e);
+        }
+
+    }
+
+
+    @Override
+    public void onPlaceChange(PlaceChangeEvent event) {
+    }
+
 
     @SuppressWarnings("deprecation")
     @Override
@@ -615,22 +808,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         request = null;
     }
 
-
-    @Override
-    public void orderEdited(AnamnesisCheckProxy proxy, String userSpecifiedOrderStr){
-        AnamnesisCheckRequest req = getRequest();
-
-        AnamnesisCheckProxy editableProxy = req.edit(proxy);
-        try {
-            editableProxy.setUserSpecifiedOrder(Integer.valueOf(userSpecifiedOrderStr));
-            req.persist().using(editableProxy);
-
-        } catch (Exception e){
-
-            System.err.println(e);
-        }
-
-    }
 
     private AnamnesisCheckRequest getRequest(){
         if (request == null){
