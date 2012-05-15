@@ -1,7 +1,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
@@ -11,9 +17,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Operation;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -25,6 +33,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.requestfactory.shared.RequestContext;
+import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -36,7 +47,8 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class AnamnesisCheckActivity extends AbstractActivity implements
-		AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate {
+		AnamnesisCheckView.Presenter, AnamnesisCheckView.Delegate,
+		PlaceChangeEvent.Handler {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -50,10 +62,15 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	private ActivityManager activityManger;
 	private AnamnesisCheckDetailsActivityMapper anamnesisCheckDetailsActivityMapper;
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	// private List<AnamnesisCheckProxy> tableData = null;
+
+	// private List<AnamnesisCheckProxy> orderEdited = null; /// Paul
+
+	static AnamnesisCheckRequest request = null;
 
 	private static final String placeToken = "AnamnesisCheckPlace";
 
-	private String listSelectedValue = "10";
+	// private String listSelectedValue = "10";
 
 	public AnamnesisCheckActivity(OsMaRequestFactory requests,
 			PlaceController placeController, AnamnesisCheckPlace place) {
@@ -64,11 +81,15 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		this.activityManger = new ActivityManager(
 				anamnesisCheckDetailsActivityMapper, requests.getEventBus());
 		this.place = place;
+		GWT.log("!!!!!!!!!!new AnamnesisCheckActivity");
+		// orderEdited = new ArrayList<AnamnesisCheckProxy>();
+
 	}
 
 	/**
 	 * Called when the activity stops
 	 */
+	@Override
 	public void onStop() {
 		activityManger.setDisplay(null);
 		if (rangeChangeHandler != null) {
@@ -80,6 +101,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			selectionChangeHandler.removeHandler();
 			selectionChangeHandler = null;
 		}
+		request = null;
+	}
+
+	@Override
+	public String mayStop() {
+		return null;
 
 	}
 
@@ -101,6 +128,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		view.getFilterTitle().clear();
 		anamnesisCheckTitleList(AnamnesisCheckTypes.QUESTION_TITLE);
 
+		eventBus.addHandler(PlaceChangeEvent.TYPE,
+				new PlaceChangeEvent.Handler() {
+					public void onPlaceChange(PlaceChangeEvent event) {
+						if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
+							init();
+						}
+					}
+				});
 		init();
 
 		activityManger.setDisplay(view.getDetailsPanel());
@@ -145,6 +180,24 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			init2(view.getSearchBoxShown());
 			view.setSearchFocus(true);
 		}
+		ProvidesKey<AnamnesisCheckProxy> keyProvider = ((AbstractHasData<AnamnesisCheckProxy>) table)
+				.getKeyProvider();
+		selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>(
+				keyProvider);
+		table.setSelectionModel(selectionModel);
+
+		selectionChangeHandler = selectionModel
+				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					public void onSelectionChange(SelectionChangeEvent event) {
+						AnamnesisCheckProxy selectedObject = selectionModel
+								.getSelectedObject();
+						if (selectedObject != null) {
+							Log.debug(selectedObject.getId() + " selected!");
+							showDetails(selectedObject);
+						}
+					}
+				});
+		view.setDelegate(this);
 
 	}
 
@@ -271,8 +324,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	protected Request<java.util.List<AnamnesisCheckProxy>> createRangeRequest(
 			String q, AnamnesisCheckProxy title, Range range) {
 		return requests.anamnesisCheckRequestNonRoo()
-				.findAnamnesisChecksBySearchWithTitle(q, title, range.getStart(),
-						range.getLength());
+				.findAnamnesisChecksBySearchWithTitle(q, title,
+						range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(String q, AnamnesisCheckProxy title,
@@ -310,10 +363,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		Log.debug("Search for " + q);
 
 		init2(q);
-
-		goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
-				.getStart(), listSelectedValue, q, getSelectedTitleId()));
-
+		goToAnamesisCheckPlace();
 	}
 
 	String getSelectedTitleId() {
@@ -328,13 +378,22 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	}
 
+	private void goToAnamesisCheckPlace() {
+		// goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
+		// .getStart(), place.getPageLen(),searchText, getSelectedTitleId()));
+		goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
+				.getStart(), view.getRangNumBox().getItemText(
+				view.getRangNumBox().getSelectedIndex()),
+				view.getSearchBoxShown(), getSelectedTitleId()));
+	}
+
 	/**
 	 * change Rang Number ListBox value
 	 */
 	@Override
 	public void changeNumRowShown(String selectedValue) {
 
-		listSelectedValue = selectedValue;
+		// listSelectedValue = selectedValue;
 
 		goTo(new AnamnesisCheckPlace(placeToken, table.getVisibleRange()
 				.getStart(), selectedValue, view.getSearchBoxShown(),
@@ -522,6 +581,182 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			systemStartViewS = new AnamnesisCheckViewImpl();
 		}
 		return systemStartViewS;
+	}
+
+	// @SuppressWarnings("deprecation")
+	// @Override
+	// public void saveOrder() {
+	// for (final Entry<Long, Integer> entry :
+	// place.getOrderEditedMap().entrySet()) {
+	// GWT.log(">>>>>>>>orderEditedMap size = " +
+	// place.getOrderEditedMap().size());
+	// GWT.log("?????????" + entry.getKey() + "--->" + entry.getValue());
+	// // if(entry.getKey() != null &&entry.getValue() !=null &&
+	// // !entry.getValue().equals("")){
+	// requests.anamnesisCheckRequest().findAnamnesisCheck(entry.getKey()).fire(new
+	// Receiver<AnamnesisCheckProxy>() {
+	// public void onFailure(ServerFailure error) {
+	// GWT.log("findAnamnesisCheck error = " + error);
+	// }
+	//
+	// @Override
+	// public void onSuccess(AnamnesisCheckProxy response) {
+	// GWT.log("response = " + response);
+	// if (response != null) {
+	// requests.anamnesisCheckRequestNonRoo().normalizeOrder(entry.getValue()).using(response).fire(new
+	// Receiver<Void>() {
+	// public void onFailure(ServerFailure error) {
+	// GWT.log("normalizeOrder error = " + error);
+	// }
+	//
+	// @Override
+	// public void onSuccess(Void response) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// });
+	// }
+	// }
+	// });
+	// // }
+	//
+	// }
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void saveOrder() {
+
+		getRequest().fire(new Receiver() {
+
+			@Override
+			public void onSuccess(Object response) {
+				// requests.anamnesisCheckRequestNonRoo().normalizeOrder().fire();
+
+			}
+
+		});
+
+		request = null;
+	}
+
+	// requests.anamnesisCheckRequestNonRoo().normalizeOrder(orderEditedMap).fire(new
+	// Receiver<Void>() {
+	//
+	// @Override
+	// public void onSuccess(Void response) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// });
+
+	// @Override
+	// public void resetUserSpecifiedOrder(AnamnesisCheckProxy
+	// selectedAnamnesisCheck, String value) {
+	// try {
+	// Integer userSpecifiedOrder = Integer.valueOf(value);
+	// if( tableData!=null ){
+	// for(AnamnesisCheckProxy anamnesisCheckProxy : tableData){
+	// if(anamnesisCheckProxy.getId() == selectedAnamnesisCheck.getId()){
+	// anamnesisCheckProxy.setUserSpecifiedOrder(userSpecifiedOrder);
+	// }
+	// }
+	// }
+	// } catch (Exception e) {
+	// GWT.log("resetUserSpecifiedOrder Exception = "+e);
+	// e.printStackTrace();
+	// }
+	//
+	// test();
+	// }
+
+	// @Override
+	// public void orderEdited(AnamnesisCheckProxy proxy, String
+	// userSpecifiedOrderStr) {
+	// // TODO
+	// if (proxy != null && userSpecifiedOrderStr != null) {
+	// try {
+	// Integer userSpecifiedOrder = Integer.valueOf(userSpecifiedOrderStr);
+	// boolean isExist = false;
+	//
+	// for (AnamnesisCheckProxy edited : orderEdited) {
+	// GWT.log("*******edited.getId() = " + edited.getId());
+	// GWT.log("*******proxy.getId() = " + proxy.getId());
+	// if (edited.getId() == proxy.getId()) {
+	// GWT.log("*******proxy isExist");
+	// isExist = true;
+	// edited.setUserSpecifiedOrder(userSpecifiedOrder);
+	// break;
+	// }
+	// }
+	// if (isExist == false) {
+	// GWT.log("*******proxy not isExist");
+	// edituserSpecifiedOrder(proxy,userSpecifiedOrder);
+	// proxy.setUserSpecifiedOrder(userSpecifiedOrder);
+	// orderEdited.add(proxy);
+	// }
+	//
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+
+	// @Override
+	// public void orderEdited(AnamnesisCheckProxy proxy, String
+	// userSpecifiedOrderStr){
+	// GWT.log("??????????????? proxy= "+proxy.getId());
+	// //TODO
+	// try {
+	// Integer userSpecifiedOrder = Integer.valueOf(userSpecifiedOrderStr);
+	// boolean isExist = false;
+	// for(Entry<Long, Integer> entry : place.getOrderEditedMap().entrySet()){
+	// GWT.log("?????????"+entry.getKey()+"--->"+entry.getValue());
+	// if(entry.getKey()==proxy.getId()){
+	// GWT.log("*******proxy isExist");
+	// isExist = true;
+	// entry.setValue(userSpecifiedOrder);
+	// }
+	// }
+	// if (isExist == false) {
+	// GWT.log("*******proxy not isExist");
+	// place.getOrderEditedMap().put(proxy.getId(),
+	// Integer.valueOf(userSpecifiedOrder));
+	// GWT.log("orderEditedMap.put");
+	// }
+	//
+	//
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// }
+
+	@Override
+	public void orderEdited(AnamnesisCheckProxy proxy,
+			String userSpecifiedOrderStr) {
+		AnamnesisCheckRequest req = getRequest();
+		AnamnesisCheckProxy editableProxy = req.edit(proxy);
+		try {
+			editableProxy.setUserSpecifiedOrder(Integer
+					.valueOf(userSpecifiedOrderStr));
+			req.persist().using(editableProxy);
+
+		} catch (Exception e) {
+
+			System.err.println(e);
+		}
+
+	}
+
+	private AnamnesisCheckRequest getRequest() {
+		if (request == null) {
+			request = requests.anamnesisCheckRequest();
+		}
+		return request;
+	}
+
+	@Override
+	public void onPlaceChange(PlaceChangeEvent event) {
 	}
 
 }

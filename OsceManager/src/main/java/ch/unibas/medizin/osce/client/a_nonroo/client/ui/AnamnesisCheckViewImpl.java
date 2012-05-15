@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.cell.client.TextInputCell;
 
 /**
  * @author dk
@@ -52,8 +53,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	// private AnamnesisCheckPlace place = null;
 
-	private static SystemStartViewUiBinder uiBinder = GWT
-			.create(SystemStartViewUiBinder.class);
+	private static SystemStartViewUiBinder uiBinder = GWT.create(SystemStartViewUiBinder.class);
 
 	interface SystemStartViewUiBinder extends
 			UiBinder<Widget, AnamnesisCheckViewImpl> {
@@ -85,6 +85,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	ListBox rangeNum;
 	@UiField
 	ListBox filterTitle;
+	@UiField
+	Button saveOrder;
 
 	@UiHandler("filterTitle")
 	public void filterTitleChangeHandler(ChangeEvent event) {
@@ -166,6 +168,17 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		table.addColumn(new SimpleTextColumn(), constants.text());
 		paths.add("value");
 		table.addColumn(new ValueColumn(), constants.value());
+		
+		Column<AnamnesisCheckProxy, String> checkOrderColumn = new Column<AnamnesisCheckProxy, String>(
+				new TextInputCell()) {
+			@Override
+			public String getValue(AnamnesisCheckProxy object) {
+				return null;
+			}
+		};
+		table.addColumn(checkOrderColumn, constants.order());
+		table.setColumnWidth(checkOrderColumn,"10px");
+
 		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<AnamnesisCheckProxy>() {
 					public void execute(AnamnesisCheckProxy proxy) {
