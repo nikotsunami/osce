@@ -21,7 +21,7 @@
 					<div class="{style.textBoxStyle} {style.controlsleft}">
 						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
 						<div class="{style.textBoxStyle}">
-							<g:TextBox width="120px" />
+							<g:Label width="140px" />
 						</div>
 
 					</div>
