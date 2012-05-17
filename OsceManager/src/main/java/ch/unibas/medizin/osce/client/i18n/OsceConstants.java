@@ -279,7 +279,7 @@ public interface OsceConstants extends Constants {
 
 	public String yes();
 
-//by spec role management functionality[
+//by spec role menu[
 	public String roles();
 
 	public String topicsAndSpec();
@@ -289,6 +289,7 @@ public interface OsceConstants extends Constants {
 	public String roomMaterials();
 
 	public String role();
+	//by spec role menu]
 
 	public String roletopic();
 
@@ -346,6 +347,30 @@ public interface OsceConstants extends Constants {
 	public String previousQuestion();
 
 	public String previousTitle();
+
+	
+	//Added By SPEC
+	public String shortName();
+	
+	public String roleDetail();
+	
+	public String roleParticipants();
+	
+	public String learningObjectives();
+	
+	public String keywords();
+	
+
+	public String roleType();
+	
+	public String addRole();
+	
+	public String editRole();
+
+	public String majorLbl();
+	
+	public String minorLbl();
+//Spec End
 
 	public String noTitle();
 

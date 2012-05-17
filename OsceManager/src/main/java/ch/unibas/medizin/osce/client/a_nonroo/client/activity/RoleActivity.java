@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Vector;
 
 import java_cup.internal_error;
+
+import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
@@ -36,8 +38,11 @@ import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.scaffold.RoleTopicRequestNonRoo;
+
+import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -107,6 +112,8 @@ public class RoleActivity extends AbstractActivity implements
 				placeController);
 		this.activityManager = new ActivityManager(roleDetailsActivityMapper,
 				requests.getEventBus());
+		
+		RoleEditActivity.roleActivity=this;
 	}
 
 	public void onStop() {
@@ -314,6 +321,27 @@ public class RoleActivity extends AbstractActivity implements
 		
 
 		activityManager.setDisplay(view.getDetailsPanel());
+		
+		ProvidesKey<RoleTopicProxy> keyProvider = ((AbstractHasData<RoleTopicProxy>) table).getKeyProvider();
+		selectionModel = new SingleSelectionModel<RoleTopicProxy>(keyProvider);
+		table.setSelectionModel(selectionModel);
+
+		// adds a selection handler to the table so that if a valid patient is selected,
+		// the corresponding details view is shown (via showDetails())
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+			public void onSelectionChange(SelectionChangeEvent event) {
+				System.out.println("======================================Selection Change==================================");
+				RoleTopicProxy selectedObject = selectionModel.getSelectedObject();
+				if (selectedObject.getId() != null) {
+					Log.debug(selectedObject.getName() + " selected!");
+					showDetails(selectedObject);
+				}
+				else
+				{
+					System.out.println("==============No Role Found===============");
+				}
+			}
+		});			
 
 		view.setDelegate(this);
 		
@@ -478,5 +506,12 @@ private void initSearch() {
 	*/
 	 
 	 
+}
+
+protected void showDetails(RoleTopicProxy RoleTopic) 
+{	
+	System.out.println("============================showDetails() GotoStandardizedPatientDetailsPlace=========================");	
+	RoleEditActivity.roleTopic = RoleTopic;//angiv
+	goTo(new RoleDetailsPlace(RoleTopic.stableId(), Operation.DETAILS));
 }
 }

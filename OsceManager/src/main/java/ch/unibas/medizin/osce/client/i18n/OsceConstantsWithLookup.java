@@ -91,4 +91,14 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String SJ4();
 	public String SJ5();
 	public String SJ6();
+	
+	//From SPEC Start
+	
+
+	
+
+		public String Simpat();
+		public String Statist();
+		public String Material();		
+		//From SPEC End
 }

@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import javax.persistence.Enumerated;
 
@@ -37,9 +38,9 @@ public class StandardizedRole {
     @Size(max = 255)
     private String roleScript;
 
-    @Size(max = 10)
-    private String roleType;
-
+    @Enumerated
+    private RoleTypes roleType;
+   
     @NotNull
     @ManyToOne
     private RoleTopic roleTopic;
@@ -53,6 +54,7 @@ public class StandardizedRole {
     @ManyToOne
     private Doctor reviewer;
     */
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
     private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
@@ -68,4 +70,6 @@ public class StandardizedRole {
     
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Keyword> keywords = new HashSet<Keyword>();
+    
+   
 }
