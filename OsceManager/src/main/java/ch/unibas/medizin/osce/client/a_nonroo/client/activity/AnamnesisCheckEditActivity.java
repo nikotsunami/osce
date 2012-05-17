@@ -412,7 +412,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 							save = true;
 
-							//sortOderByPrevious();
+							sortOderByPrevious();
 							placeController.goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(), Operation.NEW));
 						}
 					});
