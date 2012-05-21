@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
     
     <display-name>OsceManager</display-name>
@@ -17,7 +19,9 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath*:META-INF/spring/applicationContext*.xml</param-value>
     </context-param>
-    
+     <listener>  
+      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+     </listener>  
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -30,7 +34,6 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-    
     
     
     <filter>
