@@ -3,62 +3,46 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
-
-import java_cup.internal_error;
-
-import com.google.gwt.user.cellview.client.AbstractHasData;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
-
-
-
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicRequest;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
-import ch.unibas.medizin.osce.client.managed.request.SpecialisationRequest;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StudyYears;
-import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.scaffold.RoleTopicRequestNonRoo;
 
-import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.Range;
-import com.google.gwt.view.client.RangeChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.Range;
+import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
 
 public class RoleActivity extends AbstractActivity implements
@@ -72,6 +56,7 @@ public class RoleActivity extends AbstractActivity implements
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private RoleView view;
+	private RoleView filterView;
 	private ActivityManager activityManager;
 	private RoleDetailsActivityMapper roleDetailsActivityMapper;
 	//spec start
@@ -97,6 +82,8 @@ public class RoleActivity extends AbstractActivity implements
 	private ValueListBox<SpecialisationProxy> scarBox;
 	private HandlerRegistration rangeChangeHandler;
 
+	private List<String> tableFilter = Arrays.asList();
+	private List<String> whereFilter = Arrays.asList();
 	
 	
 	// spec end
@@ -125,11 +112,52 @@ public class RoleActivity extends AbstractActivity implements
 	private class SpecialisationBoxValuesReceiver extends Receiver<List<SpecialisationProxy>> {
 		@Override
 		public void onSuccess(List<SpecialisationProxy> response) {
+		//	filterView.setSpecialisationBoxValues(response);
+			filterView.setSpecialisationAutocompleteValue(response);
 			view.setSpecialisationBoxValues(response);
 		}
 	}
 
+	private class KeywordBoxValuesReceiver extends Receiver<List<KeywordProxy>> {
+		@Override
+		public void onSuccess(List<KeywordProxy> response) {
+		//	filterView.setKeywordListBoxValues(response);
+			filterView.setKeywordAutocompleteValue(response);
+			
+		//	view.setSpecialisationBoxValues(response);
+			
+			
+			
+		}
+	}
 	//spec end
+//
+	
+	private class AutherNameValueReceiver extends Receiver<List<DoctorProxy>> {
+		@Override
+		public void onSuccess(List<DoctorProxy> response) {
+			Log.info("set data in valuelistbox data for auther in filter popup--"+response.size());
+			
+		
+			filterView.setAuthorAutocompleteValue(response);
+			
+		}
+		
+	}
+	
+	
+	
+	
+	private class ReviewerNameValueReceiver extends Receiver<List<DoctorProxy>> {
+		@Override
+		public void onSuccess(List<DoctorProxy> response) {
+			Log.info("set  data in valuelistbox for reviewer in filter popup");
+		//	filterView.setReviewerListBoxValues(response);
+			filterView.setReviewerAutocompleteValue(response);
+			
+			
+		}
+	}
 	
 	
 
@@ -237,8 +265,9 @@ public class RoleActivity extends AbstractActivity implements
 				// TODO Auto-generated method stub
 		//		System.out.println("INside success");
 				Log.info("new topic added successfully");
-				init2("");
-			//	requests.roleTopicRequest().findAllRoleTopics().with("standardizedRoles").fire(new RoleAndRolesRecever());
+			//	init2();
+				initSearch();
+			
 				
 			}
 		});
@@ -264,6 +293,8 @@ public class RoleActivity extends AbstractActivity implements
 		roleView.setPresenter(this);
 		this.widget = panel;
 		this.view = roleView;
+
+		this.filterView=view.getFilter();
 		widget.setWidget(roleView.asWidget());
 	//	final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		final RoleView systemStartView = new RoleViewImpl();
@@ -271,6 +302,12 @@ public class RoleActivity extends AbstractActivity implements
 		 this.table = view.getTable();
 		 this.scarBox = view.getSpecialisationBoxValues();
 		
+		 table
+			.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+				public void onRangeChange(RangeChangeEvent event) {
+					RoleActivity.this.onRangeChanged();
+				}
+			});
 		 
 		 table.addColumnSortHandler(new ColumnSortEvent.Handler() {
 				@Override
@@ -288,16 +325,17 @@ public class RoleActivity extends AbstractActivity implements
 				}
 			});
 		 
-		init();		 
-		 
+	 //	init2();		 
+		initSearch();
 		this.SpecialisationListBox = view.getListBox();
 		requestAllTopic = requests.roleTopicRequestNonRoo();
 	//	System.out.println("Query Call");
 
 		
-		
-		
+		 requests.roleTopicRequestNonRoo().findAllAutherName().fire(new AutherNameValueReceiver());
+		 requests.roleTopicRequestNonRoo().findAllReviewerName().fire(new ReviewerNameValueReceiver());
 		requests.specialisationRequest().findAllSpecialisations().fire(new SpecialisationBoxValuesReceiver());
+                requests.keywordRequest().findAllKeywords().fire(new KeywordBoxValuesReceiver());
 //		
 //		System.out.println("Query Call for cell table1");
 		try {
@@ -344,17 +382,18 @@ public class RoleActivity extends AbstractActivity implements
 		});			
 
 		view.setDelegate(this);
+		filterView.setDelegate(this);
 		
 		
 	//	requests.find(place.getProxyId()).with("specialisation").fire(new InitializeActivityReceiver());
 		
 	}
 
-	private void init() {
+/*	private void init() {
 		init2("");
 		// TODO implement this!
 	}
-
+*/
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);
@@ -367,95 +406,38 @@ public class RoleActivity extends AbstractActivity implements
 	
 	
 	
-	protected void fireCountRequest(String name, Receiver<Long> callback) {
+	protected void fireCountRequest( Receiver<Long> callback) {
 		//requests.scarRequest().countScars().fire(callback);
 		requests.roleTopicRequest().countRoleTopics().fire(callback);
 	}
 
 	
 	
-	protected void onRangeChanged(String q) {
+	protected void onRangeChanged() {
 		final Range range = table.getVisibleRange();
 
 		Log.info("range change for role topic ");
 
-		for (AdvancedSearchCriteriaProxy criterion : searchCriteria) {
-			Log.info("Criterion: " + criterion.getField().toString() + ": " + criterion.getValue());
-		}
-		
-		final Receiver<List<RoleTopicProxy>> callback = new Receiver<List<RoleTopicProxy>>() {
-			@Override
-			public void onSuccess(List<RoleTopicProxy> values) {
-				if (view == null) {
-					// This activity is dead
-					return;
-				}
-				table.setRowData(range.getStart(), values);
-
-				// finishPendingSelection();
-				if (widget != null) {
-					widget.setWidget(view.asWidget());
-				}
-			}
-		};
-
-		fireRangeRequest(q, range, callback);
+		initSearch();
 	}
 	
 	
-	private void fireRangeRequest(String name, final Range range, final Receiver<List<RoleTopicProxy>> callback) {
-	//	createRangeRequest(name, range).with(view.getPaths()).fire(callback);
-		
-		createRangeRequest(name, range).with("standardizedRoles").fire(callback);
-		//requests.roleTopicRequest().findAllRoleTopics().with("standardizedRoles").fire(new RoleAndRolesRecever());
-		// Log.debug(((String[])view.getPaths().toArray()).toString());
-	}
 	
-	
-	protected Request<List<RoleTopicProxy>> createRangeRequest(String name, Range range) {
-		return requests.roleTopicRequest().findRoleTopicEntries(range.getStart(), range.getLength());
-	//	return requests.roleTopicRequest().findRoleTopicEntries(range.getStart(), range.getLength()).with("standardizedRoles").fire(new RoleAndRolesRecever());
-		//	return null;
-		//return requests.scarRequestNonRoo().findScarEntriesByName(name, range.getStart(), range.getLength());
+	protected Request<List<RoleTopicProxy>> createRangeRequest(Range range) {
+		return requests.roleTopicRequest().findRoleTopicEntries(range.getStart(), range.getLength());	
 	}
 
 	
-public void init2(final String r)
-{
-	
-	Log.info("set data in table");
-	// fix to avoid having multiple rangeChangeHandlers attached
-			if (rangeChangeHandler!=null){
-				rangeChangeHandler.removeHandler();
-			}
 
-			fireCountRequest(r, new Receiver<Long>() {
-				@Override
-				public void onSuccess(Long response) {
-					if (view == null) {
-						// This activity is dead
-						return;
-					}
-					Log.debug("Geholte Narben aus der Datenbank: " + response);
-					table.setRowCount(response.intValue(), true);
-
-					onRangeChanged(r);
-				}
-			});
-
-			rangeChangeHandler = table
-					.addRangeChangeHandler(new RangeChangeEvent.Handler() {
-						public void onRangeChange(RangeChangeEvent event) {
-							RoleActivity.this.onRangeChanged(r);
-						}
-					});
-}
 
 @Override
-public void performSearch(String q, List<String> list) {
+public void performSearch(String q, List<String> list,List<String> tableList,List<String> whereList ) {
 	// TODO Auto-generated method stub
 	quickSearchTerm = q;
 	this.searchThrough = list;
+	this.tableFilter=tableList;
+	this.whereFilter=whereList;
+//	this.searchThroughListBox=listBoxFilter;
 //	Log.debug("Search for " + q);
 	
 	initSearch();
@@ -466,7 +448,7 @@ public void performSearch(String q, List<String> list) {
 public Sorting sortorder = Sorting.ASC;
 public String sortname = "name";
   
-private void initSearch() {
+public void initSearch() {
 	// TODO Auto-generated method stub
 	
 	requestAllTopic = requests.roleTopicRequestNonRoo();
@@ -494,18 +476,32 @@ private void initSearch() {
 		}
 	};
 
-	
+/*
 	requestAllTopic.findRoleTopicsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
-			searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).with("standardizedRoles").fire(callback);
-	//with("standardizedRoles").fire(callback);
-//	System.out.println("after call");
-	/*
-	requestAllTopic.findRoleTopicsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
-			searchThrough, searchCriteria, range.getStart(), range.getLength() ).
-		   fire(new RoleAndRolesRecever());
+			searchThrough, searchCriteria, range.getStart(), range.getLength() fields, bindType, comparations, values ).with("standardizedRoles").fire(callback);
 	*/
 	 
+	requests.roleTopicRequestNonRoo().advanceSearchCount(sortname, sortorder , quickSearchTerm, 
+			searchThrough,tableFilter,whereFilter ).with("standardizedRoles").fire(new TotalRecordCount());
+
+	requests.roleTopicRequestNonRoo().advanceSearch(sortname, sortorder , quickSearchTerm, 
+			searchThrough,tableFilter,whereFilter,  range.getStart(), range.getLength() ).with("standardizedRoles").fire(callback);
+	
+	
+	
+	
+}
+
+private class TotalRecordCount extends  Receiver<Long> {
+	@Override
+	public void onSuccess(Long response) {
+		
+		
+		view.getTable().setRowCount(response.intValue(), true);
 	 
+		
+		
+	}
 }
 
 protected void showDetails(RoleTopicProxy RoleTopic) 
