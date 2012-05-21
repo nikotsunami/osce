@@ -107,6 +107,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements  Stand
 	
 	@UiField
 	public SpanElement studyYear;
+	
+	@UiField
+	public TabPanel roleSubPanel;
 	/*@UiField(provided = true)
 	public FocusableValueListBox<StudyYears> studyYear = new FocusableValueListBox<StudyYears>(new EnumRenderer<StudyYears>());*/
 
@@ -143,6 +146,10 @@ public StandardizedRoleDetailsViewImpl()
 	roleDisclosurePanel.setStyleName("");
 	
 	setLabelTexts();
+	
+	//Assignment E start[
+	roleSubPanel.selectTab(0);
+	//Assignment E start]
 }
 
 private void setLabelTexts() {

@@ -37,6 +37,7 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
+import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -47,6 +48,8 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
@@ -56,6 +59,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -87,10 +91,32 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private StandardizedRoleProxy standardizedRoleProxy;
 	
+	private StandardizedRoleProxy proxy;
+	
+	public StandardizedRoleProxy getProxy() {
+		return proxy;
+	}
+	public void setProxy(StandardizedRoleProxy proxy) {
+		this.proxy = proxy;
+	}
+
 	private MajorMinorPopupPanelViewImpl popupPanel;
 	
 	
+	@UiField
+	
+	public CheckBox active;
+	
+	
+	
+	@UiField
+	public IntegerBox subVersion;
+
+	@UiField
+	public IntegerBox mainVersion;
+
 	private boolean minorClick=false;
+	
 	
 	
 	public StandardizedRoleProxy getStandardizedRoleProxy() {
@@ -120,9 +146,11 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	
 	// Fields
 	@UiField
-	TextBox shortName;
+	public TextBox shortName;
 	@UiField
-	TextBox longName;
+	
+	public TextBox longName;
+	
 	@UiField(provided = true)
 	public FocusableValueListBox<RoleTypes> roleType = new FocusableValueListBox<RoleTypes>(new EnumRenderer<RoleTypes>());
 	
@@ -295,8 +323,14 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					
+					subVersion.setValue(standardizedRoleProxy.getSubVersion()+1,true);
+					
+					//subVersion.setText(new Integer(standardizedRoleProxy.getSubVersion()+1).toString());
+				//	standardizedRoleProxy.setSubVersion(standardizedRoleProxy.getSubVersion()+1);
 					minorClick=true;
 					popupPanel.hide();
+					
 					
 				}
 			});
@@ -305,8 +339,23 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					
+					
+					mainVersion.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+						
+						@Override
+						public void onValueChange(ValueChangeEvent<Integer> event) {
+							delegate.saveMajor();
+							
+						}
+					});
+					//mainVersion.setValue(standardizedRoleProxy.getMainVersion()+1,true);
+					delegate.saveMajor();
 					minorClick=false;
 					popupPanel.hide();
+					
+					
+					
 					
 				}
 			});
@@ -341,5 +390,21 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 			
 		
 	}
+	
+	
+	@UiHandler("subVersion")
+	public void ValueChanged(ValueChangeEvent<Integer> event)
+	{
+		delegate.save();
+	}
+	
+	
+	/*@UiHandler("mainVersion")
+	public void ValueChangedMainVersion(ValueChangeEvent<Integer> event)
+	{
+		delegate.saveMajor();
+	}
+
+	*/
 
 }

@@ -19,11 +19,16 @@
 	<g:TabPanel ui:field="roleDetailPanel" width="100%">
 		<g:Tab>
 			<g:TabHTML>New Role</g:TabHTML> 
+			
 			<g:HTMLPanel>    
+			<g:IntegerBox ui:field="subVersion" visible="false"></g:IntegerBox>
+			<g:IntegerBox ui:field="mainVersion" visible="false"></g:IntegerBox>
+			
 				<div class="{style.patientControls} {style.controlsright}">
 					<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
 					<my:IconButton ui:field="save" icon="disk"></my:IconButton>
 					<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
+					
 				</div>
 			    
 			    <g:TabPanel ui:field="rolePanel" addStyleNames="{style.tabStyle}">
@@ -38,7 +43,12 @@
 							<tbody>
 							<tr id="shortname">						
 								<td><span class="{style.label}" ui:field="labelShortName"/></td>
-								<td><g:TextBox ui:field='shortName'/></td>						
+								<td><g:TextBox ui:field='shortName'/></td>
+								<td align="right"><span class="{style.label}" ui:field="LabelActive"/><b>Active :</b></td>
+								<td align="right" valign="top">
+								
+								
+								<g:CheckBox ui:field="active" checked="true"></g:CheckBox></td>						
 							</tr>
 							<tr id="name">						
 								<td><span class="{style.label}" ui:field="labellongName"/></td>

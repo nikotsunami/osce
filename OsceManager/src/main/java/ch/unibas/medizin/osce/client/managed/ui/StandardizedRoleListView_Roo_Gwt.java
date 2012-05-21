@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -125,9 +126,9 @@ public abstract class StandardizedRoleListView_Roo_Gwt extends AbstractProxyList
         paths.add("roleType");
         table.addColumn(new TextColumn<StandardizedRoleProxy>() {
 
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+            Renderer<ch.unibas.medizin.osce.shared.RoleTypes> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.RoleTypes>() {
 
-                public String render(java.lang.String obj) {
+                public String render(ch.unibas.medizin.osce.shared.RoleTypes obj) {
                     return obj == null ? "" : String.valueOf(obj);
                 }
             };
@@ -137,6 +138,21 @@ public abstract class StandardizedRoleListView_Roo_Gwt extends AbstractProxyList
                 return renderer.render(object.getRoleType());
             }
         }, "Role Type");
+        paths.add("active");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.lang.Boolean> renderer = new AbstractRenderer<java.lang.Boolean>() {
+
+                public String render(java.lang.Boolean obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getActive());
+            }
+        }, "Active");
         paths.add("roleTopic");
         table.addColumn(new TextColumn<StandardizedRoleProxy>() {
 

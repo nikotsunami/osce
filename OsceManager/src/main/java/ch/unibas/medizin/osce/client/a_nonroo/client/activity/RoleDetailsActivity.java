@@ -100,6 +100,28 @@ StandardizedRoleDetailsView.Delegate
 		@Override
 		public void onSuccess(Object response) {			
 			System.out.println("==================================Call onSuccess Method==================================");
+			
+			
+			//Remove InAcive Roles from the role topic
+		/*	if (response instanceof RoleTopicProxy) 
+			{						
+				if(((RoleTopicProxy)response).getStandardizedRoles()!=null)
+				{
+					
+					
+					Iterator<StandardizedRoleProxy> iterator=((RoleTopicProxy)response).getStandardizedRoles().iterator();
+					
+					while(iterator.hasNext())
+					{
+						StandardizedRoleProxy srp=iterator.next();
+						if(srp.getActive()==false)
+						{
+							((RoleTopicProxy)response).getStandardizedRoles().remove(srp);
+						}
+					}
+				}
+			}
+			*/
 			if (response instanceof RoleTopicProxy) 
 			{						
 				if(((RoleTopicProxy)response).getStandardizedRoles()!=null)
@@ -195,7 +217,7 @@ StandardizedRoleDetailsView.Delegate
                 if (widget == null) {
                     return;
                 }
-                RoleEditActivity.roleActivity.init2("");
+                RoleEditActivity.roleActivity.initSearch();
                 goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(),	Operation.DETAILS));	
                 
                 //placeController.goTo(new RoleDetailsPlace("StandardizedRolePlace!DELETED"));

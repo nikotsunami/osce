@@ -90,6 +90,20 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -117,6 +131,10 @@
         <div id="roleType">
             <div class="{style.label}">Role Type</div>
             <div class="{style.value}" ui:field="roleType"/>
+        </div>
+        <div id="active">
+            <div class="{style.label}">Active</div>
+            <div class="{style.value}" ui:field="active"/>
         </div>
         <div id="roleTopic">
             <div class="{style.label}">Role Topic</div>

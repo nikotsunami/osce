@@ -46,8 +46,22 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	private StandardizedRoleRequest standardizedRoleRequest;
 
 	private RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> editorDriver;
-	private StandardizedRoleProxy standardizedRole;
 	
+	private RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> majoreditorDriver;
+	
+	private StandardizedRoleProxy standardizedRole;
+	private StandardizedRoleProxy  proxy;
+	
+	private StandardizedRoleRequest majorRequest;
+	
+	public StandardizedRoleProxy getProxy() {
+		return proxy;
+	}
+
+	public void setProxy(StandardizedRoleProxy proxy) {
+		this.proxy = proxy;
+	}
+
 	public StandardizedRoleProxy getStandardizedRole() {
 		return standardizedRole;
 	}
@@ -102,24 +116,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		this.widget = panel;
 		editorDriver = view.createEditorDriver();
 		view.setDelegate(this);
-		/*
-		 * eventBus.addHandler(PlaceChangeEvent.TYPE, new
-		 * PlaceChangeEvent.Handler() { public void
-		 * onPlaceChange(PlaceChangeEvent event) { // TODO ??? => profit! } });
-		 * 
-		 * 
-		 * eventBus.addHandler(PlaceChangeEvent.TYPE, new
-		 * PlaceChangeEvent.Handler() { public void
-		 * onPlaceChange(PlaceChangeEvent event) {
-		 * //updateSelection(event.getNewPlace()); // TODO implement } });
-		 */
+	
 
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
-			// requests.find(place.getProxyId()).with("standardizedRole").fire(new
-			// Receiver<Object>() {
-			// requests.find(place.getProxyId()).with("standardizedRoles").fire(new
-			// InitializeActivityReceiver());
+			
 			requests.find(place.getProxyId()).with("standardizedRoles")
 					.fire(new Receiver<Object>() {
 
@@ -150,14 +151,15 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	private void init() {
 
 		StandardizedRoleRequest request = requests.standardizedRoleRequest();
-		// DescriptionRequest descriptionRequest =
-		// requests.descriptionRequest();
+	
 
 		if (standardizedRole == null) {
 			System.out.println("====================standardizedRole=null in RoleEditActivity==================");
 			standardizedRole = request.create(StandardizedRoleProxy.class);
 			standardizedRole.setSubVersion(1);
 			standardizedRole.setMainVersion(1);
+			standardizedRole.setActive(true);
+			
 			view.setEditTitle(false);
 			Log.info("create");
 		} else {
@@ -166,8 +168,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			System.out
 					.println("====================standardizedRole not null in RoleEditActivity=============");
 			standardizedRole = request.edit(standardizedRole);
-			
-			
+		
 			view.setEditTitle(true);
 			Log.info("edit");
 		}
@@ -202,13 +203,14 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	@Override
 	public void saveClicked()
 	{
+		
 		Log.info("saveClicked");
 		
 		Log.info("Long Name "+standardizedRole.getLongName());
 		
 		Log.info("prev version"+standardizedRole.getPreviousVersion());
 		
-		
+		Log.info("Sub version"+standardizedRole.getSubVersion());
 		
 		standardizedRole.setRoleTopic(roleTopic
 				
@@ -219,27 +221,41 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		if(this.place.getOperation() == Operation.EDIT)
 		{
-			int majorMinor=view.getMajorMinorChange();
+			view.getMajorMinorChange();
 		
-			if(majorMinor==0)//minor button clicked
-			{
-				standardizedRole.setSubVersion(standardizedRole.getSubVersion()+1);
-			}
-			else	//major button clicked
-			{
-				StandardizedRoleRequest request = requests.standardizedRoleRequest();
-				StandardizedRoleProxy newStandardizedRole=standardizedRole;
-				standardizedRole=null;
-				standardizedRole = request.create(StandardizedRoleProxy.class);
-				
-				
-				//copy value from newStandardizedRole to standardizedRole
-				
-				//copy end
-			}
+		
 		}
-		// description.setDescription(descriptionView.getDescriptionContent());
-		// bankaccountDriver.flush();
+		else
+		{
+			save();
+		}
+		
+		
+		
+	}
+	
+	
+	public void copy(StandardizedRoleProxy srp)
+	{
+		proxy.setActive(srp.getActive());
+		proxy.setShortName(srp.getShortName());
+		proxy.setLongName(srp.getLongName());
+		proxy.setStudyYear(srp.getStudyYear());
+		proxy.setRoleType(srp.getRoleType());
+		proxy.setPreviousVersion(srp);
+		proxy.setMainVersion(srp.getMainVersion()+1);
+		proxy.setSubVersion(1);
+		
+		
+		//previous inactive
+		
+	}
+	
+	public void save()
+	{
+		
+		
+		
 		
 		editorDriver.flush().fire(new Receiver<Void>() {
 
@@ -263,21 +279,81 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				Log.info("Role successfully saved.");
 
 				save = true;
-				// placeController.goTo(new
-				// RoleDetailsPlace(standardizedRole.stableId(),Operation.DETAILS));
-				// vigna
-				// placeController.goTo(new
-				// RoleDetailsPlace(Operation.DETAILS)); //ADDED
+				
 				
 				RoleDetailsActivity.setSelecTab(findTabIndex());
-				roleActivity.init2("");
+				roleActivity.initSearch();
 				goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));				
+				
+		}
+		});
+		
+	}
+	
+	public void saveMajor()
+	{
+		
+		
+		
+		 majorRequest = requests.standardizedRoleRequest();
+		 proxy= majorRequest.create(StandardizedRoleProxy.class);
+		 proxy.setRoleTopic(roleTopic);
+		 //copy(standardizedRole);
+		 proxy.setActive(((RoleEditViewImpl)view).active.getValue());
+		 proxy.setShortName(((RoleEditViewImpl)view).shortName.getValue());
+			proxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
+			proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
+			proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+			proxy.setPreviousVersion(standardizedRole);
+			proxy.setMainVersion(standardizedRole.getMainVersion()+1);
+			proxy.setSubVersion(1);
+		 
+			
+		 majorRequest.persist().using(proxy).fire(new Receiver<Void>() {
+		 
+	
+
+			public void onFailure(ServerFailure error) {
+				Log.error(error.getMessage());
+
+			}
+
+			@Override
+			public void onViolation(Set<Violation> errors) {
+				Iterator<Violation> iter = errors.iterator();
+				String message = "";
+				while (iter.hasNext()) {
+					message += iter.next().getMessage() + "<br>";
+				}
+				Log.warn(" in Role -" + message);
+			}
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("Role successfully saved.");
+				
+				//previous version Inactve
+				
+				save = true;
+				
+				
+				
+				standardizedRole.setActive(false);
+				
+				((RoleEditViewImpl)view).active.setValue(false);
+				
+				((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
+				((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
+				((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
+				((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+				
+				save();
+				
+			
 				// saveDescription();
 			}
 		});
 	}
-	
-	
 	public int findTabIndex()
 	{
 		int i=0;

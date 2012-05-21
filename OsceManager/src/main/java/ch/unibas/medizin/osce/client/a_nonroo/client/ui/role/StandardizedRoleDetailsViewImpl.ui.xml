@@ -90,6 +90,36 @@
 				</g:Tab>
 			</g:TabPanel>
 		</g:DisclosurePanel>
+		
+					<g:TabPanel ui:field="roleSubPanel" width="100%">			
+				<g:Tab>
+				<g:TabHTML>CheckList</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">					
+							
+					</g:HTMLPanel>							
+				</g:Tab>
+				<g:Tab>
+					<g:TabHTML>Search Criteria</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<g:Label>Search Criteria</g:Label>
+					</g:HTMLPanel>
+				</g:Tab>
+			
+				<g:Tab>
+					<g:TabHTML>Room Materials</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<g:Label>Room Materials</g:Label>
+						<!-- <n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl> -->
+					</g:HTMLPanel>											
+				</g:Tab>
+				
+				<g:Tab>
+					<g:TabHTML>Role Script</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<g:Label>Role Script</g:Label>
+					</g:HTMLPanel>
+				</g:Tab>
+			</g:TabPanel>
 	</g:VerticalPanel>	
 </g:HTMLPanel>		
 

@@ -11,6 +11,9 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -27,6 +30,9 @@ public interface RoleEditView extends IsWidget {
 	interface Delegate {
 		void cancelClicked();
 		void saveClicked();
+		 void save();
+		
+		 public void saveMajor();
 		
 	}
 
@@ -43,6 +49,16 @@ public interface RoleEditView extends IsWidget {
 	 public void setRoleDetailPanel(TabPanel roleDetailPanel);
 	 
 	 public int getMajorMinorChange(); 
+	 
+	 public StandardizedRoleProxy getProxy() ;
+	 
+	 public void setProxy(StandardizedRoleProxy proxy);
+	 
+	
+	 
+	
+	
+	
 	
 	
 }

@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -47,6 +48,9 @@ public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composit
     Element roleType;
 
     @UiField
+    Element active;
+
+    @UiField
     Element roleTopic;
 
     @UiField
@@ -78,6 +82,7 @@ public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composit
         caseDescription.setInnerText(proxy.getCaseDescription() == null ? "" : String.valueOf(proxy.getCaseDescription()));
         roleScript.setInnerText(proxy.getRoleScript() == null ? "" : String.valueOf(proxy.getRoleScript()));
         roleType.setInnerText(proxy.getRoleType() == null ? "" : String.valueOf(proxy.getRoleType()));
+        active.setInnerText(proxy.getActive() == null ? "" : String.valueOf(proxy.getActive()));
         roleTopic.setInnerText(proxy.getRoleTopic() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().render(proxy.getRoleTopic()));
         roleParticipants.setInnerText(proxy.getRoleParticipants() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance()).render(proxy.getRoleParticipants()));
         previousVersion.setInnerText(proxy.getPreviousVersion() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getPreviousVersion()));
