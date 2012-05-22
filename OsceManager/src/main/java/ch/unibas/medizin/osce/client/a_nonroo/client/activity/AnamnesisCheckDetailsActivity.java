@@ -143,8 +143,11 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 		requests.anamnesisCheckRequest().remove().using(anamnesisCheckProxy).fire(new Receiver<Void>() {
 
 			public void onSuccess(Void ignore) {
-				if (widget == null) {
-					return;
+//				if (widget == null) {
+//					return;
+//				}
+				if(widget !=null){
+					widget.setWidget(null);
 				}
 				placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace!DELETED"));
 			}
