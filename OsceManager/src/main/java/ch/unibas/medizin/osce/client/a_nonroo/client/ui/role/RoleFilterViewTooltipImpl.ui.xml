@@ -71,30 +71,44 @@
 			</g:HorizontalPanel>
 			<g:HorizontalPanel styleName="{style.popupPanel}">
 					<g:Label ui:field="Complexity" styleName="{style.complexity}">Complexity  </g:Label>
-					<g:ListBox ui:field="ComplexityListBox" styleName="{style.listBoxStyle}"></g:ListBox>
+					<g:ValueListBox ui:field="ComplexityListBox" styleName="{style.listBoxStyle}"></g:ValueListBox>
 					<g:TextBox ui:field="ComplexityText" styleName="{style.text}"></g:TextBox>
-			</g:HorizontalPanel>
-			<g:HorizontalPanel>
-					<g:Label ui:field="Author" styleName="{style.Author}">Author</g:Label>
-					<g:ListBox ui:field="AuthorListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ListBox>
-			</g:HorizontalPanel>
-			<g:HorizontalPanel>
-					<g:Label ui:field="Reviewer" styleName="{style.Reviewer}">Reviewer</g:Label>
-					<g:ListBox ui:field="ReviewerListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ListBox>
 			</g:HorizontalPanel >
-			<g:HorizontalPanel>
-					<g:Label ui:field="Specification" styleName="{style.Specification}">Specification</g:Label>
-					<g:ListBox ui:field="SpecificationListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ListBox>
+			<g:HorizontalPanel styleName="{style.popupPanel}">
+					<g:Label ui:field="Author" styleName="{style.Author}">Author</g:Label>
+					<g:SuggestBox ui:field="autherSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					<!-- <g:ValueListBox ui:field="AuthorListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
 			</g:HorizontalPanel>
-			<g:HorizontalPanel>
+			<g:HorizontalPanel styleName="{style.popupPanel}">
+					<g:Label ui:field="Reviewer" styleName="{style.Reviewer}">Reviewer</g:Label>
+					<g:SuggestBox ui:field="reviewerSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					<!-- <g:ValueListBox ui:field="ReviewerListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
+			</g:HorizontalPanel >
+			<g:HorizontalPanel styleName="{style.popupPanel}">
+					<g:Label ui:field="Specification" styleName="{style.Specification}">Specification</g:Label>
+					<g:SuggestBox ui:field="SpecificationSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					<!-- <g:ValueListBox ui:field="SpecificationListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
+			</g:HorizontalPanel>
+			<g:HorizontalPanel styleName="{style.popupPanel}">
 					<g:Label ui:field="StudyYear" styleName="{style.StudyYear}">Study Year</g:Label>
-					<g:ValueListBox ui:field="StudyYearListBox" styleName="{style.listBoxStyle}" pixelSize="220,25" ></g:ValueListBox>
+					<g:ValueListBox ui:field="StudyYearListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox>
 					
 			</g:HorizontalPanel>
-			<g:HorizontalPanel>
+			
+			
+			<g:HorizontalPanel styleName="{style.popupPanel}">
 					<g:Label ui:field="Keywordlbl" styleName="{style.Keywordlbl}">Keyword</g:Label>
-					<g:ListBox ui:field="KeywordListBox"  pixelSize="220,25" styleName="{style.listBoxStyle}"></g:ListBox>
+					<g:SuggestBox ui:field="KeywordSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+				<!-- 	<g:ValueListBox ui:field="KeywordListBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:ValueListBox> -->
 			</g:HorizontalPanel>
+			
+			<!-- <g:HorizontalPanel styleName="{style.popupPanel}">				
+					<g:SuggestBox ui:field="KeywordSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}">
+						
+					</g:SuggestBox>
+			</g:HorizontalPanel> -->
+			
+			
 		</div>
 	</g:HTMLPanel>
 	</g:FocusPanel>

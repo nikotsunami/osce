@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
-import org.mortbay.log.Log;
+import com.allen_sauer.gwt.log.client.Log;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
