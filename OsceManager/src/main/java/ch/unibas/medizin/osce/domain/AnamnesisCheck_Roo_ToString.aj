@@ -14,6 +14,7 @@ privileged aspect AnamnesisCheck_Roo_ToString {
         sb.append("Sort_order: ").append(getSort_order()).append(", ");
         sb.append("Text: ").append(getText()).append(", ");
         sb.append("Type: ").append(getType()).append(", ");
+        sb.append("UserSpecifiedOrder: ").append(getUserSpecifiedOrder()).append(", ");
         sb.append("Value: ").append(getValue()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();

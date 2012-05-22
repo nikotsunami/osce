@@ -52,6 +52,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
         return new ApplicationEntityTypesProcessor<String>() {
 
             @Override
+            public void handleUsedMaterial(UsedMaterialProxy isNull) {
+                setResult("UsedMaterials");
+            }
+
+            @Override
             public void handleTask(TaskProxy isNull) {
                 setResult("Tasks");
             }
@@ -167,6 +172,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleMaterialList(MaterialListProxy isNull) {
+                setResult("MaterialLists");
+            }
+
+            @Override
             public void handleLogEntry(LogEntryProxy isNull) {
                 setResult("LogEntrys");
             }
@@ -239,16 +249,6 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleAdministrator(AdministratorProxy isNull) {
                 setResult("Administrators");
-            }
-            
-            @Override
-            public void handleUsedMaterial(UsedMaterialProxy isNull) {
-                setResult("UsedMaterials");
-            }
-            
-            @Override
-            public void handleMaterialList(MaterialListProxy isNull) {
-                setResult("MaterialLists");
             }
         }.process(object.getProxyClass());
     }
