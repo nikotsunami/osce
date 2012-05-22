@@ -216,7 +216,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	private Presenter presenter;
 	private CalendarUtil cal = new CalendarUtil();
 
-
 	public StandardizedPatientEditViewImpl() {
 		
 		initWidget(BINDER.createAndBindUi(this));
@@ -238,23 +237,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				switch(event.getSelectedItem().intValue()) {
-				case 0:
-					preName.setFocus(true);
-					break;
-				case 1:
-					/*birthday.setFocus(true);*/
-					break;
-				case 2:
-//					bankName.setFocus(true);
-					break;
-				case 3:
-//					description.setFocus(true);
-					break;
-				default:
-				}
+				if (delegate != null)
+					delegate.storeDisplaySettings();
 			}
-			
 		});
 		
 		setTabTexts();
@@ -625,5 +610,15 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@Override
 	public void setMaritalStatusPickerValues(List<MaritalStatus> values) {
 		maritalStatus.setAcceptableValues(values);
+	}
+
+	@Override
+	public int getSelectedDetailsTab() {
+		return patientPanel.getTabBar().getSelectedTab();
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int detailsTab) {
+		patientPanel.getTabBar().selectTab(detailsTab);
 	}
 }

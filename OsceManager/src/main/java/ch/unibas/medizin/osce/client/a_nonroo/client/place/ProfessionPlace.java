@@ -6,14 +6,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class ProfessionPlace extends Place {
+public class ProfessionPlace extends OsMaPlace {
 	
 	
 	private String token;
 
 	public ProfessionPlace(){
-		Log.debug("SystemStartPlace.SystemStartPlace");
-		this.token = "SystemStartPlace";
+		this.token = "ProfessionPlace";
 	}
 	
 	public ProfessionPlace(String token){
@@ -36,17 +35,17 @@ public class ProfessionPlace extends Place {
 		private final RequestFactory requests;
 
 		public Tokenizer(RequestFactory requests) {
-			Log.debug("SystemStartPlace.Tokenizer");
+			Log.debug("ProfessionPlace.Tokenizer");
 			this.requests = requests;
 		}
 
 		public ProfessionPlace getPlace(String token) {
-			Log.debug("SystemStartPlace.Tokenizer.getPlace");
+			Log.debug("ProfessionPlace.Tokenizer.getPlace");
 			return new ProfessionPlace(token);
 		}
 
 		public String getToken(ProfessionPlace place) {
-			Log.debug("SystemStartPlace.Tokenizer.getToken");
+			Log.debug("ProfessionPlace.Tokenizer.getToken");
 			return place.getToken();
 		}
 	}

@@ -21,9 +21,8 @@ public interface DoctorEditView extends IsWidget {
     
 	interface Delegate {
 		void cancelClicked();
-
 		void saveClicked();
-		
+		void storeDisplaySettings();
 	}
 
 	RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> createEditorDriver();
@@ -31,5 +30,7 @@ public interface DoctorEditView extends IsWidget {
 	void setClinicPickerValues(Collection<ClinicProxy> emptyList);
 	
 	SimplePanel getOfficePanel();
+	void setSelectedDetailsTab(int detailsTab);
+	int getSelectedDetailsTab();
 
 }

@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
@@ -18,6 +19,7 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void printPatientClicked();
 		void editPatientClicked();
 		void deletePatientClicked();
+		void storeDisplaySettings();
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();
@@ -29,5 +31,11 @@ public interface StandardizedPatientDetailsView extends IsWidget{
     public void setValue(StandardizedPatientProxy proxy); 
     void setDelegate(Delegate delegate);
     void setPresenter(Presenter systemStartActivity);
+	int getSelectedScarAnamnesisTab();
+	int getSelectedDetailsTab();
+	boolean isPatientDisclosurePanelOpen();
+	void setPatientDisclosurePanelOpen(boolean value);
+	void setSelectedDetailsTab(int tab);
+	void setSelectedScarAnamnesisTab(int tab);
 	
 }

@@ -9,7 +9,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class AdministratorDetailsPlace extends Place implements HasOperationOnProxy {
+public class AdministratorDetailsPlace extends OsMaDetailsPlace {
 	private String token;
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
@@ -21,8 +21,7 @@ public class AdministratorDetailsPlace extends Place implements HasOperationOnPr
 	}
 
 	public AdministratorDetailsPlace(){
-		
-		this.token = "SystemStartPlace";
+		this.token = "AdministratorDetailsPlace";
 	}
 	public AdministratorDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);

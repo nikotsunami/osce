@@ -11,10 +11,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.HasOperationOnProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
@@ -189,8 +189,8 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			return;
 		}
 		
-		if (newPlace instanceof HasOperationOnProxy) {
-			if (lastCrumb.getPlace() instanceof HasOperationOnProxy) {
+		if (newPlace instanceof OsMaDetailsPlace) {
+			if (lastCrumb.getPlace() instanceof OsMaDetailsPlace) {
 				breadCrumbs.remove(indexOfLastCrumb);
 			}
 		} else {
@@ -202,7 +202,7 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		logBreadCrumbs();
 	}
 	
-	private void addOperationOnProxyPlace(HasOperationOnProxy place) {
+	private void addDetailsPlace(OsMaDetailsPlace place) {
 		String placeDescription;
 		if (place.getOperation() == Operation.CREATE) {
 			placeDescription = renderer.render(place.getOperation());
@@ -280,8 +280,8 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 	}
 
 	private void addNewPlace(Place place) {
-		if (place instanceof HasOperationOnProxy) {
-			addOperationOnProxyPlace((HasOperationOnProxy) place);
+		if (place instanceof OsMaDetailsPlace) {
+			addDetailsPlace((OsMaDetailsPlace) place);
 		} else {
 			addRootPlace(place);
 		}

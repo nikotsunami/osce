@@ -6,7 +6,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class NationalityPlace extends Place {
+public class NationalityPlace extends OsMaPlace {
 	
 	
 	private String token;

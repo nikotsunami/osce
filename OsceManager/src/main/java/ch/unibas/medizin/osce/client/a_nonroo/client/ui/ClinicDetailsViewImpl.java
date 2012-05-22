@@ -11,6 +11,8 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -94,6 +96,16 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 		labelName.setInnerText(constants.name() + ":");
 		labelStreet.setInnerText(constants.street() + ":");
 		labelCity.setInnerText(constants.plz() + ", " + constants.city() + ":");
+		
+		clinicPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				if (delegate != null) {
+					delegate.storeDisplaySettings();
+				}
+			}
+		});
 	}
 
 	public void setValue(ClinicProxy proxy) {
@@ -144,5 +156,15 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
 		delegate.editClicked();
+	}
+
+	@Override
+	public int getSelectedDetailsTab() {
+		return clinicPanel.getTabBar().getSelectedTab();
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int detailsTab) {
+		clinicPanel.selectTab(detailsTab);
 	}
 }

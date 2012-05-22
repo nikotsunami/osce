@@ -9,8 +9,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class SpokenLanguageDetailsPlace extends Place implements HasOperationOnProxy {
-	private String token;
+public class SpokenLanguageDetailsPlace extends OsMaDetailsPlace {
+	private String token = "SpokenLanguageDetailsPlace";
 	private static final String SEPARATOR = "!";private EntityProxyId<?> proxyId;
 	private Operation operation = null;
 	
@@ -20,16 +20,13 @@ public class SpokenLanguageDetailsPlace extends Place implements HasOperationOnP
 	}
 
 	public SpokenLanguageDetailsPlace(){
-		
-		this.token = "SystemStartPlace";
 	}
+	
 	public SpokenLanguageDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
-		
 	}
 
     public SpokenLanguageDetailsPlace(EntityProxyId<?> stableId, Operation operation) {
-
 		this.operation = operation;
 		proxyId = stableId;
 	}

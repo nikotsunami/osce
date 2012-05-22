@@ -6,14 +6,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class StandardizedPatientPlace extends Place {
-	
-	
+public class StandardizedPatientPlace extends OsMaPlace {
 	private String token;
 
 	public StandardizedPatientPlace(){
-		Log.debug("SystemStartPlace.SystemStartPlace");
-		this.token = "SystemStartPlace";
+		this.token = "StandardizedPatientPlace";
 	}
 	
 	public StandardizedPatientPlace(String token){

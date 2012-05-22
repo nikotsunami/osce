@@ -8,9 +8,11 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicEditViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicRequest;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -20,7 +22,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.Receiver;
@@ -40,11 +41,13 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 	private RequestFactoryEditorDriver<ClinicProxy,ClinicEditViewImpl> editorDriver;
 	private ClinicProxy clinic;
 	private boolean save;
+	private UserPlaceSettings userSettings;
 
 	public ClinicEditActivity(ClinicDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
+		this.userSettings = new UserPlaceSettings((OsMaPlace) place);
 	}
 
 	public ClinicEditActivity(ClinicDetailsPlace place,
@@ -53,6 +56,7 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
+		this.userSettings = new UserPlaceSettings((OsMaPlace) place);
 		//this.operation=operation;
 	}
 	public void onStop(){
@@ -81,8 +85,8 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		this.widget = panel;
 		this.view = clinicEditView;
 		editorDriver = view.createEditorDriver();
-
 		view.setDelegate(this);
+		loadDisplaySettings();
 
 		//init();
 
@@ -193,5 +197,18 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 				placeController.goTo(new ClinicDetailsPlace(clinic.stableId(), Operation.NEW));		
 			}
 		}); 
+	}
+	
+	public void storeDisplaySettings() {
+		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.flush();
+	}
+	
+	private void loadDisplaySettings() {
+		int detailsTab = 0;
+		if (userSettings.hasSettings()) {
+			detailsTab = userSettings.getIntValue("detailsTab");
+		}
+		view.setSelectedDetailsTab(detailsTab);
 	}
 }
