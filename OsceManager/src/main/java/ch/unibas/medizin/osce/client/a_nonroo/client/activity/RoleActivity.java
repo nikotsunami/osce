@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
