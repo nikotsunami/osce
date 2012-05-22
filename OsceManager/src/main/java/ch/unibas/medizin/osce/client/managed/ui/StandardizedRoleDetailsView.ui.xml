@@ -110,6 +110,20 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -164,6 +178,14 @@
                 </td>
                 <td>
                     <span ui:field="roleType"/>
+                </td>
+            </tr>
+            <tr id="active">
+                <td>
+                    <span class="{style.label}">Active:</span>
+                </td>
+                <td>
+                    <span ui:field="active"/>
                 </td>
             </tr>
             <tr id="roleTopic">

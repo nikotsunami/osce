@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
@@ -36,9 +37,13 @@ public interface StandardizedRoleProxy extends EntityProxy {
 
     abstract void setRoleScript(String roleScript);
 
-    abstract String getRoleType();
+    abstract RoleTypes getRoleType();
 
-    abstract void setRoleType(String roleType);
+    abstract void setRoleType(RoleTypes roleType);
+
+    abstract Boolean getActive();
+
+    abstract void setActive(Boolean active);
 
     abstract RoleTopicProxy getRoleTopic();
 

@@ -23,6 +23,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public static Set<java.lang.Class<? extends com.google.gwt.requestfactory.shared.EntityProxy>> getAll() {
         Set<Class<? extends EntityProxy>> rtn = new HashSet<Class<? extends EntityProxy>>();
+        rtn.add(UsedMaterialProxy.class);
         rtn.add(TaskProxy.class);
         rtn.add(StudentProxy.class);
         rtn.add(StudentOscesProxy.class);
@@ -46,6 +47,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(NationalityProxy.class);
         rtn.add(MediaContentTypeProxy.class);
         rtn.add(MediaContentProxy.class);
+        rtn.add(MaterialListProxy.class);
         rtn.add(LogEntryProxy.class);
         rtn.add(LangSkillProxy.class);
         rtn.add(KeywordProxy.class);
@@ -65,6 +67,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Class<?> clazz) {
+        if (UsedMaterialProxy.class.equals(clazz)) {
+            processor.handleUsedMaterial((UsedMaterialProxy) null);
+            return;
+        }
         if (TaskProxy.class.equals(clazz)) {
             processor.handleTask((TaskProxy) null);
             return;
@@ -157,6 +163,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleMediaContent((MediaContentProxy) null);
             return;
         }
+        if (MaterialListProxy.class.equals(clazz)) {
+            processor.handleMaterialList((MaterialListProxy) null);
+            return;
+        }
         if (LogEntryProxy.class.equals(clazz)) {
             processor.handleLogEntry((LogEntryProxy) null);
             return;
@@ -221,6 +231,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Object proxy) {
+        if (proxy instanceof UsedMaterialProxy) {
+            processor.handleUsedMaterial((UsedMaterialProxy) proxy);
+            return;
+        }
         if (proxy instanceof TaskProxy) {
             processor.handleTask((TaskProxy) proxy);
             return;
@@ -313,6 +327,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleMediaContent((MediaContentProxy) proxy);
             return;
         }
+        if (proxy instanceof MaterialListProxy) {
+            processor.handleMaterialList((MaterialListProxy) proxy);
+            return;
+        }
         if (proxy instanceof LogEntryProxy) {
             processor.handleLogEntry((LogEntryProxy) proxy);
             return;
@@ -379,6 +397,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public void handleNonProxy(Object object) {
     }
 
+    public abstract void handleUsedMaterial(UsedMaterialProxy proxy);
+
     public abstract void handleTask(TaskProxy proxy);
 
     public abstract void handleStudent(StudentProxy proxy);
@@ -424,6 +444,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleMediaContentType(MediaContentTypeProxy proxy);
 
     public abstract void handleMediaContent(MediaContentProxy proxy);
+
+    public abstract void handleMaterialList(MaterialListProxy proxy);
 
     public abstract void handleLogEntry(LogEntryProxy proxy);
 

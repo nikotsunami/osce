@@ -3,6 +3,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
+import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
@@ -32,7 +35,8 @@ public interface RoleView extends IsWidget{
 		// TODO define methods to be delegated!
 		void showSubviewClicked();
 		//spec start
-		public void performSearch(String q, List<String> list);
+		public void performSearch(String q, List<String> list,List<String> tableList,List<String> whereList);
+		
 		void newClicked(String value, String value2, SpecialisationProxy specialisationProxy,
 				StudyYears value4);
 
@@ -55,5 +59,18 @@ public interface RoleView extends IsWidget{
   public List<String> getSearchFilters();
   public SearchCriteria getCriteria();
   //spec end
+
+  public RoleFilterViewTooltipImpl getFilter();
+  
+/*void setKeywordListBoxValues(List<KeywordProxy> values);
+
+void setReviewerListBoxValues(List<DoctorProxy> values);
+void setAuthorListBoxValues(List<DoctorProxy> values);*/
+
+void setKeywordAutocompleteValue(List<KeywordProxy> values);
+void setAuthorAutocompleteValue(List<DoctorProxy> values);
+void setReviewerAutocompleteValue(List<DoctorProxy> values);
+void setSpecialisationAutocompleteValue(List<SpecialisationProxy> values);
+
 
 }

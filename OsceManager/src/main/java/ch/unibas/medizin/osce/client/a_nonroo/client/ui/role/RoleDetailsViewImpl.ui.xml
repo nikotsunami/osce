@@ -1,0 +1,32 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
+	>
+	<ui:style src="../../styles.css">
+	.description {	}
+	
+	.padleft5
+	{
+		padding-left: 5px;
+	}
+	
+	</ui:style>
+
+<g:HTMLPanel>
+	  <g:TabPanel ui:field="roleDetailPanel" width="100%">
+	<!-- 	<g:Tab>
+			<g:TabHTML>Kohler</g:TabHTML>
+			<n:StandardizedRoleDetailsViewImpl ui:field="standardizedRoleDetailsViewImpl"></n:StandardizedRoleDetailsViewImpl> 
+		</g:Tab>  -->
+		<g:Tab>
+			<g:TabHTML >+</g:TabHTML>
+			<g:Label>LBL Role SubView1</g:Label>
+		</g:Tab>					
+	</g:TabPanel>
+</g:HTMLPanel>
+ 
+	
+</ui:UiBinder> 

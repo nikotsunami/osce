@@ -1,0 +1,103 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp'>
+
+<ui:style src="../../styles.css" >
+.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+</ui:style>
+ 
+<g:HTMLPanel>
+	<g:TabPanel ui:field="roleDetailPanel" width="100%">
+		<g:Tab>
+			<g:TabHTML>New Role</g:TabHTML> 
+			
+			<g:HTMLPanel>    
+			<g:IntegerBox ui:field="subVersion" visible="false"></g:IntegerBox>
+			<g:IntegerBox ui:field="mainVersion" visible="false"></g:IntegerBox>
+			
+				<div class="{style.patientControls} {style.controlsright}">
+					<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
+					<my:IconButton ui:field="save" icon="disk"></my:IconButton>
+					<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
+					
+				</div>
+			    
+			    <g:TabPanel ui:field="rolePanel" addStyleNames="{style.tabStyle}">
+					<g:Tab>
+						<g:TabHTML>Role Detail</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">	
+							<table class="{style.fields}">
+							<colgroup>
+								<col></col>
+								<col></col>						
+							</colgroup>
+							<tbody>
+							<tr id="shortname">						
+								<td><span class="{style.label}" ui:field="labelShortName"/></td>
+								<td><g:TextBox ui:field='shortName'/></td>
+								<td align="right"><span class="{style.label}" ui:field="LabelActive"/><b>Active :</b></td>
+								<td align="right" valign="top">
+								
+								
+								<g:CheckBox ui:field="active" checked="true"></g:CheckBox></td>						
+							</tr>
+							<tr id="name">						
+								<td><span class="{style.label}" ui:field="labellongName"/></td>
+								<td><g:TextBox ui:field='longName'/></td>						
+							</tr>
+							<tr id="description">
+								<td><span class="{style.label}" ui:field="labelroletype" /></td>
+								<td><my:FocusableValueListBox ui:field="roleType" /></td>
+								<!-- <td><g:TextBox ui:field='roleType'/></td> -->						
+							</tr>
+								<tr id="studyYear">
+									<td><span class="{style.label}" ui:field="labelstudyYear" /></td>
+									<td><my:FocusableValueListBox ui:field="studyYear" /></td>
+									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
+								</tr>
+								</tbody>
+							</table>
+						</g:HTMLPanel>
+					</g:Tab>
+			<!--  
+					<g:Tab>
+						<g:TabHTML>RoleParticipants</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<g:Label>Role Participants Component</g:Label>
+						</g:HTMLPanel>
+					</g:Tab>
+					<g:Tab>
+						<g:TabHTML>Keyword</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<g:Label>Keyword Components</g:Label>
+							 <n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl> 
+						</g:HTMLPanel>								
+					</g:Tab>
+					<g:Tab>
+						<g:TabHTML>Learning</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<g:Label>Learning Components</g:Label>
+						</g:HTMLPanel>
+					</g:Tab>
+					-->
+				</g:TabPanel>	    
+			<div ui:field='errors' class='{style.errors}'></div>
+			
+			
+			
+			</g:HTMLPanel>
+		</g:Tab>
+	</g:TabPanel>
+	
+	
+</g:HTMLPanel>
+</ui:UiBinder>

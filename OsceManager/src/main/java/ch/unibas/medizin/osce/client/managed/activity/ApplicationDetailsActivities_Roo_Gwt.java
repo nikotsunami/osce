@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -42,6 +43,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -61,6 +63,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
         }
         final ProxyPlace proxyPlace = (ProxyPlace) place;
         return new ApplicationEntityTypesProcessor<Activity>() {
+
+            @Override
+            public void handleUsedMaterial(UsedMaterialProxy proxy) {
+                setResult(new UsedMaterialActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
 
             @Override
             public void handleTask(TaskProxy proxy) {
@@ -175,6 +182,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleMediaContent(MediaContentProxy proxy) {
                 setResult(new MediaContentActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleMaterialList(MaterialListProxy proxy) {
+                setResult(new MaterialListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
