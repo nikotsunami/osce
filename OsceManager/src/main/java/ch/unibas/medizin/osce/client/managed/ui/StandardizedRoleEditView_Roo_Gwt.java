@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -53,8 +54,21 @@ public abstract class StandardizedRoleEditView_Roo_Gwt extends Composite impleme
     @UiField
     TextBox roleScript;
 
-    @UiField
-    TextBox roleType;
+    @UiField(provided = true)
+    ValueListBox<RoleTypes> roleType = new ValueListBox<RoleTypes>(new AbstractRenderer<ch.unibas.medizin.osce.shared.RoleTypes>() {
+
+        public String render(ch.unibas.medizin.osce.shared.RoleTypes obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+
+    @UiField(provided = true)
+    CheckBox active = new CheckBox() {
+
+        public void setValue(Boolean value) {
+            super.setValue(value == null ? Boolean.FALSE : value);
+        }
+    };
 
     @UiField(provided = true)
     ValueListBox<RoleTopicProxy> roleTopic = new ValueListBox<RoleTopicProxy>(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy>());
@@ -84,6 +98,10 @@ public abstract class StandardizedRoleEditView_Roo_Gwt extends Composite impleme
 
     public void setRoleParticipantsPickerValues(Collection<RoleParticipantProxy> values) {
         roleParticipants.setAcceptableValues(values);
+    }
+
+    public void setRoleTypePickerValues(Collection<RoleTypes> values) {
+        roleType.setAcceptableValues(values);
     }
 
     public void setKeywordsPickerValues(Collection<KeywordProxy> values) {

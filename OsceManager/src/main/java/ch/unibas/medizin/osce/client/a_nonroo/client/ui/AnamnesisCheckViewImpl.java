@@ -193,9 +193,9 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		paths.add("type");
 		table.addColumn(new QuestionTypeColumn(), constants.type());
 		paths.add("text");
-		table.addColumn(new SimpleTextColumn(), constants.text());
+		table.addColumn(new SimpleTextColumn(), constants.question());
 		paths.add("value");
-		table.addColumn(new ValueColumn(), constants.value());
+		table.addColumn(new ValueColumn(), constants.possibleAnswers());
 
 		checkOrderColumn = new Column<AnamnesisCheckProxy, String>(
 				new TextInputCell()) {

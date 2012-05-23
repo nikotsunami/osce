@@ -7,7 +7,7 @@ public interface OsceConstants extends Constants {
 
     public String addAnamnesisValue();
 
-    public String addAnswer();
+	public String addAnswer();
 
     public String addClinic();
 
@@ -46,11 +46,13 @@ public interface OsceConstants extends Constants {
     public String answer();
 
     public String answered();
-
+	
     public String answerGiven();
-
+    
     public String answerPending();
 
+	public String author();
+	
     public String bank();
 
     public String bankAccount();
@@ -75,9 +77,11 @@ public interface OsceConstants extends Constants {
 
     public String clinics();
 
-    public String comment();
+	public String comparison();
 
-    public String comparison();
+    public String comment();	
+	
+	public String complexity();
 
     public String contactInfo();
 
@@ -120,10 +124,10 @@ public interface OsceConstants extends Constants {
     public String examinationSchedule();
 
     public String exams();
+    
+	public String export();
 
-    public String export();
-
-    public String exportBellSchedule();
+	public String exportBellSchedule();
 
     public String female();
 
@@ -192,8 +196,12 @@ public interface OsceConstants extends Constants {
     public String persons();
 
     public String plz();
-
-    public String plzCity();
+    
+	public String plzCity();
+	
+	public String possibleAnswers();
+	
+	public String print();
 
     public String preName();
 
@@ -204,12 +212,16 @@ public interface OsceConstants extends Constants {
     public String profession();
 
     public String professions();
-
+    
     public String question();
 
-    public String reallyDelete();
+	public String reallyDelete();
+	
+	public String responsibilities();
 
-    public String resetFilters();
+	public String resetFilters();
+	
+	public String reviewer();
 
     public String roleAssignments();
 
@@ -244,6 +256,8 @@ public interface OsceConstants extends Constants {
     public String simulationPatients();
 	
 	public String socialInsuranceNo();
+	
+	public String specification();
 
     public String stationLength();
 
@@ -274,6 +288,7 @@ public interface OsceConstants extends Constants {
 	public String workPermission();
 	
     public String filterTitle();
+    
     public String yes();
 
 //by spec role management functionality[
@@ -287,32 +302,55 @@ public interface OsceConstants extends Constants {
     public String roomMaterials();
 
     public String role();
+    
 	public String roletopic();
-	
+
 	public String slotUntilChange();
-	
+
 	public String studyYears();
-	
+
 	public String clinicalSpecialisation();
-	
-	//By spec for popup position
+
+	// By spec for popup position
 	public String TopicsAndSpecViewPopupXPosition();
+
 	public String TopicsAndSpecViewPopupYPosition();
-	
+
 	public String TopicsAndSpecDetailsViewPopupXPosition();
+
 	public String TopicsAndSpecDetailsViewPopupYPosition();
 
-        public String topic(); 
-	public String aviableRole();
-        public String keyword();
-	public String itemName();
-	public String roleName();
-	public String checkListItem();
-	public String itemValue();
-	public String addRoleTopic();
-	//by spec role management functionality]
+	// By Spec Assignment L
+	public String addMaterial();
 
-    public String print();
+	public String editMaterial();
+
+	public String roomMaterialName();
+
+	public String roomMaterialPrice();
+
+	public String roomMaterialPriceType();
+
+	public String roomMaterialPricePerPiece();
+
+	public String roomMaterialPricePerDay();
+
+	public String topic();
+
+	public String aviableRole();
+
+	public String keyword();
+
+	public String itemName();
+
+	public String roleName();
+
+	public String checkListItem();
+
+	public String itemValue();
+
+	public String addRoleTopic();
+//by spec role management functionality]
 
     public String insideTitle();
 
@@ -324,5 +362,28 @@ public interface OsceConstants extends Constants {
 
     public String order();
     public String saveOrder();
+	
+	//Added By SPEC
+	public String shortName();
+	
+	public String roleDetail();
+	
+	public String roleParticipants();
+	
+	public String learningObjectives();
+	
+	public String keywords();
+	
+
+	public String roleType();
+	
+	public String addRole();
+	
+	public String editRole();
+
+	public String majorLbl();
+	
+	public String minorLbl();
+//Spec End
 
 }

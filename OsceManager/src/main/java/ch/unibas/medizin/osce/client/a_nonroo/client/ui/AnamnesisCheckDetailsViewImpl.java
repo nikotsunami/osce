@@ -71,7 +71,7 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		delete.setText(constants.delete());
 		
 		labelType.setInnerText(constants.type() + ":");
-		labelText.setInnerText(constants.text() + ":");
+		labelText.setInnerText(constants.question() + ":");
 
 	}
 	
@@ -132,7 +132,7 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
 
 		if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {
-			labelValue.setInnerText(constants.value() + ":");
+			labelValue.setInnerText(constants.possibleAnswers() + ":");
 			if (proxy.getValue() != null) {
 				String substrs[] = proxy.getValue().split("\\|");
 				for (int i = 0; i < substrs.length; i++) {

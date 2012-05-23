@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -41,6 +42,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import com.google.gwt.text.shared.AbstractRenderer;
 
@@ -48,6 +50,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
 
     public String render(ProxyListPlace object) {
         return new ApplicationEntityTypesProcessor<String>() {
+
+            @Override
+            public void handleUsedMaterial(UsedMaterialProxy isNull) {
+                setResult("UsedMaterials");
+            }
 
             @Override
             public void handleTask(TaskProxy isNull) {
@@ -162,6 +169,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleMediaContent(MediaContentProxy isNull) {
                 setResult("MediaContents");
+            }
+
+            @Override
+            public void handleMaterialList(MaterialListProxy isNull) {
+                setResult("MaterialLists");
             }
 
             @Override

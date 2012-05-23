@@ -125,7 +125,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		addButton.setVisible(false);
 
 		labelType.setInnerText(constants.type() + ":");
-		labelText.setInnerText(constants.text() + ":");
+		labelText.setInnerText(constants.question() + ":");
 //		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
 //		previousQuestionListBox.addItem(constants.previousQuestion(), "");
 		
@@ -271,7 +271,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			valuePanel.setVisible(false);
 		} else {
 			valuePanel.setVisible(true);
-			labelValue.setInnerText(constants.value() + ":");
+			labelValue.setInnerText(constants.possibleAnswers() + ":");
 		}
 	}
 

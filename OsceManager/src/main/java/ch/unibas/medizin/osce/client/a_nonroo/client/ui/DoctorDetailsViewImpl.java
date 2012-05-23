@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.shared.Gender;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -114,6 +116,15 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		labelEmail.setInnerText(constants.email() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelClinic.setInnerText(constants.clinic() + ":");
+		
+		doctorPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				if (delegate != null)
+					delegate.storeDisplaySettings();
+			}
+		});
 	}
   
 
@@ -174,5 +185,15 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
 		delegate.editClicked();
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int detailsTab) {
+		doctorPanel.selectTab(detailsTab);
+	}
+
+	@Override
+	public int getSelectedDetailsTab() {
+		return doctorPanel.getTabBar().getSelectedTab();
 	}
 }

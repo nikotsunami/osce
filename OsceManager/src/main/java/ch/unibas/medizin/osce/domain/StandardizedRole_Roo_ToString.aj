@@ -9,6 +9,7 @@ privileged aspect StandardizedRole_Roo_ToString {
     
     public String StandardizedRole.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Active: ").append(getActive()).append(", ");
         sb.append("CaseDescription: ").append(getCaseDescription()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Keywords: ").append(getKeywords() == null ? "null" : getKeywords().size()).append(", ");

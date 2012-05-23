@@ -3,7 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+import org.springframework.jdbc.object.StoredProcedure;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -18,7 +21,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -200,7 +210,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	 * implement HasHTML instead of HasText.
 	 */
 	public StandardizedPatientDetailsViewImpl() {
-		
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		patientPanel.selectTab(0);
@@ -221,6 +230,27 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		patientDisclosurePanel.setContent(patientPanel);
 		patientDisclosurePanel.setStyleName("");		
 		//spec end
+		
+		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				storeDisplaySettings();
+			}
+		});
+		
+		scarAnamnesisPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				storeDisplaySettings();
+			}
+		});
+		
+	}
+	
+	private void storeDisplaySettings() {
+		if (delegate != null) {
+			delegate.storeDisplaySettings();
+		}
 	}
 	
 	private void setTabTexts() {
@@ -365,18 +395,45 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		return standardizedPatientLangSkillSubViewImpl;
 	}
 	
-	//spec start
-		@UiHandler("arrow")
-		void handleClick(ClickEvent e) {
-			if(patientDisclosurePanel.isOpen()) {
-				patientDisclosurePanel.setOpen(false);
-				arrow.setResource(uiIcons.triangle1East());
-			}
-			else {
-				patientDisclosurePanel.setOpen(true);
-				arrow.setResource(uiIcons.triangle1South());
-			}
-		   
-		  }
-		//start
+	@Override
+	public boolean isPatientDisclosurePanelOpen() {
+		return patientDisclosurePanel.isOpen();
+	}
+	
+	@Override
+	public int getSelectedDetailsTab() {
+		return patientPanel.getTabBar().getSelectedTab();
+	}
+	
+	@Override
+	public int getSelectedScarAnamnesisTab() {
+		return scarAnamnesisPanel.getTabBar().getSelectedTab();
+	}
+	
+	@UiHandler("arrow")
+	void handleClick(ClickEvent e) {
+		if (patientDisclosurePanel.isOpen()) {
+			setPatientDisclosurePanelOpen(false);
+		} else {
+			setPatientDisclosurePanelOpen(true);
+		}
+		storeDisplaySettings();
+	}
+
+	@Override
+	public void setPatientDisclosurePanelOpen(boolean value) {
+		ImageResource icon = (value) ? uiIcons.triangle1South() : uiIcons.triangle1East();
+		patientDisclosurePanel.setOpen(value);
+		arrow.setResource(icon);
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int tab) {
+		patientPanel.selectTab(tab);
+	}
+
+	@Override
+	public void setSelectedScarAnamnesisTab(int tab) {
+		scarAnamnesisPanel.selectTab(tab);
+	}
 }

@@ -6,9 +6,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class AdministratorPlace extends Place {
-	
-	
+public class AdministratorPlace extends OsMaPlace {
 	private String token;
 
 	public AdministratorPlace(){

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -31,11 +33,13 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -71,17 +75,17 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	private CellTable<LangSkillProxy> langSkillTable;
 
 	private AnamnesisFormProxy anamnesisForm ;
+	private UserPlaceSettings userSettings;
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
     	this.requests = requests;
     	this.placeController = placeController;
+    	userSettings = new UserPlaceSettings(place);
     }
 
-	public void onStop(){
-
+	public void onStop() {
 	}
-	
 	
 	// By spec(Start)
 		
@@ -108,6 +112,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		standardizedPatientDetailsView.setPresenter(this);
 		this.widget = panel;
 		this.view = standardizedPatientDetailsView;
+		loadDisplaySettings();
 		standardizedPatientScarSubView = view.getStandardizedPatientScarSubViewImpl();
 		standardizedPatientAnamnesisSubView = view.getStandardizedPatientAnamnesisSubViewImpl();
 		standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubViewImpl();
@@ -120,7 +125,6 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		standardizedPatientMediaSubViewImpl.setDelegate(this);
-		
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
 	}
 	
@@ -511,6 +515,29 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	
 	protected Request<List<ScarProxy>> createScarRangeRequest(Range range) {
 		return requests.scarRequestNonRoo().findScarEntriesByAnamnesisForm(anamnesisForm.getId(), range.getStart(), range.getLength());
+	}
+	
+	public void storeDisplaySettings() {
+		userSettings.setValue("panelOpen", view.isPatientDisclosurePanelOpen());
+		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.setValue("scarAnamnesisTab", view.getSelectedScarAnamnesisTab());
+		userSettings.flush();
+	}
+	
+	private void loadDisplaySettings() {
+		boolean panelOpen = true;
+		int detailsTab = 0;
+		int scarAnamnesisTab = 0;
+		
+		if (userSettings.hasSettings()) {
+			panelOpen = userSettings.getBooleanValue("panelOpen");
+			detailsTab = userSettings.getIntValue("detailsTab");
+			scarAnamnesisTab = userSettings.getIntValue("scarAnamnesisTab");
+		}
+		
+		view.setPatientDisclosurePanelOpen(panelOpen);
+		view.setSelectedDetailsTab(detailsTab);
+		view.setSelectedScarAnamnesisTab(scarAnamnesisTab);
 	}
 	
 	@Override

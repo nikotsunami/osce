@@ -7,7 +7,9 @@ import ch.unibas.medizin.osce.domain.Keyword;
 import ch.unibas.medizin.osce.domain.RoleParticipant;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.Set;
@@ -46,12 +48,20 @@ privileged aspect StandardizedRole_Roo_JavaBean {
         this.roleScript = roleScript;
     }
     
-    public String StandardizedRole.getRoleType() {
+    public RoleTypes StandardizedRole.getRoleType() {
         return this.roleType;
     }
     
-    public void StandardizedRole.setRoleType(String roleType) {
+    public void StandardizedRole.setRoleType(RoleTypes roleType) {
         this.roleType = roleType;
+    }
+    
+    public Boolean StandardizedRole.getActive() {
+        return this.active;
+    }
+    
+    public void StandardizedRole.setActive(Boolean active) {
+        this.active = active;
     }
     
     public RoleTopic StandardizedRole.getRoleTopic() {

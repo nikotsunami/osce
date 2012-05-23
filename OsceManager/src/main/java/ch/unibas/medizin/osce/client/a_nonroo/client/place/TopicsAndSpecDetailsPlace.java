@@ -8,8 +8,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class TopicsAndSpecDetailsPlace extends Place implements HasOperationOnProxy {
-	private String token;
+public class TopicsAndSpecDetailsPlace extends OsMaDetailsPlace {
+	private String token = "TopicsAndSpecDetailsPlace";;
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
@@ -18,8 +18,8 @@ public class TopicsAndSpecDetailsPlace extends Place implements HasOperationOnPr
 		return proxyId;
 	}
 	public TopicsAndSpecDetailsPlace(){
-		this.token = "TopicsAndSpecDetailsPlace";
 	}
+	
 	public TopicsAndSpecDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
 

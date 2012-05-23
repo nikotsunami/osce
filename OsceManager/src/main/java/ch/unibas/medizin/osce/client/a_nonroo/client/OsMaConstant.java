@@ -19,5 +19,6 @@ public class OsMaConstant {
 	//By Spec[start
 	public static String FILENAME = "StandardizedPatientList.csv";
 	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
+	public static String BLANK_FIELD_MESSAGE = "Please enter details for";
 	//By Spec]End
 }

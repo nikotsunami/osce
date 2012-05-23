@@ -8,8 +8,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class RoleScriptTemplateDetailsPlace extends Place implements HasOperationOnProxy{
-	private String token;
+public class RoleScriptTemplateDetailsPlace extends OsMaDetailsPlace{
+	private String token = "RoleScriptTemplateDetailsPlace";
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
@@ -17,9 +17,10 @@ public class RoleScriptTemplateDetailsPlace extends Place implements HasOperatio
 	public EntityProxyId<?> getProxyId() {
 		return proxyId;
 	}
+	
 	public RoleScriptTemplateDetailsPlace(){
-		this.token = "SystemStartPlace";
 	}
+	
 	public RoleScriptTemplateDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
 

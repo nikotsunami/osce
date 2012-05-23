@@ -2,12 +2,14 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView.Presenter;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 
@@ -39,19 +41,20 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 	private DoctorProxy doctorProxy;
 	private OfficeDetailsView officeDetailsView;
 	
-
+	DoctorDetailsView doctorDetailsView;
+	private UserPlaceSettings userSettings;
+	
 	public DoctorDetailsActivity(DoctorDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
     	this.requests = requests;
     	this.placeController = placeController;
-
+    	this.userSettings = new UserPlaceSettings((OsMaPlace) place);
     }
 
 	public void onStop(){
 
 	}
 	
-	DoctorDetailsView doctorDetailsView;
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("DoctorDetailsActivity.start()");
@@ -62,6 +65,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 		widget.setWidget(doctorDetailsView.asWidget());
 		
 		view.setDelegate(this);
+		loadDisplaySettings();
 
 		requests.find(place.getProxyId()).with("office", "clinic").fire(new Receiver<Object>() {
 
@@ -118,6 +122,22 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 				placeController.goTo(new DoctorPlace("DoctorPlace!DELETED"));
 			}
 		});
+	}
+	
+
+	
+	public void storeDisplaySettings() {
+		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.flush();
+	}
+	
+	private void loadDisplaySettings() {
+		int detailsTab = 0;
+		if (userSettings.hasSettings()) {
+			detailsTab = userSettings.getIntValue("detailsTab");
+		}
+		
+		view.setSelectedDetailsTab(detailsTab);
 	}
 
 }

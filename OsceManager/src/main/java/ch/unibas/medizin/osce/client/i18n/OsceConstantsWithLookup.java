@@ -61,6 +61,13 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String ANAMNESIS();
 	//By SPEC[
 	public String NATIONALITY();
+	public String PERPIECE();
+	public String PERDAY();
+	public String CONSUMABLE();
+	public String EQUIPMENT();
+	public String FORSIMPAT();
+
+	
 	//By SPEC]
 	
 	public String AUTHOR();
@@ -95,4 +102,10 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String DIVORCED();
 	public String SEPARATED();
 	public String WIDOWED();
+	
+	//From SPEC Start
+	public String Simpat();
+	public String Statist();
+	public String Material();		
+	//From SPEC End
 }

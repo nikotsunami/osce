@@ -84,6 +84,18 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="shortName">
             <div class="{style.label}">Short Name</div>
             <div class="{style.value}">
@@ -112,6 +124,12 @@
             <div class="{style.label}">Role Type</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="roleType"/>
+            </div>
+        </div>
+        <div id="active">
+            <div class="{style.label}">Active</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="active"/>
             </div>
         </div>
         <div id="roleTopic">

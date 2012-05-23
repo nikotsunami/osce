@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.shared.Operation;
 
@@ -11,31 +12,46 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Inject;
 
-public class RoomMaterialsDetailsActivityMapper implements ActivityMapper{
+public class RoomMaterialsDetailsActivityMapper implements ActivityMapper {
 
-	   private OsMaRequestFactory requests;
-	   private PlaceController placeController;
+	private OsMaRequestFactory requests;
+	private PlaceController placeController;
 
-		@Inject
-		public RoomMaterialsDetailsActivityMapper(OsMaRequestFactory requests, PlaceController placeController) {
-			this.requests = requests;
-	        this.placeController = placeController;
-		}
+	@Inject
+	public RoomMaterialsDetailsActivityMapper(OsMaRequestFactory requests,
+			PlaceController placeController) {
+		this.requests = requests;
+		this.placeController = placeController;
+	}
 
-		@Override
-		public Activity getActivity(Place place) {
-			Log.debug("im RoomMaterialsDetailsActivityMapper.getActivity");
+	@Override
+	public Activity getActivity(Place place) {
+		Log.debug("im RoomMaterialsDetailsActivityMapper.getActivity");
+
+		if (place instanceof RoomMaterialsDetailsPlace) {
+			if (((RoomMaterialsDetailsPlace) place).getOperation() == Operation.DETAILS)
+				return new RoomMaterialsDetailsActivity(
+						(RoomMaterialsDetailsPlace) place, requests,
+						placeController);
+		
+			if (((RoomMaterialsDetailsPlace) place).getOperation() == Operation.EDIT)
+				return new RoomMaterialsEditActivity(
+						(RoomMaterialsDetailsPlace) place, requests,
+						placeController);
+			if (((RoomMaterialsDetailsPlace) place).getOperation() == Operation.CREATE)
+				return new RoomMaterialsEditActivity(
+						(RoomMaterialsDetailsPlace) place, requests,
+						placeController, Operation.CREATE);
+			if (((RoomMaterialsDetailsPlace) place).getOperation() == Operation.NEW)
+				return new RoomMaterialsDetailsActivity(
+						(RoomMaterialsDetailsPlace) place, requests,
+						placeController);
 			
-			if(place instanceof RoomMaterialsDetailsPlace)
-			{
-				 if(((RoomMaterialsDetailsPlace) place).getOperation() == Operation.DETAILS)
-					 return new RoomMaterialsDetailsActivity((RoomMaterialsDetailsPlace) place, requests, placeController);
-				 if(((RoomMaterialsDetailsPlace) place).getOperation() == Operation.EDIT)
-					 return null;
-				 if(((RoomMaterialsDetailsPlace) place).getOperation() == Operation.CREATE)			 
-					 return null;
-			}
-				
-			return null;
+			
+
+			
 		}
+
+		return null;
+	}
 }
