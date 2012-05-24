@@ -31,4 +31,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	SpecialisationRequestNonRoo specialisationRequestNonRoo();
 	RoleTopicRequestNonRoo roleTopicRequestNonRoo();
 	MaterialListRequestNonRoo materialListRequestNonRoo();
+	FileRequestNonRoo fileRequestNooRoo();
+	UsedMaterialRequestNonRoo usedMaterialRequestNonRoo();
 }

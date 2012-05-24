@@ -62,6 +62,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     KeywordRequest keywordRequest();
 
+    FileRequest fileRequest();
+
     EliminationCriterionRequest eliminationCriterionRequest();
 
     DoctorRequest doctorRequest();

@@ -70,12 +70,24 @@
             
             
             
+        
+            
+            
+            
         <tr id="materialCount">
                 <td>
                     <div class="{style.label}">Material Count:</div>
                 </td>
                 <td>
                     <g:TextBox ui:field="materialCount"/>
+                </td>
+            </tr>
+            <tr id="used_from">
+                <td>
+                    <div class="{style.label}">Used_from:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="used_from"/>
                 </td>
             </tr>
             <tr id="standardizedRole">

@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.CollectionRenderer;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorDelegate;

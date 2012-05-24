@@ -19,58 +19,37 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-        
-        
-    
-        
-        
-        
-    
-        
-        
-        
-    
-        
-        
-        
-    
-        
-        
-        
-    
-        
-        
-        
-    
-        
-        
-        
     <div id="materialCount">
             <div class="{style.label}">Material Count</div>
             <div class="{style.value}">
-                <g:TextBox ui:field="materialCount"/>
+                <g:IntegerBox ui:field="materialCount"/>
             </div>
         </div>
-        <div id="standardizedRole">
+    <div id="used_from">
+            <div class="{style.label}">Used_from</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="used_from"/>
+            </div>
+        </div>
+    <div id="standardizedRole">
             <div class="{style.label}">Standardized Role</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="standardizedRole"/>
             </div>
         </div>
-        <div id="materialList">
+    <div id="materialList">
             <div class="{style.label}">Material List</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="materialList"/>
             </div>
         </div>
-        <div id="sort_order">
+    <div id="sort_order">
             <div class="{style.label}">Sort_order</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="sort_order"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

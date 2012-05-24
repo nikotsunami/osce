@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -29,7 +30,7 @@ public abstract class UsedMaterialMobileListView_Roo_Gwt extends MobileProxyList
     }
 
     public void init() {
-        paths.add("materialCount");
         paths.add("id");
+        paths.add("version");
     }
 }

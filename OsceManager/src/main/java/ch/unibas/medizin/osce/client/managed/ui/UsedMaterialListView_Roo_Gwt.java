@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -63,9 +64,9 @@ public abstract class UsedMaterialListView_Roo_Gwt extends AbstractProxyListView
         paths.add("materialCount");
         table.addColumn(new TextColumn<UsedMaterialProxy>() {
 
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
 
-                public String render(java.lang.String obj) {
+                public String render(java.lang.Integer obj) {
                     return obj == null ? "" : String.valueOf(obj);
                 }
             };
@@ -75,6 +76,21 @@ public abstract class UsedMaterialListView_Roo_Gwt extends AbstractProxyListView
                 return renderer.render(object.getMaterialCount());
             }
         }, "Material Count");
+        paths.add("used_from");
+        table.addColumn(new TextColumn<UsedMaterialProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.shared.MaterialUsedFromTypes> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.MaterialUsedFromTypes>() {
+
+                public String render(ch.unibas.medizin.osce.shared.MaterialUsedFromTypes obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(UsedMaterialProxy object) {
+                return renderer.render(object.getUsed_from());
+            }
+        }, "Used_from");
         paths.add("standardizedRole");
         table.addColumn(new TextColumn<UsedMaterialProxy>() {
 

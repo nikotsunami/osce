@@ -30,6 +30,11 @@ public interface StandardizedRoleDetailsView extends IsWidget{
 	
     public void setValue(StandardizedRoleProxy proxy); 
     public void setDelegate(Delegate delegate);
-  
+    
+ // Assignment H[
+    public RoleFileSubViewImpl getRoleFileSubViewImpl();
+ // Assignment G[
+    public RoomMaterialsDetailsSubViewImpl getRoomMaterialsDetailsSubViewImpl();
+	// ]End
 	
 }

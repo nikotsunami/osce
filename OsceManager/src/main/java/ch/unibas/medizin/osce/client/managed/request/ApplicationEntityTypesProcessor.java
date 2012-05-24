@@ -51,6 +51,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(LogEntryProxy.class);
         rtn.add(LangSkillProxy.class);
         rtn.add(KeywordProxy.class);
+        rtn.add(FileProxy.class);
         rtn.add(EliminationCriterionProxy.class);
         rtn.add(DoctorProxy.class);
         rtn.add(DescriptionProxy.class);
@@ -177,6 +178,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (KeywordProxy.class.equals(clazz)) {
             processor.handleKeyword((KeywordProxy) null);
+            return;
+        }
+        if (FileProxy.class.equals(clazz)) {
+            processor.handleFile((FileProxy) null);
             return;
         }
         if (EliminationCriterionProxy.class.equals(clazz)) {
@@ -343,6 +348,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleKeyword((KeywordProxy) proxy);
             return;
         }
+        if (proxy instanceof FileProxy) {
+            processor.handleFile((FileProxy) proxy);
+            return;
+        }
         if (proxy instanceof EliminationCriterionProxy) {
             processor.handleEliminationCriterion((EliminationCriterionProxy) proxy);
             return;
@@ -452,6 +461,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleLangSkill(LangSkillProxy proxy);
 
     public abstract void handleKeyword(KeywordProxy proxy);
+
+    public abstract void handleFile(FileProxy proxy);
 
     public abstract void handleEliminationCriterion(EliminationCriterionProxy proxy);
 

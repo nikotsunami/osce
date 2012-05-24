@@ -14,6 +14,7 @@ privileged aspect UsedMaterial_Roo_ToString {
         sb.append("MaterialList: ").append(getMaterialList()).append(", ");
         sb.append("Sort_order: ").append(getSort_order()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
+        sb.append("Used_from: ").append(getUsed_from()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

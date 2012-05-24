@@ -3,7 +3,6 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsViewImpl;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -33,34 +32,34 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author niko2
- *
+ * 
  */
-public class StandardizedRoleDetailsViewImpl extends Composite implements  StandardizedRoleDetailsView {
+public class StandardizedRoleDetailsViewImpl extends Composite implements
+		StandardizedRoleDetailsView {
 
-		
-	private static StandardizedRoleDetailsViewImplUiBinder uiBinder = GWT.create(StandardizedRoleDetailsViewImplUiBinder.class);
+	private static StandardizedRoleDetailsViewImplUiBinder uiBinder = GWT
+			.create(StandardizedRoleDetailsViewImplUiBinder.class);
 
-	interface StandardizedRoleDetailsViewImplUiBinder extends UiBinder<Widget, StandardizedRoleDetailsViewImpl> {
-		
+	interface StandardizedRoleDetailsViewImplUiBinder extends
+			UiBinder<Widget, StandardizedRoleDetailsViewImpl> {
+
 	}
 
 	private OsceConstants constants = GWT.create(OsceConstants.class);
-	
-	StandardizedRoleProxy proxy;
 
+	StandardizedRoleProxy proxy;
 
 	@UiField
 	DisclosurePanel roleDisclosurePanel;
 	@UiField
 	Image arrow;
-	//SPEC End
-	
+	// SPEC End
+
 	// Panels
-	
+
 	@UiField
 	public TabPanel rolePanel;
-		
-		
+
 	// Buttons
 	@UiField
 	IconButton print;
@@ -68,9 +67,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements  Stand
 	IconButton edit;
 	@UiField
 	IconButton delete;
-	
+
 	// Labels (Fieldnames)
-	
+
 	@UiField
 	SpanElement labelShortName;
 	@UiField
@@ -79,164 +78,182 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements  Stand
 	SpanElement labelroletype;
 	@UiField
 	SpanElement labelstudyYear;
-	
+
 	// Temp Fields
-	
-/*	@UiField
-	SpanElement labelShortNameValue;
-	@UiField
-	SpanElement labellongValue;
-	@UiField
-	SpanElement labelroletypeValue;
-	@UiField
-	SpanElement labelstudyYearValue;*/
+
+	/*
+	 * @UiField SpanElement labelShortNameValue;
+	 * 
+	 * @UiField SpanElement labellongValue;
+	 * 
+	 * @UiField SpanElement labelroletypeValue;
+	 * 
+	 * @UiField SpanElement labelstudyYearValue;
+	 */
 	@UiField
 	public com.google.gwt.user.client.ui.Label labelLongNameHeader;
-	
-	
+
 	// Fields
 	@UiField
 	public SpanElement shortName;
 	@UiField
 	public SpanElement longName;
-//	@UiField(provided = true)
-//	public FocusableValueListBox<RoleTypes> roleType = new FocusableValueListBox<RoleTypes>(new EnumRenderer<RoleTypes>());
+	// @UiField(provided = true)
+	// public FocusableValueListBox<RoleTypes> roleType = new
+	// FocusableValueListBox<RoleTypes>(new EnumRenderer<RoleTypes>());
 
 	@UiField
 	public SpanElement roleType;
-	
+
 	@UiField
 	public SpanElement studyYear;
-	
+
 	@UiField
 	public TabPanel roleSubPanel;
-	/*@UiField(provided = true)
-	public FocusableValueListBox<StudyYears> studyYear = new FocusableValueListBox<StudyYears>(new EnumRenderer<StudyYears>());*/
+	/*
+	 * @UiField(provided = true) public FocusableValueListBox<StudyYears>
+	 * studyYear = new FocusableValueListBox<StudyYears>(new
+	 * EnumRenderer<StudyYears>());
+	 */
 
-	
-		
-private Delegate delegate;
+	// Assignment H[
+	@UiField
+	RoleFileSubViewImpl roleFileSubViewImpl;
 
-/**
- * Because this class has a default constructor, it can
- * be used as a binder template. In other words, it can be used in other
- * *.ui.xml files as follows:
- * <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
- *   xmlns:g="urn:import:**user's package**">
- *  <g:**UserClassName**>Hello!</g:**UserClassName>
- * </ui:UiBinder>
- * Note that depending on the widget that is used, it may be necessary to
- * implement HasHTML instead of HasText.
- */
+	public RoleFileSubViewImpl getRoleFileSubViewImpl() {
+		return roleFileSubViewImpl;
+	}
 
-public StandardizedRoleDetailsViewImpl() 
-{
-	
-	initWidget(uiBinder.createAndBindUi(this));	
-	//rolePanel.selectTab(0);
-	roleDisclosurePanel.setOpen(true);
-	
-	TabPanelHelper.moveTabBarToBottom(rolePanel);
-	
-	print.setText(constants.print());
-	edit.setText(constants.edit());
-	delete.setText(constants.delete());
-	
-	roleDisclosurePanel.setContent(rolePanel);
-	roleDisclosurePanel.setStyleName("");
-	
-	setLabelTexts();
-	
-	//Assignment E start[
-	roleSubPanel.selectTab(0);
-	//Assignment E start]
-}
+	// Assignment G[
+	@UiField
+	RoomMaterialsDetailsSubViewImpl roomMaterialsDetailsSubViewImpl;
 
-private void setLabelTexts() {
-	labelLongNameHeader.setText("");
-	labelShortName.setInnerText(constants.shortName() + ":");
-	labellongName.setInnerText(constants.name() + ":");
-	labelroletype.setInnerText(constants.roleType() + ":");		
-	labelstudyYear.setInnerText(constants.studyYear() + ":");		
-}
+	@Override
+	public RoomMaterialsDetailsSubViewImpl getRoomMaterialsDetailsSubViewImpl() {
 
+		return roomMaterialsDetailsSubViewImpl;
+	}
 
-@Override
-public void setValue(StandardizedRoleProxy proxy) {
-	/*this.proxy = proxy;		
-	shortName.setInnerText(proxy.getShortName() == null ? "" : String.valueOf(proxy.getShortName()));
-	longName.setInnerText(proxy.getLongName() == null ? "" : String.valueOf(proxy.getLongName()));
-	roleType.setInnerText(proxy.getRoleType() == null ? "" : String.valueOf(proxy.getRoleType()));
-	studyYear.setInnerText(proxy.getStudyYear() == null ? "" : String.valueOf(proxy.getStudyYear()));*/	
-	
-	this.proxy=proxy;
-}
+	// ]End
 
+	private Delegate delegate;
 
+	/**
+	 * Because this class has a default constructor, it can be used as a binder
+	 * template. In other words, it can be used in other *.ui.xml files as
+	 * follows: <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	 * xmlns:g="urn:import:**user's package**">
+	 * <g:**UserClassName**>Hello!</g:**UserClassName> </ui:UiBinder> Note that
+	 * depending on the widget that is used, it may be necessary to implement
+	 * HasHTML instead of HasText.
+	 */
 
-@Override
-public void setDelegate(Delegate delegate) {
-	this.delegate = delegate;
-}
+	public StandardizedRoleDetailsViewImpl() {
 
+		initWidget(uiBinder.createAndBindUi(this));
+		// rolePanel.selectTab(0);
+		roleDisclosurePanel.setOpen(true);
 
+		TabPanelHelper.moveTabBarToBottom(rolePanel);
 
+		print.setText(constants.print());
+		edit.setText(constants.edit());
+		delete.setText(constants.delete());
 
-public Widget asWidget() {
-	return this;
-}
+		roleDisclosurePanel.setContent(rolePanel);
+		roleDisclosurePanel.setStyleName("");
 
+		setLabelTexts();
 
-@UiHandler("print")
-public void onPrintClicked(ClickEvent e) {
-	//delegate.printRoleClicked();
-}
+		// Assignment E start[
+		roleSubPanel.selectTab(0);
+		// Assignment E start]
+	}
 
-@UiHandler("delete")
-public void onDeleteClicked(ClickEvent e) {
-	delegate.deleteRoleClicked(this.getValue());
-}
+	private void setLabelTexts() {
+		labelLongNameHeader.setText("");
+		labelShortName.setInnerText(constants.shortName() + ":");
+		labellongName.setInnerText(constants.name() + ":");
+		labelroletype.setInnerText(constants.roleType() + ":");
+		labelstudyYear.setInnerText(constants.studyYear() + ":");
+	}
 
-@UiHandler("edit")
-public void onEditClicked(ClickEvent e) {
-	System.out.println("============================Click Edit Button=========================");
-	System.out.println("============================Call delegate.editPatientClciked=========================");
-	delegate.editRoleClicked(this.getValue());
-}
+	@Override
+	public void setValue(StandardizedRoleProxy proxy) {
+		/*
+		 * this.proxy = proxy; shortName.setInnerText(proxy.getShortName() ==
+		 * null ? "" : String.valueOf(proxy.getShortName()));
+		 * longName.setInnerText(proxy.getLongName() == null ? "" :
+		 * String.valueOf(proxy.getLongName()));
+		 * roleType.setInnerText(proxy.getRoleType() == null ? "" :
+		 * String.valueOf(proxy.getRoleType()));
+		 * studyYear.setInnerText(proxy.getStudyYear() == null ? "" :
+		 * String.valueOf(proxy.getStudyYear()));
+		 */
 
-@UiHandler("arrow")
-void handleClick(ClickEvent e) 
-{	
-	if(roleDisclosurePanel.isOpen())
-	{
+		this.proxy = proxy;
+	}
+
+	@Override
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
+
+	public Widget asWidget() {
+		return this;
+	}
+
+	@UiHandler("print")
+	public void onPrintClicked(ClickEvent e) {
+		// delegate.printRoleClicked();
+	}
+
+	@UiHandler("delete")
+	public void onDeleteClicked(ClickEvent e) {
+		delegate.deleteRoleClicked(this.getValue());
+	}
+
+	@UiHandler("edit")
+	public void onEditClicked(ClickEvent e) {
+		System.out
+				.println("============================Click Edit Button=========================");
+		System.out
+				.println("============================Call delegate.editPatientClciked=========================");
+		delegate.editRoleClicked(this.getValue());
+	}
+
+	@UiHandler("arrow")
+	void handleClick(ClickEvent e) {
+		if (roleDisclosurePanel.isOpen()) {
 			roleDisclosurePanel.setOpen(false);
-			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");//set url of up image
-					
-	}
-	else
-	{
+			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
+																				// url
+																				// of
+																				// up
+																				// image
+
+		} else {
 			roleDisclosurePanel.setOpen(true);
-			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");//set url of down image
+			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
+																				// url
+																				// of
+																				// down
+																				// image
+		}
+
 	}
 
-}
+	/*
+	 * @UiHandler("roleDetailPanel") public void
+	 * roleDetailPanelClicked(SelectionEvent<Integer> click) {
+	 * if(roleDetailPanel
+	 * .getTabBar().getSelectedTab()==(roleDetailPanel.getWidgetCount()-1)) {
+	 * Log.info("roleDetailPanel plus clicked"); delegate.createRole(); } else {
+	 * Log.info("roleDetailPanel clicked"); } }
+	 */
 
-/*@UiHandler("roleDetailPanel")
-public void roleDetailPanelClicked(SelectionEvent<Integer> click)
-{		
-	if(roleDetailPanel.getTabBar().getSelectedTab()==(roleDetailPanel.getWidgetCount()-1))
-	{
-		Log.info("roleDetailPanel plus clicked");
-		delegate.createRole();			
+	public StandardizedRoleProxy getValue() {
+		return proxy;
 	}
-	else
-	{
-		Log.info("roleDetailPanel clicked");
-	}
-}*/
-
-public StandardizedRoleProxy getValue() {
-	return proxy;
-}
 
 }

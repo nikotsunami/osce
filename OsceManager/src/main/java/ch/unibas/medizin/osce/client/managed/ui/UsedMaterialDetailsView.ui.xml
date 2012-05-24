@@ -78,6 +78,12 @@
             
             
             
+        
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -100,6 +106,14 @@
                 </td>
                 <td>
                     <span ui:field="materialCount"/>
+                </td>
+            </tr>
+            <tr id="used_from">
+                <td>
+                    <span class="{style.label}">Used_from:</span>
+                </td>
+                <td>
+                    <span ui:field="used_from"/>
                 </td>
             </tr>
             <tr id="standardizedRole">

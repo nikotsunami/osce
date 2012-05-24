@@ -84,7 +84,10 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String DETAILS();
 	public String CREATE();
 	public String NEW();
-
+	//Assginment G[
+	public String DAY();	
+	//]Assignment G
+	
 	public String SJ1();
 	public String SJ2();
 	public String SJ3();

@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -39,7 +40,15 @@ import java.util.List;
 public abstract class UsedMaterialEditView_Roo_Gwt extends Composite implements View<UsedMaterialEditView> {
 
     @UiField
-    TextBox materialCount;
+    IntegerBox materialCount;
+
+    @UiField(provided = true)
+    ValueListBox<MaterialUsedFromTypes> used_from = new ValueListBox<MaterialUsedFromTypes>(new AbstractRenderer<ch.unibas.medizin.osce.shared.MaterialUsedFromTypes>() {
+
+        public String render(ch.unibas.medizin.osce.shared.MaterialUsedFromTypes obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
 
     @UiField(provided = true)
     ValueListBox<StandardizedRoleProxy> standardizedRole = new ValueListBox<StandardizedRoleProxy>(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>());
@@ -52,6 +61,10 @@ public abstract class UsedMaterialEditView_Roo_Gwt extends Composite implements 
 
     public void setMaterialListPickerValues(Collection<MaterialListProxy> values) {
         materialList.setAcceptableValues(values);
+    }
+
+    public void setUsed_fromPickerValues(Collection<MaterialUsedFromTypes> values) {
+        used_from.setAcceptableValues(values);
     }
 
     public void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values) {

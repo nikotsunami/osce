@@ -137,4 +137,15 @@
     <url-pattern>/VideoUploadServlet</url-pattern>
   </servlet-mapping>
   <!-- spec video upload -->
+  
+   <!-- Role File upload servlet -->
+  <servlet>
+	<servlet-name>RoleFileUploadServlet</servlet-name>
+	<servlet-class>ch.unibas.medizin.osce.server.upload.RoleFileUploadServlet</servlet-class>
+</servlet>
+
+ <servlet-mapping>
+  	<servlet-name>RoleFileUploadServlet</servlet-name>
+  	<url-pattern>/RoleFileUploadServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

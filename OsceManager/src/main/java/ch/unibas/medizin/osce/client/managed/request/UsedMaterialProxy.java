@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
@@ -18,9 +19,13 @@ public interface UsedMaterialProxy extends EntityProxy {
 
     abstract void setVersion(Integer version);
 
-    abstract String getMaterialCount();
+    abstract Integer getMaterialCount();
 
-    abstract void setMaterialCount(String materialCount);
+    abstract void setMaterialCount(Integer materialCount);
+
+    abstract MaterialUsedFromTypes getUsed_from();
+
+    abstract void setUsed_from(MaterialUsedFromTypes used_from);
 
     abstract StandardizedRoleProxy getStandardizedRole();
 

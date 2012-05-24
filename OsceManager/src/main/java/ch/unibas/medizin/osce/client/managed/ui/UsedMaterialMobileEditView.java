@@ -1,10 +1,13 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.UsedMaterialEditActivityWrapper;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.ui.UsedMaterialMobileEditView.Binder;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;

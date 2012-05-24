@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -43,16 +44,16 @@ public class UsedMaterialMobileListView extends UsedMaterialMobileListView_Roo_G
 
         private final String secondaryStyle = ScaffoldMobileApp.getMobileListResources().cellListStyle().secondaryProp();
 
-        private final Renderer<String> primaryRenderer = new AbstractRenderer<String>() {
+        private final Renderer<Long> primaryRenderer = new AbstractRenderer<Long>() {
 
-            public String render(java.lang.String obj) {
+            public String render(java.lang.Long obj) {
                 return obj == null ? "" : String.valueOf(obj);
             }
         };
 
-        private final Renderer<Long> secondaryRenderer = new AbstractRenderer<Long>() {
+        private final Renderer<Integer> secondaryRenderer = new AbstractRenderer<Integer>() {
 
-            public String render(java.lang.Long obj) {
+            public String render(java.lang.Integer obj) {
                 return obj == null ? "" : String.valueOf(obj);
             }
         };
@@ -63,13 +64,13 @@ public class UsedMaterialMobileListView extends UsedMaterialMobileListView_Roo_G
                 return SafeHtmlUtils.EMPTY_SAFE_HTML;
             }
             SafeHtmlBuilder sb = new SafeHtmlBuilder();
-            if (value.getMaterialCount() != null) {
-                sb.appendEscaped(primaryRenderer.render(value.getMaterialCount()));
+            if (value.getId() != null) {
+                sb.appendEscaped(primaryRenderer.render(value.getId()));
             }
             sb.appendHtmlConstant("<div style=\"position:relative;\">");
             sb.appendHtmlConstant("<div class=\"" + secondaryStyle + "\">");
-            if (value.getId() != null) {
-                sb.appendEscaped(secondaryRenderer.render(value.getId()));
+            if (value.getVersion() != null) {
+                sb.appendEscaped(secondaryRenderer.render(value.getVersion()));
             }
             sb.appendHtmlConstant("</div>");
             sb.appendHtmlConstant("<div class=\"" + dateStyle + "\">");

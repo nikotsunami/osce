@@ -5,17 +5,25 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.MaterialList;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import java.lang.Integer;
-import java.lang.String;
 
 privileged aspect UsedMaterial_Roo_JavaBean {
     
-    public String UsedMaterial.getMaterialCount() {
+    public Integer UsedMaterial.getMaterialCount() {
         return this.materialCount;
     }
     
-    public void UsedMaterial.setMaterialCount(String materialCount) {
+    public void UsedMaterial.setMaterialCount(Integer materialCount) {
         this.materialCount = materialCount;
+    }
+    
+    public MaterialUsedFromTypes UsedMaterial.getUsed_from() {
+        return this.used_from;
+    }
+    
+    public void UsedMaterial.setUsed_from(MaterialUsedFromTypes used_from) {
+        this.used_from = used_from;
     }
     
     public StandardizedRole UsedMaterial.getStandardizedRole() {
