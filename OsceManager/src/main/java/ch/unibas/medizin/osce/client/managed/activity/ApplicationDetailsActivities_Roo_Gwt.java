@@ -32,12 +32,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -51,11 +46,11 @@ import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
+
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.inject.Inject;
 
 public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMapper {
 
@@ -129,35 +124,10 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             public void handleRoleTopic(RoleTopicProxy proxy) {
                 setResult(new RoleTopicActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
-
-            @Override
-            public void handleRoleTemplate(RoleTemplateProxy proxy) {
-                setResult(new RoleTemplateActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
-            @Override
-            public void handleRoleTableItemValue(RoleTableItemValueProxy proxy) {
-                setResult(new RoleTableItemValueActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
-            @Override
-            public void handleRoleTableItem(RoleTableItemProxy proxy) {
-                setResult(new RoleTableItemActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
+          
             @Override
             public void handleRoleParticipant(RoleParticipantProxy proxy) {
                 setResult(new RoleParticipantActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
-            @Override
-            public void handleRoleItemAccess(RoleItemAccessProxy proxy) {
-                setResult(new RoleItemAccessActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
-            @Override
-            public void handleRoleBaseItem(RoleBaseItemProxy proxy) {
-                setResult(new RoleBaseItemActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
