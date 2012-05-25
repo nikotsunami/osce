@@ -110,5 +110,8 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String Simpat();
 	public String Statist();
 	public String Material();		
+	
+	public String rich_text_item();
+	public String table_item();
 	//From SPEC End
 }

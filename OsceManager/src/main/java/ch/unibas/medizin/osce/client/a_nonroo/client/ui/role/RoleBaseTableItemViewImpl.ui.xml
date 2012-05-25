@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" >
+	<ui:style src="../../styles.css">
+	.description {	}
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+	}
+	.padleft5
+	{
+		padding-left: 15px;
+	}
+	
+	.pad10
+	{
+		padding-left: 10px;
+		padding-bottom: 10px;
+		padding-top: 10px;
+	}
+	.padRightt5
+	{
+		padding-left: 25px;
+	}
+	</ui:style>
+	<ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
+	<g:HTMLPanel styleName="{style.patientTopContainer}">
+		<g:VerticalPanel addStyleNames=" {style.tabStyle}" >
+			<g:HTMLPanel styleName="{style.patientControls} {style.maxWidth}">
+			<g:Image ui:field="arrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+			<div  class="{style.controlsright}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"> <g:Label ui:field="baseItemHeaderLable" >Item Name</g:Label></span></h3>
+			
+			</div>
+			<div  class="{style.controlsright}">
+			<my:IconButton ui:field="AccessButton" icon="plusthick"/>
+			<my:IconButton ui:field="downIcon" icon="triangle-1-s"></my:IconButton>
+			<my:IconButton ui:field="upIcon" icon="triangle-1-n"></my:IconButton>
+			</div>		
+			<div class="{style.controlsleft} {style.padleft5}">
+			<my:IconButton ui:field="pencil" icon="pencil"></my:IconButton>
+			<my:IconButton ui:field="close" icon="close"></my:IconButton>
+			</div>
+		
+	</g:HTMLPanel>
+	<g:HTMLPanel styleName="gwt-InvertedTabPanel">
+		<g:DisclosurePanel animationEnabled="true" open="true" ui:field="roleBaseItemDisclosurePanel"  width="100%" styleName="{style.patientTopContainer}">
+			<g:HTMLPanel styleName="gwt-InvertedTabPanel">
+				<div class="{style.controlsleft}">
+				<g:HorizontalPanel ui:field="accessDataPanel" spacing="12" >
+					<!--n:RoleBaseTableAccessViewImpl ui:field="roleBaseAccessViewImpl"></n:RoleBaseTableAccessViewImpl-->
+				</g:HorizontalPanel>
+				</div>
+				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
+				<div class="{style.pad10}">
+				 <my:IconButton ui:field="AddSubItem" icon="plusthick" ></my:IconButton>
+				</div>
+			</g:HTMLPanel>
+		</g:DisclosurePanel>
+	</g:HTMLPanel>
+	</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>

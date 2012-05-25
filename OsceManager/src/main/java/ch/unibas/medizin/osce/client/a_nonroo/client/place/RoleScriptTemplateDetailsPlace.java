@@ -9,7 +9,7 @@ import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
 public class RoleScriptTemplateDetailsPlace extends OsMaDetailsPlace{
-	private String token = "RoleScriptTemplateDetailsPlace";
+	private String token;
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
@@ -17,10 +17,9 @@ public class RoleScriptTemplateDetailsPlace extends OsMaDetailsPlace{
 	public EntityProxyId<?> getProxyId() {
 		return proxyId;
 	}
-	
 	public RoleScriptTemplateDetailsPlace(){
+		this.token = "SystemStartPlace";
 	}
-	
 	public RoleScriptTemplateDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
 

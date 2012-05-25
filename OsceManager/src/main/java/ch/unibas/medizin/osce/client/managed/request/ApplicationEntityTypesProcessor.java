@@ -35,7 +35,12 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(ScarProxy.class);
         rtn.add(RoomProxy.class);
         rtn.add(RoleTopicProxy.class);
+        rtn.add(RoleTemplateProxy.class);
+        rtn.add(RoleTableItemValueProxy.class);
+        rtn.add(RoleTableItemProxy.class);
         rtn.add(RoleParticipantProxy.class);
+        rtn.add(RoleItemAccessProxy.class);
+        rtn.add(RoleBaseItemProxy.class);
         rtn.add(ProfessionProxy.class);
         rtn.add(PatientInSemesterProxy.class);
         rtn.add(PatientInRoleProxy.class);
@@ -116,8 +121,28 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleRoleTopic((RoleTopicProxy) null);
             return;
         }
+        if (RoleTemplateProxy.class.equals(clazz)) {
+            processor.handleRoleTemplate((RoleTemplateProxy) null);
+            return;
+        }
+        if (RoleTableItemValueProxy.class.equals(clazz)) {
+            processor.handleRoleTableItemValue((RoleTableItemValueProxy) null);
+            return;
+        }
+        if (RoleTableItemProxy.class.equals(clazz)) {
+            processor.handleRoleTableItem((RoleTableItemProxy) null);
+            return;
+        }
         if (RoleParticipantProxy.class.equals(clazz)) {
             processor.handleRoleParticipant((RoleParticipantProxy) null);
+            return;
+        }
+        if (RoleItemAccessProxy.class.equals(clazz)) {
+            processor.handleRoleItemAccess((RoleItemAccessProxy) null);
+            return;
+        }
+        if (RoleBaseItemProxy.class.equals(clazz)) {
+            processor.handleRoleBaseItem((RoleBaseItemProxy) null);
             return;
         }
         if (ProfessionProxy.class.equals(clazz)) {
@@ -284,8 +309,28 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleRoleTopic((RoleTopicProxy) proxy);
             return;
         }
+        if (proxy instanceof RoleTemplateProxy) {
+            processor.handleRoleTemplate((RoleTemplateProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleTableItemValueProxy) {
+            processor.handleRoleTableItemValue((RoleTableItemValueProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleTableItemProxy) {
+            processor.handleRoleTableItem((RoleTableItemProxy) proxy);
+            return;
+        }
         if (proxy instanceof RoleParticipantProxy) {
             processor.handleRoleParticipant((RoleParticipantProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleItemAccessProxy) {
+            processor.handleRoleItemAccess((RoleItemAccessProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleBaseItemProxy) {
+            processor.handleRoleBaseItem((RoleBaseItemProxy) proxy);
             return;
         }
         if (proxy instanceof ProfessionProxy) {
@@ -430,7 +475,17 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleRoleTopic(RoleTopicProxy proxy);
 
+    public abstract void handleRoleTemplate(RoleTemplateProxy proxy);
+
+    public abstract void handleRoleTableItemValue(RoleTableItemValueProxy proxy);
+
+    public abstract void handleRoleTableItem(RoleTableItemProxy proxy);
+
     public abstract void handleRoleParticipant(RoleParticipantProxy proxy);
+
+    public abstract void handleRoleItemAccess(RoleItemAccessProxy proxy);
+
+    public abstract void handleRoleBaseItem(RoleBaseItemProxy proxy);
 
     public abstract void handleProfession(ProfessionProxy proxy);
 

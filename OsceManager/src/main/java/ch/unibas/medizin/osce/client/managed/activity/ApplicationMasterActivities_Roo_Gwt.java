@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
@@ -31,7 +32,12 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -68,6 +74,8 @@ import ch.unibas.medizin.osce.client.managed.ui.DoctorListView;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.EliminationCriterionListView;
 import ch.unibas.medizin.osce.client.managed.ui.EliminationCriterionMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.FileListView;
+import ch.unibas.medizin.osce.client.managed.ui.FileMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.KeywordListView;
 import ch.unibas.medizin.osce.client.managed.ui.KeywordMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillListView;
@@ -98,8 +106,18 @@ import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterListView;
 import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.ProfessionListView;
 import ch.unibas.medizin.osce.client.managed.ui.ProfessionMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleBaseItemListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleBaseItemMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemValueListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemValueMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTemplateListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTemplateMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoomListView;
@@ -206,8 +224,33 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
+            public void handleRoleTemplate(RoleTemplateProxy isNull) {
+                setResult(new RoleTemplateListActivity(requests, ScaffoldApp.isMobile() ? RoleTemplateMobileListView.instance() : RoleTemplateListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleRoleTableItemValue(RoleTableItemValueProxy isNull) {
+                setResult(new RoleTableItemValueListActivity(requests, ScaffoldApp.isMobile() ? RoleTableItemValueMobileListView.instance() : RoleTableItemValueListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleRoleTableItem(RoleTableItemProxy isNull) {
+                setResult(new RoleTableItemListActivity(requests, ScaffoldApp.isMobile() ? RoleTableItemMobileListView.instance() : RoleTableItemListView.instance(), placeController));
+            }
+
+            @Override
             public void handleRoleParticipant(RoleParticipantProxy isNull) {
                 setResult(new RoleParticipantListActivity(requests, ScaffoldApp.isMobile() ? RoleParticipantMobileListView.instance() : RoleParticipantListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleRoleItemAccess(RoleItemAccessProxy isNull) {
+                setResult(new RoleItemAccessListActivity(requests, ScaffoldApp.isMobile() ? RoleItemAccessMobileListView.instance() : RoleItemAccessListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleRoleBaseItem(RoleBaseItemProxy isNull) {
+                setResult(new RoleBaseItemListActivity(requests, ScaffoldApp.isMobile() ? RoleBaseItemMobileListView.instance() : RoleBaseItemListView.instance(), placeController));
             }
 
             @Override
@@ -283,6 +326,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleKeyword(KeywordProxy isNull) {
                 setResult(new KeywordListActivity(requests, ScaffoldApp.isMobile() ? KeywordMobileListView.instance() : KeywordListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleFile(FileProxy isNull) {
+                setResult(new FileListActivity(requests, ScaffoldApp.isMobile() ? FileMobileListView.instance() : FileListView.instance(), placeController));
             }
 
             @Override

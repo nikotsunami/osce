@@ -1,7 +1,12 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.shared.TraitTypes;
+
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -14,9 +19,18 @@ public interface RoleScriptTemplateView extends IsWidget{
 		 */
 		interface Delegate {
 			void goToDetailClicked();
+			
+			void deleteClicked(RoleTemplateProxy roleTemplate);
+			
+			void editClicked(RoleTemplateProxy roleTemplate);
+			
+			void newClicked(String name);
+			
+			void performSearch(String q);
 		}
 
-
+		CellTable<RoleTemplateProxy> getTable();
+	    String[] getPaths();
 	    
 	    void setDelegate(Delegate delegate);
 	    

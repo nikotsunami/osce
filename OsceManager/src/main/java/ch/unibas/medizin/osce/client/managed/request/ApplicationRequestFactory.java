@@ -30,7 +30,17 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     RoleTopicRequest roleTopicRequest();
 
+    RoleTemplateRequest roleTemplateRequest();
+
+    RoleTableItemValueRequest roleTableItemValueRequest();
+
+    RoleTableItemRequest roleTableItemRequest();
+
     RoleParticipantRequest roleParticipantRequest();
+
+    RoleItemAccessRequest roleItemAccessRequest();
+
+    RoleBaseItemRequest roleBaseItemRequest();
 
     ProfessionRequest professionRequest();
 

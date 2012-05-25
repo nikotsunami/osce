@@ -5,7 +5,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class RoleScriptTemplatePlace extends OsMaPlace{
+public class RoleScriptTemplatePlace extends Place{
 	
 	private String token;
 	

@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.shared.scaffold;
 
+
+
 import com.google.gwt.requestfactory.shared.LoggingRequest;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
@@ -33,4 +35,7 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	MaterialListRequestNonRoo materialListRequestNonRoo();
 	FileRequestNonRoo fileRequestNooRoo();
 	UsedMaterialRequestNonRoo usedMaterialRequestNonRoo();
+    RoleTemplateRequestNonRoo roleTemplateRequestNonRoo();
+	RoleTableItemRequestNoonRoo roleTableItemRequestNoonRoo();
+	RoleBaseItemRequestNoonRoo roleBaseItemRequestNoonRoo();
 }
