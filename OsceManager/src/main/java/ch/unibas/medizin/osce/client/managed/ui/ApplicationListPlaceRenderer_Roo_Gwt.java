@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
@@ -30,7 +31,12 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -50,7 +56,7 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
 
     public String render(ProxyListPlace object) {
         return new ApplicationEntityTypesProcessor<String>() {
-
+ 
             @Override
             public void handleUsedMaterial(UsedMaterialProxy isNull) {
                 setResult("UsedMaterials");
@@ -112,8 +118,33 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleRoleTemplate(RoleTemplateProxy isNull) {
+                setResult("RoleTemplates");
+            }
+
+            @Override
+            public void handleRoleTableItemValue(RoleTableItemValueProxy isNull) {
+                setResult("RoleTableItemValues");
+            }
+
+            @Override
+            public void handleRoleTableItem(RoleTableItemProxy isNull) {
+                setResult("RoleTableItems");
+            }
+
+            @Override
             public void handleRoleParticipant(RoleParticipantProxy isNull) {
                 setResult("RoleParticipants");
+            }
+
+            @Override
+            public void handleRoleItemAccess(RoleItemAccessProxy isNull) {
+                setResult("RoleItemAccesss");
+            }
+
+            @Override
+            public void handleRoleBaseItem(RoleBaseItemProxy isNull) {
+                setResult("RoleBaseItems");
             }
 
             @Override
@@ -189,6 +220,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleKeyword(KeywordProxy isNull) {
                 setResult("Keywords");
+            }
+
+            @Override
+            public void handleFile(FileProxy isNull) {
+                setResult("Files");
             }
 
             @Override
