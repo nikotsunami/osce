@@ -17,6 +17,8 @@
 			<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
 			<my:IconButton ui:field="save" icon="disk"></my:IconButton>
 			<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
+			<g:Button ui:field="pull" />
+			<g:Button ui:field="send" />
 		</div>
     </g:HTMLPanel>
     
