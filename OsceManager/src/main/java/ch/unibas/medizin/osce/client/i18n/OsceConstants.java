@@ -68,6 +68,10 @@ public interface OsceConstants extends Constants {
 	public String bmi();
 
 	public String cancel();
+	
+	public String send();
+	
+	public String pull();
 
 	public String circuit();
 
