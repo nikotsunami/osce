@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -41,6 +43,7 @@ import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class StandardizedPatientEditActivity extends AbstractActivity implements
@@ -65,12 +68,16 @@ StandardizedPatientEditView.Delegate {
 	private CalendarUtil cal = new CalendarUtil();
 	private StandardizedPatientBankaccountEditSubView bankaccountView;
 	private UserPlaceSettings userSettings;
+	
+	private DMZSyncServiceAsync dmxSyncService = null;
+	
 
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
 		this.userSettings = new UserPlaceSettings((OsMaPlace) place);
+		
 	}
 
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place,
@@ -103,6 +110,8 @@ StandardizedPatientEditView.Delegate {
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		dmxSyncService = DMZSyncService.ServiceFactory.instance();
+		
 		Log.info("start");
 		this.view = new StandardizedPatientEditViewImpl();
 		this.widget = panel;
@@ -336,6 +345,48 @@ StandardizedPatientEditView.Delegate {
 			}
 		});
 	}
+	
+	
+	@Override
+	public void sendClicked(){
+		dmxSyncService.pushToDMZ(1, new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
+	
+	@Override
+	public void pullClicked(){
+		
+		dmxSyncService.pullFromDMZ(1, new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+	}
+	
 	
 	public void storeDisplaySettings() {
 		int detailsTab = view.getSelectedDetailsTab();
