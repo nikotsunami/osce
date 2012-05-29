@@ -38,6 +38,8 @@ public interface RoleEditView extends IsWidget {
 
 	RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> createEditorDriver();
 	
+	
+	
 	void setPresenter(Presenter doctorEditActivity);
 	
 	 public StandardizedRoleProxy getStandardizedRoleProxy();
@@ -55,6 +57,9 @@ public interface RoleEditView extends IsWidget {
 	 public void setProxy(StandardizedRoleProxy proxy);
 	 
 	
+	 public SimplePanel getRoleEditCheckListPanel();//spec
+	//public RoleEditCheckListSubViewImpl getRoleEditCheckListSubViewImpl();
+	//public void setRoleEditCheckListSubViewImpl(RoleEditCheckListSubViewImpl roleEditCheckListSubViewImpl);
 	 
 	
 	

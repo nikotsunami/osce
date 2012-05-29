@@ -38,4 +38,12 @@ public interface ScaffoldRequestFactory extends RequestFactory {
     RoleTemplateRequestNonRoo roleTemplateRequestNonRoo();
 	RoleTableItemRequestNoonRoo roleTableItemRequestNoonRoo();
 	RoleBaseItemRequestNoonRoo roleBaseItemRequestNoonRoo();
+	SimpleSearchCriteriaRequestNonRoo simpleSearchCriteriaRequestNonRoo();
+	AdvancedSearchCriteriaNonRoo advancedSearchCriteriaNonRoo();
+	
+	//SPEC START =
+		StandardizedRoleRequestNonRoo  standardizedRoleRequestNonRoo();
+		KeywordRequestNonRoo keywordRequestNonRoo();
+		RoleParticipantRequestNonRoo roleParticipantRequestNonRoo();
+		// SPEC END =
 }

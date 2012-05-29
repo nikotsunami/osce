@@ -2,9 +2,12 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
@@ -72,6 +75,15 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
     @UiField
     SpanElement keywords;
 
+    @UiField
+    SpanElement advancedSearchCriteria;
+
+    @UiField
+    SpanElement simpleSearchCriteria;
+
+    @UiField
+    SpanElement checkList;
+
     StandardizedRoleProxy proxy;
 
     @UiField
@@ -94,6 +106,9 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
         mainVersion.setInnerText(proxy.getMainVersion() == null ? "" : String.valueOf(proxy.getMainVersion()));
         subVersion.setInnerText(proxy.getSubVersion() == null ? "" : String.valueOf(proxy.getSubVersion()));
         keywords.setInnerText(proxy.getKeywords() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer.instance()).render(proxy.getKeywords()));
+        advancedSearchCriteria.setInnerText(proxy.getAdvancedSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaProxyRenderer.instance()).render(proxy.getAdvancedSearchCriteria()));
+        simpleSearchCriteria.setInnerText(proxy.getSimpleSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaProxyRenderer.instance()).render(proxy.getSimpleSearchCriteria()));
+        checkList.setInnerText(proxy.getCheckList() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer.instance().render(proxy.getCheckList()));
         displayRenderer.setInnerText(StandardizedRoleProxyRenderer.instance().render(proxy));
     }
 }

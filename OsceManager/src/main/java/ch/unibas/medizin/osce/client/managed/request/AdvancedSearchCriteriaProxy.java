@@ -44,4 +44,8 @@ public interface AdvancedSearchCriteriaProxy extends EntityProxy {
     abstract String getShownValue();
 
     abstract void setShownValue(String shownValue);
+
+    abstract StandardizedRoleProxy getStandardizedRole();
+
+    abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);
 }

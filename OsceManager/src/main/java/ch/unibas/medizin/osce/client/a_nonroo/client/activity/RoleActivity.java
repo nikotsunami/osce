@@ -270,6 +270,7 @@ public class RoleActivity extends AbstractActivity implements
 		//		System.out.println("INside success");
 				Log.info("new topic added successfully");
 			//	init2();
+				Log.info("Call Init Search from onSuccess");
 				initSearch();
 			
 				
@@ -325,11 +326,13 @@ public class RoleActivity extends AbstractActivity implements
 					sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;				
 					//By SPEC]end
 					//RoleActivity.this.init2("");
+					Log.info("Call Init Search from addColumnSortHandler");
 					initSearch();
 				}
 			});
 		 
-	 //	init2();		 
+	 //	init2();	
+		 Log.info("Call Init Search from addColumnSortHandler1");
 		initSearch();
 		this.SpecialisationListBox = view.getListBox();
 		requestAllTopic = requests.roleTopicRequestNonRoo();
@@ -339,7 +342,7 @@ public class RoleActivity extends AbstractActivity implements
 		 requests.roleTopicRequestNonRoo().findAllAutherName().fire(new AutherNameValueReceiver());
 		 requests.roleTopicRequestNonRoo().findAllReviewerName().fire(new ReviewerNameValueReceiver());
 		requests.specialisationRequest().findAllSpecialisations().fire(new SpecialisationBoxValuesReceiver());
-                requests.keywordRequest().findAllKeywords().fire(new KeywordBoxValuesReceiver());
+        requests.keywordRequest().findAllKeywords().fire(new KeywordBoxValuesReceiver());
 //		
 //		System.out.println("Query Call for cell table1");
 		try {
@@ -421,7 +424,7 @@ public class RoleActivity extends AbstractActivity implements
 		final Range range = table.getVisibleRange();
 
 		Log.info("range change for role topic ");
-
+		Log.info("Call Init Search from onRangeChange");
 		initSearch();
 	}
 	
@@ -443,7 +446,7 @@ public void performSearch(String q, List<String> list,List<String> tableList,Lis
 	this.whereFilter=whereList;
 //	this.searchThroughListBox=listBoxFilter;
 //	Log.debug("Search for " + q);
-	
+	Log.info("Call Init Search from performSearch");
 	initSearch();
 //	System.out.println("search--"+q+"---"+list);
 	

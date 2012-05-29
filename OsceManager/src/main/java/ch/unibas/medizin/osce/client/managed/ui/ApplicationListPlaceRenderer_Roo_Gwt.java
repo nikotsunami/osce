@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
@@ -41,6 +42,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -56,7 +58,7 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
 
     public String render(ProxyListPlace object) {
         return new ApplicationEntityTypesProcessor<String>() {
- 
+
             @Override
             public void handleUsedMaterial(UsedMaterialProxy isNull) {
                 setResult("UsedMaterials");
@@ -95,6 +97,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleSpecialisation(SpecialisationProxy isNull) {
                 setResult("Specialisations");
+            }
+
+            @Override
+            public void handleSimpleSearchCriteria(SimpleSearchCriteriaProxy isNull) {
+                setResult("SimpleSearchCriterias");
             }
 
             @Override
@@ -250,6 +257,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleClinic(ClinicProxy isNull) {
                 setResult("Clinics");
+            }
+
+            @Override
+            public void handleCheckList(CheckListProxy isNull) {
+                setResult("CheckLists");
             }
 
             @Override

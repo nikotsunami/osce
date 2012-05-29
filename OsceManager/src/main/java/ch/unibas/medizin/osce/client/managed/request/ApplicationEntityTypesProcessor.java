@@ -31,6 +31,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(StandardizedPatientProxy.class);
         rtn.add(SpokenLanguageProxy.class);
         rtn.add(SpecialisationProxy.class);
+        rtn.add(SimpleSearchCriteriaProxy.class);
         rtn.add(SemesterProxy.class);
         rtn.add(ScarProxy.class);
         rtn.add(RoomProxy.class);
@@ -62,6 +63,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(DescriptionProxy.class);
         rtn.add(CourseProxy.class);
         rtn.add(ClinicProxy.class);
+        rtn.add(CheckListProxy.class);
         rtn.add(BankaccountProxy.class);
         rtn.add(AssignmentProxy.class);
         rtn.add(AnamnesisFormProxy.class);
@@ -103,6 +105,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (SpecialisationProxy.class.equals(clazz)) {
             processor.handleSpecialisation((SpecialisationProxy) null);
+            return;
+        }
+        if (SimpleSearchCriteriaProxy.class.equals(clazz)) {
+            processor.handleSimpleSearchCriteria((SimpleSearchCriteriaProxy) null);
             return;
         }
         if (SemesterProxy.class.equals(clazz)) {
@@ -229,6 +235,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleClinic((ClinicProxy) null);
             return;
         }
+        if (CheckListProxy.class.equals(clazz)) {
+            processor.handleCheckList((CheckListProxy) null);
+            return;
+        }
         if (BankaccountProxy.class.equals(clazz)) {
             processor.handleBankaccount((BankaccountProxy) null);
             return;
@@ -291,6 +301,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (proxy instanceof SpecialisationProxy) {
             processor.handleSpecialisation((SpecialisationProxy) proxy);
+            return;
+        }
+        if (proxy instanceof SimpleSearchCriteriaProxy) {
+            processor.handleSimpleSearchCriteria((SimpleSearchCriteriaProxy) proxy);
             return;
         }
         if (proxy instanceof SemesterProxy) {
@@ -417,6 +431,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleClinic((ClinicProxy) proxy);
             return;
         }
+        if (proxy instanceof CheckListProxy) {
+            processor.handleCheckList((CheckListProxy) proxy);
+            return;
+        }
         if (proxy instanceof BankaccountProxy) {
             processor.handleBankaccount((BankaccountProxy) proxy);
             return;
@@ -466,6 +484,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleSpokenLanguage(SpokenLanguageProxy proxy);
 
     public abstract void handleSpecialisation(SpecialisationProxy proxy);
+
+    public abstract void handleSimpleSearchCriteria(SimpleSearchCriteriaProxy proxy);
 
     public abstract void handleSemester(SemesterProxy proxy);
 
@@ -528,6 +548,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleCourse(CourseProxy proxy);
 
     public abstract void handleClinic(ClinicProxy proxy);
+
+    public abstract void handleCheckList(CheckListProxy proxy);
 
     public abstract void handleBankaccount(BankaccountProxy proxy);
 

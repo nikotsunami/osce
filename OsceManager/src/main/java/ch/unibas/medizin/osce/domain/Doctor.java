@@ -7,6 +7,9 @@ import java.util.Set;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.allen_sauer.gwt.log.client.Log;
+
 import ch.unibas.medizin.osce.shared.Gender;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -75,4 +78,29 @@ public class Doctor {
         query.setMaxResults(maxResults);
         return query.getResultList();
     }
+    
+    
+    // SPEC START =
+   	public static java.util.List<Doctor> findDoctorWithRoleTopic(Long stadRoleid)  // Fill Doctor Name in Value List Box
+   	{
+   		EntityManager em = entityManager();
+   		Log.info("~QUERY findDoctorWithRoleTopic()");
+   		//Log.info("~QUERY BEFOREE EXECUTION role topic id : " + roleTopicid + " Standardized Role ID: " + stadRoleid);		
+   		//String queryString="SELECT doc from Doctor doc";
+   		//String queryString="select d from Doctor d where d.id not in(select r.doctor from RoleParticipant r join r.standardizedRole sr where sr.id="+stadRoleid+") and d.specialisation in (select s.id from Specialisation s join s.roleTopics rt join rt.standardizedRoles sr where sr.id="+stadRoleid+")";// WORKING		
+   		String queryString="select d from Doctor d where d.id not in(select r.doctor from RoleParticipant r join r.standardizedRole sr where sr.id="+stadRoleid+") and d.specialisation in (select s.id from Specialisation s join s.roleTopics rt join rt.standardizedRoles sr where s.id=rt.specialisation and rt.id=sr.roleTopic and sr.id="+stadRoleid+")";
+   		//select d.* from doctor d where d.id not in(select r.doctor from role_participant r join standardized_role sr where sr.id = 2 ) and d.specialisation in (select s.id from specialisation s join role_topic rt join standardized_role sr where s.id = rt.specialisation and rt.id = sr.role_topic and sr.id = 2 );
+   		Log.info("~QUERY String: " + queryString);
+   		TypedQuery<Doctor> q = em.createQuery(queryString, Doctor.class);
+   		java.util.List<Doctor> result = q.getResultList();
+   		Log.info("~QUERY Result : " + result);
+   		return result;
+   		//String queryString="SELECT doc from Doctor doc JOIN doc.specialisation sp JOIN sp.roleTopics rt JOIN rt.standardizedRoles sr WHERE rt.id = 1 and  sr.id <>"+id;
+   		//String queryString="SELECT doc from Doctor doc JOIN RoleTopic rt with doc.specialisation = rt.specialisation JOIN rt.standardizedRoles sr WHERE sr.id <> " + id;		
+   		//String queryString="SELECT sp.doctors from Specialisation sp join sp.roleTopics rt JOIN rt.standardizedRoles sr WHERE sr.id <> " + id;		
+   		//String queryString="SELECT distinct doc from Doctor doc JOIN doc.specialisation.roleTopics rt JOIN rt.standardizedRoles sr WHERE rt.id = " + id + " and  sr.id <>"+id;
+   	}
+   	
+   	// SPEC END =
+    
 }

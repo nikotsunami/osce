@@ -59,6 +59,12 @@
             
             
             
+        
+            
+            
+            
+            
+            
         <tr id="field">
                 <td>
                     <div class="{style.label}">Field:</div>
@@ -105,6 +111,14 @@
                 </td>
                 <td>
                     <g:TextBox ui:field="shownValue"/>
+                </td>
+            </tr>
+            <tr id="standardizedRole">
+                <td>
+                    <div class="{style.label}">Standardized Role:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="standardizedRole"/>
                 </td>
             </tr>
         </table>

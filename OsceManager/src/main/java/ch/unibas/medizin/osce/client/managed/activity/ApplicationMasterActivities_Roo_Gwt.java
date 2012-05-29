@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProce
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
@@ -42,6 +43,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -64,6 +66,8 @@ import ch.unibas.medizin.osce.client.managed.ui.AssignmentListView;
 import ch.unibas.medizin.osce.client.managed.ui.AssignmentMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.BankaccountListView;
 import ch.unibas.medizin.osce.client.managed.ui.BankaccountMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.CheckListListView;
+import ch.unibas.medizin.osce.client.managed.ui.CheckListMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.ClinicListView;
 import ch.unibas.medizin.osce.client.managed.ui.ClinicMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.CourseListView;
@@ -126,6 +130,8 @@ import ch.unibas.medizin.osce.client.managed.ui.ScarListView;
 import ch.unibas.medizin.osce.client.managed.ui.ScarMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.SemesterListView;
 import ch.unibas.medizin.osce.client.managed.ui.SemesterMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaListView;
+import ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.SpecialisationListView;
 import ch.unibas.medizin.osce.client.managed.ui.SpecialisationMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.SpokenLanguageListView;
@@ -201,6 +207,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleSpecialisation(SpecialisationProxy isNull) {
                 setResult(new SpecialisationListActivity(requests, ScaffoldApp.isMobile() ? SpecialisationMobileListView.instance() : SpecialisationListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleSimpleSearchCriteria(SimpleSearchCriteriaProxy isNull) {
+                setResult(new SimpleSearchCriteriaListActivity(requests, ScaffoldApp.isMobile() ? SimpleSearchCriteriaMobileListView.instance() : SimpleSearchCriteriaListView.instance(), placeController));
             }
 
             @Override
@@ -356,6 +367,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleClinic(ClinicProxy isNull) {
                 setResult(new ClinicListActivity(requests, ScaffoldApp.isMobile() ? ClinicMobileListView.instance() : ClinicListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleCheckList(CheckListProxy isNull) {
+                setResult(new CheckListListActivity(requests, ScaffoldApp.isMobile() ? CheckListMobileListView.instance() : CheckListListView.instance(), placeController));
             }
 
             @Override

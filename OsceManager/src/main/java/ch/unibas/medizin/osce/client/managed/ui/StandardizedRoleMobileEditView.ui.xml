@@ -96,6 +96,48 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="shortName">
             <div class="{style.label}">Short Name</div>
             <div class="{style.value}">
@@ -172,6 +214,24 @@
             <div class="{style.label}">Keywords</div>
             <div class="{style.value}">
                 <a:KeywordSetEditor ui:field="keywords"/>
+            </div>
+        </div>
+        <div id="advancedSearchCriteria">
+            <div class="{style.label}">Advanced Search Criteria</div>
+            <div class="{style.value}">
+                <a:AdvancedSearchCriteriaSetEditor ui:field="advancedSearchCriteria"/>
+            </div>
+        </div>
+        <div id="simpleSearchCriteria">
+            <div class="{style.label}">Simple Search Criteria</div>
+            <div class="{style.value}">
+                <a:SimpleSearchCriteriaSetEditor ui:field="simpleSearchCriteria"/>
+            </div>
+        </div>
+        <div id="checkList">
+            <div class="{style.label}">Check List</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="checkList"/>
             </div>
         </div>
     </g:HTMLPanel>

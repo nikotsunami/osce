@@ -399,11 +399,21 @@ public interface OsceConstants extends Constants {
 	public String fileDescription();
 
 	public String imageUpload();
-	
-	
+
 	public String rich_text_item();
+
 	public String table_item();
+
 	// end Assignment H
 	// Spec End
 
+	// Spec Assignment F
+	public String addSimpleSearchCriteria();
+
+	public String simpleSearchCriteriaName();
+
+	public String simpleSearchCriteriaValue();
+	// End Assignbment F
+
+	
 }

@@ -37,6 +37,12 @@
         
         
         
+    
+        
+        
+        
+        
+        
     <div id="field">
             <div class="{style.label}">Field</div>
             <div class="{style.value}">
@@ -71,6 +77,12 @@
             <div class="{style.label}">Shown Value</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="shownValue"/>
+            </div>
+        </div>
+        <div id="standardizedRole">
+            <div class="{style.label}">Standardized Role</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="standardizedRole"/>
             </div>
         </div>
     </g:HTMLPanel>

@@ -108,6 +108,8 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	public CheckBox active;
 	
 	
+	@UiField
+	SimplePanel roleEditCheckListPanel;//spec
 	
 	@UiField
 	public IntegerBox subVersion;
@@ -240,7 +242,15 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	public void setEnabled(boolean enabled) {
 		save.setEnabled(enabled);
 	}
+	//spec start
 	
+	@Override
+	public SimplePanel getRoleEditCheckListPanel()
+	{
+		return roleEditCheckListPanel;
+	}
+	
+	//spec end
 	public void showErrors(List<EditorError> errors) {
 		SafeHtmlBuilder b = new SafeHtmlBuilder();
 		for (EditorError error : errors) {
@@ -286,6 +296,11 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	
 	interface Driver extends RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> {
 	}
+	
+	
+	
+	
+	
 	
 	@Override
 	public int getMajorMinorChange() {

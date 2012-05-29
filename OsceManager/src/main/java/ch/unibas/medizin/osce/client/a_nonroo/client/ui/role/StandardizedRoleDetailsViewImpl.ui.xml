@@ -2,8 +2,11 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
+	xmlns:o="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria"
 	xmlns:m="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role"
-	xmlns:b="urn:import:com.google.gwt.user.cellview.client" xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:r="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role">
 	<!-- <g:HorizontalPanel> <g:Label>OM</g:Label> </g:HorizontalPanel> -->
 	<ui:style src="../../styles.css">
 		.description {
@@ -29,6 +32,7 @@
 						<my:IconButton ui:field="print" icon="print" />
 						<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
 						<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+						<my:IconButton ui:field="previous"  icon="triangle-1-w">Previous</my:IconButton>
 					</div>
 				</g:HTMLPanel>
 			</g:HorizontalPanel>
@@ -90,17 +94,20 @@
 					</g:Tab>
 					<g:Tab>
 						<g:TabHTML>RoleParticipants</g:TabHTML>
-						<g:HTMLPanel addStyleNames="{style.patientDetails}">
-							<g:Label>Role Participants Component</g:Label>
-						</g:HTMLPanel>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}" width="100%">						
+						<!-- SPEC START = -->						
+						<r:RoleRoleParticipantSubViewImpl ui:field="roleRoleParticipantSubViewImpl"></r:RoleRoleParticipantSubViewImpl>
+						<!-- SPEC END = -->						
+					</g:HTMLPanel>
 					</g:Tab>
 
 					<g:Tab>
 						<g:TabHTML>Keyword</g:TabHTML>
-						<g:HTMLPanel addStyleNames="{style.patientDetails}">
-							<g:Label>Keyword Components</g:Label>
-							<!-- <n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl> -->
-						</g:HTMLPanel>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">						
+						<!-- SPEC START = -->	
+						<r:RoleKeywordSubViewImpl ui:field="roleKeywordSubViewImpl"></r:RoleKeywordSubViewImpl>
+						<!-- SPEC END = -->	
+					</g:HTMLPanel>		
 					</g:Tab>
 
 					<g:Tab>
@@ -122,7 +129,25 @@
 				<g:Tab>
 					<g:TabHTML>Search Criteria</g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
-						<g:Label>Search Criteria</g:Label>
+						<g:VerticalPanel width="100%">
+							<o:StandartizedPatientAdvancedSearchSubViewImpl
+								ui:field="standartizedPatientAdvancedSearchSubViewImpl"></o:StandartizedPatientAdvancedSearchSubViewImpl>
+						</g:VerticalPanel>
+						<g:VerticalPanel width="100%">
+							<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
+								<g:Label addStyleNames="{style.label}">Other Criteria</g:Label>
+								<g:HTMLPanel>
+									<div class="{style.controlsright}">
+										<h3 class="{style.header}" style="display:inline">
+											<span ui:field="displayRenderer1"></span>
+										</h3>
+									</div>
+								</g:HTMLPanel>
+							</g:HorizontalPanel>
+							<m:RoleOtherSearchCriteriaViewImpl
+								ui:field="roleOtherSearchCriteriaViewImpl"></m:RoleOtherSearchCriteriaViewImpl>
+						</g:VerticalPanel>
+						<!-- <g:Label class="{style.label}" ui:field="labelRoomMaterials" /> -->
 					</g:HTMLPanel>
 				</g:Tab>
 

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.place.shared.Place;
@@ -28,4 +29,8 @@ public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget {
 
     CellTable<AdvancedSearchCriteriaProxy> getTable();
     void setDelegate(Delegate delegate);
+    //Assignment : F[
+    public String[] getPaths();
+    public void setValue(StandardizedRoleProxy proxy);
+    //]Assignment : F    
 }

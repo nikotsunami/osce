@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
@@ -55,6 +56,14 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	Image arrow;
 	// SPEC End
 
+	// SPEC START =
+		@UiField
+		RoleRoleParticipantSubViewImpl roleRoleParticipantSubViewImpl; 
+		
+		@UiField
+		RoleKeywordSubViewImpl roleKeywordSubViewImpl; 
+		// SPEC END =
+	
 	// Panels
 
 	@UiField
@@ -64,9 +73,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	IconButton print;
 	@UiField
-	IconButton edit;
+	public IconButton edit;
 	@UiField
-	IconButton delete;
+	public IconButton delete;
 
 	// Labels (Fieldnames)
 
@@ -93,6 +102,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	public com.google.gwt.user.client.ui.Label labelLongNameHeader;
 
+	
+	
 	// Fields
 	@UiField
 	public SpanElement shortName;
@@ -136,6 +147,26 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 
 	// ]End
 
+	// AssignmentF[
+	@Override
+	public TabPanel getRoleSubPanel() {
+		return roleSubPanel;
+	}
+	@UiField
+	public StandartizedPatientAdvancedSearchSubViewImpl standartizedPatientAdvancedSearchSubViewImpl;
+
+	public StandartizedPatientAdvancedSearchSubViewImpl getStandartizedPatientAdvancedSearchSubViewImpl() {
+		return standartizedPatientAdvancedSearchSubViewImpl;
+	}
+
+	@UiField
+	RoleOtherSearchCriteriaViewImpl roleOtherSearchCriteriaViewImpl;
+
+	public RoleOtherSearchCriteriaViewImpl getRoleOtherSearchCriteriaViewImpl() {
+		return roleOtherSearchCriteriaViewImpl;
+	}
+
+	// ]AssignmentF
 	private Delegate delegate;
 
 	/**
@@ -178,6 +209,16 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		labelstudyYear.setInnerText(constants.studyYear() + ":");
 	}
 
+	@UiHandler("previous")
+	public void onPreviousClick(ClickEvent e) {
+		System.out.println("============================Click previous Button=========================");
+		System.out.println("============================Call delegate.previousClicked=========================");
+		
+			
+		delegate.previousRoleClicked(this.getValue());
+		
+	}
+	
 	@Override
 	public void setValue(StandardizedRoleProxy proxy) {
 		/*
@@ -256,4 +297,19 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		return proxy;
 	}
 
+	// SPEC START =
+
+	@Override
+	public RoleRoleParticipantSubViewImpl getRoleRoleParticipantSubViewImpl() 
+	{	
+		return roleRoleParticipantSubViewImpl;
+	}
+
+	@Override
+	public RoleKeywordSubViewImpl getRoleKeywordSubViewImpl() 
+	{	
+		return roleKeywordSubViewImpl;
+	}
+	// SPEC END =
+	
 }
