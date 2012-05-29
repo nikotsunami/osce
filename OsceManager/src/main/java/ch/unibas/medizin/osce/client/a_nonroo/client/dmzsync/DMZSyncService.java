@@ -4,8 +4,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface DMZSyncService extends RemoteService {
-	void pushToDMZ(Integer standardizedPatientId);
-	void pullFromDMZ(Integer standardizedPatientId);
+	void pushToDMZ(Long standardizedPatientId);
+	void pullFromDMZ(Long standardizedPatientId);
 	
 	public static class ServiceFactory {
 		private static DMZSyncServiceAsync instance = null; 

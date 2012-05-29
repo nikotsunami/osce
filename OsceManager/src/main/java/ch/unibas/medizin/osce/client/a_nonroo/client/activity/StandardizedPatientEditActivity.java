@@ -349,7 +349,7 @@ StandardizedPatientEditView.Delegate {
 	
 	@Override
 	public void sendClicked(){
-		dmxSyncService.pushToDMZ(1, new AsyncCallback<Void>(){
+		dmxSyncService.pushToDMZ(1L, new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -369,7 +369,7 @@ StandardizedPatientEditView.Delegate {
 	@Override
 	public void pullClicked(){
 		
-		dmxSyncService.pullFromDMZ(1, new AsyncCallback<Void>(){
+		dmxSyncService.pullFromDMZ(1L, new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {

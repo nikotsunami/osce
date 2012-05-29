@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 public interface DMZSyncServiceAsync {
-	void pushToDMZ(Integer standardizedPatientId, AsyncCallback<Void> cb);
-	void pullFromDMZ(Integer standardizedPatientId, AsyncCallback<Void> cb);
+	void pushToDMZ(Long standardizedPatientId, AsyncCallback<Void> cb);
+	void pullFromDMZ(Long standardizedPatientId, AsyncCallback<Void> cb);
 
 }

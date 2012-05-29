@@ -40,20 +40,20 @@
             <url>http://maven.springframework.org/external</url>
             <name>SpringSource Maven Repository - External Releases</name>
         </repository>
-        
+
             <repository>
             <id>maven.repo</id>
             <url>http://mvnrepository.com/artifact/</url>
             <name>Testrepo for dependencies</name>
         </repository>
-        
+
         <repository>
           <id>local-project-libraries</id>
           <name>Local project libraries</name>
           <url>file://${project.basedir}/lib</url>
           <layout>default</layout>
       </repository>
-      
+
 
     </repositories>
     <pluginRepositories>
@@ -72,9 +72,9 @@
             <name>Spring Roo Repository</name>
             <url>http://spring-roo-repository.springsource.org/release</url>
         </pluginRepository>
-		<pluginRepository>
+        <pluginRepository>
             <id>gwt-maven-plugins</id>
-			<name>GWT Repository</name>
+            <name>GWT Repository</name>
             <url>
                 http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/
             </url>
@@ -96,7 +96,7 @@
             <!--        <scope>system</scope>
                 <systemPath>${project.basedir}/lib/gwt-dnd-3.1.1.jar</systemPath> -->
         </dependency>
-       
+
         <!-- Dependency for video upload -->
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -104,7 +104,7 @@
             <version>5.2.1</version>
           <!--     <scope>system</scope>
             <systemPath>${project.basedir}/lib/PDF_LIB/itextpdf-5.2.1.jar</systemPath> -->
-        </dependency>     
+        </dependency>
         <!-- Dependency for PDF Generation -->
         <dependency>
             <groupId>com.itextpdf.text</groupId>
@@ -112,14 +112,14 @@
             <version>5.2.1</version>
           <!--     <scope>system</scope>
             <systemPath>${project.basedir}/lib/PDF_LIB/itext-xtra-5.2.1.jar</systemPath> -->
-        </dependency>       
+        </dependency>
         <dependency>
             <groupId>fr.hd3d.html5.video</groupId>
             <artifactId>video</artifactId>
             <version>1.0</version>
           <!--     <scope>system</scope>
             <systemPath>${project.basedir}/lib/fr.hd3d.html5.video.1.0.jar</systemPath> -->
-        </dependency>  
+        </dependency>
         <!-- General dependencies for standard applications -->
         <dependency>
             <groupId>junit</groupId>
@@ -449,12 +449,18 @@
             <version>20090211</version>
             <classifier/>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2</version>
+            <scope>compile</scope>
+        </dependency>
        <dependency>
- <groupId>com.google.gwt.inject</groupId>
-<artifactId>gin</artifactId>
-<version>1.5.0</version>
-<classifier/>
-</dependency>
+            <groupId>com.google.gwt.inject</groupId>
+            <artifactId>gin</artifactId>
+            <version>1.5.0</version>
+            <classifier/>
+        </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
