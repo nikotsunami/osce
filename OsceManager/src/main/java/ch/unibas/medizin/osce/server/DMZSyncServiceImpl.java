@@ -8,6 +8,10 @@ import flexjson.JSONSerializer;
 import flexjson.JSONDeserializer;
 import flexjson.transformer.DateTransformer;
 import org.apache.http.client.methods.HttpPost;
+import flexjson.ObjectFactory;
+import flexjson.ObjectBinder;
+import ch.unibas.medizin.osce.shared.Gender;
+import java.lang.reflect.Type;
 
 public class DMZSyncServiceImpl extends RemoteServiceServlet implements DMZSyncService {
 
@@ -29,11 +33,13 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements DMZSyncS
 
 
 
+   //     data = data.replaceAll("sp_portal.local", "ch.unibas.medizin.osce.domain") ;
+//2009-09-18T16:00:00
 
-        data = data.replaceAll("sp_portal.local", "ch.unibas.medizin.osce.domain") ;
-2009-09-18T16:00:00Z
-
-        JSONDeserializer deserializer =  new JSONDeserializer().use("anamnesisForm.createDate", new DateTransformer("yyyy-MM-dd"));
+        JSONDeserializer deserializer =  new JSONDeserializer().
+                                                use("anamnesisForm.createDate", new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'")).
+                                                    use("birthday", new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'")).
+                                                        use("gender", new GenderTransformer());
 
 
         StandardizedPatient patient = (StandardizedPatient)(deserializer.use( null, StandardizedPatient.class ).deserialize( data ));
@@ -43,9 +49,29 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements DMZSyncS
 
     }
 
+    public String preProcessData(String data){
+
+        return data.replaceAll("\"id\":[0-9]*", "").replaceAll("origId", "id");
+
+    }
+
     protected StandardizedPatient findPatient(Long objectId){
         return StandardizedPatient.findStandardizedPatient(objectId);
     }
+
+
+    private class GenderTransformer implements ObjectFactory{
+
+       public Object instantiate(ObjectBinder context, Object value, Type targetType, Class targetClass) {
+            Integer valueI =  (Integer)value;
+            if (valueI == 1){
+                return Gender.MALE;
+            } else {
+                return Gender.FEMALE;
+            }
+        }
+    }
+
 
     /**
      * Send data to the DMZ server

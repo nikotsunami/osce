@@ -10,6 +10,8 @@ import org.springframework.roo.addon.test.RooIntegrationTest;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.shared.Gender;
+import java.util.*;
+import java.text.*;
 
 
 public class DMZSyncServiceImplTest {
@@ -45,6 +47,16 @@ public class DMZSyncServiceImplTest {
 
     }
 
+    @Test
+    public void testPreProcessData() {
+         String data  = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":5,\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"anamnesisChecksValues\":[{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":10,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":8,\"origId\":5,\"sortOrder\":6,\"text\":\"Leiden Sie unter Diabetes?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":2,\"origId\":11,\"sortOrder\":5,\"text\":\"Disease history category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":15,\"truth\":false},{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":9,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":4,\"origId\":1,\"sortOrder\":2,\"text\":\"Rauchen Sie?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":1,\"origId\":10,\"sortOrder\":1,\"text\":\"Personal lifestyle category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":14,\"truth\":false}],\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"scars\":[],\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"Basel\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":1,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":null,\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
+
+         String expected  = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"anamnesisChecksValues\":[{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":5,\"sortOrder\":6,\"text\":\"Leiden Sie unter Diabetes?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":11,\"sortOrder\":5,\"text\":\"Disease history category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"id\":15,\"truth\":false},{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":1,\"sortOrder\":2,\"text\":\"Rauchen Sie?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":10,\"sortOrder\":1,\"text\":\"Personal lifestyle category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"id\":14,\"truth\":false}],\"createDate\":\"2009-09-18T16:00:00Z\",\"id\":6,\"scars\":[],\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"id\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"Basel\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":1,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"nationality\":\"Deutschland\",\"id\":6},\"id\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":null,\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
+         String ret = instance.preProcessData(data);
+
+         assertEquals("preProcessData ",expected,ret);
+
+    }
 
     @Test
     public void testPullFromDMZ() {
@@ -54,9 +66,99 @@ public class DMZSyncServiceImplTest {
         instance.pullFromDMZ(33L);
 
 
+        Date expectedBirthday = null ;
+        try {
+            String str_date="1965-09-23T16:00:00Z";
+            DateFormat formatter ;
 
-        assertEquals((Long)33L, (Long)instance.spParam);;
+            formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            expectedBirthday = (Date)formatter.parse(str_date);
+
+        } catch (ParseException e){
+            System.out.println("Exception :"+e);
+
+        }
+
+
+        assertEquals(expectedBirthday,instance.savedData.getBirthday());
+        assertEquals((Long)33L, (Long)instance.spParam);
+        assertEquals("Buser",instance.savedData.getName());
+        assertEquals(Gender.MALE,instance.savedData.getGender());
+        assertEquals("Bettina",instance.savedData.getPreName());
+        assertEquals("Rankenbergweg 1",instance.savedData.getStreet());
+        assertEquals("Basel",instance.savedData.getCity());
+        assertEquals((Integer)4051,instance.savedData.getPostalCode());
+        assertEquals(null,instance.savedData.getTelephone());
+        assertEquals(null,instance.savedData.getTelephone2());
+        assertEquals("078 586 29 84",instance.savedData.getMobile());
+        assertEquals((Integer)182,instance.savedData.getHeight());
+        assertEquals((Integer)82,instance.savedData.getWeight());
+        assertEquals(null,instance.savedData.getImmagePath());
+        assertEquals(null,instance.savedData.getVideoPath());
+        assertNotNull(null,instance.savedData.getAnamnesisForm());
+
+
+        Date expectedDate = null ;
+        try {
+            String str_date="2009-09-18T16:00:00Z";
+            DateFormat formatter ;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            expectedDate = (Date)formatter.parse(str_date);
+
+        } catch (ParseException e){
+            System.out.println("Exception :"+e);
+
+        }
+
+
+
+        assertEquals(expectedDate,instance.savedData.getAnamnesisForm().getCreateDate());
+
+
     }
+
+
+    @Test
+    public void testPullFemaleFromDMZ() {
+        dataFromDMZ  = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":5,\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"anamnesisChecksValues\":[{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":10,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":8,\"origId\":5,\"sortOrder\":6,\"text\":\"Leiden Sie unter Diabetes?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":2,\"origId\":11,\"sortOrder\":5,\"text\":\"Disease history category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":15,\"truth\":false},{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":9,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":4,\"origId\":1,\"sortOrder\":2,\"text\":\"Rauchen Sie?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":1,\"origId\":10,\"sortOrder\":1,\"text\":\"Personal lifestyle category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":14,\"truth\":false}],\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"scars\":[],\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"Basel\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":2,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":null,\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
+
+
+        instance.pullFromDMZ(33L);
+
+
+
+        assertEquals((Long)33L, (Long)instance.spParam);
+        assertEquals(Gender.FEMALE,instance.savedData.getGender());
+        assertEquals("Buser",instance.savedData.getName());
+
+        assertEquals("Bettina",instance.savedData.getPreName());
+
+        assertEquals("Rankenbergweg 1",instance.savedData.getStreet());
+
+        assertEquals("Basel",instance.savedData.getCity());
+
+        assertEquals((Integer)4051,instance.savedData.getPostalCode());
+
+        assertEquals(null,instance.savedData.getTelephone());
+
+        assertEquals(null,instance.savedData.getTelephone2());
+
+        assertEquals("078 586 29 84",instance.savedData.getMobile());
+
+        assertEquals((Integer)182,instance.savedData.getHeight());
+
+        assertEquals((Integer)82,instance.savedData.getWeight());
+
+        assertEquals(null,instance.savedData.getImmagePath());
+
+        assertEquals(null,instance.savedData.getVideoPath());
+
+
+
+
+    }
+
 
     ///////////////////////////////////////////////////////////////
 
@@ -115,6 +217,7 @@ public class DMZSyncServiceImplTest {
     private class MyDMZSyncServiceImpl extends DMZSyncServiceImpl{
         public Long spParam = null;
         public String sentData = null;
+        public StandardizedPatient savedData = null;
 
         protected StandardizedPatient findPatient(Long objectId){
             spParam = objectId;
@@ -142,7 +245,7 @@ public class DMZSyncServiceImplTest {
          * Save a patient
          */
          protected void savePatient(StandardizedPatient patient){
-
+            savedData = patient;
          }
 
     }
