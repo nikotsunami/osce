@@ -12,6 +12,12 @@
         <param-name>defaultHtmlEscape</param-name>
         <param-value>true</param-value>
     </context-param>
+
+    <context-param>
+        <param-name>DMZ_HOST_ADDRESS</param-name>
+        <param-value>http://localhost:8090/</param-value>
+    </context-param>
+    
     
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -72,8 +78,6 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
-    
     
     <servlet>
         <servlet-name>requestFactory</servlet-name>
