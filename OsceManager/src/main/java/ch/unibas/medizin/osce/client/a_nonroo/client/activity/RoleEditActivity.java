@@ -11,8 +11,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.activity.RoleDetailsActivit
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -32,12 +36,14 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class RoleEditActivity extends AbstractActivity implements RoleEditView.Presenter, RoleEditView.Delegate {
+public class RoleEditActivity extends AbstractActivity implements RoleEditView.Presenter, RoleEditView.Delegate ,RoleEditCheckListSubView.Delegate,RoleEditCheckListSubView.Presenter {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private RoleEditView view;
+	private RoleEditCheckListSubView checkListView;//spec
+	
 	private RoleDetailsPlace place;	
 	public static RoleTopicProxy roleTopic;
 	//vigna
@@ -47,12 +53,25 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 
 	private RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> editorDriver;
 	
+	private RequestFactoryEditorDriver<CheckListProxy, RoleEditCheckListSubViewImpl> checkListEditorDriver;//spec
+	
+	
+	
+	
+	
 	private RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> majoreditorDriver;
 	
 	private StandardizedRoleProxy standardizedRole;
+	private CheckListProxy checkListProxy;//spec
+	
 	private StandardizedRoleProxy  proxy;
+	private CheckListProxy  checkListProxy1;//spec
+	
+	private CheckListProxy checkList;//spec
 	
 	private StandardizedRoleRequest majorRequest;
+	private CheckListRequest majorCheckListRequest;//spec
+	
 	
 	public StandardizedRoleProxy getProxy() {
 		return proxy;
@@ -114,14 +133,22 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		Log.info("==Call RoleEditActivity start();==");		
 		this.view = new RoleEditViewImpl();
 		this.widget = panel;
-		editorDriver = view.createEditorDriver();
+	
+		//spec start
+				this.checkListView=new RoleEditCheckListSubViewImpl();
+				editorDriver = view.createEditorDriver();
+				this.view.getRoleEditCheckListPanel().add(this.checkListView);		
+					checkListEditorDriver=checkListView.createCheckListEditorDriver();//spec
+					checkListView.setDelegate(this);//spec
+						
+			//spec end
 		view.setDelegate(this);
 	
 
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
-			
-			requests.find(place.getProxyId()).with("standardizedRoles")
+			//spec start
+			requests.find(place.getProxyId()).with("standardizedRoles").with("checkList")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -135,6 +162,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 										.getShortName());
 								// init((StandardizedPatientProxy) response);
 								standardizedRole = (StandardizedRoleProxy) response;
+								checkListProxy=((StandardizedRoleProxy) response).getCheckList();//spec
+								//checkListProxy=standardizedRole.getCheckList();
 								view.setStandardizedRoleProxy(standardizedRole);
 								
 								init();
@@ -151,23 +180,30 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	private void init() {
 
 		StandardizedRoleRequest request = requests.standardizedRoleRequest();
+		CheckListRequest checkListRequest=requests.checkListRequest();//spec
+	
 	
 
 		if (standardizedRole == null) {
 			System.out.println("====================standardizedRole=null in RoleEditActivity==================");
 			standardizedRole = request.create(StandardizedRoleProxy.class);
+			checkListProxy=request.create(CheckListProxy.class);//spec
+			standardizedRole.setCheckList(checkListProxy);//spec
 			standardizedRole.setSubVersion(1);
 			standardizedRole.setMainVersion(1);
 			standardizedRole.setActive(true);
-			
+			checkListProxy.setVersion(0);//spec
 			view.setEditTitle(false);
 			Log.info("create");
 		} else {
-			//set TabText when edit clicked
 			view.getRoleDetailPanel().getTabBar().setTabText(RoleDetailsActivity.getSelecTab(), standardizedRole.getShortName());
 			System.out
 					.println("====================standardizedRole not null in RoleEditActivity=============");
 			standardizedRole = request.edit(standardizedRole);
+			//spec start
+			//checkListProxy=request.edit(standardizedRole.getCheckList());
+		
+			//spec end
 		
 			view.setEditTitle(true);
 			Log.info("edit");
@@ -175,9 +211,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 
 		Log.info("edit");
 		editorDriver.edit(standardizedRole, request);
-
-		Log.info("persist");
+//spec start
+		checkListEditorDriver.edit(checkListProxy, request);//spec
+//spec end
+		
+	
+	//	checkListRequest.persist().using(checkListProxy);//spec
+		
+		
+		Log.info(" persist");
 		request.persist().using(standardizedRole);
+		
 
 		Log.debug("Create für: " + standardizedRole.getLongName());
 	}
@@ -212,10 +256,13 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		Log.info("Sub version"+standardizedRole.getSubVersion());
 		
-		standardizedRole.setRoleTopic(roleTopic
-				
-				);
+		standardizedRole.setRoleTopic(roleTopic);
+		//checkListProxy.setTitle("aaa");
+		//checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
+		
+		standardizedRole.setCheckList(checkListProxy);//spec
 		Log.info("Role Topic"+standardizedRole.getRoleTopic().getName());
+		
 		
 		// return '0' means minor clicked and '1' means Major Button Clicked
 		
@@ -223,10 +270,13 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		{
 			view.getMajorMinorChange();
 		
-		
 		}
 		else
 		{
+			checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
+			
+			standardizedRole.setCheckList(checkListProxy);//spec
+			
 			save();
 		}
 		
@@ -254,11 +304,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	public void save()
 	{
 		
-		
-		
-		
-		editorDriver.flush().fire(new Receiver<Void>() {
-
+			editorDriver.flush().fire(new Receiver<Void>() {
+			
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
 
@@ -297,6 +344,18 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		 majorRequest = requests.standardizedRoleRequest();
 		 proxy= majorRequest.create(StandardizedRoleProxy.class);
+		 
+		 
+		 //spec
+		 
+		 /*majorCheckListRequest = requests.checkListRequest();
+		 checkListProxy= majorCheckListRequest.create(CheckListProxy.class);*/
+		 
+		 checkListProxy= standardizedRole.getCheckList();//spec
+		// checkListProxy.setTitle("ccc");//spec
+		//	checkListProxy.setVersion(0);//spec
+		 //spec
+		 checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 		 proxy.setRoleTopic(roleTopic);
 		 //copy(standardizedRole);
 		 proxy.setActive(((RoleEditViewImpl)view).active.getValue());
@@ -304,10 +363,14 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			proxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 			proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 			proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+			
 			proxy.setPreviousVersion(standardizedRole);
 			proxy.setMainVersion(standardizedRole.getMainVersion()+1);
 			proxy.setSubVersion(1);
-		 
+			
+			proxy.setCheckList(checkListProxy);//spec
+			
+		
 			
 		 majorRequest.persist().using(proxy).fire(new Receiver<Void>() {
 		 

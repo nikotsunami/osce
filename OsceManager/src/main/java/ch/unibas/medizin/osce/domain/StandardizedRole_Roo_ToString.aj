@@ -10,7 +10,9 @@ privileged aspect StandardizedRole_Roo_ToString {
     public String StandardizedRole.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Active: ").append(getActive()).append(", ");
+        sb.append("AdvancedSearchCriteria: ").append(getAdvancedSearchCriteria() == null ? "null" : getAdvancedSearchCriteria().size()).append(", ");
         sb.append("CaseDescription: ").append(getCaseDescription()).append(", ");
+        sb.append("CheckList: ").append(getCheckList()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Keywords: ").append(getKeywords() == null ? "null" : getKeywords().size()).append(", ");
         sb.append("LongName: ").append(getLongName()).append(", ");
@@ -20,6 +22,7 @@ privileged aspect StandardizedRole_Roo_ToString {
         sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");
         sb.append("RoleType: ").append(getRoleType()).append(", ");
         sb.append("ShortName: ").append(getShortName()).append(", ");
+        sb.append("SimpleSearchCriteria: ").append(getSimpleSearchCriteria() == null ? "null" : getSimpleSearchCriteria().size()).append(", ");
         sb.append("StudyYear: ").append(getStudyYear()).append(", ");
         sb.append("SubVersion: ").append(getSubVersion()).append(", ");
         sb.append("Version: ").append(getVersion());

@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+	
+	.roleParticipantTable { 	 	
+ 	margin-top: 0.5cm;
+ 	 margin-bottom: 0.5cm;
+	}
+</ui:style>
+	<g:HTMLPanel addStyleNames="{style.patientDetails}">				
+		<g:ValueListBox ui:field="lstDoctor" /> 
+		<b:CellTable pageSize="8" ui:field="authorTable" width="100%" addStyleNames="{style.standardTable}"/>					
+		<b:SimplePager display="{authorTable}" ui:field="pagerAuthor" />
+		<my:IconButton ui:field="btnAddAuthor" icon="plusthick" >Author</my:IconButton>		
+		<b:CellTable pageSize="8" ui:field="reviewerTable" width="100%" addStyleNames="{style.standardTable}"/>
+		<b:SimplePager display="{reviewerTable}" ui:field="pagerReviewer" />
+		<my:IconButton ui:field="btnAddReviewer" icon="plusthick">Reviewer</my:IconButton>			
+	</g:HTMLPanel>
+</ui:UiBinder> 

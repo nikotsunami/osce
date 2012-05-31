@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.activity.AdvancedSearchCriteriaEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -37,6 +38,16 @@ public abstract class AdvancedSearchCriteriaEditActivityWrapper_Roo_Gwt implemen
         view.setFieldPickerValues(Arrays.asList(PossibleFields.values()));
         view.setBindTypePickerValues(Arrays.asList(BindType.values()));
         view.setComparationPickerValues(Arrays.asList(Comparison.values()));
+        view.setStandardizedRolePickerValues(Collections.<StandardizedRoleProxy>emptyList());
+        requests.standardizedRoleRequest().findStandardizedRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<StandardizedRoleProxy>>() {
+
+            public void onSuccess(List<StandardizedRoleProxy> response) {
+                List<StandardizedRoleProxy> values = new ArrayList<StandardizedRoleProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setStandardizedRolePickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -47,5 +58,7 @@ public abstract class AdvancedSearchCriteriaEditActivityWrapper_Roo_Gwt implemen
         void setBindTypePickerValues(Collection<BindType> values);
 
         void setComparationPickerValues(Collection<Comparison> values);
+
+        void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values);
     }
 }

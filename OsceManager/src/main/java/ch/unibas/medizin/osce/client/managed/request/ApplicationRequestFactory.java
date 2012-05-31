@@ -22,6 +22,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     SpecialisationRequest specialisationRequest();
 
+    SimpleSearchCriteriaRequest simpleSearchCriteriaRequest();
+
     SemesterRequest semesterRequest();
 
     ScarRequest scarRequest();
@@ -83,6 +85,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     CourseRequest courseRequest();
 
     ClinicRequest clinicRequest();
+
+    CheckListRequest checkListRequest();
 
     BankaccountRequest bankaccountRequest();
 

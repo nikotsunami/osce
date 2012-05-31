@@ -6,7 +6,9 @@
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
-  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp'>
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+ 
+  
 
 <ui:style src="../../styles.css" >
 .noOutline {
@@ -68,6 +70,10 @@
 							</table>
 						</g:HTMLPanel>
 					</g:Tab>
+					<g:Tab>
+					<g:TabHTML>CheckList</g:TabHTML>
+						<g:SimplePanel ui:field="roleEditCheckListPanel" addStyleNames="{style.tabStyle}"></g:SimplePanel>
+					</g:Tab>
 			<!--  
 					<g:Tab>
 						<g:TabHTML>RoleParticipants</g:TabHTML>
@@ -75,7 +81,9 @@
 							<g:Label>Role Participants Component</g:Label>
 						</g:HTMLPanel>
 					</g:Tab>
-					<g:Tab>
+					
+			
+				 <g:Tab>
 						<g:TabHTML>Keyword</g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">
 							<g:Label>Keyword Components</g:Label>

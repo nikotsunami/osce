@@ -37,6 +37,14 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -68,6 +76,10 @@
         <div id="shownValue">
             <div class="{style.label}">Shown Value</div>
             <div class="{style.value}" ui:field="shownValue"/>
+        </div>
+        <div id="standardizedRole">
+            <div class="{style.label}">Standardized Role</div>
+            <div class="{style.value}" ui:field="standardizedRole"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -124,6 +124,54 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -242,6 +290,30 @@
                 </td>
                 <td>
                     <span ui:field="keywords"/>
+                </td>
+            </tr>
+            <tr id="advancedSearchCriteria">
+                <td>
+                    <span class="{style.label}">Advanced Search Criteria:</span>
+                </td>
+                <td>
+                    <span ui:field="advancedSearchCriteria"/>
+                </td>
+            </tr>
+            <tr id="simpleSearchCriteria">
+                <td>
+                    <span class="{style.label}">Simple Search Criteria:</span>
+                </td>
+                <td>
+                    <span ui:field="simpleSearchCriteria"/>
+                </td>
+            </tr>
+            <tr id="checkList">
+                <td>
+                    <span class="{style.label}">Check List:</span>
+                </td>
+                <td>
+                    <span ui:field="checkList"/>
                 </td>
             </tr>
         </table>

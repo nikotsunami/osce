@@ -3,9 +3,12 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
+import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.Keyword;
 import ch.unibas.medizin.osce.domain.RoleParticipant;
 import ch.unibas.medizin.osce.domain.RoleTopic;
+import ch.unibas.medizin.osce.domain.SimpleSearchCriteria;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -118,6 +121,30 @@ privileged aspect StandardizedRole_Roo_JavaBean {
     
     public void StandardizedRole.setKeywords(Set<Keyword> keywords) {
         this.keywords = keywords;
+    }
+    
+    public Set<AdvancedSearchCriteria> StandardizedRole.getAdvancedSearchCriteria() {
+        return this.advancedSearchCriteria;
+    }
+    
+    public void StandardizedRole.setAdvancedSearchCriteria(Set<AdvancedSearchCriteria> advancedSearchCriteria) {
+        this.advancedSearchCriteria = advancedSearchCriteria;
+    }
+    
+    public Set<SimpleSearchCriteria> StandardizedRole.getSimpleSearchCriteria() {
+        return this.simpleSearchCriteria;
+    }
+    
+    public void StandardizedRole.setSimpleSearchCriteria(Set<SimpleSearchCriteria> simpleSearchCriteria) {
+        this.simpleSearchCriteria = simpleSearchCriteria;
+    }
+    
+    public CheckList StandardizedRole.getCheckList() {
+        return this.checkList;
+    }
+    
+    public void StandardizedRole.setCheckList(CheckList checkList) {
+        this.checkList = checkList;
     }
     
 }

@@ -4,30 +4,78 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFileSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFileSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOtherSearchCriteriaView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchNationalityPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchNationalityPopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaRequest;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileRequest;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordRequest;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaRequest;
+import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -39,7 +87,11 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -54,7 +106,17 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		RoleDetailsView.Presenter, RoleDetailsView.Delegate,
 		StandardizedRoleDetailsView.Delegate, RoleFileSubView.Delegate,
 		RoleFileSubView.Presenter, RoomMaterialsDetailsSubView.Delegate,
-		RoomMaterialsDetailsSubView.Presenter
+		RoomMaterialsDetailsSubView.Presenter,
+		RoleOtherSearchCriteriaView.Delegate,
+		RoleOtherSearchCriteriaView.Presenter,
+		StandartizedPatientAdvancedSearchSubView.Delegate,
+		StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
+		StandardizedPatientAdvancedSearchLanguagePopup.Delegate,
+		StandardizedPatientAdvancedSearchScarPopup.Delegate,
+		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate,
+		StandardizedPatientAdvancedSearchNationalityPopup.Delegate,		
+		RoleRoleParticipantSubView.Delegate, 
+		RoleKeywordSubView.Delegate
 
 {
 
@@ -68,9 +130,25 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	public Iterator<StandardizedRoleProxy> stRoleIterator;
 	public RoleDetailsActivity roleDetailActivity;
 	public StandardizedRoleDetailsViewImpl[] standardizedRoleDetailsView;
+	public RoleEditCheckListSubViewImpl[] roleEditCheckListSubView;
 
 	private static int selecTab = 0;
 
+	// SPEC START =
+	
+	public RoleRoleParticipantSubViewImpl roleRoleParticipantSubViewImpl;
+	public RoleDetailsViewImpl roleDetailsViewImpl;
+	public RoleKeywordSubViewImpl roleKeywordSubViewImpl;
+	
+	private CellTable<RoleParticipantProxy> authorTable;
+	private CellTable<RoleParticipantProxy> reviewerTable;
+	private CellTable<KeywordProxy> keywordTable;
+
+	KeywordProxy selKeywordProxy;
+	
+	// SPEC END =
+	
+	
 	// Assignment :H[
 	private RoleFileSubView[] fileView;
 	public CellTable<FileProxy> fileTable[];
@@ -83,11 +161,42 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	private RoomMaterialsDetailsSubView[] roomMaterialsDetailsSubView;
 
 	private HandlerRegistration rangeUsedMaterialTableChangeHandler;
-	private HandlerRegistration selectionUsedMaterialTableChangeHandler;
 
 	private SingleSelectionModel<UsedMaterialProxy> selectionUsedMaterialModel;
 
 	// ]End
+
+	// Assignment F[
+	private RoleOtherSearchCriteriaView[] simpleSearchCriteriaView;
+	public CellTable<SimpleSearchCriteriaProxy> simpleSearchcriteriaTable[];
+	private SingleSelectionModel<SimpleSearchCriteriaProxy> simpleSearchSelectionModel;
+	private HandlerRegistration simpleSearchRangeChangeHandler;
+	private int simpleSearchSortOrder;
+
+	private OsceConstants constants = GWT.create(OsceConstants.class);
+	public Object[] standardizedRoleProxies;
+	/** Holds a reference to the currently selected advancedSearchPopup */
+	private StandardizedPatientAdvancedSearchPopup advancedSearchPopup;
+	/** Holds a reference to the anamnesisPopup if open */
+	private StandardizedPatientAdvancedSearchAnamnesisPopup anamnesisPopup;
+	/** Holds a reference to the basicCriteriaPopUp if open */
+	private StandartizedPatientAdvancedSearchBasicCriteriaPopUp basicCriteriaPopUp;
+	/** Holds a reference to the scarPopup if open */
+	private StandardizedPatientAdvancedSearchScarPopup scarPopup;
+	/** Holds a reference to the nationalityPopup if open */
+	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
+	/** Holds a reference to the nationalityPopup if open */
+	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
+	/** Holds the table with the advanced search criteria */
+	private CellTable<AdvancedSearchCriteriaProxy> advancedSearchPatientTable[];
+	private StandartizedPatientAdvancedSearchSubView advancedSearchSubViews[];
+	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
+
+	private HandlerRegistration rangeAdvanceSearchTableChangeHandler;
+
+	private SingleSelectionModel<AdvancedSearchCriteriaProxy> selectionAdvanceSearchModel;
+
+	// ]Assignment F
 
 	public static int getSelecTab() {
 		return selecTab;
@@ -107,6 +216,19 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	public void onStop() {
 		selecTab = 0;
+		if (advancedSearchPopup != null) {
+			advancedSearchPopup.hide();
+		}
+		if (rangeUsedMaterialTableChangeHandler != null) {
+			rangeUsedMaterialTableChangeHandler.removeHandler();
+		}
+		if (rangeAdvanceSearchTableChangeHandler != null) {
+			rangeAdvanceSearchTableChangeHandler.removeHandler();
+		}
+		if (simpleSearchRangeChangeHandler != null) {
+			simpleSearchRangeChangeHandler.removeHandler();
+		}
+
 	}
 
 	@Override
@@ -119,11 +241,25 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		this.roleDetailActivity = this;
 
 		roleDetailTabPanel = view.getRoleDetailTabPanel();
+		
+
+		// SPEC START =
+		roleDetailsViewImpl = new RoleDetailsViewImpl();
+		// SPEC END =
+		
 		widget.setWidget(roleDetailsView.asWidget());
 		view.setDelegate(this);
+		
+		// SPEC START
+		//requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new InitializeActivityReceiver());
+		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords","standardizedRoles.previousVersion").fire(new InitializeActivityReceiver());
+		
+		// SPEC END
 
-		requests.find(place.getProxyId()).with("standardizedRoles")
+		/*requests.find(place.getProxyId()).with("standardizedRoles")
 				.fire(new InitializeActivityReceiver());
+		*/
+		//requests.find(place.getProxyId()).with("standardizedRoles" , "standardizedRoles.previousVersion").fire(new InitializeActivityReceiver());		//spec
 
 	}
 
@@ -220,8 +356,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	public void fileMoveUp(FileProxy proxy,
 			final StandardizedRoleProxy standRoleProxy) {
 		// TODO Auto-generated method stub
-		requests.fileRequestNooRoo().fileMoveUp(standRoleProxy.getId()).using(proxy)
-				.fire(new Receiver<Void>() {
+		requests.fileRequestNooRoo().fileMoveUp(standRoleProxy.getId())
+				.using(proxy).fire(new Receiver<Void>() {
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved");
@@ -237,8 +373,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	public void fileMoveDown(FileProxy proxy,
 			final StandardizedRoleProxy standRoleProxy) {
 		// TODO Auto-generated method stub
-		requests.fileRequestNooRoo().fileMoveDown(standRoleProxy.getId()).using(proxy)
-				.fire(new Receiver<Void>() {
+		requests.fileRequestNooRoo().fileMoveDown(standRoleProxy.getId())
+				.using(proxy).fire(new Receiver<Void>() {
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved");
@@ -429,7 +565,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	@Override
 	public void moveUsedMaterialDown(UsedMaterialProxy proxy,
 			final StandardizedRoleProxy standardizedRoleProxy) {
-		requests.usedMaterialRequestNonRoo().moveMaterialDown(standardizedRoleProxy.getId()).using(proxy)
+		requests.usedMaterialRequestNonRoo()
+				.moveMaterialDown(standardizedRoleProxy.getId()).using(proxy)
 				.fire(new Receiver<Void>() {
 					@Override
 					public void onSuccess(Void response) {
@@ -444,7 +581,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	@Override
 	public void moveUsedMaterialUp(UsedMaterialProxy proxy,
 			final StandardizedRoleProxy standardizedRoleProxy) {
-		requests.usedMaterialRequestNonRoo().moveMaterialUp(standardizedRoleProxy.getId()).using(proxy)
+		requests.usedMaterialRequestNonRoo()
+				.moveMaterialUp(standardizedRoleProxy.getId()).using(proxy)
 				.fire(new Receiver<Void>() {
 					@Override
 					public void onSuccess(Void response) {
@@ -528,14 +666,32 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					usedMaterialTable = new CellTable[size];
 					// ]End
 
+					// Assignment F[
+					simpleSearchCriteriaView = new RoleOtherSearchCriteriaView[size];
+					simpleSearchcriteriaTable = new CellTable[size];
+
+					advancedSearchSubViews = new StandartizedPatientAdvancedSearchSubViewImpl[size];
+					advancedSearchPatientTable = new CellTable[size];
+
+					standardizedRoleProxies = ((RoleTopicProxy) response)
+							.getStandardizedRoles().toArray();
+
+					// ]Assignment F
+
 					stRoleIterator = ((RoleTopicProxy) response)
 							.getStandardizedRoles().iterator();
+				
 					while (stRoleIterator.hasNext()) {
+						StandardizedRoleProxy proxy = stRoleIterator.next();
+						
+						if(proxy.getActive()==true)
+						{
+						
+						
 
 						standardizedRoleDetailsView[index] = new StandardizedRoleDetailsViewImpl();
-						StandardizedRoleProxy proxy = stRoleIterator.next();
-						standardizedRoleDetailsView[index].setValue(proxy); // nalim
-
+					
+						standardizedRoleDetailsView[index].setValue(proxy);
 						roleDetailTabPanel.insert(
 								standardizedRoleDetailsView[index],
 								"" + proxy.getShortName(), index);
@@ -640,9 +796,193 @@ public class RoleDetailsActivity extends AbstractActivity implements
 									}
 								});
 						// ]End
+						// Assignment F[
 
+						simpleSearchCriteriaView[index] = standardizedRoleDetailsView[index]
+								.getRoleOtherSearchCriteriaViewImpl();
+						simpleSearchCriteriaView[index].setValue(proxy);
+						simpleSearchCriteriaView[index]
+								.setDelegate(roleDetailActivity);
+						setSimpleSearchTable(
+								simpleSearchCriteriaView[index].getTable(),
+								proxy.getId(), index);
+
+						ProvidesKey<SimpleSearchCriteriaProxy> keyProviderSimpleSearch = ((AbstractHasData<SimpleSearchCriteriaProxy>) simpleSearchcriteriaTable[index])
+								.getKeyProvider();
+						simpleSearchSelectionModel = new SingleSelectionModel<SimpleSearchCriteriaProxy>(
+								keyProviderSimpleSearch);
+						simpleSearchcriteriaTable[index]
+								.setSelectionModel(simpleSearchSelectionModel);
+
+						simpleSearchSelectionModel
+								.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+									public void onSelectionChange(
+											SelectionChangeEvent event) {
+										SimpleSearchCriteriaProxy selectedObject = simpleSearchSelectionModel
+												.getSelectedObject();
+										if (selectedObject != null) {
+											Log.debug(selectedObject.getName()
+													+ " selected!");
+											// showDetails(selectedObject);
+										}
+									}
+								});
+
+						advancedSearchSubViews[index] = standardizedRoleDetailsView[index]
+								.getStandartizedPatientAdvancedSearchSubViewImpl();
+						advancedSearchSubViews[index].setValue(proxy);
+						advancedSearchSubViews[index]
+								.setDelegate(roleDetailActivity);
+						setAdvanceSearchTable(
+								advancedSearchSubViews[index].getTable(),
+								proxy.getId(), index);
+						ProvidesKey<AdvancedSearchCriteriaProxy> keyAdvancedSearchProvider = ((AbstractHasData<AdvancedSearchCriteriaProxy>) advancedSearchPatientTable[index])
+								.getKeyProvider();
+						selectionAdvanceSearchModel = new SingleSelectionModel<AdvancedSearchCriteriaProxy>(
+								keyAdvancedSearchProvider);
+						advancedSearchPatientTable[index]
+								.setSelectionModel(selectionAdvanceSearchModel);
+
+						selectionAdvanceSearchModel
+								.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+									public void onSelectionChange(
+											SelectionChangeEvent event) {
+										AdvancedSearchCriteriaProxy selectedObject = selectionAdvanceSearchModel
+												.getSelectedObject();
+										if (selectedObject != null) {
+											Log.debug(selectedObject.getValue()
+													+ " selected!");
+											// showDetails(selectedObject);
+										}
+									}
+								});
+
+						roleDetailTabPanel
+								.addSelectionHandler(new SelectionHandler<Integer>() {
+									@Override
+									public void onSelection(
+											SelectionEvent<Integer> event) {
+										if (advancedSearchPopup != null
+												&& advancedSearchPopup
+														.isShowing()) {
+											advancedSearchPopup.hide();
+										}
+
+									}
+								});
+
+						standardizedRoleDetailsView[index].getRoleSubPanel()
+								.addSelectionHandler(
+										new SelectionHandler<Integer>() {
+											@Override
+											public void onSelection(
+													SelectionEvent<Integer> event) {
+												if (advancedSearchPopup != null
+														&& advancedSearchPopup
+																.isShowing()) {
+													advancedSearchPopup.hide();
+												}
+
+											}
+										});
+
+						// ]Assignment F
+						
+						
+						// SPEC START =
+						
+						standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().setDelegate(roleDetailActivity);
+						standardizedRoleDetailsView[index].getRoleKeywordSubViewImpl().setDelegate(roleDetailActivity);
+						authorTable = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().authorTable; // ==>
+						reviewerTable = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().authorTable; // ==>
+					
+						ProvidesKey<RoleParticipantProxy> autkeyProvider = ((AbstractHasData<RoleParticipantProxy>) authorTable).getKeyProvider();
+						
+						final int innerindex = index;
+						final int getStandardizedRole = Integer	.parseInt(standardizedRoleDetailsView[index].getValue().getId().toString());
+						
+						requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+						{
+								@Override
+								public void onSuccess(List<RoleParticipantProxy> response) 
+								{
+										Log.info("~Success Call....");
+										Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+										Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
+										standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);
+								}
+						});
+
+						
+						requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+						{
+							@Override
+							public void onSuccess(List<RoleParticipantProxy> response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
+								standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);
+							}
+						});
+
+						
+						Log.info("==>>>Index: "+ innerindex+ " ID Pass: "+ ((RoleTopicProxy) response).getId()+ "SR ID: "+ standardizedRoleDetailsView[innerindex].getValue().getId());
+
+						requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+									@Override
+									public void onSuccess(List<DoctorProxy> response) 
+									{
+										Log.info("~In doctorInitializeActivityReceiver<==");
+										Log.info("~Success Call....");
+										Log.info("~findDoctorWithRoleTopic()");
+										Log.info("~Set Data In ValueListBox" + "Resp. Size: " + response.size()); 										
+										// SPEC START MODIFIED =
+										if(response.size()==0)
+										{											
+											System.out.println("~Keyword Null for Role " + innerindex );
+											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(false);
+										}
+										else
+										{
+											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
+											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
+										}
+										// SPEC END MODIFIED =
+									}
+
+								});
+
+						requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<List<KeywordProxy>>()						 
+						{
+								@Override
+								public void onSuccess(List<KeywordProxy> response) 
+								{									
+									Log.info("~Success Call....");
+									Log.info("~findKeywordByStandRole()");
+									Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
+									standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+								}
+						});
+
+						requests.keywordRequest().findAllKeywords().fire(new Receiver<List<KeywordProxy>>() 
+						{
+							@Override
+							public void onSuccess(List<KeywordProxy> response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findAllKeywords()");
+								Log.info("~Set Keyword Auto Complete Value for SuggestBox: " + "Resp. Size: " + response.size());
+								standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().setKeywordAutocompleteValue(response);
+							}
+						});
+
+						// SPEC END =
+						
+						
 						index++;
 
+					}
 					}
 					roleDetailTabPanel.selectTab(selecTab);
 					view.setStandardizedRoleDetailsViewImpl((StandardizedRoleDetailsViewImpl[]) standardizedRoleDetailsView);
@@ -756,4 +1096,1128 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		goTo(new RoleDetailsPlace(Operation.CREATE));
 	}
 
+	// Assignment F[
+
+	@Override
+	public void addBasicCriteriaClicked(Button addBasicData) {
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == basicCriteriaPopUp) {
+				return;
+			}
+		}
+
+		basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
+		basicCriteriaPopUp.setDelegate(this);
+		basicCriteriaPopUp.display(addBasicData);
+		advancedSearchPopup = basicCriteriaPopUp;
+	}
+
+	@Override
+	public void filterTableClicked() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addScarCriteriaClicked(Button parentButton) {
+		requests.scarRequest().findAllScars().fire(new ScarCriteriaReceiver());
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == scarPopup) {
+				return;
+			}
+		}
+		scarPopup = new StandardizedPatientAdvancedSearchScarPopupImpl();
+		scarPopup.setDelegate(this);
+		scarPopup.display(parentButton);
+		advancedSearchPopup = scarPopup;
+	}
+
+	@Override
+	public void addAnamnesisCriteriaClicked(Button parentButton) {
+		requests.anamnesisCheckRequest().findAllAnamnesisChecks()
+				.fire(new AnamnesisCriteriaReceiver());
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == anamnesisPopup) {
+				return;
+			}
+		}
+		anamnesisPopup = new StandardizedPatientAdvancedSearchAnamnesisPopupImpl();
+		anamnesisPopup.setDelegate(this);
+		anamnesisPopup.display(parentButton);
+		advancedSearchPopup = anamnesisPopup;
+	}
+
+	@Override
+	public void addLanguageCriteriaClicked(Button addLanguageButton) {
+		requests.spokenLanguageRequest().findAllSpokenLanguages()
+				.fire(new LanguageCriteriaReceiver());
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == languagePopup) {
+				return;
+			}
+		}
+		languagePopup = new StandardizedPatientAdvancedSearchLanguagePopupImpl();
+		languagePopup.setDelegate(this);
+		languagePopup.display(addLanguageButton);
+		advancedSearchPopup = languagePopup;
+	}
+
+	@Override
+	public void addNationalityCriteriaClicked(IconButton addNationalityButton) {
+		requests.nationalityRequest().findAllNationalitys()
+				.fire(new NationalityCriteriaReceiver());
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == nationalityPopup) {
+				return;
+			}
+		}
+		nationalityPopup = new StandardizedPatientAdvancedSearchNationalityPopupImpl();
+		nationalityPopup.setDelegate(this);
+		nationalityPopup.display(addNationalityButton);
+		advancedSearchPopup = nationalityPopup;
+	}
+
+	private void setAdvanceSearchTable(
+			CellTable<AdvancedSearchCriteriaProxy> table,
+			long standardizedRoleID, int index) {
+		this.advancedSearchPatientTable[index] = table;
+		Log.info("standardizedRoleID:" + standardizedRoleID);
+		initAdvancedSearch(standardizedRoleID, index);
+	}
+
+	private void initAdvancedSearch(final long standardizedRoleID,
+			final int index) {
+
+		// fix to avoid having multiple rangeChangeHandlers attached
+		if (rangeAdvanceSearchTableChangeHandler != null) {
+			rangeAdvanceSearchTableChangeHandler.removeHandler();
+		}
+		Log.info("standardizedRoleID:" + standardizedRoleID);
+		fireAdvancedSearchCriteriasCountRequest(standardizedRoleID,
+				new Receiver<Long>() {
+					@Override
+					public void onSuccess(Long response) {
+						if (advancedSearchSubViews == null) {
+							// This activity is dead
+							return;
+						}
+						Log.debug("Advanced search init: " + response);
+						advancedSearchSubViews[index].getTable().setRowCount(
+								response.intValue(), true);
+
+						onRangeChangedAdvancedSearchCriteriaTable(
+								standardizedRoleID, index);
+					}
+				});
+
+		rangeAdvanceSearchTableChangeHandler = advancedSearchPatientTable[index]
+				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+					public void onRangeChange(RangeChangeEvent event) {
+						RoleDetailsActivity.this
+								.onRangeChangedAdvancedSearchCriteriaTable(
+										standardizedRoleID, index);
+					}
+				});
+	}
+
+	protected void fireAdvancedSearchCriteriasCountRequest(
+			long standardizedRoleID, Receiver<Long> callback) {
+		requests.advancedSearchCriteriaNonRoo()
+				.countAdvancedSearchCriteriasByStandardizedRoleID(
+						standardizedRoleID).fire(callback);
+	}
+
+	protected void onRangeChangedAdvancedSearchCriteriaTable(
+			long standardizedRoleID, final int index) {
+		final Range range = advancedSearchPatientTable[index].getVisibleRange();
+
+		final Receiver<List<AdvancedSearchCriteriaProxy>> callback = new Receiver<List<AdvancedSearchCriteriaProxy>>() {
+			@Override
+			public void onSuccess(List<AdvancedSearchCriteriaProxy> values) {
+				if (advancedSearchSubViews == null) {
+					// This activity is dead
+					return;
+				}
+				advancedSearchPatientTable[index].setRowData(range.getStart(),
+						values);
+
+				// finishPendingSelection();
+				if (widget != null) {
+					widget.setWidget(view.asWidget());
+				}
+			}
+		};
+
+		fireAdvancedSearchRangeRequest(standardizedRoleID, range, callback,
+				index);
+	}
+
+	private void fireAdvancedSearchRangeRequest(long standardizedRoleID,
+			final Range range,
+			final Receiver<List<AdvancedSearchCriteriaProxy>> callback,
+			int index) {
+		createAdvancedSearchRangeRequest(standardizedRoleID, range).with(
+				advancedSearchSubViews[index].getPaths()).fire(callback);
+		// Log.debug(((String[])view.getPaths().toArray()).toString());
+	}
+
+	protected Request<List<AdvancedSearchCriteriaProxy>> createAdvancedSearchRangeRequest(
+			long standardizedRoleID, Range range) {
+		// return requests.scarRequest().findScarEntries(range.getStart(),
+		// range.getLength());
+		return requests
+				.advancedSearchCriteriaNonRoo()
+				.findAdvancedSearchCriteriasByStandardizedRoleID(
+						standardizedRoleID, range.getStart(), range.getLength());
+	}
+
+	@Override
+	public void deleteAdvancedSearchCriteria(
+			AdvancedSearchCriteriaProxy criterion) {
+
+		if (!Window
+				.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}
+
+		final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+		final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
+				.getId();
+
+		requests.advancedSearchCriteriaRequest().remove().using(criterion)
+				.fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void arg0) {
+						Log.info("Deleted...");
+						initAdvancedSearch(stRoleId, selectedTab);
+
+					}
+				});
+	}
+
+	@Override
+	public void addAdvSeaBasicButtonClicked(Long objectId, String value,
+			String shownValue, BindType bindType,
+			PossibleFields possibleFields, Comparison comparison) {
+
+		switch (possibleFields) {
+		case BMI:
+			shownValue = constants.bmi()
+					+ " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
+							.render(comparison) + " " + value;
+			break;
+		case HEIGHT:
+			shownValue = constants.height()
+					+ " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
+							.render(comparison) + " " + value + "cm";
+			break;
+		case WEIGHT:
+			shownValue = constants.weight()
+					+ " "
+					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
+							.render(comparison) + " " + value + "kg";
+		}
+		AdvancedSearchCriteriaRequest searchCriteriaRequest = requests
+				.advancedSearchCriteriaRequest();
+		AdvancedSearchCriteriaProxy searchCriteriaProxy = searchCriteriaRequest
+				.create(AdvancedSearchCriteriaProxy.class);
+
+		// searchCriteriaProxy = req.edit(searchCriteriaProxy);
+		searchCriteriaProxy.setBindType(bindType);
+		searchCriteriaProxy.setComparation(comparison);
+		searchCriteriaProxy.setField(possibleFields);
+		searchCriteriaProxy.setValue(value);
+		searchCriteriaProxy.setObjectId(objectId);
+		searchCriteriaProxy.setShownValue(shownValue);
+
+		final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+		searchCriteriaProxy
+				.setStandardizedRole((StandardizedRoleProxy) standardizedRoleProxies[selectedTab]);
+		final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
+				.getId();
+
+		Log.info("Stand role Proxy ID: " + stRoleId);
+		// Log.info("Stand Role Topoc Id : "+ S);
+
+		// searchCriteriaProxy.setStandardizedRole();
+		searchCriteriaRequest.persist().using(searchCriteriaProxy)
+				.fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void response) {
+						Log.debug("Adv search Added successfully");
+						initAdvancedSearch(stRoleId, selectedTab);
+
+					}
+				});
+
+		Log.debug("Added criterion: value = " + value);
+	}
+
+	@Override
+	public void addNationalityButtonClicked(NationalityProxy nationality,
+			BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(
+				EnumRenderer.Type.NATIONALITY).render(comparison)
+				+ " "
+				+ nationality.getNationality();
+		addAdvSeaBasicButtonClicked(nationality.getId(),
+				nationality.getNationality(), displayValue, bindType,
+				PossibleFields.NATIONALITY, comparison);
+	}
+
+	@Override
+	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType,
+			Comparison comparison) {
+		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": "
+				+ scarProxy.getBodypart());
+		String displayValue = new EnumRenderer<Comparison>(
+				EnumRenderer.Type.SCAR).render(comparison)
+				+ " "
+				+ new ScarProxyRenderer().render(scarProxy);
+		String value = scarProxy.getTraitType().toString() + ":"
+				+ scarProxy.getBodypart();
+		addAdvSeaBasicButtonClicked(scarProxy.getId(), value, displayValue,
+				bindType, PossibleFields.SCAR, comparison);
+	}
+
+	@Override
+	public void addLanguageButtonClicked(SpokenLanguageProxy languageProxy,
+			LangSkillLevel skill, BindType bindType, Comparison comparison) {
+		String displayValue = constants.patientSpeaks()
+				+ " "
+				+ languageProxy.getLanguageName()
+				+ " "
+				+ new EnumRenderer<Comparison>(EnumRenderer.Type.LANGSKILL)
+						.render(comparison) + " "
+				+ new EnumRenderer<LangSkillLevel>().render(skill);
+		String value = skill.toString();
+		addAdvSeaBasicButtonClicked(languageProxy.getId(), value, displayValue,
+				bindType, PossibleFields.LANGUAGE, comparison);
+	}
+
+	@Override
+	public void addAnamnesisValueButtonClicked(
+			AnamnesisCheckProxy anamnesisCheck, String answer,
+			BindType bindType, Comparison comparison) {
+		Log.info("Question:" + anamnesisCheck.getText() + "; options:"
+				+ anamnesisCheck.getValue() + "; answer: " + answer);
+		String displayValue = "\""
+				+ anamnesisCheck.getText()
+				+ "\" "
+				+ new EnumRenderer<Comparison>(EnumRenderer.Type.ANAMNESIS)
+						.render(comparison) + " "
+				+ humanReadableAnamnesisAnswer(anamnesisCheck, answer);
+		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), answer,
+				displayValue, bindType, PossibleFields.ANAMNESIS, comparison);
+	}
+
+	private String humanReadableAnamnesisAnswer(AnamnesisCheckProxy proxy,
+			String answer) {
+		switch (proxy.getType()) {
+		case QUESTION_OPEN:
+		case QUESTION_TITLE:
+			return answer;
+		case QUESTION_YES_NO:
+			if ("1".equals(answer))
+				return constants.yes();
+			return constants.no();
+		case QUESTION_MULT_M:
+		case QUESTION_MULT_S:
+			String[] answerTokens = answer.split("-");
+			String[] questionTokens = proxy.getValue().split("\\|");
+			for (int i = 0; i < answerTokens.length; i++) {
+				if (answerTokens[i].equals("1"))
+					return questionTokens[i];
+			}
+		}
+		return "";
+	}
+
+	private class NationalityCriteriaReceiver extends
+			Receiver<List<NationalityProxy>> {
+		@Override
+		public void onSuccess(List<NationalityProxy> response) {
+			if (nationalityPopup == null) {
+				return;
+			}
+			List<NationalityProxy> values = new ArrayList<NationalityProxy>();
+			values.addAll(response);
+			if (values.size() > 0) {
+				nationalityPopup.getNationalityBox().setValue(values.get(0));
+			}
+			nationalityPopup.getNationalityBox().setAcceptableValues(values);
+
+		}
+
+	}
+
+	/**
+	 * Receiver class that fills the language popups' pulldown with the
+	 * available languages. Should be used in request for languages.
+	 */
+	private class LanguageCriteriaReceiver extends
+			Receiver<List<SpokenLanguageProxy>> {
+		@Override
+		public void onSuccess(List<SpokenLanguageProxy> response) {
+			if (languagePopup == null) {
+				return;
+			}
+			List<SpokenLanguageProxy> values = new ArrayList<SpokenLanguageProxy>();
+			values.addAll(response);
+			if (values.size() > 0) {
+				languagePopup.getLanguageBox().setValue(values.get(0));
+			}
+			languagePopup.getLanguageBox().setAcceptableValues(values);
+		}
+	}
+
+	/**
+	 * Receiver class that fills the Scar Popups Pulldown with the available
+	 * scars. Should be used in request for scars.
+	 */
+	private class ScarCriteriaReceiver extends Receiver<List<ScarProxy>> {
+		@Override
+		public void onSuccess(List<ScarProxy> response) {
+			if (scarPopup == null) {
+				return;
+			}
+
+			List<ScarProxy> values = new ArrayList<ScarProxy>();
+			values.addAll(response);
+			if (values.size() > 0) {
+				scarPopup.getScarBox().setValue(values.get(0));
+			}
+			scarPopup.getScarBox().setAcceptableValues(values);
+		}
+	}
+
+	/**
+	 * Receiver class that fills the anamnesis criteria popups' suggest box with
+	 * possible values. Should be used in request for anamnesis values.
+	 */
+	private class AnamnesisCriteriaReceiver extends
+			Receiver<List<AnamnesisCheckProxy>> {
+		public void onSuccess(List<AnamnesisCheckProxy> response) {
+			if (anamnesisPopup == null) {
+				return;
+			}
+			((ProxySuggestOracle<AnamnesisCheckProxy>) anamnesisPopup
+					.getAnamnesisQuestionSuggestBox().getSuggestOracle())
+					.addAll(response);
+		}
+	}
+
+	// -
+
+	private void simpleSearchInit(long StandardizedRoleID, int index) {
+		simpleSearchInit2(StandardizedRoleID, index);
+	}
+
+	private void simpleSearchInit2(final long StandardizedRoleID,
+			final int index) {
+		if (simpleSearchRangeChangeHandler != null) {
+			simpleSearchRangeChangeHandler.removeHandler();
+		}
+
+		fireSimpleSearchCountRequest(StandardizedRoleID, new Receiver<Long>() {
+			@Override
+			public void onSuccess(Long response) {
+				if (simpleSearchCriteriaView == null) {
+					// This activity is dead
+					return;
+				}
+				Log.debug("Geholte Narben aus der Datenbank: " + response);
+				simpleSearchCriteriaView[index].getTable().setRowCount(
+						response.intValue(), true);
+
+				onRangeChangedSimpleSearch(StandardizedRoleID, index);
+			}
+		});
+
+		simpleSearchRangeChangeHandler = simpleSearchcriteriaTable[index]
+				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+					public void onRangeChange(RangeChangeEvent event) {
+						RoleDetailsActivity.this.onRangeChangedSimpleSearch(
+								StandardizedRoleID, index);
+					}
+				});
+	}
+
+	protected void onRangeChangedSimpleSearch(long StandardizedRoleID,
+			final int index) {
+		final Range range = simpleSearchcriteriaTable[index].getVisibleRange();
+
+		final Receiver<List<SimpleSearchCriteriaProxy>> callback = new Receiver<List<SimpleSearchCriteriaProxy>>() {
+			@Override
+			public void onSuccess(List<SimpleSearchCriteriaProxy> values) {
+				if (simpleSearchCriteriaView == null) {
+					// This activity is dead
+					return;
+				}
+				simpleSearchcriteriaTable[index].setRowData(range.getStart(),
+						values);
+
+				// finishPendingSelection();
+				if (widget != null) {
+					widget.setWidget(view.asWidget());
+				}
+			}
+		};
+
+		fireRangeRequestSimpleSearch(StandardizedRoleID, range, callback, index);
+	}
+
+	protected void fireSimpleSearchCountRequest(long StandardizedRoleID,
+			Receiver<Long> callback) {
+		// requests.scarRequest().countScars().fire(callback);
+		requests.simpleSearchCriteriaRequestNonRoo()
+				.countSimpleSearchByStandardizedRoleID(StandardizedRoleID)
+				.fire(callback);
+	}
+
+	private void fireRangeRequestSimpleSearch(long StandardizedRoleID,
+			final Range range,
+			final Receiver<List<SimpleSearchCriteriaProxy>> callback, int index) {
+		createRangeRequestSimpleSearch(StandardizedRoleID, range).with(
+				simpleSearchCriteriaView[index].getPaths()).fire(callback);
+		// Log.debug(((String[])view.getPaths().toArray()).toString());
+	}
+
+	protected Request<List<SimpleSearchCriteriaProxy>> createRangeRequestSimpleSearch(
+			long StandardizedRoleID, Range range) {
+		// return requests.scarRequest().findScarEntries(range.getStart(),
+		// range.getLength());
+		return requests.simpleSearchCriteriaRequestNonRoo()
+				.findSimpleSearchByStandardizedRoleID(StandardizedRoleID,
+						range.getStart(), range.getLength());
+	}
+
+	private void setSimpleSearchTable(
+			CellTable<SimpleSearchCriteriaProxy> table,
+			long StandardizedRoleID, int index) {
+		this.simpleSearchcriteriaTable[index] = table;
+		simpleSearchInit(StandardizedRoleID, index);
+	}
+
+	@Override
+	public void simpleSearchMoveUp(SimpleSearchCriteriaProxy proxy,
+			final StandardizedRoleProxy standRoleProxy) {
+		requests.simpleSearchCriteriaRequestNonRoo()
+				.simpleSearchMoveUp(standRoleProxy.getId()).using(proxy)
+				.fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("moved");
+						simpleSearchInit(standRoleProxy.getId(),
+								roleDetailTabPanel.getTabBar().getSelectedTab());
+
+					}
+				});
+
+	}
+
+	@Override
+	public void simpleSearchMoveDown(SimpleSearchCriteriaProxy proxy,
+			final StandardizedRoleProxy standRoleProxy) {
+		requests.simpleSearchCriteriaRequestNonRoo()
+				.simpleSearchMoveDown(standRoleProxy.getId()).using(proxy)
+				.fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("moved");
+						simpleSearchInit(standRoleProxy.getId(),
+								roleDetailTabPanel.getTabBar().getSelectedTab());
+					}
+				});
+
+	}
+
+	@Override
+	public void simpleSearchDeleteClicked(SimpleSearchCriteriaProxy proxy,
+			final StandardizedRoleProxy standRoleProxy) {
+		requests.simpleSearchCriteriaRequest().remove().using(proxy)
+				.fire(new Receiver<Void>() {
+					public void onSuccess(Void ignore) {
+						Log.debug("Sucessfully deleted");
+						simpleSearchInit(standRoleProxy.getId(),
+								roleDetailTabPanel.getTabBar().getSelectedTab());
+					}
+				});
+
+	}
+
+	@Override
+	public void newSimpleSearchClicked(String SearchName, String SearchValue,
+			final StandardizedRoleProxy standRoleProxy) {
+		if (SearchName != null) {
+			simpleSearchSortOrder = simpleSearchcriteriaTable[roleDetailTabPanel
+					.getTabBar().getSelectedTab()].getRowCount() + 1;
+			Log.debug("Add Simple Search");
+
+			SimpleSearchCriteriaRequest simpleSearchreq = requests
+					.simpleSearchCriteriaRequest();
+			SimpleSearchCriteriaProxy simpleSearchProxy = simpleSearchreq
+					.create(SimpleSearchCriteriaProxy.class);
+
+			simpleSearchProxy.setName(SearchName);
+			simpleSearchProxy.setValue(SearchValue);
+			simpleSearchProxy.setSortOrder(simpleSearchSortOrder);
+			simpleSearchProxy.setStandardizedRole(standRoleProxy);
+			// reques.edit(scar);
+			// file.setStandardizedRole(proxy);
+
+			simpleSearchreq.persist().using(simpleSearchProxy)
+					.fire(new Receiver<Void>() {
+						@Override
+						public void onSuccess(Void arg0) {
+							Log.info("Simple Search Criteria added..");
+							simpleSearchInit(standRoleProxy.getId(),
+									roleDetailTabPanel.getTabBar()
+											.getSelectedTab());
+						}
+					});
+		}
+
+	}
+
+	// ]Assignment F
+	
+	
+	@Override
+	public void previousRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
+		Log.info("previous clicked");
+		System.out.println("============================Jump to StandardizedPatientDetailActivity previousClick() =========================");
+	//	System.out.println("==>"+roleDetailTabPanel.getTabBar().getSelectedTab());
+	//	int selTabID=roleDetailTabPanel.getTabBar().getSelectedTab();
+		
+		if(standardizedRoleProxy!=null)
+		{
+		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("previousVersion").fire(new Receiver<StandardizedRoleProxy>() {
+			
+			@Override
+			public void onSuccess(StandardizedRoleProxy response) {
+				// TODO Auto-generated method stub
+				
+				StandardizedRoleDetailsViewImpl previousRole;	
+				StandardizedRoleProxy roleProxy=response.getPreviousVersion();
+				if(roleProxy!=null)
+				{
+					
+					System.out.println("Set value");
+					//goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(),	Operation.DETAILS));
+				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).roleTopic.stableId(),Operation.DETAILS));
+				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).stableId(),Operation.DETAILS));
+					previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+					
+					previousRole.edit.setEnabled(false);
+					previousRole.delete.setEnabled(false);
+					previousRole.setTitle(roleProxy.getShortName() == null ? " " : String.valueOf(roleProxy.getShortName()));
+					previousRole.shortName.setInnerText(roleProxy.getShortName() == null ? " " : String.valueOf(roleProxy.getShortName()));
+					previousRole.longName.setInnerText(roleProxy.getLongName() == null ? " " : String.valueOf(roleProxy.getLongName()));
+					previousRole.roleType.setInnerText(roleProxy.getRoleType().name()); //ADDED
+					previousRole.studyYear.setInnerText(roleProxy.getStudyYear().name()); //ADDED
+					previousRole.labelLongNameHeader.setText(""+roleProxy.getLongName());
+					previousRole.setValue(roleProxy);
+				}
+				else
+				{
+					Window.alert("No More Record");
+				}
+				
+			}
+		});
+		}
+	}
+	
+
+	// SPEC START =
+	@Override
+	public void AddAuthorClicked() 
+	{
+		Log.info("~Call AddAuthorClicked:RoleDetailActivity");		
+		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();	
+		
+		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
+		{
+			Window.alert("Please Select the Doctor from List.");
+		}
+		else
+		{
+				Log.info("~Selected Author Name: : "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getName());		
+				Log.info("~Selected Author Id: "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getId());
+				
+				RoleParticipantRequest roleParticipantRequest = requests.roleParticipantRequest();
+				RoleParticipantProxy roleParticipantProxy = roleParticipantRequest.create(RoleParticipantProxy.class);
+		
+				roleParticipantProxy.setType(RoleParticipantTypes.AUTHOR);	// If Author
+				roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
+				roleParticipantProxy.setStandardizedRole(standardizedRoleDetailsView[selectedTabId].getValue());
+				
+				Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
+				Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
+		
+				roleParticipantRequest.persist().using(roleParticipantProxy).fire(new Receiver<Void>() 
+				{
+						@Override
+						public void onSuccess(Void response) 
+						{
+							Log.info("~Success Call....");
+							Log.info("~roleParticipantRequest.persist()");
+							
+							// REFRESH LIST VIEW
+							refreshDoctorList();
+							
+							// REFRESH Author Table
+							requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+							{
+									@Override
+									public void onSuccess(List<RoleParticipantProxy> response) 
+									{																																
+										Log.info("~Success Call....");
+										Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+										Log.info("~Set Data In Author Table: Resp Size: "+ response.size());														
+										standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);
+									}
+							});
+								
+						}
+				});
+				
+				
+				
+				
+				// REFRESH LIST VIEW
+				//refreshDoctorList();	
+		}
+	}
+
+	@Override
+	public void AddReviewerClicked() 
+	{
+		Log.info("~Call AddReviewerClicked:RoleDetailActivity");
+		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
+		
+		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
+		{
+			Window.alert("Please Select the Doctor from List.");
+		}
+		else
+		{
+		
+		Log.info("~Selected Reviewer Name: : "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getName());		
+		Log.info("~Selected Reviewer Id: "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getId());
+
+		RoleParticipantRequest roleParticipantRequest = requests.roleParticipantRequest();
+		RoleParticipantProxy roleParticipantProxy = roleParticipantRequest.create(RoleParticipantProxy.class);
+
+		roleParticipantProxy.setType(RoleParticipantTypes.REVIEWER);// IfReviewer
+		roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
+		roleParticipantProxy.setStandardizedRole(standardizedRoleDetailsView[selectedTabId].getValue());
+		
+		Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
+		Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
+
+		roleParticipantRequest.persist().using(roleParticipantProxy).fire(new Receiver<Void>() 
+		{			
+				@Override
+				public void onSuccess(Void response) 
+				{
+					Log.info("~Success Call....");
+					Log.info("~roleParticipantRequest.persist()");									
+								
+					// REFRESH LIST VIEW
+					refreshDoctorList();
+					
+					// REFRESH Reviewer Table
+					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					{
+							@Override
+							public void onSuccess(List<RoleParticipantProxy> response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: Resp Size: "+ response.size());																							
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);
+								//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.removeFromParent();
+							}
+					});						
+				}				
+		});
+			
+		}
+	}
+
+	@Override
+	public void addKeywordClicked(String string) 
+	{
+			
+		Log.info("~Click on Add Keyword for Role");
+		
+		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		final String selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue();
+		
+		Log.info("~Selected Keyword: " + selectedKeyword);
+
+		requests.keywordRequest().findAllKeywords().fire(new Receiver<List<KeywordProxy>>() 
+		{
+			@Override
+			public void onSuccess(final List<KeywordProxy> response) 
+			{
+				Log.info("~Success Call....");
+				Log.info("~findAllKeywords()");				
+				Log.info("~Keyword Resp Size: "+ response.size());
+				
+				int size=response.size();				
+				int i=0;
+				boolean flag=false;
+								
+				for(i=0;i<size;i++)
+				{
+					Log.info("~Keyword Name: " + response.get(i).getName());
+					if(response.get(i).getName().equals(selectedKeyword))
+					{				
+						Log.info("~Set Proxy for Keyword " + response.get(i).getName());
+						flag=true;
+						selKeywordProxy= response.get(i);
+						break;
+					}
+
+				}
+				if(flag==false) // Keyword is not Exist in Keyword Table
+				{
+					Log.info("~Keyword Not Exist");
+					Log.info("~Add new Keyword: Name: " + selectedKeyword);
+					final int i1=i;
+					
+					KeywordRequest keywordRequest=requests.keywordRequest();	
+					final KeywordProxy keywordProxy=keywordRequest.create(KeywordProxy.class);					
+					keywordProxy.setName(selectedKeyword);
+					
+					keywordRequest.persist().using(keywordProxy).fire(new Receiver<Void>() 
+					{						
+						@Override
+						public void onSuccess(Void response1) 
+						{							
+							Log.info("~Success Call....");
+							Log.info("~keywordRequest.persist()");	
+							Log.info("Add New Keyword in Keyword Table");
+							assignKeywordToStandRoll(keywordProxy);							
+						}
+
+					
+					});					
+					
+				}
+				else
+				{
+					Log.info("~Keyword Exist");
+					Log.info("~Keyword Assign to Role");							
+					assignKeywordToStandRoll(selKeywordProxy);					
+				}
+				
+			}
+			
+			public void assignKeywordToStandRoll(final KeywordProxy tempKeywordProxy) 					
+			{
+						Log.info("~Call assignKeywordToStandRoll()");
+						KeywordProxy keywordProxy=tempKeywordProxy;
+						
+						StandardizedRoleProxy stRoleProxy = standardizedRoleDetailsView[selectedTabId].getValue();						
+						
+						Log.info("~Keyword Proxy:" + keywordProxy.getName());
+						Log.info("~Stand-Role Proxy:" + stRoleProxy.getShortName());
+						Log.info("~Stand-Role Proxy Keyword Size:" + stRoleProxy.getKeywords().size());						
+						
+						StandardizedRoleRequest srRequest = requests.standardizedRoleRequest();
+						stRoleProxy = srRequest.edit(stRoleProxy);						
+						
+						Set<KeywordProxy> setKeyworkdProxy = stRoleProxy.getKeywords();														
+						if(setKeyworkdProxy == null)
+						{
+							setKeyworkdProxy = new HashSet<KeywordProxy>();
+							Log.info("~Null part for Keyword : "+ selectedKeyword);
+						}
+						else
+						{
+							Log.info("~Not Null part for Keyword: " + selectedKeyword);	
+						}
+						
+						setKeyworkdProxy.add(keywordProxy);
+						stRoleProxy.setKeywords(setKeyworkdProxy);
+						
+						srRequest.persist().using(stRoleProxy).fire(new Receiver<Void>() 
+						{									
+							@Override
+							public void onSuccess(Void response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~srRequest.persist()");	
+								Log.info("Add new Recoerd in standardized_role_keywords Table");
+										
+									
+								// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
+								refreshRelationshipProxy();
+								
+															
+								// REFRESH KEYWORD TABLE DATA
+								
+								requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<List<KeywordProxy>>()
+								{
+										@Override
+										public void onSuccess(List<KeywordProxy> response) 
+										{
+											Log.info("~Success Call....");
+											Log.info("~REFRESH KEYWORD TABLE DATA");
+											Log.info("~findKeywordByStandRole()");
+											Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
+											Log.info("~Fetch/SET Table Data");
+											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+										}
+								});	
+								
+																		
+								// REFRESH SUGGESION BOX DATA
+								
+								requests.keywordRequest().findAllKeywords().fire(new Receiver<List<KeywordProxy>>() 
+								{
+										@Override
+										public void onSuccess(List<KeywordProxy> response) 
+										{
+											Log.info("~Success Call....");
+											Log.info("~REFRESH SUGGESION BOX DATA");
+											Log.info("~findAllKeywords()");
+											Log.info("~Set keyword Autocomplete Value for SuggestBox:" + "Resp. Size: " + response.size());
+											Log.info("~Fetch/SET SuggestBox Data");
+											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().setKeywordAutocompleteValue(response);
+										}
+								});
+								
+								standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.addChangeListener(new ChangeListener() 
+								{									
+									@Override
+									public void onChange(Widget sender) 
+									{									
+										Log.info("~onChange keywordSugestionBox");										
+										standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());	
+									}
+								});	
+							}
+						});
+					}				
+				});					
+	}
+
+	@Override
+	public void performKeywordSearch() 
+	{
+		Log.info("~Perform Keyword Search");
+		onRangeChangedKeyword();
+	}
+
+	private void onRangeChangedKeyword() 
+	{
+		Log.info("~Perform Keyword Search->onRangeChangedKeyword");
+	}
+
+	@Override
+	public void deleteKeywordClicked(KeywordProxy keywordProxy) 
+	{
+		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		Log.info("~DeleteKeywordClicked");
+		Log.info("~Delete Keyword for Role: " + standardizedRoleDetailsView[selectedTabId].getValue().getId());
+		Log.info("~Delete Keyword: " + keywordProxy.getName());
+		
+		
+		
+		StandardizedRoleProxy stRoleProxy = standardizedRoleDetailsView[selectedTabId].getValue();
+		StandardizedRoleRequest srRequest = requests.standardizedRoleRequest();
+		stRoleProxy = srRequest.edit(stRoleProxy);
+		
+		Set<KeywordProxy> setKeyworkdProxy = stRoleProxy.getKeywords();
+		
+		Iterator<KeywordProxy> i = stRoleProxy.getKeywords().iterator();
+		
+		while (i.hasNext())
+		{
+			KeywordProxy keywordProxy1 = (KeywordProxy) i.next();
+			Log.info("~ OUT Delete Keyword ID: " + keywordProxy.getId() + " " + keywordProxy1.getId());
+			
+			if (Integer.parseInt(keywordProxy1.getId().toString()) == Integer.parseInt(keywordProxy.getId().toString())) 
+			{
+				//stRoleProxy.getKeywords().remove(keywordProxy1);				
+				Log.info("~Removing : " + keywordProxy1.getName());
+				Log.info("~ IF Delete Keyword ID: " + keywordProxy.getId() + " " + keywordProxy1.getId());
+				i.remove();
+				break;
+			}
+			else
+			{
+				Log.info("~Other");
+				Log.info("~ELSE Delete Keyword ID: " + keywordProxy.getId()+ " " + keywordProxy1.getId());
+			}
+		}
+		stRoleProxy.setKeywords(setKeyworkdProxy);
+		srRequest.persist().using(stRoleProxy).fire(new Receiver<Void>()
+		{
+			@Override
+			public void onSuccess(Void response1) 
+			{
+				Log.info("~Record Deleted Successfully");
+				Log.info("~Success......");
+				Log.info("~srRequest.persist()");
+				
+				// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
+				refreshRelationshipProxy();
+				
+				// REFRESH KEYWORD TABLE DATA
+				requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<List<KeywordProxy>>()
+				{
+						@Override
+						public void onSuccess(List<KeywordProxy> response) 
+						{
+							Log.info("~Success Call....");
+							Log.info("~REFRESH KEYWORD TABLE DATA");
+							Log.info("~findKeywordByStandRole()");
+							Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
+							Log.info("~Fetch/SET Table Data");									
+							standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+						}
+				});	
+			}
+			
+		});								
+	}	// END deleteKeywordClicked
+
+	@Override
+	public void deleteDoctorClicked(RoleParticipantProxy roleParticipantProxy,int i) 
+	{
+		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int flag=i;
+		Log.info("delete clicked");
+		Log.info("~Delete Doctor" + i +"Clicked Name: " + roleParticipantProxy.getDoctor().getName() );				
+		Log.info("~Delete Doctor Clicked Role: " +standardizedRoleDetailsView[selectedTabId].getValue().getId());
+		Log.info("~RoleParticipantProxyId: " + roleParticipantProxy.getId());
+		
+		requests.roleParticipantRequest().remove().using(roleParticipantProxy).fire(new Receiver<Void>() 
+		{
+			public void onSuccess(Void ignore) 
+			{
+				Log.debug("Sucessfully deleted");
+
+			
+				if(flag==0) // Author Deleted
+				{
+					// REFRESH Author Table
+					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					{
+							@Override
+							public void onSuccess(List<RoleParticipantProxy> response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Author Table: Resp Size: "+ response.size());														
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);								
+							}
+					});	
+					
+				}
+				else	// REVIEWER DELETED
+				{
+					// REFRESH Reviewer Table
+					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					{
+							@Override
+							public void onSuccess(List<RoleParticipantProxy> response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: Resp Size: "+ response.size());																							
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);								
+							}
+					});		
+				}
+						
+				//	REFRESH LIST VIEW
+				refreshDoctorList();	
+			}
+		});
+		
+	} // end deleteDoctorClicked
+	
+	public void refreshRelationshipProxy()
+	{
+		// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
+		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
+		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new Receiver<Object>()
+		{
+			@Override
+			public void onFailure(ServerFailure error) {
+				Log.error(error.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Object response) 
+			{
+				Log.info("~Success....");
+				Log.info("~Refresh Relationship Data");
+				Log.info("~Stand Role Size: "+ ((RoleTopicProxy) response).getStandardizedRoles().size()); // Return Size of Data
+				if (response instanceof RoleTopicProxy) 
+				{										
+					if (((RoleTopicProxy) response).getStandardizedRoles() != null) 
+					{												
+						Object tempStRoleProxy[] = ((RoleTopicProxy) response).getStandardizedRoles().toArray();												
+						StandardizedRoleProxy proxy = ((StandardizedRoleProxy)tempStRoleProxy[selectedTabId]);
+						standardizedRoleDetailsView[selectedTabId].setValue(proxy); 													
+						Log.info("In get updted Role ID : " + proxy.getId() + " keyword : " + proxy.getKeywords().size());		
+					}
+				}
+				else 
+				{
+						Log.info("~No Roles Aveilable");
+				}
+			}
+
+		});
+		
+	}
+	
+	
+	public void refreshDoctorList()
+	{
+		// REFRESH LIST VIEW		
+		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
+		requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+			@Override
+			public void onSuccess(List<DoctorProxy> response) 
+			{
+				Log.info("~Success Call....");
+				Log.info("~refreshDoctorList");
+				Log.info("~Set Data In ValueListBox" + "Resp. Size: " + response.size());				
+				standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setValue(null);
+				// SPEC START MODIFIED =
+				if(response.size()==0)
+				{											
+					System.out.println("~Keyword Null for Role " + selectedTabId );
+					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(false);
+				}
+				else
+				{
+					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
+					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
+				}
+				// SPEC END MODIFIED =
+			}
+
+		});			
+	}
+	
+	// SPEC END =
+	
 }

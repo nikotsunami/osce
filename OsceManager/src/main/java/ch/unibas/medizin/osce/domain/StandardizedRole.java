@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -26,56 +25,65 @@ import javax.persistence.Enumerated;
 @RooEntity
 public class StandardizedRole {
 
-    @NotNull
-    @Size(min = 2, max = 20)
-    private String shortName;
+	@NotNull
+	@Size(min = 2, max = 20)
+	private String shortName;
 
-    @NotNull
-    @Size(min = 2, max = 100)
-    private String longName;
+	@NotNull
+	@Size(min = 2, max = 100)
+	private String longName;
 
-    @Size(max = 999)
-    private String caseDescription;
+	@Size(max = 999)
+	private String caseDescription;
 
-    @Size(max = 255)
-    private String roleScript;
+	@Size(max = 255)
+	private String roleScript;
 
-    @Enumerated
-    private RoleTypes roleType;
-    
+	@Enumerated
+	private RoleTypes roleType;
+
     
     private Boolean active;
    
-    @NotNull
-    @ManyToOne
-    private RoleTopic roleTopic;
+	@NotNull
+	@ManyToOne
+	private RoleTopic roleTopic;
 
-    /*
-    @NotNull
-    @ManyToOne
-    private Doctor author;
+	/*
+	 * @NotNull
+	 * 
+	 * @ManyToOne private Doctor author;
+	 * 
+	 * @NotNull
+	 * 
+	 * @ManyToOne private Doctor reviewer;
+	 */
 
-    @NotNull
-    @ManyToOne
-    private Doctor reviewer;
-    */
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-    private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
-  
+
 	@ManyToOne(cascade = CascadeType.ALL)
-    private StandardizedRole previousVersion;
+	private StandardizedRole previousVersion;
 
-    @Enumerated
-    private StudyYears studyYear;
+	@Enumerated
+	private StudyYears studyYear;
 
-    private Integer mainVersion;
+	private Integer mainVersion;
 
-    private Integer subVersion;
-    
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Keyword> keywords = new HashSet<Keyword>();
-    
-   
+	private Integer subVersion;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<Keyword> keywords = new HashSet<Keyword>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<AdvancedSearchCriteria> advancedSearchCriteria = new HashSet<AdvancedSearchCriteria>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<SimpleSearchCriteria> simpleSearchCriteria = new HashSet<SimpleSearchCriteria>();
+	
+	   @ManyToOne(cascade = CascadeType.ALL)
+	    private CheckList checkList;
+	    
+
 }

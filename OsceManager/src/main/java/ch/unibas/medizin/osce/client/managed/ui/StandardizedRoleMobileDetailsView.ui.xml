@@ -104,6 +104,54 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -163,6 +211,18 @@
         <div id="keywords">
             <div class="{style.label}">Keywords</div>
             <div class="{style.value}" ui:field="keywords"/>
+        </div>
+        <div id="advancedSearchCriteria">
+            <div class="{style.label}">Advanced Search Criteria</div>
+            <div class="{style.value}" ui:field="advancedSearchCriteria"/>
+        </div>
+        <div id="simpleSearchCriteria">
+            <div class="{style.label}">Simple Search Criteria</div>
+            <div class="{style.value}" ui:field="simpleSearchCriteria"/>
+        </div>
+        <div id="checkList">
+            <div class="{style.label}">Check List</div>
+            <div class="{style.value}" ui:field="checkList"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

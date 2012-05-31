@@ -17,4 +17,9 @@ public interface DoctorRequestNonRoo extends RequestContext {
 	abstract Request<Long> countDoctorsBySearch(String q);
 	
 	abstract Request<List<DoctorProxy>> findDoctorsBySearch(String q, int firstResult, int maxResults);
+	
+	// SPEC START =
+	abstract Request<List<DoctorProxy>> findDoctorWithRoleTopic(Long standroleid);
+	// SPEC END =
+	
 }

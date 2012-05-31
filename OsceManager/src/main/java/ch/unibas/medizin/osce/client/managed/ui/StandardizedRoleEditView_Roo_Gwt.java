@@ -4,9 +4,12 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.StandardizedRoleEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.StandardizedRoleEditActivityWrapper.View;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
@@ -96,8 +99,29 @@ public abstract class StandardizedRoleEditView_Roo_Gwt extends Composite impleme
     @UiField
     KeywordSetEditor keywords;
 
+    @UiField
+    AdvancedSearchCriteriaSetEditor advancedSearchCriteria;
+
+    @UiField
+    SimpleSearchCriteriaSetEditor simpleSearchCriteria;
+
+    @UiField(provided = true)
+    ValueListBox<CheckListProxy> checkList = new ValueListBox<CheckListProxy>(ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.CheckListProxy>());
+
+    public void setAdvancedSearchCriteriaPickerValues(Collection<AdvancedSearchCriteriaProxy> values) {
+        advancedSearchCriteria.setAcceptableValues(values);
+    }
+
+    public void setSimpleSearchCriteriaPickerValues(Collection<SimpleSearchCriteriaProxy> values) {
+        simpleSearchCriteria.setAcceptableValues(values);
+    }
+
     public void setRoleParticipantsPickerValues(Collection<RoleParticipantProxy> values) {
         roleParticipants.setAcceptableValues(values);
+    }
+
+    public void setCheckListPickerValues(Collection<CheckListProxy> values) {
+        checkList.setAcceptableValues(values);
     }
 
     public void setRoleTypePickerValues(Collection<RoleTypes> values) {

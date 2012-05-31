@@ -57,6 +57,14 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -119,6 +127,14 @@
                 </td>
                 <td>
                     <span ui:field="shownValue"/>
+                </td>
+            </tr>
+            <tr id="standardizedRole">
+                <td>
+                    <span class="{style.label}">Standardized Role:</span>
+                </td>
+                <td>
+                    <span ui:field="standardizedRole"/>
                 </td>
             </tr>
         </table>

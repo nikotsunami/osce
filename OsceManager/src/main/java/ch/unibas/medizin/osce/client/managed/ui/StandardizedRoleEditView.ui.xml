@@ -118,6 +118,48 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="shortName">
                 <td>
                     <div class="{style.label}">Short Name:</div>
@@ -220,6 +262,30 @@
                 </td>
                 <td>
                     <a:KeywordSetEditor ui:field="keywords"/>
+                </td>
+            </tr>
+            <tr id="advancedSearchCriteria">
+                <td>
+                    <div class="{style.label}">Advanced Search Criteria:</div>
+                </td>
+                <td>
+                    <a:AdvancedSearchCriteriaSetEditor ui:field="advancedSearchCriteria"/>
+                </td>
+            </tr>
+            <tr id="simpleSearchCriteria">
+                <td>
+                    <div class="{style.label}">Simple Search Criteria:</div>
+                </td>
+                <td>
+                    <a:SimpleSearchCriteriaSetEditor ui:field="simpleSearchCriteria"/>
+                </td>
+            </tr>
+            <tr id="checkList">
+                <td>
+                    <div class="{style.label}">Check List:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="checkList"/>
                 </td>
             </tr>
         </table>
