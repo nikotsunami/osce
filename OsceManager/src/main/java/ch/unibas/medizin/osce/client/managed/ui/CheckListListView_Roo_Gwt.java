@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -18,6 +19,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class CheckListListView_Roo_Gwt extends AbstractProxyListView<CheckListProxy> {
@@ -73,5 +75,15 @@ public abstract class CheckListListView_Roo_Gwt extends AbstractProxyListView<Ch
                 return renderer.render(object.getTitle());
             }
         }, "Title");
+        paths.add("checkListTopics");
+        table.addColumn(new TextColumn<CheckListProxy>() {
+
+            Renderer<java.util.List> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicProxyRenderer.instance());
+
+            @Override
+            public String getValue(CheckListProxy object) {
+                return renderer.render(object.getCheckListTopics());
+            }
+        }, "Check List Topics");
     }
 }

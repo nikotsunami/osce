@@ -19,13 +19,20 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="title">
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="title">
             <div class="{style.label}">Title</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="title"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+        <div id="checkListTopics">
+            <div class="{style.label}">Check List Topics</div>
+            <div class="{style.value}">
+                <a:ChecklistTopicListEditor ui:field="checkListTopics"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

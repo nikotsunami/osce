@@ -27,7 +27,14 @@
     
 
     <g:Button ui:field="save">Save</g:Button>
-  <div id="item_defination">
+  
+        
+        
+        
+        
+        
+        
+    <div id="item_defination">
             <div class="{style.label}">Item_defination</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="item_defination"/>
@@ -55,6 +62,12 @@
             <div class="{style.label}">Sort_order</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="sort_order"/>
+            </div>
+        </div>
+        <div id="roleSubItem">
+            <div class="{style.label}">Role Sub Item</div>
+            <div class="{style.value}">
+                <a:RoleSubItemValueListEditor ui:field="roleSubItem"/>
             </div>
         </div>
         <div id="roleTableItem">

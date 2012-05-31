@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.request;
 
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.List;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
 @RooGwtMirroredFrom("ch.unibas.medizin.osce.domain.CheckList")
@@ -21,4 +22,8 @@ public interface CheckListProxy extends EntityProxy {
     abstract String getTitle();
 
     abstract void setTitle(String title);
+
+    abstract List<ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy> getCheckListTopics();
+
+    abstract void setCheckListTopics(List<ChecklistTopicProxy> checkListTopics);
 }

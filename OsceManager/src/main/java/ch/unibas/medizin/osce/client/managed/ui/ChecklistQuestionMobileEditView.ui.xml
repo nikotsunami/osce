@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+  <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .error {
+      padding-left: 0.5em;
+      background-color: red;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding-bottom: 10px;
+    }
+  </ui:style>
+ 
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
+    
+    <div id="question">
+            <div class="{style.label}">Question</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="question"/>
+            </div>
+        </div>
+    <div id="checkListTopic">
+            <div class="{style.label}">Check List Topic</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="checkListTopic"/>
+            </div>
+        </div>
+    <div id="sequenceNumber">
+            <div class="{style.label}">Sequence Number</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="sequenceNumber"/>
+            </div>
+        </div>
+    <div id="checkListOptions">
+            <div class="{style.label}">Check List Options</div>
+            <div class="{style.value}">
+                <a:ChecklistOptionSetEditor ui:field="checkListOptions"/>
+            </div>
+        </div>
+    <div id="checkListCriterias">
+            <div class="{style.label}">Check List Criterias</div>
+            <div class="{style.value}">
+                <a:ChecklistCriteriaSetEditor ui:field="checkListCriterias"/>
+            </div>
+        </div>
+    <div id="instruction">
+            <div class="{style.label}">Instruction</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="instruction"/>
+            </div>
+        </div>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

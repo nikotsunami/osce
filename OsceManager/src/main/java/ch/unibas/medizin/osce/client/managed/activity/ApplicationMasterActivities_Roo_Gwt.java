@@ -12,6 +12,10 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
@@ -36,6 +40,7 @@ import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -68,6 +73,14 @@ import ch.unibas.medizin.osce.client.managed.ui.BankaccountListView;
 import ch.unibas.medizin.osce.client.managed.ui.BankaccountMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.CheckListListView;
 import ch.unibas.medizin.osce.client.managed.ui.CheckListMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistCriteriaListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistCriteriaMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistOptionListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistOptionMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistQuestionListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistQuestionMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicListView;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.ClinicListView;
 import ch.unibas.medizin.osce.client.managed.ui.ClinicMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.CourseListView;
@@ -116,6 +129,8 @@ import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueListView;
+import ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemValueListView;
@@ -250,6 +265,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
+            public void handleRoleSubItemValue(RoleSubItemValueProxy isNull) {
+                setResult(new RoleSubItemValueListActivity(requests, ScaffoldApp.isMobile() ? RoleSubItemValueMobileListView.instance() : RoleSubItemValueListView.instance(), placeController));
+            }
+
+            @Override
             public void handleRoleParticipant(RoleParticipantProxy isNull) {
                 setResult(new RoleParticipantListActivity(requests, ScaffoldApp.isMobile() ? RoleParticipantMobileListView.instance() : RoleParticipantListView.instance(), placeController));
             }
@@ -370,8 +390,28 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
+            public void handleChecklistTopic(ChecklistTopicProxy isNull) {
+                setResult(new ChecklistTopicListActivity(requests, ScaffoldApp.isMobile() ? ChecklistTopicMobileListView.instance() : ChecklistTopicListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleChecklistQuestion(ChecklistQuestionProxy isNull) {
+                setResult(new ChecklistQuestionListActivity(requests, ScaffoldApp.isMobile() ? ChecklistQuestionMobileListView.instance() : ChecklistQuestionListView.instance(), placeController));
+            }
+
+            @Override
             public void handleCheckList(CheckListProxy isNull) {
                 setResult(new CheckListListActivity(requests, ScaffoldApp.isMobile() ? CheckListMobileListView.instance() : CheckListListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleChecklistOption(ChecklistOptionProxy isNull) {
+                setResult(new ChecklistOptionListActivity(requests, ScaffoldApp.isMobile() ? ChecklistOptionMobileListView.instance() : ChecklistOptionListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleChecklistCriteria(ChecklistCriteriaProxy isNull) {
+                setResult(new ChecklistCriteriaListActivity(requests, ScaffoldApp.isMobile() ? ChecklistCriteriaMobileListView.instance() : ChecklistCriteriaListView.instance(), placeController));
             }
 
             @Override

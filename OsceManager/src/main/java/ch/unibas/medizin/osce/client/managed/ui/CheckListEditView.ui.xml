@@ -43,7 +43,8 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="title">
+      
+    <tr id="title">
                 <td>
                     <div class="{style.label}">Title:</div>
                 </td>
@@ -51,7 +52,15 @@
                     <g:TextBox ui:field="title"/>
                 </td>
             </tr>
-    </table>
+            <tr id="checkListTopics">
+                <td>
+                    <div class="{style.label}">Check List Topics:</div>
+                </td>
+                <td>
+                    <a:ChecklistTopicListEditor ui:field="checkListTopics"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

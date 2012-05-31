@@ -416,4 +416,31 @@ public interface OsceConstants extends Constants {
 	// End Assignbment F
 
 	
+ //Assignment E[
+    
+    public String addCheckListTopic();
+    
+    public String addCheckListQuestion();
+    
+    public String importTopic();
+    
+    public String importQuestion();
+    
+    public String okBtn();
+    
+    public String topicDescription();
+    
+    public String checklistTopic();
+    
+    public String optionName();
+    
+    public String optionValue();
+    
+    public String questionName();
+    
+    public String questionInstruction();
+    
+    public String checkList();
+    //Assignment E]
+	
 }

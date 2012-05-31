@@ -14,6 +14,7 @@ privileged aspect RoleBaseItem_Roo_ToString {
         sb.append("Item_defination: ").append(getItem_defination()).append(", ");
         sb.append("Item_name: ").append(getItem_name()).append(", ");
         sb.append("RoleItemAccess: ").append(getRoleItemAccess() == null ? "null" : getRoleItemAccess().size()).append(", ");
+        sb.append("RoleSubItem: ").append(getRoleSubItem() == null ? "null" : getRoleSubItem().size()).append(", ");
         sb.append("RoleTableItem: ").append(getRoleTableItem() == null ? "null" : getRoleTableItem().size()).append(", ");
         sb.append("RoleTemplate: ").append(getRoleTemplate()).append(", ");
         sb.append("Sort_order: ").append(getSort_order()).append(", ");

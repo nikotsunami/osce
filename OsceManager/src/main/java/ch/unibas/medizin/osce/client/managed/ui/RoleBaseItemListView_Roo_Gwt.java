@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
@@ -133,6 +134,16 @@ public abstract class RoleBaseItemListView_Roo_Gwt extends AbstractProxyListView
                 return renderer.render(object.getSort_order());
             }
         }, "Sort_order");
+        paths.add("roleSubItem");
+        table.addColumn(new TextColumn<RoleBaseItemProxy>() {
+
+            Renderer<java.util.List> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueProxyRenderer.instance());
+
+            @Override
+            public String getValue(RoleBaseItemProxy object) {
+                return renderer.render(object.getRoleSubItem());
+            }
+        }, "Role Sub Item");
         paths.add("roleTableItem");
         table.addColumn(new TextColumn<RoleBaseItemProxy>() {
 

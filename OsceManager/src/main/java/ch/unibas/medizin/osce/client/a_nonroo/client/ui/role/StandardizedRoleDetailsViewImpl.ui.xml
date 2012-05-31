@@ -120,12 +120,32 @@
 			</g:DisclosurePanel>
 
 			<g:TabPanel ui:field="roleSubPanel" width="100%">
+					<!--  Assignment E		start	-->		
 				<g:Tab>
-					<g:TabHTML>CheckList</g:TabHTML>
-					<g:HTMLPanel addStyleNames="{style.patientDetails}">
-
-					</g:HTMLPanel>
+					
+				<g:TabHTML>CheckList</g:TabHTML>
+						
+					
+							<g:HTMLPanel addStyleNames="{style.patientDetails}" width="100%">
+							<!--  Assignment E			-->		
+								<g:VerticalPanel width="100%">
+										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="100%">
+										
+										
+										
+										</g:VerticalPanel>
+										
+									<g:HorizontalPanel spacing="10" ui:field="addTopicHP">		
+											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
+											
+											<g:Button ui:field="addCheckListTopicButton"> </g:Button>
+											
+											<g:Button ui:field="importTopicButton"></g:Button>
+										</g:HorizontalPanel>
+								</g:VerticalPanel>
+							</g:HTMLPanel>	
 				</g:Tab>
+				<!--  Assignment E		end	-->	
 				<g:Tab>
 					<g:TabHTML>Search Criteria</g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
@@ -173,7 +193,14 @@
 				<g:Tab>
 					<g:TabHTML>Role Script</g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
-						<g:Label>Role Script</g:Label>
+						<!-- g:Label>Role Script</g:Label-->
+						<g:VerticalPanel ui:field="roleBaseItemPanel" addStyleNames="{style.tabStyle}" spacing="10">
+						<!-- m:RoleBaseTableItemViewImpl ui:field="roleBaseTableItemViewImpl"></m:RoleBaseTableItemViewImpl-->
+						</g:VerticalPanel>
+						<div>
+						<g:ValueListBox ui:field="roleTemplateListBox"></g:ValueListBox>
+						<my:IconButton ui:field="roleTemplateValueButon" icon="plusthick"></my:IconButton>
+						</div>
 					</g:HTMLPanel>
 				</g:Tab>
 			</g:TabPanel>

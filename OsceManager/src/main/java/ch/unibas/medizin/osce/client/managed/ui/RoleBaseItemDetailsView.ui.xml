@@ -43,7 +43,16 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -97,6 +106,14 @@
                 </td>
                 <td>
                     <span ui:field="sort_order"/>
+                </td>
+            </tr>
+            <tr id="roleSubItem">
+                <td>
+                    <span class="{style.label}">Role Sub Item:</span>
+                </td>
+                <td>
+                    <span ui:field="roleSubItem"/>
                 </td>
             </tr>
             <tr id="roleTableItem">

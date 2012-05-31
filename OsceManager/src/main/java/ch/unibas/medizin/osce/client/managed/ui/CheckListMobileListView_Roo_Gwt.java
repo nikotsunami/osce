@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -16,6 +17,7 @@ import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class CheckListMobileListView_Roo_Gwt extends MobileProxyListView<CheckListProxy> {

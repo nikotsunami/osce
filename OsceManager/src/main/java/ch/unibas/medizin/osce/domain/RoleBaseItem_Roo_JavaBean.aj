@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.RoleItemAccess;
+import ch.unibas.medizin.osce.domain.RoleSubItemValue;
 import ch.unibas.medizin.osce.domain.RoleTableItem;
 import ch.unibas.medizin.osce.domain.RoleTemplate;
 import ch.unibas.medizin.osce.shared.ItemDefination;
@@ -53,6 +54,14 @@ privileged aspect RoleBaseItem_Roo_JavaBean {
     
     public void RoleBaseItem.setSort_order(Integer sort_order) {
         this.sort_order = sort_order;
+    }
+    
+    public List<RoleSubItemValue> RoleBaseItem.getRoleSubItem() {
+        return this.roleSubItem;
+    }
+    
+    public void RoleBaseItem.setRoleSubItem(List<RoleSubItemValue> roleSubItem) {
+        this.roleSubItem = roleSubItem;
     }
     
     public List<RoleTableItem> RoleBaseItem.getRoleTableItem() {

@@ -41,6 +41,10 @@ public interface RoleBaseItemProxy extends EntityProxy {
 
     abstract void setSort_order(Integer sort_order);
 
+    abstract List<ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy> getRoleSubItem();
+
+    abstract void setRoleSubItem(List<RoleSubItemValueProxy> roleSubItem);
+
     abstract List<ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy> getRoleTableItem();
 
     abstract void setRoleTableItem(List<RoleTableItemProxy> roleTableItem);

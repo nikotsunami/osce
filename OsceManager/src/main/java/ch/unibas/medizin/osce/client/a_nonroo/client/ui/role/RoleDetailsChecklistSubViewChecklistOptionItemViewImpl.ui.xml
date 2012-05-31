@@ -1,0 +1,56 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp'>
+
+<ui:style src="../../styles.css" >
+.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+.padleft5
+	{
+		padding-left: 5px;
+	}
+	.standardTable input {
+		width: 100%;
+		opacity: 0.8;
+	}
+	
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+		width: 680px;
+	}
+	.right{
+		
+		float:right
+	}
+</ui:style>
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
+<g:HTMLPanel>
+<g:VerticalPanel >
+	<g:HorizontalPanel addStyleNames="{style.patientControls}" spacing="5">
+	
+	<g:Label ui:field="optionLbl" width="75px" wordWrap="true" ></g:Label>
+	<g:Label ui:field="optionValueLbl" width="25px" wordWrap="true"></g:Label>
+	<my:IconButton ui:field="deleteBtn" icon="close"></my:IconButton>
+	</g:HorizontalPanel>
+</g:VerticalPanel>
+	
+</g:HTMLPanel>
+</ui:UiBinder>

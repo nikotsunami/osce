@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.activity.RoleBaseItemEditActivityWr
 import ch.unibas.medizin.osce.client.managed.activity.RoleBaseItemEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -67,6 +68,9 @@ public abstract class RoleBaseItemEditView_Roo_Gwt extends Composite implements 
     IntegerBox sort_order;
 
     @UiField
+    RoleSubItemValueListEditor roleSubItem;
+
+    @UiField
     RoleTableItemListEditor roleTableItem;
 
     @UiField
@@ -74,6 +78,10 @@ public abstract class RoleBaseItemEditView_Roo_Gwt extends Composite implements 
 
     public void setRoleTemplatePickerValues(Collection<RoleTemplateProxy> values) {
         roleTemplate.setAcceptableValues(values);
+    }
+
+    public void setRoleSubItemPickerValues(Collection<RoleSubItemValueProxy> values) {
+        roleSubItem.setAcceptableValues(values);
     }
 
     public void setItem_definationPickerValues(Collection<ItemDefination> values) {

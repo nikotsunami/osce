@@ -78,7 +78,7 @@ RoleBaseTableItemView {
 	}
 	
 	@UiField
-	Label baseItemHeaderLable;
+	public Label baseItemHeaderLable;
 	
 	@UiField(provided = true)
 	public CellTable<RoleTableItemProxy> table;
@@ -87,16 +87,16 @@ RoleBaseTableItemView {
 //	Label hello;
 	
 	@UiField
-	IconButton AccessButton;
+	public IconButton AccessButton;
 	
 	@UiField
 	public IconButton AddSubItem;
 	
 	@UiField
-	IconButton downIcon;
+	public IconButton downIcon;
 	
 	@UiField
-	IconButton upIcon;
+	public IconButton upIcon;
 	
 //	@UiField
 //	public Label accessLabel1;
@@ -106,10 +106,10 @@ RoleBaseTableItemView {
 	com.google.gwt.user.client.ui.Image arrow;
 	
 	@UiField
-	IconButton pencil;
+	public IconButton pencil;
 	
 	@UiField
-	IconButton close;
+	public IconButton close;
 	
 	@UiHandler("AccessButton")
 	public void baseItemAccessButtonClicked(ClickEvent event){

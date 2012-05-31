@@ -6,9 +6,11 @@ import ch.unibas.medizin.osce.client.managed.activity.RoleBaseItemEditActivityWr
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueListEditor;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemListEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -49,6 +51,16 @@ public abstract class RoleBaseItemEditActivityWrapper_Roo_Gwt implements Activit
                 view.setRoleTemplatePickerValues(values);
             }
         });
+        view.setRoleSubItemPickerValues(Collections.<RoleSubItemValueProxy>emptyList());
+        requests.roleSubItemValueRequest().findRoleSubItemValueEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueProxyRenderer.instance().getPaths()).fire(new Receiver<List<RoleSubItemValueProxy>>() {
+
+            public void onSuccess(List<RoleSubItemValueProxy> response) {
+                List<RoleSubItemValueProxy> values = new ArrayList<RoleSubItemValueProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setRoleSubItemPickerValues(values);
+            }
+        });
         view.setRoleTableItemPickerValues(Collections.<RoleTableItemProxy>emptyList());
         requests.roleTableItemRequest().findRoleTableItemEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.RoleTableItemProxyRenderer.instance().getPaths()).fire(new Receiver<List<RoleTableItemProxy>>() {
 
@@ -77,6 +89,8 @@ public abstract class RoleBaseItemEditActivityWrapper_Roo_Gwt implements Activit
         void setItem_definationPickerValues(Collection<ItemDefination> values);
 
         void setRoleTemplatePickerValues(Collection<RoleTemplateProxy> values);
+
+        void setRoleSubItemPickerValues(Collection<RoleSubItemValueProxy> values);
 
         void setRoleTableItemPickerValues(Collection<RoleTableItemProxy> values);
 

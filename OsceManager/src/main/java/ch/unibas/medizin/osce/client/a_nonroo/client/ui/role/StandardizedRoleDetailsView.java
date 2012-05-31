@@ -1,10 +1,14 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.List;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface StandardizedRoleDetailsView extends IsWidget {
 
@@ -21,6 +25,16 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 		void deleteRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
 		// void createRole(StandardizedRoleProxy standardizedRoleProxy);
 	void previousRoleClicked(StandardizedRoleProxy standardizedRoleProxy);//spec
+
+	//Assignment E[
+			void saveCheckListTopic(String checkListTopic,String description);
+			
+			void setRoleListBoxValue(ImportTopicPopupView popupView);
+			//Assignment E]
+	
+			//Assignment I
+			
+			void roleTemplateValueButtonClicked(RoleTemplateProxy value);
 	}
 
 	/*
@@ -55,5 +69,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
     public RoleRoleParticipantSubViewImpl getRoleRoleParticipantSubViewImpl();
     public RoleKeywordSubViewImpl getRoleKeywordSubViewImpl();
 	// SPEC END =
+    void setRoleTemplateListBox(List<RoleTemplateProxy> roleTemplateproxy);
+	VerticalPanel getRoleBaseItemVerticalPanel();
+	
 
 }

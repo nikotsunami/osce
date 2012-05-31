@@ -39,6 +39,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(RoleTemplateProxy.class);
         rtn.add(RoleTableItemValueProxy.class);
         rtn.add(RoleTableItemProxy.class);
+        rtn.add(RoleSubItemValueProxy.class);
         rtn.add(RoleParticipantProxy.class);
         rtn.add(RoleItemAccessProxy.class);
         rtn.add(RoleBaseItemProxy.class);
@@ -63,7 +64,11 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(DescriptionProxy.class);
         rtn.add(CourseProxy.class);
         rtn.add(ClinicProxy.class);
+        rtn.add(ChecklistTopicProxy.class);
+        rtn.add(ChecklistQuestionProxy.class);
         rtn.add(CheckListProxy.class);
+        rtn.add(ChecklistOptionProxy.class);
+        rtn.add(ChecklistCriteriaProxy.class);
         rtn.add(BankaccountProxy.class);
         rtn.add(AssignmentProxy.class);
         rtn.add(AnamnesisFormProxy.class);
@@ -137,6 +142,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (RoleTableItemProxy.class.equals(clazz)) {
             processor.handleRoleTableItem((RoleTableItemProxy) null);
+            return;
+        }
+        if (RoleSubItemValueProxy.class.equals(clazz)) {
+            processor.handleRoleSubItemValue((RoleSubItemValueProxy) null);
             return;
         }
         if (RoleParticipantProxy.class.equals(clazz)) {
@@ -235,8 +244,24 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleClinic((ClinicProxy) null);
             return;
         }
+        if (ChecklistTopicProxy.class.equals(clazz)) {
+            processor.handleChecklistTopic((ChecklistTopicProxy) null);
+            return;
+        }
+        if (ChecklistQuestionProxy.class.equals(clazz)) {
+            processor.handleChecklistQuestion((ChecklistQuestionProxy) null);
+            return;
+        }
         if (CheckListProxy.class.equals(clazz)) {
             processor.handleCheckList((CheckListProxy) null);
+            return;
+        }
+        if (ChecklistOptionProxy.class.equals(clazz)) {
+            processor.handleChecklistOption((ChecklistOptionProxy) null);
+            return;
+        }
+        if (ChecklistCriteriaProxy.class.equals(clazz)) {
+            processor.handleChecklistCriteria((ChecklistCriteriaProxy) null);
             return;
         }
         if (BankaccountProxy.class.equals(clazz)) {
@@ -335,6 +360,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleRoleTableItem((RoleTableItemProxy) proxy);
             return;
         }
+        if (proxy instanceof RoleSubItemValueProxy) {
+            processor.handleRoleSubItemValue((RoleSubItemValueProxy) proxy);
+            return;
+        }
         if (proxy instanceof RoleParticipantProxy) {
             processor.handleRoleParticipant((RoleParticipantProxy) proxy);
             return;
@@ -431,8 +460,24 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleClinic((ClinicProxy) proxy);
             return;
         }
+        if (proxy instanceof ChecklistTopicProxy) {
+            processor.handleChecklistTopic((ChecklistTopicProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistQuestionProxy) {
+            processor.handleChecklistQuestion((ChecklistQuestionProxy) proxy);
+            return;
+        }
         if (proxy instanceof CheckListProxy) {
             processor.handleCheckList((CheckListProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistOptionProxy) {
+            processor.handleChecklistOption((ChecklistOptionProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistCriteriaProxy) {
+            processor.handleChecklistCriteria((ChecklistCriteriaProxy) proxy);
             return;
         }
         if (proxy instanceof BankaccountProxy) {
@@ -501,6 +546,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleRoleTableItem(RoleTableItemProxy proxy);
 
+    public abstract void handleRoleSubItemValue(RoleSubItemValueProxy proxy);
+
     public abstract void handleRoleParticipant(RoleParticipantProxy proxy);
 
     public abstract void handleRoleItemAccess(RoleItemAccessProxy proxy);
@@ -549,7 +596,15 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleClinic(ClinicProxy proxy);
 
+    public abstract void handleChecklistTopic(ChecklistTopicProxy proxy);
+
+    public abstract void handleChecklistQuestion(ChecklistQuestionProxy proxy);
+
     public abstract void handleCheckList(CheckListProxy proxy);
+
+    public abstract void handleChecklistOption(ChecklistOptionProxy proxy);
+
+    public abstract void handleChecklistCriteria(ChecklistCriteriaProxy proxy);
 
     public abstract void handleBankaccount(BankaccountProxy proxy);
 

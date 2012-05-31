@@ -38,6 +38,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     RoleTableItemRequest roleTableItemRequest();
 
+    RoleSubItemValueRequest roleSubItemValueRequest();
+
     RoleParticipantRequest roleParticipantRequest();
 
     RoleItemAccessRequest roleItemAccessRequest();
@@ -86,7 +88,15 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     ClinicRequest clinicRequest();
 
+    ChecklistTopicRequest checklistTopicRequest();
+
+    ChecklistQuestionRequest checklistQuestionRequest();
+
     CheckListRequest checkListRequest();
+
+    ChecklistOptionRequest checklistOptionRequest();
+
+    ChecklistCriteriaRequest checklistCriteriaRequest();
 
     BankaccountRequest bankaccountRequest();
 

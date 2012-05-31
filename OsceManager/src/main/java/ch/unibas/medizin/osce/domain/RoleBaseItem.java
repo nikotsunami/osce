@@ -20,6 +20,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.shared.ItemDefination;
+import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
@@ -43,6 +44,9 @@ public class RoleBaseItem {
 	private RoleTemplate roleTemplate;
 	
 	private Integer sort_order;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "roleBaseItem")
+	private List<RoleSubItemValue> roleSubItem = new ArrayList<RoleSubItemValue>();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "roleBaseItem")
 	@OrderBy ("sort_order")
@@ -57,6 +61,12 @@ public class RoleBaseItem {
 		TypedQuery<RoleBaseItem> q = em.createQuery("SELECT baseItem FROM RoleBaseItem AS baseItem WHERE baseItem.roleTemplate = " + templateId + " and baseItem.deleted=1",RoleBaseItem.class);
 		return q.getResultList();
 		
+	}
+	
+	public static List<RoleBaseItem> findAllRoleBaseItemOnTemplateId(Integer templateId){
+		EntityManager em = entityManager();
+		TypedQuery<RoleBaseItem> q = em.createQuery("SELECT baseItem FROM RoleBaseItem AS baseItem WHERE baseItem.roleTemplate = " + templateId ,RoleBaseItem.class);
+		return q.getResultList();
 	}
 	
 	public void baseItemUpButtonClicked() {
@@ -109,6 +119,37 @@ public class RoleBaseItem {
 		if (resultList == null || resultList.size() == 0)
 			return null;
 		return resultList.get(0);
+	}
+	
+	public static List<RoleBaseItem> findRoleBaseItemByStandardizedRole(Long srID) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT distinct rsiv.roleBaseItem FROM RoleSubItemValue rsiv join rsiv.standardizedRole sr where sr.id = "  + srID.longValue() ;
+							 //" UNION ALL" +
+							 //"SELECT distinct rtiv.roleTableItem.roleBaseItem FROM RoleTableItemValue rtiv join rtiv.standardizedRole sr where sr.id = "  + srID.longValue() ;
+		Log.info("findRoleBaseItemByStandardizedRole query : " + queryString);
+		TypedQuery<RoleBaseItem> query = em
+				.createQuery(
+						queryString,
+						RoleBaseItem.class);
+		//query.setParameter("sort_order", sort_order);
+		List<RoleBaseItem> resultList = query.getResultList();
+		if (resultList == null || resultList.size() == 0)
+			return null;
+		Log.info("Result at server" + resultList.size());
+		
+		queryString = "SELECT distinct rtiv.roleTableItem.roleBaseItem FROM RoleTableItemValue rtiv join rtiv.standardizedRole sr where sr.id = "  + srID.longValue() ;
+		Log.info("findRoleBaseItemByStandardizedRole query : " + queryString);
+		query = em
+			.createQuery(
+					queryString,
+					RoleBaseItem.class);
+		//query.setParameter("sort_order", sort_order);
+		List<RoleBaseItem> resultList2 = query.getResultList();
+		if (resultList2 == null || resultList2.size() == 0)
+		return null;
+		Log.info("Result at server" + resultList.size());
+		resultList.addAll(resultList2);
+		return resultList;
 	}
 	
 }

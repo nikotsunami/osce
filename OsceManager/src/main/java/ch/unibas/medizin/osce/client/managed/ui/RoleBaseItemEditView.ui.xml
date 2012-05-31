@@ -49,7 +49,14 @@
       
       
       
-    <tr id="item_defination">
+    
+            
+            
+            
+            
+            
+            
+        <tr id="item_defination">
                 <td>
                     <div class="{style.label}">Item_defination:</div>
                 </td>
@@ -87,6 +94,14 @@
                 </td>
                 <td>
                     <g:IntegerBox ui:field="sort_order"/>
+                </td>
+            </tr>
+            <tr id="roleSubItem">
+                <td>
+                    <div class="{style.label}">Role Sub Item:</div>
+                </td>
+                <td>
+                    <a:RoleSubItemValueListEditor ui:field="roleSubItem"/>
                 </td>
             </tr>
             <tr id="roleTableItem">

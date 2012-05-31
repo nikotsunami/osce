@@ -1,0 +1,106 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+
+<ui:style src="../../styles.css" >
+.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+.padleft5
+	{
+		padding-left: 5px;
+	}
+	.standardTable input {
+		width: 100%;
+		opacity: 0.8;
+	}
+	
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+		width: 100%;
+	}
+	.right{
+		
+		float:right
+	}
+	.criteria{
+	
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	.editQuestionBtn{
+	
+		margin-left: 100%;
+	}
+</ui:style>
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+<g:HTMLPanel>
+	<g:VerticalPanel ui:field="checkListQuestionItemVerticalPanel"  horizontalAlignment="left" styleName="{style.maxWidth} " addStyleNames="{style.tabStyle} {style.patientTopContainer}">
+		<g:HorizontalPanel>
+		
+			<g:VerticalPanel width="500px" spacing="8">
+				<g:HorizontalPanel spacing="8">
+					<g:Label ui:field="questionItemLbl" ></g:Label>
+					<g:VerticalPanel ui:field="editQuestionVP" horizontalAlignment="right">
+						<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>
+					</g:VerticalPanel>
+				</g:HorizontalPanel>
+				
+					<!--  <g:FlowPanel width="100px">-->
+					<g:FlowPanel ui:field="criteriaHorizontalPanel"  styleName="style.criteria" width="120%"><!-- e3 -->
+						
+					</g:FlowPanel>
+					
+						<g:VerticalPanel spacing="8" ui:field="addBtnPanel">
+							<my:IconButton ui:field="addCriteriaButton" icon="plusthick"></my:IconButton>
+						</g:VerticalPanel> 
+<!-- 					</g:FlowPanel> -->
+				
+			</g:VerticalPanel>
+			
+			
+			<g:Image ui:field="down" styleName="{style.icon}  {style.right}" resource="{uiIcons.triangle1South}"></g:Image>
+			
+			<g:Image ui:field="up" styleName="{style.icon} {style.right} " resource="{uiIcons.triangle1North}"></g:Image>
+			
+			<g:VerticalPanel width="150px" >
+			<g:VerticalPanel  spacing="3" horizontalAlignment="right" >
+				<g:VerticalPanel ui:field="optionVerticalPanel"><!-- e4 -->
+				
+				</g:VerticalPanel >
+			</g:VerticalPanel>
+				<g:VerticalPanel ui:field="addOptionVerticalPanel" spacing="8" horizontalAlignment="left">
+					<my:IconButton ui:field="addOptionButton" icon="plusthick" ></my:IconButton>
+				</g:VerticalPanel>
+			</g:VerticalPanel>
+			
+			<g:HorizontalPanel width="1px" horizontalAlignment="right" verticalAlignment="middle" spacing="8" >
+				<g:VerticalPanel verticalAlignment="middle">
+					<my:IconButton ui:field="delete" icon="close" ></my:IconButton>
+				</g:VerticalPanel>
+			</g:HorizontalPanel>
+			
+			
+		</g:HorizontalPanel>
+	
+	</g:VerticalPanel>
+	
+</g:HTMLPanel>
+</ui:UiBinder>
