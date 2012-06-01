@@ -61,7 +61,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements DMZSyncS
     public String preProcessData(String data){
     	data = data.replaceAll("\"id\":[0-9]*,", "");
     	data = data.replaceAll("origId", "id");
-    	data = data.replaceAll("\"class\":[^}]*?,|[,\\{]\"class\":[^}]*", "");
+//    	data = data.replaceAll("\"class\":[^}]*?,", "");
+ //   	data = data.replaceAll("\"\\{class\":[^}]*?,", "");
+    	data = data.replaceAll("sp_portal\\.local", "ch.unibas.medizin.osce.domain");
 System.out.println(">>> " + data);
     	
         return data;
@@ -179,6 +181,9 @@ System.out.println(">>> " + data);
      */
      protected void savePatient(StandardizedPatient patient){
 
+    	 patient.merge();
+    	 patient.persist();
+    	 
      }
 
 
