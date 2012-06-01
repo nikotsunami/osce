@@ -10,7 +10,7 @@ public class RoleTopicProxyRenderer extends ProxyRenderer<RoleTopicProxy> {
 
     private static ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer INSTANCE;
 
-    protected RoleTopicProxyRenderer() {
+    public RoleTopicProxyRenderer() {
         super(new String[] { "name" });
     }
 
@@ -25,6 +25,6 @@ public class RoleTopicProxyRenderer extends ProxyRenderer<RoleTopicProxy> {
         if (object == null) {
             return "";
         }
-        return object.getName() + " (" + object.getId() + ")";
+        return object.getName();
     }
 }

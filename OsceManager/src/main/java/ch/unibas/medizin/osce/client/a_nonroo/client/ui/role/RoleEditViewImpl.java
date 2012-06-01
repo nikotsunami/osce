@@ -16,9 +16,11 @@ import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
@@ -164,6 +166,14 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	public FocusableValueListBox<StudyYears> studyYear = new FocusableValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
 
 	
+	//spec statrt
+		@UiField
+		SpanElement labelRoleTopic;
+		
+		@UiField(provided = true)
+		public FocusableValueListBox<RoleTopicProxy> roleTopic = new FocusableValueListBox<RoleTopicProxy>(new RoleTopicProxyRenderer());
+	//spec end
+	
 	// Labels 
 	@UiField
 	SpanElement labelShortName;
@@ -224,7 +234,8 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		labelShortName.setInnerText(constants.shortName() + ":");
 		labellongName.setInnerText(constants.name() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");		
-		labelstudyYear.setInnerText(constants.studyYear() + ":");	
+		labelstudyYear.setInnerText(constants.studyYear() + ":");
+		labelRoleTopic.setInnerText(constants.roletopic());//spec
 	}
 	
 	public void setCreating(boolean creating) {
@@ -413,6 +424,20 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		delegate.save();
 	}
 	
+	
+
+	@Override
+	public void setRoleTopicListBoxValues(List<RoleTopicProxy> values) {
+		boolean areValuesValid = (values != null) && (values.size() > 0);
+		
+		if (!areValuesValid) {
+			//hideAddBoxes();
+			return;
+		}
+	
+		System.out.println("roletopic set");
+		roleTopic.setAcceptableValues(values);
+	}
 	
 	/*@UiHandler("mainVersion")
 	public void ValueChangedMainVersion(ValueChangeEvent<Integer> event)

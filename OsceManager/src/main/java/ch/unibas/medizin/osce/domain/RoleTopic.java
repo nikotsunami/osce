@@ -123,7 +123,7 @@ public class RoleTopic {
     	private String[] tokens;
     	private boolean isFirstArgument=true;
     	
-    	private static String queryBase = "SELECT distinct rt FROM RoleTopic as rt  LEFT JOIN rt.standardizedRoles as sr with sr.active=null or sr.active=1  ";
+    	private static String queryBase = "SELECT distinct rt FROM RoleTopic as rt  LEFT JOIN rt.standardizedRoles as sr";// with sr.active=null or sr.active=1  ";
     	private static String whereKeyword = " where ";
     	
    
@@ -391,6 +391,24 @@ public class RoleTopic {
 				"select d from Doctor d,RoleParticipant r where r.doctor=d.id and r.type=1", Doctor.class);
 	//	
 		java.util.List<Doctor> result = q.getResultList();
+		Log.info("return  data for reviewer in filter popup");
+		return result;
+
+
+    }
+	
+	
+public static java.util.List<RoleTopic> findAllRoleTopic(int id) {
+		
+		Log.info("fetch data for reviewer in filter popup");
+		EntityManager em = entityManager();
+
+		String query="select rt from RoleTopic rt where rt.id <> "+id;
+
+		TypedQuery<RoleTopic> q = em.createQuery(
+				query, RoleTopic.class);
+	//	
+		java.util.List<RoleTopic> result = q.getResultList();
 		Log.info("return  data for reviewer in filter popup");
 		return result;
 

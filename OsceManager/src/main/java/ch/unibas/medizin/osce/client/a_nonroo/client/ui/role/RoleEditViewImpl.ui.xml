@@ -66,6 +66,11 @@
 									<td><my:FocusableValueListBox ui:field="studyYear" /></td>
 									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
 								</tr>
+								<tr id="roleTopic">
+									<td><span class="{style.label}" ui:field="labelRoleTopic" /></td>
+									<td><my:FocusableValueListBox ui:field="roleTopic" /></td>
+									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
+								</tr>
 								</tbody>
 							</table>
 						</g:HTMLPanel>
