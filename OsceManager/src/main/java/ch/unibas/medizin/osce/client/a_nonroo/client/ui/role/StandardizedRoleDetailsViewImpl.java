@@ -3,34 +3,35 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsViewImpl;
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
-import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
-import ch.unibas.medizin.osce.shared.Gender;
-import ch.unibas.medizin.osce.shared.RoleTypes;
-import ch.unibas.medizin.osce.shared.StudyYears;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IntegerBox;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 /**
  * @author niko2
  * 
@@ -55,6 +56,37 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	Image arrow;
 	// SPEC End
+	
+ImportTopicPopupView importTopicView;
+	
+	//Assignment E[
+	
+	public ArrayList<RoleDetailsChecklistSubViewChecklistTopicItemView> checkListTopicView = new ArrayList<RoleDetailsChecklistSubViewChecklistTopicItemView>();
+	
+	@UiField
+	public VerticalPanel checkListsVerticalPanel;
+	
+	@UiField
+	public HorizontalPanel addTopicHP;
+	
+	@UiField
+	public Button addCheckListTopicButton;
+	
+	public CheckListTopicPopupView topicPopup;
+	
+	public StandardizedRoleDetailsViewImpl studentRoleView;
+	
+	@UiField
+	Button importTopicButton;
+	
+	public Button getImportTopicButton() {
+		return importTopicButton;
+	}
+
+	public void setImportTopicButton(Button importTopicButton) {
+		this.importTopicButton = importTopicButton;
+	}
+	//Assignment E]
 
 	// SPEC START =
 		@UiField
@@ -146,6 +178,50 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	}
 
 	// ]End
+	
+	//Assignment I
+//	@UiField
+//	RoleBaseTableItemViewImpl roleBaseTableItemViewImpl;
+//	
+//	@Override
+//	public RoleBaseTableItemViewImpl getroleBaseTableItemViewImpl(){
+//		return roleBaseTableItemViewImpl;
+//	}
+	
+	@UiField(provided = true)
+	public ValueListBox<RoleTemplateProxy> roleTemplateListBox = new ValueListBox<RoleTemplateProxy>(new AbstractRenderer<RoleTemplateProxy>() {
+
+		@Override
+		public String render(RoleTemplateProxy object) {
+
+			 return object == null ? "" : String.valueOf(object.getTemplateName());
+		}
+		
+	}); 
+	@UiField
+	public IconButton roleTemplateValueButon;
+	
+	@Override
+	public void setRoleTemplateListBox(List<RoleTemplateProxy> roleTemplateproxy) {
+		roleTemplateListBox.setAcceptableValues(roleTemplateproxy);
+		
+	}
+
+	@UiHandler("roleTemplateValueButon")
+	public void roleTemplateValueSelction(ClickEvent event){
+		System.out.println(roleTemplateListBox.getValue().getTemplateName());
+		delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getValue());
+	}
+	
+	@UiField
+	VerticalPanel roleBaseItemPanel;
+	
+	@Override
+	public VerticalPanel getRoleBaseItemVerticalPanel(){
+		return roleBaseItemPanel;
+	}
+	
+	// END I
 
 	// AssignmentF[
 	@Override
@@ -196,9 +272,14 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 
 		setLabelTexts();
 
-		// Assignment E start[
+		//Assignment E start[
 		roleSubPanel.selectTab(0);
-		// Assignment E start]
+		addCheckListTopicButton.setText(constants.addCheckListTopic());
+		studentRoleView=this;
+		importTopicButton.setText(constants.importTopic());
+		//Assignment E start]
+		
+		roleTemplateValueButon.setText("Select Role Template");
 	}
 
 	private void setLabelTexts() {
@@ -311,5 +392,111 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		return roleKeywordSubViewImpl;
 	}
 	// SPEC END =
+	//Assignment E[
+	@UiHandler("addCheckListTopicButton")
+	public void addCheckListTopicButtonClickHandler(ClickEvent event)
+	{
+		showTopicPopupPanel();
+		
+		//if( addCheckListTopicTxtBox.getValue() != "")
+		//delegate.saveCheckListTopic(addCheckListTopicTxtBox.getValue());
+	}
+
+	public void showTopicPopupPanel()
+	{
+		if(topicPopup==null)
+		{
+			topicPopup=new CheckListTopicPopupViewImpl();
+			
+			
+			((CheckListTopicPopupViewImpl)topicPopup).setAnimationEnabled(true);
+		
+			topicPopup.getDescriptionLbl().setText(constants.topicDescription());
+			
+			topicPopup.getTopicLbl().setText(constants.checklistTopic());
+			
+			((CheckListTopicPopupViewImpl)topicPopup).setWidth("150px");
+
+		
+			RootPanel.get().add(((CheckListTopicPopupViewImpl)topicPopup));
+			
+			topicPopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					
+					if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
+					{
+					}	
+					else
+					{
+						delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());
+					
+						((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+				
+						topicPopup.getTopicTxtBox().setValue("");
+						topicPopup.getDescriptionTxtBox().setValue("");
+					}
+				}
+		});
+		}
+		
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
+		((CheckListTopicPopupViewImpl)topicPopup).show();
+		
+	}
+
+		@UiHandler("importTopicButton")
+		public void importTopicButtonClickHandler(ClickEvent event)
+		{
+			Log.info("importTopicButtonClickHandler");
+			showImportTopicView();
+			
+		}
+		
+		public void showImportTopicView()
+		{
+//			if(importTopicView==null)
+			{
+				importTopicView=new ImportTopicPopupViewImpl(false,null);
+				
+				
+				((ImportTopicPopupViewImpl)importTopicView).setAnimationEnabled(true);
+			
+				
+				delegate.setRoleListBoxValue(importTopicView);
+				
+				
+				((ImportTopicPopupViewImpl)importTopicView).setWidth("150px");
+
+			
+				RootPanel.get().add(((ImportTopicPopupViewImpl)importTopicView));
+				
+				importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						//if(importTopicView.getRoleLstBox().getValue()=="" || importTopicView.getTopicLstBox().to.getValue()=="")
+						{
+						}	
+					//	else
+						{
+						//	delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());
+						
+							((ImportTopicPopupViewImpl)importTopicView).hide(true);
+					
+							//importTopicView.getTopicTxtBox().setValue("");
+							//importTopicView.getDescriptionTxtBox().setValue("");
+						}
+					
+				}
+			});
+				
+		}
+			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
+			((ImportTopicPopupViewImpl)importTopicView).show();
+		}
+	//Assignment E]
 	
 }

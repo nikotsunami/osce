@@ -11,6 +11,10 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProce
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
@@ -35,6 +39,7 @@ import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -137,6 +142,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleRoleTableItem(RoleTableItemProxy isNull) {
                 setResult("RoleTableItems");
+            }
+
+            @Override
+            public void handleRoleSubItemValue(RoleSubItemValueProxy isNull) {
+                setResult("RoleSubItemValues");
             }
 
             @Override
@@ -260,8 +270,28 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleChecklistTopic(ChecklistTopicProxy isNull) {
+                setResult("ChecklistTopics");
+            }
+
+            @Override
+            public void handleChecklistQuestion(ChecklistQuestionProxy isNull) {
+                setResult("ChecklistQuestions");
+            }
+
+            @Override
             public void handleCheckList(CheckListProxy isNull) {
                 setResult("CheckLists");
+            }
+
+            @Override
+            public void handleChecklistOption(ChecklistOptionProxy isNull) {
+                setResult("ChecklistOptions");
+            }
+
+            @Override
+            public void handleChecklistCriteria(ChecklistCriteriaProxy isNull) {
+                setResult("ChecklistCriterias");
             }
 
             @Override

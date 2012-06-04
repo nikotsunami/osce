@@ -5,9 +5,11 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueListEditor;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTableItemListEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
@@ -35,6 +37,6 @@ public abstract class RoleBaseItemDetailsActivity_Roo_Gwt extends AbstractActivi
     protected EntityProxyId<RoleBaseItemProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("roleTemplate", "roleTableItem", "roleItemAccess").fire(callback);
+        requests.find(proxyId).with("roleTemplate", "roleSubItem", "roleTableItem", "roleItemAccess").fire(callback);
     }
 }

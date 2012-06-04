@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
@@ -42,6 +43,9 @@ public abstract class RoleBaseItemDetailsView_Roo_Gwt extends Composite implemen
     SpanElement sort_order;
 
     @UiField
+    SpanElement roleSubItem;
+
+    @UiField
     SpanElement roleTableItem;
 
     @UiField
@@ -65,6 +69,7 @@ public abstract class RoleBaseItemDetailsView_Roo_Gwt extends Composite implemen
         deleted.setInnerText(proxy.getDeleted() == null ? "" : String.valueOf(proxy.getDeleted()));
         roleTemplate.setInnerText(proxy.getRoleTemplate() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTemplateProxyRenderer.instance().render(proxy.getRoleTemplate()));
         sort_order.setInnerText(proxy.getSort_order() == null ? "" : String.valueOf(proxy.getSort_order()));
+        roleSubItem.setInnerText(proxy.getRoleSubItem() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueProxyRenderer.instance()).render(proxy.getRoleSubItem()));
         roleTableItem.setInnerText(proxy.getRoleTableItem() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleTableItemProxyRenderer.instance()).render(proxy.getRoleTableItem()));
         roleItemAccess.setInnerText(proxy.getRoleItemAccess() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessProxyRenderer.instance()).render(proxy.getRoleItemAccess()));
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));

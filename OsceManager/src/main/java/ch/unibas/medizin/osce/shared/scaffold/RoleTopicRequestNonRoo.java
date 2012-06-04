@@ -28,7 +28,7 @@ abstract Request<List<DoctorProxy>> findAllReviewerName();
 //abstract Request<List<List<RoleParticipantProxy>>> findAllReviewer();
 //abstract Request<List<SpecialisationProxy>> findAllSpecialisation();
 //spec start
-
+abstract Request<List<RoleTopicProxy>> findAllRoleTopic(int id);
 abstract Request<List<RoleTopicProxy>> findRoleTopicsByAdvancedSearchAndSort(
 		String sortColumn,
 		Sorting order,

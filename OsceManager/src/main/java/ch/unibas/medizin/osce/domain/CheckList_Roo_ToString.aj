@@ -9,7 +9,10 @@ privileged aspect CheckList_Roo_ToString {
     
     public String CheckList.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Title: ").append(getTitle());
+        sb.append("CheckListTopics: ").append(getCheckListTopics() == null ? "null" : getCheckListTopics().size()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Title: ").append(getTitle()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

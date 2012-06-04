@@ -5,6 +5,8 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.activity.CheckListEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicListEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -31,9 +33,21 @@ public abstract class CheckListEditActivityWrapper_Roo_Gwt implements Activity, 
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
+        view.setCheckListTopicsPickerValues(Collections.<ChecklistTopicProxy>emptyList());
+        requests.checklistTopicRequest().findChecklistTopicEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicProxyRenderer.instance().getPaths()).fire(new Receiver<List<ChecklistTopicProxy>>() {
+
+            public void onSuccess(List<ChecklistTopicProxy> response) {
+                List<ChecklistTopicProxy> values = new ArrayList<ChecklistTopicProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setCheckListTopicsPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.CheckListProxy, V>> extends ProxyEditView<CheckListProxy, V> {
+
+        void setCheckListTopicsPickerValues(Collection<ChecklistTopicProxy> values);
     }
 }

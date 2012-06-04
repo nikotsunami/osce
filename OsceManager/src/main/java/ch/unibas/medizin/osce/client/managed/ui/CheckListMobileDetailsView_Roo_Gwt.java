@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -16,6 +17,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.List;
 
 public abstract class CheckListMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<CheckListProxy> {
 
@@ -28,6 +30,9 @@ public abstract class CheckListMobileDetailsView_Roo_Gwt extends Composite imple
     @UiField
     Element title;
 
+    @UiField
+    Element checkListTopics;
+
     CheckListProxy proxy;
 
     public void setValue(CheckListProxy proxy) {
@@ -35,5 +40,6 @@ public abstract class CheckListMobileDetailsView_Roo_Gwt extends Composite imple
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
+        checkListTopics.setInnerText(proxy.getCheckListTopics() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicProxyRenderer.instance()).render(proxy.getCheckListTopics()));
     }
 }

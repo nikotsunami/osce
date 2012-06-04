@@ -17,5 +17,6 @@ public interface RoleBaseItemRequestNoonRoo   extends RequestContext{
 	abstract Request<List<RoleBaseItemProxy>> findAllDeletedRoleBaseItems(Integer id);
 	public abstract InstanceRequest<RoleBaseItemProxy, Void> baseItemUpButtonClicked();
 	public abstract InstanceRequest<RoleBaseItemProxy, Void> baseItemDownButtonClicked();
-	
+	abstract Request<List<RoleBaseItemProxy>> findAllRoleBaseItemOnTemplateId(Integer id);
+	public abstract Request<List<RoleBaseItemProxy>> findRoleBaseItemByStandardizedRole(Long id);
 }

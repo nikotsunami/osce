@@ -3,7 +3,9 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import java.lang.String;
+import java.util.List;
 
 privileged aspect CheckList_Roo_JavaBean {
     
@@ -13,6 +15,14 @@ privileged aspect CheckList_Roo_JavaBean {
     
     public void CheckList.setTitle(String title) {
         this.title = title;
+    }
+    
+    public List<ChecklistTopic> CheckList.getCheckListTopics() {
+        return this.checkListTopics;
+    }
+    
+    public void CheckList.setCheckListTopics(List<ChecklistTopic> checkListTopics) {
+        this.checkListTopics = checkListTopics;
     }
     
 }
