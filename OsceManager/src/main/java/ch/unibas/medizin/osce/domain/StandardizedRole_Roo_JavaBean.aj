@@ -115,27 +115,27 @@ privileged aspect StandardizedRole_Roo_JavaBean {
         this.subVersion = subVersion;
     }
     
-    public Set<Keyword> StandardizedRole.getKeywords() {
+    public java.util.Set<Keyword> StandardizedRole.getKeywords() {
         return this.keywords;
     }
     
-    public void StandardizedRole.setKeywords(Set<Keyword> keywords) {
+    public void StandardizedRole.setKeywords(java.util.Set<Keyword> keywords) {
         this.keywords = keywords;
     }
     
-    public Set<AdvancedSearchCriteria> StandardizedRole.getAdvancedSearchCriteria() {
+    public java.util.Set<AdvancedSearchCriteria> StandardizedRole.getAdvancedSearchCriteria() {
         return this.advancedSearchCriteria;
     }
     
-    public void StandardizedRole.setAdvancedSearchCriteria(Set<AdvancedSearchCriteria> advancedSearchCriteria) {
+    public void StandardizedRole.setAdvancedSearchCriteria(java.util.Set<AdvancedSearchCriteria> advancedSearchCriteria) {
         this.advancedSearchCriteria = advancedSearchCriteria;
     }
     
-    public Set<SimpleSearchCriteria> StandardizedRole.getSimpleSearchCriteria() {
+    public java.util.Set<SimpleSearchCriteria> StandardizedRole.getSimpleSearchCriteria() {
         return this.simpleSearchCriteria;
     }
     
-    public void StandardizedRole.setSimpleSearchCriteria(Set<SimpleSearchCriteria> simpleSearchCriteria) {
+    public void StandardizedRole.setSimpleSearchCriteria(java.util.Set<SimpleSearchCriteria> simpleSearchCriteria) {
         this.simpleSearchCriteria = simpleSearchCriteria;
     }
     

@@ -4,16 +4,9 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Course;
-import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDataOnDemand;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +14,7 @@ privileged aspect CourseDataOnDemand_Roo_DataOnDemand {
     
     declare @type: CourseDataOnDemand: @Component;
     
-    private Random CourseDataOnDemand.rnd = new SecureRandom();
+    private Random CourseDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<Course> CourseDataOnDemand.data;
     
@@ -29,19 +22,19 @@ privileged aspect CourseDataOnDemand_Roo_DataOnDemand {
     private OsceDataOnDemand CourseDataOnDemand.osceDataOnDemand;
     
     public Course CourseDataOnDemand.getNewTransientCourse(int index) {
-        Course obj = new Course();
+        ch.unibas.medizin.osce.domain.Course obj = new ch.unibas.medizin.osce.domain.Course();
         setColor(obj, index);
         setOsce(obj, index);
         return obj;
     }
     
-    public void CourseDataOnDemand.setColor(Course obj, int index) {
-        String color = "color_" + index;
+    private void CourseDataOnDemand.setColor(Course obj, int index) {
+        java.lang.String color = "color_" + index;
         obj.setColor(color);
     }
     
-    public void CourseDataOnDemand.setOsce(Course obj, int index) {
-        Osce osce = osceDataOnDemand.getRandomOsce();
+    private void CourseDataOnDemand.setOsce(Course obj, int index) {
+        ch.unibas.medizin.osce.domain.Osce osce = osceDataOnDemand.getRandomOsce();
         obj.setOsce(osce);
     }
     
@@ -64,25 +57,16 @@ privileged aspect CourseDataOnDemand_Roo_DataOnDemand {
     }
     
     public void CourseDataOnDemand.init() {
-        data = Course.findCourseEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.Course.findCourseEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Course' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.Course>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Course>();
         for (int i = 0; i < 10; i++) {
-            Course obj = getNewTransientCourse(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.Course obj = getNewTransientCourse(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

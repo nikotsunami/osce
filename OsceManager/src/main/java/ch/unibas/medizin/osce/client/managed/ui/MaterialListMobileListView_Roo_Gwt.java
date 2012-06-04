@@ -9,7 +9,6 @@ import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
 import ch.unibas.medizin.osce.shared.MaterialType;
 import ch.unibas.medizin.osce.shared.PriceType;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -31,6 +30,6 @@ public abstract class MaterialListMobileListView_Roo_Gwt extends MobileProxyList
 
     public void init() {
         paths.add("name");
-        paths.add("id");
+        paths.add("type");
     }
 }

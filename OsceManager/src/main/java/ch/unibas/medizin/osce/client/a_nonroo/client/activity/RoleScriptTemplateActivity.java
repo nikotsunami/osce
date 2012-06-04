@@ -2,7 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -547,11 +547,9 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-		Calendar c = Calendar.getInstance();
 		// Date date = new Date();
 		roleTemplate.setTemplateName(name);
-		roleTemplate.setDate_cretaed(c.getTime());
-		roleTemplate.setDate_edited(c.getTime());
+
 
 		roletempreq.persist().using(roleTemplate).fire(new Receiver<Void>() {
 			@Override

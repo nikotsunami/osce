@@ -18,9 +18,9 @@ public interface StudentOscesRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countStudentOsceses();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy> findStudentOsces(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy>> findAllStudentOsceses();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy> findStudentOsces(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy>> findStudentOscesEntries(int firstResult, int maxResults);
 }

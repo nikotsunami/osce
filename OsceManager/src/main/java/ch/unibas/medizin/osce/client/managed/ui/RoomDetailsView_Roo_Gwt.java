@@ -11,7 +11,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -54,6 +53,6 @@ public abstract class RoomDetailsView_Roo_Gwt extends Composite implements Proxy
         oscePostRooms.setInnerText(proxy.getOscePostRooms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance()).render(proxy.getOscePostRooms()));
         length.setInnerText(proxy.getLength() == null ? "" : String.valueOf(proxy.getLength()));
         width.setInnerText(proxy.getWidth() == null ? "" : String.valueOf(proxy.getWidth()));
-        displayRenderer.setInnerText(RoomProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.RoomProxyRenderer.instance().render(proxy));
     }
 }

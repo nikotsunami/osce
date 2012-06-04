@@ -18,9 +18,9 @@ public interface LogEntryRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countLogEntrys();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.LogEntryProxy> findLogEntry(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.LogEntryProxy>> findAllLogEntrys();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.LogEntryProxy> findLogEntry(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.LogEntryProxy>> findLogEntryEntries(int firstResult, int maxResults);
 }

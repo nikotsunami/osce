@@ -11,10 +11,8 @@ privileged aspect MediaContent_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Comment: ").append(getComment()).append(", ");
         sb.append("ContentType: ").append(getContentType()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Link: ").append(getLink()).append(", ");
-        sb.append("StandardizedPatient: ").append(getStandardizedPatient()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("StandardizedPatient: ").append(getStandardizedPatient());
         return sb.toString();
     }
     

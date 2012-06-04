@@ -11,7 +11,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -24,16 +23,16 @@ import java.util.Set;
 public abstract class SpokenLanguageDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<SpokenLanguageProxy> {
 
     @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
-    @UiField
     SpanElement languageName;
 
     @UiField
     SpanElement langskills;
+
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
 
     SpokenLanguageProxy proxy;
 
@@ -42,10 +41,10 @@ public abstract class SpokenLanguageDetailsView_Roo_Gwt extends Composite implem
 
     public void setValue(SpokenLanguageProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         languageName.setInnerText(proxy.getLanguageName() == null ? "" : String.valueOf(proxy.getLanguageName()));
         langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
-        displayRenderer.setInnerText(SpokenLanguageProxyRenderer.instance().render(proxy));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.SpokenLanguageProxyRenderer.instance().render(proxy));
     }
 }

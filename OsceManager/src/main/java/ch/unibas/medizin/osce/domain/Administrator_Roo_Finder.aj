@@ -27,7 +27,7 @@ privileged aspect Administrator_Roo_Finder {
         StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Administrator AS o WHERE o.name != :name  AND LOWER(o.preName) LIKE LOWER(:preName)  OR");
         for (int i = 0; i < semesters.size(); i++) {
             if (i > 0) queryBuilder.append(" AND");
-            queryBuilder.append(" :semesters_item").append(i).append(" MEMBER OF o.semesters");
+            queryBuilder.append(" :semesters_item").append(i).append(" MEMBER OF administrator.semesters");
         }
         TypedQuery<Administrator> q = em.createQuery(queryBuilder.toString(), Administrator.class);
         q.setParameter("name", name);

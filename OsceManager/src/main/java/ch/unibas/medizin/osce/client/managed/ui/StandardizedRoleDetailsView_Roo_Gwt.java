@@ -18,7 +18,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -29,12 +28,6 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.Set;
 
 public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<StandardizedRoleProxy> {
-
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
 
     @UiField
     SpanElement shortName;
@@ -84,6 +77,12 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
     @UiField
     SpanElement checkList;
 
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
+
     StandardizedRoleProxy proxy;
 
     @UiField
@@ -91,8 +90,6 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
 
     public void setValue(StandardizedRoleProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         shortName.setInnerText(proxy.getShortName() == null ? "" : String.valueOf(proxy.getShortName()));
         longName.setInnerText(proxy.getLongName() == null ? "" : String.valueOf(proxy.getLongName()));
         caseDescription.setInnerText(proxy.getCaseDescription() == null ? "" : String.valueOf(proxy.getCaseDescription()));
@@ -109,6 +106,8 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
         advancedSearchCriteria.setInnerText(proxy.getAdvancedSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaProxyRenderer.instance()).render(proxy.getAdvancedSearchCriteria()));
         simpleSearchCriteria.setInnerText(proxy.getSimpleSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaProxyRenderer.instance()).render(proxy.getSimpleSearchCriteria()));
         checkList.setInnerText(proxy.getCheckList() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer.instance().render(proxy.getCheckList()));
-        displayRenderer.setInnerText(StandardizedRoleProxyRenderer.instance().render(proxy));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy));
     }
 }

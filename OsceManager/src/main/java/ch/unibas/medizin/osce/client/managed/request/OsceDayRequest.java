@@ -18,9 +18,9 @@ public interface OsceDayRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countOsceDays();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.OsceDayProxy> findOsceDay(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.OsceDayProxy>> findAllOsceDays();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.OsceDayProxy> findOsceDay(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.OsceDayProxy>> findOsceDayEntries(int firstResult, int maxResults);
 }

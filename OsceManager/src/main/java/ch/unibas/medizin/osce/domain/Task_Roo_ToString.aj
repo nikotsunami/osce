@@ -11,10 +11,9 @@ privileged aspect Task_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Administrator: ").append(getAdministrator()).append(", ");
         sb.append("Deadline: ").append(getDeadline()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsDone: ").append(getIsDone()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Osce: ").append(getOsce());
         return sb.toString();
     }
     

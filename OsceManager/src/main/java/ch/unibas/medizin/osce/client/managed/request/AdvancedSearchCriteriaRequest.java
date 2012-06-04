@@ -18,9 +18,9 @@ public interface AdvancedSearchCriteriaRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countAdvancedSearchCriterias();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy> findAdvancedSearchCriteria(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy>> findAllAdvancedSearchCriterias();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy> findAdvancedSearchCriteria(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy>> findAdvancedSearchCriteriaEntries(int firstResult, int maxResults);
 }

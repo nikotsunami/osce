@@ -11,7 +11,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,12 +20,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class TaskDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<TaskProxy> {
-
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
 
     @UiField
     SpanElement name;
@@ -43,6 +36,12 @@ public abstract class TaskDetailsView_Roo_Gwt extends Composite implements Proxy
     @UiField
     SpanElement administrator;
 
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
+
     TaskProxy proxy;
 
     @UiField
@@ -50,13 +49,13 @@ public abstract class TaskDetailsView_Roo_Gwt extends Composite implements Proxy
 
     public void setValue(TaskProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
-        deadline.setInnerText(proxy.getDeadline() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getDeadline()));
+        deadline.setInnerText(proxy.getDeadline() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getDeadline()));
         isDone.setInnerText(proxy.getIsDone() == null ? "" : String.valueOf(proxy.getIsDone()));
         osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance().render(proxy.getOsce()));
         administrator.setInnerText(proxy.getAdministrator() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance().render(proxy.getAdministrator()));
-        displayRenderer.setInnerText(TaskProxyRenderer.instance().render(proxy));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance().render(proxy));
     }
 }

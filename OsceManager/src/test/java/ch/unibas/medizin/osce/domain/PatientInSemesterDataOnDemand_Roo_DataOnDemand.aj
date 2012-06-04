@@ -4,17 +4,10 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.PatientInSemester;
-import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
-import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedPatientDataOnDemand;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +15,7 @@ privileged aspect PatientInSemesterDataOnDemand_Roo_DataOnDemand {
     
     declare @type: PatientInSemesterDataOnDemand: @Component;
     
-    private Random PatientInSemesterDataOnDemand.rnd = new SecureRandom();
+    private Random PatientInSemesterDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<PatientInSemester> PatientInSemesterDataOnDemand.data;
     
@@ -33,19 +26,19 @@ privileged aspect PatientInSemesterDataOnDemand_Roo_DataOnDemand {
     private StandardizedPatientDataOnDemand PatientInSemesterDataOnDemand.standardizedPatientDataOnDemand;
     
     public PatientInSemester PatientInSemesterDataOnDemand.getNewTransientPatientInSemester(int index) {
-        PatientInSemester obj = new PatientInSemester();
+        ch.unibas.medizin.osce.domain.PatientInSemester obj = new ch.unibas.medizin.osce.domain.PatientInSemester();
         setSemester(obj, index);
         setStandardizedPatient(obj, index);
         return obj;
     }
     
-    public void PatientInSemesterDataOnDemand.setSemester(PatientInSemester obj, int index) {
-        Semester semester = semesterDataOnDemand.getRandomSemester();
+    private void PatientInSemesterDataOnDemand.setSemester(PatientInSemester obj, int index) {
+        ch.unibas.medizin.osce.domain.Semester semester = semesterDataOnDemand.getRandomSemester();
         obj.setSemester(semester);
     }
     
-    public void PatientInSemesterDataOnDemand.setStandardizedPatient(PatientInSemester obj, int index) {
-        StandardizedPatient standardizedPatient = standardizedPatientDataOnDemand.getRandomStandardizedPatient();
+    private void PatientInSemesterDataOnDemand.setStandardizedPatient(PatientInSemester obj, int index) {
+        ch.unibas.medizin.osce.domain.StandardizedPatient standardizedPatient = standardizedPatientDataOnDemand.getRandomStandardizedPatient();
         obj.setStandardizedPatient(standardizedPatient);
     }
     
@@ -68,25 +61,16 @@ privileged aspect PatientInSemesterDataOnDemand_Roo_DataOnDemand {
     }
     
     public void PatientInSemesterDataOnDemand.init() {
-        data = PatientInSemester.findPatientInSemesterEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.PatientInSemester.findPatientInSemesterEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'PatientInSemester' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.PatientInSemester>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.PatientInSemester>();
         for (int i = 0; i < 10; i++) {
-            PatientInSemester obj = getNewTransientPatientInSemester(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.PatientInSemester obj = getNewTransientPatientInSemester(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

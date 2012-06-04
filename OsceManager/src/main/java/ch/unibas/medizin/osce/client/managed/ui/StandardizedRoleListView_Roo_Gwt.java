@@ -14,7 +14,6 @@ import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -36,36 +35,6 @@ public abstract class StandardizedRoleListView_Roo_Gwt extends AbstractProxyList
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("id");
-        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
-
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(StandardizedRoleProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(StandardizedRoleProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
         paths.add("shortName");
         table.addColumn(new TextColumn<StandardizedRoleProxy>() {
 
@@ -271,5 +240,35 @@ public abstract class StandardizedRoleListView_Roo_Gwt extends AbstractProxyList
                 return renderer.render(object.getCheckList());
             }
         }, "Check List");
+        paths.add("id");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
     }
 }

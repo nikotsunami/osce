@@ -10,7 +10,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -40,6 +39,6 @@ public abstract class DescriptionDetailsView_Roo_Gwt extends Composite implement
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         description.setInnerText(proxy.getDescription() == null ? "" : String.valueOf(proxy.getDescription()));
-        displayRenderer.setInnerText(DescriptionProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy));
     }
 }

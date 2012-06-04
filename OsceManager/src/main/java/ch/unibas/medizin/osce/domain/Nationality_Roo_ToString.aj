@@ -9,10 +9,8 @@ privileged aspect Nationality_Roo_ToString {
     
     public String Nationality.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Nationality: ").append(getNationality()).append(", ");
-        sb.append("Standardizedpatients: ").append(getStandardizedpatients() == null ? "null" : getStandardizedpatients().size()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Standardizedpatients: ").append(getStandardizedpatients() == null ? "null" : getStandardizedpatients().size());
         return sb.toString();
     }
     

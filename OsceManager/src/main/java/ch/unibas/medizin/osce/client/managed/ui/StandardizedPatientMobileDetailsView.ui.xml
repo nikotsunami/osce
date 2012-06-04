@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
  <ui:style>
     .outer {
       padding: 10px;
@@ -12,212 +13,34 @@
     }
   </ui:style>
 
-  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
+    <div id='id'><div class='{style.label}'>Id</div><div class='{style.value}' ui:field='id'></div></div>
+    <div id='version'><div class='{style.label}'>Version</div><div class='{style.value}' ui:field='version'></div></div>
+    <div id='gender'><div class='{style.label}'>Gender</div><div class='{style.value}' ui:field='gender'></div></div>
+    <div id='name'><div class='{style.label}'>Name</div><div class='{style.value}' ui:field='name'></div></div>
+    <div id='preName'><div class='{style.label}'>Pre Name</div><div class='{style.value}' ui:field='preName'></div></div>
+    <div id='street'><div class='{style.label}'>Street</div><div class='{style.value}' ui:field='street'></div></div>
+    <div id='city'><div class='{style.label}'>City</div><div class='{style.value}' ui:field='city'></div></div>
+    <div id='postalCode'><div class='{style.label}'>Postal Code</div><div class='{style.value}' ui:field='postalCode'></div></div>
+    <div id='telephone'><div class='{style.label}'>Telephone</div><div class='{style.value}' ui:field='telephone'></div></div>
+    <div id='telephone2'><div class='{style.label}'>Telephone2</div><div class='{style.value}' ui:field='telephone2'></div></div>
+    <div id='mobile'><div class='{style.label}'>Mobile</div><div class='{style.value}' ui:field='mobile'></div></div>
+    <div id='height'><div class='{style.label}'>Height</div><div class='{style.value}' ui:field='height'></div></div>
+    <div id='weight'><div class='{style.label}'>Weight</div><div class='{style.value}' ui:field='weight'></div></div>
+    <div id='immagePath'><div class='{style.label}'>Immage Path</div><div class='{style.value}' ui:field='immagePath'></div></div>
+    <div id='videoPath'><div class='{style.label}'>Video Path</div><div class='{style.value}' ui:field='videoPath'></div></div>
+    <div id='nationality'><div class='{style.label}'>Nationality</div><div class='{style.value}' ui:field='nationality'></div></div>
+    <div id='profession'><div class='{style.label}'>Profession</div><div class='{style.value}' ui:field='profession'></div></div>
+    <div id='birthday'><div class='{style.label}'>Birthday</div><div class='{style.value}' ui:field='birthday'></div></div>
+    <div id='email'><div class='{style.label}'>Email</div><div class='{style.value}' ui:field='email'></div></div>
+    <div id='descriptions'><div class='{style.label}'>Descriptions</div><div class='{style.value}' ui:field='descriptions'></div></div>
+    <div id='bankAccount'><div class='{style.label}'>Bank Account</div><div class='{style.value}' ui:field='bankAccount'></div></div>
+    <div id='maritalStatus'><div class='{style.label}'>Marital Status</div><div class='{style.value}' ui:field='maritalStatus'></div></div>
+    <div id='workPermission'><div class='{style.label}'>Work Permission</div><div class='{style.value}' ui:field='workPermission'></div></div>
+    <div id='socialInsuranceNo'><div class='{style.label}'>Social Insurance No</div><div class='{style.value}' ui:field='socialInsuranceNo'></div></div>
+    <div id='anamnesisForm'><div class='{style.label}'>Anamnesis Form</div><div class='{style.value}' ui:field='anamnesisForm'></div></div>
+    <div id='langskills'><div class='{style.label}'>Langskills</div><div class='{style.value}' ui:field='langskills'></div></div>
 
-    <g:Button ui:field="delete">Delete</g:Button>
-  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    <div id="id">
-            <div class="{style.label}">Id</div>
-            <div class="{style.value}" ui:field="id"/>
-        </div>
-        <div id="version">
-            <div class="{style.label}">Version</div>
-            <div class="{style.value}" ui:field="version"/>
-        </div>
-        <div id="gender">
-            <div class="{style.label}">Gender</div>
-            <div class="{style.value}" ui:field="gender"/>
-        </div>
-        <div id="name">
-            <div class="{style.label}">Name</div>
-            <div class="{style.value}" ui:field="name"/>
-        </div>
-        <div id="preName">
-            <div class="{style.label}">Pre Name</div>
-            <div class="{style.value}" ui:field="preName"/>
-        </div>
-        <div id="street">
-            <div class="{style.label}">Street</div>
-            <div class="{style.value}" ui:field="street"/>
-        </div>
-        <div id="city">
-            <div class="{style.label}">City</div>
-            <div class="{style.value}" ui:field="city"/>
-        </div>
-        <div id="postalCode">
-            <div class="{style.label}">Postal Code</div>
-            <div class="{style.value}" ui:field="postalCode"/>
-        </div>
-        <div id="telephone">
-            <div class="{style.label}">Telephone</div>
-            <div class="{style.value}" ui:field="telephone"/>
-        </div>
-        <div id="telephone2">
-            <div class="{style.label}">Telephone2</div>
-            <div class="{style.value}" ui:field="telephone2"/>
-        </div>
-        <div id="mobile">
-            <div class="{style.label}">Mobile</div>
-            <div class="{style.value}" ui:field="mobile"/>
-        </div>
-        <div id="height">
-            <div class="{style.label}">Height</div>
-            <div class="{style.value}" ui:field="height"/>
-        </div>
-        <div id="weight">
-            <div class="{style.label}">Weight</div>
-            <div class="{style.value}" ui:field="weight"/>
-        </div>
-        <div id="immagePath">
-            <div class="{style.label}">Immage Path</div>
-            <div class="{style.value}" ui:field="immagePath"/>
-        </div>
-        <div id="videoPath">
-            <div class="{style.label}">Video Path</div>
-            <div class="{style.value}" ui:field="videoPath"/>
-        </div>
-        <div id="nationality">
-            <div class="{style.label}">Nationality</div>
-            <div class="{style.value}" ui:field="nationality"/>
-        </div>
-        <div id="profession">
-            <div class="{style.label}">Profession</div>
-            <div class="{style.value}" ui:field="profession"/>
-        </div>
-        <div id="socialInsuranceNo">
-            <div class="{style.label}">Social Insurance No</div>
-            <div class="{style.value}" ui:field="socialInsuranceNo"/>
-        </div>
-        <div id="birthday">
-            <div class="{style.label}">Birthday</div>
-            <div class="{style.value}" ui:field="birthday"/>
-        </div>
-        <div id="email">
-            <div class="{style.label}">Email</div>
-            <div class="{style.value}" ui:field="email"/>
-        </div>
-        <div id="descriptions">
-            <div class="{style.label}">Descriptions</div>
-            <div class="{style.value}" ui:field="descriptions"/>
-        </div>
-        <div id="bankAccount">
-            <div class="{style.label}">Bank Account</div>
-            <div class="{style.value}" ui:field="bankAccount"/>
-        </div>
-        <div id="maritalStatus">
-            <div class="{style.label}">Marital Status</div>
-            <div class="{style.value}" ui:field="maritalStatus"/>
-        </div>
-        <div id="workPermission">
-            <div class="{style.label}">Work Permission</div>
-            <div class="{style.value}" ui:field="workPermission"/>
-        </div>
-        <div id="anamnesisForm">
-            <div class="{style.label}">Anamnesis Form</div>
-            <div class="{style.value}" ui:field="anamnesisForm"/>
-        </div>
-        <div id="langskills">
-            <div class="{style.label}">Langskills</div>
-            <div class="{style.value}" ui:field="langskills"/>
-        </div>
-    </g:HTMLPanel>
+    <g:Button ui:field='delete'>Delete</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

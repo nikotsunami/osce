@@ -18,9 +18,9 @@ public interface AnamnesisChecksValueRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countAnamnesisChecksValues();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy> findAnamnesisChecksValue(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy>> findAllAnamnesisChecksValues();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy> findAnamnesisChecksValue(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy>> findAnamnesisChecksValueEntries(int firstResult, int maxResults);
 }

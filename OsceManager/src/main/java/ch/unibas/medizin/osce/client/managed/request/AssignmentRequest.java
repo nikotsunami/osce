@@ -18,9 +18,9 @@ public interface AssignmentRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countAssignments();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.AssignmentProxy> findAssignment(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AssignmentProxy>> findAllAssignments();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.AssignmentProxy> findAssignment(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AssignmentProxy>> findAssignmentEntries(int firstResult, int maxResults);
 }

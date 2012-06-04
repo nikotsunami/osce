@@ -18,9 +18,9 @@ public interface DescriptionRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countDescriptions();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.DescriptionProxy> findDescription(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.DescriptionProxy>> findAllDescriptions();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.DescriptionProxy> findDescription(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.DescriptionProxy>> findDescriptionEntries(int firstResult, int maxResults);
 }

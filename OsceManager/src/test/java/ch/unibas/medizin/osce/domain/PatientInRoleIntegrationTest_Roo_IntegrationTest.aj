@@ -83,7 +83,7 @@ privileged aspect PatientInRoleIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.PatientInRole.findPatientInRole(id);
         boolean modified =  dod.modifyPatientInRole(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.PatientInRole merged =  obj.merge();
+        ch.unibas.medizin.osce.domain.PatientInRole merged = (ch.unibas.medizin.osce.domain.PatientInRole) obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'PatientInRole' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

@@ -62,6 +62,9 @@ public abstract class AnamnesisCheckEditView_Roo_Gwt extends Composite implement
     @UiField(provided = true)
     ValueListBox<AnamnesisCheckProxy> title = new ValueListBox<AnamnesisCheckProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy>());
 
+    @UiField
+    IntegerBox userSpecifiedOrder;
+
     public void setTitlePickerValues(Collection<AnamnesisCheckProxy> values) {
         title.setAcceptableValues(values);
     }

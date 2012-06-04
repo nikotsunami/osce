@@ -7,7 +7,6 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -30,7 +29,7 @@ public abstract class RoleTemplateMobileListView_Roo_Gwt extends MobileProxyList
 
     public void init() {
         paths.add("templateName");
-        paths.add("id");
+        paths.add("date_cretaed");
         paths.add("date_cretaed");
     }
 }

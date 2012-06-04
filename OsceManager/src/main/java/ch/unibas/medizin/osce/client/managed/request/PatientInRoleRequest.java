@@ -18,9 +18,9 @@ public interface PatientInRoleRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countPatientInRoles();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy> findPatientInRole(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy>> findAllPatientInRoles();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy> findPatientInRole(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy>> findPatientInRoleEntries(int firstResult, int maxResults);
 }

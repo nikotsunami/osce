@@ -18,9 +18,9 @@ public interface StandardizedRoleRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countStandardizedRoles();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> findStandardizedRole(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>> findAllStandardizedRoles();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> findStandardizedRole(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>> findStandardizedRoleEntries(int firstResult, int maxResults);
 }

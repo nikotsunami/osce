@@ -13,10 +13,10 @@ privileged aspect StandardizedRole_Roo_ToString {
         sb.append("AdvancedSearchCriteria: ").append(getAdvancedSearchCriteria() == null ? "null" : getAdvancedSearchCriteria().size()).append(", ");
         sb.append("CaseDescription: ").append(getCaseDescription()).append(", ");
         sb.append("CheckList: ").append(getCheckList()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Keywords: ").append(getKeywords() == null ? "null" : getKeywords().size()).append(", ");
         sb.append("LongName: ").append(getLongName()).append(", ");
         sb.append("MainVersion: ").append(getMainVersion()).append(", ");
+        sb.append("PreviousVersion: ").append(getPreviousVersion()).append(", ");
         sb.append("RoleParticipants: ").append(getRoleParticipants() == null ? "null" : getRoleParticipants().size()).append(", ");
         sb.append("RoleScript: ").append(getRoleScript()).append(", ");
         sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");
@@ -24,8 +24,7 @@ privileged aspect StandardizedRole_Roo_ToString {
         sb.append("ShortName: ").append(getShortName()).append(", ");
         sb.append("SimpleSearchCriteria: ").append(getSimpleSearchCriteria() == null ? "null" : getSimpleSearchCriteria().size()).append(", ");
         sb.append("StudyYear: ").append(getStudyYear()).append(", ");
-        sb.append("SubVersion: ").append(getSubVersion()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("SubVersion: ").append(getSubVersion());
         return sb.toString();
     }
     

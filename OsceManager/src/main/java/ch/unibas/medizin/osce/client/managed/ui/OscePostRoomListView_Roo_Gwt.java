@@ -10,7 +10,6 @@ import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -32,36 +31,6 @@ public abstract class OscePostRoomListView_Roo_Gwt extends AbstractProxyListView
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("id");
-        table.addColumn(new TextColumn<OscePostRoomProxy>() {
-
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(OscePostRoomProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<OscePostRoomProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(OscePostRoomProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
         paths.add("room");
         table.addColumn(new TextColumn<OscePostRoomProxy>() {
 
@@ -102,5 +71,35 @@ public abstract class OscePostRoomListView_Roo_Gwt extends AbstractProxyListView
                 return renderer.render(object.getAssignments());
             }
         }, "Assignments");
+        paths.add("id");
+        table.addColumn(new TextColumn<OscePostRoomProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OscePostRoomProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<OscePostRoomProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OscePostRoomProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
     }
 }

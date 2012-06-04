@@ -36,19 +36,19 @@ privileged aspect Semester_Roo_JavaBean {
         this.administrators = administrators;
     }
     
-    public Set<Osce> Semester.getOsces() {
+    public java.util.Set<Osce> Semester.getOsces() {
         return this.osces;
     }
     
-    public void Semester.setOsces(Set<Osce> osces) {
+    public void Semester.setOsces(java.util.Set<Osce> osces) {
         this.osces = osces;
     }
     
-    public Set<PatientInSemester> Semester.getPatientsInSemester() {
+    public java.util.Set<PatientInSemester> Semester.getPatientsInSemester() {
         return this.patientsInSemester;
     }
     
-    public void Semester.setPatientsInSemester(Set<PatientInSemester> patientsInSemester) {
+    public void Semester.setPatientsInSemester(java.util.Set<PatientInSemester> patientsInSemester) {
         this.patientsInSemester = patientsInSemester;
     }
     

@@ -18,9 +18,9 @@ public interface OfficeRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countOffices();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.OfficeProxy> findOffice(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.OfficeProxy>> findAllOffices();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.OfficeProxy> findOffice(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.OfficeProxy>> findOfficeEntries(int firstResult, int maxResults);
 }

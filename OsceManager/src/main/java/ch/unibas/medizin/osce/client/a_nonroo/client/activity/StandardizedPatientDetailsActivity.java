@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -41,6 +43,7 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
@@ -76,6 +79,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 
 	private AnamnesisFormProxy anamnesisForm ;
 	private UserPlaceSettings userSettings;
+	private DMZSyncServiceAsync dmxSyncService = null;
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -108,6 +112,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
+		dmxSyncService = DMZSyncService.ServiceFactory.instance();
 		StandardizedPatientDetailsView standardizedPatientDetailsView = new StandardizedPatientDetailsViewImpl();
 		standardizedPatientDetailsView.setPresenter(this);
 		this.widget = panel;
@@ -579,6 +584,39 @@ StandardizedPatientMediaSubViewImpl.Delegate {
         });
 		
 	}
+	@Override
+	public void sendClicked(){
+		
+		
+		dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				
+			}
+			
+		});
+	}
+	
+	@Override
+	public void pullClicked(){
+		dmxSyncService.pullFromDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+			}
+			
+		});
+		
+	}
 
 	@Override
 	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
@@ -655,7 +693,6 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
 		
 	}
 

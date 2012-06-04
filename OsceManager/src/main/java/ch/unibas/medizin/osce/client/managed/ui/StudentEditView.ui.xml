@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
 
   <ui:style>
    .errors {
@@ -32,67 +36,25 @@
   </ui:style>
  
   <g:HTMLPanel>
-    <div class="{style.underline}">    
-      <h3 class="{style.header}" ui:field="editTitle">
+    <div class='{style.underline}'>    
+      <h3 class='{style.header}' ui:field="editTitle">
         <ui:msg>Edit Student</ui:msg>
       </h3>
-      <h3 class="{style.header}" ui:field="createTitle">
-                <ui:msg>New Student</ui:msg>
-            </h3>
+      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New Student</ui:msg></h3>
     </div>
-    <div class="{style.errors}" ui:field="errors"/>
+    <div ui:field='errors' class='{style.errors}'></div>
 
-    <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-    <tr id="gender">
-                <td>
-                    <div class="{style.label}">Gender:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="gender"/>
-                </td>
-            </tr>
-            <tr id="name">
-                <td>
-                    <div class="{style.label}">Name:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="name"/>
-                </td>
-            </tr>
-            <tr id="preName">
-                <td>
-                    <div class="{style.label}">Pre Name:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="preName"/>
-                </td>
-            </tr>
-            <tr id="email">
-                <td>
-                    <div class="{style.label}">Email:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="email"/>
-                </td>
-            </tr>
-            <tr id="studentOsces">
-                <td>
-                    <div class="{style.label}">Student Osces:</div>
-                </td>
-                <td>
-                    <a:StudentOscesSetEditor ui:field="studentOsces"/>
-                </td>
-            </tr>
-        </table>
+    <table id='boundElementHolder' class="{style.fields}">
+      <tr id='gender'><td><div class='{style.label}'>Gender:</div></td><td><g:ValueListBox ui:field='gender'/></td></tr>
+      <tr id='name'><td><div class='{style.label}'>Name:</div></td><td><g:TextBox ui:field='name'/></td></tr>
+      <tr id='preName'><td><div class='{style.label}'>Pre Name:</div></td><td><g:TextBox ui:field='preName'/></td></tr>
+      <tr id='email'><td><div class='{style.label}'>Email:</div></td><td><g:TextBox ui:field='email'/></td></tr>
+      <tr id='studentOsces'><td><div class='{style.label}'>Student Osces:</div></td><td><a:StudentOscesSetEditor ui:field='studentOsces'/></td></tr>
+    </table>
 
-    <div class="{style.bar}">
-      <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>
-      <g:Button addStyleNames="{style.button}" ui:field="cancel">Cancel</g:Button>
+    <div class='{style.bar}'>
+      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
+      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
     </div>
   </g:HTMLPanel>
 </ui:UiBinder>

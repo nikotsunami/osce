@@ -18,9 +18,9 @@ public interface StandardizedPatientRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countStandardizedPatients();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy> findStandardizedPatient(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy>> findAllStandardizedPatients();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy> findStandardizedPatient(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy>> findStandardizedPatientEntries(int firstResult, int maxResults);
 }

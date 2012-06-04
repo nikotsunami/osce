@@ -13,7 +13,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -51,6 +50,6 @@ public abstract class RoleParticipantDetailsView_Roo_Gwt extends Composite imple
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
         doctor.setInnerText(proxy.getDoctor() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy.getDoctor()));
         type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
-        displayRenderer.setInnerText(RoleParticipantProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance().render(proxy));
     }
 }

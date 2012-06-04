@@ -10,14 +10,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.SimpleSearchCriteria")
 public interface SimpleSearchCriteriaProxy extends EntityProxy {
 
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
-
     abstract String getName();
 
     abstract void setName(String name);
@@ -33,4 +25,12 @@ public interface SimpleSearchCriteriaProxy extends EntityProxy {
     abstract StandardizedRoleProxy getStandardizedRole();
 
     abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);
+
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
 }

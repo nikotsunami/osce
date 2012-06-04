@@ -13,14 +13,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.RoleBaseItem")
 public interface RoleBaseItemProxy extends EntityProxy {
 
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
-
     abstract ItemDefination getItem_defination();
 
     abstract void setItem_defination(ItemDefination item_defination);
@@ -48,4 +40,12 @@ public interface RoleBaseItemProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy> getRoleItemAccess();
 
     abstract void setRoleItemAccess(Set<RoleItemAccessProxy> roleItemAccess);
+
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
 }

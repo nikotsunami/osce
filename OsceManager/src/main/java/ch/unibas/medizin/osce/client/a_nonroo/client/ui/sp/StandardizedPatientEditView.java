@@ -29,8 +29,6 @@ public interface StandardizedPatientEditView extends IsWidget {
     
 	interface Delegate {
 		void cancelClicked();
-		void sendClicked();
-		void pullClicked();
 		void saveClicked();
 		void storeDisplaySettings();
 	}

@@ -10,7 +10,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -20,12 +19,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class FileMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<FileProxy> {
-
-    @UiField
-    Element id;
-
-    @UiField
-    Element version;
 
     @UiField
     Element path;
@@ -39,15 +32,21 @@ public abstract class FileMobileDetailsView_Roo_Gwt extends Composite implements
     @UiField
     Element standardizedRole;
 
+    @UiField
+    Element id;
+
+    @UiField
+    Element version;
+
     FileProxy proxy;
 
     public void setValue(FileProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         path.setInnerText(proxy.getPath() == null ? "" : String.valueOf(proxy.getPath()));
         sortOrder.setInnerText(proxy.getSortOrder() == null ? "" : String.valueOf(proxy.getSortOrder()));
         description.setInnerText(proxy.getDescription() == null ? "" : String.valueOf(proxy.getDescription()));
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
     }
 }

@@ -11,11 +11,9 @@ privileged aspect Student_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Email: ").append(getEmail()).append(", ");
         sb.append("Gender: ").append(getGender()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("PreName: ").append(getPreName()).append(", ");
-        sb.append("StudentOsces: ").append(getStudentOsces() == null ? "null" : getStudentOsces().size()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("StudentOsces: ").append(getStudentOsces() == null ? "null" : getStudentOsces().size());
         return sb.toString();
     }
     

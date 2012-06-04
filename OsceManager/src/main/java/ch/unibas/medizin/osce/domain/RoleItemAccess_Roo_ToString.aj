@@ -9,10 +9,8 @@ privileged aspect RoleItemAccess_Roo_ToString {
     
     public String RoleItemAccess.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
-        sb.append("RoleBaseItem: ").append(getRoleBaseItem() == null ? "null" : getRoleBaseItem().size()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("RoleBaseItem: ").append(getRoleBaseItem() == null ? "null" : getRoleBaseItem().size());
         return sb.toString();
     }
     

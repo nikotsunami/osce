@@ -9,13 +9,11 @@ privileged aspect MaterialList_Roo_ToString {
     
     public String MaterialList.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("Price: ").append(getPrice()).append(", ");
         sb.append("PriceType: ").append(getPriceType()).append(", ");
         sb.append("Type: ").append(getType()).append(", ");
-        sb.append("UsedMaterials: ").append(getUsedMaterials() == null ? "null" : getUsedMaterials().size()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("UsedMaterials: ").append(getUsedMaterials() == null ? "null" : getUsedMaterials().size());
         return sb.toString();
     }
     

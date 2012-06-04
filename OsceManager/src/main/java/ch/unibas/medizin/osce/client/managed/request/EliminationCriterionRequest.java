@@ -18,9 +18,9 @@ public interface EliminationCriterionRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countEliminationCriterions();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy> findEliminationCriterion(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy>> findAllEliminationCriterions();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy> findEliminationCriterion(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy>> findEliminationCriterionEntries(int firstResult, int maxResults);
 }

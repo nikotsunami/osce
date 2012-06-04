@@ -11,9 +11,7 @@ privileged aspect AnamnesisForm_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Anamnesischecksvalues: ").append(getAnamnesischecksvalues() == null ? "null" : getAnamnesischecksvalues().size()).append(", ");
         sb.append("CreateDate: ").append(getCreateDate()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Scars: ").append(getScars() == null ? "null" : getScars().size()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Scars: ").append(getScars() == null ? "null" : getScars().size());
         return sb.toString();
     }
     

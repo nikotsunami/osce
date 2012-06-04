@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
   <ui:style>
     .outer {
       padding: 10px;
@@ -16,57 +20,17 @@
     }
   </ui:style>
  
-  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div class="{style.error}" ui:field="errors"/>
+  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
+    <div ui:field='errors' class='{style.error}'></div>
     
-    
-    
+    <div id='text'><div class='{style.label}'>Text</div><div class='{style.value}'><g:TextBox ui:field='text'/></div></div>
+    <div id='value'><div class='{style.label}'>Value</div><div class='{style.value}'><g:TextBox ui:field='value'/></div></div>
+    <div id='sort_order'><div class='{style.label}'>Sort_order</div><div class='{style.value}'><g:IntegerBox ui:field='sort_order'/></div></div>
+    <div id='type'><div class='{style.label}'>Type</div><div class='{style.value}'><g:ValueListBox ui:field='type'/></div></div>
+    <div id='anamnesischecksvalues'><div class='{style.label}'>Anamnesischecksvalues</div><div class='{style.value}'><a:AnamnesisChecksValueSetEditor ui:field='anamnesischecksvalues'/></div></div>
+    <div id='title'><div class='{style.label}'>Title</div><div class='{style.value}'><g:ValueListBox ui:field='title'/></div></div>
+    <div id='userSpecifiedOrder'><div class='{style.label}'>User Specified Order</div><div class='{style.value}'><g:IntegerBox ui:field='userSpecifiedOrder'/></div></div>
 
-    <g:Button ui:field="save">Save</g:Button>
-  
-        
-        
-        
-    
-        
-        
-        
-        
-    <div id="text">
-            <div class="{style.label}">Text</div>
-            <div class="{style.value}">
-                <g:TextBox ui:field="text"/>
-            </div>
-        </div>
-        <div id="value">
-            <div class="{style.label}">Value</div>
-            <div class="{style.value}">
-                <g:TextBox ui:field="value"/>
-            </div>
-        </div>
-        <div id="sort_order">
-            <div class="{style.label}">Sort_order</div>
-            <div class="{style.value}">
-                <g:IntegerBox ui:field="sort_order"/>
-            </div>
-        </div>
-        <div id="type">
-            <div class="{style.label}">Type</div>
-            <div class="{style.value}">
-                <g:ValueListBox ui:field="type"/>
-            </div>
-        </div>
-        <div id="anamnesischecksvalues">
-            <div class="{style.label}">Anamnesischecksvalues</div>
-            <div class="{style.value}">
-                <a:AnamnesisChecksValueSetEditor ui:field="anamnesischecksvalues"/>
-            </div>
-        </div>
-        <div id="title">
-            <div class="{style.label}">Title</div>
-            <div class="{style.value}">
-                <g:ValueListBox ui:field="title"/>
-            </div>
-        </div>
-    </g:HTMLPanel>
+    <g:Button ui:field='save'>Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

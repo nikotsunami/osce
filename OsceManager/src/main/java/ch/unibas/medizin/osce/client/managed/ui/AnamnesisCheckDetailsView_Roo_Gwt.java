@@ -12,7 +12,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -48,6 +47,9 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
     @UiField
     SpanElement title;
 
+    @UiField
+    SpanElement userSpecifiedOrder;
+
     AnamnesisCheckProxy proxy;
 
     @UiField
@@ -63,6 +65,7 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
         type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
         anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
         title.setInnerText(proxy.getTitle() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy.getTitle()));
-        displayRenderer.setInnerText(AnamnesisCheckProxyRenderer.instance().render(proxy));
+        userSpecifiedOrder.setInnerText(proxy.getUserSpecifiedOrder() == null ? "" : String.valueOf(proxy.getUserSpecifiedOrder()));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy));
     }
 }

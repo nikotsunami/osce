@@ -10,13 +10,11 @@ privileged aspect RoleTopic_Roo_ToString {
     public String RoleTopic.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Description: ").append(getDescription()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("SlotsUntilChange: ").append(getSlotsUntilChange()).append(", ");
         sb.append("Specialisation: ").append(getSpecialisation()).append(", ");
         sb.append("StandardizedRoles: ").append(getStandardizedRoles() == null ? "null" : getStandardizedRoles().size()).append(", ");
-        sb.append("StudyYear: ").append(getStudyYear()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("StudyYear: ").append(getStudyYear());
         return sb.toString();
     }
     

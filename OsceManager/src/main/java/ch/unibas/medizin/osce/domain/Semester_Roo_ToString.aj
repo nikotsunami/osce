@@ -11,11 +11,9 @@ privileged aspect Semester_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Administrators: ").append(getAdministrators() == null ? "null" : getAdministrators().size()).append(", ");
         sb.append("CalYear: ").append(getCalYear()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Osces: ").append(getOsces() == null ? "null" : getOsces().size()).append(", ");
         sb.append("PatientsInSemester: ").append(getPatientsInSemester() == null ? "null" : getPatientsInSemester().size()).append(", ");
-        sb.append("Semester: ").append(getSemester()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Semester: ").append(getSemester());
         return sb.toString();
     }
     

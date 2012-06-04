@@ -4,61 +4,54 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Clinic;
-import java.lang.Integer;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect ClinicDataOnDemand_Roo_DataOnDemand {
     
     declare @type: ClinicDataOnDemand: @Component;
     
-    private Random ClinicDataOnDemand.rnd = new SecureRandom();
+    private Random ClinicDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<Clinic> ClinicDataOnDemand.data;
     
     public Clinic ClinicDataOnDemand.getNewTransientClinic(int index) {
-        Clinic obj = new Clinic();
-        setCity(obj, index);
+        ch.unibas.medizin.osce.domain.Clinic obj = new ch.unibas.medizin.osce.domain.Clinic();
         setName(obj, index);
-        setPostalCode(obj, index);
         setStreet(obj, index);
+        setCity(obj, index);
+        setPostalCode(obj, index);
         return obj;
     }
     
-    public void ClinicDataOnDemand.setCity(Clinic obj, int index) {
-        String city = "city_" + index;
+    private void ClinicDataOnDemand.setName(Clinic obj, int index) {
+        java.lang.String name = "name_" + index;
+        if (name.length() > 60) {
+            name = name.substring(0, 60);
+        }
+        obj.setName(name);
+    }
+    
+    private void ClinicDataOnDemand.setStreet(Clinic obj, int index) {
+        java.lang.String street = "street_" + index;
+        if (street.length() > 60) {
+            street = street.substring(0, 60);
+        }
+        obj.setStreet(street);
+    }
+    
+    private void ClinicDataOnDemand.setCity(Clinic obj, int index) {
+        java.lang.String city = "city_" + index;
         if (city.length() > 30) {
             city = city.substring(0, 30);
         }
         obj.setCity(city);
     }
     
-    public void ClinicDataOnDemand.setName(Clinic obj, int index) {
-        String name = "name_" + index;
-        if (name.length() > 60) {
-            name = new Random().nextInt(10) + name.substring(1, 60);
-        }
-        obj.setName(name);
-    }
-    
-    public void ClinicDataOnDemand.setPostalCode(Clinic obj, int index) {
-        Integer postalCode = new Integer(index);
+    private void ClinicDataOnDemand.setPostalCode(Clinic obj, int index) {
+        java.lang.Integer postalCode = new Integer(index);
         obj.setPostalCode(postalCode);
-    }
-    
-    public void ClinicDataOnDemand.setStreet(Clinic obj, int index) {
-        String street = "street_" + index;
-        if (street.length() > 60) {
-            street = street.substring(0, 60);
-        }
-        obj.setStreet(street);
     }
     
     public Clinic ClinicDataOnDemand.getSpecificClinic(int index) {
@@ -80,25 +73,16 @@ privileged aspect ClinicDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ClinicDataOnDemand.init() {
-        data = Clinic.findClinicEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.Clinic.findClinicEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Clinic' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.Clinic>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Clinic>();
         for (int i = 0; i < 10; i++) {
-            Clinic obj = getNewTransientClinic(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.Clinic obj = getNewTransientClinic(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

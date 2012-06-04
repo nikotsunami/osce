@@ -20,6 +20,8 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void editPatientClicked();
 		void deletePatientClicked();
 		void storeDisplaySettings();
+		void sendClicked();
+		void pullClicked();
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();

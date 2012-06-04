@@ -4,18 +4,9 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.RoleTopic;
-import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.domain.SpecialisationDataOnDemand;
-import ch.unibas.medizin.osce.shared.StudyYears;
-import java.lang.Integer;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +14,7 @@ privileged aspect RoleTopicDataOnDemand_Roo_DataOnDemand {
     
     declare @type: RoleTopicDataOnDemand: @Component;
     
-    private Random RoleTopicDataOnDemand.rnd = new SecureRandom();
+    private Random RoleTopicDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<RoleTopic> RoleTopicDataOnDemand.data;
     
@@ -31,47 +22,47 @@ privileged aspect RoleTopicDataOnDemand_Roo_DataOnDemand {
     private SpecialisationDataOnDemand RoleTopicDataOnDemand.specialisationDataOnDemand;
     
     public RoleTopic RoleTopicDataOnDemand.getNewTransientRoleTopic(int index) {
-        RoleTopic obj = new RoleTopic();
-        setDescription(obj, index);
+        ch.unibas.medizin.osce.domain.RoleTopic obj = new ch.unibas.medizin.osce.domain.RoleTopic();
         setName(obj, index);
+        setDescription(obj, index);
+        setStudyYear(obj, index);
         setSlotsUntilChange(obj, index);
         setSpecialisation(obj, index);
-        setStudyYear(obj, index);
         return obj;
     }
     
-    public void RoleTopicDataOnDemand.setDescription(RoleTopic obj, int index) {
-        String description = "description_" + index;
-        if (description.length() > 255) {
-            description = description.substring(0, 255);
-        }
-        obj.setDescription(description);
-    }
-    
-    public void RoleTopicDataOnDemand.setName(RoleTopic obj, int index) {
-        String name = "name_" + index;
+    private void RoleTopicDataOnDemand.setName(RoleTopic obj, int index) {
+        java.lang.String name = "name_" + index;
         if (name.length() > 45) {
             name = name.substring(0, 45);
         }
         obj.setName(name);
     }
     
-    public void RoleTopicDataOnDemand.setSlotsUntilChange(RoleTopic obj, int index) {
-        Integer slotsUntilChange = new Integer(index);
+    private void RoleTopicDataOnDemand.setDescription(RoleTopic obj, int index) {
+        java.lang.String description = "description_" + index;
+        if (description.length() > 255) {
+            description = description.substring(0, 255);
+        }
+        obj.setDescription(description);
+    }
+    
+    private void RoleTopicDataOnDemand.setStudyYear(RoleTopic obj, int index) {
+        ch.unibas.medizin.osce.shared.StudyYears studyYear = ch.unibas.medizin.osce.shared.StudyYears.class.getEnumConstants()[0];
+        obj.setStudyYear(studyYear);
+    }
+    
+    private void RoleTopicDataOnDemand.setSlotsUntilChange(RoleTopic obj, int index) {
+        java.lang.Integer slotsUntilChange = new Integer(index);
         if (slotsUntilChange > 99) {
             slotsUntilChange = 99;
         }
         obj.setSlotsUntilChange(slotsUntilChange);
     }
     
-    public void RoleTopicDataOnDemand.setSpecialisation(RoleTopic obj, int index) {
-        Specialisation specialisation = specialisationDataOnDemand.getRandomSpecialisation();
+    private void RoleTopicDataOnDemand.setSpecialisation(RoleTopic obj, int index) {
+        ch.unibas.medizin.osce.domain.Specialisation specialisation = specialisationDataOnDemand.getRandomSpecialisation();
         obj.setSpecialisation(specialisation);
-    }
-    
-    public void RoleTopicDataOnDemand.setStudyYear(RoleTopic obj, int index) {
-        StudyYears studyYear = StudyYears.class.getEnumConstants()[0];
-        obj.setStudyYear(studyYear);
     }
     
     public RoleTopic RoleTopicDataOnDemand.getSpecificRoleTopic(int index) {
@@ -93,25 +84,16 @@ privileged aspect RoleTopicDataOnDemand_Roo_DataOnDemand {
     }
     
     public void RoleTopicDataOnDemand.init() {
-        data = RoleTopic.findRoleTopicEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.RoleTopic.findRoleTopicEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'RoleTopic' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.RoleTopic>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.RoleTopic>();
         for (int i = 0; i < 10; i++) {
-            RoleTopic obj = getNewTransientRoleTopic(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.RoleTopic obj = getNewTransientRoleTopic(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

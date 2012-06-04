@@ -10,13 +10,12 @@ privileged aspect AnamnesisCheck_Roo_ToString {
     public String AnamnesisCheck.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Anamnesischecksvalues: ").append(getAnamnesischecksvalues() == null ? "null" : getAnamnesischecksvalues().size()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Sort_order: ").append(getSort_order()).append(", ");
         sb.append("Text: ").append(getText()).append(", ");
+        sb.append("Title: ").append(getTitle()).append(", ");
         sb.append("Type: ").append(getType()).append(", ");
         sb.append("UserSpecifiedOrder: ").append(getUserSpecifiedOrder()).append(", ");
-        sb.append("Value: ").append(getValue()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Value: ").append(getValue());
         return sb.toString();
     }
     

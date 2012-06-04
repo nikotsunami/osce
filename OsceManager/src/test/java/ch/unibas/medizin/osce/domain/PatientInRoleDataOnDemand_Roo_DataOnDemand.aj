@@ -4,17 +4,10 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.PatientInRole;
-import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.PatientInSemesterDataOnDemand;
-import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.StandardizedRoleDataOnDemand;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +15,7 @@ privileged aspect PatientInRoleDataOnDemand_Roo_DataOnDemand {
     
     declare @type: PatientInRoleDataOnDemand: @Component;
     
-    private Random PatientInRoleDataOnDemand.rnd = new SecureRandom();
+    private Random PatientInRoleDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<PatientInRole> PatientInRoleDataOnDemand.data;
     
@@ -33,19 +26,19 @@ privileged aspect PatientInRoleDataOnDemand_Roo_DataOnDemand {
     private StandardizedRoleDataOnDemand PatientInRoleDataOnDemand.standardizedRoleDataOnDemand;
     
     public PatientInRole PatientInRoleDataOnDemand.getNewTransientPatientInRole(int index) {
-        PatientInRole obj = new PatientInRole();
+        ch.unibas.medizin.osce.domain.PatientInRole obj = new ch.unibas.medizin.osce.domain.PatientInRole();
         setPatientInSemester(obj, index);
         setStandardizedRole(obj, index);
         return obj;
     }
     
-    public void PatientInRoleDataOnDemand.setPatientInSemester(PatientInRole obj, int index) {
-        PatientInSemester patientInSemester = patientInSemesterDataOnDemand.getRandomPatientInSemester();
+    private void PatientInRoleDataOnDemand.setPatientInSemester(PatientInRole obj, int index) {
+        ch.unibas.medizin.osce.domain.PatientInSemester patientInSemester = patientInSemesterDataOnDemand.getRandomPatientInSemester();
         obj.setPatientInSemester(patientInSemester);
     }
     
-    public void PatientInRoleDataOnDemand.setStandardizedRole(PatientInRole obj, int index) {
-        StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
+    private void PatientInRoleDataOnDemand.setStandardizedRole(PatientInRole obj, int index) {
+        ch.unibas.medizin.osce.domain.StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
         obj.setStandardizedRole(standardizedRole);
     }
     
@@ -68,25 +61,16 @@ privileged aspect PatientInRoleDataOnDemand_Roo_DataOnDemand {
     }
     
     public void PatientInRoleDataOnDemand.init() {
-        data = PatientInRole.findPatientInRoleEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.PatientInRole.findPatientInRoleEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'PatientInRole' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.PatientInRole>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.PatientInRole>();
         for (int i = 0; i < 10; i++) {
-            PatientInRole obj = getNewTransientPatientInRole(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.PatientInRole obj = getNewTransientPatientInRole(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

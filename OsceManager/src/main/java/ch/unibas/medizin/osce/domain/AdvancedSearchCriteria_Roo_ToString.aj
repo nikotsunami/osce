@@ -12,12 +12,10 @@ privileged aspect AdvancedSearchCriteria_Roo_ToString {
         sb.append("BindType: ").append(getBindType()).append(", ");
         sb.append("Comparation: ").append(getComparation()).append(", ");
         sb.append("Field: ").append(getField()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("ObjectId: ").append(getObjectId()).append(", ");
         sb.append("ShownValue: ").append(getShownValue()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
-        sb.append("Value: ").append(getValue()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Value: ").append(getValue());
         return sb.toString();
     }
     

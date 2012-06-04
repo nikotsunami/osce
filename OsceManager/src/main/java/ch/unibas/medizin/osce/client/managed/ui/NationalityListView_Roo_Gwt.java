@@ -7,7 +7,6 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -29,6 +28,31 @@ public abstract class NationalityListView_Roo_Gwt extends AbstractProxyListView<
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
+        paths.add("nationality");
+        table.addColumn(new TextColumn<NationalityProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(NationalityProxy object) {
+                return renderer.render(object.getNationality());
+            }
+        }, "Nationality");
+        paths.add("standardizedpatients");
+        table.addColumn(new TextColumn<NationalityProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance());
+
+            @Override
+            public String getValue(NationalityProxy object) {
+                return renderer.render(object.getStandardizedpatients());
+            }
+        }, "Standardizedpatients");
         paths.add("id");
         table.addColumn(new TextColumn<NationalityProxy>() {
 
@@ -59,30 +83,5 @@ public abstract class NationalityListView_Roo_Gwt extends AbstractProxyListView<
                 return renderer.render(object.getVersion());
             }
         }, "Version");
-        paths.add("nationality");
-        table.addColumn(new TextColumn<NationalityProxy>() {
-
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-                public String render(java.lang.String obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(NationalityProxy object) {
-                return renderer.render(object.getNationality());
-            }
-        }, "Nationality");
-        paths.add("standardizedpatients");
-        table.addColumn(new TextColumn<NationalityProxy>() {
-
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance());
-
-            @Override
-            public String getValue(NationalityProxy object) {
-                return renderer.render(object.getStandardizedpatients());
-            }
-        }, "Standardizedpatients");
     }
 }

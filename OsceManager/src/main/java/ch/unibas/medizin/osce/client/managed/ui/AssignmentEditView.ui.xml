@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
 
   <ui:style>
    .errors {
@@ -32,94 +36,29 @@
   </ui:style>
  
   <g:HTMLPanel>
-    <div class="{style.underline}">    
-      <h3 class="{style.header}" ui:field="editTitle">
+    <div class='{style.underline}'>    
+      <h3 class='{style.header}' ui:field="editTitle">
         <ui:msg>Edit Assignment</ui:msg>
       </h3>
-      <h3 class="{style.header}" ui:field="createTitle">
-                <ui:msg>New Assignment</ui:msg>
-            </h3>
+      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New Assignment</ui:msg></h3>
     </div>
-    <div class="{style.errors}" ui:field="errors"/>
+    <div ui:field='errors' class='{style.errors}'></div>
 
-    <table class="{style.fields}" id="boundElementHolder">
-      <tr id="type">
-                <td>
-                    <div class="{style.label}">Type:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="type"/>
-                </td>
-            </tr>
-      <tr id="slotNumber">
-                <td>
-                    <div class="{style.label}">Slot Number:</div>
-                </td>
-                <td>
-                    <g:IntegerBox ui:field="slotNumber"/>
-                </td>
-            </tr>
-      <tr id="timeStart">
-                <td>
-                    <div class="{style.label}">Time Start:</div>
-                </td>
-                <td>
-                    <d:DateBox ui:field="timeStart"/>
-                </td>
-            </tr>
-      <tr id="timeEnd">
-                <td>
-                    <div class="{style.label}">Time End:</div>
-                </td>
-                <td>
-                    <d:DateBox ui:field="timeEnd"/>
-                </td>
-            </tr>
-      <tr id="osceDay">
-                <td>
-                    <div class="{style.label}">Osce Day:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="osceDay"/>
-                </td>
-            </tr>
-      <tr id="oscePostRoom">
-                <td>
-                    <div class="{style.label}">Osce Post Room:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="oscePostRoom"/>
-                </td>
-            </tr>
-      <tr id="student">
-                <td>
-                    <div class="{style.label}">Student:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="student"/>
-                </td>
-            </tr>
-      <tr id="patientInRole">
-                <td>
-                    <div class="{style.label}">Patient In Role:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="patientInRole"/>
-                </td>
-            </tr>
-      <tr id="examiner">
-                <td>
-                    <div class="{style.label}">Examiner:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="examiner"/>
-                </td>
-            </tr>
+    <table id='boundElementHolder' class="{style.fields}">
+      <tr id='type'><td><div class='{style.label}'>Type:</div></td><td><g:ValueListBox ui:field='type'/></td></tr>
+      <tr id='slotNumber'><td><div class='{style.label}'>Slot Number:</div></td><td><g:IntegerBox ui:field='slotNumber'/></td></tr>
+      <tr id='timeStart'><td><div class='{style.label}'>Time Start:</div></td><td><d:DateBox ui:field='timeStart'/></td></tr>
+      <tr id='timeEnd'><td><div class='{style.label}'>Time End:</div></td><td><d:DateBox ui:field='timeEnd'/></td></tr>
+      <tr id='osceDay'><td><div class='{style.label}'>Osce Day:</div></td><td><g:ValueListBox ui:field='osceDay'/></td></tr>
+      <tr id='oscePostRoom'><td><div class='{style.label}'>Osce Post Room:</div></td><td><g:ValueListBox ui:field='oscePostRoom'/></td></tr>
+      <tr id='student'><td><div class='{style.label}'>Student:</div></td><td><g:ValueListBox ui:field='student'/></td></tr>
+      <tr id='patientInRole'><td><div class='{style.label}'>Patient In Role:</div></td><td><g:ValueListBox ui:field='patientInRole'/></td></tr>
+      <tr id='examiner'><td><div class='{style.label}'>Examiner:</div></td><td><g:ValueListBox ui:field='examiner'/></td></tr>
     </table>
 
-    <div class="{style.bar}">
-      <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>
-      <g:Button addStyleNames="{style.button}" ui:field="cancel">Cancel</g:Button>
+    <div class='{style.bar}'>
+      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
+      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
     </div>
   </g:HTMLPanel>
 </ui:UiBinder>

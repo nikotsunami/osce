@@ -10,7 +10,6 @@ privileged aspect Assignment_Roo_ToString {
     public String Assignment.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Examiner: ").append(getExaminer()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("OsceDay: ").append(getOsceDay()).append(", ");
         sb.append("OscePostRoom: ").append(getOscePostRoom()).append(", ");
         sb.append("PatientInRole: ").append(getPatientInRole()).append(", ");
@@ -18,8 +17,7 @@ privileged aspect Assignment_Roo_ToString {
         sb.append("Student: ").append(getStudent()).append(", ");
         sb.append("TimeEnd: ").append(getTimeEnd()).append(", ");
         sb.append("TimeStart: ").append(getTimeStart()).append(", ");
-        sb.append("Type: ").append(getType()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Type: ").append(getType());
         return sb.toString();
     }
     

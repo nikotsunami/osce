@@ -9,12 +9,10 @@ privileged aspect SimpleSearchCriteria_Roo_ToString {
     
     public String SimpleSearchCriteria.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("SortOrder: ").append(getSortOrder()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
-        sb.append("Value: ").append(getValue()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Value: ").append(getValue());
         return sb.toString();
     }
     

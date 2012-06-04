@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
 
   <ui:style>
    .errors {
@@ -32,267 +36,36 @@
   </ui:style>
  
   <g:HTMLPanel>
-    <div class="{style.underline}">    
-      <h3 class="{style.header}" ui:field="editTitle">
+    <div class='{style.underline}'>    
+      <h3 class='{style.header}' ui:field="editTitle">
         <ui:msg>Edit StandardizedRole</ui:msg>
       </h3>
-      <h3 class="{style.header}" ui:field="createTitle">
-                <ui:msg>New StandardizedRole</ui:msg>
-            </h3>
+      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New StandardizedRole</ui:msg></h3>
     </div>
-    <div class="{style.errors}" ui:field="errors"/>
+    <div ui:field='errors' class='{style.errors}'></div>
 
-    <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        <tr id="shortName">
-                <td>
-                    <div class="{style.label}">Short Name:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="shortName"/>
-                </td>
-            </tr>
-            <tr id="longName">
-                <td>
-                    <div class="{style.label}">Long Name:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="longName"/>
-                </td>
-            </tr>
-            <tr id="caseDescription">
-                <td>
-                    <div class="{style.label}">Case Description:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="caseDescription"/>
-                </td>
-            </tr>
-            <tr id="roleScript">
-                <td>
-                    <div class="{style.label}">Role Script:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="roleScript"/>
-                </td>
-            </tr>
-            <tr id="roleType">
-                <td>
-                    <div class="{style.label}">Role Type:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="roleType"/>
-                </td>
-            </tr>
-            <tr id="active">
-                <td>
-                    <div class="{style.label}">Active:</div>
-                </td>
-                <td>
-                    <g:CheckBox ui:field="active"/>
-                </td>
-            </tr>
-            <tr id="roleTopic">
-                <td>
-                    <div class="{style.label}">Role Topic:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="roleTopic"/>
-                </td>
-            </tr>
-            <tr id="roleParticipants">
-                <td>
-                    <div class="{style.label}">Role Participants:</div>
-                </td>
-                <td>
-                    <a:RoleParticipantSetEditor ui:field="roleParticipants"/>
-                </td>
-            </tr>
-            <tr id="previousVersion">
-                <td>
-                    <div class="{style.label}">Previous Version:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="previousVersion"/>
-                </td>
-            </tr>
-            <tr id="studyYear">
-                <td>
-                    <div class="{style.label}">Study Year:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="studyYear"/>
-                </td>
-            </tr>
-            <tr id="mainVersion">
-                <td>
-                    <div class="{style.label}">Main Version:</div>
-                </td>
-                <td>
-                    <g:IntegerBox ui:field="mainVersion"/>
-                </td>
-            </tr>
-            <tr id="subVersion">
-                <td>
-                    <div class="{style.label}">Sub Version:</div>
-                </td>
-                <td>
-                    <g:IntegerBox ui:field="subVersion"/>
-                </td>
-            </tr>
-            <tr id="keywords">
-                <td>
-                    <div class="{style.label}">Keywords:</div>
-                </td>
-                <td>
-                    <a:KeywordSetEditor ui:field="keywords"/>
-                </td>
-            </tr>
-            <tr id="advancedSearchCriteria">
-                <td>
-                    <div class="{style.label}">Advanced Search Criteria:</div>
-                </td>
-                <td>
-                    <a:AdvancedSearchCriteriaSetEditor ui:field="advancedSearchCriteria"/>
-                </td>
-            </tr>
-            <tr id="simpleSearchCriteria">
-                <td>
-                    <div class="{style.label}">Simple Search Criteria:</div>
-                </td>
-                <td>
-                    <a:SimpleSearchCriteriaSetEditor ui:field="simpleSearchCriteria"/>
-                </td>
-            </tr>
-            <tr id="checkList">
-                <td>
-                    <div class="{style.label}">Check List:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="checkList"/>
-                </td>
-            </tr>
-        </table>
+    <table id='boundElementHolder' class="{style.fields}">
+      <tr id='shortName'><td><div class='{style.label}'>Short Name:</div></td><td><g:TextBox ui:field='shortName'/></td></tr>
+      <tr id='longName'><td><div class='{style.label}'>Long Name:</div></td><td><g:TextBox ui:field='longName'/></td></tr>
+      <tr id='caseDescription'><td><div class='{style.label}'>Case Description:</div></td><td><g:TextBox ui:field='caseDescription'/></td></tr>
+      <tr id='roleScript'><td><div class='{style.label}'>Role Script:</div></td><td><g:TextBox ui:field='roleScript'/></td></tr>
+      <tr id='roleType'><td><div class='{style.label}'>Role Type:</div></td><td><g:ValueListBox ui:field='roleType'/></td></tr>
+      <tr id='active'><td><div class='{style.label}'>Active:</div></td><td><g:CheckBox ui:field='active'/></td></tr>
+      <tr id='roleTopic'><td><div class='{style.label}'>Role Topic:</div></td><td><g:ValueListBox ui:field='roleTopic'/></td></tr>
+      <tr id='roleParticipants'><td><div class='{style.label}'>Role Participants:</div></td><td><a:RoleParticipantSetEditor ui:field='roleParticipants'/></td></tr>
+      <tr id='previousVersion'><td><div class='{style.label}'>Previous Version:</div></td><td><g:ValueListBox ui:field='previousVersion'/></td></tr>
+      <tr id='studyYear'><td><div class='{style.label}'>Study Year:</div></td><td><g:ValueListBox ui:field='studyYear'/></td></tr>
+      <tr id='mainVersion'><td><div class='{style.label}'>Main Version:</div></td><td><g:IntegerBox ui:field='mainVersion'/></td></tr>
+      <tr id='subVersion'><td><div class='{style.label}'>Sub Version:</div></td><td><g:IntegerBox ui:field='subVersion'/></td></tr>
+      <tr id='keywords'><td><div class='{style.label}'>Keywords:</div></td><td><a:KeywordSetEditor ui:field='keywords'/></td></tr>
+      <tr id='advancedSearchCriteria'><td><div class='{style.label}'>Advanced Search Criteria:</div></td><td><a:AdvancedSearchCriteriaSetEditor ui:field='advancedSearchCriteria'/></td></tr>
+      <tr id='simpleSearchCriteria'><td><div class='{style.label}'>Simple Search Criteria:</div></td><td><a:SimpleSearchCriteriaSetEditor ui:field='simpleSearchCriteria'/></td></tr>
+      <tr id='checkList'><td><div class='{style.label}'>Check List:</div></td><td><g:ValueListBox ui:field='checkList'/></td></tr>
+    </table>
 
-    <div class="{style.bar}">
-      <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>
-      <g:Button addStyleNames="{style.button}" ui:field="cancel">Cancel</g:Button>
+    <div class='{style.bar}'>
+      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
+      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
     </div>
   </g:HTMLPanel>
 </ui:UiBinder>

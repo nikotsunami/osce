@@ -13,9 +13,7 @@ privileged aspect AnamnesisChecksValue_Roo_ToString {
         sb.append("Anamnesischeck: ").append(getAnamnesischeck()).append(", ");
         sb.append("Anamnesisform: ").append(getAnamnesisform()).append(", ");
         sb.append("Comment: ").append(getComment()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Truth: ").append(getTruth()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Truth: ").append(getTruth());
         return sb.toString();
     }
     

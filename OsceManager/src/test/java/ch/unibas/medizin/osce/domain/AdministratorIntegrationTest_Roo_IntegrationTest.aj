@@ -83,7 +83,7 @@ privileged aspect AdministratorIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.Administrator.findAdministrator(id);
         boolean modified =  dod.modifyAdministrator(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.Administrator merged =  obj.merge();
+        ch.unibas.medizin.osce.domain.Administrator merged = (ch.unibas.medizin.osce.domain.Administrator) obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'Administrator' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

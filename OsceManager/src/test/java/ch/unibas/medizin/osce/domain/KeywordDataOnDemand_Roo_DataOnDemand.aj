@@ -4,32 +4,26 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Keyword;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect KeywordDataOnDemand_Roo_DataOnDemand {
     
     declare @type: KeywordDataOnDemand: @Component;
     
-    private Random KeywordDataOnDemand.rnd = new SecureRandom();
+    private Random KeywordDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<Keyword> KeywordDataOnDemand.data;
     
     public Keyword KeywordDataOnDemand.getNewTransientKeyword(int index) {
-        Keyword obj = new Keyword();
+        ch.unibas.medizin.osce.domain.Keyword obj = new ch.unibas.medizin.osce.domain.Keyword();
         setName(obj, index);
         return obj;
     }
     
-    public void KeywordDataOnDemand.setName(Keyword obj, int index) {
-        String name = "name_" + index;
+    private void KeywordDataOnDemand.setName(Keyword obj, int index) {
+        java.lang.String name = "name_" + index;
         if (name.length() > 255) {
             name = name.substring(0, 255);
         }
@@ -55,25 +49,16 @@ privileged aspect KeywordDataOnDemand_Roo_DataOnDemand {
     }
     
     public void KeywordDataOnDemand.init() {
-        data = Keyword.findKeywordEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.Keyword.findKeywordEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Keyword' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.Keyword>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Keyword>();
         for (int i = 0; i < 10; i++) {
-            Keyword obj = getNewTransientKeyword(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.Keyword obj = getNewTransientKeyword(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

@@ -95,27 +95,27 @@ privileged aspect Osce_Roo_JavaBean {
         this.osce_days = osce_days;
     }
     
-    public Set<Course> Osce.getCourses() {
+    public java.util.Set<Course> Osce.getCourses() {
         return this.courses;
     }
     
-    public void Osce.setCourses(Set<Course> courses) {
+    public void Osce.setCourses(java.util.Set<Course> courses) {
         this.courses = courses;
     }
     
-    public Set<Task> Osce.getTasks() {
+    public java.util.Set<Task> Osce.getTasks() {
         return this.tasks;
     }
     
-    public void Osce.setTasks(Set<Task> tasks) {
+    public void Osce.setTasks(java.util.Set<Task> tasks) {
         this.tasks = tasks;
     }
     
-    public Set<StudentOsces> Osce.getOsceStudents() {
+    public java.util.Set<StudentOsces> Osce.getOsceStudents() {
         return this.osceStudents;
     }
     
-    public void Osce.setOsceStudents(Set<StudentOsces> osceStudents) {
+    public void Osce.setOsceStudents(java.util.Set<StudentOsces> osceStudents) {
         this.osceStudents = osceStudents;
     }
     

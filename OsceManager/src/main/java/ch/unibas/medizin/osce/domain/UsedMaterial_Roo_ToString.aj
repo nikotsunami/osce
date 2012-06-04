@@ -9,13 +9,11 @@ privileged aspect UsedMaterial_Roo_ToString {
     
     public String UsedMaterial.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("MaterialCount: ").append(getMaterialCount()).append(", ");
         sb.append("MaterialList: ").append(getMaterialList()).append(", ");
         sb.append("Sort_order: ").append(getSort_order()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
-        sb.append("Used_from: ").append(getUsed_from()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Used_from: ").append(getUsed_from());
         return sb.toString();
     }
     

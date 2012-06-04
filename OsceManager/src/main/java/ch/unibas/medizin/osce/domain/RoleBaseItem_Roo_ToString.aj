@@ -10,14 +10,12 @@ privileged aspect RoleBaseItem_Roo_ToString {
     public String RoleBaseItem.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Deleted: ").append(getDeleted()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Item_defination: ").append(getItem_defination()).append(", ");
         sb.append("Item_name: ").append(getItem_name()).append(", ");
         sb.append("RoleItemAccess: ").append(getRoleItemAccess() == null ? "null" : getRoleItemAccess().size()).append(", ");
         sb.append("RoleTableItem: ").append(getRoleTableItem() == null ? "null" : getRoleTableItem().size()).append(", ");
         sb.append("RoleTemplate: ").append(getRoleTemplate()).append(", ");
-        sb.append("Sort_order: ").append(getSort_order()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Sort_order: ").append(getSort_order());
         return sb.toString();
     }
     

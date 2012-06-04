@@ -18,9 +18,9 @@ public interface RoomRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countRooms();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoomProxy> findRoom(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoomProxy>> findAllRooms();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoomProxy> findRoom(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoomProxy>> findRoomEntries(int firstResult, int maxResults);
 }

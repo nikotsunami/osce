@@ -11,7 +11,6 @@ import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.Gender;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -33,36 +32,6 @@ public abstract class DoctorListView_Roo_Gwt extends AbstractProxyListView<Docto
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("id");
-        table.addColumn(new TextColumn<DoctorProxy>() {
-
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(DoctorProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<DoctorProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(DoctorProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
         paths.add("gender");
         table.addColumn(new TextColumn<DoctorProxy>() {
 
@@ -208,5 +177,35 @@ public abstract class DoctorListView_Roo_Gwt extends AbstractProxyListView<Docto
                 return renderer.render(object.getRoleParticipants());
             }
         }, "Role Participants");
+        paths.add("id");
+        table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
     }
 }

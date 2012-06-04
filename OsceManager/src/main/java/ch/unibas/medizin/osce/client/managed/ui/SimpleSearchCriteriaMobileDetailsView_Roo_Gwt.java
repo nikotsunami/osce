@@ -10,7 +10,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -20,12 +19,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class SimpleSearchCriteriaMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<SimpleSearchCriteriaProxy> {
-
-    @UiField
-    Element id;
-
-    @UiField
-    Element version;
 
     @UiField
     Element name;
@@ -39,15 +32,21 @@ public abstract class SimpleSearchCriteriaMobileDetailsView_Roo_Gwt extends Comp
     @UiField
     Element standardizedRole;
 
+    @UiField
+    Element id;
+
+    @UiField
+    Element version;
+
     SimpleSearchCriteriaProxy proxy;
 
     public void setValue(SimpleSearchCriteriaProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
         sortOrder.setInnerText(proxy.getSortOrder() == null ? "" : String.valueOf(proxy.getSortOrder()));
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
     }
 }

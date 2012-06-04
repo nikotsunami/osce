@@ -9,7 +9,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,24 +20,24 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class MediaContentTypeMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<MediaContentTypeProxy> {
 
     @UiField
-    Element id;
-
-    @UiField
-    Element version;
-
-    @UiField
     Element contentType;
 
     @UiField
     Element comment;
 
+    @UiField
+    Element id;
+
+    @UiField
+    Element version;
+
     MediaContentTypeProxy proxy;
 
     public void setValue(MediaContentTypeProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         contentType.setInnerText(proxy.getContentType() == null ? "" : String.valueOf(proxy.getContentType()));
         comment.setInnerText(proxy.getComment() == null ? "" : String.valueOf(proxy.getComment()));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
     }
 }

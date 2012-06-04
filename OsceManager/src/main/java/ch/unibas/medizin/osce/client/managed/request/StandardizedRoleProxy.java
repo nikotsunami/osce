@@ -13,14 +13,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.StandardizedRole")
 public interface StandardizedRoleProxy extends EntityProxy {
 
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
-
     abstract String getShortName();
 
     abstract void setShortName(String shortName);
@@ -84,4 +76,12 @@ public interface StandardizedRoleProxy extends EntityProxy {
     abstract CheckListProxy getCheckList();
 
     abstract void setCheckList(CheckListProxy checkList);
+
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
 }

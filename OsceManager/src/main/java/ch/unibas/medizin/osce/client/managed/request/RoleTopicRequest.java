@@ -18,9 +18,9 @@ public interface RoleTopicRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countRoleTopics();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy> findRoleTopic(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy>> findAllRoleTopics();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy> findRoleTopic(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy>> findRoleTopicEntries(int firstResult, int maxResults);
 }

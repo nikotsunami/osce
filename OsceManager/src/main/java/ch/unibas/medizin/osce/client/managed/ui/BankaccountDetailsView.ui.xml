@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
  <ui:style>
     .fields {
       margin-top: 0.5em;
@@ -26,97 +28,25 @@
     }
   </ui:style>
   <g:HTMLPanel>
-    <div class="{style.underline}">
-      <h3 class="{style.header}">
-                <ui:msg>
-                    <span ui:field="displayRenderer"/>
-                </ui:msg>
-            </h3>
+    <div class='{style.underline}'>
+      <h3 class='{style.header}'><ui:msg><span ui:field='displayRenderer' /></ui:msg></h3>
     </div>
 
-    <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-    <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-            <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
-            <tr id="bankName">
-                <td>
-                    <span class="{style.label}">Bank Name:</span>
-                </td>
-                <td>
-                    <span ui:field="bankName"/>
-                </td>
-            </tr>
-            <tr id="iBAN">
-                <td>
-                    <span class="{style.label}">I B A N:</span>
-                </td>
-                <td>
-                    <span ui:field="iBAN"/>
-                </td>
-            </tr>
-            <tr id="bIC">
-                <td>
-                    <span class="{style.label}">B I C:</span>
-                </td>
-                <td>
-                    <span ui:field="bIC"/>
-                </td>
-            </tr>
-            <tr id="ownerName">
-                <td>
-                    <span class="{style.label}">Owner Name:</span>
-                </td>
-                <td>
-                    <span ui:field="ownerName"/>
-                </td>
-            </tr>
-            <tr id="postalCode">
-                <td>
-                    <span class="{style.label}">Postal Code:</span>
-                </td>
-                <td>
-                    <span ui:field="postalCode"/>
-                </td>
-            </tr>
-            <tr id="city">
-                <td>
-                    <span class="{style.label}">City:</span>
-                </td>
-                <td>
-                    <span ui:field="city"/>
-                </td>
-            </tr>
-            <tr id="country">
-                <td>
-                    <span class="{style.label}">Country:</span>
-                </td>
-                <td>
-                    <span ui:field="country"/>
-                </td>
-            </tr>
-        </table>
+    <table id='boundElementHolder' class='{style.fields}'>
+      <tr id='bankName'><td><span class='{style.label}'>Bank Name:</span></td><td><span ui:field='bankName'></span></td></tr>
+      <tr id='iBAN'><td><span class='{style.label}'>I B A N:</span></td><td><span ui:field='iBAN'></span></td></tr>
+      <tr id='bIC'><td><span class='{style.label}'>B I C:</span></td><td><span ui:field='bIC'></span></td></tr>
+      <tr id='ownerName'><td><span class='{style.label}'>Owner Name:</span></td><td><span ui:field='ownerName'></span></td></tr>
+      <tr id='postalCode'><td><span class='{style.label}'>Postal Code:</span></td><td><span ui:field='postalCode'></span></td></tr>
+      <tr id='city'><td><span class='{style.label}'>City:</span></td><td><span ui:field='city'></span></td></tr>
+      <tr id='country'><td><span class='{style.label}'>Country:</span></td><td><span ui:field='country'></span></td></tr>
+      <tr id='id'><td><span class='{style.label}'>Id:</span></td><td><span ui:field='id'></span></td></tr>
+      <tr id='version'><td><span class='{style.label}'>Version:</span></td><td><span ui:field='version'></span></td></tr>
+    </table>
 
   <div class="{style.bar}">
-    <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
-    <g:Anchor ui:field="delete">Delete</g:Anchor>
+    <g:Button addStyleNames='{style.button}' ui:field='edit'>Edit</g:Button>
+    <g:Anchor ui:field='delete'>Delete</g:Anchor>
    </div>
   </g:HTMLPanel>
 </ui:UiBinder>

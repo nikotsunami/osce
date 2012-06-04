@@ -12,7 +12,6 @@ privileged aspect Doctor_Roo_ToString {
         sb.append("Clinic: ").append(getClinic()).append(", ");
         sb.append("Email: ").append(getEmail()).append(", ");
         sb.append("Gender: ").append(getGender()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsActive: ").append(getIsActive()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("Office: ").append(getOffice()).append(", ");
@@ -20,8 +19,7 @@ privileged aspect Doctor_Roo_ToString {
         sb.append("RoleParticipants: ").append(getRoleParticipants() == null ? "null" : getRoleParticipants().size()).append(", ");
         sb.append("Specialisation: ").append(getSpecialisation()).append(", ");
         sb.append("Telephone: ").append(getTelephone()).append(", ");
-        sb.append("Title: ").append(getTitle()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Title: ").append(getTitle());
         return sb.toString();
     }
     

@@ -18,9 +18,9 @@ public interface AdministratorRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countAdministrators();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy> findAdministrator(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy>> findAllAdministrators();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy> findAdministrator(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy>> findAdministratorEntries(int firstResult, int maxResults);
 }

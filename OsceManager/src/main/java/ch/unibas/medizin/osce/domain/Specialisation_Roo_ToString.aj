@@ -10,10 +10,8 @@ privileged aspect Specialisation_Roo_ToString {
     public String Specialisation.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Doctors: ").append(getDoctors() == null ? "null" : getDoctors().size()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
-        sb.append("RoleTopics: ").append(getRoleTopics() == null ? "null" : getRoleTopics().size()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("RoleTopics: ").append(getRoleTopics() == null ? "null" : getRoleTopics().size());
         return sb.toString();
     }
     

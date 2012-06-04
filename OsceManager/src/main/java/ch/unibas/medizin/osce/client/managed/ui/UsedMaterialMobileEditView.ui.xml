@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
   <ui:style>
     .outer {
       padding: 10px;
@@ -16,40 +20,15 @@
     }
   </ui:style>
  
-  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div class="{style.error}" ui:field="errors"/>
+  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
+    <div ui:field='errors' class='{style.error}'></div>
     
-    <div id="materialCount">
-            <div class="{style.label}">Material Count</div>
-            <div class="{style.value}">
-                <g:IntegerBox ui:field="materialCount"/>
-            </div>
-        </div>
-    <div id="used_from">
-            <div class="{style.label}">Used_from</div>
-            <div class="{style.value}">
-                <g:ValueListBox ui:field="used_from"/>
-            </div>
-        </div>
-    <div id="standardizedRole">
-            <div class="{style.label}">Standardized Role</div>
-            <div class="{style.value}">
-                <g:ValueListBox ui:field="standardizedRole"/>
-            </div>
-        </div>
-    <div id="materialList">
-            <div class="{style.label}">Material List</div>
-            <div class="{style.value}">
-                <g:ValueListBox ui:field="materialList"/>
-            </div>
-        </div>
-    <div id="sort_order">
-            <div class="{style.label}">Sort_order</div>
-            <div class="{style.value}">
-                <g:IntegerBox ui:field="sort_order"/>
-            </div>
-        </div>
+    <div id='materialCount'><div class='{style.label}'>Material Count</div><div class='{style.value}'><g:IntegerBox ui:field='materialCount'/></div></div>
+    <div id='used_from'><div class='{style.label}'>Used_from</div><div class='{style.value}'><g:ValueListBox ui:field='used_from'/></div></div>
+    <div id='standardizedRole'><div class='{style.label}'>Standardized Role</div><div class='{style.value}'><g:ValueListBox ui:field='standardizedRole'/></div></div>
+    <div id='materialList'><div class='{style.label}'>Material List</div><div class='{style.value}'><g:ValueListBox ui:field='materialList'/></div></div>
+    <div id='sort_order'><div class='{style.label}'>Sort_order</div><div class='{style.value}'><g:IntegerBox ui:field='sort_order'/></div></div>
 
-    <g:Button ui:field="save">Save</g:Button>
+    <g:Button ui:field='save'>Save</g:Button>
   </g:HTMLPanel>
 </ui:UiBinder>

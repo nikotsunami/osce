@@ -4,50 +4,44 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Administrator;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect AdministratorDataOnDemand_Roo_DataOnDemand {
     
     declare @type: AdministratorDataOnDemand: @Component;
     
-    private Random AdministratorDataOnDemand.rnd = new SecureRandom();
+    private Random AdministratorDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<Administrator> AdministratorDataOnDemand.data;
     
     public Administrator AdministratorDataOnDemand.getNewTransientAdministrator(int index) {
-        Administrator obj = new Administrator();
+        ch.unibas.medizin.osce.domain.Administrator obj = new ch.unibas.medizin.osce.domain.Administrator();
         setEmail(obj, index);
         setName(obj, index);
         setPreName(obj, index);
         return obj;
     }
     
-    public void AdministratorDataOnDemand.setEmail(Administrator obj, int index) {
-        String email = "email_" + index;
+    private void AdministratorDataOnDemand.setEmail(Administrator obj, int index) {
+        java.lang.String email = "email_" + index;
         if (email.length() > 40) {
-            email = new Random().nextInt(10) + email.substring(1, 40);
+            email = email.substring(0, 40);
         }
         obj.setEmail(email);
     }
     
-    public void AdministratorDataOnDemand.setName(Administrator obj, int index) {
-        String name = "name_" + index;
+    private void AdministratorDataOnDemand.setName(Administrator obj, int index) {
+        java.lang.String name = "name_" + index;
         if (name.length() > 40) {
             name = name.substring(0, 40);
         }
         obj.setName(name);
     }
     
-    public void AdministratorDataOnDemand.setPreName(Administrator obj, int index) {
-        String preName = "preName_" + index;
+    private void AdministratorDataOnDemand.setPreName(Administrator obj, int index) {
+        java.lang.String preName = "preName_" + index;
         if (preName.length() > 40) {
             preName = preName.substring(0, 40);
         }
@@ -73,25 +67,16 @@ privileged aspect AdministratorDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AdministratorDataOnDemand.init() {
-        data = Administrator.findAdministratorEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.Administrator.findAdministratorEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Administrator' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.Administrator>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Administrator>();
         for (int i = 0; i < 10; i++) {
-            Administrator obj = getNewTransientAdministrator(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.Administrator obj = getNewTransientAdministrator(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

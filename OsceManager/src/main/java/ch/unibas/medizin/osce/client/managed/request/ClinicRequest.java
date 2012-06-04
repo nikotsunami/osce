@@ -18,9 +18,9 @@ public interface ClinicRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countClinics();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.ClinicProxy> findClinic(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ClinicProxy>> findAllClinics();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.ClinicProxy> findClinic(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ClinicProxy>> findClinicEntries(int firstResult, int maxResults);
 }

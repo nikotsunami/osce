@@ -11,7 +11,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,12 +20,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class OfficeDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<OfficeProxy> {
-
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
 
     @UiField
     SpanElement gender;
@@ -46,6 +39,12 @@ public abstract class OfficeDetailsView_Roo_Gwt extends Composite implements Pro
     @UiField
     SpanElement telephone;
 
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
+
     OfficeProxy proxy;
 
     @UiField
@@ -53,14 +52,14 @@ public abstract class OfficeDetailsView_Roo_Gwt extends Composite implements Pro
 
     public void setValue(OfficeProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         gender.setInnerText(proxy.getGender() == null ? "" : String.valueOf(proxy.getGender()));
         title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
         telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
-        displayRenderer.setInnerText(OfficeProxyRenderer.instance().render(proxy));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.OfficeProxyRenderer.instance().render(proxy));
     }
 }

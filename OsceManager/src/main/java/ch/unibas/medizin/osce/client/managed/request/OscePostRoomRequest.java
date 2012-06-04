@@ -18,9 +18,9 @@ public interface OscePostRoomRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countOscePostRooms();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy> findOscePostRoom(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy>> findAllOscePostRooms();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy> findOscePostRoom(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy>> findOscePostRoomEntries(int firstResult, int maxResults);
 }

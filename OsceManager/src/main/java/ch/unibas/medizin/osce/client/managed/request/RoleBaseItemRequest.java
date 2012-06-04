@@ -18,9 +18,9 @@ public interface RoleBaseItemRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countRoleBaseItems();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy> findRoleBaseItem(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy>> findAllRoleBaseItems();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy> findRoleBaseItem(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy>> findRoleBaseItemEntries(int firstResult, int maxResults);
 }

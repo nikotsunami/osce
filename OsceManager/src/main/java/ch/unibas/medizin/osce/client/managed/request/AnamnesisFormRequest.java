@@ -18,9 +18,9 @@ public interface AnamnesisFormRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countAnamnesisForms();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy> findAnamnesisForm(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>> findAllAnamnesisForms();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy> findAnamnesisForm(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy>> findAnamnesisFormEntries(int firstResult, int maxResults);
 }

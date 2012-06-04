@@ -12,7 +12,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -59,6 +58,6 @@ public abstract class StudentDetailsView_Roo_Gwt extends Composite implements Pr
         preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
         studentOsces.setInnerText(proxy.getStudentOsces() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance()).render(proxy.getStudentOsces()));
-        displayRenderer.setInnerText(StudentProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StudentProxyRenderer.instance().render(proxy));
     }
 }

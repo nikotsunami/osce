@@ -10,11 +10,9 @@ privileged aspect OsceDay_Roo_ToString {
     public String OsceDay.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Osce: ").append(getOsce()).append(", ");
         sb.append("TimeEnd: ").append(getTimeEnd()).append(", ");
-        sb.append("TimeStart: ").append(getTimeStart()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("TimeStart: ").append(getTimeStart());
         return sb.toString();
     }
     

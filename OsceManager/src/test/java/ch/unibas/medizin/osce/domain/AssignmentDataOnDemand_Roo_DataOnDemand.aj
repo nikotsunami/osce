@@ -4,28 +4,13 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Assignment;
-import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.DoctorDataOnDemand;
-import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OsceDayDataOnDemand;
-import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OscePostRoomDataOnDemand;
-import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInRoleDataOnDemand;
-import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.domain.StudentDataOnDemand;
-import ch.unibas.medizin.osce.shared.AssignmentTypes;
-import java.lang.Integer;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,12 +18,9 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
     
     declare @type: AssignmentDataOnDemand: @Component;
     
-    private Random AssignmentDataOnDemand.rnd = new SecureRandom();
+    private Random AssignmentDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<Assignment> AssignmentDataOnDemand.data;
-    
-    @Autowired
-    private DoctorDataOnDemand AssignmentDataOnDemand.doctorDataOnDemand;
     
     @Autowired
     private OsceDayDataOnDemand AssignmentDataOnDemand.osceDayDataOnDemand;
@@ -47,68 +29,71 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
     private OscePostRoomDataOnDemand AssignmentDataOnDemand.oscePostRoomDataOnDemand;
     
     @Autowired
+    private StudentDataOnDemand AssignmentDataOnDemand.studentDataOnDemand;
+    
+    @Autowired
     private PatientInRoleDataOnDemand AssignmentDataOnDemand.patientInRoleDataOnDemand;
     
     @Autowired
-    private StudentDataOnDemand AssignmentDataOnDemand.studentDataOnDemand;
+    private DoctorDataOnDemand AssignmentDataOnDemand.doctorDataOnDemand;
     
     public Assignment AssignmentDataOnDemand.getNewTransientAssignment(int index) {
-        Assignment obj = new Assignment();
-        setExaminer(obj, index);
+        ch.unibas.medizin.osce.domain.Assignment obj = new ch.unibas.medizin.osce.domain.Assignment();
+        setType(obj, index);
+        setSlotNumber(obj, index);
+        setTimeStart(obj, index);
+        setTimeEnd(obj, index);
         setOsceDay(obj, index);
         setOscePostRoom(obj, index);
-        setPatientInRole(obj, index);
-        setSlotNumber(obj, index);
         setStudent(obj, index);
-        setTimeEnd(obj, index);
-        setTimeStart(obj, index);
-        setType(obj, index);
+        setPatientInRole(obj, index);
+        setExaminer(obj, index);
         return obj;
     }
     
-    public void AssignmentDataOnDemand.setExaminer(Assignment obj, int index) {
-        Doctor examiner = doctorDataOnDemand.getRandomDoctor();
-        obj.setExaminer(examiner);
+    private void AssignmentDataOnDemand.setType(Assignment obj, int index) {
+        ch.unibas.medizin.osce.shared.AssignmentTypes type = ch.unibas.medizin.osce.shared.AssignmentTypes.class.getEnumConstants()[0];
+        obj.setType(type);
     }
     
-    public void AssignmentDataOnDemand.setOsceDay(Assignment obj, int index) {
-        OsceDay osceDay = osceDayDataOnDemand.getRandomOsceDay();
-        obj.setOsceDay(osceDay);
-    }
-    
-    public void AssignmentDataOnDemand.setOscePostRoom(Assignment obj, int index) {
-        OscePostRoom oscePostRoom = oscePostRoomDataOnDemand.getRandomOscePostRoom();
-        obj.setOscePostRoom(oscePostRoom);
-    }
-    
-    public void AssignmentDataOnDemand.setPatientInRole(Assignment obj, int index) {
-        PatientInRole patientInRole = patientInRoleDataOnDemand.getRandomPatientInRole();
-        obj.setPatientInRole(patientInRole);
-    }
-    
-    public void AssignmentDataOnDemand.setSlotNumber(Assignment obj, int index) {
-        Integer slotNumber = new Integer(index);
+    private void AssignmentDataOnDemand.setSlotNumber(Assignment obj, int index) {
+        java.lang.Integer slotNumber = new Integer(index);
         obj.setSlotNumber(slotNumber);
     }
     
-    public void AssignmentDataOnDemand.setStudent(Assignment obj, int index) {
-        Student student = studentDataOnDemand.getRandomStudent();
-        obj.setStudent(student);
-    }
-    
-    public void AssignmentDataOnDemand.setTimeEnd(Assignment obj, int index) {
-        Date timeEnd = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setTimeEnd(timeEnd);
-    }
-    
-    public void AssignmentDataOnDemand.setTimeStart(Assignment obj, int index) {
-        Date timeStart = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+    private void AssignmentDataOnDemand.setTimeStart(Assignment obj, int index) {
+        java.util.Date timeStart = new java.util.GregorianCalendar(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR), java.util.Calendar.getInstance().get(java.util.Calendar.MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY), java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE), java.util.Calendar.getInstance().get(java.util.Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setTimeStart(timeStart);
     }
     
-    public void AssignmentDataOnDemand.setType(Assignment obj, int index) {
-        AssignmentTypes type = AssignmentTypes.class.getEnumConstants()[0];
-        obj.setType(type);
+    private void AssignmentDataOnDemand.setTimeEnd(Assignment obj, int index) {
+        java.util.Date timeEnd = new java.util.GregorianCalendar(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR), java.util.Calendar.getInstance().get(java.util.Calendar.MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY), java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE), java.util.Calendar.getInstance().get(java.util.Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTimeEnd(timeEnd);
+    }
+    
+    private void AssignmentDataOnDemand.setOsceDay(Assignment obj, int index) {
+        ch.unibas.medizin.osce.domain.OsceDay osceDay = osceDayDataOnDemand.getRandomOsceDay();
+        obj.setOsceDay(osceDay);
+    }
+    
+    private void AssignmentDataOnDemand.setOscePostRoom(Assignment obj, int index) {
+        ch.unibas.medizin.osce.domain.OscePostRoom oscePostRoom = oscePostRoomDataOnDemand.getRandomOscePostRoom();
+        obj.setOscePostRoom(oscePostRoom);
+    }
+    
+    private void AssignmentDataOnDemand.setStudent(Assignment obj, int index) {
+        ch.unibas.medizin.osce.domain.Student student = studentDataOnDemand.getRandomStudent();
+        obj.setStudent(student);
+    }
+    
+    private void AssignmentDataOnDemand.setPatientInRole(Assignment obj, int index) {
+        ch.unibas.medizin.osce.domain.PatientInRole patientInRole = patientInRoleDataOnDemand.getRandomPatientInRole();
+        obj.setPatientInRole(patientInRole);
+    }
+    
+    private void AssignmentDataOnDemand.setExaminer(Assignment obj, int index) {
+        ch.unibas.medizin.osce.domain.Doctor examiner = doctorDataOnDemand.getRandomDoctor();
+        obj.setExaminer(examiner);
     }
     
     public Assignment AssignmentDataOnDemand.getSpecificAssignment(int index) {
@@ -130,25 +115,16 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AssignmentDataOnDemand.init() {
-        data = Assignment.findAssignmentEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.Assignment.findAssignmentEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Assignment' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.Assignment>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Assignment>();
         for (int i = 0; i < 10; i++) {
-            Assignment obj = getNewTransientAssignment(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.Assignment obj = getNewTransientAssignment(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

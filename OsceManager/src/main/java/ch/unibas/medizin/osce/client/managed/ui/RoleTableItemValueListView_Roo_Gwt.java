@@ -8,7 +8,6 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -30,36 +29,6 @@ public abstract class RoleTableItemValueListView_Roo_Gwt extends AbstractProxyLi
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("id");
-        table.addColumn(new TextColumn<RoleTableItemValueProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(RoleTableItemValueProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<RoleTableItemValueProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(RoleTableItemValueProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
         paths.add("value");
         table.addColumn(new TextColumn<RoleTableItemValueProxy>() {
 
@@ -95,5 +64,35 @@ public abstract class RoleTableItemValueListView_Roo_Gwt extends AbstractProxyLi
                 return renderer.render(object.getStandardizedRole());
             }
         }, "Standardized Role");
+        paths.add("id");
+        table.addColumn(new TextColumn<RoleTableItemValueProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(RoleTableItemValueProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<RoleTableItemValueProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(RoleTableItemValueProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
     }
 }

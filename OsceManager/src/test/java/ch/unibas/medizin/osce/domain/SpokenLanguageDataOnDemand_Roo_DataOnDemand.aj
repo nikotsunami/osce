@@ -4,32 +4,26 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.SpokenLanguage;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect SpokenLanguageDataOnDemand_Roo_DataOnDemand {
     
     declare @type: SpokenLanguageDataOnDemand: @Component;
     
-    private Random SpokenLanguageDataOnDemand.rnd = new SecureRandom();
+    private Random SpokenLanguageDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<SpokenLanguage> SpokenLanguageDataOnDemand.data;
     
     public SpokenLanguage SpokenLanguageDataOnDemand.getNewTransientSpokenLanguage(int index) {
-        SpokenLanguage obj = new SpokenLanguage();
+        ch.unibas.medizin.osce.domain.SpokenLanguage obj = new ch.unibas.medizin.osce.domain.SpokenLanguage();
         setLanguageName(obj, index);
         return obj;
     }
     
-    public void SpokenLanguageDataOnDemand.setLanguageName(SpokenLanguage obj, int index) {
-        String languageName = "languageName_" + index;
+    private void SpokenLanguageDataOnDemand.setLanguageName(SpokenLanguage obj, int index) {
+        java.lang.String languageName = "languageName_" + index;
         if (languageName.length() > 40) {
             languageName = languageName.substring(0, 40);
         }
@@ -55,25 +49,16 @@ privileged aspect SpokenLanguageDataOnDemand_Roo_DataOnDemand {
     }
     
     public void SpokenLanguageDataOnDemand.init() {
-        data = SpokenLanguage.findSpokenLanguageEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.SpokenLanguage.findSpokenLanguageEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'SpokenLanguage' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.SpokenLanguage>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.SpokenLanguage>();
         for (int i = 0; i < 10; i++) {
-            SpokenLanguage obj = getNewTransientSpokenLanguage(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.SpokenLanguage obj = getNewTransientSpokenLanguage(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

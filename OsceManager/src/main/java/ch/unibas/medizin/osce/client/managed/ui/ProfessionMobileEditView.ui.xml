@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
   <ui:style>
     .outer {
       padding: 10px;
@@ -16,22 +20,12 @@
     }
   </ui:style>
  
-  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div class="{style.error}" ui:field="errors"/>
+  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
+    <div ui:field='errors' class='{style.error}'></div>
     
-    <div id="profession">
-            <div class="{style.label}">Profession</div>
-            <div class="{style.value}">
-                <g:TextBox ui:field="profession"/>
-            </div>
-        </div>
-    <div id="standardizedpatients">
-            <div class="{style.label}">Standardizedpatients</div>
-            <div class="{style.value}">
-                <a:StandardizedPatientSetEditor ui:field="standardizedpatients"/>
-            </div>
-        </div>
+    <div id='profession'><div class='{style.label}'>Profession</div><div class='{style.value}'><g:TextBox ui:field='profession'/></div></div>
+    <div id='standardizedpatients'><div class='{style.label}'>Standardizedpatients</div><div class='{style.value}'><a:StandardizedPatientSetEditor ui:field='standardizedpatients'/></div></div>
 
-    <g:Button ui:field="save">Save</g:Button>
+    <g:Button ui:field='save'>Save</g:Button>
   </g:HTMLPanel>
 </ui:UiBinder>

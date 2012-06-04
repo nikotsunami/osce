@@ -18,9 +18,9 @@ public interface RoleTemplateRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countRoleTemplates();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy> findRoleTemplate(Integer id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy>> findAllRoleTemplates();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy> findRoleTemplate(Integer id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy>> findRoleTemplateEntries(int firstResult, int maxResults);
 }

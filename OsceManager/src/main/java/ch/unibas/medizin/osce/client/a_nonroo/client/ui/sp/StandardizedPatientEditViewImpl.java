@@ -204,13 +204,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	SpanElement labelMaritalStatus;
 	@UiField
 	SpanElement labelSocialInsuranceNo;
-	
-	@UiField
-	Button send;
-	
-	@UiField
-	Button pull;
-
 	@UiField
 	IconButton cancel;
 	@UiField
@@ -231,8 +224,8 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		
 //		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy");
 //		birthday.setFormat(new DateBox.DefaultFormat(fmt));
-		send.setText(constants.send());
-		pull.setText(constants.pull());
+		
+		
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
 		
@@ -496,16 +489,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		this.errors.setInnerHTML(b.toSafeHtml().asString());
 	}
 	
-	@UiHandler("send")
-	void onSend(ClickEvent event) {
-		delegate.sendClicked();
-	}
-	
-	@UiHandler("pull")
-	void onPull(ClickEvent event) {
-		delegate.pullClicked();
-	}
-
 	@UiHandler("cancel")
 	void onCancel(ClickEvent event) {
 		delegate.cancelClicked();

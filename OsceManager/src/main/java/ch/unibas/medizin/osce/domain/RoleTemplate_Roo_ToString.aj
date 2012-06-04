@@ -11,10 +11,8 @@ privileged aspect RoleTemplate_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Date_cretaed: ").append(getDate_cretaed()).append(", ");
         sb.append("Date_edited: ").append(getDate_edited()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("RoleBaseItem: ").append(getRoleBaseItem() == null ? "null" : getRoleBaseItem().size()).append(", ");
-        sb.append("TemplateName: ").append(getTemplateName()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("TemplateName: ").append(getTemplateName());
         return sb.toString();
     }
     

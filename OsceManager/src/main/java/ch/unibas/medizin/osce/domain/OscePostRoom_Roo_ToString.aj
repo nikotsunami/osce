@@ -11,10 +11,8 @@ privileged aspect OscePostRoom_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
         sb.append("Course: ").append(getCourse()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("OscePost: ").append(getOscePost()).append(", ");
-        sb.append("Room: ").append(getRoom()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Room: ").append(getRoom());
         return sb.toString();
     }
     

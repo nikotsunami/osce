@@ -12,7 +12,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -24,12 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class RoleTableItemValueDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<RoleTableItemValueProxy> {
 
     @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
-    @UiField
     SpanElement value;
 
     @UiField
@@ -38,6 +31,12 @@ public abstract class RoleTableItemValueDetailsView_Roo_Gwt extends Composite im
     @UiField
     SpanElement standardizedRole;
 
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
+
     RoleTableItemValueProxy proxy;
 
     @UiField
@@ -45,11 +44,11 @@ public abstract class RoleTableItemValueDetailsView_Roo_Gwt extends Composite im
 
     public void setValue(RoleTableItemValueProxy proxy) {
         this.proxy = proxy;
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
         roleTableItem.setInnerText(proxy.getRoleTableItem() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTableItemProxyRenderer.instance().render(proxy.getRoleTableItem()));
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
-        displayRenderer.setInnerText(RoleTableItemValueProxyRenderer.instance().render(proxy));
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.RoleTableItemValueProxyRenderer.instance().render(proxy));
     }
 }

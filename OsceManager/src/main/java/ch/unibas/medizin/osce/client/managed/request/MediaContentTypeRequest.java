@@ -18,9 +18,9 @@ public interface MediaContentTypeRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countMediaContentTypes();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy> findMediaContentType(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy>> findAllMediaContentTypes();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy> findMediaContentType(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy>> findMediaContentTypeEntries(int firstResult, int maxResults);
 }

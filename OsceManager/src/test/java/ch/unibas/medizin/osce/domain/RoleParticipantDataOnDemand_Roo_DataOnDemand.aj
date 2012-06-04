@@ -3,19 +3,11 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.DoctorDataOnDemand;
 import ch.unibas.medizin.osce.domain.RoleParticipant;
-import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.StandardizedRoleDataOnDemand;
-import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,36 +15,36 @@ privileged aspect RoleParticipantDataOnDemand_Roo_DataOnDemand {
     
     declare @type: RoleParticipantDataOnDemand: @Component;
     
-    private Random RoleParticipantDataOnDemand.rnd = new SecureRandom();
+    private Random RoleParticipantDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<RoleParticipant> RoleParticipantDataOnDemand.data;
     
     @Autowired
-    private DoctorDataOnDemand RoleParticipantDataOnDemand.doctorDataOnDemand;
-    
-    @Autowired
     private StandardizedRoleDataOnDemand RoleParticipantDataOnDemand.standardizedRoleDataOnDemand;
     
+    @Autowired
+    private DoctorDataOnDemand RoleParticipantDataOnDemand.doctorDataOnDemand;
+    
     public RoleParticipant RoleParticipantDataOnDemand.getNewTransientRoleParticipant(int index) {
-        RoleParticipant obj = new RoleParticipant();
-        setDoctor(obj, index);
+        ch.unibas.medizin.osce.domain.RoleParticipant obj = new ch.unibas.medizin.osce.domain.RoleParticipant();
         setStandardizedRole(obj, index);
+        setDoctor(obj, index);
         setType(obj, index);
         return obj;
     }
     
-    public void RoleParticipantDataOnDemand.setDoctor(RoleParticipant obj, int index) {
-        Doctor doctor = doctorDataOnDemand.getRandomDoctor();
-        obj.setDoctor(doctor);
-    }
-    
-    public void RoleParticipantDataOnDemand.setStandardizedRole(RoleParticipant obj, int index) {
-        StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
+    private void RoleParticipantDataOnDemand.setStandardizedRole(RoleParticipant obj, int index) {
+        ch.unibas.medizin.osce.domain.StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
         obj.setStandardizedRole(standardizedRole);
     }
     
-    public void RoleParticipantDataOnDemand.setType(RoleParticipant obj, int index) {
-        RoleParticipantTypes type = RoleParticipantTypes.class.getEnumConstants()[0];
+    private void RoleParticipantDataOnDemand.setDoctor(RoleParticipant obj, int index) {
+        ch.unibas.medizin.osce.domain.Doctor doctor = doctorDataOnDemand.getRandomDoctor();
+        obj.setDoctor(doctor);
+    }
+    
+    private void RoleParticipantDataOnDemand.setType(RoleParticipant obj, int index) {
+        ch.unibas.medizin.osce.shared.RoleParticipantTypes type = ch.unibas.medizin.osce.shared.RoleParticipantTypes.class.getEnumConstants()[0];
         obj.setType(type);
     }
     
@@ -75,25 +67,16 @@ privileged aspect RoleParticipantDataOnDemand_Roo_DataOnDemand {
     }
     
     public void RoleParticipantDataOnDemand.init() {
-        data = RoleParticipant.findRoleParticipantEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.RoleParticipant.findRoleParticipantEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'RoleParticipant' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.RoleParticipant>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.RoleParticipant>();
         for (int i = 0; i < 10; i++) {
-            RoleParticipant obj = getNewTransientRoleParticipant(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.RoleParticipant obj = getNewTransientRoleParticipant(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

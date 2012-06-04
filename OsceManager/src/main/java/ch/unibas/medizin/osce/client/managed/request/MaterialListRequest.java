@@ -18,9 +18,9 @@ public interface MaterialListRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countMaterialLists();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.MaterialListProxy> findMaterialList(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.MaterialListProxy>> findAllMaterialLists();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.MaterialListProxy> findMaterialList(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.MaterialListProxy>> findMaterialListEntries(int firstResult, int maxResults);
 }

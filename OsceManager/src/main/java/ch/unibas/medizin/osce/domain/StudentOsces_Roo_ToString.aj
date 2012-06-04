@@ -9,11 +9,9 @@ privileged aspect StudentOsces_Roo_ToString {
     
     public String StudentOsces.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsEnrolled: ").append(getIsEnrolled()).append(", ");
         sb.append("Osce: ").append(getOsce()).append(", ");
-        sb.append("Student: ").append(getStudent()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Student: ").append(getStudent());
         return sb.toString();
     }
     

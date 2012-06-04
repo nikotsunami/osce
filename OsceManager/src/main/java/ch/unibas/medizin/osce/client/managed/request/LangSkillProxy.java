@@ -11,14 +11,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.LangSkill")
 public interface LangSkillProxy extends EntityProxy {
 
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
-
     abstract LangSkillLevel getSkill();
 
     abstract void setSkill(LangSkillLevel skill);
@@ -30,4 +22,12 @@ public interface LangSkillProxy extends EntityProxy {
     abstract SpokenLanguageProxy getSpokenlanguage();
 
     abstract void setSpokenlanguage(SpokenLanguageProxy spokenlanguage);
+
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
 }

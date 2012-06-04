@@ -346,48 +346,6 @@ StandardizedPatientEditView.Delegate {
 		});
 	}
 	
-	
-	@Override
-	public void sendClicked(){
-		dmxSyncService.pushToDMZ(1L, new AsyncCallback<Void>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-	}
-	
-	@Override
-	public void pullClicked(){
-		
-		dmxSyncService.pullFromDMZ(1L, new AsyncCallback<Void>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-	}
-	
-	
 	public void storeDisplaySettings() {
 		int detailsTab = view.getSelectedDetailsTab();
 		if (detailsTab > 1) {

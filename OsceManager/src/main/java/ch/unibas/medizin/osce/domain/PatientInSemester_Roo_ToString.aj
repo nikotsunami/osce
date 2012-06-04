@@ -9,10 +9,8 @@ privileged aspect PatientInSemester_Roo_ToString {
     
     public String PatientInSemester.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Semester: ").append(getSemester()).append(", ");
-        sb.append("StandardizedPatient: ").append(getStandardizedPatient()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("StandardizedPatient: ").append(getStandardizedPatient());
         return sb.toString();
     }
     

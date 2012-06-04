@@ -11,14 +11,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Administrator")
 public interface AdministratorProxy extends EntityProxy {
 
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
-
     abstract String getEmail();
 
     abstract void setEmail(String email);
@@ -38,4 +30,12 @@ public interface AdministratorProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.TaskProxy> getTasks();
 
     abstract void setTasks(Set<TaskProxy> tasks);
+
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
 }

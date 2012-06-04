@@ -18,9 +18,9 @@ public interface CheckListRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countCheckLists();
 
-    abstract Request<ch.unibas.medizin.osce.client.managed.request.CheckListProxy> findCheckList(Long id);
-
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.CheckListProxy>> findAllCheckLists();
+
+    abstract Request<ch.unibas.medizin.osce.client.managed.request.CheckListProxy> findCheckList(Long id);
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.CheckListProxy>> findCheckListEntries(int firstResult, int maxResults);
 }

@@ -34,6 +34,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
@@ -195,6 +196,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement maritalStatus;
 	@UiField
 	SpanElement socialInsuranceNo;
+	@UiField
+	Button send;
+	@UiField
+	Button pull;
 
 	private Delegate delegate;
 
@@ -217,7 +222,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 		// reorder the Tab- and Content-Panels
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
-
+		pull.setText(constants.pull());
+		send.setText(constants.send());
 		print.setText(constants.print());
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
@@ -374,10 +380,17 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public void onDeleteClicked(ClickEvent e) {
 		delegate.deletePatientClicked();
 	}
-
+	@UiHandler("send")
+	void onSend(ClickEvent event) {
+		delegate.sendClicked();
+	}
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
 		delegate.editPatientClicked();
+	}
+	@UiHandler("pull")
+	void onPull(ClickEvent event) {
+		delegate.pullClicked();
 	}
 
 	@Override

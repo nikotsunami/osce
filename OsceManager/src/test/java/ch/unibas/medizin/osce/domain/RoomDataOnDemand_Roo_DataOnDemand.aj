@@ -4,48 +4,41 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Room;
-import java.lang.Double;
-import java.lang.String;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect RoomDataOnDemand_Roo_DataOnDemand {
     
     declare @type: RoomDataOnDemand: @Component;
     
-    private Random RoomDataOnDemand.rnd = new SecureRandom();
+    private Random RoomDataOnDemand.rnd = new java.security.SecureRandom();
     
     private List<Room> RoomDataOnDemand.data;
     
     public Room RoomDataOnDemand.getNewTransientRoom(int index) {
-        Room obj = new Room();
-        setLength(obj, index);
+        ch.unibas.medizin.osce.domain.Room obj = new ch.unibas.medizin.osce.domain.Room();
         setRoomNumber(obj, index);
+        setLength(obj, index);
         setWidth(obj, index);
         return obj;
     }
     
-    public void RoomDataOnDemand.setLength(Room obj, int index) {
-        Double length = new Integer(index).doubleValue();
-        obj.setLength(length);
-    }
-    
-    public void RoomDataOnDemand.setRoomNumber(Room obj, int index) {
-        String roomNumber = "roomNumber_" + index;
+    private void RoomDataOnDemand.setRoomNumber(Room obj, int index) {
+        java.lang.String roomNumber = "roomNumber_" + index;
         if (roomNumber.length() > 20) {
             roomNumber = roomNumber.substring(0, 20);
         }
         obj.setRoomNumber(roomNumber);
     }
     
-    public void RoomDataOnDemand.setWidth(Room obj, int index) {
-        Double width = new Integer(index).doubleValue();
+    private void RoomDataOnDemand.setLength(Room obj, int index) {
+        java.lang.Double length = new Integer(index).doubleValue();
+        obj.setLength(length);
+    }
+    
+    private void RoomDataOnDemand.setWidth(Room obj, int index) {
+        java.lang.Double width = new Integer(index).doubleValue();
         obj.setWidth(width);
     }
     
@@ -68,25 +61,16 @@ privileged aspect RoomDataOnDemand_Roo_DataOnDemand {
     }
     
     public void RoomDataOnDemand.init() {
-        data = Room.findRoomEntries(0, 10);
+        data = ch.unibas.medizin.osce.domain.Room.findRoomEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Room' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<ch.unibas.medizin.osce.domain.Room>();
+        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Room>();
         for (int i = 0; i < 10; i++) {
-            Room obj = getNewTransientRoom(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
+            ch.unibas.medizin.osce.domain.Room obj = getNewTransientRoom(i);
+            obj.persist();
             obj.flush();
             data.add(obj);
         }

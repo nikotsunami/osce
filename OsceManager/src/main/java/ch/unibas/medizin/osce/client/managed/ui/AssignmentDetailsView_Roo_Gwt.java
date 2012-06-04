@@ -16,7 +16,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -71,13 +70,13 @@ public abstract class AssignmentDetailsView_Roo_Gwt extends Composite implements
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
         slotNumber.setInnerText(proxy.getSlotNumber() == null ? "" : String.valueOf(proxy.getSlotNumber()));
-        timeStart.setInnerText(proxy.getTimeStart() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getTimeStart()));
-        timeEnd.setInnerText(proxy.getTimeEnd() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getTimeEnd()));
+        timeStart.setInnerText(proxy.getTimeStart() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getTimeStart()));
+        timeEnd.setInnerText(proxy.getTimeEnd() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getTimeEnd()));
         osceDay.setInnerText(proxy.getOsceDay() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance().render(proxy.getOsceDay()));
         oscePostRoom.setInnerText(proxy.getOscePostRoom() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance().render(proxy.getOscePostRoom()));
         student.setInnerText(proxy.getStudent() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StudentProxyRenderer.instance().render(proxy.getStudent()));
         patientInRole.setInnerText(proxy.getPatientInRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance().render(proxy.getPatientInRole()));
         examiner.setInnerText(proxy.getExaminer() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy.getExaminer()));
-        displayRenderer.setInnerText(AssignmentProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AssignmentProxyRenderer.instance().render(proxy));
     }
 }

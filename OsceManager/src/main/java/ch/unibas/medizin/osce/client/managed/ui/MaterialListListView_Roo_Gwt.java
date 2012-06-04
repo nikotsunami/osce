@@ -9,7 +9,6 @@ import ch.unibas.medizin.osce.shared.MaterialType;
 import ch.unibas.medizin.osce.shared.PriceType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -31,36 +30,6 @@ public abstract class MaterialListListView_Roo_Gwt extends AbstractProxyListView
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("id");
-        table.addColumn(new TextColumn<MaterialListProxy>() {
-
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(MaterialListProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<MaterialListProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(MaterialListProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
         paths.add("name");
         table.addColumn(new TextColumn<MaterialListProxy>() {
 
@@ -131,5 +100,35 @@ public abstract class MaterialListListView_Roo_Gwt extends AbstractProxyListView
                 return renderer.render(object.getUsedMaterials());
             }
         }, "Used Materials");
+        paths.add("id");
+        table.addColumn(new TextColumn<MaterialListProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(MaterialListProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<MaterialListProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(MaterialListProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
     }
 }

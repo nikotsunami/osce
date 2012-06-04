@@ -26,11 +26,11 @@ privileged aspect Specialisation_Roo_JavaBean {
         this.roleTopics = roleTopics;
     }
     
-    public Set<Doctor> Specialisation.getDoctors() {
+    public java.util.Set<Doctor> Specialisation.getDoctors() {
         return this.doctors;
     }
     
-    public void Specialisation.setDoctors(Set<Doctor> doctors) {
+    public void Specialisation.setDoctors(java.util.Set<Doctor> doctors) {
         this.doctors = doctors;
     }
     
