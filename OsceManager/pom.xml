@@ -48,6 +48,19 @@
             <url>http://mvnrepository.com/artifact/</url>
             <name>Testrepo for dependencies</name>
         </repository>
+        
+        <repository>
+          <id>local-project-libraries</id>
+          <name>Local project libraries</name>
+          <url>file://${project.basedir}/lib</url>
+          <layout>default</layout>
+      </repository>
+      
+        <repository>
+          <id>gwt-i18n-repo</id>
+          <url>https://service.teklabs.com/nexus/content/repositories/public-releases/</url>
+          <name>Repo for gwt-18n-project</name>
+        </repository>
     </repositories>
     
     <pluginRepositories>
@@ -113,7 +126,15 @@
 			<version>1.0</version>
 			<!--<scope>system</scope>
 			<systemPath>${project.basedir}/lib/fr.hd3d.html5.video.1.0.jar</systemPath>-->
-		</dependency>  
+		</dependency>
+		<!-- Dependency for using same client side i18n interface on server side -->
+        <dependency>
+            <groupId>com.teklabs.gwt-i18n-server</groupId>
+            <artifactId>gwt-i18n-server</artifactId>
+            <version>0.10</version>
+            <!--     <scope>system</scope>
+            <systemPath>${project.basedir}/lib/com.teklabs.gwt-i18n-server-0.10.jar</systemPath> -->
+        </dependency>
         <!-- General dependencies for standard applications -->
         <dependency>
             <groupId>junit</groupId>

@@ -556,7 +556,8 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	public void printPatientClicked(){
 		Log.info("Print clicked");
 		requests.standardizedPatientRequestNonRoo()
-		.getPdfPatientsBySearch(standardizedPatientProxy).fire(new StandardizedPatientPdfFileReceiver());
+				.getPdfPatientsBySearch(standardizedPatientProxy.getId())
+				.fire(new StandardizedPatientPdfFileReceiver());
 
 	}
 	//	by SPEC ] End

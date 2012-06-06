@@ -466,19 +466,24 @@ public class StandardizedPatient {
 
     }
 
-    public static String getPdfPatientsBySearch(
-            StandardizedPatient standardizedPatient){
-        try{
-            PdfUtil pdfUtil = new PdfUtil();
-            Log.info("Message received in Pdfpatient by Search : "+standardizedPatient.name);
-            pdfUtil.writeFile(OsMaConstant.FILE_NAME_PDF_FORMAT,standardizedPatient);
-        }catch (Exception e) {
-                e.printStackTrace();
-                Log.error("Error in Satndized Patient getPdfPatientsBySearch"+e.getMessage());
-        }
+	public static String getPdfPatientsBySearch(Long standardizedPatientId) {
+		String fileName = OsMaConstant.FILE_NAME_PDF_FORMAT;
+		try {
+			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
+			PdfUtil pdfUtil = new PdfUtil();
+			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
+			fileName = standardizedPatient.name + "_"
+					+ standardizedPatient.preName + "_ "
+					+ OsMaConstant.FILE_NAME_PDF_FORMAT;
+			pdfUtil.writeFile(fileName, standardizedPatient);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.error("Error in Std. Patient getPdfPatientsBySearch: " + e.getMessage());
+		}
 
-        return OsMaConstant.FILE_NAME_PDF_FORMAT;
-    }
+		return fileName;
+	}
+
         //By Spec]End
 
     public static Long countPatientsByAdvancedSearchAndSort(String searchWord,
