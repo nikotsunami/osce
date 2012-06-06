@@ -148,20 +148,19 @@ INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (10,'Schulterblatt (L
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (11,'Hals',0,0);
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (12,'Oberarm (Rechts)',1,0);
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (13,'Wade (Links)',1,0);
-INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (14,'Anus',2,0);
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (15,'Rechtes Schulterblatt',2,0);
 
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (2,9);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (3,10);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (4,12);
-INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (4,14);
+INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (4,13);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (5,15);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (6,11);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (7,10);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (8,9);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (9,9);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (10,12);
-INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (11,14);
+INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (11,12);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (12,13);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (13,15);
 
