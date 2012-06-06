@@ -61,7 +61,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		addScar.setText(constants.traits());
 		addAnamnesis.setText(constants.anamnesisValues());
 		addLanguage.setText(constants.languages());
-		addNationality.setText(constants.nationalities());
+		addNationality.setText(constants.nationality());
 	}
 
 	@UiField

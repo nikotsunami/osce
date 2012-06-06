@@ -60,12 +60,14 @@ public class OsMaMainNav extends Composite {
 		this.requests = requests;
 		this.placeController = placeController;
 		
-		masterDataPanel.setAnimationEnabled(true);
+		simPatDataPanel.setAnimationEnabled(true);
+		doctorDataPanel.setAnimationEnabled(true);
 		administrationPanel.setAnimationEnabled(true);
 		examinationsPanel.setAnimationEnabled(true);
 		rolePanel.setAnimationEnabled(true);
 
-		masterDataPanel.getHeaderTextAccessor().setText(constants.masterData());
+		simPatDataPanel.getHeaderTextAccessor().setText(constants.simPat());
+		doctorDataPanel.getHeaderTextAccessor().setText(constants.doctors());
 		administrationPanel.getHeaderTextAccessor().setText(constants.administration());
 		examinationsPanel.getHeaderTextAccessor().setText(constants.exams());		
 		//By Spec[
@@ -76,6 +78,7 @@ public class OsMaMainNav extends Composite {
 		people.setText(constants.simulationPatients());
 		scars.setText(constants.traits());
 		anamnesisChecks.setText(constants.anamnesisValues());
+		
 		clinics.setText(constants.clinics());
 		doctors.setText(constants.doctors());
 
@@ -107,7 +110,7 @@ public class OsMaMainNav extends Composite {
 	}
 
 	@UiField
-	DisclosurePanel masterDataPanel;		// Stammdaten
+	DisclosurePanel simPatDataPanel;		// Stammdaten
 
 	@UiField
 	Anchor people;					// Personen
@@ -120,6 +123,8 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor doctors;					// Ärzte
 
+	@UiField
+	DisclosurePanel doctorDataPanel;		// Stammdaten
 
 	@UiField
 	DisclosurePanel administrationPanel;	//Verwaltung

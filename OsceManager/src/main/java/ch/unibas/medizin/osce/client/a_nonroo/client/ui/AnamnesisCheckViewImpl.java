@@ -186,6 +186,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		saveOrder.setText(constants.saveOrder());
 		newButton.setText(constants.addAnamnesisValue());
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
 				"position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
