@@ -10,6 +10,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.RoleTableItemValue")
 public interface RoleTableItemValueProxy extends EntityProxy {
 
+    abstract Integer getId();
+
+    abstract void setId(Integer id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract String getValue();
 
     abstract void setValue(String value);
@@ -21,12 +29,4 @@ public interface RoleTableItemValueProxy extends EntityProxy {
     abstract StandardizedRoleProxy getStandardizedRole();
 
     abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);
-
-    abstract Integer getId();
-
-    abstract void setId(Integer id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

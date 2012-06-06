@@ -11,6 +11,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.UsedMaterial")
 public interface UsedMaterialProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract Integer getMaterialCount();
 
     abstract void setMaterialCount(Integer materialCount);
@@ -30,12 +38,4 @@ public interface UsedMaterialProxy extends EntityProxy {
     abstract Integer getSort_order();
 
     abstract void setSort_order(Integer sort_order);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

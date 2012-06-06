@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -45,5 +46,6 @@ public abstract class CheckListDetailsView_Roo_Gwt extends Composite implements 
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
         checkListTopics.setInnerText(proxy.getCheckListTopics() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicProxyRenderer.instance()).render(proxy.getCheckListTopics()));
+        displayRenderer.setInnerText(CheckListProxyRenderer.instance().render(proxy));
     }
 }

@@ -18,9 +18,9 @@ public interface RoleParticipantRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countRoleParticipants();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy>> findAllRoleParticipants();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy> findRoleParticipant(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy>> findAllRoleParticipants();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy>> findRoleParticipantEntries(int firstResult, int maxResults);
 }

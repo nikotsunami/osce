@@ -19,6 +19,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -132,7 +133,7 @@ public abstract class StandardizedPatientDetailsView_Roo_Gwt extends Composite i
         videoPath.setInnerText(proxy.getVideoPath() == null ? "" : String.valueOf(proxy.getVideoPath()));
         nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
         profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
-        birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getBirthday()));
+        birthday.setInnerText(proxy.getBirthday() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getBirthday()));
         email.setInnerText(proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail()));
         descriptions.setInnerText(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
         bankAccount.setInnerText(proxy.getBankAccount() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().render(proxy.getBankAccount()));
@@ -141,6 +142,6 @@ public abstract class StandardizedPatientDetailsView_Roo_Gwt extends Composite i
         socialInsuranceNo.setInnerText(proxy.getSocialInsuranceNo() == null ? "" : String.valueOf(proxy.getSocialInsuranceNo()));
         anamnesisForm.setInnerText(proxy.getAnamnesisForm() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy.getAnamnesisForm()));
         langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(StandardizedPatientProxyRenderer.instance().render(proxy));
     }
 }

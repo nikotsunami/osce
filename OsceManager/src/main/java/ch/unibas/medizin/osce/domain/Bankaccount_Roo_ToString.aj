@@ -14,8 +14,10 @@ privileged aspect Bankaccount_Roo_ToString {
         sb.append("City: ").append(getCity()).append(", ");
         sb.append("Country: ").append(getCountry()).append(", ");
         sb.append("IBAN: ").append(getIBAN()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("OwnerName: ").append(getOwnerName()).append(", ");
-        sb.append("PostalCode: ").append(getPostalCode());
+        sb.append("PostalCode: ").append(getPostalCode()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

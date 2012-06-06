@@ -3,14 +3,32 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.AnamnesisForm;
 import ch.unibas.medizin.osce.domain.AnamnesisFormDataOnDemand;
+import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.BankaccountDataOnDemand;
+import ch.unibas.medizin.osce.domain.Description;
 import ch.unibas.medizin.osce.domain.DescriptionDataOnDemand;
+import ch.unibas.medizin.osce.domain.Nationality;
 import ch.unibas.medizin.osce.domain.NationalityDataOnDemand;
+import ch.unibas.medizin.osce.domain.Profession;
 import ch.unibas.medizin.osce.domain.ProfessionDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
+import java.lang.Integer;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +36,18 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     
     declare @type: StandardizedPatientDataOnDemand: @Component;
     
-    private Random StandardizedPatientDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random StandardizedPatientDataOnDemand.rnd = new SecureRandom();
     
     private List<StandardizedPatient> StandardizedPatientDataOnDemand.data;
+    
+    @Autowired
+    private AnamnesisFormDataOnDemand StandardizedPatientDataOnDemand.anamnesisFormDataOnDemand;
+    
+    @Autowired
+    private BankaccountDataOnDemand StandardizedPatientDataOnDemand.bankaccountDataOnDemand;
+    
+    @Autowired
+    private DescriptionDataOnDemand StandardizedPatientDataOnDemand.descriptionDataOnDemand;
     
     @Autowired
     private NationalityDataOnDemand StandardizedPatientDataOnDemand.nationalityDataOnDemand;
@@ -28,189 +55,180 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private ProfessionDataOnDemand StandardizedPatientDataOnDemand.professionDataOnDemand;
     
-    @Autowired
-    private DescriptionDataOnDemand StandardizedPatientDataOnDemand.descriptionDataOnDemand;
-    
-    @Autowired
-    private BankaccountDataOnDemand StandardizedPatientDataOnDemand.bankaccountDataOnDemand;
-    
-    @Autowired
-    private AnamnesisFormDataOnDemand StandardizedPatientDataOnDemand.anamnesisFormDataOnDemand;
-    
     public StandardizedPatient StandardizedPatientDataOnDemand.getNewTransientStandardizedPatient(int index) {
-        ch.unibas.medizin.osce.domain.StandardizedPatient obj = new ch.unibas.medizin.osce.domain.StandardizedPatient();
-        setGender(obj, index);
-        setName(obj, index);
-        setPreName(obj, index);
-        setStreet(obj, index);
+        StandardizedPatient obj = new StandardizedPatient();
+        setAnamnesisForm(obj, index);
+        setBankAccount(obj, index);
+        setBirthday(obj, index);
         setCity(obj, index);
+        setDescriptions(obj, index);
+        setEmail(obj, index);
+        setGender(obj, index);
+        setHeight(obj, index);
+        setImmagePath(obj, index);
+        setMaritalStatus(obj, index);
+        setMobile(obj, index);
+        setName(obj, index);
+        setNationality(obj, index);
         setPostalCode(obj, index);
+        setPreName(obj, index);
+        setProfession(obj, index);
+        setSocialInsuranceNo(obj, index);
+        setStreet(obj, index);
         setTelephone(obj, index);
         setTelephone2(obj, index);
-        setMobile(obj, index);
-        setHeight(obj, index);
-        setWeight(obj, index);
-        setImmagePath(obj, index);
         setVideoPath(obj, index);
-        setNationality(obj, index);
-        setProfession(obj, index);
-        setBirthday(obj, index);
-        setEmail(obj, index);
-        setDescriptions(obj, index);
-        setBankAccount(obj, index);
-        setMaritalStatus(obj, index);
+        setWeight(obj, index);
         setWorkPermission(obj, index);
-        setSocialInsuranceNo(obj, index);
-        setAnamnesisForm(obj, index);
         return obj;
     }
     
-    private void StandardizedPatientDataOnDemand.setGender(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.shared.Gender gender = ch.unibas.medizin.osce.shared.Gender.class.getEnumConstants()[0];
-        obj.setGender(gender);
+    public void StandardizedPatientDataOnDemand.setAnamnesisForm(StandardizedPatient obj, int index) {
+        AnamnesisForm anamnesisForm = anamnesisFormDataOnDemand.getSpecificAnamnesisForm(index);
+        obj.setAnamnesisForm(anamnesisForm);
     }
     
-    private void StandardizedPatientDataOnDemand.setName(StandardizedPatient obj, int index) {
-        java.lang.String name = "name_" + index;
-        if (name.length() > 40) {
-            name = name.substring(0, 40);
-        }
-        obj.setName(name);
+    public void StandardizedPatientDataOnDemand.setBankAccount(StandardizedPatient obj, int index) {
+        Bankaccount bankAccount = bankaccountDataOnDemand.getSpecificBankaccount(index);
+        obj.setBankAccount(bankAccount);
     }
     
-    private void StandardizedPatientDataOnDemand.setPreName(StandardizedPatient obj, int index) {
-        java.lang.String preName = "preName_" + index;
-        if (preName.length() > 40) {
-            preName = preName.substring(0, 40);
-        }
-        obj.setPreName(preName);
+    public void StandardizedPatientDataOnDemand.setBirthday(StandardizedPatient obj, int index) {
+        Date birthday = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setBirthday(birthday);
     }
     
-    private void StandardizedPatientDataOnDemand.setStreet(StandardizedPatient obj, int index) {
-        java.lang.String street = "street_" + index;
-        if (street.length() > 60) {
-            street = street.substring(0, 60);
-        }
-        obj.setStreet(street);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setCity(StandardizedPatient obj, int index) {
-        java.lang.String city = "city_" + index;
+    public void StandardizedPatientDataOnDemand.setCity(StandardizedPatient obj, int index) {
+        String city = "city_" + index;
         if (city.length() > 30) {
             city = city.substring(0, 30);
         }
         obj.setCity(city);
     }
     
-    private void StandardizedPatientDataOnDemand.setPostalCode(StandardizedPatient obj, int index) {
-        java.lang.Integer postalCode = new Integer(index);
-        obj.setPostalCode(postalCode);
+    public void StandardizedPatientDataOnDemand.setDescriptions(StandardizedPatient obj, int index) {
+        Description descriptions = descriptionDataOnDemand.getSpecificDescription(index);
+        obj.setDescriptions(descriptions);
     }
     
-    private void StandardizedPatientDataOnDemand.setTelephone(StandardizedPatient obj, int index) {
-        java.lang.String telephone = "telephone_" + index;
-        if (telephone.length() > 30) {
-            telephone = telephone.substring(0, 30);
-        }
-        obj.setTelephone(telephone);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setTelephone2(StandardizedPatient obj, int index) {
-        java.lang.String telephone2 = "telephone2_" + index;
-        if (telephone2.length() > 30) {
-            telephone2 = telephone2.substring(0, 30);
-        }
-        obj.setTelephone2(telephone2);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setMobile(StandardizedPatient obj, int index) {
-        java.lang.String mobile = "mobile_" + index;
-        if (mobile.length() > 30) {
-            mobile = mobile.substring(0, 30);
-        }
-        obj.setMobile(mobile);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setHeight(StandardizedPatient obj, int index) {
-        java.lang.Integer height = new Integer(index);
-        obj.setHeight(height);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setWeight(StandardizedPatient obj, int index) {
-        java.lang.Integer weight = new Integer(index);
-        obj.setWeight(weight);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setImmagePath(StandardizedPatient obj, int index) {
-        java.lang.String immagePath = "immagePath_" + index;
-        if (immagePath.length() > 255) {
-            immagePath = immagePath.substring(0, 255);
-        }
-        obj.setImmagePath(immagePath);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setVideoPath(StandardizedPatient obj, int index) {
-        java.lang.String videoPath = "videoPath_" + index;
-        if (videoPath.length() > 255) {
-            videoPath = videoPath.substring(0, 255);
-        }
-        obj.setVideoPath(videoPath);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setNationality(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.domain.Nationality nationality = nationalityDataOnDemand.getRandomNationality();
-        obj.setNationality(nationality);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setProfession(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.domain.Profession profession = professionDataOnDemand.getRandomProfession();
-        obj.setProfession(profession);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setBirthday(StandardizedPatient obj, int index) {
-        java.util.Date birthday = new java.util.GregorianCalendar(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR), java.util.Calendar.getInstance().get(java.util.Calendar.MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY), java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE), java.util.Calendar.getInstance().get(java.util.Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setBirthday(birthday);
-    }
-    
-    private void StandardizedPatientDataOnDemand.setEmail(StandardizedPatient obj, int index) {
-        java.lang.String email = "email_" + index;
+    public void StandardizedPatientDataOnDemand.setEmail(StandardizedPatient obj, int index) {
+        String email = "email_" + index;
         if (email.length() > 40) {
             email = email.substring(0, 40);
         }
         obj.setEmail(email);
     }
     
-    private void StandardizedPatientDataOnDemand.setDescriptions(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.domain.Description descriptions = descriptionDataOnDemand.getSpecificDescription(index);
-        obj.setDescriptions(descriptions);
+    public void StandardizedPatientDataOnDemand.setGender(StandardizedPatient obj, int index) {
+        Gender gender = Gender.class.getEnumConstants()[0];
+        obj.setGender(gender);
     }
     
-    private void StandardizedPatientDataOnDemand.setBankAccount(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.domain.Bankaccount bankAccount = bankaccountDataOnDemand.getSpecificBankaccount(index);
-        obj.setBankAccount(bankAccount);
+    public void StandardizedPatientDataOnDemand.setHeight(StandardizedPatient obj, int index) {
+        Integer height = new Integer(index);
+        obj.setHeight(height);
     }
     
-    private void StandardizedPatientDataOnDemand.setMaritalStatus(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.shared.MaritalStatus maritalStatus = ch.unibas.medizin.osce.shared.MaritalStatus.class.getEnumConstants()[0];
+    public void StandardizedPatientDataOnDemand.setImmagePath(StandardizedPatient obj, int index) {
+        String immagePath = "immagePath_" + index;
+        if (immagePath.length() > 255) {
+            immagePath = immagePath.substring(0, 255);
+        }
+        obj.setImmagePath(immagePath);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setMaritalStatus(StandardizedPatient obj, int index) {
+        MaritalStatus maritalStatus = MaritalStatus.class.getEnumConstants()[0];
         obj.setMaritalStatus(maritalStatus);
     }
     
-    private void StandardizedPatientDataOnDemand.setWorkPermission(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.shared.WorkPermission workPermission = ch.unibas.medizin.osce.shared.WorkPermission.class.getEnumConstants()[0];
-        obj.setWorkPermission(workPermission);
+    public void StandardizedPatientDataOnDemand.setMobile(StandardizedPatient obj, int index) {
+        String mobile = "mobile_" + index;
+        if (mobile.length() > 30) {
+            mobile = mobile.substring(0, 30);
+        }
+        obj.setMobile(mobile);
     }
     
-    private void StandardizedPatientDataOnDemand.setSocialInsuranceNo(StandardizedPatient obj, int index) {
-        java.lang.String socialInsuranceNo = "socialInsur_" + index;
+    public void StandardizedPatientDataOnDemand.setName(StandardizedPatient obj, int index) {
+        String name = "name_" + index;
+        if (name.length() > 40) {
+            name = name.substring(0, 40);
+        }
+        obj.setName(name);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setNationality(StandardizedPatient obj, int index) {
+        Nationality nationality = nationalityDataOnDemand.getRandomNationality();
+        obj.setNationality(nationality);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setPostalCode(StandardizedPatient obj, int index) {
+        Integer postalCode = new Integer(index);
+        obj.setPostalCode(postalCode);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setPreName(StandardizedPatient obj, int index) {
+        String preName = "preName_" + index;
+        if (preName.length() > 40) {
+            preName = preName.substring(0, 40);
+        }
+        obj.setPreName(preName);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setProfession(StandardizedPatient obj, int index) {
+        Profession profession = professionDataOnDemand.getRandomProfession();
+        obj.setProfession(profession);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setSocialInsuranceNo(StandardizedPatient obj, int index) {
+        String socialInsuranceNo = "socialInsur_" + index;
         if (socialInsuranceNo.length() > 13) {
             socialInsuranceNo = socialInsuranceNo.substring(0, 13);
         }
         obj.setSocialInsuranceNo(socialInsuranceNo);
     }
     
-    private void StandardizedPatientDataOnDemand.setAnamnesisForm(StandardizedPatient obj, int index) {
-        ch.unibas.medizin.osce.domain.AnamnesisForm anamnesisForm = anamnesisFormDataOnDemand.getSpecificAnamnesisForm(index);
-        obj.setAnamnesisForm(anamnesisForm);
+    public void StandardizedPatientDataOnDemand.setStreet(StandardizedPatient obj, int index) {
+        String street = "street_" + index;
+        if (street.length() > 60) {
+            street = street.substring(0, 60);
+        }
+        obj.setStreet(street);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setTelephone(StandardizedPatient obj, int index) {
+        String telephone = "telephone_" + index;
+        if (telephone.length() > 30) {
+            telephone = telephone.substring(0, 30);
+        }
+        obj.setTelephone(telephone);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setTelephone2(StandardizedPatient obj, int index) {
+        String telephone2 = "telephone2_" + index;
+        if (telephone2.length() > 30) {
+            telephone2 = telephone2.substring(0, 30);
+        }
+        obj.setTelephone2(telephone2);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setVideoPath(StandardizedPatient obj, int index) {
+        String videoPath = "videoPath_" + index;
+        if (videoPath.length() > 255) {
+            videoPath = videoPath.substring(0, 255);
+        }
+        obj.setVideoPath(videoPath);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setWeight(StandardizedPatient obj, int index) {
+        Integer weight = new Integer(index);
+        obj.setWeight(weight);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setWorkPermission(StandardizedPatient obj, int index) {
+        WorkPermission workPermission = WorkPermission.class.getEnumConstants()[0];
+        obj.setWorkPermission(workPermission);
     }
     
     public StandardizedPatient StandardizedPatientDataOnDemand.getSpecificStandardizedPatient(int index) {
@@ -232,16 +250,25 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedPatientDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.StandardizedPatient.findStandardizedPatientEntries(0, 10);
+        data = StandardizedPatient.findStandardizedPatientEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'StandardizedPatient' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.StandardizedPatient>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.StandardizedPatient>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.StandardizedPatient obj = getNewTransientStandardizedPatient(i);
-            obj.persist();
+            StandardizedPatient obj = getNewTransientStandardizedPatient(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

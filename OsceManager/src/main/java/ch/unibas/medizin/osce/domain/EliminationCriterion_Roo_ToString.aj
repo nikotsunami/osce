@@ -11,8 +11,10 @@ privileged aspect EliminationCriterion_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("AnamnesisCheck: ").append(getAnamnesisCheck()).append(", ");
         sb.append("AnamnesisCheckValue: ").append(getAnamnesisCheckValue()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Scar: ").append(getScar()).append(", ");
-        sb.append("StandardizedRole: ").append(getStandardizedRole());
+        sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

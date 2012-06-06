@@ -4,72 +4,79 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Office;
+import ch.unibas.medizin.osce.shared.Gender;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect OfficeDataOnDemand_Roo_DataOnDemand {
     
     declare @type: OfficeDataOnDemand: @Component;
     
-    private Random OfficeDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random OfficeDataOnDemand.rnd = new SecureRandom();
     
     private List<Office> OfficeDataOnDemand.data;
     
     public Office OfficeDataOnDemand.getNewTransientOffice(int index) {
-        ch.unibas.medizin.osce.domain.Office obj = new ch.unibas.medizin.osce.domain.Office();
+        Office obj = new Office();
+        setEmail(obj, index);
         setGender(obj, index);
-        setTitle(obj, index);
         setName(obj, index);
         setPreName(obj, index);
-        setEmail(obj, index);
         setTelephone(obj, index);
+        setTitle(obj, index);
         return obj;
     }
     
-    private void OfficeDataOnDemand.setGender(Office obj, int index) {
-        ch.unibas.medizin.osce.shared.Gender gender = ch.unibas.medizin.osce.shared.Gender.class.getEnumConstants()[0];
-        obj.setGender(gender);
-    }
-    
-    private void OfficeDataOnDemand.setTitle(Office obj, int index) {
-        java.lang.String title = "title_" + index;
-        if (title.length() > 40) {
-            title = title.substring(0, 40);
-        }
-        obj.setTitle(title);
-    }
-    
-    private void OfficeDataOnDemand.setName(Office obj, int index) {
-        java.lang.String name = "name_" + index;
-        if (name.length() > 40) {
-            name = name.substring(0, 40);
-        }
-        obj.setName(name);
-    }
-    
-    private void OfficeDataOnDemand.setPreName(Office obj, int index) {
-        java.lang.String preName = "preName_" + index;
-        if (preName.length() > 40) {
-            preName = preName.substring(0, 40);
-        }
-        obj.setPreName(preName);
-    }
-    
-    private void OfficeDataOnDemand.setEmail(Office obj, int index) {
-        java.lang.String email = "email_" + index;
+    public void OfficeDataOnDemand.setEmail(Office obj, int index) {
+        String email = "email_" + index;
         if (email.length() > 40) {
             email = email.substring(0, 40);
         }
         obj.setEmail(email);
     }
     
-    private void OfficeDataOnDemand.setTelephone(Office obj, int index) {
-        java.lang.String telephone = "telephone_" + index;
+    public void OfficeDataOnDemand.setGender(Office obj, int index) {
+        Gender gender = Gender.class.getEnumConstants()[0];
+        obj.setGender(gender);
+    }
+    
+    public void OfficeDataOnDemand.setName(Office obj, int index) {
+        String name = "name_" + index;
+        if (name.length() > 40) {
+            name = name.substring(0, 40);
+        }
+        obj.setName(name);
+    }
+    
+    public void OfficeDataOnDemand.setPreName(Office obj, int index) {
+        String preName = "preName_" + index;
+        if (preName.length() > 40) {
+            preName = preName.substring(0, 40);
+        }
+        obj.setPreName(preName);
+    }
+    
+    public void OfficeDataOnDemand.setTelephone(Office obj, int index) {
+        String telephone = "telephone_" + index;
         if (telephone.length() > 30) {
             telephone = telephone.substring(0, 30);
         }
         obj.setTelephone(telephone);
+    }
+    
+    public void OfficeDataOnDemand.setTitle(Office obj, int index) {
+        String title = "title_" + index;
+        if (title.length() > 40) {
+            title = title.substring(0, 40);
+        }
+        obj.setTitle(title);
     }
     
     public Office OfficeDataOnDemand.getSpecificOffice(int index) {
@@ -91,16 +98,25 @@ privileged aspect OfficeDataOnDemand_Roo_DataOnDemand {
     }
     
     public void OfficeDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.Office.findOfficeEntries(0, 10);
+        data = Office.findOfficeEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Office' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Office>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.Office>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.Office obj = getNewTransientOffice(i);
-            obj.persist();
+            Office obj = getNewTransientOffice(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

@@ -10,8 +10,10 @@ privileged aspect Course_Roo_ToString {
     public String Course.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Color: ").append(getColor()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Osce: ").append(getOsce()).append(", ");
-        sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size());
+        sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

@@ -4,26 +4,34 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect AnamnesisFormDataOnDemand_Roo_DataOnDemand {
     
     declare @type: AnamnesisFormDataOnDemand: @Component;
     
-    private Random AnamnesisFormDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random AnamnesisFormDataOnDemand.rnd = new SecureRandom();
     
     private List<AnamnesisForm> AnamnesisFormDataOnDemand.data;
     
     public AnamnesisForm AnamnesisFormDataOnDemand.getNewTransientAnamnesisForm(int index) {
-        ch.unibas.medizin.osce.domain.AnamnesisForm obj = new ch.unibas.medizin.osce.domain.AnamnesisForm();
+        AnamnesisForm obj = new AnamnesisForm();
         setCreateDate(obj, index);
         return obj;
     }
     
-    private void AnamnesisFormDataOnDemand.setCreateDate(AnamnesisForm obj, int index) {
-        java.util.Date createDate = new java.util.GregorianCalendar(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR), java.util.Calendar.getInstance().get(java.util.Calendar.MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY), java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE), java.util.Calendar.getInstance().get(java.util.Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+    public void AnamnesisFormDataOnDemand.setCreateDate(AnamnesisForm obj, int index) {
+        Date createDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setCreateDate(createDate);
     }
     
@@ -46,16 +54,25 @@ privileged aspect AnamnesisFormDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AnamnesisFormDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.AnamnesisForm.findAnamnesisFormEntries(0, 10);
+        data = AnamnesisForm.findAnamnesisFormEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'AnamnesisForm' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.AnamnesisForm>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.AnamnesisForm>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.AnamnesisForm obj = getNewTransientAnamnesisForm(i);
-            obj.persist();
+            AnamnesisForm obj = getNewTransientAnamnesisForm(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

@@ -18,9 +18,9 @@ public interface KeywordRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countKeywords();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.KeywordProxy>> findAllKeywords();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.KeywordProxy> findKeyword(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.KeywordProxy>> findAllKeywords();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.KeywordProxy>> findKeywordEntries(int firstResult, int maxResults);
 }

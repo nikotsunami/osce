@@ -12,6 +12,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Doctor")
 public interface DoctorProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract Gender getGender();
 
     abstract void setGender(Gender gender);
@@ -55,12 +63,4 @@ public interface DoctorProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy> getRoleParticipants();
 
     abstract void setRoleParticipants(Set<RoleParticipantProxy> roleParticipants);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

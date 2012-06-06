@@ -4,26 +4,32 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Description;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect DescriptionDataOnDemand_Roo_DataOnDemand {
     
     declare @type: DescriptionDataOnDemand: @Component;
     
-    private Random DescriptionDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random DescriptionDataOnDemand.rnd = new SecureRandom();
     
     private List<Description> DescriptionDataOnDemand.data;
     
     public Description DescriptionDataOnDemand.getNewTransientDescription(int index) {
-        ch.unibas.medizin.osce.domain.Description obj = new ch.unibas.medizin.osce.domain.Description();
+        Description obj = new Description();
         setDescription(obj, index);
         return obj;
     }
     
-    private void DescriptionDataOnDemand.setDescription(Description obj, int index) {
-        java.lang.String description = "description_" + index;
+    public void DescriptionDataOnDemand.setDescription(Description obj, int index) {
+        String description = "description_" + index;
         if (description.length() > 999) {
             description = description.substring(0, 999);
         }
@@ -49,16 +55,25 @@ privileged aspect DescriptionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void DescriptionDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.Description.findDescriptionEntries(0, 10);
+        data = Description.findDescriptionEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Description' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Description>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.Description>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.Description obj = getNewTransientDescription(i);
-            obj.persist();
+            Description obj = getNewTransientDescription(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

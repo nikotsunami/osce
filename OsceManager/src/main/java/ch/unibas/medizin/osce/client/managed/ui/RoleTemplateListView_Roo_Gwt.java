@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -29,51 +30,6 @@ public abstract class RoleTemplateListView_Roo_Gwt extends AbstractProxyListView
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("templateName");
-        table.addColumn(new TextColumn<RoleTemplateProxy>() {
-
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-                public String render(java.lang.String obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(RoleTemplateProxy object) {
-                return renderer.render(object.getTemplateName());
-            }
-        }, "Template Name");
-        paths.add("date_cretaed");
-        table.addColumn(new TextColumn<RoleTemplateProxy>() {
-
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
-
-            @Override
-            public String getValue(RoleTemplateProxy object) {
-                return renderer.render(object.getDate_cretaed());
-            }
-        }, "Date_cretaed");
-        paths.add("date_edited");
-        table.addColumn(new TextColumn<RoleTemplateProxy>() {
-
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
-
-            @Override
-            public String getValue(RoleTemplateProxy object) {
-                return renderer.render(object.getDate_edited());
-            }
-        }, "Date_edited");
-        paths.add("roleBaseItem");
-        table.addColumn(new TextColumn<RoleTemplateProxy>() {
-
-            Renderer<java.util.List> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleBaseItemProxyRenderer.instance());
-
-            @Override
-            public String getValue(RoleTemplateProxy object) {
-                return renderer.render(object.getRoleBaseItem());
-            }
-        }, "Role Base Item");
         paths.add("id");
         table.addColumn(new TextColumn<RoleTemplateProxy>() {
 
@@ -104,5 +60,50 @@ public abstract class RoleTemplateListView_Roo_Gwt extends AbstractProxyListView
                 return renderer.render(object.getVersion());
             }
         }, "Version");
+        paths.add("templateName");
+        table.addColumn(new TextColumn<RoleTemplateProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(RoleTemplateProxy object) {
+                return renderer.render(object.getTemplateName());
+            }
+        }, "Template Name");
+        paths.add("date_cretaed");
+        table.addColumn(new TextColumn<RoleTemplateProxy>() {
+
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
+
+            @Override
+            public String getValue(RoleTemplateProxy object) {
+                return renderer.render(object.getDate_cretaed());
+            }
+        }, "Date_cretaed");
+        paths.add("date_edited");
+        table.addColumn(new TextColumn<RoleTemplateProxy>() {
+
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
+
+            @Override
+            public String getValue(RoleTemplateProxy object) {
+                return renderer.render(object.getDate_edited());
+            }
+        }, "Date_edited");
+        paths.add("roleBaseItem");
+        table.addColumn(new TextColumn<RoleTemplateProxy>() {
+
+            Renderer<java.util.List> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleBaseItemProxyRenderer.instance());
+
+            @Override
+            public String getValue(RoleTemplateProxy object) {
+                return renderer.render(object.getRoleBaseItem());
+            }
+        }, "Role Base Item");
     }
 }

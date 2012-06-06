@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;

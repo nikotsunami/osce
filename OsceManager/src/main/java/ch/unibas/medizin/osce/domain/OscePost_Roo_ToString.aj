@@ -9,10 +9,11 @@ privileged aspect OscePost_Roo_ToString {
     
     public String OscePost.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsPossibleStart: ").append(getIsPossibleStart()).append(", ");
-        sb.append("NextPost: ").append(getNextPost()).append(", ");
         sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
-        sb.append("RoleTopic: ").append(getRoleTopic());
+        sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

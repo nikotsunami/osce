@@ -10,9 +10,11 @@ privileged aspect File_Roo_ToString {
     public String File.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Description: ").append(getDescription()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Path: ").append(getPath()).append(", ");
         sb.append("SortOrder: ").append(getSortOrder()).append(", ");
-        sb.append("StandardizedRole: ").append(getStandardizedRole());
+        sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

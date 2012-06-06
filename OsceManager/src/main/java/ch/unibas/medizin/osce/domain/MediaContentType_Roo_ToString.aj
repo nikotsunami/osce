@@ -10,7 +10,9 @@ privileged aspect MediaContentType_Roo_ToString {
     public String MediaContentType.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Comment: ").append(getComment()).append(", ");
-        sb.append("ContentType: ").append(getContentType());
+        sb.append("ContentType: ").append(getContentType()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

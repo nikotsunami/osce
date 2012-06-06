@@ -3,12 +3,21 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisCheckDataOnDemand;
 import ch.unibas.medizin.osce.domain.EliminationCriterion;
+import ch.unibas.medizin.osce.domain.Scar;
 import ch.unibas.medizin.osce.domain.ScarDataOnDemand;
+import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.StandardizedRoleDataOnDemand;
+import java.lang.Boolean;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,46 +25,46 @@ privileged aspect EliminationCriterionDataOnDemand_Roo_DataOnDemand {
     
     declare @type: EliminationCriterionDataOnDemand: @Component;
     
-    private Random EliminationCriterionDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random EliminationCriterionDataOnDemand.rnd = new SecureRandom();
     
     private List<EliminationCriterion> EliminationCriterionDataOnDemand.data;
     
     @Autowired
-    private StandardizedRoleDataOnDemand EliminationCriterionDataOnDemand.standardizedRoleDataOnDemand;
+    private AnamnesisCheckDataOnDemand EliminationCriterionDataOnDemand.anamnesisCheckDataOnDemand;
     
     @Autowired
     private ScarDataOnDemand EliminationCriterionDataOnDemand.scarDataOnDemand;
     
     @Autowired
-    private AnamnesisCheckDataOnDemand EliminationCriterionDataOnDemand.anamnesisCheckDataOnDemand;
+    private StandardizedRoleDataOnDemand EliminationCriterionDataOnDemand.standardizedRoleDataOnDemand;
     
     public EliminationCriterion EliminationCriterionDataOnDemand.getNewTransientEliminationCriterion(int index) {
-        ch.unibas.medizin.osce.domain.EliminationCriterion obj = new ch.unibas.medizin.osce.domain.EliminationCriterion();
-        setAnamnesisCheckValue(obj, index);
-        setStandardizedRole(obj, index);
-        setScar(obj, index);
+        EliminationCriterion obj = new EliminationCriterion();
         setAnamnesisCheck(obj, index);
+        setAnamnesisCheckValue(obj, index);
+        setScar(obj, index);
+        setStandardizedRole(obj, index);
         return obj;
     }
     
-    private void EliminationCriterionDataOnDemand.setAnamnesisCheckValue(EliminationCriterion obj, int index) {
-        java.lang.Boolean anamnesisCheckValue = Boolean.TRUE;
+    public void EliminationCriterionDataOnDemand.setAnamnesisCheck(EliminationCriterion obj, int index) {
+        AnamnesisCheck anamnesisCheck = anamnesisCheckDataOnDemand.getRandomAnamnesisCheck();
+        obj.setAnamnesisCheck(anamnesisCheck);
+    }
+    
+    public void EliminationCriterionDataOnDemand.setAnamnesisCheckValue(EliminationCriterion obj, int index) {
+        Boolean anamnesisCheckValue = Boolean.TRUE;
         obj.setAnamnesisCheckValue(anamnesisCheckValue);
     }
     
-    private void EliminationCriterionDataOnDemand.setStandardizedRole(EliminationCriterion obj, int index) {
-        ch.unibas.medizin.osce.domain.StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
-        obj.setStandardizedRole(standardizedRole);
-    }
-    
-    private void EliminationCriterionDataOnDemand.setScar(EliminationCriterion obj, int index) {
-        ch.unibas.medizin.osce.domain.Scar scar = scarDataOnDemand.getRandomScar();
+    public void EliminationCriterionDataOnDemand.setScar(EliminationCriterion obj, int index) {
+        Scar scar = scarDataOnDemand.getRandomScar();
         obj.setScar(scar);
     }
     
-    private void EliminationCriterionDataOnDemand.setAnamnesisCheck(EliminationCriterion obj, int index) {
-        ch.unibas.medizin.osce.domain.AnamnesisCheck anamnesisCheck = anamnesisCheckDataOnDemand.getRandomAnamnesisCheck();
-        obj.setAnamnesisCheck(anamnesisCheck);
+    public void EliminationCriterionDataOnDemand.setStandardizedRole(EliminationCriterion obj, int index) {
+        StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
+        obj.setStandardizedRole(standardizedRole);
     }
     
     public EliminationCriterion EliminationCriterionDataOnDemand.getSpecificEliminationCriterion(int index) {
@@ -77,16 +86,25 @@ privileged aspect EliminationCriterionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void EliminationCriterionDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.EliminationCriterion.findEliminationCriterionEntries(0, 10);
+        data = EliminationCriterion.findEliminationCriterionEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'EliminationCriterion' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.EliminationCriterion>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.EliminationCriterion>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.EliminationCriterion obj = getNewTransientEliminationCriterion(i);
-            obj.persist();
+            EliminationCriterion obj = getNewTransientEliminationCriterion(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

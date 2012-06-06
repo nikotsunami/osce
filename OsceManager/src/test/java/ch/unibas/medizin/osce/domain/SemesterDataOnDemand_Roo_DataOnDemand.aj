@@ -4,33 +4,40 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Semester;
+import ch.unibas.medizin.osce.shared.Semesters;
+import java.lang.Integer;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect SemesterDataOnDemand_Roo_DataOnDemand {
     
     declare @type: SemesterDataOnDemand: @Component;
     
-    private Random SemesterDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random SemesterDataOnDemand.rnd = new SecureRandom();
     
     private List<Semester> SemesterDataOnDemand.data;
     
     public Semester SemesterDataOnDemand.getNewTransientSemester(int index) {
-        ch.unibas.medizin.osce.domain.Semester obj = new ch.unibas.medizin.osce.domain.Semester();
-        setSemester(obj, index);
+        Semester obj = new Semester();
         setCalYear(obj, index);
+        setSemester(obj, index);
         return obj;
     }
     
-    private void SemesterDataOnDemand.setSemester(Semester obj, int index) {
-        ch.unibas.medizin.osce.shared.Semesters semester = ch.unibas.medizin.osce.shared.Semesters.class.getEnumConstants()[0];
-        obj.setSemester(semester);
+    public void SemesterDataOnDemand.setCalYear(Semester obj, int index) {
+        Integer calYear = new Integer(index);
+        obj.setCalYear(calYear);
     }
     
-    private void SemesterDataOnDemand.setCalYear(Semester obj, int index) {
-        java.lang.Integer calYear = new Integer(index);
-        obj.setCalYear(calYear);
+    public void SemesterDataOnDemand.setSemester(Semester obj, int index) {
+        Semesters semester = Semesters.class.getEnumConstants()[0];
+        obj.setSemester(semester);
     }
     
     public Semester SemesterDataOnDemand.getSpecificSemester(int index) {
@@ -52,16 +59,25 @@ privileged aspect SemesterDataOnDemand_Roo_DataOnDemand {
     }
     
     public void SemesterDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.Semester.findSemesterEntries(0, 10);
+        data = Semester.findSemesterEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Semester' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Semester>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.Semester>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.Semester obj = getNewTransientSemester(i);
-            obj.persist();
+            Semester obj = getNewTransientSemester(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

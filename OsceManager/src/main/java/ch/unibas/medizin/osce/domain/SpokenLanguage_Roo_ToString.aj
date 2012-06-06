@@ -9,8 +9,10 @@ privileged aspect SpokenLanguage_Roo_ToString {
     
     public String SpokenLanguage.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Langskills: ").append(getLangskills() == null ? "null" : getLangskills().size()).append(", ");
-        sb.append("LanguageName: ").append(getLanguageName());
+        sb.append("LanguageName: ").append(getLanguageName()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

@@ -18,9 +18,9 @@ public interface FileRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countFiles();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.FileProxy>> findAllFiles();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.FileProxy> findFile(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.FileProxy>> findAllFiles();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.FileProxy>> findFileEntries(int firstResult, int maxResults);
 }

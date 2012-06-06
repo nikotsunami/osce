@@ -39,9 +39,7 @@ public interface OsceConstants extends Constants {
 
 	public String all();
 
-	public String anamnesisForm();
-
-	public String anamnesisValues();
+    public String anamnesisValues();
 
 	public String answer();
 

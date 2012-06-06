@@ -15,6 +15,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -26,6 +27,12 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class RoleBaseItemDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<RoleBaseItemProxy> {
+
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
 
     @UiField
     SpanElement item_defination;
@@ -51,12 +58,6 @@ public abstract class RoleBaseItemDetailsView_Roo_Gwt extends Composite implemen
     @UiField
     SpanElement roleItemAccess;
 
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
     RoleBaseItemProxy proxy;
 
     @UiField
@@ -64,6 +65,8 @@ public abstract class RoleBaseItemDetailsView_Roo_Gwt extends Composite implemen
 
     public void setValue(RoleBaseItemProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         item_defination.setInnerText(proxy.getItem_defination() == null ? "" : String.valueOf(proxy.getItem_defination()));
         item_name.setInnerText(proxy.getItem_name() == null ? "" : String.valueOf(proxy.getItem_name()));
         deleted.setInnerText(proxy.getDeleted() == null ? "" : String.valueOf(proxy.getDeleted()));
@@ -72,8 +75,6 @@ public abstract class RoleBaseItemDetailsView_Roo_Gwt extends Composite implemen
         roleSubItem.setInnerText(proxy.getRoleSubItem() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleSubItemValueProxyRenderer.instance()).render(proxy.getRoleSubItem()));
         roleTableItem.setInnerText(proxy.getRoleTableItem() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleTableItemProxyRenderer.instance()).render(proxy.getRoleTableItem()));
         roleItemAccess.setInnerText(proxy.getRoleItemAccess() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessProxyRenderer.instance()).render(proxy.getRoleItemAccess()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.RoleBaseItemProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(RoleBaseItemProxyRenderer.instance().render(proxy));
     }
 }

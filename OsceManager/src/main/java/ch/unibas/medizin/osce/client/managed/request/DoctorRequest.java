@@ -18,9 +18,9 @@ public interface DoctorRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countDoctors();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.DoctorProxy>> findAllDoctors();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.DoctorProxy> findDoctor(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.DoctorProxy>> findAllDoctors();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.DoctorProxy>> findDoctorEntries(int firstResult, int maxResults);
 }

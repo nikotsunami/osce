@@ -11,7 +11,9 @@ privileged aspect Scar_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("AnamnesisForms: ").append(getAnamnesisForms() == null ? "null" : getAnamnesisForms().size()).append(", ");
         sb.append("Bodypart: ").append(getBodypart()).append(", ");
-        sb.append("TraitType: ").append(getTraitType());
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("TraitType: ").append(getTraitType()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

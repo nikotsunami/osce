@@ -9,9 +9,11 @@ privileged aspect RoleTableItemValue_Roo_ToString {
     
     public String RoleTableItemValue.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("RoleTableItem: ").append(getRoleTableItem()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
-        sb.append("Value: ").append(getValue());
+        sb.append("Value: ").append(getValue()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

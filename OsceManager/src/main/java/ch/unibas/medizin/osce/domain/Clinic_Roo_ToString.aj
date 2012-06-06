@@ -11,9 +11,11 @@ privileged aspect Clinic_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("City: ").append(getCity()).append(", ");
         sb.append("Doctors: ").append(getDoctors() == null ? "null" : getDoctors().size()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("PostalCode: ").append(getPostalCode()).append(", ");
-        sb.append("Street: ").append(getStreet());
+        sb.append("Street: ").append(getStreet()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

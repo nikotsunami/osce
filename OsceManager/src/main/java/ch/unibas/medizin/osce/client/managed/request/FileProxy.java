@@ -10,6 +10,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.File")
 public interface FileProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract String getPath();
 
     abstract void setPath(String path);
@@ -25,12 +33,4 @@ public interface FileProxy extends EntityProxy {
     abstract StandardizedRoleProxy getStandardizedRole();
 
     abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

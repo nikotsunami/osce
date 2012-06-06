@@ -18,9 +18,9 @@ public interface SimpleSearchCriteriaRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countSimpleSearchCriterias();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy>> findAllSimpleSearchCriterias();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy> findSimpleSearchCriteria(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy>> findAllSimpleSearchCriterias();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy>> findSimpleSearchCriteriaEntries(int firstResult, int maxResults);
 }

@@ -18,9 +18,9 @@ public interface UsedMaterialRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countUsedMaterials();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy>> findAllUsedMaterials();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy> findUsedMaterial(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy>> findAllUsedMaterials();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy>> findUsedMaterialEntries(int firstResult, int maxResults);
 }

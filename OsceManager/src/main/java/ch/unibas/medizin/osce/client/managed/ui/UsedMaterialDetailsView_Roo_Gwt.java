@@ -13,6 +13,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +23,12 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class UsedMaterialDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<UsedMaterialProxy> {
+
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
 
     @UiField
     SpanElement materialCount;
@@ -38,12 +45,6 @@ public abstract class UsedMaterialDetailsView_Roo_Gwt extends Composite implemen
     @UiField
     SpanElement sort_order;
 
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
     UsedMaterialProxy proxy;
 
     @UiField
@@ -51,13 +52,13 @@ public abstract class UsedMaterialDetailsView_Roo_Gwt extends Composite implemen
 
     public void setValue(UsedMaterialProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         materialCount.setInnerText(proxy.getMaterialCount() == null ? "" : String.valueOf(proxy.getMaterialCount()));
         used_from.setInnerText(proxy.getUsed_from() == null ? "" : String.valueOf(proxy.getUsed_from()));
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
         materialList.setInnerText(proxy.getMaterialList() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer.instance().render(proxy.getMaterialList()));
         sort_order.setInnerText(proxy.getSort_order() == null ? "" : String.valueOf(proxy.getSort_order()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.UsedMaterialProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(UsedMaterialProxyRenderer.instance().render(proxy));
     }
 }

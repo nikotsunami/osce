@@ -10,8 +10,10 @@ privileged aspect RoleParticipant_Roo_ToString {
     public String RoleParticipant.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Doctor: ").append(getDoctor()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
-        sb.append("Type: ").append(getType());
+        sb.append("Type: ").append(getType()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

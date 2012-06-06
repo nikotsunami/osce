@@ -1,5 +1,5 @@
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
     <ui:style type="ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientSetEditor.Style">
         .editorPanelVisible {
           border: thin solid black;

@@ -9,9 +9,11 @@ privileged aspect LangSkill_Roo_ToString {
     
     public String LangSkill.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Skill: ").append(getSkill()).append(", ");
         sb.append("Spokenlanguage: ").append(getSpokenlanguage()).append(", ");
-        sb.append("Standardizedpatient: ").append(getStandardizedpatient());
+        sb.append("Standardizedpatient: ").append(getStandardizedpatient()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

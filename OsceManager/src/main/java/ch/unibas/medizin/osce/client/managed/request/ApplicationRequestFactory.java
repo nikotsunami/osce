@@ -92,11 +92,11 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     ChecklistQuestionRequest checklistQuestionRequest();
 
-    CheckListRequest checkListRequest();
-
     ChecklistOptionRequest checklistOptionRequest();
 
     ChecklistCriteriaRequest checklistCriteriaRequest();
+
+    CheckListRequest checkListRequest();
 
     BankaccountRequest bankaccountRequest();
 

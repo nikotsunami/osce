@@ -9,8 +9,10 @@ privileged aspect Keyword_Roo_ToString {
     
     public String Keyword.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
-        sb.append("StandardizedRoles: ").append(getStandardizedRoles() == null ? "null" : getStandardizedRoles().size());
+        sb.append("StandardizedRoles: ").append(getStandardizedRoles() == null ? "null" : getStandardizedRoles().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

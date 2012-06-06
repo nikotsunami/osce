@@ -10,10 +10,12 @@ privileged aspect Administrator_Roo_ToString {
     public String Administrator.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("PreName: ").append(getPreName()).append(", ");
         sb.append("Semesters: ").append(getSemesters() == null ? "null" : getSemesters().size()).append(", ");
-        sb.append("Tasks: ").append(getTasks() == null ? "null" : getTasks().size());
+        sb.append("Tasks: ").append(getTasks() == null ? "null" : getTasks().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

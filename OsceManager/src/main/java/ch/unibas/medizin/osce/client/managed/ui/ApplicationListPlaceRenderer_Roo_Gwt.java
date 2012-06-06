@@ -280,11 +280,6 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
-            public void handleCheckList(CheckListProxy isNull) {
-                setResult("CheckLists");
-            }
-
-            @Override
             public void handleChecklistOption(ChecklistOptionProxy isNull) {
                 setResult("ChecklistOptions");
             }
@@ -292,6 +287,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleChecklistCriteria(ChecklistCriteriaProxy isNull) {
                 setResult("ChecklistCriterias");
+            }
+
+            @Override
+            public void handleCheckList(CheckListProxy isNull) {
+                setResult("CheckLists");
             }
 
             @Override
