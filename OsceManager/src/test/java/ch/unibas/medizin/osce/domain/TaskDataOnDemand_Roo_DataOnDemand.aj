@@ -3,10 +3,21 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.Administrator;
 import ch.unibas.medizin.osce.domain.AdministratorDataOnDemand;
 import ch.unibas.medizin.osce.domain.Task;
+import java.lang.Boolean;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +25,7 @@ privileged aspect TaskDataOnDemand_Roo_DataOnDemand {
     
     declare @type: TaskDataOnDemand: @Component;
     
-    private Random TaskDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random TaskDataOnDemand.rnd = new SecureRandom();
     
     private List<Task> TaskDataOnDemand.data;
     
@@ -22,41 +33,41 @@ privileged aspect TaskDataOnDemand_Roo_DataOnDemand {
     private AdministratorDataOnDemand TaskDataOnDemand.administratorDataOnDemand;
     
     public Task TaskDataOnDemand.getNewTransientTask(int index) {
-        ch.unibas.medizin.osce.domain.Task obj = new ch.unibas.medizin.osce.domain.Task();
-        setName(obj, index);
+        Task obj = new Task();
+        setAdministrator(obj, index);
         setDeadline(obj, index);
         setIsDone(obj, index);
+        setName(obj, index);
         setOsce(obj, index);
-        setAdministrator(obj, index);
         return obj;
     }
     
-    private void TaskDataOnDemand.setName(Task obj, int index) {
-        java.lang.String name = "name_" + index;
+    public void TaskDataOnDemand.setAdministrator(Task obj, int index) {
+        Administrator administrator = administratorDataOnDemand.getRandomAdministrator();
+        obj.setAdministrator(administrator);
+    }
+    
+    public void TaskDataOnDemand.setDeadline(Task obj, int index) {
+        Date deadline = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setDeadline(deadline);
+    }
+    
+    public void TaskDataOnDemand.setIsDone(Task obj, int index) {
+        Boolean isDone = Boolean.TRUE;
+        obj.setIsDone(isDone);
+    }
+    
+    public void TaskDataOnDemand.setName(Task obj, int index) {
+        String name = "name_" + index;
         if (name.length() > 255) {
             name = name.substring(0, 255);
         }
         obj.setName(name);
     }
     
-    private void TaskDataOnDemand.setDeadline(Task obj, int index) {
-        java.util.Date deadline = new java.util.GregorianCalendar(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR), java.util.Calendar.getInstance().get(java.util.Calendar.MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY), java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE), java.util.Calendar.getInstance().get(java.util.Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setDeadline(deadline);
-    }
-    
-    private void TaskDataOnDemand.setIsDone(Task obj, int index) {
-        java.lang.Boolean isDone = Boolean.TRUE;
-        obj.setIsDone(isDone);
-    }
-    
-    private void TaskDataOnDemand.setOsce(Task obj, int index) {
-        ch.unibas.medizin.osce.domain.Task osce = obj;
+    public void TaskDataOnDemand.setOsce(Task obj, int index) {
+        Task osce = obj;
         obj.setOsce(osce);
-    }
-    
-    private void TaskDataOnDemand.setAdministrator(Task obj, int index) {
-        ch.unibas.medizin.osce.domain.Administrator administrator = administratorDataOnDemand.getRandomAdministrator();
-        obj.setAdministrator(administrator);
     }
     
     public Task TaskDataOnDemand.getSpecificTask(int index) {
@@ -78,16 +89,25 @@ privileged aspect TaskDataOnDemand_Roo_DataOnDemand {
     }
     
     public void TaskDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.Task.findTaskEntries(0, 10);
+        data = Task.findTaskEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Task' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Task>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.Task>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.Task obj = getNewTransientTask(i);
-            obj.persist();
+            Task obj = getNewTransientTask(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

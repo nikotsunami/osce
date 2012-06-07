@@ -83,7 +83,7 @@ privileged aspect OscePostIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.OscePost.findOscePost(id);
         boolean modified =  dod.modifyOscePost(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.OscePost merged = (ch.unibas.medizin.osce.domain.OscePost) obj.merge();
+        ch.unibas.medizin.osce.domain.OscePost merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'OscePost' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

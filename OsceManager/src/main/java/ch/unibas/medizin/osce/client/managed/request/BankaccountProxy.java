@@ -10,6 +10,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Bankaccount")
 public interface BankaccountProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract String getBankName();
 
     abstract void setBankName(String bankName);
@@ -37,12 +45,4 @@ public interface BankaccountProxy extends EntityProxy {
     abstract NationalityProxy getCountry();
 
     abstract void setCountry(NationalityProxy country);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

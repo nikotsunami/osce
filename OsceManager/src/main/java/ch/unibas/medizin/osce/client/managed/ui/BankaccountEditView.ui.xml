@@ -1,9 +1,5 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'
-  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
-  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
 
   <ui:style>
    .errors {
@@ -36,27 +32,78 @@
   </ui:style>
  
   <g:HTMLPanel>
-    <div class='{style.underline}'>    
-      <h3 class='{style.header}' ui:field="editTitle">
+    <div class="{style.underline}">    
+      <h3 class="{style.header}" ui:field="editTitle">
         <ui:msg>Edit Bankaccount</ui:msg>
       </h3>
-      <h3 class='{style.header}' ui:field='createTitle'><ui:msg>New Bankaccount</ui:msg></h3>
+      <h3 class="{style.header}" ui:field="createTitle">
+                <ui:msg>New Bankaccount</ui:msg>
+            </h3>
     </div>
-    <div ui:field='errors' class='{style.errors}'></div>
+    <div class="{style.errors}" ui:field="errors"/>
 
-    <table id='boundElementHolder' class="{style.fields}">
-      <tr id='bankName'><td><div class='{style.label}'>Bank Name:</div></td><td><g:TextBox ui:field='bankName'/></td></tr>
-      <tr id='iBAN'><td><div class='{style.label}'>I B A N:</div></td><td><g:TextBox ui:field='iBAN'/></td></tr>
-      <tr id='bIC'><td><div class='{style.label}'>B I C:</div></td><td><g:TextBox ui:field='bIC'/></td></tr>
-      <tr id='ownerName'><td><div class='{style.label}'>Owner Name:</div></td><td><g:TextBox ui:field='ownerName'/></td></tr>
-      <tr id='postalCode'><td><div class='{style.label}'>Postal Code:</div></td><td><g:IntegerBox ui:field='postalCode'/></td></tr>
-      <tr id='city'><td><div class='{style.label}'>City:</div></td><td><g:TextBox ui:field='city'/></td></tr>
-      <tr id='country'><td><div class='{style.label}'>Country:</div></td><td><g:ValueListBox ui:field='country'/></td></tr>
+    <table class="{style.fields}" id="boundElementHolder">
+      <tr id="bankName">
+                <td>
+                    <div class="{style.label}">Bank Name:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="bankName"/>
+                </td>
+            </tr>
+      <tr id="iBAN">
+                <td>
+                    <div class="{style.label}">I B A N:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="iBAN"/>
+                </td>
+            </tr>
+      <tr id="bIC">
+                <td>
+                    <div class="{style.label}">B I C:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="bIC"/>
+                </td>
+            </tr>
+      <tr id="ownerName">
+                <td>
+                    <div class="{style.label}">Owner Name:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="ownerName"/>
+                </td>
+            </tr>
+      <tr id="postalCode">
+                <td>
+                    <div class="{style.label}">Postal Code:</div>
+                </td>
+                <td>
+                    <g:IntegerBox ui:field="postalCode"/>
+                </td>
+            </tr>
+      <tr id="city">
+                <td>
+                    <div class="{style.label}">City:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="city"/>
+                </td>
+            </tr>
+      <tr id="country">
+                <td>
+                    <div class="{style.label}">Country:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="country"/>
+                </td>
+            </tr>
     </table>
 
-    <div class='{style.bar}'>
-      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
-      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
+    <div class="{style.bar}">
+      <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>
+      <g:Button addStyleNames="{style.button}" ui:field="cancel">Cancel</g:Button>
     </div>
   </g:HTMLPanel>
 </ui:UiBinder>

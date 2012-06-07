@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -28,31 +29,6 @@ public abstract class SpokenLanguageListView_Roo_Gwt extends AbstractProxyListVi
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("languageName");
-        table.addColumn(new TextColumn<SpokenLanguageProxy>() {
-
-            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-                public String render(java.lang.String obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(SpokenLanguageProxy object) {
-                return renderer.render(object.getLanguageName());
-            }
-        }, "Language Name");
-        paths.add("langskills");
-        table.addColumn(new TextColumn<SpokenLanguageProxy>() {
-
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance());
-
-            @Override
-            public String getValue(SpokenLanguageProxy object) {
-                return renderer.render(object.getLangskills());
-            }
-        }, "Langskills");
         paths.add("id");
         table.addColumn(new TextColumn<SpokenLanguageProxy>() {
 
@@ -83,5 +59,30 @@ public abstract class SpokenLanguageListView_Roo_Gwt extends AbstractProxyListVi
                 return renderer.render(object.getVersion());
             }
         }, "Version");
+        paths.add("languageName");
+        table.addColumn(new TextColumn<SpokenLanguageProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(SpokenLanguageProxy object) {
+                return renderer.render(object.getLanguageName());
+            }
+        }, "Language Name");
+        paths.add("langskills");
+        table.addColumn(new TextColumn<SpokenLanguageProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance());
+
+            @Override
+            public String getValue(SpokenLanguageProxy object) {
+                return renderer.render(object.getLangskills());
+            }
+        }, "Langskills");
     }
 }

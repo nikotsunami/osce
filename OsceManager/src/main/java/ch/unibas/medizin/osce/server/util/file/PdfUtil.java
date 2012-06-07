@@ -40,8 +40,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.RadioCheckField;
 import com.itextpdf.text.pdf.TextField;
-import com.teklabs.gwt.i18n.client.LocaleFactory;
-import com.teklabs.gwt.i18n.server.LocaleProxy;
+import com.mattbertolini.hermes.Hermes;
 
 public class PdfUtil {
 	private static final float titleTableSpacing = 0.0f;
@@ -70,10 +69,13 @@ public class PdfUtil {
 	}
 
 	public PdfUtil(Locale locale) {
-		LocaleProxy.initialize();
-		LocaleProxy.setLocale(locale);
-		constants = LocaleFactory.get(OsceConstants.class);
-		enumConstants = LocaleFactory.get(OsceConstantsWithLookup.class);
+		try {
+			constants = Hermes.get(OsceConstants.class, locale.toString());
+			enumConstants = Hermes.get(OsceConstantsWithLookup.class, locale.toString());
+		} catch (IOException e) {
+			Log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
+		}
+		
 	}
 
 	public void writeFile(String fileName,

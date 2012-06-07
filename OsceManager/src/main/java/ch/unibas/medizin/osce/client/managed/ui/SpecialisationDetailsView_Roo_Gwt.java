@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -50,6 +51,6 @@ public abstract class SpecialisationDetailsView_Roo_Gwt extends Composite implem
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         roleTopics.setInnerText(proxy.getRoleTopics() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance()).render(proxy.getRoleTopics()));
         doctors.setInnerText(proxy.getDoctors() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance()).render(proxy.getDoctors()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(SpecialisationProxyRenderer.instance().render(proxy));
     }
 }

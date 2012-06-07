@@ -3,11 +3,20 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisCheckDataOnDemand;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
+import ch.unibas.medizin.osce.domain.AnamnesisForm;
 import ch.unibas.medizin.osce.domain.AnamnesisFormDataOnDemand;
+import java.lang.Boolean;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,55 +24,55 @@ privileged aspect AnamnesisChecksValueDataOnDemand_Roo_DataOnDemand {
     
     declare @type: AnamnesisChecksValueDataOnDemand: @Component;
     
-    private Random AnamnesisChecksValueDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random AnamnesisChecksValueDataOnDemand.rnd = new SecureRandom();
     
     private List<AnamnesisChecksValue> AnamnesisChecksValueDataOnDemand.data;
     
     @Autowired
-    private AnamnesisFormDataOnDemand AnamnesisChecksValueDataOnDemand.anamnesisFormDataOnDemand;
-    
-    @Autowired
     private AnamnesisCheckDataOnDemand AnamnesisChecksValueDataOnDemand.anamnesisCheckDataOnDemand;
     
+    @Autowired
+    private AnamnesisFormDataOnDemand AnamnesisChecksValueDataOnDemand.anamnesisFormDataOnDemand;
+    
     public AnamnesisChecksValue AnamnesisChecksValueDataOnDemand.getNewTransientAnamnesisChecksValue(int index) {
-        ch.unibas.medizin.osce.domain.AnamnesisChecksValue obj = new ch.unibas.medizin.osce.domain.AnamnesisChecksValue();
-        setTruth(obj, index);
-        setComment(obj, index);
+        AnamnesisChecksValue obj = new AnamnesisChecksValue();
         setAnamnesisChecksValue(obj, index);
-        setAnamnesisform(obj, index);
         setAnamnesischeck(obj, index);
+        setAnamnesisform(obj, index);
+        setComment(obj, index);
+        setTruth(obj, index);
         return obj;
     }
     
-    private void AnamnesisChecksValueDataOnDemand.setTruth(AnamnesisChecksValue obj, int index) {
-        java.lang.Boolean truth = Boolean.TRUE;
-        obj.setTruth(truth);
-    }
-    
-    private void AnamnesisChecksValueDataOnDemand.setComment(AnamnesisChecksValue obj, int index) {
-        java.lang.String comment = "comment_" + index;
-        if (comment.length() > 255) {
-            comment = comment.substring(0, 255);
-        }
-        obj.setComment(comment);
-    }
-    
-    private void AnamnesisChecksValueDataOnDemand.setAnamnesisChecksValue(AnamnesisChecksValue obj, int index) {
-        java.lang.String anamnesisChecksValue = "anamnesisChecksValue_" + index;
+    public void AnamnesisChecksValueDataOnDemand.setAnamnesisChecksValue(AnamnesisChecksValue obj, int index) {
+        String anamnesisChecksValue = "anamnesisChecksValue_" + index;
         if (anamnesisChecksValue.length() > 255) {
             anamnesisChecksValue = anamnesisChecksValue.substring(0, 255);
         }
         obj.setAnamnesisChecksValue(anamnesisChecksValue);
     }
     
-    private void AnamnesisChecksValueDataOnDemand.setAnamnesisform(AnamnesisChecksValue obj, int index) {
-        ch.unibas.medizin.osce.domain.AnamnesisForm anamnesisform = anamnesisFormDataOnDemand.getRandomAnamnesisForm();
+    public void AnamnesisChecksValueDataOnDemand.setAnamnesischeck(AnamnesisChecksValue obj, int index) {
+        AnamnesisCheck anamnesischeck = anamnesisCheckDataOnDemand.getRandomAnamnesisCheck();
+        obj.setAnamnesischeck(anamnesischeck);
+    }
+    
+    public void AnamnesisChecksValueDataOnDemand.setAnamnesisform(AnamnesisChecksValue obj, int index) {
+        AnamnesisForm anamnesisform = anamnesisFormDataOnDemand.getRandomAnamnesisForm();
         obj.setAnamnesisform(anamnesisform);
     }
     
-    private void AnamnesisChecksValueDataOnDemand.setAnamnesischeck(AnamnesisChecksValue obj, int index) {
-        ch.unibas.medizin.osce.domain.AnamnesisCheck anamnesischeck = anamnesisCheckDataOnDemand.getRandomAnamnesisCheck();
-        obj.setAnamnesischeck(anamnesischeck);
+    public void AnamnesisChecksValueDataOnDemand.setComment(AnamnesisChecksValue obj, int index) {
+        String comment = "comment_" + index;
+        if (comment.length() > 255) {
+            comment = comment.substring(0, 255);
+        }
+        obj.setComment(comment);
+    }
+    
+    public void AnamnesisChecksValueDataOnDemand.setTruth(AnamnesisChecksValue obj, int index) {
+        Boolean truth = Boolean.TRUE;
+        obj.setTruth(truth);
     }
     
     public AnamnesisChecksValue AnamnesisChecksValueDataOnDemand.getSpecificAnamnesisChecksValue(int index) {
@@ -85,16 +94,25 @@ privileged aspect AnamnesisChecksValueDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AnamnesisChecksValueDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.AnamnesisChecksValue.findAnamnesisChecksValueEntries(0, 10);
+        data = AnamnesisChecksValue.findAnamnesisChecksValueEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'AnamnesisChecksValue' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.AnamnesisChecksValue>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.AnamnesisChecksValue>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.AnamnesisChecksValue obj = getNewTransientAnamnesisChecksValue(i);
-            obj.persist();
+            AnamnesisChecksValue obj = getNewTransientAnamnesisChecksValue(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

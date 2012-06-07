@@ -12,6 +12,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Semester")
 public interface SemesterProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract Semesters getSemester();
 
     abstract void setSemester(Semesters semester);
@@ -31,12 +39,4 @@ public interface SemesterProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy> getPatientsInSemester();
 
     abstract void setPatientsInSemester(Set<PatientInSemesterProxy> patientsInSemester);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

@@ -10,6 +10,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.EliminationCriterion")
 public interface EliminationCriterionProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract Boolean getAnamnesisCheckValue();
 
     abstract void setAnamnesisCheckValue(Boolean anamnesisCheckValue);
@@ -25,12 +33,4 @@ public interface EliminationCriterionProxy extends EntityProxy {
     abstract AnamnesisCheckProxy getAnamnesisCheck();
 
     abstract void setAnamnesisCheck(AnamnesisCheckProxy anamnesisCheck);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

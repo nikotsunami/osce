@@ -83,7 +83,7 @@ privileged aspect LangSkillIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.LangSkill.findLangSkill(id);
         boolean modified =  dod.modifyLangSkill(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.LangSkill merged = (ch.unibas.medizin.osce.domain.LangSkill) obj.merge();
+        ch.unibas.medizin.osce.domain.LangSkill merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'LangSkill' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

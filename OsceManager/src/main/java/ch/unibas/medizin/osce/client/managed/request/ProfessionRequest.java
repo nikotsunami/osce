@@ -18,9 +18,9 @@ public interface ProfessionRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countProfessions();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>> findAllProfessions();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy> findProfession(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>> findAllProfessions();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>> findProfessionEntries(int firstResult, int maxResults);
 }

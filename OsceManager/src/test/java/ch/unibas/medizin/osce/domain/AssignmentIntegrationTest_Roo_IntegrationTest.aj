@@ -83,7 +83,7 @@ privileged aspect AssignmentIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.Assignment.findAssignment(id);
         boolean modified =  dod.modifyAssignment(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.Assignment merged = (ch.unibas.medizin.osce.domain.Assignment) obj.merge();
+        ch.unibas.medizin.osce.domain.Assignment merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'Assignment' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

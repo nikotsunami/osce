@@ -18,9 +18,9 @@ public interface CourseRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countCourses();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.CourseProxy>> findAllCourses();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.CourseProxy> findCourse(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.CourseProxy>> findAllCourses();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.CourseProxy>> findCourseEntries(int firstResult, int maxResults);
 }

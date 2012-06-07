@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -29,36 +30,6 @@ public abstract class AnamnesisFormListView_Roo_Gwt extends AbstractProxyListVie
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("createDate");
-        table.addColumn(new TextColumn<AnamnesisFormProxy>() {
-
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
-
-            @Override
-            public String getValue(AnamnesisFormProxy object) {
-                return renderer.render(object.getCreateDate());
-            }
-        }, "Create Date");
-        paths.add("anamnesischecksvalues");
-        table.addColumn(new TextColumn<AnamnesisFormProxy>() {
-
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance());
-
-            @Override
-            public String getValue(AnamnesisFormProxy object) {
-                return renderer.render(object.getAnamnesischecksvalues());
-            }
-        }, "Anamnesischecksvalues");
-        paths.add("scars");
-        table.addColumn(new TextColumn<AnamnesisFormProxy>() {
-
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance());
-
-            @Override
-            public String getValue(AnamnesisFormProxy object) {
-                return renderer.render(object.getScars());
-            }
-        }, "Scars");
         paths.add("id");
         table.addColumn(new TextColumn<AnamnesisFormProxy>() {
 
@@ -89,5 +60,35 @@ public abstract class AnamnesisFormListView_Roo_Gwt extends AbstractProxyListVie
                 return renderer.render(object.getVersion());
             }
         }, "Version");
+        paths.add("createDate");
+        table.addColumn(new TextColumn<AnamnesisFormProxy>() {
+
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
+
+            @Override
+            public String getValue(AnamnesisFormProxy object) {
+                return renderer.render(object.getCreateDate());
+            }
+        }, "Create Date");
+        paths.add("anamnesischecksvalues");
+        table.addColumn(new TextColumn<AnamnesisFormProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance());
+
+            @Override
+            public String getValue(AnamnesisFormProxy object) {
+                return renderer.render(object.getAnamnesischecksvalues());
+            }
+        }, "Anamnesischecksvalues");
+        paths.add("scars");
+        table.addColumn(new TextColumn<AnamnesisFormProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance());
+
+            @Override
+            public String getValue(AnamnesisFormProxy object) {
+                return renderer.render(object.getScars());
+            }
+        }, "Scars");
     }
 }

@@ -11,6 +11,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Office")
 public interface OfficeProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract Gender getGender();
 
     abstract void setGender(Gender gender);
@@ -34,12 +42,4 @@ public interface OfficeProxy extends EntityProxy {
     abstract String getTelephone();
 
     abstract void setTelephone(String telephone);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

@@ -1,6 +1,5 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
  <ui:style>
     .outer {
       padding: 10px;
@@ -13,17 +12,44 @@
     }
   </ui:style>
 
-  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
-    <div id='bankName'><div class='{style.label}'>Bank Name</div><div class='{style.value}' ui:field='bankName'></div></div>
-    <div id='iBAN'><div class='{style.label}'>I B A N</div><div class='{style.value}' ui:field='iBAN'></div></div>
-    <div id='bIC'><div class='{style.label}'>B I C</div><div class='{style.value}' ui:field='bIC'></div></div>
-    <div id='ownerName'><div class='{style.label}'>Owner Name</div><div class='{style.value}' ui:field='ownerName'></div></div>
-    <div id='postalCode'><div class='{style.label}'>Postal Code</div><div class='{style.value}' ui:field='postalCode'></div></div>
-    <div id='city'><div class='{style.label}'>City</div><div class='{style.value}' ui:field='city'></div></div>
-    <div id='country'><div class='{style.label}'>Country</div><div class='{style.value}' ui:field='country'></div></div>
-    <div id='id'><div class='{style.label}'>Id</div><div class='{style.value}' ui:field='id'></div></div>
-    <div id='version'><div class='{style.label}'>Version</div><div class='{style.value}' ui:field='version'></div></div>
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="bankName">
+            <div class="{style.label}">Bank Name</div>
+            <div class="{style.value}" ui:field="bankName"/>
+        </div>
+    <div id="iBAN">
+            <div class="{style.label}">I B A N</div>
+            <div class="{style.value}" ui:field="iBAN"/>
+        </div>
+    <div id="bIC">
+            <div class="{style.label}">B I C</div>
+            <div class="{style.value}" ui:field="bIC"/>
+        </div>
+    <div id="ownerName">
+            <div class="{style.label}">Owner Name</div>
+            <div class="{style.value}" ui:field="ownerName"/>
+        </div>
+    <div id="postalCode">
+            <div class="{style.label}">Postal Code</div>
+            <div class="{style.value}" ui:field="postalCode"/>
+        </div>
+    <div id="city">
+            <div class="{style.label}">City</div>
+            <div class="{style.value}" ui:field="city"/>
+        </div>
+    <div id="country">
+            <div class="{style.label}">Country</div>
+            <div class="{style.value}" ui:field="country"/>
+        </div>
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
 
-    <g:Button ui:field='delete'>Delete</g:Button>
+    <g:Button ui:field="delete">Delete</g:Button>
   </g:HTMLPanel>
 </ui:UiBinder>

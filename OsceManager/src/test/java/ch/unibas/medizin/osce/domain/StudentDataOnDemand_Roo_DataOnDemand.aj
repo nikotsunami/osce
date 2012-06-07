@@ -4,54 +4,61 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Student;
+import ch.unibas.medizin.osce.shared.Gender;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect StudentDataOnDemand_Roo_DataOnDemand {
     
     declare @type: StudentDataOnDemand: @Component;
     
-    private Random StudentDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random StudentDataOnDemand.rnd = new SecureRandom();
     
     private List<Student> StudentDataOnDemand.data;
     
     public Student StudentDataOnDemand.getNewTransientStudent(int index) {
-        ch.unibas.medizin.osce.domain.Student obj = new ch.unibas.medizin.osce.domain.Student();
+        Student obj = new Student();
+        setEmail(obj, index);
         setGender(obj, index);
         setName(obj, index);
         setPreName(obj, index);
-        setEmail(obj, index);
         return obj;
     }
     
-    private void StudentDataOnDemand.setGender(Student obj, int index) {
-        ch.unibas.medizin.osce.shared.Gender gender = ch.unibas.medizin.osce.shared.Gender.class.getEnumConstants()[0];
+    public void StudentDataOnDemand.setEmail(Student obj, int index) {
+        String email = "email_" + index;
+        if (email.length() > 40) {
+            email = email.substring(0, 40);
+        }
+        obj.setEmail(email);
+    }
+    
+    public void StudentDataOnDemand.setGender(Student obj, int index) {
+        Gender gender = Gender.class.getEnumConstants()[0];
         obj.setGender(gender);
     }
     
-    private void StudentDataOnDemand.setName(Student obj, int index) {
-        java.lang.String name = "name_" + index;
+    public void StudentDataOnDemand.setName(Student obj, int index) {
+        String name = "name_" + index;
         if (name.length() > 40) {
             name = name.substring(0, 40);
         }
         obj.setName(name);
     }
     
-    private void StudentDataOnDemand.setPreName(Student obj, int index) {
-        java.lang.String preName = "preName_" + index;
+    public void StudentDataOnDemand.setPreName(Student obj, int index) {
+        String preName = "preName_" + index;
         if (preName.length() > 40) {
             preName = preName.substring(0, 40);
         }
         obj.setPreName(preName);
-    }
-    
-    private void StudentDataOnDemand.setEmail(Student obj, int index) {
-        java.lang.String email = "email_" + index;
-        if (email.length() > 40) {
-            email = email.substring(0, 40);
-        }
-        obj.setEmail(email);
     }
     
     public Student StudentDataOnDemand.getSpecificStudent(int index) {
@@ -73,16 +80,25 @@ privileged aspect StudentDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StudentDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.Student.findStudentEntries(0, 10);
+        data = Student.findStudentEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Student' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Student>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.Student>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.Student obj = getNewTransientStudent(i);
-            obj.persist();
+            Student obj = getNewTransientStudent(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

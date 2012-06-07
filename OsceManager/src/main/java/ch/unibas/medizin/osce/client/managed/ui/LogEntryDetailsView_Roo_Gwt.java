@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -48,9 +49,9 @@ public abstract class LogEntryDetailsView_Roo_Gwt extends Composite implements P
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         shibId.setInnerText(proxy.getShibId() == null ? "" : String.valueOf(proxy.getShibId()));
-        logtime.setInnerText(proxy.getLogtime() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getLogtime()));
+        logtime.setInnerText(proxy.getLogtime() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getLogtime()));
         oldValue.setInnerText(proxy.getOldValue() == null ? "" : String.valueOf(proxy.getOldValue()));
         newValue.setInnerText(proxy.getNewValue() == null ? "" : String.valueOf(proxy.getNewValue()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.LogEntryProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(LogEntryProxyRenderer.instance().render(proxy));
     }
 }

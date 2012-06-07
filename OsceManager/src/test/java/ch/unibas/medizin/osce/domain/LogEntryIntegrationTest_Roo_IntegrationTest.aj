@@ -83,7 +83,7 @@ privileged aspect LogEntryIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.LogEntry.findLogEntry(id);
         boolean modified =  dod.modifyLogEntry(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.LogEntry merged = (ch.unibas.medizin.osce.domain.LogEntry) obj.merge();
+        ch.unibas.medizin.osce.domain.LogEntry merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'LogEntry' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

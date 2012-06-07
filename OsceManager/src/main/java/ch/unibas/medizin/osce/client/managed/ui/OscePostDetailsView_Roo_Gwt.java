@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +23,12 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.Set;
 
 public abstract class OscePostDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<OscePostProxy> {
+
+    @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
 
     @UiField
     SpanElement isPossibleStart;
@@ -35,12 +42,6 @@ public abstract class OscePostDetailsView_Roo_Gwt extends Composite implements P
     @UiField
     SpanElement oscePostRooms;
 
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
     OscePostProxy proxy;
 
     @UiField
@@ -48,12 +49,12 @@ public abstract class OscePostDetailsView_Roo_Gwt extends Composite implements P
 
     public void setValue(OscePostProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         isPossibleStart.setInnerText(proxy.getIsPossibleStart() == null ? "" : String.valueOf(proxy.getIsPossibleStart()));
         roleTopic.setInnerText(proxy.getRoleTopic() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().render(proxy.getRoleTopic()));
         nextPost.setInnerText(proxy.getNextPost() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance().render(proxy.getNextPost()));
         oscePostRooms.setInnerText(proxy.getOscePostRooms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance()).render(proxy.getOscePostRooms()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(OscePostProxyRenderer.instance().render(proxy));
     }
 }

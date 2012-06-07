@@ -83,7 +83,7 @@ privileged aspect EliminationCriterionIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.EliminationCriterion.findEliminationCriterion(id);
         boolean modified =  dod.modifyEliminationCriterion(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.EliminationCriterion merged = (ch.unibas.medizin.osce.domain.EliminationCriterion) obj.merge();
+        ch.unibas.medizin.osce.domain.EliminationCriterion merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'EliminationCriterion' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

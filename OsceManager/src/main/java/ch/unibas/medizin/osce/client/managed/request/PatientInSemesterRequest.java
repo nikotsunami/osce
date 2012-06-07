@@ -18,9 +18,9 @@ public interface PatientInSemesterRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countPatientInSemesters();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy>> findAllPatientInSemesters();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy> findPatientInSemester(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy>> findAllPatientInSemesters();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy>> findPatientInSemesterEntries(int firstResult, int maxResults);
 }

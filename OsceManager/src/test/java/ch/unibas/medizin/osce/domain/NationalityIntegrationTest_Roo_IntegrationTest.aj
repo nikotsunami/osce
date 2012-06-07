@@ -83,7 +83,7 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.Nationality.findNationality(id);
         boolean modified =  dod.modifyNationality(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.Nationality merged = (ch.unibas.medizin.osce.domain.Nationality) obj.merge();
+        ch.unibas.medizin.osce.domain.Nationality merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'Nationality' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

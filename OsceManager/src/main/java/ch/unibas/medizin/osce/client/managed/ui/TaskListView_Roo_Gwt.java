@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -28,6 +29,36 @@ public abstract class TaskListView_Roo_Gwt extends AbstractProxyListView<TaskPro
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
+        paths.add("id");
+        table.addColumn(new TextColumn<TaskProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(TaskProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<TaskProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(TaskProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
         paths.add("name");
         table.addColumn(new TextColumn<TaskProxy>() {
 
@@ -46,7 +77,7 @@ public abstract class TaskListView_Roo_Gwt extends AbstractProxyListView<TaskPro
         paths.add("deadline");
         table.addColumn(new TextColumn<TaskProxy>() {
 
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
 
             @Override
             public String getValue(TaskProxy object) {
@@ -88,35 +119,5 @@ public abstract class TaskListView_Roo_Gwt extends AbstractProxyListView<TaskPro
                 return renderer.render(object.getAdministrator());
             }
         }, "Administrator");
-        paths.add("id");
-        table.addColumn(new TextColumn<TaskProxy>() {
-
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(TaskProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<TaskProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(TaskProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
     }
 }

@@ -18,9 +18,9 @@ public interface SemesterRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countSemesters();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SemesterProxy>> findAllSemesters();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.SemesterProxy> findSemester(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SemesterProxy>> findAllSemesters();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SemesterProxy>> findSemesterEntries(int firstResult, int maxResults);
 }

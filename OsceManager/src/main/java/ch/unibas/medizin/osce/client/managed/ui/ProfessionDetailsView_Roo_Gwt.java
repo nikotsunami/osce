@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -45,6 +46,6 @@ public abstract class ProfessionDetailsView_Roo_Gwt extends Composite implements
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         profession.setInnerText(proxy.getProfession() == null ? "" : String.valueOf(proxy.getProfession()));
         standardizedpatients.setInnerText(proxy.getStandardizedpatients() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance()).render(proxy.getStandardizedpatients()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(ProfessionProxyRenderer.instance().render(proxy));
     }
 }

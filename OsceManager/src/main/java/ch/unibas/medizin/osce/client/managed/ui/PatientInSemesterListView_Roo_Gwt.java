@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -29,26 +30,6 @@ public abstract class PatientInSemesterListView_Roo_Gwt extends AbstractProxyLis
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
-        paths.add("semester");
-        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
-
-            Renderer<ch.unibas.medizin.osce.client.managed.request.SemesterProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance();
-
-            @Override
-            public String getValue(PatientInSemesterProxy object) {
-                return renderer.render(object.getSemester());
-            }
-        }, "Semester");
-        paths.add("standardizedPatient");
-        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
-
-            Renderer<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance();
-
-            @Override
-            public String getValue(PatientInSemesterProxy object) {
-                return renderer.render(object.getStandardizedPatient());
-            }
-        }, "Standardized Patient");
         paths.add("id");
         table.addColumn(new TextColumn<PatientInSemesterProxy>() {
 
@@ -79,5 +60,25 @@ public abstract class PatientInSemesterListView_Roo_Gwt extends AbstractProxyLis
                 return renderer.render(object.getVersion());
             }
         }, "Version");
+        paths.add("semester");
+        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.SemesterProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance();
+
+            @Override
+            public String getValue(PatientInSemesterProxy object) {
+                return renderer.render(object.getSemester());
+            }
+        }, "Semester");
+        paths.add("standardizedPatient");
+        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance();
+
+            @Override
+            public String getValue(PatientInSemesterProxy object) {
+                return renderer.render(object.getStandardizedPatient());
+            }
+        }, "Standardized Patient");
     }
 }

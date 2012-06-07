@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,6 +22,12 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class EliminationCriterionMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<EliminationCriterionProxy> {
+
+    @UiField
+    Element id;
+
+    @UiField
+    Element version;
 
     @UiField
     Element anamnesisCheckValue;
@@ -34,21 +41,15 @@ public abstract class EliminationCriterionMobileDetailsView_Roo_Gwt extends Comp
     @UiField
     Element anamnesisCheck;
 
-    @UiField
-    Element id;
-
-    @UiField
-    Element version;
-
     EliminationCriterionProxy proxy;
 
     public void setValue(EliminationCriterionProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         anamnesisCheckValue.setInnerText(proxy.getAnamnesisCheckValue() == null ? "" : String.valueOf(proxy.getAnamnesisCheckValue()));
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
         scar.setInnerText(proxy.getScar() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance().render(proxy.getScar()));
         anamnesisCheck.setInnerText(proxy.getAnamnesisCheck() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy.getAnamnesisCheck()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
     }
 }

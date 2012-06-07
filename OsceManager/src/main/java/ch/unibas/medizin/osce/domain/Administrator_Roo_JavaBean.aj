@@ -42,11 +42,11 @@ privileged aspect Administrator_Roo_JavaBean {
         this.semesters = semesters;
     }
     
-    public java.util.Set<Task> Administrator.getTasks() {
+    public Set<Task> Administrator.getTasks() {
         return this.tasks;
     }
     
-    public void Administrator.setTasks(java.util.Set<Task> tasks) {
+    public void Administrator.setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
     

@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -23,6 +24,12 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class StudentOscesDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<StudentOscesProxy> {
 
     @UiField
+    SpanElement id;
+
+    @UiField
+    SpanElement version;
+
+    @UiField
     SpanElement isEnrolled;
 
     @UiField
@@ -31,12 +38,6 @@ public abstract class StudentOscesDetailsView_Roo_Gwt extends Composite implemen
     @UiField
     SpanElement student;
 
-    @UiField
-    SpanElement id;
-
-    @UiField
-    SpanElement version;
-
     StudentOscesProxy proxy;
 
     @UiField
@@ -44,11 +45,11 @@ public abstract class StudentOscesDetailsView_Roo_Gwt extends Composite implemen
 
     public void setValue(StudentOscesProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         isEnrolled.setInnerText(proxy.getIsEnrolled() == null ? "" : String.valueOf(proxy.getIsEnrolled()));
         osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getOsce()));
         student.setInnerText(proxy.getStudent() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StudentProxyRenderer.instance().render(proxy.getStudent()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(StudentOscesProxyRenderer.instance().render(proxy));
     }
 }

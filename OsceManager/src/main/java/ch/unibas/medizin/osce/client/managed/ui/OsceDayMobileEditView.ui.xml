@@ -1,9 +1,5 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'
-  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
-  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
   <ui:style>
     .outer {
       padding: 10px;
@@ -20,14 +16,34 @@
     }
   </ui:style>
  
-  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
-    <div ui:field='errors' class='{style.error}'></div>
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
     
-    <div id='timeStart'><div class='{style.label}'>Time Start</div><div class='{style.value}'><d:DateBox ui:field='timeStart'/></div></div>
-    <div id='timeEnd'><div class='{style.label}'>Time End</div><div class='{style.value}'><d:DateBox ui:field='timeEnd'/></div></div>
-    <div id='osce'><div class='{style.label}'>Osce</div><div class='{style.value}'><g:ValueListBox ui:field='osce'/></div></div>
-    <div id='assignments'><div class='{style.label}'>Assignments</div><div class='{style.value}'><a:AssignmentSetEditor ui:field='assignments'/></div></div>
+    <div id="timeStart">
+            <div class="{style.label}">Time Start</div>
+            <div class="{style.value}">
+                <d:DateBox ui:field="timeStart"/>
+            </div>
+        </div>
+    <div id="timeEnd">
+            <div class="{style.label}">Time End</div>
+            <div class="{style.value}">
+                <d:DateBox ui:field="timeEnd"/>
+            </div>
+        </div>
+    <div id="osce">
+            <div class="{style.label}">Osce</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="osce"/>
+            </div>
+        </div>
+    <div id="assignments">
+            <div class="{style.label}">Assignments</div>
+            <div class="{style.value}">
+                <a:AssignmentSetEditor ui:field="assignments"/>
+            </div>
+        </div>
 
-    <g:Button ui:field='save'>Save</g:Button>
+    <g:Button ui:field="save">Save</g:Button>
   </g:HTMLPanel>
 </ui:UiBinder>

@@ -83,7 +83,7 @@ privileged aspect CourseIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.Course.findCourse(id);
         boolean modified =  dod.modifyCourse(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.Course merged = (ch.unibas.medizin.osce.domain.Course) obj.merge();
+        ch.unibas.medizin.osce.domain.Course merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'Course' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
