@@ -47,6 +47,7 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	ChecklistTopicRequestNonRoo checklistTopicRequestNonRoo();
 	ChecklistQuestionRequestNonRoo checklistQuestionRequestNonRoo();
 	RoleTableItemValueRequestNonRoo roleTableItemValueRequestNonRoo();
+	OsceRequestNonRoo osceRequestNonRoo();
 	
 		
 }

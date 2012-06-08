@@ -18,9 +18,9 @@ public interface TaskRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countTasks();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.TaskProxy>> findAllTasks();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.TaskProxy> findTask(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.TaskProxy>> findAllTasks();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.TaskProxy>> findTaskEntries(int firstResult, int maxResults);
 }

@@ -20,7 +20,9 @@ public interface OsceConstants extends Constants {
 	public String addNationality();
 
 	public String addOsce();
-
+	
+	public String editOsce();
+	
 	public String addPatient();
 
 	public String addProfession();
@@ -39,7 +41,9 @@ public interface OsceConstants extends Constants {
 
 	public String all();
 
-    public String anamnesisValues();
+	public String anamnesisForm();
+
+	public String anamnesisValues();
 
 	public String answer();
 
@@ -444,7 +448,9 @@ public interface OsceConstants extends Constants {
     
     public String checkList();
     //Assignment E]
+    public String osceBreak();
     
-
+    
+   
 	
 }

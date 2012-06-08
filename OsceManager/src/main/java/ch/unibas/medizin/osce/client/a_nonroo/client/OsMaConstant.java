@@ -20,5 +20,15 @@ public class OsMaConstant {
 	public static String FILENAME = "StandardizedPatientList.csv";
 	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
 	public static String BLANK_FIELD_MESSAGE = "Please enter details for";
+	
+	// For Osce Status of Tabpanel
+	
+		public static String NEW_STATUS="Osce_New_Status";
+		public static String BluePrint_Status="Osce_BluePrint_Status";
+		public static String Genrated_Status="Osce_Genrated_Status";
+		public static String Fixed_Status="Osce_Fixed_Status";
+		public static String Closed_Status="Osce_Closed_Status";
+		
+		//By Spec]End
 	//By Spec]End
 }

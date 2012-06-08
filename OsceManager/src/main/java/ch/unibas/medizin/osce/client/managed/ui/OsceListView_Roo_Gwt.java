@@ -9,9 +9,11 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -33,6 +35,36 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
+        paths.add("id");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
         paths.add("studyYear");
         table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -63,6 +95,81 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getMaxNumberStudents());
             }
         }, "Max Number Students");
+        paths.add("name");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getName());
+            }
+        }, "Name");
+        paths.add("shortBreak");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Short> renderer = new AbstractRenderer<java.lang.Short>() {
+
+                public String render(java.lang.Short obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getShortBreak());
+            }
+        }, "Short Break");
+        paths.add("longBreak");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Short> renderer = new AbstractRenderer<java.lang.Short>() {
+
+                public String render(java.lang.Short obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getLongBreak());
+            }
+        }, "Long Break");
+        paths.add("lunchBreak");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Short> renderer = new AbstractRenderer<java.lang.Short>() {
+
+                public String render(java.lang.Short obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getLunchBreak());
+            }
+        }, "Lunch Break");
+        paths.add("middleBreak");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Short> renderer = new AbstractRenderer<java.lang.Short>() {
+
+                public String render(java.lang.Short obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getMiddleBreak());
+            }
+        }, "Middle Break");
         paths.add("numberPosts");
         table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -153,6 +260,21 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getIsValid());
             }
         }, "Is Valid");
+        paths.add("osceStatus");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.shared.OsceStatus> renderer = new AbstractRenderer<ch.unibas.medizin.osce.shared.OsceStatus>() {
+
+                public String render(ch.unibas.medizin.osce.shared.OsceStatus obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getOsceStatus());
+            }
+        }, "Osce Status");
         paths.add("semester");
         table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -203,35 +325,15 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getOsceStudents());
             }
         }, "Osce Students");
-        paths.add("id");
+        paths.add("copiedOsce");
         table.addColumn(new TextColumn<OsceProxy>() {
 
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
+            Renderer<ch.unibas.medizin.osce.client.managed.request.OsceProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance();
 
             @Override
             public String getValue(OsceProxy object) {
-                return renderer.render(object.getId());
+                return renderer.render(object.getCopiedOsce());
             }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<OsceProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(OsceProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
+        }, "Copied Osce");
     }
 }

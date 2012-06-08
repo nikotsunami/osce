@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;

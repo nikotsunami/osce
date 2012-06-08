@@ -1,0 +1,190 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+ xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="../../styles.css">
+	.description {	}
+	
+	.padleft5
+	{
+		padding-left: 5px;
+	}
+	
+	.fields {
+      margin-top: 0.5em;
+      margin-left: 1em;
+    }
+    .label {
+      min-height: 25px;
+      font-weight: bold;
+    }
+    .button {
+      margin-right: 1em;
+    }
+    .bar {
+      margin-left: 1em;
+    }
+    .header {
+      margin-left: 1em;
+      color: #4B4A4A;
+      text-shadow: #ddf 1px 1px 0;
+      margin-bottom: 0;
+    }
+   
+	</ui:style>
+	<g:HTMLPanel>
+	
+	<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
+				<g:Image ui:field="arrow" styleName="{style.padleft5}"
+					url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+				<g:Label addStyleNames="{style.label}" ui:field="labelLongNameHeader"></g:Label>
+				<g:HTMLPanel>
+					<div class="{style.controlsright}">
+						<h3 class="{style.header}" style="display:inline">
+							<span ui:field="displayRenderer"></span>
+						</h3>
+						
+						<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
+						<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+						
+					</div>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			
+			
+		 <g:DisclosurePanel animationEnabled="true" open="true"
+				ui:field="osceDisclosurePanel" width="100%" >
+			<g:TabPanel ui:field="osceDetailPanel" addStyleNames="gwt-InvertedTabPanel" width="100%">
+	
+			<g:Tab>
+			<g:TabHTML></g:TabHTML>
+			<g:HorizontalPanel >
+			<g:HTMLPanel addStyleNames="{style.patientDetails}">
+		<table  class="{style.fields}" >
+			<tr id="name">
+				<td>
+					<span class="{style.label}">Name:</span>
+				</td>
+				<td>
+					<span ui:field="name" />
+				</td>
+			</tr>
+			<tr id="version">
+				<td>
+					<span class="{style.label}">Version:</span>
+				</td>
+				<td>
+					<span ui:field="version" />
+				</td>
+			</tr>
+			<tr id="maxStud">
+				<td>
+					<span class="{style.label}">max. Studenten:</span>
+				</td>
+				<td>
+					<span ui:field="maxStud" />
+				</td>
+			</tr>
+			<tr id="maxNumberStudents">
+				<td>
+					<span class="{style.label}">max. Parcours:</span>
+				</td>
+				<td>
+					<span ui:field="maxNumberStudents" />
+				</td>
+			</tr>
+			<tr id="numberCourses">
+				<td>
+					<span class="{style.label}">Postenlänge:</span>
+				</td>
+				<td>
+					<span ui:field="postLength" />
+				</td>
+			</tr>
+			<tr id="shortBreak">
+				<td>
+					<span class="{style.label}">Short Break:</span>
+				</td>
+				<td>
+					<span ui:field="shortBreak" />
+				</td>
+			</tr>
+			<tr id="LongBreak">
+				<td>
+					<span class="{style.label}">Long Break:</span>
+				</td>
+				<td>
+					<span ui:field="LongBreak" />
+				</td>
+			</tr>
+			<tr id="lunchBreak">
+				<td>
+					<span class="{style.label}">lunch Break:</span>
+				</td>
+				<td>
+					<span ui:field="lunchBreak" />
+				</td>
+			</tr>
+		</table>
+		</g:HTMLPanel>
+		
+				</g:HorizontalPanel>
+ 		</g:Tab>
+		</g:TabPanel>
+		
+ 	
+		</g:DisclosurePanel>
+		
+	
+ 			
+			<g:HTMLPanel>
+				<!--  <div class="{style.controls}  {style.controlsleft}">
+					<b:SimplePager display="{table}" ui:field="pager" />
+				</div>
+				-->
+				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
+				
+				
+    <table id='boundElementHolder' class="{style.fields}">
+    <tr id="name">
+				<td>
+					<span class="{style.label}">Name:</span>
+				</td>
+				<td>
+					<g:TextBox ui:field='taskName'/>
+				</td>
+			</tr>
+     
+      <tr id="deadline">
+				<td>
+					<span class="{style.label}">DeadLine:</span>
+				</td>
+				<td>
+					 <d:DateBox ui:field='deadline'/>
+				</td>
+			</tr>
+    
+    <tr id="administrator">
+				<td>
+					<span class="{style.label}">Administrator:</span>
+				</td>
+				<td>
+					 	<g:ValueListBox ui:field="administrator" />
+				</td>
+			</tr>
+			
+			<tr>
+			<td></td>
+			<td><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button></td>
+			</tr>
+    
+     
+      
+      
+    </table>
+			</g:HTMLPanel>
+				
+	</g:HTMLPanel>
+</ui:UiBinder> 

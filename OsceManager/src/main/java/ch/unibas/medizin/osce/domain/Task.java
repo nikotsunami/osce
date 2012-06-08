@@ -27,7 +27,7 @@ public class Task {
     private Boolean isDone;
 
     @ManyToOne
-    private Task osce;
+    private Osce osce;
 
     @ManyToOne
     private Administrator administrator;

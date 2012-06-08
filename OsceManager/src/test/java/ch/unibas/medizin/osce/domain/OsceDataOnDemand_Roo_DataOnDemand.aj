@@ -4,9 +4,21 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
+import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.StudyYears;
+import java.lang.Boolean;
+import java.lang.Integer;
+import java.lang.Short;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +26,7 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     
     declare @type: OsceDataOnDemand: @Component;
     
-    private Random OsceDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random OsceDataOnDemand.rnd = new SecureRandom();
     
     private List<Osce> OsceDataOnDemand.data;
     
@@ -22,62 +34,104 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     private SemesterDataOnDemand OsceDataOnDemand.semesterDataOnDemand;
     
     public Osce OsceDataOnDemand.getNewTransientOsce(int index) {
-        ch.unibas.medizin.osce.domain.Osce obj = new ch.unibas.medizin.osce.domain.Osce();
-        setStudyYear(obj, index);
-        setMaxNumberStudents(obj, index);
-        setNumberPosts(obj, index);
-        setNumberCourses(obj, index);
-        setPostLength(obj, index);
+        Osce obj = new Osce();
+        setCopiedOsce(obj, index);
         setIsRepeOsce(obj, index);
-        setNumberRooms(obj, index);
         setIsValid(obj, index);
+        setLongBreak(obj, index);
+        setLunchBreak(obj, index);
+        setMaxNumberStudents(obj, index);
+        setMiddleBreak(obj, index);
+        setName(obj, index);
+        setNumberCourses(obj, index);
+        setNumberPosts(obj, index);
+        setNumberRooms(obj, index);
+        setOsceStatus(obj, index);
+        setPostLength(obj, index);
         setSemester(obj, index);
+        setShortBreak(obj, index);
+        setStudyYear(obj, index);
         return obj;
     }
     
-    private void OsceDataOnDemand.setStudyYear(Osce obj, int index) {
-        ch.unibas.medizin.osce.shared.StudyYears studyYear = ch.unibas.medizin.osce.shared.StudyYears.class.getEnumConstants()[0];
-        obj.setStudyYear(studyYear);
+    public void OsceDataOnDemand.setCopiedOsce(Osce obj, int index) {
+        Osce copiedOsce = obj;
+        obj.setCopiedOsce(copiedOsce);
     }
     
-    private void OsceDataOnDemand.setMaxNumberStudents(Osce obj, int index) {
-        java.lang.Integer maxNumberStudents = new Integer(index);
-        obj.setMaxNumberStudents(maxNumberStudents);
-    }
-    
-    private void OsceDataOnDemand.setNumberPosts(Osce obj, int index) {
-        java.lang.Integer numberPosts = new Integer(index);
-        obj.setNumberPosts(numberPosts);
-    }
-    
-    private void OsceDataOnDemand.setNumberCourses(Osce obj, int index) {
-        java.lang.Integer numberCourses = new Integer(index);
-        obj.setNumberCourses(numberCourses);
-    }
-    
-    private void OsceDataOnDemand.setPostLength(Osce obj, int index) {
-        java.lang.Integer postLength = new Integer(index);
-        obj.setPostLength(postLength);
-    }
-    
-    private void OsceDataOnDemand.setIsRepeOsce(Osce obj, int index) {
-        java.lang.Boolean isRepeOsce = Boolean.TRUE;
+    public void OsceDataOnDemand.setIsRepeOsce(Osce obj, int index) {
+        Boolean isRepeOsce = Boolean.TRUE;
         obj.setIsRepeOsce(isRepeOsce);
     }
     
-    private void OsceDataOnDemand.setNumberRooms(Osce obj, int index) {
-        java.lang.Integer numberRooms = new Integer(index);
-        obj.setNumberRooms(numberRooms);
-    }
-    
-    private void OsceDataOnDemand.setIsValid(Osce obj, int index) {
-        java.lang.Boolean isValid = Boolean.TRUE;
+    public void OsceDataOnDemand.setIsValid(Osce obj, int index) {
+        Boolean isValid = Boolean.TRUE;
         obj.setIsValid(isValid);
     }
     
-    private void OsceDataOnDemand.setSemester(Osce obj, int index) {
-        ch.unibas.medizin.osce.domain.Semester semester = semesterDataOnDemand.getRandomSemester();
+    public void OsceDataOnDemand.setLongBreak(Osce obj, int index) {
+        Short LongBreak = new Integer(index).shortValue();
+        obj.setLongBreak(LongBreak);
+    }
+    
+    public void OsceDataOnDemand.setLunchBreak(Osce obj, int index) {
+        Short lunchBreak = new Integer(index).shortValue();
+        obj.setLunchBreak(lunchBreak);
+    }
+    
+    public void OsceDataOnDemand.setMaxNumberStudents(Osce obj, int index) {
+        Integer maxNumberStudents = new Integer(index);
+        obj.setMaxNumberStudents(maxNumberStudents);
+    }
+    
+    public void OsceDataOnDemand.setMiddleBreak(Osce obj, int index) {
+        Short middleBreak = new Integer(index).shortValue();
+        obj.setMiddleBreak(middleBreak);
+    }
+    
+    public void OsceDataOnDemand.setName(Osce obj, int index) {
+        String name = "name_" + index;
+        obj.setName(name);
+    }
+    
+    public void OsceDataOnDemand.setNumberCourses(Osce obj, int index) {
+        Integer numberCourses = new Integer(index);
+        obj.setNumberCourses(numberCourses);
+    }
+    
+    public void OsceDataOnDemand.setNumberPosts(Osce obj, int index) {
+        Integer numberPosts = new Integer(index);
+        obj.setNumberPosts(numberPosts);
+    }
+    
+    public void OsceDataOnDemand.setNumberRooms(Osce obj, int index) {
+        Integer numberRooms = new Integer(index);
+        obj.setNumberRooms(numberRooms);
+    }
+    
+    public void OsceDataOnDemand.setOsceStatus(Osce obj, int index) {
+        OsceStatus osceStatus = OsceStatus.class.getEnumConstants()[0];
+        obj.setOsceStatus(osceStatus);
+    }
+    
+    public void OsceDataOnDemand.setPostLength(Osce obj, int index) {
+        Integer postLength = new Integer(index);
+        obj.setPostLength(postLength);
+    }
+    
+    public void OsceDataOnDemand.setSemester(Osce obj, int index) {
+        Semester semester = semesterDataOnDemand.getRandomSemester();
         obj.setSemester(semester);
+    }
+    
+    public void OsceDataOnDemand.setShortBreak(Osce obj, int index) {
+        Short shortBreak = new Integer(index).shortValue();
+        obj.setShortBreak(shortBreak);
+    }
+    
+    public void OsceDataOnDemand.setStudyYear(Osce obj, int index) {
+        StudyYears studyYear = StudyYears.class.getEnumConstants()[0];
+        obj.setStudyYear(studyYear);
     }
     
     public Osce OsceDataOnDemand.getSpecificOsce(int index) {
@@ -99,16 +153,25 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     }
     
     public void OsceDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.Osce.findOsceEntries(0, 10);
+        data = Osce.findOsceEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'Osce' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.Osce>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.Osce>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.Osce obj = getNewTransientOsce(i);
-            obj.persist();
+            Osce obj = getNewTransientOsce(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

@@ -1,9 +1,5 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'
-  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
-  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
   <ui:style>
     .outer {
       padding: 10px;
@@ -20,23 +16,222 @@
     }
   </ui:style>
  
-  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
-    <div ui:field='errors' class='{style.error}'></div>
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div class="{style.error}" ui:field="errors"/>
     
-    <div id='studyYear'><div class='{style.label}'>Study Year</div><div class='{style.value}'><g:ValueListBox ui:field='studyYear'/></div></div>
-    <div id='maxNumberStudents'><div class='{style.label}'>Max Number Students</div><div class='{style.value}'><g:IntegerBox ui:field='maxNumberStudents'/></div></div>
-    <div id='numberPosts'><div class='{style.label}'>Number Posts</div><div class='{style.value}'><g:IntegerBox ui:field='numberPosts'/></div></div>
-    <div id='numberCourses'><div class='{style.label}'>Number Courses</div><div class='{style.value}'><g:IntegerBox ui:field='numberCourses'/></div></div>
-    <div id='postLength'><div class='{style.label}'>Post Length</div><div class='{style.value}'><g:IntegerBox ui:field='postLength'/></div></div>
-    <div id='isRepeOsce'><div class='{style.label}'>Is Repe Osce</div><div class='{style.value}'><g:CheckBox ui:field='isRepeOsce'/></div></div>
-    <div id='numberRooms'><div class='{style.label}'>Number Rooms</div><div class='{style.value}'><g:IntegerBox ui:field='numberRooms'/></div></div>
-    <div id='isValid'><div class='{style.label}'>Is Valid</div><div class='{style.value}'><g:CheckBox ui:field='isValid'/></div></div>
-    <div id='semester'><div class='{style.label}'>Semester</div><div class='{style.value}'><g:ValueListBox ui:field='semester'/></div></div>
-    <div id='osce_days'><div class='{style.label}'>Osce_days</div><div class='{style.value}'><a:OsceDaySetEditor ui:field='osce_days'/></div></div>
-    <div id='courses'><div class='{style.label}'>Courses</div><div class='{style.value}'><a:CourseSetEditor ui:field='courses'/></div></div>
-    <div id='tasks'><div class='{style.label}'>Tasks</div><div class='{style.value}'><a:TaskSetEditor ui:field='tasks'/></div></div>
-    <div id='osceStudents'><div class='{style.label}'>Osce Students</div><div class='{style.value}'><a:StudentOscesSetEditor ui:field='osceStudents'/></div></div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    <g:Button ui:field='save'>Save</g:Button>
-  </g:HTMLPanel>
+    <g:Button ui:field="save">Save</g:Button>
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div id="studyYear">
+            <div class="{style.label}">Study Year</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="studyYear"/>
+            </div>
+        </div>
+        <div id="maxNumberStudents">
+            <div class="{style.label}">Max Number Students</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="maxNumberStudents"/>
+            </div>
+        </div>
+        <div id="name">
+            <div class="{style.label}">Name</div>
+            <div class="{style.value}">
+                <g:TextBox ui:field="name"/>
+            </div>
+        </div>
+        <div id="shortBreak">
+            <div class="{style.label}">Short Break</div>
+            <div class="{style.value}">
+                <r:ShortBox ui:field="shortBreak"/>
+            </div>
+        </div>
+        <div id="longBreak">
+            <div class="{style.label}">Long Break</div>
+            <div class="{style.value}">
+                <r:ShortBox ui:field="longBreak"/>
+            </div>
+        </div>
+        <div id="lunchBreak">
+            <div class="{style.label}">Lunch Break</div>
+            <div class="{style.value}">
+                <r:ShortBox ui:field="lunchBreak"/>
+            </div>
+        </div>
+        <div id="middleBreak">
+            <div class="{style.label}">Middle Break</div>
+            <div class="{style.value}">
+                <r:ShortBox ui:field="middleBreak"/>
+            </div>
+        </div>
+        <div id="numberPosts">
+            <div class="{style.label}">Number Posts</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="numberPosts"/>
+            </div>
+        </div>
+        <div id="numberCourses">
+            <div class="{style.label}">Number Courses</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="numberCourses"/>
+            </div>
+        </div>
+        <div id="postLength">
+            <div class="{style.label}">Post Length</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="postLength"/>
+            </div>
+        </div>
+        <div id="isRepeOsce">
+            <div class="{style.label}">Is Repe Osce</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="isRepeOsce"/>
+            </div>
+        </div>
+        <div id="numberRooms">
+            <div class="{style.label}">Number Rooms</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="numberRooms"/>
+            </div>
+        </div>
+        <div id="isValid">
+            <div class="{style.label}">Is Valid</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="isValid"/>
+            </div>
+        </div>
+        <div id="osceStatus">
+            <div class="{style.label}">Osce Status</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="osceStatus"/>
+            </div>
+        </div>
+        <div id="semester">
+            <div class="{style.label}">Semester</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="semester"/>
+            </div>
+        </div>
+        <div id="osce_days">
+            <div class="{style.label}">Osce_days</div>
+            <div class="{style.value}">
+                <a:OsceDaySetEditor ui:field="osce_days"/>
+            </div>
+        </div>
+        <div id="courses">
+            <div class="{style.label}">Courses</div>
+            <div class="{style.value}">
+                <a:CourseSetEditor ui:field="courses"/>
+            </div>
+        </div>
+        <div id="tasks">
+            <div class="{style.label}">Tasks</div>
+            <div class="{style.value}">
+                <a:TaskSetEditor ui:field="tasks"/>
+            </div>
+        </div>
+        <div id="osceStudents">
+            <div class="{style.label}">Osce Students</div>
+            <div class="{style.value}">
+                <a:StudentOscesSetEditor ui:field="osceStudents"/>
+            </div>
+        </div>
+        <div id="copiedOsce">
+            <div class="{style.label}">Copied Osce</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="copiedOsce"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

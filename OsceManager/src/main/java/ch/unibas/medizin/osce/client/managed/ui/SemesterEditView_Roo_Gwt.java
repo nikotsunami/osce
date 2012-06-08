@@ -53,6 +53,15 @@ public abstract class SemesterEditView_Roo_Gwt extends Composite implements View
     IntegerBox calYear;
 
     @UiField
+    DoubleBox maximalYearEarnings;
+
+    @UiField
+    DoubleBox pricestatist;
+
+    @UiField
+    DoubleBox priceStandardizedPartient;
+
+    @UiField
     AdministratorSetEditor administrators;
 
     @UiField

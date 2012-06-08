@@ -25,6 +25,12 @@ public class Semester {
     private Semesters semester;
 
     private Integer calYear;
+    
+    private Double maximalYearEarnings;
+    
+    private Double pricestatist;
+    
+    private Double priceStandardizedPartient;
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "semesters")
     private Set<Administrator> administrators = new HashSet<Administrator>();

@@ -1,0 +1,39 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' >
+
+<ui:style src="../../styles.css" >
+.padBottom25
+{
+	padding-bottom: 25px;	
+}
+
+	.padTop
+	{
+	
+		margin-top:80px;
+		margin-left: 150px;
+
+	}
+	.pnlborder
+	{
+	border:solid;	
+	border-width: 1px;
+	background-color: #666;
+	color: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	}
+</ui:style>
+	<g:HTMLPanel styleName="{style.pnlborder}">			 	
+		<g:Label ui:field="lblTitle" horizontalAlignment="center" styleName="{style.padBottom25}"></g:Label>
+		<g:Label ui:field="lblErrMessage" horizontalAlignment="center"></g:Label>
+		<g:Button ui:field="btnOk" text="OK" styleName="{style.padTop}"></g:Button>		
+	</g:HTMLPanel>	
+</ui:UiBinder>

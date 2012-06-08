@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.CollectionRenderer;
 import com.google.gwt.core.client.GWT;

@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.domain.Administrator;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.shared.Semesters;
+import java.lang.Double;
 import java.lang.Integer;
 import java.util.Set;
 
@@ -28,6 +29,30 @@ privileged aspect Semester_Roo_JavaBean {
         this.calYear = calYear;
     }
     
+    public Double Semester.getMaximalYearEarnings() {
+        return this.maximalYearEarnings;
+    }
+    
+    public void Semester.setMaximalYearEarnings(Double maximalYearEarnings) {
+        this.maximalYearEarnings = maximalYearEarnings;
+    }
+    
+    public Double Semester.getPricestatist() {
+        return this.pricestatist;
+    }
+    
+    public void Semester.setPricestatist(Double pricestatist) {
+        this.pricestatist = pricestatist;
+    }
+    
+    public Double Semester.getPriceStandardizedPartient() {
+        return this.priceStandardizedPartient;
+    }
+    
+    public void Semester.setPriceStandardizedPartient(Double priceStandardizedPartient) {
+        this.priceStandardizedPartient = priceStandardizedPartient;
+    }
+    
     public Set<Administrator> Semester.getAdministrators() {
         return this.administrators;
     }
@@ -36,19 +61,19 @@ privileged aspect Semester_Roo_JavaBean {
         this.administrators = administrators;
     }
     
-    public java.util.Set<Osce> Semester.getOsces() {
+    public Set<Osce> Semester.getOsces() {
         return this.osces;
     }
     
-    public void Semester.setOsces(java.util.Set<Osce> osces) {
+    public void Semester.setOsces(Set<Osce> osces) {
         this.osces = osces;
     }
     
-    public java.util.Set<PatientInSemester> Semester.getPatientsInSemester() {
+    public Set<PatientInSemester> Semester.getPatientsInSemester() {
         return this.patientsInSemester;
     }
     
-    public void Semester.setPatientsInSemester(java.util.Set<PatientInSemester> patientsInSemester) {
+    public void Semester.setPatientsInSemester(Set<PatientInSemester> patientsInSemester) {
         this.patientsInSemester = patientsInSemester;
     }
     

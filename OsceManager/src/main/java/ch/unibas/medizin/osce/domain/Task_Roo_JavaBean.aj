@@ -4,7 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Administrator;
-import ch.unibas.medizin.osce.domain.Task;
+import ch.unibas.medizin.osce.domain.Osce;
 import java.lang.Boolean;
 import java.lang.String;
 import java.util.Date;
@@ -35,11 +35,11 @@ privileged aspect Task_Roo_JavaBean {
         this.isDone = isDone;
     }
     
-    public Task Task.getOsce() {
+    public Osce Task.getOsce() {
         return this.osce;
     }
     
-    public void Task.setOsce(Task osce) {
+    public void Task.setOsce(Osce osce) {
         this.osce = osce;
     }
     

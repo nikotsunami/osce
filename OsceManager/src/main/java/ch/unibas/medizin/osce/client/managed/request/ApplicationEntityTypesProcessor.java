@@ -66,9 +66,9 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(ClinicProxy.class);
         rtn.add(ChecklistTopicProxy.class);
         rtn.add(ChecklistQuestionProxy.class);
+        rtn.add(CheckListProxy.class);
         rtn.add(ChecklistOptionProxy.class);
         rtn.add(ChecklistCriteriaProxy.class);
-        rtn.add(CheckListProxy.class);
         rtn.add(BankaccountProxy.class);
         rtn.add(AssignmentProxy.class);
         rtn.add(AnamnesisFormProxy.class);
@@ -252,16 +252,16 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleChecklistQuestion((ChecklistQuestionProxy) null);
             return;
         }
+        if (CheckListProxy.class.equals(clazz)) {
+            processor.handleCheckList((CheckListProxy) null);
+            return;
+        }
         if (ChecklistOptionProxy.class.equals(clazz)) {
             processor.handleChecklistOption((ChecklistOptionProxy) null);
             return;
         }
         if (ChecklistCriteriaProxy.class.equals(clazz)) {
             processor.handleChecklistCriteria((ChecklistCriteriaProxy) null);
-            return;
-        }
-        if (CheckListProxy.class.equals(clazz)) {
-            processor.handleCheckList((CheckListProxy) null);
             return;
         }
         if (BankaccountProxy.class.equals(clazz)) {
@@ -468,16 +468,16 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleChecklistQuestion((ChecklistQuestionProxy) proxy);
             return;
         }
+        if (proxy instanceof CheckListProxy) {
+            processor.handleCheckList((CheckListProxy) proxy);
+            return;
+        }
         if (proxy instanceof ChecklistOptionProxy) {
             processor.handleChecklistOption((ChecklistOptionProxy) proxy);
             return;
         }
         if (proxy instanceof ChecklistCriteriaProxy) {
             processor.handleChecklistCriteria((ChecklistCriteriaProxy) proxy);
-            return;
-        }
-        if (proxy instanceof CheckListProxy) {
-            processor.handleCheckList((CheckListProxy) proxy);
             return;
         }
         if (proxy instanceof BankaccountProxy) {
@@ -600,11 +600,11 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleChecklistQuestion(ChecklistQuestionProxy proxy);
 
+    public abstract void handleCheckList(CheckListProxy proxy);
+
     public abstract void handleChecklistOption(ChecklistOptionProxy proxy);
 
     public abstract void handleChecklistCriteria(ChecklistCriteriaProxy proxy);
-
-    public abstract void handleCheckList(CheckListProxy proxy);
 
     public abstract void handleBankaccount(BankaccountProxy proxy);
 

@@ -13,6 +13,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -25,10 +26,25 @@ import java.util.Set;
 public abstract class SemesterMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<SemesterProxy> {
 
     @UiField
+    Element id;
+
+    @UiField
+    Element version;
+
+    @UiField
     Element semester;
 
     @UiField
     Element calYear;
+
+    @UiField
+    Element maximalYearEarnings;
+
+    @UiField
+    Element pricestatist;
+
+    @UiField
+    Element priceStandardizedPartient;
 
     @UiField
     Element administrators;
@@ -39,22 +55,19 @@ public abstract class SemesterMobileDetailsView_Roo_Gwt extends Composite implem
     @UiField
     Element patientsInSemester;
 
-    @UiField
-    Element id;
-
-    @UiField
-    Element version;
-
     SemesterProxy proxy;
 
     public void setValue(SemesterProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         semester.setInnerText(proxy.getSemester() == null ? "" : String.valueOf(proxy.getSemester()));
         calYear.setInnerText(proxy.getCalYear() == null ? "" : String.valueOf(proxy.getCalYear()));
+        maximalYearEarnings.setInnerText(proxy.getMaximalYearEarnings() == null ? "" : String.valueOf(proxy.getMaximalYearEarnings()));
+        pricestatist.setInnerText(proxy.getPricestatist() == null ? "" : String.valueOf(proxy.getPricestatist()));
+        priceStandardizedPartient.setInnerText(proxy.getPriceStandardizedPartient() == null ? "" : String.valueOf(proxy.getPriceStandardizedPartient()));
         administrators.setInnerText(proxy.getAdministrators() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance()).render(proxy.getAdministrators()));
         osces.setInnerText(proxy.getOsces() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance()).render(proxy.getOsces()));
         patientsInSemester.setInnerText(proxy.getPatientsInSemester() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance()).render(proxy.getPatientsInSemester()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
     }
 }

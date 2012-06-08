@@ -24,6 +24,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
@@ -36,6 +37,8 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 	
    private OsMaRequestFactory requests;
    private PlaceController placeController;
+   private SemesterProxy semesterProxy;
+   
 
 	@Inject
 	public ApplicationMainActivitiesMapper(OsMaRequestFactory requests,
@@ -104,15 +107,26 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			Log.debug("is ProfessionPlace");
 			return new ProfessionActivity(requests, placeController);
 		}
-
+		/*
 		if (place instanceof OscePlace) {
 			Log.debug("is OscePlace");
 			return new OsceActivity(requests, placeController);
-		}
+		}*/
+		
+		// G: SPEC START =
+
+				if (place instanceof OscePlace) {
+					Log.debug("is OscePlace");
+					return new OsceActivity(requests, placeController,(OscePlace)place);
+				}
+				
+				
+				// G: SPEC END =
+
 
 		if (place instanceof CircuitPlace) {
 			Log.debug("is CircuitPlace");
-			return new CircuitActivity(requests, placeController);
+			return new CircuitActivity(requests, placeController,(CircuitPlace)place);
 		}
 
 		if (place instanceof StudentsPlace) {
@@ -149,6 +163,8 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			Log.debug("is RoleAssignmentsPlace");
 			return new RoleAssignmentsActivity(requests, placeController);
 		}
+		
+		
 		
 		//By Spec role management functionality[
 		if (place instanceof TopicsAndSpecPlace) {

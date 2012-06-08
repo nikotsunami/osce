@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
@@ -30,9 +31,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplateDet
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -179,6 +179,11 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		if (place instanceof CircuitPlace)
 			return (CircuitPlace) place;
 
+		if (place instanceof CircuitDetailsPlace)
+		{			
+			CircuitDetailsPlace circuitDetailsPlace = (CircuitDetailsPlace) place;
+			return new CircuitPlace(circuitDetailsPlace.getToken());
+		}
 		if (place instanceof StudentsPlace)
 			return (StudentsPlace) place;
 

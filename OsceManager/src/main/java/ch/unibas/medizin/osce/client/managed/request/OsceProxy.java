@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
@@ -12,6 +13,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Osce")
 public interface OsceProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract StudyYears getStudyYear();
 
     abstract void setStudyYear(StudyYears studyYear);
@@ -19,6 +28,26 @@ public interface OsceProxy extends EntityProxy {
     abstract Integer getMaxNumberStudents();
 
     abstract void setMaxNumberStudents(Integer maxNumberStudents);
+
+    abstract String getName();
+
+    abstract void setName(String name);
+
+    abstract Short getShortBreak();
+
+    abstract void setShortBreak(Short shortBreak);
+
+    abstract Short getLongBreak();
+
+    abstract void setLongBreak(Short longBreak);
+
+    abstract Short getLunchBreak();
+
+    abstract void setLunchBreak(Short lunchBreak);
+
+    abstract Short getMiddleBreak();
+
+    abstract void setMiddleBreak(Short middleBreak);
 
     abstract Integer getNumberPosts();
 
@@ -44,6 +73,10 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setIsValid(Boolean isValid);
 
+    abstract OsceStatus getOsceStatus();
+
+    abstract void setOsceStatus(OsceStatus osceStatus);
+
     abstract SemesterProxy getSemester();
 
     abstract void setSemester(SemesterProxy semester);
@@ -64,11 +97,7 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setOsceStudents(Set<StudentOscesProxy> osceStudents);
 
-    abstract Long getId();
+    abstract ch.unibas.medizin.osce.client.managed.request.OsceProxy getCopiedOsce();
 
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
+    abstract void setCopiedOsce(ch.unibas.medizin.osce.client.managed.request.OsceProxy copiedOsce);
 }

@@ -14,6 +14,7 @@ privileged aspect Task_Roo_ToString {
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsDone: ").append(getIsDone()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
+        sb.append("Osce: ").append(getOsce()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

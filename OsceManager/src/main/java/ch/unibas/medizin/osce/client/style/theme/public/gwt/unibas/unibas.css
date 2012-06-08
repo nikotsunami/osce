@@ -2114,3 +2114,20 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 .ui-icon-grip-diagonal-se {
     background-position: -83px -228px;
 }
+
+/* Spec To add Osce Status of tabpanel*/
+.Osce_New_Status{
+        background-color: #E6FFE6;
+}
+.Osce_BluePrint_Status{
+        background-color: 	#CCE0FF;
+}
+.Osce_Genrated_Status{
+        background-color:	#EBCCEB;
+}
+.Osce_Fixed_Status{
+        background-color : #FAF0E6;
+}
+.Osce_Closed_Status{
+        background-color: #FFCCCC;
+}

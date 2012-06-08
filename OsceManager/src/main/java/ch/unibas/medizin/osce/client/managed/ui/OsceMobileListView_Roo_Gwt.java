@@ -10,8 +10,10 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -32,7 +34,7 @@ public abstract class OsceMobileListView_Roo_Gwt extends MobileProxyListView<Osc
     }
 
     public void init() {
-        paths.add("studyYear");
-        paths.add("maxNumberStudents");
+        paths.add("name");
+        paths.add("id");
     }
 }

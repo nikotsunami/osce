@@ -293,6 +293,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleCheckList(CheckListProxy proxy) {
+                setResult(new CheckListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleChecklistOption(ChecklistOptionProxy proxy) {
                 setResult(new ChecklistOptionActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
@@ -300,11 +305,6 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleChecklistCriteria(ChecklistCriteriaProxy proxy) {
                 setResult(new ChecklistCriteriaActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
-            @Override
-            public void handleCheckList(CheckListProxy proxy) {
-                setResult(new CheckListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override

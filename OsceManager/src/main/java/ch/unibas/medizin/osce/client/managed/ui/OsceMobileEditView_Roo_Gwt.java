@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -55,6 +56,21 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     IntegerBox maxNumberStudents;
 
     @UiField
+    TextBox name;
+
+    @UiField
+    ShortBox shortBreak;
+
+    @UiField
+    ShortBox longBreak;
+
+    @UiField
+    ShortBox lunchBreak;
+
+    @UiField
+    ShortBox middleBreak;
+
+    @UiField
     IntegerBox numberPosts;
 
     @UiField
@@ -83,6 +99,14 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     };
 
     @UiField(provided = true)
+    ValueListBox<OsceStatus> osceStatus = new ValueListBox<OsceStatus>(new AbstractRenderer<ch.unibas.medizin.osce.shared.OsceStatus>() {
+
+        public String render(ch.unibas.medizin.osce.shared.OsceStatus obj) {
+            return obj == null ? "" : String.valueOf(obj);
+        }
+    });
+
+    @UiField(provided = true)
     ValueListBox<SemesterProxy> semester = new ValueListBox<SemesterProxy>(ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.SemesterProxy>());
 
     @UiField
@@ -97,12 +121,23 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     @UiField
     StudentOscesSetEditor osceStudents;
 
+    @UiField(provided = true)
+    ValueListBox<OsceProxy> copiedOsce = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
+
+    public void setOsceStatusPickerValues(Collection<OsceStatus> values) {
+        osceStatus.setAcceptableValues(values);
+    }
+
     public void setOsce_daysPickerValues(Collection<OsceDayProxy> values) {
         osce_days.setAcceptableValues(values);
     }
 
     public void setSemesterPickerValues(Collection<SemesterProxy> values) {
         semester.setAcceptableValues(values);
+    }
+
+    public void setCopiedOscePickerValues(Collection<OsceProxy> values) {
+        copiedOsce.setAcceptableValues(values);
     }
 
     public void setTasksPickerValues(Collection<TaskProxy> values) {
