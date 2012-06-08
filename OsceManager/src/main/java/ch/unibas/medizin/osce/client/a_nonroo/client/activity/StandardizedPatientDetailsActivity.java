@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -17,6 +18,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
+import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -33,6 +35,7 @@ import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -80,6 +83,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	private AnamnesisFormProxy anamnesisForm ;
 	private UserPlaceSettings userSettings;
 	private DMZSyncServiceAsync dmxSyncService = null;
+	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -586,17 +590,22 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	@Override
 	public void sendClicked(){
-		
-		
 		dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
+				try {
+		          throw caught;
+		        } catch (DMZSyncException e) {
+		        	Window.alert(messageLookup.serverReturndError()+ messageLookup.getString(e.getType())+e.getMessage());
+		        } catch (Throwable e) {
+		        	Window.alert(messageLookup.serverReturndError()+ e.getMessage());
+			    }
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				
+				Window.alert(messageLookup.exportSuccessful());
 			}
 			
 		});
@@ -604,17 +613,28 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	
 	@Override
 	public void pullClicked(){
+
 		dmxSyncService.pullFromDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
+			   try {
+		          throw caught;
+		        } catch (DMZSyncException e) {
+		        	Window.alert(messageLookup.serverReturndError()+messageLookup.getString(e.getType())+e.getMessage());
+		        } catch (Throwable e) {
+		        	Window.alert(messageLookup.serverReturndError()+e.getMessage());
+		        }
+				
 			}
 
 			@Override
 			public void onSuccess(Void result) {
+				Window.alert(messageLookup.importSussessful());
 			}
 			
 		});
+		
 		
 	}
 

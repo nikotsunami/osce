@@ -114,4 +114,27 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String rich_text_item();
 	public String table_item();
 	//From SPEC End
+	
+	
+
+    public String notSetHostAddressException();
+    public String connectHostAddressException();
+    public String httpClientException();
+    public String serializingException();
+    
+    public String patientNotExistException();
+    
+    public String syncStandardizedPatientException();
+    public String syncNationalityException();
+    public String syncProfessionException();
+    public String syncDescriptionException();
+    public String syncBankaccountException();
+    public String syncAnamnesisFormException();
+    public String syncAnamnesisCheckValuesException();
+    
+    
+    public String exportSuccessful();
+    public String serverReturndError();
+    public String importSussessful();
+    
 }
