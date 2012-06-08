@@ -6,9 +6,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("dmzsync")
 public interface DMZSyncService extends RemoteService {
-
-	void pushToDMZ(Long standardizedPatientId);
-	void pullFromDMZ(Long standardizedPatientId);
+	void pushToDMZ(Long standardizedPatientId) throws DMZSyncException;
+	void pullFromDMZ(Long standardizedPatientId) throws DMZSyncException;
 	
 	public static class ServiceFactory {
 		private static DMZSyncServiceAsync instance = null; 

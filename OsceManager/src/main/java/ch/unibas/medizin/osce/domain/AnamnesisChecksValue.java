@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class AnamnesisChecksValue {
+public class AnamnesisChecksValue{
 
     private Boolean truth;
 
@@ -119,6 +120,21 @@ public class AnamnesisChecksValue {
     	return q.getSingleResult();
     }
     
+//TODO   
+    public static AnamnesisChecksValue findAnamnesisChecksValuesByAnamnesisFormAndAnamnesisCheck(Long anamnesisFormId, Long anamnesisCheckId) {
+    	EntityManager em = entityManager();
+		TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm " +
+				"AND o.anamnesischeck = :anamnesischeck", AnamnesisChecksValue.class);
+		q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+		q.setParameter("anamnesischeck",AnamnesisCheck.findAnamnesisCheck(anamnesisCheckId));
+	    List<AnamnesisChecksValue> anamnesisChecksValues = q.getResultList();
+		if(anamnesisChecksValues.size()>0){
+			return anamnesisChecksValues.get(0);
+		}
+		return new AnamnesisChecksValue();
+    }
+    
+    
     public static Long countUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle) {
     	EntityManager em = entityManager();
     	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
@@ -148,6 +164,7 @@ public class AnamnesisChecksValue {
     	q.setMaxResults(maxResults);
     	return q.getResultList();
     }
+    
     
     /**
      * Returns all the entries in AnamnesisChecksValues, that exist for a given anamnesisForm id.
