@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.managed.activity.ApplicationDetailsActivities;
 import ch.unibas.medizin.osce.client.scaffold.request.RequestEvent;
@@ -140,7 +141,7 @@ public class OsMaApp {
 		mapper.setFactory(oscePlaceHistoryFactory);
 		PlaceHistoryHandler placeHistoryHandler = new PlaceHistoryHandler(mapper);
 //		ProxyListPlace defaultPlace = getTopPlaces().iterator().next();
-		placeHistoryHandler.register(placeController, eventBus, new ScarPlace());
+		placeHistoryHandler.register(placeController, eventBus, new StandardizedPatientPlace());
 		placeHistoryHandler.handleCurrentHistory();
 	}
 
