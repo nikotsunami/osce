@@ -26,11 +26,11 @@ privileged aspect AnamnesisForm_Roo_JavaBean {
         this.anamnesischecksvalues = anamnesischecksvalues;
     }
     
-    public java.util.Set<Scar> AnamnesisForm.getScars() {
+    public Set<Scar> AnamnesisForm.getScars() {
         return this.scars;
     }
     
-    public void AnamnesisForm.setScars(java.util.Set<Scar> scars) {
+    public void AnamnesisForm.setScars(Set<Scar> scars) {
         this.scars = scars;
     }
     

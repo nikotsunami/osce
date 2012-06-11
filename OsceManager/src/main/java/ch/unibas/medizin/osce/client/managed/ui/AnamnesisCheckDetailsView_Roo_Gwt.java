@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +23,9 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.Set;
 
 public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<AnamnesisCheckProxy> {
+
+    @UiField
+    SpanElement userSpecifiedOrder;
 
     @UiField
     SpanElement id;
@@ -47,9 +51,6 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
     @UiField
     SpanElement title;
 
-    @UiField
-    SpanElement userSpecifiedOrder;
-
     AnamnesisCheckProxy proxy;
 
     @UiField
@@ -57,6 +58,7 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
 
     public void setValue(AnamnesisCheckProxy proxy) {
         this.proxy = proxy;
+        userSpecifiedOrder.setInnerText(proxy.getUserSpecifiedOrder() == null ? "" : String.valueOf(proxy.getUserSpecifiedOrder()));
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
@@ -65,7 +67,6 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
         type.setInnerText(proxy.getType() == null ? "" : String.valueOf(proxy.getType()));
         anamnesischecksvalues.setInnerText(proxy.getAnamnesischecksvalues() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance()).render(proxy.getAnamnesischecksvalues()));
         title.setInnerText(proxy.getTitle() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy.getTitle()));
-        userSpecifiedOrder.setInnerText(proxy.getUserSpecifiedOrder() == null ? "" : String.valueOf(proxy.getUserSpecifiedOrder()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(AnamnesisCheckProxyRenderer.instance().render(proxy));
     }
 }

@@ -18,9 +18,9 @@ public interface SpecialisationRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countSpecialisations();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy>> findAllSpecialisations();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy> findSpecialisation(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy>> findAllSpecialisations();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy>> findSpecialisationEntries(int firstResult, int maxResults);
 }

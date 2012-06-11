@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -28,7 +29,7 @@ public abstract class OscePostMobileListView_Roo_Gwt extends MobileProxyListView
     }
 
     public void init() {
-        paths.add("isPossibleStart");
-        paths.add("roleTopic");
+        paths.add("id");
+        paths.add("version");
     }
 }

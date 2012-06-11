@@ -1,6 +1,5 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
  <ui:style>
     .outer {
       padding: 10px;
@@ -13,15 +12,36 @@
     }
   </ui:style>
 
-  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
-    <div id='id'><div class='{style.label}'>Id</div><div class='{style.value}' ui:field='id'></div></div>
-    <div id='version'><div class='{style.label}'>Version</div><div class='{style.value}' ui:field='version'></div></div>
-    <div id='truth'><div class='{style.label}'>Truth</div><div class='{style.value}' ui:field='truth'></div></div>
-    <div id='comment'><div class='{style.label}'>Comment</div><div class='{style.value}' ui:field='comment'></div></div>
-    <div id='anamnesisChecksValue'><div class='{style.label}'>Anamnesis Checks Value</div><div class='{style.value}' ui:field='anamnesisChecksValue'></div></div>
-    <div id='anamnesisform'><div class='{style.label}'>Anamnesisform</div><div class='{style.value}' ui:field='anamnesisform'></div></div>
-    <div id='anamnesischeck'><div class='{style.label}'>Anamnesischeck</div><div class='{style.value}' ui:field='anamnesischeck'></div></div>
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
+    <div id="truth">
+            <div class="{style.label}">Truth</div>
+            <div class="{style.value}" ui:field="truth"/>
+        </div>
+    <div id="comment">
+            <div class="{style.label}">Comment</div>
+            <div class="{style.value}" ui:field="comment"/>
+        </div>
+    <div id="anamnesisChecksValue">
+            <div class="{style.label}">Anamnesis Checks Value</div>
+            <div class="{style.value}" ui:field="anamnesisChecksValue"/>
+        </div>
+    <div id="anamnesisform">
+            <div class="{style.label}">Anamnesisform</div>
+            <div class="{style.value}" ui:field="anamnesisform"/>
+        </div>
+    <div id="anamnesischeck">
+            <div class="{style.label}">Anamnesischeck</div>
+            <div class="{style.value}" ui:field="anamnesischeck"/>
+        </div>
 
-    <g:Button ui:field='delete'>Delete</g:Button>
+    <g:Button ui:field="delete">Delete</g:Button>
   </g:HTMLPanel>
 </ui:UiBinder>

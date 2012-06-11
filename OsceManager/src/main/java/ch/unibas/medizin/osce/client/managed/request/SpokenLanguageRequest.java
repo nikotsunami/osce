@@ -18,9 +18,9 @@ public interface SpokenLanguageRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countSpokenLanguages();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy>> findAllSpokenLanguages();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy> findSpokenLanguage(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy>> findAllSpokenLanguages();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy>> findSpokenLanguageEntries(int firstResult, int maxResults);
 }

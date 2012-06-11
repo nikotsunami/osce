@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,16 +22,16 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class MediaContentTypeDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<MediaContentTypeProxy> {
 
     @UiField
-    SpanElement contentType;
-
-    @UiField
-    SpanElement comment;
-
-    @UiField
     SpanElement id;
 
     @UiField
     SpanElement version;
+
+    @UiField
+    SpanElement contentType;
+
+    @UiField
+    SpanElement comment;
 
     MediaContentTypeProxy proxy;
 
@@ -39,10 +40,10 @@ public abstract class MediaContentTypeDetailsView_Roo_Gwt extends Composite impl
 
     public void setValue(MediaContentTypeProxy proxy) {
         this.proxy = proxy;
-        contentType.setInnerText(proxy.getContentType() == null ? "" : String.valueOf(proxy.getContentType()));
-        comment.setInnerText(proxy.getComment() == null ? "" : String.valueOf(proxy.getComment()));
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.MediaContentTypeProxyRenderer.instance().render(proxy));
+        contentType.setInnerText(proxy.getContentType() == null ? "" : String.valueOf(proxy.getContentType()));
+        comment.setInnerText(proxy.getComment() == null ? "" : String.valueOf(proxy.getComment()));
+        displayRenderer.setInnerText(MediaContentTypeProxyRenderer.instance().render(proxy));
     }
 }

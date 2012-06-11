@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.i18n;
 
+// TODO: Whole Package has to be moved to shared!
+
 import com.google.gwt.i18n.client.Constants;
 
 public interface OsceConstants extends Constants {
@@ -146,6 +148,8 @@ public interface OsceConstants extends Constants {
 	public String generalInformation();
 
 	public String googleMaps();
+	
+	public String handledConfidentially();
 
 	public String height();
 
@@ -264,6 +268,8 @@ public interface OsceConstants extends Constants {
 	public String socialInsuranceNo();
 
 	public String specification();
+	
+	public String standardizedPatient();
 
 	public String stationLength();
 

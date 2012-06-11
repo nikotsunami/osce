@@ -4,39 +4,45 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.MediaContentType;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect MediaContentTypeDataOnDemand_Roo_DataOnDemand {
     
     declare @type: MediaContentTypeDataOnDemand: @Component;
     
-    private Random MediaContentTypeDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random MediaContentTypeDataOnDemand.rnd = new SecureRandom();
     
     private List<MediaContentType> MediaContentTypeDataOnDemand.data;
     
     public MediaContentType MediaContentTypeDataOnDemand.getNewTransientMediaContentType(int index) {
-        ch.unibas.medizin.osce.domain.MediaContentType obj = new ch.unibas.medizin.osce.domain.MediaContentType();
-        setContentType(obj, index);
+        MediaContentType obj = new MediaContentType();
         setComment(obj, index);
+        setContentType(obj, index);
         return obj;
     }
     
-    private void MediaContentTypeDataOnDemand.setContentType(MediaContentType obj, int index) {
-        java.lang.String contentType = "contentType_" + index;
-        if (contentType.length() > 255) {
-            contentType = contentType.substring(0, 255);
-        }
-        obj.setContentType(contentType);
-    }
-    
-    private void MediaContentTypeDataOnDemand.setComment(MediaContentType obj, int index) {
-        java.lang.String comment = "comment_" + index;
+    public void MediaContentTypeDataOnDemand.setComment(MediaContentType obj, int index) {
+        String comment = "comment_" + index;
         if (comment.length() > 512) {
             comment = comment.substring(0, 512);
         }
         obj.setComment(comment);
+    }
+    
+    public void MediaContentTypeDataOnDemand.setContentType(MediaContentType obj, int index) {
+        String contentType = "contentType_" + index;
+        if (contentType.length() > 255) {
+            contentType = contentType.substring(0, 255);
+        }
+        obj.setContentType(contentType);
     }
     
     public MediaContentType MediaContentTypeDataOnDemand.getSpecificMediaContentType(int index) {
@@ -58,16 +64,25 @@ privileged aspect MediaContentTypeDataOnDemand_Roo_DataOnDemand {
     }
     
     public void MediaContentTypeDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.MediaContentType.findMediaContentTypeEntries(0, 10);
+        data = MediaContentType.findMediaContentTypeEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'MediaContentType' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.MediaContentType>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.MediaContentType>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.MediaContentType obj = getNewTransientMediaContentType(i);
-            obj.persist();
+            MediaContentType obj = getNewTransientMediaContentType(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

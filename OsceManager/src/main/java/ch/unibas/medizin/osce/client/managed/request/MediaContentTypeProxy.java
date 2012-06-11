@@ -10,14 +10,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.MediaContentType")
 public interface MediaContentTypeProxy extends EntityProxy {
 
-    abstract String getContentType();
-
-    abstract void setContentType(String contentType);
-
-    abstract String getComment();
-
-    abstract void setComment(String comment);
-
     abstract Long getId();
 
     abstract void setId(Long id);
@@ -25,4 +17,12 @@ public interface MediaContentTypeProxy extends EntityProxy {
     abstract Integer getVersion();
 
     abstract void setVersion(Integer version);
+
+    abstract String getContentType();
+
+    abstract void setContentType(String contentType);
+
+    abstract String getComment();
+
+    abstract void setComment(String comment);
 }

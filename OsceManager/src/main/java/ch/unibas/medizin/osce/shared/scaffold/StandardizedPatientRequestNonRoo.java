@@ -37,7 +37,6 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 			List<AdvancedSearchCriteriaProxy> searchCriteria
                          , int firstResult, int maxResults
 	);
-         abstract Request<String> getPdfPatientsBySearch(
-    			 StandardizedPatientProxy standardizedPatientProxy);
+         abstract Request<String> getPdfPatientsBySearch(Long standardizedPatientId);
          //By Spec]End
 }

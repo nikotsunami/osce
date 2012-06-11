@@ -4,51 +4,61 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.LogEntry;
+import java.lang.Integer;
+import java.lang.String;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 privileged aspect LogEntryDataOnDemand_Roo_DataOnDemand {
     
     declare @type: LogEntryDataOnDemand: @Component;
     
-    private Random LogEntryDataOnDemand.rnd = new java.security.SecureRandom();
+    private Random LogEntryDataOnDemand.rnd = new SecureRandom();
     
     private List<LogEntry> LogEntryDataOnDemand.data;
     
     public LogEntry LogEntryDataOnDemand.getNewTransientLogEntry(int index) {
-        ch.unibas.medizin.osce.domain.LogEntry obj = new ch.unibas.medizin.osce.domain.LogEntry();
-        setShibId(obj, index);
+        LogEntry obj = new LogEntry();
         setLogtime(obj, index);
-        setOldValue(obj, index);
         setNewValue(obj, index);
+        setOldValue(obj, index);
+        setShibId(obj, index);
         return obj;
     }
     
-    private void LogEntryDataOnDemand.setShibId(LogEntry obj, int index) {
-        java.lang.Integer shibId = new Integer(index);
-        obj.setShibId(shibId);
-    }
-    
-    private void LogEntryDataOnDemand.setLogtime(LogEntry obj, int index) {
-        java.util.Date logtime = new java.util.GregorianCalendar(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR), java.util.Calendar.getInstance().get(java.util.Calendar.MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH), java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY), java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE), java.util.Calendar.getInstance().get(java.util.Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+    public void LogEntryDataOnDemand.setLogtime(LogEntry obj, int index) {
+        Date logtime = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setLogtime(logtime);
     }
     
-    private void LogEntryDataOnDemand.setOldValue(LogEntry obj, int index) {
-        java.lang.String oldValue = "oldValue_" + index;
+    public void LogEntryDataOnDemand.setNewValue(LogEntry obj, int index) {
+        String newValue = "newValue_" + index;
+        if (newValue.length() > 255) {
+            newValue = newValue.substring(0, 255);
+        }
+        obj.setNewValue(newValue);
+    }
+    
+    public void LogEntryDataOnDemand.setOldValue(LogEntry obj, int index) {
+        String oldValue = "oldValue_" + index;
         if (oldValue.length() > 255) {
             oldValue = oldValue.substring(0, 255);
         }
         obj.setOldValue(oldValue);
     }
     
-    private void LogEntryDataOnDemand.setNewValue(LogEntry obj, int index) {
-        java.lang.String newValue = "newValue_" + index;
-        if (newValue.length() > 255) {
-            newValue = newValue.substring(0, 255);
-        }
-        obj.setNewValue(newValue);
+    public void LogEntryDataOnDemand.setShibId(LogEntry obj, int index) {
+        Integer shibId = new Integer(index);
+        obj.setShibId(shibId);
     }
     
     public LogEntry LogEntryDataOnDemand.getSpecificLogEntry(int index) {
@@ -70,16 +80,25 @@ privileged aspect LogEntryDataOnDemand_Roo_DataOnDemand {
     }
     
     public void LogEntryDataOnDemand.init() {
-        data = ch.unibas.medizin.osce.domain.LogEntry.findLogEntryEntries(0, 10);
+        data = LogEntry.findLogEntryEntries(0, 10);
         if (data == null) throw new IllegalStateException("Find entries implementation for 'LogEntry' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new java.util.ArrayList<ch.unibas.medizin.osce.domain.LogEntry>();
+        data = new ArrayList<ch.unibas.medizin.osce.domain.LogEntry>();
         for (int i = 0; i < 10; i++) {
-            ch.unibas.medizin.osce.domain.LogEntry obj = getNewTransientLogEntry(i);
-            obj.persist();
+            LogEntry obj = getNewTransientLogEntry(i);
+            try {
+                obj.persist();
+            } catch (ConstraintViolationException e) {
+                StringBuilder msg = new StringBuilder();
+                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<?> cv = it.next();
+                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
+                }
+                throw new RuntimeException(msg.toString(), e);
+            }
             obj.flush();
             data.add(obj);
         }

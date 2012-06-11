@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,24 +23,24 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class PatientInSemesterMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<PatientInSemesterProxy> {
 
     @UiField
-    Element semester;
-
-    @UiField
-    Element standardizedPatient;
-
-    @UiField
     Element id;
 
     @UiField
     Element version;
 
+    @UiField
+    Element semester;
+
+    @UiField
+    Element standardizedPatient;
+
     PatientInSemesterProxy proxy;
 
     public void setValue(PatientInSemesterProxy proxy) {
         this.proxy = proxy;
-        semester.setInnerText(proxy.getSemester() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance().render(proxy.getSemester()));
-        standardizedPatient.setInnerText(proxy.getStandardizedPatient() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy.getStandardizedPatient()));
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        semester.setInnerText(proxy.getSemester() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance().render(proxy.getSemester()));
+        standardizedPatient.setInnerText(proxy.getStandardizedPatient() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy.getStandardizedPatient()));
     }
 }

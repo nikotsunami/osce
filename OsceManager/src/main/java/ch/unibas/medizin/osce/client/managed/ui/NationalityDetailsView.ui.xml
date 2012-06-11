@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
  <ui:style>
     .fields {
       margin-top: 0.5em;
@@ -28,20 +26,52 @@
     }
   </ui:style>
   <g:HTMLPanel>
-    <div class='{style.underline}'>
-      <h3 class='{style.header}'><ui:msg><span ui:field='displayRenderer' /></ui:msg></h3>
+    <div class="{style.underline}">
+      <h3 class="{style.header}">
+                <ui:msg>
+                    <span ui:field="displayRenderer"/>
+                </ui:msg>
+            </h3>
     </div>
 
-    <table id='boundElementHolder' class='{style.fields}'>
-      <tr id='nationality'><td><span class='{style.label}'>Nationality:</span></td><td><span ui:field='nationality'></span></td></tr>
-      <tr id='standardizedpatients'><td><span class='{style.label}'>Standardizedpatients:</span></td><td><span ui:field='standardizedpatients'></span></td></tr>
-      <tr id='id'><td><span class='{style.label}'>Id:</span></td><td><span ui:field='id'></span></td></tr>
-      <tr id='version'><td><span class='{style.label}'>Version:</span></td><td><span ui:field='version'></span></td></tr>
+    <table class="{style.fields}" id="boundElementHolder">
+      <tr id="nationality">
+                <td>
+                    <span class="{style.label}">Nationality:</span>
+                </td>
+                <td>
+                    <span ui:field="nationality"/>
+                </td>
+            </tr>
+      <tr id="standardizedpatients">
+                <td>
+                    <span class="{style.label}">Standardizedpatients:</span>
+                </td>
+                <td>
+                    <span ui:field="standardizedpatients"/>
+                </td>
+            </tr>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
     </table>
 
   <div class="{style.bar}">
-    <g:Button addStyleNames='{style.button}' ui:field='edit'>Edit</g:Button>
-    <g:Anchor ui:field='delete'>Delete</g:Anchor>
+    <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
+    <g:Anchor ui:field="delete">Delete</g:Anchor>
    </div>
   </g:HTMLPanel>
 </ui:UiBinder>

@@ -1,6 +1,5 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
  <ui:style>
     .outer {
       padding: 10px;
@@ -13,12 +12,24 @@
     }
   </ui:style>
 
-  <g:HTMLPanel id="boundElementHolder" styleName='{style.outer}'>
-    <div id='languageName'><div class='{style.label}'>Language Name</div><div class='{style.value}' ui:field='languageName'></div></div>
-    <div id='langskills'><div class='{style.label}'>Langskills</div><div class='{style.value}' ui:field='langskills'></div></div>
-    <div id='id'><div class='{style.label}'>Id</div><div class='{style.value}' ui:field='id'></div></div>
-    <div id='version'><div class='{style.label}'>Version</div><div class='{style.value}' ui:field='version'></div></div>
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="languageName">
+            <div class="{style.label}">Language Name</div>
+            <div class="{style.value}" ui:field="languageName"/>
+        </div>
+    <div id="langskills">
+            <div class="{style.label}">Langskills</div>
+            <div class="{style.value}" ui:field="langskills"/>
+        </div>
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
 
-    <g:Button ui:field='delete'>Delete</g:Button>
+    <g:Button ui:field="delete">Delete</g:Button>
   </g:HTMLPanel>
 </ui:UiBinder>

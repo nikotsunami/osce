@@ -400,11 +400,6 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
-            public void handleCheckList(CheckListProxy isNull) {
-                setResult(new CheckListListActivity(requests, ScaffoldApp.isMobile() ? CheckListMobileListView.instance() : CheckListListView.instance(), placeController));
-            }
-
-            @Override
             public void handleChecklistOption(ChecklistOptionProxy isNull) {
                 setResult(new ChecklistOptionListActivity(requests, ScaffoldApp.isMobile() ? ChecklistOptionMobileListView.instance() : ChecklistOptionListView.instance(), placeController));
             }
@@ -412,6 +407,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleChecklistCriteria(ChecklistCriteriaProxy isNull) {
                 setResult(new ChecklistCriteriaListActivity(requests, ScaffoldApp.isMobile() ? ChecklistCriteriaMobileListView.instance() : ChecklistCriteriaListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleCheckList(CheckListProxy isNull) {
+                setResult(new CheckListListActivity(requests, ScaffoldApp.isMobile() ? CheckListMobileListView.instance() : CheckListListView.instance(), placeController));
             }
 
             @Override

@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -96,7 +97,7 @@ public abstract class AssignmentListView_Roo_Gwt extends AbstractProxyListView<A
         paths.add("timeStart");
         table.addColumn(new TextColumn<AssignmentProxy>() {
 
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
 
             @Override
             public String getValue(AssignmentProxy object) {
@@ -106,7 +107,7 @@ public abstract class AssignmentListView_Roo_Gwt extends AbstractProxyListView<A
         paths.add("timeEnd");
         table.addColumn(new TextColumn<AssignmentProxy>() {
 
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
 
             @Override
             public String getValue(AssignmentProxy object) {

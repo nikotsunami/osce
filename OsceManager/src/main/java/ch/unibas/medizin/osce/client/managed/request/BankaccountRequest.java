@@ -18,9 +18,9 @@ public interface BankaccountRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countBankaccounts();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy>> findAllBankaccounts();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy> findBankaccount(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy>> findAllBankaccounts();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.BankaccountProxy>> findBankaccountEntries(int firstResult, int maxResults);
 }

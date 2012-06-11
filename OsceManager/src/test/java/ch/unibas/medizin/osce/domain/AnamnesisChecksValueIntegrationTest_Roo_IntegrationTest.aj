@@ -83,7 +83,7 @@ privileged aspect AnamnesisChecksValueIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.AnamnesisChecksValue.findAnamnesisChecksValue(id);
         boolean modified =  dod.modifyAnamnesisChecksValue(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.AnamnesisChecksValue merged = (ch.unibas.medizin.osce.domain.AnamnesisChecksValue) obj.merge();
+        ch.unibas.medizin.osce.domain.AnamnesisChecksValue merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'AnamnesisChecksValue' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

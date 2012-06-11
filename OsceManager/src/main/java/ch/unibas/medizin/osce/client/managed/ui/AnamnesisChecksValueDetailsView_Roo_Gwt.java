@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -57,6 +58,6 @@ public abstract class AnamnesisChecksValueDetailsView_Roo_Gwt extends Composite 
         anamnesisChecksValue.setInnerText(proxy.getAnamnesisChecksValue() == null ? "" : String.valueOf(proxy.getAnamnesisChecksValue()));
         anamnesisform.setInnerText(proxy.getAnamnesisform() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy.getAnamnesisform()));
         anamnesischeck.setInnerText(proxy.getAnamnesischeck() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer.instance().render(proxy.getAnamnesischeck()));
-        displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance().render(proxy));
+        displayRenderer.setInnerText(AnamnesisChecksValueProxyRenderer.instance().render(proxy));
     }
 }

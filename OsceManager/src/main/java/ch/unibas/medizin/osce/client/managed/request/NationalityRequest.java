@@ -18,9 +18,9 @@ public interface NationalityRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countNationalitys();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>> findAllNationalitys();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.NationalityProxy> findNationality(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>> findAllNationalitys();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.NationalityProxy>> findNationalityEntries(int firstResult, int maxResults);
 }

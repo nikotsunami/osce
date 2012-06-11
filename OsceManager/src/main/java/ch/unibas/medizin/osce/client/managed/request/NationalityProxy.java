@@ -11,14 +11,6 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.Nationality")
 public interface NationalityProxy extends EntityProxy {
 
-    abstract String getNationality();
-
-    abstract void setNationality(String nationality);
-
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy> getStandardizedpatients();
-
-    abstract void setStandardizedpatients(Set<StandardizedPatientProxy> standardizedpatients);
-
     abstract Long getId();
 
     abstract void setId(Long id);
@@ -26,4 +18,12 @@ public interface NationalityProxy extends EntityProxy {
     abstract Integer getVersion();
 
     abstract void setVersion(Integer version);
+
+    abstract String getNationality();
+
+    abstract void setNationality(String nationality);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy> getStandardizedpatients();
+
+    abstract void setStandardizedpatients(Set<StandardizedPatientProxy> standardizedpatients);
 }

@@ -11,6 +11,14 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.OscePostRoom")
 public interface OscePostRoomProxy extends EntityProxy {
 
+    abstract Long getId();
+
+    abstract void setId(Long id);
+
+    abstract Integer getVersion();
+
+    abstract void setVersion(Integer version);
+
     abstract RoomProxy getRoom();
 
     abstract void setRoom(RoomProxy room);
@@ -26,12 +34,4 @@ public interface OscePostRoomProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.AssignmentProxy> getAssignments();
 
     abstract void setAssignments(Set<AssignmentProxy> assignments);
-
-    abstract Long getId();
-
-    abstract void setId(Long id);
-
-    abstract Integer getVersion();
-
-    abstract void setVersion(Integer version);
 }

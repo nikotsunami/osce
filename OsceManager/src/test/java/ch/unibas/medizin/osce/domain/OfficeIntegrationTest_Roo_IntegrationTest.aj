@@ -83,7 +83,7 @@ privileged aspect OfficeIntegrationTest_Roo_IntegrationTest {
         obj = ch.unibas.medizin.osce.domain.Office.findOffice(id);
         boolean modified =  dod.modifyOffice(obj);
         java.lang.Integer currentVersion = obj.getVersion();
-        ch.unibas.medizin.osce.domain.Office merged = (ch.unibas.medizin.osce.domain.Office) obj.merge();
+        ch.unibas.medizin.osce.domain.Office merged =  obj.merge();
         obj.flush();
         org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         org.junit.Assert.assertTrue("Version for 'Office' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);

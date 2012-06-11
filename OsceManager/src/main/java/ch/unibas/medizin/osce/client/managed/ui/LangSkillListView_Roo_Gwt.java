@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -30,6 +31,36 @@ public abstract class LangSkillListView_Roo_Gwt extends AbstractProxyListView<La
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
+        paths.add("id");
+        table.addColumn(new TextColumn<LangSkillProxy>() {
+
+            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
+
+                public String render(java.lang.Long obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(LangSkillProxy object) {
+                return renderer.render(object.getId());
+            }
+        }, "Id");
+        paths.add("version");
+        table.addColumn(new TextColumn<LangSkillProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(LangSkillProxy object) {
+                return renderer.render(object.getVersion());
+            }
+        }, "Version");
         paths.add("skill");
         table.addColumn(new TextColumn<LangSkillProxy>() {
 
@@ -65,35 +96,5 @@ public abstract class LangSkillListView_Roo_Gwt extends AbstractProxyListView<La
                 return renderer.render(object.getSpokenlanguage());
             }
         }, "Spokenlanguage");
-        paths.add("id");
-        table.addColumn(new TextColumn<LangSkillProxy>() {
-
-            Renderer<java.lang.Long> renderer = new AbstractRenderer<java.lang.Long>() {
-
-                public String render(java.lang.Long obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(LangSkillProxy object) {
-                return renderer.render(object.getId());
-            }
-        }, "Id");
-        paths.add("version");
-        table.addColumn(new TextColumn<LangSkillProxy>() {
-
-            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
-
-                public String render(java.lang.Integer obj) {
-                    return obj == null ? "" : String.valueOf(obj);
-                }
-            };
-
-            @Override
-            public String getValue(LangSkillProxy object) {
-                return renderer.render(object.getVersion());
-            }
-        }, "Version");
     }
 }

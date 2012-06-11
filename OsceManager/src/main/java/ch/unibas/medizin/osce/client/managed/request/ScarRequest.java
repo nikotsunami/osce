@@ -18,9 +18,9 @@ public interface ScarRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countScars();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ScarProxy>> findAllScars();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.ScarProxy> findScar(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ScarProxy>> findAllScars();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.ScarProxy>> findScarEntries(int firstResult, int maxResults);
 }

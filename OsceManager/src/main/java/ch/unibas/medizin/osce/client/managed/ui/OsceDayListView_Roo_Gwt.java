@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.text.client.DateTimeFormatRenderer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -62,7 +63,7 @@ public abstract class OsceDayListView_Roo_Gwt extends AbstractProxyListView<Osce
         paths.add("timeStart");
         table.addColumn(new TextColumn<OsceDayProxy>() {
 
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
 
             @Override
             public String getValue(OsceDayProxy object) {
@@ -72,7 +73,7 @@ public abstract class OsceDayListView_Roo_Gwt extends AbstractProxyListView<Osce
         paths.add("timeEnd");
         table.addColumn(new TextColumn<OsceDayProxy>() {
 
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
 
             @Override
             public String getValue(OsceDayProxy object) {

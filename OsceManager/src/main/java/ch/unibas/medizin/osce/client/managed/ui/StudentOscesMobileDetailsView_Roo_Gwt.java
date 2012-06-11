@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +23,12 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class StudentOscesMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<StudentOscesProxy> {
 
     @UiField
+    Element id;
+
+    @UiField
+    Element version;
+
+    @UiField
     Element isEnrolled;
 
     @UiField
@@ -30,20 +37,14 @@ public abstract class StudentOscesMobileDetailsView_Roo_Gwt extends Composite im
     @UiField
     Element student;
 
-    @UiField
-    Element id;
-
-    @UiField
-    Element version;
-
     StudentOscesProxy proxy;
 
     public void setValue(StudentOscesProxy proxy) {
         this.proxy = proxy;
+        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
+        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         isEnrolled.setInnerText(proxy.getIsEnrolled() == null ? "" : String.valueOf(proxy.getIsEnrolled()));
         osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getOsce()));
         student.setInnerText(proxy.getStudent() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StudentProxyRenderer.instance().render(proxy.getStudent()));
-        id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
-        version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
     }
 }

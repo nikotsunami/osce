@@ -18,9 +18,9 @@ public interface LangSkillRequest extends RequestContext {
 
     abstract Request<java.lang.Long> countLangSkills();
 
-    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.LangSkillProxy>> findAllLangSkills();
-
     abstract Request<ch.unibas.medizin.osce.client.managed.request.LangSkillProxy> findLangSkill(Long id);
+
+    abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.LangSkillProxy>> findAllLangSkills();
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.LangSkillProxy>> findLangSkillEntries(int firstResult, int maxResults);
 }
