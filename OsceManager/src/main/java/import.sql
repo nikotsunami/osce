@@ -174,3 +174,85 @@ INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert3', 'alter Wert3', '543210', 0);
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert4', 'alter Wert4', '543210', 0);
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert5', 'alter Wert5', '012345', 0);
+
+
+
+INSERT INTO `specialisation` (name, version) VALUES ('Ear-Nose-Throat', 0);
+INSERT INTO `specialisation` (name, version) VALUES ('Arms', 0);
+INSERT INTO `specialisation` (name, version) VALUES ('Legs', 0);
+INSERT INTO `specialisation` (name, version) VALUES ('Sewing', 0);
+
+INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('HNO', 'Ear-Nose-Throat', 2, 10, 1, 0);
+INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Arm', 'Arm Problems', 2, 10, 2, 0);
+INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Knie', 'Knee Problem', 2, 0, 3, 0);
+INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Naht', 'Stiching up sth.', 2, 0, 4, 0);
+
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (1, 'HNO - A', 'HNO - Version A', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (2, 'Arm - A', 'Arm - Version A', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (3, 'Knie - A', 'Knie - Version A', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (4, 'Naht - A', 'Naht - Version A', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (1, 'HNO - B', 'HNO - Version B', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (2, 'Arm - B', 'Arm - Version B', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (3, 'Knie - B', 'Knie - Version B', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (4, 'Naht - B', 'Naht - Version B', 0);
+
+INSERT INTO `osce` (is_repe_osce, is_valid, max_number_students, number_courses, number_rooms, post_length, short_break, middle_break, long_break, study_year, name, osce_status, semester, version) VALUES (0, 1, 130, 0, 16, 13, 1, 15, 35, 3, 'Test 1', 2, 1, 0);
+INSERT INTO `osce` (is_repe_osce, is_valid, max_number_students, number_courses, number_rooms, post_length, short_break, middle_break, long_break, study_year, name, osce_status, semester, version) VALUES (0, 1, 120, 0, 16, 20, 1, 20, 45, 3, 'Test 2', 2, 1, 0);
+
+INSERT INTO `osce_day` (osce_date, time_start, time_end, osce, version) VALUES('2012-06-18', '2012-06-18 09:00', '2012-06-18 18:00', 1, 0);
+INSERT INTO `osce_day` (osce_date, time_start, time_end, osce, version) VALUES('2012-06-19', '2012-06-18 09:00', '2012-06-18 17:00', 2, 0);
+INSERT INTO `osce_day` (osce_date, time_start, time_end, osce, version) VALUES('2012-06-20', '2012-06-18 09:00', '2012-06-18 11:00', 2, 0);
+
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 1, 1, 1, 0, 1, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 2, 2, 1, 0, 2, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 3, 3, 1, 0, 3, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 4, 4, 1, 0, 4, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 1, 1, 2, 2, 1, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 2, 2, 2, 3, 2, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 3, 3, 2, 0, 3, 0);
+INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 4, 4, 2, 0, 4, 0);
+
+INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 4, 1, 0);
+INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('B', 4, 1, 0);
+INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 3, 2, 0);
+INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('B', 3, 2, 0);
+INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('C', 2, 2, 0);
+
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('yellow', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('yellow', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 3, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 3, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 3, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 4, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 4, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 4, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 5, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 5, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 5, 0);
+
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (1, 1, 1, 1);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (1, 2, 2, 2);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (1, 3, 3, 3);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (1, 4, 4, 4);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (2, 1, 1, 5);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (2, 2, 2, 6);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (2, 3, 3, 7);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (2, 4, 4, 8);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 1, 5, 1);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 2, 6, 2);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 3, 7, 3);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 4, 8, 4);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 1, 5, 5);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 2, 6, 6);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 3, 7, 7);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 4, 8, 8);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 1, 5, null);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 2, 6, null);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 3, 7, null);
+INSERT INTO `osce_post` (osce_sequence, sequence_number, osce_post_blueprint, standardized_role) VALUES (3, 4, 8, null);

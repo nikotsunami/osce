@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -48,6 +49,9 @@ public abstract class RoleTopicMobileDetailsView_Roo_Gwt extends Composite imple
     @UiField
     Element specialisation;
 
+    @UiField
+    Element oscePostBlueprints;
+
     RoleTopicProxy proxy;
 
     public void setValue(RoleTopicProxy proxy) {
@@ -60,5 +64,6 @@ public abstract class RoleTopicMobileDetailsView_Roo_Gwt extends Composite imple
         slotsUntilChange.setInnerText(proxy.getSlotsUntilChange() == null ? "" : String.valueOf(proxy.getSlotsUntilChange()));
         standardizedRoles.setInnerText(proxy.getStandardizedRoles() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance()).render(proxy.getStandardizedRoles()));
         specialisation.setInnerText(proxy.getSpecialisation() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance().render(proxy.getSpecialisation()));
+        oscePostBlueprints.setInnerText(proxy.getOscePostBlueprints() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance()).render(proxy.getOscePostBlueprints()));
     }
 }

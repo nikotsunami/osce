@@ -3,10 +3,12 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.OscePost;
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
-import ch.unibas.medizin.osce.domain.RoleTopic;
+import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.StandardizedRole;
 import java.lang.Boolean;
+import java.lang.Integer;
 import java.util.Set;
 
 privileged aspect OscePost_Roo_JavaBean {
@@ -19,20 +21,12 @@ privileged aspect OscePost_Roo_JavaBean {
         this.isPossibleStart = isPossibleStart;
     }
     
-    public RoleTopic OscePost.getRoleTopic() {
-        return this.roleTopic;
+    public OscePostBlueprint OscePost.getOscePostBlueprint() {
+        return this.oscePostBlueprint;
     }
     
-    public void OscePost.setRoleTopic(RoleTopic roleTopic) {
-        this.roleTopic = roleTopic;
-    }
-    
-    public OscePost OscePost.getNextPost() {
-        return this.nextPost;
-    }
-    
-    public void OscePost.setNextPost(OscePost nextPost) {
-        this.nextPost = nextPost;
+    public void OscePost.setOscePostBlueprint(OscePostBlueprint oscePostBlueprint) {
+        this.oscePostBlueprint = oscePostBlueprint;
     }
     
     public Set<OscePostRoom> OscePost.getOscePostRooms() {
@@ -41,6 +35,30 @@ privileged aspect OscePost_Roo_JavaBean {
     
     public void OscePost.setOscePostRooms(Set<OscePostRoom> oscePostRooms) {
         this.oscePostRooms = oscePostRooms;
+    }
+    
+    public StandardizedRole OscePost.getStandardizedRole() {
+        return this.standardizedRole;
+    }
+    
+    public void OscePost.setStandardizedRole(StandardizedRole standardizedRole) {
+        this.standardizedRole = standardizedRole;
+    }
+    
+    public OsceSequence OscePost.getOsceSequence() {
+        return this.osceSequence;
+    }
+    
+    public void OscePost.setOsceSequence(OsceSequence osceSequence) {
+        this.osceSequence = osceSequence;
+    }
+    
+    public Integer OscePost.getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+    
+    public void OscePost.setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
     
 }

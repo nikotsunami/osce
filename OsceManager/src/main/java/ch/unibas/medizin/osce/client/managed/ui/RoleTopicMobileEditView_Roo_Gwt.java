@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.RoleTopicEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.RoleTopicEditActivityWrapper.View;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -63,8 +64,15 @@ public abstract class RoleTopicMobileEditView_Roo_Gwt extends Composite implemen
     @UiField(provided = true)
     ValueListBox<SpecialisationProxy> specialisation = new ValueListBox<SpecialisationProxy>(ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy>());
 
+    @UiField
+    OscePostBlueprintSetEditor oscePostBlueprints;
+
     public void setStandardizedRolesPickerValues(Collection<StandardizedRoleProxy> values) {
         standardizedRoles.setAcceptableValues(values);
+    }
+
+    public void setOscePostBlueprintsPickerValues(Collection<OscePostBlueprintProxy> values) {
+        oscePostBlueprints.setAcceptableValues(values);
     }
 
     public void setSpecialisationPickerValues(Collection<SpecialisationProxy> values) {

@@ -20,6 +20,10 @@ public interface OsceDayProxy extends EntityProxy {
 
     abstract void setVersion(Integer version);
 
+    abstract Date getOsceDate();
+
+    abstract void setOsceDate(Date osceDate);
+
     abstract Date getTimeStart();
 
     abstract void setTimeStart(Date timeStart);
@@ -32,7 +36,7 @@ public interface OsceDayProxy extends EntityProxy {
 
     abstract void setOsce(OsceProxy osce);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.AssignmentProxy> getAssignments();
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy> getOsceSequences();
 
-    abstract void setAssignments(Set<AssignmentProxy> assignments);
+    abstract void setOsceSequences(Set<OsceSequenceProxy> osceSequences);
 }

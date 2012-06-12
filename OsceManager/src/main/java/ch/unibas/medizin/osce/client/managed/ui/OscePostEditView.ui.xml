@@ -43,7 +43,11 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="isPossibleStart">
+      
+      
+      
+      
+    <tr id="isPossibleStart">
                 <td>
                     <div class="{style.label}">Is Possible Start:</div>
                 </td>
@@ -51,23 +55,15 @@
                     <g:CheckBox ui:field="isPossibleStart"/>
                 </td>
             </tr>
-      <tr id="roleTopic">
+            <tr id="oscePostBlueprint">
                 <td>
-                    <div class="{style.label}">Role Topic:</div>
+                    <div class="{style.label}">Osce Post Blueprint:</div>
                 </td>
                 <td>
-                    <g:ValueListBox ui:field="roleTopic"/>
-                </td>
-            </tr>
-      <tr id="nextPost">
-                <td>
-                    <div class="{style.label}">Next Post:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="nextPost"/>
+                    <g:ValueListBox ui:field="oscePostBlueprint"/>
                 </td>
             </tr>
-      <tr id="oscePostRooms">
+            <tr id="oscePostRooms">
                 <td>
                     <div class="{style.label}">Osce Post Rooms:</div>
                 </td>
@@ -75,7 +71,31 @@
                     <a:OscePostRoomSetEditor ui:field="oscePostRooms"/>
                 </td>
             </tr>
-    </table>
+            <tr id="standardizedRole">
+                <td>
+                    <div class="{style.label}">Standardized Role:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="standardizedRole"/>
+                </td>
+            </tr>
+            <tr id="osceSequence">
+                <td>
+                    <div class="{style.label}">Osce Sequence:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="osceSequence"/>
+                </td>
+            </tr>
+            <tr id="sequenceNumber">
+                <td>
+                    <div class="{style.label}">Sequence Number:</div>
+                </td>
+                <td>
+                    <g:IntegerBox ui:field="sequenceNumber"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

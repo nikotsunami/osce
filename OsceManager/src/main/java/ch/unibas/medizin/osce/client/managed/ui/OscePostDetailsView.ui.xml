@@ -35,39 +35,13 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="isPossibleStart">
-                <td>
-                    <span class="{style.label}">Is Possible Start:</span>
-                </td>
-                <td>
-                    <span ui:field="isPossibleStart"/>
-                </td>
-            </tr>
-      <tr id="roleTopic">
-                <td>
-                    <span class="{style.label}">Role Topic:</span>
-                </td>
-                <td>
-                    <span ui:field="roleTopic"/>
-                </td>
-            </tr>
-      <tr id="nextPost">
-                <td>
-                    <span class="{style.label}">Next Post:</span>
-                </td>
-                <td>
-                    <span ui:field="nextPost"/>
-                </td>
-            </tr>
-      <tr id="oscePostRooms">
-                <td>
-                    <span class="{style.label}">Osce Post Rooms:</span>
-                </td>
-                <td>
-                    <span ui:field="oscePostRooms"/>
-                </td>
-            </tr>
-      <tr id="id">
+      
+      
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -75,7 +49,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -83,7 +57,55 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-    </table>
+            <tr id="isPossibleStart">
+                <td>
+                    <span class="{style.label}">Is Possible Start:</span>
+                </td>
+                <td>
+                    <span ui:field="isPossibleStart"/>
+                </td>
+            </tr>
+            <tr id="oscePostBlueprint">
+                <td>
+                    <span class="{style.label}">Osce Post Blueprint:</span>
+                </td>
+                <td>
+                    <span ui:field="oscePostBlueprint"/>
+                </td>
+            </tr>
+            <tr id="oscePostRooms">
+                <td>
+                    <span class="{style.label}">Osce Post Rooms:</span>
+                </td>
+                <td>
+                    <span ui:field="oscePostRooms"/>
+                </td>
+            </tr>
+            <tr id="standardizedRole">
+                <td>
+                    <span class="{style.label}">Standardized Role:</span>
+                </td>
+                <td>
+                    <span ui:field="standardizedRole"/>
+                </td>
+            </tr>
+            <tr id="osceSequence">
+                <td>
+                    <span class="{style.label}">Osce Sequence:</span>
+                </td>
+                <td>
+                    <span ui:field="osceSequence"/>
+                </td>
+            </tr>
+            <tr id="sequenceNumber">
+                <td>
+                    <span class="{style.label}">Sequence Number:</span>
+                </td>
+                <td>
+                    <span ui:field="sequenceNumber"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

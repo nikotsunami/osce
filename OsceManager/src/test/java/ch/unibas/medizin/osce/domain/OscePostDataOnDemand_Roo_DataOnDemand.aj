@@ -4,9 +4,12 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.OscePost;
-import ch.unibas.medizin.osce.domain.RoleTopic;
-import ch.unibas.medizin.osce.domain.RoleTopicDataOnDemand;
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
+import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.domain.StandardizedRoleDataOnDemand;
 import java.lang.Boolean;
+import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,13 +29,15 @@ privileged aspect OscePostDataOnDemand_Roo_DataOnDemand {
     private List<OscePost> OscePostDataOnDemand.data;
     
     @Autowired
-    private RoleTopicDataOnDemand OscePostDataOnDemand.roleTopicDataOnDemand;
+    private StandardizedRoleDataOnDemand OscePostDataOnDemand.standardizedRoleDataOnDemand;
     
     public OscePost OscePostDataOnDemand.getNewTransientOscePost(int index) {
         OscePost obj = new OscePost();
         setIsPossibleStart(obj, index);
-        setNextPost(obj, index);
-        setRoleTopic(obj, index);
+        setOscePostBlueprint(obj, index);
+        setOsceSequence(obj, index);
+        setSequenceNumber(obj, index);
+        setStandardizedRole(obj, index);
         return obj;
     }
     
@@ -41,14 +46,24 @@ privileged aspect OscePostDataOnDemand_Roo_DataOnDemand {
         obj.setIsPossibleStart(isPossibleStart);
     }
     
-    public void OscePostDataOnDemand.setNextPost(OscePost obj, int index) {
-        OscePost nextPost = obj;
-        obj.setNextPost(nextPost);
+    public void OscePostDataOnDemand.setOscePostBlueprint(OscePost obj, int index) {
+        OscePostBlueprint oscePostBlueprint = null;
+        obj.setOscePostBlueprint(oscePostBlueprint);
     }
     
-    public void OscePostDataOnDemand.setRoleTopic(OscePost obj, int index) {
-        RoleTopic roleTopic = roleTopicDataOnDemand.getRandomRoleTopic();
-        obj.setRoleTopic(roleTopic);
+    public void OscePostDataOnDemand.setOsceSequence(OscePost obj, int index) {
+        OsceSequence osceSequence = null;
+        obj.setOsceSequence(osceSequence);
+    }
+    
+    public void OscePostDataOnDemand.setSequenceNumber(OscePost obj, int index) {
+        Integer sequenceNumber = new Integer(index);
+        obj.setSequenceNumber(sequenceNumber);
+    }
+    
+    public void OscePostDataOnDemand.setStandardizedRole(OscePost obj, int index) {
+        StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
+        obj.setStandardizedRole(standardizedRole);
     }
     
     public OscePost OscePostDataOnDemand.getSpecificOscePost(int index) {

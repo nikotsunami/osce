@@ -23,15 +23,23 @@ public interface OscePostProxy extends EntityProxy {
 
     abstract void setIsPossibleStart(Boolean isPossibleStart);
 
-    abstract RoleTopicProxy getRoleTopic();
+    abstract OscePostBlueprintProxy getOscePostBlueprint();
 
-    abstract void setRoleTopic(RoleTopicProxy roleTopic);
-
-    abstract ch.unibas.medizin.osce.client.managed.request.OscePostProxy getNextPost();
-
-    abstract void setNextPost(ch.unibas.medizin.osce.client.managed.request.OscePostProxy nextPost);
+    abstract void setOscePostBlueprint(OscePostBlueprintProxy oscePostBlueprint);
 
     abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy> getOscePostRooms();
 
     abstract void setOscePostRooms(Set<OscePostRoomProxy> oscePostRooms);
+
+    abstract StandardizedRoleProxy getStandardizedRole();
+
+    abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);
+
+    abstract OsceSequenceProxy getOsceSequence();
+
+    abstract void setOsceSequence(OsceSequenceProxy osceSequence);
+
+    abstract Integer getSequenceNumber();
+
+    abstract void setSequenceNumber(Integer sequenceNumber);
 }

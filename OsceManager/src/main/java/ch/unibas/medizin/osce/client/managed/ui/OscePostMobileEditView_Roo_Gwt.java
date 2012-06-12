@@ -4,9 +4,11 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.OscePostEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.OscePostEditActivityWrapper.View;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import com.google.gwt.core.client.GWT;
@@ -48,23 +50,33 @@ public abstract class OscePostMobileEditView_Roo_Gwt extends Composite implement
     };
 
     @UiField(provided = true)
-    ValueListBox<RoleTopicProxy> roleTopic = new ValueListBox<RoleTopicProxy>(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy>());
-
-    @UiField(provided = true)
-    ValueListBox<OscePostProxy> nextPost = new ValueListBox<OscePostProxy>(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OscePostProxy>());
+    ValueListBox<OscePostBlueprintProxy> oscePostBlueprint = new ValueListBox<OscePostBlueprintProxy>(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy>());
 
     @UiField
     OscePostRoomSetEditor oscePostRooms;
+
+    @UiField(provided = true)
+    ValueListBox<StandardizedRoleProxy> standardizedRole = new ValueListBox<StandardizedRoleProxy>(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>());
+
+    @UiField(provided = true)
+    ValueListBox<OsceSequenceProxy> osceSequence = new ValueListBox<OsceSequenceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy>());
+
+    @UiField
+    IntegerBox sequenceNumber;
 
     public void setOscePostRoomsPickerValues(Collection<OscePostRoomProxy> values) {
         oscePostRooms.setAcceptableValues(values);
     }
 
-    public void setNextPostPickerValues(Collection<OscePostProxy> values) {
-        nextPost.setAcceptableValues(values);
+    public void setOscePostBlueprintPickerValues(Collection<OscePostBlueprintProxy> values) {
+        oscePostBlueprint.setAcceptableValues(values);
     }
 
-    public void setRoleTopicPickerValues(Collection<RoleTopicProxy> values) {
-        roleTopic.setAcceptableValues(values);
+    public void setOsceSequencePickerValues(Collection<OsceSequenceProxy> values) {
+        osceSequence.setAcceptableValues(values);
+    }
+
+    public void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values) {
+        standardizedRole.setAcceptableValues(values);
     }
 }

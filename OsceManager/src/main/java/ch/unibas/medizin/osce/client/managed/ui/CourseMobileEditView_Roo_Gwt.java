@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.activity.CourseEditActivityWrapper.
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import com.google.gwt.core.client.GWT;
@@ -48,8 +49,15 @@ public abstract class CourseMobileEditView_Roo_Gwt extends Composite implements 
     @UiField
     OscePostRoomSetEditor oscePostRooms;
 
+    @UiField(provided = true)
+    ValueListBox<OsceSequenceProxy> osceSequence = new ValueListBox<OsceSequenceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy>());
+
     public void setOscePostRoomsPickerValues(Collection<OscePostRoomProxy> values) {
         oscePostRooms.setAcceptableValues(values);
+    }
+
+    public void setOsceSequencePickerValues(Collection<OsceSequenceProxy> values) {
+        osceSequence.setAcceptableValues(values);
     }
 
     public void setOscePickerValues(Collection<OsceProxy> values) {

@@ -9,7 +9,6 @@ privileged aspect Osce_Roo_ToString {
     
     public String Osce.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Courses: ").append(getCourses() == null ? "null" : getCourses().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("IsRepeOsce: ").append(getIsRepeOsce()).append(", ");
         sb.append("IsValid: ").append(getIsValid()).append(", ");
@@ -21,6 +20,7 @@ privileged aspect Osce_Roo_ToString {
         sb.append("NumberCourses: ").append(getNumberCourses()).append(", ");
         sb.append("NumberPosts: ").append(getNumberPosts()).append(", ");
         sb.append("NumberRooms: ").append(getNumberRooms()).append(", ");
+        sb.append("OscePostBlueprints: ").append(getOscePostBlueprints() == null ? "null" : getOscePostBlueprints().size()).append(", ");
         sb.append("OsceStatus: ").append(getOsceStatus()).append(", ");
         sb.append("OsceStudents: ").append(getOsceStudents() == null ? "null" : getOsceStudents().size()).append(", ");
         sb.append("Osce_days: ").append(getOsce_days() == null ? "null" : getOsce_days().size()).append(", ");

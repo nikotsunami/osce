@@ -2,8 +2,8 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
@@ -295,16 +295,16 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getOsce_days());
             }
         }, "Osce_days");
-        paths.add("courses");
+        paths.add("oscePostBlueprints");
         table.addColumn(new TextColumn<OsceProxy>() {
 
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.CourseProxyRenderer.instance());
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance());
 
             @Override
             public String getValue(OsceProxy object) {
-                return renderer.render(object.getCourses());
+                return renderer.render(object.getOscePostBlueprints());
             }
-        }, "Courses");
+        }, "Osce Post Blueprints");
         paths.add("tasks");
         table.addColumn(new TextColumn<OsceProxy>() {
 

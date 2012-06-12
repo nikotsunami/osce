@@ -3,9 +3,9 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.domain.Task;
@@ -147,12 +147,12 @@ privileged aspect Osce_Roo_JavaBean {
         this.osce_days = osce_days;
     }
     
-    public Set<Course> Osce.getCourses() {
-        return this.courses;
+    public Set<OscePostBlueprint> Osce.getOscePostBlueprints() {
+        return this.oscePostBlueprints;
     }
     
-    public void Osce.setCourses(Set<Course> courses) {
-        this.courses = courses;
+    public void Osce.setOscePostBlueprints(Set<OscePostBlueprint> oscePostBlueprints) {
+        this.oscePostBlueprints = oscePostBlueprints;
     }
     
     public Set<Task> Osce.getTasks() {

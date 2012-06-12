@@ -85,9 +85,9 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setOsce_days(Set<OsceDayProxy> osce_days);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.CourseProxy> getCourses();
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy> getOscePostBlueprints();
 
-    abstract void setCourses(Set<CourseProxy> courses);
+    abstract void setOscePostBlueprints(Set<OscePostBlueprintProxy> oscePostBlueprints);
 
     abstract Set<ch.unibas.medizin.osce.client.managed.request.TaskProxy> getTasks();
 

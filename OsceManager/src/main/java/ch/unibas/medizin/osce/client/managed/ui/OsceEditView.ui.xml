@@ -135,6 +135,26 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
@@ -263,12 +283,12 @@
                     <a:OsceDaySetEditor ui:field="osce_days"/>
                 </td>
             </tr>
-            <tr id="courses">
+            <tr id="oscePostBlueprints">
                 <td>
-                    <div class="{style.label}">Courses:</div>
+                    <div class="{style.label}">Osce Post Blueprints:</div>
                 </td>
                 <td>
-                    <a:CourseSetEditor ui:field="courses"/>
+                    <a:OscePostBlueprintSetEditor ui:field="oscePostBlueprints"/>
                 </td>
             </tr>
             <tr id="tasks">

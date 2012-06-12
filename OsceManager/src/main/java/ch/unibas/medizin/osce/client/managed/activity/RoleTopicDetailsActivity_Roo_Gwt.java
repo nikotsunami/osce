@@ -3,9 +3,11 @@
 package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
@@ -32,6 +34,6 @@ public abstract class RoleTopicDetailsActivity_Roo_Gwt extends AbstractActivity 
     protected EntityProxyId<RoleTopicProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("standardizedRoles", "specialisation").fire(callback);
+        requests.find(proxyId).with("standardizedRoles", "specialisation", "oscePostBlueprints").fire(callback);
     }
 }

@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.activity.StandardizedRoleEditActivi
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
@@ -108,6 +109,9 @@ public abstract class StandardizedRoleMobileEditView_Roo_Gwt extends Composite i
     @UiField(provided = true)
     ValueListBox<CheckListProxy> checkList = new ValueListBox<CheckListProxy>(ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.CheckListProxy>());
 
+    @UiField
+    OscePostSetEditor oscePosts;
+
     public void setAdvancedSearchCriteriaPickerValues(Collection<AdvancedSearchCriteriaProxy> values) {
         advancedSearchCriteria.setAcceptableValues(values);
     }
@@ -130,6 +134,10 @@ public abstract class StandardizedRoleMobileEditView_Roo_Gwt extends Composite i
 
     public void setKeywordsPickerValues(Collection<KeywordProxy> values) {
         keywords.setAcceptableValues(values);
+    }
+
+    public void setOscePostsPickerValues(Collection<OscePostProxy> values) {
+        oscePosts.setAcceptableValues(values);
     }
 
     public void setRoleTopicPickerValues(Collection<RoleTopicProxy> values) {

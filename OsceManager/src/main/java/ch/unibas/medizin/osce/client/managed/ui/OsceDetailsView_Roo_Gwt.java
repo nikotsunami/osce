@@ -2,8 +2,8 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
@@ -84,7 +84,7 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
     SpanElement osce_days;
 
     @UiField
-    SpanElement courses;
+    SpanElement oscePostBlueprints;
 
     @UiField
     SpanElement tasks;
@@ -120,7 +120,7 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
         osceStatus.setInnerText(proxy.getOsceStatus() == null ? "" : String.valueOf(proxy.getOsceStatus()));
         semester.setInnerText(proxy.getSemester() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance().render(proxy.getSemester()));
         osce_days.setInnerText(proxy.getOsce_days() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance()).render(proxy.getOsce_days()));
-        courses.setInnerText(proxy.getCourses() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.CourseProxyRenderer.instance()).render(proxy.getCourses()));
+        oscePostBlueprints.setInnerText(proxy.getOscePostBlueprints() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance()).render(proxy.getOscePostBlueprints()));
         tasks.setInnerText(proxy.getTasks() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance()).render(proxy.getTasks()));
         osceStudents.setInnerText(proxy.getOsceStudents() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StudentOscesProxyRenderer.instance()).render(proxy.getOsceStudents()));
         copiedOsce.setInnerText(proxy.getCopiedOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getCopiedOsce()));

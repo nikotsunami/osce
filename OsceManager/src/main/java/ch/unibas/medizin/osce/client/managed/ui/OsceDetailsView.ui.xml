@@ -137,6 +137,28 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -281,12 +303,12 @@
                     <span ui:field="osce_days"/>
                 </td>
             </tr>
-            <tr id="courses">
+            <tr id="oscePostBlueprints">
                 <td>
-                    <span class="{style.label}">Courses:</span>
+                    <span class="{style.label}">Osce Post Blueprints:</span>
                 </td>
                 <td>
-                    <span ui:field="courses"/>
+                    <span ui:field="oscePostBlueprints"/>
                 </td>
             </tr>
             <tr id="tasks">

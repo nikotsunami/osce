@@ -31,9 +31,11 @@ import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
@@ -113,10 +115,14 @@ import ch.unibas.medizin.osce.client.managed.ui.OsceDayListView;
 import ch.unibas.medizin.osce.client.managed.ui.OsceDayMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.OsceListView;
 import ch.unibas.medizin.osce.client.managed.ui.OsceMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintListView;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostListView;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomListView;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.OsceSequenceListView;
+import ch.unibas.medizin.osce.client.managed.ui.OsceSequenceMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.PatientInRoleListView;
 import ch.unibas.medizin.osce.client.managed.ui.PatientInRoleMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterListView;
@@ -300,6 +306,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
+            public void handleOsceSequence(OsceSequenceProxy isNull) {
+                setResult(new OsceSequenceListActivity(requests, ScaffoldApp.isMobile() ? OsceSequenceMobileListView.instance() : OsceSequenceListView.instance(), placeController));
+            }
+
+            @Override
             public void handleOsce(OsceProxy isNull) {
                 setResult(new OsceListActivity(requests, ScaffoldApp.isMobile() ? OsceMobileListView.instance() : OsceListView.instance(), placeController));
             }
@@ -312,6 +323,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleOscePost(OscePostProxy isNull) {
                 setResult(new OscePostListActivity(requests, ScaffoldApp.isMobile() ? OscePostMobileListView.instance() : OscePostListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleOscePostBlueprint(OscePostBlueprintProxy isNull) {
+                setResult(new OscePostBlueprintListActivity(requests, ScaffoldApp.isMobile() ? OscePostBlueprintMobileListView.instance() : OscePostBlueprintListView.instance(), placeController));
             }
 
             @Override

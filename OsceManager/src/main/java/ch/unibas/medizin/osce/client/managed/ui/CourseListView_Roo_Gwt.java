@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -95,5 +96,15 @@ public abstract class CourseListView_Roo_Gwt extends AbstractProxyListView<Cours
                 return renderer.render(object.getOscePostRooms());
             }
         }, "Osce Post Rooms");
+        paths.add("osceSequence");
+        table.addColumn(new TextColumn<CourseProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance();
+
+            @Override
+            public String getValue(CourseProxy object) {
+                return renderer.render(object.getOsceSequence());
+            }
+        }, "Osce Sequence");
     }
 }

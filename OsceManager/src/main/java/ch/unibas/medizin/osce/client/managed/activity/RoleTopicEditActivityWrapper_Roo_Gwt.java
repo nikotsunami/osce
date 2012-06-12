@@ -4,9 +4,11 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.RoleTopicEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -57,6 +59,16 @@ public abstract class RoleTopicEditActivityWrapper_Roo_Gwt implements Activity, 
                 view.setSpecialisationPickerValues(values);
             }
         });
+        view.setOscePostBlueprintsPickerValues(Collections.<OscePostBlueprintProxy>emptyList());
+        requests.oscePostBlueprintRequest().findOscePostBlueprintEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance().getPaths()).fire(new Receiver<List<OscePostBlueprintProxy>>() {
+
+            public void onSuccess(List<OscePostBlueprintProxy> response) {
+                List<OscePostBlueprintProxy> values = new ArrayList<OscePostBlueprintProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setOscePostBlueprintsPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -67,5 +79,7 @@ public abstract class RoleTopicEditActivityWrapper_Roo_Gwt implements Activity, 
         void setStandardizedRolesPickerValues(Collection<StandardizedRoleProxy> values);
 
         void setSpecialisationPickerValues(Collection<SpecialisationProxy> values);
+
+        void setOscePostBlueprintsPickerValues(Collection<OscePostBlueprintProxy> values);
     }
 }

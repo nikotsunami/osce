@@ -30,4 +30,8 @@ public interface CourseProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy> getOscePostRooms();
 
     abstract void setOscePostRooms(Set<OscePostRoomProxy> oscePostRooms);
+
+    abstract OsceSequenceProxy getOsceSequence();
+
+    abstract void setOsceSequence(OsceSequenceProxy osceSequence);
 }

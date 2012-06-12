@@ -2,6 +2,7 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -141,5 +142,15 @@ public abstract class RoleTopicListView_Roo_Gwt extends AbstractProxyListView<Ro
                 return renderer.render(object.getSpecialisation());
             }
         }, "Specialisation");
+        paths.add("oscePostBlueprints");
+        table.addColumn(new TextColumn<RoleTopicProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance());
+
+            @Override
+            public String getValue(RoleTopicProxy object) {
+                return renderer.render(object.getOscePostBlueprints());
+            }
+        }, "Osce Post Blueprints");
     }
 }

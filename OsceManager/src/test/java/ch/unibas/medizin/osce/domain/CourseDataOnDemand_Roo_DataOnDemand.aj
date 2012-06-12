@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDataOnDemand;
+import ch.unibas.medizin.osce.domain.OsceSequence;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ privileged aspect CourseDataOnDemand_Roo_DataOnDemand {
         Course obj = new Course();
         setColor(obj, index);
         setOsce(obj, index);
+        setOsceSequence(obj, index);
         return obj;
     }
     
@@ -43,6 +45,11 @@ privileged aspect CourseDataOnDemand_Roo_DataOnDemand {
     public void CourseDataOnDemand.setOsce(Course obj, int index) {
         Osce osce = osceDataOnDemand.getRandomOsce();
         obj.setOsce(osce);
+    }
+    
+    public void CourseDataOnDemand.setOsceSequence(Course obj, int index) {
+        OsceSequence osceSequence = null;
+        obj.setOsceSequence(osceSequence);
     }
     
     public Course CourseDataOnDemand.getSpecificCourse(int index) {

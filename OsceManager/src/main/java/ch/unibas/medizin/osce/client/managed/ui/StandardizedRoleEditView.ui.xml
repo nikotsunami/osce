@@ -43,7 +43,23 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="shortName">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <tr id="shortName">
                 <td>
                     <div class="{style.label}">Short Name:</div>
                 </td>
@@ -51,7 +67,7 @@
                     <g:TextBox ui:field="shortName"/>
                 </td>
             </tr>
-      <tr id="longName">
+            <tr id="longName">
                 <td>
                     <div class="{style.label}">Long Name:</div>
                 </td>
@@ -59,7 +75,7 @@
                     <g:TextBox ui:field="longName"/>
                 </td>
             </tr>
-      <tr id="caseDescription">
+            <tr id="caseDescription">
                 <td>
                     <div class="{style.label}">Case Description:</div>
                 </td>
@@ -67,7 +83,7 @@
                     <g:TextBox ui:field="caseDescription"/>
                 </td>
             </tr>
-      <tr id="roleScript">
+            <tr id="roleScript">
                 <td>
                     <div class="{style.label}">Role Script:</div>
                 </td>
@@ -75,7 +91,7 @@
                     <g:TextBox ui:field="roleScript"/>
                 </td>
             </tr>
-      <tr id="roleType">
+            <tr id="roleType">
                 <td>
                     <div class="{style.label}">Role Type:</div>
                 </td>
@@ -83,7 +99,7 @@
                     <g:ValueListBox ui:field="roleType"/>
                 </td>
             </tr>
-      <tr id="active">
+            <tr id="active">
                 <td>
                     <div class="{style.label}">Active:</div>
                 </td>
@@ -91,7 +107,7 @@
                     <g:CheckBox ui:field="active"/>
                 </td>
             </tr>
-      <tr id="roleTopic">
+            <tr id="roleTopic">
                 <td>
                     <div class="{style.label}">Role Topic:</div>
                 </td>
@@ -99,7 +115,7 @@
                     <g:ValueListBox ui:field="roleTopic"/>
                 </td>
             </tr>
-      <tr id="roleParticipants">
+            <tr id="roleParticipants">
                 <td>
                     <div class="{style.label}">Role Participants:</div>
                 </td>
@@ -107,7 +123,7 @@
                     <a:RoleParticipantSetEditor ui:field="roleParticipants"/>
                 </td>
             </tr>
-      <tr id="previousVersion">
+            <tr id="previousVersion">
                 <td>
                     <div class="{style.label}">Previous Version:</div>
                 </td>
@@ -115,7 +131,7 @@
                     <g:ValueListBox ui:field="previousVersion"/>
                 </td>
             </tr>
-      <tr id="studyYear">
+            <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
                 </td>
@@ -123,7 +139,7 @@
                     <g:ValueListBox ui:field="studyYear"/>
                 </td>
             </tr>
-      <tr id="mainVersion">
+            <tr id="mainVersion">
                 <td>
                     <div class="{style.label}">Main Version:</div>
                 </td>
@@ -131,7 +147,7 @@
                     <g:IntegerBox ui:field="mainVersion"/>
                 </td>
             </tr>
-      <tr id="subVersion">
+            <tr id="subVersion">
                 <td>
                     <div class="{style.label}">Sub Version:</div>
                 </td>
@@ -139,7 +155,7 @@
                     <g:IntegerBox ui:field="subVersion"/>
                 </td>
             </tr>
-      <tr id="keywords">
+            <tr id="keywords">
                 <td>
                     <div class="{style.label}">Keywords:</div>
                 </td>
@@ -147,7 +163,7 @@
                     <a:KeywordSetEditor ui:field="keywords"/>
                 </td>
             </tr>
-      <tr id="advancedSearchCriteria">
+            <tr id="advancedSearchCriteria">
                 <td>
                     <div class="{style.label}">Advanced Search Criteria:</div>
                 </td>
@@ -155,7 +171,7 @@
                     <a:AdvancedSearchCriteriaSetEditor ui:field="advancedSearchCriteria"/>
                 </td>
             </tr>
-      <tr id="simpleSearchCriteria">
+            <tr id="simpleSearchCriteria">
                 <td>
                     <div class="{style.label}">Simple Search Criteria:</div>
                 </td>
@@ -163,7 +179,7 @@
                     <a:SimpleSearchCriteriaSetEditor ui:field="simpleSearchCriteria"/>
                 </td>
             </tr>
-      <tr id="checkList">
+            <tr id="checkList">
                 <td>
                     <div class="{style.label}">Check List:</div>
                 </td>
@@ -171,7 +187,15 @@
                     <g:ValueListBox ui:field="checkList"/>
                 </td>
             </tr>
-    </table>
+            <tr id="oscePosts">
+                <td>
+                    <div class="{style.label}">Osce Posts:</div>
+                </td>
+                <td>
+                    <a:OscePostSetEditor ui:field="oscePosts"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>
