@@ -20,13 +20,14 @@ public interface ClinicEditView extends IsWidget {
     
 	interface Delegate {
 		void cancelClicked();
-
 		void saveClicked();
-		
+		void storeDisplaySettings();
 	}
 
 	RequestFactoryEditorDriver<ClinicProxy, ClinicEditViewImpl> createEditorDriver();
 	void setPresenter(Presenter doctorEditActivity);
 	void setDoctorsPickerValues(Collection<DoctorProxy> values);
+	void setSelectedDetailsTab(int detailsTab);
+	int getSelectedDetailsTab();
 
 }

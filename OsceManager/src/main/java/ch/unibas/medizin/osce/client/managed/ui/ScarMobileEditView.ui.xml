@@ -19,33 +19,25 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    
-    
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-        
-        
-    
-        
-        
     <div id="bodypart">
             <div class="{style.label}">Bodypart</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="bodypart"/>
             </div>
         </div>
-        <div id="traitType">
+    <div id="traitType">
             <div class="{style.label}">Trait Type</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="traitType"/>
             </div>
         </div>
-        <div id="anamnesisForms">
+    <div id="anamnesisForms">
             <div class="{style.label}">Anamnesis Forms</div>
             <div class="{style.value}">
                 <a:AnamnesisFormSetEditor ui:field="anamnesisForms"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

@@ -28,6 +28,18 @@ public interface SemesterProxy extends EntityProxy {
 
     abstract void setCalYear(Integer calYear);
 
+    abstract Double getMaximalYearEarnings();
+
+    abstract void setMaximalYearEarnings(Double maximalYearEarnings);
+
+    abstract Double getPricestatist();
+
+    abstract void setPricestatist(Double pricestatist);
+
+    abstract Double getPriceStandardizedPartient();
+
+    abstract void setPriceStandardizedPartient(Double priceStandardizedPartient);
+
     abstract Set<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy> getAdministrators();
 
     abstract void setAdministrators(Set<AdministratorProxy> administrators);

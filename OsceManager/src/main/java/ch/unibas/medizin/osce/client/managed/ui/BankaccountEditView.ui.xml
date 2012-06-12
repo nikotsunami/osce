@@ -43,10 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-    <tr id="bankName">
+      <tr id="bankName">
                 <td>
                     <div class="{style.label}">Bank Name:</div>
                 </td>
@@ -54,7 +51,7 @@
                     <g:TextBox ui:field="bankName"/>
                 </td>
             </tr>
-            <tr id="iBAN">
+      <tr id="iBAN">
                 <td>
                     <div class="{style.label}">I B A N:</div>
                 </td>
@@ -62,7 +59,7 @@
                     <g:TextBox ui:field="iBAN"/>
                 </td>
             </tr>
-            <tr id="bIC">
+      <tr id="bIC">
                 <td>
                     <div class="{style.label}">B I C:</div>
                 </td>
@@ -70,7 +67,7 @@
                     <g:TextBox ui:field="bIC"/>
                 </td>
             </tr>
-            <tr id="ownerName">
+      <tr id="ownerName">
                 <td>
                     <div class="{style.label}">Owner Name:</div>
                 </td>
@@ -78,7 +75,7 @@
                     <g:TextBox ui:field="ownerName"/>
                 </td>
             </tr>
-            <tr id="postalCode">
+      <tr id="postalCode">
                 <td>
                     <div class="{style.label}">Postal Code:</div>
                 </td>
@@ -86,7 +83,7 @@
                     <g:IntegerBox ui:field="postalCode"/>
                 </td>
             </tr>
-            <tr id="city">
+      <tr id="city">
                 <td>
                     <div class="{style.label}">City:</div>
                 </td>
@@ -94,15 +91,15 @@
                     <g:TextBox ui:field="city"/>
                 </td>
             </tr>
-            <tr id="country">
+      <tr id="country">
                 <td>
                     <div class="{style.label}">Country:</div>
                 </td>
                 <td>
-                    <g:TextBox ui:field="country"/>
+                    <g:ValueListBox ui:field="country"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

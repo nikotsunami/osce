@@ -6,13 +6,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class IndividualSchedulesPlace extends Place {
+public class IndividualSchedulesPlace extends OsMaPlace {
 
 	private String token;
 
 	public IndividualSchedulesPlace(){
 		Log.debug("ExaminationSchedulePlace.ExaminationSchedulePlace");
-		this.token = "ExaminationSchedulePlace";
+		this.token = "IndividualSchedulesPlace";
 	}
 
 	public IndividualSchedulesPlace(String token){

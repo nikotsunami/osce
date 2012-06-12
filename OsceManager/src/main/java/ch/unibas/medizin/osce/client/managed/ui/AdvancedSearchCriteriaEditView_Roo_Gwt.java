@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.activity.AdvancedSearchCriteriaEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.AdvancedSearchCriteriaEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import ch.unibas.medizin.osce.shared.BindType;
@@ -72,6 +73,9 @@ public abstract class AdvancedSearchCriteriaEditView_Roo_Gwt extends Composite i
     @UiField
     TextBox shownValue;
 
+    @UiField(provided = true)
+    ValueListBox<StandardizedRoleProxy> standardizedRole = new ValueListBox<StandardizedRoleProxy>(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>());
+
     public void setComparationPickerValues(Collection<Comparison> values) {
         comparation.setAcceptableValues(values);
     }
@@ -82,5 +86,9 @@ public abstract class AdvancedSearchCriteriaEditView_Roo_Gwt extends Composite i
 
     public void setBindTypePickerValues(Collection<BindType> values) {
         bindType.setAcceptableValues(values);
+    }
+
+    public void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values) {
+        standardizedRole.setAcceptableValues(values);
     }
 }

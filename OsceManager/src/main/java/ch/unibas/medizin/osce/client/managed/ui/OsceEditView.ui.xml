@@ -53,6 +53,9 @@
       
       
       
+      
+      
+      
     
             
             
@@ -64,6 +67,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         
             
             
@@ -76,7 +87,42 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
             
             
             
@@ -103,6 +149,46 @@
                 </td>
                 <td>
                     <g:IntegerBox ui:field="maxNumberStudents"/>
+                </td>
+            </tr>
+            <tr id="name">
+                <td>
+                    <div class="{style.label}">Name:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="name"/>
+                </td>
+            </tr>
+            <tr id="shortBreak">
+                <td>
+                    <div class="{style.label}">Short Break:</div>
+                </td>
+                <td>
+                    <r:ShortBox ui:field="shortBreak"/>
+                </td>
+            </tr>
+            <tr id="longBreak">
+                <td>
+                    <div class="{style.label}">Long Break:</div>
+                </td>
+                <td>
+                    <r:ShortBox ui:field="longBreak"/>
+                </td>
+            </tr>
+            <tr id="lunchBreak">
+                <td>
+                    <div class="{style.label}">Lunch Break:</div>
+                </td>
+                <td>
+                    <r:ShortBox ui:field="lunchBreak"/>
+                </td>
+            </tr>
+            <tr id="middleBreak">
+                <td>
+                    <div class="{style.label}">Middle Break:</div>
+                </td>
+                <td>
+                    <r:ShortBox ui:field="middleBreak"/>
                 </td>
             </tr>
             <tr id="numberPosts">
@@ -153,6 +239,14 @@
                     <g:CheckBox ui:field="isValid"/>
                 </td>
             </tr>
+            <tr id="osceStatus">
+                <td>
+                    <div class="{style.label}">Osce Status:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="osceStatus"/>
+                </td>
+            </tr>
             <tr id="semester">
                 <td>
                     <div class="{style.label}">Semester:</div>
@@ -191,6 +285,14 @@
                 </td>
                 <td>
                     <a:StudentOscesSetEditor ui:field="osceStudents"/>
+                </td>
+            </tr>
+            <tr id="copiedOsce">
+                <td>
+                    <div class="{style.label}">Copied Osce:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="copiedOsce"/>
                 </td>
             </tr>
         </table>

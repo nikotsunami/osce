@@ -13,14 +13,6 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div id="id">
-            <div class="{style.label}">Id</div>
-            <div class="{style.value}" ui:field="id"/>
-        </div>
-    <div id="version">
-            <div class="{style.label}">Version</div>
-            <div class="{style.value}" ui:field="version"/>
-        </div>
     <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}" ui:field="name"/>
@@ -40,6 +32,14 @@
     <div id="doctors">
             <div class="{style.label}">Doctors</div>
             <div class="{style.value}" ui:field="doctors"/>
+        </div>
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
         </div>
 
     <g:Button ui:field="delete">Delete</g:Button>

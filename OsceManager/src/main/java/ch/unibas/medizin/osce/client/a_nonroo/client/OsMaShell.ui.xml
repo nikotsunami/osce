@@ -11,7 +11,7 @@
 			<g:SimplePanel ui:field='headerPanel' />
 		</g:north>
 		
-		<g:west size="172" addStyleNames='{style.mainNav}'>
+		<g:west size="196" addStyleNames='{style.mainNav}'>
 			<g:SimplePanel  ui:field='mainNav' addStyleNames='{style.mainNav}'/>
 		</g:west>
 		

@@ -43,17 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-    
-        
-            
-        
-            
-            
-        
-            
-            
-            
-        <tr id="name">
+      <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -61,7 +51,7 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-            <tr id="deadline">
+      <tr id="deadline">
                 <td>
                     <div class="{style.label}">Deadline:</div>
                 </td>
@@ -69,7 +59,7 @@
                     <d:DateBox ui:field="deadline"/>
                 </td>
             </tr>
-            <tr id="isDone">
+      <tr id="isDone">
                 <td>
                     <div class="{style.label}">Is Done:</div>
                 </td>
@@ -77,7 +67,7 @@
                     <g:CheckBox ui:field="isDone"/>
                 </td>
             </tr>
-            <tr id="osce">
+      <tr id="osce">
                 <td>
                     <div class="{style.label}">Osce:</div>
                 </td>
@@ -85,7 +75,7 @@
                     <g:ValueListBox ui:field="osce"/>
                 </td>
             </tr>
-            <tr id="administrator">
+      <tr id="administrator">
                 <td>
                     <div class="{style.label}">Administrator:</div>
                 </td>
@@ -93,7 +83,7 @@
                     <g:ValueListBox ui:field="administrator"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

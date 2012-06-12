@@ -4,13 +4,17 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Course;
+import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.domain.Task;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Boolean;
 import java.lang.Integer;
+import java.lang.Short;
+import java.lang.String;
 import java.util.Set;
 
 privileged aspect Osce_Roo_JavaBean {
@@ -29,6 +33,46 @@ privileged aspect Osce_Roo_JavaBean {
     
     public void Osce.setMaxNumberStudents(Integer maxNumberStudents) {
         this.maxNumberStudents = maxNumberStudents;
+    }
+    
+    public String Osce.getName() {
+        return this.name;
+    }
+    
+    public void Osce.setName(String name) {
+        this.name = name;
+    }
+    
+    public Short Osce.getShortBreak() {
+        return this.shortBreak;
+    }
+    
+    public void Osce.setShortBreak(Short shortBreak) {
+        this.shortBreak = shortBreak;
+    }
+    
+    public Short Osce.getLongBreak() {
+        return this.LongBreak;
+    }
+    
+    public void Osce.setLongBreak(Short LongBreak) {
+        this.LongBreak = LongBreak;
+    }
+    
+    public Short Osce.getLunchBreak() {
+        return this.lunchBreak;
+    }
+    
+    public void Osce.setLunchBreak(Short lunchBreak) {
+        this.lunchBreak = lunchBreak;
+    }
+    
+    public Short Osce.getMiddleBreak() {
+        return this.middleBreak;
+    }
+    
+    public void Osce.setMiddleBreak(Short middleBreak) {
+        this.middleBreak = middleBreak;
     }
     
     public Integer Osce.getNumberPosts() {
@@ -79,6 +123,14 @@ privileged aspect Osce_Roo_JavaBean {
         this.isValid = isValid;
     }
     
+    public OsceStatus Osce.getOsceStatus() {
+        return this.osceStatus;
+    }
+    
+    public void Osce.setOsceStatus(OsceStatus osceStatus) {
+        this.osceStatus = osceStatus;
+    }
+    
     public Semester Osce.getSemester() {
         return this.semester;
     }
@@ -117,6 +169,14 @@ privileged aspect Osce_Roo_JavaBean {
     
     public void Osce.setOsceStudents(Set<StudentOsces> osceStudents) {
         this.osceStudents = osceStudents;
+    }
+    
+    public Osce Osce.getCopiedOsce() {
+        return this.copiedOsce;
+    }
+    
+    public void Osce.setCopiedOsce(Osce copiedOsce) {
+        this.copiedOsce = copiedOsce;
     }
     
 }

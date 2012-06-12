@@ -35,43 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-    
-            
-            
-        
-            
-            
-            
-        
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-        <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-            <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
-            <tr id="name">
+      <tr id="name">
                 <td>
                     <span class="{style.label}">Name:</span>
                 </td>
@@ -79,7 +43,7 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            <tr id="deadline">
+      <tr id="deadline">
                 <td>
                     <span class="{style.label}">Deadline:</span>
                 </td>
@@ -87,7 +51,7 @@
                     <span ui:field="deadline"/>
                 </td>
             </tr>
-            <tr id="isDone">
+      <tr id="isDone">
                 <td>
                     <span class="{style.label}">Is Done:</span>
                 </td>
@@ -95,7 +59,7 @@
                     <span ui:field="isDone"/>
                 </td>
             </tr>
-            <tr id="osce">
+      <tr id="osce">
                 <td>
                     <span class="{style.label}">Osce:</span>
                 </td>
@@ -103,7 +67,7 @@
                     <span ui:field="osce"/>
                 </td>
             </tr>
-            <tr id="administrator">
+      <tr id="administrator">
                 <td>
                     <span class="{style.label}">Administrator:</span>
                 </td>
@@ -111,7 +75,23 @@
                     <span ui:field="administrator"/>
                 </td>
             </tr>
-        </table>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

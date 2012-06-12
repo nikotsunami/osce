@@ -61,6 +61,13 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String ANAMNESIS();
 	//By SPEC[
 	public String NATIONALITY();
+	public String PERPIECE();
+	public String PERDAY();
+	public String CONSUMABLE();
+	public String EQUIPMENT();
+	public String FORSIMPAT();
+
+	
 	//By SPEC]
 	
 	public String AUTHOR();
@@ -77,7 +84,10 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String DETAILS();
 	public String CREATE();
 	public String NEW();
-
+	//Assginment G[
+	public String DAY();	
+	//]Assignment G
+	
 	public String SJ1();
 	public String SJ2();
 	public String SJ3();
@@ -95,4 +105,50 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String DIVORCED();
 	public String SEPARATED();
 	public String WIDOWED();
+	
+	//From SPEC Start
+	public String Simpat();
+	public String Statist();
+	public String Material();		
+	
+	public String rich_text_item();
+	public String table_item();
+	//From SPEC End
+	
+	
+
+    public String notSetHostAddressException();
+    public String connectHostAddressException();
+    public String httpClientException();
+    public String serializingException();
+    
+    public String patientNotExistException();
+    
+    public String syncStandardizedPatientException();
+    public String syncNationalityException();
+    public String syncProfessionException();
+    public String syncDescriptionException();
+    public String syncBankaccountException();
+    public String syncAnamnesisFormException();
+    public String syncAnamnesisCheckValuesException();
+    
+    
+    public String exportSuccessful();
+    public String serverReturndError();
+    public String importSussessful();
+    
+ // G: SPEC START =
+ 	public String HS();
+ 	public String FS();
+ 	// G: SPEC END =
+ 	
+ 	//Osce Screen Status
+ 	
+ 		public String NEW_STATUS();
+ 		
+ 		public String BluePrint_Status();
+ 		public String Genrated_Status();
+ 		public String Fixed_Status();
+ 		public String Closed_Status();
+    
 }

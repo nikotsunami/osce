@@ -35,21 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-    
-            
-            
-        
-            
-            
-            
-        
-            
-            
-            
-            
-        <tr id="id">
+      <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -57,7 +43,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-            <tr id="version">
+      <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -65,7 +51,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            <tr id="shibId">
+      <tr id="shibId">
                 <td>
                     <span class="{style.label}">Shib Id:</span>
                 </td>
@@ -73,7 +59,7 @@
                     <span ui:field="shibId"/>
                 </td>
             </tr>
-            <tr id="logtime">
+      <tr id="logtime">
                 <td>
                     <span class="{style.label}">Logtime:</span>
                 </td>
@@ -81,7 +67,7 @@
                     <span ui:field="logtime"/>
                 </td>
             </tr>
-            <tr id="oldValue">
+      <tr id="oldValue">
                 <td>
                     <span class="{style.label}">Old Value:</span>
                 </td>
@@ -89,7 +75,7 @@
                     <span ui:field="oldValue"/>
                 </td>
             </tr>
-            <tr id="newValue">
+      <tr id="newValue">
                 <td>
                     <span class="{style.label}">New Value:</span>
                 </td>
@@ -97,7 +83,7 @@
                     <span ui:field="newValue"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

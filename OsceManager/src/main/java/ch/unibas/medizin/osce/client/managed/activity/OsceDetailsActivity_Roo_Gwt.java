@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace.Operation;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -38,6 +39,6 @@ public abstract class OsceDetailsActivity_Roo_Gwt extends AbstractActivity imple
     protected EntityProxyId<OsceProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("semester", "osce_days", "courses", "tasks", "osceStudents").fire(callback);
+        requests.find(proxyId).with("semester", "osce_days", "courses", "tasks", "osceStudents", "copiedOsce").fire(callback);
     }
 }

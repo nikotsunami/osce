@@ -58,15 +58,21 @@ INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (11,'2012-03-24 00:
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (12,'2010-12-24 00:00:00',0);
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (13,'2010-07-18 00:00:00',0);
 
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (1,1,'',1,NULL,'Rauchen Sie?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (2,2,'oft|mittel|selten',2,NULL,'Wie oft rauchen Sie?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (3,3,'',1,NULL,'Nehmen Sie zurzeit regelmässig Medikamente ein?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (4,4,'',0,NULL,'Welche Medikamente nehmen Sie ein?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (5,5,'',1,NULL,'Leiden Sie unter Diabetes?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (6,6,'',1,NULL,'Wurde Ihnen der Blinddarm entfernt?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (7,7,'Prozac|Ritalin|Aspirin|Ethanol',3,NULL,'Nehmen Sie eines der aufgelisteten Medikamete und wenn ja, welche?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (8,8,'Darmende|Kopf|Fuss|Iris',2,NULL,'Woraus wurde Ihnen der Blinddarm entfernt?',0);
-INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version) VALUES (9,9,'Marlboro|Mary Long|Lucky Strike|Awesomesauce|Winfail',3,NULL,'Welche Zigarettenmarken haben Sie schon geraucht?',0);
+
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (10,1,'',4,NULL,'Personal lifestyle category',0,NULL);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (1,2,'',1,NULL,'Rauchen Sie?',0,10);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (2,3,'oft|mittel|selten',2,NULL,'Wie oft rauchen Sie?',0,10);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (9,4,'Marlboro|Mary Long|Lucky Strike|Awesomesauce|Winfail',3,NULL,'Welche Zigarettenmarken haben Sie schon geraucht?',0,10);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (11,5,'',4,NULL,'Disease history category',0,NULL);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (5,6,'',1,NULL,'Leiden Sie unter Diabetes?',0,11);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (6,7,'',1,NULL,'Wurde Ihnen der Blinddarm entfernt?',0,11);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (8,8,'Darmende|Kopf|Fuss|Iris',2,NULL,'Woraus wurde Ihnen der Blinddarm entfernt?',0,11);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (12,9,'',4,NULL,'Treatment history category',0,NULL);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (3,10,'',1,NULL,'Nehmen Sie zurzeit regelmässig Medikamente ein?',0,12);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (4,11,'',0,NULL,'Welche Medikamente nehmen Sie ein?',0,12);
+INSERT INTO `anamnesis_check` (id,sort_order,value,type,user_specified_order,text,version,title) VALUES (7,12,'Prozac|Ritalin|Aspirin|Ethanol',3,NULL,'Nehmen Sie eines der aufgelisteten Medikamete und wenn ja, welche?',0,12);
+
+
 
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (1,'0-0-1',NULL,NULL,0,2,2);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (7,NULL,NULL,0,0,3,2);
@@ -142,20 +148,19 @@ INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (10,'Schulterblatt (L
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (11,'Hals',0,0);
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (12,'Oberarm (Rechts)',1,0);
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (13,'Wade (Links)',1,0);
-INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (14,'Anus',2,0);
 INSERT INTO `scar` (id,bodypart,trait_type,version) VALUES (15,'Rechtes Schulterblatt',2,0);
 
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (2,9);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (3,10);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (4,12);
-INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (4,14);
+INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (4,13);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (5,15);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (6,11);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (7,10);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (8,9);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (9,9);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (10,12);
-INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (11,14);
+INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (11,12);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (12,13);
 INSERT INTO `anamnesis_form_scars` (anamnesis_forms,scars) VALUES (13,15);
 

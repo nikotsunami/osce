@@ -43,11 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-    
-        
-            
-        
-        <tr id="contentType">
+      <tr id="contentType">
                 <td>
                     <div class="{style.label}">Content Type:</div>
                 </td>
@@ -55,7 +51,7 @@
                     <g:TextBox ui:field="contentType"/>
                 </td>
             </tr>
-            <tr id="comment">
+      <tr id="comment">
                 <td>
                     <div class="{style.label}">Comment:</div>
                 </td>
@@ -63,7 +59,7 @@
                     <g:TextBox ui:field="comment"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

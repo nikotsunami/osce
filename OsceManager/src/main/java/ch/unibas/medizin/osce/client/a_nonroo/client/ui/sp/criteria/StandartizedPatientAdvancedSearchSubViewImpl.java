@@ -1,9 +1,12 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
+import java.util.ArrayList;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -58,7 +61,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		addScar.setText(constants.traits());
 		addAnamnesis.setText(constants.anamnesisValues());
 		addLanguage.setText(constants.languages());
-		addNationality.setText(constants.nationalities());
+		addNationality.setText(constants.nationality());
 	}
 
 	@UiField
@@ -104,6 +107,11 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	SimplePager pager;
 
 	private Delegate delegate;
+	
+	//Assignment : F [
+	protected ArrayList<String> paths = new ArrayList<String>();
+	StandardizedRoleProxy standardizedRoleProxy;
+	//]Assignment : F
 	
 	 public void init() {
 		 table.addColumn(new Column<AdvancedSearchCriteriaProxy, SafeHtml>(new SafeHtmlCell()) {
@@ -178,5 +186,21 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		this.delegate = delegate;
 		
 	}
+	
+	//Assignment : F[
+	@Override
+	public String[] getPaths() {
+		return paths.toArray(new String[paths.size()]);
+	}
+	
+	@Override
+	public void setValue(StandardizedRoleProxy standardizedRoleProxy) {
+		this.standardizedRoleProxy = standardizedRoleProxy;
+	}
+	
+	public StandardizedRoleProxy getStRoleProxy() {
+		return this.standardizedRoleProxy;
+	}
+//	]Assignment : F 
 
 }

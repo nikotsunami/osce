@@ -43,8 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-    
-        <tr id="name">
+      <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -52,7 +51,7 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-            <tr id="standardizedRoles">
+      <tr id="standardizedRoles">
                 <td>
                     <div class="{style.label}">Standardized Roles:</div>
                 </td>
@@ -60,7 +59,7 @@
                     <a:StandardizedRoleSetEditor ui:field="standardizedRoles"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

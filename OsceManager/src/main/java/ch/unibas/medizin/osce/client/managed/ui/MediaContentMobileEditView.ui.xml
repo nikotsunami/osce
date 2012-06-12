@@ -19,37 +19,31 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-    
-        
-    
-        
-        
     <div id="link">
             <div class="{style.label}">Link</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="link"/>
             </div>
         </div>
-        <div id="comment">
+    <div id="comment">
             <div class="{style.label}">Comment</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="comment"/>
             </div>
         </div>
-        <div id="standardizedPatient">
+    <div id="standardizedPatient">
             <div class="{style.label}">Standardized Patient</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="standardizedPatient"/>
             </div>
         </div>
-        <div id="contentType">
+    <div id="contentType">
             <div class="{style.label}">Content Type</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="contentType"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

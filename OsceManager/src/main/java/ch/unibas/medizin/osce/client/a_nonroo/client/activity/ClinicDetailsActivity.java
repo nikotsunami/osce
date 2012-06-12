@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 
@@ -34,11 +35,13 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
 
 	private ClinicDetailsPlace place;
 	private ClinicProxy clinicProxy;
+	private UserPlaceSettings userSettings;
 
 	public ClinicDetailsActivity(ClinicDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
+		this.userSettings = new UserPlaceSettings(place);
 	}
 
 	public void onStop(){
@@ -55,6 +58,7 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
 		widget.setWidget(ClinicDetailsView.asWidget());
 
 		view.setDelegate(this);
+		loadDisplaySettings();
 
 		requests.find(place.getProxyId()).fire(new Receiver<Object>() {
 
@@ -107,4 +111,19 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate {
 			}
 		});
 	}
+	
+	public void storeDisplaySettings() {
+		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.flush();
+	}
+	
+	private void loadDisplaySettings() {
+		int detailsTab = 0;
+		if (userSettings.hasSettings()) {
+			detailsTab = userSettings.getIntValue("detailsTab");
+		}
+		
+		view.setSelectedDetailsTab(detailsTab);
+	}
+	
 }

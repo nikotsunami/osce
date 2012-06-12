@@ -54,7 +54,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	// private AnamnesisCheckPlace place = null;
 
-	private static SystemStartViewUiBinder uiBinder = GWT.create(SystemStartViewUiBinder.class);
+	private static SystemStartViewUiBinder uiBinder = GWT
+			.create(SystemStartViewUiBinder.class);
 
 	interface SystemStartViewUiBinder extends
 			UiBinder<Widget, AnamnesisCheckViewImpl> {
@@ -63,6 +64,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private Delegate delegate;
 	private OsMaRequestFactory requests;
+	private Column<AnamnesisCheckProxy, String> checkOrderColumn;
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
@@ -89,7 +91,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	@UiField
 	Button saveOrder;
 	IconButton refreshButton;
-	
+
 	@UiHandler("refreshButton")
 	public void refreshButtonClicked(ClickEvent event) {
 		delegate.performSearch(searchBox.getValue());
@@ -109,11 +111,19 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				.getSelectedIndex()));
 
 	}
-	
+
 	@UiHandler("saveOrder")
 	public void onSaveOrder(ClickEvent event) {
-		GWT.log("onSaveOrder delegate = "+delegate);
+		GWT.log("onSaveOrder delegate = " + delegate);
 		delegate.saveOrder();
+		table.removeColumn(0);
+		table.removeColumn(1);
+		table.removeColumn(2);
+		table.removeColumn(0);
+		table.removeColumn(1);
+		table.removeColumn(checkOrderColumn);
+		init();
+
 	}
 
 	public void initList() {
@@ -143,6 +153,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	 * HasHTML instead of HasText.
 	 */
 	public AnamnesisCheckViewImpl() {
+
 		CellTable.Resources tableResources = GWT
 				.create(MyCellTableResources.class);
 		table = new CellTable<AnamnesisCheckProxy>(15, tableResources);
@@ -161,9 +172,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
-				OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		newButton.setText(constants.addAnamnesisValue());
+		initList();
+
 	}
 
 	public String[] getPaths() {
@@ -173,51 +183,64 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	public void init() {
 		// bugfix to avoid hiding of all panels (maybe there is a better
 		// solution...?!)
+
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
+				OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		saveOrder.setText(constants.saveOrder());
+		newButton.setText(constants.addAnamnesisValue());
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
 				"position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+
 		paths.add("type");
 		table.addColumn(new QuestionTypeColumn(), constants.type());
 		paths.add("text");
-		table.addColumn(new SimpleTextColumn(), constants.text());
+		table.addColumn(new SimpleTextColumn(), constants.question());
 		paths.add("value");
-		table.addColumn(new ValueColumn(), constants.value());
-		
-		Column<AnamnesisCheckProxy, String> checkOrderColumn = new Column<AnamnesisCheckProxy, String>(
+		table.addColumn(new ValueColumn(), constants.possibleAnswers());
+
+		checkOrderColumn = new Column<AnamnesisCheckProxy, String>(
 				new TextInputCell()) {
 			@Override
 			public String getValue(AnamnesisCheckProxy object) {
-				if(object.getUserSpecifiedOrder() !=null ){
+				if (object.getUserSpecifiedOrder() != null) {
 					return String.valueOf(object.getUserSpecifiedOrder());
-				}else{
+				} else {
+
 					return "";
 				}
 			}
 		};
-		checkOrderColumn.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
+		checkOrderColumn
+				.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
 
-			@Override
-			public void update(int index, AnamnesisCheckProxy object, String value) {
-				try {
-					GWT.log("??????checkOrderColumn.setFieldUpdater value = "+value);
-					GWT.log("????object type= "+object.getType());
-					GWT.log("????object sortoder= "+object.getSort_order());
-					GWT.log("????object value= "+value);
-//					GWT.log("????object UserSpecifiedOrder= "+object.getUserSpecifiedOrder());
-//					Integer userSpecifiedOrder = Integer.valueOf(value);
-//					delegate.resetUserSpecifiedOrder(object, value);
-					if(value != null && !value.equals("")){
-						delegate.orderEdited(object,value);
+					@Override
+					public void update(int index, AnamnesisCheckProxy object,
+							String value) {
+						try {
+							GWT.log("??????checkOrderColumn.setFieldUpdater value = "
+									+ value);
+							GWT.log("????object type= " + object.getType());
+							GWT.log("????object sortoder= "
+									+ object.getSort_order());
+							GWT.log("????object value= " + value);
+							// GWT.log("????object UserSpecifiedOrder= "+object.getUserSpecifiedOrder());
+							// Integer userSpecifiedOrder =
+							// Integer.valueOf(value);
+							// delegate.resetUserSpecifiedOrder(object, value);
+							if (value != null && !value.equals("")) {
+								delegate.orderEdited(object, value);
+							} else {
+								delegate.orderEdited(object, null);
+							}
+							// object.setUserSpecifiedOrder(userSpecifiedOrder);
+						} catch (Exception e) {
+							GWT.log(value + e);
+						}
+
 					}
-//					object.setUserSpecifiedOrder(userSpecifiedOrder);
-				} catch (Exception e) {
-					GWT.log(value + e);
-				}
-				
-				
-			}
-		});
+				});
 		table.addColumn(checkOrderColumn, constants.order());
-		table.setColumnWidth(checkOrderColumn,"10px");
+		table.setColumnWidth(checkOrderColumn, "10px");
 
 		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<AnamnesisCheckProxy>() {
@@ -240,7 +263,6 @@ public class AnamnesisCheckViewImpl extends Composite implements
 			}
 		}, null);
 
-		initList();
 	}
 
 	private <C> void addColumn(Cell<C> cell, String headerText,

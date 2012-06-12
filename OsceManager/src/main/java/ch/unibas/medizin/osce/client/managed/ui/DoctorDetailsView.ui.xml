@@ -35,56 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-            <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
-            <tr id="gender">
+      <tr id="gender">
                 <td>
                     <span class="{style.label}">Gender:</span>
                 </td>
@@ -92,7 +43,7 @@
                     <span ui:field="gender"/>
                 </td>
             </tr>
-            <tr id="title">
+      <tr id="title">
                 <td>
                     <span class="{style.label}">Title:</span>
                 </td>
@@ -100,7 +51,7 @@
                     <span ui:field="title"/>
                 </td>
             </tr>
-            <tr id="name">
+      <tr id="name">
                 <td>
                     <span class="{style.label}">Name:</span>
                 </td>
@@ -108,7 +59,7 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            <tr id="preName">
+      <tr id="preName">
                 <td>
                     <span class="{style.label}">Pre Name:</span>
                 </td>
@@ -116,7 +67,7 @@
                     <span ui:field="preName"/>
                 </td>
             </tr>
-            <tr id="email">
+      <tr id="email">
                 <td>
                     <span class="{style.label}">Email:</span>
                 </td>
@@ -124,7 +75,7 @@
                     <span ui:field="email"/>
                 </td>
             </tr>
-            <tr id="telephone">
+      <tr id="telephone">
                 <td>
                     <span class="{style.label}">Telephone:</span>
                 </td>
@@ -132,7 +83,7 @@
                     <span ui:field="telephone"/>
                 </td>
             </tr>
-            <tr id="clinic">
+      <tr id="clinic">
                 <td>
                     <span class="{style.label}">Clinic:</span>
                 </td>
@@ -140,7 +91,7 @@
                     <span ui:field="clinic"/>
                 </td>
             </tr>
-            <tr id="office">
+      <tr id="office">
                 <td>
                     <span class="{style.label}">Office:</span>
                 </td>
@@ -148,7 +99,7 @@
                     <span ui:field="office"/>
                 </td>
             </tr>
-            <tr id="isActive">
+      <tr id="isActive">
                 <td>
                     <span class="{style.label}">Is Active:</span>
                 </td>
@@ -156,7 +107,7 @@
                     <span ui:field="isActive"/>
                 </td>
             </tr>
-            <tr id="specialisation">
+      <tr id="specialisation">
                 <td>
                     <span class="{style.label}">Specialisation:</span>
                 </td>
@@ -164,7 +115,7 @@
                     <span ui:field="specialisation"/>
                 </td>
             </tr>
-            <tr id="roleParticipants">
+      <tr id="roleParticipants">
                 <td>
                     <span class="{style.label}">Role Participants:</span>
                 </td>
@@ -172,7 +123,23 @@
                     <span ui:field="roleParticipants"/>
                 </td>
             </tr>
-        </table>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

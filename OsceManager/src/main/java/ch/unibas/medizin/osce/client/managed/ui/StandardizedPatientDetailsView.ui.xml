@@ -35,107 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        <tr id="id">
+      <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -143,7 +43,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-            <tr id="version">
+      <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -151,7 +51,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            <tr id="gender">
+      <tr id="gender">
                 <td>
                     <span class="{style.label}">Gender:</span>
                 </td>
@@ -159,7 +59,7 @@
                     <span ui:field="gender"/>
                 </td>
             </tr>
-            <tr id="name">
+      <tr id="name">
                 <td>
                     <span class="{style.label}">Name:</span>
                 </td>
@@ -167,7 +67,7 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            <tr id="preName">
+      <tr id="preName">
                 <td>
                     <span class="{style.label}">Pre Name:</span>
                 </td>
@@ -175,7 +75,7 @@
                     <span ui:field="preName"/>
                 </td>
             </tr>
-            <tr id="street">
+      <tr id="street">
                 <td>
                     <span class="{style.label}">Street:</span>
                 </td>
@@ -183,7 +83,7 @@
                     <span ui:field="street"/>
                 </td>
             </tr>
-            <tr id="city">
+      <tr id="city">
                 <td>
                     <span class="{style.label}">City:</span>
                 </td>
@@ -191,7 +91,7 @@
                     <span ui:field="city"/>
                 </td>
             </tr>
-            <tr id="postalCode">
+      <tr id="postalCode">
                 <td>
                     <span class="{style.label}">Postal Code:</span>
                 </td>
@@ -199,7 +99,7 @@
                     <span ui:field="postalCode"/>
                 </td>
             </tr>
-            <tr id="telephone">
+      <tr id="telephone">
                 <td>
                     <span class="{style.label}">Telephone:</span>
                 </td>
@@ -207,7 +107,7 @@
                     <span ui:field="telephone"/>
                 </td>
             </tr>
-            <tr id="telephone2">
+      <tr id="telephone2">
                 <td>
                     <span class="{style.label}">Telephone2:</span>
                 </td>
@@ -215,7 +115,7 @@
                     <span ui:field="telephone2"/>
                 </td>
             </tr>
-            <tr id="mobile">
+      <tr id="mobile">
                 <td>
                     <span class="{style.label}">Mobile:</span>
                 </td>
@@ -223,7 +123,7 @@
                     <span ui:field="mobile"/>
                 </td>
             </tr>
-            <tr id="height">
+      <tr id="height">
                 <td>
                     <span class="{style.label}">Height:</span>
                 </td>
@@ -231,7 +131,7 @@
                     <span ui:field="height"/>
                 </td>
             </tr>
-            <tr id="weight">
+      <tr id="weight">
                 <td>
                     <span class="{style.label}">Weight:</span>
                 </td>
@@ -239,7 +139,7 @@
                     <span ui:field="weight"/>
                 </td>
             </tr>
-            <tr id="immagePath">
+      <tr id="immagePath">
                 <td>
                     <span class="{style.label}">Immage Path:</span>
                 </td>
@@ -247,7 +147,7 @@
                     <span ui:field="immagePath"/>
                 </td>
             </tr>
-            <tr id="videoPath">
+      <tr id="videoPath">
                 <td>
                     <span class="{style.label}">Video Path:</span>
                 </td>
@@ -255,7 +155,7 @@
                     <span ui:field="videoPath"/>
                 </td>
             </tr>
-            <tr id="nationality">
+      <tr id="nationality">
                 <td>
                     <span class="{style.label}">Nationality:</span>
                 </td>
@@ -263,7 +163,7 @@
                     <span ui:field="nationality"/>
                 </td>
             </tr>
-            <tr id="profession">
+      <tr id="profession">
                 <td>
                     <span class="{style.label}">Profession:</span>
                 </td>
@@ -271,15 +171,7 @@
                     <span ui:field="profession"/>
                 </td>
             </tr>
-            <tr id="socialInsuranceNo">
-                <td>
-                    <span class="{style.label}">Social Insurance No:</span>
-                </td>
-                <td>
-                    <span ui:field="socialInsuranceNo"/>
-                </td>
-            </tr>
-            <tr id="birthday">
+      <tr id="birthday">
                 <td>
                     <span class="{style.label}">Birthday:</span>
                 </td>
@@ -287,7 +179,7 @@
                     <span ui:field="birthday"/>
                 </td>
             </tr>
-            <tr id="email">
+      <tr id="email">
                 <td>
                     <span class="{style.label}">Email:</span>
                 </td>
@@ -295,7 +187,7 @@
                     <span ui:field="email"/>
                 </td>
             </tr>
-            <tr id="descriptions">
+      <tr id="descriptions">
                 <td>
                     <span class="{style.label}">Descriptions:</span>
                 </td>
@@ -303,7 +195,7 @@
                     <span ui:field="descriptions"/>
                 </td>
             </tr>
-            <tr id="bankAccount">
+      <tr id="bankAccount">
                 <td>
                     <span class="{style.label}">Bank Account:</span>
                 </td>
@@ -311,7 +203,7 @@
                     <span ui:field="bankAccount"/>
                 </td>
             </tr>
-            <tr id="maritalStatus">
+      <tr id="maritalStatus">
                 <td>
                     <span class="{style.label}">Marital Status:</span>
                 </td>
@@ -319,7 +211,7 @@
                     <span ui:field="maritalStatus"/>
                 </td>
             </tr>
-            <tr id="workPermission">
+      <tr id="workPermission">
                 <td>
                     <span class="{style.label}">Work Permission:</span>
                 </td>
@@ -327,7 +219,15 @@
                     <span ui:field="workPermission"/>
                 </td>
             </tr>
-            <tr id="anamnesisForm">
+      <tr id="socialInsuranceNo">
+                <td>
+                    <span class="{style.label}">Social Insurance No:</span>
+                </td>
+                <td>
+                    <span ui:field="socialInsuranceNo"/>
+                </td>
+            </tr>
+      <tr id="anamnesisForm">
                 <td>
                     <span class="{style.label}">Anamnesis Form:</span>
                 </td>
@@ -335,7 +235,7 @@
                     <span ui:field="anamnesisForm"/>
                 </td>
             </tr>
-            <tr id="langskills">
+      <tr id="langskills">
                 <td>
                     <span class="{style.label}">Langskills:</span>
                 </td>
@@ -343,7 +243,7 @@
                     <span ui:field="langskills"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
@@ -18,7 +15,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -185,6 +185,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement maritalStatus;
 	@UiField
 	SpanElement socialInsuranceNo;
+	@UiField
+	IconButton send;
+	@UiField
+	IconButton pull;
 
 	private Delegate delegate;
 
@@ -200,7 +204,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	 * implement HasHTML instead of HasText.
 	 */
 	public StandardizedPatientDetailsViewImpl() {
-		
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		patientPanel.selectTab(0);
@@ -208,7 +211,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		
 		// reorder the Tab- and Content-Panels
 		TabPanelHelper.moveTabBarToBottom(patientPanel);
-
+		pull.setText(constants.pull());
+		send.setText(constants.send());
 		print.setText(constants.print());
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
@@ -221,6 +225,27 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		patientDisclosurePanel.setContent(patientPanel);
 		patientDisclosurePanel.setStyleName("");		
 		//spec end
+		
+		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				storeDisplaySettings();
+			}
+		});
+		
+		scarAnamnesisPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				storeDisplaySettings();
+			}
+		});
+		
+	}
+	
+	private void storeDisplaySettings() {
+		if (delegate != null) {
+			delegate.storeDisplaySettings();
+		}
 	}
 	
 	private void setTabTexts() {
@@ -344,10 +369,17 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public void onDeleteClicked(ClickEvent e) {
 		delegate.deletePatientClicked();
 	}
-
+	@UiHandler("send")
+	void onSend(ClickEvent event) {
+		delegate.sendClicked();
+	}
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
 		delegate.editPatientClicked();
+	}
+	@UiHandler("pull")
+	void onPull(ClickEvent event) {
+		delegate.pullClicked();
 	}
 
 	@Override
@@ -365,18 +397,45 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		return standardizedPatientLangSkillSubViewImpl;
 	}
 	
-	//spec start
-		@UiHandler("arrow")
-		void handleClick(ClickEvent e) {
-			if(patientDisclosurePanel.isOpen()) {
-				patientDisclosurePanel.setOpen(false);
-				arrow.setResource(uiIcons.triangle1East());
-			}
-			else {
-				patientDisclosurePanel.setOpen(true);
-				arrow.setResource(uiIcons.triangle1South());
-			}
-		   
-		  }
-		//start
+	@Override
+	public boolean isPatientDisclosurePanelOpen() {
+		return patientDisclosurePanel.isOpen();
+	}
+	
+	@Override
+	public int getSelectedDetailsTab() {
+		return patientPanel.getTabBar().getSelectedTab();
+	}
+	
+	@Override
+	public int getSelectedScarAnamnesisTab() {
+		return scarAnamnesisPanel.getTabBar().getSelectedTab();
+	}
+	
+	@UiHandler("arrow")
+	void handleClick(ClickEvent e) {
+		if (patientDisclosurePanel.isOpen()) {
+			setPatientDisclosurePanelOpen(false);
+		} else {
+			setPatientDisclosurePanelOpen(true);
+		}
+		storeDisplaySettings();
+	}
+
+	@Override
+	public void setPatientDisclosurePanelOpen(boolean value) {
+		ImageResource icon = (value) ? uiIcons.triangle1South() : uiIcons.triangle1East();
+		patientDisclosurePanel.setOpen(value);
+		arrow.setResource(icon);
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int tab) {
+		patientPanel.selectTab(tab);
+	}
+
+	@Override
+	public void setSelectedScarAnamnesisTab(int tab) {
+		scarAnamnesisPanel.selectTab(tab);
+	}
 }

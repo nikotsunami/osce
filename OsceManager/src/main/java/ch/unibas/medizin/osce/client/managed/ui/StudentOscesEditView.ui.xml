@@ -43,10 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-    
-        
-            
-        <tr id="isEnrolled">
+      <tr id="isEnrolled">
                 <td>
                     <div class="{style.label}">Is Enrolled:</div>
                 </td>
@@ -54,7 +51,7 @@
                     <g:CheckBox ui:field="isEnrolled"/>
                 </td>
             </tr>
-            <tr id="osce">
+      <tr id="osce">
                 <td>
                     <div class="{style.label}">Osce:</div>
                 </td>
@@ -62,7 +59,7 @@
                     <g:ValueListBox ui:field="osce"/>
                 </td>
             </tr>
-            <tr id="student">
+      <tr id="student">
                 <td>
                     <div class="{style.label}">Student:</div>
                 </td>
@@ -70,7 +67,7 @@
                     <g:ValueListBox ui:field="student"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

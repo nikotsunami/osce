@@ -29,9 +29,8 @@ public interface StandardizedPatientEditView extends IsWidget {
     
 	interface Delegate {
 		void cancelClicked();
-
 		void saveClicked();
-		
+		void storeDisplaySettings();
 	}
 
 	RequestFactoryEditorDriver<StandardizedPatientProxy, StandardizedPatientEditViewImpl> createEditorDriver();
@@ -57,6 +56,8 @@ public interface StandardizedPatientEditView extends IsWidget {
 	void setAcceptableMonths(List<Integer> months);
 	void setWorkPermissionPickerValues(List<WorkPermission> values);
 	void setMaritalStatusPickerValues(List<MaritalStatus> values);
+	int getSelectedDetailsTab();
+	void setSelectedDetailsTab(int detailsTab);
 	
 	//String getPatientId();
 	//void setPatientId(String patientId);

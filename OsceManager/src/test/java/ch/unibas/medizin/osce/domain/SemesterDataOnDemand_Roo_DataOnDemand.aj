@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.shared.Semesters;
+import java.lang.Double;
 import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ privileged aspect SemesterDataOnDemand_Roo_DataOnDemand {
     public Semester SemesterDataOnDemand.getNewTransientSemester(int index) {
         Semester obj = new Semester();
         setCalYear(obj, index);
+        setMaximalYearEarnings(obj, index);
+        setPriceStandardizedPartient(obj, index);
+        setPricestatist(obj, index);
         setSemester(obj, index);
         return obj;
     }
@@ -33,6 +37,21 @@ privileged aspect SemesterDataOnDemand_Roo_DataOnDemand {
     public void SemesterDataOnDemand.setCalYear(Semester obj, int index) {
         Integer calYear = new Integer(index);
         obj.setCalYear(calYear);
+    }
+    
+    public void SemesterDataOnDemand.setMaximalYearEarnings(Semester obj, int index) {
+        Double maximalYearEarnings = new Integer(index).doubleValue();
+        obj.setMaximalYearEarnings(maximalYearEarnings);
+    }
+    
+    public void SemesterDataOnDemand.setPriceStandardizedPartient(Semester obj, int index) {
+        Double priceStandardizedPartient = new Integer(index).doubleValue();
+        obj.setPriceStandardizedPartient(priceStandardizedPartient);
+    }
+    
+    public void SemesterDataOnDemand.setPricestatist(Semester obj, int index) {
+        Double pricestatist = new Integer(index).doubleValue();
+        obj.setPricestatist(pricestatist);
     }
     
     public void SemesterDataOnDemand.setSemester(Semester obj, int index) {

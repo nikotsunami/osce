@@ -35,36 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-            
-        <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-            <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
-            <tr id="email">
+      <tr id="email">
                 <td>
                     <span class="{style.label}">Email:</span>
                 </td>
@@ -72,7 +43,7 @@
                     <span ui:field="email"/>
                 </td>
             </tr>
-            <tr id="name">
+      <tr id="name">
                 <td>
                     <span class="{style.label}">Name:</span>
                 </td>
@@ -80,7 +51,7 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            <tr id="preName">
+      <tr id="preName">
                 <td>
                     <span class="{style.label}">Pre Name:</span>
                 </td>
@@ -88,7 +59,7 @@
                     <span ui:field="preName"/>
                 </td>
             </tr>
-            <tr id="semesters">
+      <tr id="semesters">
                 <td>
                     <span class="{style.label}">Semesters:</span>
                 </td>
@@ -96,7 +67,7 @@
                     <span ui:field="semesters"/>
                 </td>
             </tr>
-            <tr id="tasks">
+      <tr id="tasks">
                 <td>
                     <span class="{style.label}">Tasks:</span>
                 </td>
@@ -104,7 +75,23 @@
                     <span ui:field="tasks"/>
                 </td>
             </tr>
-        </table>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

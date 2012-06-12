@@ -10,14 +10,21 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -29,11 +36,18 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -41,6 +55,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import com.google.gwt.text.shared.AbstractRenderer;
 
@@ -48,6 +63,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
 
     public String render(ProxyListPlace object) {
         return new ApplicationEntityTypesProcessor<String>() {
+
+            @Override
+            public void handleUsedMaterial(UsedMaterialProxy isNull) {
+                setResult("UsedMaterials");
+            }
 
             @Override
             public void handleTask(TaskProxy isNull) {
@@ -85,6 +105,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleSimpleSearchCriteria(SimpleSearchCriteriaProxy isNull) {
+                setResult("SimpleSearchCriterias");
+            }
+
+            @Override
             public void handleSemester(SemesterProxy isNull) {
                 setResult("Semesters");
             }
@@ -105,8 +130,38 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleRoleTemplate(RoleTemplateProxy isNull) {
+                setResult("RoleTemplates");
+            }
+
+            @Override
+            public void handleRoleTableItemValue(RoleTableItemValueProxy isNull) {
+                setResult("RoleTableItemValues");
+            }
+
+            @Override
+            public void handleRoleTableItem(RoleTableItemProxy isNull) {
+                setResult("RoleTableItems");
+            }
+
+            @Override
+            public void handleRoleSubItemValue(RoleSubItemValueProxy isNull) {
+                setResult("RoleSubItemValues");
+            }
+
+            @Override
             public void handleRoleParticipant(RoleParticipantProxy isNull) {
                 setResult("RoleParticipants");
+            }
+
+            @Override
+            public void handleRoleItemAccess(RoleItemAccessProxy isNull) {
+                setResult("RoleItemAccesss");
+            }
+
+            @Override
+            public void handleRoleBaseItem(RoleBaseItemProxy isNull) {
+                setResult("RoleBaseItems");
             }
 
             @Override
@@ -165,6 +220,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleMaterialList(MaterialListProxy isNull) {
+                setResult("MaterialLists");
+            }
+
+            @Override
             public void handleLogEntry(LogEntryProxy isNull) {
                 setResult("LogEntrys");
             }
@@ -177,6 +237,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleKeyword(KeywordProxy isNull) {
                 setResult("Keywords");
+            }
+
+            @Override
+            public void handleFile(FileProxy isNull) {
+                setResult("Files");
             }
 
             @Override
@@ -202,6 +267,31 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleClinic(ClinicProxy isNull) {
                 setResult("Clinics");
+            }
+
+            @Override
+            public void handleChecklistTopic(ChecklistTopicProxy isNull) {
+                setResult("ChecklistTopics");
+            }
+
+            @Override
+            public void handleChecklistQuestion(ChecklistQuestionProxy isNull) {
+                setResult("ChecklistQuestions");
+            }
+
+            @Override
+            public void handleChecklistOption(ChecklistOptionProxy isNull) {
+                setResult("ChecklistOptions");
+            }
+
+            @Override
+            public void handleChecklistCriteria(ChecklistCriteriaProxy isNull) {
+                setResult("ChecklistCriterias");
+            }
+
+            @Override
+            public void handleCheckList(CheckListProxy isNull) {
+                setResult("CheckLists");
             }
 
             @Override

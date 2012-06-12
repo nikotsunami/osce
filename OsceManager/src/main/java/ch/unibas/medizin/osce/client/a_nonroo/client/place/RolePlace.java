@@ -9,7 +9,7 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
  * @author dk
  *
  */
-public class RolePlace extends Place {
+public class RolePlace extends OsMaPlace {
 	
 	private String token;
 

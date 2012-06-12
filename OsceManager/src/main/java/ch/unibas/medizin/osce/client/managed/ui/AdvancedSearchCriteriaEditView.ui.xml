@@ -43,23 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-        <tr id="field">
+      <tr id="field">
                 <td>
                     <div class="{style.label}">Field:</div>
                 </td>
@@ -67,7 +51,7 @@
                     <g:ValueListBox ui:field="field"/>
                 </td>
             </tr>
-            <tr id="objectId">
+      <tr id="objectId">
                 <td>
                     <div class="{style.label}">Object Id:</div>
                 </td>
@@ -75,7 +59,7 @@
                     <g:LongBox ui:field="objectId"/>
                 </td>
             </tr>
-            <tr id="bindType">
+      <tr id="bindType">
                 <td>
                     <div class="{style.label}">Bind Type:</div>
                 </td>
@@ -83,7 +67,7 @@
                     <g:ValueListBox ui:field="bindType"/>
                 </td>
             </tr>
-            <tr id="comparation">
+      <tr id="comparation">
                 <td>
                     <div class="{style.label}">Comparation:</div>
                 </td>
@@ -91,7 +75,7 @@
                     <g:ValueListBox ui:field="comparation"/>
                 </td>
             </tr>
-            <tr id="value">
+      <tr id="value">
                 <td>
                     <div class="{style.label}">Value:</div>
                 </td>
@@ -99,7 +83,7 @@
                     <g:TextBox ui:field="value"/>
                 </td>
             </tr>
-            <tr id="shownValue">
+      <tr id="shownValue">
                 <td>
                     <div class="{style.label}">Shown Value:</div>
                 </td>
@@ -107,7 +91,15 @@
                     <g:TextBox ui:field="shownValue"/>
                 </td>
             </tr>
-        </table>
+      <tr id="standardizedRole">
+                <td>
+                    <div class="{style.label}">Standardized Role:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="standardizedRole"/>
+                </td>
+            </tr>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

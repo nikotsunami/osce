@@ -35,24 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-        <tr id="id">
+      <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -60,7 +43,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-            <tr id="version">
+      <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -68,7 +51,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            <tr id="text">
+      <tr id="text">
                 <td>
                     <span class="{style.label}">Text:</span>
                 </td>
@@ -76,7 +59,7 @@
                     <span ui:field="text"/>
                 </td>
             </tr>
-            <tr id="value">
+      <tr id="value">
                 <td>
                     <span class="{style.label}">Value:</span>
                 </td>
@@ -84,7 +67,7 @@
                     <span ui:field="value"/>
                 </td>
             </tr>
-            <tr id="sort_order">
+      <tr id="sort_order">
                 <td>
                     <span class="{style.label}">Sort_order:</span>
                 </td>
@@ -92,7 +75,7 @@
                     <span ui:field="sort_order"/>
                 </td>
             </tr>
-            <tr id="type">
+      <tr id="type">
                 <td>
                     <span class="{style.label}">Type:</span>
                 </td>
@@ -100,7 +83,7 @@
                     <span ui:field="type"/>
                 </td>
             </tr>
-            <tr id="anamnesischecksvalues">
+      <tr id="anamnesischecksvalues">
                 <td>
                     <span class="{style.label}">Anamnesischecksvalues:</span>
                 </td>
@@ -108,7 +91,7 @@
                     <span ui:field="anamnesischecksvalues"/>
                 </td>
             </tr>
-            <tr id="title">
+      <tr id="title">
                 <td>
                     <span class="{style.label}">Title:</span>
                 </td>
@@ -116,7 +99,15 @@
                     <span ui:field="title"/>
                 </td>
             </tr>
-        </table>
+      <tr id="userSpecifiedOrder">
+                <td>
+                    <span class="{style.label}">User Specified Order:</span>
+                </td>
+                <td>
+                    <span ui:field="userSpecifiedOrder"/>
+                </td>
+            </tr>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

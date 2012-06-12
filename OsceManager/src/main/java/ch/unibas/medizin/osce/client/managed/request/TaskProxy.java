@@ -31,9 +31,9 @@ public interface TaskProxy extends EntityProxy {
 
     abstract void setIsDone(Boolean isDone);
 
-    abstract ch.unibas.medizin.osce.client.managed.request.TaskProxy getOsce();
+    abstract OsceProxy getOsce();
 
-    abstract void setOsce(ch.unibas.medizin.osce.client.managed.request.TaskProxy osce);
+    abstract void setOsce(OsceProxy osce);
 
     abstract AdministratorProxy getAdministrator();
 

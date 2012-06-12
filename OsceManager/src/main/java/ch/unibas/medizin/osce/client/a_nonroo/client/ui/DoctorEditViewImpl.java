@@ -20,6 +20,8 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -117,6 +119,15 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		labelEmail.setInnerText(constants.email() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelClinic.setInnerText(constants.clinic() + ":");
+		
+		doctorPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				if (delegate != null)
+					delegate.storeDisplaySettings();
+			}
+		});
 	}
 
 
@@ -192,5 +203,17 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	@Override
 	public SimplePanel getOfficePanel(){
 		return officePanel;
+	}
+
+
+	@Override
+	public void setSelectedDetailsTab(int detailsTab) {
+		doctorPanel.selectTab(detailsTab);
+	}
+
+
+	@Override
+	public int getSelectedDetailsTab() {
+		return doctorPanel.getTabBar().getSelectedTab();
 	}
 }

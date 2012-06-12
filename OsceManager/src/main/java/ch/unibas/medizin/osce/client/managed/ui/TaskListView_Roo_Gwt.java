@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -102,7 +103,7 @@ public abstract class TaskListView_Roo_Gwt extends AbstractProxyListView<TaskPro
         paths.add("osce");
         table.addColumn(new TextColumn<TaskProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.TaskProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance();
+            Renderer<ch.unibas.medizin.osce.client.managed.request.OsceProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance();
 
             @Override
             public String getValue(TaskProxy object) {

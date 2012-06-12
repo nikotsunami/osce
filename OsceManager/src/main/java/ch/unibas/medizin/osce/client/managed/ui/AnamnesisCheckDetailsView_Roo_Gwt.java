@@ -25,6 +25,9 @@ import java.util.Set;
 public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<AnamnesisCheckProxy> {
 
     @UiField
+    SpanElement userSpecifiedOrder;
+
+    @UiField
     SpanElement id;
 
     @UiField
@@ -55,6 +58,7 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
 
     public void setValue(AnamnesisCheckProxy proxy) {
         this.proxy = proxy;
+        userSpecifiedOrder.setInnerText(proxy.getUserSpecifiedOrder() == null ? "" : String.valueOf(proxy.getUserSpecifiedOrder()));
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));

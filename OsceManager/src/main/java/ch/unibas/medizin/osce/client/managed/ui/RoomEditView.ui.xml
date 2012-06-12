@@ -43,12 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-    
-            
-            
-        <tr id="roomNumber">
+      <tr id="roomNumber">
                 <td>
                     <div class="{style.label}">Room Number:</div>
                 </td>
@@ -56,7 +51,7 @@
                     <g:TextBox ui:field="roomNumber"/>
                 </td>
             </tr>
-            <tr id="oscePostRooms">
+      <tr id="oscePostRooms">
                 <td>
                     <div class="{style.label}">Osce Post Rooms:</div>
                 </td>
@@ -64,7 +59,7 @@
                     <a:OscePostRoomSetEditor ui:field="oscePostRooms"/>
                 </td>
             </tr>
-            <tr id="length">
+      <tr id="length">
                 <td>
                     <div class="{style.label}">Length:</div>
                 </td>
@@ -72,7 +67,7 @@
                     <g:DoubleBox ui:field="length"/>
                 </td>
             </tr>
-            <tr id="width">
+      <tr id="width">
                 <td>
                     <div class="{style.label}">Width:</div>
                 </td>
@@ -80,7 +75,7 @@
                     <g:DoubleBox ui:field="width"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

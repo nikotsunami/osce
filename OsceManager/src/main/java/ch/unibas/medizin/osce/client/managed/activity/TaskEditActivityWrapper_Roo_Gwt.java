@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.activity.TaskEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -32,11 +33,11 @@ public abstract class TaskEditActivityWrapper_Roo_Gwt implements Activity, IsSca
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
-        view.setOscePickerValues(Collections.<TaskProxy>emptyList());
-        requests.taskRequest().findTaskEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance().getPaths()).fire(new Receiver<List<TaskProxy>>() {
+        view.setOscePickerValues(Collections.<OsceProxy>emptyList());
+        requests.osceRequest().findOsceEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().getPaths()).fire(new Receiver<List<OsceProxy>>() {
 
-            public void onSuccess(List<TaskProxy> response) {
-                List<TaskProxy> values = new ArrayList<TaskProxy>();
+            public void onSuccess(List<OsceProxy> response) {
+                List<OsceProxy> values = new ArrayList<OsceProxy>();
                 values.add(null);
                 values.addAll(response);
                 view.setOscePickerValues(values);
@@ -57,7 +58,7 @@ public abstract class TaskEditActivityWrapper_Roo_Gwt implements Activity, IsSca
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.TaskProxy, V>> extends ProxyEditView<TaskProxy, V> {
 
-        void setOscePickerValues(Collection<TaskProxy> values);
+        void setOscePickerValues(Collection<OsceProxy> values);
 
         void setAdministratorPickerValues(Collection<AdministratorProxy> values);
     }

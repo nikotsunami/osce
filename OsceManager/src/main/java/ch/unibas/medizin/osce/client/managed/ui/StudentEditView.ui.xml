@@ -43,12 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-    <tr id="gender">
+      <tr id="gender">
                 <td>
                     <div class="{style.label}">Gender:</div>
                 </td>
@@ -56,7 +51,7 @@
                     <g:ValueListBox ui:field="gender"/>
                 </td>
             </tr>
-            <tr id="name">
+      <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -64,7 +59,7 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-            <tr id="preName">
+      <tr id="preName">
                 <td>
                     <div class="{style.label}">Pre Name:</div>
                 </td>
@@ -72,7 +67,7 @@
                     <g:TextBox ui:field="preName"/>
                 </td>
             </tr>
-            <tr id="email">
+      <tr id="email">
                 <td>
                     <div class="{style.label}">Email:</div>
                 </td>
@@ -80,7 +75,7 @@
                     <g:TextBox ui:field="email"/>
                 </td>
             </tr>
-            <tr id="studentOsces">
+      <tr id="studentOsces">
                 <td>
                     <div class="{style.label}">Student Osces:</div>
                 </td>
@@ -88,7 +83,7 @@
                     <a:StudentOscesSetEditor ui:field="studentOsces"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

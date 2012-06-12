@@ -35,32 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-    
-            
-            
-        
-            
-            
-            
-        <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-            <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
-            <tr id="isEnrolled">
+      <tr id="isEnrolled">
                 <td>
                     <span class="{style.label}">Is Enrolled:</span>
                 </td>
@@ -68,7 +43,7 @@
                     <span ui:field="isEnrolled"/>
                 </td>
             </tr>
-            <tr id="osce">
+      <tr id="osce">
                 <td>
                     <span class="{style.label}">Osce:</span>
                 </td>
@@ -76,7 +51,7 @@
                     <span ui:field="osce"/>
                 </td>
             </tr>
-            <tr id="student">
+      <tr id="student">
                 <td>
                     <span class="{style.label}">Student:</span>
                 </td>
@@ -84,7 +59,23 @@
                     <span ui:field="student"/>
                 </td>
             </tr>
-        </table>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

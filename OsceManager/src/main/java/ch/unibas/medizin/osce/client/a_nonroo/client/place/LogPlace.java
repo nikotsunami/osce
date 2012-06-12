@@ -9,7 +9,7 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
  * @author dk
  *
  */
-public class LogPlace extends Place {
+public class LogPlace extends OsMaPlace {
 	
 	private String token;
 

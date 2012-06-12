@@ -16,6 +16,8 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -83,6 +85,15 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 		labelName.setInnerText(constants.name() + ":");
 		labelStreet.setInnerText(constants.street() + ":");
 		labelCity.setInnerText(constants.plz() + ", " + constants.city() + ":");
+		clinicPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				if (delegate != null) {
+					delegate.storeDisplaySettings();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -151,6 +162,16 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 	@Override
 	public void setDoctorsPickerValues(Collection<DoctorProxy> values) {
 		doctors.setAcceptableValues(values);
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int detailsTab) {
+		clinicPanel.selectTab(detailsTab);
+	}
+
+	@Override
+	public int getSelectedDetailsTab() {
+		return clinicPanel.getTabBar().getSelectedTab();
 	}
 
 }

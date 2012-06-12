@@ -11,14 +11,21 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProce
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.EliminationCriterionProxy;
+import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
 import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -30,11 +37,18 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -42,6 +56,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -61,6 +76,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
         }
         final ProxyPlace proxyPlace = (ProxyPlace) place;
         return new ApplicationEntityTypesProcessor<Activity>() {
+
+            @Override
+            public void handleUsedMaterial(UsedMaterialProxy proxy) {
+                setResult(new UsedMaterialActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
 
             @Override
             public void handleTask(TaskProxy proxy) {
@@ -98,6 +118,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleSimpleSearchCriteria(SimpleSearchCriteriaProxy proxy) {
+                setResult(new SimpleSearchCriteriaActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleSemester(SemesterProxy proxy) {
                 setResult(new SemesterActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
@@ -118,8 +143,38 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleRoleTemplate(RoleTemplateProxy proxy) {
+                setResult(new RoleTemplateActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleRoleTableItemValue(RoleTableItemValueProxy proxy) {
+                setResult(new RoleTableItemValueActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleRoleTableItem(RoleTableItemProxy proxy) {
+                setResult(new RoleTableItemActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleRoleSubItemValue(RoleSubItemValueProxy proxy) {
+                setResult(new RoleSubItemValueActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleRoleParticipant(RoleParticipantProxy proxy) {
                 setResult(new RoleParticipantActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleRoleItemAccess(RoleItemAccessProxy proxy) {
+                setResult(new RoleItemAccessActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleRoleBaseItem(RoleBaseItemProxy proxy) {
+                setResult(new RoleBaseItemActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
@@ -178,6 +233,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleMaterialList(MaterialListProxy proxy) {
+                setResult(new MaterialListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleLogEntry(LogEntryProxy proxy) {
                 setResult(new LogEntryActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
@@ -190,6 +250,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleKeyword(KeywordProxy proxy) {
                 setResult(new KeywordActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleFile(FileProxy proxy) {
+                setResult(new FileActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
@@ -215,6 +280,31 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleClinic(ClinicProxy proxy) {
                 setResult(new ClinicActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleChecklistTopic(ChecklistTopicProxy proxy) {
+                setResult(new ChecklistTopicActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleChecklistQuestion(ChecklistQuestionProxy proxy) {
+                setResult(new ChecklistQuestionActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleChecklistOption(ChecklistOptionProxy proxy) {
+                setResult(new ChecklistOptionActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleChecklistCriteria(ChecklistCriteriaProxy proxy) {
+                setResult(new ChecklistCriteriaActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleCheckList(CheckListProxy proxy) {
+                setResult(new CheckListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override

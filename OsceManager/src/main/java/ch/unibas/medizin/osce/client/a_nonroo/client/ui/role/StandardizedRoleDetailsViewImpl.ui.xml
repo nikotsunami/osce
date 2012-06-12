@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
+	xmlns:o="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria"
+	xmlns:m="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:r="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role">
+	<!-- <g:HorizontalPanel> <g:Label>OM</g:Label> </g:HorizontalPanel> -->
+	<ui:style src="../../styles.css">
+		.description {
+			
+		}
+		
+		.padleft5 {
+			padding-left: 5px;
+		}
+	</ui:style>
+
+	<g:HTMLPanel>
+		<g:VerticalPanel addStyleNames="{style.tabStyle} {style.patientTopContainer}">
+			<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
+				<g:Image ui:field="arrow" styleName="{style.padleft5}"
+					url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+				<g:Label addStyleNames="{style.label}" ui:field="labelLongNameHeader"></g:Label>
+				<g:HTMLPanel>
+					<div class="{style.controlsright}">
+						<h3 class="{style.header}" style="display:inline">
+							<span ui:field="displayRenderer"></span>
+						</h3>
+						<my:IconButton ui:field="print" icon="print" />
+						<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
+						<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+						<my:IconButton ui:field="previous"  icon="triangle-1-w">Previous</my:IconButton>
+					</div>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+
+			<g:DisclosurePanel animationEnabled="true" open="true"
+				ui:field="roleDisclosurePanel" width="100%">
+				<g:TabPanel ui:field="rolePanel" styleName="gwt-InvertedTabPanel"
+					width="100%">
+					<g:Tab>
+						<g:TabHTML>RoleDetail</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<table class="{style.fields}">
+								<colgroup>
+									<col></col>
+									<col></col>
+								</colgroup>
+								<tbody>
+									<tr id="shortname">
+										<td>
+											<span class="{style.label}" ui:field="labelShortName" />
+										</td>
+										<!-- <td><span class="{style.label}" ui:field="labelShortNameValue" 
+											/></td> -->
+										<td>
+											<span ui:field="shortName" />
+										</td>
+									</tr>
+									<tr id="longName">
+										<td>
+											<span class="{style.label}" ui:field="labellongName" />
+										</td>
+										<!-- <td><span class="{style.label}" ui:field="labellongValue" 
+											/></td> -->
+										<td>
+											<span ui:field="longName" />
+										</td>
+									</tr>
+									<tr id="roletype">
+										<td>
+											<span class="{style.label}" ui:field="labelroletype" />
+										</td>
+										<td>
+											<span class="{style.label}" ui:field="roleType" />
+										</td>
+										<!--<td><my:FocusableValueListBox ui:field="roleType" /></td> -->
+									</tr>
+									<tr id="studyYear">
+										<td>
+											<span class="{style.label}" ui:field="labelstudyYear" />
+										</td>
+										<td>
+											<span class="{style.label}" ui:field="studyYear" />
+										</td>
+										<!--<td><my:FocusableValueListBox ui:field="studyYear" /></td> -->
+									</tr>
+								</tbody>
+							</table>
+						</g:HTMLPanel>
+					</g:Tab>
+					<g:Tab>
+						<g:TabHTML>RoleParticipants</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}" width="100%">						
+						<!-- SPEC START = -->						
+						<r:RoleRoleParticipantSubViewImpl ui:field="roleRoleParticipantSubViewImpl"></r:RoleRoleParticipantSubViewImpl>
+						<!-- SPEC END = -->						
+					</g:HTMLPanel>
+					</g:Tab>
+
+					<g:Tab>
+						<g:TabHTML>Keyword</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">						
+						<!-- SPEC START = -->	
+						<r:RoleKeywordSubViewImpl ui:field="roleKeywordSubViewImpl"></r:RoleKeywordSubViewImpl>
+						<!-- SPEC END = -->	
+					</g:HTMLPanel>		
+					</g:Tab>
+
+					<g:Tab>
+						<g:TabHTML>Learning</g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<g:Label>Learning Components</g:Label>
+						</g:HTMLPanel>
+					</g:Tab>
+				</g:TabPanel>
+			</g:DisclosurePanel>
+
+			<g:TabPanel ui:field="roleSubPanel" width="100%">
+					<!--  Assignment E		start	-->		
+				<g:Tab>
+					
+				<g:TabHTML>CheckList</g:TabHTML>
+						
+					
+							<g:HTMLPanel addStyleNames="{style.patientDetails}" width="100%">
+							<!--  Assignment E			-->		
+								<g:VerticalPanel width="100%">
+										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="100%">
+										
+										
+										
+										</g:VerticalPanel>
+										
+									<g:HorizontalPanel spacing="10" ui:field="addTopicHP">		
+											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
+											
+											<g:Button ui:field="addCheckListTopicButton"> </g:Button>
+											
+											<g:Button ui:field="importTopicButton"></g:Button>
+										</g:HorizontalPanel>
+								</g:VerticalPanel>
+							</g:HTMLPanel>	
+				</g:Tab>
+				<!--  Assignment E		end	-->	
+				<g:Tab>
+					<g:TabHTML>Search Criteria</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<g:VerticalPanel width="100%">
+							<o:StandartizedPatientAdvancedSearchSubViewImpl
+								ui:field="standartizedPatientAdvancedSearchSubViewImpl"></o:StandartizedPatientAdvancedSearchSubViewImpl>
+						</g:VerticalPanel>
+						<g:VerticalPanel width="100%">
+							<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
+								<g:Label addStyleNames="{style.label}">Other Criteria</g:Label>
+								<g:HTMLPanel>
+									<div class="{style.controlsright}">
+										<h3 class="{style.header}" style="display:inline">
+											<span ui:field="displayRenderer1"></span>
+										</h3>
+									</div>
+								</g:HTMLPanel>
+							</g:HorizontalPanel>
+							<m:RoleOtherSearchCriteriaViewImpl
+								ui:field="roleOtherSearchCriteriaViewImpl"></m:RoleOtherSearchCriteriaViewImpl>
+						</g:VerticalPanel>
+						<!-- <g:Label class="{style.label}" ui:field="labelRoomMaterials" /> -->
+					</g:HTMLPanel>
+				</g:Tab>
+
+				<g:Tab>
+					<g:TabHTML>Room Materials</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<g:Label><!-- Room Materials -->
+						</g:Label>
+						<m:RoomMaterialsDetailsSubViewImpl
+							ui:field="roomMaterialsDetailsSubViewImpl"></m:RoomMaterialsDetailsSubViewImpl>
+					</g:HTMLPanel>
+				</g:Tab>
+
+				<g:Tab>
+					<g:TabHTML>File</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<m:RoleFileSubViewImpl ui:field="roleFileSubViewImpl"></m:RoleFileSubViewImpl>
+						<!-- <g:Label class="{style.label}" ui:field="labelRoomMaterials" /> -->
+					</g:HTMLPanel>
+
+				</g:Tab>
+
+				<g:Tab>
+					<g:TabHTML>Role Script</g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<!-- g:Label>Role Script</g:Label-->
+						<g:VerticalPanel ui:field="roleBaseItemPanel" addStyleNames="{style.tabStyle}" spacing="10">
+						<!-- m:RoleBaseTableItemViewImpl ui:field="roleBaseTableItemViewImpl"></m:RoleBaseTableItemViewImpl-->
+						</g:VerticalPanel>
+						<div>
+						<g:ValueListBox ui:field="roleTemplateListBox"></g:ValueListBox>
+						<my:IconButton ui:field="roleTemplateValueButon" icon="plusthick"></my:IconButton>
+						</div>
+					</g:HTMLPanel>
+				</g:Tab>
+			</g:TabPanel>
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+
+</ui:UiBinder>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+ <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding: 4px 0px 15px 15px;
+    }
+  </ui:style>
+
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="itemName">
+            <div class="{style.label}">Item Name</div>
+            <div class="{style.value}" ui:field="itemName"/>
+        </div>
+    <div id="roleBaseItem">
+            <div class="{style.label}">Role Base Item</div>
+            <div class="{style.value}" ui:field="roleBaseItem"/>
+        </div>
+    <div id="sort_order">
+            <div class="{style.label}">Sort_order</div>
+            <div class="{style.value}" ui:field="sort_order"/>
+        </div>
+    <div id="roleTableItemValue">
+            <div class="{style.label}">Role Table Item Value</div>
+            <div class="{style.value}" ui:field="roleTableItemValue"/>
+        </div>
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

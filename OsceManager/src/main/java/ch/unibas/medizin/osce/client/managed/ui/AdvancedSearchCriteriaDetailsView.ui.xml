@@ -35,29 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-      
-    
-            
-            
-            
-            
-            
-            
-            
-            
-        
-            
-            
-            
-            
-            
-            
-        <tr id="id">
+      <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -65,7 +43,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-            <tr id="version">
+      <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -73,7 +51,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            <tr id="field">
+      <tr id="field">
                 <td>
                     <span class="{style.label}">Field:</span>
                 </td>
@@ -81,7 +59,7 @@
                     <span ui:field="field"/>
                 </td>
             </tr>
-            <tr id="objectId">
+      <tr id="objectId">
                 <td>
                     <span class="{style.label}">Object Id:</span>
                 </td>
@@ -89,7 +67,7 @@
                     <span ui:field="objectId"/>
                 </td>
             </tr>
-            <tr id="bindType">
+      <tr id="bindType">
                 <td>
                     <span class="{style.label}">Bind Type:</span>
                 </td>
@@ -97,7 +75,7 @@
                     <span ui:field="bindType"/>
                 </td>
             </tr>
-            <tr id="comparation">
+      <tr id="comparation">
                 <td>
                     <span class="{style.label}">Comparation:</span>
                 </td>
@@ -105,7 +83,7 @@
                     <span ui:field="comparation"/>
                 </td>
             </tr>
-            <tr id="value">
+      <tr id="value">
                 <td>
                     <span class="{style.label}">Value:</span>
                 </td>
@@ -113,7 +91,7 @@
                     <span ui:field="value"/>
                 </td>
             </tr>
-            <tr id="shownValue">
+      <tr id="shownValue">
                 <td>
                     <span class="{style.label}">Shown Value:</span>
                 </td>
@@ -121,7 +99,15 @@
                     <span ui:field="shownValue"/>
                 </td>
             </tr>
-        </table>
+      <tr id="standardizedRole">
+                <td>
+                    <span class="{style.label}">Standardized Role:</span>
+                </td>
+                <td>
+                    <span ui:field="standardizedRole"/>
+                </td>
+            </tr>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

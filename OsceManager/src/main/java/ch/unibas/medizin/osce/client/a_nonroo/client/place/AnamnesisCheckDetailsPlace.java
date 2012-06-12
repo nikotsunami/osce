@@ -9,8 +9,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class AnamnesisCheckDetailsPlace extends Place implements HasOperationOnProxy {
-	private String token;
+public class AnamnesisCheckDetailsPlace extends OsMaDetailsPlace {
+	private String token = "AnamnesisCheckDetailsPlace";
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
@@ -20,9 +20,8 @@ public class AnamnesisCheckDetailsPlace extends Place implements HasOperationOnP
 	}
 
 	public AnamnesisCheckDetailsPlace(){
-		
-		this.token = "SystemStartPlace";
 	}
+	
 	public AnamnesisCheckDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
 	}
@@ -50,6 +49,11 @@ public class AnamnesisCheckDetailsPlace extends Place implements HasOperationOnP
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	@Override
+	public String toString() {
+		return "AnamnesisCheckDetailsPlace";
 	}
 
 	/**

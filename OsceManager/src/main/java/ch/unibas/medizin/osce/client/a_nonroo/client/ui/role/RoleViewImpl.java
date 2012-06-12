@@ -19,6 +19,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFilterViewToolt
 
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
@@ -124,7 +127,9 @@ public class RoleViewImpl extends Composite implements RoleView {
 	@UiField(provided = true)
 	ValueListBox<SpecialisationProxy> SpecialisationBox = new ValueListBox<SpecialisationProxy>(new SpecialisationProxyRenderer());
 	
-	private boolean addBoxesShown = true;
+	private boolean addBoxesShown = true;   
+	
+	
 	
 	@UiField
 	public IconButton newButton;
@@ -173,6 +178,8 @@ public class RoleViewImpl extends Composite implements RoleView {
 		int y = eventSource.getAbsoluteTop();
 		filterPanel.setPopupPosition(x, y);
 		filterPanel.show();
+		//Log.info(filterPanel.getSpecialisationBox().getValue());
+		
 	}
 	
 
@@ -182,9 +189,16 @@ public class RoleViewImpl extends Composite implements RoleView {
 	}
 	
 	
-//	public List<String> getSearchFilters() {
-//		return filterPanel.getFilters();
-//	}
+	public List<String> getTableFilters() {
+		return filterPanel.getTableFilters();
+	}
+	
+	
+	public List<String> getWhereFilters() {
+		return filterPanel.getWhereFilters();
+	}
+	
+
 	
 	public String getQuery() {
 		return searchBox.getValue();
@@ -193,7 +207,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 	@Override
 	public void updateSearch() {
 		String q = searchBox.getValue();
-		delegate.performSearch(q, getSearchFilters());
+		delegate.performSearch(q, getSearchFilters(),getTableFilters(),getWhereFilters());
 	}
 
 	public RoleViewImpl() {
@@ -216,7 +230,8 @@ public class RoleViewImpl extends Composite implements RoleView {
 				Log.info("filter panel close");
 				if (filterPanel.selectionChanged()) {
 					filterPanel.clearSelectionChanged();
-					delegate.performSearch(searchBox.getValue(), getSearchFilters());
+					//delegate.performSearch(searchBox.getValue(), getSearchFilters());
+					delegate.performSearch(searchBox.getValue(), getSearchFilters(),getTableFilters(),getWhereFilters());
 				}
 			}
 			
@@ -227,7 +242,8 @@ public class RoleViewImpl extends Composite implements RoleView {
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
 			public void performAction() {
-				delegate.performSearch(searchBox.getValue(), getSearchFilters());
+				//delegate.performSearch(searchBox.getValue(), getSearchFilters());
+				delegate.performSearch(searchBox.getValue(), getSearchFilters(),getTableFilters(),getWhereFilters());
 			}
 		});
 		
@@ -247,8 +263,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 		
 		studyYearBox.setValue(StudyYears.values()[0]);
 		studyYearBox.setAcceptableValues(Arrays.asList(StudyYears.values()));
-		//studyYearBox.setValue(StudyYears.values()[0]);
-	//	studyYearBox.setAcceptableValues(Arrays.asList(StudyYears.values()));
+		
 		
 		//spec  end
 		
@@ -315,16 +330,24 @@ public class RoleViewImpl extends Composite implements RoleView {
 			@Override
 			public String getValue(RoleTopicProxy object) {
 				String strStanderdizedRole = "";
-			//	System.out.println("111");
-			//	System.out.println("test---"+object.getStandardizedRoles());
+			
 				if(object.getStandardizedRoles()!=null)
 				{
+					
+					StandardizedRoleProxy role;
+					
 					Iterator<StandardizedRoleProxy> stRoleIterator = object.getStandardizedRoles().iterator();
-							
+							System.out.println("size--"+object.getStandardizedRoles().size());
 					while(stRoleIterator.hasNext())
 					{
+						role=stRoleIterator.next();
+						if(role.getActive()==true)
+						{
+							
+							strStanderdizedRole = strStanderdizedRole + role.getShortName() + ", ";
+						}
 								
-						strStanderdizedRole = strStanderdizedRole + stRoleIterator.next().getShortName() + ", ";
+						//strStanderdizedRole = strStanderdizedRole + role.getShortName() + ", ";
 									
 					}
 			
@@ -336,10 +359,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 				}
 
 				
-				//strStanderdizedRole.substring(0,strStanderdizedRole.length()-2);
-				
-			//	System.out.println("check"+strStanderdizedRole);
-				
+			
 				
 				return renderer.render(strStanderdizedRole);
 				
@@ -352,10 +372,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 		// TODO implement this!
 	}
 	
-//	@UiHandler ("showSubview")
-//	public void showSubviewClicked(ClickEvent event) {
-//		delegate.showSubviewClicked();
-//	}
+
 
 	@Override
 	public void setDelegate(Delegate delegate) {
@@ -397,10 +414,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 			return;
 		}
 		
-	//	showAddBoxes();
-	//	SpecialisationBox.setValue(values.get(1));
-//		System.out.println("1--"+values);
-//		System.out.println("name--"+values.get(0).getName());
+	
 		SpecialisationBox.setAcceptableValues(values);
 		
 	}
@@ -439,4 +453,40 @@ public class RoleViewImpl extends Composite implements RoleView {
 		return null;
 	}
 
+	
+
+	@Override
+	public RoleFilterViewTooltipImpl getFilter() {
+		// TODO Auto-generated method stub
+		return this.filterPanel;
+	}
+
+	
+
+	@Override
+	public void setKeywordAutocompleteValue(List<KeywordProxy> values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAuthorAutocompleteValue(List<DoctorProxy> values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setReviewerAutocompleteValue(List<DoctorProxy> values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSpecialisationAutocompleteValue(
+			List<SpecialisationProxy> values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

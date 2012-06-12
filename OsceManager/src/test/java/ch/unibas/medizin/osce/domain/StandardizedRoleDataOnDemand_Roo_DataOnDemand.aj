@@ -3,10 +3,13 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.domain.RoleTopicDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.String;
 import java.security.SecureRandom;
@@ -32,7 +35,9 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
     
     public StandardizedRole StandardizedRoleDataOnDemand.getNewTransientStandardizedRole(int index) {
         StandardizedRole obj = new StandardizedRole();
+        setActive(obj, index);
         setCaseDescription(obj, index);
+        setCheckList(obj, index);
         setLongName(obj, index);
         setMainVersion(obj, index);
         setPreviousVersion(obj, index);
@@ -45,12 +50,22 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
         return obj;
     }
     
+    public void StandardizedRoleDataOnDemand.setActive(StandardizedRole obj, int index) {
+        Boolean active = Boolean.TRUE;
+        obj.setActive(active);
+    }
+    
     public void StandardizedRoleDataOnDemand.setCaseDescription(StandardizedRole obj, int index) {
         String caseDescription = "caseDescription_" + index;
         if (caseDescription.length() > 999) {
             caseDescription = caseDescription.substring(0, 999);
         }
         obj.setCaseDescription(caseDescription);
+    }
+    
+    public void StandardizedRoleDataOnDemand.setCheckList(StandardizedRole obj, int index) {
+        CheckList checkList = null;
+        obj.setCheckList(checkList);
     }
     
     public void StandardizedRoleDataOnDemand.setLongName(StandardizedRole obj, int index) {
@@ -85,10 +100,7 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
     }
     
     public void StandardizedRoleDataOnDemand.setRoleType(StandardizedRole obj, int index) {
-        String roleType = "roleType_" + index;
-        if (roleType.length() > 10) {
-            roleType = roleType.substring(0, 10);
-        }
+        RoleTypes roleType = RoleTypes.class.getEnumConstants()[0];
         obj.setRoleType(roleType);
     }
     

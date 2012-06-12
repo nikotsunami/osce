@@ -204,7 +204,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	SpanElement labelMaritalStatus;
 	@UiField
 	SpanElement labelSocialInsuranceNo;
-
 	@UiField
 	IconButton cancel;
 	@UiField
@@ -216,7 +215,6 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	private Presenter presenter;
 	private CalendarUtil cal = new CalendarUtil();
 
-
 	public StandardizedPatientEditViewImpl() {
 		
 		initWidget(BINDER.createAndBindUi(this));
@@ -226,6 +224,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		
 //		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy");
 //		birthday.setFormat(new DateBox.DefaultFormat(fmt));
+		
 		
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
@@ -238,23 +237,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				switch(event.getSelectedItem().intValue()) {
-				case 0:
-					preName.setFocus(true);
-					break;
-				case 1:
-					/*birthday.setFocus(true);*/
-					break;
-				case 2:
-//					bankName.setFocus(true);
-					break;
-				case 3:
-//					description.setFocus(true);
-					break;
-				default:
-				}
+				if (delegate != null)
+					delegate.storeDisplaySettings();
 			}
-			
 		});
 		
 		setTabTexts();
@@ -503,7 +488,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		}
 		this.errors.setInnerHTML(b.toSafeHtml().asString());
 	}
-
+	
 	@UiHandler("cancel")
 	void onCancel(ClickEvent event) {
 		delegate.cancelClicked();
@@ -625,5 +610,15 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@Override
 	public void setMaritalStatusPickerValues(List<MaritalStatus> values) {
 		maritalStatus.setAcceptableValues(values);
+	}
+
+	@Override
+	public int getSelectedDetailsTab() {
+		return patientPanel.getTabBar().getSelectedTab();
+	}
+
+	@Override
+	public void setSelectedDetailsTab(int detailsTab) {
+		patientPanel.getTabBar().selectTab(detailsTab);
 	}
 }

@@ -19,26 +19,25 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
     <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-        <div id="roleTopics">
+    <div id="roleTopics">
             <div class="{style.label}">Role Topics</div>
             <div class="{style.value}">
                 <a:RoleTopicSetEditor ui:field="roleTopics"/>
             </div>
         </div>
-        <div id="doctors">
+    <div id="doctors">
             <div class="{style.label}">Doctors</div>
             <div class="{style.value}">
                 <a:DoctorSetEditor ui:field="doctors"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

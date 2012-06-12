@@ -8,7 +8,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class RoleScriptTemplateDetailsPlace extends Place implements HasOperationOnProxy{
+public class RoleScriptTemplateDetailsPlace extends OsMaDetailsPlace{
 	private String token;
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;

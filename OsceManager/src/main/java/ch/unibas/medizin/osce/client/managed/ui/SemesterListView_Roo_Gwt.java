@@ -92,6 +92,51 @@ public abstract class SemesterListView_Roo_Gwt extends AbstractProxyListView<Sem
                 return renderer.render(object.getCalYear());
             }
         }, "Cal Year");
+        paths.add("maximalYearEarnings");
+        table.addColumn(new TextColumn<SemesterProxy>() {
+
+            Renderer<java.lang.Double> renderer = new AbstractRenderer<java.lang.Double>() {
+
+                public String render(java.lang.Double obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(SemesterProxy object) {
+                return renderer.render(object.getMaximalYearEarnings());
+            }
+        }, "Maximal Year Earnings");
+        paths.add("pricestatist");
+        table.addColumn(new TextColumn<SemesterProxy>() {
+
+            Renderer<java.lang.Double> renderer = new AbstractRenderer<java.lang.Double>() {
+
+                public String render(java.lang.Double obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(SemesterProxy object) {
+                return renderer.render(object.getPricestatist());
+            }
+        }, "Pricestatist");
+        paths.add("priceStandardizedPartient");
+        table.addColumn(new TextColumn<SemesterProxy>() {
+
+            Renderer<java.lang.Double> renderer = new AbstractRenderer<java.lang.Double>() {
+
+                public String render(java.lang.Double obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(SemesterProxy object) {
+                return renderer.render(object.getPriceStandardizedPartient());
+            }
+        }, "Price Standardized Partient");
         paths.add("administrators");
         table.addColumn(new TextColumn<SemesterProxy>() {
 

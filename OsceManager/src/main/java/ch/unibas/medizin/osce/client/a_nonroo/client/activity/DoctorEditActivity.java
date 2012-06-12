@@ -8,11 +8,13 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorEditViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeEditViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorRequest;
@@ -57,11 +59,13 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 	private RequestFactoryEditorDriver<OfficeProxy, OfficeEditViewImpl> officeDriver;
 	//private RequestFactoryEditorDriver<OfficeProxy, OfficeEditViewImpl> officeEditorDriver;
 	private boolean save;
+	private UserPlaceSettings userSettings;
 
 	public DoctorEditActivity(DoctorDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
+		this.userSettings = new UserPlaceSettings((OsMaPlace) place);
 	}
 
 	public DoctorEditActivity(DoctorDetailsPlace place,
@@ -70,6 +74,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
+		this.userSettings = new UserPlaceSettings((OsMaPlace) place);
 		//this.operation=operation;
 	}
 
@@ -98,7 +103,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 		this.widget = panel;
 		this.view = doctorEditView;
-
+		
 		OfficeEditView officeView = new OfficeEditViewImpl();
 		view.getOfficePanel().add(officeView);
 		officeDriver = officeView.createEditorDriver();
@@ -106,6 +111,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		editorDriver = view.createEditorDriver();
 
 		view.setDelegate(this);
+		loadDisplaySettings();
 
 		view.setClinicPickerValues(Collections.<ClinicProxy>emptyList());
 		requests.clinicRequest().findClinicEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance().getPaths()).fire(new Receiver<List<ClinicProxy>>() {
@@ -238,6 +244,21 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
 			}
 		}); 
+	}
+	
+	@Override
+	public void storeDisplaySettings() {
+		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.flush();
+	}
+	
+	private void loadDisplaySettings() {
+		int detailsTab = 0;
+		if (userSettings.hasSettings()) {
+			detailsTab = userSettings.getIntValue("detailsTab");
+		}
+		
+		view.setSelectedDetailsTab(detailsTab);
 	}
 
 //	private void saveOffice() {

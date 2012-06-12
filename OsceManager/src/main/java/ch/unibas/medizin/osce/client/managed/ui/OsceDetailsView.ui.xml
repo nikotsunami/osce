@@ -47,6 +47,9 @@
       
       
       
+      
+      
+      
     
             
             
@@ -60,6 +63,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         
             
             
@@ -74,7 +85,44 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+            
             
             
             
@@ -119,6 +167,46 @@
                 </td>
                 <td>
                     <span ui:field="maxNumberStudents"/>
+                </td>
+            </tr>
+            <tr id="name">
+                <td>
+                    <span class="{style.label}">Name:</span>
+                </td>
+                <td>
+                    <span ui:field="name"/>
+                </td>
+            </tr>
+            <tr id="shortBreak">
+                <td>
+                    <span class="{style.label}">Short Break:</span>
+                </td>
+                <td>
+                    <span ui:field="shortBreak"/>
+                </td>
+            </tr>
+            <tr id="longBreak">
+                <td>
+                    <span class="{style.label}">Long Break:</span>
+                </td>
+                <td>
+                    <span ui:field="longBreak"/>
+                </td>
+            </tr>
+            <tr id="lunchBreak">
+                <td>
+                    <span class="{style.label}">Lunch Break:</span>
+                </td>
+                <td>
+                    <span ui:field="lunchBreak"/>
+                </td>
+            </tr>
+            <tr id="middleBreak">
+                <td>
+                    <span class="{style.label}">Middle Break:</span>
+                </td>
+                <td>
+                    <span ui:field="middleBreak"/>
                 </td>
             </tr>
             <tr id="numberPosts">
@@ -169,6 +257,14 @@
                     <span ui:field="isValid"/>
                 </td>
             </tr>
+            <tr id="osceStatus">
+                <td>
+                    <span class="{style.label}">Osce Status:</span>
+                </td>
+                <td>
+                    <span ui:field="osceStatus"/>
+                </td>
+            </tr>
             <tr id="semester">
                 <td>
                     <span class="{style.label}">Semester:</span>
@@ -207,6 +303,14 @@
                 </td>
                 <td>
                     <span ui:field="osceStudents"/>
+                </td>
+            </tr>
+            <tr id="copiedOsce">
+                <td>
+                    <span class="{style.label}">Copied Osce:</span>
+                </td>
+                <td>
+                    <span ui:field="copiedOsce"/>
                 </td>
             </tr>
         </table>

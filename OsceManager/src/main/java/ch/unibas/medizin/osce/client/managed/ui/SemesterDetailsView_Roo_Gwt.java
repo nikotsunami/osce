@@ -39,6 +39,15 @@ public abstract class SemesterDetailsView_Roo_Gwt extends Composite implements P
     SpanElement calYear;
 
     @UiField
+    SpanElement maximalYearEarnings;
+
+    @UiField
+    SpanElement pricestatist;
+
+    @UiField
+    SpanElement priceStandardizedPartient;
+
+    @UiField
     SpanElement administrators;
 
     @UiField
@@ -58,6 +67,9 @@ public abstract class SemesterDetailsView_Roo_Gwt extends Composite implements P
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         semester.setInnerText(proxy.getSemester() == null ? "" : String.valueOf(proxy.getSemester()));
         calYear.setInnerText(proxy.getCalYear() == null ? "" : String.valueOf(proxy.getCalYear()));
+        maximalYearEarnings.setInnerText(proxy.getMaximalYearEarnings() == null ? "" : String.valueOf(proxy.getMaximalYearEarnings()));
+        pricestatist.setInnerText(proxy.getPricestatist() == null ? "" : String.valueOf(proxy.getPricestatist()));
+        priceStandardizedPartient.setInnerText(proxy.getPriceStandardizedPartient() == null ? "" : String.valueOf(proxy.getPriceStandardizedPartient()));
         administrators.setInnerText(proxy.getAdministrators() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance()).render(proxy.getAdministrators()));
         osces.setInnerText(proxy.getOsces() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance()).render(proxy.getOsces()));
         patientsInSemester.setInnerText(proxy.getPatientsInSemester() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance()).render(proxy.getPatientsInSemester()));

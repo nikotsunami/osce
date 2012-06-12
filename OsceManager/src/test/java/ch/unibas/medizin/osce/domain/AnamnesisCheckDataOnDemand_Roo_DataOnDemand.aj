@@ -30,6 +30,7 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
         setText(obj, index);
         setTitle(obj, index);
         setType(obj, index);
+        setUserSpecifiedOrder(obj, index);
         setValue(obj, index);
         return obj;
     }
@@ -55,6 +56,11 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
     public void AnamnesisCheckDataOnDemand.setType(AnamnesisCheck obj, int index) {
         AnamnesisCheckTypes type = AnamnesisCheckTypes.class.getEnumConstants()[0];
         obj.setType(type);
+    }
+    
+    public void AnamnesisCheckDataOnDemand.setUserSpecifiedOrder(AnamnesisCheck obj, int index) {
+        Integer userSpecifiedOrder = new Integer(index);
+        obj.setUserSpecifiedOrder(userSpecifiedOrder);
     }
     
     public void AnamnesisCheckDataOnDemand.setValue(AnamnesisCheck obj, int index) {

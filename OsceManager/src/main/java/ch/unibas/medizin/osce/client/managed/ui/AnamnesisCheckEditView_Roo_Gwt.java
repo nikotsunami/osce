@@ -40,6 +40,9 @@ import java.util.Set;
 public abstract class AnamnesisCheckEditView_Roo_Gwt extends Composite implements View<AnamnesisCheckEditView> {
 
     @UiField
+    IntegerBox userSpecifiedOrder;
+
+    @UiField
     TextBox text;
 
     @UiField

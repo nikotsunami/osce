@@ -13,40 +13,31 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    
-    
-    
-    
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  
-        
-        
-        
-        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-        <div id="version">
+    <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-        <div id="roomNumber">
+    <div id="roomNumber">
             <div class="{style.label}">Room Number</div>
             <div class="{style.value}" ui:field="roomNumber"/>
         </div>
-        <div id="oscePostRooms">
+    <div id="oscePostRooms">
             <div class="{style.label}">Osce Post Rooms</div>
             <div class="{style.value}" ui:field="oscePostRooms"/>
         </div>
-        <div id="length">
+    <div id="length">
             <div class="{style.label}">Length</div>
             <div class="{style.value}" ui:field="length"/>
         </div>
-        <div id="width">
+    <div id="width">
             <div class="{style.label}">Width</div>
             <div class="{style.value}" ui:field="width"/>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

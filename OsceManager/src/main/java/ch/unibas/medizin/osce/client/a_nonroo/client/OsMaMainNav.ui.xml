@@ -1,31 +1,27 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 
 	<ui:style src="styles.css" />
 
 	<g:HTMLPanel>
-		<g:DisclosurePanel ui:field="masterDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
+		<g:DisclosurePanel ui:field="simPatDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
 			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="people"></g:Anchor>
 				<g:Anchor ui:field="scars"></g:Anchor>
 				<g:Anchor ui:field="anamnesisChecks"></g:Anchor>
-				<g:Anchor ui:field="clinics"></g:Anchor>
-				<g:Anchor ui:field="doctors"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
-
-		<g:DisclosurePanel ui:field="administrationPanel" open="true" addStyleNames='{style.mainNavPanel}'>
+		
+		<g:DisclosurePanel ui:field="doctorDataPanel" open="false" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
+			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="administrators"></g:Anchor>
-				<g:Anchor ui:field="nationalities"></g:Anchor>
-				<g:Anchor ui:field="languages"></g:Anchor>
-				<g:Anchor ui:field="professions"></g:Anchor>
-				<g:Anchor ui:field="rooms"></g:Anchor>
-				<g:Anchor ui:field="log"></g:Anchor>
+				<g:Anchor ui:field="clinics"></g:Anchor>
+				<g:Anchor ui:field="doctors"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
@@ -47,6 +43,14 @@
 		<g:DisclosurePanel ui:field="examinationsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
+			<!-- G: SPEC START = -->						
+			<g:Label>Semester:</g:Label>				
+			<g:HorizontalPanel>
+				<g:ValueListBox ui:field="lstSemester" />				
+				 <s:IconButton ui:field="btnEditSem" icon="pencil"></s:IconButton>
+				<s:IconButton ui:field="btnAddSem" icon="plusthick"></s:IconButton> 
+			</g:HorizontalPanel> 
+		<!-- G: SPEC END = -->	
 				<g:Anchor ui:field="osces"></g:Anchor>
 				<g:Anchor ui:field="circuit"></g:Anchor>
 				<g:Anchor ui:field="students"></g:Anchor>
@@ -56,6 +60,19 @@
 				<g:Anchor ui:field="bellSchedule"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
+		
+		<g:DisclosurePanel ui:field="administrationPanel" open="false" addStyleNames='{style.mainNavPanel}'>
+			<g:header></g:header>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
+				<g:Anchor ui:field="administrators"></g:Anchor>
+				<g:Anchor ui:field="nationalities"></g:Anchor>
+				<g:Anchor ui:field="languages"></g:Anchor>
+				<g:Anchor ui:field="professions"></g:Anchor>
+				<g:Anchor ui:field="rooms"></g:Anchor>
+				<g:Anchor ui:field="log"></g:Anchor>
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		
 		<!-- Commented by spec 
 		<g:DisclosurePanel ui:field="simulationPatientsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>
@@ -66,27 +83,6 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 -->	
-
-		<!-- <g:DisclosurePanel ui:field="administratorPanel">
-			<g:header>alt Administratoren</g:header>
-			<g:VerticalPanel>
-				<g:Anchor ui:field="administratorsOld">Administratoren</g:Anchor>
-			</g:VerticalPanel>
-		</g:DisclosurePanel>
-		<g:DisclosurePanel ui:field="anamnesisPanel">
-			<g:header>alt Anamnese</g:header>
-			<g:VerticalPanel>
-				<g:Anchor ui:field="anamnesisFormsOld">Anamneseformulare</g:Anchor>
-			</g:VerticalPanel>
-		</g:DisclosurePanel>
-		<g:DisclosurePanel ui:field="patientPanel">
-			<g:header>alt Patient</g:header>
-			<g:VerticalPanel>
-				<g:Anchor ui:field="patient">Patient</g:Anchor>
-				<g:Anchor ui:field="doctor">Doktor</g:Anchor>
-				<g:Anchor ui:field="clinic">Klinik</g:Anchor>
-			</g:VerticalPanel>
-		</g:DisclosurePanel> -->
 	</g:HTMLPanel>
 
 

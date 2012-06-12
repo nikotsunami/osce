@@ -19,37 +19,31 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-    
-        
-    
-        
-        
     <div id="shibId">
             <div class="{style.label}">Shib Id</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="shibId"/>
             </div>
         </div>
-        <div id="logtime">
+    <div id="logtime">
             <div class="{style.label}">Logtime</div>
             <div class="{style.value}">
                 <d:DateBox ui:field="logtime"/>
             </div>
         </div>
-        <div id="oldValue">
+    <div id="oldValue">
             <div class="{style.label}">Old Value</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="oldValue"/>
             </div>
         </div>
-        <div id="newValue">
+    <div id="newValue">
             <div class="{style.label}">New Value</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="newValue"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

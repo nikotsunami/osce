@@ -1,9 +1,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -13,6 +17,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
+import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -29,14 +35,18 @@ import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
@@ -71,17 +81,19 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	private CellTable<LangSkillProxy> langSkillTable;
 
 	private AnamnesisFormProxy anamnesisForm ;
+	private UserPlaceSettings userSettings;
+	private DMZSyncServiceAsync dmxSyncService = null;
+	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
     	this.requests = requests;
     	this.placeController = placeController;
+    	userSettings = new UserPlaceSettings(place);
     }
 
-	public void onStop(){
-
+	public void onStop() {
 	}
-	
 	
 	// By spec(Start)
 		
@@ -104,10 +116,12 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("StandardizedPatientDetailsActivity.start()");
+		dmxSyncService = DMZSyncService.ServiceFactory.instance();
 		StandardizedPatientDetailsView standardizedPatientDetailsView = new StandardizedPatientDetailsViewImpl();
 		standardizedPatientDetailsView.setPresenter(this);
 		this.widget = panel;
 		this.view = standardizedPatientDetailsView;
+		loadDisplaySettings();
 		standardizedPatientScarSubView = view.getStandardizedPatientScarSubViewImpl();
 		standardizedPatientAnamnesisSubView = view.getStandardizedPatientAnamnesisSubViewImpl();
 		standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubViewImpl();
@@ -120,7 +134,6 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		standardizedPatientMediaSubViewImpl.setDelegate(this);
-		
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
 	}
 	
@@ -513,6 +526,29 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		return requests.scarRequestNonRoo().findScarEntriesByAnamnesisForm(anamnesisForm.getId(), range.getStart(), range.getLength());
 	}
 	
+	public void storeDisplaySettings() {
+		userSettings.setValue("panelOpen", view.isPatientDisclosurePanelOpen());
+		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.setValue("scarAnamnesisTab", view.getSelectedScarAnamnesisTab());
+		userSettings.flush();
+	}
+	
+	private void loadDisplaySettings() {
+		boolean panelOpen = true;
+		int detailsTab = 0;
+		int scarAnamnesisTab = 0;
+		
+		if (userSettings.hasSettings()) {
+			panelOpen = userSettings.getBooleanValue("panelOpen");
+			detailsTab = userSettings.getIntValue("detailsTab");
+			scarAnamnesisTab = userSettings.getIntValue("scarAnamnesisTab");
+		}
+		
+		view.setPatientDisclosurePanelOpen(panelOpen);
+		view.setSelectedDetailsTab(detailsTab);
+		view.setSelectedScarAnamnesisTab(scarAnamnesisTab);
+	}
+	
 	@Override
 	public void goTo(Place place) {
 		placeController.goTo(place);		
@@ -524,7 +560,8 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	public void printPatientClicked(){
 		Log.info("Print clicked");
 		requests.standardizedPatientRequestNonRoo()
-		.getPdfPatientsBySearch(standardizedPatientProxy).fire(new StandardizedPatientPdfFileReceiver());
+				.getPdfPatientsBySearch(standardizedPatientProxy.getId())
+				.fire(new StandardizedPatientPdfFileReceiver());
 
 	}
 	//	by SPEC ] End
@@ -550,6 +587,55 @@ StandardizedPatientMediaSubViewImpl.Delegate {
             	placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!DELETED"));
             }
         });
+		
+	}
+	@Override
+	public void sendClicked(){
+		dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				try {
+		          throw caught;
+		        } catch (DMZSyncException e) {
+		        	Window.alert(messageLookup.serverReturndError()+ messageLookup.getString(e.getType())+e.getMessage());
+		        } catch (Throwable e) {
+		        	Window.alert(messageLookup.serverReturndError()+ e.getMessage());
+			    }
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert(messageLookup.exportSuccessful());
+			}
+			
+		});
+	}
+	
+	@Override
+	public void pullClicked(){
+
+		dmxSyncService.pullFromDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+			   try {
+		          throw caught;
+		        } catch (DMZSyncException e) {
+		        	Window.alert(messageLookup.serverReturndError()+messageLookup.getString(e.getType())+e.getMessage());
+		        } catch (Throwable e) {
+		        	Window.alert(messageLookup.serverReturndError()+e.getMessage());
+		        }
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert(messageLookup.importSussessful());
+			}
+			
+		});
+		
 		
 	}
 
@@ -628,7 +714,6 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 
 	@Override
 	public void newClicked() {
-		// TODO Auto-generated method stub
 		
 	}
 

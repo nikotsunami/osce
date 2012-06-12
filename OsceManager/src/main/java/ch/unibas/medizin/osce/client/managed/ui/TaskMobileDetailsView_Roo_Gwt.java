@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import com.google.gwt.core.client.GWT;
@@ -51,7 +52,7 @@ public abstract class TaskMobileDetailsView_Roo_Gwt extends Composite implements
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         deadline.setInnerText(proxy.getDeadline() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getDeadline()));
         isDone.setInnerText(proxy.getIsDone() == null ? "" : String.valueOf(proxy.getIsDone()));
-        osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance().render(proxy.getOsce()));
+        osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getOsce()));
         administrator.setInnerText(proxy.getAdministrator() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance().render(proxy.getAdministrator()));
     }
 }

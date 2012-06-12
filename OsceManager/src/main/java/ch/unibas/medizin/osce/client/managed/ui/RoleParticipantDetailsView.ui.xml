@@ -35,16 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-    
-            
-            
-        
-            
-            
-            
-        <tr id="id">
+      <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -52,7 +43,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-            <tr id="version">
+      <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -60,7 +51,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            <tr id="standardizedRole">
+      <tr id="standardizedRole">
                 <td>
                     <span class="{style.label}">Standardized Role:</span>
                 </td>
@@ -68,7 +59,7 @@
                     <span ui:field="standardizedRole"/>
                 </td>
             </tr>
-            <tr id="doctor">
+      <tr id="doctor">
                 <td>
                     <span class="{style.label}">Doctor:</span>
                 </td>
@@ -76,7 +67,7 @@
                     <span ui:field="doctor"/>
                 </td>
             </tr>
-            <tr id="type">
+      <tr id="type">
                 <td>
                     <span class="{style.label}">Type:</span>
                 </td>
@@ -84,7 +75,7 @@
                     <span ui:field="type"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

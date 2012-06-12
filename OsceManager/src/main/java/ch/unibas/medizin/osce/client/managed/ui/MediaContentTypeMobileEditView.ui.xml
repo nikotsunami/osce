@@ -19,23 +19,19 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-    
-        
-    
     <div id="contentType">
             <div class="{style.label}">Content Type</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="contentType"/>
             </div>
         </div>
-        <div id="comment">
+    <div id="comment">
             <div class="{style.label}">Comment</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="comment"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

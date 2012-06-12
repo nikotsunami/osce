@@ -19,59 +19,49 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    
-    
-    
-    
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
     <div id="field">
             <div class="{style.label}">Field</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="field"/>
             </div>
         </div>
-        <div id="objectId">
+    <div id="objectId">
             <div class="{style.label}">Object Id</div>
             <div class="{style.value}">
                 <g:LongBox ui:field="objectId"/>
             </div>
         </div>
-        <div id="bindType">
+    <div id="bindType">
             <div class="{style.label}">Bind Type</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="bindType"/>
             </div>
         </div>
-        <div id="comparation">
+    <div id="comparation">
             <div class="{style.label}">Comparation</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="comparation"/>
             </div>
         </div>
-        <div id="value">
+    <div id="value">
             <div class="{style.label}">Value</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="value"/>
             </div>
         </div>
-        <div id="shownValue">
+    <div id="shownValue">
             <div class="{style.label}">Shown Value</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="shownValue"/>
             </div>
         </div>
-    </g:HTMLPanel>
+    <div id="standardizedRole">
+            <div class="{style.label}">Standardized Role</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="standardizedRole"/>
+            </div>
+        </div>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

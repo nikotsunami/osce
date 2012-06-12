@@ -56,6 +56,8 @@
 			<my:IconButton ui:field="print" icon="print"/>
 			<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
 			<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+			<my:IconButton ui:field="send" icon="extlink"/>
+			<my:IconButton ui:field="pull" icon="arrowthickstop-1-s"/>
 		</div>
 	</g:HTMLPanel>
 

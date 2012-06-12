@@ -19,48 +19,43 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    
-    
-    
-    
-    
-
-    <g:Button ui:field="save">Save</g:Button>
-  <div id="name">
+    <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-        <div id="description">
+    <div id="description">
             <div class="{style.label}">Description</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="description"/>
             </div>
         </div>
-        <div id="studyYear">
+    <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="studyYear"/>
             </div>
         </div>
-        <div id="slotsUntilChange">
+    <div id="slotsUntilChange">
             <div class="{style.label}">Slots Until Change</div>
             <div class="{style.value}">
                 <g:IntegerBox ui:field="slotsUntilChange"/>
             </div>
         </div>
-        <div id="standardizedRoles">
+    <div id="standardizedRoles">
             <div class="{style.label}">Standardized Roles</div>
             <div class="{style.value}">
                 <a:StandardizedRoleSetEditor ui:field="standardizedRoles"/>
             </div>
         </div>
-        <div id="specialisation">
+    <div id="specialisation">
             <div class="{style.label}">Specialisation</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="specialisation"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

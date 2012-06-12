@@ -4,13 +4,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class StandardizedPatientDetailsPlace extends Place implements HasOperationOnProxy {
-	private String token;
+public class StandardizedPatientDetailsPlace extends OsMaDetailsPlace {
+	private String token = "StandardizedPatientDetailsPlace";
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
@@ -20,8 +19,8 @@ public class StandardizedPatientDetailsPlace extends Place implements HasOperati
 	}
 
 	public StandardizedPatientDetailsPlace(){
-		this.token = "SystemStartPlace";
 	}
+	
 	public StandardizedPatientDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
 	}

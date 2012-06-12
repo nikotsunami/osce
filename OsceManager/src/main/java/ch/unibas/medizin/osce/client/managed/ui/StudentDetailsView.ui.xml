@@ -35,14 +35,7 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-      
-      
-      
-      
-      
-    <tr id="id">
+      <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -50,7 +43,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-            <tr id="version">
+      <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -58,7 +51,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-            <tr id="gender">
+      <tr id="gender">
                 <td>
                     <span class="{style.label}">Gender:</span>
                 </td>
@@ -66,7 +59,7 @@
                     <span ui:field="gender"/>
                 </td>
             </tr>
-            <tr id="name">
+      <tr id="name">
                 <td>
                     <span class="{style.label}">Name:</span>
                 </td>
@@ -74,7 +67,7 @@
                     <span ui:field="name"/>
                 </td>
             </tr>
-            <tr id="preName">
+      <tr id="preName">
                 <td>
                     <span class="{style.label}">Pre Name:</span>
                 </td>
@@ -82,7 +75,7 @@
                     <span ui:field="preName"/>
                 </td>
             </tr>
-            <tr id="email">
+      <tr id="email">
                 <td>
                     <span class="{style.label}">Email:</span>
                 </td>
@@ -90,7 +83,7 @@
                     <span ui:field="email"/>
                 </td>
             </tr>
-            <tr id="studentOsces">
+      <tr id="studentOsces">
                 <td>
                     <span class="{style.label}">Student Osces:</span>
                 </td>
@@ -98,7 +91,7 @@
                     <span ui:field="studentOsces"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

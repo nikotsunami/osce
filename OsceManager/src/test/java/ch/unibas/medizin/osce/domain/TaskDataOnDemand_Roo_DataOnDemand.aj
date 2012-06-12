@@ -5,6 +5,8 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Administrator;
 import ch.unibas.medizin.osce.domain.AdministratorDataOnDemand;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceDataOnDemand;
 import ch.unibas.medizin.osce.domain.Task;
 import java.lang.Boolean;
 import java.lang.String;
@@ -31,6 +33,9 @@ privileged aspect TaskDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     private AdministratorDataOnDemand TaskDataOnDemand.administratorDataOnDemand;
+    
+    @Autowired
+    private OsceDataOnDemand TaskDataOnDemand.osceDataOnDemand;
     
     public Task TaskDataOnDemand.getNewTransientTask(int index) {
         Task obj = new Task();
@@ -66,7 +71,7 @@ privileged aspect TaskDataOnDemand_Roo_DataOnDemand {
     }
     
     public void TaskDataOnDemand.setOsce(Task obj, int index) {
-        Task osce = obj;
+        Osce osce = osceDataOnDemand.getRandomOsce();
         obj.setOsce(osce);
     }
     

@@ -19,6 +19,7 @@ public interface DoctorDetailsView extends IsWidget{
 	interface Delegate {
 		void editClicked();
 		void deleteClicked();
+		void storeDisplaySettings();
 	}
 	
     public void setValue(DoctorProxy proxy); 
@@ -28,4 +29,7 @@ public interface DoctorDetailsView extends IsWidget{
     void setPresenter(Presenter systemStartActivity);
 
 	SimplePanel getOfficeDetailsPanel();
+
+	public void setSelectedDetailsTab(int detailsTab);
+	public int getSelectedDetailsTab();
 }

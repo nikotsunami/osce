@@ -13,7 +13,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class AnamnesisCheckPlace extends Place {
+public class AnamnesisCheckPlace extends OsMaPlace {
 
 	private final static OsceConstants constants = GWT
 			.create(OsceConstants.class);
@@ -80,8 +80,7 @@ public class AnamnesisCheckPlace extends Place {
 	}
 
 	public AnamnesisCheckPlace() {
-
-		this.token = "SystemStartPlace";
+		this.token = "AnamnesisCheckPlace";
 
 	}
 
@@ -106,8 +105,6 @@ public class AnamnesisCheckPlace extends Place {
 	public void setToken(String token) {
 		this.token = token;
 	}
-
-	
 	
 	public Map<Long, Integer> getOrderEditedMap() {
 		return orderEditedMap;
@@ -117,15 +114,9 @@ public class AnamnesisCheckPlace extends Place {
 		this.orderEditedMap = orderEditedMap;
 	}
 
-	
-
-
 	public AnamnesisCheckRequest getReq() {
 		return req;
 	}
-
-
-
 
 	/**
 	 * Tokenizer.

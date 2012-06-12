@@ -2,19 +2,25 @@
 
 package ch.unibas.medizin.osce.client.managed.activity;
 
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.KeywordSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace.Operation;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -34,6 +40,6 @@ public abstract class StandardizedRoleDetailsActivity_Roo_Gwt extends AbstractAc
     protected EntityProxyId<StandardizedRoleProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("roleTopic", "roleParticipants", "previousVersion", "keywords").fire(callback);
+        requests.find(proxyId).with("roleTopic", "roleParticipants", "previousVersion", "keywords", "advancedSearchCriteria", "simpleSearchCriteria", "checkList").fire(callback);
     }
 }

@@ -25,6 +25,9 @@
     
     
     
+    
+    
+    
 
     <g:Button ui:field="delete">Delete</g:Button>
   
@@ -40,6 +43,14 @@
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
     
         
         
@@ -54,7 +65,44 @@
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -85,6 +133,26 @@
             <div class="{style.label}">Max Number Students</div>
             <div class="{style.value}" ui:field="maxNumberStudents"/>
         </div>
+        <div id="name">
+            <div class="{style.label}">Name</div>
+            <div class="{style.value}" ui:field="name"/>
+        </div>
+        <div id="shortBreak">
+            <div class="{style.label}">Short Break</div>
+            <div class="{style.value}" ui:field="shortBreak"/>
+        </div>
+        <div id="longBreak">
+            <div class="{style.label}">Long Break</div>
+            <div class="{style.value}" ui:field="longBreak"/>
+        </div>
+        <div id="lunchBreak">
+            <div class="{style.label}">Lunch Break</div>
+            <div class="{style.value}" ui:field="lunchBreak"/>
+        </div>
+        <div id="middleBreak">
+            <div class="{style.label}">Middle Break</div>
+            <div class="{style.value}" ui:field="middleBreak"/>
+        </div>
         <div id="numberPosts">
             <div class="{style.label}">Number Posts</div>
             <div class="{style.value}" ui:field="numberPosts"/>
@@ -109,6 +177,10 @@
             <div class="{style.label}">Is Valid</div>
             <div class="{style.value}" ui:field="isValid"/>
         </div>
+        <div id="osceStatus">
+            <div class="{style.label}">Osce Status</div>
+            <div class="{style.value}" ui:field="osceStatus"/>
+        </div>
         <div id="semester">
             <div class="{style.label}">Semester</div>
             <div class="{style.value}" ui:field="semester"/>
@@ -128,6 +200,10 @@
         <div id="osceStudents">
             <div class="{style.label}">Osce Students</div>
             <div class="{style.value}" ui:field="osceStudents"/>
+        </div>
+        <div id="copiedOsce">
+            <div class="{style.label}">Copied Osce</div>
+            <div class="{style.value}" ui:field="copiedOsce"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

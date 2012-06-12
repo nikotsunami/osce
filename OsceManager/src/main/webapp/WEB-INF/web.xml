@@ -14,6 +14,12 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
         <param-name>defaultHtmlEscape</param-name>
         <param-value>true</param-value>
     </context-param>
+
+    <context-param>
+        <param-name>DMZ_HOST_ADDRESS</param-name>
+        <param-value>http://192.168.2.40:8080</param-value>
+    </context-param>
+    
     
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -88,8 +94,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
         <load-on-startup>1</load-on-startup>
     </servlet>
     
-    
-    
     <servlet>
         <servlet-name>requestFactory</servlet-name>
         <servlet-class>com.google.gwt.requestfactory.server.RequestFactoryServlet</servlet-class>
@@ -141,6 +145,18 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <url-pattern>/UploadServlet</url-pattern>
   </servlet-mapping>
     
+
+<!-- dmz sync service -->    
+  <servlet>
+    <servlet-name>DMZSyncService</servlet-name>
+    <servlet-class>ch.unibas.medizin.osce.server.DMZSyncServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DMZSyncService</servlet-name>
+    <url-pattern>/osMaEntry/dmzsync</url-pattern>
+  </servlet-mapping>
+    
+
     
 <!-- spec video upload -->
 <servlet>
@@ -152,4 +168,15 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <url-pattern>/VideoUploadServlet</url-pattern>
   </servlet-mapping>
   <!-- spec video upload -->
+  
+   <!-- Role File upload servlet -->
+  <servlet>
+	<servlet-name>RoleFileUploadServlet</servlet-name>
+	<servlet-class>ch.unibas.medizin.osce.server.upload.RoleFileUploadServlet</servlet-class>
+</servlet>
+
+ <servlet-mapping>
+  	<servlet-name>RoleFileUploadServlet</servlet-name>
+  	<url-pattern>/RoleFileUploadServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

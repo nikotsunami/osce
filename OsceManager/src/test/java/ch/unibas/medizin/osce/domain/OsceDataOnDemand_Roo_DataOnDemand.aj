@@ -6,9 +6,12 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Boolean;
 import java.lang.Integer;
+import java.lang.Short;
+import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,16 +35,28 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     
     public Osce OsceDataOnDemand.getNewTransientOsce(int index) {
         Osce obj = new Osce();
+        setCopiedOsce(obj, index);
         setIsRepeOsce(obj, index);
         setIsValid(obj, index);
+        setLongBreak(obj, index);
+        setLunchBreak(obj, index);
         setMaxNumberStudents(obj, index);
+        setMiddleBreak(obj, index);
+        setName(obj, index);
         setNumberCourses(obj, index);
         setNumberPosts(obj, index);
         setNumberRooms(obj, index);
+        setOsceStatus(obj, index);
         setPostLength(obj, index);
         setSemester(obj, index);
+        setShortBreak(obj, index);
         setStudyYear(obj, index);
         return obj;
+    }
+    
+    public void OsceDataOnDemand.setCopiedOsce(Osce obj, int index) {
+        Osce copiedOsce = obj;
+        obj.setCopiedOsce(copiedOsce);
     }
     
     public void OsceDataOnDemand.setIsRepeOsce(Osce obj, int index) {
@@ -54,9 +69,29 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         obj.setIsValid(isValid);
     }
     
+    public void OsceDataOnDemand.setLongBreak(Osce obj, int index) {
+        Short LongBreak = new Integer(index).shortValue();
+        obj.setLongBreak(LongBreak);
+    }
+    
+    public void OsceDataOnDemand.setLunchBreak(Osce obj, int index) {
+        Short lunchBreak = new Integer(index).shortValue();
+        obj.setLunchBreak(lunchBreak);
+    }
+    
     public void OsceDataOnDemand.setMaxNumberStudents(Osce obj, int index) {
         Integer maxNumberStudents = new Integer(index);
         obj.setMaxNumberStudents(maxNumberStudents);
+    }
+    
+    public void OsceDataOnDemand.setMiddleBreak(Osce obj, int index) {
+        Short middleBreak = new Integer(index).shortValue();
+        obj.setMiddleBreak(middleBreak);
+    }
+    
+    public void OsceDataOnDemand.setName(Osce obj, int index) {
+        String name = "name_" + index;
+        obj.setName(name);
     }
     
     public void OsceDataOnDemand.setNumberCourses(Osce obj, int index) {
@@ -74,6 +109,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         obj.setNumberRooms(numberRooms);
     }
     
+    public void OsceDataOnDemand.setOsceStatus(Osce obj, int index) {
+        OsceStatus osceStatus = OsceStatus.class.getEnumConstants()[0];
+        obj.setOsceStatus(osceStatus);
+    }
+    
     public void OsceDataOnDemand.setPostLength(Osce obj, int index) {
         Integer postLength = new Integer(index);
         obj.setPostLength(postLength);
@@ -82,6 +122,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public void OsceDataOnDemand.setSemester(Osce obj, int index) {
         Semester semester = semesterDataOnDemand.getRandomSemester();
         obj.setSemester(semester);
+    }
+    
+    public void OsceDataOnDemand.setShortBreak(Osce obj, int index) {
+        Short shortBreak = new Integer(index).shortValue();
+        obj.setShortBreak(shortBreak);
     }
     
     public void OsceDataOnDemand.setStudyYear(Osce obj, int index) {

@@ -19,36 +19,31 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    
-    
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-        
-        
     <div id="roomNumber">
             <div class="{style.label}">Room Number</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="roomNumber"/>
             </div>
         </div>
-        <div id="oscePostRooms">
+    <div id="oscePostRooms">
             <div class="{style.label}">Osce Post Rooms</div>
             <div class="{style.value}">
                 <a:OscePostRoomSetEditor ui:field="oscePostRooms"/>
             </div>
         </div>
-        <div id="length">
+    <div id="length">
             <div class="{style.label}">Length</div>
             <div class="{style.value}">
                 <g:DoubleBox ui:field="length"/>
             </div>
         </div>
-        <div id="width">
+    <div id="width">
             <div class="{style.label}">Width</div>
             <div class="{style.value}">
                 <g:DoubleBox ui:field="width"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

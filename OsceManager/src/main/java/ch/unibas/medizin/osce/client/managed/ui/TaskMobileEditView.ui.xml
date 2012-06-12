@@ -19,47 +19,37 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-    
-        
-    
-        
-        
-    
-        
-        
-        
     <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-        <div id="deadline">
+    <div id="deadline">
             <div class="{style.label}">Deadline</div>
             <div class="{style.value}">
                 <d:DateBox ui:field="deadline"/>
             </div>
         </div>
-        <div id="isDone">
+    <div id="isDone">
             <div class="{style.label}">Is Done</div>
             <div class="{style.value}">
                 <g:CheckBox ui:field="isDone"/>
             </div>
         </div>
-        <div id="osce">
+    <div id="osce">
             <div class="{style.label}">Osce</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="osce"/>
             </div>
         </div>
-        <div id="administrator">
+    <div id="administrator">
             <div class="{style.label}">Administrator</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="administrator"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

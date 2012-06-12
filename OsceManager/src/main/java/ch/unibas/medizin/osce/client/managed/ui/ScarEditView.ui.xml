@@ -43,15 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      
-      
-    
-            
-            
-        
-            
-            
-        <tr id="bodypart">
+      <tr id="bodypart">
                 <td>
                     <div class="{style.label}">Bodypart:</div>
                 </td>
@@ -59,7 +51,7 @@
                     <g:TextBox ui:field="bodypart"/>
                 </td>
             </tr>
-            <tr id="traitType">
+      <tr id="traitType">
                 <td>
                     <div class="{style.label}">Trait Type:</div>
                 </td>
@@ -67,7 +59,7 @@
                     <g:ValueListBox ui:field="traitType"/>
                 </td>
             </tr>
-            <tr id="anamnesisForms">
+      <tr id="anamnesisForms">
                 <td>
                     <div class="{style.label}">Anamnesis Forms:</div>
                 </td>
@@ -75,7 +67,7 @@
                     <a:AnamnesisFormSetEditor ui:field="anamnesisForms"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.ui.MobileProxyListView;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -33,7 +34,7 @@ public abstract class OsceMobileListView_Roo_Gwt extends MobileProxyListView<Osc
     }
 
     public void init() {
+        paths.add("name");
         paths.add("id");
-        paths.add("version");
     }
 }

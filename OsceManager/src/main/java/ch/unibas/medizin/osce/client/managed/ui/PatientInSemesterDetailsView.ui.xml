@@ -35,22 +35,6 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-      <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
       <tr id="semester">
                 <td>
                     <span class="{style.label}">Semester:</span>
@@ -65,6 +49,22 @@
                 </td>
                 <td>
                     <span ui:field="standardizedPatient"/>
+                </td>
+            </tr>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
                 </td>
             </tr>
     </table>

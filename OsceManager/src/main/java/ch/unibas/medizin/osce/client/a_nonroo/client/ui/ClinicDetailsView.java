@@ -16,9 +16,12 @@ public interface ClinicDetailsView extends IsWidget{
 	interface Delegate {
 		void editClicked();
 		void deleteClicked();
+		void storeDisplaySettings();
 	}
 	
     public void setValue(ClinicProxy proxy);
     void setDelegate(Delegate delegate);
     void setPresenter(Presenter systemStartActivity);
+	public int getSelectedDetailsTab();
+	public void setSelectedDetailsTab(int detailsTab);
 }

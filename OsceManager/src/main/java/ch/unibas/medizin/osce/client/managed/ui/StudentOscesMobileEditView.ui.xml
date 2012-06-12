@@ -19,28 +19,25 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-    
-        
     <div id="isEnrolled">
             <div class="{style.label}">Is Enrolled</div>
             <div class="{style.value}">
                 <g:CheckBox ui:field="isEnrolled"/>
             </div>
         </div>
-        <div id="osce">
+    <div id="osce">
             <div class="{style.label}">Osce</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="osce"/>
             </div>
         </div>
-        <div id="student">
+    <div id="student">
             <div class="{style.label}">Student</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="student"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

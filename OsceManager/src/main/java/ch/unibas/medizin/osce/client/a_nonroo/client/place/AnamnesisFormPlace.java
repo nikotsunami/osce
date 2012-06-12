@@ -6,14 +6,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class AnamnesisFormPlace extends Place {
+public class AnamnesisFormPlace extends OsMaPlace {
 	
 	
 	private String token;
 
 	public AnamnesisFormPlace(){
-		Log.debug("SystemStartPlace.SystemStartPlace");
-		this.token = "SystemStartPlace";
+		this.token = "AnamnesisFormPlace";
 	}
 	
 	public AnamnesisFormPlace(String token){
@@ -36,17 +35,17 @@ public class AnamnesisFormPlace extends Place {
 		private final RequestFactory requests;
 
 		public Tokenizer(RequestFactory requests) {
-			Log.debug("SystemStartPlace.Tokenizer");
+			Log.debug("AnamnesisFormPlace.Tokenizer");
 			this.requests = requests;
 		}
 
 		public AnamnesisFormPlace getPlace(String token) {
-			Log.debug("SystemStartPlace.Tokenizer.getPlace");
+			Log.debug("AnamnesisFormPlace.Tokenizer.getPlace");
 			return new AnamnesisFormPlace(token);
 		}
 
 		public String getToken(AnamnesisFormPlace place) {
-			Log.debug("SystemStartPlace.Tokenizer.getToken");
+			Log.debug("AnamnesisFormPlace.Tokenizer.getToken");
 			return place.getToken();
 		}
 	}

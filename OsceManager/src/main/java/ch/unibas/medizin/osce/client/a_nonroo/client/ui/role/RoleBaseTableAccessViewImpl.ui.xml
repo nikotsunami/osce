@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+	.description {	}
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+	}
+	.padleft5
+	{
+		padding-left: 15px;
+	}
+	.padRight
+	{
+		padding-right: 10px;
+
+	}
+	</ui:style>
+	<ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
+	<g:HTMLPanel styleName="gwt-InvertedTabPanel">
+	<g:HorizontalPanel styleName="{style.patientControls}">
+	<g:Label ui:field="accessDataLabel" styleName="{style.padleft5} {style.padRight}" height="20"></g:Label>
+	<my:IconButton ui:field="accessDataCloseButton" styleName="{style.padRight}" icon="close"></my:IconButton>
+	</g:HorizontalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>

@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.activity.TaskEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.TaskEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
@@ -52,7 +53,7 @@ public abstract class TaskEditView_Roo_Gwt extends Composite implements View<Tas
     };
 
     @UiField(provided = true)
-    ValueListBox<TaskProxy> osce = new ValueListBox<TaskProxy>(ch.unibas.medizin.osce.client.managed.ui.TaskProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.TaskProxy>());
+    ValueListBox<OsceProxy> osce = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
 
     @UiField(provided = true)
     ValueListBox<AdministratorProxy> administrator = new ValueListBox<AdministratorProxy>(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy>());
@@ -61,7 +62,7 @@ public abstract class TaskEditView_Roo_Gwt extends Composite implements View<Tas
         administrator.setAcceptableValues(values);
     }
 
-    public void setOscePickerValues(Collection<TaskProxy> values) {
+    public void setOscePickerValues(Collection<OsceProxy> values) {
         osce.setAcceptableValues(values);
     }
 }

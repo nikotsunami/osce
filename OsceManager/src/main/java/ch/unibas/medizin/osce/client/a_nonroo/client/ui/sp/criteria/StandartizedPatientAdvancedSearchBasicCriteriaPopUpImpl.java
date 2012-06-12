@@ -18,6 +18,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -44,11 +45,22 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	
 	@UiField
 	Label unit;
-		
+	
+	@UiField
+	Label valueNotAvail;
+	
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
+		
+	if (value.getValue().trim().compareToIgnoreCase("") == 0) {
+		valueNotAvail.setText("Please enter a Value");
+		return;
+	}
+	else{
+		valueNotAvail.setText("");
 		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());
 		this.hide();
+		}
 	}
 	
 	@UiField
@@ -98,6 +110,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		addAdvSeaBasicButton.setText(constants.add());
 		addBasicData.setText(constants.basicFilter());
 		unit.setText("[cm]");
+		valueNotAvail.setText("");		
 		field.addValueChangeHandler(new ValueChangeHandler<PossibleFields>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<PossibleFields> event) {

@@ -13,46 +13,39 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    
-    
-    
-    
-    
-    
-    
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  <div id="id">
-            <div class="{style.label}">Id</div>
-            <div class="{style.value}" ui:field="id"/>
-        </div>
-        <div id="version">
-            <div class="{style.label}">Version</div>
-            <div class="{style.value}" ui:field="version"/>
-        </div>
-        <div id="name">
+    <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}" ui:field="name"/>
         </div>
-        <div id="description">
+    <div id="description">
             <div class="{style.label}">Description</div>
             <div class="{style.value}" ui:field="description"/>
         </div>
-        <div id="studyYear">
+    <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}" ui:field="studyYear"/>
         </div>
-        <div id="slotsUntilChange">
+    <div id="slotsUntilChange">
             <div class="{style.label}">Slots Until Change</div>
             <div class="{style.value}" ui:field="slotsUntilChange"/>
         </div>
-        <div id="standardizedRoles">
+    <div id="standardizedRoles">
             <div class="{style.label}">Standardized Roles</div>
             <div class="{style.value}" ui:field="standardizedRoles"/>
         </div>
-        <div id="specialisation">
+    <div id="specialisation">
             <div class="{style.label}">Specialisation</div>
             <div class="{style.value}" ui:field="specialisation"/>
         </div>
-    </g:HTMLPanel>
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

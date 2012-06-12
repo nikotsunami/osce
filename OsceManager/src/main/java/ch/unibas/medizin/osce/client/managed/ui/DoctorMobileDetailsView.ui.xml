@@ -13,92 +13,59 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    <div id="gender">
+            <div class="{style.label}">Gender</div>
+            <div class="{style.value}" ui:field="gender"/>
+        </div>
+    <div id="title">
+            <div class="{style.label}">Title</div>
+            <div class="{style.value}" ui:field="title"/>
+        </div>
+    <div id="name">
+            <div class="{style.label}">Name</div>
+            <div class="{style.value}" ui:field="name"/>
+        </div>
+    <div id="preName">
+            <div class="{style.label}">Pre Name</div>
+            <div class="{style.value}" ui:field="preName"/>
+        </div>
+    <div id="email">
+            <div class="{style.label}">Email</div>
+            <div class="{style.value}" ui:field="email"/>
+        </div>
+    <div id="telephone">
+            <div class="{style.label}">Telephone</div>
+            <div class="{style.value}" ui:field="telephone"/>
+        </div>
+    <div id="clinic">
+            <div class="{style.label}">Clinic</div>
+            <div class="{style.value}" ui:field="clinic"/>
+        </div>
+    <div id="office">
+            <div class="{style.label}">Office</div>
+            <div class="{style.value}" ui:field="office"/>
+        </div>
+    <div id="isActive">
+            <div class="{style.label}">Is Active</div>
+            <div class="{style.value}" ui:field="isActive"/>
+        </div>
+    <div id="specialisation">
+            <div class="{style.label}">Specialisation</div>
+            <div class="{style.value}" ui:field="specialisation"/>
+        </div>
+    <div id="roleParticipants">
+            <div class="{style.label}">Role Participants</div>
+            <div class="{style.value}" ui:field="roleParticipants"/>
+        </div>
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-        <div id="version">
+    <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-        <div id="gender">
-            <div class="{style.label}">Gender</div>
-            <div class="{style.value}" ui:field="gender"/>
-        </div>
-        <div id="title">
-            <div class="{style.label}">Title</div>
-            <div class="{style.value}" ui:field="title"/>
-        </div>
-        <div id="name">
-            <div class="{style.label}">Name</div>
-            <div class="{style.value}" ui:field="name"/>
-        </div>
-        <div id="preName">
-            <div class="{style.label}">Pre Name</div>
-            <div class="{style.value}" ui:field="preName"/>
-        </div>
-        <div id="email">
-            <div class="{style.label}">Email</div>
-            <div class="{style.value}" ui:field="email"/>
-        </div>
-        <div id="telephone">
-            <div class="{style.label}">Telephone</div>
-            <div class="{style.value}" ui:field="telephone"/>
-        </div>
-        <div id="clinic">
-            <div class="{style.label}">Clinic</div>
-            <div class="{style.value}" ui:field="clinic"/>
-        </div>
-        <div id="office">
-            <div class="{style.label}">Office</div>
-            <div class="{style.value}" ui:field="office"/>
-        </div>
-        <div id="isActive">
-            <div class="{style.label}">Is Active</div>
-            <div class="{style.value}" ui:field="isActive"/>
-        </div>
-        <div id="specialisation">
-            <div class="{style.label}">Specialisation</div>
-            <div class="{style.value}" ui:field="specialisation"/>
-        </div>
-        <div id="roleParticipants">
-            <div class="{style.label}">Role Participants</div>
-            <div class="{style.value}" ui:field="roleParticipants"/>
-        </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

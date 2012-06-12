@@ -5,7 +5,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class RoomMaterialsPlace extends Place{
+public class RoomMaterialsPlace extends OsMaPlace{
 	
 	private String token;
 	

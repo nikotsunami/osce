@@ -6,14 +6,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class SpokenLanguagePlace extends Place {
+public class SpokenLanguagePlace extends OsMaPlace {
 	
 	
 	private String token;
 
 	public SpokenLanguagePlace(){
-		Log.debug("SystemStartPlace.SystemStartPlace");
-		this.token = "SystemStartPlace";
+		this.token = "SpokenLanguagePlace";
 	}
 	
 	public SpokenLanguagePlace(String token){

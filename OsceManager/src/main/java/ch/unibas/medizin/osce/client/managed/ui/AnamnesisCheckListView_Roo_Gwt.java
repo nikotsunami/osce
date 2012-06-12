@@ -30,6 +30,21 @@ public abstract class AnamnesisCheckListView_Roo_Gwt extends AbstractProxyListVi
     protected Set<String> paths = new HashSet<String>();
 
     public void init() {
+        paths.add("userSpecifiedOrder");
+        table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(AnamnesisCheckProxy object) {
+                return renderer.render(object.getUserSpecifiedOrder());
+            }
+        }, "User Specified Order");
         paths.add("id");
         table.addColumn(new TextColumn<AnamnesisCheckProxy>() {
 

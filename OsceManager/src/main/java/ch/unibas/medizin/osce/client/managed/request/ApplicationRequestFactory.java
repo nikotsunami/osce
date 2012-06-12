@@ -6,6 +6,8 @@ import ch.unibas.medizin.osce.shared.scaffold.ScaffoldRequestFactory;
 
 public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
+    UsedMaterialRequest usedMaterialRequest();
+
     TaskRequest taskRequest();
 
     StudentRequest studentRequest();
@@ -20,6 +22,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     SpecialisationRequest specialisationRequest();
 
+    SimpleSearchCriteriaRequest simpleSearchCriteriaRequest();
+
     SemesterRequest semesterRequest();
 
     ScarRequest scarRequest();
@@ -28,7 +32,19 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     RoleTopicRequest roleTopicRequest();
 
+    RoleTemplateRequest roleTemplateRequest();
+
+    RoleTableItemValueRequest roleTableItemValueRequest();
+
+    RoleTableItemRequest roleTableItemRequest();
+
+    RoleSubItemValueRequest roleSubItemValueRequest();
+
     RoleParticipantRequest roleParticipantRequest();
+
+    RoleItemAccessRequest roleItemAccessRequest();
+
+    RoleBaseItemRequest roleBaseItemRequest();
 
     ProfessionRequest professionRequest();
 
@@ -52,11 +68,15 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     MediaContentRequest mediaContentRequest();
 
+    MaterialListRequest materialListRequest();
+
     LogEntryRequest logEntryRequest();
 
     LangSkillRequest langSkillRequest();
 
     KeywordRequest keywordRequest();
+
+    FileRequest fileRequest();
 
     EliminationCriterionRequest eliminationCriterionRequest();
 
@@ -67,6 +87,16 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     CourseRequest courseRequest();
 
     ClinicRequest clinicRequest();
+
+    ChecklistTopicRequest checklistTopicRequest();
+
+    ChecklistQuestionRequest checklistQuestionRequest();
+
+    ChecklistOptionRequest checklistOptionRequest();
+
+    ChecklistCriteriaRequest checklistCriteriaRequest();
+
+    CheckListRequest checkListRequest();
 
     BankaccountRequest bankaccountRequest();
 

@@ -13,138 +13,79 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    <div id="shortName">
+            <div class="{style.label}">Short Name</div>
+            <div class="{style.value}" ui:field="shortName"/>
+        </div>
+    <div id="longName">
+            <div class="{style.label}">Long Name</div>
+            <div class="{style.value}" ui:field="longName"/>
+        </div>
+    <div id="caseDescription">
+            <div class="{style.label}">Case Description</div>
+            <div class="{style.value}" ui:field="caseDescription"/>
+        </div>
+    <div id="roleScript">
+            <div class="{style.label}">Role Script</div>
+            <div class="{style.value}" ui:field="roleScript"/>
+        </div>
+    <div id="roleType">
+            <div class="{style.label}">Role Type</div>
+            <div class="{style.value}" ui:field="roleType"/>
+        </div>
+    <div id="active">
+            <div class="{style.label}">Active</div>
+            <div class="{style.value}" ui:field="active"/>
+        </div>
+    <div id="roleTopic">
+            <div class="{style.label}">Role Topic</div>
+            <div class="{style.value}" ui:field="roleTopic"/>
+        </div>
+    <div id="roleParticipants">
+            <div class="{style.label}">Role Participants</div>
+            <div class="{style.value}" ui:field="roleParticipants"/>
+        </div>
+    <div id="previousVersion">
+            <div class="{style.label}">Previous Version</div>
+            <div class="{style.value}" ui:field="previousVersion"/>
+        </div>
+    <div id="studyYear">
+            <div class="{style.label}">Study Year</div>
+            <div class="{style.value}" ui:field="studyYear"/>
+        </div>
+    <div id="mainVersion">
+            <div class="{style.label}">Main Version</div>
+            <div class="{style.value}" ui:field="mainVersion"/>
+        </div>
+    <div id="subVersion">
+            <div class="{style.label}">Sub Version</div>
+            <div class="{style.value}" ui:field="subVersion"/>
+        </div>
+    <div id="keywords">
+            <div class="{style.label}">Keywords</div>
+            <div class="{style.value}" ui:field="keywords"/>
+        </div>
+    <div id="advancedSearchCriteria">
+            <div class="{style.label}">Advanced Search Criteria</div>
+            <div class="{style.value}" ui:field="advancedSearchCriteria"/>
+        </div>
+    <div id="simpleSearchCriteria">
+            <div class="{style.label}">Simple Search Criteria</div>
+            <div class="{style.value}" ui:field="simpleSearchCriteria"/>
+        </div>
+    <div id="checkList">
+            <div class="{style.label}">Check List</div>
+            <div class="{style.value}" ui:field="checkList"/>
+        </div>
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-        <div id="version">
+    <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-        <div id="shortName">
-            <div class="{style.label}">Short Name</div>
-            <div class="{style.value}" ui:field="shortName"/>
-        </div>
-        <div id="longName">
-            <div class="{style.label}">Long Name</div>
-            <div class="{style.value}" ui:field="longName"/>
-        </div>
-        <div id="caseDescription">
-            <div class="{style.label}">Case Description</div>
-            <div class="{style.value}" ui:field="caseDescription"/>
-        </div>
-        <div id="roleScript">
-            <div class="{style.label}">Role Script</div>
-            <div class="{style.value}" ui:field="roleScript"/>
-        </div>
-        <div id="roleType">
-            <div class="{style.label}">Role Type</div>
-            <div class="{style.value}" ui:field="roleType"/>
-        </div>
-        <div id="roleTopic">
-            <div class="{style.label}">Role Topic</div>
-            <div class="{style.value}" ui:field="roleTopic"/>
-        </div>
-        <div id="roleParticipants">
-            <div class="{style.label}">Role Participants</div>
-            <div class="{style.value}" ui:field="roleParticipants"/>
-        </div>
-        <div id="previousVersion">
-            <div class="{style.label}">Previous Version</div>
-            <div class="{style.value}" ui:field="previousVersion"/>
-        </div>
-        <div id="studyYear">
-            <div class="{style.label}">Study Year</div>
-            <div class="{style.value}" ui:field="studyYear"/>
-        </div>
-        <div id="mainVersion">
-            <div class="{style.label}">Main Version</div>
-            <div class="{style.value}" ui:field="mainVersion"/>
-        </div>
-        <div id="subVersion">
-            <div class="{style.label}">Sub Version</div>
-            <div class="{style.value}" ui:field="subVersion"/>
-        </div>
-        <div id="keywords">
-            <div class="{style.label}">Keywords</div>
-            <div class="{style.value}" ui:field="keywords"/>
-        </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

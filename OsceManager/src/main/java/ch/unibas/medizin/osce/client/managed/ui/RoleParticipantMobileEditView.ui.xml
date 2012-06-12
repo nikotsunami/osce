@@ -19,28 +19,25 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-
-    <g:Button ui:field="save">Save</g:Button>
-  
-    
-        
     <div id="standardizedRole">
             <div class="{style.label}">Standardized Role</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="standardizedRole"/>
             </div>
         </div>
-        <div id="doctor">
+    <div id="doctor">
             <div class="{style.label}">Doctor</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="doctor"/>
             </div>
         </div>
-        <div id="type">
+    <div id="type">
             <div class="{style.label}">Type</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="type"/>
             </div>
         </div>
-    </g:HTMLPanel>
+
+    <g:Button ui:field="save">Save</g:Button>
+  </g:HTMLPanel>
 </ui:UiBinder>

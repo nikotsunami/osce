@@ -23,6 +23,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public static Set<java.lang.Class<? extends com.google.gwt.requestfactory.shared.EntityProxy>> getAll() {
         Set<Class<? extends EntityProxy>> rtn = new HashSet<Class<? extends EntityProxy>>();
+        rtn.add(UsedMaterialProxy.class);
         rtn.add(TaskProxy.class);
         rtn.add(StudentProxy.class);
         rtn.add(StudentOscesProxy.class);
@@ -30,11 +31,18 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(StandardizedPatientProxy.class);
         rtn.add(SpokenLanguageProxy.class);
         rtn.add(SpecialisationProxy.class);
+        rtn.add(SimpleSearchCriteriaProxy.class);
         rtn.add(SemesterProxy.class);
         rtn.add(ScarProxy.class);
         rtn.add(RoomProxy.class);
         rtn.add(RoleTopicProxy.class);
+        rtn.add(RoleTemplateProxy.class);
+        rtn.add(RoleTableItemValueProxy.class);
+        rtn.add(RoleTableItemProxy.class);
+        rtn.add(RoleSubItemValueProxy.class);
         rtn.add(RoleParticipantProxy.class);
+        rtn.add(RoleItemAccessProxy.class);
+        rtn.add(RoleBaseItemProxy.class);
         rtn.add(ProfessionProxy.class);
         rtn.add(PatientInSemesterProxy.class);
         rtn.add(PatientInRoleProxy.class);
@@ -46,14 +54,21 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(NationalityProxy.class);
         rtn.add(MediaContentTypeProxy.class);
         rtn.add(MediaContentProxy.class);
+        rtn.add(MaterialListProxy.class);
         rtn.add(LogEntryProxy.class);
         rtn.add(LangSkillProxy.class);
         rtn.add(KeywordProxy.class);
+        rtn.add(FileProxy.class);
         rtn.add(EliminationCriterionProxy.class);
         rtn.add(DoctorProxy.class);
         rtn.add(DescriptionProxy.class);
         rtn.add(CourseProxy.class);
         rtn.add(ClinicProxy.class);
+        rtn.add(ChecklistTopicProxy.class);
+        rtn.add(ChecklistQuestionProxy.class);
+        rtn.add(ChecklistOptionProxy.class);
+        rtn.add(ChecklistCriteriaProxy.class);
+        rtn.add(CheckListProxy.class);
         rtn.add(BankaccountProxy.class);
         rtn.add(AssignmentProxy.class);
         rtn.add(AnamnesisFormProxy.class);
@@ -65,6 +80,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Class<?> clazz) {
+        if (UsedMaterialProxy.class.equals(clazz)) {
+            processor.handleUsedMaterial((UsedMaterialProxy) null);
+            return;
+        }
         if (TaskProxy.class.equals(clazz)) {
             processor.handleTask((TaskProxy) null);
             return;
@@ -93,6 +112,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleSpecialisation((SpecialisationProxy) null);
             return;
         }
+        if (SimpleSearchCriteriaProxy.class.equals(clazz)) {
+            processor.handleSimpleSearchCriteria((SimpleSearchCriteriaProxy) null);
+            return;
+        }
         if (SemesterProxy.class.equals(clazz)) {
             processor.handleSemester((SemesterProxy) null);
             return;
@@ -109,8 +132,32 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleRoleTopic((RoleTopicProxy) null);
             return;
         }
+        if (RoleTemplateProxy.class.equals(clazz)) {
+            processor.handleRoleTemplate((RoleTemplateProxy) null);
+            return;
+        }
+        if (RoleTableItemValueProxy.class.equals(clazz)) {
+            processor.handleRoleTableItemValue((RoleTableItemValueProxy) null);
+            return;
+        }
+        if (RoleTableItemProxy.class.equals(clazz)) {
+            processor.handleRoleTableItem((RoleTableItemProxy) null);
+            return;
+        }
+        if (RoleSubItemValueProxy.class.equals(clazz)) {
+            processor.handleRoleSubItemValue((RoleSubItemValueProxy) null);
+            return;
+        }
         if (RoleParticipantProxy.class.equals(clazz)) {
             processor.handleRoleParticipant((RoleParticipantProxy) null);
+            return;
+        }
+        if (RoleItemAccessProxy.class.equals(clazz)) {
+            processor.handleRoleItemAccess((RoleItemAccessProxy) null);
+            return;
+        }
+        if (RoleBaseItemProxy.class.equals(clazz)) {
+            processor.handleRoleBaseItem((RoleBaseItemProxy) null);
             return;
         }
         if (ProfessionProxy.class.equals(clazz)) {
@@ -157,6 +204,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleMediaContent((MediaContentProxy) null);
             return;
         }
+        if (MaterialListProxy.class.equals(clazz)) {
+            processor.handleMaterialList((MaterialListProxy) null);
+            return;
+        }
         if (LogEntryProxy.class.equals(clazz)) {
             processor.handleLogEntry((LogEntryProxy) null);
             return;
@@ -167,6 +218,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (KeywordProxy.class.equals(clazz)) {
             processor.handleKeyword((KeywordProxy) null);
+            return;
+        }
+        if (FileProxy.class.equals(clazz)) {
+            processor.handleFile((FileProxy) null);
             return;
         }
         if (EliminationCriterionProxy.class.equals(clazz)) {
@@ -187,6 +242,26 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (ClinicProxy.class.equals(clazz)) {
             processor.handleClinic((ClinicProxy) null);
+            return;
+        }
+        if (ChecklistTopicProxy.class.equals(clazz)) {
+            processor.handleChecklistTopic((ChecklistTopicProxy) null);
+            return;
+        }
+        if (ChecklistQuestionProxy.class.equals(clazz)) {
+            processor.handleChecklistQuestion((ChecklistQuestionProxy) null);
+            return;
+        }
+        if (ChecklistOptionProxy.class.equals(clazz)) {
+            processor.handleChecklistOption((ChecklistOptionProxy) null);
+            return;
+        }
+        if (ChecklistCriteriaProxy.class.equals(clazz)) {
+            processor.handleChecklistCriteria((ChecklistCriteriaProxy) null);
+            return;
+        }
+        if (CheckListProxy.class.equals(clazz)) {
+            processor.handleCheckList((CheckListProxy) null);
             return;
         }
         if (BankaccountProxy.class.equals(clazz)) {
@@ -221,6 +296,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Object proxy) {
+        if (proxy instanceof UsedMaterialProxy) {
+            processor.handleUsedMaterial((UsedMaterialProxy) proxy);
+            return;
+        }
         if (proxy instanceof TaskProxy) {
             processor.handleTask((TaskProxy) proxy);
             return;
@@ -249,6 +328,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleSpecialisation((SpecialisationProxy) proxy);
             return;
         }
+        if (proxy instanceof SimpleSearchCriteriaProxy) {
+            processor.handleSimpleSearchCriteria((SimpleSearchCriteriaProxy) proxy);
+            return;
+        }
         if (proxy instanceof SemesterProxy) {
             processor.handleSemester((SemesterProxy) proxy);
             return;
@@ -265,8 +348,32 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleRoleTopic((RoleTopicProxy) proxy);
             return;
         }
+        if (proxy instanceof RoleTemplateProxy) {
+            processor.handleRoleTemplate((RoleTemplateProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleTableItemValueProxy) {
+            processor.handleRoleTableItemValue((RoleTableItemValueProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleTableItemProxy) {
+            processor.handleRoleTableItem((RoleTableItemProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleSubItemValueProxy) {
+            processor.handleRoleSubItemValue((RoleSubItemValueProxy) proxy);
+            return;
+        }
         if (proxy instanceof RoleParticipantProxy) {
             processor.handleRoleParticipant((RoleParticipantProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleItemAccessProxy) {
+            processor.handleRoleItemAccess((RoleItemAccessProxy) proxy);
+            return;
+        }
+        if (proxy instanceof RoleBaseItemProxy) {
+            processor.handleRoleBaseItem((RoleBaseItemProxy) proxy);
             return;
         }
         if (proxy instanceof ProfessionProxy) {
@@ -313,6 +420,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleMediaContent((MediaContentProxy) proxy);
             return;
         }
+        if (proxy instanceof MaterialListProxy) {
+            processor.handleMaterialList((MaterialListProxy) proxy);
+            return;
+        }
         if (proxy instanceof LogEntryProxy) {
             processor.handleLogEntry((LogEntryProxy) proxy);
             return;
@@ -323,6 +434,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (proxy instanceof KeywordProxy) {
             processor.handleKeyword((KeywordProxy) proxy);
+            return;
+        }
+        if (proxy instanceof FileProxy) {
+            processor.handleFile((FileProxy) proxy);
             return;
         }
         if (proxy instanceof EliminationCriterionProxy) {
@@ -343,6 +458,26 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (proxy instanceof ClinicProxy) {
             processor.handleClinic((ClinicProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistTopicProxy) {
+            processor.handleChecklistTopic((ChecklistTopicProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistQuestionProxy) {
+            processor.handleChecklistQuestion((ChecklistQuestionProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistOptionProxy) {
+            processor.handleChecklistOption((ChecklistOptionProxy) proxy);
+            return;
+        }
+        if (proxy instanceof ChecklistCriteriaProxy) {
+            processor.handleChecklistCriteria((ChecklistCriteriaProxy) proxy);
+            return;
+        }
+        if (proxy instanceof CheckListProxy) {
+            processor.handleCheckList((CheckListProxy) proxy);
             return;
         }
         if (proxy instanceof BankaccountProxy) {
@@ -379,6 +514,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public void handleNonProxy(Object object) {
     }
 
+    public abstract void handleUsedMaterial(UsedMaterialProxy proxy);
+
     public abstract void handleTask(TaskProxy proxy);
 
     public abstract void handleStudent(StudentProxy proxy);
@@ -393,6 +530,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleSpecialisation(SpecialisationProxy proxy);
 
+    public abstract void handleSimpleSearchCriteria(SimpleSearchCriteriaProxy proxy);
+
     public abstract void handleSemester(SemesterProxy proxy);
 
     public abstract void handleScar(ScarProxy proxy);
@@ -401,7 +540,19 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleRoleTopic(RoleTopicProxy proxy);
 
+    public abstract void handleRoleTemplate(RoleTemplateProxy proxy);
+
+    public abstract void handleRoleTableItemValue(RoleTableItemValueProxy proxy);
+
+    public abstract void handleRoleTableItem(RoleTableItemProxy proxy);
+
+    public abstract void handleRoleSubItemValue(RoleSubItemValueProxy proxy);
+
     public abstract void handleRoleParticipant(RoleParticipantProxy proxy);
+
+    public abstract void handleRoleItemAccess(RoleItemAccessProxy proxy);
+
+    public abstract void handleRoleBaseItem(RoleBaseItemProxy proxy);
 
     public abstract void handleProfession(ProfessionProxy proxy);
 
@@ -425,11 +576,15 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleMediaContent(MediaContentProxy proxy);
 
+    public abstract void handleMaterialList(MaterialListProxy proxy);
+
     public abstract void handleLogEntry(LogEntryProxy proxy);
 
     public abstract void handleLangSkill(LangSkillProxy proxy);
 
     public abstract void handleKeyword(KeywordProxy proxy);
+
+    public abstract void handleFile(FileProxy proxy);
 
     public abstract void handleEliminationCriterion(EliminationCriterionProxy proxy);
 
@@ -440,6 +595,16 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleCourse(CourseProxy proxy);
 
     public abstract void handleClinic(ClinicProxy proxy);
+
+    public abstract void handleChecklistTopic(ChecklistTopicProxy proxy);
+
+    public abstract void handleChecklistQuestion(ChecklistQuestionProxy proxy);
+
+    public abstract void handleChecklistOption(ChecklistOptionProxy proxy);
+
+    public abstract void handleChecklistCriteria(ChecklistCriteriaProxy proxy);
+
+    public abstract void handleCheckList(CheckListProxy proxy);
 
     public abstract void handleBankaccount(BankaccountProxy proxy);
 

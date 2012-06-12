@@ -35,22 +35,6 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
-                <td>
-                    <span class="{style.label}">Id:</span>
-                </td>
-                <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-      <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
       <tr id="room">
                 <td>
                     <span class="{style.label}">Room:</span>
@@ -81,6 +65,22 @@
                 </td>
                 <td>
                     <span ui:field="assignments"/>
+                </td>
+            </tr>
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
                 </td>
             </tr>
     </table>

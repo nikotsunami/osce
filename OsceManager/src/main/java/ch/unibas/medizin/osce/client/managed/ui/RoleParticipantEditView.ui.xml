@@ -43,10 +43,7 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-    
-        
-            
-        <tr id="standardizedRole">
+      <tr id="standardizedRole">
                 <td>
                     <div class="{style.label}">Standardized Role:</div>
                 </td>
@@ -54,7 +51,7 @@
                     <g:ValueListBox ui:field="standardizedRole"/>
                 </td>
             </tr>
-            <tr id="doctor">
+      <tr id="doctor">
                 <td>
                     <div class="{style.label}">Doctor:</div>
                 </td>
@@ -62,7 +59,7 @@
                     <g:ValueListBox ui:field="doctor"/>
                 </td>
             </tr>
-            <tr id="type">
+      <tr id="type">
                 <td>
                     <div class="{style.label}">Type:</div>
                 </td>
@@ -70,7 +67,7 @@
                     <g:ValueListBox ui:field="type"/>
                 </td>
             </tr>
-        </table>
+    </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

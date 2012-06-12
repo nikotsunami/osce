@@ -2,12 +2,16 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -48,6 +52,9 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
     SpanElement roleType;
 
     @UiField
+    SpanElement active;
+
+    @UiField
     SpanElement roleTopic;
 
     @UiField
@@ -68,6 +75,15 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
     @UiField
     SpanElement keywords;
 
+    @UiField
+    SpanElement advancedSearchCriteria;
+
+    @UiField
+    SpanElement simpleSearchCriteria;
+
+    @UiField
+    SpanElement checkList;
+
     StandardizedRoleProxy proxy;
 
     @UiField
@@ -82,6 +98,7 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
         caseDescription.setInnerText(proxy.getCaseDescription() == null ? "" : String.valueOf(proxy.getCaseDescription()));
         roleScript.setInnerText(proxy.getRoleScript() == null ? "" : String.valueOf(proxy.getRoleScript()));
         roleType.setInnerText(proxy.getRoleType() == null ? "" : String.valueOf(proxy.getRoleType()));
+        active.setInnerText(proxy.getActive() == null ? "" : String.valueOf(proxy.getActive()));
         roleTopic.setInnerText(proxy.getRoleTopic() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().render(proxy.getRoleTopic()));
         roleParticipants.setInnerText(proxy.getRoleParticipants() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer.instance()).render(proxy.getRoleParticipants()));
         previousVersion.setInnerText(proxy.getPreviousVersion() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getPreviousVersion()));
@@ -89,6 +106,9 @@ public abstract class StandardizedRoleDetailsView_Roo_Gwt extends Composite impl
         mainVersion.setInnerText(proxy.getMainVersion() == null ? "" : String.valueOf(proxy.getMainVersion()));
         subVersion.setInnerText(proxy.getSubVersion() == null ? "" : String.valueOf(proxy.getSubVersion()));
         keywords.setInnerText(proxy.getKeywords() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer.instance()).render(proxy.getKeywords()));
+        advancedSearchCriteria.setInnerText(proxy.getAdvancedSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaProxyRenderer.instance()).render(proxy.getAdvancedSearchCriteria()));
+        simpleSearchCriteria.setInnerText(proxy.getSimpleSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaProxyRenderer.instance()).render(proxy.getSimpleSearchCriteria()));
+        checkList.setInnerText(proxy.getCheckList() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer.instance().render(proxy.getCheckList()));
         displayRenderer.setInnerText(StandardizedRoleProxyRenderer.instance().render(proxy));
     }
 }

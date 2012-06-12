@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -47,6 +48,9 @@ public abstract class AdvancedSearchCriteriaMobileDetailsView_Roo_Gwt extends Co
     @UiField
     Element shownValue;
 
+    @UiField
+    Element standardizedRole;
+
     AdvancedSearchCriteriaProxy proxy;
 
     public void setValue(AdvancedSearchCriteriaProxy proxy) {
@@ -59,5 +63,6 @@ public abstract class AdvancedSearchCriteriaMobileDetailsView_Roo_Gwt extends Co
         comparation.setInnerText(proxy.getComparation() == null ? "" : String.valueOf(proxy.getComparation()));
         value.setInnerText(proxy.getValue() == null ? "" : String.valueOf(proxy.getValue()));
         shownValue.setInnerText(proxy.getShownValue() == null ? "" : String.valueOf(proxy.getShownValue()));
+        standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
     }
 }

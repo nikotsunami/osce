@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.domain.Administrator;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.shared.Semesters;
+import java.lang.Double;
 import java.lang.Integer;
 import java.util.Set;
 
@@ -26,6 +27,30 @@ privileged aspect Semester_Roo_JavaBean {
     
     public void Semester.setCalYear(Integer calYear) {
         this.calYear = calYear;
+    }
+    
+    public Double Semester.getMaximalYearEarnings() {
+        return this.maximalYearEarnings;
+    }
+    
+    public void Semester.setMaximalYearEarnings(Double maximalYearEarnings) {
+        this.maximalYearEarnings = maximalYearEarnings;
+    }
+    
+    public Double Semester.getPricestatist() {
+        return this.pricestatist;
+    }
+    
+    public void Semester.setPricestatist(Double pricestatist) {
+        this.pricestatist = pricestatist;
+    }
+    
+    public Double Semester.getPriceStandardizedPartient() {
+        return this.priceStandardizedPartient;
+    }
+    
+    public void Semester.setPriceStandardizedPartient(Double priceStandardizedPartient) {
+        this.priceStandardizedPartient = priceStandardizedPartient;
     }
     
     public Set<Administrator> Semester.getAdministrators() {
