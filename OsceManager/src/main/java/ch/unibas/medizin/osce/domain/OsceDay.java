@@ -20,6 +20,8 @@ import javax.persistence.CascadeType;
 @RooEntity
 public class OsceDay {
 
+	private Date osceDate;
+	
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date timeStart;
@@ -29,8 +31,8 @@ public class OsceDay {
     private Date timeEnd;
 
     @ManyToOne
-    private Osce osce;
-
+    private Osce osce;   
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
-    private Set<Assignment> assignments = new HashSet<Assignment>();
+	 private Set<OsceSequence> osceSequences = new HashSet<OsceSequence>();
 }

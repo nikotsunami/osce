@@ -25,4 +25,7 @@ public class Course {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private Set<OscePostRoom> oscePostRooms = new HashSet<OscePostRoom>();
+         
+    @ManyToOne
+    private OsceSequence osceSequence;
 }
