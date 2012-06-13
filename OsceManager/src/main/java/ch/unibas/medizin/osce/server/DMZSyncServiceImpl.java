@@ -385,7 +385,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
         String hostAddress = getHostAddress();
 
-        String url = hostAddress + "/sp_portal/DataImportExport/importSP";
+        String url = hostAddress + "/dataImportExport/importSP";
 
         PostMethod postMethod = new PostMethod(url);
 
@@ -432,7 +432,10 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
         HttpClient httpClient = new HttpClient();
 
-        String url = getHostAddress() + "/sp_portal/DataImportExport/exportSP?id="  + standardizedPatientId;
+        String url = getHostAddress() + "/dataImportExport/exportSP?id="  + standardizedPatientId;
+
+        System.err.println("URL: " + url);
+
         GetMethod getMethod = new GetMethod(url);
 
         getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
