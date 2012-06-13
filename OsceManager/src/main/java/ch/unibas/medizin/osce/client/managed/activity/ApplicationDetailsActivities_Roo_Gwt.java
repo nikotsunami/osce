@@ -31,9 +31,11 @@ import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
@@ -193,6 +195,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleOsceSequence(OsceSequenceProxy proxy) {
+                setResult(new OsceSequenceActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleOsce(OsceProxy proxy) {
                 setResult(new OsceActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
@@ -205,6 +212,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleOscePost(OscePostProxy proxy) {
                 setResult(new OscePostActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleOscePostBlueprint(OscePostBlueprintProxy proxy) {
+                setResult(new OscePostBlueprintActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override

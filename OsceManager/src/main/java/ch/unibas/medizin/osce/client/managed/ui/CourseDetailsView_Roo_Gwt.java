@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -39,6 +40,9 @@ public abstract class CourseDetailsView_Roo_Gwt extends Composite implements Pro
     @UiField
     SpanElement oscePostRooms;
 
+    @UiField
+    SpanElement osceSequence;
+
     CourseProxy proxy;
 
     @UiField
@@ -51,6 +55,7 @@ public abstract class CourseDetailsView_Roo_Gwt extends Composite implements Pro
         color.setInnerText(proxy.getColor() == null ? "" : String.valueOf(proxy.getColor()));
         osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getOsce()));
         oscePostRooms.setInnerText(proxy.getOscePostRooms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance()).render(proxy.getOscePostRooms()));
+        osceSequence.setInnerText(proxy.getOsceSequence() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance().render(proxy.getOsceSequence()));
         displayRenderer.setInnerText(CourseProxyRenderer.instance().render(proxy));
     }
 }

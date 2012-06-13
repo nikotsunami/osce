@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
@@ -31,6 +32,6 @@ public abstract class CourseDetailsActivity_Roo_Gwt extends AbstractActivity imp
     protected EntityProxyId<CourseProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("osce", "oscePostRooms").fire(callback);
+        requests.find(proxyId).with("osce", "oscePostRooms", "osceSequence").fire(callback);
     }
 }

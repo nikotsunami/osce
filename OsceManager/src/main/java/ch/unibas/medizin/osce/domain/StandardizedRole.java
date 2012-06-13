@@ -85,5 +85,6 @@ public class StandardizedRole {
 	   @ManyToOne(cascade = CascadeType.ALL)
 	    private CheckList checkList;
 	    
-
+	   @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+		private Set<OscePost> oscePosts = new HashSet<OscePost>();
 }

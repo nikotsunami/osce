@@ -3,10 +3,10 @@
 package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.ui.AssignmentSetEditor;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.ui.OsceSequenceSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
@@ -31,6 +31,6 @@ public abstract class OsceDayDetailsActivity_Roo_Gwt extends AbstractActivity im
     protected EntityProxyId<OsceDayProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("osce", "assignments").fire(callback);
+        requests.find(proxyId).with("osce", "osceSequences").fire(callback);
     }
 }

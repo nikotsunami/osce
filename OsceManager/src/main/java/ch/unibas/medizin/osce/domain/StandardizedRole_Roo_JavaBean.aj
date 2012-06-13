@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.Keyword;
+import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.RoleParticipant;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.domain.SimpleSearchCriteria;
@@ -145,6 +146,14 @@ privileged aspect StandardizedRole_Roo_JavaBean {
     
     public void StandardizedRole.setCheckList(CheckList checkList) {
         this.checkList = checkList;
+    }
+    
+    public Set<OscePost> StandardizedRole.getOscePosts() {
+        return this.oscePosts;
+    }
+    
+    public void StandardizedRole.setOscePosts(Set<OscePost> oscePosts) {
+        this.oscePosts = oscePosts;
     }
     
 }

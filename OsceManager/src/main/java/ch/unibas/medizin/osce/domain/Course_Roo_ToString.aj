@@ -13,6 +13,7 @@ privileged aspect Course_Roo_ToString {
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Osce: ").append(getOsce()).append(", ");
         sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
+        sb.append("OsceSequence: ").append(getOsceSequence()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

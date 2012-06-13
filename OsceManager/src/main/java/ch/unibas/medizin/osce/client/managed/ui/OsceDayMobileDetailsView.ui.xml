@@ -13,31 +13,41 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div id="id">
+    
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-    <div id="version">
+        <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-    <div id="timeStart">
+        <div id="osceDate">
+            <div class="{style.label}">Osce Date</div>
+            <div class="{style.value}" ui:field="osceDate"/>
+        </div>
+        <div id="timeStart">
             <div class="{style.label}">Time Start</div>
             <div class="{style.value}" ui:field="timeStart"/>
         </div>
-    <div id="timeEnd">
+        <div id="timeEnd">
             <div class="{style.label}">Time End</div>
             <div class="{style.value}" ui:field="timeEnd"/>
         </div>
-    <div id="osce">
+        <div id="osce">
             <div class="{style.label}">Osce</div>
             <div class="{style.value}" ui:field="osce"/>
         </div>
-    <div id="assignments">
-            <div class="{style.label}">Assignments</div>
-            <div class="{style.value}" ui:field="assignments"/>
+        <div id="osceSequences">
+            <div class="{style.label}">Osce Sequences</div>
+            <div class="{style.value}" ui:field="osceSequences"/>
         </div>
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  </g:HTMLPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

@@ -17,6 +17,7 @@ privileged aspect StandardizedRole_Roo_ToString {
         sb.append("Keywords: ").append(getKeywords() == null ? "null" : getKeywords().size()).append(", ");
         sb.append("LongName: ").append(getLongName()).append(", ");
         sb.append("MainVersion: ").append(getMainVersion()).append(", ");
+        sb.append("OscePosts: ").append(getOscePosts() == null ? "null" : getOscePosts().size()).append(", ");
         sb.append("RoleParticipants: ").append(getRoleParticipants() == null ? "null" : getRoleParticipants().size()).append(", ");
         sb.append("RoleScript: ").append(getRoleScript()).append(", ");
         sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");

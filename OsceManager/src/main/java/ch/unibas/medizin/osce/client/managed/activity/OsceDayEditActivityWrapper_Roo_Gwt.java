@@ -4,10 +4,10 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.OsceDayEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.ui.AssignmentSetEditor;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.ui.OsceSequenceSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -45,14 +45,14 @@ public abstract class OsceDayEditActivityWrapper_Roo_Gwt implements Activity, Is
                 view.setOscePickerValues(values);
             }
         });
-        view.setAssignmentsPickerValues(Collections.<AssignmentProxy>emptyList());
-        requests.assignmentRequest().findAssignmentEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AssignmentProxyRenderer.instance().getPaths()).fire(new Receiver<List<AssignmentProxy>>() {
+        view.setOsceSequencesPickerValues(Collections.<OsceSequenceProxy>emptyList());
+        requests.osceSequenceRequest().findOsceSequenceEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance().getPaths()).fire(new Receiver<List<OsceSequenceProxy>>() {
 
-            public void onSuccess(List<AssignmentProxy> response) {
-                List<AssignmentProxy> values = new ArrayList<AssignmentProxy>();
+            public void onSuccess(List<OsceSequenceProxy> response) {
+                List<OsceSequenceProxy> values = new ArrayList<OsceSequenceProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setAssignmentsPickerValues(values);
+                view.setOsceSequencesPickerValues(values);
             }
         });
         wrapped.start(display, eventBus);
@@ -62,6 +62,6 @@ public abstract class OsceDayEditActivityWrapper_Roo_Gwt implements Activity, Is
 
         void setOscePickerValues(Collection<OsceProxy> values);
 
-        void setAssignmentsPickerValues(Collection<AssignmentProxy> values);
+        void setOsceSequencesPickerValues(Collection<OsceSequenceProxy> values);
     }
 }

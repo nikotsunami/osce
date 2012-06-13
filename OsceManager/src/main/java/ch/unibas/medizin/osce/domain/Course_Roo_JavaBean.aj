@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
+import ch.unibas.medizin.osce.domain.OsceSequence;
 import java.lang.String;
 import java.util.Set;
 
@@ -32,6 +33,14 @@ privileged aspect Course_Roo_JavaBean {
     
     public void Course.setOscePostRooms(Set<OscePostRoom> oscePostRooms) {
         this.oscePostRooms = oscePostRooms;
+    }
+    
+    public OsceSequence Course.getOsceSequence() {
+        return this.osceSequence;
+    }
+    
+    public void Course.setOsceSequence(OsceSequence osceSequence) {
+        this.osceSequence = osceSequence;
     }
     
 }

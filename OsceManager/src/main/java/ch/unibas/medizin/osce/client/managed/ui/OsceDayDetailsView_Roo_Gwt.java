@@ -2,9 +2,9 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -31,6 +31,9 @@ public abstract class OsceDayDetailsView_Roo_Gwt extends Composite implements Pr
     SpanElement version;
 
     @UiField
+    SpanElement osceDate;
+
+    @UiField
     SpanElement timeStart;
 
     @UiField
@@ -40,7 +43,7 @@ public abstract class OsceDayDetailsView_Roo_Gwt extends Composite implements Pr
     SpanElement osce;
 
     @UiField
-    SpanElement assignments;
+    SpanElement osceSequences;
 
     OsceDayProxy proxy;
 
@@ -51,10 +54,11 @@ public abstract class OsceDayDetailsView_Roo_Gwt extends Composite implements Pr
         this.proxy = proxy;
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+        osceDate.setInnerText(proxy.getOsceDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getOsceDate()));
         timeStart.setInnerText(proxy.getTimeStart() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getTimeStart()));
         timeEnd.setInnerText(proxy.getTimeEnd() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getTimeEnd()));
         osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getOsce()));
-        assignments.setInnerText(proxy.getAssignments() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AssignmentProxyRenderer.instance()).render(proxy.getAssignments()));
+        osceSequences.setInnerText(proxy.getOsceSequences() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance()).render(proxy.getOsceSequences()));
         displayRenderer.setInnerText(OsceDayProxyRenderer.instance().render(proxy));
     }
 }

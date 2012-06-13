@@ -52,11 +52,15 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     PatientInRoleRequest patientInRoleRequest();
 
+    OsceSequenceRequest osceSequenceRequest();
+
     OsceRequest osceRequest();
 
     OscePostRoomRequest oscePostRoomRequest();
 
     OscePostRequest oscePostRequest();
+
+    OscePostBlueprintRequest oscePostBlueprintRequest();
 
     OsceDayRequest osceDayRequest();
 

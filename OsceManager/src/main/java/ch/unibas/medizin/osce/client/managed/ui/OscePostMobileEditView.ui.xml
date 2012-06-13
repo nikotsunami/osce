@@ -19,31 +19,47 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="isPossibleStart">
+    
+    
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="isPossibleStart">
             <div class="{style.label}">Is Possible Start</div>
             <div class="{style.value}">
                 <g:CheckBox ui:field="isPossibleStart"/>
             </div>
         </div>
-    <div id="roleTopic">
-            <div class="{style.label}">Role Topic</div>
+        <div id="oscePostBlueprint">
+            <div class="{style.label}">Osce Post Blueprint</div>
             <div class="{style.value}">
-                <g:ValueListBox ui:field="roleTopic"/>
+                <g:ValueListBox ui:field="oscePostBlueprint"/>
             </div>
         </div>
-    <div id="nextPost">
-            <div class="{style.label}">Next Post</div>
-            <div class="{style.value}">
-                <g:ValueListBox ui:field="nextPost"/>
-            </div>
-        </div>
-    <div id="oscePostRooms">
+        <div id="oscePostRooms">
             <div class="{style.label}">Osce Post Rooms</div>
             <div class="{style.value}">
                 <a:OscePostRoomSetEditor ui:field="oscePostRooms"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+        <div id="standardizedRole">
+            <div class="{style.label}">Standardized Role</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="standardizedRole"/>
+            </div>
+        </div>
+        <div id="osceSequence">
+            <div class="{style.label}">Osce Sequence</div>
+            <div class="{style.value}">
+                <g:ValueListBox ui:field="osceSequence"/>
+            </div>
+        </div>
+        <div id="sequenceNumber">
+            <div class="{style.label}">Sequence Number</div>
+            <div class="{style.value}">
+                <g:IntegerBox ui:field="sequenceNumber"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

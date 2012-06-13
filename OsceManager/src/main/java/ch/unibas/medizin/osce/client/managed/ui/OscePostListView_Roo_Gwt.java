@@ -2,9 +2,11 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -75,26 +77,16 @@ public abstract class OscePostListView_Roo_Gwt extends AbstractProxyListView<Osc
                 return renderer.render(object.getIsPossibleStart());
             }
         }, "Is Possible Start");
-        paths.add("roleTopic");
+        paths.add("oscePostBlueprint");
         table.addColumn(new TextColumn<OscePostProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance();
+            Renderer<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance();
 
             @Override
             public String getValue(OscePostProxy object) {
-                return renderer.render(object.getRoleTopic());
+                return renderer.render(object.getOscePostBlueprint());
             }
-        }, "Role Topic");
-        paths.add("nextPost");
-        table.addColumn(new TextColumn<OscePostProxy>() {
-
-            Renderer<ch.unibas.medizin.osce.client.managed.request.OscePostProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance();
-
-            @Override
-            public String getValue(OscePostProxy object) {
-                return renderer.render(object.getNextPost());
-            }
-        }, "Next Post");
+        }, "Osce Post Blueprint");
         paths.add("oscePostRooms");
         table.addColumn(new TextColumn<OscePostProxy>() {
 
@@ -105,5 +97,40 @@ public abstract class OscePostListView_Roo_Gwt extends AbstractProxyListView<Osc
                 return renderer.render(object.getOscePostRooms());
             }
         }, "Osce Post Rooms");
+        paths.add("standardizedRole");
+        table.addColumn(new TextColumn<OscePostProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance();
+
+            @Override
+            public String getValue(OscePostProxy object) {
+                return renderer.render(object.getStandardizedRole());
+            }
+        }, "Standardized Role");
+        paths.add("osceSequence");
+        table.addColumn(new TextColumn<OscePostProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance();
+
+            @Override
+            public String getValue(OscePostProxy object) {
+                return renderer.render(object.getOsceSequence());
+            }
+        }, "Osce Sequence");
+        paths.add("sequenceNumber");
+        table.addColumn(new TextColumn<OscePostProxy>() {
+
+            Renderer<java.lang.Integer> renderer = new AbstractRenderer<java.lang.Integer>() {
+
+                public String render(java.lang.Integer obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OscePostProxy object) {
+                return renderer.render(object.getSequenceNumber());
+            }
+        }, "Sequence Number");
     }
 }

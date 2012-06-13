@@ -43,7 +43,19 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="timeStart">
+      
+      
+      
+      
+    <tr id="osceDate">
+                <td>
+                    <div class="{style.label}">Osce Date:</div>
+                </td>
+                <td>
+                    <d:DateBox ui:field="osceDate"/>
+                </td>
+            </tr>
+            <tr id="timeStart">
                 <td>
                     <div class="{style.label}">Time Start:</div>
                 </td>
@@ -51,7 +63,7 @@
                     <d:DateBox ui:field="timeStart"/>
                 </td>
             </tr>
-      <tr id="timeEnd">
+            <tr id="timeEnd">
                 <td>
                     <div class="{style.label}">Time End:</div>
                 </td>
@@ -59,7 +71,7 @@
                     <d:DateBox ui:field="timeEnd"/>
                 </td>
             </tr>
-      <tr id="osce">
+            <tr id="osce">
                 <td>
                     <div class="{style.label}">Osce:</div>
                 </td>
@@ -67,15 +79,15 @@
                     <g:ValueListBox ui:field="osce"/>
                 </td>
             </tr>
-      <tr id="assignments">
+            <tr id="osceSequences">
                 <td>
-                    <div class="{style.label}">Assignments:</div>
+                    <div class="{style.label}">Osce Sequences:</div>
                 </td>
                 <td>
-                    <a:AssignmentSetEditor ui:field="assignments"/>
+                    <a:OsceSequenceSetEditor ui:field="osceSequences"/>
                 </td>
             </tr>
-    </table>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

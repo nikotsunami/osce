@@ -19,31 +19,41 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="timeStart">
+    
+    
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="osceDate">
+            <div class="{style.label}">Osce Date</div>
+            <div class="{style.value}">
+                <d:DateBox ui:field="osceDate"/>
+            </div>
+        </div>
+        <div id="timeStart">
             <div class="{style.label}">Time Start</div>
             <div class="{style.value}">
                 <d:DateBox ui:field="timeStart"/>
             </div>
         </div>
-    <div id="timeEnd">
+        <div id="timeEnd">
             <div class="{style.label}">Time End</div>
             <div class="{style.value}">
                 <d:DateBox ui:field="timeEnd"/>
             </div>
         </div>
-    <div id="osce">
+        <div id="osce">
             <div class="{style.label}">Osce</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="osce"/>
             </div>
         </div>
-    <div id="assignments">
-            <div class="{style.label}">Assignments</div>
+        <div id="osceSequences">
+            <div class="{style.label}">Osce Sequences</div>
             <div class="{style.value}">
-                <a:AssignmentSetEditor ui:field="assignments"/>
+                <a:OsceSequenceSetEditor ui:field="osceSequences"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

@@ -4,8 +4,8 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.OsceEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.OsceEditActivityWrapper.View;
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
@@ -113,7 +113,7 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     OsceDaySetEditor osce_days;
 
     @UiField
-    CourseSetEditor courses;
+    OscePostBlueprintSetEditor oscePostBlueprints;
 
     @UiField
     TaskSetEditor tasks;
@@ -123,6 +123,10 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
 
     @UiField(provided = true)
     ValueListBox<OsceProxy> copiedOsce = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
+
+    public void setOscePostBlueprintsPickerValues(Collection<OscePostBlueprintProxy> values) {
+        oscePostBlueprints.setAcceptableValues(values);
+    }
 
     public void setOsceStatusPickerValues(Collection<OsceStatus> values) {
         osceStatus.setAcceptableValues(values);
@@ -142,10 +146,6 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
 
     public void setTasksPickerValues(Collection<TaskProxy> values) {
         tasks.setAcceptableValues(values);
-    }
-
-    public void setCoursesPickerValues(Collection<CourseProxy> values) {
-        courses.setAcceptableValues(values);
     }
 
     public void setOsceStudentsPickerValues(Collection<StudentOscesProxy> values) {

@@ -35,31 +35,12 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="color">
-                <td>
-                    <span class="{style.label}">Color:</span>
-                </td>
-                <td>
-                    <span ui:field="color"/>
-                </td>
-            </tr>
-      <tr id="osce">
-                <td>
-                    <span class="{style.label}">Osce:</span>
-                </td>
-                <td>
-                    <span ui:field="osce"/>
-                </td>
-            </tr>
-      <tr id="oscePostRooms">
-                <td>
-                    <span class="{style.label}">Osce Post Rooms:</span>
-                </td>
-                <td>
-                    <span ui:field="oscePostRooms"/>
-                </td>
-            </tr>
-      <tr id="id">
+      
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -67,7 +48,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -75,7 +56,39 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-    </table>
+            <tr id="color">
+                <td>
+                    <span class="{style.label}">Color:</span>
+                </td>
+                <td>
+                    <span ui:field="color"/>
+                </td>
+            </tr>
+            <tr id="osce">
+                <td>
+                    <span class="{style.label}">Osce:</span>
+                </td>
+                <td>
+                    <span ui:field="osce"/>
+                </td>
+            </tr>
+            <tr id="oscePostRooms">
+                <td>
+                    <span class="{style.label}">Osce Post Rooms:</span>
+                </td>
+                <td>
+                    <span ui:field="oscePostRooms"/>
+                </td>
+            </tr>
+            <tr id="osceSequence">
+                <td>
+                    <span class="{style.label}">Osce Sequence:</span>
+                </td>
+                <td>
+                    <span ui:field="osceSequence"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

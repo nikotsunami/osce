@@ -12,6 +12,7 @@ privileged aspect RoleTopic_Roo_ToString {
         sb.append("Description: ").append(getDescription()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
+        sb.append("OscePostBlueprints: ").append(getOscePostBlueprints() == null ? "null" : getOscePostBlueprints().size()).append(", ");
         sb.append("SlotsUntilChange: ").append(getSlotsUntilChange()).append(", ");
         sb.append("Specialisation: ").append(getSpecialisation()).append(", ");
         sb.append("StandardizedRoles: ").append(getStandardizedRoles() == null ? "null" : getStandardizedRoles().size()).append(", ");

@@ -4,9 +4,11 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.OscePostEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -35,24 +37,14 @@ public abstract class OscePostEditActivityWrapper_Roo_Gwt implements Activity, I
 
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
-        view.setRoleTopicPickerValues(Collections.<RoleTopicProxy>emptyList());
-        requests.roleTopicRequest().findRoleTopicEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().getPaths()).fire(new Receiver<List<RoleTopicProxy>>() {
+        view.setOscePostBlueprintPickerValues(Collections.<OscePostBlueprintProxy>emptyList());
+        requests.oscePostBlueprintRequest().findOscePostBlueprintEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance().getPaths()).fire(new Receiver<List<OscePostBlueprintProxy>>() {
 
-            public void onSuccess(List<RoleTopicProxy> response) {
-                List<RoleTopicProxy> values = new ArrayList<RoleTopicProxy>();
+            public void onSuccess(List<OscePostBlueprintProxy> response) {
+                List<OscePostBlueprintProxy> values = new ArrayList<OscePostBlueprintProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setRoleTopicPickerValues(values);
-            }
-        });
-        view.setNextPostPickerValues(Collections.<OscePostProxy>emptyList());
-        requests.oscePostRequest().findOscePostEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance().getPaths()).fire(new Receiver<List<OscePostProxy>>() {
-
-            public void onSuccess(List<OscePostProxy> response) {
-                List<OscePostProxy> values = new ArrayList<OscePostProxy>();
-                values.add(null);
-                values.addAll(response);
-                view.setNextPostPickerValues(values);
+                view.setOscePostBlueprintPickerValues(values);
             }
         });
         view.setOscePostRoomsPickerValues(Collections.<OscePostRoomProxy>emptyList());
@@ -65,15 +57,37 @@ public abstract class OscePostEditActivityWrapper_Roo_Gwt implements Activity, I
                 view.setOscePostRoomsPickerValues(values);
             }
         });
+        view.setStandardizedRolePickerValues(Collections.<StandardizedRoleProxy>emptyList());
+        requests.standardizedRoleRequest().findStandardizedRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<StandardizedRoleProxy>>() {
+
+            public void onSuccess(List<StandardizedRoleProxy> response) {
+                List<StandardizedRoleProxy> values = new ArrayList<StandardizedRoleProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setStandardizedRolePickerValues(values);
+            }
+        });
+        view.setOsceSequencePickerValues(Collections.<OsceSequenceProxy>emptyList());
+        requests.osceSequenceRequest().findOsceSequenceEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance().getPaths()).fire(new Receiver<List<OsceSequenceProxy>>() {
+
+            public void onSuccess(List<OsceSequenceProxy> response) {
+                List<OsceSequenceProxy> values = new ArrayList<OsceSequenceProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setOsceSequencePickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.OscePostProxy, V>> extends ProxyEditView<OscePostProxy, V> {
 
-        void setRoleTopicPickerValues(Collection<RoleTopicProxy> values);
-
-        void setNextPostPickerValues(Collection<OscePostProxy> values);
+        void setOscePostBlueprintPickerValues(Collection<OscePostBlueprintProxy> values);
 
         void setOscePostRoomsPickerValues(Collection<OscePostRoomProxy> values);
+
+        void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values);
+
+        void setOsceSequencePickerValues(Collection<OsceSequenceProxy> values);
     }
 }

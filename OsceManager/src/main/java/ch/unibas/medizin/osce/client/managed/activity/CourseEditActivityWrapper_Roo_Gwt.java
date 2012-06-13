@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -55,6 +56,16 @@ public abstract class CourseEditActivityWrapper_Roo_Gwt implements Activity, IsS
                 view.setOscePostRoomsPickerValues(values);
             }
         });
+        view.setOsceSequencePickerValues(Collections.<OsceSequenceProxy>emptyList());
+        requests.osceSequenceRequest().findOsceSequenceEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance().getPaths()).fire(new Receiver<List<OsceSequenceProxy>>() {
+
+            public void onSuccess(List<OsceSequenceProxy> response) {
+                List<OsceSequenceProxy> values = new ArrayList<OsceSequenceProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setOsceSequencePickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -63,5 +74,7 @@ public abstract class CourseEditActivityWrapper_Roo_Gwt implements Activity, IsS
         void setOscePickerValues(Collection<OsceProxy> values);
 
         void setOscePostRoomsPickerValues(Collection<OscePostRoomProxy> values);
+
+        void setOsceSequencePickerValues(Collection<OsceSequenceProxy> values);
     }
 }

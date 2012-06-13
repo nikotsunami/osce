@@ -84,4 +84,8 @@ public interface StandardizedRoleProxy extends EntityProxy {
     abstract CheckListProxy getCheckList();
 
     abstract void setCheckList(CheckListProxy checkList);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostProxy> getOscePosts();
+
+    abstract void setOscePosts(Set<OscePostProxy> oscePosts);
 }

@@ -30,9 +30,11 @@ import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
@@ -180,6 +182,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             }
 
             @Override
+            public void handleOsceSequence(OsceSequenceProxy isNull) {
+                setResult("OsceSequences");
+            }
+
+            @Override
             public void handleOsce(OsceProxy isNull) {
                 setResult("Osces");
             }
@@ -192,6 +199,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleOscePost(OscePostProxy isNull) {
                 setResult("OscePosts");
+            }
+
+            @Override
+            public void handleOscePostBlueprint(OscePostBlueprintProxy isNull) {
+                setResult("OscePostBlueprints");
             }
 
             @Override

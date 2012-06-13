@@ -13,27 +13,36 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div id="color">
-            <div class="{style.label}">Color</div>
-            <div class="{style.value}" ui:field="color"/>
-        </div>
-    <div id="osce">
-            <div class="{style.label}">Osce</div>
-            <div class="{style.value}" ui:field="osce"/>
-        </div>
-    <div id="oscePostRooms">
-            <div class="{style.label}">Osce Post Rooms</div>
-            <div class="{style.value}" ui:field="oscePostRooms"/>
-        </div>
-    <div id="id">
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-    <div id="version">
+        <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  </g:HTMLPanel>
+        <div id="color">
+            <div class="{style.label}">Color</div>
+            <div class="{style.value}" ui:field="color"/>
+        </div>
+        <div id="osce">
+            <div class="{style.label}">Osce</div>
+            <div class="{style.value}" ui:field="osce"/>
+        </div>
+        <div id="oscePostRooms">
+            <div class="{style.label}">Osce Post Rooms</div>
+            <div class="{style.value}" ui:field="oscePostRooms"/>
+        </div>
+        <div id="osceSequence">
+            <div class="{style.label}">Osce Sequence</div>
+            <div class="{style.value}" ui:field="osceSequence"/>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

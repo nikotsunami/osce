@@ -35,7 +35,13 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +49,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +57,15 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="timeStart">
+            <tr id="osceDate">
+                <td>
+                    <span class="{style.label}">Osce Date:</span>
+                </td>
+                <td>
+                    <span ui:field="osceDate"/>
+                </td>
+            </tr>
+            <tr id="timeStart">
                 <td>
                     <span class="{style.label}">Time Start:</span>
                 </td>
@@ -59,7 +73,7 @@
                     <span ui:field="timeStart"/>
                 </td>
             </tr>
-      <tr id="timeEnd">
+            <tr id="timeEnd">
                 <td>
                     <span class="{style.label}">Time End:</span>
                 </td>
@@ -67,7 +81,7 @@
                     <span ui:field="timeEnd"/>
                 </td>
             </tr>
-      <tr id="osce">
+            <tr id="osce">
                 <td>
                     <span class="{style.label}">Osce:</span>
                 </td>
@@ -75,15 +89,15 @@
                     <span ui:field="osce"/>
                 </td>
             </tr>
-      <tr id="assignments">
+            <tr id="osceSequences">
                 <td>
-                    <span class="{style.label}">Assignments:</span>
+                    <span class="{style.label}">Osce Sequences:</span>
                 </td>
                 <td>
-                    <span ui:field="assignments"/>
+                    <span ui:field="osceSequences"/>
                 </td>
             </tr>
-    </table>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

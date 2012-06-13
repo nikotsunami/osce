@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
@@ -271,5 +272,15 @@ public abstract class StandardizedRoleListView_Roo_Gwt extends AbstractProxyList
                 return renderer.render(object.getCheckList());
             }
         }, "Check List");
+        paths.add("oscePosts");
+        table.addColumn(new TextColumn<StandardizedRoleProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance());
+
+            @Override
+            public String getValue(StandardizedRoleProxy object) {
+                return renderer.render(object.getOscePosts());
+            }
+        }, "Osce Posts");
     }
 }

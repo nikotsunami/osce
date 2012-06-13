@@ -43,4 +43,8 @@ public interface RoleTopicProxy extends EntityProxy {
     abstract SpecialisationProxy getSpecialisation();
 
     abstract void setSpecialisation(SpecialisationProxy specialisation);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy> getOscePostBlueprints();
+
+    abstract void setOscePostBlueprints(Set<OscePostBlueprintProxy> oscePostBlueprints);
 }

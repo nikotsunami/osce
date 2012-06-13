@@ -1,7 +1,6 @@
-#Thu Apr 12 10:59:34 CEST 2012
 eclipse.preferences.version=1
 jarsExcludedFromWebInfLib=
-lastWarOutDir=/home/mwagner/git/osce/OsceManager/target/OsceManager-0.1.0.BUILD-SNAPSHOT
+lastWarOutDir=/home/kohlda00/git/osce/OsceManager/target/OsceManager-0.1.0.BUILD-SNAPSHOT
 launchConfigExternalUrlPrefix=
 warSrcDir=src/main/webapp
 warSrcDirIsOutput=false

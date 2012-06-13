@@ -3,6 +3,7 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -58,6 +59,14 @@ privileged aspect RoleTopic_Roo_JavaBean {
     
     public void RoleTopic.setSpecialisation(Specialisation specialisation) {
         this.specialisation = specialisation;
+    }
+    
+    public Set<OscePostBlueprint> RoleTopic.getOscePostBlueprints() {
+        return this.oscePostBlueprints;
+    }
+    
+    public void RoleTopic.setOscePostBlueprints(Set<OscePostBlueprint> oscePostBlueprints) {
+        this.oscePostBlueprints = oscePostBlueprints;
     }
     
 }

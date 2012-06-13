@@ -2,9 +2,11 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -34,13 +36,19 @@ public abstract class OscePostDetailsView_Roo_Gwt extends Composite implements P
     SpanElement isPossibleStart;
 
     @UiField
-    SpanElement roleTopic;
-
-    @UiField
-    SpanElement nextPost;
+    SpanElement oscePostBlueprint;
 
     @UiField
     SpanElement oscePostRooms;
+
+    @UiField
+    SpanElement standardizedRole;
+
+    @UiField
+    SpanElement osceSequence;
+
+    @UiField
+    SpanElement sequenceNumber;
 
     OscePostProxy proxy;
 
@@ -52,9 +60,11 @@ public abstract class OscePostDetailsView_Roo_Gwt extends Composite implements P
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         isPossibleStart.setInnerText(proxy.getIsPossibleStart() == null ? "" : String.valueOf(proxy.getIsPossibleStart()));
-        roleTopic.setInnerText(proxy.getRoleTopic() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance().render(proxy.getRoleTopic()));
-        nextPost.setInnerText(proxy.getNextPost() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance().render(proxy.getNextPost()));
+        oscePostBlueprint.setInnerText(proxy.getOscePostBlueprint() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance().render(proxy.getOscePostBlueprint()));
         oscePostRooms.setInnerText(proxy.getOscePostRooms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance()).render(proxy.getOscePostRooms()));
+        standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
+        osceSequence.setInnerText(proxy.getOsceSequence() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance().render(proxy.getOsceSequence()));
+        sequenceNumber.setInnerText(proxy.getSequenceNumber() == null ? "" : String.valueOf(proxy.getSequenceNumber()));
         displayRenderer.setInnerText(OscePostProxyRenderer.instance().render(proxy));
     }
 }

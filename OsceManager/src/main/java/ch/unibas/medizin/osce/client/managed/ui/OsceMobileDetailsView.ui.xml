@@ -117,6 +117,28 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -189,9 +211,9 @@
             <div class="{style.label}">Osce_days</div>
             <div class="{style.value}" ui:field="osce_days"/>
         </div>
-        <div id="courses">
-            <div class="{style.label}">Courses</div>
-            <div class="{style.value}" ui:field="courses"/>
+        <div id="oscePostBlueprints">
+            <div class="{style.label}">Osce Post Blueprints</div>
+            <div class="{style.value}" ui:field="oscePostBlueprints"/>
         </div>
         <div id="tasks">
             <div class="{style.label}">Tasks</div>

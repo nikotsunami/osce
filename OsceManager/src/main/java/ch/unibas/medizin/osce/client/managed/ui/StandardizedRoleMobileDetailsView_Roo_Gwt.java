@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
@@ -83,6 +84,9 @@ public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composit
     @UiField
     Element checkList;
 
+    @UiField
+    Element oscePosts;
+
     StandardizedRoleProxy proxy;
 
     public void setValue(StandardizedRoleProxy proxy) {
@@ -105,5 +109,6 @@ public abstract class StandardizedRoleMobileDetailsView_Roo_Gwt extends Composit
         advancedSearchCriteria.setInnerText(proxy.getAdvancedSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaProxyRenderer.instance()).render(proxy.getAdvancedSearchCriteria()));
         simpleSearchCriteria.setInnerText(proxy.getSimpleSearchCriteria() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.SimpleSearchCriteriaProxyRenderer.instance()).render(proxy.getSimpleSearchCriteria()));
         checkList.setInnerText(proxy.getCheckList() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer.instance().render(proxy.getCheckList()));
+        oscePosts.setInnerText(proxy.getOscePosts() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance()).render(proxy.getOscePosts()));
     }
 }

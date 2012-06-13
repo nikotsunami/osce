@@ -3,12 +3,20 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceSequence;
 import java.util.Date;
 import java.util.Set;
 
 privileged aspect OsceDay_Roo_JavaBean {
+    
+    public Date OsceDay.getOsceDate() {
+        return this.osceDate;
+    }
+    
+    public void OsceDay.setOsceDate(Date osceDate) {
+        this.osceDate = osceDate;
+    }
     
     public Date OsceDay.getTimeStart() {
         return this.timeStart;
@@ -34,12 +42,12 @@ privileged aspect OsceDay_Roo_JavaBean {
         this.osce = osce;
     }
     
-    public Set<Assignment> OsceDay.getAssignments() {
-        return this.assignments;
+    public Set<OsceSequence> OsceDay.getOsceSequences() {
+        return this.osceSequences;
     }
     
-    public void OsceDay.setAssignments(Set<Assignment> assignments) {
-        this.assignments = assignments;
+    public void OsceDay.setOsceSequences(Set<OsceSequence> osceSequences) {
+        this.osceSequences = osceSequences;
     }
     
 }

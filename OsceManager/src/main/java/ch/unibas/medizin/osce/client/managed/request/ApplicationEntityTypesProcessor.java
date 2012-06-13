@@ -46,9 +46,11 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(ProfessionProxy.class);
         rtn.add(PatientInSemesterProxy.class);
         rtn.add(PatientInRoleProxy.class);
+        rtn.add(OsceSequenceProxy.class);
         rtn.add(OsceProxy.class);
         rtn.add(OscePostRoomProxy.class);
         rtn.add(OscePostProxy.class);
+        rtn.add(OscePostBlueprintProxy.class);
         rtn.add(OsceDayProxy.class);
         rtn.add(OfficeProxy.class);
         rtn.add(NationalityProxy.class);
@@ -172,6 +174,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handlePatientInRole((PatientInRoleProxy) null);
             return;
         }
+        if (OsceSequenceProxy.class.equals(clazz)) {
+            processor.handleOsceSequence((OsceSequenceProxy) null);
+            return;
+        }
         if (OsceProxy.class.equals(clazz)) {
             processor.handleOsce((OsceProxy) null);
             return;
@@ -182,6 +188,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (OscePostProxy.class.equals(clazz)) {
             processor.handleOscePost((OscePostProxy) null);
+            return;
+        }
+        if (OscePostBlueprintProxy.class.equals(clazz)) {
+            processor.handleOscePostBlueprint((OscePostBlueprintProxy) null);
             return;
         }
         if (OsceDayProxy.class.equals(clazz)) {
@@ -388,6 +398,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handlePatientInRole((PatientInRoleProxy) proxy);
             return;
         }
+        if (proxy instanceof OsceSequenceProxy) {
+            processor.handleOsceSequence((OsceSequenceProxy) proxy);
+            return;
+        }
         if (proxy instanceof OsceProxy) {
             processor.handleOsce((OsceProxy) proxy);
             return;
@@ -398,6 +412,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (proxy instanceof OscePostProxy) {
             processor.handleOscePost((OscePostProxy) proxy);
+            return;
+        }
+        if (proxy instanceof OscePostBlueprintProxy) {
+            processor.handleOscePostBlueprint((OscePostBlueprintProxy) proxy);
             return;
         }
         if (proxy instanceof OsceDayProxy) {
@@ -560,11 +578,15 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handlePatientInRole(PatientInRoleProxy proxy);
 
+    public abstract void handleOsceSequence(OsceSequenceProxy proxy);
+
     public abstract void handleOsce(OsceProxy proxy);
 
     public abstract void handleOscePostRoom(OscePostRoomProxy proxy);
 
     public abstract void handleOscePost(OscePostProxy proxy);
+
+    public abstract void handleOscePostBlueprint(OscePostBlueprintProxy proxy);
 
     public abstract void handleOsceDay(OsceDayProxy proxy);
 

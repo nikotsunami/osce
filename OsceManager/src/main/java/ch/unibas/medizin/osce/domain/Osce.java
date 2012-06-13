@@ -69,7 +69,7 @@ public class Osce {
     private Set<OsceDay> osce_days = new HashSet<OsceDay>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
-    private Set<Course> courses = new HashSet<Course>();
+    private Set<OscePostBlueprint> oscePostBlueprints = new HashSet<OscePostBlueprint>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Task> tasks = new HashSet<Task>();

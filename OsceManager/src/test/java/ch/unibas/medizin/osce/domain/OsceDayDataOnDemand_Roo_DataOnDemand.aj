@@ -33,6 +33,7 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
     public OsceDay OsceDayDataOnDemand.getNewTransientOsceDay(int index) {
         OsceDay obj = new OsceDay();
         setOsce(obj, index);
+        setOsceDate(obj, index);
         setTimeEnd(obj, index);
         setTimeStart(obj, index);
         return obj;
@@ -41,6 +42,11 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
     public void OsceDayDataOnDemand.setOsce(OsceDay obj, int index) {
         Osce osce = osceDataOnDemand.getRandomOsce();
         obj.setOsce(osce);
+    }
+    
+    public void OsceDayDataOnDemand.setOsceDate(OsceDay obj, int index) {
+        Date osceDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setOsceDate(osceDate);
     }
     
     public void OsceDayDataOnDemand.setTimeEnd(OsceDay obj, int index) {

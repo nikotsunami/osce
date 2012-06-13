@@ -19,11 +19,16 @@ public class OscePost {
     private Boolean isPossibleStart;
 
     @ManyToOne
-    private RoleTopic roleTopic;
-
-    @ManyToOne
-    private ch.unibas.medizin.osce.domain.OscePost nextPost;
-
+    private OscePostBlueprint oscePostBlueprint;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "oscePost")
     private Set<OscePostRoom> oscePostRooms = new HashSet<OscePostRoom>();
+    
+    @ManyToOne
+    private StandardizedRole standardizedRole;
+    
+    @ManyToOne
+    private OsceSequence osceSequence;
+    
+    private Integer sequenceNumber;
 }

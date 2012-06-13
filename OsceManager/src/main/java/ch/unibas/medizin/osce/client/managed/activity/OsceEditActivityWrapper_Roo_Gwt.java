@@ -4,14 +4,14 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.OsceEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
-import ch.unibas.medizin.osce.client.managed.ui.CourseSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.OsceDaySetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.StudentOscesSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
@@ -65,14 +65,14 @@ public abstract class OsceEditActivityWrapper_Roo_Gwt implements Activity, IsSca
                 view.setOsce_daysPickerValues(values);
             }
         });
-        view.setCoursesPickerValues(Collections.<CourseProxy>emptyList());
-        requests.courseRequest().findCourseEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.CourseProxyRenderer.instance().getPaths()).fire(new Receiver<List<CourseProxy>>() {
+        view.setOscePostBlueprintsPickerValues(Collections.<OscePostBlueprintProxy>emptyList());
+        requests.oscePostBlueprintRequest().findOscePostBlueprintEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance().getPaths()).fire(new Receiver<List<OscePostBlueprintProxy>>() {
 
-            public void onSuccess(List<CourseProxy> response) {
-                List<CourseProxy> values = new ArrayList<CourseProxy>();
+            public void onSuccess(List<OscePostBlueprintProxy> response) {
+                List<OscePostBlueprintProxy> values = new ArrayList<OscePostBlueprintProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setCoursesPickerValues(values);
+                view.setOscePostBlueprintsPickerValues(values);
             }
         });
         view.setTasksPickerValues(Collections.<TaskProxy>emptyList());
@@ -118,7 +118,7 @@ public abstract class OsceEditActivityWrapper_Roo_Gwt implements Activity, IsSca
 
         void setOsce_daysPickerValues(Collection<OsceDayProxy> values);
 
-        void setCoursesPickerValues(Collection<CourseProxy> values);
+        void setOscePostBlueprintsPickerValues(Collection<OscePostBlueprintProxy> values);
 
         void setTasksPickerValues(Collection<TaskProxy> values);
 

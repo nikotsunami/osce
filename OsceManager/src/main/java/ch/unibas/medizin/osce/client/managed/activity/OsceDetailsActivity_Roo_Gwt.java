@@ -3,14 +3,14 @@
 package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
-import ch.unibas.medizin.osce.client.managed.ui.CourseSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.OsceDaySetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.StudentOscesSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
@@ -39,6 +39,6 @@ public abstract class OsceDetailsActivity_Roo_Gwt extends AbstractActivity imple
     protected EntityProxyId<OsceProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("semester", "osce_days", "courses", "tasks", "osceStudents", "copiedOsce").fire(callback);
+        requests.find(proxyId).with("semester", "osce_days", "oscePostBlueprints", "tasks", "osceStudents", "copiedOsce").fire(callback);
     }
 }

@@ -67,6 +67,9 @@ public class RoleTopic {
     @ManyToOne
     private Specialisation specialisation;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleTopic")
+	private Set<OscePostBlueprint> oscePostBlueprints = new HashSet<OscePostBlueprint>();
+    
     public static Long countRoleTopicBySpecialisationId(String name,Long specialisationId) {
     	EntityManager em = entityManager();
     	Specialisation specialisation = Specialisation.findSpecialisation(specialisationId);
