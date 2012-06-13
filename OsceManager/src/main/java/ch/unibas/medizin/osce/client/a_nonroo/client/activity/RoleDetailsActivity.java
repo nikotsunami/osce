@@ -754,8 +754,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					while (stRoleIterator.hasNext()) {
 						StandardizedRoleProxy proxy = stRoleIterator.next();
 						
-						if(proxy.getActive()==true)
-						{
+						// Boolean object has to be checked for null value!
+						if(proxy.getActive() != null && proxy.getActive().booleanValue() == true) 	{
 						
 						
 

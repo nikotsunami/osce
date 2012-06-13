@@ -171,7 +171,15 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 								checkListProxy=((StandardizedRoleProxy) response).getCheckList();//spec
 								//checkListProxy=standardizedRole.getCheckList();
 								view.setStandardizedRoleProxy(standardizedRole);
-								requests.roleTopicRequestNonRoo().findAllRoleTopic(Integer.parseInt(standardizedRole.getRoleTopic().getId().toString())).fire(new RoleTopicRecevier());
+								
+								/* TODO is this right? There is potential for null ptr exception, therefore I
+								 * made the request conditional.
+								 * -michaelwgnr */
+								if (standardizedRole.getRoleTopic() != null) {
+									requests.roleTopicRequestNonRoo().
+											findAllRoleTopic(standardizedRole.getRoleTopic().getId().intValue()).
+											fire(new RoleTopicRecevier());
+								}
 								init();
 							}
 						}
@@ -190,7 +198,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		@Override
 		public void onSuccess(List<RoleTopicProxy> response) {
 		//	filterView.setSpecialisationBoxValues(response);
-			System.out.println("roletopic success");
+			Log.debug("roletopic success");
 			view.setRoleTopicListBoxValues(response);
 		}
 	}
@@ -281,7 +289,9 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		//checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 		
 	//	standardizedRole.setCheckList(checkListProxy);//spec
-		Log.info("Role Topic"+standardizedRole.getRoleTopic().getName());
+		if (Log.isInfoEnabled() && standardizedRole.getRoleTopic() != null) {
+			Log.info("Role Topic: "+ standardizedRole.getRoleTopic().getName());
+		}
 		
 		
 		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());

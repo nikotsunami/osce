@@ -331,26 +331,13 @@ public class RoleViewImpl extends Composite implements RoleView {
 			public String getValue(RoleTopicProxy object) {
 				String strStanderdizedRole = "";
 			
-				if(object.getStandardizedRoles()!=null)
-				{
-					
-					StandardizedRoleProxy role;
-					
-					Iterator<StandardizedRoleProxy> stRoleIterator = object.getStandardizedRoles().iterator();
-							System.out.println("size--"+object.getStandardizedRoles().size());
-					while(stRoleIterator.hasNext())
-					{
-						role=stRoleIterator.next();
-						if(role.getActive()==true)
-						{
-							
+				if(object.getStandardizedRoles()!=null) {
+					for (StandardizedRoleProxy role : object.getStandardizedRoles()) {
+						// Boolean object has to be checked for null value!
+						if(role.getActive() != null && role.getActive().booleanValue() == true) {
 							strStanderdizedRole = strStanderdizedRole + role.getShortName() + ", ";
 						}
-								
-						//strStanderdizedRole = strStanderdizedRole + role.getShortName() + ", ";
-									
 					}
-			
 				}
 				if(strStanderdizedRole!="")
 				{
