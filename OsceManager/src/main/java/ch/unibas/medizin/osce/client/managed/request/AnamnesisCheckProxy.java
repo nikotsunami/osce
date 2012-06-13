@@ -12,6 +12,10 @@ import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 @ProxyForName("ch.unibas.medizin.osce.domain.AnamnesisCheck")
 public interface AnamnesisCheckProxy extends EntityProxy {
 
+    abstract AnamnesisCheckTitleProxy getAnamnesisCheckTitle();
+
+    abstract void setAnamnesisCheckTitle(AnamnesisCheckTitleProxy anamnesisCheckTitle);
+
     abstract Integer getUserSpecifiedOrder();
 
     abstract void setUserSpecifiedOrder(Integer userSpecifiedOrder);

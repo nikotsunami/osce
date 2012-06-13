@@ -43,55 +43,22 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="text">
+      
+      
+      
+      
+      
+      
+      
+    <tr id="anamnesisCheckTitle">
                 <td>
-                    <div class="{style.label}">Text:</div>
+                    <div class="{style.label}">Anamnesis Check Title:</div>
                 </td>
                 <td>
-                    <g:TextBox ui:field="text"/>
-                </td>
-            </tr>
-      <tr id="value">
-                <td>
-                    <div class="{style.label}">Value:</div>
-                </td>
-                <td>
-                    <g:TextBox ui:field="value"/>
-                </td>
-            </tr>
-      <tr id="sort_order">
-                <td>
-                    <div class="{style.label}">Sort_order:</div>
-                </td>
-                <td>
-                    <g:IntegerBox ui:field="sort_order"/>
+                    <g:ValueListBox ui:field="anamnesisCheckTitle"/>
                 </td>
             </tr>
-      <tr id="type">
-                <td>
-                    <div class="{style.label}">Type:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="type"/>
-                </td>
-            </tr>
-      <tr id="anamnesischecksvalues">
-                <td>
-                    <div class="{style.label}">Anamnesischecksvalues:</div>
-                </td>
-                <td>
-                    <a:AnamnesisChecksValueSetEditor ui:field="anamnesischecksvalues"/>
-                </td>
-            </tr>
-      <tr id="title">
-                <td>
-                    <div class="{style.label}">Title:</div>
-                </td>
-                <td>
-                    <g:ValueListBox ui:field="title"/>
-                </td>
-            </tr>
-      <tr id="userSpecifiedOrder">
+            <tr id="userSpecifiedOrder">
                 <td>
                     <div class="{style.label}">User Specified Order:</div>
                 </td>
@@ -99,7 +66,55 @@
                     <g:IntegerBox ui:field="userSpecifiedOrder"/>
                 </td>
             </tr>
-    </table>
+            <tr id="text">
+                <td>
+                    <div class="{style.label}">Text:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="text"/>
+                </td>
+            </tr>
+            <tr id="value">
+                <td>
+                    <div class="{style.label}">Value:</div>
+                </td>
+                <td>
+                    <g:TextBox ui:field="value"/>
+                </td>
+            </tr>
+            <tr id="sort_order">
+                <td>
+                    <div class="{style.label}">Sort_order:</div>
+                </td>
+                <td>
+                    <g:IntegerBox ui:field="sort_order"/>
+                </td>
+            </tr>
+            <tr id="type">
+                <td>
+                    <div class="{style.label}">Type:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="type"/>
+                </td>
+            </tr>
+            <tr id="anamnesischecksvalues">
+                <td>
+                    <div class="{style.label}">Anamnesischecksvalues:</div>
+                </td>
+                <td>
+                    <a:AnamnesisChecksValueSetEditor ui:field="anamnesischecksvalues"/>
+                </td>
+            </tr>
+            <tr id="title">
+                <td>
+                    <div class="{style.label}">Title:</div>
+                </td>
+                <td>
+                    <g:ValueListBox ui:field="title"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

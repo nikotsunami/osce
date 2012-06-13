@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.activity.AnamnesisCheckEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.AnamnesisCheckEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
@@ -39,6 +40,9 @@ import java.util.Set;
 
 public abstract class AnamnesisCheckEditView_Roo_Gwt extends Composite implements View<AnamnesisCheckEditView> {
 
+    @UiField(provided = true)
+    ValueListBox<AnamnesisCheckTitleProxy> anamnesisCheckTitle = new ValueListBox<AnamnesisCheckTitleProxy>(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckTitleProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy>());
+
     @UiField
     IntegerBox userSpecifiedOrder;
 
@@ -71,6 +75,10 @@ public abstract class AnamnesisCheckEditView_Roo_Gwt extends Composite implement
 
     public void setAnamnesischecksvaluesPickerValues(Collection<AnamnesisChecksValueProxy> values) {
         anamnesischecksvalues.setAcceptableValues(values);
+    }
+
+    public void setAnamnesisCheckTitlePickerValues(Collection<AnamnesisCheckTitleProxy> values) {
+        anamnesisCheckTitle.setAcceptableValues(values);
     }
 
     public void setTypePickerValues(Collection<AnamnesisCheckTypes> values) {

@@ -3,7 +3,6 @@
 
 package ch.unibas.medizin.osce.domain;
 
-import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 import java.lang.Integer;
 import java.lang.String;
 
@@ -16,7 +15,7 @@ privileged aspect AnamnesisCheckTitle_Roo_JavaBean {
     public void AnamnesisCheckTitle.setText(String text) {
         this.text = text;
     }
-        
+    
     public Integer AnamnesisCheckTitle.getSort_order() {
         return this.sort_order;
     }
@@ -24,5 +23,5 @@ privileged aspect AnamnesisCheckTitle_Roo_JavaBean {
     public void AnamnesisCheckTitle.setSort_order(Integer sort_order) {
         this.sort_order = sort_order;
     }
-        
+    
 }

@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueSetEditor;
@@ -31,6 +32,6 @@ public abstract class AnamnesisCheckDetailsActivity_Roo_Gwt extends AbstractActi
     protected EntityProxyId<AnamnesisCheckProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("anamnesischecksvalues", "title").fire(callback);
+        requests.find(proxyId).with("anamnesisCheckTitle", "anamnesischecksvalues", "title").fire(callback);
     }
 }

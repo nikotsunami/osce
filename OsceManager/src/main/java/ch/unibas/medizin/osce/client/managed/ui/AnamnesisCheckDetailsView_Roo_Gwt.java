@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
@@ -23,6 +24,9 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.Set;
 
 public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<AnamnesisCheckProxy> {
+
+    @UiField
+    SpanElement anamnesisCheckTitle;
 
     @UiField
     SpanElement userSpecifiedOrder;
@@ -58,6 +62,7 @@ public abstract class AnamnesisCheckDetailsView_Roo_Gwt extends Composite implem
 
     public void setValue(AnamnesisCheckProxy proxy) {
         this.proxy = proxy;
+        anamnesisCheckTitle.setInnerText(proxy.getAnamnesisCheckTitle() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckTitleProxyRenderer.instance().render(proxy.getAnamnesisCheckTitle()));
         userSpecifiedOrder.setInnerText(proxy.getUserSpecifiedOrder() == null ? "" : String.valueOf(proxy.getUserSpecifiedOrder()));
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));

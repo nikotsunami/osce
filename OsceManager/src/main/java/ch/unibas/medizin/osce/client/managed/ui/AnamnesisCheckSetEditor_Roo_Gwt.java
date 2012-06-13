@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.CollectionRenderer;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;

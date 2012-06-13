@@ -4,6 +4,8 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
+import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
+import ch.unibas.medizin.osce.domain.AnamnesisCheckTitleDataOnDemand;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import java.lang.Integer;
 import java.lang.String;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
@@ -24,8 +27,12 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
     
     private List<AnamnesisCheck> AnamnesisCheckDataOnDemand.data;
     
+    @Autowired
+    private AnamnesisCheckTitleDataOnDemand AnamnesisCheckDataOnDemand.anamnesisCheckTitleDataOnDemand;
+    
     public AnamnesisCheck AnamnesisCheckDataOnDemand.getNewTransientAnamnesisCheck(int index) {
         AnamnesisCheck obj = new AnamnesisCheck();
+        setAnamnesisCheckTitle(obj, index);
         setSort_order(obj, index);
         setText(obj, index);
         setTitle(obj, index);
@@ -33,6 +40,11 @@ privileged aspect AnamnesisCheckDataOnDemand_Roo_DataOnDemand {
         setUserSpecifiedOrder(obj, index);
         setValue(obj, index);
         return obj;
+    }
+    
+    public void AnamnesisCheckDataOnDemand.setAnamnesisCheckTitle(AnamnesisCheck obj, int index) {
+        AnamnesisCheckTitle anamnesisCheckTitle = anamnesisCheckTitleDataOnDemand.getRandomAnamnesisCheckTitle();
+        obj.setAnamnesisCheckTitle(anamnesisCheckTitle);
     }
     
     public void AnamnesisCheckDataOnDemand.setSort_order(AnamnesisCheck obj, int index) {

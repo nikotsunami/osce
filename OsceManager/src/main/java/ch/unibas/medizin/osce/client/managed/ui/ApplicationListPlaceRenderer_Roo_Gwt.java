@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor;
@@ -324,6 +325,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleAnamnesisChecksValue(AnamnesisChecksValueProxy isNull) {
                 setResult("AnamnesisChecksValues");
+            }
+
+            @Override
+            public void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy isNull) {
+                setResult("AnamnesisCheckTitles");
             }
 
             @Override

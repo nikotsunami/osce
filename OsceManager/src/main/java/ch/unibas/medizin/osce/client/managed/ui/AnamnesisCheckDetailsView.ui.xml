@@ -35,71 +35,24 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <tr id="anamnesisCheckTitle">
                 <td>
-                    <span class="{style.label}">Id:</span>
+                    <span class="{style.label}">Anamnesis Check Title:</span>
                 </td>
                 <td>
-                    <span ui:field="id"/>
-                </td>
-            </tr>
-      <tr id="version">
-                <td>
-                    <span class="{style.label}">Version:</span>
-                </td>
-                <td>
-                    <span ui:field="version"/>
-                </td>
-            </tr>
-      <tr id="text">
-                <td>
-                    <span class="{style.label}">Text:</span>
-                </td>
-                <td>
-                    <span ui:field="text"/>
+                    <span ui:field="anamnesisCheckTitle"/>
                 </td>
             </tr>
-      <tr id="value">
-                <td>
-                    <span class="{style.label}">Value:</span>
-                </td>
-                <td>
-                    <span ui:field="value"/>
-                </td>
-            </tr>
-      <tr id="sort_order">
-                <td>
-                    <span class="{style.label}">Sort_order:</span>
-                </td>
-                <td>
-                    <span ui:field="sort_order"/>
-                </td>
-            </tr>
-      <tr id="type">
-                <td>
-                    <span class="{style.label}">Type:</span>
-                </td>
-                <td>
-                    <span ui:field="type"/>
-                </td>
-            </tr>
-      <tr id="anamnesischecksvalues">
-                <td>
-                    <span class="{style.label}">Anamnesischecksvalues:</span>
-                </td>
-                <td>
-                    <span ui:field="anamnesischecksvalues"/>
-                </td>
-            </tr>
-      <tr id="title">
-                <td>
-                    <span class="{style.label}">Title:</span>
-                </td>
-                <td>
-                    <span ui:field="title"/>
-                </td>
-            </tr>
-      <tr id="userSpecifiedOrder">
+            <tr id="userSpecifiedOrder">
                 <td>
                     <span class="{style.label}">User Specified Order:</span>
                 </td>
@@ -107,7 +60,71 @@
                     <span ui:field="userSpecifiedOrder"/>
                 </td>
             </tr>
-    </table>
+            <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+            <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
+            <tr id="text">
+                <td>
+                    <span class="{style.label}">Text:</span>
+                </td>
+                <td>
+                    <span ui:field="text"/>
+                </td>
+            </tr>
+            <tr id="value">
+                <td>
+                    <span class="{style.label}">Value:</span>
+                </td>
+                <td>
+                    <span ui:field="value"/>
+                </td>
+            </tr>
+            <tr id="sort_order">
+                <td>
+                    <span class="{style.label}">Sort_order:</span>
+                </td>
+                <td>
+                    <span ui:field="sort_order"/>
+                </td>
+            </tr>
+            <tr id="type">
+                <td>
+                    <span class="{style.label}">Type:</span>
+                </td>
+                <td>
+                    <span ui:field="type"/>
+                </td>
+            </tr>
+            <tr id="anamnesischecksvalues">
+                <td>
+                    <span class="{style.label}">Anamnesischecksvalues:</span>
+                </td>
+                <td>
+                    <span ui:field="anamnesischecksvalues"/>
+                </td>
+            </tr>
+            <tr id="title">
+                <td>
+                    <span class="{style.label}">Title:</span>
+                </td>
+                <td>
+                    <span ui:field="title"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

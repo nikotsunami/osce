@@ -75,6 +75,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(AssignmentProxy.class);
         rtn.add(AnamnesisFormProxy.class);
         rtn.add(AnamnesisChecksValueProxy.class);
+        rtn.add(AnamnesisCheckTitleProxy.class);
         rtn.add(AnamnesisCheckProxy.class);
         rtn.add(AdvancedSearchCriteriaProxy.class);
         rtn.add(AdministratorProxy.class);
@@ -288,6 +289,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         }
         if (AnamnesisChecksValueProxy.class.equals(clazz)) {
             processor.handleAnamnesisChecksValue((AnamnesisChecksValueProxy) null);
+            return;
+        }
+        if (AnamnesisCheckTitleProxy.class.equals(clazz)) {
+            processor.handleAnamnesisCheckTitle((AnamnesisCheckTitleProxy) null);
             return;
         }
         if (AnamnesisCheckProxy.class.equals(clazz)) {
@@ -514,6 +519,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleAnamnesisChecksValue((AnamnesisChecksValueProxy) proxy);
             return;
         }
+        if (proxy instanceof AnamnesisCheckTitleProxy) {
+            processor.handleAnamnesisCheckTitle((AnamnesisCheckTitleProxy) proxy);
+            return;
+        }
         if (proxy instanceof AnamnesisCheckProxy) {
             processor.handleAnamnesisCheck((AnamnesisCheckProxy) proxy);
             return;
@@ -635,6 +644,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleAnamnesisForm(AnamnesisFormProxy proxy);
 
     public abstract void handleAnamnesisChecksValue(AnamnesisChecksValueProxy proxy);
+
+    public abstract void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy proxy);
 
     public abstract void handleAnamnesisCheck(AnamnesisCheckProxy proxy);
 

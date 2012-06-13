@@ -10,6 +10,8 @@ privileged aspect AnamnesisCheckTitle_Roo_ToString {
     public String AnamnesisCheckTitle.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Sort_order: ").append(getSort_order()).append(", ");
+        sb.append("Text: ").append(getText()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

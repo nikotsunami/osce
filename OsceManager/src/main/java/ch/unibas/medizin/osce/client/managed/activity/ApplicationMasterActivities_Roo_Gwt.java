@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor;
@@ -65,6 +66,8 @@ import ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaListView;
 import ch.unibas.medizin.osce.client.managed.ui.AdvancedSearchCriteriaMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckListView;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckTitleListView;
+import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckTitleMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueListView;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormListView;
@@ -448,6 +451,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleAnamnesisChecksValue(AnamnesisChecksValueProxy isNull) {
                 setResult(new AnamnesisChecksValueListActivity(requests, ScaffoldApp.isMobile() ? AnamnesisChecksValueMobileListView.instance() : AnamnesisChecksValueListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy isNull) {
+                setResult(new AnamnesisCheckTitleListActivity(requests, ScaffoldApp.isMobile() ? AnamnesisCheckTitleMobileListView.instance() : AnamnesisCheckTitleListView.instance(), placeController));
             }
 
             @Override

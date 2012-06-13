@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.AnamnesisCheckEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueSetEditor;
@@ -36,6 +37,16 @@ public abstract class AnamnesisCheckEditActivityWrapper_Roo_Gwt implements Activ
     @Override
     public void start(AcceptsOneWidget display, EventBus eventBus) {
         view.setTypePickerValues(Arrays.asList(AnamnesisCheckTypes.values()));
+        view.setAnamnesisCheckTitlePickerValues(Collections.<AnamnesisCheckTitleProxy>emptyList());
+        requests.anamnesisCheckTitleRequest().findAnamnesisCheckTitleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckTitleProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>() {
+
+            public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
+                List<AnamnesisCheckTitleProxy> values = new ArrayList<AnamnesisCheckTitleProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setAnamnesisCheckTitlePickerValues(values);
+            }
+        });
         view.setAnamnesischecksvaluesPickerValues(Collections.<AnamnesisChecksValueProxy>emptyList());
         requests.anamnesisChecksValueRequest().findAnamnesisChecksValueEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance().getPaths()).fire(new Receiver<List<AnamnesisChecksValueProxy>>() {
 
@@ -62,6 +73,8 @@ public abstract class AnamnesisCheckEditActivityWrapper_Roo_Gwt implements Activ
     public interface View_Roo_Gwt<V extends ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView<ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy, V>> extends ProxyEditView<AnamnesisCheckProxy, V> {
 
         void setTypePickerValues(Collection<AnamnesisCheckTypes> values);
+
+        void setAnamnesisCheckTitlePickerValues(Collection<AnamnesisCheckTitleProxy> values);
 
         void setAnamnesischecksvaluesPickerValues(Collection<AnamnesisChecksValueProxy> values);
 
