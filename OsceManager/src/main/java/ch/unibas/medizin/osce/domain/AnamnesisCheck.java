@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 
 import java.util.HashSet;
 import java.util.List;
@@ -43,9 +44,21 @@ public class AnamnesisCheck {
 
     @ManyToOne
     private ch.unibas.medizin.osce.domain.AnamnesisCheck title;
+    
+    @ManyToOne
+    private ch.unibas.medizin.osce.domain.AnamnesisCheckTitle anamnesisCheckTitle;
+
+    public ch.unibas.medizin.osce.domain.AnamnesisCheckTitle getAnamnesisCheckTitle() {
+		return anamnesisCheckTitle;
+	}
 
 
-    private Integer userSpecifiedOrder;
+	public void setAnamnesisCheckTitle(ch.unibas.medizin.osce.domain.AnamnesisCheckTitle anamnesisCheckTitle) {
+		this.anamnesisCheckTitle = anamnesisCheckTitle;
+	}
+
+
+	private Integer userSpecifiedOrder;
 
 
     public Integer getUserSpecifiedOrder() {
