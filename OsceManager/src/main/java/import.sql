@@ -187,14 +187,14 @@ INSERT INTO `role_topic` (name, description, study_year, slots_until_change, spe
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Knie', 'Knee Problem', 2, 0, 3, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Naht', 'Stiching up sth.', 2, 0, 4, 0);
 
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (1, 'HNO - A', 'HNO - Version A', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (2, 'Arm - A', 'Arm - Version A', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (3, 'Knie - A', 'Knie - Version A', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (4, 'Naht - A', 'Naht - Version A', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (1, 'HNO - B', 'HNO - Version B', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (2, 'Arm - B', 'Arm - Version B', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (3, 'Knie - B', 'Knie - Version B', 0);
-INSERT INTO `standardized_role` (role_topic, short_name, long_name, version) VALUES (4, 'Naht - B', 'Naht - Version B', 0);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (1, 'HNO - A', 'HNO - Version A', 0, 1, 0, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (2, 'Arm - A', 'Arm - Version A', 0, 1, 1, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (3, 'Knie - A', 'Knie - Version A', 0, 1, 2, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (4, 'Naht - A', 'Naht - Version A', 0, 1, 0, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (1, 'HNO - B', 'HNO - Version B', 0, 1, 1, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (2, 'Arm - B', 'Arm - Version B', 0, 1, 2, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (3, 'Knie - B', 'Knie - Version B', 0, 0, 0, 3);
+INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (4, 'Naht - B', 'Naht - Version B', 0, 1, 1, 3);
 
 INSERT INTO `osce` (is_repe_osce, is_valid, max_number_students, number_courses, number_rooms, post_length, short_break, middle_break, long_break, study_year, name, osce_status, semester, version) VALUES (0, 1, 130, 0, 16, 13, 1, 15, 35, 3, 'Test 1', 2, 1, 0);
 INSERT INTO `osce` (is_repe_osce, is_valid, max_number_students, number_courses, number_rooms, post_length, short_break, middle_break, long_break, study_year, name, osce_status, semester, version) VALUES (0, 1, 120, 0, 16, 20, 1, 20, 45, 3, 'Test 2', 2, 1, 0);

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -509,6 +510,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 										.roleTemplateRequest();
 								response = spReq.edit(response);
 								response.setTemplateName(toolTipLabel.getText());
+								response.setDate_edited(new Date());
 								spReq.persist().using(roleTemplate)
 										.fire(new Receiver<Void>() {
 
@@ -549,7 +551,8 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 		// Date date = new Date();
 		roleTemplate.setTemplateName(name);
-
+		roleTemplate.setDate_cretaed(new Date());
+		roleTemplate.setDate_edited(new Date());
 
 		roletempreq.persist().using(roleTemplate).fire(new Receiver<Void>() {
 			@Override

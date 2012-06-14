@@ -175,11 +175,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 								/* TODO is this right? There is potential for null ptr exception, therefore I
 								 * made the request conditional.
 								 * -michaelwgnr */
-								if (standardizedRole.getRoleTopic() != null) {
+//								if (standardizedRole.getRoleTopic() != null) {
 									requests.roleTopicRequestNonRoo().
 											findAllRoleTopic(standardizedRole.getRoleTopic().getId().intValue()).
 											fire(new RoleTopicRecevier());
-								}
+//								}
 								init();
 							}
 						}

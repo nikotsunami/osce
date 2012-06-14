@@ -335,7 +335,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 					for (StandardizedRoleProxy role : object.getStandardizedRoles()) {
 						// Boolean object has to be checked for null value!
 						if(role.getActive() != null && role.getActive().booleanValue() == true) {
-							strStanderdizedRole = strStanderdizedRole + role.getShortName() + ", ";
+							strStanderdizedRole += strStanderdizedRole + role.getShortName() + ", ";
 						}
 					}
 				}
