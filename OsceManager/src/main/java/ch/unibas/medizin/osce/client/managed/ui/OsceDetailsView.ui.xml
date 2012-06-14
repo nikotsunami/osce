@@ -159,6 +159,28 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
@@ -205,6 +227,14 @@
                 </td>
                 <td>
                     <span ui:field="shortBreak"/>
+                </td>
+            </tr>
+            <tr id="shortBreakSimpatChange">
+                <td>
+                    <span class="{style.label}">Short Break Simpat Change:</span>
+                </td>
+                <td>
+                    <span ui:field="shortBreakSimpatChange"/>
                 </td>
             </tr>
             <tr id="longBreak">

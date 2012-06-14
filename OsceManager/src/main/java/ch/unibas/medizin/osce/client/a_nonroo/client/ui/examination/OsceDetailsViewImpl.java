@@ -166,6 +166,9 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField
+	public IconButton generate;
+	
+	@UiField
 	public IconButton edit;
 	
 	
@@ -634,6 +637,11 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 	@UiHandler("edit")
 	public void onEditClicked(ClickEvent e) {
 		delegate.osceEditClicked();
+	}
+	
+	@UiHandler("generate")
+	public void onGenerateClicked(ClickEvent e) {
+		delegate.osceGenerateClicked();
 	}
 
 	

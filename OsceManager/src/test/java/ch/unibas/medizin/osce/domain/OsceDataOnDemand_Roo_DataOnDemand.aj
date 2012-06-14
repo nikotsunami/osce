@@ -50,6 +50,7 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         setPostLength(obj, index);
         setSemester(obj, index);
         setShortBreak(obj, index);
+        setShortBreakSimpatChange(obj, index);
         setStudyYear(obj, index);
         return obj;
     }
@@ -127,6 +128,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public void OsceDataOnDemand.setShortBreak(Osce obj, int index) {
         Short shortBreak = new Integer(index).shortValue();
         obj.setShortBreak(shortBreak);
+    }
+    
+    public void OsceDataOnDemand.setShortBreakSimpatChange(Osce obj, int index) {
+        Short shortBreakSimpatChange = new Integer(index).shortValue();
+        obj.setShortBreakSimpatChange(shortBreakSimpatChange);
     }
     
     public void OsceDataOnDemand.setStudyYear(Osce obj, int index) {

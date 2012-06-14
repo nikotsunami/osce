@@ -27,6 +27,7 @@ privileged aspect Osce_Roo_ToString {
         sb.append("PostLength: ").append(getPostLength()).append(", ");
         sb.append("Semester: ").append(getSemester()).append(", ");
         sb.append("ShortBreak: ").append(getShortBreak()).append(", ");
+        sb.append("ShortBreakSimpatChange: ").append(getShortBreakSimpatChange()).append(", ");
         sb.append("StudyYear: ").append(getStudyYear()).append(", ");
         sb.append("Tasks: ").append(getTasks() == null ? "null" : getTasks().size()).append(", ");
         sb.append("Version: ").append(getVersion());

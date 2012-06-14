@@ -21,5 +21,7 @@ public interface OsceRequestNonRoo extends RequestContext{
 	abstract Request<OsceProxy> findMaxOsce();
 	
 	public abstract Request<List<OsceProxy>> findAllOsceOnSemesterId(Long id);
+	
+	public abstract Request<Boolean> generateOsceScaffold(Long osceId);
 
 }

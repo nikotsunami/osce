@@ -155,6 +155,26 @@
             
             
             
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         <tr id="studyYear">
                 <td>
                     <div class="{style.label}">Study Year:</div>
@@ -185,6 +205,14 @@
                 </td>
                 <td>
                     <r:ShortBox ui:field="shortBreak"/>
+                </td>
+            </tr>
+            <tr id="shortBreakSimpatChange">
+                <td>
+                    <div class="{style.label}">Short Break Simpat Change:</div>
+                </td>
+                <td>
+                    <r:ShortBox ui:field="shortBreakSimpatChange"/>
                 </td>
             </tr>
             <tr id="longBreak">

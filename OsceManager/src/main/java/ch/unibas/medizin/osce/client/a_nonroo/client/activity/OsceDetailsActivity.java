@@ -23,6 +23,8 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.server.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -157,6 +159,15 @@ public void init()
 		goTo(new OsceDetailsPlace(osceProxy.stableId(),
 				Operation.EDIT));
 
+	}
+	
+	@Override
+	public void osceGenerateClicked() {
+		Log.info("generate clicked");
+		
+		requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(
+				
+		);
 	}
 
 	

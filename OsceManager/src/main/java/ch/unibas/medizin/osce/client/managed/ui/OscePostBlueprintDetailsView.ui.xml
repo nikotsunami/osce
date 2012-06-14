@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+ <ui:style>
+    .fields {
+      margin-top: 0.5em;
+      margin-left: 1em;
+    }
+    .label {
+      min-height: 25px;
+      font-weight: bold;
+    }
+    .button {
+      margin-right: 1em;
+    }
+    .bar {
+      margin-left: 1em;
+    }
+    .header {
+      margin-left: 1em;
+      color: #4B4A4A;
+      text-shadow: #ddf 1px 1px 0;
+      margin-bottom: 0;
+    }
+    .underline {
+      border-bottom: 2px solid #6F7277;
+    }
+  </ui:style>
+  <g:HTMLPanel>
+    <div class="{style.underline}">
+      <h3 class="{style.header}">
+                <ui:msg>
+                    <span ui:field="displayRenderer"/>
+                </ui:msg>
+            </h3>
+    </div>
+
+    <table class="{style.fields}" id="boundElementHolder">
+      <tr id="id">
+                <td>
+                    <span class="{style.label}">Id:</span>
+                </td>
+                <td>
+                    <span ui:field="id"/>
+                </td>
+            </tr>
+      <tr id="version">
+                <td>
+                    <span class="{style.label}">Version:</span>
+                </td>
+                <td>
+                    <span ui:field="version"/>
+                </td>
+            </tr>
+      <tr id="isPossibleStart">
+                <td>
+                    <span class="{style.label}">Is Possible Start:</span>
+                </td>
+                <td>
+                    <span ui:field="isPossibleStart"/>
+                </td>
+            </tr>
+      <tr id="roleTopic">
+                <td>
+                    <span class="{style.label}">Role Topic:</span>
+                </td>
+                <td>
+                    <span ui:field="roleTopic"/>
+                </td>
+            </tr>
+      <tr id="osce">
+                <td>
+                    <span class="{style.label}">Osce:</span>
+                </td>
+                <td>
+                    <span ui:field="osce"/>
+                </td>
+            </tr>
+      <tr id="oscePosts">
+                <td>
+                    <span class="{style.label}">Osce Posts:</span>
+                </td>
+                <td>
+                    <span ui:field="oscePosts"/>
+                </td>
+            </tr>
+      <tr id="postType">
+                <td>
+                    <span class="{style.label}">Post Type:</span>
+                </td>
+                <td>
+                    <span ui:field="postType"/>
+                </td>
+            </tr>
+      <tr id="specialisation">
+                <td>
+                    <span class="{style.label}">Specialisation:</span>
+                </td>
+                <td>
+                    <span ui:field="specialisation"/>
+                </td>
+            </tr>
+      <tr id="sequenceNumber">
+                <td>
+                    <span class="{style.label}">Sequence Number:</span>
+                </td>
+                <td>
+                    <span ui:field="sequenceNumber"/>
+                </td>
+            </tr>
+    </table>
+
+  <div class="{style.bar}">
+    <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>
+    <g:Anchor ui:field="delete">Delete</g:Anchor>
+   </div>
+  </g:HTMLPanel>
+</ui:UiBinder>

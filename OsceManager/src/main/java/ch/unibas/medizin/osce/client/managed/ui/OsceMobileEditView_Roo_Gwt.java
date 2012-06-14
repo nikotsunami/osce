@@ -62,6 +62,9 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     ShortBox shortBreak;
 
     @UiField
+    ShortBox shortBreakSimpatChange;
+
+    @UiField
     ShortBox longBreak;
 
     @UiField

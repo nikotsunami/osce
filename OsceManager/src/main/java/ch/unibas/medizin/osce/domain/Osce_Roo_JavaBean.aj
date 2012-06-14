@@ -51,6 +51,14 @@ privileged aspect Osce_Roo_JavaBean {
         this.shortBreak = shortBreak;
     }
     
+    public Short Osce.getShortBreakSimpatChange() {
+        return this.shortBreakSimpatChange;
+    }
+    
+    public void Osce.setShortBreakSimpatChange(Short shortBreakSimpatChange) {
+        this.shortBreakSimpatChange = shortBreakSimpatChange;
+    }
+    
     public Short Osce.getLongBreak() {
         return this.LongBreak;
     }

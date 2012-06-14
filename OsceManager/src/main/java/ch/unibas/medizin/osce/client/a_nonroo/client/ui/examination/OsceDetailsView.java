@@ -24,6 +24,7 @@ public interface OsceDetailsView extends IsWidget{
 	 */
 	interface Delegate {
 		void osceEditClicked();
+		void osceGenerateClicked();
 		
 		void osceDeleteClicked();
 		void deleteClicked(TaskProxy task);

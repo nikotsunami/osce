@@ -133,6 +133,26 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="studyYear">
             <div class="{style.label}">Study Year</div>
             <div class="{style.value}">
@@ -155,6 +175,12 @@
             <div class="{style.label}">Short Break</div>
             <div class="{style.value}">
                 <r:ShortBox ui:field="shortBreak"/>
+            </div>
+        </div>
+        <div id="shortBreakSimpatChange">
+            <div class="{style.label}">Short Break Simpat Change</div>
+            <div class="{style.value}">
+                <r:ShortBox ui:field="shortBreakSimpatChange"/>
             </div>
         </div>
         <div id="longBreak">

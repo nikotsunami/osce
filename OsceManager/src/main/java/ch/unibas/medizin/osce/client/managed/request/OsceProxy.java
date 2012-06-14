@@ -37,6 +37,10 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setShortBreak(Short shortBreak);
 
+    abstract Short getShortBreakSimpatChange();
+
+    abstract void setShortBreakSimpatChange(Short shortBreakSimpatChange);
+
     abstract Short getLongBreak();
 
     abstract void setLongBreak(Short longBreak);
