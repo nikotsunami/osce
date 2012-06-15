@@ -178,6 +178,8 @@ public interface OsceConstants extends Constants {
 	public String maxCircuits();
 
 	public String maxStudents();
+	
+	public String messages();
 
 	public String mobile();
 

@@ -33,11 +33,10 @@ public interface StandardizedPatientDetailsView extends IsWidget{
     public void setValue(StandardizedPatientProxy proxy); 
     void setDelegate(Delegate delegate);
     void setPresenter(Presenter systemStartActivity);
-	int getSelectedScarAnamnesisTab();
 	int getSelectedDetailsTab();
 	boolean isPatientDisclosurePanelOpen();
+	boolean isAnamnesisDisclosurePanelOpen();
 	void setPatientDisclosurePanelOpen(boolean value);
+	void setAnamnesisDisclosurePanelOpen(boolean value);
 	void setSelectedDetailsTab(int tab);
-	void setSelectedScarAnamnesisTab(int tab);
-	
 }

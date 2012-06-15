@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DescriptionEditViewImpl;
@@ -40,7 +41,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
-import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -135,7 +135,9 @@ StandardizedPatientEditView.Delegate {
 		view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
 		bankaccountView.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
 		
-		requests.nationalityRequest().findNationalityEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).fire(new Receiver<List<NationalityProxy>>() {
+		requests.nationalityRequest().findNationalityEntries(0, 50).
+				with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).
+				fire(new OSCEReceiver<List<NationalityProxy>>() {
 
 			public void onSuccess(List<NationalityProxy> response) {
 				List<NationalityProxy> values = new ArrayList<NationalityProxy>();
@@ -147,7 +149,9 @@ StandardizedPatientEditView.Delegate {
 		});
 
 		view.setProfessionPickerValues(Collections.<ProfessionProxy>emptyList());
-		requests.professionRequest().findProfessionEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().getPaths()).fire(new Receiver<List<ProfessionProxy>>() {
+		requests.professionRequest().findProfessionEntries(0, 50).
+				with(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().getPaths()).
+				fire(new OSCEReceiver<List<ProfessionProxy>>() {
 
 			public void onSuccess(List<ProfessionProxy> response) {
 				List<ProfessionProxy> values = new ArrayList<ProfessionProxy>();
@@ -181,11 +185,10 @@ StandardizedPatientEditView.Delegate {
 		
 		if (this.place.getOperation()== Operation.EDIT){
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("nationality", "profession", "langskills", "bankAccount", "bankAccount.country", "anamnesisForm", "descriptions").fire(new Receiver<Object>() {
+			requests.find(place.getProxyId()).
+					with("nationality", "profession", "langskills", "bankAccount", "bankAccount.country", "anamnesisForm", "descriptions").
+					fire(new OSCEReceiver<Object>() {
 
-				public void onFailure(ServerFailure error){
-					Log.error(error.getMessage());
-				}
 				@Override
 				public void onSuccess(Object response) {
 					if(response instanceof StandardizedPatientProxy){
@@ -320,21 +323,8 @@ StandardizedPatientEditView.Delegate {
 		cal.setYear(view.getYear());
 		cal.setDay(view.getDay());
 		standardizedPatient.setBirthday(cal.getDate());
-		editorDriver.flush().fire(new Receiver<Void>() {
+		editorDriver.flush().fire(new OSCEReceiver<Void>() {
 
-			public void onFailure(ServerFailure error){
-				Log.error(error.getMessage());
-
-			}
-			@Override
-			public void onViolation(Set<Violation> errors) {
-				Iterator<Violation> iter = errors.iterator();
-				String message = "";
-				while(iter.hasNext()){
-					message += iter.next().getMessage() + "<br>";
-				}
-				Log.warn(" in StandardizedPatient -" + message);
-			}
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("StandardizedPatient successfully saved.");
@@ -348,10 +338,6 @@ StandardizedPatientEditView.Delegate {
 	
 	public void storeDisplaySettings() {
 		int detailsTab = view.getSelectedDetailsTab();
-		if (detailsTab > 1) {
-			// bc. of language tab
-			detailsTab++;
-		}
 		userSettings.setValue("detailsTab", detailsTab);
 		userSettings.flush();
 	}
@@ -362,9 +348,9 @@ StandardizedPatientEditView.Delegate {
 			detailsTab = userSettings.getIntValue("detailsTab");
 		}
 		
-		// because of language tab
-		if (detailsTab > 1) {
-			detailsTab--;
+		// because of language & scar tab
+		if (detailsTab > 3) {
+			detailsTab = 0;
 		}
 		
 		view.setSelectedDetailsTab(detailsTab);

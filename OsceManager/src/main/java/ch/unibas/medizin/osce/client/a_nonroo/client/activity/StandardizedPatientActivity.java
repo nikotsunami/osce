@@ -9,6 +9,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
@@ -174,7 +175,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * created.
 	 */
 	@SuppressWarnings("deprecation")
-	private class StandardizedPatientCsvFileReceiver extends Receiver<String> {
+	private class StandardizedPatientCsvFileReceiver extends OSCEReceiver<String> {
 		@Override
 		public void onFailure(ServerFailure error) {
 			Log.error(error.getMessage());
@@ -301,7 +302,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * the actual request to fill the table.
 	 */
 	@SuppressWarnings("deprecation")
-	private class StandardizedPatientCountReceiver extends Receiver<Long> {
+	private class StandardizedPatientCountReceiver extends OSCEReceiver<Long> {
 		@Override
 		public void onSuccess(Long response) {
 			if (view == null) {
@@ -320,7 +321,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * patients.
 	 */
 	 @SuppressWarnings("deprecation")
-	private class StandardizedPatientReceiver extends Receiver<List<StandardizedPatientProxy>> {
+	private class StandardizedPatientReceiver extends OSCEReceiver<List<StandardizedPatientProxy>> {
 		public void onFailure(ServerFailure error) {
 			Log.error(error.getMessage());
 			// onStop();
@@ -634,7 +635,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Receiver class that fills the Nationality Popups Pulldown with the available nationalities.
 	 * Should be used in request for nationality. 
 	 */
-	private class NationalityCriteriaReceiver extends Receiver<List<NationalityProxy>> {
+	private class NationalityCriteriaReceiver extends OSCEReceiver<List<NationalityProxy>> {
 		@Override
 		public void onSuccess(List<NationalityProxy> response) {
 			if (nationalityPopup == null) {
@@ -655,7 +656,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Receiver class that fills the language popups' pulldown with the available languages.
 	 * Should be used in request for languages. 
 	 */
-	private class LanguageCriteriaReceiver extends Receiver<List<SpokenLanguageProxy>> {
+	private class LanguageCriteriaReceiver extends OSCEReceiver<List<SpokenLanguageProxy>> {
 		@Override
 		public void onSuccess(List<SpokenLanguageProxy> response) {
 			if (languagePopup == null) {
@@ -674,7 +675,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Receiver class that fills the Scar Popups Pulldown with the available scars.
 	 * Should be used in request for scars. 
 	 */
-	private class ScarCriteriaReceiver extends Receiver<List<ScarProxy>> {
+	private class ScarCriteriaReceiver extends OSCEReceiver<List<ScarProxy>> {
 		@Override
 		public void onSuccess(List<ScarProxy> response) {
 			if (scarPopup == null) {
@@ -696,7 +697,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Receiver class that fills the anamnesis criteria popups' suggest box with possible
 	 * values. Should be used in request for anamnesis values. 
 	 */
-	private class AnamnesisCriteriaReceiver extends Receiver<List<AnamnesisCheckProxy>> {
+	private class AnamnesisCriteriaReceiver extends OSCEReceiver<List<AnamnesisCheckProxy>> {
 		public void onSuccess(List<AnamnesisCheckProxy> response) {
 			if (anamnesisPopup == null) {
 				return;

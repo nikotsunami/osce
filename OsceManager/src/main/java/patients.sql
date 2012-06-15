@@ -67,6 +67,15 @@ INSERT INTO `osce`.`profession` (`id`,`profession`,`version`) VALUES (146,'Sekre
 INSERT INTO `osce`.`profession` (`id`,`profession`,`version`) VALUES (148,'Unternehmer/in','0');
 INSERT INTO `osce`.`profession` (`id`,`profession`,`version`) VALUES (150,'Finanzwirt','0');
 
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (1,'Österreich','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (2,'Schweiz','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (3,'CH/FIN','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (4,'CH/I','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (5,'Deutschland','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (6,'D/CH','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (7,'Italien','0');
+INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (8,'Spanien','0');
+
 INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`,`owner_name`,`postal_code`,`version`) VALUES (1,'','CH66 0023 3233 1673 8598 0','UBS AG','4153 Reinach',2,'A. Aeschlimann',NULL,'0');
 INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`,`owner_name`,`postal_code`,`version`) VALUES (2,'CRESCHZZ80A','CH03 0483 5030 3141 0001','Credit Suisse','Basel',2,'Noora Al Rubai',NULL,'0');
 INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`,`owner_name`,`postal_code`,`version`) VALUES (3,'','CH46 0483 5070 1478 0000 0','Credit Suisse','Zürich',2,'',NULL,'0');
@@ -215,15 +224,6 @@ INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`
 INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`,`owner_name`,`postal_code`,`version`) VALUES (146,'UBSWCHZH40M','CH31 0023 3233 5414 2040 B','UBS','Basel',2,'Barbara Wenger',NULL,'0');
 INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`,`owner_name`,`postal_code`,`version`) VALUES (147,'CRESCHZZ80A','CH49 0483 5095 8531 7000 1','Credit Suisse','4125 Riehen',2,'B. Wild Mey',NULL,'0');
 INSERT INTO `osce`.`bankaccount` (`id`,`bic`,`iban`,`bank_name`,`city`,`country`,`owner_name`,`postal_code`,`version`) VALUES (148,'','CH02 0900 0000 4079 2070 9','Postfinance','',2,'Paul Wiesler',NULL,'0');
-
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (1,'A','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (2,'CH','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (3,'CH/FIN','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (4,'CH/I','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (5,'D','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (6,'D/CH','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (7,'I','0');
-INSERT INTO `osce`.`nationality`  (`id`,`nationality`,`version`) VALUES (8,'SP','0');
 
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (1, '2012-05-11 12:45:00',0);
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (2, '2012-05-11 12:45:00',0);

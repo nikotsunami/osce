@@ -21,6 +21,10 @@
 		margin-bottom: 8px;
 	}
 	
+	.distanceToTop {
+		margin-top: 16px;
+	}
+	
 	</ui:style>
 	<ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
 	<!-- Spec added disclosure class above-->	
@@ -48,8 +52,8 @@
 
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
 		
-	<g:HTMLPanel styleName="{style.patientControls} {style.maxWidth}">
-		<g:Image ui:field="arrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+	<g:HTMLPanel styleName="{style.patientControls}">
+		<g:Image ui:field="patientPanelArrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
 		<div  class="{style.controlsright}">
 			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
 			
@@ -61,8 +65,8 @@
 		</div>
 	</g:HTMLPanel>
 
-	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="patientDisclosurePanel"  width="100%">
-		<g:TabPanel ui:field="patientPanel" styleName="gwt-InvertedTabPanel" width="100%">
+	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="patientDisclosurePanel" width="100%">
+		<g:TabPanel ui:field="patientPanel" styleName="gwt-InvertedTabPanel {style.maxWidth}" width="100%">
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
@@ -167,10 +171,6 @@
 				</g:Tab>
 				<g:Tab>
 					<g:TabHTML></g:TabHTML>
-					<n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl>
-				</g:Tab>
-				<g:Tab>
-					<g:TabHTML></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<table class="{style.fields}">
 							<colgroup>
@@ -217,22 +217,34 @@
 						<div ui:field="description" class="{style.description}"></div>
 					</g:HTMLPanel>
 				</g:Tab>
+				
+				
+				<g:Tab>
+					<g:TabHTML></g:TabHTML>
+					<n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl>
+				</g:Tab>
+				
+				<g:Tab>
+					<g:TabHTML>ScarSubView</g:TabHTML>
+					<n:StandardizedPatientScarSubViewImpl ui:field="standardizedPatientScarSubViewImpl"></n:StandardizedPatientScarSubViewImpl>
+				</g:Tab>
+				
 			</g:TabPanel>
 		</g:DisclosurePanel>
+		
+	<g:HTMLPanel styleName="{style.patientControls} {style.distanceToTop}">
+		<g:Image ui:field="anamnesisPanelArrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+		<div  class="{style.controlsright}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="anamnesisPanelTitle"></span></h3>
+		</div>
+	</g:HTMLPanel>
+	
+	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="anamnesisDisclosurePanel"  width="100%">
+		<n:StandardizedPatientAnamnesisSubViewImpl ui:field="standardizedPatientAnamneisSubViewImpl"></n:StandardizedPatientAnamnesisSubViewImpl>
+	</g:DisclosurePanel>
+	
+	
 	</g:VerticalPanel>
-		<!--  Spec Start-->
-		
-	<g:TabPanel ui:field="scarAnamnesisPanel" addStyleNames="{style.tabStyle}">
-		<g:Tab>
-		<g:TabHTML>ScarSubView</g:TabHTML>
-			<n:StandardizedPatientScarSubViewImpl ui:field="standardizedPatientScarSubViewImpl"></n:StandardizedPatientScarSubViewImpl>
-		</g:Tab>
-		
-		<g:Tab>
-		<g:TabHTML>AnamnesisSubView</g:TabHTML>
-			<n:StandardizedPatientAnamnesisSubViewImpl ui:field="standardizedPatientAnamneisSubViewImpl"></n:StandardizedPatientAnamnesisSubViewImpl>
-		</g:Tab>
-	</g:TabPanel>
 		
 </g:HTMLPanel>
 	

@@ -1,7 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,8 +10,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
@@ -19,6 +21,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientSc
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
@@ -38,13 +41,11 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -59,7 +60,8 @@ StandardizedPatientDetailsView.Delegate,
 StandardizedPatientScarSubView.Delegate,
 StandardizedPatientAnamnesisSubView.Delegate,
 StandardizedPatientLangSkillSubView.Delegate,
-StandardizedPatientMediaSubViewImpl.Delegate {
+StandardizedPatientMediaSubViewImpl.Delegate,
+StandardizedPatientAnamnesisTableSubView.Delegate {
 	
     private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -68,14 +70,18 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 
 	private StandardizedPatientDetailsPlace place;
 	private StandardizedPatientProxy standardizedPatientProxy;
+	
+	private HashMap<AnamnesisCheckTitleProxy, StandardizedPatientAnamnesisTableSubView> anamnesisSubViews = 
+			new HashMap<AnamnesisCheckTitleProxy, StandardizedPatientAnamnesisTableSubView>();
 
-	private StandardizedPatientScarSubView standardizedPatientScarSubView;
+	private List<AnamnesisCheckTitleProxy> anamnesisCheckTitles = new ArrayList<AnamnesisCheckTitleProxy>();
+	
 	private CellTable<ScarProxy> scarTable;
 	private ValueListBox<ScarProxy> scarBox;
 	
+	private StandardizedPatientScarSubView standardizedPatientScarSubView;
 	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
 	private StandardizedPatientMediaSubViewImpl standardizedPatientMediaSubViewImpl;
-	private CellTable<AnamnesisChecksValueProxy> anamnesisTable;
 	
 	private StandardizedPatientLangSkillSubView standardizedPatientLangSkillSubView;
 	private CellTable<LangSkillProxy> langSkillTable;
@@ -96,9 +102,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	// By spec(Start)
-		
-		@SuppressWarnings("deprecation")
-		private class StandardizedPatientPdfFileReceiver extends Receiver<String> {
+		private class StandardizedPatientPdfFileReceiver extends OSCEReceiver<String> {
 			@Override
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
@@ -142,7 +146,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 * that is edited in this activities instance.
 	 */
 	
-	private class InitializeActivityReceiver extends Receiver<Object> {
+	private class InitializeActivityReceiver extends OSCEReceiver<Object> {
 		@Override
 		public void onFailure(ServerFailure error){
 			Log.error(error.getMessage());
@@ -157,13 +161,17 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 			}
 		}
 	}
+
+	  ///////////////////////
+	 /////	LANGSKILL  /////
+	///////////////////////
 	
 	/**
 	 * Callback for filling the language picker with all available @SpokenLanguageProxy
 	 * elements.
 	 */
 	
-	private class SpokenLanguageReceiver extends Receiver<List<SpokenLanguageProxy>> {
+	private class SpokenLanguageReceiver extends OSCEReceiver<List<SpokenLanguageProxy>> {
 		@Override
 		public void onSuccess(List<SpokenLanguageProxy> response) {
 			Log.debug("Geholte Sprachen aus der Datenbank: " + response.size());
@@ -175,7 +183,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 * Callback for 
 	 */
 	
-	private class LangSkillCountReceiver extends Receiver<Long> {
+	private class LangSkillCountReceiver extends OSCEReceiver<Long> {
 		@Override
 		public void onSuccess(Long count) {
 			if (view == null) {
@@ -203,7 +211,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	
-	private class LangSkillUpdateReceiver extends Receiver<Void> {
+	private class LangSkillUpdateReceiver extends OSCEReceiver<Void> {
 		@Override
 		public void onSuccess(Void response) {
 			Log.debug("Langskills updated successfully");
@@ -211,50 +219,101 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		}
 	}
 	
+	  ///////////////////////
+	 /////	ANAMNESIS  /////
+	///////////////////////
 	
-	private class AnamnesisChecksValueFillReceiver extends Receiver<Void> {		
+	private class AnamnesisCheckTitleReceiver extends OSCEReceiver<List<AnamnesisCheckTitleProxy>> {
+		@Override
+		public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
+			if (response == null) {
+				// TODO: display message...
+				return;
+			}
+			
+			for (final AnamnesisCheckTitleProxy title : response) {
+				StandardizedPatientAnamnesisTableSubView subView = standardizedPatientAnamnesisSubView.addAnamnesisCheckTitle(title);
+				subView.setDelegate(StandardizedPatientDetailsActivity.this);
+				anamnesisSubViews.put(title, subView);
+				anamnesisCheckTitles.add(title);
+				onRangeChangedAnamnesis(title);
+
+				subView.getTable().addRangeChangeHandler(new RangeChangeEvent.Handler() {
+					@Override
+					public void onRangeChange(RangeChangeEvent event) {
+						onRangeChangedAnamnesis(title);
+					}
+				});
+			}
+		}
+	}
+	
+	private class AnamnesisChecksValueFillReceiver extends OSCEReceiver<Void> {
+		
 		@Override
 		public void onSuccess(Void response) {
-			fireAnamnesisChecksValueCountRequest();
+			requests.anamnesisCheckTitleRequest().findAllAnamnesisCheckTitles().fire(new AnamnesisCheckTitleReceiver());
 		}
-		
 	}
 	
 	
-	private class AnamnesisChecksValueCountReceiver extends Receiver<Long> {
+	private class AnamnesisChecksValueCountReceiver extends OSCEReceiver<Long> {
+		private AnamnesisCheckTitleProxy title;
+		
+		public AnamnesisChecksValueCountReceiver(AnamnesisCheckTitleProxy title) {
+			this.title = title;
+		}
+		
 		@Override
 		public void onSuccess(Long count) {
 			if (view == null) {
 				return;
 			}
 			Log.debug(count.toString() + " AnamnesisChecksValues found");
-			anamnesisTable.setRowCount(count.intValue(), true);
-			fireAnamnesisChecksValueRequest();
+			// TODO: problem, that null is not checked on view and table? Should in any case be initialized
+			CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(title).getTable();
+			table.setRowCount(count.intValue(), true);
+			fireAnamnesisChecksValueRequest(title);
 		}
 	}
 	
 	
-	private class AnamnesisChecksValueReceiver extends Receiver<List<AnamnesisChecksValueProxy>> {
+	private class AnamnesisChecksValueReceiver extends OSCEReceiver<List<AnamnesisChecksValueProxy>> {
+		private AnamnesisCheckTitleProxy title;
+
+		public AnamnesisChecksValueReceiver(AnamnesisCheckTitleProxy title) {
+			this.title = title;
+		}
+
 		@Override
 		public void onSuccess(List<AnamnesisChecksValueProxy> response) {
-			Range range = anamnesisTable.getVisibleRange();
+			CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(title).getTable();
+			Range range = table.getVisibleRange();
 			Log.debug("response.size(): " + response.size());
-			anamnesisTable.setRowData(range.getStart(), response);
+			table.setRowData(range.getStart(), response);
 		}
 	}
 	
 	
-	private class AnamnesisChecksValueUpdateReceiver extends Receiver<Void> {
+	private class AnamnesisChecksValueUpdateReceiver extends OSCEReceiver<Void> {
+		private AnamnesisCheckTitleProxy title;
+
+		public AnamnesisChecksValueUpdateReceiver(AnamnesisCheckTitleProxy title) {
+			this.title = title;
+		}
 
 		@Override
 		public void onSuccess(Void response) {
 			Log.info("AnamnesisChecksValue updated");
-			onRangeChangedAnamnesis();
+			onRangeChangedAnamnesis(title);
 		}
 	}
 	
+	  //////////////////
+	 /////	SCAR  /////
+	//////////////////
 	
-	private class ScarBoxReceiver extends Receiver<List<ScarProxy>> {
+	private class ScarBoxReceiver extends OSCEReceiver<List<ScarProxy>> {
 		@Override
 		public void onSuccess(List<ScarProxy> response) {
 			standardizedPatientScarSubView.setScarBoxValues(response);
@@ -262,7 +321,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	
-	private class ScarCountReceiver extends Receiver<Long> {
+	private class ScarCountReceiver extends OSCEReceiver<Long> {
 		@Override
 		public void onSuccess(Long count) {
 			if (view == null) {
@@ -278,7 +337,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	
-	private class ScarReceiver extends Receiver<List<ScarProxy>> {
+	private class ScarReceiver extends OSCEReceiver<List<ScarProxy>> {
 		
 		@Override
 		public void onSuccess(List<ScarProxy> values) {
@@ -297,7 +356,7 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	
-	private class ScarUpdateReceiver extends Receiver<Void>{
+	private class ScarUpdateReceiver extends OSCEReceiver<Void>{
 		@Override
 		public void onSuccess(Void arg0) {
 			Log.debug("scar updated...");
@@ -385,84 +444,89 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 ******************/
 
 	protected void initAnamnesis() {
-		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
-		this.anamnesisTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
-			@Override
-			public void onRangeChange(RangeChangeEvent event) {
-				Log.debug("onRangeChange() ==> onRangeChangedAnamnesis()");
-				onRangeChangedAnamnesis();
-			}
-		});
-		onRangeChangedAnamnesis();
+//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
+		requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
 	}
-	
-	
-	private void onRangeChangedAnamnesis() {
+
+	private void onRangeChangedAnamnesis(AnamnesisCheckTitleProxy title) {
 		// TODO Implementation mit Checkboxes korrekt machen
 		if (standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown()) {
 			// fills the AnamnesisChecksValue table in the database with
 			// NULL-values for unanswered questions
 			Log.info("unanswered questions are shown (fill table)");
-			requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
 		} else {
 			// requests the number of rows in AnamnesisChecksValue for the
 			// current patient
-			fireAnamnesisChecksValueCountRequest();
+			fireAnamnesisChecksValueCountRequest(title);
 		}
 	}
 	
+//	private void onRangeChangedAnamnesis() {
+//		// TODO Implementation mit Checkboxes korrekt machen
+//		if (standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown()) {
+//			// fills the AnamnesisChecksValue table in the database with
+//			// NULL-values for unanswered questions
+//			Log.info("unanswered questions are shown (fill table)");
+//			requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
+//		} else {
+//			// requests the number of rows in AnamnesisChecksValue for the
+//			// current patient
+//			fireAnamnesisChecksValueCountRequest();
+//		}
+//	}
 	
-	private void fireAnamnesisChecksValueCountRequest() {
+	
+	private void fireAnamnesisChecksValueCountRequest(AnamnesisCheckTitleProxy title) {
 		String query = standardizedPatientAnamnesisSubView.getSearchString();
-		Receiver<Long> receiver = new AnamnesisChecksValueCountReceiver();
+		Receiver<Long> receiver = new AnamnesisChecksValueCountReceiver(title);
 		boolean answeredQuestions = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unansweredQuestions = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
 		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo(); 
 		
-		if (answeredQuestions && unansweredQuestions) {
+//		if (answeredQuestions && unansweredQuestions) {
 			Log.debug("count -- show answered and unanswered");
-			request.countAllAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query).fire(receiver);
-		} else if (answeredQuestions) {
-			Log.debug("count -- show only answered");
-			request.countAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query).fire(receiver);
-		} else if (unansweredQuestions) {
-			Log.debug("count -- show only unanswered");
-			request.countUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query).fire(receiver);
-		} else {
-			Log.debug("count -- show none");
-			receiver.onSuccess(new Long(0));
-		}
+			request.countAllAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
+//		} else if (answeredQuestions) {
+//			Log.debug("count -- show only answered");
+//			request.countAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
+//		} else if (unansweredQuestions) {
+//			Log.debug("count -- show only unanswered");
+//			request.countUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
+//		} else {
+//			Log.debug("count -- show none");
+//			receiver.onSuccess(new Long(0));
+//		}
 	}
 
 	
-	protected void fireAnamnesisChecksValueRequest() {
+	protected void fireAnamnesisChecksValueRequest(AnamnesisCheckTitleProxy title) {
 		String query = standardizedPatientAnamnesisSubView.getSearchString();
 		boolean answered = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unanswered = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
 		
-		String[] paths = standardizedPatientAnamnesisSubView.getPaths();
+		String[] paths = anamnesisSubViews.get(title).getPaths();
 				
 		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo();
-		AnamnesisChecksValueReceiver receiver = new AnamnesisChecksValueReceiver();
+		AnamnesisChecksValueReceiver receiver = new AnamnesisChecksValueReceiver(title);
 		
-		Range range = anamnesisTable.getVisibleRange();
+		Range range = anamnesisSubViews.get(title).getTable().getVisibleRange();
 		Log.debug("range.getStart():" + range.getStart() + "; range.getLength():" + range.getLength() + ";");
 		
-		if (answered && unanswered) {
+//		if (answered && unanswered) {
 			Log.debug("request -- show answered and unanswered");
-			request.findAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, range.getStart(), range.getLength())
+			request.findAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
 					.with(paths).fire(receiver);
-		} else if (answered) {
-			Log.debug("request -- show only answered");
-			request.findAnsweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, range.getStart(), range.getLength())
-					.with(paths).fire(receiver);
-		} else if (unanswered) {
-			Log.debug("request -- show only unanswered");
-			request.findUnansweredAnamnesisChecksValuesByAnamnesisForm(anamnesisForm.getId(), query, range.getStart(), range.getLength())
-					.with(paths).fire(receiver);
-		} else {
-			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
-		}
+//		} else if (answered) {
+//			Log.debug("request -- show only answered");
+//			request.findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
+//					.with(paths).fire(receiver);
+//		} else if (unanswered) {
+//			Log.debug("request -- show only unanswered");
+//			request.findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
+//					.with(paths).fire(receiver);
+//		} else {
+//			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
+//		}
 	}
 	
 	/*******************
@@ -527,26 +591,26 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	}
 	
 	public void storeDisplaySettings() {
+		userSettings.setValue("anamnesisPanelOpen", view.isAnamnesisDisclosurePanelOpen());
 		userSettings.setValue("panelOpen", view.isPatientDisclosurePanelOpen());
 		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
-		userSettings.setValue("scarAnamnesisTab", view.getSelectedScarAnamnesisTab());
 		userSettings.flush();
 	}
 	
 	private void loadDisplaySettings() {
+		boolean anamnesisPanelOpen = true;
 		boolean panelOpen = true;
 		int detailsTab = 0;
-		int scarAnamnesisTab = 0;
 		
 		if (userSettings.hasSettings()) {
+			anamnesisPanelOpen = userSettings.getBooleanValue("anamnesisPanelOpen");
 			panelOpen = userSettings.getBooleanValue("panelOpen");
 			detailsTab = userSettings.getIntValue("detailsTab");
-			scarAnamnesisTab = userSettings.getIntValue("scarAnamnesisTab");
 		}
 		
+		view.setAnamnesisDisclosurePanelOpen(anamnesisPanelOpen);
 		view.setPatientDisclosurePanelOpen(panelOpen);
 		view.setSelectedDetailsTab(detailsTab);
-		view.setSelectedScarAnamnesisTab(scarAnamnesisTab);
 	}
 	
 	@Override
@@ -696,7 +760,8 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		proxy = request.edit(proxy);
 		proxy.setTruth(truth);
 		proxy.setAnamnesisChecksValue(anamnesisChecksValue);
-		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver());
+		AnamnesisCheckTitleProxy title = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
+		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver(title));
 	}
 	
 	@Override
@@ -704,23 +769,27 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 		AnamnesisChecksValueRequest request = requests.anamnesisChecksValueRequest();
 		proxy = request.edit(proxy);
 		proxy.setComment(comment);
-		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver());
+		AnamnesisCheckTitleProxy title = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
+		request.persist().using(proxy).fire(new AnamnesisChecksValueUpdateReceiver(title));
 	}
 	
 	@Override
 	public void performAnamnesisSearch() {
-		onRangeChangedAnamnesis();
+		Log.debug("performAnamnesisSearch() -- ");
+		for (AnamnesisCheckTitleProxy title : anamnesisCheckTitles) {
+			Log.debug("performAnamnesisSearch() -- title == " + title.getText());
+			onRangeChangedAnamnesis(title);
+		}
 	}
 
 	@Override
 	public void newClicked() {
-		
+		// TODO: ???
 	}
 
 	@Override
 	public void uploadClicked() {
-
-		
+		// TODO: ???
 	}
 
 	@Override
@@ -729,8 +798,6 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 standardizedPatientProxy = stdPatRequest.edit(standardizedPatientProxy);
 	 standardizedPatientProxy.setImmagePath(results);
 	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
-	 
-		
 	}
 	
 	//spec start
@@ -746,19 +813,14 @@ StandardizedPatientMediaSubViewImpl.Delegate {
 	 
 	 
 	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
-	 
-		
 	}
 	//spec end
 	
 	@Override
-	public String getNameOfStandardizedPatient()
-	{
-		
-		 return standardizedPatientProxy.getName();
+	public String getNameOfStandardizedPatient() {
+		return standardizedPatientProxy.getName();
 	}
-	public Long getIdOfStandardizedPatient()
-	{
+	public Long getIdOfStandardizedPatient() {
 		return standardizedPatientProxy.getId();
 	}
 	

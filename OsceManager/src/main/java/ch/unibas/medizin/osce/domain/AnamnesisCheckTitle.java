@@ -22,9 +22,6 @@ public class AnamnesisCheckTitle {
     private String text;
 
     private Integer sort_order;
-
-    
-    
     
 	@Override
 	public int hashCode() {
@@ -56,9 +53,8 @@ public class AnamnesisCheckTitle {
 			return false;
 		return true;
 	}
-    
-    
-    
-    
 
+	public static List<AnamnesisCheckTitle> findAllAnamnesisCheckTitles() {
+        return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
+    }
 }

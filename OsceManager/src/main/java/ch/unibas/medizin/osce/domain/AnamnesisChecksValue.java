@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -34,19 +33,6 @@ public class AnamnesisChecksValue{
 
     @ManyToOne
     private AnamnesisCheck anamnesischeck;
-    
-//    public static List<AnamnesisChecksValue> findAndFillAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults) {
-//    	return null;
-//    }
-//    
-//    public static List<AnamnesisChecksValue> findAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults) {
-//    	EntityManager em = AnamnesisChecksValue.entityManager();
-//    	AnamnesisForm form = AnamnesisForm.findAnamnesisForm(anamnesisFormId);
-//    	TypedQuery<AnamnesisChecksValue> qValue = em.createQuery(
-//    			"SELECT o FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm", AnamnesisChecksValue.class);
-//    	qValue.setParameter("anamnesisForm", form);
-//    	return qValue.getResultList();
-//    }
     
     private static Logger log = Logger.getLogger(AnamnesisChecksValue.class);
     
@@ -99,23 +85,43 @@ public class AnamnesisChecksValue{
 		}
     }
     
-    public static Long countAllAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle) {
-    	EntityManager em = entityManager();
-    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm " +
-    			"AND o.anamnesischeck.text LIKE :needle", Long.class);
-    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
-    	q.setParameter("needle","%" + needle + "%");
-    	return q.getSingleResult();
-    }
-    
-    public static Long countAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle) {
+    public static Long countAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisCheckTitleId, String needle) {
     	EntityManager em = entityManager();
     	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
-    			"WHERE anamnesisform = :anamnesisForm AND " +
-    			"(anamnesisChecksValue <> NULL OR truth <> NULL) " +
+    			"WHERE anamnesisform = :anamnesisForm " +
+    			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
+    			"AND (anamnesisChecksValue <> NULL OR truth <> NULL) " +
     			"AND o.anamnesischeck.text LIKE :needle";
     	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisCheckTitleId));
+    	q.setParameter("needle", "%" + needle + "%");
+    	return q.getSingleResult();
+    }
+    
+    public static Long countAllAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisCheckTitleId, String needle) {
+    	EntityManager em = entityManager();
+    	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm " +
+    			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " + 
+    			"AND o.anamnesischeck.text LIKE :needle";
+    	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisCheckTitleId));
+    	q.setParameter("needle", "%" + needle + "%");
+    	return q.getSingleResult();
+    }
+    
+    public static Long countUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle) {
+    	EntityManager em = entityManager();
+    	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm " +
+    			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
+				"AND (anamnesisChecksValue = NULL AND truth = NULL) " +
+				"AND o.anamnesischeck.text LIKE :needle";
+    	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
+    	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("needle","%" + needle + "%");
     	return q.getSingleResult();
     }
@@ -134,19 +140,6 @@ public class AnamnesisChecksValue{
 		return new AnamnesisChecksValue();
     }
     
-    
-    public static Long countUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle) {
-    	EntityManager em = entityManager();
-    	String queryString = "SELECT COUNT(o) FROM AnamnesisChecksValue AS o " +
-    			"WHERE anamnesisform = :anamnesisForm AND " +
-				"(anamnesisChecksValue = NULL AND truth = NULL) " +
-				"AND o.anamnesischeck.text LIKE :needle";
-    	TypedQuery<Long> q = em.createQuery(queryString, Long.class);
-    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
-    	q.setParameter("needle","%" + needle + "%");
-    	return q.getSingleResult();
-    }
-    
     /**
      * Returns all the entries in AnamnesisChecksValues, that exist for a given anamnesisForm id.
      * @param anamnesisFormId the id of the relevant AnamnesisForm
@@ -154,10 +147,14 @@ public class AnamnesisChecksValue{
      * @param maxResults number of maximum results
      * @return all the entries in AnamnesisChecksValues for a given anamnesisForm
      */
-    public static List<AnamnesisChecksValue> findAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle, int firstResult, int maxResults) {
+    public static List<AnamnesisChecksValue> findAnamnesisChecksValuesByAnamnesisFormAndTitle(
+    		Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults) {
     	EntityManager em = entityManager();
-    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm " +
+    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
+    			"WHERE anamnesisform = :anamnesisForm " +
+    			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
     			"AND o.anamnesischeck.text LIKE :needle", AnamnesisChecksValue.class);
+    	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
     	q.setParameter("needle","%" + needle + "%");
     	q.setFirstResult(firstResult);
@@ -173,11 +170,15 @@ public class AnamnesisChecksValue{
      * @param maxResults number of maximum results
      * @return all the entries in AnamnesisChecksValues for a given anamnesisForm
      */
-    public static List<AnamnesisChecksValue> findUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle, int firstResult, int maxResults) {
+    public static List<AnamnesisChecksValue> findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(
+    		Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults) {
     	EntityManager em = entityManager();
     	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
-    			"WHERE anamnesisform = :anamnesisForm AND truth = NULL AND anamnesisChecksValue = NULL " +
+    			"WHERE anamnesisform = :anamnesisForm " +
+    			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
+    			"AND truth = NULL AND anamnesisChecksValue = NULL " +
     			"AND o.anamnesischeck.text LIKE :needle", AnamnesisChecksValue.class);
+    	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
     	q.setParameter("needle","%" + needle + "%");
     	q.setFirstResult(firstResult);
@@ -192,12 +193,16 @@ public class AnamnesisChecksValue{
      * @param maxResults number of maximum results
      * @return all the entries in AnamnesisChecksValues for a given anamnesisForm
      */
-    public static List<AnamnesisChecksValue> findAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle, int firstResult, int maxResults) {
+    public static List<AnamnesisChecksValue> findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(
+    		Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults) {
     	EntityManager em = entityManager();
     	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
-    			"WHERE anamnesisform = :anamnesisForm AND (truth <> NULL OR anamnesisChecksValue <> NULL) " +
+    			"WHERE anamnesisform = :anamnesisForm " +
+    			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
+    			"AND (truth <> NULL OR anamnesisChecksValue <> NULL) " +
     			"AND o.anamnesischeck.text LIKE :needle", 
     			AnamnesisChecksValue.class);
+    	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
     	q.setParameter("needle","%" + needle + "%");
     	q.setFirstResult(firstResult);

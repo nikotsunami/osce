@@ -9,6 +9,7 @@ import java.util.Locale;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
+import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.LangSkill;
@@ -238,11 +239,23 @@ public class PdfUtil {
 
 	private void addAnamnesis() {
 		Paragraph anamnesis = new Paragraph();
-		PdfPTable table = createAnamnesisTable();
-		table.setSpacingBefore(titleTableSpacing);
-		anamnesis
-				.add(new Chunk(constants.anamnesisValues(), paragraphTitleFont));
-		anamnesis.add(table);
+		anamnesis.add(new Chunk(constants.anamnesisValues(), paragraphTitleFont));
+		
+		AnamnesisChecksValue.fillAnamnesisChecksValues(anamnesisFormId);
+		List<AnamnesisCheckTitle> titles = AnamnesisCheckTitle.findAllAnamnesisCheckTitles();
+		
+		for (AnamnesisCheckTitle title : titles) {
+			String titleText = "";
+			if (title.getText() != null) {
+				titleText = title.getText();
+			}
+			anamnesis.add(new Chunk(titleText, paragraphTitleFont));
+			PdfPTable table = createAnamnesisTableForTitle(title.getId());
+			table.setSpacingBefore(titleTableSpacing);
+			anamnesis.add(table);
+		}
+		
+		
 		addEmptyLine(anamnesis, 1);
 
 		// TODO: addLegend (for answer types)
@@ -274,15 +287,11 @@ public class PdfUtil {
 		return table;
 	}
 
-	private PdfPTable createAnamnesisTable() {
+	private PdfPTable createAnamnesisTableForTitle(Long titleId) {
 		PdfPTable table = new PdfPTable(new float[] { 0.5f, 0.5f });
-
-		AnamnesisChecksValue.fillAnamnesisChecksValues(anamnesisFormId);
-		List<AnamnesisChecksValue> values = AnamnesisChecksValue
-				.findAnamnesisChecksValuesByAnamnesisForm(anamnesisFormId, "",
-						0, 1024);
-
-		// TODO: correct order according to order field
+		
+		List<AnamnesisChecksValue> values = AnamnesisChecksValue.
+				findAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisFormId, titleId, "", 0, 1024);
 		for (AnamnesisChecksValue value : values) {
 			AnamnesisCheck check = value.getAnamnesischeck();
 			if (check != null) {

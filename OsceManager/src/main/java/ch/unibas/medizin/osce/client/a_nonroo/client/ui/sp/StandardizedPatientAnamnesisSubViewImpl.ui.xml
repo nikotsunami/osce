@@ -3,20 +3,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	<ui:style src="../../styles.css">
-	.standardTable input {
-		width: 100%;
-		opacity: 0.8;
-	}
-	</ui:style>
+	<ui:style src="../../styles.css" />
 		
 	<g:HTMLPanel>
-		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
+		<g:TabPanel ui:field="anamnesisTabs" addStyleNames="{style.tabStyle}" width="100%">
+			
+		</g:TabPanel>
 		<div class="{style.controls}">
 			<my:QuickSearchBox ui:field="searchBox" />
 			<g:CheckBox ui:field="showAnswered"></g:CheckBox>
 			<g:CheckBox ui:field="showUnanswered"></g:CheckBox>
-			<b:SimplePager display="{table}" ui:field="pager" />
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 
