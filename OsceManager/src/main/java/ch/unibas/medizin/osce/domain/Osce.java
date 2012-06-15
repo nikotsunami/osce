@@ -23,6 +23,10 @@ import ch.unibas.medizin.osce.server.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
+
+
+import com.allen_sauer.gwt.log.client.Log;
+
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -86,7 +90,7 @@ public class Osce {
     
     @ManyToOne(cascade = CascadeType.ALL)
 	private Osce copiedOsce;
-    
+   
     /**
 	 * Get number of slots until a SP change is necessary (lowest number of consecutive slots
 	 * is defined by the most difficult role)
@@ -145,7 +149,7 @@ public class Osce {
     public static List<Osce> findAllOsceBySemster(Long id) {
     	EntityManager em = entityManager();
     	System.out.println("BEFORE CALL------->");
-    	String queryString="SELECT o FROM Osce as o  where o.semester.id="+id;
+    	String queryString="SELECT o FROM Osce as o  where o.semester.id="+id + " order by studyYear desc";
     	System.out.println("query--"+ queryString);
     	TypedQuery<Osce> q = em.createQuery(queryString, Osce.class);
     //	TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce as o  where o.semester=1 " , Osce.class);
@@ -165,14 +169,14 @@ public class Osce {
         
     }
     
-    public static List<Osce> findAllOsceOnSemesterId(Long semesterId){
-
+ public static List<Osce> findAllOsceOnSemesterId(Long semesterId){
+		
     	log.info("Inside Osce class To retrive all Osce Based On semesterId");
-    	EntityManager em = entityManager();
-    	TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId ,Osce.class);
-    	return q.getResultList();
-
-    }
-
+		EntityManager em = entityManager();
+		TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId ,Osce.class);
+		return q.getResultList();
+				
+	}
+    
     //spec end
 }

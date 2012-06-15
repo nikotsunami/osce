@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitOsceS
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.util;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -73,14 +74,25 @@ CircuitDetailsView.Delegate,CircuitOsceSubView.Delegate {
 						
 						String style = status.getOsceStatus(status);
 						
+						circuitOsceSubViewImpl.maxRoomsTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getNumberRooms()));
+						
+						
 						circuitOsceSubViewImpl.setStyleName(style);
-						circuitOsceSubViewImpl.shortBreakTextBox.setText(((OsceProxy) response).getShortBreak().toString());
-						circuitOsceSubViewImpl.longBreakTextBox.setText(((OsceProxy) response).getLongBreak().toString());
-						circuitOsceSubViewImpl.launchBreakTextBox.setText(((OsceProxy) response).getLunchBreak().toString());
-						circuitOsceSubViewImpl.maxStudentTextBox.setText(((OsceProxy) response).getMaxNumberStudents().toString());
-						circuitOsceSubViewImpl.maxParcourTextBox.setText(((OsceProxy) response).getNumberCourses().toString());
-						circuitOsceSubViewImpl.maxRoomsTextBox.setText(((OsceProxy) response).getNumberRooms().toString());
+						circuitOsceSubViewImpl.shortBreakTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getShortBreak()));
+						circuitOsceSubViewImpl.longBreakTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getLongBreak()));
+						circuitOsceSubViewImpl.launchBreakTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getLunchBreak()));
+						circuitOsceSubViewImpl.maxStudentTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getMaxNumberStudents()));
+						circuitOsceSubViewImpl.maxParcourTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getNumberCourses()));
+						//circuitOsceSubViewImpl.shortBreakTextBox.setText(((OsceProxy) response).getShortBreak().toString());
+						//circuitOsceSubViewImpl.longBreakTextBox.setText(((OsceProxy) response).getLongBreak().toString());
+						
+					//	circuitOsceSubViewImpl.launchBreakTextBox.setText(((OsceProxy) response).getLunchBreak().toString());
+					//	circuitOsceSubViewImpl.maxStudentTextBox.setText(((OsceProxy) response).getMaxNumberStudents().toString());
+					//	circuitOsceSubViewImpl.maxParcourTextBox.setText(((OsceProxy) response).getNumberCourses().toString());
+						circuitOsceSubViewImpl.maxRoomsTextBox.setText(util.getEmptyIfNull(((OsceProxy) response).getNumberRooms()));
+						//circuitOsceSubViewImpl.maxRoomsTextBox.setText(((OsceProxy) response).getNumberRooms().toString());
 						circuitOsceSubViewImpl.setProxy((OsceProxy)response);
+						circuitOsceSubViewImpl.setClearAllBtn(((OsceProxy)response).getOsceStatus() == OsceStatus.OSCE_GENRATED);
 						circuitOsceSubViewImpl.setDelegate(activity);
 					}
 					
@@ -117,5 +129,23 @@ CircuitDetailsView.Delegate,CircuitOsceSubView.Delegate {
 					
 				}
 			});
+		}
+		
+		@Override
+		public void clearAll(OsceProxy proxy) {
+			OsceRequest osceReq = requests.osceRequest();
+			proxy = osceReq.edit(proxy);			
+			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);			
+			osceReq.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					Log.info("Osce Value Updated");
+					//Window.alert("Osce Data Updated sucessfully");
+					
+				}
+			});
+
+			
 		}
 }

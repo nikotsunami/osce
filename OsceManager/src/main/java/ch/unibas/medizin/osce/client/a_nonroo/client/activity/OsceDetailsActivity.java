@@ -120,8 +120,8 @@ public void init()
 	
 	view.setDelegate(this);
 	
-	requests.find(place.getProxyId()).with("tasks").fire(new OSCEReceiver<Object>() {
-
+	//requests.find(place.getProxyId()).with("tasks").fire(new OSCEReceiver<Object>() {
+	requests.find(place.getProxyId()).with("tasks","tasks.administrator").fire(new OSCEReceiver<Object>() {
 		public void onFailure(ServerFailure error) {
 			Log.error(error.getMessage());
 		}
@@ -160,7 +160,7 @@ public void init()
 				Operation.EDIT));
 
 	}
-	
+
 	@Override
 	public void osceGenerateClicked() {
 		Log.info("generate clicked");
@@ -168,9 +168,7 @@ public void init()
 		requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(
 				
 		);
-	}
-
-	
+	}	
 	
 	
 	@Override
@@ -178,16 +176,28 @@ public void init()
 		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
 			return;
 		}
+		
+		try{
+			
+		
 		requests.osceRequest().remove().using(osceProxy).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onViolation(Set<Violation> errors) {
-				Iterator<Violation> iter = errors.iterator();
+				/*Iterator<Violation> iter = errors.iterator();
 				String message = "";
 				while (iter.hasNext()) {
 					message += iter.next().getMessage() + "<br>";
 				}
-				Log.warn(" in task -" + message);
+				Log.warn(" in task -" + message);*/
+				Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
+			}
+			
+			public void onFailure(ServerFailure error) {
+		/*	Log.warn("you not able to delete record used by other ");
+				Log.error(error.getMessage());
+*/
+				Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
 			}
 			
 			public void onSuccess(Void ignore) {
@@ -222,6 +232,11 @@ public void init()
 			
 			}
 		});
+		}
+		catch(Exception e)
+		{
+			
+		}
 	}
 
 	@Override

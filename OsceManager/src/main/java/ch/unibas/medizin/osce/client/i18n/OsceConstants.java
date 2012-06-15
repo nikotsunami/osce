@@ -456,6 +456,8 @@ public interface OsceConstants extends Constants {
     //Assignment E]
     public String osceBreak();
     
+    public String clearAll();
+    
     
    
 	

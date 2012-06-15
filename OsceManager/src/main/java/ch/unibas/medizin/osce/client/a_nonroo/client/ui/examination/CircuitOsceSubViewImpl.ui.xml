@@ -1,54 +1,60 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:s="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
-	 
-	 <ui:style src="../../styles.css" >
-	.padleft25
-	{
-		padding-left: 25px;
-	}
-	.padleft33
-	{
-		padding-left: 33px;
-	}
-	.padleft30
-	{
-		padding-left: 30px;
-	}
-	.padleft8
-	{
-		padding-left: 8px;
-	}
-	.marginRight20
-	{
-		margin-right: 20px;
-	}
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:s="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+
+	<ui:style src="../../styles.css">
+		.padleft25 {
+			padding-left: 25px;
+		}
+		
+		.padleft33 {
+			padding-left: 33px;
+		}
+		
+		.padleft30 {
+			padding-left: 30px;
+		}
+		
+		.padleft8 {
+			padding-left: 8px;
+		}
+		
+		.marginRight20 {
+			margin-right: 20px;
+		}
+		.marginLeft20
+		{
+			margin-Left: 20px;
+		}
 	</ui:style>
 	<g:HTMLPanel>
-		<!-- h1>CircuitOsceSubView</h1-->
+		<!-- h1>CircuitOsceSubView</h1 -->
 		<g:VerticalPanel spacing="8">
 			<g:HorizontalPanel ui:field="osceHorizontalPanel1">
 				<g:Label ui:field="shortBreakLabel" styleName="{style.padleft8}">Short Break :</g:Label>
 				<s:ShortBox ui:field="shortBreakTextBox"></s:ShortBox>
-			
+
 				<g:Label ui:field="longBreakLabel" styleName="{style.padleft30}">Long Break :</g:Label>
 				<s:ShortBox ui:field="longBreakTextBox"></s:ShortBox>
-			
-				<g:Label ui:field="launchBreakLabel" styleName="{style.padleft33}">Launch Break :</g:Label>
+
+				<g:Label ui:field="launchBreakLabel" styleName="{style.padleft33}">Launch Break
+					:</g:Label>
 				<s:ShortBox ui:field="launchBreakTextBox"></s:ShortBox>
 			</g:HorizontalPanel>
 			<g:HorizontalPanel>
 				<g:Label ui:field="maxStudentLabel">Max Students :</g:Label>
 				<g:IntegerBox ui:field="maxStudentTextBox"></g:IntegerBox>
-			
+
 				<g:Label ui:field="maxParcourLabel" styleName="{style.padleft25}">Max Parcour :</g:Label>
 				<g:IntegerBox ui:field="maxParcourTextBox"></g:IntegerBox>
-			
-				<g:Label ui:field="maxRoomsLabel" styleName="{style.padleft25}">Max No Rooms :</g:Label>				
-				<g:IntegerBox ui:field="maxRoomsTextBox" styleName="{style.marginRight20}"></g:IntegerBox> 								
+
+				<g:Label ui:field="maxRoomsLabel" styleName="{style.padleft25}">Max No Rooms :</g:Label>
+				<g:IntegerBox ui:field="maxRoomsTextBox" styleName="{style.marginRight20}"></g:IntegerBox>
 				<my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton>
+				<g:Label  styleName="{style.padleft25}"></g:Label>	
+				<g:Button ui:field="clearAllBtn" ></g:Button>
 			</g:HorizontalPanel>
 		</g:VerticalPanel>
 	</g:HTMLPanel>
