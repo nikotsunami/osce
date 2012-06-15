@@ -112,7 +112,7 @@ public class AnamnesisCheck {
         return query.getSingleResult();
     }
 
-
+    //TODO delete
     public static List<AnamnesisCheck> findAnamnesisChecksBySearchWithTitle(String q,
             AnamnesisCheck title, int firstResult, int maxResults) {
         if (q == null)
@@ -139,6 +139,44 @@ public class AnamnesisCheck {
             query.setMaxResults(maxResults);
             return query.getResultList();
         }
+    }
+    
+    public static List<AnamnesisCheckTitle> findTitlesContatisAnamnesisChecksWithSearching(String q,AnamnesisCheckTitle title){
+    	List<AnamnesisCheckTitle> titles = new ArrayList<AnamnesisCheckTitle>();
+    	List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksBySearchWithAnamnesisCheckTitle(q,title);
+    	for(AnamnesisCheck anamnesisCheck : anamnesisChecks){
+    		if(anamnesisCheck.anamnesisCheckTitle != null && !titles.contains(anamnesisCheck.anamnesisCheckTitle)){
+    			titles.add(anamnesisCheck.anamnesisCheckTitle);
+    		}
+    	}
+		return titles;
+    	
+    }
+    
+    public static List<AnamnesisCheck> findAnamnesisChecksBySearchWithAnamnesisCheckTitle(String q,AnamnesisCheckTitle title){
+    	
+        if (q == null)
+            throw new IllegalArgumentException("The q argument is required");
+        EntityManager em = entityManager();
+        if (title == null) {
+            TypedQuery<AnamnesisCheck> query = em
+                    .createQuery(
+                    		"SELECT c FROM AnamnesisCheck c LEFT OUTER JOIN c.anamnesisCheckTitle AS t WHERE c.text LIKE :q ORDER BY (c.sort_order + coalesce(t.sort_order*100,(c.sort_order * 100) - c.sort_order))",
+//                            "SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q ORDER BY sort_order",
+                            AnamnesisCheck.class);
+            query.setParameter("q", "%" + q + "%");
+            return query.getResultList();
+        } else {
+            TypedQuery<AnamnesisCheck> query = em
+                    .createQuery(
+                    		"SELECT c FROM AnamnesisCheck c LEFT OUTER JOIN c.anamnesisCheckTitle AS t WHERE c.text LIKE :q and c.anamnesisCheckTitle = :title ORDER BY (c.sort_order + coalesce(t.sort_order*100,(c.sort_order * 100) - c.sort_order))",
+//                            "SELECT o FROM AnamnesisCheck AS o WHERE o.text LIKE :q and o.anamnesisCheckTitle = :title ORDER BY sort_order",
+                            AnamnesisCheck.class);
+            query.setParameter("q", "%" + q + "%");
+            query.setParameter("title", title);
+            return query.getResultList();
+        }
+    	
     }
 
     public static List<AnamnesisCheck> findAnamnesisChecksBySearch(String q, int firstResult, int maxResults) {
@@ -728,5 +766,8 @@ public class AnamnesisCheck {
 
 
     private static Logger log = Logger.getLogger(AnamnesisCheck.class);
+    
+    
+    
 
 }

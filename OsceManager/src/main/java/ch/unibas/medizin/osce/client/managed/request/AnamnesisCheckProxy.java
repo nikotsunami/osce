@@ -47,4 +47,9 @@ public interface AnamnesisCheckProxy extends EntityProxy {
     abstract Integer getUserSpecifiedOrder();
 
     abstract void setUserSpecifiedOrder(Integer userSpecifiedOrder);
+    
+    abstract ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy getAnamnesisCheckTitle();
+
+    abstract void setAnamnesisCheckTitle(ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy anamnesisCheckTitle);
+    
 }

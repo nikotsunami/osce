@@ -97,7 +97,8 @@ privileged aspect AnamnesisCheckTitle_Roo_Entity {
     }
     
     public static List<AnamnesisCheckTitle> AnamnesisCheckTitle.findAllAnamnesisCheckTitles() {
-        return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o", AnamnesisCheckTitle.class).getResultList();
+	System.out.println("this is findAllAnamnesisCheckTitles");
+        return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
     }
     
     public static AnamnesisCheckTitle AnamnesisCheckTitle.findAnamnesisCheckTitle(Long id) {

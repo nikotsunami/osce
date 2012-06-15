@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
@@ -30,4 +31,6 @@ public interface AnamnesisCheckRequestNonRoo extends RequestContext {
     public abstract Request<AnamnesisCheckProxy> findAnamnesisChecksBySortOder(int sort_order);
     public abstract Request<AnamnesisCheckProxy> findPreviousTitleBySortOder(int sort_order);
     public abstract Request<Void> normalizeOrder();
+	public abstract Request<List<AnamnesisCheckProxy>> findAnamnesisChecksBySearchWithAnamnesisCheckTitle(String q,AnamnesisCheckTitleProxy title);
+	public abstract Request<List<AnamnesisCheckTitleProxy>> findTitlesContatisAnamnesisChecksWithSearching(String q,AnamnesisCheckTitleProxy title);
 }

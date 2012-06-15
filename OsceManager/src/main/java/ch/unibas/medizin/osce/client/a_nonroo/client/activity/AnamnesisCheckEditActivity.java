@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -28,6 +29,7 @@ import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class AnamnesisCheckEditActivity extends AbstractActivity implements
@@ -80,7 +82,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
+		
 		Log.info("AnamnesisCheckEditActivity.start()");
 		AnamnesisCheckEditView anamnesisCheckEditView = new AnamnesisCheckEditViewImpl();
 
@@ -154,21 +156,21 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	
 	@SuppressWarnings("deprecation")
 	private void initInsideTitle(){
-		requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksByType(AnamnesisCheckTypes.QUESTION_TITLE).with("anamnesisForm","title").fire(new Receiver<List<AnamnesisCheckProxy>>() {
-			public void onFailure(ServerFailure error) {
-				GWT.log("in AnamnesisCheckEditActivity initInsideTitle error = "+error);
-			}
-			
-			@Override
-			public void onSuccess(List<AnamnesisCheckProxy> response) {
-				view.setInsideTitleListBox(response);
-				if(anamnesisCheck.getTitle() != null){
-				view.setSeletedInsideTitle(String.valueOf(anamnesisCheck.getTitle().getId()));
-				}
 
+		requests.anamnesisCheckTitleRequest().findAllAnamnesisCheckTitles().fire(new Receiver<List<AnamnesisCheckTitleProxy>>() {
+
+			@Override
+			public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
+				GWT.log("find titles sucess response size = "+response.size());
+				view.setInsideTitleListBox(response);
+				if(place.getOperation() == Operation.EDIT && anamnesisCheck.getAnamnesisCheckTitle() != null){
+					view.setSeletedInsideTitle(String.valueOf(anamnesisCheck.getAnamnesisCheckTitle().getId()));
+				}else if(place.getOperation() == Operation.CREATE && place.getTitleId() != null){
+					view.setSeletedInsideTitle(String.valueOf(place.getTitleId()));
+
+				}
 			}
 		});
-
 			
 	}
 	

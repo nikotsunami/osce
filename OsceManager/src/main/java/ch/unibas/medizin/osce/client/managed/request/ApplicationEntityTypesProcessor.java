@@ -613,7 +613,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public abstract void handleAnamnesisForm(AnamnesisFormProxy proxy);
 
     public abstract void handleAnamnesisChecksValue(AnamnesisChecksValueProxy proxy);
-
+    
     public abstract void handleAnamnesisCheck(AnamnesisCheckProxy proxy);
 
     public abstract void handleAdvancedSearchCriteria(AdvancedSearchCriteriaProxy proxy);
