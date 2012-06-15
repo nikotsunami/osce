@@ -125,6 +125,21 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
                 return renderer.render(object.getShortBreak());
             }
         }, "Short Break");
+        paths.add("shortBreakSimpatChange");
+        table.addColumn(new TextColumn<OsceProxy>() {
+
+            Renderer<java.lang.Short> renderer = new AbstractRenderer<java.lang.Short>() {
+
+                public String render(java.lang.Short obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(OsceProxy object) {
+                return renderer.render(object.getShortBreakSimpatChange());
+            }
+        }, "Short Break Simpat Change");
         paths.add("longBreak");
         table.addColumn(new TextColumn<OsceProxy>() {
 

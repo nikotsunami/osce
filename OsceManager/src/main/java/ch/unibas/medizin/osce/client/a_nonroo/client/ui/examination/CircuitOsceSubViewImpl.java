@@ -6,15 +6,18 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.ShortBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
@@ -33,6 +36,8 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	interface CircuitOsceSubViewUiBinder extends UiBinder<Widget, CircuitOsceSubViewImpl> {
 	}
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	private Delegate delegate;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -45,6 +50,11 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 
 	public void setProxy(OsceProxy proxy) {
 		this.proxy = proxy;
+		
+	}
+	
+	public void setClearAllBtn(boolean value){
+		clearAllBtn.setEnabled(value);
 	}
 
 	private Presenter presenter;
@@ -97,6 +107,14 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		delegate.saveOsceData(proxy);
 	}
 	
+	@UiField	
+	public Button clearAllBtn;
+	
+	@UiHandler("clearAllBtn")
+	public void clearAllClicked(ClickEvent event){
+		delegate.clearAll(proxy);
+		clearAllBtn.setEnabled(false);
+	}
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -111,7 +129,8 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	public CircuitOsceSubViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-		saveOsce.setText("Save");
+		saveOsce.setText(constants.save());
+		clearAllBtn.setText(constants.clearAll());	
 	}
 
 	public String[] getPaths() {

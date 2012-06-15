@@ -62,6 +62,9 @@ public abstract class OsceEditView_Roo_Gwt extends Composite implements View<Osc
     ShortBox shortBreak;
 
     @UiField
+    ShortBox shortBreakSimpatChange;
+
+    @UiField
     ShortBox longBreak;
 
     @UiField

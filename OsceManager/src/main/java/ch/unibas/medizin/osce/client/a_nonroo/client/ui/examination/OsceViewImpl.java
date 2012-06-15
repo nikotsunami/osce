@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.OsceEditActivity;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -124,7 +125,12 @@ public class OsceViewImpl extends Composite implements  OsceView {
 				}
 				else
 				{
-				String s=""+object.getStudyYear().ordinal();
+					String s=" "+object.getStudyYear()+"."+OsceEditActivity.semester.getSemester();
+					if(object.getIsRepeOsce()==true)
+					{
+						s=s+" rape";
+					}
+				//String s=""+object.getStudyYear().ordinal();
 				return renderer.render(s);
 				}
 			}

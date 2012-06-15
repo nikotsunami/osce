@@ -48,6 +48,9 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
     SpanElement shortBreak;
 
     @UiField
+    SpanElement shortBreakSimpatChange;
+
+    @UiField
     SpanElement longBreak;
 
     @UiField
@@ -108,6 +111,7 @@ public abstract class OsceDetailsView_Roo_Gwt extends Composite implements Proxy
         maxNumberStudents.setInnerText(proxy.getMaxNumberStudents() == null ? "" : String.valueOf(proxy.getMaxNumberStudents()));
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         shortBreak.setInnerText(proxy.getShortBreak() == null ? "" : String.valueOf(proxy.getShortBreak()));
+        shortBreakSimpatChange.setInnerText(proxy.getShortBreakSimpatChange() == null ? "" : String.valueOf(proxy.getShortBreakSimpatChange()));
         longBreak.setInnerText(proxy.getLongBreak() == null ? "" : String.valueOf(proxy.getLongBreak()));
         lunchBreak.setInnerText(proxy.getLunchBreak() == null ? "" : String.valueOf(proxy.getLunchBreak()));
         middleBreak.setInnerText(proxy.getMiddleBreak() == null ? "" : String.valueOf(proxy.getMiddleBreak()));

@@ -139,6 +139,28 @@
         
         
         
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
@@ -162,6 +184,10 @@
         <div id="shortBreak">
             <div class="{style.label}">Short Break</div>
             <div class="{style.value}" ui:field="shortBreak"/>
+        </div>
+        <div id="shortBreakSimpatChange">
+            <div class="{style.label}">Short Break Simpat Change</div>
+            <div class="{style.value}" ui:field="shortBreakSimpatChange"/>
         </div>
         <div id="longBreak">
             <div class="{style.label}">Long Break</div>
