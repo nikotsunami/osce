@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+ <ui:style>
+    .outer {
+      padding: 10px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .value {
+      padding: 4px 0px 15px 15px;
+    }
+  </ui:style>
+
+  <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
+    <div id="id">
+            <div class="{style.label}">Id</div>
+            <div class="{style.value}" ui:field="id"/>
+        </div>
+    <div id="version">
+            <div class="{style.label}">Version</div>
+            <div class="{style.value}" ui:field="version"/>
+        </div>
+    <div id="isPossibleStart">
+            <div class="{style.label}">Is Possible Start</div>
+            <div class="{style.value}" ui:field="isPossibleStart"/>
+        </div>
+    <div id="roleTopic">
+            <div class="{style.label}">Role Topic</div>
+            <div class="{style.value}" ui:field="roleTopic"/>
+        </div>
+    <div id="osce">
+            <div class="{style.label}">Osce</div>
+            <div class="{style.value}" ui:field="osce"/>
+        </div>
+    <div id="oscePosts">
+            <div class="{style.label}">Osce Posts</div>
+            <div class="{style.value}" ui:field="oscePosts"/>
+        </div>
+    <div id="postType">
+            <div class="{style.label}">Post Type</div>
+            <div class="{style.value}" ui:field="postType"/>
+        </div>
+    <div id="specialisation">
+            <div class="{style.label}">Specialisation</div>
+            <div class="{style.value}" ui:field="specialisation"/>
+        </div>
+    <div id="sequenceNumber">
+            <div class="{style.label}">Sequence Number</div>
+            <div class="{style.value}" ui:field="sequenceNumber"/>
+        </div>
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  </g:HTMLPanel>
+</ui:UiBinder>

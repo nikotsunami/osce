@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+	.standardTable input {
+		width: 100%;
+		opacity: 0.8;
+	}
+	</ui:style>
+	<g:HTMLPanel>
+		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
+		<div class="{style.controls}">
+			<b:SimplePager display="{table}" ui:field="pager" />
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>
