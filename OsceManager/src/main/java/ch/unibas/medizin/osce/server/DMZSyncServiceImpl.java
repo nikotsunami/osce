@@ -21,6 +21,7 @@ import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.DMZSyncExceptionType;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import java.lang.reflect.Type;
@@ -65,7 +66,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 						   .transform(new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"), "birthday")
 						   .transform(new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"), "anamnesisForm.createDate")
 						   .serialize(patient);
-					System.out.println(" json data is: "+json);
 					
 				}catch(Exception e){
 					throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
@@ -83,7 +83,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		String data = getDMZDataForPatient(standardizedPatientId);
 		
 		data =preProcessData(data);
-
 		
 		JSONDeserializer deserializer = new JSONDeserializer()
 				.use("anamnesisForm.createDate",
@@ -94,6 +93,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				.use("maritalStatus", new MaritalStatusTransformer())
 				.use("workPermission", new WorkPermissionTransformer())
 				.use("anamnesisForm.anamnesischecksvalues.values.anamnesischeck.title.type", new AnamnesisChecksTypeTransformet())
+				.use("anamnesisForm.scars.values.traitType", new TraitTypeTransformet())
 				.use("anamnesisForm.anamnesischecksvalues.values.anamnesischeck.type", new AnamnesisChecksTypeTransformet());
 		
 		
@@ -148,6 +148,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getNationality() != null){
 					Nationality nationality = Nationality.findNationality(newPatient.getNationality().getId());
+					nationality.setNationality(newPatient.getNationality().getNationality());
 					if(nationality != null){
 						patient.setNationality(nationality);
 					}
@@ -159,6 +160,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getProfession() !=null){
 					Profession profession = Profession.findProfession(newPatient.getProfession().getId());
+					profession.setProfession(newPatient.getProfession().getProfession()); 
+					   
 					if(profession != null){
 						patient.setProfession(profession);
 					}	
@@ -170,6 +173,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getDescriptions() !=null){
 					Description descriptions = Description.findDescription(newPatient.getDescriptions().getId());
+					descriptions.setDescription(newPatient.getDescriptions().getDescription());
 					if(descriptions != null){
 						patient.setDescriptions(descriptions);
 					}	
@@ -182,7 +186,13 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getBankAccount() !=null){
 					Bankaccount bankAccount = Bankaccount.findBankaccount(newPatient.getBankAccount().getId());
-					if(bankAccount != null){
+					bankAccount.setBankName(newPatient.getBankAccount().getBankName());
+					bankAccount.setIBAN(newPatient.getBankAccount().getIBAN());
+					bankAccount.setBIC(newPatient.getBankAccount().getBIC());
+					bankAccount.setOwnerName(newPatient.getBankAccount().getOwnerName());
+					bankAccount.setPostalCode(newPatient.getBankAccount().getPostalCode());
+					bankAccount.setCity(newPatient.getBankAccount().getCity());
+				  	if(bankAccount != null){
 						patient.setBankAccount(bankAccount);
 					}	
 				}
@@ -295,7 +305,10 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		data = data.replaceAll("anamnesisChecksValues","anamnesischecksvalues");
 		data = data.replaceAll("\"anamnesisCheck\"","\"anamnesischeck\"");
 		data = data.replaceAll("\"_ref\"","\"ignoreMe\"");
-		
+		data = data.replaceAll("\"iban\"","\"IBAN\"");
+		data = data.replaceAll("\"bic\"","\"BIC\"");
+//		data = data.replaceAll("\"description\":{","\"descriptions\":{");
+
 		return data;
 
 	}
@@ -384,6 +397,22 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 	
+	private class TraitTypeTransformet implements ObjectFactory {
+		public Object instantiate(ObjectBinder context, Object value,
+				Type targetType, Class targetClass) {
+			Integer valueI = (Integer) value;
+			if (valueI == 0) {
+				return TraitTypes.SCAR;
+			} else if(valueI == 1){
+				return TraitTypes.TATTOO;
+			} else if(valueI == 2){
+				return TraitTypes.NOT_TO_EXAMINE;
+			} else {
+				return null;
+			}
+			
+		}
+	}
 
 	
 
