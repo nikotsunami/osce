@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
-import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;

@@ -18,11 +18,11 @@ public interface AnamnesisChecksValueRequestNonRoo extends RequestContext {
 	
 	public abstract Request<Void> fillAnamnesisChecksValues(Long anamnesisFormId);
 	
-	public abstract Request<Long> countAllAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle);
-	public abstract Request<Long> countAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle);
-	public abstract Request<Long> countUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle);
+	public abstract Request<Long> countAllAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle);
+	public abstract Request<Long> countAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle);
+	public abstract Request<Long> countUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle);
 	
-    public abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle, int firstResult, int maxResults);
-    public abstract Request<List<AnamnesisChecksValueProxy>> findAnsweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle, int firstResult, int maxResults);
-    public abstract Request<List<AnamnesisChecksValueProxy>> findUnansweredAnamnesisChecksValuesByAnamnesisForm(Long anamnesisFormId, String needle, int firstResult, int maxResults);
+    public abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
+    public abstract Request<List<AnamnesisChecksValueProxy>> findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
+    public abstract Request<List<AnamnesisChecksValueProxy>> findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
 }
