@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -61,8 +62,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 
@@ -473,7 +476,22 @@ public class AnamnesisCheckViewImpl extends Composite implements
 			GWT.log("################title text : "+anamnesisCheckTitleProxy.getText());
 			AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(anamnesisCheckTitleProxy);
 			final ListDataProvider<AnamnesisCheckProxy> dataProvider = new ListDataProvider<AnamnesisCheckProxy>();
+			final SingleSelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
 			anamnesisCheckTable.setDataProvider(dataProvider);
+			anamnesisCheckTable.setSelectionModel(selectionModel);
+			anamnesisCheckTable.setDelegate(delegate);
+			selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler(){
+
+				@Override
+				public void onSelectionChange(SelectionChangeEvent event) {
+					AnamnesisCheckProxy selectedObject = selectionModel.getSelectedObject();
+					if (selectedObject != null) {						
+						delegate.showDetails(selectedObject);
+					}
+					
+				}
+				
+			});
 			CellTable<AnamnesisCheckProxy> cellTable = anamnesisCheckTable.initTable();
 			
 			
@@ -519,8 +537,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 			horizontalPanel.add(iconImage);
 			horizontalPanel.add(label);
 			horizontalPanel.add(addBtnButton);
-			horizontalPanel.add(moveUp);
-			horizontalPanel.add(moveDown);
+//			horizontalPanel.add(moveUp);
+//			horizontalPanel.add(moveDown);
 			
 			DisclosurePanel advancedDisclosure = new DisclosurePanel(horizontalPanel);
 			advancedDisclosure.setAnimationEnabled(true);
@@ -538,9 +556,9 @@ public class AnamnesisCheckViewImpl extends Composite implements
 //					iconImage.removeStyleName("closeIcon");
 //					iconImage.setStyleName("openIcon");
 					iconImage.setResource(anamnesisCheckImageResources.downImage());
-					if(isOpen == false){
-					delegate.setQuestionTableData(dataProvider,anamnesisCheckTitleProxy);
-					}
+//					if(isOpen == false){
+//					delegate.setQuestionTableData(dataProvider,anamnesisCheckTitleProxy);
+//					}
 				}
 			});			
 			advancedDisclosure.addCloseHandler(new CloseHandler<DisclosurePanel>() {
@@ -553,18 +571,18 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				}
 			});
 			
-			if(isOpen){
+//			if(isOpen){
 //				iconImage.setUrl("down.png");
 //				iconImage.removeStyleName("closeIcon");
 //				iconImage.setStyleName("openIcon");
 				advancedDisclosure.setOpen(true);
 				delegate.setQuestionTableData(dataProvider,anamnesisCheckTitleProxy);
 				iconImage.setResource(anamnesisCheckImageResources.downImage());
-			}else{
-//				iconImage.setUrl("right.png");
-//				iconImage.removeStyleName("openIcon");
-//				iconImage.setStyleName("closeIcon");
-			}
+//			}else{
+////				iconImage.setUrl("right.png");
+////				iconImage.removeStyleName("openIcon");
+////				iconImage.setStyleName("closeIcon");
+//			}
 			anamnesisCheckPanel.add(advancedDisclosure);
 		}
 		
