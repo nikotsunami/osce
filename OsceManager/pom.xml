@@ -89,7 +89,15 @@
     </pluginRepositories>
     
     <dependencies>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>1.8.6</version>
+        </dependency>
+    
+    
        <!-- myOwn dependencies for standard applications -->
+             
         <dependency>
 		  <groupId>com.google.code.gwt-log</groupId>
 		  <artifactId>gwt-log</artifactId>
