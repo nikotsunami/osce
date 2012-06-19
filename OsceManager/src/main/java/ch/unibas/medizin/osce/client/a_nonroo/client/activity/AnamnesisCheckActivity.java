@@ -247,20 +247,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 
 
-    /**
-     * Called from the table selection handler
-     *
-     * @param AnamnesisCheck
-     */
-    protected void showDetails(AnamnesisCheckProxy AnamnesisCheck) {
-
-        Log.debug(AnamnesisCheck.getId().toString());
-
-        goTo(new AnamnesisCheckDetailsPlace(AnamnesisCheck.stableId(),
-                Operation.DETAILS));
-    }
-
-
 
 
     @Override
@@ -432,7 +418,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
         for (AnamnesisCheckTitleProxy title : anamnesisCheckTitles) {
         	
-        	GWT.log("*****************************selecte id = "+view.getFilterTitle().getValue(view.getFilterTitle().getSelectedIndex()));
             if (view.getFilterTitle().getSelectedIndex() != -1 && getSelectedTitleId().equals(String.valueOf(title.getId()))) {
                 return title;
             }
@@ -492,12 +477,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     @Override
     public void orderEdited(AnamnesisCheckProxy proxy,
-            String userSpecifiedOrderStr) {
+            String sortOrderStr) {
         AnamnesisCheckRequest req = getRequest();
         AnamnesisCheckProxy editableProxy = req.edit(proxy);
         try {
-            editableProxy.setUserSpecifiedOrder(Integer
-                    .valueOf(userSpecifiedOrderStr));
+            editableProxy.setSort_order(Integer
+                    .valueOf(sortOrderStr));
             req.persist().using(editableProxy);
 
         } catch (Exception e) {
@@ -516,21 +501,21 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     @SuppressWarnings("deprecation")
     @Override
     public void saveOrder() {
-
+    	Window.alert("sava oder");
 
 
         getRequest().fire(new Receiver(){
 
             @Override
             public void onSuccess(Object response) {
-                requests.anamnesisCheckRequestNonRoo().normalizeOrder().fire(new Receiver(){
-
-                    @Override
-                    public void onSuccess(Object response) {
-                        init();
-                    }
-                });
-
+//                requests.anamnesisCheckRequestNonRoo().normalizeOrder().fire(new Receiver(){
+//
+//                    @Override
+//                    public void onSuccess(Object response) {
+//                        init();
+//                    }
+//                });
+            	goToAnamesisCheckPlace();
 
             }
 
@@ -578,4 +563,19 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		// TODO Auto-generated method stub
 		
 	}
+	
+    /**
+     * Called from the table selection handler
+     *
+     * @param anamnesisCheck
+     */
+	@Override
+    public void showDetails(AnamnesisCheckProxy anamnesisCheck) {
+
+        Log.debug(anamnesisCheck.getId().toString());
+
+        goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
+                Operation.DETAILS));
+    }
+	
 }

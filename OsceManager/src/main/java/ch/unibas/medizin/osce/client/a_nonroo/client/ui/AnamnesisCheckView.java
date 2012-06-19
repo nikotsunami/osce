@@ -34,10 +34,12 @@ public interface AnamnesisCheckView extends IsWidget{
 //		void changeNumRowShown(String selectedValue);
 		void changeFilterTitleShown(String selectedTitle);
 		void saveOrder();
-		void orderEdited(AnamnesisCheckProxy proxy, String userSpecifiedOrder); // paul
+		void orderEdited(AnamnesisCheckProxy proxy, String sortOrder); 
 //		void resetUserSpecifiedOrder(AnamnesisCheckProxy anamnesisCheck, String value);
 		
 		void setQuestionTableData(ListDataProvider<AnamnesisCheckProxy> dataProvider, AnamnesisCheckTitleProxy title);
+		
+		void showDetails(AnamnesisCheckProxy anamnesisCheck);
 	}
 
 //    CellTable<AnamnesisCheckProxy> getTable();

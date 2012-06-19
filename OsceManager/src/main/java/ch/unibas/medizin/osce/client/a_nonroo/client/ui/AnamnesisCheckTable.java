@@ -27,8 +27,10 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 public class AnamnesisCheckTable {
 
@@ -37,7 +39,12 @@ public class AnamnesisCheckTable {
 
 	List<AnamnesisCheckProxy> anamnesisCheckProxyList = new ArrayList<AnamnesisCheckProxy>();
 	AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = null;
+	SelectionModel<AnamnesisCheckProxy> selectionModel = null;
 	private Delegate delegate;
+
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
 
 	public AnamnesisCheckTable(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy) {
 		this.anamnesisCheckTitleProxy = anamnesisCheckTitleProxy;
@@ -50,7 +57,6 @@ public class AnamnesisCheckTable {
 		cellTable = new CellTable<AnamnesisCheckProxy>(15, tableResources);
 		cellTable.setStyleName("standardTable");
 		
-		SelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
 		cellTable.setSelectionModel(selectionModel);
 
 		// Add colum
@@ -196,6 +202,10 @@ public class AnamnesisCheckTable {
 
 	public void setDataProvider(ListDataProvider<AnamnesisCheckProxy> dataProvider) {
 		this.dataProvider = dataProvider;
+	}
+
+	public void setSelectionModel(SelectionModel<AnamnesisCheckProxy> selectionModel) {
+		this.selectionModel = selectionModel;
 	}
 
 }
