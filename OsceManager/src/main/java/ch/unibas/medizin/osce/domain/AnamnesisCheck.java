@@ -422,8 +422,11 @@ public class AnamnesisCheck {
     	List<AnamnesisCheck> reSortingList = getReSortingList(anamnesisCheckTitle, sortFrom);
     	if(reSortingList != null){
     		for (AnamnesisCheck check : reSortingList) {
-    			check.sort_order = check.sort_order - 1;
-    			check.persist();
+    			if(check.sort_order != null){
+    				check.sort_order = check.sort_order - 1;
+    				check.persist();
+    			}
+    			
     		}
     	}
     }
@@ -468,8 +471,10 @@ public class AnamnesisCheck {
 		List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(
 				preSortorder + 1, this.sort_order - 1, this.anamnesisCheckTitle);
 		for (AnamnesisCheck check : checksBelow) {
-			check.sort_order = check.sort_order + 1;
-			check.persist();
+			if(check.sort_order != null){
+				check.sort_order = check.sort_order + 1;
+				check.persist();
+			}
 		}
 
 		setSort_order(preSortorder + 1);
@@ -487,8 +492,10 @@ public class AnamnesisCheck {
 		List<AnamnesisCheck> checksBelow = findAnamnesisChecksBySortOderBetween(
 				this.sort_order + 1, preSortorder, this.anamnesisCheckTitle);
 		for (AnamnesisCheck check : checksBelow) {
-			check.sort_order = check.sort_order - 1;
-			check.persist();
+			if(check.sort_order != null){
+				check.sort_order = check.sort_order - 1;
+				check.persist();
+			}
 		}
 
 		setSort_order(preSortorder);

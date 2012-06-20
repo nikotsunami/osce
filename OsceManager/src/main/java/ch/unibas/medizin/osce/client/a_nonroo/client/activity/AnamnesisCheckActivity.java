@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckTitleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
@@ -561,6 +562,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	@Override
 	public void newTitleClicked() {
 		// TODO Auto-generated method stub
+		goTo(new AnamnesisCheckTitleDetailsPlace(Operation.CREATE));
 		
 	}
 	

@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
+import ch.unibas.medizin.osce.client.style.resources.AnamnesisTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 
@@ -53,7 +54,7 @@ public class AnamnesisCheckTable {
 	public CellTable<AnamnesisCheckProxy> initTable() {
 //		cellTable.setWidth("100%");
 		CellTable.Resources tableResources = GWT
-		.create(MyCellTableResources.class);
+		.create(AnamnesisTableResources.class);
 		cellTable = new CellTable<AnamnesisCheckProxy>(15, tableResources);
 		cellTable.setStyleName("standardTable");
 		
