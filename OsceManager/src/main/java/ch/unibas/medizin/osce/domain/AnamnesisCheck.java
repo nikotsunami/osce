@@ -395,7 +395,7 @@ public class AnamnesisCheck {
         Integer result = q.getSingleResult();
 
         if (result == null){
-            result = title.sort_order;
+            result = 0;
         }
 
         return result;
@@ -403,20 +403,23 @@ public class AnamnesisCheck {
     
     //new 
     //when change the title of question and the question is edit
-    private static List<AnamnesisCheck> getReSortingList(AnamnesisCheckTitle anamnesisCheckTitle, Integer sortFrom){
-    	  EntityManager em = AnamnesisCheck.entityManager();
-          TypedQuery<AnamnesisCheck> q = em.createQuery(
-        		  "SELECT o FROM AnamnesisCheck AS o WHERE o.anamnesisCheckTitle = :anamnesisCheckTitle and o.sort_order >= :sortFrom ORDER BY sort_order ASC", AnamnesisCheck.class);
-          q.setParameter("anamnesisCheckTitle", anamnesisCheckTitle);
-          q.setParameter("sortFrom", sortFrom);
-          if (q.getResultList() == null || q.getResultList().size() == 0){
-              return null;
-          }
+	private static List<AnamnesisCheck> getReSortingList(
+			AnamnesisCheckTitle anamnesisCheckTitle, Integer sortFrom) {
 
+		EntityManager em = AnamnesisCheck.entityManager();
+		TypedQuery<AnamnesisCheck> q = em
+				.createQuery(
+						"SELECT o FROM AnamnesisCheck AS o WHERE o.anamnesisCheckTitle = :anamnesisCheckTitle and o.sort_order >= :sortFrom ORDER BY sort_order ASC",
+						AnamnesisCheck.class);
+		q.setParameter("anamnesisCheckTitle", anamnesisCheckTitle);
+		q.setParameter("sortFrom", sortFrom);
+		if (q.getResultList() == null || q.getResultList().size() == 0) {
+			return null;
+		}
 
-          return q.getResultList();
+		return q.getResultList();
 
-    }
+	}
     
     public static void reSorting(AnamnesisCheckTitle anamnesisCheckTitle, Integer sortFrom){
     	List<AnamnesisCheck> reSortingList = getReSortingList(anamnesisCheckTitle, sortFrom);
@@ -434,15 +437,11 @@ public class AnamnesisCheck {
     //new 
     public void insertAnamnesisCheck(int preSortorder){
 
-//    	 if(preSortorder == 0){
-//         	 //TODO put this AnamnesisCheck first
-//    		 
-//         }else{
-//        	 //TODO insert this AnamnesisCheck  on preSortorder+1
-//         }
+
     	//put this AnamnesisCheck last in title
     		int maxSortOder = getMaxSortOderInTitle(this.anamnesisCheckTitle);
     		this.sort_order = maxSortOder + 1;
+    		this.persist();
     	//oderByPreviousAnamnesisCheck
     		oderByPreviousAnamnesisCheck(preSortorder);
     }

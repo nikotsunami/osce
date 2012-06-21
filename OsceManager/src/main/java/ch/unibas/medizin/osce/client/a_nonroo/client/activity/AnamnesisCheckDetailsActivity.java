@@ -150,22 +150,49 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void deleteClicked() {
-		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
+		if (!Window
+				.confirm("Really delete this entry? You cannot undo this change.")) {
 			return;
 		}
-		requests.anamnesisCheckRequest().remove().using(anamnesisCheckProxy).fire(new Receiver<Void>() {
+		requests.anamnesisCheckRequest().remove().using(anamnesisCheckProxy)
+				.fire(new Receiver<Void>() {
 
-			public void onSuccess(Void ignore) {
-//				if (widget == null) {
-//					return;
-//				}
-				if(widget !=null){
-					widget.setWidget(null);
-				}
-				placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace!DELETED"));
-			}
-		});
+					public void onSuccess(Void ignore) {
+						// if (widget == null) {
+						// return;
+						// }
+						// TODO
+						if (anamnesisCheckProxy.getAnamnesisCheckTitle() != null
+								&& anamnesisCheckProxy.getSort_order() != null) {
+							requests.anamnesisCheckRequestNonRoo().reSorting(
+									anamnesisCheckProxy
+											.getAnamnesisCheckTitle(),
+									anamnesisCheckProxy.getSort_order()).fire(
+									new Receiver<Void>() {
+
+										@Override
+										public void onSuccess(Void response) {
+											if (widget != null) {
+												widget.setWidget(null);
+											}
+											placeController
+													.goTo(new AnamnesisCheckPlace(
+															"AnamnesisCheckPlace!DELETED"));
+										}
+
+									});
+						} else {
+							if (widget != null) {
+								widget.setWidget(null);
+							}
+							placeController.goTo(new AnamnesisCheckPlace(
+									"AnamnesisCheckPlace!DELETED"));
+						}
+
+					}
+				});
 	}
 }

@@ -107,10 +107,12 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     AssignmentRequest assignmentRequest();
 
     AnamnesisFormRequest anamnesisFormRequest();
+    
+    AnamnesisCheckTitleRequest anamnesisCheckTitleRequest();
 
     AnamnesisChecksValueRequest anamnesisChecksValueRequest();
 
-    AnamnesisCheckTitleRequest anamnesisCheckTitleRequest();
+    //AnamnesisCheckTitleRequest anamnesisCheckTitleRequest();
 
     AnamnesisCheckRequest anamnesisCheckRequest();
     

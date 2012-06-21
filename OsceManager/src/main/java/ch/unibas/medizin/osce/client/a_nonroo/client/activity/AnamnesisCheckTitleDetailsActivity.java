@@ -119,34 +119,44 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void deleteClicked() {
-//		if (!Window
-//				.confirm("Really delete this entry? You cannot undo this change.")) {
-//			return;
-//		}
-		//
-		requests.anamnesisCheckTitleRequest().remove()
-				.using(anamnesisCheckTitleProxy).fire(new Receiver<Void>() {
+		if (!Window
+				.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}
 
-					public void onSuccess(Void ignore) {
-						// if (widget == null) {
-						// return;
-						if (widget != null) {
-							widget.setWidget(null);
-						}
-						if (!Window
-								.confirm("Really delete this entry? You cannot undo this change.")) {
-							return;
-						}
-						placeController.goTo(new AnamnesisCheckPlace());
-						// }
+		requests.anamnesisCheckTitleRequest().remove().using(
+				anamnesisCheckTitleProxy).fire(new Receiver<Void>() {
 
+			public void onSuccess(Void ignore) {
+				if (anamnesisCheckTitleProxy.getSort_order() != null) {
+					requests.anamnesisCheckTitleRequestNonRoo().reSorting(
+							anamnesisCheckTitleProxy.getSort_order()).fire(
+							new Receiver<Void>() {
+
+								@Override
+								public void onSuccess(Void response) {
+									if (widget != null) {
+										widget.setWidget(null);
+									}
+									placeController
+											.goTo(new AnamnesisCheckPlace());
+								}
+							});
+				} else {
+					if (widget != null) {
+						widget.setWidget(null);
 					}
-					public void onFailure(ServerFailure error) {
-						Window.alert("Don't delete this Title");
-					}
+					placeController.goTo(new AnamnesisCheckPlace());
+				}
+			}
 
-				});
+			public void onFailure(ServerFailure error) {
+				Window
+						.alert("You can not delete this title,please make sure the question belongs this title has been moved.");
+			}
+		});
 	}
 }

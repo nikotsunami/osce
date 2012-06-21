@@ -52,7 +52,6 @@ public class AnamnesisCheckTable {
 	}
 
 	public CellTable<AnamnesisCheckProxy> initTable() {
-//		cellTable.setWidth("100%");
 		CellTable.Resources tableResources = GWT
 		.create(AnamnesisTableResources.class);
 		cellTable = new CellTable<AnamnesisCheckProxy>(15, tableResources);
