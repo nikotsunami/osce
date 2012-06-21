@@ -460,7 +460,12 @@ public interface OsceConstants extends Constants {
     
     public String clearAll();
     
+// 5C: SPEC START
     
+    public String select();
+    
+    public String deleteOsceBluePrintPost();
+    // 5C: SPEC END
    
 	
 }

@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,7 +31,8 @@ public class OsceSequence {
 	 private Set<Course> courses = new HashSet<Course>();
 	 
 	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceSequence")
-	 private Set<OscePost> oscePosts = new HashSet<OscePost>();
+	 @OrderBy("sequenceNumber")
+	 private List<OscePost> oscePosts = new ArrayList<OscePost>();
 	 
 	
 }

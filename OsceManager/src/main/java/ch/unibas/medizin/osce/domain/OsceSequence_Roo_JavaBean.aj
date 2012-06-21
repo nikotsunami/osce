@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import java.lang.Integer;
 import java.lang.String;
+import java.util.List;
 import java.util.Set;
 
 privileged aspect OsceSequence_Roo_JavaBean {
@@ -44,11 +45,11 @@ privileged aspect OsceSequence_Roo_JavaBean {
         this.courses = courses;
     }
     
-    public Set<OscePost> OsceSequence.getOscePosts() {
+    public List<OscePost> OsceSequence.getOscePosts() {
         return this.oscePosts;
     }
     
-    public void OsceSequence.setOscePosts(Set<OscePost> oscePosts) {
+    public void OsceSequence.setOscePosts(List<OscePost> oscePosts) {
         this.oscePosts = oscePosts;
     }
     

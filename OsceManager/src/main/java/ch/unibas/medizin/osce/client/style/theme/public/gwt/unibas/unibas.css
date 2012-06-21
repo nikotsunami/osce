@@ -2131,3 +2131,122 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 .Osce_Closed_Status{
         background-color: #FFCCCC;
 }
+
+
+.Osce-Status{
+       /* background-color: #E6FFE6;*/
+}
+.Osce-Status-NEW{
+         background-color: #E6FFE6;
+}
+.Osce-Status-BluePrint{
+        background-color: 	#CCE0FF;
+}
+.Osce-Status-BluePrint-Save{
+        background-color: 	rgb(168,203,255);
+}
+.Osce-Status-BluePrint-Create{
+		 background-color: 	rgb(193,218,255);
+}
+.Osce-Status-Genrated{
+        background-color:	#EBCCEB;
+}
+.Osce-Status-Fixed{
+        background-color : #FAF0E6;
+}
+.Osce-Status-Closed{
+        background-color: #FFCCCC;
+}
+
+/* Assignment E:Module 5] */
+.accordion-title {
+/*background: #EFEFE3 url(gray-bg.gif) repeat-x scroll 0%;*/
+border: 0pt none;
+padding: 3px;
+/*color: white;*/
+font-weight: bold;
+font-size: 10px;
+
+}
+
+
+.accordion-title-selectedred {
+background: rgb(243,216,220) ;
+}
+.accordion-title-selectedwhite {
+background: white ;
+}
+.accordion-title-selectedgreen {
+background: rgb(214,240,213) ;
+}
+.accordion-title-selectedblue {
+background: rgb(218,224,241) ;
+}
+
+.accordion-title-selectedyellow {
+background: rgb(255,255,204)  ;
+}
+
+
+.cource-color-red{
+	background: red;
+}
+
+.cource-color-green{
+	background: green;
+}
+.cource-color-white{
+	background: white;
+}
+.cource-color-blue{
+	background: blue;
+}
+.accordion {
+/*width: 300px;*/
+
+}
+
+.verticalText{
+   -moz-transform: rotate(-90deg) translate(0, 100%);
+   -moz-transform-origin: 0% 100%;
+   -o-transform: rotate(-90deg) translate(0, 100%);
+   -o-transform-origin: 0% 100%;
+   -webkit-transform: rotate(-90deg) translate(0, 100%);
+   -webkit-transform-origin: 0% 100%;
+   transform: rotate(-90deg) translate(0, 100%);
+   transform-origin: 0% 100%;	
+}
+.tabStyle { /*position: relative;*/
+	margin: 8px auto;
+	width: 98%;
+}
+.patientTopContainer{
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;	
+}
+.gwt-Button {
+	outline-style: none !important;
+	margin: 0;
+	padding: 3px 6px 3px 0;
+	text-decoration: none !important;
+	cursor: pointer;
+	cursor: hand;
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	border: 1px solid #999;
+	
+	height: 23px;
+	
+	font-size: 90%;
+	align:center;
+	-moz-border-radius: 4px;
+}
+
+/* Assignment E:Module 5] */

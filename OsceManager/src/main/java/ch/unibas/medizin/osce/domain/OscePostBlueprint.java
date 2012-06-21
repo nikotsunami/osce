@@ -36,7 +36,7 @@ public class OscePostBlueprint
     @Enumerated
     PostType postType;
   
-	@NotNull
+	
 	@ManyToOne	   
 	private Specialisation specialisation;
 

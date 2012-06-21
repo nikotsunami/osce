@@ -1,11 +1,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface CircuitDetailsView extends IsWidget{
+public interface OscePostBluePrintSubView extends IsWidget{
 
 	 public interface Presenter {
 	        void goTo(Place place);
@@ -21,16 +23,9 @@ public interface CircuitDetailsView extends IsWidget{
 	    
 	    void setPresenter(Presenter systemStartActivity);
 
-		CircuitOsceSubViewImpl getcircuitOsceSubViewImpl();
-		
-		//AssignmentE:Module 5[
-		public VerticalPanel getGenerateVP() ;
-		
-		public ScrollPanel getScrollPanel();
-		//AssignmentE:Module 5]
-		
-		//L: SPEC START =
-		OSCENewSubViewImpl getOSCENewSubViewImpl();
-		//L: SPEC END =
+		HorizontalPanel getOscePostBluePrintSubViewImplHP();
 
+		AbsolutePanel getOscePostBluePrintSubViewImplAP();
+
+		public PickupDragController getDragController();
 }

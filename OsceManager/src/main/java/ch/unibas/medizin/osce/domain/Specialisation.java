@@ -40,6 +40,9 @@ public class Specialisation {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "specialisation")
     private Set<Doctor> doctors = new HashSet<Doctor>();
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "specialisation")
+    private Set<OscePostBlueprint> oscePostBlueprint = new HashSet<OscePostBlueprint>();
+    
     public static Long countSpecializations(String name) {
     	Log.info("Inside to fire query to get total count:");
     	EntityManager em = entityManager();

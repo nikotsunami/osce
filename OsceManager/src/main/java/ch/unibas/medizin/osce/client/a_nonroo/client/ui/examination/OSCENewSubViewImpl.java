@@ -7,25 +7,25 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author dk
  *
  */
-public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsView {
+public class OSCENewSubViewImpl extends Composite implements OSCENewSubView {
 
-	private static CircuitDetailsViewUiBinder uiBinder = GWT
-			.create(CircuitDetailsViewUiBinder.class);
+	private static OSCENewSubViewUiBinder uiBinder = GWT
+			.create(OSCENewSubViewUiBinder.class);
 
-	interface CircuitDetailsViewUiBinder extends UiBinder<Widget, CircuitDetailsViewImpl> {
+	interface OSCENewSubViewUiBinder extends UiBinder<Widget, OSCENewSubViewImpl> {
 	}
 
 	private Delegate delegate;
@@ -35,35 +35,19 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	private Presenter presenter;
 	
 	@UiField
-	public CircuitOsceSubViewImpl circuitOsceSubViewImpl;
-	
-	//AssignmentE:Module 5[
-	@UiField
-	VerticalPanel generateVP;
+	HorizontalPanel OSCENewSubViewImplHP;
 	
 	@UiField
-	ScrollPanel scrollPanel;
+	OscePostBluePrintSubViewImpl oscePostBluePrintSubViewImpl;
 	
-	
-	public ScrollPanel getScrollPanel() {
-		return scrollPanel;
-	}
-
-	public VerticalPanel getGenerateVP() {
-		return generateVP;
-	}
-
-	public void setGenerateVP(VerticalPanel generateVP) {
-		this.generateVP = generateVP;
-	}
-	//Assignment E:Modlule 5]
-	
-	
+		
 	@Override
-	public CircuitOsceSubViewImpl getcircuitOsceSubViewImpl(){
-		return this.circuitOsceSubViewImpl;
+	public OscePostBluePrintSubViewImpl getOscePostBluePrintSubViewImpl()
+	{
+		Log.info("Call getOscePostBluePrintSubViewImpl()");
+		return this.oscePostBluePrintSubViewImpl;
 	}
-
+	
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -75,10 +59,15 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
-	public CircuitDetailsViewImpl() {
+	
+	@Override
+	public HorizontalPanel getOSCENewSubViewImplHP()
+	{
+		return this.OSCENewSubViewImplHP;
+	}
+	
+	public OSCENewSubViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-		
-		//DOM.setAttribute(this.getElement(),"overflow","auto");
 		init();
 	}
 
@@ -101,19 +90,5 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	}
 	
 		
-	// L: SPEC START =	
-		//@UiField
-		public OSCENewSubViewImpl oSCENewSubViewImpl;
-		// L: SPEC END =
-		
-			
-		
-		
-			
-		// L: SPEC START =
-		@Override
-		public OSCENewSubViewImpl getOSCENewSubViewImpl(){
-			return this.oSCENewSubViewImpl;
-		}
-		// L: SPEC END =
+	
 }
