@@ -143,28 +143,28 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 			labelValue.setInnerText("");
 		}
 		
-		if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
-			GWT.log("in AnamnesisCheckDetailsViewImpl setValue type is QUESTION_TITLE");
-			labelTitle.setInnerText("");
-			title.setInnerText("");
-		}else{
-			if(proxy.getTitle()!=null){
-				String titleTextString = proxy.getTitle().getText();
+//		if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
+//			GWT.log("in AnamnesisCheckDetailsViewImpl setValue type is QUESTION_TITLE");
+//			labelTitle.setInnerText("");
+//			title.setInnerText("");
+//		}else{
+			if(proxy.getAnamnesisCheckTitle()!=null){
+				String titleTextString = proxy.getAnamnesisCheckTitle().getText();
 				labelTitle.setInnerText(constants.insideTitle());
 			    title.setInnerText(titleTextString == null ? "" : String.valueOf(titleTextString));
 			}else{
 				labelTitle.setInnerText(constants.insideTitle());
 				title.setInnerText(constants.noTitle());
 			}
-		}
+//		}
 		
 		
-	    if(proxy.getSort_order()!=null&&proxy.getSort_order()!=1){
-	    	if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
-	    	labelPrevious.setInnerText(constants.previousTitle());
-	    	}else{
-	    		labelPrevious.setInnerText(constants.previousQuestion());
-	    	}
+	    if(proxy.getSort_order() != null && proxy.getSort_order() > 1){
+//	    	if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
+//	    	labelPrevious.setInnerText(constants.previousTitle());
+//	    	}else{
+	    	labelPrevious.setInnerText(constants.previousQuestion());
+//	    	}
 		    previous.setInnerText(previousAnamnesisCheckText == null ? "" : String.valueOf(previousAnamnesisCheckText));
 	    }else{
 	    	labelPrevious.setInnerText("");

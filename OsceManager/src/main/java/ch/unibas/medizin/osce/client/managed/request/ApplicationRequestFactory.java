@@ -113,7 +113,7 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
     AnamnesisCheckTitleRequest anamnesisCheckTitleRequest();
 
     AnamnesisCheckRequest anamnesisCheckRequest();
-
+    
     AdvancedSearchCriteriaRequest advancedSearchCriteriaRequest();
 
     AdministratorRequest administratorRequest();

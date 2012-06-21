@@ -6,6 +6,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.allen_sauer.gwt.log.client.SystemLogger;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -54,7 +56,23 @@ public class AnamnesisCheckTitle {
 		return true;
 	}
 
-	public static List<AnamnesisCheckTitle> findAllAnamnesisCheckTitles() {
+    public static List<AnamnesisCheckTitle> findAllAnamnesisCheckTitles() {
         return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
+    }
+    
+    public void insertNewSortOder(Integer previousSortOder){
+    	//TODO 
+    	System.out.println("!!!!!!!!!!!!!!!!this is insertNewSortOder ");
+    	if(previousSortOder == 0){
+    	List<AnamnesisCheckTitle> anamnesisCheckTitles = findAllAnamnesisCheckTitles();
+    	for(AnamnesisCheckTitle anamnesisCheckTitleBlow : anamnesisCheckTitles){
+    		if(anamnesisCheckTitleBlow.sort_order != null){
+    			anamnesisCheckTitleBlow.sort_order = anamnesisCheckTitleBlow.sort_order + 1;
+    			anamnesisCheckTitleBlow.persist();
+    		}
+    	}
+    	this.sort_order = 1;
+    	this.persist();
+    	}
     }
 }
