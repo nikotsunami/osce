@@ -6,6 +6,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.allen_sauer.gwt.log.client.SystemLogger;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -54,7 +56,53 @@ public class AnamnesisCheckTitle {
 		return true;
 	}
 
-	public static List<AnamnesisCheckTitle> findAllAnamnesisCheckTitles() {
-        return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
+    
+    
+    public void insertNewSortOder(Integer previousSortOder){
+    	//TODO 
+    	System.out.println("!!!!!!!!!!!!!!!!this is insertNewSortOder ");
+    	if(previousSortOder == 0){
+    	List<AnamnesisCheckTitle> anamnesisCheckTitles = findAllAnamnesisCheckTitles();
+    	for(AnamnesisCheckTitle anamnesisCheckTitleBlow : anamnesisCheckTitles){
+    		if(anamnesisCheckTitleBlow.sort_order != null){
+    			anamnesisCheckTitleBlow.sort_order = anamnesisCheckTitleBlow.sort_order + 1;
+    			anamnesisCheckTitleBlow.persist();
+    		}
+    	}
+    	this.sort_order = 1;
+    	this.persist();
+    	}
+    }
+    
+    
+    
+	private static List<AnamnesisCheckTitle> getReSortingList(Integer sortFrom) {
+
+		System.out.println(">>>>>>>>>sortFrom = "+sortFrom);
+		EntityManager em = AnamnesisCheck.entityManager();
+		TypedQuery<AnamnesisCheckTitle> q = em
+				.createQuery(
+						"SELECT o FROM AnamnesisCheckTitle AS o WHERE o.sort_order >= :sortFrom ORDER BY sort_order ASC",
+						AnamnesisCheckTitle.class);
+		q.setParameter("sortFrom", sortFrom);
+		if (q.getResultList() == null || q.getResultList().size() == 0) {
+			return null;
+		}
+
+		return q.getResultList();
+
+	}
+    
+    public static void reSorting(Integer sortFrom){
+    	List<AnamnesisCheckTitle> reSortingList = getReSortingList(sortFrom);
+    	if(reSortingList != null){
+    		for (AnamnesisCheckTitle checkTitle : reSortingList) {
+    			if(checkTitle.sort_order != null){
+    				checkTitle.sort_order = checkTitle.sort_order - 1;
+    				checkTitle.persist();
+    			}
+    			
+    		}
+    	}
     }
 }
