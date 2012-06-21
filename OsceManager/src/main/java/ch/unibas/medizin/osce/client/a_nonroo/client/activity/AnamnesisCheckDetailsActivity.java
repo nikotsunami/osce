@@ -59,7 +59,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 
 		view.setDelegate(this);
 
-		requests.find(place.getProxyId()).with("title").fire(new Receiver<Object>() {
+		requests.find(place.getProxyId()).with("anamnesisCheckTitle").fire(new Receiver<Object>() {
 
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
@@ -70,15 +70,12 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 				if (response instanceof AnamnesisCheckProxy) {
 					Log.info(((AnamnesisCheckProxy) response).getId().toString());
 					final AnamnesisCheckProxy anamnesisCheckProxy = (AnamnesisCheckProxy) response;
-					int previousSortOrder = -1;
-					if (anamnesisCheckProxy.getSort_order() != null) {
-						previousSortOrder = anamnesisCheckProxy.getSort_order() - 1;
-					}
-					if (anamnesisCheckProxy.getType() != AnamnesisCheckTypes.QUESTION_TITLE) {
-						requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySortOder(previousSortOrder).fire(new Receiver<AnamnesisCheckProxy>() {
-							public void onFailure(ServerFailure error) {
-								Log.error(error.getMessage());
-							}
+//					int sortOrder = -1;
+//					if (anamnesisCheckProxy.getSort_order() != null) {
+//						previousSortOrder = anamnesisCheckProxy.getSort_order() - 1;
+//					}
+					if(anamnesisCheckProxy.getSort_order() != null && anamnesisCheckProxy.getSort_order() > 1 && anamnesisCheckProxy.getAnamnesisCheckTitle() !=null ){
+						requests.anamnesisCheckRequestNonRoo().findPreviousAnamnesisCheck(anamnesisCheckProxy.getSort_order(), anamnesisCheckProxy.getAnamnesisCheckTitle()).fire(new Receiver<AnamnesisCheckProxy>() {
 
 							@Override
 							public void onSuccess(AnamnesisCheckProxy response) {
@@ -86,30 +83,48 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 								if (response != null) {
 									previousAnamnesisCheckText = response.getText();
 								}
-								init(anamnesisCheckProxy, previousAnamnesisCheckText);
-
+								init(anamnesisCheckProxy, previousAnamnesisCheckText);					
 							}
 						});
-					} else {
-						if(anamnesisCheckProxy.getSort_order()!=null){
-						requests.anamnesisCheckRequestNonRoo().findPreviousTitleBySortOder(anamnesisCheckProxy.getSort_order()).fire(new Receiver<AnamnesisCheckProxy>() {
-							public void onFailure(ServerFailure error) {
-								Log.error(error.getMessage());
-							}
-
-							@Override
-							public void onSuccess(AnamnesisCheckProxy response) {
-								String previousAnamnesisCheckText = "";
-								if (response != null) {
-									previousAnamnesisCheckText = response.getText();
-								}
-								init(anamnesisCheckProxy, previousAnamnesisCheckText);								
-							}
-						});
-						}else{
-							init(anamnesisCheckProxy, "");
-						}
+					}else{
+						init(anamnesisCheckProxy, "");
 					}
+//					if (anamnesisCheckProxy.getType() != AnamnesisCheckTypes.QUESTION_TITLE) {
+//						requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySortOder(previousSortOrder).fire(new Receiver<AnamnesisCheckProxy>() {
+//							public void onFailure(ServerFailure error) {
+//								Log.error(error.getMessage());
+//							}
+//
+//							@Override
+//							public void onSuccess(AnamnesisCheckProxy response) {
+//								String previousAnamnesisCheckText = "";
+//								if (response != null) {
+//									previousAnamnesisCheckText = response.getText();
+//								}
+//								init(anamnesisCheckProxy, previousAnamnesisCheckText);
+//
+//							}
+//						});
+//					} else {
+//						if(anamnesisCheckProxy.getSort_order()!=null){
+//						requests.anamnesisCheckRequestNonRoo().findPreviousTitleBySortOder(anamnesisCheckProxy.getSort_order()).fire(new Receiver<AnamnesisCheckProxy>() {
+//							public void onFailure(ServerFailure error) {
+//								Log.error(error.getMessage());
+//							}
+//
+//							@Override
+//							public void onSuccess(AnamnesisCheckProxy response) {
+//								String previousAnamnesisCheckText = "";
+//								if (response != null) {
+//									previousAnamnesisCheckText = response.getText();
+//								}
+//								init(anamnesisCheckProxy, previousAnamnesisCheckText);								
+//							}
+//						});
+//						}else{
+//							init(anamnesisCheckProxy, "");
+//						}
+//					}
 
 				}
 			}

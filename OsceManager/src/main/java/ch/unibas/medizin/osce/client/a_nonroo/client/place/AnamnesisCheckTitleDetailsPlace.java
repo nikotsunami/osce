@@ -10,8 +10,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
-public class AnamnesisCheckDetailsPlace extends OsMaDetailsPlace {
-	private String token = "AnamnesisCheckDetailsPlace";
+public class AnamnesisCheckTitleDetailsPlace extends OsMaDetailsPlace {
+	
+	private String token = "AnamnesisCheckTitleDetailsPlace";
 	private static final String SEPARATOR = "!";
 	private EntityProxyId<?> proxyId;
 	private Operation operation = null;
@@ -21,36 +22,38 @@ public class AnamnesisCheckDetailsPlace extends OsMaDetailsPlace {
 		return proxyId;
 	}
 
-	public AnamnesisCheckDetailsPlace(){
+	public AnamnesisCheckTitleDetailsPlace(){
 	}
 	
-	public AnamnesisCheckDetailsPlace(EntityProxyId<?> record) {
+	public AnamnesisCheckTitleDetailsPlace(EntityProxyId<?> record) {
 		this(record, Operation.DETAILS);
 	}
 	
-	public AnamnesisCheckDetailsPlace(Operation operation) {
+	public AnamnesisCheckTitleDetailsPlace(Operation operation) {
 		this.operation = operation;
 	}
+	public AnamnesisCheckTitleDetailsPlace(Operation operation,String titleId) {
+		this.operation = operation;
+		this.titleId=titleId;
+	}
+	
+	
 
-    public AnamnesisCheckDetailsPlace(EntityProxyId<?> stableId, Operation operation) {
+    public AnamnesisCheckTitleDetailsPlace(EntityProxyId<?> stableId, Operation operation) {
 		this.operation = operation;
 		proxyId = stableId;
 	}
     
-    public AnamnesisCheckDetailsPlace(Operation operation, String titleId) {
-		this.operation = operation;
-		this.titleId = titleId;
-	}
 
-	public String getTitleId() {
+    public String getTitleId() {
 		return titleId;
 	}
-	
+    
 	public Operation getOperation() {
 		return operation;
 	}
 	
-	public AnamnesisCheckDetailsPlace(String token){
+	public AnamnesisCheckTitleDetailsPlace(String token){
 		this.token = token;
 	}
 
@@ -64,47 +67,45 @@ public class AnamnesisCheckDetailsPlace extends OsMaDetailsPlace {
 	
 	@Override
 	public String toString() {
-		return "AnamnesisCheckDetailsPlace";
+		return "AnamnesisCheckTitleDetailsPlace";
 	}
 
 	/**
 	 * Tokenizer.
 	 */
 
-	public static class Tokenizer implements PlaceTokenizer<AnamnesisCheckDetailsPlace> {
+	public static class Tokenizer implements PlaceTokenizer<AnamnesisCheckTitleDetailsPlace> {
 		private final RequestFactory requests;
 
 		public Tokenizer(RequestFactory requests) {
-			Log.debug("AnamnesisCheckDetailsPlace.Tokenizer");
+			System.err.println("AnamnesisCheckTitleDetailsPlace.Tokenizer");
 			this.requests = requests;
 		}
 
-		public AnamnesisCheckDetailsPlace getPlace(String token) {
-			Log.debug("AnamnesisCheckDetailsPlace.Tokenizer.getPlace");
+		public AnamnesisCheckTitleDetailsPlace getPlace(String token) {
+			System.err.println("AnamnesisCheckTitleDetailsPlace.Tokenizer.getPlace");
 			String bits[] = token.split(SEPARATOR);
 			Operation operation = Operation.valueOf(bits[1]);
 			
-			GWT.log(">>>>>>>>>>>>>>>>>>>>>>>>in AnamnesisCheckDetailsPlace titleId = "+titleId);
 
 			if (Operation.DETAILS == operation) {
-				return new AnamnesisCheckDetailsPlace(requests.getProxyId(bits[0]), Operation.DETAILS);
+				return new AnamnesisCheckTitleDetailsPlace(requests.getProxyId(bits[0]), Operation.DETAILS);
 			}
 			if (Operation.EDIT == operation) {
-				return new AnamnesisCheckDetailsPlace(requests.getProxyId(bits[0]), Operation.EDIT);
+				return new AnamnesisCheckTitleDetailsPlace(requests.getProxyId(bits[0]), Operation.EDIT);
 			}
 			if (Operation.CREATE == operation) {
-				String titleId = String.valueOf(bits[2]);
-				return new AnamnesisCheckDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE, titleId);
+				return new AnamnesisCheckTitleDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.CREATE);
 			}
 			if (Operation.NEW == operation) {
-				return new AnamnesisCheckDetailsPlace(requests.getProxyId(bits[0]), Operation.NEW);
+				return new AnamnesisCheckTitleDetailsPlace(requests.getProxyId(bits[0]), Operation.NEW);
 			}
 
-			return new AnamnesisCheckDetailsPlace(token);
+			return new AnamnesisCheckTitleDetailsPlace(token);
 		}
 
-		public String getToken(AnamnesisCheckDetailsPlace place) {
-			Log.debug("AnamnesisCheckDetailsPlace.Tokenizer.getToken");
+		public String getToken(AnamnesisCheckTitleDetailsPlace place) {
+			System.err.println("AnamnesisCheckTitleDetailsPlace.Tokenizer.getToken");
 			if (Operation.DETAILS == place.getOperation()) {
 				return place.getProxyId() + SEPARATOR + Operation.DETAILS;
 			}
