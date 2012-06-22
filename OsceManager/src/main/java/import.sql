@@ -202,6 +202,7 @@ INSERT INTO `osce_day` (osce_date, time_start, time_end, osce, version) VALUES('
 INSERT INTO `osce_day` (osce_date, time_start, time_end, osce, version) VALUES('2012-06-19', '2012-06-18 09:00', '2012-06-18 17:00', 2, 0);
 INSERT INTO `osce_day` (osce_date, time_start, time_end, osce, version) VALUES('2012-06-20', '2012-06-18 09:00', '2012-06-18 11:00', 2, 0);
 
+
 INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 1, 1, 1, 0, 1, 0);
 INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 2, 2, 1, 0, 2, 0);
 INSERT INTO `osce_post_blueprint` (is_possible_start, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 3, 3, 1, 0, 3, 0);
