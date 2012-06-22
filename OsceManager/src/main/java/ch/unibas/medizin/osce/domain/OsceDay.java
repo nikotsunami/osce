@@ -20,19 +20,25 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class OsceDay {
 
-	private Date osceDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	 @DateTimeFormat(style = "M-")
+	 private Date osceDate;
 	
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date timeStart;
+	@Temporal(TemporalType.TIMESTAMP)
+   @DateTimeFormat(style = "M-")
+   private Date timeStart;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date timeEnd;
+   @Temporal(TemporalType.TIMESTAMP)
+   @DateTimeFormat(style = "M-")
+   private Date timeEnd;
 
-    @ManyToOne
-    private Osce osce;   
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
+   @ManyToOne
+   private Osce osce;
+
+   /*
+   @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
+   private Set<Assignment> assignments = new HashSet<Assignment>();*/
+   
+   @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
 	 private Set<OsceSequence> osceSequences = new HashSet<OsceSequence>();
 }

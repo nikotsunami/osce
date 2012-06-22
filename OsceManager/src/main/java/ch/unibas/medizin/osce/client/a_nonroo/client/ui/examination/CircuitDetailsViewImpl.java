@@ -63,6 +63,12 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	public CircuitOsceSubViewImpl getcircuitOsceSubViewImpl(){
 		return this.circuitOsceSubViewImpl;
 	}
+	
+	// Day Module Start
+	
+		
+		
+		
 
 	/**
 	 * Because this class has a default constructor, it can

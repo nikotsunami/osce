@@ -33,4 +33,9 @@ public interface CircuitDetailsView extends IsWidget{
 		OSCENewSubViewImpl getOSCENewSubViewImpl();
 		//L: SPEC END =
 
+	
+
+		
+
+		
 }

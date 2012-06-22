@@ -14,9 +14,9 @@
 		margin-top: 5px;
 	 }
 	 </ui:style>
-	<g:VerticalPanel width="800px"  height="400px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" >
+	<g:VerticalPanel width="900px"  height="300px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" verticalAlignment="middle">
 	<g:AbsolutePanel ui:field="oscePostBluePrintSubViewImplAP">
-		<g:ScrollPanel width="800px">					
+		<g:ScrollPanel width="900px">					
 			<g:HorizontalPanel verticalAlignment="middle">
 			
 				
@@ -27,6 +27,8 @@
 				<g:HorizontalPanel ui:field="newPostHP" spacing="10">
 				
 				</g:HorizontalPanel>	
+				
+				
 			</g:HorizontalPanel>
 		</g:ScrollPanel>
 	</g:AbsolutePanel>

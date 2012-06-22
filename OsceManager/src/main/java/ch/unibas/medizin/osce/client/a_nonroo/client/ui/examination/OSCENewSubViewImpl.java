@@ -38,6 +38,18 @@ public class OSCENewSubViewImpl extends Composite implements OSCENewSubView {
 	HorizontalPanel OSCENewSubViewImplHP;
 	
 	@UiField
+	OsceDayViewImpl osceDayViewImpl;
+	
+	
+	public OsceDayViewImpl getOsceDayViewImpl() {
+		return osceDayViewImpl;
+	}
+
+	public void setOsceDayViewImpl(OsceDayViewImpl osceDayViewImpl) {
+		this.osceDayViewImpl = osceDayViewImpl;
+	}
+	
+	@UiField
 	OscePostBluePrintSubViewImpl oscePostBluePrintSubViewImpl;
 	
 		

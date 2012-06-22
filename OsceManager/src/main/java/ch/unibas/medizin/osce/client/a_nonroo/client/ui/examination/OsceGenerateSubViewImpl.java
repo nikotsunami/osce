@@ -20,6 +20,17 @@ public class OsceGenerateSubViewImpl extends Composite implements OsceGenerateSu
 	@UiField
 	VerticalPanel accordianVP;
 	
+	@UiField
+	OsceDayViewImpl osceDayViewImpl;
+	
+	
+	public OsceDayViewImpl getOsceDayViewImpl() {
+		return osceDayViewImpl;
+	}
+
+	public void setOsceDayViewImpl(OsceDayViewImpl osceDayViewImpl) {
+		this.osceDayViewImpl = osceDayViewImpl;
+	}
 	
 	public VerticalPanel getAccordianVP() {
 		return accordianVP;

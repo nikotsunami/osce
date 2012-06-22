@@ -41,6 +41,8 @@ public class OscePostBluePrintSubViewImpl extends Composite implements OscePostB
 	@UiField
 	public HorizontalPanel newPostHP;
 	
+	
+
 	PickupDragController dragController;
 	
 	public PickupDragController getDragController() {

@@ -1,8 +1,12 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+
+
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -53,6 +57,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		this.add(vp);
 		setAnimationEnabled(true);
 		setGlassEnabled(true);
+		dialogBox=this;
 		
 	}
 	public static MessageConfirmationDialogBox create(String msg)
@@ -74,5 +79,21 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	{
 		super.center();
 		super.show();
+	}
+	
+	public void showConfirmationDialog()
+	{
+		this.getYesBtn().setVisible(false);
+		this.getNoBtnl().setText(constants.okBtn());
+		this.getCaption().setText(constants.success());
+		this.showDialog();
+		this.getNoBtnl().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+			
+				dialogBox.hide();	
+			}
+		});
 	}
 }

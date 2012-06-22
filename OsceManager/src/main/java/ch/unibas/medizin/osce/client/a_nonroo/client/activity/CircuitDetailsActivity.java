@@ -1,8 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -18,20 +21,24 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.ListBoxPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.ListBoxPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OSCENewSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OSCENewSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceCreatePostBluePrintSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceCreatePostBluePrintSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDayView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDayViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceGenerateSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceGenerateSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostViewImpl;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayRequest;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintRequest;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
@@ -45,6 +52,8 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.util;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -53,12 +62,17 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxy;
+import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -71,7 +85,7 @@ CircuitDetailsView.Presenter,
 CircuitDetailsView.Delegate,CircuitOsceSubView.Delegate,OsceGenerateSubView.Delegate,OscePostSubView.Delegate,ListBoxPopupView.Delegate,OscePostView.Delegate
 ,HeaderView.Delegate,DragHandler,//5C:SPEC START
 OSCENewSubView.Delegate,
-OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
+OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Module 5
 
 		private OsMaRequestFactory requests;
 		private PlaceController placeController;
@@ -81,7 +95,8 @@ OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
 		//5C:SPEC START
 		private final OsceConstants constants;
 		private OsceProxy osceProxy;
-		
+		private OsceDayViewImpl osceDayViewImpl;
+		private CircuitOsceSubViewImpl circuitOsceSubViewImpl;
 		
 		private OscePostBlueprintProxy oscePostBlueprintProxy;
 		List<OscePostSubViewImpl>  oscePostSubViewImpl;
@@ -143,26 +158,35 @@ OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
 				public void onSuccess(Object response) {
 					if(response instanceof OsceProxy && response != null){
 						
-						
+						osceProxy=(OsceProxy)response;
 						Log.info("Arrived OsceProxy At CircuitDetailActivity");
-						CircuitOsceSubViewImpl circuitOsceSubViewImpl=view.getcircuitOsceSubViewImpl();
+						
+						circuitOsceSubViewImpl=view.getcircuitOsceSubViewImpl();
 						
 						OsceStatus status = ((OsceProxy) response).getOsceStatus();
 						
 						String style = status.getOsceStatus(status);
 						
+						setOsceStatusStyle(style);
+						
 						//circuitOsceSubViewImpl.setStyleName(style);
-						circuitOsceSubViewImpl.shortBreakTextBox.setText(((OsceProxy) response).getShortBreak().toString());
-						circuitOsceSubViewImpl.longBreakTextBox.setText(((OsceProxy) response).getLongBreak().toString());
-						circuitOsceSubViewImpl.launchBreakTextBox.setText(((OsceProxy) response).getLunchBreak().toString());
-						circuitOsceSubViewImpl.maxStudentTextBox.setText(((OsceProxy) response).getMaxNumberStudents().toString());
-						circuitOsceSubViewImpl.maxParcourTextBox.setText(((OsceProxy) response).getNumberCourses().toString());
-						if(((OsceProxy) response).getNumberRooms() != null)
-						circuitOsceSubViewImpl.maxRoomsTextBox.setText(((OsceProxy) response).getNumberRooms().toString());
+						circuitOsceSubViewImpl.shortBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getShortBreak())));
+						circuitOsceSubViewImpl.longBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getLongBreak())));
+						circuitOsceSubViewImpl.launchBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getLunchBreak())));
+						circuitOsceSubViewImpl.maxStudentTextBox.setValue(util.checkInteger(((OsceProxy) response).getMaxNumberStudents()));
+						circuitOsceSubViewImpl.maxParcourTextBox.setValue(util.checkInteger(((OsceProxy) response).getNumberCourses()));
+						//Log.info("Room Value"+ ((OsceProxy) response).getNumberRooms());
+						circuitOsceSubViewImpl.maxRoomsTextBox.setValue(util.checkInteger((((OsceProxy) response).getNumberRooms())));
+						
+						
+						
+						
 						circuitOsceSubViewImpl.setProxy((OsceProxy)response);
 						circuitOsceSubViewImpl.setClearAllBtn(((OsceProxy)response).getOsceStatus() == OsceStatus.OSCE_GENRATED);
 						circuitOsceSubViewImpl.setDelegate(activity);
 						
+						
+
 						//Assignment E:Module 5[
 						//5C:SPEC START		
 						view.getScrollPanel().setStylePrimaryName("Osce-Status");
@@ -187,6 +211,37 @@ OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
 						//oSCENewSubViewImpl.
 						((CircuitDetailsViewImpl)view).oSCENewSubViewImpl=oSCENewSubViewImpl;
 						oSCENewSubViewImpl.setDelegate(activity);
+						
+						//Osce Days[
+						osceDayViewImpl = oSCENewSubViewImpl.getOsceDayViewImpl();
+						osceDayViewImpl.setDelegate(activity);
+						// Day Assignment 
+						
+						
+						Log.info("Before Iterator");
+						
+					
+						
+						Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
+						if(setOsceDays.size()==0){
+							Log.info("OsceDay null for proxy : " +osceProxy.getId());
+							osceDayViewImpl.setOsceDayProxy(null);
+						}
+						else{
+							Log.info("Osce Exist for OsceProxy : " + osceProxy.getId());
+							Iterator<OsceDayProxy> osceDays = setOsceDays.iterator();
+							if(osceDays.hasNext()){
+								osceDayViewImpl.setOsceDayProxy(osceDays.next());
+							}
+						}
+						
+						setDayStatusStyle(style);
+						osceDayViewImpl.init();
+						addTimeHendlers();
+						
+						//Osce Days]
+						
+						
 						
 						//Log.info("Osce Post Blue Print Size : "+ listOscePostBlueprintProxy.size());						
 							
@@ -295,7 +350,7 @@ OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
 								OsceGenerateSubView generateView=createGenerateView((OsceDayProxy)osceDayProxy);
 								
 								Iterator<OsceSequenceProxy> osceSeqProxyIterator=osceDayProxy.getOsceSequences().iterator();
-								
+							
 								while(osceSeqProxyIterator.hasNext())
 								{
 									OsceSequenceProxy osceSeqProxy=osceSeqProxyIterator.next();
@@ -324,8 +379,38 @@ OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
 								}
 								
 									//create Day view
+								//Osce Days[
+								osceDayViewImpl = generateView.getOsceDayViewImpl();
+								osceDayViewImpl.setDelegate(activity);
+								// Day Assignment 
+								
+								
+								Log.info("Before Iterator");
+								
 							
+								
+								/*Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
+								if(setOsceDays.size()==0){
+									Log.info("OsceDay null for proxy : " +osceProxy.getId());
+									osceDayViewImpl.setOsceDayProxy(null);
+								}
+								else{
+									Log.info("Osce Exist for OsceProxy : " + osceProxy.getId());
+									Iterator<OsceDayProxy> osceDays = setOsceDays.iterator();
+									if(osceDays.hasNext()){
+										osceDayViewImpl.setOsceDayProxy(osceDays.next());
+									}
+								}*/
+								
+								osceDayViewImpl.setOsceDayProxy(osceDayProxy);
+								setDayStatusStyle(style);
+								osceDayViewImpl.init();
+								
+								addTimeHendlers();
+								
+								//Osce Days]
 							}
+							
 							
 						}
 						//Assignment E:Module 5]
@@ -1289,6 +1374,366 @@ OsceCreatePostBluePrintSubView.Delegate{//Assignment E:Module 5
 					
 				}
 				
+				// OSCE Day Assignment Start 
+				
+				public void setOsceStatusStyle(String style){
+					circuitOsceSubViewImpl.setStyleName(style);
+				}
+				public void setDayStatusStyle(String style){
+					osceDayViewImpl.setStyleName(style);
+				}
+				public void addTimeHendlers(){
+				
+					
+					osceDayViewImpl.startTimeTextBox.addBlurHandler(new BlurHandler() {
+						public boolean dayStartTimeflag=true;
+						@Override
+						public void onBlur(BlurEvent event) {
+							if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED){
+							if(osceDayViewImpl.startTimeTextBox.getValue() !=null ){
+								
+								if(! checkStarttimeValidation()){
+									return;
+								}
+								
+							}
+							
+							Time startDate=new Time( osceProxy.getOsce_days().iterator().next().getTimeStart().getTime());
+							Time endDate=new Time( osceProxy.getOsce_days().iterator().next().getTimeEnd().getTime());
+							
+							long diff=Math.abs((startDate.getTime())-endDate.getTime());
+							
+							Log.info("diff--"+diff);
+							
+						//	DateFormat dateformat = new SimpleDateFormat("HH:mm");
+							
+							try{
+								//Date newDateTime=DateTimeFormat.getShortDateTimeFormat().parse((osceDayViewImpl.startTimeTextBox.getValue()));
+								
+								//Log.info("Before Date Format" + osceDayViewImpl.startTimeTextBox.getValue());
+								
+								Date newDateTime=new Date();
+								String hrs=osceDayViewImpl.startTimeTextBox.getValue().substring(0, 2);
+								newDateTime.setHours(new Integer(hrs));
+								String mts=osceDayViewImpl.startTimeTextBox.getValue().substring(3, 5);
+								newDateTime.setMinutes(new Integer(mts));
+								
+								//Date oldDate = new Date(osceDayViewImpl.startTimeTextBox.getValue());
+								//Date newDateTime=DateTimeFormat.getShortDateTimeFormat().parse(oldDate.toString());
+								
+								
+								
+								//Log.info("After Date Format" + newDateTime);
+							//	Date newDateTime=dateformat.parse((osceDayViewImpl.startTimeTextBox.getValue()));
+								Log.info("New Date is" + newDateTime);
+								
+								Time newTime=new Time(newDateTime.getTime());
+								newTime.setTime(newTime.getTime() + diff);
+								osceDayViewImpl.endTimeTextBox.setText(newTime.toString().substring(0,5));
+							}catch(Exception e){
+								Log.info("Parse Exception Occured :");
+								e.printStackTrace();
+							}
+							
+						}
+							else{
+									if(osceDayViewImpl.startTimeTextBox.getValue() !=null )
+									if(! checkStarttimeValidation()){
+										return;
+									}
+							}
+						}
+					}); 
+					
+
+					osceDayViewImpl.endTimeTextBox.addBlurHandler(new BlurHandler() {
+						
+						@Override
+						public void onBlur(BlurEvent event) {
+							if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED){
+								
+								if(osceDayViewImpl.endTimeTextBox.getValue() !=null ){
+									
+									if( ! checkEndTimeValidation())
+									return;
+								}
+							Time startDate=new Time( osceProxy.getOsce_days().iterator().next().getTimeStart().getTime());
+							Time endDate=new Time( osceProxy.getOsce_days().iterator().next().getTimeEnd().getTime());
+							
+							long diff=Math.abs((startDate.getTime())-endDate.getTime());
+							
+
+							System.out.println("diff--"+diff);
+							
+							
+							//DateFormat dateformat = new SimpleDateFormat("HH:mm");
+							
+							try{
+								Date endTime=new Date();
+								String hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
+								endTime.setHours(new Integer(hrs));
+								String mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
+								endTime.setMinutes(new Integer(mts));
+								
+							//	Date newDateTime=DateTimeFormat.getShortDateTimeFormat().parse(endTime.toString());
+								
+								//Date newDateTime=dateformat.parse((osceDayViewImpl.endTimeTextBox.getValue()));
+								Log.info("New Date is" + endTime);
+								
+								Time newTime=new Time(endTime.getTime());
+								newTime.setTime(newTime.getTime() - diff);
+								osceDayViewImpl.startTimeTextBox.setText(newTime.toString().substring(0,5));
+							} catch(Exception e){
+								Log.info("Parse Exception Occured :");
+								e.printStackTrace();
+							}
+
+							}
+							else{
+								if(osceDayViewImpl.endTimeTextBox.getValue() !=null ){
+									
+									if(! checkEndTimeValidation())
+									return;
+								}
+							}
+						}
+					});
+				}
+				public boolean checkStarttimeValidation(){
+					boolean dayStartTimeValidflag=true;
+					String sTimeValue=osceDayViewImpl.startTimeTextBox.getValue();
+					if(! sTimeValue.matches("^[]0-9]{2}\\:[0-9]{2}$")){
+						Window.alert("please Enter valid formatted Time Valid format is HH:MM");
+						dayStartTimeValidflag=false;
+						return dayStartTimeValidflag;
+					}
+					
+					if(new Integer(sTimeValue.substring(0,2)) >= 24){
+						Window.alert("Please Enter Valid Hour (Allowed Till 24)");
+						dayStartTimeValidflag=false;
+						return dayStartTimeValidflag;
+					}
+					if(new Integer(sTimeValue.substring(3,5))> 59){
+						Window.alert("Please Enter Valid Minutes (Allowed Till 59)");
+						dayStartTimeValidflag=false;
+						return dayStartTimeValidflag;
+					}
+					return dayStartTimeValidflag;
+				}
+				public boolean checkEndTimeValidation(){
+					boolean dayEndTimeValidFlag=true;
+					String sTimeValue=osceDayViewImpl.endTimeTextBox.getValue();
+					if(! sTimeValue.matches("^[]0-9]{2}\\:[0-9]{2}$")){
+						Window.alert("please Enter valid formatted Time Valid format is HH:MM");
+						dayEndTimeValidFlag=false;
+						return dayEndTimeValidFlag;
+					}
+					
+					if(new Integer(sTimeValue.substring(0,2)) >= 24){
+						Window.alert("Please Enter Valid Hour (Allowed Till 24)");
+						dayEndTimeValidFlag=false;
+						return dayEndTimeValidFlag;
+					}
+					if(new Integer(sTimeValue.substring(3,5))> 59){
+						Window.alert("Please Enter Valid Minutes (Allowed Till 59)");
+						dayEndTimeValidFlag=false;
+						return dayEndTimeValidFlag;
+					}
+					return dayEndTimeValidFlag;
+				}
+				
+				
+				
+				@Override
+				public void saveOsceDayValue(OsceDayProxy osceDayProxy,
+						boolean insertflag) {
+					Log.info("Insert Value flag status :" +insertflag);
+					if(insertflag==true){
+						
+						
+						if(osceDayViewImpl.dateTextBox.getValue()==null){
+							Window.alert("Data must not empty");
+							return;
+						}
+						if(osceDayViewImpl.startTimeTextBox.getValue()==null){
+							Window.alert("Start Time must not Empty");
+							return;
+						}
+						if(osceDayViewImpl.startTimeTextBox.getValue() !=null ){
+							
+							if(! checkStarttimeValidation())
+							return;
+						}
+										
+						if(osceDayViewImpl.endTimeTextBox.getValue()==null){
+							Window.alert("EndDate Mus Not Empty");
+							return;
+						}
+						if(osceDayViewImpl.endTimeTextBox.getValue() !=null ){
+							if(! checkEndTimeValidation())
+								return;
+						}
+						
+						
+						OsceDayRequest osceDayReq = requests.osceDayRequest();
+						osceDayProxy = osceDayReq.create(OsceDayProxy.class);
+			
+						osceDayProxy.setOsceDate(osceDayViewImpl.dateTextBox.getValue());
+						
+						osceDayProxy.setOsce(osceProxy);
+						
+						//DateFormat updatetdNewStartTimeDateFormat = new SimpleDateFormat("HH:mm");
+						//DateFormat updatetdNewEndTimeDateFormat = new SimpleDateFormat("HH:mm");
+						
+						
+						
+						try{
+							Log.info("In side new Day persist  try block");
+							
+							Date newDateWithStartTime=new Date();
+							
+							String hrs=osceDayViewImpl.startTimeTextBox.getValue().substring(0, 2);
+							newDateWithStartTime.setHours(new Integer(hrs));
+							
+							String mts=osceDayViewImpl.startTimeTextBox.getValue().substring(3, 5);
+							newDateWithStartTime.setMinutes(new Integer(mts));
+							
+							Date newDateWitnEndTime=new Date();
+							 hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
+							newDateWitnEndTime.setHours(new Integer(hrs));
+							 mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
+							newDateWitnEndTime.setMinutes(new Integer(mts));
+							
+							
+							//Date newDateWithStartTime =updatetdNewStartTimeDateFormat.parse(osceDayViewImpl.startTimeTextBox.getValue());
+							//Date newDateWitnEndTime = updatetdNewEndTimeDateFormat.parse(osceDayViewImpl.endTimeTextBox.getValue());
+							
+							Date oldDate = osceDayViewImpl.dateTextBox.getValue();
+												
+							Log.info("Updated Start Time :" +newDateWithStartTime.getTime());
+							
+							Date newStartTimeDate = new Date(oldDate.getYear(), oldDate.getMonth(), oldDate.getDate(), newDateWithStartTime.getHours(),newDateWithStartTime.getMinutes());
+							Date newEndTimeDate = new Date(oldDate.getYear(), oldDate.getMonth(), oldDate.getDate(), newDateWitnEndTime.getHours(),newDateWitnEndTime.getMinutes());
+							
+										
+							Log.info("Value of newDate" + newStartTimeDate);
+							Log.info("Value getSuccessfully");
+							
+							osceDayProxy.setTimeStart(newStartTimeDate);
+							osceDayProxy.setTimeEnd(newEndTimeDate);
+					
+						}catch(Exception e){
+							Log.info("Parsing exception During new Day persist");
+						}
+						
+						osceDayReq.persist().using(osceDayProxy).fire(new Receiver<Void>() {
+
+							@Override
+							public void onSuccess(Void response) {
+								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.osceDaySuccess());
+								
+								dialogbox.showConfirmationDialog();
+								Log.info("Osce Day Saved successfully");
+							}
+						});
+					}
+					else{
+						
+						Log.info("Inside to Update Day");
+						Log.info(""+osceDayViewImpl.dateTextBox.getValue());
+						if(osceDayViewImpl.dateTextBox.getValue()==null){
+							Window.alert("Data must not empty");
+							return;
+						}
+						if(osceDayViewImpl.startTimeTextBox.getValue()==null){
+							Window.alert("Start Time must not Empty");
+							return;
+						}
+						if(osceDayViewImpl.startTimeTextBox.getValue() !=null ){
+
+								if(! checkStarttimeValidation())
+									return;
+						}
+						if(osceDayViewImpl.endTimeTextBox.getValue()==null){
+							Window.alert("EndDate Mus Not Empty");
+							return;
+						}
+						if(osceDayViewImpl.endTimeTextBox.getValue() !=null ){
+
+							if(! checkEndTimeValidation())
+								return;
+						}
+						
+						
+						OsceDayRequest osceDayReq = requests.osceDayRequest();
+						osceDayProxy = osceDayReq.edit(osceDayProxy);
+						
+						osceDayProxy.setOsceDate(osceDayViewImpl.dateTextBox.getValue());
+						
+						
+						//DateFormat updatetdNewStartTimeDateFormat = new SimpleDateFormat("HH:mm");
+						//DateFormat updatetdNewEndTimeDateFormat = new SimpleDateFormat("HH:mm");
+						
+						
+						
+						try{
+							Log.info("In side update Day persist try block");
+							
+							Date newDateWithStartTime=new Date();
+							String hrs=osceDayViewImpl.startTimeTextBox.getValue().substring(0, 2);
+							newDateWithStartTime.setHours(new Integer(hrs));
+							String mts=osceDayViewImpl.startTimeTextBox.getValue().substring(3, 5);
+							newDateWithStartTime.setMinutes(new Integer(mts));
+							
+							Date newDateWitnEndTime=new Date();
+							 hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
+							newDateWitnEndTime.setHours(new Integer(hrs));
+							 mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
+							newDateWitnEndTime.setMinutes(new Integer(mts));
+							//Date newDateWithStartTime=DateTimeFormat.getShortDateTimeFormat().parse((osceDayViewImpl.startTimeTextBox.getValue()));
+							
+							//Date newDateWitnEndTime=DateTimeFormat.getShortDateTimeFormat().parse((osceDayViewImpl.endTimeTextBox.getValue()));
+							//Date newDateWithStartTime =updatetdNewStartTimeDateFormat.parse(osceDayViewImpl.startTimeTextBox.getValue());
+							//Date newDateWitnEndTime = updatetdNewEndTimeDateFormat.parse(osceDayViewImpl.endTimeTextBox.getValue());
+							
+							Date oldDate = osceDayProxy.getOsceDate();
+												
+							Log.info("Updated Start Time :" +newDateWithStartTime.getTime());
+							
+							Date newStartTimeDate = new Date(oldDate.getYear(), oldDate.getMonth(), oldDate.getDate(), newDateWithStartTime.getHours(),newDateWithStartTime.getMinutes());
+							Date newEndTimeDate = new Date(oldDate.getYear(), oldDate.getMonth(), oldDate.getDate(), newDateWitnEndTime.getHours(),newDateWitnEndTime.getMinutes());
+							
+							//oldDate.setTime(osceDayViewImpl.startTimeTextBox.getValue());
+							//Date updatedstartTime = updatestartTimeDateFormat.parse(osceDayViewImpl.startTimeTextBox.getValue());
+							
+							Log.info("Value of newDate" + newStartTimeDate);
+							Log.info("Value getSuccessfully");
+							
+							osceDayProxy.setTimeStart(newStartTimeDate);
+							osceDayProxy.setTimeEnd(newEndTimeDate);
+					
+						}catch(Exception e){
+							Log.info("Parsing exception During Day persist");
+						}
+						//osceDayProxy.setOsce(osceProxy);
+						
+						osceDayReq.persist().using(osceDayProxy).fire(new Receiver<Void>() {
+
+							@Override
+							public void onSuccess(Void response) {
+								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.osceDaySuccess());
+								
+								dialogbox.showConfirmationDialog();
+								Log.info("Osce Day Updated successfully");
+							}
+						}); 
+
+						
+					}
+					
+				}
+				
+				//  OSCE Day Assignment END
 				
 				
 

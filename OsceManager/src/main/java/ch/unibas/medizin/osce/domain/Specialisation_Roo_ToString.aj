@@ -12,6 +12,7 @@ privileged aspect Specialisation_Roo_ToString {
         sb.append("Doctors: ").append(getDoctors() == null ? "null" : getDoctors().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
+        sb.append("OscePostBlueprint: ").append(getOscePostBlueprint() == null ? "null" : getOscePostBlueprint().size()).append(", ");
         sb.append("RoleTopics: ").append(getRoleTopics() == null ? "null" : getRoleTopics().size()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();

@@ -13,5 +13,7 @@ public interface OsceGenerateSubView extends IsWidget{
 	 void setDelegate(Delegate delegate);
 	 
 	 public VerticalPanel getAccordianVP();
+	 
+	 public OsceDayViewImpl getOsceDayViewImpl();
 
 }

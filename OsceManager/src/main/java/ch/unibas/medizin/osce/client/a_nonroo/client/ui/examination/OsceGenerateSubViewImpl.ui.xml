@@ -1,10 +1,10 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" >
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
  <ui:style src="../../styles.css" />
 	
-	<g:VerticalPanel ui:field="osceMainVP" addStyleNames="{style.tabStyle} {style.patientTopContainer}" spacing="10">
-		<g:HorizontalPanel ui:field="osceMainHP">
+	<g:VerticalPanel ui:field="osceMainVP" addStyleNames="{style.tabStyle} {style.patientTopContainer}" spacing="10" >
+		<g:HorizontalPanel ui:field="osceMainHP" verticalAlignment="top">
 			<g:VerticalPanel ui:field="accordianVP">
 				
 				<!-- accordian View -->
@@ -15,6 +15,11 @@
 			</g:VerticalPanel>
 			
 			<!-- Day View -->
+		
+			  <g:VerticalPanel ui:field="OsceDayVerticalPanel" spacing="10">
+						<e:OsceDayViewImpl ui:field="osceDayViewImpl"></e:OsceDayViewImpl>
+			</g:VerticalPanel>
+			
 		</g:HorizontalPanel>
 	</g:VerticalPanel>
   

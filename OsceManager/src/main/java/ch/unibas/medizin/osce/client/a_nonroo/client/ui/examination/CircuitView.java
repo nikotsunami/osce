@@ -4,6 +4,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * @author dk
@@ -30,4 +31,6 @@ public interface CircuitView extends IsWidget{
     TabPanel getCircuitTabPanel();
     
     public SimplePanel getCircuitDetailPanel();
+    
+	
 }

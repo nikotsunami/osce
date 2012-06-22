@@ -28,7 +28,11 @@
 			</g:VerticalPanel>
 			<!-- Assignment E:Module 5 -->
 				<!-- Assignment E:Module 5 -->
-			
+			<!--  <g:HTMLPanel>
+		<g:VerticalPanel ui:field="OsceDayVerticalPanel">
+			<e:OsceDayViewImpl ui:field="osceDayViewImpl"></e:OsceDayViewImpl>
+		</g:VerticalPanel>
+		</g:HTMLPanel>-->
 		</g:VerticalPanel>
 	
 		
