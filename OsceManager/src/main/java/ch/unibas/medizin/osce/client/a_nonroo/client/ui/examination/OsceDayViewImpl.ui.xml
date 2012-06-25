@@ -1,0 +1,62 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
+	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
+	 <ui:style src="../../styles.css" >
+	
+	.margin50
+	{
+		margin-left: 50px;
+	}
+	.margin19
+	{
+		margin-left: 19px;
+	}
+	.margin79{
+		margin-left: 99px;
+
+	}
+	.spacing10
+	{
+		
+		padding: 5px;
+		padding-top: 5px;
+	}
+	</ui:style>
+	<g:HTMLPanel>
+	<!--h1>Osce Day</h1-->
+		<g:HTMLPanel styleName="{style.patientTopContainer}" height="300px" width="250px">
+			<g:HorizontalPanel horizontalAlignment="center" width="250px">
+				 <g:Label ui:field="dayLabel"  styleName="{style.spacing10} {style.label}" ></g:Label>
+			 </g:HorizontalPanel>
+			 <g:Label ui:field="presentsLabel" styleName="{style.spacing10} {style.label}" > </g:Label>
+			<g:VerticalPanel ui:field="dayContentVerticalPanel"  >
+			<g:HorizontalPanel styleName="{style.spacing10}">
+				<g:Label ui:field="dateLabel" styleName="{style.spacing10}"></g:Label>
+				<d:DateBox ui:field="dateTextBox" styleName="{style.margin50}"></d:DateBox>
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel styleName="{style.spacing10}">
+				<g:Label ui:field="startTimeLable" styleName="{style.spacing10}"></g:Label>
+				<g:TextBox ui:field="startTimeTextBox" styleName="{style.margin19}"></g:TextBox>
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel styleName="{style.spacing10}">
+				<g:Label ui:field="endTimeLable" styleName="{style.spacing10}"></g:Label>
+				<g:TextBox ui:field="endTimeTextBox"></g:TextBox>
+			</g:HorizontalPanel>
+			<g:Label ui:field="calculationsLabel"  styleName="{style.spacing10} {style.label}" ></g:Label>
+			<g:Label ui:field="lunchBreakLabel"  styleName="{style.spacing10}"></g:Label>
+			<g:Label ui:field="lbEndTimeLabel"  styleName="{style.spacing10}"></g:Label>
+			<g:Label ui:field="studentsLabel"  styleName="{style.spacing10}"></g:Label>
+				<g:VerticalPanel styleName="{style.margin79}" horizontalAlignment="center">
+					<my:IconButton ui:field="saveOsceDayValue" icon="plusthick"></my:IconButton>
+				</g:VerticalPanel>
+			</g:VerticalPanel>
+		
+		
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

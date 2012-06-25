@@ -62,7 +62,7 @@ public class RoleTopic {
     private Integer slotsUntilChange;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleTopic")
-    private Set<StandardizedRole> standardizedRoles = new HashSet<StandardizedRole>();
+    private List<StandardizedRole> standardizedRoles = new ArrayList<StandardizedRole>();
 
     @ManyToOne
     private Specialisation specialisation;
@@ -418,6 +418,17 @@ public static java.util.List<RoleTopic> findAllRoleTopic(int id) {
 
     }
 	
+public static java.util.List<RoleTopic> findRoleTopicBySpecialisation(Long specialisationId) 
+{
 
+	Log.info("fetch data from role topic");
+	EntityManager em = entityManager();
+	String queryString="select r from RoleTopic r where r.specialisation="+specialisationId;
+	TypedQuery<RoleTopic> q = em.createQuery(queryString, RoleTopic.class);
+	java.util.List<RoleTopic> result = q.getResultList();		
+	Log.info("Query String: " + queryString.toString());
+	return result;
+
+}
     
 }

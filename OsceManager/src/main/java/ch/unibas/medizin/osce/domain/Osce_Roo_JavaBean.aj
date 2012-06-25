@@ -15,6 +15,7 @@ import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.Short;
 import java.lang.String;
+import java.util.List;
 import java.util.Set;
 
 privileged aspect Osce_Roo_JavaBean {
@@ -155,11 +156,11 @@ privileged aspect Osce_Roo_JavaBean {
         this.osce_days = osce_days;
     }
     
-    public Set<OscePostBlueprint> Osce.getOscePostBlueprints() {
+    public List<OscePostBlueprint> Osce.getOscePostBlueprints() {
         return this.oscePostBlueprints;
     }
     
-    public void Osce.setOscePostBlueprints(Set<OscePostBlueprint> oscePostBlueprints) {
+    public void Osce.setOscePostBlueprints(List<OscePostBlueprint> oscePostBlueprints) {
         this.oscePostBlueprints = oscePostBlueprints;
     }
     

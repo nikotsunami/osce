@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.request;
 
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.List;
 import java.util.Set;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
@@ -35,7 +36,7 @@ public interface OsceSequenceProxy extends EntityProxy {
 
     abstract void setCourses(Set<CourseProxy> courses);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostProxy> getOscePosts();
+    abstract List<ch.unibas.medizin.osce.client.managed.request.OscePostProxy> getOscePosts();
 
-    abstract void setOscePosts(Set<OscePostProxy> oscePosts);
+    abstract void setOscePosts(List<OscePostProxy> oscePosts);
 }

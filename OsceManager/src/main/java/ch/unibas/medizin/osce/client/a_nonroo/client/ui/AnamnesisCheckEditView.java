@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.google.gwt.place.shared.Place;
@@ -29,7 +30,7 @@ public interface AnamnesisCheckEditView extends IsWidget {
 	String getValue();
 	void update(AnamnesisCheckProxy anamnesisCheck);
 
-	void setInsideTitleListBox(List<AnamnesisCheckProxy> titleList);
+	void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList);
 
 	void setPreviousQuestionListBox(List<AnamnesisCheckProxy> anamnesisCheckList);
 

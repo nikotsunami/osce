@@ -30,4 +30,8 @@ public interface SpecialisationProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.DoctorProxy> getDoctors();
 
     abstract void setDoctors(Set<DoctorProxy> doctors);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy> getOscePostBlueprint();
+
+    abstract void setOscePostBlueprint(Set<OscePostBlueprintProxy> oscePostBlueprint);
 }
