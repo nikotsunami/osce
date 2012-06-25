@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.request;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.List;
 import java.util.Set;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
@@ -36,9 +37,9 @@ public interface RoleTopicProxy extends EntityProxy {
 
     abstract void setSlotsUntilChange(Integer slotsUntilChange);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> getStandardizedRoles();
+    abstract List<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> getStandardizedRoles();
 
-    abstract void setStandardizedRoles(Set<StandardizedRoleProxy> standardizedRoles);
+    abstract void setStandardizedRoles(List<StandardizedRoleProxy> standardizedRoles);
 
     abstract SpecialisationProxy getSpecialisation();
 

@@ -390,7 +390,7 @@ public class TimetableGenerator {
 				Set<Course> parcours = insertParcoursForSequence(seq);
 				
 				// insert posts
-				Set<OscePost> posts = insertPostsForSequence(seq);
+				List<OscePost> posts = insertPostsForSequence(seq);
 				
 				seq.setCourses(parcours);
 				seq.setOscePosts(posts);
@@ -417,7 +417,7 @@ public class TimetableGenerator {
 				Set<Course> parcours = insertParcoursForSequence(seq);
 				
 				// insert posts
-				Set<OscePost> posts = insertPostsForSequence(seq);
+				List<OscePost> posts = insertPostsForSequence(seq);
 				
 				seq.setCourses(parcours);
 				seq.setOscePosts(posts);
@@ -491,8 +491,8 @@ public class TimetableGenerator {
 	 * @param seq
 	 * @return
 	 */
-	private Set<OscePost> insertPostsForSequence(OsceSequence seq) {
-		Set<OscePost> posts = new HashSet<OscePost>();
+	private List<OscePost> insertPostsForSequence(OsceSequence seq) {
+		List<OscePost> posts = new ArrayList<OscePost>();
 		
 		OscePost current = null;
 		

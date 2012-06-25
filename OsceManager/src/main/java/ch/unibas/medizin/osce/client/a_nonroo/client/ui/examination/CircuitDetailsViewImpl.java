@@ -10,7 +10,10 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -34,10 +37,38 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	@UiField
 	public CircuitOsceSubViewImpl circuitOsceSubViewImpl;
 	
+	//AssignmentE:Module 5[
+	@UiField
+	VerticalPanel generateVP;
+	
+	@UiField
+	ScrollPanel scrollPanel;
+	
+	
+	public ScrollPanel getScrollPanel() {
+		return scrollPanel;
+	}
+
+	public VerticalPanel getGenerateVP() {
+		return generateVP;
+	}
+
+	public void setGenerateVP(VerticalPanel generateVP) {
+		this.generateVP = generateVP;
+	}
+	//Assignment E:Modlule 5]
+	
+	
 	@Override
 	public CircuitOsceSubViewImpl getcircuitOsceSubViewImpl(){
 		return this.circuitOsceSubViewImpl;
 	}
+	
+	// Day Module Start
+	
+		
+		
+		
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -52,6 +83,8 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	 */
 	public CircuitDetailsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		//DOM.setAttribute(this.getElement(),"overflow","auto");
 		init();
 	}
 
@@ -74,5 +107,19 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	}
 	
 		
-	
+	// L: SPEC START =	
+		//@UiField
+		public OSCENewSubViewImpl oSCENewSubViewImpl;
+		// L: SPEC END =
+		
+			
+		
+		
+			
+		// L: SPEC START =
+		@Override
+		public OSCENewSubViewImpl getOSCENewSubViewImpl(){
+			return this.oSCENewSubViewImpl;
+		}
+		// L: SPEC END =
 }
