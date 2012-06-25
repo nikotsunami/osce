@@ -52,6 +52,7 @@ public class PdfUtil {
 			Font.ITALIC);
 	private Font paragraphTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 14,
 			Font.BOLD);
+	private Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
 	private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private Font smallFont = new Font(Font.FontFamily.HELVETICA, 9);
 	private Font emailFont = new Font(Font.FontFamily.HELVETICA, 9,
@@ -239,7 +240,7 @@ public class PdfUtil {
 
 	private void addAnamnesis() {
 		Paragraph anamnesis = new Paragraph();
-		anamnesis.add(new Chunk(constants.anamnesisValues(), paragraphTitleFont));
+		anamnesis.add(new Chunk(constants.anamnesisValues() + "\n", paragraphTitleFont));
 		
 		AnamnesisChecksValue.fillAnamnesisChecksValues(anamnesisFormId);
 		List<AnamnesisCheckTitle> titles = AnamnesisCheckTitle.findAllAnamnesisCheckTitles();
@@ -249,12 +250,11 @@ public class PdfUtil {
 			if (title.getText() != null) {
 				titleText = title.getText();
 			}
-			anamnesis.add(new Chunk(titleText, paragraphTitleFont));
+			anamnesis.add(new Chunk(titleText, subTitleFont));
 			PdfPTable table = createAnamnesisTableForTitle(title.getId());
 			table.setSpacingBefore(titleTableSpacing);
 			anamnesis.add(table);
 		}
-		
 		
 		addEmptyLine(anamnesis, 1);
 
