@@ -579,5 +579,29 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
                 Operation.DETAILS));
     }
+
+	@Override
+	public void moveDownTitle(AnamnesisCheckTitleProxy proxy) {
+		requests.anamnesisCheckTitleRequestNonRoo().moveDown().using(proxy).fire(new Receiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				init();
+			}
+		});
+		
+	}
+
+	@Override
+	public void moveUpTitle(AnamnesisCheckTitleProxy proxy) {
+		requests.anamnesisCheckTitleRequestNonRoo().moveUp().using(proxy).fire(new Receiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				init();
+			}
+		});
+		
+	}
 	
 }
