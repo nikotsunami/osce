@@ -51,9 +51,4 @@ public interface AnamnesisCheckProxy extends EntityProxy {
     abstract ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy getTitle();
 
     abstract void setTitle(ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy title);
-    
-    
-
-    //abstract void setAnamnesisCheckTitle(ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy anamnesisCheckTitle);
-    
 }

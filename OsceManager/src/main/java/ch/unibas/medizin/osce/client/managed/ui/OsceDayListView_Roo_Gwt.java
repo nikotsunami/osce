@@ -63,7 +63,7 @@ public abstract class OsceDayListView_Roo_Gwt extends AbstractProxyListView<Osce
         paths.add("osceDate");
         table.addColumn(new TextColumn<OsceDayProxy>() {
 
-            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT));
+            Renderer<java.util.Date> renderer = new DateTimeFormatRenderer(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM));
 
             @Override
             public String getValue(OsceDayProxy object) {

@@ -116,7 +116,7 @@ public abstract class OsceMobileEditView_Roo_Gwt extends Composite implements Vi
     OsceDaySetEditor osce_days;
 
     @UiField
-    OscePostBlueprintSetEditor oscePostBlueprints;
+    OscePostBlueprintListEditor oscePostBlueprints;
 
     @UiField
     TaskSetEditor tasks;
