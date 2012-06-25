@@ -1580,8 +1580,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 .ui-icon {
 	background-image: url('images/ui-icons_454545.png');
-	height: 11px;
-	width: 11px;
+	height: 12px;
+	width: 12px;
 	background-repeat: no-repeat;
     display: block;
     overflow: hidden;
@@ -1953,7 +1953,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     background-position: -243px -132px;
 }
 .ui-icon-alert {
-    background-position: -3px -148px;
+    background-position: -2px -147px;
 }
 .ui-icon-info {
     background-position: -19px -148px;
