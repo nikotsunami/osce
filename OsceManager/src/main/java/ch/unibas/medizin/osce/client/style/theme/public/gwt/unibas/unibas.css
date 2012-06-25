@@ -2131,3 +2131,21 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 .Osce_Closed_Status{
         background-color: #FFCCCC;
 }
+
+.upIcon {
+	width: 15px;
+	height: 15px;	
+	background-image: url("images/up.png");
+}
+
+.downIcon {
+	width: 15px;
+	height: 15px;	
+	background-image: url("images/down.png");
+}
+
+.rightIcon {
+	width: 15px;
+	height: 15px;	
+	background-image: url("images/right.png");
+}	

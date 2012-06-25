@@ -105,4 +105,61 @@ public class AnamnesisCheckTitle {
     		}
     	}
     }
+    
+    public void moveUp() {
+        if (this.entityManager == null) {
+            this.entityManager = entityManager();
+        }
+        AnamnesisCheckTitle anamnesisCheckTitle = findAnamnesisCheckTitleByOrderSmaller(this.sort_order - 1);
+        if (anamnesisCheckTitle == null) {
+            return;
+        }
+        anamnesisCheckTitle.setSort_order(this.sort_order);
+        anamnesisCheckTitle.persist();
+        setSort_order(sort_order - 1);
+        this.persist();    	
+    }
+
+    public void moveDown() {
+        if (this.entityManager == null) {
+            this.entityManager = entityManager();
+        }
+        AnamnesisCheckTitle anamnesisCheckTitle = findAnamnesisCheckTitleByOrderGreater(this.sort_order + 1);
+        if (anamnesisCheckTitle == null) {
+            return;
+        }
+        anamnesisCheckTitle.setSort_order(this.sort_order);
+        anamnesisCheckTitle.persist();
+        setSort_order(sort_order + 1);
+        this.persist();
+    }
+    
+    //find next title
+    private AnamnesisCheckTitle findAnamnesisCheckTitleByOrderGreater(int sort_order) {
+        EntityManager em = entityManager();
+        TypedQuery<AnamnesisCheckTitle> query = em
+                .createQuery(
+                        "SELECT o FROM AnamnesisCheckTitle AS o WHERE o.sort_order >= :sort_order ORDER BY sort_order ASC",
+                        AnamnesisCheckTitle.class);
+        query.setParameter("sort_order", sort_order);
+        List<AnamnesisCheckTitle> resultList = query.getResultList();
+        if (resultList == null || resultList.size() == 0)
+            return null;
+        return resultList.get(0);
+    }
+
+    //find previous tilte
+    public AnamnesisCheckTitle findAnamnesisCheckTitleByOrderSmaller(int sort_order) {
+        EntityManager em = entityManager();
+        TypedQuery<AnamnesisCheckTitle> query = em
+                .createQuery(
+                        "SELECT o FROM AnamnesisCheckTitle AS o WHERE o.sort_order <= :sort_order ORDER BY sort_order DESC",
+                        AnamnesisCheckTitle.class);
+        query.setParameter("sort_order", sort_order);
+        List<AnamnesisCheckTitle> resultList = query.getResultList();
+        if (resultList == null || resultList.size() == 0)
+            return null;
+        return resultList.get(0);
+    }
+    
 }

@@ -19,4 +19,8 @@ public interface AnamnesisCheckTitleRequestNonRoo extends RequestContext{
 	 public abstract Request<List<AnamnesisCheckTitleProxy>> getReSortingList(Integer sortFrom);
 		
 	 public abstract Request<Void> reSorting(Integer sortFrom);	 
+	 
+	 public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> moveUp();
+	 
+	 public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> moveDown();
 }
