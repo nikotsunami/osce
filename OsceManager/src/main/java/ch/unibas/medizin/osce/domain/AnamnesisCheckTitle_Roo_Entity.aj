@@ -96,9 +96,6 @@ privileged aspect AnamnesisCheckTitle_Roo_Entity {
         return entityManager().createQuery("SELECT COUNT(o) FROM AnamnesisCheckTitle o", Long.class).getSingleResult();
     }
     
-    public static List<AnamnesisCheckTitle> AnamnesisCheckTitle.findAllAnamnesisCheckTitles() {
-        return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
-    }
     
     public static AnamnesisCheckTitle AnamnesisCheckTitle.findAnamnesisCheckTitle(Long id) {
         if (id == null) return null;
