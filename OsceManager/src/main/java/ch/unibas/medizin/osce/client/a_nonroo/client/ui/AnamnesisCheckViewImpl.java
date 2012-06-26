@@ -474,7 +474,6 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	public void loadAnamnesisCheckPanel(List<AnamnesisCheckTitleProxy> anamnesisCheckTitleList , final boolean isOpen) {
 		anamnesisCheckPanel.clear();
 		for(final AnamnesisCheckTitleProxy anamnesisCheckTitleProxy : anamnesisCheckTitleList){
-			GWT.log("################title text : "+anamnesisCheckTitleProxy.getText());
 			AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(anamnesisCheckTitleProxy);
 			final ListDataProvider<AnamnesisCheckProxy> dataProvider = new ListDataProvider<AnamnesisCheckProxy>();
 			final SingleSelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
@@ -512,7 +511,6 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				@Override
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
-					//TODO go to detail , add detail
 					delegate.newDetailClicked(String.valueOf(anamnesisCheckTitleProxy.getId()));
 				}
 				
@@ -520,14 +518,9 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 			
 			final AnamnesisCheckImageResources anamnesisCheckImageResources = GWT.create(AnamnesisCheckImageResources.class);
-//			anamnesisCheckImageResources.upImage();
 			AnamnesisTableResources anamnesisTableResources = GWT.create(AnamnesisTableResources.class);
 			HorizontalPanel moveUpPanel = new HorizontalPanel();
-//			moveUpPanel.setSize("15px","15px");
 			moveUpPanel.addStyleName("upIcon");
-//			moveUpPanel.setStyleName(anamnesisTableResources.cellTableStyle().headMoveUpPanel());
-//			Image moveUp = new Image(anamnesisCheckImageResources.upImage());
-//			moveUpPanel.add(moveUp);
 			moveUpPanel.addDomHandler(new ClickHandler(){
 
 				@Override
@@ -539,14 +532,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				
 			}, ClickEvent.getType());
 			
-//			Image moveUp = new Image("up.png");
-//			moveUp.setWidth("15px");
-//			HorizontalPanel moveUp = new HorizontalPanel();
-//			moveUp.setStyleName("moveUpPanel");
-//			Image moveDown = new Image("down.png");
-//			HorizontalPanel moveDown = new HorizontalPanel();
-//			moveDown.setStyleName("moveDownPanel");
-//			Image moveDown = new Image(anamnesisCheckImageResources.downImage());
+
 			HorizontalPanel moveDownPanel = new HorizontalPanel();
 			moveDownPanel.addStyleName("downIcon");
 			moveDownPanel.addDomHandler(new ClickHandler(){
@@ -554,13 +540,11 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				@Override
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
-					//TODO move down
 					delegate.moveDownTitle(anamnesisCheckTitleProxy);
 				}
 				
 			}, ClickEvent.getType());
 			
-//			iconImagePanel.add(iconImage);
 			horizontalPanel.add(iconImagePanel);
 			horizontalPanel.add(label);
 			horizontalPanel.add(addBtnButton);
