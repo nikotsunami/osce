@@ -33,6 +33,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -129,7 +130,12 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 				if (proxy.getText() != null) {
 					desc += proxy.getText();
 				}
-			} else if (response instanceof AnamnesisFormProxy) {
+			} else if (response instanceof AnamnesisCheckTitleProxy) {
+				AnamnesisCheckTitleProxy proxy = (AnamnesisCheckTitleProxy) response;
+				if (proxy.getText() != null) {
+					desc += proxy.getText();
+				}
+			}else if (response instanceof AnamnesisFormProxy) {
 				AnamnesisFormProxy proxy = (AnamnesisFormProxy) response;
 				if (proxy.getId() != null) {
 					desc += proxy.getId();
