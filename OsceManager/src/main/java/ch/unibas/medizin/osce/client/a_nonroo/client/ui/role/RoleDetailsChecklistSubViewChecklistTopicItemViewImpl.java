@@ -33,6 +33,8 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	@UiField
 	public Button addCheckListQuestionButton;
 	
+	public CheckListTopicPopupView topicPopup;
+	
 	@UiField
 	public VerticalPanel questionButtonVP;
 	
@@ -60,6 +62,9 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	
 	@UiField 
 	IconButton delete;
+	
+	@UiField 
+	IconButton edit;
 	
 	@UiField
 	Image down;
@@ -149,8 +154,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					{
 					}	
 					else
-					{
-					
+					{						
 						delegate.saveCheckListQuestion(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue(),topicView);
 						((CheckListTopicPopupViewImpl)questionPopup).hide(true);
 				
@@ -170,6 +174,66 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		Log.info("delete Topic");
 		if(Window.confirm("are you sure you want to delete this Topic?"))
 			delegate.deleteCheckListTopic(this.proxy,topicView);
+	}
+	
+	@UiHandler("edit")
+	public void editCheckListTopic(ClickEvent event)
+	{
+		Log.info("edit Topic");
+		
+		//Window.alert("Edit Clicked");
+		showTopicPopupPanel(this.proxy, event.getScreenX(), event.getScreenY());
+		
+		
+		//if(Window.confirm("are you sure you want to delete this Topic?"))
+		//	delegate.deleteCheckListTopic(this.proxy,topicView);
+	}
+	
+	public void showTopicPopupPanel(final ChecklistTopicProxy proxy, int x, int y)
+	{
+		if(topicPopup==null)
+		{
+			topicPopup=new CheckListTopicPopupViewImpl();
+			
+			((CheckListTopicPopupViewImpl)topicPopup).setGlassEnabled(true);
+			((CheckListTopicPopupViewImpl)topicPopup).setAnimationEnabled(true);
+		
+			topicPopup.getDescriptionLbl().setText(constants.topicDescription());
+			topicPopup.getDescriptionTxtBox().setValue(proxy.getDescription());
+			
+			topicPopup.getTopicLbl().setText(constants.checklistTopic());
+			topicPopup.getTopicTxtBox().setValue(proxy.getTitle());
+			
+			((CheckListTopicPopupViewImpl)topicPopup).setWidth("150px");
+
+		
+			RootPanel.get().add(((CheckListTopicPopupViewImpl)topicPopup));
+			
+			topicPopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					
+					if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
+					{
+					}	
+					else
+					{
+						delegate.updateCheckListTopic(proxy,topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue(),topicView);
+					
+						((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+				
+						//topicPopup.getTopicTxtBox().setValue("");
+						//topicPopup.getDescriptionTxtBox().setValue("");
+					}
+				}
+		});
+		}
+		
+		
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-200, y - 265);
+		((CheckListTopicPopupViewImpl)topicPopup).show();
+		
 	}
 	
 	@UiHandler("arrow")

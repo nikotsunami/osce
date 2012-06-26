@@ -13,6 +13,7 @@ public interface RoleDetailsChecklistSubViewChecklistTopicItemView extends IsWid
 	interface Delegate {
 		public void saveCheckListQuestion(String question,String instruction,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl view);
 		public void deleteCheckListTopic(ChecklistTopicProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
+		public void updateCheckListTopic(ChecklistTopicProxy proxy, String topicname, String description, RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
 		void setRoleListBoxValue(ImportTopicPopupView popupView);
 		void topicMoveDown(ChecklistTopicProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
 		void topicMoveUp(ChecklistTopicProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
