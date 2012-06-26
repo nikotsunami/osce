@@ -59,6 +59,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorListView;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorMobileListView;
@@ -170,6 +171,8 @@ import ch.unibas.medizin.osce.client.managed.ui.StudentOscesListView;
 import ch.unibas.medizin.osce.client.managed.ui.StudentOscesMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.TaskListView;
 import ch.unibas.medizin.osce.client.managed.ui.TaskMobileListView;
+import ch.unibas.medizin.osce.client.managed.ui.TrainingListView;
+import ch.unibas.medizin.osce.client.managed.ui.TrainingMobileListView;
 import ch.unibas.medizin.osce.client.managed.ui.UsedMaterialListView;
 import ch.unibas.medizin.osce.client.managed.ui.UsedMaterialMobileListView;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldApp;
@@ -196,6 +199,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleUsedMaterial(UsedMaterialProxy isNull) {
                 setResult(new UsedMaterialListActivity(requests, ScaffoldApp.isMobile() ? UsedMaterialMobileListView.instance() : UsedMaterialListView.instance(), placeController));
+            }
+
+            @Override
+            public void handleTraining(TrainingProxy isNull) {
+                setResult(new TrainingListActivity(requests, ScaffoldApp.isMobile() ? TrainingMobileListView.instance() : TrainingListView.instance(), placeController));
             }
 
             @Override
@@ -419,6 +427,11 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
+            public void handleCheckList(CheckListProxy isNull) {
+                setResult(new CheckListListActivity(requests, ScaffoldApp.isMobile() ? CheckListMobileListView.instance() : CheckListListView.instance(), placeController));
+            }
+
+            @Override
             public void handleChecklistOption(ChecklistOptionProxy isNull) {
                 setResult(new ChecklistOptionListActivity(requests, ScaffoldApp.isMobile() ? ChecklistOptionMobileListView.instance() : ChecklistOptionListView.instance(), placeController));
             }
@@ -426,11 +439,6 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             @Override
             public void handleChecklistCriteria(ChecklistCriteriaProxy isNull) {
                 setResult(new ChecklistCriteriaListActivity(requests, ScaffoldApp.isMobile() ? ChecklistCriteriaMobileListView.instance() : ChecklistCriteriaListView.instance(), placeController));
-            }
-
-            @Override
-            public void handleCheckList(CheckListProxy isNull) {
-                setResult(new CheckListListActivity(requests, ScaffoldApp.isMobile() ? CheckListMobileListView.instance() : CheckListListView.instance(), placeController));
             }
 
             @Override
@@ -449,13 +457,13 @@ public abstract class ApplicationMasterActivities_Roo_Gwt implements ActivityMap
             }
 
             @Override
-            public void handleAnamnesisChecksValue(AnamnesisChecksValueProxy isNull) {
-                setResult(new AnamnesisChecksValueListActivity(requests, ScaffoldApp.isMobile() ? AnamnesisChecksValueMobileListView.instance() : AnamnesisChecksValueListView.instance(), placeController));
+            public void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy isNull) {
+                setResult(new AnamnesisCheckTitleListActivity(requests, ScaffoldApp.isMobile() ? AnamnesisCheckTitleMobileListView.instance() : AnamnesisCheckTitleListView.instance(), placeController));
             }
 
             @Override
-            public void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy isNull) {
-                setResult(new AnamnesisCheckTitleListActivity(requests, ScaffoldApp.isMobile() ? AnamnesisCheckTitleMobileListView.instance() : AnamnesisCheckTitleListView.instance(), placeController));
+            public void handleAnamnesisChecksValue(AnamnesisChecksValueProxy isNull) {
+                setResult(new AnamnesisChecksValueListActivity(requests, ScaffoldApp.isMobile() ? AnamnesisChecksValueMobileListView.instance() : AnamnesisChecksValueListView.instance(), placeController));
             }
 
             @Override

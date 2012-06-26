@@ -483,4 +483,30 @@ public interface OsceConstants extends Constants {
     public String generate();
 	public String success();
 	public String osceDaySuccess();
+
+	// MODULE 3 : START
+	public String loading();
+
+	public String acceptedTraining();
+
+	public String acceptedOSCE();
+
+	public String assignedRole();
+
+	public String surveyImport();
+
+	public String autoAssign();
+
+	public String addManually();
+
+	public String accepted();
+
+	public String assignTo();
+
+	public String enterPatient();
+
+	public String patientInformation();
+
+	public String close();
+	// MODULE 3 : END
 }

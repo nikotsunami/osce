@@ -2,9 +2,9 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -33,7 +33,13 @@ public abstract class PatientInRoleDetailsView_Roo_Gwt extends Composite impleme
     SpanElement patientInSemester;
 
     @UiField
-    SpanElement standardizedRole;
+    SpanElement oscePost;
+
+    @UiField
+    SpanElement fit_criteria;
+
+    @UiField
+    SpanElement is_backup;
 
     PatientInRoleProxy proxy;
 
@@ -45,7 +51,9 @@ public abstract class PatientInRoleDetailsView_Roo_Gwt extends Composite impleme
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         patientInSemester.setInnerText(proxy.getPatientInSemester() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance().render(proxy.getPatientInSemester()));
-        standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
+        oscePost.setInnerText(proxy.getOscePost() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance().render(proxy.getOscePost()));
+        fit_criteria.setInnerText(proxy.getFit_criteria() == null ? "" : String.valueOf(proxy.getFit_criteria()));
+        is_backup.setInnerText(proxy.getIs_backup() == null ? "" : String.valueOf(proxy.getIs_backup()));
         displayRenderer.setInnerText(PatientInRoleProxyRenderer.instance().render(proxy));
     }
 }

@@ -48,7 +48,15 @@
       
       
       
-    <tr id="semester">
+    
+            
+            
+            
+            
+            
+            
+            
+        <tr id="semester">
                 <td>
                     <div class="{style.label}">Semester:</div>
                 </td>
@@ -110,6 +118,14 @@
                 </td>
                 <td>
                     <a:PatientInSemesterSetEditor ui:field="patientsInSemester"/>
+                </td>
+            </tr>
+            <tr id="training">
+                <td>
+                    <div class="{style.label}">Training:</div>
+                </td>
+                <td>
+                    <a:TrainingSetEditor ui:field="training"/>
                 </td>
             </tr>
         </table>

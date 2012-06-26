@@ -12,6 +12,9 @@ public class OsMaConstant {
 	public static final SafeHtml EDIT_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-pencil\"></span>").toSafeHtml();
 	public static final SafeHtml UP_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-triangle-1-n\"></span>").toSafeHtml();
 	public static final SafeHtml DOWN_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-triangle-1-s\"></span>").toSafeHtml();
+	public static final SafeHtml CHECK_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-check\"></span>").toSafeHtml();
+	public static final SafeHtml UNCHECK_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-close\"></span>").toSafeHtml();
+	public static final SafeHtml SEEK_FIRST_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-seek-next\"></span>").toSafeHtml();
 	public static final int TABLE_PAGE_SIZE = 15;
 	public static final int TABLE_JUMP_SIZE = 30;
 	public static final int SPLIT_PANEL_MINWIDTH = 520;

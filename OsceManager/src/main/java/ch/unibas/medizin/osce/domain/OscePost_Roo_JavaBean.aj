@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import java.lang.Boolean;
 import java.lang.Integer;
@@ -35,6 +36,14 @@ privileged aspect OscePost_Roo_JavaBean {
     
     public void OscePost.setOscePostRooms(Set<OscePostRoom> oscePostRooms) {
         this.oscePostRooms = oscePostRooms;
+    }
+    
+    public Set<PatientInRole> OscePost.getPatientInRole() {
+        return this.patientInRole;
+    }
+    
+    public void OscePost.setPatientInRole(Set<PatientInRole> patientInRole) {
+        this.patientInRole = patientInRole;
     }
     
     public StandardizedRole OscePost.getStandardizedRole() {

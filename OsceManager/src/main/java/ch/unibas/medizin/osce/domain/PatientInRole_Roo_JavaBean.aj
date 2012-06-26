@@ -3,8 +3,9 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
-import ch.unibas.medizin.osce.domain.StandardizedRole;
+import java.lang.Boolean;
 
 privileged aspect PatientInRole_Roo_JavaBean {
     
@@ -16,12 +17,28 @@ privileged aspect PatientInRole_Roo_JavaBean {
         this.patientInSemester = patientInSemester;
     }
     
-    public StandardizedRole PatientInRole.getStandardizedRole() {
-        return this.standardizedRole;
+    public OscePost PatientInRole.getOscePost() {
+        return this.oscePost;
     }
     
-    public void PatientInRole.setStandardizedRole(StandardizedRole standardizedRole) {
-        this.standardizedRole = standardizedRole;
+    public void PatientInRole.setOscePost(OscePost oscePost) {
+        this.oscePost = oscePost;
+    }
+    
+    public Boolean PatientInRole.getFit_criteria() {
+        return this.fit_criteria;
+    }
+    
+    public void PatientInRole.setFit_criteria(Boolean fit_criteria) {
+        this.fit_criteria = fit_criteria;
+    }
+    
+    public Boolean PatientInRole.getIs_backup() {
+        return this.is_backup;
+    }
+    
+    public void PatientInRole.setIs_backup(Boolean is_backup) {
+        this.is_backup = is_backup;
     }
     
 }

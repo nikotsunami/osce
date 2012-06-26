@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.PatientInSemester;
 import java.util.Date;
 import java.util.Set;
 
@@ -48,6 +49,14 @@ privileged aspect OsceDay_Roo_JavaBean {
     
     public void OsceDay.setOsceSequences(Set<OsceSequence> osceSequences) {
         this.osceSequences = osceSequences;
+    }
+    
+    public Set<PatientInSemester> OsceDay.getPatientInSemesters() {
+        return this.patientInSemesters;
+    }
+    
+    public void OsceDay.setPatientInSemesters(Set<PatientInSemester> patientInSemesters) {
+        this.patientInSemesters = patientInSemesters;
     }
     
 }

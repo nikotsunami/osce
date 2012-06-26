@@ -1,0 +1,49 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment">
+	<ui:style src="../../styles.css">
+		.cellTableEvenYesRow {
+			width: 500px;
+			min-height: 26px;
+			margin: 4px auto;
+		}
+		
+		.cellTableEvenRow {
+			background: #ffffff;
+		}
+	</ui:style>
+
+	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
+		<g:west size="400">
+			<g:ScrollPanel>
+				<g:VerticalPanel spacing="5">
+					<g:Button ui:field="surveyImpBtn"></g:Button>
+					<g:HTMLPanel>
+						<div class="{style.cellTableEvenYesRow}">
+							<n:PatientInSemesterFlexTable
+								ui:field="table"></n:PatientInSemesterFlexTable>
+						</div>
+					</g:HTMLPanel>
+					<g:HorizontalPanel spacing="4">
+
+						<g:Button ui:field="autoAssignmentBtn"></g:Button>
+						<g:Button ui:field="addManuallyBtn"></g:Button>
+
+					</g:HorizontalPanel>
+				</g:VerticalPanel>
+
+			</g:ScrollPanel>
+		</g:west>
+		<g:center>
+			<g:ScrollPanel>
+				<g:SimplePanel ui:field="detailsPanel">
+					<g:HTMLPanel>
+
+
+					</g:HTMLPanel>
+				</g:SimplePanel>
+			</g:ScrollPanel>
+		</g:center>
+	</g:SplitLayoutPanel>
+</ui:UiBinder> 

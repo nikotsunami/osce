@@ -1580,8 +1580,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 .ui-icon {
 	background-image: url('images/ui-icons_454545.png');
-	height: 12px;
-	width: 12px;
+	height: 11px;
+	width: 11px;
 	background-repeat: no-repeat;
     display: block;
     overflow: hidden;
@@ -1953,7 +1953,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     background-position: -243px -132px;
 }
 .ui-icon-alert {
-    background-position: -2px -147px;
+    background-position: -3px -148px;
 }
 .ui-icon-info {
     background-position: -19px -148px;
@@ -2132,23 +2132,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
         background-color: #FFCCCC;
 }
 
-.upIcon {
-	width: 15px;
-	height: 15px;	
-	background-image: url("images/up.png");
-}
-
-.downIcon {
-	width: 15px;
-	height: 15px;	
-	background-image: url("images/down.png");
-}
-
-.rightIcon {
-	width: 15px;
-	height: 15px;	
-	background-image: url("images/right.png");
-}	
 
 .Osce-Status{
        /* background-color: #E6FFE6;*/
@@ -2267,3 +2250,76 @@ background: rgb(255,255,204)  ;
 }
 
 /* Assignment E:Module 5] */
+
+/* MODULE 3 : START */
+.flexTableHeader {	
+	
+	color: #212121;		
+	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	height: 28px;
+		
+	line-height: 13px;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+	text-shadow: #DDF 1px 1px 0;
+	font-weight: bold;
+	vertical-align: middle;
+	margin-left: 10px;
+}
+
+.flexTableFirstColumnHeader {
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x
+		scroll 50% 50% #DADADA;	
+	border-top-left-radius: 8px;	
+	border-bottom: 1px solid #999999;
+	border-right: 1px solid #999999;
+	padding: 4px 10px 4px 10px;	
+}
+
+.flexTableLastColumnHeader {
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x
+		scroll 50% 50% #DADADA;	
+	border-right: 0;
+	border-top-right-radius: 8px;
+	border-bottom: 1px solid #999999;
+	padding: 4px 10px 4px 10px;
+	
+}
+
+.flexTableColumnHeader {
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x
+		scroll 50% 50% #DADADA;
+	
+	border-right:  1px solid #999999;	
+	border-bottom: 1px solid #999999;	
+	padding: 4px 10px 4px 10px;
+}
+
+.flexTableEvenRow {
+	background: #ffffff;
+	border: 0;
+	height: 20px;
+	padding: 4px 10px;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.flexTableOddRow {
+	background: #eee;
+	border: 0;
+	height: 20px;
+	padding: 4px 10px;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.flexTableRow{
+	border: 0;
+}
+
+.flexTableRow:hover {
+	background: #f1b532;
+}
+/* MODULE 3 : END */

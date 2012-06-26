@@ -41,7 +41,21 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -95,6 +109,14 @@
                 </td>
                 <td>
                     <span ui:field="osceSequences"/>
+                </td>
+            </tr>
+            <tr id="patientInSemesters">
+                <td>
+                    <span class="{style.label}">Patient In Semesters:</span>
+                </td>
+                <td>
+                    <span ui:field="patientInSemesters"/>
                 </td>
             </tr>
         </table>

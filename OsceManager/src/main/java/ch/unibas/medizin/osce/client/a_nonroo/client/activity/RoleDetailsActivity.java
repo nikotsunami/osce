@@ -1366,7 +1366,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void createRole(StandardizedRoleProxy standardizedRoleProxy) {
+	public void createRole() {
 		System.out.println("Call createRole() of RoleDetailActivity");
 		goTo(new RoleDetailsPlace(this.roleTopicProxy.stableId() ,Operation.CREATE));
 	}
