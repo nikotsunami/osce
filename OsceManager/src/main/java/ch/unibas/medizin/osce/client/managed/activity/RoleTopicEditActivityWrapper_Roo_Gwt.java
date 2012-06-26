@@ -9,7 +9,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintSetEditor;
-import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleListEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;

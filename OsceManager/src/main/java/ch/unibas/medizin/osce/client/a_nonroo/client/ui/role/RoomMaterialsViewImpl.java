@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -283,11 +282,6 @@ public class RoomMaterialsViewImpl extends Composite implements
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
-	}
-
-	public SearchCriteria getCriteria() {
-		return new SearchCriteria();
-
 	}
 
 	@Override

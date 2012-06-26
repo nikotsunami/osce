@@ -13,27 +13,36 @@
   </ui:style>
 
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
-    <div id="id">
+    
+    
+    
+    
+    
+
+    <g:Button ui:field="delete">Delete</g:Button>
+  <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
-    <div id="version">
+        <div id="version">
             <div class="{style.label}">Version</div>
             <div class="{style.value}" ui:field="version"/>
         </div>
-    <div id="name">
+        <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}" ui:field="name"/>
         </div>
-    <div id="roleTopics">
+        <div id="roleTopics">
             <div class="{style.label}">Role Topics</div>
             <div class="{style.value}" ui:field="roleTopics"/>
         </div>
-    <div id="doctors">
+        <div id="doctors">
             <div class="{style.label}">Doctors</div>
             <div class="{style.value}" ui:field="doctors"/>
         </div>
-
-    <g:Button ui:field="delete">Delete</g:Button>
-  </g:HTMLPanel>
+        <div id="oscePostBlueprint">
+            <div class="{style.label}">Osce Post Blueprint</div>
+            <div class="{style.value}" ui:field="oscePostBlueprint"/>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

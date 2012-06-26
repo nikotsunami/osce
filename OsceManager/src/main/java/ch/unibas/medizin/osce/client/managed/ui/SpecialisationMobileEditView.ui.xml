@@ -19,25 +19,34 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="name">
+    
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="name">
             <div class="{style.label}">Name</div>
             <div class="{style.value}">
                 <g:TextBox ui:field="name"/>
             </div>
         </div>
-    <div id="roleTopics">
+        <div id="roleTopics">
             <div class="{style.label}">Role Topics</div>
             <div class="{style.value}">
                 <a:RoleTopicSetEditor ui:field="roleTopics"/>
             </div>
         </div>
-    <div id="doctors">
+        <div id="doctors">
             <div class="{style.label}">Doctors</div>
             <div class="{style.value}">
                 <a:DoctorSetEditor ui:field="doctors"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+        <div id="oscePostBlueprint">
+            <div class="{style.label}">Osce Post Blueprint</div>
+            <div class="{style.value}">
+                <a:OscePostBlueprintSetEditor ui:field="oscePostBlueprint"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

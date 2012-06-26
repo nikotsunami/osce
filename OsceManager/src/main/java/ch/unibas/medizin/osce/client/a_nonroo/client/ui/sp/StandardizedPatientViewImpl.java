@@ -4,10 +4,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
-
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -17,9 +14,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
-
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -422,11 +417,6 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	
 	public List<String> getSearchFilters() {
 		return filterPanel.getFilters();
-	}
-	
-	public SearchCriteria getCriteria() {
-		return new SearchCriteria();
-//		return filterPanel.getCriteria();
 	}
 
 	@Override

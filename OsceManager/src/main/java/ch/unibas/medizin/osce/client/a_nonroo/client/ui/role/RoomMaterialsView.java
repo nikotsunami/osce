@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -41,6 +40,4 @@ public interface RoomMaterialsView extends IsWidget {
 	public String getQuery();
 
 	public void updateSearch();
-
-	public SearchCriteria getCriteria();
 }

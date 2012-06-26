@@ -1,41 +1,23 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.management.relation.Role;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView.Delegate;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView.Presenter;
-
-
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
-import ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer;
-import ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer;
-import ch.unibas.medizin.osce.client.managed.ui.RoleParticipantProxyRenderer;
-import ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
-import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -45,18 +27,13 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -64,7 +41,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -649,22 +625,11 @@ public List<String> getWhereFilters() {
 		
 	}
 
-
 	@Override
 	public List<String> getSearchFilters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-	@Override
-	public SearchCriteria getCriteria() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 	
 	@Override
 	public void setDelegate(Delegate delegate) {

@@ -59,7 +59,7 @@ public abstract class RoleTopicMobileEditView_Roo_Gwt extends Composite implemen
     IntegerBox slotsUntilChange;
 
     @UiField
-    StandardizedRoleSetEditor standardizedRoles;
+    StandardizedRoleListEditor standardizedRoles;
 
     @UiField(provided = true)
     ValueListBox<SpecialisationProxy> specialisation = new ValueListBox<SpecialisationProxy>(ch.unibas.medizin.osce.client.managed.ui.SpecialisationProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy>());

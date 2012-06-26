@@ -23,6 +23,7 @@ import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class OsceMobileListView_Roo_Gwt extends MobileProxyListView<OsceProxy> {

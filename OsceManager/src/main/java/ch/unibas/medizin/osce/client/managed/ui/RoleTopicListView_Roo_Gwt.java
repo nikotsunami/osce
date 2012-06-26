@@ -22,6 +22,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class RoleTopicListView_Roo_Gwt extends AbstractProxyListView<RoleTopicProxy> {
@@ -125,7 +126,7 @@ public abstract class RoleTopicListView_Roo_Gwt extends AbstractProxyListView<Ro
         paths.add("standardizedRoles");
         table.addColumn(new TextColumn<RoleTopicProxy>() {
 
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance());
+            Renderer<java.util.List> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance());
 
             @Override
             public String getValue(RoleTopicProxy object) {

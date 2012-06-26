@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.activity.SpecialisationEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.SpecialisationEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -47,6 +48,13 @@ public abstract class SpecialisationEditView_Roo_Gwt extends Composite implement
 
     @UiField
     DoctorSetEditor doctors;
+
+    @UiField
+    OscePostBlueprintSetEditor oscePostBlueprint;
+
+    public void setOscePostBlueprintPickerValues(Collection<OscePostBlueprintProxy> values) {
+        oscePostBlueprint.setAcceptableValues(values);
+    }
 
     public void setDoctorsPickerValues(Collection<DoctorProxy> values) {
         doctors.setAcceptableValues(values);
