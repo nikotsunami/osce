@@ -12,7 +12,7 @@ public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends Is
 	interface Delegate {
 		void saveCriteria(String criteria,RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl view);
 		void saveOption(String option,String value,RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl view);
-		void editOption(String question,RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView);
+		void editOption(String question, String instruction, RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView);
 		void deleteQuestion(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView);
 		void questionMoveUp(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView,ChecklistTopicProxy topicProxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
 		void questionMoveDown(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView,ChecklistTopicProxy topicProxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
@@ -25,6 +25,10 @@ public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends Is
 	  public Label getQuestionItemLbl() ;
 	  
 	  public void setQuestionItemLbl(Label questionItemLbl);
+	  
+	  public Label getQuestionInstruction();
+
+	  public void setQuestionInstruction(Label questionInstruction);
 	  
 	  public ChecklistQuestionProxy getProxy();
 	  
