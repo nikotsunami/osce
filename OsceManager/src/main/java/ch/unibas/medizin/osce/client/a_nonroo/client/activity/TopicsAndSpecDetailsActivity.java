@@ -300,7 +300,7 @@ TopicsAndSpecDetailsView.Delegate
 		}
 
 		@Override
-		public void editClicked(final RoleTopicProxy roletopic) {
+		public void editClicked(final RoleTopicProxy roletopic,int left,int top) {
 			
 			Log.info("Opened role topic ToolTip");
 
@@ -357,8 +357,10 @@ TopicsAndSpecDetailsView.Delegate
 	     //   popup.setHeight("20px");
 	        
 	        toolTip.add(toolTipContentPanel);   // you can add any widget here
-	        toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecDetailsViewPopupXPosition()),new Integer(constants.TopicsAndSpecDetailsViewPopupYPosition())); 
-	      
+	        // Issue Role
+	        //toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecDetailsViewPopupXPosition()),new Integer(constants.TopicsAndSpecDetailsViewPopupYPosition())); 
+	        toolTip.setPopupPosition(left,top);
+	        // E: Issue Role
 	        toolTip.show();
 	        
 	        toolTipChange.addClickHandler(new ClickHandler() {

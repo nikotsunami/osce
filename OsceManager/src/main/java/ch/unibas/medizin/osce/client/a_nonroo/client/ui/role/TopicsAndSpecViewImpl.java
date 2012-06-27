@@ -53,7 +53,8 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private Delegate delegate;
-	
+	// Issue Role
+		int left=0,top=0;
 	
 	@UiField
 	public SplitLayoutPanel splitLayoutPanel;
@@ -142,6 +143,21 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 		
 		//By spec for table insert
 		
+		
+		// Issue Role
+		
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				left=event.getClientX();
+				top=event.getClientY();
+			}
+		}, ClickEvent.getType());
+		
+		// E: Issue Role		
+		
 		paths.add("name");
 		table.addColumn(new TextColumn<SpecialisationProxy>() {
 			{ this.setSortable(true); }
@@ -165,7 +181,9 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<SpecialisationProxy>() {
 					public void execute(final SpecialisationProxy specialization) {
 										
-						delegate.editClicked(specialization);
+						//delegate.editClicked(specialization);
+						//Issue Role				
+						delegate.editClicked(specialization,left,top);
 											
 					}
 				}), "", new GetValue<SpecialisationProxy>() {

@@ -1072,7 +1072,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						//Assignment E[
 						//set CheckList Title
 						//Log.info(proxy.getCheckList().getTitle());
-						((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? "Checklist" : "Checklist "+proxy.getCheckList().getTitle());
+						if(proxy.getCheckList()!=null)
+						{
+							
+						((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? "Checklist" : "Checklist "+proxy.getCheckList().getTitle());					
 						
 						Log.info("checklisttopic Proxy Size:" + proxy.getCheckList().getCheckListTopics().size());
 						Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
@@ -1211,7 +1214,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								}
 							}
 						});
-						
+					}
 						// End I
 						index++;
 

@@ -2323,3 +2323,17 @@ background: rgb(255,255,204)  ;
 	background: #f1b532;
 }
 /* MODULE 3 : END */
+
+
+/*Issue Role*/
+
+.marginTop15
+{
+	margin-top: 15px;
+	margin-left: 5px;
+}
+.marginTop7
+{
+	margin-top: 7px;
+	margin-left: 5px;	
+}
