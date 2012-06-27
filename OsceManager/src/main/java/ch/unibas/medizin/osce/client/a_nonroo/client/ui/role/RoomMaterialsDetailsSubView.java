@@ -13,10 +13,10 @@ import com.google.gwt.user.cellview.client.CellTable;
 public interface RoomMaterialsDetailsSubView {
 	
 	public interface Delegate {
-		public void newUsedMaterialButtonClicked(Integer materialCount,
+		/*public void newUsedMaterialButtonClicked(Integer materialCount,
 				MaterialUsedFromTypes used_from,
 				StandardizedRoleProxy standardizedRoleProxy,
-				MaterialListProxy materialList);
+				MaterialListProxy materialList);*/
 		
 		// void changeUsedMaterialNumRowShown(UsedMaterialProxy
 		// usedMaterialProxy,
@@ -45,7 +45,9 @@ public interface RoomMaterialsDetailsSubView {
 	
 	void setPresenter(Presenter systemStartActivity);
 	
-	public void setMaterialListPickerValues(Collection<MaterialListProxy> values);
+	/*public void setMaterialListPickerValues(Collection<MaterialListProxy> values);*/
+	
+	public RoomMaterialsPopupViewImpl getRoomMaterialsPopupViewImpl();
 	
 	public void setValue(StandardizedRoleProxy proxy);
 	

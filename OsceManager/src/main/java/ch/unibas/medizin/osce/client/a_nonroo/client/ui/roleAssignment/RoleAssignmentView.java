@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface RoleAssignmentView extends IsWidget {
 	public interface Presenter {
@@ -35,4 +36,7 @@ public interface RoleAssignmentView extends IsWidget {
 
 	public Button getAddManuallyBtn();
 
+	//Module 3 { 
+	VerticalPanel getOsceDaySubViewContainerPanel();
+	//Module 3 }
 }

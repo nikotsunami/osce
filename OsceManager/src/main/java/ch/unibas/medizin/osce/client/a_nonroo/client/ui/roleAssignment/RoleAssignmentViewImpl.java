@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RoleAssignmentViewImpl extends Composite implements
@@ -35,6 +36,17 @@ public class RoleAssignmentViewImpl extends Composite implements
 	public SplitLayoutPanel splitLayoutPanel;
 	@UiField
 	public SimplePanel detailsPanel;
+
+	//Module  3 {
+	
+		@UiField
+		VerticalPanel osceDaySubViewContainerPanel;
+		
+		@Override
+		public VerticalPanel getOsceDaySubViewContainerPanel(){
+			return this.osceDaySubViewContainerPanel;
+		}
+		//Module 3 }
 
 	@UiField
 	PatientInSemesterFlexTable table;

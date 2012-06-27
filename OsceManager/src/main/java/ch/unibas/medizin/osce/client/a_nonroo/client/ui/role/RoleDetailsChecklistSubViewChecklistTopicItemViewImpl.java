@@ -195,7 +195,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		{
 			topicPopup=new CheckListTopicPopupViewImpl();
 			
-			((CheckListTopicPopupViewImpl)topicPopup).setGlassEnabled(true);
+			
 			((CheckListTopicPopupViewImpl)topicPopup).setAnimationEnabled(true);
 		
 			topicPopup.getDescriptionLbl().setText(constants.topicDescription());

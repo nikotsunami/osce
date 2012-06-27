@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+
+<ui:style src="../../styles.css" >
+.marginTop15
+{
+	margin-top: 15px;
+	margin-left: 5px;
+}
+.marginTop7
+{
+	margin-top: 7px;
+	margin-left: 5px;	
+}
+.marginLeft5
+{
+	margin-left: 5px;
+}
+</ui:style>
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with> 	
+	<g:HTMLPanel>		
+		<g:HorizontalPanel>
+			<g:VerticalPanel>
+				<g:Label styleName="{style.marginTop15}">Name: </g:Label>
+				<g:Label styleName="{style.marginTop15}">Number: </g:Label>
+				<g:Label styleName="{style.marginTop15}">Use For: </g:Label>
+			</g:VerticalPanel>
+			<g:VerticalPanel>
+				<g:ValueListBox ui:field="materialList" styleName="{style.marginTop7}"></g:ValueListBox>
+				<g:IntegerBox ui:field="materialCount" styleName="{style.marginTop7}"></g:IntegerBox>
+				<my:FocusableValueListBox ui:field="used_from" styleName="{style.marginTop7}"></my:FocusableValueListBox>	
+			</g:VerticalPanel>				
+		</g:HorizontalPanel>	
+		<g:Button ui:field="saveRoomMaterial" styleName="{style.marginTop15}"></g:Button>
+		<g:Button ui:field="cancel" styleName="{style.marginTop15}"></g:Button>			
+	</g:HTMLPanel>	
+</ui:UiBinder>

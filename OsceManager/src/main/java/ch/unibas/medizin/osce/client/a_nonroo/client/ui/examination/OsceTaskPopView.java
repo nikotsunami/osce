@@ -12,7 +12,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface OsceDetailsView extends IsWidget{
+public interface OsceTaskPopView extends IsWidget{
 	
 	
 	
@@ -23,22 +23,16 @@ public interface OsceDetailsView extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		void osceEditClicked();
-		void osceGenerateClicked();
 		
-		void osceDeleteClicked();
-		void deleteClicked(TaskProxy task);
-		void editForDone(TaskProxy task);
-
-		/*void saveClicked(Boolean isedit, String innerText,
+		void saveClicked(Boolean isedit, String innerText,
 				AdministratorProxy value, Date value2,OsceProxy osceproxy,TaskProxy task);
-		*/
+		
 		
 		
 	}
 	
-	CellTable<TaskProxy> getTable();
-	String[] getPaths();
+	
+	
 	
     public void setValue(OsceProxy proxy); 
   
@@ -46,5 +40,6 @@ public interface OsceDetailsView extends IsWidget{
     
     void setPresenter(Presenter osceActivity);
 	void setAdministratorValue(List<AdministratorProxy> emptyList);
-	public OsceTaskPopViewImpl getPopView();
+
+	
 }

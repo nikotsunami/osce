@@ -92,11 +92,26 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	@UiField
 	public IconButton KeywordAddButton;
 	
-	@UiField(provided = true)
-	public SuggestBox keywordSugestionBox =  new SuggestBox(keywordoracle);
+	/*@UiField(provided = true)
+	public SuggestBox keywordSugestionBox =  new SuggestBox(keywordoracle);*/
 	
-	public TextBox textbox;;
+	//public TextBox textbox;;
 		
+	// Issue Role Module
+		@UiField(provided = true)
+		public SuggestBox keywordSugestionBox =  //new SuggestBox(keywordoracle);
+				new SuggestBox(
+						new ProxySuggestOracle<KeywordProxy>(
+								new AbstractRenderer<KeywordProxy>() {
+									@Override
+									public String render(KeywordProxy object) {
+										return object.getName() ;
+									}
+								}// ));
+								, ",;:. \t?!_-/\\"));
+		
+		//public TextBox textbox;
+		// Issue Role Module
 		
 	public RoleKeywordSubViewImpl() 
 	{
@@ -131,7 +146,45 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	private void initSuggestBox()
 	{
 		
-		keywordSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() 
+		// Issue Role Module
+		/*keywordSugestionBox = new SuggestBox(new ProxySuggestOracle<KeywordProxy>(new AbstractRenderer<KeywordProxy>() {
+				@Override
+				public String render(KeywordProxy object) {
+					return object.getName();
+				}
+		}));
+		*/
+//		keywordSugestionBox.setText(constants.enterQuestion());
+		keywordSugestionBox.getTextBox().addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (keywordSugestionBox.getText().equals(constants.enterKeyword())) {					
+					keywordSugestionBox.setText("");	
+				}
+			}
+		});
+		keywordSugestionBox.getTextBox().addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				if (keywordSugestionBox.getText().equals("")) {
+					keywordSugestionBox.setText(constants.enterKeyword());
+					
+				}
+			}
+		});
+		 keywordSugestionBox.addChangeListener(new ChangeListener() 
+			{			
+				@Override
+				public void onChange(Widget sender) 
+				{
+					// TODO Auto-generated method stub
+					System.out.println("on Change");
+					keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());					
+				}
+			});
+		 keywordSugestionBox.setValue(constants.enterKeyword());
+			// E Issue Role Module
+		/*keywordSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() 
 		{			
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) 
@@ -152,7 +205,7 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 				System.out.println("on Change");
 				keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());					
 			}
-		});
+		});*/
 	}
 	
 	
@@ -211,7 +264,7 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	@Override
 	public void setKeywordAutocompleteValue(List<KeywordProxy> values) {
 	
-		int index=0;
+		/*int index=0;
 		while(index<values.size())
 		{		
 			keywordoracle.add(values.get(index).getName());
@@ -219,7 +272,11 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		}
 		textbox=new TextBox();
 		//keywordSugestionBox = new SuggestBox(keywordoracle, new TextBox());
-		keywordSugestionBox = new SuggestBox(keywordoracle, textbox);
+		keywordSugestionBox = new SuggestBox(keywordoracle, textbox);*/
+		// Issue Role Module		
+				((ProxySuggestOracle<KeywordProxy>) keywordSugestionBox	.getSuggestOracle()).addAll(values);
+				// E Issue Role Module
+				
 		
 	}
 	
@@ -248,7 +305,7 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	@UiHandler("KeywordAddButton")
 	public void KeywordAddButton(ClickEvent e) 
 	{
-		if(keywordSugestionBox.getValue().trim().equals(""))
+		/*if(keywordSugestionBox.getValue().trim().equals(""))
 		{
 			Log.info("Suggest Box Value is NULL");
 			Window.alert("Please Select/Add new Keyword");
@@ -256,7 +313,21 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		else
 		{
 			delegate.addKeywordClicked("");
-		}
+		
+		}*/
+		// Issue Role Module		
+				if(keywordSugestionBox.getValue().trim().equals("") || keywordSugestionBox.getValue().trim().equals(constants.enterKeyword()))
+				{
+					Log.info("Suggest Box Value is NULL");
+					Log.info("getTextBox().getValue() TextBox Value: " + keywordSugestionBox.getTextBox().getValue());
+					Window.alert("Please Select/Add new Keyword");			
+				}
+				else
+				{			
+					delegate.addKeywordClicked();
+					keywordSugestionBox.setText(constants.enterKeyword());
+				}
+				// E Issue Role Module
 	}
 	
 	@Override

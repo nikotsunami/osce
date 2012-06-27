@@ -1,14 +1,20 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.ManualStandardizedPatientInSemesterAssignmentPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.ManualStandardizedPatientInSemesterAssignmentPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.OsceDaySubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.OsceDaySubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.PatientInSemesterData;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.RoleAssignmentView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.RoleAssignmentViewImpl;
@@ -18,28 +24,39 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.PatientInSemesterSelec
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.PatientInSemesterSelectedHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleRequest;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 @SuppressWarnings("deprecation")
 public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		implements RoleAssignmentView.Presenter, RoleAssignmentView.Delegate,
-		ManualStandardizedPatientInSemesterAssignmentPopupView.Delegate {
+		ManualStandardizedPatientInSemesterAssignmentPopupView.Delegate,OsceDaySubView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -52,7 +69,21 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	private ManualStandardizedPatientInSemesterAssignmentPopupViewImpl manualStdPatientInSemesterAssignmentPopupViewImpl;
 	private List<PatientInSemesterProxy> patientInSemesterProxies;
 	private OscePostProxy oscePostProxy;
-
+	//Module 3 {
+	
+		//private SemesterProxy semesterProxy;
+		private OsceProxy osceProxy;
+		private OsceDayProxy osceDayProxy;
+		private OsceDaySubViewImpl osceDaySubViewImpl;
+		private DisclosurePanel disCloserPanel;
+		private StudentsActivity activity;
+//		private HashMap<String,Object> timerMap;
+		private Timer osceDayTimer;
+		private OsMaConstant constant = GWT.create(OsMaConstant.class);
+		
+		
+		//Module 3 }
+	
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
 	}
@@ -150,8 +181,124 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		this.widget = panel;
 		widget.setWidget(view.asWidget());
 		init();
+		
 	}
+	// Module 3 {
+	public void initOsceDaySubView(){
+	osceDayTimer = new Timer() {
+		
+		@Override
+		public void run() {
+			Collection<String> cookie =Cookies.getCookieNames();
+			for(String cook : cookie){
+				//Window.alert(Cookies.getCookie(cook));
+				Log.info(""+Cookies.getCookie(cook));
+			}
+			
+		}
+	};
 
+	//timerMap = new HashMap<String, Object>();
+	requests.find(semesterProxy.stableId()).with("osces","osces.osce_days").fire(new OSCEReceiver<Object>() {
+
+		@Override
+		public void onSuccess(Object response) {
+			Log.info("Semester Id " + ((SemesterProxy)response).getId());
+			Log.info("OSCE Size " + ((SemesterProxy)response).getOsces().size());
+			
+			semesterProxy=((SemesterProxy)response);
+			VerticalPanel osceDaySubViewContainerPanel = view.getOsceDaySubViewContainerPanel();
+			boolean isopen =true;
+			osceDaySubViewContainerPanel.clear();
+			
+			Set<OsceProxy> setOsceProxy = semesterProxy.getOsces();
+			if(setOsceProxy==null)
+			{
+				Log.info("No Any OsceProxy Found");
+			}
+			else{
+			
+			Log.info(" Total Osces is :" + setOsceProxy.size());
+			
+			Iterator<OsceProxy> iteratorOsceProxy = setOsceProxy.iterator();
+				
+			while(iteratorOsceProxy.hasNext()){
+				osceProxy=iteratorOsceProxy.next();
+					
+				Set<OsceDayProxy> setOsceDayProxy = osceProxy.getOsce_days();
+				
+				if(setOsceDayProxy == null){
+					Log.info("No OsceDay Found");
+				}
+				else{
+				Log.info("Total OSce Day is : " + setOsceDayProxy.size());
+				Iterator<OsceDayProxy> iteratorOSceDayProxy = setOsceDayProxy.iterator();
+				
+				while(iteratorOSceDayProxy.hasNext()){
+					
+					osceDayProxy=iteratorOSceDayProxy.next();
+					OsceDaySubViewImpl osceDaySubViewImpl = new OsceDaySubViewImpl();
+					osceDaySubViewImpl.setDelegate(spRoleAssignmentActivity);
+					osceDaySubViewImpl.setOsceDayProxy(osceDayProxy);
+					if(isopen){
+						osceDaySubViewImpl.simpleDiscloserPanel.setOpen(isopen);
+						isopen=false;
+					}
+					StudyYears studyYear =osceProxy.getStudyYear();
+					String name =semesterProxy.getSemester().name();
+					//Date date =osceDayProxy.getOsceDate();
+						
+					if(studyYear != null && name !=null){
+						osceDaySubViewImpl.simpleDiscloserPanel.getHeaderTextAccessor().setText("" +studyYear +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()));
+						osceDaySubViewContainerPanel.add(osceDaySubViewImpl);
+					}
+					else{
+						Window.alert("Semester and study year must not empty to show on OSce Day");
+					}
+						
+							
+				}
+			}
+		 }
+		}
+			
+	}
+});
+	
+}
+@Override
+public void discloserPanelOpened(final OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl) {
+	Log.info("OsceDay Proxy " + osceDayProxy.getId());
+	//(new Date()).getTime()+ (1000 * 60 * 60 * 24))
+	
+	
+	if(Cookies.getCookie(osceDayProxy.getId().toString()) == null){
+		Cookies.setCookie(osceDayProxy.getId().toString(),osceDayProxy.getId().toString(),new Date((new Date()).getTime() + (1000 * 60 * 60 * 24)));
+		Log.info("Cookie Created for :" + osceDayProxy.getId());
+		
+	}
+		refreshData(osceDayProxy);
+	
+		osceDayTimer.schedule(constant.OSCEDAYTIMESCHEDULE);
+		
+		//timerMap.put(osceDayProxy.getId().toString(),osceDayTimer);
+}
+
+
+@Override
+public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl) {
+			Log.info("Cookie Removed for :" +osceDayProxy.getId());
+			Cookies.removeCookie(osceDayProxy.getId().toString());
+			//timerMap.remove(osceDayProxy.getId().toString());
+	
+}
+
+public void refreshData(OsceDayProxy osceDayProxy){
+	// Do Data Refreshing Task
+}
+
+
+// Module 3 }
 	/**
 	 * go to another place
 	 * 
@@ -297,6 +444,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 						}
 					}
 				});
+		initOsceDaySubView();
 	}
 
 	@Override

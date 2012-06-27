@@ -276,6 +276,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
 			osceProxy.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
 			osceProxy.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
+			osceProxy.setMiddleBreak(((OsceEditViewImpl)view).middleBreak.getValue());
 			osceProxy.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
 			//osceProxy.setSemester(((OsceEditViewImpl)view).semester.getValue());
 			osceProxy.setSemester(semester);

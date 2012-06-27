@@ -34,6 +34,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostSubV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubView.Delegate;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubViewImpl;
 
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseRequest;
@@ -46,10 +49,12 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.shared.ColorPicker;
+import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.util;
@@ -85,7 +90,7 @@ CircuitDetailsView.Presenter,
 CircuitDetailsView.Delegate,CircuitOsceSubView.Delegate,OsceGenerateSubView.Delegate,OscePostSubView.Delegate,ListBoxPopupView.Delegate,OscePostView.Delegate
 ,HeaderView.Delegate,DragHandler,//5C:SPEC START
 OSCENewSubView.Delegate,
-OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Module 5
+OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubView.Delegate {//Assignment E:Module 5
 
 		private OsMaRequestFactory requests;
 		private PlaceController placeController;
@@ -96,6 +101,9 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 		private final OsceConstants constants;
 		private OsceProxy osceProxy;
 		private OsceDayViewImpl osceDayViewImpl;
+		private SequenceOsceSubViewImpl sequenceOsceSubViewImpl;
+		private List<SequenceOsceSubViewImpl> sequenceOsceSubViewImpl1;
+		
 		private CircuitOsceSubViewImpl circuitOsceSubViewImpl;
 		
 		private OscePostBlueprintProxy oscePostBlueprintProxy;
@@ -350,6 +358,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 								OsceGenerateSubView generateView=createGenerateView((OsceDayProxy)osceDayProxy);
 								
 								Iterator<OsceSequenceProxy> osceSeqProxyIterator=osceDayProxy.getOsceSequences().iterator();
+								sequenceOsceSubViewImpl1=new ArrayList<SequenceOsceSubViewImpl>(osceDayProxy.getOsceSequences().size());
 							
 								while(osceSeqProxyIterator.hasNext())
 								{
@@ -363,7 +372,9 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 									ScrollPanel sp=new ScrollPanel(accordianView.asWidget());
 									
 									sp.setWidth("720px");
-									generateView.getAccordianVP().insert(sp, generateView.getAccordianVP().getWidgetCount());
+									HorizontalPanel accordingHp=new HorizontalPanel();
+									accordingHp.add(sp);
+									
 									
 									//create each parcor
 									//while(courseProxyIterator.hasNext())
@@ -375,6 +386,26 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 									
 									//create Sequence View
 									
+										//sequence start
+									//	sequenceOsceSubViewImpl=new SequenceOsceSubViewImpl(osceSeqProxy);
+										
+										 sequenceOsceSubViewImpl = new SequenceOsceSubViewImpl();
+									//	sequenceOsceSubViewImpl=sequenceOsceSubViewImpl2;
+									//	sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
+										sequenceOsceSubViewImpl.setDelegate(activity);
+										sequenceOsceSubViewImpl.nameOfSequence.setText((osceSeqProxy.getLabel()==null?"aaa":osceSeqProxy.getLabel()));
+										sequenceOsceSubViewImpl.sequenceRotation.setText(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
+										sequenceOsceSubViewImpl.osceSequenceProxy=osceSeqProxy;
+										sequenceOsceSubViewImpl.osceDayProxy=osceDayProxy;
+									//	addClickHandler(sequenceOsceSubViewImpl);
+										//sequenceOsceSubViewImpl.setStyleName(status.getOsceStatus(OsceStatus.OSCE_GENRATED));
+										accordingHp.add(sequenceOsceSubViewImpl);
+										//sequence end
+										
+										//add accordian and sequence to vertical panel
+										accordingHp.setSpacing(20);
+										generateView.getAccordianVP().insert(accordingHp, generateView.getAccordianVP().getWidgetCount());
+									
 									
 								}
 								
@@ -382,6 +413,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 								//Osce Days[
 								osceDayViewImpl = generateView.getOsceDayViewImpl();
 								osceDayViewImpl.setDelegate(activity);
+								
 								// Day Assignment 
 								
 								
@@ -426,6 +458,12 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 			// spec End==
 	
 	}
+		
+		
+	//sequence start
+		
+	
+		//sequence end
 		
 		
 		//Assignment E:Module 5[
@@ -1732,6 +1770,210 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate {//Assignment E:Mod
 					}
 					
 				}
+				
+				//sequence start
+				
+				private void addClickHandler(final SequenceOsceSubViewImpl sequenceOsceSubViewImpl)
+				{
+					sequenceOsceSubViewImpl.ok.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							// TODO Auto-generated method stub
+							
+							sequenceOsceSubViewImpl.chaneNameOfSequence.setVisible(false);
+							sequenceOsceSubViewImpl.ok.setVisible(false);
+							sequenceOsceSubViewImpl.nameOfSequence.setText(sequenceOsceSubViewImpl.chaneNameOfSequence.getValue());
+						//	sequenceOsceSubViewImpl.osceSequenceProxy.setLabel(sequenceOsceSubViewImpl[i].nameOfSequence.getText());
+							System.out.println(sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
+							sequenceOsceSubViewImpl.ok.setVisible(false);
+							sequenceOsceSubViewImpl.chaneNameOfSequence.setVisible(false);
+							
+							OsceSequenceRequest osceSequenceRequest=requests.osceSequenceRequest();
+							OsceSequenceProxy proxy=osceSequenceRequest.edit(sequenceOsceSubViewImpl.osceSequenceProxy);
+							proxy.setLabel(sequenceOsceSubViewImpl.nameOfSequence.getText());
+							sequenceOsceSubViewImpl.osceSequenceProxy=proxy;
+							
+							osceSequenceRequest.persist().using(proxy).fire(new Receiver<Void>() {
+								@Override
+								public void onSuccess(Void response) {	
+									// TODO Auto-generated method stub
+							//		System.out.println("INside success");
+									Log.info("osce sequence updated  successfully with label--"+sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
+								//	init2();
+								
+									}
+							});
+							
+						}
+					});
+				}
+				@Override
+				public void saveSequenceLabel(final SequenceOsceSubViewImpl sequenceOsceSubViewImpl) {
+					// TODO Auto-generated method stub
+					Log.info("ok button click");
+					
+					sequenceOsceSubViewImpl.chaneNameOfSequence.setVisible(false);
+					sequenceOsceSubViewImpl.ok.setVisible(false);
+					sequenceOsceSubViewImpl.nameOfSequence.setText(sequenceOsceSubViewImpl.chaneNameOfSequence.getValue());
+				//	sequenceOsceSubViewImpl.osceSequenceProxy.setLabel(sequenceOsceSubViewImpl[i].nameOfSequence.getText());
+					System.out.println(sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
+					
+					OsceSequenceRequest osceSequenceRequest=requests.osceSequenceRequest();
+					OsceSequenceProxy proxy=osceSequenceRequest.edit(sequenceOsceSubViewImpl.osceSequenceProxy);
+					proxy.setLabel(sequenceOsceSubViewImpl.nameOfSequence.getText());
+					sequenceOsceSubViewImpl.osceSequenceProxy=proxy;
+					
+					osceSequenceRequest.persist().using(proxy).fire(new Receiver<Void>() {
+						@Override
+						public void onSuccess(Void response) {	
+							// TODO Auto-generated method stub
+					//		System.out.println("INside success");
+							Log.info("osce sequence updated  successfully with label--"+sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
+						//	init2();
+						
+							}
+					});
+					
+					
+					
+				}
+
+				@Override
+				public void saveOsceDataSplit(SequenceOsceSubViewImpl sequenceOsceSubViewImpl) {
+					// TODO Auto-generated method stub
+				//	final OsceSequenceProxy newOsce;
+					if(sequenceOsceSubViewImpl.osceDayProxy.getTimeEnd().getHours()>13)
+					{
+						
+					requests.osceSequenceRequestNonRoo().splitSequence(sequenceOsceSubViewImpl.osceSequenceProxy.getId()).fire(new OSCEReceiver<OsceSequenceProxy>() {
+
+						@Override
+						public void onSuccess(OsceSequenceProxy osceSequenceProxy) {
+							// TODO Auto-generated method stub
+							Log.info("spliting of sequence done:--"+osceSequenceProxy.getId());
+							goTo(new CircuitDetailsPlace(osceProxy.stableId(),Operation.DETAILS));
+						}
+					});
+					
+					}
+					else
+					{
+						Log.info("Spliting not allowed");
+					}
+						
+/*						
+						// TODO Auto-generated method stub
+						Log.info("end time:- "+sequenceOsceSubViewImpl.osceDayProxy.getTimeEnd().getHours());
+						if(sequenceOsceSubViewImpl.osceDayProxy.getTimeEnd().getHours()>13)
+						{
+							Log.info("perform spliting");
+							requests.osceSequenceRequest().findOsceSequence(sequenceOsceSubViewImpl.osceSequenceProxy.getId()).with("osceDay","oscePosts","courses").fire(new Receiver<OsceSequenceProxy>() {
+
+								@Override
+								public void onSuccess(OsceSequenceProxy response) {
+									// TODO Auto-generated method stub
+									final OsceSequenceProxy globalResponse=response;
+									System.out.println("success fetch--"+response.getCourses().size()+"-"+response.getOscePosts().size());
+								
+							
+							//,"osceSequences.osceDay","osceSequences.oscePosts","osceSequences.courses"
+									
+							OsceSequenceRequest sequenceRequest=requests.osceSequenceRequest();
+							final OsceSequenceProxy sequenceProxy=sequenceRequest.create(OsceSequenceProxy.class);
+							
+							sequenceProxy.setLabel(response.getLabel());
+							sequenceProxy.setNumberRotation(response.getNumberRotation());
+					//		
+							sequenceProxy.setOsceDay(response.getOsceDay());
+							System.out.println("before set course");
+
+							sequenceRequest.persist().using(sequenceProxy).fire(new Receiver<Void>() {
+
+								@Override
+								public void onSuccess(Void response) {
+									// TODO Auto-generated method stub
+									System.out.println("new sequence save successfully");
+									
+									//requests.osceSequenceRequestNonRoo().findMaxOsceSequence().fire(new Receiver<OsceSequenceProxy>() {
+									requests.find(sequenceProxy.stableId()).fire(new Receiver<Object>() {
+
+										@Override
+										public void onSuccess(Object response) {
+											// TODO Auto-generated method stub
+											
+											System.out.println("new size--"+globalResponse.getOscePosts().size());
+											Iterator<OscePostProxy> postIterator=globalResponse.getOscePosts().iterator();
+											while(postIterator.hasNext())
+											{
+												OscePostProxy post=postIterator.next();
+												OscePostRequest postRequest=requests.oscePostRequest();
+												
+												OscePostProxy addpost=postRequest.create(OscePostProxy.class);
+												addpost.setIsPossibleStart(post.getIsPossibleStart());
+												addpost.setOscePostBlueprint(post.getOscePostBlueprint());
+												addpost.setOscePostRooms(post.getOscePostRooms());
+												addpost.setOsceSequence((OsceSequenceProxy)response);
+												addpost.setStandardizedRole(post.getStandardizedRole());
+												addpost.setSequenceNumber(post.getSequenceNumber());
+												
+												
+												postRequest.persist().using(addpost).fire();
+											}
+											
+											Iterator<CourseProxy> courseIterator=globalResponse.getCourses().iterator();
+											while(courseIterator.hasNext())
+											{
+												CourseProxy course=courseIterator.next();
+												CourseRequest courseRequest=requests.courseRequest();
+												
+												CourseProxy addCourse=courseRequest.create(CourseProxy.class);
+												
+												addCourse.setColor(course.getColor());
+												addCourse.setOsce(course.getOsce());
+												addCourse.setOscePostRooms(course.getOscePostRooms());
+												addCourse.setOsceSequence((OsceSequenceProxy)response);
+												
+												
+												
+												courseRequest.persist().using(addCourse).fire();
+											}
+											
+										}
+									});
+								}
+								
+								@Override
+								public void onViolation(Set<Violation> errors) {
+									Iterator<Violation> iter = errors.iterator();
+									String message = "";
+									while (iter.hasNext()) {
+										message += iter.next().getMessage() + "<br>";
+									}
+									Log.warn(" in sequence -" + message);
+								}
+								
+								public void onFailure(ServerFailure error) {
+									Log.error("error--"+error.getMessage());
+
+								}
+							
+							});
+							
+							}
+							});
+						}
+						else
+						{
+							Log.info("spliting not allowed");
+						}
+						*/
+					}
+		
+				
+				
+					
+		
 				
 				//  OSCE Day Assignment END
 				

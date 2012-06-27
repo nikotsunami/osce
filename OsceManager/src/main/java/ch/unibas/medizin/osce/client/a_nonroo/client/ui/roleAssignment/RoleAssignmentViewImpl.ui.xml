@@ -39,8 +39,12 @@
 			<g:ScrollPanel>
 				<g:SimplePanel ui:field="detailsPanel">
 					<g:HTMLPanel>
-
-
+							<!-- Module 3 { -->
+							<g:VerticalPanel ui:field="osceDaySubViewContainerPanel">
+								<!-- r:OsceDaySubViewImpl ui:field="osceDaySubViewImpl"></r:OsceDaySubViewImpl -->
+							</g:VerticalPanel>
+							<!-- Module 3 } -->
+			
 					</g:HTMLPanel>
 				</g:SimplePanel>
 			</g:ScrollPanel>

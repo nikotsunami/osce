@@ -33,5 +33,11 @@ public class OsMaConstant {
 		public static String Closed_Status="Osce_Closed_Status";
 		
 		//By Spec]End
+		
+		// Module 3 {
+				public static int OSCECOOKIEDAY = 0;
+				public static int OSCEDAYTIMESCHEDULE =6000;
+				
+				// Module 3 }
 	//By Spec]End
 }
