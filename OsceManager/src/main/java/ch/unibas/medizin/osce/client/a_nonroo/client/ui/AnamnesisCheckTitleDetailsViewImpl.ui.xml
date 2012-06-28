@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../styles.css" />
+		
+	<g:VerticalPanel addStyleNames="{style.tabStyle}">
+		<g:HTMLPanel styleName="{style.patientControls}">
+			<div class="{style.controlsright}">
+				<h3 class="{style.header}" style="display:inline">
+					<span ui:field="header"></span>
+				</h3>
+				<my:IconButton ui:field="edit" icon="pencil"></my:IconButton>
+				<my:IconButton ui:field="delete" icon="trash"></my:IconButton>
+			</div>
+		</g:HTMLPanel>
+
+		<g:TabPanel ui:field="anamnesisTitlePanel" addStyleNames="gwt-InvertedTabPanel" width="100%">
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					<table id='boundElementHolder' class="{style.fields}">
+						<colgroup>
+							<col></col>
+							<col></col>
+						</colgroup>
+						<tbody>
+							<tr id='text'>
+								<td><span class='{style.label}' ui:field="labelText" /></td>
+								<td><span ui:field='text' /></td>
+							</tr>
+							 <tr id='previous'>
+                                <td><span class='{style.label}' ui:field="labelPrevious" /></td>
+                                <td><span ui:field='previous' /></td>
+                            </tr>
+						</tbody>
+					</table>
+				</g:HTMLPanel>
+			</g:Tab>
+		</g:TabPanel>
+	</g:VerticalPanel>
+</ui:UiBinder>

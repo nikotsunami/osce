@@ -3,6 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../styles.css" />
+	
 
 	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
 		<g:west size="400">
@@ -12,11 +13,12 @@
 						<my:QuickSearchBox ui:field="searchBox" />
 						<my:IconButton icon="arrowrefresh-1-w" ui:field="refreshButton" />
 						<g:ListBox width="150px"  ui:field="filterTitle"/>
-						<b:SimplePager display="{table}" ui:field="pager" />
 					</div>
 
-					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
-
+<!-- 			 <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />   -->
+                   <g:ScrollPanel ui:field="scrollPanel" height="400px" width="100%" styleName="scrollPanelTest">
+                        <g:VerticalPanel ui:field="anamnesisCheckPanel" width="100%"></g:VerticalPanel>
+                   </g:ScrollPanel>
 
 					<div class="{style.textBoxStyle} {style.controlsleft}">
 						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
@@ -28,10 +30,10 @@
 					<div class="{style.textBoxStyle} {style.controlsleft}">
 					<g:Button width="80px" text="Save Order" ui:field="saveOrder"></g:Button>
                     </div>
-					<div class="{style.listBoxStyle}">
+<!-- 					<div class="{style.listBoxStyle}">
 						<g:ListBox width="50px" ui:field="rangeNum" />
 					</div>
-
+ -->
 					<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
 				</g:HTMLPanel>
 			</g:ScrollPanel>

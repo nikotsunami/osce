@@ -460,6 +460,7 @@ public interface OsceConstants extends Constants {
     
     public String clearAll();
     
+    public String anamnesisCheckTitle();
     
    
 	
