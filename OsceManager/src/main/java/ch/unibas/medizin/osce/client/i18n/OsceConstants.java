@@ -461,6 +461,9 @@ public interface OsceConstants extends Constants {
     public String clearAll();
     
     
-   
-	
+    public String enterSortOrderWarn();
+    
+    public String unSaveOrderWarn();
+    
+    public String leavePageWarn();
 }

@@ -154,7 +154,15 @@ public class AnamnesisCheckViewImpl extends Composite implements
 //		table.removeColumn(1);
 //		table.removeColumn(checkOrderColumn);
 		init();
-
+		
+//		DisclosurePanel advancedDisclosure = (DisclosurePanel) anamnesisCheckPanel.getWidget(0);
+//		CellTable<AnamnesisCheckProxy> cellTable = (CellTable<AnamnesisCheckProxy>) advancedDisclosure.getContent();
+//		List<AnamnesisCheckProxy> anamnesisCheckProxyList = cellTable.getDisplayedItems();
+//		Window.alert("anamnesisCheckProxyList size = "+anamnesisCheckProxyList.size());
+//		for(AnamnesisCheckProxy check : anamnesisCheckProxyList){
+//			GWT.log("check "+ check.getText());
+//			GWT.log("check "+ check.getSort_order());
+//		}
 	}
 
 //	public void initList() {

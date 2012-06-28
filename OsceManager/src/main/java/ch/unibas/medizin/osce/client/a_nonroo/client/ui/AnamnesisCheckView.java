@@ -36,7 +36,7 @@ public interface AnamnesisCheckView extends IsWidget{
 //		void changeNumRowShown(String selectedValue);
 		void changeFilterTitleShown(String selectedTitle);
 		void saveOrder();
-		void orderEdited(AnamnesisCheckProxy proxy, String sortOrder); 
+		List<AnamnesisCheckProxy> orderEdited(AnamnesisCheckProxy proxy, String sortOrder, ListDataProvider<AnamnesisCheckProxy> dataProvider); 
 //		void resetUserSpecifiedOrder(AnamnesisCheckProxy anamnesisCheck, String value);
 		
 		void setQuestionTableData(ListDataProvider<AnamnesisCheckProxy> dataProvider, AnamnesisCheckTitleProxy title);

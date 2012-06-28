@@ -77,6 +77,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     private String quickSearchTerm = "";
 
     private HandlerRegistration placeChangeHandlerRegistration;
+    
+    private boolean sortOrderHasChange = false;
 
     public AnamnesisCheckActivity(OsMaRequestFactory requests,
             PlaceController placeController, AnamnesisCheckPlace place) {
@@ -117,7 +119,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     @Override
     public String mayStop() {
-        return null;
+    	if (sortOrderHasChange){
+    		return constants.leavePageWarn();
+    	} else {
+    		return null;
+    		
+    	}
     }
 
 
@@ -218,33 +225,41 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     @Override
     public void moveUp(final AnamnesisCheckProxy proxy) {
-        requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy)
-                .fire(new Receiver<Void>() {
-                    @Override
-                    public void onSuccess(Void response) {
-                        Log.info("moved");
-//                        init();
-                        findTitlesWithSearching();
-                    }
-                });
+		if (request == null) {
+			requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy).fire(
+					new Receiver<Void>() {
+						@Override
+						public void onSuccess(Void response) {
+							Log.info("moved");
+							// init();
+							findTitlesWithSearching();
+						}
+					});
+		} else {
+			Window.alert(constants.unSaveOrderWarn());
+		}
     }
 
     @Override
     public void moveDown(final AnamnesisCheckProxy proxy) {
-        requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy)
-                .fire(new Receiver<Void>() {
-                    @Override
-                    public void onSuccess(Void response) {
-                        Log.info("moved");
-//                        init();
-                        findTitlesWithSearching();
-                    }
-                });
+		if (request == null) {
+			requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy)
+					.fire(new Receiver<Void>() {
+						@Override
+						public void onSuccess(Void response) {
+							Log.info("moved");
+							// init();
+							findTitlesWithSearching();
+						}
+					});
+		} else {
+			Window.alert(constants.unSaveOrderWarn());
+		}
     }
 
     @Override
     public void deleteClicked(AnamnesisCheckProxy proxy) {
-        // TODO implement
+      
     }
 
     private void fireRangeRequest(String q, AnamnesisCheckProxy title,
@@ -443,26 +458,171 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     }
 
 
-    @Override
-    public void orderEdited(AnamnesisCheckProxy proxy,
-            String sortOrderStr) {
-        AnamnesisCheckRequest req = getRequest();
-        AnamnesisCheckProxy editableProxy = req.edit(proxy);
-        try {
-            editableProxy.setSort_order(Integer
-                    .valueOf(sortOrderStr));
-            req.persist().using(editableProxy);
+	@Override
+	public List<AnamnesisCheckProxy> orderEdited(AnamnesisCheckProxy proxy,
+			String sortOrderStr,
+			ListDataProvider<AnamnesisCheckProxy> dataProvider) {
+		
+	
+		//TODO delete
+		for (AnamnesisCheckProxy anamnesisCheckProxy : dataProvider
+				.getList()) {
 
-        } catch (Exception e) {
+			GWT.log("$$$$$$$$$$$$$$$$$$$$"+anamnesisCheckProxy.getText());
 
-            System.err.println(e);
-        }
 
-    }
+		}
+		
+		AnamnesisCheckProxy currentProxy = proxy;
 
+		AnamnesisCheckRequest req = getRequest();
+
+		try {
+			if(sortOrderStr.matches("[0-9]+")) {
+
+				Integer editSortOrder = Integer.valueOf(sortOrderStr);
+
+				Integer dataSize = dataProvider.getList().size();
+
+				if (editSortOrder > dataSize) {
+					editSortOrder = dataSize;
+				}
+
+				if (editSortOrder > 0) {
+					
+					for (AnamnesisCheckProxy check : dataProvider.getList()) {
+						// if has same sortOder with this sortOder
+						if (check.getSort_order() == editSortOrder
+								&& check.getId() != currentProxy.getId()) {
+							GWT.log("************************find same sort Order");
+							if (currentProxy.getSort_order() > editSortOrder) {
+								// move up
+								// for(AnamnesisCheckProxy anamnesisCheckProxy :
+								// dataProvider.getList()){
+								for (int i = dataSize - 1; i >= 0; i--) {
+									// find between editableProxy and
+									// currentProxy
+									AnamnesisCheckProxy anamnesisCheckProxy = dataProvider
+											.getList().get(i);
+									if (anamnesisCheckProxy.getSort_order() >= editSortOrder
+											&& anamnesisCheckProxy
+													.getSort_order() < currentProxy
+													.getSort_order()
+											&& anamnesisCheckProxy.getId() != proxy
+													.getId()) {
+										GWT.log(anamnesisCheckProxy.getText()
+												+ "sortOder+1");
+										AnamnesisCheckProxy editanamnesisCheckProxy = req
+												.edit(anamnesisCheckProxy);
+										editanamnesisCheckProxy
+												.setSort_order(anamnesisCheckProxy
+														.getSort_order() + 1);
+										req.persist().using(editanamnesisCheckProxy);
+										dataProvider.getList().set(
+												editanamnesisCheckProxy
+														.getSort_order() - 1,
+												editanamnesisCheckProxy);
+
+										GWT.log(anamnesisCheckProxy
+												.getSort_order()
+												+ " change to "
+												+ editanamnesisCheckProxy
+														.getSort_order());
+
+									}
+								}
+								// dataProvider.getList().set(editableProxy.getSort_order()
+								// - 1, editableProxy);
+							} else if (currentProxy.getSort_order() < editSortOrder) {
+								// move down
+
+								for (AnamnesisCheckProxy anamnesisCheckProxy : dataProvider
+										.getList()) {
+									// find between editableProxy and
+									// currentProxy
+									Integer anamnesisCheckProxySortorder = anamnesisCheckProxy.getSort_order();
+									if (anamnesisCheckProxySortorder <= editSortOrder
+											&& anamnesisCheckProxySortorder > currentProxy
+													.getSort_order()
+											&& anamnesisCheckProxy.getId() != proxy
+													.getId()) {
+										GWT.log(anamnesisCheckProxy.getText()
+												+ "sortOder-1");
+										AnamnesisCheckProxy editanamnesisCheckProxy = req
+												.edit(anamnesisCheckProxy);
+										editanamnesisCheckProxy
+												.setSort_order(anamnesisCheckProxySortorder - 1);
+										req.persist().using(editanamnesisCheckProxy);
+										dataProvider.getList().set(
+												editanamnesisCheckProxy
+														.getSort_order() - 1,
+												editanamnesisCheckProxy);
+
+										GWT.log(anamnesisCheckProxySortorder
+												+ " change to "
+												+ editanamnesisCheckProxy
+														.getSort_order());
+
+									}
+								}
+
+							}
+//							AnamnesisCheckProxy editableProxy = req.edit(proxy);
+//							editableProxy.setSort_order(editSortOrder);
+//							dataProvider.getList().set(
+//									editableProxy.getSort_order() - 1,
+//									editableProxy);
+							// TODO change the number in text
+
+						}else {
+							//not has same number
+							GWT.log(">>>>>>>>not has same number");
+
+						}
+
+					}
+					
+					AnamnesisCheckProxy editableProxy = req.edit(proxy);
+					editableProxy.setSort_order(editSortOrder);
+					req.persist().using(editableProxy);
+//					Window.alert(editableProxy.getSort_order() - 1 + ","+editableProxy.getText());
+					dataProvider.getList().set(
+							editableProxy.getSort_order() - 1,
+							editableProxy);
+
+					
+					// TODO delete
+					for (AnamnesisCheckProxy anamnesisCheckProxy : dataProvider
+							.getList()) {
+
+						GWT.log(anamnesisCheckProxy.getText() + "sortOrder = "
+								+ anamnesisCheckProxy.getSort_order());
+
+					}
+				} else {
+					// TODO change the number in text
+					Window.alert(constants.enterSortOrderWarn());
+				}
+
+			} else  {
+				// TODO change the number in text
+				Window.alert(constants.enterSortOrderWarn());
+//				dataProvider.getList().set(
+//						proxy.getSort_order() - 1,
+//						proxy);
+			}
+			sortOrderHasChange = true;
+		} catch (Exception e) {
+			System.err.println(e);
+			findTitlesWithSearching();
+		}
+		return dataProvider.getList();
+
+	}
 
     @Override
     public void onPlaceChange(PlaceChangeEvent event) {
+
     }
 
 
@@ -476,8 +636,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             @Override
             public void onSuccess(Object response) {
 
+            	sortOrderHasChange = false;
             	goToAnamesisCheckPlace();
-
             }
 
         });
@@ -535,28 +695,36 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	@Override
 	public void moveDownTitle(AnamnesisCheckTitleProxy proxy) {
-		requests.anamnesisCheckTitleRequestNonRoo().moveDown().using(proxy).fire(new Receiver<Void>() {
+		if (request == null) {
+			requests.anamnesisCheckTitleRequestNonRoo().moveDown().using(proxy)
+					.fire(new Receiver<Void>() {
 
-			@Override
-			public void onSuccess(Void response) {
-//				init();
-				findTitlesWithSearching();
-			}
-		});
-		
+						@Override
+						public void onSuccess(Void response) {
+							// init();
+							findTitlesWithSearching();
+						}
+					});
+		} else {
+			Window.alert(constants.unSaveOrderWarn());
+		}
 	}
 
 	@Override
 	public void moveUpTitle(AnamnesisCheckTitleProxy proxy) {
-		requests.anamnesisCheckTitleRequestNonRoo().moveUp().using(proxy).fire(new Receiver<Void>() {
+		if (request == null) {
+			requests.anamnesisCheckTitleRequestNonRoo().moveUp().using(proxy)
+					.fire(new Receiver<Void>() {
 
-			@Override
-			public void onSuccess(Void response) {
+						@Override
+						public void onSuccess(Void response) {
 
-				findTitlesWithSearching();
-			}
-		});
-		
+							findTitlesWithSearching();
+						}
+					});
+		} else {
+			Window.alert(constants.unSaveOrderWarn());
+		}
 	}
 	
 }

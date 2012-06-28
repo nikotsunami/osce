@@ -25,6 +25,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -59,8 +60,105 @@ public class AnamnesisCheckTable {
 		
 		cellTable.setSelectionModel(selectionModel);
 
+//		// Add colum
+//		Column<AnamnesisCheckProxy, String> checkOrderColumn = new Column<AnamnesisCheckProxy, String>(new TextInputCell()) {
+//
+//			@Override
+//			public String getValue(AnamnesisCheckProxy object) {
+//				return String.valueOf(object.getSort_order());
+//			}
+//
+//		};
+//		checkOrderColumn.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
+//
+//			@Override
+//			public void update(int index, AnamnesisCheckProxy object, String value) {
+//				
+//				try {
+//					if (value != null && !value.equals("")) {
+//						delegate.orderEdited(object, value, dataProvider);
+//						
+//						//TODO delete
+//						for(AnamnesisCheckProxy anamnesisCheckProxy : dataProvider.getList()){
+//			    			
+//			    			GWT.log(">>>>>>>>>>>>>>>>>>>>>> "+anamnesisCheckProxy.getSort_order()+","+anamnesisCheckProxy.getText());
+//			    			
+//			    			
+//			    		}
+//						
+////						for(int i = 0 ;i <cellTable.getColumnCount(); i++){
+////							cellTable.removeColumn(i);
+////						}
+//
+//						
+////						initTable();
+////						//TODO delete
+////						for(AnamnesisCheckProxy anamnesisCheckProxy : anamnesisChecks){
+////			    			
+////			    			GWT.log("######################before "+anamnesisCheckProxy.getSort_order()+","+anamnesisCheckProxy.getText());
+////			    			
+////			    			
+////			    		}
+//						
+////						dataProvider.getList().clear();						
+////						dataProvider.getList().addAll(anamnesisChecks);
+////						dataProvider.refresh();
+////						dataProvider.setList(dataProvider.getList());
+////						cellTable.setVisibleRange(0, anamnesisChecks.size());
+////						dataProvider.setList(anamnesisChecks);
+////						for(AnamnesisCheckProxy anamnesisCheckProxy : anamnesisChecks){
+////			    			
+////			    			GWT.log("######################after "+anamnesisCheckProxy.getText());
+////			    			
+////			    			
+////			    		}
+//
+//					} else {
+//						List<AnamnesisCheckProxy> anamnesisChecks = delegate.orderEdited(object, null, dataProvider);
+//					}
+//				} catch (Exception e) {
+//					GWT.log(value + e);
+//				}
+//
+//			}
+//		});
+//		cellTable.addColumn(checkOrderColumn);
+//		
+//		cellTable.addColumn(new QuestionTypeColumn());
+//		cellTable.addColumn(new SimpleTextColumn());
+//		cellTable.addColumn(new ValueColumn());
+//		
+//		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
+//			public void execute(AnamnesisCheckProxy proxy) {
+//				delegate.moveDown(proxy);
+//			}
+//		}), "", new GetValue<AnamnesisCheckProxy>() {
+//			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
+//				return proxy;
+//			}
+//		}, null);
+//		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.UP_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
+//			public void execute(AnamnesisCheckProxy proxy) {
+//				delegate.moveUp(proxy);
+//			}
+//		}), "", new GetValue<AnamnesisCheckProxy>() {
+//			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
+//				return proxy;
+//			}
+//		}, null);
+		addColumInTabel();
+		
+		dataProvider.addDataDisplay(cellTable);
+		dataProvider.setList(anamnesisCheckProxyList);
+		
+		
+		return cellTable;
+
+	}
+	
+	private void addColumInTabel(){
 		// Add colum
-		Column<AnamnesisCheckProxy, String> checkOrderColumn = new Column<AnamnesisCheckProxy, String>(new TextInputCell()) {
+		final Column<AnamnesisCheckProxy, String> checkOrderColumn = new Column<AnamnesisCheckProxy, String>(new TextInputCell()) {
 
 			@Override
 			public String getValue(AnamnesisCheckProxy object) {
@@ -72,11 +170,50 @@ public class AnamnesisCheckTable {
 
 			@Override
 			public void update(int index, AnamnesisCheckProxy object, String value) {
+				
 				try {
 					if (value != null && !value.equals("")) {
-						delegate.orderEdited(object, value);
+						delegate.orderEdited(object, value, dataProvider);
+						resetColumn();
+				
+						
+						//TODO delete
+						for(AnamnesisCheckProxy anamnesisCheckProxy : dataProvider.getList()){
+			    			
+			    			GWT.log(">>>>>>>>>>>>>>>>>>>>>> "+anamnesisCheckProxy.getSort_order()+","+anamnesisCheckProxy.getText());
+			    			
+			    			
+			    		}
+						
+//						for(int i = 0 ;i <cellTable.getColumnCount(); i++){
+//							cellTable.removeColumn(i);
+//						}
+
+						
+//						initTable();
+//						//TODO delete
+//						for(AnamnesisCheckProxy anamnesisCheckProxy : anamnesisChecks){
+//			    			
+//			    			GWT.log("######################before "+anamnesisCheckProxy.getSort_order()+","+anamnesisCheckProxy.getText());
+//			    			
+//			    			
+//			    		}
+						
+//						dataProvider.getList().clear();						
+//						dataProvider.getList().addAll(anamnesisChecks);
+//						dataProvider.refresh();
+//						dataProvider.setList(dataProvider.getList());
+//						cellTable.setVisibleRange(0, anamnesisChecks.size());
+//						dataProvider.setList(anamnesisChecks);
+//						for(AnamnesisCheckProxy anamnesisCheckProxy : anamnesisChecks){
+//			    			
+//			    			GWT.log("######################after "+anamnesisCheckProxy.getText());
+//			    			
+//			    			
+//			    		}
+
 					} else {
-						delegate.orderEdited(object, null);
+						List<AnamnesisCheckProxy> anamnesisChecks = delegate.orderEdited(object, null, dataProvider);
 					}
 				} catch (Exception e) {
 					GWT.log(value + e);
@@ -108,16 +245,23 @@ public class AnamnesisCheckTable {
 				return proxy;
 			}
 		}, null);
-		
-		
-		dataProvider.addDataDisplay(cellTable);
-		dataProvider.setList(anamnesisCheckProxyList);
-		
-		
-		return cellTable;
-
 	}
 
+	private void resetColumn(){
+
+//		cellTable.removeColumn(0);
+//		cellTable.removeColumn(0);
+//		cellTable.removeColumn(0);
+//		cellTable.removeColumn(0);
+//		cellTable.removeColumn(0);
+//		cellTable.removeColumn(0);
+		int ColumnNum = cellTable.getColumnCount();
+		for(int i = 0; i < ColumnNum; i++){
+			cellTable.removeColumn(0);
+		}
+		addColumInTabel();
+	}
+	
 	private <C> void addColumn(Cell<C> cell, String headerText, final GetValue<C> getter, FieldUpdater<AnamnesisCheckProxy, C> fieldUpdater) {
 		Column<AnamnesisCheckProxy, C> column = new Column<AnamnesisCheckProxy, C>(cell) {
 			@Override
