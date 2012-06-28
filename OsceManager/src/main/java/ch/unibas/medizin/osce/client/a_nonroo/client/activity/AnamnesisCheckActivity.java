@@ -494,7 +494,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 						// if has same sortOder with this sortOder
 						if (check.getSort_order() == editSortOrder
 								&& check.getId() != currentProxy.getId()) {
-							GWT.log("************************find same sort Order");
 							if (currentProxy.getSort_order() > editSortOrder) {
 								// move up
 								// for(AnamnesisCheckProxy anamnesisCheckProxy :
@@ -510,8 +509,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 													.getSort_order()
 											&& anamnesisCheckProxy.getId() != proxy
 													.getId()) {
-										GWT.log(anamnesisCheckProxy.getText()
-												+ "sortOder+1");
+										
 										AnamnesisCheckProxy editanamnesisCheckProxy = req
 												.edit(anamnesisCheckProxy);
 										editanamnesisCheckProxy
@@ -523,11 +521,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 														.getSort_order() - 1,
 												editanamnesisCheckProxy);
 
-										GWT.log(anamnesisCheckProxy
-												.getSort_order()
-												+ " change to "
-												+ editanamnesisCheckProxy
-														.getSort_order());
+										
 
 									}
 								}
@@ -546,8 +540,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 													.getSort_order()
 											&& anamnesisCheckProxy.getId() != proxy
 													.getId()) {
-										GWT.log(anamnesisCheckProxy.getText()
-												+ "sortOder-1");
+										
 										AnamnesisCheckProxy editanamnesisCheckProxy = req
 												.edit(anamnesisCheckProxy);
 										editanamnesisCheckProxy
@@ -558,10 +551,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 														.getSort_order() - 1,
 												editanamnesisCheckProxy);
 
-										GWT.log(anamnesisCheckProxySortorder
-												+ " change to "
-												+ editanamnesisCheckProxy
-														.getSort_order());
+										
 
 									}
 								}
@@ -595,8 +585,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 					for (AnamnesisCheckProxy anamnesisCheckProxy : dataProvider
 							.getList()) {
 
-						GWT.log(anamnesisCheckProxy.getText() + "sortOrder = "
-								+ anamnesisCheckProxy.getSort_order());
+						
 
 					}
 				} else {

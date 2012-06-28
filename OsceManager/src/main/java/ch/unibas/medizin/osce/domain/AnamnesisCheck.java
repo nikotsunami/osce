@@ -840,6 +840,37 @@ public class AnamnesisCheck {
 
   
     private static Logger log = Logger.getLogger(AnamnesisCheck.class);
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((sort_order == null) ? 0 : sort_order.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AnamnesisCheck other = (AnamnesisCheck) obj;
+		if (sort_order == null) {
+			if (other.sort_order != null)
+				return false;
+		} else if (!sort_order.equals(other.sort_order))
+			return false;
+		return true;
+	}
+    
+    
+    
+    
     
 }
 
