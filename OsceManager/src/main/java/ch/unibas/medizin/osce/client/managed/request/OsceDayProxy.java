@@ -39,4 +39,8 @@ public interface OsceDayProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy> getOsceSequences();
 
     abstract void setOsceSequences(Set<OsceSequenceProxy> osceSequences);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy> getPatientInSemesters();
+
+    abstract void setPatientInSemesters(Set<PatientInSemesterProxy> patientInSemesters);
 }

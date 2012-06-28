@@ -50,5 +50,5 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	OsceRequestNonRoo osceRequestNonRoo();
 	
 	AnamnesisCheckTitleRequestNonRoo anamnesisCheckTitleRequestNonRoo();
-		
+	OsceSequenceRequestNonRoo osceSequenceRequestNonRoo();
 }

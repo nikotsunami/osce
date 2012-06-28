@@ -13,6 +13,7 @@ privileged aspect OsceDay_Roo_ToString {
         sb.append("Osce: ").append(getOsce()).append(", ");
         sb.append("OsceDate: ").append(getOsceDate()).append(", ");
         sb.append("OsceSequences: ").append(getOsceSequences() == null ? "null" : getOsceSequences().size()).append(", ");
+        sb.append("PatientInSemesters: ").append(getPatientInSemesters() == null ? "null" : getPatientInSemesters().size()).append(", ");
         sb.append("TimeEnd: ").append(getTimeEnd()).append(", ");
         sb.append("TimeStart: ").append(getTimeStart()).append(", ");
         sb.append("Version: ").append(getVersion());

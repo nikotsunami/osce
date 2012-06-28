@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.List;
 import java.util.Set;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
@@ -89,9 +90,9 @@ public interface OsceProxy extends EntityProxy {
 
     abstract void setOsce_days(Set<OsceDayProxy> osce_days);
 
-    abstract Set<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy> getOscePostBlueprints();
+    abstract List<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy> getOscePostBlueprints();
 
-    abstract void setOscePostBlueprints(Set<OscePostBlueprintProxy> oscePostBlueprints);
+    abstract void setOscePostBlueprints(List<OscePostBlueprintProxy> oscePostBlueprints);
 
     abstract Set<ch.unibas.medizin.osce.client.managed.request.TaskProxy> getTasks();
 

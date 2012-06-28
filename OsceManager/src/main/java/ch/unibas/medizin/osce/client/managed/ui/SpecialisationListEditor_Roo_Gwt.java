@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.CollectionRenderer;

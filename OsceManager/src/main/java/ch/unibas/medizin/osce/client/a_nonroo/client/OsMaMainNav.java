@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -28,7 +29,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
+
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterRequest;
@@ -115,6 +119,12 @@ public class OsMaMainNav extends Composite {
 		topicsAndSpec.setText(constants.topicsAndSpec());
 		roleScriptTemplate.setText(constants.roleScriptTemplate());
 		roomMaterials.setText(constants.roomMaterials());
+
+		roleAssignmentPanel.setAnimationEnabled(true);
+		roleAssignmentPanel.getHeaderTextAccessor().setText(
+				constants.simulationPatients());
+
+		roleAssignment.setText(constants.roleAssignments());
 		//By Spec]
 		
 		osces.setText(constants.osces());
@@ -250,6 +260,16 @@ public class OsMaMainNav extends Composite {
 	Anchor roomMaterials;
 	
 	//By SPEC Role]
+
+	// Assignment : 3 By SPEC[
+
+	@UiField
+	DisclosurePanel roleAssignmentPanel;
+	@UiField
+	Anchor roleAssignment; 
+
+	// By SPEC End//
+
 	@UiField
 	DisclosurePanel examinationsPanel;		// Prüfungen
 
@@ -352,6 +372,26 @@ public class OsMaMainNav extends Composite {
 	void roomMaterialsClicked(ClickEvent event) {
 		placeController.goTo(new RoomMaterialsPlace("RoomMaterialsPlace"));
 	}
+
+	@UiHandler("roleAssignment")
+	void roleAssignmentClicked(ClickEvent event) {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info("~~~~~~~~ApplicationLoadingScreenEvent onEventReceived Called");
+						event.display();
+					}
+				});
+		requests.getEventBus().fireEvent(
+				new ApplicationLoadingScreenEvent(true));
+		placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",
+				handlerManager, lstSemester.getValue()));
+		requests.getEventBus().fireEvent(
+				new ApplicationLoadingScreenEvent(false));
+	}
+
 	//By Spec]
 	@UiHandler("osces")
 	void oscesClicked(ClickEvent event) 

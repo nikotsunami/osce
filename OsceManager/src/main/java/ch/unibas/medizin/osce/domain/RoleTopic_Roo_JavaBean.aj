@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Integer;
 import java.lang.String;
+import java.util.List;
 import java.util.Set;
 
 privileged aspect RoleTopic_Roo_JavaBean {
@@ -45,11 +46,11 @@ privileged aspect RoleTopic_Roo_JavaBean {
         this.slotsUntilChange = slotsUntilChange;
     }
     
-    public Set<StandardizedRole> RoleTopic.getStandardizedRoles() {
+    public List<StandardizedRole> RoleTopic.getStandardizedRoles() {
         return this.standardizedRoles;
     }
     
-    public void RoleTopic.setStandardizedRoles(Set<StandardizedRole> standardizedRoles) {
+    public void RoleTopic.setStandardizedRoles(List<StandardizedRole> standardizedRoles) {
         this.standardizedRoles = standardizedRoles;
     }
     

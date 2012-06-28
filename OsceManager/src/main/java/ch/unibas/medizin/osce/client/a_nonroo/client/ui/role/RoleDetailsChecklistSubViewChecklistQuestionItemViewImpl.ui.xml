@@ -57,7 +57,11 @@
 		
 			<g:VerticalPanel width="500px" spacing="8">
 				<g:HorizontalPanel spacing="8">
-					<g:Label ui:field="questionItemLbl" ></g:Label>
+					<g:VerticalPanel spacing="5">
+						<g:Label ui:field="questionItemLbl" ></g:Label>
+						<g:Label ui:field="questionInstruction" ></g:Label>
+					</g:VerticalPanel>
+					
 					<g:VerticalPanel ui:field="editQuestionVP" horizontalAlignment="right">
 						<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>
 					</g:VerticalPanel>

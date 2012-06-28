@@ -464,3 +464,16 @@ body {
 	float: left;
 	margin: 0 0 0 40px;
 }
+
+/*Issue Role*/
+
+.marginTop15
+{
+	margin-top: 15px;
+	margin-left: 5px;
+}
+.marginTop7
+{
+	margin-top: 7px;
+	margin-left: 5px;	
+}

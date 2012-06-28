@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -30,9 +31,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -129,7 +132,12 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 				if (proxy.getText() != null) {
 					desc += proxy.getText();
 				}
-			} else if (response instanceof AnamnesisFormProxy) {
+			} else if (response instanceof AnamnesisCheckTitleProxy) {
+				AnamnesisCheckTitleProxy proxy = (AnamnesisCheckTitleProxy) response;
+				if (proxy.getText() != null) {
+					desc += proxy.getText();
+				}
+			}else if (response instanceof AnamnesisFormProxy) {
 				AnamnesisFormProxy proxy = (AnamnesisFormProxy) response;
 				if (proxy.getId() != null) {
 					desc += proxy.getId();
@@ -268,6 +276,9 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		}
 		else if (place instanceof RoomMaterialsPlace) {
 			placeDescription = constants.roomMaterials();
+		}
+		else if (place instanceof RoleAssignmentPlace) {
+			placeDescription = constants.simulationPatients();
 		}
 		
 		//By spec Role Management]

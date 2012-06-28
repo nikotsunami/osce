@@ -17,7 +17,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -44,9 +43,21 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	@UiField
 	public Label questionItemLbl;
 	
+	@UiField
+	public Label questionInstruction;
+	
 	
 	public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView;
 	
+	
+	public Label getQuestionInstruction() {
+		return questionInstruction;
+	}
+
+	public void setQuestionInstruction(Label questionInstruction) {
+		this.questionInstruction = questionInstruction;
+	}
+
 	public Label getQuestionItemLbl() {
 		return questionItemLbl;
 	}
@@ -108,6 +119,8 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	CheckListTopicPopupView optionPopup;
 	
 	CriteriaPopupView questionPopup;
+	
+	public CheckListTopicPopupView editquestionpopup;
 	
 	public ChecklistQuestionProxy getProxy() {
 		return proxy;
@@ -246,7 +259,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	
 	public void showQuestionPopup()
 	{
-		if(questionPopup==null)
+		/*if(questionPopup==null)
 		{
 			questionPopup=new CriteriaPopupViewImpl();
 		
@@ -283,7 +296,54 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		((CriteriaPopupViewImpl)questionPopup).show();
 		questionPopup.getCriteriaTxtBox().setText(questionItemLbl.getText());
 		questionPopup.getCriteriaTxtBox().selectAll();
-		questionPopup.getCriteriaTxtBox().setFocus(true);
+		questionPopup.getCriteriaTxtBox().setFocus(true); */
+		
+		//spec india
+		if(editquestionpopup==null)
+		{
+			editquestionpopup=new CheckListTopicPopupViewImpl();
+			
+			
+			((CheckListTopicPopupViewImpl)editquestionpopup).setAnimationEnabled(true);
+		
+			editquestionpopup.getDescriptionLbl().setText(constants.questionInstruction());
+			
+			editquestionpopup.getTopicLbl().setText(constants.questionName());
+			
+			editquestionpopup.getTopicTxtBox().setText(proxy.getQuestion());
+			
+			editquestionpopup.getDescriptionTxtBox().setText(proxy.getInstruction());
+			
+			((CheckListTopicPopupViewImpl)editquestionpopup).setWidth("150px");
+
+		
+			RootPanel.get().add(((CheckListTopicPopupViewImpl)editquestionpopup));
+			
+			editquestionpopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					
+					if(editquestionpopup.getTopicTxtBox().getValue()=="" || editquestionpopup.getDescriptionTxtBox().getValue()=="")
+					{
+					}	
+					else
+					{	
+						delegate.editOption(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue(),questionView);
+						//delegate.e
+						//delegate.saveCheckListQuestion(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue(),topicView);
+						((CheckListTopicPopupViewImpl)editquestionpopup).hide(true);
+				
+						//editquestionpopup.getTopicTxtBox().setValue("");
+						//editquestionpopup.getDescriptionTxtBox().setValue("");
+					}
+				}
+		});
+		}
+		
+		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(editQuestionVP.getAbsoluteLeft(), editQuestionVP.getAbsoluteTop()-180);
+		((CheckListTopicPopupViewImpl)editquestionpopup).show();
+		
 	}
 
 	@Override

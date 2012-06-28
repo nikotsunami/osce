@@ -63,8 +63,10 @@
 					<!--n:RoleBaseTableAccessViewImpl ui:field="roleBaseAccessViewImpl"></n:RoleBaseTableAccessViewImpl-->
 				</g:HorizontalPanel>
 				</div>
-				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
-				<div class="{style.pad10}">
+				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>								
+				<!-- Issue Role Module -->
+				<div class="{style.pad10}">				 				 
+				 <g:TextBox ui:field="txtSubItem"></g:TextBox>	
 				 <my:IconButton ui:field="AddSubItem" icon="plusthick" ></my:IconButton>
 				</div>
 			</g:HTMLPanel>

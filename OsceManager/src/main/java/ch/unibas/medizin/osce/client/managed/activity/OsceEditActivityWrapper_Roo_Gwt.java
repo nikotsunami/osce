@@ -11,7 +11,7 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OsceDaySetEditor;
-import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintListEditor;
 import ch.unibas.medizin.osce.client.managed.ui.StudentOscesSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;

@@ -58,6 +58,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	
 	
 	private StandardizedRoleProxy standardizedRole;
+	private StandardizedRoleProxy standardizedRole1;
 	private CheckListProxy checkListProxy;//spec
 	
 	private StandardizedRoleProxy  proxy;//spec
@@ -154,6 +155,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
 			//spec start
+			Log.info("Proxy ID : " + place.getProxyId());
 			requests.find(place.getProxyId()).with("standardizedRoles").with("checkList").with("roleTopic")
 					.fire(new Receiver<Object>() {
 
@@ -188,6 +190,9 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			
 		} else {
 			Log.info("new StandardizedRole");
+			((RoleEditViewImpl)view).roleTopic.setVisible(false);
+			((RoleEditViewImpl)view).labelRoleTopic.setInnerText("");
+			((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);
 			init();
 		}
 		widget.setWidget(view.asWidget());
@@ -200,6 +205,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		//	filterView.setSpecialisationBoxValues(response);
 			Log.debug("roletopic success");
 			view.setRoleTopicListBoxValues(response);
+			
+			
 		}
 	}
 	private void init() {
@@ -219,9 +226,44 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			standardizedRole.setActive(true);
 			checkListProxy.setVersion(0);//spec
 			view.setEditTitle(false);
+				
 			requests.roleTopicRequest().findAllRoleTopics().fire(new RoleTopicRecevier());
+			
+			Log.info("Proxy ID : " + place.getProxyId());
+				
+			requests.find(place.getProxyId()).with("roleTopic")
+			.fire(new Receiver<Object>() {
+
+				public void onFailure(ServerFailure error) {
+					Log.error(error.getMessage());
+				}
+
+				@Override
+				public void onSuccess(Object response) {
+					if (response instanceof RoleTopicProxy) {
+						Log.info(((RoleTopicProxy) response).getName());
+						// init((StandardizedPatientProxy) response);
+						RoleTopicProxy proxy1;
+						 proxy1 = (RoleTopicProxy) response;
+						
+						Log.info("Role Topic ID : " + proxy1.getId());
+						
+						RoleEditViewImpl test1 = new RoleEditViewImpl();
+						test1 = (RoleEditViewImpl) view;
+						test1.roleTopic.setValue(proxy1);
+						//	requests.roleTopicRequestNonRoo().
+						//			findAllRoleTopic(proxy1.getId().intValue()).
+						//			fire(new RoleTopicRecevier());
+//						
+				
+					}
+				}
+			}); 
+		//	requests.roleTopicRequest().findAllRoleTopics().fire(new RoleTopicRecevier());
+			
 			//requests.roleTopicRequestNonRoo().findAllRoleTopic(Integer.parseInt(standardizedRole.getRoleTopic().getId().toString())).fire(new RoleTopicRecevier());
 			Log.info("create");
+			((RoleEditViewImpl)view).roleTopic.setValue(this.roleTopic);
 		} else {
 			//set TabText when edit clicked
 			view.getRoleDetailPanel().getTabBar().setTabText(RoleDetailsActivity.getSelecTab(), standardizedRole.getShortName());
@@ -293,7 +335,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("Role Topic: "+ standardizedRole.getRoleTopic().getName());
 		}
 		
-		
+	//	((RoleEditViewImpl)view).roleTopic.setValue(this.roleTopic);
 		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
 //		checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 //		standardizedRole.setCheckList(checkListProxy);//spec
@@ -324,7 +366,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				 checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 				 proxy.setRoleTopic(roleTopic);
 				 //copy(standardizedRole);
-				 proxy.setActive(((RoleEditViewImpl)view).active.getValue());
+				// proxy.setActive(((RoleEditViewImpl)view).active.getValue());
+				 proxy.setActive(true);
 				 proxy.setShortName(((RoleEditViewImpl)view).shortName.getValue());
 					proxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
@@ -341,7 +384,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					majorRequest1 = this.requests.standardizedRoleRequest();
 					oldProxy= majorRequest1.create(StandardizedRoleProxy.class);
 					oldProxy.setActive(((RoleEditViewImpl)view).active.getValue());
-				//	oldProxy.setActive(false);
+				//	oldProxy.setActive(true);
 					oldProxy.setShortName(((RoleEditViewImpl)view).shortName.getValue());
 					oldProxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					oldProxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
@@ -366,6 +409,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 			standardizedRole.setCheckList(checkListProxy);//spec
 			System.out.println("Checklist----"+checkListProxy.getTitle());
+			((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);
 			save();
 		}
 		
@@ -437,6 +481,26 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		{
 			 
 		 System.out.println("not Same");
+			
+		 //
+		 
+		 majorRequest1 = this.requests.standardizedRoleRequest();
+			oldProxy= majorRequest1.create(StandardizedRoleProxy.class);
+		//	oldProxy.setActive(((RoleEditViewImpl)view).active.getValue());
+			oldProxy.setActive(true);
+			oldProxy.setShortName(((RoleEditViewImpl)view).shortName.getValue());
+			oldProxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
+			oldProxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
+			oldProxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+				
+				//proxy1.setPreviousVersion(standardizedRole);
+				//proxy1.setMainVersion(standardizedRole.getMainVersion()+1);
+			oldProxy.setMainVersion(1);
+			oldProxy.setSubVersion(1);
+				
+			oldProxy.setCheckList(checkListProxy);//spec
+			oldProxy.setRoleTopic(roleTopic);
+		 //
 			
 			System.out.println("role---"+oldProxy);
 			

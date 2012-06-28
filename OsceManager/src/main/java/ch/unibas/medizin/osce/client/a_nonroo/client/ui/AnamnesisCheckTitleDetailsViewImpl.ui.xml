@@ -29,10 +29,13 @@
 								<td><span class='{style.label}' ui:field="labelText" /></td>
 								<td><span ui:field='text' /></td>
 							</tr>
+<<<<<<< HEAD
 							 <tr id='previous'>
                                 <td><span class='{style.label}' ui:field="labelPrevious" /></td>
                                 <td><span ui:field='previous' /></td>
                             </tr>
+=======
+>>>>>>> paul/master
 						</tbody>
 					</table>
 				</g:HTMLPanel>

@@ -59,6 +59,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 import com.google.gwt.activity.shared.Activity;
@@ -83,6 +84,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleUsedMaterial(UsedMaterialProxy proxy) {
                 setResult(new UsedMaterialActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
+            public void handleTraining(TrainingProxy proxy) {
+                setResult(new TrainingActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
@@ -306,6 +312,11 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
+            public void handleCheckList(CheckListProxy proxy) {
+                setResult(new CheckListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            }
+
+            @Override
             public void handleChecklistOption(ChecklistOptionProxy proxy) {
                 setResult(new ChecklistOptionActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
@@ -313,11 +324,6 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             @Override
             public void handleChecklistCriteria(ChecklistCriteriaProxy proxy) {
                 setResult(new ChecklistCriteriaActivitiesMapper(requests, placeController).getActivity(proxyPlace));
-            }
-
-            @Override
-            public void handleCheckList(CheckListProxy proxy) {
-                setResult(new CheckListActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
@@ -336,13 +342,13 @@ public abstract class ApplicationDetailsActivities_Roo_Gwt implements ActivityMa
             }
 
             @Override
-            public void handleAnamnesisChecksValue(AnamnesisChecksValueProxy proxy) {
-                setResult(new AnamnesisChecksValueActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            public void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy proxy) {
+                setResult(new AnamnesisCheckTitleActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override
-            public void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy proxy) {
-                setResult(new AnamnesisCheckTitleActivitiesMapper(requests, placeController).getActivity(proxyPlace));
+            public void handleAnamnesisChecksValue(AnamnesisChecksValueProxy proxy) {
+                setResult(new AnamnesisChecksValueActivitiesMapper(requests, placeController).getActivity(proxyPlace));
             }
 
             @Override

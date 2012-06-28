@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
@@ -392,5 +393,15 @@ public abstract class StandardizedPatientListView_Roo_Gwt extends AbstractProxyL
                 return renderer.render(object.getLangskills());
             }
         }, "Langskills");
+        paths.add("patientInSemester");
+        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance());
+
+            @Override
+            public String getValue(StandardizedPatientProxy object) {
+                return renderer.render(object.getPatientInSemester());
+            }
+        }, "Patient In Semester");
     }
 }

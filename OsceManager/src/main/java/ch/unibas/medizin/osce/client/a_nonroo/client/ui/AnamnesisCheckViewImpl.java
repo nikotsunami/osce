@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisCheckImageResources;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
+import ch.unibas.medizin.osce.client.style.resources.AnamnesisTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -473,7 +474,6 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	public void loadAnamnesisCheckPanel(List<AnamnesisCheckTitleProxy> anamnesisCheckTitleList , final boolean isOpen) {
 		anamnesisCheckPanel.clear();
 		for(final AnamnesisCheckTitleProxy anamnesisCheckTitleProxy : anamnesisCheckTitleList){
-			GWT.log("################title text : "+anamnesisCheckTitleProxy.getText());
 			AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(anamnesisCheckTitleProxy);
 			final ListDataProvider<AnamnesisCheckProxy> dataProvider = new ListDataProvider<AnamnesisCheckProxy>();
 			final SingleSelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
@@ -512,9 +512,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				}
 				
 			});
-			final Image iconImage = new Image();
-//			final HorizontalPanel iconImage = new HorizontalPanel();
-			iconImage.setWidth("15px");
+			final HorizontalPanel iconImagePanel = new HorizontalPanel();
+			iconImagePanel.setWidth("15px");
 			Button addBtnButton = new Button("Add detail");
 			addBtnButton.setWidth("80px");
 			addBtnButton.addDomHandler(new ClickHandler(){
@@ -522,33 +521,45 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				@Override
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
-					//TODO go to detail , add detail
 					delegate.newDetailClicked(String.valueOf(anamnesisCheckTitleProxy.getId()));
 				}
 				
 			}, ClickEvent.getType());
 
-//			MyCellTableResources tableResource = GWT.create(MyCellTableResources.class);
-//			tableResource.
 			
 			final AnamnesisCheckImageResources anamnesisCheckImageResources = GWT.create(AnamnesisCheckImageResources.class);
-//			anamnesisCheckImageResources.upImage();
-			Image moveUp = new Image(anamnesisCheckImageResources.upImage());
+			AnamnesisTableResources anamnesisTableResources = GWT.create(AnamnesisTableResources.class);
+			HorizontalPanel moveUpPanel = new HorizontalPanel();
+			moveUpPanel.addStyleName("upIcon");
+			moveUpPanel.addDomHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					event.stopPropagation();
+					//TODO move up
+					delegate.moveUpTitle(anamnesisCheckTitleProxy);
+				}
+				
+			}, ClickEvent.getType());
 			
-//			Image moveUp = new Image("up.png");
-//			moveUp.setWidth("15px");
-//			HorizontalPanel moveUp = new HorizontalPanel();
-//			moveUp.setStyleName("moveUpPanel");
-//			Image moveDown = new Image("down.png");
-//			HorizontalPanel moveDown = new HorizontalPanel();
-//			moveDown.setStyleName("moveDownPanel");
-			Image moveDown = new Image(anamnesisCheckImageResources.downImage());
+
+			HorizontalPanel moveDownPanel = new HorizontalPanel();
+			moveDownPanel.addStyleName("downIcon");
+			moveDownPanel.addDomHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					event.stopPropagation();
+					delegate.moveDownTitle(anamnesisCheckTitleProxy);
+				}
+				
+			}, ClickEvent.getType());
 			
-			horizontalPanel.add(iconImage);
+			horizontalPanel.add(iconImagePanel);
 			horizontalPanel.add(label);
 			horizontalPanel.add(addBtnButton);
-//			horizontalPanel.add(moveUp);
-//			horizontalPanel.add(moveDown);
+			horizontalPanel.add(moveUpPanel);
+			horizontalPanel.add(moveDownPanel);
 			
 			DisclosurePanel advancedDisclosure = new DisclosurePanel(horizontalPanel);
 			advancedDisclosure.setAnimationEnabled(true);
@@ -563,36 +574,28 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				
 				@Override
 				public void onOpen(OpenEvent<DisclosurePanel> event) {
-//					iconImage.removeStyleName("closeIcon");
-//					iconImage.setStyleName("openIcon");
-					iconImage.setResource(anamnesisCheckImageResources.downImage());
-//					if(isOpen == false){
-//					delegate.setQuestionTableData(dataProvider,anamnesisCheckTitleProxy);
-//					}
+
+					iconImagePanel.removeStyleName("rightIcon");
+					iconImagePanel.addStyleName("downIcon");
+					
 				}
 			});			
 			advancedDisclosure.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 				
 				@Override
 				public void onClose(CloseEvent<DisclosurePanel> event) {
-//					iconImage.removeStyleName("openIcon");
-//					iconImage.setStyleName("closeIcon");
-					iconImage.setResource(anamnesisCheckImageResources.rightImage());
+					
+					iconImagePanel.removeStyleName("downIcon");
+					iconImagePanel.addStyleName("rightIcon");
 				}
 			});
 			
-//			if(isOpen){
-//				iconImage.setUrl("down.png");
-//				iconImage.removeStyleName("closeIcon");
-//				iconImage.setStyleName("openIcon");
+
 				advancedDisclosure.setOpen(true);
+				iconImagePanel.removeStyleName("rightIcon");
+				iconImagePanel.addStyleName("downIcon");
 				delegate.setQuestionTableData(dataProvider,anamnesisCheckTitleProxy);
-				iconImage.setResource(anamnesisCheckImageResources.downImage());
-//			}else{
-////				iconImage.setUrl("right.png");
-////				iconImage.removeStyleName("openIcon");
-////				iconImage.setStyleName("closeIcon");
-//			}
+
 			anamnesisCheckPanel.add(advancedDisclosure);
 		}
 		

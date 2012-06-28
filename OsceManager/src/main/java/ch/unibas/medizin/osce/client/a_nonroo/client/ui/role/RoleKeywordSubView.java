@@ -19,7 +19,7 @@ public interface RoleKeywordSubView {
 	
 	interface Delegate {
 
-		void addKeywordClicked(String string);
+		void addKeywordClicked();
 		public void performKeywordSearch();
 		public void deleteKeywordClicked(KeywordProxy keywordProxy);		
 	}

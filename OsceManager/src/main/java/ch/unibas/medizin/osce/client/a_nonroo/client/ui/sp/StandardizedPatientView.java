@@ -4,7 +4,6 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 
 import java.util.List;
@@ -32,8 +31,6 @@ public interface StandardizedPatientView  extends IsWidget{
     public List<String> getSearchFilters();
     
     public String getQuery();
-    
-    public SearchCriteria getCriteria();
     
     public void setDelegate(Delegate delegate);
     public void updateSearch();

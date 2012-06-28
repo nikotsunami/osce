@@ -42,7 +42,17 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -120,6 +130,14 @@
                 </td>
                 <td>
                     <span ui:field="patientsInSemester"/>
+                </td>
+            </tr>
+            <tr id="training">
+                <td>
+                    <span class="{style.label}">Training:</span>
+                </td>
+                <td>
+                    <span ui:field="training"/>
                 </td>
             </tr>
         </table>

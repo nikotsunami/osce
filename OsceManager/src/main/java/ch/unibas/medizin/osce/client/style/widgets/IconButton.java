@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.style.widgets;
 
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -28,6 +29,12 @@ public class IconButton extends Button {
 		
 	}
 	
+	@Override
+	public void setHTML(SafeHtml html) {
+		this.text = html.asString();
+		construct();
+	}
+	
 	public void setIcon(String iconName) {
 		this.icon = iconName;
 		if (text.length() == 0)
@@ -48,6 +55,6 @@ public class IconButton extends Button {
 			html = ICON_HTML_OPEN + icon + ICON_HTML_CLOSE + text;
 		SafeHtmlBuilder builder = new SafeHtmlBuilder();
 		builder.appendHtmlConstant(html);
-		setHTML(builder.toSafeHtml());
+		super.setHTML(builder.toSafeHtml());
 	}
 }

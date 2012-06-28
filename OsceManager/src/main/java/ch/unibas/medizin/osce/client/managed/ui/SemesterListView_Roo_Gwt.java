@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.shared.Semesters;
 import com.google.gwt.core.client.GWT;
@@ -167,5 +168,15 @@ public abstract class SemesterListView_Roo_Gwt extends AbstractProxyListView<Sem
                 return renderer.render(object.getPatientsInSemester());
             }
         }, "Patients In Semester");
+        paths.add("training");
+        table.addColumn(new TextColumn<SemesterProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TrainingProxyRenderer.instance());
+
+            @Override
+            public String getValue(SemesterProxy object) {
+                return renderer.render(object.getTraining());
+            }
+        }, "Training");
     }
 }

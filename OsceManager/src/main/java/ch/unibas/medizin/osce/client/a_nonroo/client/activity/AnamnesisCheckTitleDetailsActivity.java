@@ -35,7 +35,11 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 	private CellTable<AnamnesisCheckTitleProxy> table;
 	private SingleSelectionModel<AnamnesisCheckTitleProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
+<<<<<<< HEAD
 	private int previousSortOrder;
+=======
+
+>>>>>>> paul/master
 	private AnamnesisCheckTitleDetailsPlace place;
 	private AnamnesisCheckTitleProxy anamnesisCheckTitleProxy;
 
@@ -54,6 +58,10 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 	@SuppressWarnings("deprecation")
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+<<<<<<< HEAD
+=======
+//		Window.alert("!!!!!!!!!!! String.valueOf(anamnesisCheckProxy.getId()) ");
+>>>>>>> paul/master
 		AnamnesisCheckTitleDetailsView anamnesisCheckDetailsView = new AnamnesisCheckTitleDetailsViewImpl();
 		anamnesisCheckDetailsView.setPresenter(this);
 
@@ -72,6 +80,7 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 			@Override
 			public void onSuccess(Object response) {
 				if (response instanceof AnamnesisCheckTitleProxy) {
+<<<<<<< HEAD
 					final AnamnesisCheckTitleProxy anamnesisCheckProxy = (AnamnesisCheckTitleProxy) response;
 					if(anamnesisCheckProxy.getSort_order() != null && anamnesisCheckProxy.getSort_order() > 1 && anamnesisCheckProxy.getId() !=null ){
 					requests.anamnesisCheckTitleRequestNonRoo().findAnamnesisChecksBySortOder(anamnesisCheckProxy.getSort_order()-1).fire(new Receiver<AnamnesisCheckTitleProxy>(){
@@ -84,13 +93,34 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 								
 							}
 							init(anamnesisCheckProxy,titleId);
+=======
+//					Window.alert("!!!!!!!!!!! String.valueOf(anamnesisCheckProxy.getId()) ");
+					// Log.info(((AnamnesisCheckTitleProxy)
+					// response).getId().toString());
+					final AnamnesisCheckTitleProxy anamnesisCheckProxy = (AnamnesisCheckTitleProxy) response;
+					requests.anamnesisCheckTitleRequest().findAnamnesisCheckTitle(anamnesisCheckProxy.getId()).fire(new Receiver<AnamnesisCheckTitleProxy>(){
+
+						@Override
+						public void onSuccess(AnamnesisCheckTitleProxy response) {
+							// TODO Auto-generated method stub
+							String titleId="";
+							if(response!=null){
+//								Window.alert("!!!!!!!!!!!!!!!!!!!!!!! String.valueOf(anamnesisCheckProxy.getId()) "+String.valueOf(anamnesisCheckProxy.getId()));
+								titleId=String.valueOf(response.getId());
+								
+							}
+							init(anamnesisCheckProxy,String.valueOf(response.getId()));
+>>>>>>> paul/master
 							
 						}
 						
 					});
+<<<<<<< HEAD
 				}else{
 					init(anamnesisCheckProxy,"");
 				}
+=======
+>>>>>>> paul/master
 					
 					
 				}
@@ -117,6 +147,7 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 		}
 	}
 
+<<<<<<< HEAD
 	@Override
 	public void deleteClicked() {
 		requests.anamnesisCheckTitleRequest().remove()
@@ -139,5 +170,46 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 					}
 
 				});
+=======
+	@SuppressWarnings("deprecation")
+	@Override
+	public void deleteClicked() {
+		if (!Window
+				.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}
+
+		requests.anamnesisCheckTitleRequest().remove().using(
+				anamnesisCheckTitleProxy).fire(new Receiver<Void>() {
+
+			public void onSuccess(Void ignore) {
+				if (anamnesisCheckTitleProxy.getSort_order() != null) {
+					requests.anamnesisCheckTitleRequestNonRoo().reSorting(
+							anamnesisCheckTitleProxy.getSort_order()).fire(
+							new Receiver<Void>() {
+
+								@Override
+								public void onSuccess(Void response) {
+									if (widget != null) {
+										widget.setWidget(null);
+									}
+									placeController
+											.goTo(new AnamnesisCheckPlace());
+								}
+							});
+				} else {
+					if (widget != null) {
+						widget.setWidget(null);
+					}
+					placeController.goTo(new AnamnesisCheckPlace());
+				}
+			}
+
+			public void onFailure(ServerFailure error) {
+				Window
+						.alert("You can not delete this title,please make sure the question belongs this title has been moved.");
+			}
+		});
+>>>>>>> paul/master
 	}
 }

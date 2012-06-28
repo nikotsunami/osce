@@ -8,7 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.ui.CourseSetEditor;
-import ch.unibas.medizin.osce.client.managed.ui.OscePostSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.OscePostListEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
@@ -24,6 +24,7 @@ import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import java.util.List;
 import java.util.Set;
 
 public abstract class OsceSequenceDetailsActivity_Roo_Gwt extends AbstractActivity implements Delegate, IsScaffoldMobileActivity {

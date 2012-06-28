@@ -1,0 +1,35 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+ <ui:style src="../../styles.css" />
+	<g:VerticalPanel   width="120px" height="150px" horizontalAlignment="center" spacing="0">
+		
+		<!--  <g:HorizontalPanel addStyleNames="{style.patientControls}" spacing="3" >
+			  <g:Label ui:field="postTypeLbl">Post Type</g:Label>
+			<s:IconButton ui:field="deletePost"  icon="close"></s:IconButton>
+		</g:HorizontalPanel>-->
+		
+			<g:Label ui:field="postNameLbl">Post Name</g:Label>
+			
+		<g:HorizontalPanel ui:field="specializationHP">
+			<g:Label ui:field="specializationLbl"></g:Label>
+			<s:IconButton ui:field="specializationedit" icon="pencil"> </s:IconButton>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel ui:field="roleTopicHP">
+			<g:Label ui:field="roleTopicLbl"></g:Label>
+			<s:IconButton ui:field="roleTopicedit" icon="pencil"> </s:IconButton>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel ui:field="standardizedRoleHP">
+			<g:Label ui:field="standardizedRoleLbl"></g:Label>
+			
+			<s:IconButton ui:field="standardizedRoleedit" icon="pencil"> </s:IconButton>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel>
+			<g:Label ui:field="roomLbl"></g:Label>
+			<s:IconButton ui:field="roomedit" icon="pencil"> </s:IconButton>
+		</g:HorizontalPanel>
+		
+	</g:VerticalPanel>
+	
+  
+</ui:UiBinder> 

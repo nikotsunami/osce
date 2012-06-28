@@ -61,7 +61,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     private AnamnesisCheckPlace place;
     private AcceptsOneWidget widget;
     private AnamnesisCheckView view;
-//    private CellTable<AnamnesisCheckProxy> table;
     private SingleSelectionModel<AnamnesisCheckProxy> selectionModel;
     private HandlerRegistration rangeChangeHandler;
     private HandlerRegistration selectionChangeHandler;
@@ -127,20 +126,61 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
      */
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-//        Log.info("SystemStartActivity.start()");
+        Log.info("SystemStartActivity.start()");
         AnamnesisCheckView systemStartView = getAnamnesisCheckView();
         systemStartView.setPresenter(this);
         this.widget = panel;
         this.view = systemStartView;
 
         widget.setWidget(systemStartView.asWidget());
-
+        view.getFilterTitle().clear();
 
         eventBus.addHandler(PlaceChangeEvent.TYPE,
                 new PlaceChangeEvent.Handler() {
-                    public void onPlaceChange(PlaceChangeEvent event) {
+                    @SuppressWarnings("deprecation")
+					public void onPlaceChange(PlaceChangeEvent event) {
                         if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
-//                            init();
+                        	final AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
+                        	if(place.getOperation() == Operation.NEW){
+                        		
+                                requests.find((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId()).with("anamnesisCheckTitle").fire(new Receiver<AnamnesisCheckProxy>() {
+
+                                    @Override
+                                    public void onSuccess(AnamnesisCheckProxy proxy) {
+                                    	
+                                        if (proxy != null ) {
+                                            for(int i = 0;i<view.getFilterTitle().getItemCount();i++){
+                                            	if(view.getFilterTitle().getValue(i).equals(place.getTitleId())){
+                                            		view.getFilterTitle().setSelectedIndex(i);
+                                            	}
+                                            }
+                                            view.getSearchBox().setText(proxy.getText());
+                                            List<AnamnesisCheckTitleProxy> titles = new ArrayList<AnamnesisCheckTitleProxy>();
+                                            titles.add(proxy.getAnamnesisCheckTitle());
+                                            view.loadAnamnesisCheckPanel(titles, true);
+                                        }
+                                    }
+                                 });
+                        	}
+                        }else if(event.getNewPlace() instanceof AnamnesisCheckTitleDetailsPlace){
+                        	final AnamnesisCheckTitleDetailsPlace place = (AnamnesisCheckTitleDetailsPlace) event.getNewPlace();
+                        	if(place.getOperation() == Operation.NEW){
+                        		requests.find((EntityProxyId<AnamnesisCheckTitleProxy>)place.getProxyId()).fire(new Receiver<AnamnesisCheckTitleProxy>() {
+                        			
+                        			@Override
+                        			public void onSuccess(AnamnesisCheckTitleProxy proxy) {
+                        				
+                        				if (proxy != null ) {
+                        					view.getFilterTitle().addItem(proxy.getText(), String.valueOf(proxy.getId()));
+                        					view.getFilterTitle().setSelectedIndex(view.getFilterTitle().getItemCount()-1);
+                        					view.getSearchBox().setText("");
+                        					List<AnamnesisCheckTitleProxy> titles = new ArrayList<AnamnesisCheckTitleProxy>();
+                        					titles.add(proxy);
+                        					view.loadAnamnesisCheckPanel(titles, true);
+                        				}
+                        			}
+                        		});
+                        	}
                         }
                     }
                 });
@@ -149,43 +189,9 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         activityManger.setDisplay(view.getDetailsPanel());
 
         view.setDelegate(this);
-        placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 
-            @Override
-            public void onPlaceChange(PlaceChangeEvent event) {
-                if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
-                    AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
-                    if (place.getOperation() == Operation.NEW) {
-                        getSearchStringByEntityProxyId((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId());
-                    }
-                } else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {
-                    AnamnesisCheckPlace place = (AnamnesisCheckPlace) event.getNewPlace();
-                    if (place.getToken().contains("!DELETED")) {
-//                        initSearch();
-                    }
-                }
-            }
-        });
     }
 
-    /**
-      * Used to fill table and search field after creating new entity.
-      * @param entityId
-      */
-     private void getSearchStringByEntityProxyId(EntityProxyId<AnamnesisCheckProxy> entityId) {
-         requests.find(entityId).fire(new Receiver<AnamnesisCheckProxy>() {
-
-            @Override
-            public void onSuccess(AnamnesisCheckProxy proxy) {
-                if (proxy != null) {
-                    List<AnamnesisCheckProxy> values = new ArrayList<AnamnesisCheckProxy>();
-                    values.add(proxy);
-                    view.getSearchBox().setText(proxy.getText());
-
-                }
-            }
-         });
-     }
 
     private void init() {
 //    	Window.alert("init");
@@ -194,9 +200,10 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 //        view.getScrollPanel().clear();
         getTitles();
 
+
         if (place.getSearchStr().equals("")) {
             view.setSearchBoxShown(place.DEFAULT_SEARCHSTR);
-//            initSearch();
+
             if (place.getFilterTileId().equals("")) {
                 view.setSearchFocus(false);
             } else {
@@ -205,72 +212,37 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             }
         } else {
             view.setSearchBoxShown(place.getSearchStr());
-//            initSearch();
             view.setSearchFocus(true);
         }
 
-        view.setDelegate(this);
+        view.setDelegate(this);             
+        
+        getTitles();
 
     }
 
-//    private void initSearch() {
-//        fireCountRequest(quickSearchTerm, getSelectedFilterTitle(), new Receiver<Long>() {
-//            @Override
-//            public void onSuccess(Long response) {
-//                if (view == null) {
-//                    // This activity is dead
-//                    return;
-//                }
-//                Log.debug("Geholte Intitution aus der Datenbank: " + response);
-//                setTableRowCount(response.intValue(), true);
-//                view.setListBoxItem(place.getPageLen());
-//                onRangeChanged(quickSearchTerm);
-//            }
-//        });
-//
-//        if (rangeChangeHandler != null) {
-//            rangeChangeHandler.removeHandler();
-//            rangeChangeHandler = null;
-//        }
-//
-//        if (selectionChangeHandler != null) {
-//            selectionChangeHandler.removeHandler();
-//            selectionChangeHandler = null;
-//        }
-
-//        rangeChangeHandler = table
-//                .addRangeChangeHandler(new RangeChangeEvent.Handler() {
-//                    public void onRangeChange(RangeChangeEvent event) {
-//                        AnamnesisCheckActivity.this.onRangeChanged(quickSearchTerm);
-//                    }
-//                });
-//    }
-
-
-
-
-
     @Override
-    public void moveUp(AnamnesisCheckProxy proxy) {
+    public void moveUp(final AnamnesisCheckProxy proxy) {
         requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy)
                 .fire(new Receiver<Void>() {
                     @Override
                     public void onSuccess(Void response) {
                         Log.info("moved");
-                        init();
-
+//                        init();
+                        findTitlesWithSearching();
                     }
                 });
     }
 
     @Override
-    public void moveDown(AnamnesisCheckProxy proxy) {
+    public void moveDown(final AnamnesisCheckProxy proxy) {
         requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy)
                 .fire(new Receiver<Void>() {
                     @Override
                     public void onSuccess(Void response) {
                         Log.info("moved");
-                        init();
+//                        init();
+                        findTitlesWithSearching();
                     }
                 });
     }
@@ -324,7 +296,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     public void performSearch(String q) {
         Log.debug("Search for " + q);
         quickSearchTerm = q;
-//        initSearch();
         goToAnamesisCheckPlace();
     }
 
@@ -355,14 +326,13 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     public void changeFilterTitleShown(String selectedtTitle) {
     	GWT.log("###########this is changeFilterTitleShown");
 
-//		Window.alert("getSelectedFilterTitle() = " + getSelectedFilterTitle());
-    	requests.anamnesisCheckRequestNonRoo().findTitlesContatisAnamnesisChecksWithSearching(place.getSearchStr(), getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>(){
+    	final String searchStr = view.getSearchBox().getText();
+    	requests.anamnesisCheckRequestNonRoo().findTitlesContatisAnamnesisChecksWithSearching(searchStr, getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>(){
 
 			@Override
 			public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
-				GWT.log("????????in changeFilterTitleShown response = "+response.size());
 				view.getAnamnesisCheckPanel().clear();
-				if((place.getSearchStr() == null || place.getSearchStr().equals("")) && getSelectedFilterTitle() == null){
+				if((searchStr == null || searchStr.equals("")) && getSelectedFilterTitle() == null){
 					view.loadAnamnesisCheckPanel(response, false);
 				}else{
 					view.loadAnamnesisCheckPanel(response, true);
@@ -386,21 +356,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
 				anamnesisCheckTitles = response;
 				setAnamnesisCheckTitleList(anamnesisCheckTitles);
-					GWT.log("place.getSearchStr() = " + place.getSearchStr());
-					requests.anamnesisCheckRequestNonRoo().findTitlesContatisAnamnesisChecksWithSearching(place.getSearchStr(), getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>() {
-
-						@Override
-						public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
-							GWT.log("findTitlesContatisAnamnesisChecksWithSearching size = "+response.size());
-							if((place.getSearchStr() == null || place.getSearchStr().equals("")) && getSelectedFilterTitle() == null){
-								view.loadAnamnesisCheckPanel(response, false);
-							}else{
-								view.loadAnamnesisCheckPanel(response, true);
-							}
-
-						}
-					});
-
+				findTitlesWithSearching();
 			}
 
 		});
@@ -408,6 +364,23 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     	
 		
 
+    }
+    
+    private void findTitlesWithSearching(){
+    	
+    	final String searchStr = view.getSearchBox().getText();
+		requests.anamnesisCheckRequestNonRoo().findTitlesContatisAnamnesisChecksWithSearching(searchStr, getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>() {
+
+			@Override
+			public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
+				if((searchStr == null || searchStr.equals("")) && getSelectedFilterTitle() == null){
+					view.loadAnamnesisCheckPanel(response, false);
+				}else{
+					view.loadAnamnesisCheckPanel(response, true);
+				}
+
+			}
+		});
     }
 
     /**
@@ -509,13 +482,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
             @Override
             public void onSuccess(Object response) {
-//                requests.anamnesisCheckRequestNonRoo().normalizeOrder().fire(new Receiver(){
-//
-//                    @Override
-//                    public void onSuccess(Object response) {
-//                        init();
-//                    }
-//                });
+
             	goToAnamesisCheckPlace();
 
             }
@@ -536,16 +503,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	@SuppressWarnings("deprecation")
 	@Override
 	public void setQuestionTableData(final ListDataProvider<AnamnesisCheckProxy> dataProvider, AnamnesisCheckTitleProxy title) {
-		GWT.log("this is setQuestionTableData dataProvider = " + dataProvider);
-		GWT.log("this is setQuestionTableData title = " + title);
+
 		if (dataProvider.getList() != null && dataProvider.getList().size() == 0) {
-			GWT.log("this is setQuestionTableData view.getSearchBoxShown() = " + view.getSearchBoxShown());
 			requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySearchWithAnamnesisCheckTitle(view.getSearchBoxShown(), title).fire(new Receiver<List<AnamnesisCheckProxy>>() {
 
 				@Override
 				public void onSuccess(List<AnamnesisCheckProxy> response) {
-					GWT.log("########setQuestionTableData sueccess and response size = " + response.size());
-					GWT.log("########dataProvider.getList().size() = " + dataProvider.getList().size());
 
 					if (dataProvider.getList() != null && dataProvider.getList().size() == 0) {
 						dataProvider.getList().addAll(response);
@@ -553,7 +516,6 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 						dataProvider.setList(dataProvider.getList());
 					}
 
-					// dataProvider.setList(anamnesisCheckProxyList);
 				}
 			});
 		}
@@ -561,9 +523,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	@Override
 	public void newTitleClicked() {
-		// TODO Auto-generated method stub
 		goTo(new AnamnesisCheckTitleDetailsPlace(Operation.CREATE));
-		
 	}
 	
     /**
@@ -579,6 +539,33 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
         goTo(new AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
                 Operation.DETAILS));
     }
+
+	@Override
+	public void moveDownTitle(AnamnesisCheckTitleProxy proxy) {
+		requests.anamnesisCheckTitleRequestNonRoo().moveDown().using(proxy).fire(new Receiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+//				init();
+				findTitlesWithSearching();
+			}
+		});
+		
+	}
+
+	@Override
+	public void moveUpTitle(AnamnesisCheckTitleProxy proxy) {
+		requests.anamnesisCheckTitleRequestNonRoo().moveUp().using(proxy).fire(new Receiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+
+				findTitlesWithSearching();
+			}
+		});
+		
+	}
+
 	@Override
 	public void goToTitle(AnamnesisCheckTitleProxy anamnesisCheckTitle) {
 		// TODO Auto-generated method stub

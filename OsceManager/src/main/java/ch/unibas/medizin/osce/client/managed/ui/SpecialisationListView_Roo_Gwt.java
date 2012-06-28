@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
@@ -95,5 +96,15 @@ public abstract class SpecialisationListView_Roo_Gwt extends AbstractProxyListVi
                 return renderer.render(object.getDoctors());
             }
         }, "Doctors");
+        paths.add("oscePostBlueprint");
+        table.addColumn(new TextColumn<SpecialisationProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance());
+
+            @Override
+            public String getValue(SpecialisationProxy object) {
+                return renderer.render(object.getOscePostBlueprint());
+            }
+        }, "Osce Post Blueprint");
     }
 }

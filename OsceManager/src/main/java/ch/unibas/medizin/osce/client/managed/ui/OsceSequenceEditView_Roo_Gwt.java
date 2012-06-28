@@ -53,7 +53,7 @@ public abstract class OsceSequenceEditView_Roo_Gwt extends Composite implements 
     CourseSetEditor courses;
 
     @UiField
-    OscePostSetEditor oscePosts;
+    OscePostListEditor oscePosts;
 
     public void setOsceDayPickerValues(Collection<OsceDayProxy> values) {
         osceDay.setAcceptableValues(values);

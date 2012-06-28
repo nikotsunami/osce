@@ -7,7 +7,9 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OsceSequenceSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -55,6 +57,16 @@ public abstract class OsceDayEditActivityWrapper_Roo_Gwt implements Activity, Is
                 view.setOsceSequencesPickerValues(values);
             }
         });
+        view.setPatientInSemestersPickerValues(Collections.<PatientInSemesterProxy>emptyList());
+        requests.patientInSemesterRequest().findPatientInSemesterEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance().getPaths()).fire(new Receiver<List<PatientInSemesterProxy>>() {
+
+            public void onSuccess(List<PatientInSemesterProxy> response) {
+                List<PatientInSemesterProxy> values = new ArrayList<PatientInSemesterProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setPatientInSemestersPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -63,5 +75,7 @@ public abstract class OsceDayEditActivityWrapper_Roo_Gwt implements Activity, Is
         void setOscePickerValues(Collection<OsceProxy> values);
 
         void setOsceSequencesPickerValues(Collection<OsceSequenceProxy> values);
+
+        void setPatientInSemestersPickerValues(Collection<PatientInSemesterProxy> values);
     }
 }

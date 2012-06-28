@@ -2,9 +2,9 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.CollectionRenderer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;

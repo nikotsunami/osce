@@ -7,6 +7,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
@@ -395,8 +396,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	}
 
 	@Override
-	public void setInsideTitleListBox(List<AnamnesisCheckProxy> titleList) {
-		for(AnamnesisCheckProxy title : titleList){
+	public void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList) {
+		for(AnamnesisCheckTitleProxy title : titleList){
 			if (title != null) {
 				insideTitleListBox.addItem(title.getText(), String.valueOf(title.getId()));
 			}

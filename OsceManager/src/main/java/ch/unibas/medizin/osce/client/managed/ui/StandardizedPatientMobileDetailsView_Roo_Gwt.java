@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
@@ -108,6 +109,9 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
     @UiField
     Element langskills;
 
+    @UiField
+    Element patientInSemester;
+
     StandardizedPatientProxy proxy;
 
     public void setValue(StandardizedPatientProxy proxy) {
@@ -138,5 +142,6 @@ public abstract class StandardizedPatientMobileDetailsView_Roo_Gwt extends Compo
         socialInsuranceNo.setInnerText(proxy.getSocialInsuranceNo() == null ? "" : String.valueOf(proxy.getSocialInsuranceNo()));
         anamnesisForm.setInnerText(proxy.getAnamnesisForm() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.AnamnesisFormProxyRenderer.instance().render(proxy.getAnamnesisForm()));
         langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
+        patientInSemester.setInnerText(proxy.getPatientInSemester() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance()).render(proxy.getPatientInSemester()));
     }
 }

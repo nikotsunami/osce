@@ -2,9 +2,12 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -19,6 +22,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.Set;
 
 public abstract class PatientInSemesterMobileDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<PatientInSemesterProxy> {
 
@@ -34,6 +38,18 @@ public abstract class PatientInSemesterMobileDetailsView_Roo_Gwt extends Composi
     @UiField
     Element standardizedPatient;
 
+    @UiField
+    Element accepted;
+
+    @UiField
+    Element osceDays;
+
+    @UiField
+    Element patientInRole;
+
+    @UiField
+    Element trainings;
+
     PatientInSemesterProxy proxy;
 
     public void setValue(PatientInSemesterProxy proxy) {
@@ -42,5 +58,9 @@ public abstract class PatientInSemesterMobileDetailsView_Roo_Gwt extends Composi
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
         semester.setInnerText(proxy.getSemester() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance().render(proxy.getSemester()));
         standardizedPatient.setInnerText(proxy.getStandardizedPatient() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy.getStandardizedPatient()));
+        accepted.setInnerText(proxy.getAccepted() == null ? "" : String.valueOf(proxy.getAccepted()));
+        osceDays.setInnerText(proxy.getOsceDays() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance()).render(proxy.getOsceDays()));
+        patientInRole.setInnerText(proxy.getPatientInRole() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance()).render(proxy.getPatientInRole()));
+        trainings.setInnerText(proxy.getTrainings() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TrainingProxyRenderer.instance()).render(proxy.getTrainings()));
     }
 }

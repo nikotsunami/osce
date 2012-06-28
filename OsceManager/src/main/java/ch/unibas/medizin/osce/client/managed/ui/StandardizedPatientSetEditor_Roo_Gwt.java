@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.CollectionRenderer;

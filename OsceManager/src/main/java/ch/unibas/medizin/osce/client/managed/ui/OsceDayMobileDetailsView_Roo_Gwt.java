@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -44,16 +45,20 @@ public abstract class OsceDayMobileDetailsView_Roo_Gwt extends Composite impleme
     @UiField
     Element osceSequences;
 
+    @UiField
+    Element patientInSemesters;
+
     OsceDayProxy proxy;
 
     public void setValue(OsceDayProxy proxy) {
         this.proxy = proxy;
         id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
         version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
-        osceDate.setInnerText(proxy.getOsceDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT).format(proxy.getOsceDate()));
+        osceDate.setInnerText(proxy.getOsceDate() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getOsceDate()));
         timeStart.setInnerText(proxy.getTimeStart() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getTimeStart()));
         timeEnd.setInnerText(proxy.getTimeEnd() == null ? "" : DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(proxy.getTimeEnd()));
         osce.setInnerText(proxy.getOsce() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance().render(proxy.getOsce()));
         osceSequences.setInnerText(proxy.getOsceSequences() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance()).render(proxy.getOsceSequences()));
+        patientInSemesters.setInnerText(proxy.getPatientInSemesters() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance()).render(proxy.getPatientInSemesters()));
     }
 }

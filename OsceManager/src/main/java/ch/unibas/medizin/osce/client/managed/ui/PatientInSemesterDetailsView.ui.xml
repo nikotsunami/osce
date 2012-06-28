@@ -35,23 +35,11 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="semester">
-                <td>
-                    <span class="{style.label}">Semester:</span>
-                </td>
-                <td>
-                    <span ui:field="semester"/>
-                </td>
-            </tr>
-      <tr id="standardizedPatient">
-                <td>
-                    <span class="{style.label}">Standardized Patient:</span>
-                </td>
-                <td>
-                    <span ui:field="standardizedPatient"/>
-                </td>
-            </tr>
-      <tr id="id">
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -59,7 +47,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -67,7 +55,55 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-    </table>
+            <tr id="semester">
+                <td>
+                    <span class="{style.label}">Semester:</span>
+                </td>
+                <td>
+                    <span ui:field="semester"/>
+                </td>
+            </tr>
+            <tr id="standardizedPatient">
+                <td>
+                    <span class="{style.label}">Standardized Patient:</span>
+                </td>
+                <td>
+                    <span ui:field="standardizedPatient"/>
+                </td>
+            </tr>
+            <tr id="accepted">
+                <td>
+                    <span class="{style.label}">Accepted:</span>
+                </td>
+                <td>
+                    <span ui:field="accepted"/>
+                </td>
+            </tr>
+            <tr id="osceDays">
+                <td>
+                    <span class="{style.label}">Osce Days:</span>
+                </td>
+                <td>
+                    <span ui:field="osceDays"/>
+                </td>
+            </tr>
+            <tr id="patientInRole">
+                <td>
+                    <span class="{style.label}">Patient In Role:</span>
+                </td>
+                <td>
+                    <span ui:field="patientInRole"/>
+                </td>
+            </tr>
+            <tr id="trainings">
+                <td>
+                    <span class="{style.label}">Trainings:</span>
+                </td>
+                <td>
+                    <span ui:field="trainings"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

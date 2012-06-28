@@ -320,7 +320,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	}
 
 	@Override
-	public void editClicked(final SpecialisationProxy specialization) {
+	public void editClicked(final SpecialisationProxy specialization,int left,int top) {
 		
 		//ToolTip Function Added by spec
 		Log.info("ToolTip opened");
@@ -358,7 +358,12 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		        
 			table.getColumnIndex(table.getColumn(1));
 		   
-			toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+			// Issue Role
+			
+						//toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+						toolTip.setPopupPosition(left,top);
+						
+						// E: Issue Role
 		    
 		        toolTip.show();
 		        

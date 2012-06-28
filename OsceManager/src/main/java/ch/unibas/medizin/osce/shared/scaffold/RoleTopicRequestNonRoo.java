@@ -59,4 +59,5 @@ abstract Request<Long> advanceSearchCount(
 		List<String> whereFilters
 		
 );
+abstract Request<List<RoleTopicProxy>> findRoleTopicBySpecialisation(Long specialisationId);
 }

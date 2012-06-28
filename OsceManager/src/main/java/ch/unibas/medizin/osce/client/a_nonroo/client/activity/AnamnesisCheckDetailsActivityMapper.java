@@ -39,7 +39,7 @@ public class AnamnesisCheckDetailsActivityMapper  implements ActivityMapper{
 			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.CREATE)
 				return new AnamnesisCheckEditActivity((AnamnesisCheckDetailsPlace) place, requests, placeController,  Operation.CREATE);
 		}else if (place instanceof AnamnesisCheckTitleDetailsPlace){
-//			System.err.println("im AnamnesisCheckTitleDetailsPlace.getActivity");
+			System.err.println("im AnamnesisCheckTitleDetailsPlace.getActivity");
 			if(((AnamnesisCheckTitleDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new AnamnesisCheckTitleDetailsActivity((AnamnesisCheckTitleDetailsPlace) place, requests, placeController);
 			if(((AnamnesisCheckTitleDetailsPlace) place).getOperation() == Operation.NEW)

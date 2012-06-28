@@ -3,6 +3,7 @@
 package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
@@ -38,6 +39,9 @@ public abstract class SpecialisationMobileDetailsView_Roo_Gwt extends Composite 
     @UiField
     Element doctors;
 
+    @UiField
+    Element oscePostBlueprint;
+
     SpecialisationProxy proxy;
 
     public void setValue(SpecialisationProxy proxy) {
@@ -47,5 +51,6 @@ public abstract class SpecialisationMobileDetailsView_Roo_Gwt extends Composite 
         name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
         roleTopics.setInnerText(proxy.getRoleTopics() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer.instance()).render(proxy.getRoleTopics()));
         doctors.setInnerText(proxy.getDoctors() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance()).render(proxy.getDoctors()));
+        oscePostBlueprint.setInnerText(proxy.getOscePostBlueprint() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance()).render(proxy.getOscePostBlueprint()));
     }
 }

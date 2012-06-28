@@ -461,7 +461,26 @@ public interface OsceConstants extends Constants {
     public String clearAll();
     
     public String anamnesisCheckTitle();
+// 5C: SPEC START
     
+    public String select();
+    
+    public String deleteOsceBluePrintPost();
+    // 5C: SPEC END
    
-	
+    
+// Assignment (Day) D
+    
+    public String day();
+    public String presents();
+    public String date();
+    public String starttime();
+    public String endtime();
+    public String calculation();
+    public String lunchbreak();
+    public String lbendtime();
+    public String student();
+
+    //Issue Role Module
+    public String enterKeyword();	
 }

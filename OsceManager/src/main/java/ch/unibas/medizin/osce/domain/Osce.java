@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -18,14 +20,9 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-
 import ch.unibas.medizin.osce.server.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
-
-
-
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
@@ -73,8 +70,9 @@ public class Osce {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<OsceDay> osce_days = new HashSet<OsceDay>();
 
+    @OrderBy("sequenceNumber")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
-    private Set<OscePostBlueprint> oscePostBlueprints = new HashSet<OscePostBlueprint>();
+    private List<OscePostBlueprint> oscePostBlueprints = new ArrayList<OscePostBlueprint>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Task> tasks = new HashSet<Task>();
@@ -99,7 +97,7 @@ public class Osce {
 	 */
 	public int slotsOfMostDifficultRole() {
 		int slotsUntilChange = Integer.MAX_VALUE;
-		
+		 
 		Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
 		while (it.hasNext()) {
 			OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();

@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceTaskPopView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
@@ -46,12 +47,13 @@ import com.google.gwt.view.client.SingleSelectionModel;
  *
  */
 public class OsceDetailsActivity extends AbstractActivity implements
-OsceDetailsView.Presenter, OsceDetailsView.Delegate {
+OsceDetailsView.Presenter, OsceDetailsView.Delegate, OsceTaskPopView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private OsceDetailsView view;
+	private OsceTaskPopView osceTaskPop;
 	private CellTable<OsceProxy> table;
 	private SingleSelectionModel<OsceProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
@@ -59,12 +61,14 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate {
 	public static OsceActivity osceActivity;
 	private OsceProxy osceProxy;
 	private OsceDetailsPlace place;
+	private OsceDetailsActivity osceDetailsActivity;
 
 	public OsceDetailsActivity(OsceDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
 		this.placeController = placeController;
+		osceDetailsActivity=this;
 	}
 
 	public void onStop() {
@@ -78,11 +82,15 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate {
 		osceDetailsView.setPresenter(this);
 		this.widget = panel;
 		this.view = osceDetailsView;
+		this.osceTaskPop=view.getPopView();
 	//	osceActivity=new OsceActivity(requests, placeController);
 		widget.setWidget(osceDetailsView.asWidget());
 
 		
 		view.setDelegate(this);
+		osceTaskPop.setDelegate(this);
+	//	osceTaskPop.setDelegate(this);
+		
 		//System.out.println("semster--"+osceActivity.getSemester());
 
 		
@@ -90,7 +98,9 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate {
 
 			public void onSuccess(List<AdministratorProxy> response) {
 				System.out.println("sem receive:-"+response);
-				view.setAdministratorValue(response);
+			//	view.setAdministratorValue(response);
+				osceTaskPop.setAdministratorValue(response);
+				
 			}
 		});
 		
@@ -133,6 +143,7 @@ public void init()
 				//init((OsceProxy) response);
 				osceProxy=(OsceProxy)response;
 				view.setValue((OsceProxy)response);
+				osceTaskPop.setValue((OsceProxy)response);
 			}
 
 		}
@@ -269,6 +280,7 @@ public void init()
 	@Override
 	public void saveClicked(Boolean isedit, String innerText,
 			AdministratorProxy value, Date value2, OsceProxy osce,TaskProxy task) {
+		System.out.println("Save call");
 		// TODO Auto-generated method stub
 		Date today = new Date();
 		Date futureDate=new Date();

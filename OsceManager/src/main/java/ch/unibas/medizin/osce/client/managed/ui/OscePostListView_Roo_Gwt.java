@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
@@ -97,6 +98,16 @@ public abstract class OscePostListView_Roo_Gwt extends AbstractProxyListView<Osc
                 return renderer.render(object.getOscePostRooms());
             }
         }, "Osce Post Rooms");
+        paths.add("patientInRole");
+        table.addColumn(new TextColumn<OscePostProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance());
+
+            @Override
+            public String getValue(OscePostProxy object) {
+                return renderer.render(object.getPatientInRole());
+            }
+        }, "Patient In Role");
         paths.add("standardizedRole");
         table.addColumn(new TextColumn<OscePostProxy>() {
 
