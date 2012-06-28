@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.style.resources.AnamnesisTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -50,7 +51,7 @@ public class AnamnesisCheckTable {
 	public AnamnesisCheckTable(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy) {
 		this.anamnesisCheckTitleProxy = anamnesisCheckTitleProxy;
 	}
-
+	
 	public CellTable<AnamnesisCheckProxy> initTable() {
 		CellTable.Resources tableResources = GWT
 		.create(AnamnesisTableResources.class);
@@ -69,7 +70,6 @@ public class AnamnesisCheckTable {
 
 		};
 		checkOrderColumn.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
-
 			@Override
 			public void update(int index, AnamnesisCheckProxy object, String value) {
 				try {
@@ -79,11 +79,12 @@ public class AnamnesisCheckTable {
 						delegate.orderEdited(object, null);
 					}
 				} catch (Exception e) {
-					GWT.log(value + e);
+					Log.error(value + e);
 				}
 
 			}
 		});
+		
 		cellTable.addColumn(checkOrderColumn);
 		
 		cellTable.addColumn(new QuestionTypeColumn());
@@ -92,7 +93,7 @@ public class AnamnesisCheckTable {
 		
 		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
 			public void execute(AnamnesisCheckProxy proxy) {
-				delegate.moveDown(proxy);
+				delegate.moveDown(anamnesisCheckTitleProxy, proxy);
 			}
 		}), "", new GetValue<AnamnesisCheckProxy>() {
 			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
@@ -101,7 +102,7 @@ public class AnamnesisCheckTable {
 		}, null);
 		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.UP_ICON, new ActionCell.Delegate<AnamnesisCheckProxy>() {
 			public void execute(AnamnesisCheckProxy proxy) {
-				delegate.moveUp(proxy);
+				delegate.moveUp(anamnesisCheckTitleProxy, proxy);
 			}
 		}), "", new GetValue<AnamnesisCheckProxy>() {
 			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
@@ -109,6 +110,12 @@ public class AnamnesisCheckTable {
 			}
 		}, null);
 		
+		cellTable.setColumnWidth(cellTable.getColumn(0), "24px");
+		cellTable.setColumnWidth(cellTable.getColumn(1), "40px");
+		cellTable.setColumnWidth(cellTable.getColumn(2), "50%");
+		cellTable.setColumnWidth(cellTable.getColumn(3), "50%");
+		cellTable.setColumnWidth(cellTable.getColumn(4), "16px");
+		cellTable.setColumnWidth(cellTable.getColumn(5), "16px");
 		
 		dataProvider.addDataDisplay(cellTable);
 		dataProvider.setList(anamnesisCheckProxyList);
@@ -132,7 +139,6 @@ public class AnamnesisCheckTable {
 	private static interface GetValue<C> {
 		C getValue(AnamnesisCheckProxy proxy);
 	}
-	
 
 	private class QuestionTypeColumn extends Column<AnamnesisCheckProxy, SafeHtml> {
 		public QuestionTypeColumn() {
@@ -145,9 +151,6 @@ public class AnamnesisCheckTable {
 			AnamnesisQuestionTypeImages resources = GWT.create(AnamnesisQuestionTypeImages.class);
 			String html = "";
 			switch (proxy.getType()) {
-			case QUESTION_TITLE:
-				html = "<img src=\"" + resources.title().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_TITLE() + "\" />";
-				break;
 			case QUESTION_MULT_M:
 				html = "<img src=\"" + resources.questionMultM().getURL() + "\" title=\"" + constantsWithLookup.QUESTION_MULT_M() + "\" />";
 				break;

@@ -43,7 +43,10 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="text">
+      
+      
+    
+            <tr id="text">
                 <td>
                     <div class="{style.label}">Text:</div>
                 </td>
@@ -51,7 +54,7 @@
                     <g:TextBox ui:field="text"/>
                 </td>
             </tr>
-      <tr id="sort_order">
+            <tr id="sort_order">
                 <td>
                     <div class="{style.label}">Sort_order:</div>
                 </td>
@@ -59,7 +62,7 @@
                     <g:IntegerBox ui:field="sort_order"/>
                 </td>
             </tr>
-    </table>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

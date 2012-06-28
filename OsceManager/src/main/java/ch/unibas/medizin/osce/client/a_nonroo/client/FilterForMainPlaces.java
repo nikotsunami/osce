@@ -7,7 +7,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsP
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckTitleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
@@ -241,15 +240,6 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			RoomMaterialsDetailsPlace roomMaterialsDetailsPlace = (RoomMaterialsDetailsPlace) place;
 			return new RoomMaterialsPlace(roomMaterialsDetailsPlace.getToken());
 		}
-		if (place instanceof AnamnesisCheckTitleDetailsPlace) {
-
-			AnamnesisCheckTitleDetailsPlace AnamnesisCheckTitleDetailsPlace = (AnamnesisCheckTitleDetailsPlace) place;
-			return new AnamnesisCheckPlace(
-					AnamnesisCheckTitleDetailsPlace.getToken());
-		}
-
-	
-		
 		//by spec role management]
 
 		return null;

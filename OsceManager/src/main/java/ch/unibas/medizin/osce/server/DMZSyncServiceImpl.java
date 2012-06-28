@@ -386,8 +386,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				return AnamnesisCheckTypes.QUESTION_MULT_S;
 			} else if(valueI == 2){
 				return AnamnesisCheckTypes.QUESTION_OPEN;
-			} else if(valueI == 3){
-				return AnamnesisCheckTypes.QUESTION_TITLE;
 			} else if(valueI == 4){
 				return AnamnesisCheckTypes.QUESTION_YES_NO;
 			}  else {

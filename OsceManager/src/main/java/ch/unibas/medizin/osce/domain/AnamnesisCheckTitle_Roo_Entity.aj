@@ -50,12 +50,6 @@ privileged aspect AnamnesisCheckTitle_Roo_Entity {
     }
     
     @Transactional
-    public void AnamnesisCheckTitle.persist() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.persist(this);
-    }
-    
-    @Transactional
     public void AnamnesisCheckTitle.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
@@ -94,10 +88,6 @@ privileged aspect AnamnesisCheckTitle_Roo_Entity {
     
     public static long AnamnesisCheckTitle.countAnamnesisCheckTitles() {
         return entityManager().createQuery("SELECT COUNT(o) FROM AnamnesisCheckTitle o", Long.class).getSingleResult();
-    }
-    
-    public static List<AnamnesisCheckTitle> AnamnesisCheckTitle.findAllAnamnesisCheckTitles() {
-        return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
     }
     
     public static AnamnesisCheckTitle AnamnesisCheckTitle.findAnamnesisCheckTitle(Long id) {

@@ -154,17 +154,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 					default:
 						setMultipleFields(false);
 				}
-				switch(selectedValue) {
-				case QUESTION_TITLE:
-					labelinsideTitle.setInnerText("");
-					insideTitleListBox.setVisible(false);
-					labelpreviousQuestion.setInnerText(constants.previousTitle() + ":");
-					break;
-				default:
-					labelinsideTitle.setInnerText(constants.insideTitle() + ":");
-					insideTitleListBox.setVisible(true);
-					labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
-			}
+				labelinsideTitle.setInnerText(constants.insideTitle() + ":");
+				insideTitleListBox.setVisible(true);
+				labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
 				
 				//TODO
 				resetpreviousQuestion(selectedValue);
@@ -189,13 +181,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			setMultipleFields(false);
 		}
 		
-		if(type.getValue() == AnamnesisCheckTypes.QUESTION_TITLE){
-			labelinsideTitle.setInnerText("");
-			insideTitleListBox.setVisible(false);
-		}else{
-			labelinsideTitle.setInnerText(constants.insideTitle() + ":");
-			insideTitleListBox.setVisible(true);
-		}
+		labelinsideTitle.setInnerText(constants.insideTitle() + ":");
+		insideTitleListBox.setVisible(true);
 		
 		text.addFocusHandler(new FocusHandler() {
 			@Override
@@ -212,13 +199,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	
 	private void resetpreviousQuestion(AnamnesisCheckTypes selectedValue){
 		previousQuestionListBox.clear();
-		if(selectedValue == AnamnesisCheckTypes.QUESTION_TITLE){
-			previousQuestionListBox.addItem(constants.previousTitle(), "");
-		}else{
-			previousQuestionListBox.addItem(constants.previousQuestion(), "");
-		}
+		previousQuestionListBox.addItem(constants.thisIsTheFirstQuestion(), "");
 		delegate.changePreviousQuestion(selectedValue,insideTitleListBox.getValue(insideTitleListBox.getSelectedIndex()));
-
 	}
 	
 	private IconButton createDeleteButton() {
@@ -356,18 +338,10 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	@Override
 	public void update(AnamnesisCheckProxy anamnesisCheckProxy) {
 		String value = anamnesisCheckProxy.getValue();
-	
-		if(anamnesisCheckProxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
-			labelinsideTitle.setInnerText("");
-			insideTitleListBox.setVisible(false);
-			labelpreviousQuestion.setInnerText(constants.previousTitle() + ":");
-			previousQuestionListBox.addItem(constants.previousTitle(), "");
-		}else{
-			labelinsideTitle.setInnerText(constants.insideTitle() + ":");
-			insideTitleListBox.setVisible(true);
-			labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
-			previousQuestionListBox.addItem(constants.previousQuestion(), "");
-		}
+		labelinsideTitle.setInnerText(constants.insideTitle() + ":");
+		insideTitleListBox.setVisible(true);
+		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
+		previousQuestionListBox.addItem(constants.thisIsTheFirstQuestion(), "");
 		
 		if (type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_M || type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_S){
 			setMultipleFields(true);
@@ -402,7 +376,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 				insideTitleListBox.addItem(title.getText(), String.valueOf(title.getId()));
 			}
 		}
-		
+		insideTitleListBox.setSelectedIndex(insideTitleListBox.getItemCount() - 1);
 	}
 
 

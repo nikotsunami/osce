@@ -25,6 +25,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 			UiBinder<Widget, StandardizedPatientAnamnesisSubViewImpl> {
 	}
 
+	private int selectedAnamnesisTab;
 	private Delegate delegate;
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 
@@ -74,8 +75,8 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 		});
 		
 		// FIXME: temporarily disabled...
-		showAnswered.removeFromParent();
-		showUnanswered.removeFromParent();
+//		showAnswered.removeFromParent();
+//		showUnanswered.removeFromParent();
 	}
 
 	@Override
@@ -87,7 +88,13 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 		StandardizedPatientAnamnesisTableSubView tableSubView = new StandardizedPatientAnamnesisTableSubViewImpl();
 		anamnesisTabs.add((Widget) tableSubView, titleText);
 		if (anamnesisTabs.getWidgetCount() == 1) {
-			anamnesisTabs.selectTab(0);
+			anamnesisTabs.addSelectionHandler(new SelectionHandler<Integer>() {
+				@Override
+				public void onSelection(SelectionEvent<Integer> event) {
+					delegate.performAnamnesisSearch();
+					delegate.storeDisplaySettings();
+				}
+			});
 		}
 		return tableSubView;
 	}
@@ -112,5 +119,20 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	@Override
 	public int getSelectedTab() {
 		return anamnesisTabs.getTabBar().getSelectedTab();
+	}
+	
+	@Override
+	public void allTitlesAreLoaded() {
+		if (anamnesisTabs.getWidgetCount() - 1 > selectedAnamnesisTab) {
+			selectedAnamnesisTab = anamnesisTabs.getWidgetCount() - 1;
+		} else if (selectedAnamnesisTab < 0) {
+			selectedAnamnesisTab = 0;
+		}
+		anamnesisTabs.selectTab(selectedAnamnesisTab);
+	}
+
+	@Override
+	public void setSelectedAnamnesisTab(int selectedAnamnesisTab) {
+		this.selectedAnamnesisTab = selectedAnamnesisTab;
 	}
 }

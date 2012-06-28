@@ -59,7 +59,6 @@ public class OscePlaceHistoryFactory {
 	
 	private final RoomMaterialsPlace.Tokenizer roomMaterialsPlaceTokenizer;
 	private final RoomMaterialsDetailsPlace.Tokenizer roomMaterialsDetailsPlaceTokenizer;
-	private final AnamnesisCheckTitleDetailsPlace.Tokenizer anamnesisCheckTitleDetailsPlaceTokenizer;
 	
 	//By SPEC role management]
 
@@ -116,7 +115,6 @@ public class OscePlaceHistoryFactory {
 		this.roleScriptTemplateDetailsPlaceTokenizer = new RoleScriptTemplateDetailsPlace.Tokenizer(requestFactory);
 		this.roomMaterialsPlaceTokenizer = new RoomMaterialsPlace.Tokenizer(requestFactory);
 		this.roomMaterialsDetailsPlaceTokenizer = new RoomMaterialsDetailsPlace.Tokenizer(requestFactory);
-		this.anamnesisCheckTitleDetailsPlaceTokenizer = new AnamnesisCheckTitleDetailsPlace.Tokenizer(requestFactory);
 		//By Spec Role Management]
 	}
 
@@ -274,9 +272,6 @@ public class OscePlaceHistoryFactory {
 
 	public PlaceTokenizer<RoomMaterialsDetailsPlace> getRoomMaterialsDetailsPlaceTokenizer() {
 		return roomMaterialsDetailsPlaceTokenizer;
-	}
-	public PlaceTokenizer<AnamnesisCheckTitleDetailsPlace> getAnamnesisCheckTitleDetailsPlaceTokenizer() {
-		return anamnesisCheckTitleDetailsPlaceTokenizer;
 	}
 	
 	//By SPec Role Management]

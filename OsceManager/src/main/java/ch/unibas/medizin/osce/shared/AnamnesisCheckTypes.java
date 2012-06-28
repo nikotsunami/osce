@@ -4,7 +4,7 @@ package ch.unibas.medizin.osce.shared;
  * 
  */
 public enum AnamnesisCheckTypes {
-	QUESTION_OPEN(0), QUESTION_YES_NO(1), QUESTION_MULT_S(2), QUESTION_MULT_M(3), QUESTION_TITLE(4);
+	QUESTION_OPEN(0), QUESTION_YES_NO(1), QUESTION_MULT_S(2), QUESTION_MULT_M(3);
     
     private int typeId;
     

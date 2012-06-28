@@ -8,67 +8,45 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
-import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
-import ch.unibas.medizin.osce.client.managed.activity.AdministratorEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
-import ch.unibas.medizin.osce.client.style.resources.AnamnesisCheckImageResources;
-import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
-import ch.unibas.medizin.osce.client.style.resources.AnamnesisTableResources;
-import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
-import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.cell.client.ActionCell;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.cell.client.TextInputCell;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 
 /**
  * @author dk
@@ -86,10 +64,9 @@ public class AnamnesisCheckViewImpl extends Composite implements
 			UiBinder<Widget, AnamnesisCheckViewImpl> {
 	}
 
+//	private final UiIcons uiIcons = GWT.create(UiIcons.class);
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private Delegate delegate;
-	private OsMaRequestFactory requests;
-	private Column<AnamnesisCheckProxy, String> checkOrderColumn;
 
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
@@ -102,30 +79,32 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	@UiField
 	SimplePanel detailsPanel;
-//
-//	@UiField(provided = true)
-//	SimplePager pager;
-
-//	@UiField(provided = true)
-//	CellTable<AnamnesisCheckProxy> table;
-
-//	@UiField
-//	ListBox rangeNum;
+	
 	@UiField
 	ListBox filterTitle;
+	
 	@UiField
-	Button saveOrder;
 	IconButton refreshButton;
 	
 	@UiField
     VerticalPanel anamnesisCheckPanel;
 	
 	@UiField
-	ScrollPanel scrollPanel;
+	DivElement loadingImageContainer;
+	
+	@UiField
+	TextBox newTitleText;
+	
+	@UiHandler("newTitleText")
+	public void enterButtonPressed(KeyUpEvent event) {
+		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+			delegate.addNewTitleClicked(newTitleText.getText());
+		}
+	}
 
 	@UiHandler("refreshButton")
 	public void refreshButtonClicked(ClickEvent event) {
-		delegate.performSearch(searchBox.getValue());
+		delegate.performSearch();
 	}
 
 	@UiHandler("filterTitle")
@@ -143,20 +122,6 @@ public class AnamnesisCheckViewImpl extends Composite implements
 //
 //	}
 
-	@UiHandler("saveOrder")
-	public void onSaveOrder(ClickEvent event) {
-		GWT.log("onSaveOrder delegate = " + delegate);
-		delegate.saveOrder();
-//		table.removeColumn(0);
-//		table.removeColumn(1);
-//		table.removeColumn(2);
-//		table.removeColumn(0);
-//		table.removeColumn(1);
-//		table.removeColumn(checkOrderColumn);
-		init();
-
-	}
-
 //	public void initList() {
 //
 //		for (VisibleRange range : VisibleRange.values()) {
@@ -171,7 +136,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	@UiHandler("newButton")
 	public void newButtonClicked(ClickEvent event) {
-		delegate.newTitleClicked();
+		delegate.addNewTitleClicked(newTitleText.getText());
 	}
 
 	/**
@@ -184,27 +149,16 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	 * HasHTML instead of HasText.
 	 */
 	public AnamnesisCheckViewImpl() {
-
-//		CellTable.Resources tableResources = GWT
-//				.create(MyCellTableResources.class);
-//		table = new CellTable<AnamnesisCheckProxy>(15, tableResources);
-
-//		SimplePager.Resources pagerResources = GWT
-//				.create(MySimplePagerResources.class);
-//		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources,
-//				true, 30, true);
-
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
 			public void performAction() {
-				delegate.performSearch(searchBox.getValue());
+				delegate.performSearch();
 			}
 		});
 
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 //		initList();
-
 	}
 
 	public String[] getPaths() {
@@ -216,196 +170,10 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		// solution...?!)
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		saveOrder.setText(constants.saveOrder());
-		newButton.setText(constants.addAnamnesisValue());
+		newButton.setText(constants.addTitle());
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
 				"position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
-
-//		paths.add("type");
-//		table.addColumn(new QuestionTypeColumn(), constants.type());
-//		paths.add("text");
-//		table.addColumn(new SimpleTextColumn(), constants.question());
-//		paths.add("value");
-//		table.addColumn(new ValueColumn(), constants.possibleAnswers());
-
-//		checkOrderColumn = new Column<AnamnesisCheckProxy, String>(
-//				new TextInputCell()) {
-//			@Override
-//			public String getValue(AnamnesisCheckProxy object) {
-//				if (object.getUserSpecifiedOrder() != null) {
-//					return String.valueOf(object.getUserSpecifiedOrder());
-//				} else {
-//
-//					return "";
-//				}
-//			}
-//		};
-//		checkOrderColumn
-//				.setFieldUpdater(new FieldUpdater<AnamnesisCheckProxy, String>() {
-//
-//					@Override
-//					public void update(int index, AnamnesisCheckProxy object,
-//							String value) {
-//						try {
-//							GWT.log("??????checkOrderColumn.setFieldUpdater value = "
-//									+ value);
-//							GWT.log("????object type= " + object.getType());
-//							GWT.log("????object sortoder= "
-//									+ object.getSort_order());
-//							GWT.log("????object value= " + value);
-//							// GWT.log("????object UserSpecifiedOrder= "+object.getUserSpecifiedOrder());
-//							// Integer userSpecifiedOrder =
-//							// Integer.valueOf(value);
-//							// delegate.resetUserSpecifiedOrder(object, value);
-//							if (value != null && !value.equals("")) {
-//								delegate.orderEdited(object, value);
-//							} else {
-//								delegate.orderEdited(object, null);
-//							}
-//							// object.setUserSpecifiedOrder(userSpecifiedOrder);
-//						} catch (Exception e) {
-//							GWT.log(value + e);
-//						}
-//
-//					}
-//				});
-//		table.addColumn(checkOrderColumn, constants.order());
-//		table.setColumnWidth(checkOrderColumn, "10px");
-//
-//		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.DOWN_ICON,
-//				new ActionCell.Delegate<AnamnesisCheckProxy>() {
-//					public void execute(AnamnesisCheckProxy proxy) {
-//						delegate.moveDown(proxy);
-//					}
-//				}), "", new GetValue<AnamnesisCheckProxy>() {
-//			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
-//				return proxy;
-//			}
-//		}, null);
-//		addColumn(new ActionCell<AnamnesisCheckProxy>(OsMaConstant.UP_ICON,
-//				new ActionCell.Delegate<AnamnesisCheckProxy>() {
-//					public void execute(AnamnesisCheckProxy proxy) {
-//						delegate.moveUp(proxy);
-//					}
-//				}), "", new GetValue<AnamnesisCheckProxy>() {
-//			public AnamnesisCheckProxy getValue(AnamnesisCheckProxy proxy) {
-//				return proxy;
-//			}
-//		}, null);
-//
 	}
-//
-//	private <C> void addColumn(Cell<C> cell, String headerText,
-//			final GetValue<C> getter,
-//			FieldUpdater<AnamnesisCheckProxy, C> fieldUpdater) {
-//		Column<AnamnesisCheckProxy, C> column = new Column<AnamnesisCheckProxy, C>(
-//				cell) {
-//			@Override
-//			public C getValue(AnamnesisCheckProxy object) {
-//				return getter.getValue(object);
-//			}
-//		};
-//		column.setFieldUpdater(fieldUpdater);
-//		table.addColumn(column, headerText);
-//	}
-
-	/**
-	 * Get a cell value from a record.
-	 * 
-	 * @param <C>
-	 *            the cell type
-	 */
-	private static interface GetValue<C> {
-		C getValue(AnamnesisCheckProxy proxy);
-	}
-
-	private class QuestionTypeColumn extends
-			Column<AnamnesisCheckProxy, SafeHtml> {
-		public QuestionTypeColumn() {
-			super(new SafeHtmlCell());
-		}
-
-		@Override
-		public SafeHtml getValue(AnamnesisCheckProxy proxy) {
-			OsceConstantsWithLookup constantsWithLookup = GWT
-					.create(OsceConstantsWithLookup.class);
-			AnamnesisQuestionTypeImages resources = GWT
-					.create(AnamnesisQuestionTypeImages.class);
-			String html = "";
-			switch (proxy.getType()) {
-			case QUESTION_TITLE:
-				html = "<img src=\"" + resources.title().getURL()
-						+ "\" title=\"" + constantsWithLookup.QUESTION_TITLE()
-						+ "\" />";
-				break;
-			case QUESTION_MULT_M:
-				html = "<img src=\"" + resources.questionMultM().getURL()
-						+ "\" title=\"" + constantsWithLookup.QUESTION_MULT_M()
-						+ "\" />";
-				break;
-			case QUESTION_MULT_S:
-				html = "<img src=\"" + resources.questionMultS().getURL()
-						+ "\" title=\"" + constantsWithLookup.QUESTION_MULT_S()
-						+ "\" />";
-				break;
-			case QUESTION_YES_NO:
-				html = "<img src=\"" + resources.questionYesNo().getURL()
-						+ "\" title=\"" + constantsWithLookup.QUESTION_YES_NO()
-						+ "\" />";
-				break;
-			case QUESTION_OPEN:
-			default:
-				html = "<img src=\"" + resources.questionOpen().getURL()
-						+ "\" title=\"" + constantsWithLookup.QUESTION_OPEN()
-						+ "\" />";
-			}
-			return (new SafeHtmlBuilder().appendHtmlConstant(html).toSafeHtml());
-		}
-	}
-	
-
-
-	private class SimpleTextColumn extends TextColumn<AnamnesisCheckProxy> {
-		@Override
-		public String getValue(AnamnesisCheckProxy object) {
-			String text = object.getText();
-			return (text == null) ? "" : text;
-		}
-	}
-
-	private class ValueColumn extends Column<AnamnesisCheckProxy, SafeHtml> {
-		public ValueColumn() {
-			super(new SafeHtmlCell());
-		}
-
-		@Override
-		public SafeHtml getValue(AnamnesisCheckProxy proxy) {
-			
-			String html = "";
-			String[] values;
-
-			if (proxy != null) {
-				values = proxy.getValue().split("\\|");
-				if (values.length > 1) {
-					html = "<ul>";
-					for (int i = 0; i < values.length; i++) {
-						html += "<li>" + values[i] + "</li>";
-					}
-					html += "</ul>";
-				} else {
-					html = values[0];
-				}
-			}
-
-			return (new SafeHtmlBuilder().appendHtmlConstant(html))
-					.toSafeHtml();
-		}
-	}
-
-//	@Override
-//	public CellTable<AnamnesisCheckProxy> getTable() {
-//		return table;
-//	}
 
 	@Override
 	public void setDelegate(Delegate delegate) {
@@ -463,156 +231,209 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	public QuickSearchBox getSearchBox() {
 		return searchBox;
 	}
-//
-//	@Override
-//	public ListBox getRangNumBox() {
-//		return rangeNum;
-//	}
+	
+	private HorizontalPanel getHeaderPanelForTitle(final AnamnesisCheckTitleProxy title, final DisclosurePanel disclosurePanel) {
+		HorizontalPanel panel = new HorizontalPanel();
+		panel.setSpacing(2);
+		panel.setWidth("100%");
+		panel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		panel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 
+		Label label = new Label(title.getText());
+		label.setWidth("150px");
+		final HorizontalPanel iconImagePanel = new HorizontalPanel();
+		iconImagePanel.setWidth("15px");
+		IconButton addBtnButton = new IconButton(constants.addQuestion());
+		addBtnButton.setIcon("plusthick");
+		addBtnButton.addDomHandler(new ClickHandler(){
 
-	@Override
-	public void loadAnamnesisCheckPanel(List<AnamnesisCheckTitleProxy> anamnesisCheckTitleList , final boolean isOpen) {
-		anamnesisCheckPanel.clear();
-		for(final AnamnesisCheckTitleProxy anamnesisCheckTitleProxy : anamnesisCheckTitleList){
-			GWT.log("################title text : "+anamnesisCheckTitleProxy.getText());
-			AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(anamnesisCheckTitleProxy);
-			final ListDataProvider<AnamnesisCheckProxy> dataProvider = new ListDataProvider<AnamnesisCheckProxy>();
-			final SingleSelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
-			anamnesisCheckTable.setDataProvider(dataProvider);
-			anamnesisCheckTable.setSelectionModel(selectionModel);
-			anamnesisCheckTable.setDelegate(delegate);
-			selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				//TODO go to detail , add detail
+				if (!disclosurePanel.isOpen()) {
+					disclosurePanel.setOpen(true);
+				}
+				delegate.newDetailClicked(String.valueOf(title.getId()));
+			}
+			
+		}, ClickEvent.getType());
+		
+		final IconButton editTitleButton = new IconButton();
+		editTitleButton.setIcon("pencil");
+		editTitleButton.addDomHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				delegate.editTitle(title, editTitleButton);
+			}
+		}, ClickEvent.getType());
+		
+		IconButton deleteTitleButton = new IconButton();
+		deleteTitleButton.setIcon("trash");
+		deleteTitleButton.addDomHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				delegate.deleteTitle(title);
+			}
+		}, ClickEvent.getType());
 
-				@Override
-				public void onSelectionChange(SelectionChangeEvent event) {
-					AnamnesisCheckProxy selectedObject = selectionModel.getSelectedObject();
-					if (selectedObject != null) {						
-						delegate.showDetails(selectedObject);
-					}
-					
+		HorizontalPanel moveUpPanel = new HorizontalPanel();
+		moveUpPanel.addStyleName("upIcon");
+		moveUpPanel.addDomHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				
+				int index = anamnesisCheckPanel.getWidgetIndex(disclosurePanel);
+				if (index == 0) {
+					return;
 				}
 				
-			});
-			CellTable<AnamnesisCheckProxy> cellTable = anamnesisCheckTable.initTable();
+				anamnesisCheckPanel.remove(index);
+				anamnesisCheckPanel.insert(disclosurePanel, index-1);
+				
+				delegate.moveUpTitle(title);
+			}
 			
-			
-			HorizontalPanel horizontalPanel = new HorizontalPanel();
-			horizontalPanel.setWidth("100%");
-			horizontalPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-			horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+		}, ClickEvent.getType());
+		HorizontalPanel moveDownPanel = new HorizontalPanel();
+		moveDownPanel.addStyleName("downIcon");
+		moveDownPanel.addDomHandler(new ClickHandler(){
 
-			Label label = new Label(anamnesisCheckTitleProxy.getText());
-			label.setWidth("200px");
-			final HorizontalPanel iconImagePanel = new HorizontalPanel();
-			iconImagePanel.setWidth("15px");
-			Button addBtnButton = new Button("Add detail");
-			addBtnButton.setWidth("80px");
-			addBtnButton.addDomHandler(new ClickHandler(){
-
-				@Override
-				public void onClick(ClickEvent event) {
-					event.stopPropagation();
-					//TODO go to detail , add detail
-					delegate.newDetailClicked(String.valueOf(anamnesisCheckTitleProxy.getId()));
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				
+				int index = anamnesisCheckPanel.getWidgetIndex(disclosurePanel);
+				if (index == anamnesisCheckPanel.getWidgetCount() - 1) {
+					return;
 				}
 				
-			}, ClickEvent.getType());
-
-			
-			final AnamnesisCheckImageResources anamnesisCheckImageResources = GWT.create(AnamnesisCheckImageResources.class);
-//			anamnesisCheckImageResources.upImage();
-			AnamnesisTableResources anamnesisTableResources = GWT.create(AnamnesisTableResources.class);
-			HorizontalPanel moveUpPanel = new HorizontalPanel();
-//			moveUpPanel.setSize("15px","15px");
-			moveUpPanel.addStyleName("upIcon");
-//			moveUpPanel.setStyleName(anamnesisTableResources.cellTableStyle().headMoveUpPanel());
-//			Image moveUp = new Image(anamnesisCheckImageResources.upImage());
-//			moveUpPanel.add(moveUp);
-			moveUpPanel.addDomHandler(new ClickHandler(){
-
-				@Override
-				public void onClick(ClickEvent event) {
-					event.stopPropagation();
-					//TODO move up
-					delegate.moveUpTitle(anamnesisCheckTitleProxy);
-				}
+				anamnesisCheckPanel.remove(index);
+				anamnesisCheckPanel.insert(disclosurePanel, index + 1);
 				
-			}, ClickEvent.getType());
+				delegate.moveDownTitle(title);
+			}
 			
-//			Image moveUp = new Image("up.png");
-//			moveUp.setWidth("15px");
-//			HorizontalPanel moveUp = new HorizontalPanel();
-//			moveUp.setStyleName("moveUpPanel");
-//			Image moveDown = new Image("down.png");
-//			HorizontalPanel moveDown = new HorizontalPanel();
-//			moveDown.setStyleName("moveDownPanel");
-//			Image moveDown = new Image(anamnesisCheckImageResources.downImage());
-			HorizontalPanel moveDownPanel = new HorizontalPanel();
-			moveDownPanel.addStyleName("downIcon");
-			moveDownPanel.addDomHandler(new ClickHandler(){
-
-				@Override
-				public void onClick(ClickEvent event) {
-					event.stopPropagation();
-					//TODO move down
-					delegate.moveDownTitle(anamnesisCheckTitleProxy);
-				}
-				
-			}, ClickEvent.getType());
-			
-//			iconImagePanel.add(iconImage);
-			horizontalPanel.add(iconImagePanel);
-			horizontalPanel.add(label);
-			horizontalPanel.add(addBtnButton);
-			horizontalPanel.add(moveUpPanel);
-			horizontalPanel.add(moveDownPanel);
-			
-			DisclosurePanel advancedDisclosure = new DisclosurePanel(horizontalPanel);
-			advancedDisclosure.setAnimationEnabled(true);
-			advancedDisclosure.ensureDebugId("cwDisclosurePanel");
-			
-			//Add table to DisclosurePanel
-			advancedDisclosure.setContent(cellTable);
-			advancedDisclosure.setWidth("100%");
-			
-			//when open DisclosurePanel,add data to table
-			advancedDisclosure.addOpenHandler(new OpenHandler<DisclosurePanel>() {
-				
-				@Override
-				public void onOpen(OpenEvent<DisclosurePanel> event) {
-
-					iconImagePanel.removeStyleName("rightIcon");
-					iconImagePanel.addStyleName("downIcon");
-					
-				}
-			});			
-			advancedDisclosure.addCloseHandler(new CloseHandler<DisclosurePanel>() {
-				
-				@Override
-				public void onClose(CloseEvent<DisclosurePanel> event) {
-					
-					iconImagePanel.removeStyleName("downIcon");
-					iconImagePanel.addStyleName("rightIcon");
-				}
-			});
-			
-
-				advancedDisclosure.setOpen(true);
+		}, ClickEvent.getType());
+		
+		panel.add(iconImagePanel);
+		panel.add(label);
+		panel.add(editTitleButton);
+		panel.add(deleteTitleButton);
+		panel.add(addBtnButton);
+		panel.add(moveUpPanel);
+		panel.add(moveDownPanel);
+		
+		OpenHandler<DisclosurePanel> openHandler = new OpenHandler<DisclosurePanel>() {
+			@Override
+			public void onOpen(OpenEvent<DisclosurePanel> event) {
 				iconImagePanel.removeStyleName("rightIcon");
 				iconImagePanel.addStyleName("downIcon");
-				delegate.setQuestionTableData(dataProvider,anamnesisCheckTitleProxy);
+				// TODO fix... request may already be runnint? in which case?
+				delegate.setQuestionTableData(title);
+			}
+		}; 
 
-			anamnesisCheckPanel.add(advancedDisclosure);
-		}
+		CloseHandler<DisclosurePanel> closeHandler = new CloseHandler<DisclosurePanel>() {
+			
+			@Override
+			public void onClose(CloseEvent<DisclosurePanel> event) {
+				iconImagePanel.removeStyleName("downIcon");
+				iconImagePanel.addStyleName("rightIcon");
+			}
+		};
 		
+		//when open DisclosurePanel,add data to table
+		disclosurePanel.addOpenHandler(openHandler);			
+		disclosurePanel.addCloseHandler(closeHandler);
+
+		closeHandler.onClose(null);
+		return panel;
+	}
+	
+	public void addAnamnesisCheckTitle(final AnamnesisCheckTitleProxy title, boolean isOpen) {
+		Log.debug("addAnamnesisCheckTitle(): " + title.getText());
+		AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(title);
+		final ListDataProvider<AnamnesisCheckProxy> dataProvider = new ListDataProvider<AnamnesisCheckProxy>();
+		final SingleSelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
+		anamnesisCheckTable.setDataProvider(dataProvider);
+		anamnesisCheckTable.setSelectionModel(selectionModel);
+		anamnesisCheckTable.setDelegate(delegate);
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler(){
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				AnamnesisCheckProxy selectedObject = selectionModel.getSelectedObject();
+				if (selectedObject != null) {						
+					delegate.showDetails(selectedObject);
+				}
+			}
+		});
+		CellTable<AnamnesisCheckProxy> cellTable = anamnesisCheckTable.initTable();
+		DisclosurePanel advancedDisclosure = new DisclosurePanel();
+		HorizontalPanel headerPanel = getHeaderPanelForTitle(title, advancedDisclosure);
+		advancedDisclosure.setHeader(headerPanel);
+		advancedDisclosure.setAnimationEnabled(true);
+		advancedDisclosure.ensureDebugId("cwDisclosurePanel");
+		
+		//Add table to DisclosurePanel
+		advancedDisclosure.setContent(cellTable);
+		advancedDisclosure.setWidth("100%");
+		delegate.addDataProvider(title, dataProvider);
+
+		anamnesisCheckPanel.add(advancedDisclosure);
+		if (loadingImageContainer.hasParentElement()) {
+			loadingImageContainer.removeFromParent();
+		}
+
+		advancedDisclosure.setOpen(isOpen);
+	}
+
+	@Override
+	public void loadAnamnesisCheckPanel(List<AnamnesisCheckTitleProxy> anamnesisCheckTitleList, boolean isOpen) {
+		anamnesisCheckPanel.clear();
+		for(final AnamnesisCheckTitleProxy anamnesisCheckTitleProxy : anamnesisCheckTitleList){
+			addAnamnesisCheckTitle(anamnesisCheckTitleProxy, isOpen);
+		}
 	}
 
 	@Override
 	public VerticalPanel getAnamnesisCheckPanel() {
 		return anamnesisCheckPanel;
 	}
-
 	
-
+	interface Style extends CssResource {
+		String hilight();
+	}
+	
+	@UiField
+	Style style;
+	
+	@Override
+	public void filterTitle(AnamnesisCheckTitleProxy title) {
+		if (title == null) {
+			filterTitle.setSelectedIndex(0);
+		} else {		
+			for (int i=0; i < filterTitle.getItemCount(); i++) {
+				if (filterTitle.getValue(i).equals(title.getId().toString())) {
+					filterTitle.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
+		
+		filterTitle.addStyleName(style.hilight());
+		Timer timer = new Timer() {
+			
+			@Override
+			public void run() {
+				filterTitle.removeStyleName(style.hilight());
+			}
+		};
+		timer.schedule(2500);
+	}
 }
 

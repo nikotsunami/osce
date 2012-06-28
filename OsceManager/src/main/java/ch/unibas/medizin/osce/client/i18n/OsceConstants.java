@@ -33,6 +33,8 @@ public interface OsceConstants extends Constants {
 
 	public String addRoom();
 
+	public String addTitle();
+
 	public String addTrait();
 
 	public String addUser();
@@ -284,6 +286,8 @@ public interface OsceConstants extends Constants {
 	public String telephone();
 
 	public String text();
+	
+	public String thisIsTheFirstQuestion();
 
 	public String title();
 

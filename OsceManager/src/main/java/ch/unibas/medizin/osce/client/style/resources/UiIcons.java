@@ -34,6 +34,9 @@ public interface UiIcons extends ClientBundle {
 	@Source("images/icons/carat-2-e-w.png")
 	public ImageResource carat2EastWest();
 	
+	@Source("images/icons/loading-ring.gif")
+	public ImageResource loadingRing();
+	
 	@Source("images/icons/triangle-1-n.png")
 	public ImageResource triangle1North();
 	
