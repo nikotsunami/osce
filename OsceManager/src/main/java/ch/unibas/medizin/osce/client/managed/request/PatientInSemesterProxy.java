@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.managed.request;
 
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ProxyForName;
+import java.util.Set;
 import org.springframework.roo.addon.gwt.RooGwtMirroredFrom;
 
 @RooGwtMirroredFrom("ch.unibas.medizin.osce.domain.PatientInSemester")
@@ -25,4 +26,20 @@ public interface PatientInSemesterProxy extends EntityProxy {
     abstract StandardizedPatientProxy getStandardizedPatient();
 
     abstract void setStandardizedPatient(StandardizedPatientProxy standardizedPatient);
+
+    abstract Boolean getAccepted();
+
+    abstract void setAccepted(Boolean accepted);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.OsceDayProxy> getOsceDays();
+
+    abstract void setOsceDays(Set<OsceDayProxy> osceDays);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy> getPatientInRole();
+
+    abstract void setPatientInRole(Set<PatientInRoleProxy> patientInRole);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.TrainingProxy> getTrainings();
+
+    abstract void setTrainings(Set<TrainingProxy> trainings);
 }

@@ -58,6 +58,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -70,6 +71,11 @@ public abstract class ApplicationListPlaceRenderer_Roo_Gwt extends AbstractRende
             @Override
             public void handleUsedMaterial(UsedMaterialProxy isNull) {
                 setResult("UsedMaterials");
+            }
+
+            @Override
+            public void handleTraining(TrainingProxy isNull) {
+                setResult("Trainings");
             }
 
             @Override

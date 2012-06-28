@@ -130,10 +130,12 @@
 					<g:ValueListBox ui:field="copiedOsce" />
 				</td>
 			
-			<td></td>
-			<td>
-				
+			<td id="shortBreak">
+					<div class="{style.label}">Middle Break:</div>
+				</td>
 				 
+				<td>
+					<r:ShortBox ui:field="middleBreak" />
 			</td>
 			</tr>
 			
@@ -267,3 +269,4 @@
 		    </g:HTMLPanel>
 		 </g:VerticalPanel>
 </ui:UiBinder>
+

@@ -19,19 +19,45 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="semester">
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="semester">
             <div class="{style.label}">Semester</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="semester"/>
             </div>
         </div>
-    <div id="standardizedPatient">
+        <div id="standardizedPatient">
             <div class="{style.label}">Standardized Patient</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="standardizedPatient"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+        <div id="accepted">
+            <div class="{style.label}">Accepted</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="accepted"/>
+            </div>
+        </div>
+        <div id="osceDays">
+            <div class="{style.label}">Osce Days</div>
+            <div class="{style.value}">
+                <a:OsceDaySetEditor ui:field="osceDays"/>
+            </div>
+        </div>
+        <div id="patientInRole">
+            <div class="{style.label}">Patient In Role</div>
+            <div class="{style.value}">
+                <a:PatientInRoleSetEditor ui:field="patientInRole"/>
+            </div>
+        </div>
+        <div id="trainings">
+            <div class="{style.label}">Trainings</div>
+            <div class="{style.value}">
+                <a:TrainingSetEditor ui:field="trainings"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

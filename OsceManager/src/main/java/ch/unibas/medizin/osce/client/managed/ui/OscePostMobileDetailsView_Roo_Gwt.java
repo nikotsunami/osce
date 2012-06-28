@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import com.google.gwt.core.client.GWT;
@@ -41,6 +42,9 @@ public abstract class OscePostMobileDetailsView_Roo_Gwt extends Composite implem
     Element oscePostRooms;
 
     @UiField
+    Element patientInRole;
+
+    @UiField
     Element standardizedRole;
 
     @UiField
@@ -58,6 +62,7 @@ public abstract class OscePostMobileDetailsView_Roo_Gwt extends Composite implem
         isPossibleStart.setInnerText(proxy.getIsPossibleStart() == null ? "" : String.valueOf(proxy.getIsPossibleStart()));
         oscePostBlueprint.setInnerText(proxy.getOscePostBlueprint() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance().render(proxy.getOscePostBlueprint()));
         oscePostRooms.setInnerText(proxy.getOscePostRooms() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostRoomProxyRenderer.instance()).render(proxy.getOscePostRooms()));
+        patientInRole.setInnerText(proxy.getPatientInRole() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance()).render(proxy.getPatientInRole()));
         standardizedRole.setInnerText(proxy.getStandardizedRole() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().render(proxy.getStandardizedRole()));
         osceSequence.setInnerText(proxy.getOsceSequence() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.OsceSequenceProxyRenderer.instance().render(proxy.getOsceSequence()));
         sequenceNumber.setInnerText(proxy.getSequenceNumber() == null ? "" : String.valueOf(proxy.getSequenceNumber()));

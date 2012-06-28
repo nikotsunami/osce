@@ -8,6 +8,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     UsedMaterialRequest usedMaterialRequest();
 
+    TrainingRequest trainingRequest();
+
     TaskRequest taskRequest();
 
     StudentRequest studentRequest();

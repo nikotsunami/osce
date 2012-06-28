@@ -28,7 +28,9 @@ public interface TopicsAndSpecDetailsView extends IsWidget{
 		//todo
 
 		void deleteClicked(RoleTopicProxy roletopic);
-		void editClicked(RoleTopicProxy roletopic);
+		//void editClicked(RoleTopicProxy roletopic);
+		//Issue Role
+		void editClicked(RoleTopicProxy roletopic, int left, int top);
 
 		void performSearch(String value);
 	}

@@ -19,19 +19,33 @@
   <g:HTMLPanel id="boundElementHolder" styleName="{style.outer}">
     <div class="{style.error}" ui:field="errors"/>
     
-    <div id="patientInSemester">
+    
+    
+
+    <g:Button ui:field="save">Save</g:Button>
+  <div id="patientInSemester">
             <div class="{style.label}">Patient In Semester</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="patientInSemester"/>
             </div>
         </div>
-    <div id="standardizedRole">
-            <div class="{style.label}">Standardized Role</div>
+        <div id="oscePost">
+            <div class="{style.label}">Osce Post</div>
             <div class="{style.value}">
-                <g:ValueListBox ui:field="standardizedRole"/>
+                <g:ValueListBox ui:field="oscePost"/>
             </div>
         </div>
-
-    <g:Button ui:field="save">Save</g:Button>
-  </g:HTMLPanel>
+        <div id="fit_criteria">
+            <div class="{style.label}">Fit_criteria</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="fit_criteria"/>
+            </div>
+        </div>
+        <div id="is_backup">
+            <div class="{style.label}">Is_backup</div>
+            <div class="{style.value}">
+                <g:CheckBox ui:field="is_backup"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
 </ui:UiBinder>

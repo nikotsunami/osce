@@ -30,9 +30,9 @@ public interface OsceDetailsView extends IsWidget{
 		void deleteClicked(TaskProxy task);
 		void editForDone(TaskProxy task);
 
-		void saveClicked(Boolean isedit, String innerText,
+		/*void saveClicked(Boolean isedit, String innerText,
 				AdministratorProxy value, Date value2,OsceProxy osceproxy,TaskProxy task);
-		
+		*/
 		
 		
 	}
@@ -46,4 +46,5 @@ public interface OsceDetailsView extends IsWidget{
     
     void setPresenter(Presenter osceActivity);
 	void setAdministratorValue(List<AdministratorProxy> emptyList);
+	public OsceTaskPopViewImpl getPopView();
 }

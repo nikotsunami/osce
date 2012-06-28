@@ -60,6 +60,15 @@
 				<g:Anchor ui:field="bellSchedule"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
+	
+                <!-- module: 3  SPEC START = -->
+		<g:DisclosurePanel ui:field="roleAssignmentPanel" open="true" addStyleNames='{style.mainNavPanel}'>
+			<g:header></g:header>
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
+				<g:Anchor ui:field="roleAssignment"></g:Anchor>				
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		<!-- module: 3  SPEC END = -->
 		
 		<g:DisclosurePanel ui:field="administrationPanel" open="false" addStyleNames='{style.mainNavPanel}'>
 			<g:header></g:header>

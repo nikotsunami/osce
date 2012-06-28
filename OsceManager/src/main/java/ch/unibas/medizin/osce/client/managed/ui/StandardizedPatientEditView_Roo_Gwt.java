@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
@@ -133,8 +134,15 @@ public abstract class StandardizedPatientEditView_Roo_Gwt extends Composite impl
     @UiField
     LangSkillSetEditor langskills;
 
+    @UiField
+    PatientInSemesterSetEditor patientInSemester;
+
     public void setProfessionPickerValues(Collection<ProfessionProxy> values) {
         profession.setAcceptableValues(values);
+    }
+
+    public void setPatientInSemesterPickerValues(Collection<PatientInSemesterProxy> values) {
+        patientInSemester.setAcceptableValues(values);
     }
 
     public void setMaritalStatusPickerValues(Collection<MaritalStatus> values) {

@@ -22,7 +22,17 @@
     
 
     <g:Button ui:field="delete">Delete</g:Button>
-  <div id="id">
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
@@ -61,6 +71,10 @@
         <div id="patientsInSemester">
             <div class="{style.label}">Patients In Semester</div>
             <div class="{style.value}" ui:field="patientsInSemester"/>
+        </div>
+        <div id="training">
+            <div class="{style.label}">Training</div>
+            <div class="{style.value}" ui:field="training"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

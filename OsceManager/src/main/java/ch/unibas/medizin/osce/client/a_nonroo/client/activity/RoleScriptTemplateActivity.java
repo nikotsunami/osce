@@ -452,8 +452,13 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 				});
 	}
 
+// Issue Role Module
 	@Override
-	public void editClicked(final RoleTemplateProxy roleTemplate) {
+	public void editClicked(final RoleTemplateProxy roleTemplate,int left,int top) {
+	// E: Issue Role Module
+
+//	@Override
+//	public void editClicked(final RoleTemplateProxy roleTemplate) {
 
 		// ToolTip Function Added by spec
 		Log.info("ToolTip opened");
@@ -490,9 +495,10 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 		table.getColumnIndex(table.getColumn(1));
 
-		toolTip.setPopupPosition(
-				new Integer(constants.TopicsAndSpecViewPopupXPosition()),
-				new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+	//	toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+// Issue Role Module
+		toolTip.setPopupPosition(left,top);
+		// Issue Role Module
 
 		toolTip.show();
 

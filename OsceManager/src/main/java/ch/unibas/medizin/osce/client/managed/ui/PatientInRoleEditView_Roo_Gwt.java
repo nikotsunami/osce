@@ -4,9 +4,9 @@ package ch.unibas.medizin.osce.client.managed.ui;
 
 import ch.unibas.medizin.osce.client.managed.activity.PatientInRoleEditActivityWrapper;
 import ch.unibas.medizin.osce.client.managed.activity.PatientInRoleEditActivityWrapper.View;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import com.google.gwt.core.client.GWT;
@@ -42,13 +42,29 @@ public abstract class PatientInRoleEditView_Roo_Gwt extends Composite implements
     ValueListBox<PatientInSemesterProxy> patientInSemester = new ValueListBox<PatientInSemesterProxy>(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy>());
 
     @UiField(provided = true)
-    ValueListBox<StandardizedRoleProxy> standardizedRole = new ValueListBox<StandardizedRoleProxy>(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>());
+    ValueListBox<OscePostProxy> oscePost = new ValueListBox<OscePostProxy>(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OscePostProxy>());
+
+    @UiField(provided = true)
+    CheckBox fit_criteria = new CheckBox() {
+
+        public void setValue(Boolean value) {
+            super.setValue(value == null ? Boolean.FALSE : value);
+        }
+    };
+
+    @UiField(provided = true)
+    CheckBox is_backup = new CheckBox() {
+
+        public void setValue(Boolean value) {
+            super.setValue(value == null ? Boolean.FALSE : value);
+        }
+    };
 
     public void setPatientInSemesterPickerValues(Collection<PatientInSemesterProxy> values) {
         patientInSemester.setAcceptableValues(values);
     }
 
-    public void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values) {
-        standardizedRole.setAcceptableValues(values);
+    public void setOscePostPickerValues(Collection<OscePostProxy> values) {
+        oscePost.setAcceptableValues(values);
     }
 }

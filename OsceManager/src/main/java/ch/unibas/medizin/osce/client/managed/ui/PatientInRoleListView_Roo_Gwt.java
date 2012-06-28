@@ -2,9 +2,9 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -70,15 +70,45 @@ public abstract class PatientInRoleListView_Roo_Gwt extends AbstractProxyListVie
                 return renderer.render(object.getPatientInSemester());
             }
         }, "Patient In Semester");
-        paths.add("standardizedRole");
+        paths.add("oscePost");
         table.addColumn(new TextColumn<PatientInRoleProxy>() {
 
-            Renderer<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance();
+            Renderer<ch.unibas.medizin.osce.client.managed.request.OscePostProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance();
 
             @Override
             public String getValue(PatientInRoleProxy object) {
-                return renderer.render(object.getStandardizedRole());
+                return renderer.render(object.getOscePost());
             }
-        }, "Standardized Role");
+        }, "Osce Post");
+        paths.add("fit_criteria");
+        table.addColumn(new TextColumn<PatientInRoleProxy>() {
+
+            Renderer<java.lang.Boolean> renderer = new AbstractRenderer<java.lang.Boolean>() {
+
+                public String render(java.lang.Boolean obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(PatientInRoleProxy object) {
+                return renderer.render(object.getFit_criteria());
+            }
+        }, "Fit_criteria");
+        paths.add("is_backup");
+        table.addColumn(new TextColumn<PatientInRoleProxy>() {
+
+            Renderer<java.lang.Boolean> renderer = new AbstractRenderer<java.lang.Boolean>() {
+
+                public String render(java.lang.Boolean obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(PatientInRoleProxy object) {
+                return renderer.render(object.getIs_backup());
+            }
+        }, "Is_backup");
     }
 }

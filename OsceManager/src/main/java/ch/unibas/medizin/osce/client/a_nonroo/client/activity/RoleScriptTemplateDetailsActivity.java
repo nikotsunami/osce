@@ -47,6 +47,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.ProvidesKey;
@@ -304,6 +305,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 									roleText_AreaTableItemViewImpl.roleBaseItemDisclosurePanel.setStyleName("border=0");
 									roleText_AreaTableItemViewImpl.table.removeFromParent();
 									roleText_AreaTableItemViewImpl.AddSubItem.removeFromParent();
+									roleText_AreaTableItemViewImpl.txtSubItem.removeFromParent();
 								}
 							}
 							
@@ -318,7 +320,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 	
 	
 	@Override
-	public void addRoleBaseSubItem(final RoleBaseItemProxy roleBaseItemProxy,final CellTable<RoleTableItemProxy> table) {
+	public void addRoleBaseSubItem(final RoleBaseItemProxy roleBaseItemProxy,final CellTable<RoleTableItemProxy> table,final RoleBaseTableItemViewImpl roleBaseTableItemViewImpl) {
 		this.table=table;
 		ProvidesKey<RoleTableItemProxy> keyProvider = ((AbstractHasData<RoleTableItemProxy>) table).getKeyProvider();
 		selectionModel = new SingleSelectionModel<RoleTableItemProxy>(keyProvider);
@@ -345,7 +347,10 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 						Log.info("RoleBaseItem set list count:" +  ((RoleBaseItemProxy)object).getRoleTableItem().size());
 						sizeOfTable=(((RoleBaseItemProxy)object).getRoleTableItem().size());
 						sizeOfTable+=1;
-						roleTableItemProxy.setItemName("Title "+sizeOfTable);	
+						// Issue Role Module
+						//roleTableItemProxy.setItemName("Title "+sizeOfTable);
+						roleTableItemProxy.setItemName(roleBaseTableItemViewImpl.txtSubItem.getText());
+						// Issue Role Module
 						roleTableItemProxy.setSort_order(sizeOfTable);
 						roleTableItemProxy.setRoleBaseItem((RoleBaseItemProxy)object);
 						final Long roleBaseItemId = ((RoleBaseItemProxy)object).getId(); 
@@ -420,7 +425,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 	}
 
 	@Override
-	public void pencliButtonclickEvent(final RoleBaseItemProxy roleBaseItemProxy) {
+	public void pencliButtonclickEvent(final RoleBaseItemProxy roleBaseItemProxy,ClickEvent event) {
 
 		
 		Log.info("ToolTip opened");
@@ -459,13 +464,14 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 				toolTipContentPanel.add(toolTipChange);
 			     
 				toolTipLabel.setText(roleBaseItemProxy.getItem_name());
-			       
-				    
+			       	   
 				toolTip.add(toolTipContentPanel);   // you can add any widget here
 			        
 
 			   
-				toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+				// Issue Role Module
+				//toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+				toolTip.setPopupPosition(event.getClientX(),event.getClientY());
 			    
 			        toolTip.show();
 			        
@@ -513,7 +519,11 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 	}
 
 	@Override
-public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableItem,final Long roleBaseItemId,final CellTable<RoleTableItemProxy> roleTableItemtable) {
+public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableItem,final Long roleBaseItemId, final CellTable<RoleTableItemProxy> roleTableItemtable, int left,int top) {
+		
+		Range range=roleTableItemtable.getVisibleRange();
+		
+		Log.info("Start: " + range.getStart() + range.getLength());
 		
 		Log.info("RoleBase Proxy Item name to add title of roletable:" + roleTableItem.getItemName());
 		Log.info("RoleBase Proxy Item id to add title of roletable:" + roleTableItem.getRoleBaseItem());
@@ -550,9 +560,9 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		    
 		toolTip.add(toolTipContentPanel);   // you can add any widget here
 	        
-
-	   
-		toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+//		toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));	   
+		//toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
+	toolTip.setPopupPosition(left, top);
 	    
 	        toolTip.show();
 	        

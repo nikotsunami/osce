@@ -24,6 +24,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public static Set<java.lang.Class<? extends com.google.gwt.requestfactory.shared.EntityProxy>> getAll() {
         Set<Class<? extends EntityProxy>> rtn = new HashSet<Class<? extends EntityProxy>>();
         rtn.add(UsedMaterialProxy.class);
+        rtn.add(TrainingProxy.class);
         rtn.add(TaskProxy.class);
         rtn.add(StudentProxy.class);
         rtn.add(StudentOscesProxy.class);
@@ -85,6 +86,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Class<?> clazz) {
         if (UsedMaterialProxy.class.equals(clazz)) {
             processor.handleUsedMaterial((UsedMaterialProxy) null);
+            return;
+        }
+        if (TrainingProxy.class.equals(clazz)) {
+            processor.handleTraining((TrainingProxy) null);
             return;
         }
         if (TaskProxy.class.equals(clazz)) {
@@ -315,6 +320,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleUsedMaterial((UsedMaterialProxy) proxy);
             return;
         }
+        if (proxy instanceof TrainingProxy) {
+            processor.handleTraining((TrainingProxy) proxy);
+            return;
+        }
         if (proxy instanceof TaskProxy) {
             processor.handleTask((TaskProxy) proxy);
             return;
@@ -542,6 +551,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     public abstract void handleUsedMaterial(UsedMaterialProxy proxy);
+
+    public abstract void handleTraining(TrainingProxy proxy);
 
     public abstract void handleTask(TaskProxy proxy);
 

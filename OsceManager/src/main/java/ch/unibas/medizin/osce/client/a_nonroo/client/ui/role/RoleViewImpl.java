@@ -10,8 +10,6 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFilterViewTooltipImpl;
-
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
@@ -324,7 +322,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 					for (StandardizedRoleProxy role : object.getStandardizedRoles()) {
 						// Boolean object has to be checked for null value!
 						if(role.getActive() != null && role.getActive().booleanValue() == true) {
-							strStanderdizedRole += strStanderdizedRole + role.getShortName() + ", ";
+							strStanderdizedRole = strStanderdizedRole + role.getShortName() + ", ";
 						}
 					}
 				}
@@ -369,6 +367,9 @@ public class RoleViewImpl extends Composite implements RoleView {
 	public CellTable<RoleTopicProxy> getTable() {
 		return table;
 	}
+
+	
+	
 	
 	public ValueListBox<SpecialisationProxy> gets() {
 		return SpecialisationBox;

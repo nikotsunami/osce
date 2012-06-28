@@ -11,12 +11,14 @@ import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -30,6 +32,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -92,6 +95,11 @@ RoleBaseTableItemView {
 	@UiField
 	public IconButton AddSubItem;
 	
+	// Issue Role Module
+		@UiField
+		public TextBox txtSubItem;
+		//Issue Role Module
+	
 	@UiField
 	public IconButton downIcon;
 	
@@ -101,6 +109,10 @@ RoleBaseTableItemView {
 //	@UiField
 //	public Label accessLabel1;
 //	
+	
+	// Issue Role Module
+		public RoleTableItemProxy tempRoleTableItem;	
+		int top =0, left=0;
 	
 	@UiField
 	com.google.gwt.user.client.ui.Image arrow;
@@ -128,7 +140,9 @@ RoleBaseTableItemView {
 	
 	@UiHandler("pencil")
 	public void pencilButtonClickEvent(ClickEvent event){
-		delegate.pencliButtonclickEvent(roleBasedItemProxy);
+		//delegate.pencliButtonclickEvent(roleBasedItemProxy);
+		// Issue Role Module		
+		delegate.pencliButtonclickEvent(roleBasedItemProxy,event);
 	}
 	
 	@UiHandler("arrow")
@@ -146,7 +160,11 @@ RoleBaseTableItemView {
 	@UiHandler("AddSubItem")
 	public void addRoleBaseSubItemClickHandler(ClickEvent event) {
 		System.out.println("Calling method to add Sub items..");
-		delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);
+		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);
+		// Issue Role Module
+		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);		
+		delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table,this);		
+		// Issue Role Module
 		
 	}
 	
@@ -192,6 +210,19 @@ RoleBaseTableItemView {
 	protected ArrayList<String> paths = new ArrayList<String>();
 	public void init(){
 		
+		// Issue Role Module
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				top = event.getClientY()-50;
+				left = event.getClientX();
+				
+				Log.info("top : "+top);
+				Log.info("left : "+left);
+			}
+		}, ClickEvent.getType());		
+		// Issue Role Module E
 		
 		paths.add("item_name");
 		table.addColumn(new TextColumn<RoleTableItemProxy>() {
@@ -237,7 +268,7 @@ RoleBaseTableItemView {
 		}, null);
 		table.addColumnStyleName(1, "iconCol");
 		
-		addColumn(new ActionCell<RoleTableItemProxy>(
+		/*addColumn(new ActionCell<RoleTableItemProxy>(
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoleTableItemProxy>() {
 					public void execute(final RoleTableItemProxy roleTableItem) {
 						delegate.roleTableItemEditButtonClicked(roleTableItem,roleBasedItemProxy.getId(),table);		
@@ -247,7 +278,24 @@ RoleBaseTableItemView {
 				return roleTableItem;
 			}
 		}, null);
+		table.addColumnStyleName(1, "iconCol");*/
+		
+		// Issue Role Module
+		addColumn(new ActionCell<RoleTableItemProxy>(OsMaConstant.EDIT_ICON,
+				new ActionCell.Delegate<RoleTableItemProxy>() {
+					public void execute(final RoleTableItemProxy roleTableItem) {
+						// Log.info("DOM.eventGetClientX(null) ...."+DOM.eventGetClientX(null));
+
+						delegate.roleTableItemEditButtonClicked(roleTableItem,
+								roleBasedItemProxy.getId(), table, left, top);
+					}
+				}), "", new GetValue<RoleTableItemProxy>() {
+			public RoleTableItemProxy getValue(RoleTableItemProxy roleTableItem) {
+				return roleTableItem;
+			}
+		}, null);
 		table.addColumnStyleName(1, "iconCol");
+		// Issue Role Module E
 
 		addColumn(new ActionCell<RoleTableItemProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTableItemProxy>() {

@@ -7,8 +7,10 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.PatientInRoleSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
@@ -33,6 +35,6 @@ public abstract class OscePostDetailsActivity_Roo_Gwt extends AbstractActivity i
     protected EntityProxyId<OscePostProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("oscePostBlueprint", "oscePostRooms", "standardizedRole", "osceSequence").fire(callback);
+        requests.find(proxyId).with("oscePostBlueprint", "oscePostRooms", "patientInRole", "standardizedRole", "osceSequence").fire(callback);
     }
 }

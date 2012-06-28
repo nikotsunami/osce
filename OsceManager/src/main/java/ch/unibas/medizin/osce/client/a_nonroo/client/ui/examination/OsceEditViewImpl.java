@@ -87,6 +87,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	public ShortBox lunchBreak;
 	
+	@UiField
+	public ShortBox middleBreak;
+	
+	
+	
 	/*@UiField
 	TaskSetEditor tasks;
 	*/

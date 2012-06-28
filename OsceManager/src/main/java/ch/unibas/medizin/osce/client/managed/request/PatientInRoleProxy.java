@@ -22,7 +22,15 @@ public interface PatientInRoleProxy extends EntityProxy {
 
     abstract void setPatientInSemester(PatientInSemesterProxy patientInSemester);
 
-    abstract StandardizedRoleProxy getStandardizedRole();
+    abstract OscePostProxy getOscePost();
 
-    abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);
+    abstract void setOscePost(OscePostProxy oscePost);
+
+    abstract Boolean getFit_criteria();
+
+    abstract void setFit_criteria(Boolean fit_criteria);
+
+    abstract Boolean getIs_backup();
+
+    abstract void setIs_backup(Boolean is_backup);
 }

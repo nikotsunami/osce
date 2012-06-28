@@ -22,7 +22,9 @@ public interface TopicsAndSpecView extends IsWidget{
 	//	void deleteClicked(SpecialisationProxy specialization);
 		void newClicked(String value);
 		void deleteClicked(SpecialisationProxy specialization);
-		void editClicked(SpecialisationProxy specialization);
+		//void editClicked(SpecialisationProxy specialization);
+		// Issue Role
+		void editClicked(SpecialisationProxy specialization, int left, int top);
 		void performSearch(String value);
 	}
 

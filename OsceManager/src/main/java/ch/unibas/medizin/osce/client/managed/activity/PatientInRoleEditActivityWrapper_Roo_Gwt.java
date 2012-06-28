@@ -4,9 +4,9 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.PatientInRoleEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -43,14 +43,14 @@ public abstract class PatientInRoleEditActivityWrapper_Roo_Gwt implements Activi
                 view.setPatientInSemesterPickerValues(values);
             }
         });
-        view.setStandardizedRolePickerValues(Collections.<StandardizedRoleProxy>emptyList());
-        requests.standardizedRoleRequest().findStandardizedRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<StandardizedRoleProxy>>() {
+        view.setOscePostPickerValues(Collections.<OscePostProxy>emptyList());
+        requests.oscePostRequest().findOscePostEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OscePostProxyRenderer.instance().getPaths()).fire(new Receiver<List<OscePostProxy>>() {
 
-            public void onSuccess(List<StandardizedRoleProxy> response) {
-                List<StandardizedRoleProxy> values = new ArrayList<StandardizedRoleProxy>();
+            public void onSuccess(List<OscePostProxy> response) {
+                List<OscePostProxy> values = new ArrayList<OscePostProxy>();
                 values.add(null);
                 values.addAll(response);
-                view.setStandardizedRolePickerValues(values);
+                view.setOscePostPickerValues(values);
             }
         });
         wrapped.start(display, eventBus);
@@ -60,6 +60,6 @@ public abstract class PatientInRoleEditActivityWrapper_Roo_Gwt implements Activi
 
         void setPatientInSemesterPickerValues(Collection<PatientInSemesterProxy> values);
 
-        void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values);
+        void setOscePostPickerValues(Collection<OscePostProxy> values);
     }
 }

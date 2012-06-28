@@ -118,4 +118,8 @@ public interface StandardizedPatientProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.LangSkillProxy> getLangskills();
 
     abstract void setLangskills(Set<LangSkillProxy> langskills);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy> getPatientInSemester();
+
+    abstract void setPatientInSemester(Set<PatientInSemesterProxy> patientInSemester);
 }

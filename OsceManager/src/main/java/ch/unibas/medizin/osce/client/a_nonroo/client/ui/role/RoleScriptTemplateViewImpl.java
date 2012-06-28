@@ -1,33 +1,23 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.hibernate.event.def.AbstractReassociateEventListener;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView.Delegate;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView.Presenter;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecViewImpl.TopicsAndSpecViewUiBinder;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
-import ch.unibas.medizin.osce.shared.TraitTypes;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -42,7 +32,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -88,6 +77,10 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	
 	@UiField
 	Button newButton;
+	
+	// Issue Role Module
+	int top =0, left=0;
+	
 	
 	
 	@UiHandler ("newButton")
@@ -147,6 +140,20 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 		
+		// Issue Role Module
+				table.addDomHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						top = event.getClientY()-50;
+						left = event.getClientX();
+						
+						Log.info("top : "+top);
+						Log.info("left : "+left);
+					}
+				}, ClickEvent.getType());		
+				// E Issue Role Module
+		
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		paths.add("templateName");
 		table.addColumn(new TextColumn<RoleTemplateProxy>() {
@@ -203,11 +210,12 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 			}
 		}, "Date Edited");
 		//Edit Button
-				addColumn(new ActionCell<RoleTemplateProxy>(
+					// Issue Role Module
+		addColumn(new ActionCell<RoleTemplateProxy>(
 						OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoleTemplateProxy>() {
 							public void execute(final RoleTemplateProxy roleTemplate) {
 												
-								delegate.editClicked(roleTemplate);
+								delegate.editClicked(roleTemplate,left,top);
 													
 							}
 						}), "", new GetValue<RoleTemplateProxy>() {
@@ -216,6 +224,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 					}
 				}, null);
 				table.addColumnStyleName(1, "iconCol");
+		// E Issue Role Module
 		addColumn(new ActionCell<RoleTemplateProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTemplateProxy>() {
 					public void execute(RoleTemplateProxy roleTemplate) {

@@ -43,7 +43,9 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="patientInSemester">
+      
+      
+    <tr id="patientInSemester">
                 <td>
                     <div class="{style.label}">Patient In Semester:</div>
                 </td>
@@ -51,15 +53,31 @@
                     <g:ValueListBox ui:field="patientInSemester"/>
                 </td>
             </tr>
-      <tr id="standardizedRole">
+            <tr id="oscePost">
                 <td>
-                    <div class="{style.label}">Standardized Role:</div>
+                    <div class="{style.label}">Osce Post:</div>
                 </td>
                 <td>
-                    <g:ValueListBox ui:field="standardizedRole"/>
+                    <g:ValueListBox ui:field="oscePost"/>
                 </td>
             </tr>
-    </table>
+            <tr id="fit_criteria">
+                <td>
+                    <div class="{style.label}">Fit_criteria:</div>
+                </td>
+                <td>
+                    <g:CheckBox ui:field="fit_criteria"/>
+                </td>
+            </tr>
+            <tr id="is_backup">
+                <td>
+                    <div class="{style.label}">Is_backup:</div>
+                </td>
+                <td>
+                    <g:CheckBox ui:field="is_backup"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

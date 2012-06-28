@@ -32,6 +32,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePla
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
@@ -240,6 +241,9 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			RoomMaterialsDetailsPlace roomMaterialsDetailsPlace = (RoomMaterialsDetailsPlace) place;
 			return new RoomMaterialsPlace(roomMaterialsDetailsPlace.getToken());
 		}
+	
+		if (place instanceof RoleAssignmentPlace)
+			return (RoleAssignmentPlace) place;
 		//by spec role management]
 
 		return null;

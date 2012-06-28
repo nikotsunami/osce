@@ -25,7 +25,17 @@
     
 
     <g:Button ui:field="save">Save</g:Button>
-  <div id="osceDate">
+  
+        
+        
+        
+        
+    
+        
+        
+        
+        
+    <div id="osceDate">
             <div class="{style.label}">Osce Date</div>
             <div class="{style.value}">
                 <d:DateBox ui:field="osceDate"/>
@@ -53,6 +63,12 @@
             <div class="{style.label}">Osce Sequences</div>
             <div class="{style.value}">
                 <a:OsceSequenceSetEditor ui:field="osceSequences"/>
+            </div>
+        </div>
+        <div id="patientInSemesters">
+            <div class="{style.label}">Patient In Semesters</div>
+            <div class="{style.value}">
+                <a:PatientInSemesterSetEditor ui:field="patientInSemesters"/>
             </div>
         </div>
     </g:HTMLPanel>

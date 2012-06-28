@@ -14,6 +14,7 @@ privileged aspect OscePost_Roo_ToString {
         sb.append("OscePostBlueprint: ").append(getOscePostBlueprint()).append(", ");
         sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
         sb.append("OsceSequence: ").append(getOsceSequence()).append(", ");
+        sb.append("PatientInRole: ").append(getPatientInRole() == null ? "null" : getPatientInRole().size()).append(", ");
         sb.append("SequenceNumber: ").append(getSequenceNumber()).append(", ");
         sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
         sb.append("Version: ").append(getVersion());

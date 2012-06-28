@@ -8,9 +8,11 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView.Delegate;
@@ -38,6 +40,6 @@ public abstract class StandardizedPatientDetailsActivity_Roo_Gwt extends Abstrac
     protected EntityProxyId<StandardizedPatientProxy> proxyId;
 
     protected void find(Receiver<EntityProxy> callback) {
-        requests.find(proxyId).with("nationality", "profession", "descriptions", "bankAccount", "anamnesisForm", "langskills").fire(callback);
+        requests.find(proxyId).with("nationality", "profession", "descriptions", "bankAccount", "anamnesisForm", "langskills", "patientInSemester").fire(callback);
     }
 }

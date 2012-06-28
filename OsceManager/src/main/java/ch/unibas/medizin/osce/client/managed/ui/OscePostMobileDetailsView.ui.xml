@@ -21,7 +21,15 @@
     
 
     <g:Button ui:field="delete">Delete</g:Button>
-  <div id="id">
+  
+        
+        
+        
+        
+        
+        
+        
+    <div id="id">
             <div class="{style.label}">Id</div>
             <div class="{style.value}" ui:field="id"/>
         </div>
@@ -40,6 +48,10 @@
         <div id="oscePostRooms">
             <div class="{style.label}">Osce Post Rooms</div>
             <div class="{style.value}" ui:field="oscePostRooms"/>
+        </div>
+        <div id="patientInRole">
+            <div class="{style.label}">Patient In Role</div>
+            <div class="{style.value}" ui:field="patientInRole"/>
         </div>
         <div id="standardizedRole">
             <div class="{style.label}">Standardized Role</div>

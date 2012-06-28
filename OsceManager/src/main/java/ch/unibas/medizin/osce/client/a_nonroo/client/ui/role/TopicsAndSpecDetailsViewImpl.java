@@ -16,12 +16,14 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -37,10 +39,13 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsAndSpecDetailsView{
@@ -56,10 +61,24 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	private Presenter presenter;
 	private Delegate delegate;
 	
+	// Issue Role
+	
+	int left=0,top=0;
+	PopupPanel addRolePopup;
+	HorizontalPanel popupHP;
+	//HorizontalPanel popupbtnHP;
+	VerticalPanel popupLabelVP;
+	VerticalPanel popupValueVP;
+	Button btnSave;
+	Button btnCancel;
+	com.google.gwt.user.client.ui.Label lblRoleTopic;
+	com.google.gwt.user.client.ui.Label lblMaxStudent;
+	com.google.gwt.user.client.ui.Label lblStudyYear;
+	
 	@UiField(provided = true)
 	CellTable<RoleTopicProxy>table;
 	
-	@UiField
+	//@UiField
 	TextBox AddTextBox;
 	
 	@UiField
@@ -84,10 +103,10 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		return paths.toArray(new String[paths.size()]);
 	}
 	
-	@UiField(provided = true)
+	//@UiField(provided = true)
 	ListBox slots_till_change=new ListBox();
 	
-	@UiField(provided = true)
+	//@UiField(provided = true)
 	ValueListBox<StudyYears> StudyYearListBox = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
 	
 	
@@ -95,13 +114,99 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	@UiField
 	Button FilterButton;
 	
+	// Issue Role
 	@UiHandler ("AddButton")
-	public void newButtonClicked(ClickEvent event) {
-	//	Specialisation specialization =  new Specialisation();
-	//	specialization.setId()
-		delegate.newClicked(AddTextBox.getValue(),slots_till_change.getValue(slots_till_change.getSelectedIndex()),StudyYearListBox.getValue());
+	public void newButtonClicked(ClickEvent event) 
+		{
+	Log.info("Click Add Button.");
+		//delegate.newClicked(AddTextBox.getValue(),slots_till_change.getValue(slots_till_change.getSelectedIndex()),StudyYearListBox.getValue());
 		AddTextBox.setValue("");
+		initPopup(event);
 	}
+
+	private void initPopup(ClickEvent event) 
+	{
+		Log.info("initPopup() Call");
+				
+		//SimplePanel container=new SimplePanel();
+		AddTextBox.setValue(null);
+		slots_till_change.setSelectedIndex(0);
+		StudyYearListBox.setValue(null);
+		
+		addRolePopup=new PopupPanel(true);
+		addRolePopup.setAnimationEnabled(true);		
+		addRolePopup.setSize("230px", "140px");		
+		
+		lblRoleTopic.addStyleName("marginTop15");
+		lblMaxStudent.addStyleName("marginTop15");
+		lblStudyYear.addStyleName("marginTop15");
+		
+		AddTextBox.addStyleName("marginTop7");
+		slots_till_change.addStyleName("marginTop7");
+		StudyYearListBox.addStyleName("marginTop7");
+		
+		btnSave.addStyleName("marginTop15");
+		btnCancel.addStyleName("marginTop15");
+		
+		lblRoleTopic.setText("Role Topic: ");
+		lblMaxStudent.setText("Max. Student: ");
+		lblStudyYear.setText("Study year: ");
+		
+		btnSave.setText(constants.save());
+		btnCancel.setText(constants.cancel());
+		
+		
+				
+		popupLabelVP.add(lblRoleTopic);
+		popupLabelVP.add(lblMaxStudent);
+		popupLabelVP.add(lblStudyYear);
+		popupLabelVP.add(btnSave);
+				
+		popupValueVP.add(AddTextBox);
+		popupValueVP.add(slots_till_change);
+		popupValueVP.add(StudyYearListBox);
+		popupValueVP.add(btnCancel);
+				
+		popupHP.add(popupLabelVP);
+		popupHP.add(popupValueVP);
+				
+		addRolePopup.add(popupHP);
+	
+		addRolePopup.setPopupPosition(event.getClientX(), event.getClientY());
+		addRolePopup.show();
+		
+		btnSave.addClickHandler(new ClickHandler() 
+		{		
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Click on Save Role Button.");
+				Log.info("==>" + AddTextBox.getValue()+"==>" + slots_till_change.getValue(slots_till_change.getSelectedIndex())+"==>" + StudyYearListBox.getValue());
+				
+				if(AddTextBox.getValue()==null || StudyYearListBox.getValue()==null || AddTextBox.getText().equals(""))
+				{
+					Window.alert("Please Enter appropriate value for Role Base Item");
+				}
+				else
+				{
+				delegate.newClicked(AddTextBox.getValue(),slots_till_change.getValue(slots_till_change.getSelectedIndex()),StudyYearListBox.getValue());
+				addRolePopup.hide();
+				}
+			}
+		});
+		
+		btnCancel.addClickHandler(new ClickHandler() 
+		{		
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				Log.info("Click on Cancel Role Button.");
+				addRolePopup.hide();
+			}
+		});
+		
+	}
+	
+	
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -153,6 +258,33 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	}
 	
 	public void init(){
+		
+		// Issue Role		
+		
+				AddTextBox=new TextBox();		
+				
+				popupHP=new HorizontalPanel();
+				//popupbtnHP=new HorizontalPanel();
+				
+				popupLabelVP=new VerticalPanel();
+				popupValueVP=new VerticalPanel();
+				
+				lblRoleTopic=new com.google.gwt.user.client.ui.Label();
+				lblMaxStudent=new com.google.gwt.user.client.ui.Label();
+				lblStudyYear=new com.google.gwt.user.client.ui.Label();
+				
+				btnSave=new Button();
+				btnCancel=new Button();
+				
+				table.addDomHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) 
+					{
+						left=event.getClientX();
+						top=event.getClientY();				
+					}
+				}, ClickEvent.getType());
 		
 		AddTextBox.addKeyDownHandler(new KeyDownHandler() {
 		    @Override
@@ -231,7 +363,11 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 						//Window.alert("You clicked " + institution.getInstitutionName());
 //						if(Window.confirm("wirklich löschen?"))
 //							delegate.deleteClicked(roletopic);
-						delegate.editClicked(roletopic);
+
+						// Issue Role
+						delegate.editClicked(roletopic,left,top);
+						
+						//delegate.editClicked(roletopic);
 					}
 				}), "", new GetValue<RoleTopicProxy>() {
 			public RoleTopicProxy getValue(RoleTopicProxy roletopic) {

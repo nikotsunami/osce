@@ -1,0 +1,25 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 
+	<ui:style src="../../styles.css" >
+	.leftSpacing{
+	
+	padding-left: 10px;
+	}
+	</ui:style>
+	
+	<g:HTMLPanel>
+		<g:DisclosurePanel ui:field="simpleDiscloserPanel" addStyleNames='{style.mainNavPanel}' width="710px" >
+			<g:header></g:header>
+			<!-- Style name für VerticalPanel -->
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}' height="100px">
+				<!-- g:Label>Hello</g:Label>
+				<g:Label>Hello2</g:Label-->
+			</g:VerticalPanel>
+		</g:DisclosurePanel>
+		
+	</g:HTMLPanel>
+</ui:UiBinder> 

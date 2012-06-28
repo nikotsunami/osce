@@ -9,9 +9,11 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -105,6 +107,16 @@ public abstract class StandardizedPatientEditActivityWrapper_Roo_Gwt implements 
                 view.setLangskillsPickerValues(values);
             }
         });
+        view.setPatientInSemesterPickerValues(Collections.<PatientInSemesterProxy>emptyList());
+        requests.patientInSemesterRequest().findPatientInSemesterEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance().getPaths()).fire(new Receiver<List<PatientInSemesterProxy>>() {
+
+            public void onSuccess(List<PatientInSemesterProxy> response) {
+                List<PatientInSemesterProxy> values = new ArrayList<PatientInSemesterProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setPatientInSemesterPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -127,5 +139,7 @@ public abstract class StandardizedPatientEditActivityWrapper_Roo_Gwt implements 
         void setAnamnesisFormPickerValues(Collection<AnamnesisFormProxy> values);
 
         void setLangskillsPickerValues(Collection<LangSkillProxy> values);
+
+        void setPatientInSemesterPickerValues(Collection<PatientInSemesterProxy> values);
     }
 }

@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -52,11 +53,15 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	// private List<AbstractEditableCell<?, ?>> editableCells;
 	private OsMaRequestFactory requests;
 
+	// Issue Role Module
+		RoomMaterialsPopupViewImpl roomMaterialsPopupViewImpl;
+		// E: Issue Role Module
+	
 	@UiField(provided = true)
 	CellTable<UsedMaterialProxy> table;
 	private Presenter presenter;
 
-	@UiField(provided = true)
+	/*@UiField(provided = true)
 	FocusableValueListBox<MaterialUsedFromTypes> used_from = new FocusableValueListBox<MaterialUsedFromTypes>(
 			new EnumRenderer<MaterialUsedFromTypes>());
 
@@ -69,7 +74,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 				public String render(MaterialListProxy obj) {
 					return obj == null ? "" : String.valueOf(obj.getName());
 				}
-			});
+			});*/
 
 	@UiField(provided = true)
 	SimplePager pager;
@@ -93,12 +98,79 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		newButton.setText(constants.addMaterial());
-		used_from.setAcceptableValues(java.util.Arrays
-				.asList(MaterialUsedFromTypes.values()));
+	/*	used_from.setAcceptableValues(java.util.Arrays
+				.asList(MaterialUsedFromTypes.values()));*/
 
 	}
 
+	// Issue Role Module
+
 	@UiHandler("newButton")
+	public void newButtonClicked(ClickEvent event) {
+		Log.info("Add Room Material");
+		showRoomMtaterialAddPopup(event,this.standardizedRoleProxy);
+				
+		  /*if (materialList.getValue() == null ||materialList.getValue().toString() == "") 
+		  {
+			  Window.confirm("Please enter a value for Room material list");
+			  return; 
+		  } 
+		  if (materialCount.getValue() == null ||materialCount.getValue().toString() == "") 
+		  {
+			  Window.confirm("Please enter a value for Material Count number");
+			  return; 
+		  } 
+		  if (used_from.getValue() == null ||used_from.getValue().toString() == "") 
+		  {
+			  Window.confirm("Please enter a value for \"For who\""); 
+			  return; 
+		  }
+		  
+		  delegate.newUsedMaterialButtonClicked(materialCount.getValue(),used_from.getValue(), this.standardizedRoleProxy,materialList.getValue());
+		  materialCount.setValue(null); used_from.setValue(null);
+		  materialList.setValue(null);*/
+		 
+
+	}
+
+	private void showRoomMtaterialAddPopup(ClickEvent event, StandardizedRoleProxy standardizedRoleProxy) 
+	{		
+		Log.info("~showRoomMtaterialAddPopup()");
+	
+		if (roomMaterialsPopupViewImpl == null) 
+		{
+			Log.info("showRoomMtaterialAddPopup Proxy: " + standardizedRoleProxy.getShortName());
+			roomMaterialsPopupViewImpl = new RoomMaterialsPopupViewImpl(standardizedRoleProxy);			
+			initPopup(event,standardizedRoleProxy);
+		} 
+		else 
+		{
+			initPopup(event,standardizedRoleProxy);
+		}
+
+	}
+
+	private void initPopup(ClickEvent event,StandardizedRoleProxy standardizedRoleProxy) 
+	{
+	
+		roomMaterialsPopupViewImpl.setAnimationEnabled(true);
+		roomMaterialsPopupViewImpl.setWidth("200px");
+		roomMaterialsPopupViewImpl.setHeight("140px");
+		roomMaterialsPopupViewImpl.setPopupPosition(event.getClientX(),event.getClientY());
+		roomMaterialsPopupViewImpl.saveRoomMaterial.setText(constants.save());
+		roomMaterialsPopupViewImpl.cancel.setText(constants.cancel());
+		roomMaterialsPopupViewImpl.materialCount.setValue(null);
+		roomMaterialsPopupViewImpl.used_from.setValue(null);
+		roomMaterialsPopupViewImpl.materialList.setValue(null);
+		roomMaterialsPopupViewImpl.setProxy(this.standardizedRoleProxy);
+		roomMaterialsPopupViewImpl.show();	
+		
+	}
+
+	// E: Issue Role Module
+	
+	
+	/*@UiHandler("newButton")
 	public void newButtonClicked(ClickEvent event) {
 		if (materialList.getValue() == null
 				|| materialList.getValue().toString() == "") {
@@ -123,7 +195,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 		used_from.setValue(null);
 		materialList.setValue(null);
 
-	}
+	}*/
 
 	public void init() {
 
@@ -200,6 +272,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 			}
 		}, null);
 		table.addColumnStyleName(2, "iconCol");
+		roomMaterialsPopupViewImpl = new RoomMaterialsPopupViewImpl(standardizedRoleProxy);
 
 	}
 
@@ -262,9 +335,13 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 
 	}
 
-	@Override
+	/*@Override
 	public void setMaterialListPickerValues(Collection<MaterialListProxy> values) {
 		materialList.setAcceptableValues(values);
+	}*/
+	@Override
+	public RoomMaterialsPopupViewImpl getRoomMaterialsPopupViewImpl() {
+		return roomMaterialsPopupViewImpl;
 	}
 
 }

@@ -4,9 +4,15 @@ package ch.unibas.medizin.osce.client.managed.activity;
 
 import ch.unibas.medizin.osce.client.managed.activity.PatientInSemesterEditActivityWrapper.View;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
+import ch.unibas.medizin.osce.client.managed.ui.OsceDaySetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.PatientInRoleSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.TrainingSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -22,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public abstract class PatientInSemesterEditActivityWrapper_Roo_Gwt implements Activity, IsScaffoldMobileActivity {
 
@@ -53,6 +60,36 @@ public abstract class PatientInSemesterEditActivityWrapper_Roo_Gwt implements Ac
                 view.setStandardizedPatientPickerValues(values);
             }
         });
+        view.setOsceDaysPickerValues(Collections.<OsceDayProxy>emptyList());
+        requests.osceDayRequest().findOsceDayEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance().getPaths()).fire(new Receiver<List<OsceDayProxy>>() {
+
+            public void onSuccess(List<OsceDayProxy> response) {
+                List<OsceDayProxy> values = new ArrayList<OsceDayProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setOsceDaysPickerValues(values);
+            }
+        });
+        view.setPatientInRolePickerValues(Collections.<PatientInRoleProxy>emptyList());
+        requests.patientInRoleRequest().findPatientInRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<PatientInRoleProxy>>() {
+
+            public void onSuccess(List<PatientInRoleProxy> response) {
+                List<PatientInRoleProxy> values = new ArrayList<PatientInRoleProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setPatientInRolePickerValues(values);
+            }
+        });
+        view.setTrainingsPickerValues(Collections.<TrainingProxy>emptyList());
+        requests.trainingRequest().findTrainingEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.TrainingProxyRenderer.instance().getPaths()).fire(new Receiver<List<TrainingProxy>>() {
+
+            public void onSuccess(List<TrainingProxy> response) {
+                List<TrainingProxy> values = new ArrayList<TrainingProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setTrainingsPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -61,5 +98,11 @@ public abstract class PatientInSemesterEditActivityWrapper_Roo_Gwt implements Ac
         void setSemesterPickerValues(Collection<SemesterProxy> values);
 
         void setStandardizedPatientPickerValues(Collection<StandardizedPatientProxy> values);
+
+        void setOsceDaysPickerValues(Collection<OsceDayProxy> values);
+
+        void setPatientInRolePickerValues(Collection<PatientInRoleProxy> values);
+
+        void setTrainingsPickerValues(Collection<TrainingProxy> values);
     }
 }

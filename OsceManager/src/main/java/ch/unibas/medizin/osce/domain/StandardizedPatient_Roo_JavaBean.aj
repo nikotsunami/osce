@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.Description;
 import ch.unibas.medizin.osce.domain.LangSkill;
 import ch.unibas.medizin.osce.domain.Nationality;
+import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.Profession;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
@@ -209,6 +210,14 @@ privileged aspect StandardizedPatient_Roo_JavaBean {
     
     public void StandardizedPatient.setLangskills(Set<LangSkill> langskills) {
         this.langskills = langskills;
+    }
+    
+    public Set<PatientInSemester> StandardizedPatient.getPatientInSemester() {
+        return this.patientInSemester;
+    }
+    
+    public void StandardizedPatient.setPatientInSemester(Set<PatientInSemester> patientInSemester) {
+        this.patientInSemester = patientInSemester;
     }
     
 }

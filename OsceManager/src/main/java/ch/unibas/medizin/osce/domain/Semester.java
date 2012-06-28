@@ -40,4 +40,8 @@ public class Semester {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semester")
     private Set<PatientInSemester> patientsInSemester = new HashSet<PatientInSemester>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semester")
+    private Set<Training> training = new HashSet<Training>();
+    
 }
