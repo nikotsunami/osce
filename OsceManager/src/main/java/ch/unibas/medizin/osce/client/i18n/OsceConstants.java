@@ -471,6 +471,7 @@ public interface OsceConstants extends Constants {
     public String enterSortOrderWarn();
     
     public String unSaveOrderWarn();
+
 // Assignment (Day) D
     
     public String day();
@@ -482,7 +483,6 @@ public interface OsceConstants extends Constants {
     public String lunchbreak();
     public String lbendtime();
     public String student();
-
     
     //Issue Role Module
     public String leavePageWarn();

@@ -723,6 +723,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		}
 	}
 
+
 	@Override
 	public void goToTitle(AnamnesisCheckTitleProxy anamnesisCheckTitle) {
 		// TODO Auto-generated method stub
