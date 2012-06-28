@@ -22,13 +22,17 @@ public interface RoleBaseTableItemView extends IsWidget {
 	 */
 	interface Delegate {
 		// todo
-//		void newClicked(String itemName, int item_defination);
+		
+		// Issue Role Module
 
-		void addRoleBaseSubItem(RoleBaseItemProxy roleBaseItemProxy,CellTable<RoleTableItemProxy> table);
-
-		void  pencliButtonclickEvent(RoleBaseItemProxy roleBaseItemProxy);
-
-		void roleTableItemEditButtonClicked(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemProxy> table);
+		void addRoleBaseSubItem(RoleBaseItemProxy roleBaseItemProxy,CellTable<RoleTableItemProxy> table, RoleBaseTableItemViewImpl roleBaseTableItemViewImpl);
+		
+		void  pencliButtonclickEvent(RoleBaseItemProxy roleBaseItemProxy, ClickEvent event);
+		
+		// Issue Role Module
+		
+		//void roleTableItemEditButtonClicked(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemProxy> table);
+		void roleTableItemEditButtonClicked(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemProxy> table , int left,int top);
 
 		void roleTableItemDeleteClicked(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemProxy> roleTableItemProxyTable);
 

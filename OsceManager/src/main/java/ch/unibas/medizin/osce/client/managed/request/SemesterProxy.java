@@ -51,4 +51,8 @@ public interface SemesterProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy> getPatientsInSemester();
 
     abstract void setPatientsInSemester(Set<PatientInSemesterProxy> patientsInSemester);
+
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.TrainingProxy> getTraining();
+
+    abstract void setTraining(Set<TrainingProxy> training);
 }

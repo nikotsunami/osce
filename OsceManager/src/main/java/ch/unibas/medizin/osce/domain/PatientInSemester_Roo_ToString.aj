@@ -9,9 +9,13 @@ privileged aspect PatientInSemester_Roo_ToString {
     
     public String PatientInSemester.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Accepted: ").append(getAccepted()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
+        sb.append("OsceDays: ").append(getOsceDays() == null ? "null" : getOsceDays().size()).append(", ");
+        sb.append("PatientInRole: ").append(getPatientInRole() == null ? "null" : getPatientInRole().size()).append(", ");
         sb.append("Semester: ").append(getSemester()).append(", ");
         sb.append("StandardizedPatient: ").append(getStandardizedPatient()).append(", ");
+        sb.append("Trainings: ").append(getTrainings() == null ? "null" : getTrainings().size()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

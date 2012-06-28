@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.ui;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -110,5 +111,15 @@ public abstract class OsceDayListView_Roo_Gwt extends AbstractProxyListView<Osce
                 return renderer.render(object.getOsceSequences());
             }
         }, "Osce Sequences");
+        paths.add("patientInSemesters");
+        table.addColumn(new TextColumn<OsceDayProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance());
+
+            @Override
+            public String getValue(OsceDayProxy object) {
+                return renderer.render(object.getPatientInSemesters());
+            }
+        }, "Patient In Semesters");
     }
 }

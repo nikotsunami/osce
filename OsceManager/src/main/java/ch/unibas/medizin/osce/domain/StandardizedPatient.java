@@ -121,6 +121,9 @@ public class StandardizedPatient {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient")
     private Set<LangSkill> langskills = new HashSet<LangSkill>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedPatient")
+	private Set<PatientInSemester> patientInSemester = new HashSet<PatientInSemester>();
+
     private static class PatientSearch {
 
         private StringBuilder wholeSearchString;

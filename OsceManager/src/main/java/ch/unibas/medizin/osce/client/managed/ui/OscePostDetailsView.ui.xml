@@ -41,7 +41,15 @@
       
       
       
-    <tr id="id">
+    
+            
+            
+            
+            
+            
+            
+            
+        <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -79,6 +87,14 @@
                 </td>
                 <td>
                     <span ui:field="oscePostRooms"/>
+                </td>
+            </tr>
+            <tr id="patientInRole">
+                <td>
+                    <span class="{style.label}">Patient In Role:</span>
+                </td>
+                <td>
+                    <span ui:field="patientInRole"/>
                 </td>
             </tr>
             <tr id="standardizedRole">

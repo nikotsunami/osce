@@ -120,6 +120,14 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 					<span ui:field="LongBreak" />
 				</td>
 			</tr>
+			<tr id="MiddleBreak">
+				<td>
+					<span class="{style.label}">Middle Break:</span>
+				</td>
+				<td>
+					<span ui:field="MiddleBreak" />
+				</td>
+			</tr>
 			<tr id="lunchBreak">
 				<td>
 					<span class="{style.label}">lunch Break:</span>
@@ -146,9 +154,10 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 				</div>
 				-->
 				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
-				
-				
-    <table id='boundElementHolder' class="{style.fields}">
+				<div>
+					<my:IconButton ui:field="newButton" icon="plusthick">Add New</my:IconButton>
+					</div>
+   <!--  <table id='boundElementHolder' class="{style.fields}">
     <tr id="name">
 				<td>
 					<span class="{style.label}">Name:</span>
@@ -178,13 +187,13 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			
 			<tr>
 			<td></td>
-			<td><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button></td>
+			<td><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button><my:IconButton  ui:field="filterButton">filter</my:IconButton></td>
 			</tr>
     
      
       
       
-    </table>
+    </table> -->
 			</g:HTMLPanel>
 				
 	</g:HTMLPanel>

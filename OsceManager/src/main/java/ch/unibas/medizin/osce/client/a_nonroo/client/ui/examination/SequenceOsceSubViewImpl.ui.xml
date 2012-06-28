@@ -1,0 +1,79 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:s="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
+	 
+	 <ui:style src="../../styles.css" >
+	.padleft25
+	{
+		padding-left: 25px;
+	}
+	.padleft33
+	{
+		padding-left: 33px;
+	}
+	.padleft30
+	{
+		
+		margin: 8x auto;
+	}
+	.margin10{
+	
+		margin: 10px;
+	}
+	.padleft8
+	{
+		padding-left: 8px;
+	}
+	.marginRight20
+	{
+		margin-right: 20px;
+	}
+	.marginTop10 {
+		margin-top: 5px 
+	}
+	.padTop3{
+	
+		
+		margin: 8px auto
+	}
+	.customTabStyle
+	 {				
+		border-color: #808080;
+		border-style: solid;
+		border-width:1px;		
+		-moz-border-radius: 16px;
+		margin-top: 5px;
+	 }
+	</ui:style>
+	
+	
+	<g:HorizontalPanel addStyleNames="{style.patientTopContainer} {style.padTop3}"  width="20px"  height="235px">
+	
+	<g:VerticalPanel width="20px"  height="220px" verticalAlignment="middle" horizontalAlignment="center" >
+		
+		<g:VerticalPanel   horizontalAlignment="center"  width="20px" verticalAlignment="middle">
+		<g:HorizontalPanel spacing="10">
+		<g:Label ui:field="nameOfSequence" ></g:Label>
+		<!-- <g:Button ui:field="edit">Edit</g:Button> -->
+	<my:IconButton ui:field="edit" icon="pencil"> </my:IconButton>
+		</g:HorizontalPanel>
+		<g:TextBox ui:field="chaneNameOfSequence" width="30px" ></g:TextBox>
+		<g:Button ui:field="ok"></g:Button>
+		<!-- 	<s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton> -->
+		</g:VerticalPanel>
+		
+		<g:VerticalPanel  width="20px" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
+			<g:Button ui:field="spliteSequence"   width="40px"></g:Button>
+			<!-- <g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  >Parcour</g:Label>-->
+		</g:VerticalPanel>
+		<g:VerticalPanel width="20px">
+		<g:TextBox ui:field="sequenceRotation"   width="30px" styleName="{style.margin10}"></g:TextBox>
+	<!-- 	<g:ValueListBox ui:field="colorPicker"></g:ValueListBox> -->
+	</g:VerticalPanel>
+	</g:VerticalPanel>
+	</g:HorizontalPanel>
+  
+  
+</ui:UiBinder> 

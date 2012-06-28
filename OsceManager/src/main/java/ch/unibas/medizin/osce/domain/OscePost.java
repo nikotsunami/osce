@@ -24,6 +24,9 @@ public class OscePost {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "oscePost")
     private Set<OscePostRoom> oscePostRooms = new HashSet<OscePostRoom>();
     
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "oscePost")
+	private Set<PatientInRole> patientInRole = new HashSet<PatientInRole>();
+	
     @ManyToOne
     private StandardizedRole standardizedRole;
     

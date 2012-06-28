@@ -18,6 +18,7 @@ privileged aspect Semester_Roo_ToString {
         sb.append("PriceStandardizedPartient: ").append(getPriceStandardizedPartient()).append(", ");
         sb.append("Pricestatist: ").append(getPricestatist()).append(", ");
         sb.append("Semester: ").append(getSemester()).append(", ");
+        sb.append("Training: ").append(getTraining() == null ? "null" : getTraining().size()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

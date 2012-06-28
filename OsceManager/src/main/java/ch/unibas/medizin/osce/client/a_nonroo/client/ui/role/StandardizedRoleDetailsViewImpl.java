@@ -50,6 +50,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	StandardizedRoleProxy proxy;
+	StandardizedRoleProxy baseProxy;
+
 
 	@UiField
 	DisclosurePanel roleDisclosurePanel;
@@ -108,6 +110,13 @@ ImportTopicPopupView importTopicView;
 	public IconButton edit;
 	@UiField
 	public IconButton delete;
+
+	@UiField
+	public IconButton previous;
+	
+	@UiField
+	public IconButton home;
+	
 
 	// Labels (Fieldnames)
 
@@ -300,6 +309,18 @@ ImportTopicPopupView importTopicView;
 		
 	}
 	
+	
+
+	@UiHandler("home")
+	public void onHomeClick(ClickEvent e) {
+		System.out.println("============================Click Actual Button=========================");
+		System.out.println("============================Call delegate.actualClicked=========================");
+		
+			
+		delegate.actualRoleClicked(this.getBaseValue());
+		
+	}
+	
 	@Override
 	public void setValue(StandardizedRoleProxy proxy) {
 		/*
@@ -312,8 +333,14 @@ ImportTopicPopupView importTopicView;
 		 * studyYear.setInnerText(proxy.getStudyYear() == null ? "" :
 		 * String.valueOf(proxy.getStudyYear()));
 		 */
-
+		System.out.println("new value set");
 		this.proxy = proxy;
+	}
+
+	@Override
+	public void setBaseProxy(StandardizedRoleProxy proxy)
+	{
+		baseProxy=proxy;
 	}
 
 	@Override
@@ -376,6 +403,10 @@ ImportTopicPopupView importTopicView;
 
 	public StandardizedRoleProxy getValue() {
 		return proxy;
+	}
+
+	public StandardizedRoleProxy getBaseValue() {
+		return baseProxy;
 	}
 
 	// SPEC START =

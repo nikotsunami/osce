@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -41,4 +42,7 @@ public class OsceDay {
    
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
 	 private Set<OsceSequence> osceSequences = new HashSet<OsceSequence>();
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
 }

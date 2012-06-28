@@ -479,5 +479,7 @@ public interface OsceConstants extends Constants {
     public String lunchbreak();
     public String lbendtime();
     public String student();
-	
+
+    //Issue Role Module
+    public String enterKeyword();	
 }

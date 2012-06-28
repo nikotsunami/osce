@@ -25,7 +25,13 @@
     
 
     <g:Button ui:field="save">Save</g:Button>
-  <div id="isPossibleStart">
+  
+        
+        
+        
+        
+        
+    <div id="isPossibleStart">
             <div class="{style.label}">Is Possible Start</div>
             <div class="{style.value}">
                 <g:CheckBox ui:field="isPossibleStart"/>
@@ -41,6 +47,12 @@
             <div class="{style.label}">Osce Post Rooms</div>
             <div class="{style.value}">
                 <a:OscePostRoomSetEditor ui:field="oscePostRooms"/>
+            </div>
+        </div>
+        <div id="patientInRole">
+            <div class="{style.label}">Patient In Role</div>
+            <div class="{style.value}">
+                <a:PatientInRoleSetEditor ui:field="patientInRole"/>
             </div>
         </div>
         <div id="standardizedRole">
