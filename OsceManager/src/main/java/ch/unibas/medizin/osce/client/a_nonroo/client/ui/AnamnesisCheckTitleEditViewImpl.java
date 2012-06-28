@@ -18,6 +18,8 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -30,6 +32,7 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
@@ -47,8 +50,12 @@ public class AnamnesisCheckTitleEditViewImpl extends Composite implements Anamne
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	private boolean multipleFields = false;
+
+	public int selectedIndex= -1;
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	private  AnamnesisCheckTitleProxy anamnesisCheckTitle=null;
+
 
 	@UiField
 	TabPanel anamnesisTitlePanel;
@@ -56,47 +63,27 @@ public class AnamnesisCheckTitleEditViewImpl extends Composite implements Anamne
 	@UiField
 	SpanElement header;
 	
-//	@UiField(provided = true)
-//    ValueListBox<AnamnesisCheckTypes> type = new ValueListBox<AnamnesisCheckTypes>(new AbstractRenderer<AnamnesisCheckTypes>() {
-//    	EnumRenderer<AnamnesisCheckTypes> renderer = new EnumRenderer<AnamnesisCheckTypes>();
-//        public String render(AnamnesisCheckTypes obj) {
-//            return obj == null ? "" : renderer.render(obj);
-//        }
-//    }
-//    );
+
+
 	
 	@UiField
 	TextBox text;
-//	@UiField
-//	VerticalPanel valuePanel;
+
+
 	
 	// TODO: Fill
 	public String value = "";
 	
-//	@UiField
-//	SpanElement labelType;
+
+
 	@UiField
 	SpanElement labelText;
-//	@UiField
-//	SpanElement labelValue;
-//	@UiField
-//	SpanElement labelinsideTitle;
-//	@UiField
-//	SpanElement labelpreviousQuestion;
-//
-//	@UiField
-//	ListBox insideTitleListBox;
-//	@UiField
-//	ListBox	previousQuestionListBox;
 
-//	@UiField
-//	DateBox createDate;
-//
-//	@UiField
-//	AnamnesisChecksValueSetEditor anamnesischecksvalues;
-//
-//	@UiField
-//	ScarSetEditor scars;
+	@UiField
+	SpanElement labelpreviousTitle;
+
+	@UiField
+	ListBox	previousTitleListBox;
 
 	@UiField
 	IconButton cancel;
@@ -126,109 +113,27 @@ public class AnamnesisCheckTitleEditViewImpl extends Composite implements Anamne
 		addButton.setText(constants.addAnswer());
 		addButton.setVisible(false);
 
-//		labelType.setInnerText(constants.type() + ":");
-		labelText.setInnerText(constants.question() + ":");
-//		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
-//		previousQuestionListBox.addItem(constants.previousQuestion(), "");
-		
-//		insideTitleListBox.addItem(constants.insideTitle(), "");
-//		insideTitleListBox.setVisible(false);
-		
-		//addValueField();
-		
-		addButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				//addValueField();
-			}
-		});
-		
-		
-		
-//		insideTitleListBox.addChangeListener(new ChangeListener() {
-//			
-//			@Override
-//			public void onChange(Widget sender) {
-//				//TODO
-//				resetpreviousQuestion(type.getValue());
-//			}
-//		});
-		
-	//	Log.info("type.getValue() = " + type.getValue());
-	
-	
-		
-	//	type.setValue(AnamnesisChecks.values()[0]);
-		//type.setAcceptableValues(Arrays.asList(AnamnesisCheckTypes.values()));
-		
-		
+		labelText.setInnerText(constants.anamnesisCheckTitle() + ":");
+		labelpreviousTitle.setInnerText(constants.previousTitle()+":");
+		previousTitleListBox.addItem(constants.previousTitle(),"");
 	}
 	
-	private void resetpreviousQuestion(AnamnesisCheckTypes selectedValue){
-//		previousQuestionListBox.clear();
-//		if(selectedValue == AnamnesisCheckTypes.QUESTION_TITLE){
-//			previousQuestionListBox.addItem(constants.previousTitle(), "");
-//		}else{
-//			previousQuestionListBox.addItem(constants.previousQuestion(), "");
-//		}
-//		delegate.changePreviousQuestion(selectedValue,insideTitleListBox.getValue(insideTitleListBox.getSelectedIndex()));
 
-	}
-	
+
 	private IconButton createDeleteButton() {
 		IconButton button = new IconButton();
 		button.setIcon("trash");
 		button.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				deleteValueField((HorizontalPanel) ((Widget) event.getSource()).getParent());
 			}
 		});
 		return button;
 	}
 	
-	private void deleteValueField(HorizontalPanel parentPanel) {
-		// Check if last field
-//		if (valuePanel.getWidget(valuePanel.getWidgetCount() - 1).equals(parentPanel)) {
-//			((HorizontalPanel)valuePanel.getWidget(valuePanel.getWidgetCount() - 2)).add(addButton);
-//		}
-//		valuePanel.remove(parentPanel);
-	}
+
 	
-//	private void addValueField() {
-//		HorizontalPanel newPanel = new HorizontalPanel();
-//		TextBox textBox = new TextBox();
-//		textBox.addFocusHandler(new FocusHandler() {
-//			@Override
-//			public void onFocus(FocusEvent event) {
-//				((TextBox) event.getSource()).selectAll();
-//			}
-//		});
-//		newPanel.add(textBox);
-//		if (valuePanel.getWidgetCount() > 0)
-//			newPanel.add(createDeleteButton());
-//		newPanel.add(addButton);
-//		valuePanel.add(newPanel);
-//		textBox.setFocus(true);
-//	}
-//	
-//	private void setMultipleFields(boolean multipleFields) {
-//		this.multipleFields = multipleFields;
-//		addButton.setVisible(multipleFields);
-//		
-//		// removes the additional fields...
-//		if (!multipleFields) {
-//			labelValue.setInnerText("");
-//			for (int i = valuePanel.getWidgetCount() - 1; i > 0; i--) {
-//				valuePanel.remove(i);
-//			}
-//			((HorizontalPanel) valuePanel.getWidget(0)).add(addButton);
-//			valuePanel.setVisible(false);
-//		} else {
-//			valuePanel.setVisible(true);
-//			labelValue.setInnerText(constants.possibleAnswers() + ":");
-//		}
-//	}
+
 
 	@Override
 	public RequestFactoryEditorDriver<AnamnesisCheckTitleProxy, AnamnesisCheckTitleEditViewImpl> createEditorDriver() {
@@ -271,96 +176,41 @@ public class AnamnesisCheckTitleEditViewImpl extends Composite implements Anamne
 	interface Driver extends RequestFactoryEditorDriver<AnamnesisCheckTitleProxy, AnamnesisCheckTitleEditViewImpl> {
 	}
 
-//	public void setCreating(boolean creating) {
-//		Log.debug("setCreating()");
-//		if (creating) {
-//			header.setInnerText(constants.editAnamnesisValue());
-//		} else {
-//			header.setInnerText(constants.addAnamnesisValue());
-//		}
-//	}
-	
-//	@Override
-//	public void setEditTitle(boolean edit) {
-//		if (edit) {
-//			header.setInnerText(constants.editAnamnesisValue());
-//		} else {
-//			header.setInnerText(constants.addAnamnesisValue());
-//			type.setValue(AnamnesisCheckTypes.values()[0]);
-//		}
-//
-//	}
-//
-//	@Override
-//	public void setPresenter(Presenter presenter) {
-//		this.presenter = presenter;
-//	}
-//	
+
 	@Override
-	public String getValue() {
-		return value;
+	public void update(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy) {
+		String value = anamnesisCheckTitleProxy.getText();
+	}
+
+	@Override
+	public void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList) {
+		for(AnamnesisCheckTitleProxy title:titleList){
+			
+			if (title != null) {
+				previousTitleListBox.addItem(title.getText(), String.valueOf(title.getId()));
+			}
+		}
+		
 	}
 	
-//	@Override
-//	public void update(AnamnesisCheckTitleProxy anamnesisCheckProxy) {
-//		String value = anamnesisCheckTitleProxy.getText();
-//	}
-
-//	@Override
-//	public void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList) {
-//		for(AnamnesisCheckTitleProxy title : titleList){
-//			if (title != null) {
-//				insideTitleListBox.addItem(title.getText(), String.valueOf(title.getId()));
-//			}
-//		}
-//		
-//	}
+	@Override
+	public String getSelectedInsideTitle() {
+		int selectedIndex = previousTitleListBox.getSelectedIndex();
+		String selectedInsideTitle = previousTitleListBox.getValue(selectedIndex);
+		return selectedInsideTitle;
+	}
 
 
-//	@Override
-//	public void setPreviousQuestionListBox(List<AnamnesisCheckTitleProxy> anamnesisCheckList) {
-//		for(AnamnesisCheckTitleProxy anamnesisCheck : anamnesisCheckList){
-//			if (anamnesisCheck != null) {
-//				previousQuestionListBox.addItem(anamnesisCheck.getText(), String.valueOf(anamnesisCheck.getSort_order()));
-//			}
-//		}
-//		
-//	}
-	
-//	@Override
-//	public String getSelectedInsideTitle() {
-//		int selectedIndex = insideTitleListBox.getSelectedIndex();
-//		String selectedInsideTitle = insideTitleListBox.getValue(selectedIndex);
-//		return selectedInsideTitle;
-//	}
-//
-//	@Override
-//	public String getSelectedPreviousQuestion() {
-//		int selectedIndex = previousQuestionListBox.getSelectedIndex();
-//		String selectedPreviousQuestion = previousQuestionListBox.getValue(selectedIndex);
-//		return selectedPreviousQuestion;
-//	}
-//
-//	@Override
-//	public void setSeletedInsideTitle(String anamnesisCheckTitleId) {
-//		for (int i = 0; i < insideTitleListBox.getItemCount(); i++) {
-//			GWT.log("insideTitleListBox.getValue(i) = "+insideTitleListBox.getValue(i));
-//			if (insideTitleListBox.getValue(i).equals(anamnesisCheckTitleId)) {
-//				insideTitleListBox.setSelectedIndex(i);
-//			}
-//		}
-//		
-//	}
-//
-//	@Override
-//	public void setSeletedPreviousQuestion(String previousSortId) {
-//		GWT.log("?????previousSortId = "+previousSortId);
-//		for (int i = 0; i < previousQuestionListBox.getItemCount(); i++) {
-//			GWT.log("previousQuestionListBox.getValue(i) = "+previousQuestionListBox.getValue(i));
-//			if (previousQuestionListBox.getValue(i).equals(previousSortId)) {
-//				previousQuestionListBox.setSelectedIndex(i);
-//			}
-//		}	
-//	}
+	@Override
+	public void setSeletedInsideTitle(String anamnesisCheckTitleId) {
+		for (int i = 0; i < previousTitleListBox.getItemCount(); i++) {
+			GWT.log("insideTitleListBox.getValue(i) = "+previousTitleListBox.getValue(i));
+			if (previousTitleListBox.getValue(i).equals(anamnesisCheckTitleId)) {
+				previousTitleListBox.setSelectedIndex(i);
+			}
+		}
+		
+	}
+
 
 }

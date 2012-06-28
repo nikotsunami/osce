@@ -35,7 +35,7 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 	private CellTable<AnamnesisCheckTitleProxy> table;
 	private SingleSelectionModel<AnamnesisCheckTitleProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
-
+	private int previousSortOrder;
 	private AnamnesisCheckTitleDetailsPlace place;
 	private AnamnesisCheckTitleProxy anamnesisCheckTitleProxy;
 
@@ -54,7 +54,6 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 	@SuppressWarnings("deprecation")
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-//		Window.alert("!!!!!!!!!!! String.valueOf(anamnesisCheckProxy.getId()) ");
 		AnamnesisCheckTitleDetailsView anamnesisCheckDetailsView = new AnamnesisCheckTitleDetailsViewImpl();
 		anamnesisCheckDetailsView.setPresenter(this);
 
@@ -73,26 +72,25 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 			@Override
 			public void onSuccess(Object response) {
 				if (response instanceof AnamnesisCheckTitleProxy) {
-//					Window.alert("!!!!!!!!!!! String.valueOf(anamnesisCheckProxy.getId()) ");
-					// Log.info(((AnamnesisCheckTitleProxy)
-					// response).getId().toString());
 					final AnamnesisCheckTitleProxy anamnesisCheckProxy = (AnamnesisCheckTitleProxy) response;
-					requests.anamnesisCheckTitleRequest().findAnamnesisCheckTitle(anamnesisCheckProxy.getId()).fire(new Receiver<AnamnesisCheckTitleProxy>(){
+					if(anamnesisCheckProxy.getSort_order() != null && anamnesisCheckProxy.getSort_order() > 1 && anamnesisCheckProxy.getId() !=null ){
+					requests.anamnesisCheckTitleRequestNonRoo().findAnamnesisChecksBySortOder(anamnesisCheckProxy.getSort_order()-1).fire(new Receiver<AnamnesisCheckTitleProxy>(){
 
 						@Override
 						public void onSuccess(AnamnesisCheckTitleProxy response) {
-							// TODO Auto-generated method stub
 							String titleId="";
 							if(response!=null){
-//								Window.alert("!!!!!!!!!!!!!!!!!!!!!!! String.valueOf(anamnesisCheckProxy.getId()) "+String.valueOf(anamnesisCheckProxy.getId()));
-								titleId=String.valueOf(response.getId());
+								titleId=response.getText();
 								
 							}
-							init(anamnesisCheckProxy,String.valueOf(response.getId()));
+							init(anamnesisCheckProxy,titleId);
 							
 						}
 						
 					});
+				}else{
+					init(anamnesisCheckProxy,"");
+				}
 					
 					
 				}
@@ -119,7 +117,6 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void deleteClicked() {
 		if (!Window
@@ -159,4 +156,5 @@ public class AnamnesisCheckTitleDetailsActivity extends AbstractActivity
 			}
 		});
 	}
+
 }

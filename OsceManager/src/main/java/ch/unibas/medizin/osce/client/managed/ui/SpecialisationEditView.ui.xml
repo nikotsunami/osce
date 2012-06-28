@@ -43,7 +43,10 @@
     <div class="{style.errors}" ui:field="errors"/>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="name">
+      
+      
+      
+    <tr id="name">
                 <td>
                     <div class="{style.label}">Name:</div>
                 </td>
@@ -51,7 +54,7 @@
                     <g:TextBox ui:field="name"/>
                 </td>
             </tr>
-      <tr id="roleTopics">
+            <tr id="roleTopics">
                 <td>
                     <div class="{style.label}">Role Topics:</div>
                 </td>
@@ -59,7 +62,7 @@
                     <a:RoleTopicSetEditor ui:field="roleTopics"/>
                 </td>
             </tr>
-      <tr id="doctors">
+            <tr id="doctors">
                 <td>
                     <div class="{style.label}">Doctors:</div>
                 </td>
@@ -67,7 +70,15 @@
                     <a:DoctorSetEditor ui:field="doctors"/>
                 </td>
             </tr>
-    </table>
+            <tr id="oscePostBlueprint">
+                <td>
+                    <div class="{style.label}">Osce Post Blueprint:</div>
+                </td>
+                <td>
+                    <a:OscePostBlueprintSetEditor ui:field="oscePostBlueprint"/>
+                </td>
+            </tr>
+        </table>
 
     <div class="{style.bar}">
       <g:Button addStyleNames="{style.button}" ui:field="save">Save</g:Button>

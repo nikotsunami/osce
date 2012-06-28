@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.Administrator;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
+import ch.unibas.medizin.osce.domain.Training;
 import ch.unibas.medizin.osce.shared.Semesters;
 import java.lang.Double;
 import java.lang.Integer;
@@ -75,6 +76,14 @@ privileged aspect Semester_Roo_JavaBean {
     
     public void Semester.setPatientsInSemester(Set<PatientInSemester> patientsInSemester) {
         this.patientsInSemester = patientsInSemester;
+    }
+    
+    public Set<Training> Semester.getTraining() {
+        return this.training;
+    }
+    
+    public void Semester.setTraining(Set<Training> training) {
+        this.training = training;
     }
     
 }

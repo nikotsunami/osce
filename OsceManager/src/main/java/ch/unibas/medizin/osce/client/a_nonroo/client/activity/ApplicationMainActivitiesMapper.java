@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -180,6 +181,12 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof RoomMaterialsPlace) {
 			Log.debug("is RoomMaterialsPlace");
 			return new RoomMaterialsActivity(requests, placeController);
+		}
+
+		if (place instanceof RoleAssignmentPlace) {
+			Log.debug("is SPRoleAssignmentPlace");
+			return new RoleAssignmentPatientInSemesterActivity(requests,
+					placeController, (RoleAssignmentPlace) place);
 		}
 		//By Spec]
 

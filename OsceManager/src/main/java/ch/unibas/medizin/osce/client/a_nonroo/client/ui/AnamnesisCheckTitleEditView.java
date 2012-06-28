@@ -12,8 +12,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface AnamnesisCheckTitleEditView extends IsWidget {
 	void setDelegate(Delegate delegate);
-//	void setEditTitle(boolean edit);
-//
+
 	public interface Presenter {
 		void goTo(Place place);
 	}
@@ -21,24 +20,13 @@ public interface AnamnesisCheckTitleEditView extends IsWidget {
 	interface Delegate {
 		void cancelClicked();
 		void saveClicked();
-		//void changePreviousQuestion(AnamnesisCheckTypes anamnesisCheckTypes, String seletedTitleId);
+
 	}
-//
 	RequestFactoryEditorDriver<AnamnesisCheckTitleProxy, AnamnesisCheckTitleEditViewImpl> createEditorDriver();
-	//void setPresenter(Presenter presenter);
-//	
-	String getValue();
-//	void update(AnamnesisCheckTitleProxy anamnesisCheckTitle);
-//
-//	void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList);
-//
-//	void setPreviousQuestionListBox(List<AnamnesisCheckProxy> anamnesisCheckList);
-//
-//	void setSeletedInsideTitle(String anamnesisCheckTitleId);
-//
-//	void setSeletedPreviousQuestion(String previousSortId);
-//
-//	String getSelectedInsideTitle();
-//
-//	String getSelectedPreviousQuestion();
+	void update(AnamnesisCheckTitleProxy anamnesisCheckTitle);
+	void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList);
+	void setSeletedInsideTitle(String anamnesisCheckTitleId);
+	String getSelectedInsideTitle();
+
 }
+

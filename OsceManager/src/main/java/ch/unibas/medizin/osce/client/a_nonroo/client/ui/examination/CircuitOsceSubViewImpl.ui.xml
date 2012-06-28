@@ -55,6 +55,8 @@
 				<my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton>
 				<g:Label  styleName="{style.padleft25}"></g:Label>	
 				<g:Button ui:field="clearAllBtn" ></g:Button>
+				<g:Label  styleName="{style.padleft25}"></g:Label>
+				<g:Button ui:field="generateBtn"></g:Button>
 			</g:HorizontalPanel>
 		</g:VerticalPanel>
 	</g:HTMLPanel>

@@ -3,8 +3,13 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.OsceDay;
+import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.domain.Training;
+import java.lang.Boolean;
+import java.util.Set;
 
 privileged aspect PatientInSemester_Roo_JavaBean {
     
@@ -22,6 +27,38 @@ privileged aspect PatientInSemester_Roo_JavaBean {
     
     public void PatientInSemester.setStandardizedPatient(StandardizedPatient standardizedPatient) {
         this.standardizedPatient = standardizedPatient;
+    }
+    
+    public Boolean PatientInSemester.getAccepted() {
+        return this.accepted;
+    }
+    
+    public void PatientInSemester.setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+    
+    public Set<OsceDay> PatientInSemester.getOsceDays() {
+        return this.osceDays;
+    }
+    
+    public void PatientInSemester.setOsceDays(Set<OsceDay> osceDays) {
+        this.osceDays = osceDays;
+    }
+    
+    public Set<PatientInRole> PatientInSemester.getPatientInRole() {
+        return this.patientInRole;
+    }
+    
+    public void PatientInSemester.setPatientInRole(Set<PatientInRole> patientInRole) {
+        this.patientInRole = patientInRole;
+    }
+    
+    public Set<Training> PatientInSemester.getTrainings() {
+        return this.trainings;
+    }
+    
+    public void PatientInSemester.setTrainings(Set<Training> trainings) {
+        this.trainings = trainings;
     }
     
 }

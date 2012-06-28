@@ -33,10 +33,10 @@
 								<td><span class='{style.label}' ui:field="labelText" /></td>
 								<td ><g:TextBox ui:field='text' /></td>
 							</tr>
-                       <!--      <tr id='previousQuestion'>
-                                <td><span class='{style.label}' ui:field="labelpreviousQuestion" /></td>
-                                <td ><g:ListBox ui:field='previousQuestionListBox' /></td>
-                            </tr>--> 
+                         <tr id='previousTitle'>
+                                <td><span class='{style.label}' ui:field="labelpreviousTitle" /></td>
+                                <td ><g:ListBox ui:field='previousTitleListBox' /></td>
+                            </tr>
 						</tbody>
 					</table>
 				</g:HTMLPanel>

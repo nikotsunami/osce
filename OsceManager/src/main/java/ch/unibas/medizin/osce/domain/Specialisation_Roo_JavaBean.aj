@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Doctor;
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 import java.lang.String;
 import java.util.Set;
@@ -32,6 +33,14 @@ privileged aspect Specialisation_Roo_JavaBean {
     
     public void Specialisation.setDoctors(Set<Doctor> doctors) {
         this.doctors = doctors;
+    }
+    
+    public Set<OscePostBlueprint> Specialisation.getOscePostBlueprint() {
+        return this.oscePostBlueprint;
+    }
+    
+    public void Specialisation.setOscePostBlueprint(Set<OscePostBlueprint> oscePostBlueprint) {
+        this.oscePostBlueprint = oscePostBlueprint;
     }
     
 }

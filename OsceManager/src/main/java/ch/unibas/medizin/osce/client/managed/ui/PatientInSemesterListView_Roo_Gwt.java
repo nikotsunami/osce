@@ -2,9 +2,12 @@
 
 package ch.unibas.medizin.osce.client.managed.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -80,5 +83,50 @@ public abstract class PatientInSemesterListView_Roo_Gwt extends AbstractProxyLis
                 return renderer.render(object.getStandardizedPatient());
             }
         }, "Standardized Patient");
+        paths.add("accepted");
+        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
+
+            Renderer<java.lang.Boolean> renderer = new AbstractRenderer<java.lang.Boolean>() {
+
+                public String render(java.lang.Boolean obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(PatientInSemesterProxy object) {
+                return renderer.render(object.getAccepted());
+            }
+        }, "Accepted");
+        paths.add("osceDays");
+        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceDayProxyRenderer.instance());
+
+            @Override
+            public String getValue(PatientInSemesterProxy object) {
+                return renderer.render(object.getOsceDays());
+            }
+        }, "Osce Days");
+        paths.add("patientInRole");
+        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance());
+
+            @Override
+            public String getValue(PatientInSemesterProxy object) {
+                return renderer.render(object.getPatientInRole());
+            }
+        }, "Patient In Role");
+        paths.add("trainings");
+        table.addColumn(new TextColumn<PatientInSemesterProxy>() {
+
+            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TrainingProxyRenderer.instance());
+
+            @Override
+            public String getValue(PatientInSemesterProxy object) {
+                return renderer.render(object.getTrainings());
+            }
+        }, "Trainings");
     }
 }

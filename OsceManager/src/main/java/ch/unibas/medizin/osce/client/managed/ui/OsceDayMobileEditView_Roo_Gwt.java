@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.activity.OsceDayEditActivityWrapper
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import com.google.gwt.core.client.GWT;
@@ -54,8 +55,15 @@ public abstract class OsceDayMobileEditView_Roo_Gwt extends Composite implements
     @UiField
     OsceSequenceSetEditor osceSequences;
 
+    @UiField
+    PatientInSemesterSetEditor patientInSemesters;
+
     public void setOscePickerValues(Collection<OsceProxy> values) {
         osce.setAcceptableValues(values);
+    }
+
+    public void setPatientInSemestersPickerValues(Collection<PatientInSemesterProxy> values) {
+        patientInSemesters.setAcceptableValues(values);
     }
 
     public void setOsceSequencesPickerValues(Collection<OsceSequenceProxy> values) {

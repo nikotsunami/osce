@@ -406,8 +406,6 @@ public class AnamnesisCheck {
 	private static List<AnamnesisCheck> getReSortingList(
 			AnamnesisCheckTitle anamnesisCheckTitle, Integer sortFrom) {
 
-		System.out.println(">>>>>>>>>This is anamnesisCheckTitle = "+anamnesisCheckTitle.getText());
-		System.out.println(">>>>>>>>>sortFrom = "+sortFrom);
 		EntityManager em = AnamnesisCheck.entityManager();
 		TypedQuery<AnamnesisCheck> q = em
 				.createQuery(
@@ -439,12 +437,7 @@ public class AnamnesisCheck {
     //new 
     public void insertAnamnesisCheck(int preSortorder){
 
-//    	 if(preSortorder == 0){
-//         	 //TODO put this AnamnesisCheck first
-//    		 
-//         }else{
-//        	 //TODO insert this AnamnesisCheck  on preSortorder+1
-//         }
+
     	//put this AnamnesisCheck last in title
     		int maxSortOder = getMaxSortOderInTitle(this.anamnesisCheckTitle);
     		this.sort_order = maxSortOder + 1;

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFilterViewTooltipImpl;
 
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -39,8 +40,12 @@ import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ShowRangeEvent;
 import com.google.gwt.event.logical.shared.ShowRangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -62,6 +67,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -97,7 +103,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 
 
 
-	
+	int left=0,top=0;
 
 	
 	private Delegate delegate;
@@ -127,11 +133,24 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		TabPanelHelper.moveTabBarToBottom(osceDetailPanel);
 		
 		
+		filterPanel = new OsceTaskPopViewImpl();
+		filterPanel.addCloseHandler(new CloseHandler<PopupPanel>() {
 		
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				Log.info("filter panel close");
+				/*if (filterPanel.selectionChanged()) {
+					filterPanel.clearSelectionChanged();
+					//delegate.performSearch(searchBox.getValue(), getSearchFilters());
+					delegate.performSearch(searchBox.getValue(), getSearchFilters(),getTableFilters(),getWhereFilters());
+				}*/
+			}
+			
+		});
 		
 		init();
 		
-		deadline.getTextBox().setReadOnly(true);
+		/*deadline.getTextBox().setReadOnly(true);
 		deadline.addValueChangeHandler(new ValueChangeHandler<Date>() {
 			
 			@Override
@@ -143,10 +162,10 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 				Date futureDate=new Date();
 				futureDate.setYear(today.getYear()+2);
 				
-				/*Date date = new Date();
+				Date date = new Date();
 				Date d=new Date();
 			//	Calendar cal = Calendar.getInstance();
-				d.setYear(date.getYear()+2);*/
+				d.setYear(date.getYear()+2);
 			if(event.getValue().before(today))
 			{
 				Window.alert("Date should be past date");
@@ -160,7 +179,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 			}
 
 			
-		});
+		});*/
 	}
 
 	private OsceConstants constants = GWT.create(OsceConstants.class);
@@ -206,12 +225,15 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	SpanElement lunchBreak;
 
 	@UiField
+	SpanElement MiddleBreak;
+	
+	@UiField
 	TabPanel osceDetailPanel;
 	
 	@UiField (provided = true)
 	CellTable<TaskProxy> table;
 	
-	 @UiField
+	/* @UiField
 	    DateBox deadline;
 
 	@UiField
@@ -219,13 +241,20 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 	@UiField
 	Button save;
+	*/
+	public Boolean isedit;
 	
-	Boolean isedit;
+	/*@UiField
+	public IconButton filterButton;*/
 	
+	@UiField
+	public IconButton newButton;
 	
-	@UiField(provided = true)
-	ValueListBox<AdministratorProxy> administrator = new ValueListBox<AdministratorProxy>(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy>());
+	private OsceTaskPopViewImpl  filterPanel;
 
+	/*@UiField(provided = true)
+	ValueListBox<AdministratorProxy> administrator = new ValueListBox<AdministratorProxy>(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy>());
+*/
 	
 	 
 	 protected Set<String> paths = new HashSet<String>();
@@ -242,9 +271,38 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	LongBreak
 	lunchBreak*/
 
+	
+	@UiHandler("newButton")
+	public void newButtonclick(ClickEvent event) {
+//System.out.println("Mouse over");
+		Log.info("filter panel call");
+			showFilterPanel((Widget) event.getSource());
+	}
+	
+	private void showFilterPanel(Widget eventSource) {
+		int x = eventSource.getAbsoluteLeft();
+		int y = eventSource.getAbsoluteTop();
+		filterPanel.setPopupPosition(x, y);
+		filterPanel.show();
+		//Log.info(filterPanel.getSpecialisationBox().getValue());
+		
+	}
+	
 	public void init()
 	{
 		isedit=false;
+		filterPanel.isedit=false;
+		
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				left=event.getClientX();
+				top=event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
 		
 		/*deadline.getDatePicker().addShowRangeHandler(new ShowRangeHandler<Date>() {
 			
@@ -452,10 +510,23 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	public void editClicked(TaskProxy task)
 	{
 		isedit=true;
-		taskName.setText(task.getName());
+		
+		/*taskName.setText(task.getName());
 		deadline.setValue(task.getDeadline());
-		administrator.setValue(task.getAdministrator());
+		administrator.setValue(task.getAdministrator());*/
 		editProxy=task;
+		
+		filterPanel.isedit=true;
+		filterPanel.taskName.setText(task.getName());
+		filterPanel.deadline.setValue(task.getDeadline());
+		filterPanel.administrator.setValue(task.getAdministrator());
+		filterPanel.editProxy=task;
+		//filterPanel.show();
+		
+		Log.info("filterPanel width : " + filterPanel.getOffsetWidth());
+		filterPanel.setPopupPosition(left-200, top);		
+		filterPanel.show();
+		
 	}
 	
 	private <C> void addColumn(Cell<C> cell, String headerText,
@@ -502,6 +573,7 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 	@Override
 	public void setValue(OsceProxy proxy) {
 		this.proxy = proxy;
+		
 		if(proxy.getName()=="")
 		{
 			name.setInnerText("");
@@ -548,6 +620,17 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		else
 		{
 		shortBreak.setInnerText(proxy.getShortBreak() == 0 ? "" : String.valueOf(proxy.getShortBreak()));
+		}
+		
+		
+		if(proxy.getMiddleBreak()==null)
+		{
+			MiddleBreak.setInnerText("");
+			
+		}
+		else
+		{
+			MiddleBreak.setInnerText(proxy.getMiddleBreak() == 0 ? "" : String.valueOf(proxy.getMiddleBreak()));
 		}
 		
 		if(proxy.getLongBreak()==null)
@@ -657,16 +740,18 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	/*
 	@Override
 	public void setAdministratorValue(List<AdministratorProxy> emptyList) {
 		// TODO Auto-generated method stub
 		administrator.setAcceptableValues(emptyList);
 	}
+	*/
 	
-	
-	@UiHandler ("save")
+	/*@UiHandler ("save")
 	public void newButtonClicked(ClickEvent event) {
+		
+				
 		
 		Date today = new Date();
 		Date futureDate=new Date();
@@ -683,7 +768,7 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 			return;
 		}
 		
-		/*else if(deadline.getValue()==null)
+		else if(deadline.getValue()==null)
 		{
 			Window.alert("please select deadline date");
 			return;
@@ -700,14 +785,26 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		{
 			Window.alert("please enter proper date");
 			return;
-		}*/
+		}
 		
-		delegate.saveClicked(isedit,taskName.getText(),administrator.getValue(),deadline.getValue(),proxy,editProxy);
+	//	delegate.saveClicked(isedit,taskName.getText(),administrator.getValue(),deadline.getValue(),proxy,editProxy);
 		isedit=false;
 		taskName.setValue("");
 		deadline.getTextBox().setValue("");
 
 		
+		
+	}*/
+
+	@Override
+	public OsceTaskPopViewImpl getPopView() {
+		// TODO Auto-generated method stub
+		return filterPanel;
+	}
+
+	@Override
+	public void setAdministratorValue(List<AdministratorProxy> emptyList) {
+		// TODO Auto-generated method stub
 		
 	}
 	

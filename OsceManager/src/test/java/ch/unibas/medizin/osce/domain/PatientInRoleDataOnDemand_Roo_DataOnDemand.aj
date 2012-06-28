@@ -3,11 +3,12 @@
 
 package ch.unibas.medizin.osce.domain;
 
+import ch.unibas.medizin.osce.domain.OscePost;
+import ch.unibas.medizin.osce.domain.OscePostDataOnDemand;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.PatientInSemesterDataOnDemand;
-import ch.unibas.medizin.osce.domain.StandardizedRole;
-import ch.unibas.medizin.osce.domain.StandardizedRoleDataOnDemand;
+import java.lang.Boolean;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,26 +28,38 @@ privileged aspect PatientInRoleDataOnDemand_Roo_DataOnDemand {
     private List<PatientInRole> PatientInRoleDataOnDemand.data;
     
     @Autowired
-    private PatientInSemesterDataOnDemand PatientInRoleDataOnDemand.patientInSemesterDataOnDemand;
+    private OscePostDataOnDemand PatientInRoleDataOnDemand.oscePostDataOnDemand;
     
     @Autowired
-    private StandardizedRoleDataOnDemand PatientInRoleDataOnDemand.standardizedRoleDataOnDemand;
+    private PatientInSemesterDataOnDemand PatientInRoleDataOnDemand.patientInSemesterDataOnDemand;
     
     public PatientInRole PatientInRoleDataOnDemand.getNewTransientPatientInRole(int index) {
         PatientInRole obj = new PatientInRole();
+        setFit_criteria(obj, index);
+        setIs_backup(obj, index);
+        setOscePost(obj, index);
         setPatientInSemester(obj, index);
-        setStandardizedRole(obj, index);
         return obj;
+    }
+    
+    public void PatientInRoleDataOnDemand.setFit_criteria(PatientInRole obj, int index) {
+        Boolean fit_criteria = Boolean.TRUE;
+        obj.setFit_criteria(fit_criteria);
+    }
+    
+    public void PatientInRoleDataOnDemand.setIs_backup(PatientInRole obj, int index) {
+        Boolean is_backup = Boolean.TRUE;
+        obj.setIs_backup(is_backup);
+    }
+    
+    public void PatientInRoleDataOnDemand.setOscePost(PatientInRole obj, int index) {
+        OscePost oscePost = oscePostDataOnDemand.getRandomOscePost();
+        obj.setOscePost(oscePost);
     }
     
     public void PatientInRoleDataOnDemand.setPatientInSemester(PatientInRole obj, int index) {
         PatientInSemester patientInSemester = patientInSemesterDataOnDemand.getRandomPatientInSemester();
         obj.setPatientInSemester(patientInSemester);
-    }
-    
-    public void PatientInRoleDataOnDemand.setStandardizedRole(PatientInRole obj, int index) {
-        StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
-        obj.setStandardizedRole(standardizedRole);
     }
     
     public PatientInRole PatientInRoleDataOnDemand.getSpecificPatientInRole(int index) {

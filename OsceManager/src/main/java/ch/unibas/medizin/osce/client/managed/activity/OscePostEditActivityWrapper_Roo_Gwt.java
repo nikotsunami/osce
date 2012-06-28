@@ -8,8 +8,10 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.OscePostRoomSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.PatientInRoleSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -57,6 +59,16 @@ public abstract class OscePostEditActivityWrapper_Roo_Gwt implements Activity, I
                 view.setOscePostRoomsPickerValues(values);
             }
         });
+        view.setPatientInRolePickerValues(Collections.<PatientInRoleProxy>emptyList());
+        requests.patientInRoleRequest().findPatientInRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.PatientInRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<PatientInRoleProxy>>() {
+
+            public void onSuccess(List<PatientInRoleProxy> response) {
+                List<PatientInRoleProxy> values = new ArrayList<PatientInRoleProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setPatientInRolePickerValues(values);
+            }
+        });
         view.setStandardizedRolePickerValues(Collections.<StandardizedRoleProxy>emptyList());
         requests.standardizedRoleRequest().findStandardizedRoleEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer.instance().getPaths()).fire(new Receiver<List<StandardizedRoleProxy>>() {
 
@@ -85,6 +97,8 @@ public abstract class OscePostEditActivityWrapper_Roo_Gwt implements Activity, I
         void setOscePostBlueprintPickerValues(Collection<OscePostBlueprintProxy> values);
 
         void setOscePostRoomsPickerValues(Collection<OscePostRoomProxy> values);
+
+        void setPatientInRolePickerValues(Collection<PatientInRoleProxy> values);
 
         void setStandardizedRolePickerValues(Collection<StandardizedRoleProxy> values);
 

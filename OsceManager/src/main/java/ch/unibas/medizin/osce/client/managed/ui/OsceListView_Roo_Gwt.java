@@ -25,6 +25,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OsceProxy> {
@@ -313,7 +314,7 @@ public abstract class OsceListView_Roo_Gwt extends AbstractProxyListView<OscePro
         paths.add("oscePostBlueprints");
         table.addColumn(new TextColumn<OsceProxy>() {
 
-            Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance());
+            Renderer<java.util.List> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OscePostBlueprintProxyRenderer.instance());
 
             @Override
             public String getValue(OsceProxy object) {

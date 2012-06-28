@@ -12,6 +12,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessViewImpl;
@@ -39,6 +41,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipant
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
@@ -75,6 +78,7 @@ import ch.unibas.medizin.osce.client.managed.request.KeywordRequest;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantRequest;
@@ -108,6 +112,8 @@ import ch.unibas.medizin.osce.shared.ViewType;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -125,11 +131,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -164,7 +172,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		ImportTopicPopupView.Delegate,
 		RoleDetailsChecklistSubViewChecklistCriteriaItemView.Delegate,
 		RoleDetailsChecklistSubViewChecklistOptionItemView.Delegate,
-		RoleBaseTableItemView.Delegate,RoleBaseTableItemValueView.Delegate
+		RoleBaseTableItemView.Delegate,RoleBaseTableItemValueView.Delegate,
+		// Issue Role Module
+		RoomMaterialsPopupView.Delegate
+		// E Issue Role Module
+		
 
 {
 
@@ -206,6 +218,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	private CellTable<KeywordProxy> keywordTable;
 
 	KeywordProxy selKeywordProxy;
+	
+	public CheckListTopicPopupView topicPopup;
 	
 	// SPEC END =
 	
@@ -760,7 +774,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						
 
 						standardizedRoleDetailsView[index] = new StandardizedRoleDetailsViewImpl();
-					
+						System.out.println("length previous version--"+proxy.getPreviousVersion());
+						if(proxy.getPreviousVersion()==null)
+						{
+							standardizedRoleDetailsView[index].previous.setEnabled(false);
+						}
+						standardizedRoleDetailsView[index].setBaseProxy(proxy);
+						standardizedRoleDetailsView[index].home.setVisible(false);
 						standardizedRoleDetailsView[index].setValue(proxy);
 						roleDetailTabPanel.insert(
 								standardizedRoleDetailsView[index],
@@ -776,7 +796,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						standardizedRoleDetailsView[index].studyYear
 								.setInnerText(proxy.getStudyYear().name()); // ADDED
 						standardizedRoleDetailsView[index].labelLongNameHeader
-								.setText("" + proxy.getLongName());
+								.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
 
 						setRoleDetailTabData(proxy, response, index);
 						standardizedRoleDetailsView[index].rolePanel
@@ -816,26 +836,26 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								.getRoomMaterialsDetailsSubViewImpl();
 						roomMaterialsDetailsSubView[index]
 								.setDelegate(roleDetailActivity);
+						roomMaterialsDetailsSubView[index].setValue(proxy);
 
 						roomMaterialsDetailsSubView[index].setValue(proxy);
-						roomMaterialsDetailsSubView[index]
-								.setMaterialListPickerValues(Collections
-										.<MaterialListProxy> emptyList());
-						final int index2 = index;
+					// Issue Role Module
+						roomMaterialsDetailsSubView[index].getRoomMaterialsPopupViewImpl().setDelegate(roleDetailActivity);
+						roomMaterialsDetailsSubView[index].getRoomMaterialsPopupViewImpl().setMaterialListPickerValues(Collections.<MaterialListProxy> emptyList());						
+					//E Issue Role Module
+					
+	final int index2 = index;
 
-						requests.materialListRequest()
-								.findMaterialListEntries(0, 50)
-								.with(MaterialListProxyRenderer.instance()
-										.getPaths())
-								.fire(new Receiver<List<MaterialListProxy>>() {
-
-									public void onSuccess(
-											List<MaterialListProxy> response) {
+							requests.materialListRequest().findMaterialListEntries(0, 50).with(MaterialListProxyRenderer.instance().getPaths()).fire(new Receiver<List<MaterialListProxy>>() {
+									public void onSuccess(List<MaterialListProxy> response) 
+									{
 										List<MaterialListProxy> values = new ArrayList<MaterialListProxy>();
 										values.add(null);
 										values.addAll(response);
-										roomMaterialsDetailsSubView[index2]
-												.setMaterialListPickerValues(values);
+										// Issue Role Module
+										roomMaterialsDetailsSubView[index2].getRoomMaterialsPopupViewImpl().setMaterialListPickerValues(values);										
+										// roomMaterialsDetailsSubView[index2].setMaterialListPickerValues(values);
+										// E Issue Role Module
 									}
 								});
 
@@ -1052,7 +1072,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						//Assignment E[
 						//set CheckList Title
 						//Log.info(proxy.getCheckList().getTitle());
-						((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? "Checklist" : "Checklist "+proxy.getCheckList().getTitle());
+						if(proxy.getCheckList()!=null)
+						{
+							
+						((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? "Checklist" : "Checklist "+proxy.getCheckList().getTitle());					
 						
 						Log.info("checklisttopic Proxy Size:" + proxy.getCheckList().getCheckListTopics().size());
 						Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
@@ -1191,7 +1214,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								}
 							}
 						});
-						
+					}
 						// End I
 						index++;
 
@@ -1362,7 +1385,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	@Override
 	public void createRole() {
 		System.out.println("Call createRole() of RoleDetailActivity");
-		goTo(new RoleDetailsPlace(Operation.CREATE));
+		goTo(new RoleDetailsPlace(this.roleTopicProxy.stableId() ,Operation.CREATE));
 	}
 	
 	//Assignment E[
@@ -1438,6 +1461,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		{
 			RoleDetailsChecklistSubViewChecklistQuestionItemView questionView=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl();
 			questionView.getQuestionItemLbl().setText(proxy.getQuestion());
+			questionView.getQuestionInstruction().setText(proxy.getInstruction());
 			questionView.setProxy(proxy);
 			
 			questionView.setDelegate(this);
@@ -1527,6 +1551,44 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			});
 			
 		}
+		
+		
+		@Override
+		public void updateCheckListTopic(ChecklistTopicProxy proxy,
+						final String topicname, final String description, final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
+			// TODO Auto-generated method stub
+		//	requests.checklistTopicRequest().findChecklistTopic(proxy.getId()).fire(new Receiver<ChecklistTopicProxy>() {
+
+		//		@Override
+		//		public void onSuccess(ChecklistTopicProxy response) {
+					// TODO Auto-generated method stub
+					
+					//RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
+					//response = roleBaseItemReq.edit(response);
+					//response.setItem_name(toolTipLabel.getText());
+					
+					ChecklistTopicRequest checklisttopicreq = requests.checklistTopicRequest();
+					proxy = checklisttopicreq.edit(proxy);
+					
+					proxy.setTitle(topicname);
+					proxy.setDescription(description);
+					
+					checklisttopicreq.persist().using(proxy).fire(new Receiver<Void>() {
+
+						@Override
+						public void onSuccess(Void arg0) {
+							// TODO Auto-generated method stub
+							topicView.checkListTopicLbl.setText(topicname);
+							topicView.descriptionLbl.setText(description);
+							Log.debug("Record Updated Successfully");
+							
+						}
+					});
+				//}
+
+			//});
+		}
+
 		
 		public void deleteQuestion(final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionViewImpl)
 		{
@@ -1848,7 +1910,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			
 		}
 		
-		public void editOption(final String question,final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
+		public void editOption(final String question,final String instruction, final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
 		{
 			Log.info("editOption");
 			 ChecklistQuestionProxy questionProxy=questionView.getProxy();
@@ -1856,12 +1918,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			ChecklistQuestionRequest request=requests.checklistQuestionRequest();
 			questionProxy=request.edit(questionProxy);
 			questionProxy.setQuestion(question);
+			questionProxy.setInstruction(instruction);
 			request.persist().using(questionProxy).fire(new Receiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
 					questionView.questionItemLbl.setText(question);
-					
+					questionView.questionInstruction.setText(instruction);
 				}
 			});
 		}
@@ -2543,6 +2606,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				// TODO Auto-generated method stub
 				
 				StandardizedRoleDetailsViewImpl previousRole;	
+				previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
 				StandardizedRoleProxy roleProxy=response.getPreviousVersion();
 				if(roleProxy!=null)
 				{
@@ -2555,16 +2619,19 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					
 					previousRole.edit.setEnabled(false);
 					previousRole.delete.setEnabled(false);
+					previousRole.home.setVisible(true);
 					previousRole.setTitle(roleProxy.getShortName() == null ? " " : String.valueOf(roleProxy.getShortName()));
 					previousRole.shortName.setInnerText(roleProxy.getShortName() == null ? " " : String.valueOf(roleProxy.getShortName()));
 					previousRole.longName.setInnerText(roleProxy.getLongName() == null ? " " : String.valueOf(roleProxy.getLongName()));
 					previousRole.roleType.setInnerText(roleProxy.getRoleType().name()); //ADDED
 					previousRole.studyYear.setInnerText(roleProxy.getStudyYear().name()); //ADDED
-					previousRole.labelLongNameHeader.setText(""+roleProxy.getLongName());
+					//previousRole.labelLongNameHeader.setText(""+roleProxy.getLongName());
+					previousRole.labelLongNameHeader.setText("" + roleProxy.getLongName()+ " ("+roleProxy.getMainVersion()+"."+roleProxy.getSubVersion()+")");
 					previousRole.setValue(roleProxy);
 				}
 				else
 				{
+					previousRole.previous.setEnabled(false);
 					Window.alert("No More Record");
 				}
 				
@@ -2692,13 +2759,20 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void addKeywordClicked(String string) 
+	public void addKeywordClicked() 
 	{
 			
 		Log.info("~Click on Add Keyword for Role");
 		
 		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
 		final String selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue();
+		
+		Log.info("~Set Value To Null");
+		//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());
+		
+		//SuggestBox suggestBox = null;
+		//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getTextBox().setText(null);		
+		//Log.info("~TextBox Value : " + standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue());
 		
 		Log.info("~Selected Keyword: " + selectedKeyword);
 
@@ -2750,7 +2824,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 					
 					});					
-					
+
 				}
 				else
 				{
@@ -2766,8 +2840,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						Log.info("~Call assignKeywordToStandRoll()");
 						KeywordProxy keywordProxy=tempKeywordProxy;
 						
-						StandardizedRoleProxy stRoleProxy = standardizedRoleDetailsView[selectedTabId].getValue();						
+						StandardizedRoleProxy stRoleProxy = standardizedRoleDetailsView[selectedTabId].getValue();
 						
+										
 						Log.info("~Keyword Proxy:" + keywordProxy.getName());
 						Log.info("~Stand-Role Proxy:" + stRoleProxy.getShortName());
 						Log.info("~Stand-Role Proxy Keyword Size:" + stRoleProxy.getKeywords().size());						
@@ -2802,7 +2877,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
 								refreshRelationshipProxy();
 								
-															
+								//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setText(null);
+								//Log.info("Remove TextBox Value : " + standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue());
+								
 								// REFRESH KEYWORD TABLE DATA
 								
 								requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<List<KeywordProxy>>()
@@ -2816,6 +2893,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 											Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
 											Log.info("~Fetch/SET Table Data");
 											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+											
 										}
 								});	
 								
@@ -2834,7 +2912,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 											Log.info("~Fetch/SET SuggestBox Data");
 											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().setKeywordAutocompleteValue(response);
 										}
-								});
+								}); 
 								
 								standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.addChangeListener(new ChangeListener() 
 								{									
@@ -2847,6 +2925,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								});	
 							}
 						});
+						
 					}				
 				});					
 	}
@@ -3058,15 +3137,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	// SPEC END =
 	
 	//AssignMEnt I
-	@Override
-	public void addRoleBaseSubItem(RoleBaseItemProxy roleBaseItemProxy,
-			CellTable<RoleTableItemProxy> table) {
-		// TODO Auto-generated method stub
-		
-	}
+	// Issue Role Module
 
 	@Override
-	public void pencliButtonclickEvent(RoleBaseItemProxy roleBaseItemProxy) {
+	public void addRoleBaseSubItem(RoleBaseItemProxy roleBaseItemProxy,CellTable<RoleTableItemProxy> table,RoleBaseTableItemViewImpl roleBaseTableItemViewImpl) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -3074,11 +3148,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	@Override
 	public void roleTableItemEditButtonClicked(
 			RoleTableItemProxy roleTableItem, Long id,
-			CellTable<RoleTableItemProxy> table) {
+			CellTable<RoleTableItemProxy> table, int left,int top) {
 		// TODO Auto-generated method stub
 		
 	}
+	// E Issue Role Module
 
+	
 	@Override
 	public void roleTableItemDeleteClicked(RoleTableItemProxy roleTableItem,
 			Long id, CellTable<RoleTableItemProxy> roleTableItemProxyTable) {
@@ -3372,5 +3448,60 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	
 	}
 
+	// Issue Role Module
+	@Override
+	public void pencliButtonclickEvent(RoleBaseItemProxy roleBaseItemProxy,
+			ClickEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+	// Issue Role Module
+
+	@Override
+	public void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
+		// TODO Auto-generated method stub
+	
+/*requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).fire(new Receiver<StandardizedRoleProxy>() {
+			
+			@Override
+			public void onSuccess(StandardizedRoleProxy response) {
+				// TODO Auto-generated method stub
+				
+*/				StandardizedRoleDetailsViewImpl homeRole;	
+				/*StandardizedRoleProxy roleProxy=response.getPreviousVersion();*/
+				/*if(roleProxy!=null)
+				{*/
+					
+					System.out.println("Set value");
+					//goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(),	Operation.DETAILS));
+				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).roleTopic.stableId(),Operation.DETAILS));
+				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).stableId(),Operation.DETAILS));
+					homeRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+					
+					homeRole.edit.setEnabled(true);
+					homeRole.delete.setEnabled(true);
+					homeRole.home.setVisible(false);
+					homeRole.previous.setEnabled(true);
+					
+					homeRole.setTitle(standardizedRoleProxy.getShortName() == null ? " " : String.valueOf(standardizedRoleProxy.getShortName()));
+					homeRole.shortName.setInnerText(standardizedRoleProxy.getShortName() == null ? " " : String.valueOf(standardizedRoleProxy.getShortName()));
+					homeRole.longName.setInnerText(standardizedRoleProxy.getLongName() == null ? " " : String.valueOf(standardizedRoleProxy.getLongName()));
+					homeRole.roleType.setInnerText(standardizedRoleProxy.getRoleType().name()); //ADDED
+					homeRole.studyYear.setInnerText(standardizedRoleProxy.getStudyYear().name()); //ADDED
+				//	homeRole.labelLongNameHeader.setText(""+standardizedRoleProxy.getLongName());
+					homeRole.labelLongNameHeader.setText("" + standardizedRoleProxy.getLongName()+ " ("+standardizedRoleProxy.getMainVersion()+"."+standardizedRoleProxy.getSubVersion()+")");
+					homeRole.setValue(standardizedRoleProxy);
+				/*}
+				else
+				{
+					Window.alert("No More Record");
+				}*/
+				
+			}
+	/*	});*/
+
 	
 }
+
+	
+

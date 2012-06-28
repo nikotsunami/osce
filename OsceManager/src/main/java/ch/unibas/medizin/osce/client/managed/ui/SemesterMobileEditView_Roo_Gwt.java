@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.ui.*;
 import ch.unibas.medizin.osce.shared.Semesters;
@@ -70,12 +71,19 @@ public abstract class SemesterMobileEditView_Roo_Gwt extends Composite implement
     @UiField
     PatientInSemesterSetEditor patientsInSemester;
 
+    @UiField
+    TrainingSetEditor training;
+
     public void setAdministratorsPickerValues(Collection<AdministratorProxy> values) {
         administrators.setAcceptableValues(values);
     }
 
     public void setSemesterPickerValues(Collection<Semesters> values) {
         semester.setAcceptableValues(values);
+    }
+
+    public void setTrainingPickerValues(Collection<TrainingProxy> values) {
+        training.setAcceptableValues(values);
     }
 
     public void setPatientsInSemesterPickerValues(Collection<PatientInSemesterProxy> values) {

@@ -35,7 +35,11 @@
     </div>
 
     <table class="{style.fields}" id="boundElementHolder">
-      <tr id="id">
+      
+      
+      
+      
+    <tr id="id">
                 <td>
                     <span class="{style.label}">Id:</span>
                 </td>
@@ -43,7 +47,7 @@
                     <span ui:field="id"/>
                 </td>
             </tr>
-      <tr id="version">
+            <tr id="version">
                 <td>
                     <span class="{style.label}">Version:</span>
                 </td>
@@ -51,7 +55,7 @@
                     <span ui:field="version"/>
                 </td>
             </tr>
-      <tr id="patientInSemester">
+            <tr id="patientInSemester">
                 <td>
                     <span class="{style.label}">Patient In Semester:</span>
                 </td>
@@ -59,15 +63,31 @@
                     <span ui:field="patientInSemester"/>
                 </td>
             </tr>
-      <tr id="standardizedRole">
+            <tr id="oscePost">
                 <td>
-                    <span class="{style.label}">Standardized Role:</span>
+                    <span class="{style.label}">Osce Post:</span>
                 </td>
                 <td>
-                    <span ui:field="standardizedRole"/>
+                    <span ui:field="oscePost"/>
                 </td>
             </tr>
-    </table>
+            <tr id="fit_criteria">
+                <td>
+                    <span class="{style.label}">Fit_criteria:</span>
+                </td>
+                <td>
+                    <span ui:field="fit_criteria"/>
+                </td>
+            </tr>
+            <tr id="is_backup">
+                <td>
+                    <span class="{style.label}">Is_backup:</span>
+                </td>
+                <td>
+                    <span ui:field="is_backup"/>
+                </td>
+            </tr>
+        </table>
 
   <div class="{style.bar}">
     <g:Button addStyleNames="{style.button}" ui:field="edit">Edit</g:Button>

@@ -5,11 +5,40 @@
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
 	 <ui:style src="../../styles.css" />
+
+	<g:ScrollPanel width='1230px' height='800px'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
 	
-	<g:HTMLPanel>
 	<!-- h1>Circuit Details Place</h1  -->
-	<g:HTMLPanel>
-		<e:CircuitOsceSubViewImpl ui:field="circuitOsceSubViewImpl"></e:CircuitOsceSubViewImpl>
-	</g:HTMLPanel>
-	</g:HTMLPanel>
+	
+		<g:VerticalPanel  >
+		
+		
+			<e:CircuitOsceSubViewImpl ui:field="circuitOsceSubViewImpl"></e:CircuitOsceSubViewImpl>
+			
+				<!-- L: SPEC START = -->
+		<!--  <g:HTMLPanel>	
+			<e:OSCENewSubViewImpl ui:field="oSCENewSubViewImpl"></e:OSCENewSubViewImpl>			
+		</g:HTMLPanel>		
+		-->
+		<!-- L: SPEC END = -->
+			
+			<!-- Assignment E:Module 5 -->
+			<g:VerticalPanel ui:field="generateVP">
+				
+			</g:VerticalPanel>
+			<!-- Assignment E:Module 5 -->
+				<!-- Assignment E:Module 5 -->
+			<!--  <g:HTMLPanel>
+		<g:VerticalPanel ui:field="OsceDayVerticalPanel">
+			<e:OsceDayViewImpl ui:field="osceDayViewImpl"></e:OsceDayViewImpl>
+		</g:VerticalPanel>
+		</g:HTMLPanel>-->
+		</g:VerticalPanel>
+	
+		
+	
+	</g:ScrollPanel>
+	
+	
+	
 </ui:UiBinder> 

@@ -8,6 +8,8 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     UsedMaterialRequest usedMaterialRequest();
 
+    TrainingRequest trainingRequest();
+
     TaskRequest taskRequest();
 
     StudentRequest studentRequest();
@@ -96,26 +98,24 @@ public interface ApplicationRequestFactory extends ScaffoldRequestFactory {
 
     ChecklistQuestionRequest checklistQuestionRequest();
 
+    CheckListRequest checkListRequest();
+
     ChecklistOptionRequest checklistOptionRequest();
 
     ChecklistCriteriaRequest checklistCriteriaRequest();
-
-    CheckListRequest checkListRequest();
 
     BankaccountRequest bankaccountRequest();
 
     AssignmentRequest assignmentRequest();
 
     AnamnesisFormRequest anamnesisFormRequest();
-    
+
     AnamnesisCheckTitleRequest anamnesisCheckTitleRequest();
 
     AnamnesisChecksValueRequest anamnesisChecksValueRequest();
 
-    //AnamnesisCheckTitleRequest anamnesisCheckTitleRequest();
-
     AnamnesisCheckRequest anamnesisCheckRequest();
-    
+
     AdvancedSearchCriteriaRequest advancedSearchCriteriaRequest();
 
     AdministratorRequest administratorRequest();

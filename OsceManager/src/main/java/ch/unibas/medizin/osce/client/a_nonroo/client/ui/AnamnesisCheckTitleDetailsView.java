@@ -21,8 +21,9 @@ public interface AnamnesisCheckTitleDetailsView extends IsWidget{
 	}
 	
     public void setValue(AnamnesisCheckTitleProxy proxy,String title); 
-//  
+
+    
     void setDelegate(Delegate delegate);
-//    
+
     void setPresenter(Presenter systemStartActivity);
 }

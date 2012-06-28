@@ -510,6 +510,17 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 			Label label = new Label(anamnesisCheckTitleProxy.getText());
 			label.setWidth("200px");
+			label.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					event.stopPropagation();
+					delegate.goToTitle(anamnesisCheckTitleProxy);
+					
+				}
+				
+			});
 			final HorizontalPanel iconImagePanel = new HorizontalPanel();
 			iconImagePanel.setWidth("15px");
 			Button addBtnButton = new Button("Add detail");

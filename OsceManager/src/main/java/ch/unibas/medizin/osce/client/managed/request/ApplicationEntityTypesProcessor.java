@@ -24,6 +24,7 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     public static Set<java.lang.Class<? extends com.google.gwt.requestfactory.shared.EntityProxy>> getAll() {
         Set<Class<? extends EntityProxy>> rtn = new HashSet<Class<? extends EntityProxy>>();
         rtn.add(UsedMaterialProxy.class);
+        rtn.add(TrainingProxy.class);
         rtn.add(TaskProxy.class);
         rtn.add(StudentProxy.class);
         rtn.add(StudentOscesProxy.class);
@@ -68,14 +69,14 @@ public abstract class ApplicationEntityTypesProcessor<T> {
         rtn.add(ClinicProxy.class);
         rtn.add(ChecklistTopicProxy.class);
         rtn.add(ChecklistQuestionProxy.class);
+        rtn.add(CheckListProxy.class);
         rtn.add(ChecklistOptionProxy.class);
         rtn.add(ChecklistCriteriaProxy.class);
-        rtn.add(CheckListProxy.class);
         rtn.add(BankaccountProxy.class);
         rtn.add(AssignmentProxy.class);
         rtn.add(AnamnesisFormProxy.class);
-        rtn.add(AnamnesisChecksValueProxy.class);
         rtn.add(AnamnesisCheckTitleProxy.class);
+        rtn.add(AnamnesisChecksValueProxy.class);
         rtn.add(AnamnesisCheckProxy.class);
         rtn.add(AdvancedSearchCriteriaProxy.class);
         rtn.add(AdministratorProxy.class);
@@ -85,6 +86,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Class<?> clazz) {
         if (UsedMaterialProxy.class.equals(clazz)) {
             processor.handleUsedMaterial((UsedMaterialProxy) null);
+            return;
+        }
+        if (TrainingProxy.class.equals(clazz)) {
+            processor.handleTraining((TrainingProxy) null);
             return;
         }
         if (TaskProxy.class.equals(clazz)) {
@@ -263,16 +268,16 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleChecklistQuestion((ChecklistQuestionProxy) null);
             return;
         }
+        if (CheckListProxy.class.equals(clazz)) {
+            processor.handleCheckList((CheckListProxy) null);
+            return;
+        }
         if (ChecklistOptionProxy.class.equals(clazz)) {
             processor.handleChecklistOption((ChecklistOptionProxy) null);
             return;
         }
         if (ChecklistCriteriaProxy.class.equals(clazz)) {
             processor.handleChecklistCriteria((ChecklistCriteriaProxy) null);
-            return;
-        }
-        if (CheckListProxy.class.equals(clazz)) {
-            processor.handleCheckList((CheckListProxy) null);
             return;
         }
         if (BankaccountProxy.class.equals(clazz)) {
@@ -287,12 +292,12 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleAnamnesisForm((AnamnesisFormProxy) null);
             return;
         }
-        if (AnamnesisChecksValueProxy.class.equals(clazz)) {
-            processor.handleAnamnesisChecksValue((AnamnesisChecksValueProxy) null);
-            return;
-        }
         if (AnamnesisCheckTitleProxy.class.equals(clazz)) {
             processor.handleAnamnesisCheckTitle((AnamnesisCheckTitleProxy) null);
+            return;
+        }
+        if (AnamnesisChecksValueProxy.class.equals(clazz)) {
+            processor.handleAnamnesisChecksValue((AnamnesisChecksValueProxy) null);
             return;
         }
         if (AnamnesisCheckProxy.class.equals(clazz)) {
@@ -313,6 +318,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     private static void process(ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor<?> processor, Object proxy) {
         if (proxy instanceof UsedMaterialProxy) {
             processor.handleUsedMaterial((UsedMaterialProxy) proxy);
+            return;
+        }
+        if (proxy instanceof TrainingProxy) {
+            processor.handleTraining((TrainingProxy) proxy);
             return;
         }
         if (proxy instanceof TaskProxy) {
@@ -491,16 +500,16 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleChecklistQuestion((ChecklistQuestionProxy) proxy);
             return;
         }
+        if (proxy instanceof CheckListProxy) {
+            processor.handleCheckList((CheckListProxy) proxy);
+            return;
+        }
         if (proxy instanceof ChecklistOptionProxy) {
             processor.handleChecklistOption((ChecklistOptionProxy) proxy);
             return;
         }
         if (proxy instanceof ChecklistCriteriaProxy) {
             processor.handleChecklistCriteria((ChecklistCriteriaProxy) proxy);
-            return;
-        }
-        if (proxy instanceof CheckListProxy) {
-            processor.handleCheckList((CheckListProxy) proxy);
             return;
         }
         if (proxy instanceof BankaccountProxy) {
@@ -515,12 +524,12 @@ public abstract class ApplicationEntityTypesProcessor<T> {
             processor.handleAnamnesisForm((AnamnesisFormProxy) proxy);
             return;
         }
-        if (proxy instanceof AnamnesisChecksValueProxy) {
-            processor.handleAnamnesisChecksValue((AnamnesisChecksValueProxy) proxy);
-            return;
-        }
         if (proxy instanceof AnamnesisCheckTitleProxy) {
             processor.handleAnamnesisCheckTitle((AnamnesisCheckTitleProxy) proxy);
+            return;
+        }
+        if (proxy instanceof AnamnesisChecksValueProxy) {
+            processor.handleAnamnesisChecksValue((AnamnesisChecksValueProxy) proxy);
             return;
         }
         if (proxy instanceof AnamnesisCheckProxy) {
@@ -542,6 +551,8 @@ public abstract class ApplicationEntityTypesProcessor<T> {
     }
 
     public abstract void handleUsedMaterial(UsedMaterialProxy proxy);
+
+    public abstract void handleTraining(TrainingProxy proxy);
 
     public abstract void handleTask(TaskProxy proxy);
 
@@ -631,11 +642,11 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleChecklistQuestion(ChecklistQuestionProxy proxy);
 
+    public abstract void handleCheckList(CheckListProxy proxy);
+
     public abstract void handleChecklistOption(ChecklistOptionProxy proxy);
 
     public abstract void handleChecklistCriteria(ChecklistCriteriaProxy proxy);
-
-    public abstract void handleCheckList(CheckListProxy proxy);
 
     public abstract void handleBankaccount(BankaccountProxy proxy);
 
@@ -643,10 +654,10 @@ public abstract class ApplicationEntityTypesProcessor<T> {
 
     public abstract void handleAnamnesisForm(AnamnesisFormProxy proxy);
 
+    public abstract void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy proxy);
+
     public abstract void handleAnamnesisChecksValue(AnamnesisChecksValueProxy proxy);
 
-    public abstract void handleAnamnesisCheckTitle(AnamnesisCheckTitleProxy proxy);
-    
     public abstract void handleAnamnesisCheck(AnamnesisCheckProxy proxy);
 
     public abstract void handleAdvancedSearchCriteria(AdvancedSearchCriteriaProxy proxy);

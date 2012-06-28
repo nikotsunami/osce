@@ -78,12 +78,10 @@ public class AnamnesisCheckTitleDetailsPlace extends OsMaDetailsPlace {
 		private final RequestFactory requests;
 
 		public Tokenizer(RequestFactory requests) {
-			System.err.println("AnamnesisCheckTitleDetailsPlace.Tokenizer");
 			this.requests = requests;
 		}
 
 		public AnamnesisCheckTitleDetailsPlace getPlace(String token) {
-			System.err.println("AnamnesisCheckTitleDetailsPlace.Tokenizer.getPlace");
 			String bits[] = token.split(SEPARATOR);
 			Operation operation = Operation.valueOf(bits[1]);
 			
@@ -105,7 +103,6 @@ public class AnamnesisCheckTitleDetailsPlace extends OsMaDetailsPlace {
 		}
 
 		public String getToken(AnamnesisCheckTitleDetailsPlace place) {
-			System.err.println("AnamnesisCheckTitleDetailsPlace.Tokenizer.getToken");
 			if (Operation.DETAILS == place.getOperation()) {
 				return place.getProxyId() + SEPARATOR + Operation.DETAILS;
 			}

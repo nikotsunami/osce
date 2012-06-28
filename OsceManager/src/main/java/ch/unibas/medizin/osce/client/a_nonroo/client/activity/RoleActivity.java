@@ -8,7 +8,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.SearchCriteria;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -461,7 +460,6 @@ public void initSearch() {
 	requestAllTopic = requests.roleTopicRequestNonRoo();
 // (1) Text search
 	List<String> searchThrough = view.getSearchFilters();
-	SearchCriteria criteria = view.getCriteria();
 	final Range range = table.getVisibleRange();
 	
 // (2) Advanced search

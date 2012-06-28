@@ -42,6 +42,7 @@ public interface AnamnesisCheckView extends IsWidget{
 		void setQuestionTableData(ListDataProvider<AnamnesisCheckProxy> dataProvider, AnamnesisCheckTitleProxy title);
 		
 		void showDetails(AnamnesisCheckProxy anamnesisCheck);
+		void goToTitle(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy);
 	}
 
 //    CellTable<AnamnesisCheckProxy> getTable();

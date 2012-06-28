@@ -22,7 +22,7 @@ public interface RoleScriptTemplateView extends IsWidget{
 			
 			void deleteClicked(RoleTemplateProxy roleTemplate);
 			
-			void editClicked(RoleTemplateProxy roleTemplate);
+			void editClicked(RoleTemplateProxy roleTemplate,int left,int top);
 			
 			void newClicked(String name);
 			

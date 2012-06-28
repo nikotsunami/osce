@@ -35,6 +35,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 			//Assignment I
 			
 			void roleTemplateValueButtonClicked(RoleTemplateProxy value);
+
+			void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy);//spec
 	}
 
 	/*
@@ -59,6 +61,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 	// ]End
 
     public void setValue(StandardizedRoleProxy proxy); 
+    public void setBaseProxy(StandardizedRoleProxy proxy); 
+    
     public void setDelegate(Delegate delegate);
 
 	public StandartizedPatientAdvancedSearchSubView getStandartizedPatientAdvancedSearchSubViewImpl();

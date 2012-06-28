@@ -223,38 +223,61 @@ public class AnamnesisCheckPlace extends OsMaPlace {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
+		}
 		AnamnesisCheckPlace other = (AnamnesisCheckPlace) obj;
+	    if(token.equals(anamnesisCheckTitleDetailsPlace) || token.equals(anamnesisCheckDetailsPlace)){
+	    	return true;
+	    }
 		if (pageLen == null) {
-			if (other.pageLen != null)
+			if (other.pageLen != null){
 				return false;
-		} else if (!pageLen.equals(other.pageLen))
+			}
+		} else if (!pageLen.equals(other.pageLen)){
 			return false;
-		if (pageStart != other.pageStart)
+		}
+		if (pageStart != other.pageStart){
 			return false;
+		}
 		if (searchStr == null) {
-			if (other.searchStr != null)
+			if (other.searchStr != null){
 				return false;
-		} else if (!searchStr.equals(other.searchStr))
+			}
+		} else if (!searchStr.equals(other.searchStr)){
 			return false;
+		}
 		if (filterTileId == null) {
-			if (other.filterTileId != null)
+			if (other.filterTileId != null){
 				return false;
-		} else if (!filterTileId.equals(other.filterTileId))
+			}
+		} else if (!filterTileId.equals(other.filterTileId)){
 			return false;
+		}
 		if (token == null) {
-			if (other.token != null)
+			if (other.token != null){
 				return false;
-		} else if (!token.equals(other.token))
+			}
+		} 
+//		else if (!token.equals(other.token)){
+//			GWT.log(">>>>>>> 21 !token.equals(other.token)");
+//			return false;
+//		}
+		if(pageLen.equals(other.pageLen)&&searchStr.equals(other.searchStr)&&filterTileId.equals(other.filterTileId)&&token.equals(placeName)){
 			return false;
+		}
 		return true;
 	}
 
+	private static final String placeName="AnamnesisCheckPlace";
+	private static final String anamnesisCheckTitleDetailsPlace="AnamnesisCheckTitleDetailsPlace";
+	private static final String anamnesisCheckDetailsPlace = "AnamnesisCheckDetailsPlace";
 	/*
 	 * (non-Javadoc)
 	 * 

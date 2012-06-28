@@ -621,8 +621,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	
 	HttpServletRequest getRequest(){
 		HttpServletRequest ret = getThreadLocalRequest();
-		if (ret == null ){
-		}
 		return ret;
 	}
 	

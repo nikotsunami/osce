@@ -31,6 +31,10 @@ public interface OscePostProxy extends EntityProxy {
 
     abstract void setOscePostRooms(Set<OscePostRoomProxy> oscePostRooms);
 
+    abstract Set<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy> getPatientInRole();
+
+    abstract void setPatientInRole(Set<PatientInRoleProxy> patientInRole);
+
     abstract StandardizedRoleProxy getStandardizedRole();
 
     abstract void setStandardizedRole(StandardizedRoleProxy standardizedRole);

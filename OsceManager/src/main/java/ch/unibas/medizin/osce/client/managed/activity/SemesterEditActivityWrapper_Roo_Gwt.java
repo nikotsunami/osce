@@ -8,9 +8,11 @@ import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AdministratorSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.OsceSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.TrainingSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyEditView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
@@ -70,6 +72,16 @@ public abstract class SemesterEditActivityWrapper_Roo_Gwt implements Activity, I
                 view.setPatientsInSemesterPickerValues(values);
             }
         });
+        view.setTrainingPickerValues(Collections.<TrainingProxy>emptyList());
+        requests.trainingRequest().findTrainingEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.TrainingProxyRenderer.instance().getPaths()).fire(new Receiver<List<TrainingProxy>>() {
+
+            public void onSuccess(List<TrainingProxy> response) {
+                List<TrainingProxy> values = new ArrayList<TrainingProxy>();
+                values.add(null);
+                values.addAll(response);
+                view.setTrainingPickerValues(values);
+            }
+        });
         wrapped.start(display, eventBus);
     }
 
@@ -82,5 +94,7 @@ public abstract class SemesterEditActivityWrapper_Roo_Gwt implements Activity, I
         void setOscesPickerValues(Collection<OsceProxy> values);
 
         void setPatientsInSemesterPickerValues(Collection<PatientInSemesterProxy> values);
+
+        void setTrainingPickerValues(Collection<TrainingProxy> values);
     }
 }

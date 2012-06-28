@@ -201,6 +201,11 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 
     private void init() {
+//    	Window.alert("init");
+        view.getFilterTitle().clear();
+        view.getAnamnesisCheckPanel().clear();
+//        view.getScrollPanel().clear();
+        getTitles();
 
 
         if (place.getSearchStr().equals("")) {
@@ -334,6 +339,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     @SuppressWarnings("deprecation")
 	@Override
     public void changeFilterTitleShown(String selectedtTitle) {
+    	GWT.log("###########this is changeFilterTitleShown");
 
     	final String searchStr = view.getSearchBox().getText();
     	requests.anamnesisCheckRequestNonRoo().findTitlesContatisAnamnesisChecksWithSearching(searchStr, getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>(){
@@ -618,6 +624,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     @SuppressWarnings("deprecation")
     @Override
     public void saveOrder() {
+    	Window.alert("sava oder");
 
 
         getRequest().fire(new Receiver(){
@@ -714,6 +721,13 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		} else {
 			Window.alert(constants.unSaveOrderWarn());
 		}
+	}
+
+	@Override
+	public void goToTitle(AnamnesisCheckTitleProxy anamnesisCheckTitle) {
+		// TODO Auto-generated method stub
+		goTo(new AnamnesisCheckTitleDetailsPlace(anamnesisCheckTitle.stableId(),Operation.DETAILS));
+		
 	}
 	
 }

@@ -69,109 +69,45 @@ public class AnamnesisCheckTitleDetailsViewImpl extends Composite implements Ana
 		
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
-		
-//		labelType.setInnerText(constants.type() + ":");
-		labelText.setInnerText(constants.question() + ":");
+
+		labelText.setInnerText(constants.anamnesisCheckTitle() + ":");
 
 	}
 	
-//	@UiField
-//	SpanElement labelType;
-//	@UiField
-//	SpanElement labelValue;
 	@UiField
 	SpanElement labelText;
-	
-//	@UiField
-//	SpanElement header;
-//	@UiField
-//	SpanElement type;
-//	@UiField
-//	VerticalPanel valuePanel;
-	
 	@UiField
 	SpanElement text;
-	
-//	@UiField
-//	SpanElement labelTitle;
-//	@UiField
-//	SpanElement title;
-//	@UiField
-//	SpanElement labelPrevious;
-//	@UiField
-//	SpanElement previous;
+	@UiField
+	SpanElement labelPrevious;
+	@UiField
+	SpanElement previous;
 
-//	@UiField
-//	SpanElement version;
-
-//	@UiField
-//	SpanElement createDate;
-//
-//	@UiField
-//	SpanElement anamnesischecksvalues;
-//
-//	@UiField
-//	SpanElement scars;
-
+	@UiField
+	SpanElement header;
 	AnamnesisCheckTitleProxy proxy;
-
-//	@UiField
-//	SpanElement displayRenderer;
-
+	
 	private Presenter presenter;
 
 	public void setValue(AnamnesisCheckTitleProxy proxy,String title) {
 		this.proxy = proxy;
-//		String headerText = "[";
-//		headerText += proxy.getId() == null ? "" : String.valueOf(proxy.getId());
-//		headerText += "] ";
-//		headerText += proxy.getText() == null ? "" : String.valueOf(proxy.getText());
-//		header.setInnerText(headerText);
-//		
-//		//type.setInnerText(proxy.getType() == null ? "" : new EnumRenderer<AnamnesisCheckTypes>().render(proxy.getType()));
-		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));
-//
-//		//if (proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_M || proxy.getType() == AnamnesisCheckTypes.QUESTION_MULT_S) {
-//			labelValue.setInnerText(constants.possibleAnswers() + ":");
-//			if (proxy.getValue() != null) {
-//				String substrs[] = proxy.getValue().split("\\|");
-//				for (int i = 0; i < substrs.length; i++) {
-//					valuePanel.add(new Label(substrs[i]));
-//				}
-//			}
-//	//	} else {
-//			labelValue.setInnerText("");
-//	//	}
+
+		String headerText = "[";
+		headerText += proxy.getId() == null ? "" : String.valueOf(proxy.getId());
+		headerText += "] ";
+		headerText += proxy.getText() == null ? "" : String.valueOf(proxy.getText());
+		header.setInnerText(headerText);
+		text.setInnerText(proxy.getText() == null ? "" : String.valueOf(proxy.getText()));		
 		
-//		//if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
-//			GWT.log("in AnamnesisCheckDetailsViewImpl setValue type is QUESTION_TITLE");
-//			labelTitle.setInnerText("");
-//			title.setInnerText("");
-//		//}else{
-//			if(proxy.getTitle()!=null){
-//				String titleTextString = proxy.getTitle().getText();
-//				labelTitle.setInnerText(constants.insideTitle());
-//			    title.setInnerText(titleTextString == null ? "" : String.valueOf(titleTextString));
-//			}else{
-//				labelTitle.setInnerText(constants.insideTitle());
-//				title.setInnerText(constants.noTitle());
-//			}
-//		//}
-//		
-//		
-//	    if(proxy.getSort_order()!=null&&proxy.getSort_order()!=1){
-//	    	//if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
-//	    	labelPrevious.setInnerText(constants.previousTitle());
-//	    	//}else{
-//	    		labelPrevious.setInnerText(constants.previousQuestion());
-//	    	//}
-//		    previous.setInnerText(previousAnamnesisCheckText == null ? "" : String.valueOf(previousAnamnesisCheckText));
-//	    //}else{
-//	    	labelPrevious.setInnerText("");
-//	    	previous.setInnerText("");
-//	    }
-//		
-//		
+		if(proxy.getSort_order() != null && proxy.getSort_order() > 1){
+	    	labelPrevious.setInnerText(constants.previousTitle());
+		    previous.setInnerText(title == null ? "" : String.valueOf(title));
+	    }else{
+	    	labelPrevious.setInnerText("");
+	    	previous.setInnerText("");
+	    }
+		
+
 	}
 
 	@Override
@@ -183,18 +119,20 @@ public class AnamnesisCheckTitleDetailsViewImpl extends Composite implements Ana
 	public void setPresenter(Presenter AnamnesisCheckTitleDetailsActivity) {
 		this.presenter =  AnamnesisCheckTitleDetailsActivity;
 	}
-//
-//	public Widget asWidget() {
-//		return this;
-//	}
-//
-//	public boolean confirm(String msg) {
-//		return Window.confirm(msg);
-//	}
-//
-//	public AnamnesisCheckTitleProxy getValue() {
-//		return proxy;
-//	}
+
+
+	public Widget asWidget() {
+		return this;
+	}
+
+	public boolean confirm(String msg) {
+		return Window.confirm(msg);
+	}
+
+	public AnamnesisCheckTitleProxy getValue() {
+		return proxy;
+	}
+
 
 	@UiHandler("delete")
 	public void onDeleteClicked(ClickEvent e) {

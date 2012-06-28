@@ -28,7 +28,7 @@ public class AnamnesisCheckDetailsActivityMapper  implements ActivityMapper{
 
 	@Override
 	public Activity getActivity(Place place) {
-		Log.debug("im AnamnesisCheckDetailsActivityMapper.getActivity");
+//		Log.debug("im AnamnesisCheckDetailsActivityMapper.getActivity");
 		if (place instanceof AnamnesisCheckDetailsPlace){
 			if(((AnamnesisCheckDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new AnamnesisCheckDetailsActivity((AnamnesisCheckDetailsPlace) place, requests, placeController);

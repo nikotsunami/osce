@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedPatientDataOnDemand;
+import java.lang.Boolean;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,9 +35,15 @@ privileged aspect PatientInSemesterDataOnDemand_Roo_DataOnDemand {
     
     public PatientInSemester PatientInSemesterDataOnDemand.getNewTransientPatientInSemester(int index) {
         PatientInSemester obj = new PatientInSemester();
+        setAccepted(obj, index);
         setSemester(obj, index);
         setStandardizedPatient(obj, index);
         return obj;
+    }
+    
+    public void PatientInSemesterDataOnDemand.setAccepted(PatientInSemester obj, int index) {
+        Boolean accepted = Boolean.TRUE;
+        obj.setAccepted(accepted);
     }
     
     public void PatientInSemesterDataOnDemand.setSemester(PatientInSemester obj, int index) {

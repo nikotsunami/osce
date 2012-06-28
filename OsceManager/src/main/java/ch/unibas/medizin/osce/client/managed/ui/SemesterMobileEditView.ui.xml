@@ -26,7 +26,15 @@
     
 
     <g:Button ui:field="save">Save</g:Button>
-  <div id="semester">
+  
+        
+        
+        
+        
+        
+        
+        
+    <div id="semester">
             <div class="{style.label}">Semester</div>
             <div class="{style.value}">
                 <g:ValueListBox ui:field="semester"/>
@@ -72,6 +80,12 @@
             <div class="{style.label}">Patients In Semester</div>
             <div class="{style.value}">
                 <a:PatientInSemesterSetEditor ui:field="patientsInSemester"/>
+            </div>
+        </div>
+        <div id="training">
+            <div class="{style.label}">Training</div>
+            <div class="{style.value}">
+                <a:TrainingSetEditor ui:field="training"/>
             </div>
         </div>
     </g:HTMLPanel>

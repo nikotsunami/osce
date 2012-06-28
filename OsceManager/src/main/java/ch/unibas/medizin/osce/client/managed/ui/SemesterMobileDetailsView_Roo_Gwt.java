@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyDetailsView;
 import ch.unibas.medizin.osce.shared.Semesters;
 import com.google.gwt.core.client.GWT;
@@ -55,6 +56,9 @@ public abstract class SemesterMobileDetailsView_Roo_Gwt extends Composite implem
     @UiField
     Element patientsInSemester;
 
+    @UiField
+    Element training;
+
     SemesterProxy proxy;
 
     public void setValue(SemesterProxy proxy) {
@@ -69,5 +73,6 @@ public abstract class SemesterMobileDetailsView_Roo_Gwt extends Composite implem
         administrators.setInnerText(proxy.getAdministrators() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance()).render(proxy.getAdministrators()));
         osces.setInnerText(proxy.getOsces() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance()).render(proxy.getOsces()));
         patientsInSemester.setInnerText(proxy.getPatientsInSemester() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.PatientInSemesterProxyRenderer.instance()).render(proxy.getPatientsInSemester()));
+        training.setInnerText(proxy.getTraining() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.TrainingProxyRenderer.instance()).render(proxy.getTraining()));
     }
 }

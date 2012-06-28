@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.List;
 import java.util.Set;
 
 public abstract class OsceSequenceDetailsView_Roo_Gwt extends Composite implements ProxyDetailsView<OsceSequenceProxy> {

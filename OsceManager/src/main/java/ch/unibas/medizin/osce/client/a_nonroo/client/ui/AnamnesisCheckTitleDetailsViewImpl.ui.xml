@@ -29,6 +29,10 @@
 								<td><span class='{style.label}' ui:field="labelText" /></td>
 								<td><span ui:field='text' /></td>
 							</tr>
+							 <tr id='previous'>
+                                <td><span class='{style.label}' ui:field="labelPrevious" /></td>
+                                <td><span ui:field='previous' /></td>
+                            </tr>
 						</tbody>
 					</table>
 				</g:HTMLPanel>

@@ -47,7 +47,17 @@
       
       
       
-    <tr id="osceDate">
+    
+            
+            
+            
+            
+        
+            
+            
+            
+            
+        <tr id="osceDate">
                 <td>
                     <div class="{style.label}">Osce Date:</div>
                 </td>
@@ -85,6 +95,14 @@
                 </td>
                 <td>
                     <a:OsceSequenceSetEditor ui:field="osceSequences"/>
+                </td>
+            </tr>
+            <tr id="patientInSemesters">
+                <td>
+                    <div class="{style.label}">Patient In Semesters:</div>
+                </td>
+                <td>
+                    <a:PatientInSemesterSetEditor ui:field="patientInSemesters"/>
                 </td>
             </tr>
         </table>
