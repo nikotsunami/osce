@@ -100,18 +100,16 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		StandardizedPatient newPatient = (StandardizedPatient) (deserializer
 				.use(null, StandardizedPatient.class).deserialize(data));
 		
-
 		
 		
 		StandardizedPatient patient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
-	
+		
 		if( patient != null){
 			updatePatient(patient,newPatient);
 		}else{
-//			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
+			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
 //			savePatient(newPatient);
 		}
-
 	}
 	
 	private static String dmzSyncExceptionType = "";
@@ -135,7 +133,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			patient.setMobile(newPatient.getMobile());
 			patient.setHeight(newPatient.getHeight());
 			patient.setWeight(newPatient.getWeight());
-			
+
 			patient.setImmagePath(newPatient.getImmagePath());
 			patient.setVideoPath(newPatient.getVideoPath());
 			patient.setBirthday(newPatient.getBirthday());
@@ -148,8 +146,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getNationality() != null){
 					Nationality nationality = Nationality.findNationality(newPatient.getNationality().getId());
-					nationality.setNationality(newPatient.getNationality().getNationality());
 					if(nationality != null){
+						nationality.setNationality(newPatient.getNationality().getNationality());
 						patient.setNationality(nationality);
 					}
 				}
@@ -160,9 +158,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getProfession() !=null){
 					Profession profession = Profession.findProfession(newPatient.getProfession().getId());
-					profession.setProfession(newPatient.getProfession().getProfession()); 
-					   
 					if(profession != null){
+						profession.setProfession(newPatient.getProfession().getProfession()); 
 						patient.setProfession(profession);
 					}	
 				}
@@ -173,8 +170,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getDescriptions() !=null){
 					Description descriptions = Description.findDescription(newPatient.getDescriptions().getId());
-					descriptions.setDescription(newPatient.getDescriptions().getDescription());
 					if(descriptions != null){
+						descriptions.setDescription(newPatient.getDescriptions().getDescription());
 						patient.setDescriptions(descriptions);
 					}	
 				}	
@@ -186,14 +183,14 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getBankAccount() !=null){
 					Bankaccount bankAccount = Bankaccount.findBankaccount(newPatient.getBankAccount().getId());
-					bankAccount.setBankName(newPatient.getBankAccount().getBankName());
-					bankAccount.setIBAN(newPatient.getBankAccount().getIBAN());
-					bankAccount.setBIC(newPatient.getBankAccount().getBIC());
-					bankAccount.setOwnerName(newPatient.getBankAccount().getOwnerName());
-					bankAccount.setPostalCode(newPatient.getBankAccount().getPostalCode());
-					bankAccount.setCity(newPatient.getBankAccount().getCity());
 				  	if(bankAccount != null){
-						patient.setBankAccount(bankAccount);
+				  		bankAccount.setBankName(newPatient.getBankAccount().getBankName());
+						bankAccount.setIBAN(newPatient.getBankAccount().getIBAN());
+						bankAccount.setBIC(newPatient.getBankAccount().getBIC());
+						bankAccount.setOwnerName(newPatient.getBankAccount().getOwnerName());
+						bankAccount.setPostalCode(newPatient.getBankAccount().getPostalCode());
+						bankAccount.setCity(newPatient.getBankAccount().getCity());
+				  		patient.setBankAccount(bankAccount);
 					}	
 				}
 			}catch(Exception e){
@@ -219,6 +216,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 								if(newChecksValue.getId() != null){
 									AnamnesisChecksValue checksValue =AnamnesisChecksValue.findAnamnesisChecksValue(newChecksValue.getId());
 									if(checksValue!=null){
+										
 										updateChecksValue(checksValue, newChecksValue,anamnesisForm);
 									}else{
 										saveChecksValue(newChecksValue, anamnesisForm);
@@ -246,16 +244,16 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				}
 				throw e;
 			}
-			
-	
-			patient.flush();
+			patient.merge();
 		
 		} catch (Exception e){
+			e.printStackTrace();
 			if(dmzSyncExceptionType==null &&dmzSyncExceptionType.equals("")){
 				setDMZSyncExceptionTypeAndErrorMsg(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,e.getMessage());
 			}
 			throw new DMZSyncException(dmzSyncExceptionType,errorMsg);
 		}
+		
 	}
 	
 	/**
@@ -307,7 +305,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		data = data.replaceAll("\"_ref\"","\"ignoreMe\"");
 		data = data.replaceAll("\"iban\"","\"IBAN\"");
 		data = data.replaceAll("\"bic\"","\"BIC\"");
-//		data = data.replaceAll("\"description\":{","\"descriptions\":{");
 
 		return data;
 
