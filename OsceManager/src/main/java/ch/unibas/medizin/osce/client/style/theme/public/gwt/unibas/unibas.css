@@ -2337,3 +2337,20 @@ background: rgb(255,255,204)  ;
 	margin-top: 7px;
 	margin-left: 5px;	
 }
+.upIcon {
+	width: 15px;
+	height: 15px;	
+	background-image: url("images/up.png");
+}
+
+.downIcon {
+	width: 15px;
+	height: 15px;	
+	background-image: url("images/down.png");
+}
+
+.rightIcon {
+	width: 15px;
+	height: 15px;	
+	background-image: url("images/right.png");
+}	

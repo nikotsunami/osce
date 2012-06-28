@@ -68,21 +68,6 @@ public class AnamnesisCheckTitle {
 
 
 
-    public void insertNewSortOder(Integer previousSortOder){
-        //TODO
-        System.out.println("!!!!!!!!!!!!!!!!this is insertNewSortOder ");
-        if(previousSortOder == 0){
-        List<AnamnesisCheckTitle> anamnesisCheckTitles = findAllAnamnesisCheckTitles();
-        for(AnamnesisCheckTitle anamnesisCheckTitleBlow : anamnesisCheckTitles){
-            if(anamnesisCheckTitleBlow.sort_order != null){
-                anamnesisCheckTitleBlow.sort_order = anamnesisCheckTitleBlow.sort_order + 1;
-                anamnesisCheckTitleBlow.persist();
-            }
-        }
-        this.sort_order = 1;
-        this.persist();
-        }
-    }
 
 
 
