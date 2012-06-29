@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView;
@@ -686,7 +688,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	// ]Assignment G
 
-	public class InitializeActivityReceiver extends Receiver<Object> {
+	public class InitializeActivityReceiver extends OSCEReceiver<Object> {
 		@Override
 		public void onFailure(ServerFailure error) {
 			Log.error(error.getMessage());
@@ -782,35 +784,24 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						standardizedRoleDetailsView[index].setBaseProxy(proxy);
 						standardizedRoleDetailsView[index].home.setVisible(false);
 						standardizedRoleDetailsView[index].setValue(proxy);
-						roleDetailTabPanel.insert(
-								standardizedRoleDetailsView[index],
-								"" + proxy.getShortName(), index);
-						standardizedRoleDetailsView[index].shortName
-								.setInnerText(proxy.getShortName() == null ? ""
-										: String.valueOf(proxy.getShortName()));
-						standardizedRoleDetailsView[index].longName
-								.setInnerText(proxy.getLongName() == null ? ""
-										: String.valueOf(proxy.getLongName()));
-						standardizedRoleDetailsView[index].roleType
-								.setInnerText(proxy.getRoleType().name()); // ADDED
-						standardizedRoleDetailsView[index].studyYear
-								.setInnerText(proxy.getStudyYear().name()); // ADDED
-						standardizedRoleDetailsView[index].labelLongNameHeader
-								.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
+						roleDetailTabPanel.insert(standardizedRoleDetailsView[index],"" + proxy.getShortName(), index);
+						standardizedRoleDetailsView[index].shortName.setInnerText(proxy.getShortName() == null ? "": String.valueOf(proxy.getShortName()));						
+						standardizedRoleDetailsView[index].longName.setInnerText(proxy.getLongName() == null ? "": String.valueOf(proxy.getLongName()));
+						// Issue Role
+						standardizedRoleDetailsView[index].roleType.setInnerText(proxy.getRoleType() == null ? "": proxy.getRoleType().name()); // ADDED
+						standardizedRoleDetailsView[index].studyYear.setInnerText(proxy.getStudyYear() == null ? "": proxy.getStudyYear().name()); // ADDED
+						// E: Issue Role
+						standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
 
 						setRoleDetailTabData(proxy, response, index);
-						standardizedRoleDetailsView[index].rolePanel
-								.selectTab(0);
-						standardizedRoleDetailsView[index]
-								.setDelegate(roleDetailActivity);
+						standardizedRoleDetailsView[index].rolePanel.selectTab(0);
+						standardizedRoleDetailsView[index].setDelegate(roleDetailActivity);
 
 						// Assignment :H[
-						fileView[index] = standardizedRoleDetailsView[index]
-								.getRoleFileSubViewImpl();
+						fileView[index] = standardizedRoleDetailsView[index].getRoleFileSubViewImpl();
 						fileView[index].setValue(proxy);
 						fileView[index].setDelegate(roleDetailActivity);
-						setFileTable(fileView[index].getTable(), proxy.getId(),
-								index);
+						setFileTable(fileView[index].getTable(), proxy.getId(),index);
 						ProvidesKey<FileProxy> keyProvider = ((AbstractHasData<FileProxy>) fileTable[index])
 								.getKeyProvider();
 						selectionModel = new SingleSelectionModel<FileProxy>(
@@ -1019,7 +1010,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						
 						Log.info("==>>>Index: "+ innerindex+ " ID Pass: "+ ((RoleTopicProxy) response).getId()+ "SR ID: "+ standardizedRoleDetailsView[innerindex].getValue().getId());
 
-						requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+						// Issue Role
+						//requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+						requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
 									@Override
 									public void onSuccess(List<DoctorProxy> response) 
 									{
@@ -1031,11 +1024,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 										if(response.size()==0)
 										{											
 											System.out.println("~Keyword Null for Role " + innerindex );
-											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(false);
+											//Issue Role
+											//standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible();
 										}
 										else
 										{
-											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
+											//Issue Role
+											//standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
 											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
 										}
 										// SPEC END MODIFIED =
@@ -1288,16 +1283,15 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		}
 		//] Assignment E
 
-	public void setRoleDetailTabData(StandardizedRoleProxy proxy,
-			Object response, int index) {
-		System.out.println("===============================>" + "" + index
-				+ proxy.getShortName());
-		System.out.println("===============================>" + "" + index
-				+ proxy.getLongName());
-		System.out.println("===============================>" + "" + index
-				+ proxy.getRoleType().valueOf(proxy.getRoleType().name()));
-		System.out.println("===============================>" + "" + index
-				+ proxy.getStudyYear().valueOf(proxy.getStudyYear().name()));
+	public void setRoleDetailTabData(StandardizedRoleProxy proxy,Object response, int index) {
+		// Issue Role
+		
+		//System.out.println("===============================>" + "" + index+ proxy.getShortName());
+		//System.out.println("===============================>" + "" + index+ proxy.getLongName());
+		//System.out.println("===============================>" + "" + index+ proxy.getRoleType().valueOf(proxy.getRoleType().name()));
+		//System.out.println("===============================>" + "" + index+ proxy.getStudyYear().valueOf(proxy.getStudyYear().name()));
+
+		//E:  Issue Role
 	}
 
 	private void init(RoleTopicProxy proxy) {
@@ -1331,32 +1325,54 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void deleteRoleClicked(StandardizedRoleProxy proxy) {
+	public void deleteRoleClicked(final StandardizedRoleProxy proxy) {
 		Log.info("delete clicked");
+		
+		// Issue Role
+		 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.deleteOsceBluePrintPost());
+		 dialogBox.showDialog();
+		 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();
+					
+					Log.info("yes click");	
+					requests.standardizedRoleRequest().remove().using(proxy)
+					.fire(new Receiver<Void>() {
+						public void onSuccess(Void ignore) {
+							if (widget == null) {
+								return;
+							}
+							RoleEditActivity.roleActivity.initSearch();
+							goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic
+									.stableId(), Operation.DETAILS));
 
-		if (!Window
-				.confirm("Really delete this entry? You cannot undo this change.")) {
-			return;
-		}
+							// placeController.goTo(new
+							// RoleDetailsPlace("StandardizedRolePlace!DELETED"));
+							// placeController.goTo(new
+							// RolePlace(Operation.DETAILS));
 
-		requests.standardizedRoleRequest().remove().using(proxy)
-				.fire(new Receiver<Void>() {
-					public void onSuccess(Void ignore) {
-						if (widget == null) {
-							return;
 						}
-						RoleEditActivity.roleActivity.initSearch();
-						goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic
-								.stableId(), Operation.DETAILS));
+					});
 
-						// placeController.goTo(new
-						// RoleDetailsPlace("StandardizedRolePlace!DELETED"));
-						// placeController.goTo(new
-						// RolePlace(Operation.DETAILS));
-
-					}
-				});
-
+				}
+			});
+			
+				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();
+					Log.info("no click");
+					return;
+					
+				}
+			});
+		// E: Issue Role
+		
+		
+		
 	}
 
 	/*
@@ -1632,10 +1648,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		
 		public void setRoleListBoxValue(ImportTopicPopupView popupView)
 		{
-			popupView.setDelegate(this);
-			
-			StandardizedRoleProxy proxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getTabBar().getSelectedTab()].getValue();
-			
+			popupView.setDelegate(this);			
+			StandardizedRoleProxy proxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getTabBar().getSelectedTab()].getValue();			
 			ArrayList<StandardizedRoleProxy> roles=new ArrayList<StandardizedRoleProxy>();
 			
 			Iterator<StandardizedRoleProxy> iterator=roleTopicProxy.getStandardizedRoles().iterator();
@@ -1704,7 +1718,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				@Override
 				public void onSuccess(Void response) {
 					
-					requests.find(addTopicProxy.stableId()).fire(new Receiver<Object>() {
+					requests.find(addTopicProxy.stableId()).fire(new OSCEReceiver<Object>() {
 
 						@Override
 						public void onSuccess(Object response) {
@@ -1732,7 +1746,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 									@Override
 									public void onSuccess(Void response) {
-										requests.find(addQuestionProxy.stableId()).fire(new Receiver<Object>() {
+										requests.find(addQuestionProxy.stableId()).fire(new OSCEReceiver<Object>() {
 
 											@Override
 											public void onSuccess(Object response) {
@@ -1833,7 +1847,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				@Override
 				public void onSuccess(Void response) {
 					
-					requests.find(addQuestionProxy.stableId()).fire(new Receiver<Object>() {
+					requests.find(addQuestionProxy.stableId()).fire(new OSCEReceiver<Object>() {
 
 						@Override
 						public void onSuccess(Object response) {
@@ -2177,14 +2191,55 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void deleteAdvancedSearchCriteria(
-			AdvancedSearchCriteriaProxy criterion) {
+	public void deleteAdvancedSearchCriteria(final AdvancedSearchCriteriaProxy criterion) 
+	{
+		// Issue Role
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Really delete this entry? You cannot undo this change.");
+				 dialogBox.showDialog();
+				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("yes click");	
+							final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+							final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
+									.getId();
 
-		if (!Window
-				.confirm("Really delete this entry? You cannot undo this change.")) {
+							requests.advancedSearchCriteriaRequest().remove().using(criterion)
+									.fire(new Receiver<Void>() {
+										@Override
+										public void onSuccess(Void arg0) {
+											Log.info("Deleted...");
+											initAdvancedSearch(stRoleId, selectedTab);
+
+										}
+									});
+							
+							
+						}
+					});
+					
+						dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							Log.info("no click");
+							return;
+							
+						}
+					});
+				// E: Issue Role
+				
+		
+		
+		
+		
+		
+		/*if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
 			return;
 		}
-
 		final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
 		final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
 				.getId();
@@ -2197,7 +2252,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						initAdvancedSearch(stRoleId, selectedTab);
 
 					}
-				});
+				});*/
+
 	}
 
 	@Override
@@ -2322,6 +2378,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			String answer) {
 		switch (proxy.getType()) {
 		case QUESTION_OPEN:
+		case QUESTION_TITLE:
 			return answer;
 		case QUESTION_YES_NO:
 			if ("1".equals(answer))
@@ -2539,16 +2596,44 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void simpleSearchDeleteClicked(SimpleSearchCriteriaProxy proxy,
-			final StandardizedRoleProxy standRoleProxy) {
-		requests.simpleSearchCriteriaRequest().remove().using(proxy)
-				.fire(new Receiver<Void>() {
-					public void onSuccess(Void ignore) {
-						Log.debug("Sucessfully deleted");
-						simpleSearchInit(standRoleProxy.getId(),
-								roleDetailTabPanel.getTabBar().getSelectedTab());
-					}
-				});
+	public void simpleSearchDeleteClicked(final SimpleSearchCriteriaProxy proxy,final StandardizedRoleProxy standRoleProxy) {
+		
+		// Issue Role
+		 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Really delete this entry? You cannot undo this change.");
+		 dialogBox.showDialog();
+		 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("yes click");	
+					requests.simpleSearchCriteriaRequest().remove().using(proxy)
+					.fire(new Receiver<Void>() {
+						public void onSuccess(Void ignore) {
+							Log.debug("Sucessfully deleted");
+							simpleSearchInit(standRoleProxy.getId(),
+									roleDetailTabPanel.getTabBar().getSelectedTab());
+						}
+					});
+				}
+			});
+			
+				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();
+					Log.info("no click");
+					return;
+					
+				}
+			});
+		// E: Issue Role
+		
+		
+		
+		
+		
 
 	}
 
@@ -2649,7 +2734,21 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		
 		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
 		{
-			Window.alert("Please Select the Doctor from List.");
+			//Window.alert("Please Select the Doctor from List.");
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Select the Doctor from List.");
+			
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+						}
+					});						
+		// E: Issue Role
 		}
 		else
 		{
@@ -2666,7 +2765,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
 				Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
 		
-				roleParticipantRequest.persist().using(roleParticipantProxy).fire(new Receiver<Void>() 
+				roleParticipantRequest.persist().using(roleParticipantProxy).fire(new OSCEReceiver<Void>() 
 				{
 						@Override
 						public void onSuccess(Void response) 
@@ -2709,7 +2808,24 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		
 		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
 		{
-			Window.alert("Please Select the Doctor from List.");
+			//Window.alert("Please Select the Doctor from List.");
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Select the Doctor from List.");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+						}
+					});
+
+			
+			
+		// E: Issue Role
+			
 		}
 		else
 		{
@@ -2727,7 +2843,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
 		Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
 
-		roleParticipantRequest.persist().using(roleParticipantProxy).fire(new Receiver<Void>() 
+		roleParticipantRequest.persist().using(roleParticipantProxy).fire(new OSCEReceiver<Void>() 
 		{			
 				@Override
 				public void onSuccess(Void response) 
@@ -3070,7 +3186,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	{
 		// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
 		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
-		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new Receiver<Object>()
+		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new OSCEReceiver<Object>()
 		{
 			@Override
 			public void onFailure(ServerFailure error) {
@@ -3108,7 +3224,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	{
 		// REFRESH LIST VIEW		
 		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
-		requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+		// Issue Role
+		//requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+		requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
 			@Override
 			public void onSuccess(List<DoctorProxy> response) 
 			{
@@ -3120,11 +3238,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				if(response.size()==0)
 				{											
 					System.out.println("~Keyword Null for Role " + selectedTabId );
-					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(false);
+					//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(false);
 				}
 				else
 				{
-					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
+					//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
 					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
 				}
 				// SPEC END MODIFIED =
@@ -3254,8 +3372,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								public void onSuccess(Void response) {									
 									Log.info("Persisted Role_Table_Item_Value");
 						
-									requests.find(roleTableItemValueProxy.stableId()).with("roleTableItem").fire(new Receiver<Object>() {
-
+									requests.find(roleTableItemValueProxy.stableId()).with("roleTableItem").fire(new OSCEReceiver<Object>() {
+										
 										@Override
 										public void onSuccess(Object response) {
 											
@@ -3501,3 +3619,6 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	
 }
+
+	
+

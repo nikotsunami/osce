@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -227,10 +228,36 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		// E Issue Role Module
 		addColumn(new ActionCell<RoleTemplateProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTemplateProxy>() {
-					public void execute(RoleTemplateProxy roleTemplate) {
+					public void execute(final RoleTemplateProxy roleTemplate) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(roleTemplate);
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(roleTemplate);*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");
+									delegate.deleteClicked(roleTemplate);
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValue<RoleTemplateProxy>() {
 			public RoleTemplateProxy getValue(RoleTemplateProxy roleTemplate) {

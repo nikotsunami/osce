@@ -366,6 +366,8 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 							@Override
 							public void onSuccess(Void arg0) {
 								Log.info("Save RoleTopic values value Succesfully");	
+								// Issue Role
+								roleBaseTableItemViewImpl.txtSubItem.setText("");
 								table.setRowCount(sizeOfTable);
 								onRangeChanged(roleBaseItemId);
 								

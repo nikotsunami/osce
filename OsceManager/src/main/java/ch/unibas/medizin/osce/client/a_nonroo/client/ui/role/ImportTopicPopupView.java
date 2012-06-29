@@ -26,6 +26,10 @@ public interface ImportTopicPopupView extends IsWidget{
 	
 	public Button getOkBtn() ;
 	
+	// Issue Role	
+	public Button getCancelBtn() ;
+	// E: Issue Role
+	
 	public ValueListBox<StandardizedRoleProxy> getRoleLstBox();
 	
 	public ValueListBox<ChecklistTopicProxy> getTopicLstBox();

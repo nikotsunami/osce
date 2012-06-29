@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
@@ -13,12 +14,14 @@ import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -83,10 +86,32 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 	public void addItemClickHandler(ClickEvent event) {
 		System.out.println("selected Item Defination index value.."+ ItemtypeDD.getValue());
 		if(ItemNameText.getValue()==null || ItemNameText.getValue()=="" || ItemNameText.getValue().startsWith(" "))
-			Window.alert("Please Enter appropriate value for Role Base Item");
+		{
+			/*Window.alert("Please Enter appropriate value for Role Base Item");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Enter appropriate value for Role Base Item");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+//E: Issue Role
+		}
 		else
-		delegate.newClicked(ItemNameText.getValue(),ItemtypeDD.getValue());
-		ItemNameText.setText("");
+		{
+			delegate.newClicked(ItemNameText.getValue(),ItemtypeDD.getValue());
+			ItemNameText.setText("");	
+		}
+		
 	}
 
 	/**

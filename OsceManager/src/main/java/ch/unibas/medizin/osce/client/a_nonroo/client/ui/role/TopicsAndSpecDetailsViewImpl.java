@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -154,9 +155,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		
 		btnSave.setText(constants.save());
 		btnCancel.setText(constants.cancel());
-		
-		
-				
+			
 		popupLabelVP.add(lblRoleTopic);
 		popupLabelVP.add(lblMaxStudent);
 		popupLabelVP.add(lblStudyYear);
@@ -184,7 +183,23 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				
 				if(AddTextBox.getValue()==null || StudyYearListBox.getValue()==null || AddTextBox.getText().equals(""))
 				{
-					Window.alert("Please Enter appropriate value for Role Base Item");
+					/*Window.alert("Please Enter appropriate value for Role Base Item");*/
+					// Issue Role
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Enter appropriate value for Role Base Item");
+					 dialogBox.showConfirmationDialog();
+					 
+					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("ok click");	
+							return;
+								}
+							});
+
+					
+//E: Issue Role
 				}
 				else
 				{
@@ -381,10 +396,35 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		//Delete Buuton
 		addColumn(new ActionCell<RoleTopicProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTopicProxy>() {
-					public void execute(RoleTopicProxy roletopic) {
+					public void execute(final RoleTopicProxy roletopic) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(roletopic);
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(roletopic);*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");	
+									delegate.deleteClicked(roletopic);
+									return;
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValue<RoleTopicProxy>() {
 			public RoleTopicProxy getValue(RoleTopicProxy roletopic) {

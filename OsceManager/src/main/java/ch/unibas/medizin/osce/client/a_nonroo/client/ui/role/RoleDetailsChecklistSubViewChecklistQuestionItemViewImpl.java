@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
@@ -32,6 +33,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	private ChecklistTopicProxy topicProxy;
 	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView;
 	
+		
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField
@@ -246,8 +248,34 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	@UiHandler("delete")
 	public void deleteQuestion(ClickEvent event)
 	{
-		if(Window.confirm("are you sure you want to delete this Question?"))
-			delegate.deleteQuestion(this);
+		// Issue Role
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("are you sure you want to delete this Question?");
+				 dialogBox.showDialog();
+				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							
+							Log.info("yes click");	
+							delegate.deleteQuestion(questionView);
+							return;
+
+								}
+							});
+
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							Log.info("no click");
+							return;
+							
+						}
+					});
+				// E: Issue Role		
+			
 	}
 	
 	@UiHandler("edit")
@@ -339,6 +367,16 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					}
 				}
 		});
+			
+			// Issue Role
+				editquestionpopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					((CheckListTopicPopupViewImpl)editquestionpopup).hide(true);
+				}
+				});
+			// E: Issue Role
 		}
 		
 		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(editQuestionVP.getAbsoluteLeft(), editQuestionVP.getAbsoluteTop()-180);

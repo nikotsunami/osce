@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Collection;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
@@ -12,6 +13,7 @@ import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -92,19 +94,69 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 	@UiHandler("saveRoomMaterial")
 	public void saveRoomMaterialClicked(ClickEvent event)
 	{
-		if (materialList.getValue() == null
-				|| materialList.getValue().toString() == "") {
-			Window.confirm("Please enter a value for Room material list");
+		if (materialList.getValue() == null	|| materialList.getValue().toString() == "") 
+		{
+			/*Window.confirm("Please enter a value for Room material list");*/
+			
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter a value for Room material list");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+//E: Issue Role
 			return;
 		}
-		if (materialCount.getValue() == null
-				|| materialCount.getValue().toString() == "") {
-			Window.confirm("Please enter a value for Material Count number");
+		if (materialCount.getValue() == null || materialCount.getValue().toString() == "") 
+		{
+			/*Window.confirm("Please enter a value for Material Count number");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter a value for Material Count number");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+//E: Issue Role
 			return;
 		}
-		if (used_from.getValue() == null
-				|| used_from.getValue().toString() == "") {
-			Window.confirm("Please enter a value for \"For who\"");
+		if (used_from.getValue() == null || used_from.getValue().toString() == "") 
+		{
+		/*	Window.confirm("Please enter a value for \"For who\"");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter a value used for");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+//E: Issue Role
 			return;
 		}
 		

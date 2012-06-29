@@ -66,6 +66,9 @@
 	
 	<g:HorizontalPanel  spacing="10" horizontalAlignment="center">
 		<g:Button ui:field="okBtn"></g:Button>
+		<!-- Issue Role -->
+		<g:Button ui:field="cancelBtn"></g:Button>
+		<!-- E: Issue Role -->
 	</g:HorizontalPanel>
 </g:VerticalPanel>
 	

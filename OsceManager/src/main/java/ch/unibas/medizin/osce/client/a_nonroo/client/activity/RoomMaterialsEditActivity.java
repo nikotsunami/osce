@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsEditViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
@@ -17,6 +18,8 @@ import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -179,28 +182,95 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 		Log.info("saveClicked");
 
 		if (view.getName() == null || (view.getName().compareTo("") == 0)) {
-			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");
+			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+//E: Issue Role
 			return;
 		} else {
 			materialList.setName(view.getName());
 		}
-		if (view.getType() == null
-				|| (view.getType().toString().compareTo("") == 0)) {
-			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");
+		if (view.getType() == null	|| (view.getType().toString().compareTo("") == 0)) {
+			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+//E: Issue Role
 			return;
 		} else {
 			materialList.setType(view.getType());
 		}
 		if (view.getPrice() == null
 				|| (view.getPrice().toString().compareTo("") == 0)) {
-			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");
+			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+//E: Issue Role
 			return;
 		} else {
 			materialList.setPrice(view.getPrice());
 		}
 		if (view.getPriceType() == null
 				|| (view.getPriceType().toString().compareTo("") == 0)) {
-			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");
+			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+//E: Issue Role
 			return;
 		} else {
 			materialList.setPriceType(view.getPriceType());

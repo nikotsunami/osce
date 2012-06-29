@@ -4,6 +4,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecViewImpl;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -29,7 +30,6 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -301,7 +301,24 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			public void onSuccess(SpecialisationProxy response) {
 				if(response.getRoleTopics() != null && response.getRoleTopics().size() > 0)
 				{
-					Window.alert("Specialisation can not be deleted if role topic is asigned");
+					//Window.alert("Specialisation can not be deleted if role topic is asigned");
+					// Issue Role
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Specialisation can not be deleted if role topic is asigned");
+					 dialogBox.showConfirmationDialog();
+					 
+					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("ok click");	
+							return;
+								}
+							});
+
+					
+					
+//E: Issue Role
 				}
 				else
 				{

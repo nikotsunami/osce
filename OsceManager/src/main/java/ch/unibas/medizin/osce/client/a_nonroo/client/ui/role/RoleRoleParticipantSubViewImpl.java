@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -30,6 +31,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -150,11 +152,37 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		
 		addColumn(new ActionCell<RoleParticipantProxy>(OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleParticipantProxy>() 
 		{
-					public void execute(RoleParticipantProxy roleParticipantProxy) {
-						if(Window.confirm(constants.reallyDelete()))
+					public void execute(final RoleParticipantProxy roleParticipantProxy) {
+						/*if(Window.confirm(constants.reallyDelete()))
 						{
 							delegate.deleteDoctorClicked(roleParticipantProxy,0);
-						}
+						}*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									delegate.deleteDoctorClicked(roleParticipantProxy,0);
+									Log.info("yes click");	
+									
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValueDoctor<RoleParticipantProxy>() {
 					public RoleParticipantProxy getValue(RoleParticipantProxy roleParticipantProxy) {
@@ -165,11 +193,39 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		
 		addColumnRe(new ActionCell<RoleParticipantProxy>(OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleParticipantProxy>() 
 				{
-							public void execute(RoleParticipantProxy roleParticipantProxy) {
-								if(Window.confirm(constants.reallyDelete()))
+							public void execute(final RoleParticipantProxy roleParticipantProxy) {
+								/*if(Window.confirm(constants.reallyDelete()))
 								{
 									delegate.deleteDoctorClicked(roleParticipantProxy,1);
-								}
+								}*/
+								
+								// Issue Role
+								 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+								 dialogBox.showDialog();
+								 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+										
+										@Override
+										public void onClick(ClickEvent event) {
+											dialogBox.hide();
+											delegate.deleteDoctorClicked(roleParticipantProxy,1);
+											Log.info("yes click");	
+											
+											return;
+
+												}
+											});
+
+									dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+										
+										@Override
+										public void onClick(ClickEvent event) {
+											dialogBox.hide();
+											Log.info("no click");
+											return;
+											
+										}
+									});
+								// E: Issue Role
 							}
 						}), "", new GetValueReviewerDoctor<RoleParticipantProxy>() {
 							public RoleParticipantProxy getValue(RoleParticipantProxy roleParticipantProxy) {
@@ -226,7 +282,8 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 	@UiHandler("btnAddAuthor")
 	public void btnAddAuthorClicked(ClickEvent event)
 	{		
-			delegate.AddAuthorClicked();		
+			
+		delegate.AddAuthorClicked();		
 	}
 	
 	@UiHandler("btnAddReviewer")

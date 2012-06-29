@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
@@ -27,13 +28,11 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RoleBaseTableItemViewImpl extends Composite implements
@@ -170,8 +169,34 @@ RoleBaseTableItemView {
 	
 	@UiHandler("close")
 	public void deleteButtonClicked(ClickEvent event){
-		if(Window.confirm("wirklich löschen?"))
-		delegate.deleteButtonClickEvent(roleBasedItemProxy);
+		/*if(Window.confirm("wirklich löschen?"))
+		delegate.deleteButtonClickEvent(roleBasedItemProxy);*/
+		// Issue Role
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+				 dialogBox.showDialog();
+				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("yes click");
+							delegate.deleteButtonClickEvent(roleBasedItemProxy);
+							return;
+
+								}
+							});
+
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							Log.info("no click");
+							return;
+							
+						}
+					});
+				// E: Issue Role
 	}
 	/**
 	 * Because this class has a default constructor, it can be used as a binder
@@ -299,10 +324,37 @@ RoleBaseTableItemView {
 
 		addColumn(new ActionCell<RoleTableItemProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTableItemProxy>() {
-					public void execute(RoleTableItemProxy roleTableItem) {
+					public void execute(final RoleTableItemProxy roleTableItem) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);
+					
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");
+									delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValue<RoleTableItemProxy>() {
 			public RoleTableItemProxy getValue(RoleTableItemProxy roleTableItem) {

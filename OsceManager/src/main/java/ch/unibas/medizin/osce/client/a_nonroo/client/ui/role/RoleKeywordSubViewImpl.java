@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.RoleEditActivity;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -27,6 +30,7 @@ import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -37,10 +41,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -246,11 +252,41 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		
 		addColumn(new ActionCell<KeywordProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<KeywordProxy>() {
-					public void execute(KeywordProxy keywordProxy) {
-						if(Window.confirm(constants.reallyDelete()))
+					public void execute(final KeywordProxy keywordProxy) {
+						
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									
+									Log.info("yes click");
+									delegate.deleteKeywordClicked(keywordProxy);
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
+						
+						
+						/*if(Window.confirm(constants.reallyDelete()))
 						{
 							delegate.deleteKeywordClicked(keywordProxy);
-						}
+						}*/
 					}
 				}), "", new GetValue<KeywordProxy>() {
 					public KeywordProxy getValue(KeywordProxy keyword) {
@@ -315,12 +351,30 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 			delegate.addKeywordClicked("");
 		
 		}*/
+		
 		// Issue Role Module		
 				if(keywordSugestionBox.getValue().trim().equals("") || keywordSugestionBox.getValue().trim().equals(constants.enterKeyword()))
 				{
-					Log.info("Suggest Box Value is NULL");
-					Log.info("getTextBox().getValue() TextBox Value: " + keywordSugestionBox.getTextBox().getValue());
-					Window.alert("Please Select/Add new Keyword");			
+				/*	Log.info("Suggest Box Value is NULL");
+					Log.info("getTextBox().getValue() TextBox Value: " + keywordSugestionBox.getTextBox().getValue());*/
+					//Window.alert("Please Select/Add new Keyword");
+					
+					// Issue Role
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Select/Add new Keyword");
+					 dialogBox.showConfirmationDialog();
+					 
+					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("ok click");	
+								}
+							});
+
+					
+					
+				// E: Issue Role
 				}
 				else
 				{			
@@ -328,6 +382,10 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 					keywordSugestionBox.setText(constants.enterKeyword());
 				}
 				// E Issue Role Module
+				
+
+				
+				
 	}
 	
 	@Override

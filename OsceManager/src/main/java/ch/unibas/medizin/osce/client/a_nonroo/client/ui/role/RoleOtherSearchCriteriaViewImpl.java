@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
@@ -24,6 +25,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -99,12 +101,51 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 
 		System.out.println(searchName.getValue() + "*"+ SearchValue.getValue() + "*");
 		if ((searchName.getValue().trim().compareToIgnoreCase("") == 0)|| (searchName.getValue() == null)) {
-			Window.confirm("Search Name cant not be left blank.");
+			//Window.confirm("Search Name cant not be left blank.");
+			
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Search Name cant not be left blank.");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");
+					return;
+						}
+					});
+
+			
+			
 			return;
+			// E: Issue Role
+			
+			
 		}
 		if ((SearchValue.getValue().trim().compareToIgnoreCase("") == 0)|| (SearchValue.getValue() == null)) {
-			Window.confirm("Search Value cant not be left blank.");
-			return;
+			/*Window.confirm("Search Value cant not be left blank.");
+			return;*/
+			
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Search Value cant not be left blank.");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");
+					return;
+						}
+					});
+
+		
+		return;
+			// E: Issue Role
+			
 		}
 
 		delegate.newSimpleSearchClicked(searchName.getValue(),SearchValue.getValue(), this.getValue());
@@ -196,11 +237,40 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 
 		addColumn(new ActionCell<SimpleSearchCriteriaProxy>(OsMaConstant.DELETE_ICON,
 				new ActionCell.Delegate<SimpleSearchCriteriaProxy>() {
-					public void execute(SimpleSearchCriteriaProxy file) {
+					public void execute(final SimpleSearchCriteriaProxy file) {
 						// Window.alert("You clicked " +
 						// institution.getInstitutionName());
-						if (Window.confirm("wirklich löschen?"))
-							delegate.simpleSearchDeleteClicked(file, getValue());
+						
+						//if (Window.confirm("wirklich löschen?"))
+						
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("wirklich löschen?");
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									
+									Log.info("yes click");	
+									delegate.simpleSearchDeleteClicked(file, getValue());
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
+							
 					}
 				}), "", new GetValue<SimpleSearchCriteriaProxy>() {
 			public SimpleSearchCriteriaProxy getValue(SimpleSearchCriteriaProxy simpleSearch) {

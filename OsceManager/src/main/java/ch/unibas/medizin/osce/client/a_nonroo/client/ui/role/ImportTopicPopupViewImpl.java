@@ -42,9 +42,26 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	public void setOkBtn(Button okBtn) {
 		this.okBtn = okBtn;
 	}
+	
+	// Issue Role 
+		public Button getCancelBtn() {
+			return cancelBtn;
+		}
+		
+		public void setCancelBtn(Button cancelBtn) {
+			this.cancelBtn = cancelBtn;
+		}
+		// E: Issue Role 
 
 	@UiField
 	Label roleLbl;
+	
+
+	// Issue Role 
+	@UiField
+	Button cancelBtn;
+	// E: Issue Role 
+			
 	
 	@UiField(provided = true)
 	ValueListBox<StandardizedRoleProxy> roleLstBox=new ValueListBox<StandardizedRoleProxy>(new Renderer<StandardizedRoleProxy>() {
@@ -148,6 +165,9 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.topic());
 			questionLbl.setText("Questions");
+			// Issue Role 
+			cancelBtn.setText(constants.cancel());
+			// E: Issue Role 
 		}
 		else
 		{
@@ -158,6 +178,9 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.topic());
 			questionLbl.setText("Questions");
+			// Issue Role 
+			cancelBtn.setText(constants.cancel());
+			// E: Issue Role 
 			
 		}
 	}
@@ -205,5 +228,14 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 		}
 			
 	}
+	
+	// Issue Role
+	@UiHandler("cancelBtn")
+	public void cancelBtnClicked(ClickEvent event)
+	{
+		Log.info("Cancel Topic");
+		hide();
+	}
+	// E: Issue Role
 	
 }

@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -217,9 +218,34 @@ ImportTopicPopupView importTopicView;
 	}
 
 	@UiHandler("roleTemplateValueButon")
-	public void roleTemplateValueSelction(ClickEvent event){
-		System.out.println(roleTemplateListBox.getValue().getTemplateName());
+	public void roleTemplateValueSelction(ClickEvent event)
+	{	
+		//System.out.println(roleTemplateListBox.getValue().getTemplateName());
+		// Issue Role
+		if(roleTemplateListBox.getValue()==null)
+		{
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Select Role Template");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+		
+//E: Issue Role	
+		}
+		else
+		{
 		delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getValue());
+		}
+		// E: Issue Role
 	}
 	
 	@UiField
@@ -470,7 +496,21 @@ ImportTopicPopupView importTopicView;
 					}
 				}
 		});
+			// Issue Role
+			topicPopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) 
+				{
+					((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+					topicPopup.getTopicTxtBox().setValue("");
+					topicPopup.getDescriptionTxtBox().setValue("");
+				}
+			});
+			// E: Issue Role
 		}
+			
+		
 		
 		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
 		((CheckListTopicPopupViewImpl)topicPopup).show();
@@ -490,39 +530,33 @@ ImportTopicPopupView importTopicView;
 //			if(importTopicView==null)
 			{
 				importTopicView=new ImportTopicPopupViewImpl(false,null);
-				
-				
 				((ImportTopicPopupViewImpl)importTopicView).setAnimationEnabled(true);
-			
 				
 				delegate.setRoleListBoxValue(importTopicView);
 				
-				
-				((ImportTopicPopupViewImpl)importTopicView).setWidth("150px");
-
-			
+				((ImportTopicPopupViewImpl)importTopicView).setWidth("150px");			
 				RootPanel.get().add(((ImportTopicPopupViewImpl)importTopicView));
 				
 				importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
 					
 					@Override
-					public void onClick(ClickEvent event) {
-						
-						//if(importTopicView.getRoleLstBox().getValue()=="" || importTopicView.getTopicLstBox().to.getValue()=="")
+					public void onClick(ClickEvent event) 
+					{
 						{
-						}	
-					//	else
-						{
-						//	delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());
-						
 							((ImportTopicPopupViewImpl)importTopicView).hide(true);
-					
-							//importTopicView.getTopicTxtBox().setValue("");
-							//importTopicView.getDescriptionTxtBox().setValue("");
 						}
-					
-				}
-			});
+					}
+				});
+				// Issue Role
+					importTopicView.getCancelBtn().addClickHandler(new ClickHandler() 
+					{
+						@Override
+					public void onClick(ClickEvent event) 
+						{
+					((ImportTopicPopupViewImpl)importTopicView).hide(true);
+						}
+					});
+				// E: Issue Role
 				
 		}
 			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);

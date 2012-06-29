@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
@@ -163,8 +164,22 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					}
 				}
 		});
+		// Issue Role
+		questionPopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+		@Override
+		public void onClick(ClickEvent event) 
+		{
+				Log.info("Cancel Click...");
+				((CheckListTopicPopupViewImpl)questionPopup).hide(true);					
+					questionPopup.getTopicTxtBox().setValue("");
+					questionPopup.getDescriptionTxtBox().setValue("");
+			
 		}
-		
+		});
+		// E: Issue Role
+	}
+			
 		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(questionButtonVP.getAbsoluteLeft(), questionButtonVP.getAbsoluteTop()-180);
 		((CheckListTopicPopupViewImpl)questionPopup).show();
 	}
@@ -172,8 +187,37 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	public void deleteCheckListTopic(ClickEvent event)
 	{
 		Log.info("delete Topic");
-		if(Window.confirm("are you sure you want to delete this Topic?"))
-			delegate.deleteCheckListTopic(this.proxy,topicView);
+		final ChecklistTopicProxy tempproxy;
+		tempproxy=proxy;
+		/*if(Window.confirm("are you sure you want to delete this Topic?"))
+			delegate.deleteCheckListTopic(this.proxy,topicView);*/
+		
+		// Issue Role
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("are you sure you want to delete this Topic?");
+				 dialogBox.showDialog();
+				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("yes click");
+							delegate.deleteCheckListTopic(tempproxy,topicView);
+							return;
+
+								}
+							});
+
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							Log.info("no click");
+							return;
+							
+						}
+					});
+				// E: Issue Role
 	}
 	
 	@UiHandler("edit")
@@ -228,6 +272,17 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					}
 				}
 		});
+			// Issue Role
+			topicPopup.getCancelBtn().addClickHandler(new ClickHandler() 
+			{
+				
+				@Override
+				public void onClick(ClickEvent event) 
+				{
+					((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+				}
+			});
+			// E: Issue Role
 		}
 		
 		

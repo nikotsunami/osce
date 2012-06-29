@@ -24,4 +24,8 @@ public interface CheckListTopicPopupView extends IsWidget{
 	public TextBox getDescriptionTxtBox();
 	
 	public Button getOkBtn();
+	
+	// Issue Role
+	public Button getCancelBtn();
 }
+

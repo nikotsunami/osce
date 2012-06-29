@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -22,6 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -95,24 +97,59 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 	private Presenter presenter;
 
 	@UiHandler("newButton")
-	public void newButtonClicked(ClickEvent event) {
+	public void newButtonClicked(ClickEvent event) 
+	{
 
-		// System.out.println( fileUpload.getFilename() + "*"
-		// + fileDescription.getValue() + "*");
-		if ((fileUpload.getFilename().trim().compareToIgnoreCase("") == 0)
-				|| (fileUpload.getFilename() == null)) {
-			Window.confirm("Please select file to upload");
-			return;
-		}
-		if ((fileDescription.getValue() == "")
-				|| (fileDescription.getValue() == null)) {
-			Window.confirm("Please enter description");
-			return;
-		}
+		if ((fileUpload.getFilename().trim().compareToIgnoreCase("") == 0)	|| (fileUpload.getFilename() == null)) 
+		{
+			//Window.confirm("Please select file to upload");
+			// return;
+			
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please select file to upload");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
 
-		delegate.newFileClicked(fileUpload.getFilename(),
-				fileDescription.getValue(), this.getValue());
+			
+			
+			return;
+//E: Issue Role
 		
+		}
+		if ((fileDescription.getValue() == "")	|| (fileDescription.getValue() == null)) {
+			/*Window.confirm("Please enter description");
+			return;*/
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter description");
+			 dialogBox.showConfirmationDialog();
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+			
+			
+			return;
+//E: Issue Role
+			
+		}
+
+		delegate.newFileClicked(fileUpload.getFilename(),fileDescription.getValue(), this.getValue());		
 		fileDescription.setValue("");
 
 	}
@@ -175,7 +212,25 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 					@Override
 					public void onSubmitComplete(SubmitCompleteEvent event) {
 						Log.info("PS Submit is Complete " + event.getResults());
-						Window.confirm(constants.imageUpload());
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.imageUpload());
+						 dialogBox.showConfirmationDialog();
+						 
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								dialogBox.hide();							
+								Log.info("ok click");	
+								return;
+									}
+								});
+
+						
+						
+	// E: Issue Role
+
+						//Window.confirm(constants.imageUpload());
 						// setMediaContent(event.getResults());
 						// delegate.uploadSuccesfull(event.getResults());
 					}
@@ -246,11 +301,39 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 
 		addColumn(new ActionCell<FileProxy>(OsMaConstant.DELETE_ICON,
 				new ActionCell.Delegate<FileProxy>() {
-					public void execute(FileProxy file) {
+					public void execute(final FileProxy file) {
 						// Window.alert("You clicked " +
 						// institution.getInstitutionName());
-						if (Window.confirm("wirklich löschen?"))
-							delegate.fileDeleteClicked(file, getValue());
+						
+						/*if (Window.confirm("wirklich löschen?"))
+							delegate.fileDeleteClicked(file, getValue());*/
+						
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
+						 dialogBox.showDialog();
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");
+									delegate.fileDeleteClicked(file, getValue());
+									return;
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
+						
 					}
 				}), "", new GetValue<FileProxy>() {
 			public FileProxy getValue(FileProxy file) {
