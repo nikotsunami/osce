@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public  class MessageConfirmationDialogBox extends DialogBox{
@@ -30,7 +31,8 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	}
 
 	
-
+	Label msgLbl;
+	
 	public  Button getNoBtnl() {
 		return this.noBtnl;
 	}
@@ -49,6 +51,9 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		noBtnl=new Button();
 		yesBtn.setText(constants.yes());
 		noBtnl.setText(constants.no());
+		
+		msgLbl=new Label();
+		vp.add(msgLbl);
 		hp.add(yesBtn);
 		hp.add(noBtnl);
 		hp.setSpacing(10);
@@ -102,7 +107,9 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	public void showConfirmationDialog(String msg)
 	{
 		this.getYesBtn().setVisible(false);
-		vp.add(new HTML(msg));
+		
+		msgLbl.setText(msg);
+		
 		this.getNoBtnl().setText(constants.okBtn());
 		this.getCaption().setText(constants.success());
 		this.showDialog();
