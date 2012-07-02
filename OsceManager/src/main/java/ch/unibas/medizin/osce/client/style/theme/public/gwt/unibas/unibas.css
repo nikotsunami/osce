@@ -2355,3 +2355,58 @@ background: rgb(255,255,204)  ;
 	height: 15px;	
 	background-image: url("images/right.png");
 }
+
+/*Module 3:Assignment D*/
+.count{
+	
+}
+.count-yellow{
+	background: rgb(255,255,204) !important;
+	
+}
+.count-red{
+	background: rgb(243,216,220) !important;
+}
+.count-green{
+	background: rgb(106,255,106) !important;
+}
+.highlight-role{
+	
+	background: rgb(153,252,139) !important;
+}
+.dashed{
+	border:dashed rgb(145,214,236); 
+	border-width:5px 0 0 0; 
+	height:0;
+	line-height:0px;
+	font-size:0;
+	margin:0;
+	padding:0;
+}
+.sequenceLbl{
+	font-size: 40px;
+	color: rgb(145,214,236);
+	margin-top: 20px;
+}
+
+/*Module 3:Assignment D*/
+
+/* Module 3 d { */
+
+.discloserPanel_Selected_header_Color{
+	
+	/*background-color:green;*/
+	background:url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #F1B532;		
+}
+.discloserPanel_DeSlected_header_Color{
+	
+	background:url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #F1B532;		
+}
+
+highlight-role{
+	
+	background: rgb(153,252,139) !important;
+}
+
+/* Module 3 d }*/
+/* MODULE 3 : END */

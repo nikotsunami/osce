@@ -731,13 +731,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 					int index = 0; // Array Object bIndex (SET VALUE TO OBJECT)
 					// int objcnt=-1; // Total Objects (INITIALIZE THE OBJECT)
-					int totalrole = roleDetailTabPanel.getWidgetCount(); // Total
-																			// Role
-																			// Tabs
-					int size = ((RoleTopicProxy) response)
-							.getStandardizedRoles().size(); // Total Size of
-															// Data
-															// (standardized_role)
+					int totalrole = roleDetailTabPanel.getWidgetCount(); // Total Role Tabs
+					int size = ((RoleTopicProxy) response).getStandardizedRoles().size(); // Total Size of Data (standardized_role)
+					
 					System.out.println("Total Role: " + totalrole);
 					// roleDetailTabPanel.insert(standardizedRoleDetailsView,"Test Tab",
 					// totalTab-1);
@@ -2736,7 +2732,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		{
 			//Window.alert("Please Select the Doctor from List.");
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Select the Doctor from List.");
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success.");
 			
 			 dialogBox.showConfirmationDialog();
 			 

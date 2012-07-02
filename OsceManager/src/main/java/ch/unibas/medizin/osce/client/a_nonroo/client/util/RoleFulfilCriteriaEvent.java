@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
 import java.util.List;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
@@ -21,6 +22,32 @@ public class RoleFulfilCriteriaEvent extends
 	private static final Type<RoleFulfilCriteriaHandler> TYPE = new Type<RoleFulfilCriteriaHandler>();
 
 	private PatientInSemesterProxy patientInSemesterProxy;
+	
+	
+	//Modlue 3:Assignment D[
+	private OsceDayProxy osceDayProxy;
+	
+	public OsceDayProxy getOsceDayProxy() {
+		return osceDayProxy;
+	}
+
+	public void setOsceDayProxy(OsceDayProxy osceDayProxy) {
+		this.osceDayProxy = osceDayProxy;
+	}
+	
+	private List<StandardizedRoleProxy> standardizedroleProxies;
+	
+	public List<StandardizedRoleProxy> getStandardizedroleProxies() {
+		return standardizedroleProxies;
+	}
+
+	public void setStandardizedroleProxies(
+			List<StandardizedRoleProxy> standardizedroleProxies) {
+		this.standardizedroleProxies = standardizedroleProxies;
+	}
+	//Modlue 3:Assignment D]
+	
+	
 
 	private List<OsceDayProxy> osceDayProxies;
 
@@ -46,12 +73,12 @@ public class RoleFulfilCriteriaEvent extends
 	}
 
 	public RoleFulfilCriteriaEvent(
-			PatientInSemesterProxy patientInSemesterProxy,
-			List<OsceDayProxy> osceDayProxies,
-			StandardizedRoleProxy standardizedRoleProxy) {
-		this.setPatientInSemesterProxy(patientInSemesterProxy);
-		this.setOsceDayProxies(osceDayProxies);
-		this.setStandardizedRoleProxy(standardizedRoleProxy);
+			
+			OsceDayProxy osceDayProxy,
+			List<StandardizedRoleProxy> standardizedRoleProxy) {
+		
+		this.osceDayProxy=osceDayProxy;
+		this.standardizedroleProxies=standardizedRoleProxy;
 	}
 
 	public RoleFulfilCriteriaEvent() {

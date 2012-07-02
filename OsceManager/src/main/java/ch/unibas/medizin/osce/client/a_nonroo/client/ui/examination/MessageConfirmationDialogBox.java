@@ -39,12 +39,12 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 
 	 Button noBtnl;
 	
-	public MessageConfirmationDialogBox(String msg) {
+	public MessageConfirmationDialogBox(String caption) {
 		// TODO Auto-generated constructor stub
 		
 		vp=new VerticalPanel();
 		hp=new HorizontalPanel();
-		vp.add(new HTML(msg));
+		//vp.add(new HTML(msg));
 		yesBtn=new Button();
 		noBtnl=new Button();
 		yesBtn.setText(constants.yes());
@@ -53,7 +53,8 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		hp.add(noBtnl);
 		hp.setSpacing(10);
 		vp.add(hp);
-		super.setText("Warning");
+		//super.setText("Warning");
+		super.setText(caption);
 		this.add(vp);
 		setAnimationEnabled(true);
 		setGlassEnabled(true);
@@ -84,6 +85,24 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	public void showConfirmationDialog()
 	{
 		this.getYesBtn().setVisible(false);
+		
+		this.getNoBtnl().setText(constants.okBtn());
+		this.getCaption().setText(constants.success());
+		this.showDialog();
+		this.getNoBtnl().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+			
+				dialogBox.hide();	
+			}
+		});
+	}
+	
+	public void showConfirmationDialog(String msg)
+	{
+		this.getYesBtn().setVisible(false);
+		vp.add(new HTML(msg));
 		this.getNoBtnl().setText(constants.okBtn());
 		this.getCaption().setText(constants.success());
 		this.showDialog();

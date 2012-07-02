@@ -8,7 +8,8 @@ public class PatientInSemesterFlexTable extends FlexTable {
 	// private String headerStyle;
 	// private String selectedStyle;
 	private List<PatientInSemesterData> patientInSemesterDatas;
-	private RoleAssignmentView.Delegate delegate;
+
+	// private RoleAssignmentView.Delegate delegate;
 
 	// private int selectedRow;
 
@@ -33,15 +34,12 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		this.setCellSpacing(0);
 		this.setWidth("100%");
 
-		// this.addTableListener(this);
-		// this.setSource(source);
-
 	}
 
 	public void setSource(List<PatientInSemesterData> patientInSemesterDatas,
 			String[] headers) {
 
-		this.delegate = delegate;
+		// this.delegate = delegate;
 		for (int i = this.getRowCount(); i > 0; i--) {
 			this.removeRow(0);
 		}

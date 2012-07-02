@@ -3,13 +3,32 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedHandler;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.IdentityColumn;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -17,9 +36,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.RowCountChangeEvent;
 
 public class RoleAssignmentViewImpl extends Composite implements
-		RoleAssignmentView {
+		RoleAssignmentView, RoleSelectedHandler {
 
 	private static RoleAssignmentViewImplUiBinder uiBinder = GWT
 			.create(RoleAssignmentViewImplUiBinder.class);
@@ -37,22 +57,26 @@ public class RoleAssignmentViewImpl extends Composite implements
 	@UiField
 	public SimplePanel detailsPanel;
 
-	//Module  3 {
-	
-		@UiField
-		VerticalPanel osceDaySubViewContainerPanel;
-		
-		@Override
-		public VerticalPanel getOsceDaySubViewContainerPanel(){
-			return this.osceDaySubViewContainerPanel;
-		}
-		//Module 3 }
+	// Module 3 {
+
+	@UiField
+	VerticalPanel osceDaySubViewContainerPanel;
+
+	@Override
+	public VerticalPanel getOsceDaySubViewContainerPanel() {
+		return this.osceDaySubViewContainerPanel;
+	}
+
+	// Module 3 }
 
 	@UiField
 	PatientInSemesterFlexTable table;
 
-	// @UiField
-	// FTable fTable;
+	@UiField(provided = true)
+	CellTable<AdvancedSearchCriteriaProxy> advancedSearchCriteriaTable;
+
+	@UiField(provided = true)
+	SimplePager pager;
 
 	@UiField
 	Button surveyImpBtn;
@@ -68,9 +92,16 @@ public class RoleAssignmentViewImpl extends Composite implements
 	private String[] headers;
 
 	public RoleAssignmentViewImpl() {
+		advancedSearchCriteriaTable = new CellTable<AdvancedSearchCriteriaProxy>(
+				OsMaConstant.TABLE_PAGE_SIZE,
+				(CellTable.Resources) GWT.create(MyCellTableResources.class));
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT,
+				(SimplePager.Resources) GWT
+						.create(MySimplePagerResources.class), true,
+				OsMaConstant.TABLE_JUMP_SIZE, true);
 
 		initWidget(uiBinder.createAndBindUi(this));
-		init();
+
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		surveyImpBtn.setText(constants.surveyImport());
@@ -79,7 +110,7 @@ public class RoleAssignmentViewImpl extends Composite implements
 		headers = new String[] { constants.name(), constants.accepted(),
 				constants.assignTo(), "" };
 
-		// fTable = new FTable(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		init();
 
 	}
 
@@ -106,144 +137,99 @@ public class RoleAssignmentViewImpl extends Composite implements
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
 				"position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 
-		// table.addTableListener(new TableListener() {
-		// public void onCellClicked(SourcesTableEvents sender, int row,
-		// int cell) {
-		// // History.newItem( ""+row );
-		// Log.info("row" + row + "Cell " + cell);
-		// }
-		// });
-
-		// class MyObject{
-		// private CheckBox checkBox;
-		//
-		// public MyObject(CheckBox checkBox) {
-		// this.setCheckBox(checkBox);
-		// }
-		//
-		// public CheckBox getCheckBox() {
-		// return checkBox;
-		// }
-		//
-		// public void setCheckBox(CheckBox checkBox) {
-		// this.checkBox = checkBox;
-		// }
-		//
-		// }
-		// CellTable<MyObject> cellTable = new CellTable<MyObject>();
-		// TextColumn<MyObject> firstColumn = new TextColumn<MyObject>() {
-		// @Override
-		// public CheckBox getValue(MyObject object) {
-		// return object.getCheckBox;
-		// }
-		// };
-		// cellTable.addColumn(firstColumn , "Checkbox");
-
-		// fTable.addColumn(new TextColumn<PatientInSemesterData>() {
-		// {
-		// this.setSortable(true);
-		// }
-		//
-		// Renderer<java.lang.String> renderer = new
-		// AbstractRenderer<java.lang.String>() {
-		//
-		// public String render(java.lang.String obj) {
-		// return obj == null ? "" : String.valueOf(obj);
-		// }
-		// };
-		//
-		// @Override
-		// public String getValue(PatientInSemesterData pISD) {
-		// return renderer.render((pISD.name == null) ? "" : pISD.name);
-		//
-		// }
-		// }, constants.roomMaterialName());
-		//
-		// addColumn(new ActionCell<PatientInSemesterData>(
-		// OsMaConstant.DELETE_ICON,
-		// new ActionCell.Delegate<PatientInSemesterData>() {
-		// public void execute(PatientInSemesterData materialListProxy) {
-		// // Window.alert("You clicked " +
-		// // institution.getInstitutionName());
-		// if (Window.confirm("wirklich löschen?")) {
-		// // delegate.deleteClicked(materialListProxy);
-		// }
-		// }
-		// }), "", new GetValue<PatientInSemesterData>() {
-		// public PatientInSemesterData getValue(
-		// PatientInSemesterData patientInSemesterData) {
-		// return patientInSemesterData;
-		// }
-		//
-		// }, null);
-		// fTable.addColumnStyleName(1, "iconCol");
-		//
-		// fTable.addColumn(new TextColumn<PatientInSemesterData>() {
-		// {
-		// this.setSortable(true);
-		// }
-		//
-		// Renderer<String> renderer = new AbstractRenderer<String>() {
-		//
-		// public String render(String obj) {
-		// return obj == null ? "" : String.valueOf(obj);
-		// }
-		// };
-		//
-		// @Override
-		// public String getValue(PatientInSemesterData materialListProxy) {
-		// return renderer
-		// .render((materialListProxy.assignedTo == null) ? ""
-		// : materialListProxy.assignedTo);
-		//
-		// }
-		// }, constants.roomMaterialPrice());
-
+		initAdvancedCriteria();
 	}
 
-	// private static interface GetValue<C> {
-	// C getValue(PatientInSemesterData patientInSemesterData);
-	// }
+	public void initAdvancedCriteria() {
+		advancedSearchCriteriaTable
+				.addColumn(new Column<AdvancedSearchCriteriaProxy, SafeHtml>(
+						new SafeHtmlCell()) {
+					@Override
+					public SafeHtml getValue(
+							AdvancedSearchCriteriaProxy criterion) {
+						switch (criterion.getField()) {
+						case NATIONALITY:
+							return OsMaConstant.FLAG_ICON;
+						case LANGUAGE:
+							return OsMaConstant.COMMENT_ICON;
+						case ANAMNESIS:
+							return OsMaConstant.EDIT_ICON;
+						case SCAR:
+							return OsMaConstant.SEARCH_ICON;
+						default:
+							return OsMaConstant.WRENCH_ICON;
+						}
+					}
+				});
 
-	// private <C> void addColumn(Cell<C> cell, String headerText,
-	// final GetValue<C> getter,
-	// FieldUpdater<PatientInSemesterData, C> fieldUpdater) {
-	//
-	// Column<PatientInSemesterData, C> column = new
-	// Column<PatientInSemesterData, C>(
-	// cell) {
-	// @Override
-	// public C getValue(PatientInSemesterData object) {
-	// return getter.getValue(object);
-	// }
-	// };
-	// column.setFieldUpdater(fieldUpdater);
-	// if (cell instanceof AbstractEditableCell<?, ?>) {
-	// editableCells.add((AbstractEditableCell<?, ?>) cell);
-	// }
-	// fTable.addColumn(column, headerText);
-	// }
+		advancedSearchCriteriaTable.addColumn(
+				new TextColumn<AdvancedSearchCriteriaProxy>() {
+					Renderer<BindType> renderer = new EnumRenderer<BindType>();
 
-	// private class RightClickableHeader extends SafeHtmlHeader {
-	// public RightClickableHeader(SafeHtml headerHtml, String columnId,
-	// String datatype) {
-	// super(headerHtml);
-	// sinkEvents(Event.ONMOUSEDOWN | Event.ONMOUSEUP
-	// | Event.ONCONTEXTMENU);
-	// }
-	//
-	// @Override
-	// public void onBrowserEvent(Context context, Element elem,
-	// final NativeEvent event) {
-	// if ((event.getButton() & NativeEvent.BUTTON_RIGHT) > 0) {
-	// Window.alert("Right click!");
-	// } else {
-	// super.onBrowserEvent(context, elem, event);
-	// }
-	// }
-	// }
-	//
-	// private List<AbstractEditableCell<?, ?>> editableCells;
+					@Override
+					public String getValue(AdvancedSearchCriteriaProxy object) {
+						return renderer.render(object.getBindType());
+					}
+				}, constants.bindType());
+
+		advancedSearchCriteriaTable.addColumn(
+				new TextColumn<AdvancedSearchCriteriaProxy>() {
+
+					public String getValue(AdvancedSearchCriteriaProxy criterion) {
+						return criterion.getShownValue();
+					}
+				}, constants.criterion());
+
+		advancedSearchCriteriaTable
+				.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(
+						new ActionCell<AdvancedSearchCriteriaProxy>(
+								OsMaConstant.UNCHECK_ICON,
+								new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
+									@Override
+									public void execute(
+											AdvancedSearchCriteriaProxy object) {
+										// delegate.deleteAdvancedSearchCriteria(object);
+									}
+
+								}) {
+							@Override
+							public void onBrowserEvent(
+									com.google.gwt.cell.client.Cell.Context context,
+									Element elem,
+									AdvancedSearchCriteriaProxy advancedSearchCriteriaProxy,
+									NativeEvent nativeEvent,
+									ValueUpdater<AdvancedSearchCriteriaProxy> valueUpdater) {
+								if (nativeEvent.getButton() == NativeEvent.BUTTON_LEFT) {
+									elem.setInnerHTML(delegate
+											.onAdvancedSearchCriteriaClicked(advancedSearchCriteriaProxy));
+								}
+								super.onBrowserEvent(context, elem,
+										advancedSearchCriteriaProxy,
+										nativeEvent, valueUpdater);
+
+							}
+						}));
+		advancedSearchCriteriaTable.addColumnStyleName(
+				advancedSearchCriteriaTable.getColumnCount() - 1, "iconCol");
+
+		advancedSearchCriteriaTable
+				.addRowCountChangeHandler(new RowCountChangeEvent.Handler() {
+
+					@Override
+					public void onRowCountChange(RowCountChangeEvent event) {
+						if (event.getNewRowCount() > 0) {
+							advancedSearchCriteriaTable.setVisible(true);
+							pager.setVisible(true);
+						} else {
+							advancedSearchCriteriaTable.setVisible(false);
+							pager.setVisible(false);
+						}
+					}
+				});
+
+		advancedSearchCriteriaTable.setVisible(false);
+		pager.setVisible(false);
+	}
 
 	@Override
 	public void setDelegate(Delegate delegate) {
@@ -273,6 +259,24 @@ public class RoleAssignmentViewImpl extends Composite implements
 	@Override
 	public Button getAddManuallyBtn() {
 		return addManuallyBtn;
+	}
+
+	@Override
+	public CellTable<AdvancedSearchCriteriaProxy> getAdvancedSearchCriteriaTable() {
+		return advancedSearchCriteriaTable;
+	}
+
+	@Override
+	public void setAdvancedSearchCriteriaTable(
+			CellTable<AdvancedSearchCriteriaProxy> advancedSearchCriteriaTable) {
+		this.advancedSearchCriteriaTable = advancedSearchCriteriaTable;
+	}
+
+	@Override
+	public void onRoleSelectedEventReceived(RoleSelectedEvent event) {
+		delegate.initAdvancedSearchByStandardizedRole(event
+				.getStandardizedRoleProxy().getId());
+
 	}
 
 }

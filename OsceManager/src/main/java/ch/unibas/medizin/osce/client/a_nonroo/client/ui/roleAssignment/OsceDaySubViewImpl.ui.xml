@@ -13,11 +13,14 @@
 	
 	<g:HTMLPanel>
 		<g:DisclosurePanel ui:field="simpleDiscloserPanel" addStyleNames='{style.mainNavPanel}' width="710px" >
-			<g:header></g:header>
+			<g:header ></g:header>
 			<!-- Style name für VerticalPanel -->
-			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}' height="100px">
+			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}' height="100px" ui:field="sequenceVP">
 				<!-- g:Label>Hello</g:Label>
 				<g:Label>Hello2</g:Label-->
+				
+				
+				
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		

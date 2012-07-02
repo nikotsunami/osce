@@ -477,3 +477,100 @@ body {
 	margin-top: 7px;
 	margin-left: 5px;	
 }
+
+}
+/*Module 3*/
+.roleLlb {
+
+	-moz-border-radius: 16px 16px 0px 0px;
+	background-color: #EBEBEB;
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	margin-bottom: 8px;
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 0px;
+}
+.countLbl {
+
+	background-color: #EBEBEB;
+    border-color: #808080;
+    border-radius: 22px 22px 22px 22px;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 8px;
+    height: 22px;
+    margin-bottom: 4px;
+    width: 22px;
+}
+.patientInRoleLbl {
+
+	-moz-border-radius: 16px 16px 16px 16px;
+	background-color: #EBEBEB;
+	height: 30px;
+	max-height: 20px;
+	min-height: 20px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 5px;
+	margin-bottom: 6px;
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+.rect{
+		
+	background-color: #EBEBEB;
+	height: 30px;
+	max-height: 20px;
+	min-height: 20px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 0px;
+}
+.padTop5{
+	padding-top: 5px
+}
+.roleContainer{
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	-moz-border-radius: 16px 16px 10px 10px;
+}
+.oscePostHeader {
+
+	-moz-border-radius: 16px 16px 0px 0px;
+	background-color: #EBEBEB;
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	margin-bottom: 8px;
+}
+.oscePostHeader:hover {
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
+}
+
+/*Module 3*/

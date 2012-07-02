@@ -508,5 +508,7 @@ public interface OsceConstants extends Constants {
 	public String patientInformation();
 
 	public String close();
+	
+	public String patientAlreadyAssigned();
 	// MODULE 3 : END
 }

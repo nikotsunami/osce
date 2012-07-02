@@ -1,7 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -9,29 +7,25 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
-import ch.unibas.medizin.osce.client.style.resources.UiIcons;
-import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+@SuppressWarnings("deprecation")
 public class PatientInSemesterData {
 
 	public String name;
 	// public Image acceptedImage;
-	public IconButton acceptedIconBtn;
+	public Button acceptedIconBtn;
 	public PatientAssignLabel assignedTo;
-	public IconButton navigationButton;
+	public Button navigationButton;
 	// private int index;
 
 	private RoleAssignmentView.Delegate delegate;
@@ -39,7 +33,7 @@ public class PatientInSemesterData {
 	private PatientInSemesterData patientInSemesterData;
 	private String rowSetColor;
 
-	private final UiIcons uiIcons = GWT.create(UiIcons.class);
+	// private final UiIcons uiIcons = GWT.create(UiIcons.class);
 
 	/** Creates a new instance of PatientInSemesterData */
 	public PatientInSemesterData() {
@@ -63,7 +57,7 @@ public class PatientInSemesterData {
 		// this.acceptedImage = new Image();
 		// this.acceptedImage.setStyleName("ui-icon-squaresmall-close");
 
-		this.acceptedIconBtn = new IconButton();
+		this.acceptedIconBtn = new Button();
 		this.setAcceptedImage();
 		this.acceptedIconBtn.addClickHandler(new ClickHandler() {
 
@@ -100,7 +94,7 @@ public class PatientInSemesterData {
 		// ,getIndex());
 
 		this.setPatientInSemesterProxy(tempPatientInSemesterProxy);
-		this.navigationButton = new IconButton();
+		this.navigationButton = new Button();
 		this.navigationButton.setHTML(OsMaConstant.SEEK_FIRST_ICON);
 		this.navigationButton.addClickHandler(new ClickHandler() {
 
