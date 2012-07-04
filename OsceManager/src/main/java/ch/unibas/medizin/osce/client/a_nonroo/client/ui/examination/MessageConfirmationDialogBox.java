@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -58,6 +57,8 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		hp.add(noBtnl);
 		hp.setSpacing(10);
 		vp.add(hp);
+		super.getCaption().asWidget().addStyleName("confirmbox");
+		
 		//super.setText("Warning");
 		super.setText(caption);
 		this.add(vp);
@@ -94,6 +95,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		this.getNoBtnl().setText(constants.okBtn());
 		this.getCaption().setText(constants.success());
 		this.showDialog();
+		
 		this.getNoBtnl().addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -111,7 +113,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		msgLbl.setText(msg);
 		
 		this.getNoBtnl().setText(constants.okBtn());
-		this.getCaption().setText(constants.success());
+		//this.getCaption().setText(constants.success());
 		this.showDialog();
 		this.getNoBtnl().addClickHandler(new ClickHandler() {
 			

@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.List;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.ui.FlexTable;
 
 public class PatientInSemesterFlexTable extends FlexTable {
@@ -47,6 +48,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 			return;
 		}
 
+		this.patientInSemesterDatas = patientInSemesterDatas;
 		int row = 0;
 		// String[] headers = source.getHeaderRow();
 		if (headers != null) {
@@ -168,6 +170,20 @@ public class PatientInSemesterFlexTable extends FlexTable {
 	public void setPatientInSemesterDatas(
 			List<PatientInSemesterData> patientInSemesterDatas) {
 		this.patientInSemesterDatas = patientInSemesterDatas;
+	}
+
+	public void setNavigationButtonEnable(boolean enabled) {
+		Log.info("Check for Button");
+		if (this.patientInSemesterDatas != null
+				&& this.patientInSemesterDatas.size() > 0) {
+			int rows = this.patientInSemesterDatas.size();
+			PatientInSemesterData patientInSemesterData;
+
+			for (int i = 0; i < rows; i++) {
+				patientInSemesterData = patientInSemesterDatas.get(i);
+				patientInSemesterData.setNavigationButton(enabled);
+			}
+		}
 	}
 
 }

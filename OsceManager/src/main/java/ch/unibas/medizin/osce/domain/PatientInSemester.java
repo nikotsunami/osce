@@ -35,7 +35,7 @@ public class PatientInSemester {
 
 	private Boolean accepted;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "patientInSemesters")
+	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<OsceDay> osceDays = new HashSet<OsceDay>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInSemester")

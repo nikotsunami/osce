@@ -85,9 +85,14 @@ a:hover, .gwt-Anchor:hover {
 .gwt-Button[disabled] {
 	cursor: default;
 	color: #888;
+	background: #888;
+	
 }
 
 .gwt-Button[disabled]:hover {
+	cursor: default !important;
+	color: #888 !important;
+	background: #888;
 }
 
 .gwt-CheckBox {
@@ -2393,6 +2398,11 @@ background: rgb(255,255,204)  ;
 
 /* Module 3 d { */
 
+.highlight-oscdaypanel{
+	background: #B2B2FF !important;
+	
+}
+
 .discloserPanel_Selected_header_Color{
 	
 	/*background-color:green;*/
@@ -2406,6 +2416,9 @@ background: rgb(255,255,204)  ;
 highlight-role{
 	
 	background: rgb(153,252,139) !important;
+}
+.confirmbox{
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50  !important;
 }
 
 /* Module 3 d }*/

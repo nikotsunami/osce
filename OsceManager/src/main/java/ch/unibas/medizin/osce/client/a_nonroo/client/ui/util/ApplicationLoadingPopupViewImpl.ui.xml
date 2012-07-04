@@ -31,15 +31,10 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<g:HorizontalPanel>
-			<g:VerticalPanel styleName="{style.panelPadding}" width="200%"
-				ui:field="vPanel">
-				<g:NotificationMole animationDuration='0'
-					message='loading...' ui:field='mole'>
-				</g:NotificationMole>
-				<g:Image url="/osMaEntry/gwt/unibas/images/loading.gif"></g:Image>
-
-			</g:VerticalPanel>
-		</g:HorizontalPanel>
+		<!-- <g:HorizontalPanel> <g:VerticalPanel styleName="{style.panelPadding}" 
+			width="200%" ui:field="vPanel"> <g:NotificationMole animationDuration='0' 
+			message='loading...' ui:field='mole'> </g:NotificationMole> -->
+		<g:Image url="/osMaEntry/gwt/unibas/images/loading.gif"></g:Image>
+		<!-- </g:VerticalPanel> </g:HorizontalPanel> -->
 	</g:HTMLPanel>
 </ui:UiBinder>

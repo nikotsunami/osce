@@ -51,5 +51,9 @@ public interface RoleAssignmentView extends IsWidget {
 	public void setAdvancedSearchCriteriaTable(
 			CellTable<AdvancedSearchCriteriaProxy> advancedSearchCriteriaTable);
 
+	//Module 3 : change
+		
+	public PatientInSemesterFlexTable getDataTable();
+	
 	// Module 3 }
 }

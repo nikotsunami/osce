@@ -50,7 +50,8 @@ public class OsceDay {
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
 	 private Set<OsceSequence> osceSequences = new HashSet<OsceSequence>();
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "osceDays")
+	
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
 	
 	// Module 3 d {
@@ -60,7 +61,7 @@ public class OsceDay {
 			
 		Log.info("In dise findRoleForSPInSemester to Retrieve Data in OsceDay.java");
 		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
-		Log.info("OsceDay is " + osceDay);
+		Log.info("OsceDay is " + osceDay.getId());
 		Semester semester;
 		StandardizedPatient standardizedPatient;
 		PatientInSemester patientInSemester;
@@ -70,10 +71,10 @@ public class OsceDay {
 		
 		patientInSemester = PatientInSemester.findPatientInSemester(patientInSemesterId);
 		standardizedPatient=patientInSemester.getStandardizedPatient();
-		Log.info("Standardized Patient is :" + standardizedPatient);
+		Log.info("Standardized Patient is :" + standardizedPatient.getId());
 		semester=patientInSemester.getSemester();
 		
-		Log.info("Semester is :" + semester);
+		Log.info("Semester is :" + semester.getId());
 		
 		List<PatientInSemester> listOfPatientInSemester = new ArrayList<PatientInSemester>();
 		List<StandardizedRole> listStandardizedRole = new ArrayList<StandardizedRole>();
@@ -102,7 +103,7 @@ public class OsceDay {
 				  Log.info("Osce Post is : " + oscePost.getId());
 				  
 				  standardizedRole=oscePost.getStandardizedRole();
-				  Log.info("Satandardized Role is :" +standardizedRole);
+				  Log.info("Satandardized Role is :" +standardizedRole.getId());
 				  
 				  if(standardizedRole != null){
 				  
@@ -130,7 +131,7 @@ public class OsceDay {
 				 
 				  while(itPatientInSemester.hasNext()){
 				
-					  if(standardizedPatient.getId()==itPatientInSemester.next().getStandardizedPatient().getId()){
+					  if(standardizedPatient.getId().equals(itPatientInSemester.next().getStandardizedPatient().getId())){
 						
 						 Log.info("St Role Satisfies Advance Search Criteria is :" + standardizedRole.getId());
 						Log.info("St Role Satisfies Advance Search Criteria is :" + standardizedRole.getShortName());

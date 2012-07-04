@@ -510,5 +510,9 @@ public interface OsceConstants extends Constants {
 	public String close();
 	
 	public String patientAlreadyAssigned();
+	
+	public String pleaseSelectRole();
+	
+	public String patientIsNotAccepted();
 	// MODULE 3 : END
 }

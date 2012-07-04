@@ -278,5 +278,10 @@ public class RoleAssignmentViewImpl extends Composite implements
 				.getStandardizedRoleProxy().getId());
 
 	}
+	
+	@Override
+	public PatientInSemesterFlexTable getDataTable(){
+		 return table;
+	}
 
 }

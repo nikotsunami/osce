@@ -4,10 +4,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.NotificationMole;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ApplicationLoadingPopupViewImpl extends DialogBox implements
@@ -20,13 +17,13 @@ public class ApplicationLoadingPopupViewImpl extends DialogBox implements
 			UiBinder<Widget, ApplicationLoadingPopupViewImpl> {
 	}
 
-	private final OsceConstants constants = GWT.create(OsceConstants.class);
+//	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
-	@UiField
-	NotificationMole mole;
+//	@UiField
+//	NotificationMole mole;
 
-	@UiField
-	VerticalPanel vPanel;
+//	@UiField
+//	VerticalPanel vPanel;
 
 	static private ApplicationLoadingPopupViewImpl applicationLoadingPopupViewImpl;
 
@@ -37,7 +34,7 @@ public class ApplicationLoadingPopupViewImpl extends DialogBox implements
 		setAnimationEnabled(true);
 		setAutoHideEnabled(false);
 		center();
-		setText(constants.loading());
+//		setText(constants.loading());
 
 	}
 

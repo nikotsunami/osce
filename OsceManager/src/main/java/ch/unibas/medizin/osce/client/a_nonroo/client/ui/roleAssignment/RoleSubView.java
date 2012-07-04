@@ -19,7 +19,7 @@ public interface RoleSubView extends IsWidget{
 		
 		public void editBackUpFlag(RoleSubView view,PatientInRoleSubView patientInRoleSubView,PatientInRoleProxy proxy,boolean isBackUp);
 		
-		public boolean patientInRoleIsFirstAssigned(OsceSequenceProxy seqProxy,PatientInRoleProxy patientInRoleProxy);
+		//public boolean patientInRoleIsFirstAssigned(OsceSequenceProxy seqProxy,PatientInRoleProxy patientInRoleProxy);
 	}
 	
 	 void setDelegate(Delegate delegate);

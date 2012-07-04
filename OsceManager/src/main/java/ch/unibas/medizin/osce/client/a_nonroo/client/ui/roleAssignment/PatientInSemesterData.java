@@ -95,7 +95,7 @@ public class PatientInSemesterData {
 
 		this.setPatientInSemesterProxy(tempPatientInSemesterProxy);
 		this.navigationButton = new Button();
-		this.navigationButton.setHTML(OsMaConstant.SEEK_FIRST_ICON);
+		this.navigationButton.setHTML(OsMaConstant.SEEK_FIRST_ICON);		
 		this.navigationButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -106,6 +106,11 @@ public class PatientInSemesterData {
 		});
 	}
 
+	public void setNavigationButton(boolean enabled){
+		navigationButton.setEnabled(enabled);
+		
+	}
+	
 	public PatientInSemesterProxy getPatientInSemesterProxy() {
 		return patientInSemesterProxy;
 	}
