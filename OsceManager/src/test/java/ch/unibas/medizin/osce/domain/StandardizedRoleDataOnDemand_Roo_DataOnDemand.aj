@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.CheckList;
+import ch.unibas.medizin.osce.domain.RoleTemplate;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.domain.RoleTopicDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
@@ -42,6 +43,7 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
         setMainVersion(obj, index);
         setPreviousVersion(obj, index);
         setRoleScript(obj, index);
+        setRoleTemplate(obj, index);
         setRoleTopic(obj, index);
         setRoleType(obj, index);
         setShortName(obj, index);
@@ -92,6 +94,11 @@ privileged aspect StandardizedRoleDataOnDemand_Roo_DataOnDemand {
             roleScript = roleScript.substring(0, 255);
         }
         obj.setRoleScript(roleScript);
+    }
+    
+    public void StandardizedRoleDataOnDemand.setRoleTemplate(StandardizedRole obj, int index) {
+        RoleTemplate roleTemplate = null;
+        obj.setRoleTemplate(roleTemplate);
     }
     
     public void StandardizedRoleDataOnDemand.setRoleTopic(StandardizedRole obj, int index) {

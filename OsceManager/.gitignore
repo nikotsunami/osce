@@ -58,3 +58,6 @@
 /target/OsceManager-0.1.0.BUILD-SNAPSHOT/index.html
 
 OsceManager/log.roo
+bin/
+src/main/java/ch/unibas/medizin/osce/client/managed/
+src/main/java/ch/unibas/medizin/osce/domain/*.aj
