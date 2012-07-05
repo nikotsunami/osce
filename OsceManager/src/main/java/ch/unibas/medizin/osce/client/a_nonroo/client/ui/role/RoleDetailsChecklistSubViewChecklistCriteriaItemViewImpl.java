@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -65,8 +65,8 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	public void deleteOption(ClickEvent event)
 	{
 		/*if(Window.confirm("are you sure you want to delete this criteria?"))*/
-		final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("are you sure you want to delete this criteria?");
-		 dialogBox.showConfirmationDialog();
+		final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+		 dialogBox.showConfirmationDialog("are you sure you want to delete this criteria?");
 		 
 		 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 			

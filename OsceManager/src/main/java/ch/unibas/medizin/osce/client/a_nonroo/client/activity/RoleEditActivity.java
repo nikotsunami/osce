@@ -4,8 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.mortbay.log.StdErrLog;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubViewImpl;
@@ -156,7 +159,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("edit");
 			//spec start
 			Log.info("Proxy ID : " + place.getProxyId());
-			requests.find(place.getProxyId()).with("standardizedRoles").with("checkList").with("roleTopic")
+			requests.find(place.getProxyId()).with("standardizedRoles" , "checkList" ,"keywords", "advancedSearchCriteria", "simpleSearchCriteria","oscePosts","roleTemplate").with("roleTopic")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -346,6 +349,12 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		{
 			 checkListProxy= standardizedRole.getCheckList();//spec
 
+			 if(checkListProxy==null)
+			 {
+
+				CheckListRequest checklistRequest=requests.checkListRequest();
+				 checkListProxy=checklistRequest.create(CheckListProxy.class);
+			 }
 				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 				standardizedRole.setCheckList(checkListProxy);//spec
 				System.out.println("Checklist----"+checkListProxy.getTitle());
@@ -359,7 +368,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				 /*majorCheckListRequest = requests.checkListRequest();
 				 checkListProxy= majorCheckListRequest.create(CheckListProxy.class);*/
 				 
-				 checkListProxy= standardizedRole.getCheckList();//spec
+			//	 checkListProxy= standardizedRole.getCheckList();//spec
 				// checkListProxy.setTitle("ccc");//spec
 				//	checkListProxy.setVersion(0);//spec
 				 //spec
@@ -374,7 +383,23 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
 					
 					proxy.setPreviousVersion(standardizedRole);
+					
+					proxy.setAdvancedSearchCriteria(standardizedRole.getAdvancedSearchCriteria());
+					proxy.setKeywords(standardizedRole.getKeywords());
+					proxy.setOscePosts(standardizedRole.getOscePosts());
+					proxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+					proxy.setRoleTemplate(standardizedRole.getRoleTemplate());
+					proxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+					proxy.setSimpleSearchCriteria(standardizedRole.getSimpleSearchCriteria());
+					
+					if(standardizedRole.getMainVersion()==null)
+					{
+						proxy.setMainVersion(1);
+					}
+					else
+					{
 					proxy.setMainVersion(standardizedRole.getMainVersion()+1);
+					}
 					proxy.setSubVersion(1);
 					
 					proxy.setCheckList(checkListProxy);//spec
@@ -397,6 +422,18 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 						
 					oldProxy.setCheckList(checkListProxy);//spec
 					oldProxy.setRoleTopic(roleTopic);
+
+					oldProxy.setAdvancedSearchCriteria(standardizedRole.getAdvancedSearchCriteria());
+					oldProxy.setKeywords(standardizedRole.getKeywords());
+					oldProxy.setOscePosts(standardizedRole.getOscePosts());
+					oldProxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+					oldProxy.setRoleTemplate(standardizedRole.getRoleTemplate());
+					oldProxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+					oldProxy.setSimpleSearchCriteria(standardizedRole.getSimpleSearchCriteria());
+					oldProxy.setCaseDescription(standardizedRole.getCaseDescription());
+					oldProxy.setRoleScript(standardizedRole.getRoleScript());
+					
+					
 			view.getMajorMinorChange();
 			
 			
@@ -500,6 +537,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				
 			oldProxy.setCheckList(checkListProxy);//spec
 			oldProxy.setRoleTopic(roleTopic);
+		 
+			oldProxy.setAdvancedSearchCriteria(standardizedRole.getAdvancedSearchCriteria());
+			oldProxy.setKeywords(standardizedRole.getKeywords());
+			oldProxy.setOscePosts(standardizedRole.getOscePosts());
+			oldProxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+			oldProxy.setRoleTemplate(standardizedRole.getRoleTemplate());
+			oldProxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+			oldProxy.setSimpleSearchCriteria(standardizedRole.getSimpleSearchCriteria());
+			oldProxy.setCaseDescription(standardizedRole.getCaseDescription());
+			oldProxy.setRoleScript(standardizedRole.getRoleScript());
+			
 		 //
 			
 			System.out.println("role---"+oldProxy);
@@ -559,13 +607,15 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		
 		
+	Log.info("before persist after popup");		
+	Log.info("Proxy---"+proxy.getLongName());		
 			
-		
-		 majorRequest.persist().using(proxy).fire(new Receiver<Void>() {
+		 majorRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
 		 
 	
 
 			public void onFailure(ServerFailure error) {
+				Log.info("error in persist");
 				Log.error(error.getMessage());
 
 			}
@@ -606,6 +656,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				
 			
 			}
+			
 		});
 		 
 		 

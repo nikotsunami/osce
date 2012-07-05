@@ -104,8 +104,8 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 			//Window.confirm("Search Name cant not be left blank.");
 			
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Search Name cant not be left blank.");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Search Name cant not be left blank.");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -129,8 +129,8 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 			return;*/
 			
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Search Value cant not be left blank.");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Search Value cant not be left blank.");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -244,8 +244,8 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 						//if (Window.confirm("wirklich löschen?"))
 						
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("wirklich löschen?");
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog("wirklich löschen?");
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

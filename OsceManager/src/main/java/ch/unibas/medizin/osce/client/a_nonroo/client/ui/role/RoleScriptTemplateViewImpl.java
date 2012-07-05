@@ -233,8 +233,8 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 						/*if(Window.confirm("wirklich löschen?"))
 							delegate.deleteClicked(roleTemplate);*/
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

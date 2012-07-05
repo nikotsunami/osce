@@ -56,7 +56,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			
 			
 		 <g:DisclosurePanel animationEnabled="true" open="true"
-				ui:field="osceDisclosurePanel" width="100%" >
+				ui:field="osceDisclosurePanel" width="100%" addStyleNames="{style.patientDetails}" >
 			<g:TabPanel ui:field="osceDetailPanel" addStyleNames="gwt-InvertedTabPanel" width="100%">
 	
 			<g:Tab>
@@ -154,7 +154,8 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 				</div>
 				-->
 				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
-				<div>
+				<div class="{style.controls}  {style.controlsleft}">
+					
 					<my:IconButton ui:field="newButton" icon="plusthick">Add New</my:IconButton>
 					</div>
    <!--  <table id='boundElementHolder' class="{style.fields}">

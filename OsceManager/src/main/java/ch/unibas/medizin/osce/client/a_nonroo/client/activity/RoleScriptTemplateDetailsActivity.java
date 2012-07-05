@@ -8,13 +8,13 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplateDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateDetailsViewImpl;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
@@ -24,6 +24,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.ItemDefination;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -477,7 +478,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 			    
 			        toolTip.show();
 			        
-			        toolTipChange.addClickHandler(new ClickHandler() {
+			       /* toolTipChange.addClickHandler(new ClickHandler() {
 						
 						@Override
 						public void onClick(ClickEvent event) {
@@ -514,6 +515,72 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 								);
 											
 											
+							}
+								
+					});*/
+			        
+ toolTipChange.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) 
+						{
+							
+
+							// Issue Role V2
+							
+							if(toolTipLabel.getText().trim().equals(""))
+							{
+								Log.info("Null Value....");
+								
+								 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+								 dialogBox.showConfirmationDialog("Please Enter appropriate value for Role Template");
+								 
+								 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+									
+									@Override
+									public void onClick(ClickEvent event) {
+										dialogBox.hide();							
+										Log.info("ok click");	
+										return;
+											}
+										});
+							}
+							else
+							{
+								Log.info("Not Null Value....");
+							
+								requests.roleBaseItemRequest().findRoleBaseItem(roleBaseItemProxy.getId()).fire(new Receiver<RoleBaseItemProxy>() 
+										{
+								
+								
+											@Override
+											public void onSuccess(RoleBaseItemProxy response) {
+												RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
+												response = roleBaseItemReq.edit(response);
+												response.setItem_name(toolTipLabel.getText());
+												roleBaseItemReq.persist().using(roleBaseItemProxy).fire(new Receiver<Void>(){
+													
+													@Override
+													public void onFailure(ServerFailure error){
+														Log.error("onFilure");
+														Log.error(error.getMessage());				
+													}
+													
+													@Override
+													public void onSuccess(Void arg0) {
+														Log.info("Save RoleBaseItem value Succesfully according to ToolTip value");
+														toolTip.clear();
+														toolTip.hide();		
+														
+														view.getTableItem().clear();
+														init();
+														init2();
+																			
+													}
+												});					
+											}							
+										});
+								}
 							}
 								
 					});

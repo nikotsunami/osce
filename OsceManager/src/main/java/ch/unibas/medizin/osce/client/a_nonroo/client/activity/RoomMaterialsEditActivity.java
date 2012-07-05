@@ -184,8 +184,8 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 		if (view.getName() == null || (view.getName().compareTo("") == 0)) {
 			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -207,8 +207,8 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 		if (view.getType() == null	|| (view.getType().toString().compareTo("") == 0)) {
 			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -231,8 +231,8 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 				|| (view.getPrice().toString().compareTo("") == 0)) {
 			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -255,8 +255,8 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 				|| (view.getPriceType().toString().compareTo("") == 0)) {
 			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				

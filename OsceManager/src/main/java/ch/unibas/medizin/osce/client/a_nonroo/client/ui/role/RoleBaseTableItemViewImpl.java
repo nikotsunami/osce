@@ -5,12 +5,12 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -158,13 +158,48 @@ RoleBaseTableItemView {
 	  }
 	@UiHandler("AddSubItem")
 	public void addRoleBaseSubItemClickHandler(ClickEvent event) {
-		System.out.println("Calling method to add Sub items..");
+		/*System.out.println("Calling method to add Sub items..");
 		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);
 		// Issue Role Module
 		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);		
 		delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table,this);		
 		// Issue Role Module
+		 * 
+		 
+*/		
 		
+		System.out.println("Calling method to add Sub items..");
+		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);
+		// Issue Role Module
+		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);		
+
+		// Issue Role V2 
+		
+		if(txtSubItem.getText().trim().equals(""))
+		{
+			Log.info("TextBox Value is Null");
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+				
+			 dialogBox.showConfirmationDialog("Please Add SubItem.");
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");
+					
+						}
+					});			
+			
+		}
+		else
+		{
+			Log.info("TextBox Value is Not Null");
+			delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table,this);		
+		}
+		
+		// E: Issue Role V2 
 	}
 	
 	@UiHandler("close")
@@ -172,8 +207,8 @@ RoleBaseTableItemView {
 		/*if(Window.confirm("wirklich löschen?"))
 		delegate.deleteButtonClickEvent(roleBasedItemProxy);*/
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
-				 dialogBox.showDialog();
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 dialogBox.showYesNoDialog(constants.reallyDelete());
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
 						@Override
@@ -330,8 +365,8 @@ RoleBaseTableItemView {
 						/*if(Window.confirm("wirklich löschen?"))
 							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);*/
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

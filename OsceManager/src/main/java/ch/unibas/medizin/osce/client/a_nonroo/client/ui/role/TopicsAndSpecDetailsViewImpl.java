@@ -9,13 +9,14 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -185,8 +186,8 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				{
 					/*Window.alert("Please Enter appropriate value for Role Base Item");*/
 					// Issue Role
-					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Enter appropriate value for Role Base Item");
-					 dialogBox.showConfirmationDialog();
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					 dialogBox.showConfirmationDialog("Please Enter appropriate value for Role Base Item");
 					 
 					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
@@ -401,8 +402,8 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 						/*if(Window.confirm("wirklich löschen?"))
 							delegate.deleteClicked(roletopic);*/
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

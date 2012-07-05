@@ -9,11 +9,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.ActionCell;
@@ -106,8 +106,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 			// return;
 			
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please select file to upload");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Please select file to upload");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -129,8 +129,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 			/*Window.confirm("Please enter description");
 			return;*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter description");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+			 dialogBox.showConfirmationDialog("Please enter description");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -213,8 +213,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 					public void onSubmitComplete(SubmitCompleteEvent event) {
 						Log.info("PS Submit is Complete " + event.getResults());
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.imageUpload());
-						 dialogBox.showConfirmationDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+						 dialogBox.showConfirmationDialog(constants.imageUpload());
 						 
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 							
@@ -309,8 +309,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 							delegate.fileDeleteClicked(file, getValue());*/
 						
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

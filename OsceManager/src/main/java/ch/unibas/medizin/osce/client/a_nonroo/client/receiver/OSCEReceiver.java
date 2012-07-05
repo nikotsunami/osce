@@ -1,16 +1,23 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.receiver;
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupViewImpl;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.gargoylesoftware.htmlunit.javascript.host.Screen;
+import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -21,19 +28,16 @@ public abstract class OSCEReceiver<T> extends Receiver<T>
 {
 	// SPEC START =	
 		OSCEReceiverPopupViewImpl osceReceiverPopupView=null;
-		//static String errorType;
 	// SPEC END =
+		
+		// Constraint Violation
+		StringBuffer errorBuffor;
 	
 	@Override
 	public void onFailure(ServerFailure error) 
 	{
 		Log.error(error.getMessage());	
 		showMessage(error.getMessage());
-		//final String errorMsg=error.getMessage();		
-		//final HorizontalPanel hp=new HorizontalPanel();
-		/*osceReceiverPopupView=new OSCEReceiverPopupViewImpl();
-		osceReceiverPopupView.setTitle(error.getExceptionType());*/
-		//errorType=error.getExceptionType();
 	}
 	
 	public void showMessage(String error)
@@ -42,22 +46,10 @@ public abstract class OSCEReceiver<T> extends Receiver<T>
 		final String errorMsg=error;
 		Log.info("Error Message" + errorMsg);	
 		
+		String[] errorMsgLst;
 		osceReceiverPopupView=new OSCEReceiverPopupViewImpl();
-		osceReceiverPopupView.setAnimationEnabled(true);
-		osceReceiverPopupView.center();
-		osceReceiverPopupView.setGlassEnabled(true);
-	
-		osceReceiverPopupView.lblErrMessage.setWordWrap(true);
-		osceReceiverPopupView.lblErrMessage.setText(errorMsg);
+		osceReceiverPopupView.showMessage(error);
 		
-		//osceReceiverPopupView.lblTitle.setText(errorType);
-		/*osceReceiverPopupView.lblErrMessage.setWidth("500px");*/							
-						
-		RootPanel.get().add(osceReceiverPopupView);
-		osceReceiverPopupView.show();
-		
-					
-				
 		Timer t = new Timer() 
 		{		
 			@Override
@@ -77,10 +69,17 @@ public abstract class OSCEReceiver<T> extends Receiver<T>
 	
 	  public void onViolation(Set<Violation> errors) 
 	  {
+		  errorBuffor=new StringBuffer();
+		  // Constraint Violation
 		  if (!errors.isEmpty()) 
-		  {
-		      onFailure(new ServerFailure("The call failed on the server due to a ConstraintViolation"));
+		  {		      			  
+			  Iterator<Violation> iter = errors.iterator();
+			 
+			  while (iter.hasNext()) 
+			  {				
+				  errorBuffor.append("Please specify appropriate value of " + iter.next().getPath() + "<br>");				  
+			  }
+			  showMessage(errorBuffor.toString());
 		  }
 	  }
-
 }

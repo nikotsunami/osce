@@ -89,8 +89,8 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 		{
 			/*Window.alert("Please Enter appropriate value for Role Base Item");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Enter appropriate value for Role Base Item");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+			 dialogBox.showConfirmationDialog("Please Enter appropriate value for Role Base Item");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				

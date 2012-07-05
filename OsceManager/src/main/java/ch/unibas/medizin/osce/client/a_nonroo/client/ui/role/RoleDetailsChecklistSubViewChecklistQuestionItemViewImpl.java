@@ -238,6 +238,19 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					}
 				}
 		});
+
+		// Issue Role V1 
+		optionPopup.getCancelBtn().addClickHandler(new ClickHandler() 
+		{				
+				@Override
+				public void onClick(ClickEvent event) 
+				{
+					((CheckListTopicPopupViewImpl)optionPopup).hide(true);					
+					optionPopup.getTopicTxtBox().setValue("");
+					optionPopup.getDescriptionTxtBox().setValue("");
+				}
+		});
+		// E: Issue Role V1
 		}
 		
 		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionVerticalPanel.getAbsoluteLeft(), addOptionVerticalPanel.getAbsoluteTop()-180);
@@ -249,8 +262,8 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	public void deleteQuestion(ClickEvent event)
 	{
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("are you sure you want to delete this Question?");
-				 dialogBox.showDialog();
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 dialogBox.showYesNoDialog("are you sure you want to delete this Question?");
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
 						@Override

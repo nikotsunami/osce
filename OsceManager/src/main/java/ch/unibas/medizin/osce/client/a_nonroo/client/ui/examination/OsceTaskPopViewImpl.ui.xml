@@ -84,7 +84,7 @@
 						</tr>
 			
 						<tr>
-								<td><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button><g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button></td>
+								<td><g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button></td>
 								<td></td>
 						</tr>
     				 </table>

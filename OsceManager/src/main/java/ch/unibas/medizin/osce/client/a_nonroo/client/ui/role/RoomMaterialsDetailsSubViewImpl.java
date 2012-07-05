@@ -266,8 +266,8 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 						/*if (Window.confirm("wirklich löschen?"))
 							delegate.deleteUsedFromClicked(usedMaterialProxy,standardizedRoleProxy);*/
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("wirklich löschen?");
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog("wirklich löschen?");
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

@@ -99,8 +99,8 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 			/*Window.confirm("Please enter a value for Room material list");*/
 			
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter a value for Room material list");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Please enter a value for Room material list");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -121,8 +121,8 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 		{
 			/*Window.confirm("Please enter a value for Material Count number");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter a value for Material Count number");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Please enter a value for Material Count number");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -142,8 +142,8 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 		{
 		/*	Window.confirm("Please enter a value for \"For who\"");*/
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please enter a value used for");
-			 dialogBox.showConfirmationDialog();
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Please enter a value used for");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				

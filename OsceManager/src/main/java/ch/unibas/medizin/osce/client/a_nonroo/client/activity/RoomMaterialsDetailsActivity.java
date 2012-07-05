@@ -202,8 +202,8 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 			return;
 		}*/
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Really delete this entry? You cannot undo this change.");
-				 dialogBox.showDialog();
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 dialogBox.showYesNoDialog("Really delete this entry? You cannot undo this change.");
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
 						@Override

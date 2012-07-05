@@ -61,6 +61,7 @@
 							
 							<div ui:field='errors' class='{style.errors}'></div>
 					 <div class="{style.controlsright}">
+					 <my:IconButton ui:field="saveRichTextArea" icon="disk"></my:IconButton>
    					<my:IconButton ui:field="addRichTextAreaValue" icon="pencil"></my:IconButton>
    					</div>
    						 <my1:RichTextToolbar ui:field="toolbar" />
@@ -69,7 +70,7 @@
    							border: 1px solid #AAA; 
    							border-top: 0; 
    						padding: 4px">
-   					<g:RichTextArea ui:field='description'/>
+   					<g:RichTextArea ui:field='description' enabled="false"/>
    					</div>
 							
 						

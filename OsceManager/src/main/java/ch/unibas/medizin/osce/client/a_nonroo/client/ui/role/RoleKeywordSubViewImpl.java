@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView.Delegate;
+
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -31,6 +32,7 @@ import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
+
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -255,8 +257,8 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 					public void execute(final KeywordProxy keywordProxy) {
 						
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.reallyDelete());
-						 dialogBox.showDialog();
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override
@@ -360,8 +362,8 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 					//Window.alert("Please Select/Add new Keyword");
 					
 					// Issue Role
-					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Please Select/Add new Keyword");
-					 dialogBox.showConfirmationDialog();
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+					 dialogBox.showConfirmationDialog("Please Select/Add new Keyword");
 					 
 					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						

@@ -7,11 +7,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecViewImpl;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -303,8 +303,8 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 				{
 					//Window.alert("Specialisation can not be deleted if role topic is asigned");
 					// Issue Role
-					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Specialisation can not be deleted if role topic is asigned");
-					 dialogBox.showConfirmationDialog();
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					 dialogBox.showConfirmationDialog("Specialisation can not be deleted if role topic is asigned");
 					 
 					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						

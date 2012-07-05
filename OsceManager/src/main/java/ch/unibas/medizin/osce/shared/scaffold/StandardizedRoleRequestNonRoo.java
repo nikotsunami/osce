@@ -27,8 +27,8 @@ import ch.unibas.medizin.osce.shared.Sorting;
 public interface StandardizedRoleRequestNonRoo extends RequestContext 
 {
 	
-	abstract Request<Long> countKeywordsByStandRole(Long standardizedRoleProxy);	
-	
+	//abstract Request<Long> countKeywordsByStandRole(Long standardizedRoleProxy);	
+	abstract Request<StandardizedRoleProxy> createStandardizedRoleMajorVersion(Long standardizedRoleId);
 }
 
 
