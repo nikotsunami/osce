@@ -2489,8 +2489,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			String answer) {
 		switch (proxy.getType()) {
 		case QUESTION_OPEN:
-		case QUESTION_TITLE:
-			return answer;
+		
 		case QUESTION_YES_NO:
 			if ("1".equals(answer))
 				return constants.yes();

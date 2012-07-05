@@ -24,11 +24,11 @@ public interface RoleBaseTableItemValueView extends IsWidget {
 	interface Delegate {
 
 		void addRoleScriptTableItemValue(RoleTableItemValueProxy roleTableItem,
-				Long id, CellTable<RoleTableItemValueProxy> table);
+				Long id, CellTable<RoleTableItemValueProxy> table,int left,int top);
 		// todo
 //		void newClicked(String itemName, int item_defination);
 
-		void addRichTextAreaValue(RoleBaseItemProxy roleBaseItemProxy, RichTextArea description);
+		void addRichTextAreaValue(RoleBaseItemProxy roleBaseItemProxy, RichTextArea description,int i);
 
 		
 //		void addRoleScriptTableItemValue(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemValueProxy> table);
