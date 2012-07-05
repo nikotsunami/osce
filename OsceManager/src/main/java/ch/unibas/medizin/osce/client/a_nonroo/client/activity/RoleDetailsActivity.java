@@ -1011,8 +1011,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						Log.info("==>>>Index: "+ innerindex+ " ID Pass: "+ ((RoleTopicProxy) response).getId()+ "SR ID: "+ standardizedRoleDetailsView[innerindex].getValue().getId());
 
 						// Issue Role
-						//requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
-						requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
+						// V4
+						//requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
+						requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() 
+						{ 
 									@Override
 									public void onSuccess(List<DoctorProxy> response) 
 									{
@@ -3338,8 +3340,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		// REFRESH LIST VIEW		
 		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
 		// Issue Role
-		//requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
-		requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
+		//	V4
+		//requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
+		requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
 			@Override
 			public void onSuccess(List<DoctorProxy> response) 
 			{

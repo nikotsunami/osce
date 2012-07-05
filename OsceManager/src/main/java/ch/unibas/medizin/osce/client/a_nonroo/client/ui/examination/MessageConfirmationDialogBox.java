@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -84,8 +85,17 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	}
 	public void showDialog()
 	{
+		
 		super.center();
 		super.show();
+		
+	}
+	public void showYesNoDialog(String str)
+	{
+		msgLbl.setText(str);
+		super.center();
+		super.show();
+		
 	}
 	
 	public void showConfirmationDialog()

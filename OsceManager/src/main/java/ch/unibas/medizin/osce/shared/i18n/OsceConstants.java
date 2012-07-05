@@ -515,4 +515,12 @@ public interface OsceConstants extends Constants {
 	
 	public String patientIsNotAccepted();
 	// MODULE 3 : END
+
+	public String updateOsce();
+	
+	public String warning();
+	
+	public String deleteTask();
+	
+	public String saveOsceBlueprint();
 }
