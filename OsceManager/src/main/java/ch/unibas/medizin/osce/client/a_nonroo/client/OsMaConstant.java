@@ -36,7 +36,7 @@ public class OsMaConstant {
 		
 		// Module 3 {
 				public static int OSCECOOKIEDAY = 0;
-				public static int OSCEDAYTIMESCHEDULE =6000000;
+				public static int OSCEDAYTIMESCHEDULE =600000;
 				
 				// Module 3 }
 				

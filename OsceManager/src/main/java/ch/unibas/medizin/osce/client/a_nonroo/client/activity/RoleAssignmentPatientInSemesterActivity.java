@@ -725,7 +725,7 @@ public void checkFitCriteria(RoleSubView view)
 					{
 						setFitCriteria(patientInRoleProxy,true);
 					}
-					else if(patientInRoleProxy.getFit_criteria())
+					else if(p.getStandardizedPatient().getId()!=semester.getStandardizedPatient().getId() && patientInRoleProxy.getFit_criteria())
 						setFitCriteria(patientInRoleProxy,false);
 				}
 				
