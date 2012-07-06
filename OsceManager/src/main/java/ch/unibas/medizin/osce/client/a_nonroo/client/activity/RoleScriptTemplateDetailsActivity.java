@@ -853,7 +853,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		toolTipContentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		toolTipContentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 	
-		final ValueListBox<RoleItemAccessProxy> accessList = new ValueListBox<RoleItemAccessProxy>(new RoleItemAccessProxyRenderer());
+		final ValueListBox<RoleItemAccessProxy> accessList = new ValueListBox<RoleItemAccessProxy>(RoleItemAccessProxyRenderer.instance());
 		accessList.setWidth("150px");
 		accessList.setHeight("22px");
 		

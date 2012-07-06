@@ -128,7 +128,7 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	public SpanElement labelRoleTopic;
 		
 	@UiField(provided = true)
-	public FocusableValueListBox<RoleTopicProxy> roleTopic = new FocusableValueListBox<RoleTopicProxy>(new RoleTopicProxyRenderer());
+	public FocusableValueListBox<RoleTopicProxy> roleTopic = new FocusableValueListBox<RoleTopicProxy>(RoleTopicProxyRenderer.instance());
 	//spec end
 	
 	// Labels 
