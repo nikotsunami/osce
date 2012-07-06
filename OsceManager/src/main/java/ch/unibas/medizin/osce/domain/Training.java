@@ -20,6 +20,6 @@ public class Training {
 	@ManyToOne
 	private Semester semester;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "trainings")
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
 }

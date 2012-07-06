@@ -2327,6 +2327,12 @@ background: rgb(255,255,204)  ;
 .flexTableRow:hover {
 	background: #f1b532;
 }
+
+.flexTable-Button-Disabled {
+	cursor: default;
+	color: #888;
+	background: #888;
+}
 /* MODULE 3 : END */
 
 
@@ -2413,7 +2419,7 @@ background: rgb(255,255,204)  ;
 	background:url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #F1B532;		
 }
 
-highlight-role{
+.highlight-role{
 	
 	background: rgb(153,252,139) !important;
 }

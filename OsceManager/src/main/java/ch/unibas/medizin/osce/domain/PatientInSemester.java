@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.domain.Semester;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -36,12 +37,14 @@ public class PatientInSemester {
 	private Boolean accepted;
 
 	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="accepted_osce_days")	
 	private Set<OsceDay> osceDays = new HashSet<OsceDay>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInSemester")
 	private Set<PatientInRole> patientInRole = new HashSet<PatientInRole>();
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "patientInSemesters")
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="accepted_trainings")	
 	private Set<Training> trainings = new HashSet<Training>();
 
 	private static String selectBase = "SELECT o ";
