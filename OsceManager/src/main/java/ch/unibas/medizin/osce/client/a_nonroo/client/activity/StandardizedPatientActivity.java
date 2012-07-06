@@ -525,12 +525,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
 			if (advancedSearchPopup == anamnesisPopup) {
+				advancedSearchPopup = null;
 				return;
 			}
 		}
-		anamnesisPopup = new StandardizedPatientAdvancedSearchAnamnesisPopupImpl();
+		anamnesisPopup = new StandardizedPatientAdvancedSearchAnamnesisPopupImpl(parentButton);
 		anamnesisPopup.setDelegate(this);
-		anamnesisPopup.display(parentButton);
+//		anamnesisPopup.display(parentButton);
 		advancedSearchPopup = anamnesisPopup;
 	}
 

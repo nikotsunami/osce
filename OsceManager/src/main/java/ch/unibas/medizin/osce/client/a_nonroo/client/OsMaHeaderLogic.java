@@ -31,7 +31,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.log.ErrorListener;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.log.ErrorLog;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.log.ErrorMessage;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
@@ -57,15 +61,17 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.inject.Inject;
 
-public class OsMaHeaderLogic implements OsMaHeader.Delegate {
+public class OsMaHeaderLogic implements OsMaHeader.Delegate, ErrorListener {
 	private OsMaRequestFactory requestFactory;
 	private PlaceController placeController;
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private List<BreadCrumb> breadCrumbs = new ArrayList<BreadCrumb>();
 	private EnumRenderer<Operation> renderer = new EnumRenderer<Operation>();
 	private Place currentPlace;
+	private ErrorLog errorLog = ErrorLog.getInstance();
 	
 	@Inject
 	public OsMaHeaderLogic(OsMaRequestFactory requestFactory, PlaceController placeController, EventBus eventBus) {
@@ -323,5 +329,23 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			}
 		}
 		Window.open(url, "_self", "");
+	}
+
+	@Override
+	public void newErrorMessageReceived(ErrorMessage msg) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private OSCEReceiverPopupView popupView;
+
+	@Override
+	public void showMessages(UIObject referenceObject) {
+		if (popupView != null) {
+			popupView.hide();
+			popupView = null;
+		} else {
+			popupView = new OSCEReceiverPopupViewImpl(referenceObject);
+		}
 	}
 }

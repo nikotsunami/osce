@@ -9,29 +9,32 @@
   xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' >
 
 <ui:style src="../../styles.css" >
-.padBottom25
-{
-	padding-bottom: 25px;	
-}
+	.padBottom25 {
+		padding-bottom: 25px;	
+	}
 
-	.padTop
-	{
-	
+	.padTop {
 		margin-top:80px;
 		margin-left: 150px;
-
 	}
-	.pnlborder
-	{
-	border:solid;	
-	border-width: 1px;
-	background-color: #666;
-	color: #fff;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+	.pnlborder {
+		/* border:solid;	
+		border-width: 1px;
+		background-color: #666;
+		color: #fff;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px; */
 	}
+	.pnlStyle {
+		width: 400px; 
+		position: relative;
+		margin: 0px;
+		padding: 4px;
+	}
+	
 </ui:style>
-	<g:HTMLPanel styleName="{style.pnlborder}">			 	
+	<g:HTMLPanel addStyleNames="{style.pnlStyle}">
+		<p>Bla bla bla asnfjasfasf asfasf</p>
 		<g:Label ui:field="lblTitle" horizontalAlignment="center" styleName="{style.padBottom25}"></g:Label>
 		<g:Label ui:field="lblErrMessage" horizontalAlignment="center"></g:Label>
 		<g:Button ui:field="btnOk" text="OK" styleName="{style.padTop}"></g:Button>		

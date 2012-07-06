@@ -1,0 +1,16 @@
+.tooltipPanel {
+	
+}
+
+.tooltipPanelParent td {
+	line-height: 0;
+}
+
+.tooltipPanelChild {
+	line-height: 1.2em;
+	padding: 12px;
+	background-color: #222;
+	opacity: 0.9;
+	-moz-border-radius: 8px;
+	color: #fff;
+}

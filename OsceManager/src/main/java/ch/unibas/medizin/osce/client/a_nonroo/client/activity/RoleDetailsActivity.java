@@ -4144,5 +4144,3 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	
 }
 
-	
-

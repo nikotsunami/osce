@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgets.tooltip.TooltipPanel;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -34,10 +35,11 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPanel
+public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends TooltipPanel
 		implements StandardizedPatientAdvancedSearchAnamnesisPopup {
 
 	private static StandardizedPatientAdvancedSearchAnamnesisPopupImplUiBinder uiBinder = GWT
@@ -54,8 +56,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	
 	@UiField
 	IconButton addAnamnesisValueButton;
-	@UiField
-	IconButton addAnamnesisValues;
 	@UiField
 	IconButton closeBoxButton;
 	
@@ -93,8 +93,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	private AnamnesisCheckProxy selectedProxy;
 	private List<String> possibleAnswers;
 
-	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
-		
+	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl(UIObject reference) {
+		super(reference);
 		anamnesisQuestionSuggestBox = new SuggestBox(new ProxySuggestOracle<AnamnesisCheckProxy>(new AbstractRenderer<AnamnesisCheckProxy>() {
 			@Override
 			public String render(AnamnesisCheckProxy object) {
@@ -137,7 +137,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		
 		addAnamnesisValueButton.setText(constants.add());
-		addAnamnesisValues.setText(constants.anamnesisValues());
 		
 		anamnesisAnswerText.setText(constants.enterAnswer());
 		anamnesisAnswerText.addFocusHandler(new FocusHandler() {
@@ -162,6 +161,7 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		acceptableBooleanValues.add(new Boolean(false));
 		anamnesisAnswerYesNoSelector.setValue(true);
 		anamnesisAnswerYesNoSelector.setAcceptableValues(acceptableBooleanValues);
+		show();
 	}
 	
 	private void displayAnswerFieldForProxy(AnamnesisCheckProxy proxy) {
@@ -230,11 +230,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		hide();
 	}
 	
-	@UiHandler("addAnamnesisValues")
-	public void addAnamnesisValuesClicked(ClickEvent e) {
-		hide();
-	}
-	
 	@UiHandler("closeBoxButton")
 	public void closeBoxButtonClicked(ClickEvent e) {
 		hide();
@@ -246,11 +241,11 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		this.delegate = delegate;
 	}
 
-	@Override
-	public void display(Button parentButton) {
-		this.show();
-		this.setPopupPosition(parentButton.getAbsoluteLeft() - 5, parentButton.getAbsoluteTop() - getOffsetHeight()/2 - 6);
-	}
+//	@Override
+//	public void display(Button parentButton) {
+//		this.show();
+//		this.setPopupPosition(parentButton.getAbsoluteLeft() - 5, parentButton.getAbsoluteTop() - getOffsetHeight()/2 - 6);
+//	}
 
 	@Override
 	public SuggestBox getAnamnesisQuestionSuggestBox() {

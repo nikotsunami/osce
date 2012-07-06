@@ -25,6 +25,6 @@ public interface StandardizedPatientAdvancedSearchAnamnesisPopup extends IsWidge
 	}
   
     void setDelegate(Delegate delegate);
-	void display(Button parentButton);
+//	void display(Button parentButton);
 	SuggestBox getAnamnesisQuestionSuggestBox();
 }

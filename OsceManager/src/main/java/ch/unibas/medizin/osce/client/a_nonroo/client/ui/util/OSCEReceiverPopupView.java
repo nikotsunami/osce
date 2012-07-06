@@ -10,7 +10,8 @@ public interface OSCEReceiverPopupView extends IsWidget{
 	
 	void setDelegate(Delegate delegate);
 	
-	interface Delegate 
-	{
-	}	
+	interface Delegate {
+	}
+
+	void hide();
 }

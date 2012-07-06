@@ -69,4 +69,7 @@ public interface UiIcons extends ClientBundle {
 
 	@Source("images/loading.gif")
 	public ImageResource loading();
+	
+	@Source("images/icons/alert.png")
+	public ImageResource alert();
 }

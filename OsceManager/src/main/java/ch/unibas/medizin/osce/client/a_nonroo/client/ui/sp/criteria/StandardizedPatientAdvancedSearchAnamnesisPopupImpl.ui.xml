@@ -14,8 +14,5 @@
 			<my:IconButton ui:field="addAnamnesisValueButton" icon="plusthick"/>
 			<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>
 		</g:HorizontalPanel>
-		<g:HorizontalPanel spacing ="4">
-			<my:IconButton ui:field="addAnamnesisValues" icon="pencil"/>
-		</g:HorizontalPanel>
 	</g:VerticalPanel>
 </ui:UiBinder> 

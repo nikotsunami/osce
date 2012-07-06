@@ -17,7 +17,7 @@
 		<g:HorizontalPanel addStyleNames="{uiStyles.uiCss.alignRight} {uiStyles.uiCss.horizontalSpacing}">
 			<g:Label ui:field="selectLanguageLabel"></g:Label>
 			<g:ValueListBox ui:field="selectLanguageBox"></g:ValueListBox>
-			<my:IconButton icon="power" ui:field="logoutButton" />
+			<my:IconButton icon="alert" ui:field="messages" />
 		</g:HorizontalPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>
