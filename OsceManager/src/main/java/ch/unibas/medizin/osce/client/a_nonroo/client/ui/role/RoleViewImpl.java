@@ -112,7 +112,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 //	ValueListBox<Specialisation> c=new ValueListBox<Specialisation>(new SpecialisationProxyRenderer());
 	
 	@UiField(provided = true)
-	ValueListBox<SpecialisationProxy> SpecialisationBox = new ValueListBox<SpecialisationProxy>(new SpecialisationProxyRenderer());
+	ValueListBox<SpecialisationProxy> SpecialisationBox = new ValueListBox<SpecialisationProxy>(SpecialisationProxyRenderer.instance());
 	
 	private boolean addBoxesShown = true;   
 	

@@ -1088,6 +1088,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 											public void onSuccess(Object response) 
 											{
 												// TODO Auto-generated method stub	
+												final OscePostBlueprintProxy oscePostBlueprintProxy=(OscePostBlueprintProxy)response;
 												Log.info("~~Total Widget Before is:" + newPostAddHP.getWidgetCount());											
 												
 												Log.info("~~Total Widget After is:" + newPostAddHP.getWidgetCount());
@@ -1121,7 +1122,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 																			public void onSuccess(
 																					Object response) {
 																				Log.info("~Success Call....");	
-																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy1, (((OscePostBlueprintProxy)response))),newPostAddHP.getWidgetCount());
+																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response))),newPostAddHP.getWidgetCount());
 																				
 																			}
 																	
@@ -1239,6 +1240,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					}
 					oscePostSubViewImpl.add(tempOscePostSubViewImpl);	
 					tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity);
+					tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
 					//oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW						
 					oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImpl);	// ADD SUBVIEW IN POSTVIEW
 					oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	
@@ -1255,6 +1257,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							tempOscePostSubViewImplNext.getRoleTopicLbl().setText(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName());
 							oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
 							tempOscePostSubViewImplNext.getPostNameLbl().setText("Post "+ oscePostBlueprintProxyNext.getSequenceNumber());
+							tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
 							Log.info("OsceBluerint Next Id: " + oscePostBlueprintProxyNext.getId());												
 							oscePostSubViewImpl.add(tempOscePostSubViewImplNext);	
 							oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity);

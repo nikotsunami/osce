@@ -108,6 +108,11 @@ public class PatientInSemesterData {
 
 	public void setNavigationButton(boolean enabled){
 		navigationButton.setEnabled(enabled);
+		if (!enabled) {
+			navigationButton.addStyleName("flexTable-Button-Disabled");
+		} else {
+			navigationButton.removeStyleName("flexTable-Button-Disabled");
+		}
 		
 	}
 	

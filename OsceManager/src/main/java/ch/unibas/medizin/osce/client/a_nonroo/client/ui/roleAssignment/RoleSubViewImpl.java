@@ -299,6 +299,7 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 				if(roles.next().getId()==roleProxy.getId())
 				{
 					this.roleHeader.getWidget().addStyleName("highlight-role");
+					break;
 					//this.addStyleName("");
 				}
 			}

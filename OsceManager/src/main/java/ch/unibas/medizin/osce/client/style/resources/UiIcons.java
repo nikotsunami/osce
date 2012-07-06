@@ -66,4 +66,7 @@ public interface UiIcons extends ClientBundle {
 
 	@Source("images/icons/triangle-2-e-w.png")
 	public ImageResource triangle2EastWest();
+
+	@Source("images/loading.gif")
+	public ImageResource loading();
 }
