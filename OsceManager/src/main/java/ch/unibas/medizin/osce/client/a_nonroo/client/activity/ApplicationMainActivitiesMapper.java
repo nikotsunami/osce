@@ -132,7 +132,7 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 
 		if (place instanceof StudentsPlace) {
 			Log.debug("is StudentsPlace");
-			return new StudentsActivity(requests, placeController);
+			return new StudentsActivity(requests, placeController,(StudentsPlace)place);
 		}
 
 		if (place instanceof ExaminationSchedulePlace) {

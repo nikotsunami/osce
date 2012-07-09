@@ -15,13 +15,16 @@ public interface RoomView extends IsWidget{
 
 	public interface Presenter {
 		void goTo(Place place);
-	}
+
+			}
 	/**
 	 * Implemented by the owner of the view.
 	 */
-	interface Delegate {
+	public interface Delegate {
 		void newClicked(String name, double length, double width);
 
+		void editClicked(RoomProxy proxy, String name, double length, double width);
+		
 		void deleteClicked(RoomProxy room);
 
 		void performSearch(String q);

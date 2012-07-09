@@ -27,16 +27,18 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterRequest;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -49,6 +51,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
@@ -79,10 +82,13 @@ public class OsMaMainNav extends Composite {
 		static SemesterPopupView semesterPopupView;	
 		SemesterProxy semesterProxy=null;
 	// G: SPEC END =
+		
+		// Role Module Issue V4
+		OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@Inject
 	public OsMaMainNav(OsMaRequestFactory requests, PlaceController placeController) {
-		OsceConstants constants = GWT.create(OsceConstants.class);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		this.requests = requests;
 		this.placeController = placeController;
@@ -408,7 +414,8 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("students")
 	void studentsClicked(ClickEvent event) {
-		placeController.goTo(new StudentsPlace("StudentsPlace"));
+		
+		placeController.goTo(new StudentsPlace("StudentsPlace", handlerManager, lstSemester.getValue()));
 	}
 
 	@UiHandler("examinationSchedule")
@@ -464,7 +471,20 @@ public class OsMaMainNav extends Composite {
 		
 		if(lstSemester.getValue()==null)
 		{
-			Window.alert("Please Select Semester to Edit.....");	
+			// Role Module Issue V4
+			//Window.alert("Please Select Semester to Edit.....");	
+			final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+			
+			 dialogBox.showConfirmationDialog("Please Select Semester to Edit.....");
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+						}
+					});	
 		}
 		else
 		{																										
@@ -511,7 +531,20 @@ public class OsMaMainNav extends Composite {
 				
 				if((((SemesterPopupViewImpl)semesterPopupView).enumSemester.getValue()) == null)
 				{
-					Window.alert("Please Enter Semester" );
+					// Role Module Issue V4
+					//Window.alert("Please Enter Semester" );					
+					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					
+					 dialogBox.showConfirmationDialog("Please Enter Semester");
+					 
+					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("ok click");	
+								}
+							});	
 				}
 																
 				else
@@ -519,7 +552,20 @@ public class OsMaMainNav extends Composite {
 					Log.info("~Semester is not null");	
 					if(((SemesterPopupViewImpl)semesterPopupView).txtYear.getText().trim().equals(""))
 					{
-						Window.alert("Please Enter Year");						
+						// Issue Role Module V4
+						//Window.alert("Please Enter Year");
+						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+						
+						 dialogBox.showConfirmationDialog("Please Enter Year");
+						 
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								dialogBox.hide();							
+								Log.info("ok click");	
+									}
+								});	
 					}
 					else
 					{
@@ -594,7 +640,23 @@ public class OsMaMainNav extends Composite {
 						}
 						else
 						{
-							Window.alert("Please Enter Valid Data");											
+							// Role Module Issue V4
+							
+							//Window.alert("Please Enter Valid Data");
+							final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+							
+							 dialogBox.showConfirmationDialog("Please Enter Valid Data");
+							 
+							 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();							
+									Log.info("ok click");	
+										}
+									});	
+							
+							
 						}	
 					}					
 				}

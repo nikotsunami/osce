@@ -8,12 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
@@ -21,9 +24,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -37,8 +38,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -56,20 +57,23 @@ public class RoomViewImpl extends Composite implements RoomView {
 	private Delegate delegate;
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
+	int left = 0;
+	int top = 0;
+	
 	@UiField
 	SplitLayoutPanel splitLayoutPanel;
 
 	@UiField (provided = true)
 	QuickSearchBox searchBox;
 
-	@UiField
+/*	@UiField
 	TextBox newRoomNumber;
 
 	@UiField
 	TextBox newRoomLength;
 
 	@UiField
-	TextBox newRoomWidth;
+	TextBox newRoomWidth; */
 
 	@UiField
 	Button newButton;
@@ -82,18 +86,79 @@ public class RoomViewImpl extends Composite implements RoomView {
 
 	protected Set<String> paths = new HashSet<String>();
 
+	public RoomEditPopupView roomEditPopup;
+	
 	private Presenter presenter;
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
 
-		double roomLength = newRoomLength.getValue().length() > 0 ? Double.parseDouble(newRoomLength.getValue()) : 0;
-		double roomWidth = newRoomWidth.getValue().length() > 0 ? Double.parseDouble(newRoomWidth.getValue()) : 0;
+		if (roomEditPopup == null)
+		{
+			roomEditPopup = new RoomEditPopupViewImpl();
+			
+			((RoomEditPopupViewImpl)roomEditPopup).setAnimationEnabled(true);
+			
+			((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
+			((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
+			((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+			
+			((RoomEditPopupViewImpl)roomEditPopup).setWidth("200px");
+			
+			RootPanel.get().add(((RoomEditPopupViewImpl)roomEditPopup));
+			
+			roomEditPopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent arg0) {
+					// TODO Auto-generated method stub
+					
+					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
+					{
+						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+						
+						//Window.alert("Enter Correct Value");
+					}
+					else
+					{
+						double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
+						double roomWidth = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()) : 0;
+						
+						delegate.newClicked(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue() , roomLength, roomWidth);
+						//Window.alert("Button Clicked");
+						
+						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
+						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
+						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+						((RoomEditPopupViewImpl)roomEditPopup).hide(true);
+					}
+					
+				}
+			});
+		}
+		
+		roomEditPopup.getCancelBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				
+				((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
+				((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
+				((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+				((RoomEditPopupViewImpl)roomEditPopup).hide(true);
+			}
+		});
+		
+		((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
+		((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
+		((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+		
+		((RoomEditPopupViewImpl)roomEditPopup).setPopupPosition(event.getClientX(), event.getClientY());
+		
+		((RoomEditPopupViewImpl)roomEditPopup).show();		
 
-		delegate.newClicked(newRoomNumber.getValue(), roomLength, roomWidth);
-		newRoomNumber.setValue("");
-		newRoomLength.setValue("");
-		newRoomWidth.setValue("");
+	
 	}
 
 	/**
@@ -132,8 +197,68 @@ public class RoomViewImpl extends Composite implements RoomView {
 		return paths.toArray(new String[paths.size()]);
 	}
 
+       public void editPopupView(final RoomProxy proxy) {
+		
+		
+			roomEditPopup = new RoomEditPopupViewImpl();
+			
+			((RoomEditPopupViewImpl)roomEditPopup).setAnimationEnabled(true);
+			
+			((RoomEditPopupViewImpl)roomEditPopup).setWidth("200px");
+			
+			((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(proxy.getRoomNumber());
+			((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(String.valueOf(proxy.getLength()));
+			((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(String.valueOf(proxy.getWidth()));
+			
+			RootPanel.get().add(((RoomEditPopupViewImpl)roomEditPopup));
+			
+			roomEditPopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent arg0) {
+					// TODO Auto-generated method stub
+					
+					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
+					{
+						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+					}
+					else
+					{
+						double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
+						double roomWidth = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()) : 0;
+						
+						delegate.editClicked(proxy, ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue() , roomLength, roomWidth);
+						//Window.alert("Button Clicked");
+						
+						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
+						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
+						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+						((RoomEditPopupViewImpl)roomEditPopup).hide(true);
+					}
+					
+				}
+			});
+	
+			roomEditPopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent arg0) {
+					
+					((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
+					((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
+					((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+					((RoomEditPopupViewImpl)roomEditPopup).hide(true);
+				}
+			});
+			
+			((RoomEditPopupViewImpl)roomEditPopup).setPopupPosition(left-350, top - 50);
+			
+			((RoomEditPopupViewImpl)roomEditPopup).show();
+	}
+
 	public void init() {
-		newRoomNumber.addKeyDownHandler(new KeyDownHandler() {
+	/*	newRoomNumber.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
@@ -153,7 +278,18 @@ public class RoomViewImpl extends Composite implements RoomView {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
 					newButtonClicked(null);
 			}
-		});
+		}); */
+
+               	table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
 
 
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
@@ -205,6 +341,18 @@ public class RoomViewImpl extends Composite implements RoomView {
 				return renderer.render(object.getWidth());
 			}
 		}, constants.roomWidth());
+		
+		addColumn(new ActionCell<RoomProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoomProxy>() {
+						public void execute(RoomProxy room){
+								editPopupView(room);
+						}
+		}), "", new GetValue<RoomProxy>() {
+			public RoomProxy getValue(RoomProxy room){
+				return room;
+			}
+		}, null);
+		
 		addColumn(new ActionCell<RoomProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoomProxy>() {
 					public void execute(RoomProxy room) {

@@ -130,6 +130,15 @@
     <url-pattern>/UploadServlet</url-pattern>
   </servlet-mapping>
     
+<!-- CSV File upload servlet -->    
+  <servlet>
+    <servlet-name>CsvFileUploadServlet</servlet-name>
+    <servlet-class>ch.unibas.medizin.osce.server.upload.CsvFileUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CsvFileUploadServlet</servlet-name>
+    <url-pattern>/CsvFileUploadServlet</url-pattern>
+  </servlet-mapping>  
 
 <!-- dmz sync service -->    
   <servlet>

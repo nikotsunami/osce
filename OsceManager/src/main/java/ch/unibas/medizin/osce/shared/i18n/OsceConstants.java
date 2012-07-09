@@ -523,4 +523,8 @@ public interface OsceConstants extends Constants {
 	public String deleteTask();
 	
 	public String saveOsceBlueprint();
+	
+	//MODULE 6 START
+		public String importstudent();
+		//MODULE 6 END
 }

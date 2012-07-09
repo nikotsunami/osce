@@ -53,4 +53,7 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	OsceSequenceRequestNonRoo osceSequenceRequestNonRoo();
 	PatientInSemesterRequestNonRoo patientInSemesterRequestNonRoo();
 	OsceDayRequestNooRoo osceDayRequestNooRoo();
+
+        StudentOsceRequestNonRoo studentOsceRequestNonRoo();
+	StudentRequestNonRoo studentRequestNonRoo();
 }
