@@ -742,6 +742,7 @@ public void checkFitCriteria(RoleSubView view)
 			@Override
 			public void onSuccess(List<PatientInSemesterProxy> response) {
 				Log.info("" +response);
+				boolean flag=false;
 				if(response==null)
 				{
 					Log.info(" onSuccess response null");
@@ -751,10 +752,23 @@ public void checkFitCriteria(RoleSubView view)
 				{
 					if(p.getStandardizedPatient().getId()==semester.getStandardizedPatient().getId() && !patientInRoleProxy.getFit_criteria())
 					{
-						setFitCriteria(patientInRoleProxy,true);
+						//setFitCriteria(patientInRoleProxy,true);
+						flag=true;
+						break;
 					}
-					else if(p.getStandardizedPatient().getId()!=semester.getStandardizedPatient().getId() && patientInRoleProxy.getFit_criteria())
+					/*else if(p.getStandardizedPatient().getId()!=semester.getStandardizedPatient().getId() && patientInRoleProxy.getFit_criteria())
+					{
 						setFitCriteria(patientInRoleProxy,false);
+						break;
+					}*/
+				}
+				if(flag && !patientInRoleProxy.getFit_criteria())
+				{
+					setFitCriteria(patientInRoleProxy,true);
+				}
+				else if(!flag && patientInRoleProxy.getFit_criteria())
+				{
+					setFitCriteria(patientInRoleProxy,false);
 				}
 				
 			}
