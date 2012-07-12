@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
@@ -213,6 +214,19 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	public void goTo(Place place) {
 		placeController.goTo(place);
 		
+	}
+
+	@Override
+	public void updateClicked(ProfessionProxy proxy, String value) {
+		ProfessionRequest profRequest = requests.professionRequest();
+		proxy = profRequest.edit(proxy);
+		proxy.setProfession(value);
+		profRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				init();			
+			}
+		});
 	}
 
 }

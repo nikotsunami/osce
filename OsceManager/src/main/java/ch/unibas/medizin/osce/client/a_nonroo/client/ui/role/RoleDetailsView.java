@@ -22,7 +22,7 @@ public interface RoleDetailsView extends IsWidget{
 	interface Delegate {
 
 		void createRole();
-		void printRoleClicked();
+//		void printRoleClicked();
 		void editRoleClicked(StandardizedRoleProxy proxy);
 		void deleteRoleClicked(StandardizedRoleProxy proxy);
 		//void editClicked();

@@ -104,4 +104,18 @@ public class Doctor {
    	
    	// SPEC END =
     
+   	//Module 6 Start
+	public static java.util.List<Doctor> findDoctorByClinicID(Long clinicid)  
+   	{
+   		EntityManager em = entityManager();
+   		String queryString="select d from Doctor d where d.clinic.id = " + clinicid;
+   		TypedQuery<Doctor> q = em.createQuery(queryString, Doctor.class);
+   		java.util.List<Doctor> result = q.getResultList();
+   		return result;
+   	}
+   	
+   	//Module 6 End
+  
+   	
+    
 }

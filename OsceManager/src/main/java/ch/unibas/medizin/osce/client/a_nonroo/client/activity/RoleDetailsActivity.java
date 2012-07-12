@@ -44,6 +44,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetail
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRolePrintFilterViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
@@ -77,7 +78,6 @@ import ch.unibas.medizin.osce.client.managed.request.KeywordRequest;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantRequest;
@@ -112,8 +112,6 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -132,13 +130,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -1408,16 +1404,83 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		placeController.goTo(place);
 	}
 
+	// Issue : 120 : Start
 	@Override
-	public void printRoleClicked() {
+	public void printRoleClicked(
+			StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl) {
 		Log.info("Print clicked");
-		/*
-		 * requests.standardizedPatientRequestNonRoo().getPdfPatientsBySearch(
-		 * standardizedPatientProxy).fire(new
-		 * StandardizedPatientPdfFileReceiver());
-		 */
+		Long selectedRoleItemAccess = -1L;
+		if (standardizedRolePrintFilterViewImpl.getSelectedRoleItemAccess() != null
+				&& standardizedRolePrintFilterViewImpl
+						.getSelectedRoleItemAccess().getName() != null) {
+			selectedRoleItemAccess = (standardizedRolePrintFilterViewImpl
+					.getSelectedRoleItemAccess().getName().trim()
+					.compareTo(constants.all().trim()) == 0) ? 0L
+					: standardizedRolePrintFilterViewImpl
+							.getSelectedRoleItemAccess().getId();
+		}
+		requests.standardizedRoleRequestNonRoo()
+				.getRolesPrintPdfBySearch(
+						standardizedRolePrintFilterViewImpl
+								.getStandardizedRoleProxy().getId(),
+						standardizedRolePrintFilterViewImpl.getFilters(),
+						selectedRoleItemAccess)
+				.fire(new StandardizedRolePdfFileReceiver());
 	}
 
+	private class StandardizedRolePdfFileReceiver extends OSCEReceiver<String> {
+		@Override
+		public void onFailure(ServerFailure error) {
+			Log.error(error.getMessage());
+			// onStop();
+		}
+
+		@Override
+		public void onSuccess(String response) {
+			Window.open(response, "_blank", "enabled");
+		}
+	}
+
+	@Override
+	public void getRoleScriptListPickerValues(
+			final StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl) {
+
+		requests.roleItemAccessRequest().findAllRoleItemAccesses()
+				.fire(new OSCEReceiver<List<RoleItemAccessProxy>>() {
+					@Override
+					public void onSuccess(List<RoleItemAccessProxy> response) {
+
+						RoleItemAccessProxy roleItemAccessProxy = requests
+								.roleItemAccessRequest().create(
+										RoleItemAccessProxy.class);
+						roleItemAccessProxy.setName(constants.all());
+
+						List<RoleItemAccessProxy> roleItemAccessProxies = new ArrayList<RoleItemAccessProxy>(
+								response);
+						roleItemAccessProxies.add(0, roleItemAccessProxy);
+						Log.info("~~~ Length of roleItemAccessProxy"
+								+ roleItemAccessProxies.size());
+						standardizedRolePrintFilterViewImpl
+								.setRoleScriptListPickerValues(roleItemAccessProxies);
+						return;
+					}
+
+					@Override
+					public void onViolation(Set<Violation> errors) {
+						// TODO Auto-generated method stub
+						super.onViolation(errors);
+					}
+
+					@Override
+					public void onFailure(ServerFailure error) {
+						// TODO Auto-generated method stub
+						super.onFailure(error);
+					}
+				});
+	}
+
+	// Issue : 120 Stop
+	
 	@Override
 	public void editRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
 		Log.info("edit clicked");

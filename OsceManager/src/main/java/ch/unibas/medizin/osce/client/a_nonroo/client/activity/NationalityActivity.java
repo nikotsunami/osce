@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
@@ -205,6 +206,24 @@ NationalityView.Presenter, NationalityView.Delegate {
 	@Override
 	public void goTo(Place place) {
 		placeControler.goTo(place);
+		
+	}
+
+	@Override
+	public void updateClicked(NationalityProxy nation, String value) 
+	{
+		NationalityRequest nationrequest = requests.nationalityRequest();
+		nation = nationrequest.edit(nation);
+		nation.setNationality(value);
+		nationrequest.persist().using(nation).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				init();
+				
+			}
+		});
+		
 		
 	}
 

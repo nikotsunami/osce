@@ -133,4 +133,19 @@ public class UsedMaterial {
 		return q.getResultList();
 	}
 
+	// Issue : 120
+	public static List<UsedMaterial> findUsedMaterialsByStandardizedRoleID(
+			long standardizedRoleID) {
+		if (standardizedRoleID == 0)
+			throw new IllegalArgumentException("The name argument is required");
+		EntityManager em = entityManager();
+		TypedQuery<UsedMaterial> q = em
+				.createQuery(
+						"SELECT o FROM UsedMaterial AS o WHERE o.standardizedRole.id = :standardizedRoleID ORDER BY sort_order ASC",
+						UsedMaterial.class);
+		q.setParameter("standardizedRoleID", standardizedRoleID);
+		return q.getResultList();
+	}
+	// Issue : 120
+
 }

@@ -85,14 +85,9 @@ a:hover, .gwt-Anchor:hover {
 .gwt-Button[disabled] {
 	cursor: default;
 	color: #888;
-	background: #888;
-	
 }
 
 .gwt-Button[disabled]:hover {
-	cursor: default !important;
-	color: #888 !important;
-	background: #888;
 }
 
 .gwt-CheckBox {
@@ -2425,6 +2420,13 @@ background: rgb(255,255,204)  ;
 }
 .confirmbox{
 	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50  !important;
+}
+.higlight_onViolation{
+	background-color: #FFC7C7;
+	border-color: red;
+	border-width: 1px;	
+	border-style: solid;
+	border-spacing: 2px;
 }
 
 /* Module 3 d }*/

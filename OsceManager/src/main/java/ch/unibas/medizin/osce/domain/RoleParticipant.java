@@ -50,4 +50,15 @@ public class RoleParticipant {
 	}
 	
     // SPEC END =
+    
+    public static java.util.List<RoleParticipant> findRoleParticipatentByDoctor(Doctor proxy)
+    {
+    	Log.info("~~Inside Server");
+    	EntityManager em = entityManager();
+    	String query = "SELECT r FROM RoleParticipant r WHERE r.doctor.id = " + proxy.getId();
+    	Log.info("~~Query : " + query);
+    	TypedQuery<RoleParticipant> q = em.createQuery(query, RoleParticipant.class);
+    	Log.info("~~Result : " + q.getResultList().size());
+    	return q.getResultList();
+    }
 }

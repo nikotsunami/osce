@@ -38,6 +38,29 @@ public class Clinic {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clinic")
     private Set<Doctor> doctors = new HashSet<Doctor>();
     
+    
+    public static List<Clinic> findAllDoctorsId(Long id) {
+    	EntityManager em = entityManager();
+    	System.out.println("BEFORE CALL------->");
+    	String queryString="SELECT o FROM Clinic as o  where o.id="+id;
+    	System.out.println("query--"+ queryString);
+    	TypedQuery<Clinic> q = em.createQuery(queryString, Clinic.class);
+    	System.out.println("success done with size");
+    	
+    	return q.getResultList();
+    }
+    
+    public static List<Clinic> findListOfDocsId(Long id) {
+    	EntityManager em = entityManager();
+    	System.out.println("BEFORE CALL------->");
+    	String queryString="SELECT o FROM Clinic as o  where o.id="+id;
+    	System.out.println("query--"+ queryString);
+    	TypedQuery<Clinic> q = em.createQuery(queryString, Clinic.class);
+    	System.out.println("success done with size");
+    	
+    	return q.getResultList();
+    }
+    
     public static Long countClinicsBySearch(String q) {
     	EntityManager em = entityManager();
     	TypedQuery<Long> query = em.createQuery("SELECT COUNT(o) FROM Clinic o WHERE o.name LIKE :q", Long.class);
@@ -55,5 +78,13 @@ public class Clinic {
         query.setMaxResults(maxResults);
         
         return query.getResultList();
+    }
+    
+   public static Long findSpecialist(){
+    	EntityManager em = entityManager();
+    	TypedQuery<Long> query = em.createQuery("SELECT d.email FROM Clinic AS o, Doctor AS d WHERE o.id = 3", Long.class);
+    	return query.getSingleResult();
+
+    	
     }
 }

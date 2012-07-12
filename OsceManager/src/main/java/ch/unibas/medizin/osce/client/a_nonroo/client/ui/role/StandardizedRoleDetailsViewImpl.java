@@ -380,8 +380,24 @@ ImportTopicPopupView importTopicView;
 	}
 
 	@UiHandler("print")
-	public void onPrintClicked(ClickEvent e) {
-		// delegate.printRoleClicked();
+	public void onPrintClicked(ClickEvent event) {
+		Widget eventSource = (Widget) event.getSource();		
+		showPrintFilterPanel(eventSource.getAbsoluteLeft(), eventSource.getAbsoluteTop());
+//		showPrintFilterPanel(event.getClientX(), event.getClientY());
+	}
+
+//	@UiHandler("print")
+//	public void onPrintClicked(MouseOverEvent event) {
+//		Widget eventSource = (Widget) event.getSource();		
+//		showPrintFilterPanel(eventSource.getAbsoluteLeft(), eventSource.getAbsoluteTop());
+//	}
+
+	private void showPrintFilterPanel(int left, int top) {
+		StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl = StandardizedRolePrintFilterViewImpl
+				.getStandardizedRolePrintFilterViewImpl(getValue(),delegate);				
+		standardizedRolePrintFilterViewImpl.setPopupPosition(left-193, top-5);
+//		standardizedRolePrintFilterViewImpl.setPopupPosition(left, top);
+		standardizedRolePrintFilterViewImpl.show();
 	}
 
 	@UiHandler("delete")

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
@@ -205,6 +206,21 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	@Override
 	public void goTo(Place place) {
 		placeControler.goTo(place);
+		
+	}
+
+	@Override
+	public void updateClicked(SpokenLanguageProxy proxy, String value) {
+		SpokenLanguageRequest langRequest = requests.spokenLanguageRequest();
+		proxy = langRequest.edit(proxy);
+		proxy.setLanguageName(value);
+		langRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				init();				
+			}
+		});
+		
 		
 	}
 

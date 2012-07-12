@@ -23,7 +23,7 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 		// Edit Clicked from StandardizedRoleDetailViewImpl implementation in
 		// RoleDetailActivity
 		void deleteRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
-		// void createRole(StandardizedRoleProxy standardizedRoleProxy);
+		// void createRole(StandardizedRoleProxy standardizedRoleProxy);		
 	void previousRoleClicked(StandardizedRoleProxy standardizedRoleProxy);//spec
 
 	//Assignment E[
@@ -36,7 +36,12 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 			
 			void roleTemplateValueButtonClicked(RoleTemplateProxy value);
 
-			void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy);//spec
+			void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
+
+		public void getRoleScriptListPickerValues(StandardizedRolePrintFilterViewImpl  standardizedRolePrintFilterViewImpl);
+
+		void printRoleClicked(StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl);
+			//spec
 	}
 
 	/*

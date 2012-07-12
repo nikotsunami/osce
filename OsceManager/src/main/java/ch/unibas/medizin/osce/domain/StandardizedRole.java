@@ -12,6 +12,8 @@ import com.allen_sauer.gwt.log.client.Log;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 
 import javax.persistence.CascadeType;
@@ -21,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import javax.persistence.Enumerated;
@@ -86,21 +89,21 @@ public class StandardizedRole {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
 	private Set<SimpleSearchCriteria> simpleSearchCriteria = new HashSet<SimpleSearchCriteria>();
-	
-	   @ManyToOne(cascade = CascadeType.ALL)
-	    private CheckList checkList;
-	    
-	   @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-		private Set<OscePost> oscePosts = new HashSet<OscePost>();
-	   
-	   @OneToOne
-	   private RoleTemplate roleTemplate;
-	   
-	   @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-		private Set<RoleTableItemValue> roleTableItemValue = new HashSet<RoleTableItemValue>();
-	   
-	   @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-		private Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private CheckList checkList;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<OscePost> oscePosts = new HashSet<OscePost>();
+
+	@OneToOne
+	private RoleTemplate roleTemplate;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<RoleTableItemValue> roleTableItemValue = new HashSet<RoleTableItemValue>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
 	   
 	   
 	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId) {
@@ -258,5 +261,31 @@ public class StandardizedRole {
 			}
 			return roleSubItemValue;
 	   }
+
+	// Issue : 120
+	public static String getRolesPrintPdfBySearch(Long standardizedRoleId,
+			List<String> itemsList, Long roleItemAccessId) {
+		String fileName = OsMaConstant.ROLE_FILE_NAME_PDF_FORMAT;
+		try {
+			StandardizedRole standardizedRole = StandardizedRole
+					.findStandardizedRole(standardizedRoleId);
+			RolePrintPdfUtil rolePrintPdfUtil = new RolePrintPdfUtil();
+			Log.info("Message received in Pdf role print by : "
+					+ standardizedRole.longName);
+			fileName = standardizedRole.longName + "_"
+					+ standardizedRole.studyYear + "_ "
+					+ OsMaConstant.ROLE_FILE_NAME_PDF_FORMAT;
+			rolePrintPdfUtil.writeFile(fileName, standardizedRole, itemsList,
+					roleItemAccessId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.error("Error in Std. Role getRolesPrintPdfBySearch: "
+					+ e.getMessage());
+		}
+
+		return fileName;
+	}
+	// Issue : 120
+	   
 }
 

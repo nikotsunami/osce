@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -27,6 +28,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,6 +75,18 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	public void newButtonClicked(ClickEvent event) {
 		delegate.newClicked();
 	}
+
+	//Module 6 Start
+	@UiField
+	ListBox filterTitle;
+	
+	@UiHandler("filterTitle")
+	public void filterTitleChangeHandler(ChangeEvent event) {
+		delegate.changeFilterTitleShown(filterTitle.getValue(filterTitle.getSelectedIndex()));
+
+	}
+	
+	//Module 6 End
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -288,5 +302,11 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+	
+	//Module 6
+	@Override
+	public ListBox getFilterTitle() {
+		return filterTitle;
 	}
 }

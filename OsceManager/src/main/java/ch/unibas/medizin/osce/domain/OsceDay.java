@@ -168,4 +168,21 @@ public class OsceDay {
 			}
 		
 		// Module 3 d }
+	
+	//Module : 6 START
+	public static java.util.List<OsceDay> findOsceDayByDoctorAssignment(Doctor proxy)
+   	{
+		Log.info("~~Inside OSCEDAY Method");
+   		EntityManager em = entityManager();
+   		Log.info("~QUERY findDoctorWithRoleTopic()");
+   		String queryString="select d from OsceDay d where d.id in(select r.osceDay from Assignment r  where r.examiner.id="+proxy.getId()+")";
+   		//String queryString = "Select d from OsceDay d";
+   		Log.info("~QUERY String: " + queryString);
+   		TypedQuery<OsceDay> q = em.createQuery(queryString, OsceDay.class);
+   		java.util.List<OsceDay> result = q.getResultList();
+   		Log.info("~QUERY Result : " + result);
+   		return result;
+   		
+   	}
+	//Module : 6 END
 }

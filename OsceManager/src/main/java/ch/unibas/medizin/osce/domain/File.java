@@ -56,6 +56,20 @@ public class File {
     	return q.getSingleResult();
     }
 	
+	// Issue : 120
+	public static List<File> getFilesByStandardizedRoleID(
+			long standardizedRoleID) {
+		EntityManager em = entityManager();
+		TypedQuery<File> q = em.createQuery(
+				"SELECT o FROM File o WHERE o.standardizedRole ="
+						+ standardizedRoleID + " order by o.sortOrder",
+				File.class);
+		// q.setParameter("name", "%" + name + "%");
+
+		return q.getResultList();
+	}
+	// Issue : 120
+
 	public static List<File> findFileEntriesByStandardizedRoleID(long standardizedRoleID, int firstResult, int maxResults) {
         if (standardizedRoleID == 0) throw new IllegalArgumentException("The name argument is required");
         EntityManager em = entityManager();

@@ -9,18 +9,21 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -37,6 +40,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,6 +76,9 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 //    @UiField
 //    SimplePanel detailsPanel;
     
+    int left = 0;
+	int top = 0;
+    
     @UiField (provided = true)
     SimplePager pager;
     
@@ -81,6 +88,9 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
     protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
+    
+	//spec popup
+	public EditPopView editPopView;
     
     @UiHandler ("newButton")
     public void newButtonClicked(ClickEvent event) {
@@ -135,6 +145,17 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
+		
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
 //        paths.add("id");
@@ -192,6 +213,17 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 //                return renderer.render(object.getStandardizedpatients());
 //            }
 //        }, "Standardized Patient");
+		addColumn(new ActionCell<NationalityProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<NationalityProxy>() {
+					public void execute(NationalityProxy nation) {
+						showEditPopUp(nation);
+					}
+				}), "", new GetValue<NationalityProxy>() {
+			public NationalityProxy getValue(NationalityProxy nation) {
+				return nation;
+			}
+		}, null);
+		
 		addColumn(new ActionCell<NationalityProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<NationalityProxy>() {
 					public void execute(NationalityProxy nation) {
@@ -261,4 +293,52 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	//spec popup
+	public void showEditPopUp(final NationalityProxy nation)
+	{
+		editPopView = new EditPopViewImpl();
+		((EditPopViewImpl)editPopView).setAnimationEnabled(true);
+		((EditPopViewImpl)editPopView).setWidth("200px");
+		((EditPopViewImpl)editPopView).getEditTextbox().setValue(nation.getNationality());
+		RootPanel.get().add(((EditPopViewImpl)editPopView));
+		
+		editPopView.getOkBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
+				{
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+				}
+				else
+				{
+					delegate.updateClicked(nation, ((EditPopViewImpl)editPopView).getEditTextbox().getValue());
+					((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
+					((EditPopViewImpl)editPopView).hide(true);
+				}
+			}
+		});
+		
+		editPopView.getCancelBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
+				((EditPopViewImpl)editPopView).hide(true);
+			}
+		});
+		
+		((EditPopViewImpl)editPopView).setPopupPosition(left-150, top - 50);
+		((EditPopViewImpl)editPopView).show();
+	}
+
+	@Override
+	public EditPopView getEditPopupView() {
+		// TODO Auto-generated method stub
+		return editPopView;
+	}
+	
 }

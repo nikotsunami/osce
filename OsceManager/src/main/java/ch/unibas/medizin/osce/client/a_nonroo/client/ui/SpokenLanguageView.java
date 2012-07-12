@@ -22,6 +22,7 @@ public interface SpokenLanguageView  extends IsWidget{
 		void newClicked(String name);
 		void deleteClicked(SpokenLanguageProxy lang);
 		void performSearch();
+		void updateClicked(SpokenLanguageProxy proxy, String value);
 	}
 
     CellTable<SpokenLanguageProxy> getTable();

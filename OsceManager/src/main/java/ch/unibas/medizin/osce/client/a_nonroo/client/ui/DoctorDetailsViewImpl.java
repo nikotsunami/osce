@@ -3,21 +3,38 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -38,6 +55,8 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 			UiBinder<Widget, DoctorDetailsViewImpl> {
 	}	
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	@UiField
 	TabPanel doctorPanel;
     @UiField
@@ -84,6 +103,22 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
     @UiField
     SpanElement labelClinic;
     
+    //Module : 6
+    @UiField (provided = true)
+	CellTable<OsceDayProxy> oscetable;
+    
+	@UiField(provided = true)
+	public SimplePager pager;
+	
+	@UiField (provided = true)
+	CellTable<RoleParticipantProxy> roletable;
+    
+	@UiField(provided = true)
+	public SimplePager rolepager;
+	
+	protected ArrayList<String> paths = new ArrayList<String>();
+	
+	protected ArrayList<String> paths1 = new ArrayList<String>();
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -96,6 +131,29 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	 * implement HasHTML instead of HasText.
 	 */
 	public DoctorDetailsViewImpl() {
+		
+		//Module 6 START
+		CellTable.Resources tableResources = GWT
+				.create(MyCellTableResources.class);
+		oscetable = new CellTable<OsceDayProxy>(5, tableResources);
+
+		SimplePager.Resources pagerResources = GWT
+				.create(MySimplePagerResources.class);
+		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources,
+				true, OsMaConstant.TABLE_JUMP_SIZE, true);
+		
+		
+		CellTable.Resources tableResources1 = GWT
+				.create(MyCellTableResources.class);
+		roletable = new CellTable<RoleParticipantProxy>(5, tableResources1);
+
+		SimplePager.Resources pagerResources1 = GWT
+				.create(MySimplePagerResources.class);
+		rolepager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources1,
+				true, OsMaConstant.TABLE_JUMP_SIZE, true);
+
+		//Module 6 END
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		
@@ -103,6 +161,8 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 
 		doctorPanel.getTabBar().setTabText(0, constants.generalInformation());
 		doctorPanel.getTabBar().setTabText(1, constants.officeDetails());
+		doctorPanel.getTabBar().setTabText(2, constants.oscedoc());
+		doctorPanel.getTabBar().setTabText(3, constants.role());
 		
 		TabPanelHelper.moveTabBarToBottom(doctorPanel);
 		
@@ -125,6 +185,10 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 					delegate.storeDisplaySettings();
 			}
 		});
+		
+		initTableOsce();
+		
+		initRoleTable();
 	}
   
 
@@ -196,4 +260,125 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	public int getSelectedDetailsTab() {
 		return doctorPanel.getTabBar().getSelectedTab();
 	}
+
+	//Module : 6 Start
+	public void initTableOsce()
+	{
+		paths.add("oscename");
+		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
+			Renderer<String> renderer = new AbstractRenderer<String>() {
+
+				public String render(String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(OsceDayProxy object) {
+				return renderer.render(object.getOsce().getName());
+			}
+		}, constants.oscedoc());
+		
+		paths.add("starttime");
+		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
+
+			Renderer<Date> renderer = new AbstractRenderer<Date>() {
+
+				public String render(Date obj) {
+					return obj == null ? "" : String.valueOf(DateTimeFormat.getFormat("HH:mm").format(obj).substring(0,5));
+				}
+			};
+
+			@Override
+			public String getValue(OsceDayProxy object) {
+				return renderer.render(object.getTimeStart());
+			}
+		}, constants.starttimedoc());
+		
+		paths.add("endtime");
+		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
+			Renderer<Date> renderer = new AbstractRenderer<Date>() {
+				public String render(Date obj){
+					return obj == null ? "" : String.valueOf(DateTimeFormat.getFormat("HH:mm").format(obj).substring(0,5));
+				}
+			};
+			
+			@Override
+			public  String getValue(OsceDayProxy object)
+			{
+				return renderer.render(object.getTimeEnd());
+			}
+		}, constants.endtimedoc());
+
+	}
+	
+	public void initRoleTable()
+	{
+		paths1.add("spshortname");
+		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {
+			Renderer<String> renderer = new AbstractRenderer<String>() {
+
+				public String render(String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(RoleParticipantProxy object) {
+				return renderer.render(object.getStandardizedRole().getShortName());
+			}
+		}, constants.shortName());
+		
+		paths1.add("version");
+		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {
+
+			Renderer<Integer> renderer = new AbstractRenderer<Integer>() {
+
+				public String render(Integer obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(RoleParticipantProxy object) {
+				return renderer.render(object.getVersion());
+			}
+		}, constants.version());
+		
+		paths1.add("roletype");
+		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {
+			Renderer<String> renderer = new AbstractRenderer<String>() {
+				public String render(String obj){
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+			
+			@Override
+			public  String getValue(RoleParticipantProxy object)
+			{
+				return renderer.render(object.getType().name());
+			}
+		}, constants.roleType());
+		
+	}
+
+	@Override
+	public CellTable<OsceDayProxy> getTable() {
+		return oscetable;
+	}
+
+
+	@Override
+	public String[] getPaths() {
+		return paths.toArray(new String[paths.size()]);
+	}
+
+
+	@Override
+	public CellTable<RoleParticipantProxy> getRoleTable() {
+		
+		return roletable;
+	}
+	
+	//Module : 6 End
 }
