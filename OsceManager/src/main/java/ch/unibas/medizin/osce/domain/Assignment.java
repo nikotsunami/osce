@@ -53,4 +53,6 @@ public class Assignment {
 
     @ManyToOne
     private Doctor examiner;
+    
+    private Integer sequenceNumber;
 }
