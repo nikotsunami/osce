@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
@@ -9,8 +8,11 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
@@ -27,7 +29,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -91,6 +92,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	IconButton delete;
 	@UiField
 	IconButton maps;
+	@UiField
+	IconButton status;
 	
 	// Labels (Fieldnames)
 	@UiField
@@ -324,6 +327,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		bankCity.setInnerText((bank == null || bank.getCity() == null) ? "" : String.valueOf(bank.getCity()));
 		bankPostalCode.setInnerText((bank == null || bank.getPostalCode() == null) ? "" : String.valueOf(bank.getPostalCode()));
 		bankOwnerName.setInnerText((bank == null || bank.getOwnerName() == null) ? "" : String.valueOf(bank.getOwnerName()));
+
+		// Module 3 Task B
+		setStatusIcon(proxy.getStatus());
+		// Module 3 Task B
 	}
 	
 	private String createGoogleMapsLink(StandardizedPatientProxy proxy) {
@@ -378,6 +385,33 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	void onPull(ClickEvent event) {
 		delegate.pullClicked();
 	}
+
+	// Module 3 Task B
+	@UiHandler("status")
+	public void onStatusClicked(ClickEvent e) {
+		Log.info("onStatusClicked");
+		if (proxy.getStatus() == StandardizedPatientStatus.ANONYMIZED) {
+			status.setVisible(false);
+		} else {
+			delegate.statusClicked();
+		}
+	}
+	
+	@Override
+	public void setStatusIcon(
+			StandardizedPatientStatus standardizedPatientStatus) {
+		if (standardizedPatientStatus == StandardizedPatientStatus.ANONYMIZED) {
+			status.setVisible(false);
+		} else {
+			Log.info("proxy.getStatus() : " + proxy.getStatus());
+			status.setText((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? constants
+					.inActive() : constants.active());
+			status.setIcon((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? "close"
+					: "check");
+			status.setVisible(true);
+		}
+	}
+	// Module 3 Task B
 
 	@Override
 	public ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubViewImpl getStandardizedPatientAnamnesisSubViewImpl() {

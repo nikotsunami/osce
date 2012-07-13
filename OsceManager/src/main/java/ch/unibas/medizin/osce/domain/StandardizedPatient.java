@@ -36,6 +36,7 @@ import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -109,6 +110,9 @@ public class StandardizedPatient {
 
     @Enumerated
     private WorkPermission workPermission;
+
+    @Enumerated
+    private StandardizedPatientStatus status;
 
     @Size(max = 13)
     @Pattern(regexp = "^[0-9]{13,13}$")

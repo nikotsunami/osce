@@ -14,6 +14,7 @@
 				width="150px" />
 			<my:IconButton ui:field="standardizedPatientAddButton"
 				icon="plusthick"></my:IconButton>
+				<my:IconButton ui:field="addAllButton" icon="plusthick"></my:IconButton>
 			<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>
 		</g:HorizontalPanel>
 		<g:Label ui:field="suggestionBoxLbl"></g:Label>

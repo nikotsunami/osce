@@ -365,7 +365,9 @@ public class TimetableGenerator {
 	public void createScaffold() {
 		
 		// remove old scaffold if existing (and re-create first OSCE day
-		//removeOldScaffold();
+		removeOldScaffold();
+		if(true)
+			return;
 		// TODO: remove old scaffold (all OSCE days and re-create first day again)
 		
 		Set<OsceDay> days = insertOsceDays();
@@ -435,6 +437,7 @@ public class TimetableGenerator {
 
 	/**
 	 * Remove old calculated scaffold (when OsceStatus is changed from GENERATED to BLUEPRINT again)
+	 * 
 	 */
 	private void removeOldScaffold() {
 		// temp variables for first OSCE day (used to re-create OSCE day after deleting whole scaffold)
@@ -452,16 +455,76 @@ public class TimetableGenerator {
 //		osce.setOsce_days(null);
 //		osce.flush();
 		
+		//SPEC[		
+		log.info("removeOldScaffold start");
+		Set<OsceDay> setOsceDays = new HashSet<OsceDay>();		
+		Iterator<OsceDay> itDay = osce.getOsce_days().iterator();		
+		OsceDay firstDay = itDay.next();							
+		OsceDay removeDay = null;
+		log.info("First Day : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());
+		while(itDay.hasNext())
+		{			
+			OsceDay nextDay = itDay.next();
+			log.info("Next Day : " + nextDay.getId() + " : " + nextDay.getOsceDate().toLocaleString());
+			if(firstDay.getOsceDate().after(nextDay.getOsceDate()))
+			{
+				log.info("First Day after Next Day");
+				if(firstDay.getPatientInSemesters() == null || firstDay.getPatientInSemesters().size()==0)
+				{
+					removeDay = firstDay;					
+				}
+				
+				firstDay = nextDay;
+			}
+			else
+			{
+				log.info("Next Day after First Day");
+				if(nextDay.getPatientInSemesters() == null || nextDay.getPatientInSemesters().size()==0)
+				{
+					log.info("Next Day going to be deleted");
+					removeDay = nextDay;
+					log.info("Next Day is deleted");					
+				}
+			}
+			
+			log.info("remove Day going to be deleted");
+			osce.getOsce_days().remove(removeDay);
+			removeDay.remove();			
+			log.info("Next Day is deleted");
+			
+			
+		}
 		
-		// re-create new OSCE day
-		OsceDay newDay = new OsceDay();
-		newDay.setOsce(osce);
-		newDay.setOsceDate(dayRefTimeStart);
-		newDay.setTimeStart(dayRefTimeStart);
-		newDay.setTimeEnd(dayRefTimeEnd);
-		newDay.persist();
 		
-		osceDayRef = newDay;
+		if(firstDay != null)
+		{
+			log.info("First Day not null : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());						
+			Set<OsceSequence> setOsceSeq = firstDay.getOsceSequences();
+			Iterator<OsceSequence> itOsceSeq = setOsceSeq.iterator();
+			//firstDay.getOsceSequences().removeAll(setOsceSeq);			
+			while(itOsceSeq.hasNext())
+			{				
+				OsceSequence osceSequence = itOsceSeq.next();
+				log.info("Removing osce sequence : " + osceSequence.getId() );
+				firstDay.getOsceSequences().remove(osceSequence);
+				osceSequence.remove();
+			}
+			
+			osceDayRef = firstDay;
+		}
+		else
+		{
+			// re-create new OSCE day
+			OsceDay newDay = new OsceDay();
+			newDay.setOsce(osce);
+			newDay.setOsceDate(dayRefTimeStart);
+			newDay.setTimeStart(dayRefTimeStart);
+			newDay.setTimeEnd(dayRefTimeEnd);
+			newDay.persist();
+			osceDayRef = newDay;
+		}	
+		
+		//SPEC]
 	}
 
 	/**

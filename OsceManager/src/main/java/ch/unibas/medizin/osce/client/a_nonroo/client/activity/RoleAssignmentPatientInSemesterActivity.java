@@ -44,6 +44,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.RoleTypes;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -977,7 +978,7 @@ public void refreshData(OsceDayProxy osceDayProxy){
 public void initPatientInSemesterData(
 			List<PatientInSemesterProxy> patientInSemesterProxies,boolean setDataInTable) {
 		if (patientInSemesterProxies != null
-				&& patientInSemesterProxies.size() > 0) {
+				&& patientInSemesterProxies.size() >= 0) {
 			this.patientInSemesterProxies = patientInSemesterProxies;
 
 			Iterator<PatientInSemesterProxy> iterator = patientInSemesterProxies
@@ -1592,5 +1593,57 @@ public void initPatientInSemesterData(
 		}
 
 		// Module 3 d }
+	
+	// Module 3 Task B
+	@Override
+	public void onAddAllActive(
+			List<StandardizedPatientProxy> standardizedPatientProxies) {
+		if (standardizedPatientProxies != null) {
+			for (Iterator<StandardizedPatientProxy> iterator = standardizedPatientProxies
+					.iterator(); iterator.hasNext();) {
+				StandardizedPatientProxy standardizedPatientProxy = (StandardizedPatientProxy) iterator
+						.next();
+				if (standardizedPatientProxy.getStatus() == StandardizedPatientStatus.ACTIVE) {
+					onStandizedPatientAddBtnClick(standardizedPatientProxy);
+				}
+
+			}
+		}
+
+	}
+	
+	public void onDeleteButtonClicked(
+			PatientInSemesterData patientInSemesterData) {
+		PatientInSemesterProxy patientInSemesterProxy = patientInSemesterData
+				.getPatientInSemesterProxy();
+
+		Log.info("patientInSemesterProxy.getPatientInRole().size: "
+				+ patientInSemesterProxy.getPatientInRole().size());
+		// if (patientInSemesterProxy.getPatientInRole() != null
+		// && patientInSemesterProxy.getPatientInRole().size() > 0) {
+		//
+		// MessageConfirmationDialogBox dialogBox = new
+		// MessageConfirmationDialogBox(
+		// "Warning");
+		// dialogBox.showConfirmationDialog(constants.onDeleteRoleAssignedToPatient());
+		//
+		// } else
+		{
+			requests.patientInSemesterRequest().remove()
+					.using(patientInSemesterProxy)
+					.fire(new OSCEReceiver<Void>() {
+
+						public void onSuccess(Void ignore) {
+							Log.debug("Sucessfully deleted");
+							init();
+						}
+					});
+		}
+		
+	}
+	
+	// Module 3 Task B
+	
+	
 	
 }

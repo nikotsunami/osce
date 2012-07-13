@@ -550,4 +550,15 @@ public interface OsceConstants extends Constants {
 	public String starttimedoc();
 	public String endtimedoc();
 	//moduel 7
+
+	//Module 3 : Task : B
+	
+	public String addAllActive();
+	public String onDeleteRoleAssignedToPatient();
+	public String deletePatientInSemester();
+	public String active();
+	public String inActive();
+	public String patientIsNotAvailable();
+	
+	//Module 3 : Task : B	
 }

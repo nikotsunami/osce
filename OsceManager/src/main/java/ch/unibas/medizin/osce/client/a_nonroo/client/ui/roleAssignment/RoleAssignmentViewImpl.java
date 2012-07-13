@@ -108,7 +108,7 @@ public class RoleAssignmentViewImpl extends Composite implements
 		autoAssignmentBtn.setText(constants.autoAssign());
 		addManuallyBtn.setText(constants.addManually());
 		headers = new String[] { constants.name(), constants.accepted(),
-				constants.assignTo(), "" };
+				constants.assignTo(), "", "" };
 
 		init();
 
