@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -82,6 +84,11 @@ public class RoomMaterialsEditViewImpl extends Composite implements
 	private Delegate delegate;
 	private Presenter presenter;
 
+	
+	// Violation Changes Highlight
+			Map<String, Widget> editViewMap;
+		// E Violation Changes Highlight
+			
 	public RoomMaterialsEditViewImpl() {
 
 		initWidget(BINDER.createAndBindUi(this));
@@ -104,6 +111,15 @@ public class RoomMaterialsEditViewImpl extends Composite implements
 
 		name.setFocus(true);
 		name.selectAll();
+		
+		// Violation Changes Highlight
+					editViewMap=new HashMap<String, Widget>();
+					editViewMap.put("name",name);
+					editViewMap.put("type",type );
+					editViewMap.put("price", price);
+					editViewMap.put("priceType", priceType);
+					
+				// E Violation Changes Highlight
 
 	}
 
@@ -262,4 +278,13 @@ public class RoomMaterialsEditViewImpl extends Composite implements
 		return priceType.getValue();
 	}
 
+	// Violation Changes Highlight
+
+		@Override
+		public Map getEditViewMap() {
+			// TODO Auto-generated method stub
+			return this.editViewMap;
+		}
+		
+		// E Violation Changes Highlight
 }

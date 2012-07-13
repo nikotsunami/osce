@@ -3,9 +3,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsView;
@@ -42,6 +45,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -170,7 +174,7 @@ TopicsAndSpecDetailsView.Delegate
 	public void newClicked(final String value, final String value2, final StudyYears value3) {
 		
 		Log.debug("RoleTopic Adding");
-		requests.find(place.getProxyId()).fire(new Receiver<Object>(){
+		requests.find(place.getProxyId()).fire(new OSCEReceiver<Object>(){
 		//spReq.persist().using(specialisationProxy).fire(new Receiver<Void>(){
 			@Override
 			public void onFailure(ServerFailure error){
@@ -192,9 +196,14 @@ TopicsAndSpecDetailsView.Delegate
 					Log.debug("Specialization : " + specialisationProxy.getVersion());
 					Log.debug("Specialization : " + specialisationProxy.stableId());					
 					roletopic.setSpecialisation((SpecialisationProxy)object);
-				
-					roletopicReq.persist().using(roletopic).fire(new Receiver<Void>(){
+					// Violation Changes Highlight
 					
+					//roletopicReq.persist().using(roletopic).fire(new Receiver<Void>(){
+					
+					Log.info("Map Size:" + view.viewPopupMapAdd().size());
+					
+					roletopicReq.persist().using(roletopic).fire(new OSCEReceiver<Void>(view.viewPopupMapAdd()){
+						// E Violation Changes Highlight
 						@Override
 						public void onFailure(ServerFailure error){
 							Log.error("onFilure");
@@ -204,7 +213,13 @@ TopicsAndSpecDetailsView.Delegate
 						@Override
 						public void onSuccess(Void arg0) {
 							System.out.println("Save RoleTopic values value Succesfully");
-											
+							// Violation Changes Highlight
+							Log.info("Save RoleTopic values value Succesfully");
+							view.getAddTextBox().removeStyleName("higlight_onViolation");
+							view.getslots_till_change().removeStyleName("higlight_onViolation");
+							view.getStudyYearListBox().removeStyleName("higlight_onViolation");
+							view.getAddPopupPanel().hide();
+							// E Violation Changes Highlight				
 							init();
 						
 						}
@@ -359,7 +374,10 @@ TopicsAndSpecDetailsView.Delegate
 	        toolTip.add(toolTipContentPanel);   // you can add any widget here
 	        // Issue Role
 	        //toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecDetailsViewPopupXPosition()),new Integer(constants.TopicsAndSpecDetailsViewPopupYPosition())); 
-	        toolTip.setPopupPosition(left,top);
+	        //toolTip.setPopupPosition(left,top);
+	     // Violation Changes Highlight
+	        toolTip.setPopupPosition(left-180,top+10);
+		     // E Violation Changes Highlight
 	        // E: Issue Role
 	        toolTip.show();
 	        
@@ -367,8 +385,14 @@ TopicsAndSpecDetailsView.Delegate
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					requests.roleTopicRequest().findRoleTopic(roletopic.getId()).fire(new Receiver<RoleTopicProxy>(
-							){
+					// Violation Changes Highlight
+					final Map<String, Widget> viewPopupMap=new HashMap<String, Widget>();
+					viewPopupMap.put("name",toolTipLabel);
+					viewPopupMap.put("slotsUntilChange",slotBox);
+					viewPopupMap.put("studyYear",StudyYearListBox);
+					
+					requests.roleTopicRequest().findRoleTopic(roletopic.getId()).fire(new OSCEReceiver<RoleTopicProxy>()
+					{
 
 								@Override
 								public void onSuccess(RoleTopicProxy response) {
@@ -377,7 +401,7 @@ TopicsAndSpecDetailsView.Delegate
 									response.setName(toolTipLabel.getText());
 									response.setSlotsUntilChange(new Integer((slotBox.getSelectedIndex()+1)));
 									response.setStudyYear(StudyYearListBox.getValue());
-									roleReq.persist().using(roletopic).fire(new Receiver<Void>(){
+									roleReq.persist().using(roletopic).fire(new OSCEReceiver<Void>(viewPopupMap){
 										
 										@Override
 										public void onFailure(ServerFailure error){
@@ -395,8 +419,10 @@ TopicsAndSpecDetailsView.Delegate
 										}
 									});					
 								}							
-							}
-						);
+							});
+					// E Violation Changes Highlight
+					
+					
 									
 									
 					}

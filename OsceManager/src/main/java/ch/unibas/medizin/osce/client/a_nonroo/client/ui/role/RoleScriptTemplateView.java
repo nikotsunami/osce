@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.shared.TraitTypes;
@@ -36,4 +38,8 @@ public interface RoleScriptTemplateView extends IsWidget{
 	    
 		SimplePanel getDetailsPanel();
 	    void setPresenter(Presenter roleScriptTemplateActivity);
+	    
+	 // Violation Changes Highlight
+    	public Map getAadTemplateMap();
+	 // E Violation Changes Highlight
 }

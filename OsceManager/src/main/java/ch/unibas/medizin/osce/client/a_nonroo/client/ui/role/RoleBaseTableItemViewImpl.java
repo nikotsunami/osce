@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
@@ -46,6 +48,10 @@ RoleBaseTableItemView {
 
 	}
 
+	// Violation Changes Highlight
+		Map<String, Widget> viewMap;
+	// E Violation Changes Highlight
+	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private Presenter presenter;
 	private Delegate delegate;
@@ -174,8 +180,10 @@ RoleBaseTableItemView {
 		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);		
 
 		// Issue Role V2 
-		
-		if(txtSubItem.getText().trim().equals(""))
+
+		// Violation Changes Highlight
+
+		/*if(txtSubItem.getText().trim().equals(""))
 		{
 			Log.info("TextBox Value is Null");
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
@@ -194,12 +202,13 @@ RoleBaseTableItemView {
 			
 		}
 		else
-		{
+		{*/
 			Log.info("TextBox Value is Not Null");
 			delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table,this);		
-		}
+		//}
+			// E Violation Changes Highlight
 		
-		// E: Issue Role V2 
+ 
 	}
 	
 	@UiHandler("close")
@@ -258,6 +267,14 @@ RoleBaseTableItemView {
 		//AddSubItem.setStyleName("padding=10");
 		
 	//	accessLabel1=new Label();
+		
+
+		// Violation Changes Highlight
+		
+		viewMap=new HashMap<String, Widget>();
+		viewMap.put("itemName", txtSubItem);
+				
+		// E Violation Changes Highlight
 	}
 	
 	public void setValue(RoleBaseItemProxy roleBaseItemProxy)
@@ -464,6 +481,14 @@ RoleBaseTableItemView {
 //		return this.accessLabel1;
 //	}
 
-	
+	// Violation Changes Highlight
+
+	@Override
+	public Map getViewMap() {
+		// TODO Auto-generated method stub
+		return this.viewMap;
+	}
+
+	// E Violation Changes Highlight	
 	
 }

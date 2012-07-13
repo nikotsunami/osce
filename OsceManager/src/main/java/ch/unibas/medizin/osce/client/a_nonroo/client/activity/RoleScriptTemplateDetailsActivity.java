@@ -1,12 +1,15 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplateDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessView;
@@ -51,6 +54,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -273,15 +277,19 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 		roleBaseitem.setRoleTemplate(roleTemplate);
 		roleBaseitem.setSort_order(view.getTableItem().getWidgetCount()+1);
 		
+		// Violation Changes Highlight
+				Log.info("Map Size: " + view.getViewMap().size());
+		// E Violation Changes Highlight
+		
 		roleBaseItemReq.persist().using(roleBaseitem)
 				.fire(new Receiver<Void>() {
 					
 					@Override
 					public void onSuccess(Void arg0) {
 						Log.info("sucessfully RoleBase Item saved");
-												
-						requests.find(roleBaseitem.stableId()).fire(new Receiver<Object>() {
-
+						// Violation Changes Highlight					
+						requests.find(roleBaseitem.stableId()).fire(new OSCEReceiver<Object>(view.getViewMap()) {
+						// E Violation Changes Highlight
 							@Override
 							public void onSuccess(Object response) {
 								// TODO Auto-generated method stub
@@ -329,8 +337,9 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 		Log.info("Inside of addRoleBaseSubItem() to add and retrive sub item data");
 		//final int totalRow = table.getRowCount();
 		
-		requests.find(roleBaseItemProxy.stableId()).with("roleTableItem").fire(new Receiver<Object>(){
-			
+		// Violation Changes Highlight
+		requests.find(roleBaseItemProxy.stableId()).with("roleTableItem").fire(new OSCEReceiver<Object>(){
+		// E Violation Changes Highlight
 				@Override
 				public void onFailure(ServerFailure error){
 					Log.error("onFilure");
@@ -356,8 +365,10 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 						roleTableItemProxy.setRoleBaseItem((RoleBaseItemProxy)object);
 						final Long roleBaseItemId = ((RoleBaseItemProxy)object).getId(); 
 						
-						roleTableItemReq.persist().using(roleTableItemProxy).fire(new Receiver<Void>(){
-							
+						// Violation Changes Highlight
+						Log.info("Map Size Is: " + view.getRoleBaseTableItemViewImpl().getViewMap().size());											
+						roleTableItemReq.persist().using(roleTableItemProxy).fire(new OSCEReceiver<Void>(view.getRoleBaseTableItemViewImpl().getViewMap()){
+						// E Violation Changes Highlight
 							@Override
 							public void onFailure(ServerFailure error){
 								Log.error("onFilure");
@@ -399,8 +410,10 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 	protected void onRangeChanged( Long roleBaseItemId) {
 		final Range range = table.getVisibleRange();
 
-		final Receiver<List<RoleTableItemProxy>> callback = new Receiver<List<RoleTableItemProxy>>() {
-
+		Log.info("Map Size: " + view.getRoleBaseTableItemViewImpl().getViewMap().size());
+		// Violation Changes Highlight
+		final Receiver<List<RoleTableItemProxy>> callback = new OSCEReceiver<List<RoleTableItemProxy>>(view.getRoleBaseTableItemViewImpl().getViewMap()) {
+		// E Violation Changes Highlight
 			@Override
 			public void onSuccess(List<RoleTableItemProxy> response) {
 				if (view == null) {
@@ -478,6 +491,11 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 			    
 			        toolTip.show();
 			        
+			     // Violation Changes Highlight
+			        final Map<String, Widget> editPopupViewMap=new HashMap<String, Widget>();
+			        editPopupViewMap.put("item_name", toolTipLabel);			        
+				     // E Violation Changes Highlight			    
+			        
 			       /* toolTipChange.addClickHandler(new ClickHandler() {
 						
 						@Override
@@ -519,14 +537,15 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 								
 					});*/
 			        
- toolTipChange.addClickHandler(new ClickHandler() {
+			        toolTipChange.addClickHandler(new ClickHandler() {
 						
 						@Override
 						public void onClick(ClickEvent event) 
 						{
 							
-
-							// Issue Role V2
+							 // Violation Changes Highlight
+							
+							/*// Issue Role V2
 							
 							if(toolTipLabel.getText().trim().equals(""))
 							{
@@ -544,12 +563,14 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 										return;
 											}
 										});
-							}
-							else
-							{
-								Log.info("Not Null Value....");
-							
-								requests.roleBaseItemRequest().findRoleBaseItem(roleBaseItemProxy.getId()).fire(new Receiver<RoleBaseItemProxy>() 
+							}*/
+							//else
+							//{
+							 // E: Violation Changes Highlight
+								Log.info("Value....");
+								 // Violation Changes Highlight
+								requests.roleBaseItemRequest().findRoleBaseItem(roleBaseItemProxy.getId()).fire(new OSCEReceiver<RoleBaseItemProxy>() 
+								 // E: Violation Changes Highlight
 										{
 								
 								
@@ -558,7 +579,8 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 												RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
 												response = roleBaseItemReq.edit(response);
 												response.setItem_name(toolTipLabel.getText());
-												roleBaseItemReq.persist().using(roleBaseItemProxy).fire(new Receiver<Void>(){
+												Log.info("Map Size: " + editPopupViewMap.size());												
+												roleBaseItemReq.persist().using(roleBaseItemProxy).fire(new OSCEReceiver<Void>(editPopupViewMap){
 													
 													@Override
 													public void onFailure(ServerFailure error){
@@ -580,7 +602,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 												});					
 											}							
 										});
-								}
+								//}
 							}
 								
 					});
@@ -647,8 +669,11 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 									RoleTableItemRequest roleTableItemReq = requests.roleTableItemRequest();										
 									response = roleTableItemReq.edit(response);
 									response.setItemName(toolTipLabel.getText());
-								
-									roleTableItemReq.persist().using(roleTableItem).fire(new Receiver<Void>(){
+
+									// Violation Changes Highlight
+									Log.info("Map Size: " + view.getRoleBaseTableItemViewImpl().getViewMap());									
+									roleTableItemReq.persist().using(roleTableItem).fire(new OSCEReceiver<Void>(view.getRoleBaseTableItemViewImpl().getViewMap()){
+									// E Violation Changes Highlight
 										
 									@Override
 									public void onFailure(ServerFailure error){
@@ -711,8 +736,8 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		
 			RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
 			rolebaseItem = roleBaseItemReq.edit(rolebaseItem);
-			rolebaseItem.setDeleted(true);
-			roleBaseItemReq.persist().using(rolebaseItem).fire(new Receiver<Void>() {
+			rolebaseItem.setDeleted(true);			
+			roleBaseItemReq.persist().using(rolebaseItem).fire(new OSCEReceiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
@@ -732,8 +757,11 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
 		roleBaseItem = roleBaseItemReq.edit(roleBaseItem);
 		roleBaseItem.setDeleted(false);
-		roleBaseItemReq.persist().using(roleBaseItem).fire(new Receiver<Void>() {
-
+		Log.info("Map Size: " + view.getViewMap().size());
+		// Violation Changes Highlight		
+		roleBaseItemReq.persist().using(roleBaseItem).fire(new OSCEReceiver<Void>(view.getViewMap()) 
+		{
+		// E Violation Changes Highlight
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("BaseItem Deleted Successfully");
@@ -921,6 +949,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 				
 				editRoleBasedItemProxy.setRoleItemAccess(setRoleItemAccessProxy);
 				
+				// PERSIST TEST
 				roleBaseItemReq.persist().using(editRoleBasedItemProxy).fire(new Receiver<Void>() {
 
 					@Override
@@ -930,8 +959,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 						toolTip.hide();
 						view.getTableItem().clear();
 						init();
-						init2();
-						
+						init2();						
 					}
 					
 				});
@@ -986,8 +1014,8 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 				
 	
 		
-		editRoleBasedItemProxy.setRoleItemAccess(editSetRoleItemAccessProxy);
-		roleBaseItemReq.persist().using(editRoleBasedItemProxy).fire(new Receiver<Void>() {
+		editRoleBasedItemProxy.setRoleItemAccess(editSetRoleItemAccessProxy);		
+		roleBaseItemReq.persist().using(editRoleBasedItemProxy).fire(new OSCEReceiver<Void>() {
 	
 			@Override
 			public void onSuccess(Void response) {

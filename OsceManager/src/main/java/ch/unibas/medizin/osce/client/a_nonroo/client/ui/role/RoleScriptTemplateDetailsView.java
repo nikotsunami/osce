@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsView.Presenter;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
@@ -36,5 +38,7 @@ public interface RoleScriptTemplateDetailsView extends IsWidget{
     public VerticalPanel getTableItem();
 	//RoleBaseTableItemViewImpl getRoleBaseTableItemViewImpl();
     CellTable<RoleBaseItemProxy> getTable();
-    
+    // Violation Changes Highlight
+    public Map getViewMap();
+ // E Violation Changes Highlight    
 }
