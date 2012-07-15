@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.server;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -371,8 +372,8 @@ public class TimetableGenerator {
 		
 		// remove old scaffold if existing (and re-create first OSCE day
 		removeOldScaffold();
-		if(true)
-			return;
+//		if(true)
+//			return;
 		// TODO: remove old scaffold (all OSCE days and re-create first day again)
 		
 		Set<OsceDay> days = insertOsceDays();
