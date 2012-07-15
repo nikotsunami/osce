@@ -1,11 +1,18 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.csvreader.CsvReader;
+
 import javax.validation.constraints.Size;
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
 
@@ -54,35 +61,34 @@ public class AnamnesisChecksValue{
     		return;
     	}
     	
-    	EntityManager em = entityManager();
-    	
-		// find all existing AnamnesisChecksValues for the given AnamnesisForm
-		TypedQuery<AnamnesisChecksValue> qValue = em
-				.createQuery(
-						"SELECT o FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm",
-						AnamnesisChecksValue.class);
-		qValue.setParameter("anamnesisForm", form);
-		List<AnamnesisChecksValue> anamnesisChecksValues = qValue.getResultList();
-		
-		for (AnamnesisChecksValue value : anamnesisChecksValues) {
-			log.info("existing anamnesisChecksValues: " + value.getId());
-		}
+    	generateSampleData();
 
-		// find anamnesisChecks which are not assigned to the current
-		// anamnesisForm and
-		// init a table...
-		List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksWithoutAnamnesischecksvalues(anamnesisChecksValues);
-		for (AnamnesisCheck check : anamnesisChecks) {
-			AnamnesisChecksValue newValue = new AnamnesisChecksValue();
-			newValue.anamnesischeck = check;
-			newValue.anamnesisform = form;
-			log.info("unassigned check: " + check.getId());
-			log.info("new value: " + newValue.getId());
-			
-			newValue.flush();
-			newValue.persist();
-			em.refresh(newValue);
-		}
+//    	EntityManager em = entityManager();
+//    	
+//		// find all existing AnamnesisChecksValues for the given AnamnesisForm
+//		TypedQuery<AnamnesisChecksValue> qValue = em
+//				.createQuery(
+//						"SELECT o FROM AnamnesisChecksValue AS o WHERE anamnesisform = :anamnesisForm",
+//						AnamnesisChecksValue.class);
+//		qValue.setParameter("anamnesisForm", form);
+//		List<AnamnesisChecksValue> anamnesisChecksValues = qValue.getResultList();
+//		
+//		for (AnamnesisChecksValue value : anamnesisChecksValues) {
+//			log.info("existing anamnesisChecksValues: " + value.getId());
+//		}
+//
+//		// find anamnesisChecks which are not assigned to the current
+//		// anamnesisForm and
+//		// init a table...
+//		List<AnamnesisCheck> anamnesisChecks = findAnamnesisChecksWithoutAnamnesischecksvalues(anamnesisChecksValues);
+//		for (AnamnesisCheck check : anamnesisChecks) {
+//			AnamnesisChecksValue newValue = new AnamnesisChecksValue();
+//			newValue.anamnesischeck = check;
+//			newValue.anamnesisform = form;
+//			newValue.flush();
+//			newValue.persist();
+//			em.refresh(newValue);
+//		}
     }
     
     public static Long countAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisCheckTitleId, String needle) {
@@ -260,5 +266,99 @@ public class AnamnesisChecksValue{
             q.setParameter("anamnesischecksvalues_item" + anamnesischecksvaluesIndex++, _anamnesischecksvalue);
         }
         return q.getResultList();
+    }
+    
+    private static void generateSampleData() {
+    	EntityManager em = entityManager();
+    	List<StandardizedPatient> simPats = StandardizedPatient.findAllStandardizedPatients();
+    	String[] options;
+    	StringBuilder sb;
+    	List<String> openOptions;
+    	int selectedAnswer;
+		try {
+			HashMap<Long, List<String>> openQuestions = loadOpenQuestions();
+			int counter = 0;
+			for (StandardizedPatient simPat : simPats) {
+				log.info("patient " + counter++ + "/" + simPats.size());
+    			List<AnamnesisCheck> checks = AnamnesisCheck.findAllAnamnesisChecks();
+    			for (AnamnesisCheck check : checks) {
+    				AnamnesisChecksValue value = new AnamnesisChecksValue();
+    				value.anamnesischeck = check;
+    				value.anamnesisform = simPat.getAnamnesisForm();
+    				if (Math.random() > 0.25) {
+		    			switch(check.getType()) {
+	    				case QUESTION_MULT_M:
+	    					options = check.getValue().split("\\|");
+	    					sb = new StringBuilder();
+	    					for (int i=0; i < options.length; i++) {
+	    						sb.append(Math.round(Math.random()));
+	    						if (i < options.length - 1)
+	    							sb.append("-");
+	    					}
+	    					value.anamnesisChecksValue = sb.toString();
+	    					break;
+	    				case QUESTION_MULT_S:
+	    					options = check.getValue().split("\\|");
+	    					sb = new StringBuilder();
+	    					selectedAnswer = (int) Math.round(Math.random() * (options.length-1));
+	    					for (int i=0; i < options.length; i++) {
+	    						if (i == selectedAnswer) {
+	    							sb.append(1);
+	    						} else {
+	    							sb.append(0);
+	    						}
+	    						if (i < options.length - 1)
+	    							sb.append("-");
+	    					}
+	    					value.anamnesisChecksValue = sb.toString();
+	    					break;
+	    				case QUESTION_YES_NO:
+	    					if (Math.round(Math.random()) > 0) {
+	    						value.truth = true;
+	    					} else {
+	    						value.truth = false;
+	    					}
+	    					break;
+	    				case QUESTION_OPEN:
+	    					openOptions = openQuestions.get(check.getId());
+	    					if (openOptions == null) {
+	    						log.error("question not found: id = " + check.getId() );
+	    					} else {
+	    						selectedAnswer = (int) Math.round(Math.random() * (openOptions.size() - 1));
+	    						value.anamnesisChecksValue = openOptions.get(selectedAnswer);
+	    					}
+	    					break;
+	    				}
+    				}
+
+    				value.flush();
+    				value.persist();
+    				em.refresh(value);
+    			}
+	    			
+	    	}
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+    }
+    
+    private static HashMap<Long, List<String>> loadOpenQuestions() throws IOException {
+    	HashMap<Long, List<String>> map = new HashMap<Long, List<String>>();
+    	log.info("working directory: " + System.getProperty("user.dir"));
+    	CsvReader reader = new CsvReader("/home/mwagner/Documents/osceDocs/beispieldaten.csv");
+    	while (reader.readRecord()) {
+    		int length = reader.getColumnCount();
+    		List<String> options = new ArrayList<String>();
+    		for (int i=1; i < length - 1; i++) {
+    			options.add(reader.get(i));
+    		}
+    		try {
+    			int id = Integer.parseInt(reader.get(0));
+        		map.put(new Long(id), options);
+    		} catch (NumberFormatException ex) {
+    			log.warn("cannot parse int: " + reader.get(0));
+    		}
+    	}
+    	return map;
     }
 }
