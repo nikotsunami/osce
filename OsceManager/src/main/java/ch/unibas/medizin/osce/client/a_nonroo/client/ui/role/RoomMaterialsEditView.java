@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.shared.MaterialType;
 import ch.unibas.medizin.osce.shared.PriceType;
@@ -38,4 +40,8 @@ public interface RoomMaterialsEditView extends IsWidget {
 	abstract Integer getPrice();
 
 	abstract PriceType getPriceType();
+	
+	// Violation Changes Highlight
+		public Map getEditViewMap();
+		// E Violation Changes Highlight
 }

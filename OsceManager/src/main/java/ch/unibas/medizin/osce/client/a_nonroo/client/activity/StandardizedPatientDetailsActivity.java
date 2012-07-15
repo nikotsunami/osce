@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
@@ -34,6 +35,8 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -90,6 +93,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	private UserPlaceSettings userSettings;
 	private DMZSyncServiceAsync dmxSyncService = null;
 	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
+	private static final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -138,7 +142,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		standardizedPatientMediaSubViewImpl.setDelegate(this);
 		loadDisplaySettings();
-		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
+		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new InitializeActivityReceiver());
 	}
 	
 	/**
@@ -646,14 +650,75 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				Operation.EDIT));
 	}
 
+	
+	//Module 3 : Task B
+	@Override
+	public void statusClicked() {
+
+		final StandardizedPatientStatus newStatus = (standardizedPatientProxy
+				.getStatus() == StandardizedPatientStatus.ACTIVE) ? StandardizedPatientStatus.INACTIVE
+				: StandardizedPatientStatus.ACTIVE;
+
+		Log.info("Status is to : " + standardizedPatientProxy.getStatus());
+		StandardizedPatientRequest standardizedPatientRequest = requests
+				.standardizedPatientRequest();
+		standardizedPatientProxy = standardizedPatientRequest
+				.edit(standardizedPatientProxy);
+		standardizedPatientProxy.setStatus(newStatus);
+		standardizedPatientRequest.persist().using(standardizedPatientProxy)
+				.fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void arg0) {
+						// init();
+						Log.info("Patient is persist with " + newStatus.name());
+						Log.info("Status is change to : " + newStatus.name());
+						view.setStatusIcon(newStatus);
+						placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(), Operation.NEW));
+					}
+
+				});
+
+	}
+	
 	@Override
 	public void deletePatientClicked() {
 		// TODO replace with appropriate message
+
+		if (standardizedPatientProxy.getPatientInSemester() != null
+				&& standardizedPatientProxy.getPatientInSemester().size() > 0) {
+
+			StandardizedPatientRequest standardizedPatientRequest = requests
+					.standardizedPatientRequest();
+			standardizedPatientProxy = standardizedPatientRequest
+					.edit(standardizedPatientProxy);
+			standardizedPatientProxy
+					.setStatus(StandardizedPatientStatus.ANONYMIZED);
+			standardizedPatientRequest.persist()
+					.using(standardizedPatientProxy)
+					.fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void arg0) {
+							// init();
+
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
+									"Warning");
+							dialogBox.showConfirmationDialog(constants
+									.onDeleteRoleAssignedToPatient());
+							view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
+						}
+
+					});
+		
+			//Module 3 : Task B
+		} else {
+		
 		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
             return;
         }
 		
-        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
+        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
             public void onSuccess(Void ignore) {
                 if (widget == null) {
                     return;
@@ -661,6 +726,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
             	placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!DELETED"));
             }
         });
+		}
 		
 	}
 	@Override

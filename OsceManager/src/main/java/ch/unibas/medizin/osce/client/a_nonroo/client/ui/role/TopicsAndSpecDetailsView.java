@@ -1,19 +1,17 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView.Delegate;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView.Presenter;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
-import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 
 public interface TopicsAndSpecDetailsView extends IsWidget{
     public interface Presenter {
@@ -43,4 +41,11 @@ public interface TopicsAndSpecDetailsView extends IsWidget{
     void setPresenter(Presenter systemStartActivity);
 	CellTable<RoleTopicProxy> getTable();
 	String[] getPaths();
+	// Violation Changes Highlight
+		public Map viewPopupMapAdd();
+		public PopupPanel getAddPopupPanel();
+		public TextBox getAddTextBox();
+		public ListBox getslots_till_change();
+		public ValueListBox<StudyYears> getStudyYearListBox();
+		// E Violation Changes Highlight
 }

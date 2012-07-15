@@ -8,6 +8,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsEditView;
@@ -181,8 +182,16 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 	public void saveClicked() {
 		Log.info("saveClicked");
 
-		if (view.getName() == null || (view.getName().compareTo("") == 0)) {
-			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");*/
+
+		// Violation Changes Highlight
+
+		materialList.setType(view.getType());
+		materialList.setPrice(view.getPrice());
+		materialList.setPriceType(view.getPriceType());
+
+	/*	if (view.getName() == null || (view.getName().compareTo("") == 0)) 
+		{
+			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
 			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " Name");
@@ -199,13 +208,16 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 
 			
 			
-//E: Issue Role
+		//E: Issue Role
 			return;
-		} else {
-			materialList.setName(view.getName());
+		} 
+		else 
+		{
+			materialList.setName(view.getName());			
 		}
-		if (view.getType() == null	|| (view.getType().toString().compareTo("") == 0)) {
-			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");*/
+		if (view.getType() == null	|| (view.getType().toString().compareTo("") == 0)) 
+		{
+			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
 			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " Type");
@@ -222,14 +234,18 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 
 			
 			
-//E: Issue Role
+		//E: Issue Role
 			return;
-		} else {
+		} 
+		else 
+		{
 			materialList.setType(view.getType());
+			
 		}
 		if (view.getPrice() == null
-				|| (view.getPrice().toString().compareTo("") == 0)) {
-			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");*/
+				|| (view.getPrice().toString().compareTo("") == 0)) 
+		{
+			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
 			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " Price");
@@ -246,14 +262,17 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 
 			
 			
-//E: Issue Role
+		//E: Issue Role
 			return;
-		} else {
-			materialList.setPrice(view.getPrice());
+		} 
+		else 
+		{
+			materialList.setPrice(view.getPrice());			
 		}
 		if (view.getPriceType() == null
-				|| (view.getPriceType().toString().compareTo("") == 0)) {
-			/*Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");*/
+				|| (view.getPriceType().toString().compareTo("") == 0)) 
+		{
+			Window.confirm(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
 			 dialogBox.showConfirmationDialog(OsMaConstant.BLANK_FIELD_MESSAGE + " PriceType");
@@ -270,20 +289,26 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 
 			
 			
-//E: Issue Role
+		//E: Issue Role
 			return;
-		} else {
+		} 
+		else 
+		{
 			materialList.setPriceType(view.getPriceType());
-		}
-
-		editorDriver.flush().fire(new Receiver<Void>() {
-
-			public void onFailure(ServerFailure error) {
+		}*/
+		
+	
+		Log.info("Map Size: " + view.getEditViewMap().size());
+		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getEditViewMap()) {
+		// E Violation Changes Highlight
+			public void onFailure(ServerFailure error) 
+			{
 				Log.error(error.getMessage());
 
 			}
+			// Violation Changes Highlight
 
-			@Override
+			/*@Override
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
@@ -291,7 +316,8 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 					message += iter.next().getMessage() + "<br>";
 				}
 				Log.warn(" in RoomMaterials -" + message);
-			}
+			}*/
+			// E Violation Changes Highlight
 
 			@Override
 			public void onSuccess(Void response) {

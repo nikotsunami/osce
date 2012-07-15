@@ -33,6 +33,8 @@ public interface RoleAssignmentView extends IsWidget {
 
 		public void initAdvancedSearchByStandardizedRole(long standardizedRoleID);
 		
+		public void onDeleteButtonClicked(PatientInSemesterData patientInSemesterData);
+		
 	}
 
 	void setDelegate(Delegate delegate);

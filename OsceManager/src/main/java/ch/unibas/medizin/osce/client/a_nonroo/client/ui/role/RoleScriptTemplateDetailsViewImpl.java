@@ -2,7 +2,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
@@ -50,10 +52,18 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 
 	}
 
+	// Violation Changes Highlight
+			Map<String, Widget> viewMap;
+		// E Violation Changes Highlight
+			
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private Presenter presenter;
 	private Delegate delegate;
-
+	
+	// Violation Changes Highlight
+	public RoleBaseTableItemViewImpl roleBaseTableItemViewImpl;
+	// E Violation Changes Highlight
+	
 	@UiField
 	TextBox ItemNameText;
 
@@ -69,10 +79,13 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 //	@UiField
 //	RoleBaseTableItemViewImpl roleBaseTableItemViewImpl;
 //	
+
+	// Violation Changes Highlight
 	@Override
 	public RoleBaseTableItemViewImpl getRoleBaseTableItemViewImpl() {
-		return null;
+		return roleBaseTableItemViewImpl;
 	}
+	// E Violation Changes Highlight
 	
 	@Override
 	public VerticalPanel getTableItem() {
@@ -85,32 +98,38 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 	@UiHandler("AddItem")
 	public void addItemClickHandler(ClickEvent event) {
 		System.out.println("selected Item Defination index value.."+ ItemtypeDD.getValue());
-		if(ItemNameText.getValue()==null || ItemNameText.getValue()=="" || ItemNameText.getValue().startsWith(" "))
-		{
-			/*Window.alert("Please Enter appropriate value for Role Base Item");*/
-			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
-			 dialogBox.showConfirmationDialog("Please Enter appropriate value for Role Base Item");
-			 
-			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-				
-				@Override
-				public void onClick(ClickEvent event) {
-					dialogBox.hide();							
-					Log.info("ok click");	
-					return;
-						}
-					});
+		// Violation Changes Highlight
+		
+				/*if(ItemNameText.getValue()==null || ItemNameText.getValue()=="" || ItemNameText.getValue().startsWith(" "))
+				{
+					Window.alert("Please Enter appropriate value for Role Base Item");
+					// Issue Role
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+					 dialogBox.showConfirmationDialog("Please Enter appropriate value for Role Base Item");
+					 
+					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("ok click");	
+							return;
+								}
+							});
 
-			
-			
-//E: Issue Role
-		}
-		else
-		{
-			delegate.newClicked(ItemNameText.getValue(),ItemtypeDD.getValue());
-			ItemNameText.setText("");	
-		}
+					
+					
+			//E: Issue Role
+				}
+				else
+				{
+					delegate.newClicked(ItemNameText.getValue(),ItemtypeDD.getValue());
+					ItemNameText.setText("");	
+				}*/
+				
+				delegate.newClicked(ItemNameText.getValue(),ItemtypeDD.getValue());
+				ItemNameText.setText("");	
+				// E Violation Changes Highlight
 		
 	}
 
@@ -137,6 +156,14 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 		init();
 		// todo
 		AddItem.setText("Add item");
+		
+		// Violation Changes Highlight
+				viewMap=new HashMap<String, Widget>();
+				viewMap.put("item_name", ItemNameText);
+				viewMap.put("item_defination", ItemtypeDD);
+				// E Violation Changes Highlight
+				
+				roleBaseTableItemViewImpl=new RoleBaseTableItemViewImpl();
 	}
 	
 	protected ArrayList<String> paths = new ArrayList<String>();
@@ -255,5 +282,13 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 		TableItem.add(roleBaseTableItemViewImpl);
 	}
 	
-		
+	// Violation Changes Highlight
+
+		@Override
+		public Map getViewMap() {
+			// TODO Auto-generated method stub
+			Log.info("Call getViewMap....");
+			return this.viewMap;
+		}
+		// E Violation Changes Highlight		
 }

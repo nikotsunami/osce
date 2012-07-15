@@ -174,11 +174,10 @@ public void init()
 
 	@Override
 	public void osceGenerateClicked() {
-		Log.info("generate clicked");
+//		Log.info("generate clicked");
 		
-		requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(
-				
-		);
+//		requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire();
+		requests.osceRequestNonRoo().generateAssignments(osceProxy.getId()).fire();
 	}	
 	
 	

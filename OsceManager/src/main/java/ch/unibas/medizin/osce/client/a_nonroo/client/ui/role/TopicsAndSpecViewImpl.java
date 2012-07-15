@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -50,6 +52,10 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	interface TopicsAndSpecViewUiBinder extends UiBinder<Widget, TopicsAndSpecViewImpl> {
 	}
 	
+	// Violation Changes Highlight
+	Map<String, Widget> viewMap;
+	// E Violation Changes Highlight
+	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private Delegate delegate;
@@ -82,8 +88,7 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	
 	@UiField (provided = true)
 	SimplePager Pager;
-	
-	
+		
 	
 	@UiHandler ("AddButton")
 	public void newButtonClicked(ClickEvent event) {
@@ -113,6 +118,12 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 				splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);		
 				FilterButton.setText("Filter");	
 				AddButton.setText("add Specialization");
+				
+				// Violation Changes Highlight
+				Log.info("Call TopicsAndSpecViewImpl Constructor..");
+				viewMap=new HashMap<String, Widget>();				
+				viewMap.put("name",AddTextBox);
+			// E Violation Changes Highlight
 				
 				
 	}
@@ -283,5 +294,18 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 		this.presenter = presenter;
 	}
 		
+	// Violation Changes Highlight
 
+	@Override
+	public Map getMap() {
+		// TODO Auto-generated method stub
+		return this.viewMap;
+	}
+
+	@Override
+	public TextBox getTextBox() 
+	{
+		return this.AddTextBox;		
+	}
+	// E Violation Changes Highlight
 }

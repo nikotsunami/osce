@@ -1,8 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView;
@@ -37,6 +40,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -65,6 +69,10 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	private HorizontalPanel toolTipContentPanel;
 	private TextBox toolTipLabel;
 	private Button toolTipChange;
+	
+	// Violation Changes Highlight
+		public Map<String, Widget> viewMap;
+		// E Violation Changes Highlight
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
@@ -111,6 +119,10 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	public String sortname = "name";
 	public String searchFilter="";
 	
+	// Violation Changes Highlight
+		TopicsAndSpecView topicsAndSpecView;
+		// E Violation Changes Highlight
+	
 	/**
 	 * Initializes the corresponding views and initializes the tables as well as their
 	 * corresponding handlers.
@@ -120,7 +132,10 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		Log.info("TopicsAndSpecDetailsActivityMapper.start()");
 		//By SPEC[Start 
 		//StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
-		final TopicsAndSpecView topicsAndSpecView = new TopicsAndSpecViewImpl();
+		//final TopicsAndSpecView topicsAndSpecView = new TopicsAndSpecViewImpl();
+		// Violation Changes Highlight
+				topicsAndSpecView= new TopicsAndSpecViewImpl();
+				// E Violation Changes Highlight
 		//By SPEC] End
 		topicsAndSpecView.setPresenter(this);
 		initSearch();
@@ -206,8 +221,11 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		SpecialisationRequest specialisationReq = requests.specialisationRequest();
 		SpecialisationProxy special = specialisationReq.create(SpecialisationProxy.class);
 		special.setName(value);
+		//Violation Changes Highlight
+		Log.info("Map Size: " + topicsAndSpecView.getMap().size());		
+		specialisationReq.persist().using(special).fire(new OSCEReceiver<Void>(topicsAndSpecView.getMap()){
+			// E Violation Changes Highlight
 		
-		specialisationReq.persist().using(special).fire(new Receiver<Void>(){
 			@Override
 			public void onSuccess(Void arg0) {
 				Log.info("specification data saved");
@@ -267,7 +285,10 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 				if(view == null){
 				return;
 			}
-				Log.info("Successfully specialisation result value set in table");
+				Log.info("Successfully specialisation result value set in table");		
+				// Violation Changes Highlight				
+				topicsAndSpecView.getTextBox().removeStyleName("higlight_onViolation");
+				// E Violation Changes Highlight
 				table.setRowData(range.getStart(), response);
 
 				// finishPendingSelection();
@@ -363,7 +384,10 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			toolTipChange.setWidth("40px");
 			toolTipChange.setHeight("25px");       
 			
-			
+			// Violation Changes Highlight
+						viewMap=new HashMap<String, Widget>();
+						viewMap.put("name",toolTipLabel);
+						// E Violation Changes Highlight	
 		
 			toolTipContentPanel.add(toolTipLabel);
 			toolTipContentPanel.add(toolTipChange);
@@ -388,34 +412,63 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						requests.specialisationRequest().findSpecialisation(specialization.getId()).fire(new Receiver<SpecialisationProxy>(
-								){
+						// Violation Changes Highlight
 
-									@Override
-									public void onSuccess(SpecialisationProxy response) {
-										SpecialisationRequest spReq = requests.specialisationRequest();										
-										response = spReq.edit(response);
-										response.setName(toolTipLabel.getText());
-										spReq.persist().using(specialization).fire(new Receiver<Void>(){
-											
-											@Override
-											public void onFailure(ServerFailure error){
-												Log.error("onFilure");
-												Log.error(error.getMessage());				
-											}
-											
-											@Override
-											public void onSuccess(Void arg0) {
-												Log.info("Save RoleTopic values value Succesfully according to ToolTip value");
-												toolTip.clear();
-												toolTip.hide();				
-												init();
-											
-											}
-										});					
-									}							
-								}
-							);
+						/*						requests.specialisationRequest().findSpecialisation(specialization.getId()).fire(new Receiver<SpecialisationProxy>(
+														){
+
+															@Override
+															public void onSuccess(SpecialisationProxy response) {
+																SpecialisationRequest spReq = requests.specialisationRequest();										
+																response = spReq.edit(response);
+																response.setName(toolTipLabel.getText());
+																spReq.persist().using(specialization).fire(new Receiver<Void>(){
+																	
+																	@Override
+																	public void onFailure(ServerFailure error){
+																		Log.error("onFilure");
+																		Log.error(error.getMessage());				
+																	}
+																	
+																	@Override
+																	public void onSuccess(Void arg0) {
+																		Log.info("Save RoleTopic values value Succesfully according to ToolTip value");
+																		toolTip.clear();
+																		toolTip.hide();				
+																		init();
+																	
+																	}
+																});					
+															}							
+														});*/
+												//requests.specialisationRequest().findSpecialisation(specialization.getId()).fire(new OSCEReceiverTempTest<SpecialisationProxy>(viewMap)
+												requests.specialisationRequest().findSpecialisation(specialization.getId()).fire(new OSCEReceiver<SpecialisationProxy>(viewMap)
+												{
+																@Override
+															public void onSuccess(SpecialisationProxy response) {
+																SpecialisationRequest spReq = requests.specialisationRequest();										
+																response = spReq.edit(response);
+																response.setName(toolTipLabel.getText());
+																spReq.persist().using(specialization).fire(new OSCEReceiver<Void>(viewMap){
+																	
+																	@Override
+																	public void onFailure(ServerFailure error){
+																		Log.error("onFilure");
+																		Log.error(error.getMessage());				
+																	}
+																	
+																	@Override
+																	public void onSuccess(Void arg0) {
+																		Log.info("Save RoleTopic values value Succesfully according to ToolTip value");
+																		toolTip.clear();
+																		toolTip.hide();				
+																		init();
+																	
+																	}
+																});					
+															}							
+														});		
+												// E Violation Changes Highlight
 										
 										
 						}

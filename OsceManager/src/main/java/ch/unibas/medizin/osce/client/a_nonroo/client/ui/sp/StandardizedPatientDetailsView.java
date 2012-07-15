@@ -1,8 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -22,6 +21,7 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void storeDisplaySettings();
 		void sendClicked();
 		void pullClicked();
+		void statusClicked();
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();
@@ -39,4 +39,5 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 	void setPatientDisclosurePanelOpen(boolean value);
 	void setAnamnesisDisclosurePanelOpen(boolean value);
 	void setSelectedDetailsTab(int tab);
+	public void setStatusIcon(StandardizedPatientStatus status);
 }

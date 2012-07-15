@@ -81,17 +81,16 @@ public class PatientInSemesterFlexTable extends FlexTable {
 
 			this.setWidget(row, 2, patientInSemesterData.assignedTo);
 			this.setWidget(row, 3, patientInSemesterData.navigationButton);
-			this.getRowFormatter().addStyleName(row, "flexTableRow");
+			
+			// Module 3 Task B
+			this.setWidget(row, 4, patientInSemesterData.deleteButton);
+			this.getRowFormatter().addStyleName(row, "flexTableRow");		
 
-			this.getCellFormatter().addStyleName(row, 0,
+			for (int j = 0; j < headers.length; j++) {
+			this.getCellFormatter().addStyleName(row, j,
 					patientInSemesterData.getRowSetColor());
-			this.getCellFormatter().addStyleName(row, 1,
-					patientInSemesterData.getRowSetColor());
-			this.getCellFormatter().addStyleName(row, 2,
-					patientInSemesterData.getRowSetColor());
-
-			this.getCellFormatter().addStyleName(row, 3,
-					patientInSemesterData.getRowSetColor());
+			}
+			// Module 3 Task B
 
 			row++;
 		}
@@ -110,9 +109,11 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		this.getCellFormatter()
 				.addStyleName(0, 0, "flexTableFirstColumnHeader");
 		this.getCellFormatter().addStyleName(0, 1, "flexTableColumnHeader");
-		this.getCellFormatter().addStyleName(0, 2, "flexTableColumnHeader");
-
-		this.getCellFormatter().addStyleName(0, 3, "flexTableLastColumnHeader");
+		this.getCellFormatter().addStyleName(0, 2, "flexTableColumnHeader");		
+		// Module 3 Task B
+		this.getCellFormatter().addStyleName(0, 3, "flexTableColumnHeader");		
+		this.getCellFormatter().addStyleName(0, 4, "flexTableLastColumnHeader");
+		// Module 3 Task B
 
 		// Element tBody = getBodyElement();
 		// Log.info(tBody.getString() + "Child count " + tBody.getChildCount());

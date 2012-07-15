@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
@@ -54,6 +56,9 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 
 	private Delegate delegate;
 	
+	// Violation Changes Highlight
+		Map<String, Widget> addTemplateMap;
+		// E Violation Changes Highlight
 	
 	@UiField
 	public SplitLayoutPanel splitLayoutPanel;
@@ -86,11 +91,17 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
-		if(newBodypart.getValue()==null || newBodypart.getValue()=="" || newBodypart.getValue().startsWith(" "))
-			Window.alert("Please Enter Appropriate Value For Role Template");
-		else
-			delegate.newClicked(newBodypart.getValue());
-		newBodypart.setValue("");
+		// Violation Changes Highlight
+
+				/*if(newBodypart.getValue()==null || newBodypart.getValue()=="" || newBodypart.getValue().startsWith(" "))
+					Window.alert("Please Enter Appropriate Value For Role Template");
+				else
+					delegate.newClicked(newBodypart.getValue());
+				newBodypart.setValue("");*/
+				
+				delegate.newClicked(newBodypart.getValue());
+				newBodypart.setValue("");
+				// E Violation Changes Highlight
 	}
 	
 	@UiField(provided=true)
@@ -122,6 +133,12 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		
+		// Violation Changes Highlight
+				addTemplateMap=new HashMap<String, Widget>();
+				addTemplateMap.put("templateName",newBodypart);
+				
+				// E Violation Changes Highlight
 	}
 	
 	public String[] getPaths() {
@@ -316,4 +333,11 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		}
 		table.addColumn(column, headerText);
 	}
+	// Violation Changes Highlight
+	@Override
+	public Map getAadTemplateMap() {
+		// TODO Auto-generated method stub
+		return this.addTemplateMap;
+	}
+	// E Violation Changes Highlight
 }
