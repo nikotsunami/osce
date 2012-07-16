@@ -25,8 +25,6 @@ public class Assignment {
     @Enumerated
     private AssignmentTypes type;
 
-    private Integer slotNumber;
-
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")

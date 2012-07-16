@@ -7,7 +7,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -16,9 +15,10 @@ import ch.unibas.medizin.osce.shared.PostType;
 
 @RooJavaBean
 @RooToString
-@RooEntity(finders = { "findOscePostBlueprintsBySequenceNumberGreaterThan", "findOscePostBlueprintsBySequenceNumberLessThan" })
+@RooEntity(finders = { "findOscePostBlueprintsByOsceAndSequenceNumberGreaterThan", "findOscePostBlueprintsByOsceAndSequenceNumberLessThan" })
 public class OscePostBlueprint {
-	private static Logger log = Logger.getLogger(OscePostBlueprint.class);
+
+    private static Logger log = Logger.getLogger(OscePostBlueprint.class);
 
     private Boolean isPossibleStart;
 
@@ -43,50 +43,45 @@ public class OscePostBlueprint {
 
     /**
      * TODO: finish and verify this method
-     * Post is a possible start point for a student if post is not a double post
-     * or if it is a double post, then only the first part is a possible start point.
+     * Post is a possible starting point for a student if post is not a double post
+     * or if it is a double post, then only the first part is a possible starting point.
      * @return whether from this post can be started or not
      */
     public boolean isPossibleStart() {
-    	OscePostBlueprint nextPost;
-    	
+        OscePostBlueprint nextPost;
         switch(this.getPostType()) {
             case NORMAL:
                 return true;
             case BREAK:
                 return true;
             case PREPARATION:
-            	nextPost = OscePostBlueprint.findOscePostBlueprintsBySequenceNumberGreaterThan(this.getSequenceNumber()).getSingleResult();
+            	// TODO: verify whether only first post can be starting point
+                nextPost = OscePostBlueprint.findOscePostBlueprintsByOsceAndSequenceNumberGreaterThan(this.getOsce(), this.getSequenceNumber()).getSingleResult();
                 if (nextPost.getPostType().equals(this.getPostType())) {
                     return true;
                 }
                 break;
             case ANAMNESIS_THERAPY:
-                nextPost = OscePostBlueprint.findOscePostBlueprintsBySequenceNumberGreaterThan(this.getSequenceNumber()).getSingleResult();
+            	// TODO: verify whether only first post can be starting point
+                nextPost = OscePostBlueprint.findOscePostBlueprintsByOsceAndSequenceNumberGreaterThan(this.getOsce(), this.getSequenceNumber()).getSingleResult();
                 if (nextPost.getPostType().equals(this.getPostType())) {
                     return true;
                 }
                 break;
-            default:
-            	return false;
         }
         return false;
     }
 
     public OscePostBlueprint otherPartOfDoublePost() {
-    	// check next post
-    	OscePostBlueprint nextPost = OscePostBlueprint.findOscePostBlueprintsBySequenceNumberGreaterThan(this.getSequenceNumber()).getSingleResult();
-    	if(nextPost != null && nextPost.getPostType().equals(this.getPostType())) {
-    		return nextPost;
-    	}
-    	
-    	// check previous post
-    	OscePostBlueprint prevPost = OscePostBlueprint.findOscePostBlueprintsBySequenceNumberLessThan(this.getSequenceNumber()).getSingleResult();
-    	if(prevPost != null && prevPost.getPostType().equals(this.getPostType())) {
-    		return prevPost;
-    	}
-
-    	log.info("other part of post not found!");
-    	return null;
+        OscePostBlueprint nextPost = OscePostBlueprint.findOscePostBlueprintsByOsceAndSequenceNumberGreaterThan(this.getOsce(), this.getSequenceNumber()).getSingleResult();
+        if (nextPost != null && nextPost.getPostType().equals(this.getPostType())) {
+            return nextPost;
+        }
+        OscePostBlueprint prevPost = OscePostBlueprint.findOscePostBlueprintsByOsceAndSequenceNumberLessThan(this.getOsce(), this.getSequenceNumber()).getSingleResult();
+        if (prevPost != null && prevPost.getPostType().equals(this.getPostType())) {
+            return prevPost;
+        }
+        log.info("other part of post not found!");
+        return null;
     }
 }
