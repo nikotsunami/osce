@@ -68,7 +68,8 @@ public class Osce {
     private Semester semester;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
-    private Set<OsceDay> osce_days = new HashSet<OsceDay>();
+    @OrderBy("osceDate")
+    private List<OsceDay> osce_days = new ArrayList<OsceDay>();
 
     @OrderBy("sequenceNumber")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")

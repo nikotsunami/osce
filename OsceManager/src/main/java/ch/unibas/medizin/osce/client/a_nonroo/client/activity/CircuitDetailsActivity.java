@@ -230,7 +230,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 						
 					
 						
-						Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
+						List<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
 						if(setOsceDays.size()==0){
 							Log.info("OsceDay null for proxy : " +osceProxy.getId());
 							osceDayViewImpl.setOsceDayProxy(null);

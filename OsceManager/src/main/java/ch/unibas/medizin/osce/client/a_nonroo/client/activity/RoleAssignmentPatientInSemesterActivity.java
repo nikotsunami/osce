@@ -278,7 +278,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 			while(iteratorOsceProxy.hasNext()){
 				osceProxy=iteratorOsceProxy.next();
 					
-				Set<OsceDayProxy> setOsceDayProxy = osceProxy.getOsce_days();
+				List<OsceDayProxy> setOsceDayProxy = osceProxy.getOsce_days();
 				
 				if(setOsceDayProxy == null){
 					Log.info("No OsceDay Found");
