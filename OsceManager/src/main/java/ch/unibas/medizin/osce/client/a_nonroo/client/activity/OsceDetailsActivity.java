@@ -287,6 +287,7 @@ public void init()
 		if(isedit==true)
 		{
 			System.out.println("edit mode");
+			Log.info("Map Size: " + view.getPopView().getTaskMap().size());
 			TaskRequest taskRequest=requests.taskRequest();
 			task = taskRequest.edit(task);
 			
@@ -320,9 +321,11 @@ public void init()
 				return;
 			}
 			*/
-			taskRequest.persist().using(task).fire(new OSCEReceiver<Void>() {
-				
-				@Override
+			// Highlight onViolation
+			Log.info("Map Size: " + view.getPopView().getTaskMap().size());
+			taskRequest.persist().using(task).fire(new OSCEReceiver<Void>(view.getPopView().getTaskMap()) {
+				// E Highlight onViolation
+				/*@Override
 				public void onViolation(Set<Violation> errors) {
 					Iterator<Violation> iter = errors.iterator();
 					String message = "";
@@ -330,7 +333,7 @@ public void init()
 						message += iter.next().getMessage() + "<br>";
 					}
 					Log.warn(" in task -" + message);
-				}
+				}*/
 				@Override
 				public void onSuccess(Void response) {
 					// TODO Auto-generated method stub
@@ -338,6 +341,7 @@ public void init()
 					Log.info(" task edited successfully");
 				//	init2();
 					Log.info("Call Init Search from onSuccess");
+					view.getPopView().hide();
 					init();
 				
 					
@@ -386,9 +390,10 @@ public void init()
 			}
 			*/
 				System.out.println("before save");
-			
-			taskRequest.persist().using(taskProxy).fire(new OSCEReceiver<Void>() {
-				
+				// Highlight onViolation
+				Log.info("Map Size: " + view.getPopView().getTaskMap().size());
+			taskRequest.persist().using(taskProxy).fire(new OSCEReceiver<Void>(view.getPopView().getTaskMap()) {
+				// E Highlight onViolation	
 				
 				@Override
 				public void onSuccess(Void response) {
@@ -397,6 +402,7 @@ public void init()
 					Log.info("new task added successfully");
 				//	init2();
 					Log.info("Call Init Search from onSuccess");
+					view.getPopView().hide();
 					init();
 				
 					

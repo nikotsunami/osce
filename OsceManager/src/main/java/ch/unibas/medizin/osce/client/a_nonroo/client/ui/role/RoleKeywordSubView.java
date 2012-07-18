@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -26,4 +27,8 @@ public interface RoleKeywordSubView {
 	public void setDelegate(Delegate delegate);
 	public void setKeywordAutocompleteValue(List<KeywordProxy> values);
 	CellTable<KeywordProxy> getKeywordTable();
+
+	// Highlight onViolation
+	public Map getKeywordMap();
+	// E Highlight onViolation
 }

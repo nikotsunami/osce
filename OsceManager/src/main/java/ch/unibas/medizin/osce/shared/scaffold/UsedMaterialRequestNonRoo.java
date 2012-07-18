@@ -25,10 +25,10 @@ public interface UsedMaterialRequestNonRoo extends RequestContext {
 	public abstract Request<UsedMaterialProxy> findUsedMaterialByOrderGreater(
 			long standardizedRoleID, int sort_order);
 
-	abstract Request<Long> countUsedMaterialsByStandardizedRoleID(
-			long standardizedRoleID);
+	abstract Request<Long> countUsedMaterialsByStandardizedRoleID(long standardizedRoleID);
 
-	abstract Request<List<UsedMaterialProxy>> findUsedMaterialsByStandardizedRoleID(
-			long standardizedRoleID, int firstResult, int maxResults);
+	abstract Request<List<UsedMaterialProxy>> findUsedMaterialsByStandardizedRoleID(long standardizedRoleID, int firstResult, int maxResults);
+	
+	abstract Request<List<UsedMaterialProxy>> findUsedMaterialsByStandardizedRoleIDpdf(long standardizedRoleID);
 
 }

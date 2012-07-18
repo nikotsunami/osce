@@ -100,13 +100,10 @@ public class UsedMaterial {
 		return resultList.get(0);
 	}
 
-	public static Long countUsedMaterialsByStandardizedRoleID(
-			long standardizedRoleID) {
+	public static Long countUsedMaterialsByStandardizedRoleID(long standardizedRoleID) {
+		System.out.println("goto countUsedMaterialsByStandardizedRoleID");
 		EntityManager em = entityManager();
-		TypedQuery<Long> q = em
-				.createQuery(
-						"SELECT COUNT(o) FROM UsedMaterial o WHERE o.standardizedRole.id = :standardizedRoleID ORDER BY sort_order ASC",
-						Long.class);
+		TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM UsedMaterial o WHERE o.standardizedRole.id = :standardizedRoleID ORDER BY sort_order ASC",Long.class);
 		q.setParameter("standardizedRoleID", standardizedRoleID);
 		// System.out.println("^standardizedRoleID: " + standardizedRoleID);
 		// System.out.println("^ Size  : " + q.getMaxResults());
@@ -114,8 +111,7 @@ public class UsedMaterial {
 		return q.getSingleResult();
 	}
 
-	public static List<UsedMaterial> findUsedMaterialsByStandardizedRoleID(
-			long standardizedRoleID, int firstResult, int maxResults) {
+	public static List<UsedMaterial> findUsedMaterialsByStandardizedRoleID(	long standardizedRoleID, int firstResult, int maxResults) {
 		if (standardizedRoleID == 0)
 			throw new IllegalArgumentException("The name argument is required");
 		EntityManager em = entityManager();
@@ -134,8 +130,8 @@ public class UsedMaterial {
 	}
 
 	// Issue : 120
-	public static List<UsedMaterial> findUsedMaterialsByStandardizedRoleID(
-			long standardizedRoleID) {
+	public static List<UsedMaterial> findUsedMaterialsByStandardizedRoleIDpdf(long standardizedRoleID) 
+	{
 		if (standardizedRoleID == 0)
 			throw new IllegalArgumentException("The name argument is required");
 		EntityManager em = entityManager();

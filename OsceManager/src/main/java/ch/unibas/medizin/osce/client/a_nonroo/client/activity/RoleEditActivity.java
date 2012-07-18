@@ -355,7 +355,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			 }
 				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 				standardizedRole.setCheckList(checkListProxy);//spec
-				System.out.println("Checklist----"+checkListProxy.getTitle());
+				System.out.println("Checklist----1: "+checkListProxy.getTitle());
 				
 				 majorRequest = requests.standardizedRoleRequest();
 				 proxy= majorRequest.create(StandardizedRoleProxy.class);
@@ -443,7 +443,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 
 			checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 			standardizedRole.setCheckList(checkListProxy);//spec
-			System.out.println("Checklist----"+checkListProxy.getTitle());
+			System.out.println("Checklist----2: "+checkListProxy.getTitle());
 			((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);
 			save();
 		}
@@ -474,13 +474,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	
 	public void finalSave()
 	{
-		editorDriver.flush().fire(new Receiver<Void>() {
+		Log.info("Call Final Save()");
+		
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getStandardizedRoleMap().size());
+		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
 			
-			public void onFailure(ServerFailure error) {
+			/*public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
 
 			}
-
+			
 			@Override
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
@@ -490,7 +494,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				}
 				Log.warn(" in Role -" + message);
 			}
-
+*/
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Role successfully saved.");
@@ -503,6 +508,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));				
 				
 		}
+			
 		});
 		
 		
@@ -510,7 +516,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	
 	public void save()
 	{
-		
+		Log.info("Call Save()");
 		
 		if(((RoleEditViewImpl)view).roleTopic.getValue().getId()!=roleTopic.getId())
 		{
@@ -548,13 +554,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			
 		 //
 			
-			System.out.println("role---"+oldProxy);
-			
-			
-		
-		
-		majorRequest1.persist().using(oldProxy).fire(new Receiver<Void>() {
-
+			Log.info(" save role---"+oldProxy);
+			// Highlight onViolation
+			Log.info("Map Size: " + view.getStandardizedRoleMap().size());
+			majorRequest1.persist().using(oldProxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
+				// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				// TODO Auto-generated method stub
@@ -567,12 +571,14 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				
 			}
 			
-			public void onFailure(ServerFailure error) {
+			// Highlight onViolation
+/*			public void onFailure(ServerFailure error) {
 				System.out.println("Error");
 				Log.error(error.getMessage());
 
 			}
-
+			
+			
 			@Override
 			public void onViolation(Set<Violation> errors) {
 				System.out.println("violate");
@@ -583,6 +589,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				}
 				Log.warn(" in Role -" + message);
 			}
+*/			// E Highlight onViolation
 		});
 		
 		//save();
@@ -592,6 +599,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		else
 		{
+			Log.info("Goto Else Part");
 		finalSave();
 		
 		}
@@ -607,12 +615,14 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 	Log.info("before persist after popup");		
 	Log.info("Proxy---"+proxy.getLongName());		
-			
-		 majorRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
-		 
+		
+		// Highlight onViolation
+		Log.info("Map Size: "  + view.getStandardizedRoleMap().size());
+		 majorRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
+
 	
 
-			public void onFailure(ServerFailure error) {
+		/*	public void onFailure(ServerFailure error) {
 				Log.info("error in persist");
 				Log.error(error.getMessage());
 
@@ -627,6 +637,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				}
 				Log.warn(" in Role -" + message);
 			}
+		 */
+			// E Highlight onViolation		 
 
 			@Override
 			public void onSuccess(Void response) {

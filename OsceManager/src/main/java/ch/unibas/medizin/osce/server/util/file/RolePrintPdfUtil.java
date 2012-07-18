@@ -603,7 +603,7 @@ public class RolePrintPdfUtil {
 		PdfPTable roomMaterialTable = new PdfPTable(3);
 
 		List<UsedMaterial> usedMaterials = UsedMaterial
-				.findUsedMaterialsByStandardizedRoleID(standardizedRole.getId());
+				.findUsedMaterialsByStandardizedRoleIDpdf(standardizedRole.getId());
 		Log.info("usedMaterials size " + usedMaterials.size());
 
 		roomMaterialTable.addCell(getPdfCellBold(constants.roomMaterialName()));

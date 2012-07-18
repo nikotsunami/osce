@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -56,6 +58,10 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
     @UiField(provided = true)
     ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.LANGSKILL));
 
+    // Highlight onViolation
+    Map<String, Widget> advanceSearchCriteriaMap;
+ 	// E Highlight onViolation
+    
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
 		skill.setValue(LangSkillLevel.values()[0]);
@@ -68,6 +74,12 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addLanguageButton.setText(constants.add());
 		languageButton.setText(constants.languages());
+		
+		// Highlight onViolation			
+				advanceSearchCriteriaMap=new HashMap<String, Widget>();
+				advanceSearchCriteriaMap.put("bindType", bindType);
+				advanceSearchCriteriaMap.put("comparation", comparison);									
+		// E Highlight onViolation
 	}
 	
 	@UiHandler("addLanguageButton")
@@ -100,5 +112,11 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 	@Override
 	public ValueListBox<SpokenLanguageProxy> getLanguageBox() {
 		return language;
+	}
+
+	@Override
+	public Map getMap() {
+		// TODO Auto-generated method stub
+		return this.advanceSearchCriteriaMap;
 	}
 }

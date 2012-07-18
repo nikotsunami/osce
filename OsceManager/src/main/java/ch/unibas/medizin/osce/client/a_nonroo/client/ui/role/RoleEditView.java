@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
@@ -63,6 +64,10 @@ public interface RoleEditView extends IsWidget {
 	 public SimplePanel getRoleEditCheckListPanel();//spec
 	//public RoleEditCheckListSubViewImpl getRoleEditCheckListSubViewImpl();
 	//public void setRoleEditCheckListSubViewImpl(RoleEditCheckListSubViewImpl roleEditCheckListSubViewImpl);
+	
+	// Highlight onViolation
+	 public Map getStandardizedRoleMap();
+	// E Highlight onViolation
 	 
 	
 	

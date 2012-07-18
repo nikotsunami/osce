@@ -865,6 +865,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 
 		@Override
 		public void saveOsceData(OsceProxy osceProxy) {
+			Log.info("Call saveOsceData");
+			
 			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();
 			OsceRequest osceReq = requests.osceRequest();
 			osceProxy = osceReq.edit(osceProxy);
@@ -875,9 +877,10 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 			osceProxy.setMaxNumberStudents(circuitOsceSubViewImp.maxStudentTextBox.getValue());
 			osceProxy.setNumberCourses(circuitOsceSubViewImp.maxParcourTextBox.getValue());
 			osceProxy.setNumberRooms(circuitOsceSubViewImp.maxRoomsTextBox.getValue());
-			
-			osceReq.persist().using(osceProxy).fire(new OSCEReceiver<Void>() {
-
+			// Highlight onViolation
+			Log.info("Map Size: " + circuitOsceSubViewImp.osceMap.size());
+			osceReq.persist().using(osceProxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
+			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("Osce Value Updated");
@@ -907,10 +910,16 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 		}
 		@Override
 		public void clearAll(OsceProxy proxy) {
+			// Highlight onViolation
+			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();
+			// E Highlight onViolation
+			
 			OsceRequest osceReq = requests.osceRequest();
 			proxy = osceReq.edit(proxy);			
-			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);			
-			osceReq.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);		
+			// Highlight onViolation
+			osceReq.persist().using(proxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
+				// E Highlight onViolation
 
 				@Override
 				public void onSuccess(Void response) {
@@ -1375,7 +1384,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					oscePostBlueprintProxy.setRoleTopic(null);
 					
 					oscePostSubViewImplok.oscePostBlueprintProxy=oscePostBlueprintProxy;
-					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>()
+					Log.info("oscePostSubViewImplok : " + oscePostSubViewImplok.oscePostBluePrintMap.size());
+					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>(oscePostSubViewImplok.oscePostBluePrintMap)
 					{
 						@Override
 						public void onSuccess(Void response) 
@@ -1408,7 +1418,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					oscePostBlueprintProxy=oscePostBlueprintRequest.edit(oscePostBlueprintProxy);
 					oscePostBlueprintProxy.setRoleTopic(roleTopicProxy);
 					oscePostSubViewImplok.oscePostBlueprintProxy=oscePostBlueprintProxy;
-					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>()
+					Log.info("oscePostSubViewImplok : " + oscePostSubViewImplok.oscePostBluePrintMap.size());
+					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>(oscePostSubViewImplok.oscePostBluePrintMap)
 					{
 						@Override
 						public void onSuccess(Void response) 
@@ -1691,9 +1702,9 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							newDateWithStartTime.setMinutes(new Integer(mts));
 							
 							Date newDateWitnEndTime=new Date();
-							 hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
+							hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
 							newDateWitnEndTime.setHours(new Integer(hrs));
-							 mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
+							mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
 							newDateWitnEndTime.setMinutes(new Integer(mts));
 							
 							
@@ -1718,8 +1729,11 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							Log.info("Parsing exception During new Day persist");
 						}
 						
-						osceDayReq.persist().using(osceDayProxy).fire(new Receiver<Void>() {
-
+						// Highlight onViolation	
+						Log.info(""+osceDayViewImpl.osceDayMap.size());
+						osceDayReq.persist().using(osceDayProxy).fire(new OSCEReceiver<Void>(osceDayViewImpl.osceDayMap) {
+						// E Highlight onViolation
+							
 							@Override
 							public void onSuccess(Void response) {
 								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.success());								
@@ -1807,9 +1821,10 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							Log.info("Parsing exception During Day persist");
 						}
 						//osceDayProxy.setOsce(osceProxy);
-						
-						osceDayReq.persist().using(osceDayProxy).fire(new Receiver<Void>() {
-
+						// Highlight onViolation	
+						Log.info(""+osceDayViewImpl.osceDayMap.size());
+						osceDayReq.persist().using(osceDayProxy).fire(new OSCEReceiver<Void>(osceDayViewImpl.osceDayMap) {
+						// E: Highlight onViolation	
 							@Override
 							public void onSuccess(Void response) {
 								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.success());
@@ -1877,7 +1892,10 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					proxy.setLabel(sequenceOsceSubViewImpl.nameOfSequence.getText());
 					sequenceOsceSubViewImpl.osceSequenceProxy=proxy;
 					
-					osceSequenceRequest.persist().using(proxy).fire(new Receiver<Void>() {
+					// Highlight onViolation
+					Log.info("Map Size: "+sequenceOsceSubViewImpl.osceSequenceMap.size());
+					osceSequenceRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(sequenceOsceSubViewImpl.osceSequenceMap) {
+					// E Highlight onViolation
 						@Override
 						public void onSuccess(Void response) {	
 							// TODO Auto-generated method stub

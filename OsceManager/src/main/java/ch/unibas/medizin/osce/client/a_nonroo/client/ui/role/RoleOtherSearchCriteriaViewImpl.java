@@ -4,6 +4,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -68,6 +70,9 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 	private OsMaRequestFactory requests;
 	StandardizedRoleProxy proxy;
 
+	// Highlight onViolation
+	Map<String, Widget> simpleSearchCriteriaMap;
+	// E Highlight onViolation
 
 	@UiField
 	Button addSimpleSearch;
@@ -173,6 +178,12 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 		
 		init();
 		addSimpleSearch.setText(constants.addSimpleSearchCriteria());
+		
+		// Highlight onViolation
+		simpleSearchCriteriaMap=new HashMap<String, Widget>();
+		simpleSearchCriteriaMap.put("name", searchName);
+		simpleSearchCriteriaMap.put("value", SearchValue);		
+		// E Highlight onViolation
 	}
 
 	public String[] getPaths() {
@@ -348,5 +359,13 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 	public StandardizedRoleProxy getValue() {
 		return proxy;
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getSimpleSearchCriteriaMap()
+	{
+		return this.simpleSearchCriteriaMap;
+	}
+	// E Highlight onViolation
 
 }

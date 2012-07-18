@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -30,7 +33,9 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 	interface OscePostSubViewImplUiBinder extends UiBinder<Widget, OscePostSubViewImpl> {
 	}
 	
-	
+	// Highlight onViolation
+		public Map<String, Widget> oscePostBluePrintMap;
+	// E Highlight onViolation
 	
 	// 5C: SPEC START =
 	public ListBoxPopupViewImpl listBoxPopupViewImpl;
@@ -123,6 +128,12 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 		initWidget(uiBinder.createAndBindUi(this));
 		oscePostSubViewImpl=this;
 		
+		// Highlight onViolation
+		oscePostBluePrintMap=new HashMap<String, Widget>();
+		oscePostBluePrintMap.put("roleTopic", roleTopicLbl);
+		oscePostBluePrintMap.put("specialisation", specializationLbl);				
+		// E Highlight onViolation
+
 	}
 	
 	public void enableDisableforGeneratedStatus()
@@ -174,7 +185,7 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 					
 					if(object instanceof SpecialisationProxy)
 					{
-						Log.info("Specialisation Proxy");
+						Log.info("Specialisation Proxy");						
 						delegate.saveSpecialisation(oscePostSubViewImpl);
 					}
 					else if(object instanceof RoleTopicProxy)

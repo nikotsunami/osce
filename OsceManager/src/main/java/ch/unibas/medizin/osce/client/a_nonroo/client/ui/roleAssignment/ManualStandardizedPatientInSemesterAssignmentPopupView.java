@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
@@ -21,4 +22,6 @@ public interface ManualStandardizedPatientInSemesterAssignmentPopupView extends
 
 	public void setStandizedPatientAutocompleteValue(
 			List<StandardizedPatientProxy> values);
+
+	Map getPatientInSemesterMap();
 }

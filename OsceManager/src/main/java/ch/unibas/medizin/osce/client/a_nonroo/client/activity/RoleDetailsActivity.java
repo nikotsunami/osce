@@ -2,9 +2,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
@@ -14,6 +16,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CriteriaPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessViewImpl;
@@ -205,6 +209,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	
 	//AssignmentE]
 	// SPEC START =
+	
+	// Highlight onViolation
+	public int mapVar=0;
+	// E Highlight onViolation
 	
 	public RoleRoleParticipantSubViewImpl roleRoleParticipantSubViewImpl;
 	public RoleDetailsViewImpl roleDetailsViewImpl;
@@ -480,8 +488,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void newFileClicked(String fileName, String fileDescription,
-			final StandardizedRoleProxy proxy) {
+			final StandardizedRoleProxy proxy) {		
 		// TODO Auto-generated method stub
+		
+		Log.info("call newFileClicked");
 
 		if (fileName != null) {
 			sortOrder = fileTable[roleDetailTabPanel.getTabBar()
@@ -496,11 +506,14 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			file.setSortOrder(sortOrder);
 			file.setStandardizedRole(proxy);
 
-			fileReq.persist().using(file).fire(new Receiver<Void>() {
+			// Highlight onViolation
+			Log.info("Map Size:"+ standardizedRoleDetailsView[selecTab].getRoleFileSubViewImpl().getFileMap().size());
+			fileReq.persist().using(file).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selecTab].getRoleFileSubViewImpl().getFileMap()) {
+			// E Highlight onViolation
 				@Override
-				public void onSuccess(Void arg0) {
-					init(proxy.getId(), roleDetailTabPanel.getTabBar()
-							.getSelectedTab());
+				public void onSuccess(Void arg0) 
+				{
+					init(proxy.getId(), roleDetailTabPanel.getTabBar().getSelectedTab());
 				}
 			});
 		}
@@ -556,6 +569,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			MaterialUsedFromTypes used_from,
 			final StandardizedRoleProxy standardizedRoleProxy,
 			MaterialListProxy materialList) {
+		Log.info("Call newUsedMaterialButtonClicked");
+		
 		UsedMaterialRequest usedMaterialRequest = requests
 				.usedMaterialRequest();
 
@@ -570,18 +585,20 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		usedMaterialProxy.setSort_order(usedMaterialTable[roleDetailTabPanel
 				.getTabBar().getSelectedTab()].getRowCount() + 1);
 
-		Log.debug("Add UsedMaterial (" + usedMaterialProxy.getMaterialCount()
-				+ " - id " + usedMaterialProxy.getId() + " "
-				+ usedMaterialProxy.getMaterialList().getName()
-				+ usedMaterialProxy.getStandardizedRole().getShortName());
-
-		usedMaterialRequest.persist().using(usedMaterialProxy)
-				.fire(new Receiver<Void>() {
+		// Highlight onViolation
+		/*	Log.debug("Add UsedMaterial (" + usedMaterialProxy.getMaterialCount()
+					+ " - id " + usedMaterialProxy.getId() + " "
+					+ usedMaterialProxy.getMaterialList().getName()
+					+ usedMaterialProxy.getStandardizedRole().getShortName());*/
+		Log.info("Map Size: "+standardizedRoleDetailsView[selecTab].getRoomMaterialsDetailsSubViewImpl().getUsedMaterialMap().size());
+		usedMaterialRequest.persist().using(usedMaterialProxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selecTab].getRoomMaterialsDetailsSubViewImpl().getUsedMaterialMap()) 
+		{
+				// E Highlight onViolation
 					@Override
 					public void onSuccess(Void response) {
 						Log.debug("UsedMaterialReceiver Added successfully");
-						initUsedMaterial2(standardizedRoleProxy.getId(),
-								roleDetailTabPanel.getTabBar().getSelectedTab());
+						standardizedRoleDetailsView[selecTab].getRoomMaterialsDetailsSubViewImpl().getRoomMaterialsPopupViewImpl().hide();
+						initUsedMaterial2(standardizedRoleProxy.getId(),roleDetailTabPanel.getTabBar().getSelectedTab());
 
 					}
 				});
@@ -631,9 +648,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	protected void fireUsedMaterialCountRequest(long standardizedRoleID,
 			Receiver<Long> callback) {
 
-		requests.usedMaterialRequestNonRoo()
-				.countUsedMaterialsByStandardizedRoleID(standardizedRoleID)
-				.fire(callback);
+		Log.info("Call fireUsedMaterialCountRequest");		
+		requests.usedMaterialRequestNonRoo().countUsedMaterialsByStandardizedRoleID(standardizedRoleID).fire(callback);
 	}
 
 	@Override
@@ -1594,6 +1610,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		
 		public void saveCheckListTopic(final String checkListTopic,final String description)
 		{
+			Log.info("Call saveCheckListTopic");
 			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
 			
 			ChecklistTopicRequest request=requests.checklistTopicRequest();
@@ -1607,14 +1624,20 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			
 			proxy.setSort_order(standardizedRoleDetailsView[selectedtab].checkListsVerticalPanel.getWidgetCount());
 			proxy.setCheckList(standardizedRoleDetailsView[selectedtab].getValue().getCheckList());
-			request.persist().using(proxy).fire(new Receiver<Void>() {
+			// Highlight onViolation
+			Log.info("Map Size: "+ standardizedRoleDetailsView[selectedtab].getChecklistTopicMap().size());
+			request.persist().using(proxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selectedtab].getChecklistTopicMap()) {
+			// E Highlight onViolation
 
 				@Override
-				public void onSuccess(Void response) {
+				public void onSuccess(Void response) 
+				{
 					Log.info("Check List Topic Saved");
-					Log.info("Topic ID : " + proxy.getId());
+					Log.info("Topic ID : " + proxy.getId());				
 					createCheckListTopic(selectedtab,proxy);
-					
+					// Highlight onViolation					
+					((CheckListTopicPopupViewImpl)(standardizedRoleDetailsView[selectedtab].topicPopup)).hide();
+					// E Highlight onViolation
 				}
 			});
 		}
@@ -1632,10 +1655,15 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			proxy.setCheckListTopic(topicView.getProxy());
 			proxy.setSequenceNumber(topicView.checkListQuestionVerticalPanel.getWidgetCount());
 			
-			request.persist().using(proxy).fire(new Receiver<Void>() {
-
+			// Highlight onViolation
+			Log.info("Map Size: "+ standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab).getChecklistQuestionMap().size());
+			request.persist().using(proxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab).getChecklistQuestionMap()) {
+			// E Highlight onViolation
 				@Override
-				public void onSuccess(Void response) {
+				public void onSuccess(Void response) 
+				{
+					Log.info("Call Success...");	
+					((CheckListTopicPopupViewImpl)(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)(standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab))).questionPopup)).hide();
 					createQuestionView(selectedtab,proxy,topicView);
 					
 				}
@@ -1664,12 +1692,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			final ChecklistCriteriaProxy proxy=request.create(ChecklistCriteriaProxy.class);
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setCriteria(criteria);
-			
-			request.persist().using(proxy).fire(new Receiver<Void>() {
-
+			// Highlight onViolation
+			request.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("Criteria Saved Successfully");
+					((CriteriaPopupViewImpl)(questionView.criteriaPopup)).hide();
 					createCriteriaView(selectedtab,proxy,questionView);
 					
 				}
@@ -1699,11 +1728,17 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setValue(value);
 			
-			request.persist().using(proxy).fire(new Receiver<Void>() {
-
+			// Highlight onViolation
+			Log.info("Map Size: " + questionView.getChecklistOptionMap().size());
+			request.persist().using(proxy).fire(new OSCEReceiver<Void>(questionView.getChecklistOptionMap()) 
+			{
+			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
-					Log.info("Option Saved Successfully");
+					Log.info("Option Saved Successfully");	
+					// Highlight onViolation
+					((CheckListTopicPopupViewImpl)(questionView.optionPopup)).hide();
+					// E Highlight onViolation
 					createOptionView(selectedtab,proxy,questionView);
 					
 				}
@@ -1758,11 +1793,14 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					proxy.setTitle(topicname);
 					proxy.setDescription(description);
 					
-					checklisttopicreq.persist().using(proxy).fire(new Receiver<Void>() {
+					Log.info("Map Size: " + topicView.getChecklistTopicMap().size());
+					checklisttopicreq.persist().using(proxy).fire(new OSCEReceiver<Void>(topicView.getChecklistTopicMap()) 
+					{
 
 						@Override
 						public void onSuccess(Void arg0) {
 							// TODO Auto-generated method stub
+							((CheckListTopicPopupViewImpl)topicView.topicPopup).hide(true);
 							topicView.checkListTopicLbl.setText(topicname);
 							topicView.descriptionLbl.setText(description);
 							Log.debug("Record Updated Successfully");
@@ -1866,10 +1904,18 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		}
 		
 		
-		public void importTopic(final ChecklistTopicProxy proxy)
+		public void importTopic(final ChecklistTopicProxy proxy,ImportTopicPopupViewImpl viewTopicPopup)
 		{
 			
 			Log.info("importTopic");
+			// Highlight onViolation			
+			/*if(proxy==null)
+			{
+				Log.info("Proxy is Null");
+				proxy.setTitle(null);
+				proxy.setDescription(null);
+			}*/
+			// E Highlight onViolation
 			
 			final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
 			CheckListProxy checklsitProxy=standardizedRoleDetailsView[selectedTab].getValue().getCheckList();
@@ -1882,8 +1928,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			addTopicProxy.setDescription(proxy.getDescription());
 			addTopicProxy.setSort_order(proxy.getSort_order());
 			addTopicProxy.setTitle(proxy.getTitle());
-			
-			request.persist().using(addTopicProxy).fire(new Receiver<Void>() {
+
+			// Highlight onViolation
+			Log.info("Map Size: " + viewTopicPopup.getChecklistTopicMap().size());
+			request.persist().using(addTopicProxy).fire(new OSCEReceiver<Void>(viewTopicPopup.getChecklistTopicMap()) {
+			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					
@@ -1980,8 +2029,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			
 			
 		}
-		
-		public void importQuestion(final ChecklistQuestionProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView)
+		// Highlight onViolation
+		public void importQuestion(final ChecklistQuestionProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,ImportTopicPopupViewImpl viewforMap)
+		// E Highlight onViolation
 		{
 			Log.info("import Question");
 			final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
@@ -2010,8 +2060,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 //					
 //				}
 //			});
-			
-			questionRequest.persist().using(addQuestionProxy).fire(new Receiver<Void>() {
+			// Highlight onViolation
+			Log.info("Map Size: " + viewforMap.getChecklistQuestionMap().size());
+			questionRequest.persist().using(addQuestionProxy).fire(new OSCEReceiver<Void>(viewforMap.getChecklistQuestionMap()) {
+			// E Highlight onViolation
 
 				@Override
 				public void onSuccess(Void response) {
@@ -2102,12 +2154,18 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			questionProxy=request.edit(questionProxy);
 			questionProxy.setQuestion(question);
 			questionProxy.setInstruction(instruction);
-			request.persist().using(questionProxy).fire(new Receiver<Void>() {
-
+			// Highlight onViolation	
+			Log.info("Map Size: " + questionView.getChecklistQuestionMap().size());
+			request.persist().using(questionProxy).fire(new OSCEReceiver<Void>(questionView.getChecklistQuestionMap()) {
+			// E Highlight onViolation
+				
 				@Override
 				public void onSuccess(Void response) {
 					questionView.questionItemLbl.setText(question);
 					questionView.questionInstruction.setText(instruction);
+					// Highlight onViolation	
+					((CheckListTopicPopupViewImpl)(questionView.editquestionpopup)).hide();
+					// E Highlight onViolation
 				}
 			});
 		}
@@ -2183,6 +2241,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void addBasicCriteriaClicked(Button addBasicData) {
+		Log.info("addBasicCriteriaClicked");
+		mapVar=1;
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
 			if (advancedSearchPopup == basicCriteriaPopUp) {
@@ -2204,6 +2264,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void addScarCriteriaClicked(Button parentButton) {
+		Log.info("addScarCriteriaClicked");
+		mapVar=2;
 		requests.scarRequest().findAllScars().fire(new ScarCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
 			advancedSearchPopup.hide();
@@ -2219,6 +2281,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void addAnamnesisCriteriaClicked(Button parentButton) {
+		Log.info("addAnamnesisCriteriaClicked");
+		mapVar=3;
 		requests.anamnesisCheckRequest().findAllAnamnesisChecks()
 				.fire(new AnamnesisCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
@@ -2235,6 +2299,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void addLanguageCriteriaClicked(Button addLanguageButton) {
+		Log.info("addLanguageCriteriaClicked");
+		mapVar=4;
 		requests.spokenLanguageRequest().findAllSpokenLanguages()
 				.fire(new LanguageCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
@@ -2251,6 +2317,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void addNationalityCriteriaClicked(IconButton addNationalityButton) {
+		Log.info("addNationalityCriteriaClicked");
+		mapVar=5;
 		requests.nationalityRequest().findAllNationalitys()
 				.fire(new NationalityCriteriaReceiver());
 		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
@@ -2281,8 +2349,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			rangeAdvanceSearchTableChangeHandler.removeHandler();
 		}
 		Log.info("standardizedRoleID:" + standardizedRoleID);
-		fireAdvancedSearchCriteriasCountRequest(standardizedRoleID,
-				new Receiver<Long>() {
+		fireAdvancedSearchCriteriasCountRequest(standardizedRoleID,	new Receiver<Long>() {
 					@Override
 					public void onSuccess(Long response) {
 						if (advancedSearchSubViews == null) {
@@ -2296,6 +2363,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						onRangeChangedAdvancedSearchCriteriaTable(
 								standardizedRoleID, index);
 					}
+					
 				});
 
 		rangeAdvanceSearchTableChangeHandler = advancedSearchPatientTable[index]
@@ -2309,10 +2377,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	protected void fireAdvancedSearchCriteriasCountRequest(
-			long standardizedRoleID, Receiver<Long> callback) {
-		requests.advancedSearchCriteriaNonRoo()
-				.countAdvancedSearchCriteriasByStandardizedRoleID(
-						standardizedRoleID).fire(callback);
+			long standardizedRoleID, Receiver<Long> callback) 
+	{
+		Log.info("Call fireAdvancedSearchCriteriasCountRequest");
+		requests.advancedSearchCriteriaNonRoo().countAdvancedSearchCriteriasByStandardizedRoleID(standardizedRoleID).fire(callback);
 	}
 
 	protected void onRangeChangedAdvancedSearchCriteriaTable(
@@ -2425,11 +2493,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	}
 
+	// Highlight onViolation
 	@Override
-	public void addAdvSeaBasicButtonClicked(Long objectId, String value,
-			String shownValue, BindType bindType,
-			PossibleFields possibleFields, Comparison comparison) {
-
+	//anamnesisCheck.getId(), answer,displayValue, bindType, PossibleFields.ANAMNESIS, comparison
+	public void addAdvSeaBasicButtonClicked(Long objectId, String value,String shownValue, BindType bindType,PossibleFields possibleFields, Comparison comparison) 
+	{
+		// E Highlight onViolation		
+		Log.info("Call addAdvSeaBasicButtonClicked");		
 		switch (possibleFields) {
 		case BMI:
 			shownValue = constants.bmi()
@@ -2472,11 +2542,39 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		// Log.info("Stand Role Topoc Id : "+ S);
 
 		// searchCriteriaProxy.setStandardizedRole();
-		searchCriteriaRequest.persist().using(searchCriteriaProxy)
-				.fire(new Receiver<Void>() {
+
+		// Highlight onViolation
+		Log.info("~~~~MapVar: " + mapVar);
+		Map<String, Widget> tempMap=new HashMap<String, Widget>();
+		if(mapVar==1)
+		{
+			tempMap=basicCriteriaPopUp.getAdvanceSearchCriteriaMap();			
+		}
+		else if(mapVar==2)
+		{
+			tempMap=scarPopup.getAdvanceSearchCriteriaMap();
+		}
+		else if(mapVar==3)
+		{
+			tempMap=anamnesisPopup.getMap();
+		}
+		else if(mapVar==4)
+		{
+			tempMap=languagePopup.getMap();
+		}
+		else if(mapVar==5)
+		{
+			tempMap=nationalityPopup.getMap();
+		}
+		//Log.info("Map Size: " + scarPopup.getAdvanceSearchCriteriaMap().size());
+		//Log.info("Map Size: " + basicCriteriaPopUp.getAdvanceSearchCriteriaMap().size());	
+		
+		searchCriteriaRequest.persist().using(searchCriteriaProxy).fire(new OSCEReceiver<Void>(tempMap)
+				// E Highlight onViolation
+		{
 					@Override
 					public void onSuccess(Void response) {
-						Log.debug("Adv search Added successfully");
+						Log.debug("Adv search Added successfully");			
 						initAdvancedSearch(stRoleId, selectedTab);
 
 					}
@@ -2500,16 +2598,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	@Override
 	public void addScarButtonClicked(ScarProxy scarProxy, BindType bindType,
 			Comparison comparison) {
-		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": "
-				+ scarProxy.getBodypart());
-		String displayValue = new EnumRenderer<Comparison>(
-				EnumRenderer.Type.SCAR).render(comparison)
-				+ " "
-				+ new ScarProxyRenderer().render(scarProxy);
-		String value = scarProxy.getTraitType().toString() + ":"
-				+ scarProxy.getBodypart();
-		addAdvSeaBasicButtonClicked(scarProxy.getId(), value, displayValue,
-				bindType, PossibleFields.SCAR, comparison);
+		Log.info("Call addScarButtonClicked");
+		Log.info("ScarType:" + scarProxy.getTraitType().toString() + ": "+ scarProxy.getBodypart());
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.SCAR).render(comparison)+ " "+ new ScarProxyRenderer().render(scarProxy);
+		String value = scarProxy.getTraitType().toString() + ":"+ scarProxy.getBodypart();
+		addAdvSeaBasicButtonClicked(scarProxy.getId(), value, displayValue,bindType, PossibleFields.SCAR, comparison);
 	}
 
 	@Override
@@ -2531,6 +2624,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	public void addAnamnesisValueButtonClicked(
 			AnamnesisCheckProxy anamnesisCheck, String answer,
 			BindType bindType, Comparison comparison) {
+		Log.info("Call addAnamnesisValueButtonClicked");
 		Log.info("Question:" + anamnesisCheck.getText() + "; options:"
 				+ anamnesisCheck.getValue() + "; answer: " + answer);
 		String displayValue = "\""
@@ -2798,19 +2892,16 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			});
 		// E: Issue Role
 		
-		
-		
-		
-		
-
 	}
 
 	@Override
 	public void newSimpleSearchClicked(String SearchName, String SearchValue,
 			final StandardizedRoleProxy standRoleProxy) {
-		if (SearchName != null) {
-			simpleSearchSortOrder = simpleSearchcriteriaTable[roleDetailTabPanel
-					.getTabBar().getSelectedTab()].getRowCount() + 1;
+		Log.info("Call newSimpleSearchClicked");
+		
+		if (SearchName != null) 
+		{
+			simpleSearchSortOrder = simpleSearchcriteriaTable[roleDetailTabPanel.getTabBar().getSelectedTab()].getRowCount() + 1;
 			Log.debug("Add Simple Search");
 
 			SimpleSearchCriteriaRequest simpleSearchreq = requests
@@ -2824,9 +2915,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			simpleSearchProxy.setStandardizedRole(standRoleProxy);
 			// reques.edit(scar);
 			// file.setStandardizedRole(proxy);
-
-			simpleSearchreq.persist().using(simpleSearchProxy)
-					.fire(new Receiver<Void>() {
+			// Highlight onViolation
+			Log.info("Map Size: " + simpleSearchCriteriaView[selecTab].getSimpleSearchCriteriaMap().size());
+			simpleSearchreq.persist().using(simpleSearchProxy).fire(new OSCEReceiver<Void>(simpleSearchCriteriaView[selecTab].getSimpleSearchCriteriaMap()) {
+			// E Highlight onViolation
 						@Override
 						public void onSuccess(Void arg0) {
 							Log.info("Simple Search Criteria added..");
@@ -2904,7 +2996,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		Log.info("~Call AddAuthorClicked:RoleDetailActivity");		
 		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();	
 		
-		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
+		// Highlight onViolation
+		
+		/*if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
 		{
 			//Window.alert("Please Select the Doctor from List.");
 			// Issue Role
@@ -2921,11 +3015,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						}
 					});						
 		// E: Issue Role
-		}
-		else
-		{
-				Log.info("~Selected Author Name: : "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getName());		
-				Log.info("~Selected Author Id: "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getId());
+		}*/
+		//else
+		//{
+				//Log.info("~Selected Author Name: : "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getName());		
+				//Log.info("~Selected Author Id: "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getId());
 				
 				RoleParticipantRequest roleParticipantRequest = requests.roleParticipantRequest();
 				RoleParticipantProxy roleParticipantProxy = roleParticipantRequest.create(RoleParticipantProxy.class);
@@ -2934,10 +3028,12 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
 				roleParticipantProxy.setStandardizedRole(standardizedRoleDetailsView[selectedTabId].getValue());
 				
-				Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
-				Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
-		
-				roleParticipantRequest.persist().using(roleParticipantProxy).fire(new OSCEReceiver<Void>() 
+				//Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
+				//Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
+				
+			
+				Log.info("Map Size:" + standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().getRoleParticipantMap().size());
+				roleParticipantRequest.persist().using(roleParticipantProxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().getRoleParticipantMap()) 
 				{
 						@Override
 						public void onSuccess(Void response) 
@@ -2969,7 +3065,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				
 				// REFRESH LIST VIEW
 				//refreshDoctorList();	
-		}
+		//}
+		// E Highlight onViolation
 	}
 
 	@Override
@@ -2978,7 +3075,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		Log.info("~Call AddReviewerClicked:RoleDetailActivity");
 		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
 		
-		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
+		// Highlight onViolation
+		/*		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
 		{
 			//Window.alert("Please Select the Doctor from List.");
 			// Issue Role
@@ -2998,12 +3096,12 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			
 		// E: Issue Role
 			
-		}
-		else
-		{
+		}*/
+		//else
+		//{
 		
-		Log.info("~Selected Reviewer Name: : "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getName());		
-		Log.info("~Selected Reviewer Id: "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getId());
+		//Log.info("~Selected Reviewer Name: : "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getName());		
+		//Log.info("~Selected Reviewer Id: "+ standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue().getId());
 
 		RoleParticipantRequest roleParticipantRequest = requests.roleParticipantRequest();
 		RoleParticipantProxy roleParticipantProxy = roleParticipantRequest.create(RoleParticipantProxy.class);
@@ -3012,10 +3110,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
 		roleParticipantProxy.setStandardizedRole(standardizedRoleDetailsView[selectedTabId].getValue());
 		
-		Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
-		Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
-
-		roleParticipantRequest.persist().using(roleParticipantProxy).fire(new OSCEReceiver<Void>() 
+		//Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
+		//Log.info("~Doctor Name:" + roleParticipantProxy.getDoctor().getName());
+		Log.info("Map Size:" + standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().getRoleParticipantMap().size());
+		roleParticipantRequest.persist().using(roleParticipantProxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().getRoleParticipantMap()) 
 		{			
 				@Override
 				public void onSuccess(Void response) 
@@ -3042,7 +3140,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				}				
 		});
 			
-		}
+		//}
+		// E Highlight onViolation
 	}
 
 	@Override
@@ -3098,7 +3197,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					final KeywordProxy keywordProxy=keywordRequest.create(KeywordProxy.class);					
 					keywordProxy.setName(selectedKeyword);
 					
-					keywordRequest.persist().using(keywordProxy).fire(new Receiver<Void>() 
+					// Highlight onViolation
+					Log.info("Map Size:" + standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().getKeywordMap().size());
+					keywordRequest.persist().using(keywordProxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().getKeywordMap())
+					// E Highlight onViolation
 					{						
 						@Override
 						public void onSuccess(Void response1) 
@@ -3151,7 +3253,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 						setKeyworkdProxy.add(keywordProxy);
 						stRoleProxy.setKeywords(setKeyworkdProxy);
 						
-						srRequest.persist().using(stRoleProxy).fire(new Receiver<Void>() 
+						// Highlight onViolation
+						srRequest.persist().using(stRoleProxy).fire(new OSCEReceiver<Void>()
+						// E Highlight onViolation
 						{									
 							@Override
 							public void onSuccess(Void response) 
@@ -3159,7 +3263,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								Log.info("~Success Call....");
 								Log.info("~srRequest.persist()");	
 								Log.info("Add new Recoerd in standardized_role_keywords Table");
-										
+								// Highlight onViolation			
+								standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue("");
+								// E Highlight onViolation
 									
 								// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
 								refreshRelationshipProxy();
@@ -3593,7 +3699,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	int selectedtab;
 	@Override
 	public void roleTemplateValueButtonClicked(final RoleTemplateProxy roleTemplateProxy) {
-				
+	Log.info("Call roleTemplateValueButtonClicked");		
 		selectedtab=roleDetailTabPanel.getTabBar().getSelectedTab();
 		standardizedRoleProxy= standardizedRoleDetailsView[selectedtab].getValue();
 		StandardizedRoleRequest request = requests.standardizedRoleRequest();
@@ -3601,15 +3707,20 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		
 		Log.info(standardizedRoleProxy.getId()+"---");
 		standardizedRoleProxy.setRoleTemplate(roleTemplateProxy);
-		
-		request.persist().using(standardizedRoleProxy).fire(new Receiver<Void>() {
-
+		// Highlight onViolation
+		Log.info("Map Size: " + standardizedRoleDetailsView[selecTab].getStandardizedRoleTemplateMap().size());
+		request.persist().using(standardizedRoleProxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selecTab].getStandardizedRoleTemplateMap()) {
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("stand role update succesfully"+ standardizedRoleProxy.getId());
 				standardizedRoleDetailsView[selectedtab].setValue(standardizedRoleProxy);
 				//initRoleScript(selectedtab, roleTemplateProxy,true);
-				createDefaultSubValueItem(roleTemplateProxy);
+				if(roleTemplateProxy!=null)
+				{
+					createDefaultSubValueItem(roleTemplateProxy);	
+				}
+				
 			}
 		});
 			
@@ -3825,8 +3936,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		toolTipContentPanel.add(toolTipChange);
 	     
 		toolTipTextBox.setText(roleTableItemValueProxy.getValue());
-	       
-		    
+	    
+		// Highlight onViolation
+		final Map<String, Widget> roleTableItemValueMap=new HashMap<String, Widget>();
+		roleTableItemValueMap.put("value", toolTipTextBox);
+		roleTableItemValueMap.put("roleTableItem", toolTipTextBox);
+		// E Highlight onViolation
+		   
 		toolTip.add(toolTipContentPanel);   // you can add any widget here
 	        
 		// Issue Role V1
@@ -3851,8 +3967,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 									RoleTableItemValueRequest roleTableItemValueReq = requests.roleTableItemValueRequest();										
 									response = roleTableItemValueReq.edit(response);
 									response.setValue(toolTipTextBox.getText());
-								
-									roleTableItemValueReq.persist().using(roleTableItemValueProxy).fire(new Receiver<Void>(){
+									// Highlight onViolation
+									roleTableItemValueReq.persist().using(roleTableItemValueProxy).fire(new OSCEReceiver<Void>(roleTableItemValueMap){
+									// E Highlight onViolation
 										
 									@Override
 									public void onFailure(ServerFailure error){
@@ -3894,10 +4011,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 		
 	}
-
+	// Highlight onViolation
 	@Override
-	public void addRichTextAreaValue(final RoleBaseItemProxy roleBaseItemProxy,final RichTextArea description,int majorOrMinar) {
-
+	public void addRichTextAreaValue(final RoleBaseItemProxy roleBaseItemProxy,final RichTextArea description,int majorOrMinar, final Map roleSubItemValueMap) {
+	// E Highlight onViolation
+		
 		//description.setEnabled(false);
 		System.out.println("Major Change Or minor change--"+majorOrMinar);
 		selectedtab =roleDetailTabPanel.getTabBar().getSelectedTab();
@@ -3924,9 +4042,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			{
 				standardizedRoleProxy.setSubVersion(standardizedRoleProxy.getSubVersion()+1);
 			}
-			
-			request.persist().using(standardizedRoleProxy).fire(new Receiver<Void>() {
-
+			// Highlight onViolation
+			request.persist().using(standardizedRoleProxy).fire(new OSCEReceiver<Void>() {
+				// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("stand role create updated"+ standardizedRoleProxy.getId());
@@ -3939,7 +4057,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			roleSubItemValueProxy.setItemText(description.getHTML());
 			
 			roleSubItemValueProxy.setStandardizedRole(standardizedRoleProxy);
-			roleSubItemValueReq.persist().using(roleSubItemValueProxy).fire(new Receiver<Void>() {
+			// Highlight onViolation
+			Log.info("Map Size: " + roleSubItemValueMap.size());
+			roleSubItemValueReq.persist().using(roleSubItemValueProxy).fire(new OSCEReceiver<Void>(roleSubItemValueMap) {
+			// E Highlight onViolation
 
 				@Override
 				public void onSuccess(Void response) {
@@ -3968,8 +4089,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					roleSubItemValueProxy.setItemText(description.getHTML());
 					roleSubItemValueProxy.setStandardizedRole(newCreatedStandardizedRoleProxy);
 					standardizedRoleDetailsView[selectedtab].setValue(newCreatedStandardizedRoleProxy);
-					roleSubItemValueReq.persist().using(roleSubItemValueProxy).fire(new Receiver<Void>() {
-	
+					// Highlight onViolation
+					roleSubItemValueReq.persist().using(roleSubItemValueProxy).fire(new OSCEReceiver<Void>(roleSubItemValueMap) {
+						// E Highlight onViolation
 						@Override
 						public void onSuccess(Void response) {
 							Log.info("RichTextArea Value edited succeessfully");

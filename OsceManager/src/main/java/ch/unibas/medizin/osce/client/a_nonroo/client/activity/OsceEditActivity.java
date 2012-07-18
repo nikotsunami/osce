@@ -225,11 +225,15 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
+		// Highlight onViolation
+			Log.info("Map Size: " + view.getOsceMap().size());
+		// E Highlight onViolations
 		if(this.place.getOperation() == Operation.EDIT)
 		{
 	
-			
-			editorDriver.flush().fire(new OSCEReceiver<Void>() {
+			// Highlight onViolation			
+			editorDriver.flush().fire(new OSCEReceiver<Void>(view.getOsceMap()) {
+				// E Highlight onViolation
 
 				public void onFailure(ServerFailure error) {
 					Log.error(error.getMessage());
@@ -290,7 +294,8 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			//System.out.println("task--"+setTaskProxy.size());
 			//final LifeCycleState osceDefauleState=LifeCycleState.NEW;
 			
-			if(osceProxy.getIsRepeOsce()==true )
+			// Highlight onViolation
+			/*if(osceProxy.getIsRepeOsce()==true )
 			{
 				if(osceProxy.getCopiedOsce()==null)
 				{
@@ -341,10 +346,10 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			{
 				Window.alert("please select value in Study Year");
 				return;
-			}
+			}*/
 		
-			osceRequest.persist().using(osceProxy).fire(new OSCEReceiver<Void>() {
-				
+			osceRequest.persist().using(osceProxy).fire(new OSCEReceiver<Void>(view.getOsceMap()) {
+				// E Highlight onViolation	
 				
 				@Override
 				public void onSuccess(Void response) {

@@ -998,15 +998,14 @@ public void initPatientInSemesterData(
 
 				Log.info("semesterProxy.getId()" + semesterProxy.getId());
 				if (patientInSemesterProxy.getSemester() != null) {
-					Log.info("patientInSemesterProxy.getId()"
-							+ patientInSemesterProxy.getSemester().getId());
-				} else {
+					Log.info("patientInSemesterProxy.getId()"+ patientInSemesterProxy.getSemester().getId());
+				} 
+				else 
+				{
 					Log.info("semesterProxy is null ...");
 				}
-				if (semesterProxy.getId() == patientInSemesterProxy
-						.getSemester().getId()) {
-					patientInSemesterDataList.add(new PatientInSemesterData(
-							patientInSemesterProxy, spRoleAssignmentActivity));
+				if (semesterProxy.getId() == patientInSemesterProxy	.getSemester().getId()) {
+					patientInSemesterDataList.add(new PatientInSemesterData(patientInSemesterProxy, spRoleAssignmentActivity));
 				}
 
 			}
@@ -1086,24 +1085,29 @@ public void initPatientInSemesterData(
 	}
 
 	@Override
-	public void onStandizedPatientAddBtnClick(
-			StandardizedPatientProxy standardizedPatientProxy) {
-		PatientInSemesterRequest patientInSemesterRequest = requests
-				.patientInSemesterRequest();
-		PatientInSemesterProxy patientInSemesterProxy = patientInSemesterRequest
-				.create(PatientInSemesterProxy.class);
+	public void onStandizedPatientAddBtnClick(StandardizedPatientProxy standardizedPatientProxy) 
+	{
+		Log.info("Call onStandizedPatientAddBtnClick");
+		
+		if(standardizedPatientProxy==null)
+		{
+			return;
+		}
+		Log.info("StandardizedPatientProxy " + standardizedPatientProxy.getName());
+		PatientInSemesterRequest patientInSemesterRequest = requests.patientInSemesterRequest();
+		PatientInSemesterProxy patientInSemesterProxy = patientInSemesterRequest.create(PatientInSemesterProxy.class);
 
 		patientInSemesterProxy.setSemester(semesterProxy);
 		patientInSemesterProxy.setStandardizedPatient(standardizedPatientProxy);
 		patientInSemesterProxy.setAccepted(false);
 
-			
-		patientInSemesterRequest.persist().using(patientInSemesterProxy)
-				.fire(new OSCEReceiver<Void>() {
+		Log.info("Map Size: " + manualStdPatientInSemesterAssignmentPopupViewImpl.getPatientInSemesterMap().size());
+		patientInSemesterRequest.persist().using(patientInSemesterProxy).fire(new OSCEReceiver<Void>(manualStdPatientInSemesterAssignmentPopupViewImpl.getPatientInSemesterMap()) 
+		{
 
 					@Override
 					public void onSuccess(Void arg0) {
-						System.out.println("Value saved successfully");
+						Log.info("Value saved successfully");
 //						initPatientInSemester(false,false);
 						initPatientInSemester(true,false);
 						manualStdPatientInSemesterAssignmentPopupViewImpl

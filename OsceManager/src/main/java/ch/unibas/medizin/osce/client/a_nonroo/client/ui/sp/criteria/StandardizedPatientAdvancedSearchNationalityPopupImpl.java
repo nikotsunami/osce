@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -52,6 +54,10 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
     @UiField(provided = true)
     ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.NATIONALITY));
 
+ // Highlight onViolation
+    Map<String, Widget> advanceSearchCriteriaMap;
+ 	// E Highlight onViolation
+    
 	public StandardizedPatientAdvancedSearchNationalityPopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
 		bindType.setValue(BindType.values()[0]);
@@ -62,6 +68,12 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addNationalityButton.setText(constants.add());
 		nationalityButton.setText(constants.nationalities());
+		
+		// Highlight onViolation			
+		advanceSearchCriteriaMap=new HashMap<String, Widget>();
+		advanceSearchCriteriaMap.put("bindType", bindType);
+		advanceSearchCriteriaMap.put("comparation", comparison);									
+// E Highlight onViolation
 	}
 	
 	@UiHandler("addNationalityButton")
@@ -94,6 +106,12 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 	@Override
 	public ValueListBox<NationalityProxy> getNationalityBox() {
 		return nationality;
+	}
+
+	@Override
+	public Map getMap() {
+		// TODO Auto-generated method stub
+		return this.advanceSearchCriteriaMap;
 	}
 
 }

@@ -94,9 +94,12 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 	@UiHandler("saveRoomMaterial")
 	public void saveRoomMaterialClicked(ClickEvent event)
 	{
-		if (materialList.getValue() == null	|| materialList.getValue().toString() == "") 
+		Log.info("Call saveRoomMaterialClicked");
+
+		// Highlight onViolation
+		/*if (materialList.getValue() == null	|| materialList.getValue().toString() == "") 
 		{
-			/*Window.confirm("Please enter a value for Room material list");*/
+			Window.confirm("Please enter a value for Room material list");
 			
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
@@ -119,7 +122,7 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 		}
 		if (materialCount.getValue() == null || materialCount.getValue().toString() == "") 
 		{
-			/*Window.confirm("Please enter a value for Material Count number");*/
+			Window.confirm("Please enter a value for Material Count number");
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
 			 dialogBox.showConfirmationDialog("Please enter a value for Material Count number");
@@ -140,7 +143,7 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 		}
 		if (used_from.getValue() == null || used_from.getValue().toString() == "") 
 		{
-		/*	Window.confirm("Please enter a value for \"For who\"");*/
+			Window.confirm("Please enter a value for \"For who\"");
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
 			 dialogBox.showConfirmationDialog("Please enter a value used for");
@@ -158,14 +161,15 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 			
 //E: Issue Role
 			return;
-		}
-		
-		Log.info("saveRoomMaterial Clicked");
-		Log.info("="+materialCount.getValue()+"="+used_from.getValue()+"="+materialList.getValue().getName());
-		
-		Log.info("Stand.Role.Proxy: " + this.standardizedRoleProxy.getShortName());
+		}*/
+		// E Highlight onViolation
+				
+		//Log.info("="+materialCount.getValue()+"="+used_from.getValue()+"="+materialList.getValue().getName());		
+		//Log.info("Stand.Role.Proxy: " + this.standardizedRoleProxy.getShortName());
 		delegate.newUsedMaterialButtonClicked(materialCount.getValue(),used_from.getValue(), this.standardizedRoleProxy,materialList.getValue());
-		hide();
+		// Highlight onViolation
+		//hide();
+		// E Highlight onViolation
 		
 	}
 	

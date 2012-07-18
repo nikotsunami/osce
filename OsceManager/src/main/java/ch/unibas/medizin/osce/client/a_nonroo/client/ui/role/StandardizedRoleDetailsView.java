@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -80,6 +81,15 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 	// SPEC END =
     void setRoleTemplateListBox(List<RoleTemplateProxy> roleTemplateproxy);
 	VerticalPanel getRoleBaseItemVerticalPanel();
+
+	// Highlight onViolation
+	Map getChecklistTopicMap();
+
+	Map getStandardizedRoleTemplateMap();
+
+	// E Highlight onViolation
+
+	
 	
 
 }

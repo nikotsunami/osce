@@ -3,7 +3,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -58,7 +60,11 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	public void setProxy(StandardizedRoleProxy proxy) {
 		this.proxy = proxy;
 	}
-
+	
+	// Highlight onViolation
+		Map<String, Widget> standardizedRoleMap;
+	// E Highlight onViolation
+	
 	private MajorMinorPopupPanelViewImpl popupPanel;
 	
 	
@@ -177,7 +183,14 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		rolePanel.selectTab(0);
 		roleDetailPanel.selectTab(0);
 		
-		
+		// Highlight onViolation
+		standardizedRoleMap=new HashMap<String, Widget>();
+		standardizedRoleMap.put("shortName", shortName);
+		standardizedRoleMap.put("longName", longName);
+		standardizedRoleMap.put("roleType", roleType);
+		standardizedRoleMap.put("studyYear", studyYear);
+		standardizedRoleMap.put("active", active);
+		// E Highlight onViolation
 		
 		
 	}
@@ -402,6 +415,14 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		System.out.println("roletopic set");
 		roleTopic.setAcceptableValues(values);
 	}
+	
+	// Highlight onViolation
+	@Override
+	public Map getStandardizedRoleMap()
+	{
+		return this.standardizedRoleMap;
+	}
+	// E Highlight onViolation
 	
 	/*@UiHandler("mainVersion")
 	public void ValueChangedMainVersion(ValueChangeEvent<Integer> event)

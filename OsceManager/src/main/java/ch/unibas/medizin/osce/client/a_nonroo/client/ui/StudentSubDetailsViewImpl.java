@@ -144,12 +144,18 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 		            if(fileName.length() == 0)
 		            {
-		                Window.alert("Error: no file is selected. Please select a file to be uploaded.");
+		                /*Window.alert("Error: no file is selected. Please select a file to be uploaded.");*/
+		            	// Highlight onViolation
+		            	fileUpload.addStyleName("higlight_onViolation");
+		            	// E Highlight onViolation
 		                event.cancel();
 		            }
 		            else if(!fileName.endsWith("xml") && !fileName.endsWith("json") && !fileName.endsWith("csv"))
 		            {
-		                Window.alert("Error: file format not supported. Only supports XML, CSV and JSON");
+		                /*Window.alert("Error: file format not supported. Only supports XML, CSV and JSON");*/
+		            	// Highlight onViolation
+		            	fileUpload.addStyleName("higlight_onViolation");
+		            	// E Highlight onViolation
 		                event.cancel();
 		            }
 		            //else
@@ -211,14 +217,20 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		            // TODO Auto-generated method stub
 		            String fileName = fileUpload.getFilename();
 
-		            if(fileName.length() == 0)
+		           if(fileName.length() == 0)
 		            {
-		                Window.alert("Error: no file is selected. Please select a file to be uploaded.");
+		                /*Window.alert("Error1: no file is selected. Please select a file to be uploaded.");*/
+		             // Highlight onViolation
+		            	fileUpload.addStyleName("higlight_onViolation");
+		            	// E Highlight onViolation
 		                event.cancel();
 		            }
 		            else if(!fileName.endsWith("xml") && !fileName.endsWith("json") && !fileName.endsWith("csv"))
 		            {
-		                Window.alert("Error: file format not supported. Only supports XML, CSV and JSON");
+		                //Window.alert("Error1: file format not supported. Only supports XML, CSV and JSON");
+		            	// Highlight onViolation
+		            	fileUpload.addStyleName("higlight_onViolation");
+		            	// E Highlight onViolation
 		                event.cancel();
 		            }
 		            //else

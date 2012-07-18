@@ -40,6 +40,22 @@ public abstract class OSCEReceiver<T> extends Receiver<T>
 		Log.info("Size of map is: " + viewMap.size());
 		localViewMap=new HashMap<String, Widget>();
 		localViewMap=viewMap;
+		
+		if(localViewMap==null)
+		  {
+			  Log.info("Map Null from constructor");
+		  }
+		  else
+		  {
+			  Log.info("Map Not Null  from constructor");
+			  
+			  Iterator<String> tempIterator=localViewMap.keySet().iterator();
+			  while(tempIterator.hasNext())
+			  {
+				  Log.info("Remove... Highlight");	
+				  localViewMap.get(tempIterator.next()).removeStyleName("higlight_onViolation");
+			  }
+		  }
 	}
 	
 /*public OSCEReceiver(Widget view) 
@@ -75,7 +91,7 @@ public void showMessage(String error)
 		}
 			
 	};
-	t.schedule(5000);
+	t.schedule(10000);
 
 }
 
@@ -111,12 +127,12 @@ public abstract void onSuccess(T response);
 		  {
 			  Log.info("Map Not Null");
 			  
-			  Iterator<String> tempIterator=localViewMap.keySet().iterator();
+			 /* Iterator<String> tempIterator=localViewMap.keySet().iterator();
 			  while(tempIterator.hasNext())
 			  {
 				  Log.info("Remove... Highlight");	
 				  localViewMap.get(tempIterator.next()).removeStyleName("higlight_onViolation");
-			  }
+			  }*/
 			  
 			  
 			  for (String retval: violationMessageBuffor.toString().split(","))

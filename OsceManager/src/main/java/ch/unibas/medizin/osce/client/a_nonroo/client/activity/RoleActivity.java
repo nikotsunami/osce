@@ -10,6 +10,7 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
@@ -237,8 +238,10 @@ public class RoleActivity extends AbstractActivity implements
 	public void newClicked( String topicName,  String slots_till_change,
 			 SpecialisationProxy specialisationProxy,  StudyYears studyYearBox) {
 		
-		Log.info("call for new topic add");
-//		System.out.println(specialisationProxy);
+		Log.info("call for new topic add");	
+		// Highlight onViolation
+		
+/*//		System.out.println(specialisationProxy);
 		if(topicName=="" || specialisationProxy==null)
 		{
 			return;
@@ -248,7 +251,8 @@ public class RoleActivity extends AbstractActivity implements
 //		ScarProxy scar = scarReq.create(ScarProxy.class);
 		
 //		System.out.println("spec---"+specialisationProxy.getName());
-		
+*/		
+		// E Highlight onViolation
 		RoleTopicRequest roleTopicRequest=requests.roleTopicRequest();
 		RoleTopicProxy roleTopicProxy=roleTopicRequest.create(RoleTopicProxy.class);
 		
@@ -259,9 +263,11 @@ public class RoleActivity extends AbstractActivity implements
 		try
 		{
 			
-		
-		roleTopicRequest.persist().using(roleTopicProxy).fire(new Receiver<Void>() {
-			
+		// Highlight onViolation			
+		Log.info("Map Size: " + view.getRoleTopicMap());
+		roleTopicRequest.persist().using(roleTopicProxy).fire(new OSCEReceiver<Void>(view.getRoleTopicMap()) 
+		{
+		// E Highlight onViolation
 			
 			@Override
 			public void onSuccess(Void response) {
@@ -271,8 +277,6 @@ public class RoleActivity extends AbstractActivity implements
 			//	init2();
 				Log.info("Call Init Search from onSuccess");
 				initSearch();
-			
-				
 			}
 		});
 		}

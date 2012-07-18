@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -153,7 +155,12 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 		this.queListBox = queListBox;
 	}
 
-	
+	// Highlight onViolation
+	ImportTopicPopupViewImpl importTopicPopupView;
+	Map<String, Widget> checklistTopicMap;
+	Map<String, Widget> checklistQuestionMap;
+	// E Highlight onViolation
+		
 	
 	public ImportTopicPopupViewImpl(boolean isImportQuestion,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl TopicView) {
 		super(true);
@@ -183,6 +190,17 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			// E: Issue Role 
 			
 		}
+		// Highlight onViolation
+		importTopicPopupView=this;
+		checklistTopicMap=new HashMap<String, Widget>();
+		checklistTopicMap.put("title", this.getTopicLstBox());
+		checklistTopicMap.put("description", this.getTopicLstBox());
+		
+		checklistQuestionMap=new HashMap<String, Widget>();
+		checklistQuestionMap.put("checkListTopic", topicLstBox);
+		checklistQuestionMap.put("instruction", roleLstBox);
+		checklistQuestionMap.put("question", queListBox);
+		// E Highlight onViolation
 	}
 	
 	public void setDelegate(Delegate delegate) {
@@ -219,13 +237,24 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 		Log.info("okBtnClicked");
 		if(!queListBox.isVisible())
 		{
-			Log.info("Import Topic");
-			delegate.importTopic(this.getTopicLstBox().getValue());
+			Log.info("Import Topic #");
+			//Log.info("Value: " + this.getTopicLstBox().getValue());
+			// Highlight onViolation
+			if(this.getTopicLstBox().getValue()!=null)
+			{
+				delegate.importTopic(this.getTopicLstBox().getValue(),importTopicPopupView);	
+			}
+			
+			
 		}
 		else
 		{
-			delegate.importQuestion(this.getQueListBox().getValue(),this.topicView);
+			if(this.getQueListBox().getValue()!=null)
+			{
+			delegate.importQuestion(this.getQueListBox().getValue(),this.topicView,importTopicPopupView);
+			}
 		}
+		// E Highlight onViolation
 			
 	}
 	
@@ -238,4 +267,17 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	}
 	// E: Issue Role
 	
+	// Highlight onViolation
+	@Override
+	public Map getChecklistTopicMap()
+	{
+		return this.checklistTopicMap;
+	}
+	
+	@Override 
+	public Map getChecklistQuestionMap()
+	{
+		return this.checklistQuestionMap;
+	}
+	// E Highlight onViolation	
 }

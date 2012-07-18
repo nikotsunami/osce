@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -51,6 +53,10 @@ RoleBaseTableItemValueView {
 			UiBinder<Widget, RoleBaseTableItemValueViewImpl> {
 
 	}
+	
+	// Highlight onViolation
+	public Map<String, Widget> roleSubItemValueMap;
+	// E Highlight onViolation
 
 	private MajorMinorPopupPanelViewImpl popupPanel;
 	private boolean minorClick=false;
@@ -142,6 +148,7 @@ RoleBaseTableItemValueView {
 	
 	@UiHandler("saveRichTextArea")
 	public void addRichTextAreaValue(ClickEvent event){
+		Log.info("Call addRichTextAreaValue");
 	//role template spec
 		//int majorOrMinor=getMajorMinorChange();
 		//Log.info("Major or minar click--"+majorOrMinor);
@@ -219,6 +226,12 @@ RoleBaseTableItemValueView {
 		//AddSubItem.setStyleName("padding=10");
 		
 	//	accessLabel1=new Label();
+		
+		// Highlight onViolation
+		roleSubItemValueMap=new HashMap<String, Widget>();
+		roleSubItemValueMap.put("itemText", description);
+		// E Highlight onViolation
+		
 	}
 	
 	public void setValue(RoleBaseItemProxy roleBaseItemProxy)
@@ -265,7 +278,7 @@ RoleBaseTableItemValueView {
 			}
 		},"Item Name");
 		
-				
+		
 //			paths.add("item_value");
 		TextColumn<RoleTableItemValueProxy> slotColumn=new TextColumn<RoleTableItemValueProxy>() {
 				{ this.setSortable(true); }
@@ -426,7 +439,9 @@ RoleBaseTableItemValueView {
 				
 					minorClick=true;
 					
-					delegate.addRichTextAreaValue(roleBasedItemProxy,description,0);
+					// Highlight onViolation
+					delegate.addRichTextAreaValue(roleBasedItemProxy,description,0,roleSubItemValueMap);
+					// E Highlight onViolation
 					saveRichTextArea.setVisible(false);
 					popupPanel.hide();
 					
@@ -442,7 +457,9 @@ RoleBaseTableItemValueView {
 					
 				
 					minorClick=false;
-					delegate.addRichTextAreaValue(roleBasedItemProxy,description,1);
+					// Highlight onViolation
+					delegate.addRichTextAreaValue(roleBasedItemProxy,description,1,roleSubItemValueMap);
+					// E Highlight onViolation
 					saveRichTextArea.setVisible(false);
 					
 					popupPanel.hide();

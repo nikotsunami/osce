@@ -3,7 +3,9 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -131,12 +133,28 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+		public Map<String, Widget> osceMap;
+	// E Highlight onViolation
+	
 	public CircuitOsceSubViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		saveOsce.setText(constants.save());
 		clearAllBtn.setText(constants.clearAll());	
 		generateBtn.setText(constants.generate());
+		
+		// Highlight onViolation
+		osceMap=new HashMap<String, Widget>();
+		osceMap.put("shortBreak", shortBreakTextBox);
+		osceMap.put("LongBreak", longBreakTextBox);
+		osceMap.put("lunchBreak", launchBreakTextBox);
+		osceMap.put("maxNumberStudents", maxStudentTextBox);
+		osceMap.put("numberCourses", maxParcourTextBox);
+		osceMap.put("numberRooms", maxRoomsTextBox);
+		// E Highlight onViolation
+		
 	}
 
 	public String[] getPaths() {

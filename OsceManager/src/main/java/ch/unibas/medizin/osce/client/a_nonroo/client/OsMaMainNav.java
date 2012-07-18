@@ -1,6 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.transaction.config.TxNamespaceHandler;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
@@ -68,9 +72,10 @@ public class OsMaMainNav extends Composite {
 
 	interface MainNavUiBinder extends UiBinder<Widget, OsMaMainNav> {
 	}
-
+	
 	public OsMaMainNav() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
 	}
 
 	private OsMaRequestFactory requests;
@@ -390,12 +395,9 @@ public class OsMaMainNav extends Composite {
 						event.display();
 					}
 				});
-		requests.getEventBus().fireEvent(
-				new ApplicationLoadingScreenEvent(true));
-		placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",
-				handlerManager, lstSemester.getValue()));
-		requests.getEventBus().fireEvent(
-				new ApplicationLoadingScreenEvent(false));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 
 	//By Spec]
@@ -606,7 +608,11 @@ public class OsMaMainNav extends Composite {
 							final SemesterProxy insemesterPropxy;
 							insemesterPropxy=semesterProxy;
 							
-							semesterRequest.persist().using(semesterProxy).fire(new OSCEReceiver<Void>() 
+							// Highlight onViolation
+							Log.info("Map Size: " + ((SemesterPopupViewImpl)semesterPopupView).semesterMap.size());
+							// E Highlight onViolation
+							
+							semesterRequest.persist().using(semesterProxy).fire(new OSCEReceiver<Void>(((SemesterPopupViewImpl)semesterPopupView).semesterMap) 
 							{						
 								@Override
 								public void onSuccess(Void response1) 

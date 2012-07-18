@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Collection;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -50,5 +51,9 @@ public interface RoomMaterialsDetailsSubView {
 	public RoomMaterialsPopupViewImpl getRoomMaterialsPopupViewImpl();
 	
 	public void setValue(StandardizedRoleProxy proxy);
+
+	// Highlight onViolation
+	Map getUsedMaterialMap();
+	// E Highlight onViolation
 	
 }

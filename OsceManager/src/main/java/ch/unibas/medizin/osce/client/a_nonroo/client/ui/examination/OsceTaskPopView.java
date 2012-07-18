@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -40,6 +41,10 @@ public interface OsceTaskPopView extends IsWidget{
     
     void setPresenter(Presenter osceActivity);
 	void setAdministratorValue(List<AdministratorProxy> emptyList);
+
+	// Highlight onViolation
+	Map getTaskMap();
+	// E Highlight onViolation
 
 	
 }

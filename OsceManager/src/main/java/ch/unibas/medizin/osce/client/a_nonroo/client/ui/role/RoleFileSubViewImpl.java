@@ -4,6 +4,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -83,6 +85,10 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 
 	@UiField
 	FormPanel uploadFormPanel;
+	
+	// Highlight onViolation
+	Map<String, Widget> fileMap;
+	// E Highlight onViolation
 
 	public void initList() {
 
@@ -99,8 +105,10 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 	@UiHandler("newButton")
 	public void newButtonClicked(ClickEvent event) 
 	{
+		Log.info("Call newButtonClicked");
+		// Highlight onViolation
 
-		if ((fileUpload.getFilename().trim().compareToIgnoreCase("") == 0)	|| (fileUpload.getFilename() == null)) 
+/*		if ((fileUpload.getFilename().trim().compareToIgnoreCase("") == 0)	|| (fileUpload.getFilename() == null)) 
 		{
 			//Window.confirm("Please select file to upload");
 			// return;
@@ -126,8 +134,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		
 		}
 		if ((fileDescription.getValue() == "")	|| (fileDescription.getValue() == null)) {
-			/*Window.confirm("Please enter description");
-			return;*/
+			Window.confirm("Please enter description");
+			return;
 			// Issue Role
 			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 			 dialogBox.showConfirmationDialog("Please enter description");
@@ -147,7 +155,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 			return;
 //E: Issue Role
 			
-		}
+		}*/
+		// E Highlight onViolation
 
 		delegate.newFileClicked(fileUpload.getFilename(),fileDescription.getValue(), this.getValue());		
 		fileDescription.setValue("");
@@ -237,6 +246,14 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 				});
 		init();
 		newButton.setText(constants.addRoleFile());
+		
+		// Highlight onViolation
+		fileMap=new HashMap<String, Widget>();
+		fileMap.put("path", fileUpload);
+		fileMap.put("description", fileDescription);
+		
+		// E Highlight onViolation
+		
 	}
 
 	public String[] getPaths() {
@@ -412,4 +429,14 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		return proxy;
 	}
 
+	// Highlight onViolation
+	@Override
+	public Map getFileMap()
+	{
+		return this.fileMap;
+	}
+	// E Highlight onViolation
+	
+	
+	
 }

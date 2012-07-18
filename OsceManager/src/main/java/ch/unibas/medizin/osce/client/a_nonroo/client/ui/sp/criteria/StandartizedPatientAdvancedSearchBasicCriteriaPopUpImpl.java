@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -10,6 +12,7 @@ import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -51,16 +54,22 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
-		
-	if (value.getValue().trim().compareToIgnoreCase("") == 0) {
+	// Highlight onViolation
+		Log.info("Call addAdvSeaBasicButtonClicked");
+/*	if (value.getValue().trim().compareToIgnoreCase("") == 0) {
 		valueNotAvail.setText("Please enter a Value");
 		return;
 	}
-	else{
+	else{*/
+	// E Highlight onViolation		
 		valueNotAvail.setText("");
+		
+		// Highlight onViolation		
 		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());
-		this.hide();
-		}
+		//this.hide();	
+	//}
+	// E Highlight onViolation
+
 	}
 	
 	@UiField
@@ -92,6 +101,11 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	
 	@UiField
 	HorizontalPanel parentPanel;
+	
+	// Highlight onViolation
+	Map<String, Widget> advanceSearchCriteriaMap;
+	StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl advanceSearchView;
+	// E Highlight onViolation
 
 	public StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
@@ -123,6 +137,17 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 				}
 			}
 		});
+		
+		// Highlight onViolation
+		advanceSearchView=this;
+		advanceSearchCriteriaMap=new HashMap<String, Widget>();
+		advanceSearchCriteriaMap.put("field", field);
+		advanceSearchCriteriaMap.put("bindType", bindType);
+		advanceSearchCriteriaMap.put("comparation", comparison);
+		advanceSearchCriteriaMap.put("value", value);
+		advanceSearchCriteriaMap.put("shownValue", value);
+				
+		// E Highlight onViolation
 	}
 	
     public void setBindTypePickerValues(Collection<BindType> values) {
@@ -147,4 +172,13 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		this.show();
 		this.setPopupPosition(addBasicData.getAbsoluteLeft() - 5, addBasicData.getAbsoluteTop() - getOffsetHeight()/2 - 4);
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getAdvanceSearchCriteriaMap()
+	{
+		return this.advanceSearchCriteriaMap;
+	}
+	// E Highlight onViolation
+
 }

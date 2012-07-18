@@ -2,8 +2,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -121,6 +123,10 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		//public TextBox textbox;
 		// Issue Role Module
 		
+		// Highlight onViolation
+		Map<String, Widget> keywordMap;
+		// E Highlight onViolation
+		
 	public RoleKeywordSubViewImpl() 
 	{
 				
@@ -138,6 +144,13 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 //		initSearchBox();
 		initSuggestBox();
 		KeywordAddButton.setText("Add Keyword");
+		
+		// Highlight onViolation
+		keywordMap=new HashMap<String, Widget>();
+		keywordMap.put("name", keywordSugestionBox);
+		keywordMap.put("standardizedRoles", keywordSugestionBox);
+		// E Highlight onViolation
+		
 				
 	}
 	
@@ -163,7 +176,9 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		}));
 		*/
 //		keywordSugestionBox.setText(constants.enterQuestion());
-		keywordSugestionBox.getTextBox().addFocusHandler(new FocusHandler() {
+		// Highlight onViolation
+		
+		/*keywordSugestionBox.getTextBox().addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
 				if (keywordSugestionBox.getText().equals(constants.enterKeyword())) {					
@@ -190,7 +205,8 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 					keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());					
 				}
 			});
-		 keywordSugestionBox.setValue(constants.enterKeyword());
+		 keywordSugestionBox.setValue(constants.enterKeyword());*/
+		// E Highlight onViolation
 			// E Issue Role Module
 		/*keywordSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() 
 		{			
@@ -343,6 +359,7 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	@UiHandler("KeywordAddButton")
 	public void KeywordAddButton(ClickEvent e) 
 	{
+		
 		/*if(keywordSugestionBox.getValue().trim().equals(""))
 		{
 			Log.info("Suggest Box Value is NULL");
@@ -355,10 +372,12 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		}*/
 		
 		// Issue Role Module		
-				if(keywordSugestionBox.getValue().trim().equals("") || keywordSugestionBox.getValue().trim().equals(constants.enterKeyword()))
+		// Highlight onViolation
+		Log.info("KeywordAddButton call");
+		/*if(keywordSugestionBox.getValue().trim().equals("") || keywordSugestionBox.getValue().trim().equals(constants.enterKeyword()))
 				{
-				/*	Log.info("Suggest Box Value is NULL");
-					Log.info("getTextBox().getValue() TextBox Value: " + keywordSugestionBox.getTextBox().getValue());*/
+					Log.info("Suggest Box Value is NULL");
+					Log.info("getTextBox().getValue() TextBox Value: " + keywordSugestionBox.getTextBox().getValue());
 					//Window.alert("Please Select/Add new Keyword");
 					
 					// Issue Role
@@ -377,12 +396,13 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 					
 					
 				// E: Issue Role
-				}
-				else
-				{			
+				}*/
+				//else
+				//{			
 					delegate.addKeywordClicked();
-					keywordSugestionBox.setText(constants.enterKeyword());
-				}
+					//keywordSugestionBox.setText(constants.enterKeyword());
+				//}
+				// E Highlight onViolation
 				// E Issue Role Module
 				
 
@@ -400,6 +420,13 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	{
 		this.delegate=delegate;			
 	}
+	// Highlight onViolation
+	@Override
+	public Map getKeywordMap()
+	{
+		return this.keywordMap;
+	}
 	
+	// E Highlight onViolation
 	
 }

@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -38,8 +40,8 @@ import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RoomMaterialsDetailsSubViewImpl extends Composite implements
-		RoomMaterialsDetailsSubView {
+public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMaterialsDetailsSubView 
+{
 
 	private static RoomMaterialsDetailsSubViewImplUiBinder uiBinder = GWT
 			.create(RoomMaterialsDetailsSubViewImplUiBinder.class);
@@ -58,6 +60,10 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	// Issue Role Module
 		RoomMaterialsPopupViewImpl roomMaterialsPopupViewImpl;
 		// E: Issue Role Module
+		
+		// Highlight onViolation
+		Map<String, Widget> usedMaterialMap;
+		// E Highlight onViolation
 	
 	@UiField(provided = true)
 	CellTable<UsedMaterialProxy> table;
@@ -103,6 +109,14 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	/*	used_from.setAcceptableValues(java.util.Arrays
 				.asList(MaterialUsedFromTypes.values()));*/
 
+		// Highlight onViolation
+		usedMaterialMap=new HashMap<String, Widget>();
+		usedMaterialMap.put("materialCount", roomMaterialsPopupViewImpl.materialCount);
+		usedMaterialMap.put("used_from", roomMaterialsPopupViewImpl.used_from);
+		usedMaterialMap.put("materialList", roomMaterialsPopupViewImpl.materialList);	
+		// E Highlight onViolation
+		
+		
 	}
 
 	// Issue Role Module
@@ -371,5 +385,13 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	public RoomMaterialsPopupViewImpl getRoomMaterialsPopupViewImpl() {
 		return roomMaterialsPopupViewImpl;
 	}
+	
+	// Highlight onViolation
+	@Override
+	public Map getUsedMaterialMap()
+	{
+		return this.usedMaterialMap;
+	}
+	// E Highlight onViolation
 
 }

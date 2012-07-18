@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -17,9 +19,12 @@ public interface ImportTopicPopupView extends IsWidget{
 		
 		public void topicListBoxValueSelected(ChecklistTopicProxy proxy,ImportTopicPopupViewImpl view);
 		
-		public void importTopic(ChecklistTopicProxy proxy);
+		// Highlight onViolation
+		public void importTopic(ChecklistTopicProxy proxy, ImportTopicPopupViewImpl importTopicPopupView);
 		
-		public void importQuestion(ChecklistQuestionProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
+		public void importQuestion(ChecklistQuestionProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView, ImportTopicPopupViewImpl importTopicPopupView);
+		// E Highlight onViolation
+
 	}
 	
 	void setDelegate(Delegate delegate);
@@ -37,4 +42,11 @@ public interface ImportTopicPopupView extends IsWidget{
 	public void setRoleLstBox(ValueListBox<StandardizedRoleProxy> roleLstBox) ;
 	
 	public void setTopicLstBox(ValueListBox<ChecklistTopicProxy> topicLstBox);
+
+	// Highlight onViolation
+	Map getChecklistTopicMap();
+	Map getChecklistQuestionMap();
+	// E Highlight onViolation
+
+	
 }

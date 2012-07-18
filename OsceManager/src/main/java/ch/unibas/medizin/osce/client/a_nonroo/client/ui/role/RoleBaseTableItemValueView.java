@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
@@ -12,6 +14,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface RoleBaseTableItemValueView extends IsWidget {
 	public interface Presenter {
@@ -28,7 +31,7 @@ public interface RoleBaseTableItemValueView extends IsWidget {
 		// todo
 //		void newClicked(String itemName, int item_defination);
 
-		void addRichTextAreaValue(RoleBaseItemProxy roleBaseItemProxy, RichTextArea description,int i);
+		void addRichTextAreaValue(RoleBaseItemProxy roleBaseItemProxy, RichTextArea description,int i, Map<String, Widget> roleSubItemValueMap);
 
 		
 //		void addRoleScriptTableItemValue(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemValueProxy> table);

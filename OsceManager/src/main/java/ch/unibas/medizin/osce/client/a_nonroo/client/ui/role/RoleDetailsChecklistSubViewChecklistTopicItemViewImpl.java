@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
@@ -104,12 +107,18 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
+	// Highlight onViolation
+			Map<String, Widget> checklistQuestionMap;			
+			Map<String, Widget> checklistTopicMap;			
+	// E Highlight onViolation
+	
 	public RoleDetailsChecklistSubViewChecklistTopicItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		addCheckListQuestionButton.setText(constants.addCheckListQuestion());
 		importQuestionButton.setText(constants.importQuestion());
 		
 		topicView=this;
+		
 		
 	}
 	
@@ -123,6 +132,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	@UiHandler("addCheckListQuestionButton")
 	public void addCheckListQuestion(ClickEvent event)
 	{
+		Log.info("Call addCheckListQuestion");
 		showQuestionPopup();
 		//delegate.saveCheckListQuestion(checkListQuestionTxtBox.getText(),this);
 	}
@@ -146,22 +156,33 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)questionPopup));
 			
+				// Highlight onViolation
+						checklistQuestionMap=new HashMap<String, Widget>();
+						checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
+						checklistQuestionMap.put("instruction", questionPopup.getDescriptionTxtBox());
+				// E Highlight onViolation
+			
 			questionPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					Log.info("Call onClick");
+					// Highlight onViolation
 					
-					if(questionPopup.getTopicTxtBox().getValue()=="" || questionPopup.getDescriptionTxtBox().getValue()=="")
+					/*if(questionPopup.getTopicTxtBox().getValue()=="" || questionPopup.getDescriptionTxtBox().getValue()=="")
 					{
 					}	
 					else
-					{						
+					{	*/
+					
 						delegate.saveCheckListQuestion(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue(),topicView);
-						((CheckListTopicPopupViewImpl)questionPopup).hide(true);
-				
+						// E Highlight onViolation
+						//((CheckListTopicPopupViewImpl)questionPopup).hide(true);				
 						questionPopup.getTopicTxtBox().setValue("");
 						questionPopup.getDescriptionTxtBox().setValue("");
-					}
+					// Highlight onViolation
+					//}
+					// E Highlight onViolation
 				}
 		});
 		// Issue Role
@@ -253,23 +274,36 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)topicPopup));
 			
+			// Highlight onViolation
+			checklistTopicMap=new HashMap<String, Widget>();
+			checklistTopicMap.put("title", topicPopup.getTopicTxtBox());
+			checklistTopicMap.put("description", topicPopup.getDescriptionTxtBox());			
+			// E Highlight onViolation
+			
 			topicPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
-				public void onClick(ClickEvent event) {
-					
-					if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
+				public void onClick(ClickEvent event)
+				{
+					// Highlight onViolation
+					Log.info("Call onClick");
+					/*if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
 					{
 					}	
 					else
-					{
-						delegate.updateCheckListTopic(proxy,topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue(),topicView);
+					{*/
+											
+					delegate.updateCheckListTopic(proxy,topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue(),topicView);
+					// E Highlight onViolation
 					
-						((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+						//((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+					// E Highlight onViolation
 				
 						//topicPopup.getTopicTxtBox().setValue("");
 						//topicPopup.getDescriptionTxtBox().setValue("");
-					}
+					// Highlight onViolation
+					//}
+					// E Highlight onViolation
 				}
 		});
 			// Issue Role
@@ -309,6 +343,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	@UiHandler("importQuestionButton")
 	public void importQuestiuons(ClickEvent event)
 	{
+		Log.info("Call importQuestiuons");
 		showImportquestionView();
 	}
 	
@@ -355,4 +390,19 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		((ImportTopicPopupViewImpl)importQuestionPopup).setPopupPosition(addQuestionHP.getAbsoluteLeft(), addQuestionHP.getAbsoluteTop()-180);
 		((ImportTopicPopupViewImpl)importQuestionPopup).show();
 	}
+	// Highlight onViolation
+	
+	@Override
+	public Map getChecklistQuestionMap()
+	{
+		return this.checklistQuestionMap;
+	}
+	
+	@Override
+	public Map getChecklistTopicMap()	
+	{
+		return this.checklistTopicMap;
+	}
+	
+	// E Highlight onViolation
 }
