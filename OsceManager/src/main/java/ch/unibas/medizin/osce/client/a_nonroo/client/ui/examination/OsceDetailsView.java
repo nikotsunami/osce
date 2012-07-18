@@ -34,7 +34,7 @@ public interface OsceDetailsView extends IsWidget{
 				AdministratorProxy value, Date value2,OsceProxy osceproxy,TaskProxy task);
 		*/
 		
-		
+				
 	}
 	
 	CellTable<TaskProxy> getTable();
@@ -47,4 +47,6 @@ public interface OsceDetailsView extends IsWidget{
     void setPresenter(Presenter osceActivity);
 	void setAdministratorValue(List<AdministratorProxy> emptyList);
 	public OsceTaskPopViewImpl getPopView();
+	
+	
 }
