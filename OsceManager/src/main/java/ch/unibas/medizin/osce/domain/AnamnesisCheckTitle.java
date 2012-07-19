@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-import org.apache.log4j.Logger;
-import javax.validation.constraints.Size;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.allen_sauer.gwt.log.client.SystemLogger;
 
@@ -15,14 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.Set;
-
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToOne;
 
 @RooJavaBean
 @RooToString
@@ -66,10 +57,21 @@ public class AnamnesisCheckTitle {
         return true;
     }
 
-
-
-
-
+    public void insertNewSortOder(Integer previousSortOder){
+        //TODO
+        System.out.println("!!!!!!!!!!!!!!!!this is insertNewSortOder ");
+        if(previousSortOder == 0){
+	        List<AnamnesisCheckTitle> anamnesisCheckTitles = findAllAnamnesisCheckTitles();
+	        for(AnamnesisCheckTitle anamnesisCheckTitleBlow : anamnesisCheckTitles){
+	            if(anamnesisCheckTitleBlow.sort_order != null){
+	                anamnesisCheckTitleBlow.sort_order = anamnesisCheckTitleBlow.sort_order + 1;
+	                anamnesisCheckTitleBlow.persist();
+	            }
+	        }
+	        this.sort_order = 1;
+	        this.persist();
+        }
+    }
 
     private static List<AnamnesisCheckTitle> getReSortingList(Integer sortFrom) {
 
@@ -160,120 +162,14 @@ public class AnamnesisCheckTitle {
     public static List<AnamnesisCheckTitle> findAllAnamnesisCheckTitles() {
         return entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
     }
-    
-    public void insertNewSortOder(int preSortorder){
-    	//TODO 
-    	int maxSortOder=getMaxSortOderInTitle();
-    	this.sort_order = maxSortOder+1;
-    	oderByPreviousAnamnesisCheckTitle(preSortorder);
-    	
 
-    }
-
-    //
-    
-    public static AnamnesisCheckTitle findAnamnesisChecksBySortOder(int sort_order) {
-        EntityManager em = AnamnesisCheckTitle.entityManager();
-        TypedQuery<AnamnesisCheckTitle> q = em.createQuery("SELECT o FROM AnamnesisCheckTitle AS o WHERE o.sort_order = :sort_order", AnamnesisCheckTitle.class);
-        q.setParameter("sort_order", sort_order);
-        if (q.getResultList() == null || q.getResultList().size() == 0){
-            return null;
-        }
-
-        if ( q.getResultList().size() > 0){
-//           Log.warn("Inconsistent data found, 2 AnamnesisCheckTitle's with sort order." +this. sort_order );
-        }
-
-        return q.getResultList().get(0);
-    }
-    public void oderByPreviousAnamnesisCheckTitle(int preSortorder){
-    	if(this.sort_order > preSortorder+1){
-    		orderUpByPrevious(preSortorder);
-    		
-    	}else if(this.sort_order < preSortorder){
-    		orderDownByPrevious(preSortorder);
+	@Transactional
+	public void persist() {
+    	if (this.entityManager == null) this.entityManager = entityManager();
+    	if (this.sort_order == null) {
+    		TypedQuery<Integer> q = entityManager.createQuery("SELECT MAX(o.sort_order) FROM AnamnesisCheckTitle AS o", Integer.class);
+    		this.sort_order = q.getSingleResult();
     	}
-    		
-   
-    
-}
-    private int getMaxSortOderInTitle(){
-
-        if (this.entityManager == null) {
-            this.entityManager = entityManager();
-        }
-
-        TypedQuery<Integer> q = entityManager.createQuery(
-                "SELECT MAX(sort_order) FROM AnamnesisCheckTitle AS o WHERE o != :this",
-                Integer.class);
-
-        q.setParameter("this", this);
-        Integer result = q.getSingleResult();
-
-        if (result == null){
-            result = this.sort_order;
-        }
-
-        return result;
+        this.entityManager.persist(this);
     }
-
-
-private void orderUpByPrevious(int preSortorder) {
-
-	if (this.entityManager == null) {
-		this.entityManager = entityManager();
-	}
-	List<AnamnesisCheckTitle> checksTitleBelow = findAnamnesisCheckTitlesBySortOderBetween(preSortorder+1, this.sort_order-1); 
-
-	for (AnamnesisCheckTitle title : checksTitleBelow) {
-		if(title.sort_order != null){
-			title.sort_order = title.sort_order + 1;
-			title.persist();
-		}
-	}
-	setSort_order(preSortorder + 1);
-	this.persist();
-
-
-}
-
-private void orderDownByPrevious(int preSortorder) {
-
-	if (this.entityManager == null) {
-		this.entityManager = entityManager();
-	}
-
-	List<AnamnesisCheckTitle> checksTitleBelow = findAnamnesisCheckTitlesBySortOderBetween(this.sort_order + 1, preSortorder);
-	for (AnamnesisCheckTitle title : checksTitleBelow) {
-		if(title.sort_order != null){
-			title.sort_order = title.sort_order - 1;
-			title.persist();
-		}
-	}
-	setSort_order(preSortorder);
-	this.persist();
-
-}
-
-
-/**
- * Finds the title at the specified position. Assumes no 2 titles have the same sort_order
- * @param sort_order
- * @return
- */
-public static List<AnamnesisCheckTitle> findAnamnesisCheckTitlesBySortOderBetween(int lower, int upper) {
-    EntityManager em = AnamnesisCheckTitle.entityManager();
-    TypedQuery<AnamnesisCheckTitle> q = em.createQuery("SELECT o FROM AnamnesisCheckTitle AS o WHERE o.sort_order >= :sort_order_lower and o.sort_order <= :sort_order_upper ORDER BY sort_order ASC", AnamnesisCheckTitle.class);
-    q.setParameter("sort_order_lower", lower);
-    q.setParameter("sort_order_upper", upper);
-    if (q.getResultList() == null || q.getResultList().size() == 0){
-        return null;
-    }
-
-
-    return q.getResultList();
-}
-
-
-    
 }

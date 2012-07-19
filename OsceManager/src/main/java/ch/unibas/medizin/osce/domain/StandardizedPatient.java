@@ -26,7 +26,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
@@ -37,6 +36,7 @@ import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -110,6 +110,9 @@ public class StandardizedPatient {
 
     @Enumerated
     private WorkPermission workPermission;
+
+    @Enumerated
+    private StandardizedPatientStatus status;
 
     @Size(max = 13)
     @Pattern(regexp = "^[0-9]{13,13}$")
@@ -519,4 +522,63 @@ public class StandardizedPatient {
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result;
     }
+    
+    public static Long countPatientsByAdvancedCriteria(List<AdvancedSearchCriteria> searchCriteria) {
+
+        EntityManager em = entityManager();
+        PatientSearch simpatSearch = new PatientSearch(true);
+        Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
+        while (iter.hasNext()) {
+            AdvancedSearchCriteria criterium = (AdvancedSearchCriteria) iter.next();
+            simpatSearch.addAdvancedCriterion(criterium.getField(), criterium.getObjectId(), criterium.getValue(),
+                    criterium.getBindType().toString(), criterium.getComparation().getStringValue());
+
+        }
+        String queryString = simpatSearch.getSQLString();
+        Log.info("Query: [" + queryString+"]");
+        TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+        //this parameter is not required if we have no q value in the request
+        String[] tokens = simpatSearch.getTokens();
+        if (tokens != null) {
+            for(int i=0; queryString.indexOf(":q" + i) != -1; i++) {
+                q.setParameter("q" + i, "%" + tokens[i] + "%");
+                Log.info("Search :[" + tokens[i] + "]");
+            }
+        }
+        Long result  = q.getSingleResult();
+        Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result;
+    }
+    
+    public static List<StandardizedPatient> findPatientsByAdvancedCriteria(List<AdvancedSearchCriteria> searchCriteria) {
+
+        EntityManager em = entityManager();
+        PatientSearch simpatSearch = new PatientSearch(false);
+        
+
+        Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
+        while (iter.hasNext()) {
+            AdvancedSearchCriteria criterion = (AdvancedSearchCriteria) iter.next();
+            simpatSearch.addAdvancedCriterion(criterion.getField(), criterion.getObjectId(), criterion.getValue(),
+                    criterion.getBindType().toString(), criterion.getComparation().getStringValue());
+
+        }
+        String queryString = simpatSearch.getSQLString();
+        Log.info("Query: [" + queryString+"]");
+        TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
+        //this parameter is not required if we have no q value in the request
+        String[] tokens = simpatSearch.getTokens();
+        if (tokens != null) {
+            for(int i=0; queryString.indexOf(":q" + i) != -1; i++) {
+                q.setParameter("q" + i, "%" + tokens[i] + "%");
+                Log.info("Search :[" + tokens[i] + "]");
+            }
+        }
+       
+        List<StandardizedPatient> result  = q.getResultList();
+        Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result;
+    }
+    
+    
 }

@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 
@@ -66,5 +68,9 @@ public interface RoleBaseTableItemView extends IsWidget {
 	HorizontalPanel getAccessDataPanel();
 	
 	//public Label getLabel();
+	
+	// Violation Changes Highlight
+	public Map getViewMap();
+	// E Violation Changes Highlight
 
 }

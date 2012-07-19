@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
@@ -13,6 +14,8 @@ import ch.unibas.medizin.osce.shared.PriceType;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -193,26 +196,50 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void deleteClicked() {
-		if (!Window
-				.confirm("Really delete this entry? You cannot undo this change.")) {
+	/*	if (!Window.confirm("Really delete this entry? You cannot undo this change.")) 
+		{
 			Log.info("Return from deleted details");
 			return;
-		}
-		requests.materialListRequest().remove().using(materialListProxy)
-				.fire(new Receiver<Void>() {
+		}*/
+		// Issue Role
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 dialogBox.showYesNoDialog("Really delete this entry? You cannot undo this change.");
+				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) 
+						{
+							dialogBox.hide();							
+							Log.info("yes click");	
+							requests.materialListRequest().remove().using(materialListProxy)
+							.fire(new Receiver<Void>() {
 
-					public void onSuccess(Void ignore) {
-						Log.debug("Sucessfully deleted");
-						init();
-						placeController.goTo(new RoomMaterialsPlace(
-								"RoomMaterialsPlace"));
-						// placeController.goTo(new RoomMaterialsDetailsPlace(
-						// "RoomMaterialsDetailsPlace!DELETED"));
+								public void onSuccess(Void ignore) {
+									Log.debug("Sucessfully deleted");
+									init();
+									placeController.goTo(new RoomMaterialsPlace("RoomMaterialsPlace"));									
+									// placeController.goTo(new RoomMaterialsDetailsPlace(
+									// "RoomMaterialsDetailsPlace!DELETED"));
 
-					}
-				});
-		init();
-		placeController.goTo(new RoomMaterialsPlace("RoomMaterialsPlace"));
+								}
+							});
+							return;
+
+								}						
+							});
+
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							Log.info("no click");
+							return;
+							
+						}
+					});
+				// E: Issue Role		
+	
 	}
 
 }

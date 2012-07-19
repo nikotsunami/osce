@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
+	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
+	 <ui:style src="../../styles.css" />
+
+	<g:HorizontalPanel  addStyleNames="{style.rect}" width="120px" spacing="3">
+		<g:Label ui:field="patientInRoleLbl" wordWrap="false">Patient In Role</g:Label>
+		<my:IconButton ui:field="deletePatientInRole"  icon="close"></my:IconButton>
+	</g:HorizontalPanel>
+	
+	
+	
+</ui:UiBinder> 

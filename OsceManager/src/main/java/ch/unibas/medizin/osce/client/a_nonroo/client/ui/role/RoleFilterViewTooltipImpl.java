@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 
@@ -827,7 +828,15 @@ public List<String> getWhereFilters() {
 		// TODO Auto-generated method stub
 		
 	}
-	
+	// Highlight onViolation
+
+	@Override
+	public Map getRoleTopicMap() 
+	{
+		Log.info("Call getRoleTopicMap from RoleFilterViewTooltipImpl");
+		return null;
+	}
+	// E Highlight onViolation
 	
 
 	

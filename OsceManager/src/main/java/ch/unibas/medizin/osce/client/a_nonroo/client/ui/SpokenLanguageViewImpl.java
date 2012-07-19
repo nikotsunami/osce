@@ -9,18 +9,23 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -37,6 +42,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -54,6 +60,10 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 	}
 
 	private Delegate delegate;
+	
+	public EditPopView editPopView;
+	int left = 0;
+	int top = 0;
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
@@ -136,6 +146,17 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
 		
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
+		
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
 //		paths.add("id");
@@ -193,6 +214,18 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 //				return renderer.render(object.getLangskills());
 //			}
 //		}, "Langskills");
+		
+		addColumn(new ActionCell<SpokenLanguageProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<SpokenLanguageProxy>() {
+					public void execute(SpokenLanguageProxy lang) {
+						showEditPopUp(lang);
+					}
+				}), "", new GetValue<SpokenLanguageProxy>() {
+			public SpokenLanguageProxy getValue(SpokenLanguageProxy lang) {
+				return lang;
+			}
+		}, null);
+		
 		addColumn(new ActionCell<SpokenLanguageProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<SpokenLanguageProxy>() {
 					public void execute(SpokenLanguageProxy lang) {
@@ -267,4 +300,45 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 	public String getSearchTerm() {
 		return searchBox.getValue();
 	}
+	
+	//spec popup
+		public void showEditPopUp(final SpokenLanguageProxy lang)
+		{
+			editPopView = new EditPopViewImpl();
+			((EditPopViewImpl)editPopView).setAnimationEnabled(true);
+			((EditPopViewImpl)editPopView).setWidth("200px");
+			((EditPopViewImpl)editPopView).getEditTextbox().setValue(lang.getLanguageName());
+			RootPanel.get().add(((EditPopViewImpl)editPopView));
+			
+			editPopView.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					
+					if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
+					{
+						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+					}
+					else
+					{
+						delegate.updateClicked(lang, ((EditPopViewImpl)editPopView).getEditTextbox().getValue());
+						((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
+						((EditPopViewImpl)editPopView).hide(true);
+					}
+				}
+			});
+			
+			editPopView.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
+					((EditPopViewImpl)editPopView).hide(true);
+				}
+			});
+			
+			((EditPopViewImpl)editPopView).setPopupPosition(left-150, top - 50);
+			((EditPopViewImpl)editPopView).show();
+		}
 }

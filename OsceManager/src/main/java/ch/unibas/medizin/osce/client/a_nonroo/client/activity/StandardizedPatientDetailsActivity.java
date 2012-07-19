@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
@@ -34,6 +35,8 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -90,6 +93,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	private UserPlaceSettings userSettings;
 	private DMZSyncServiceAsync dmxSyncService = null;
 	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
+	private static final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -125,7 +129,6 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientDetailsView.setPresenter(this);
 		this.widget = panel;
 		this.view = standardizedPatientDetailsView;
-		loadDisplaySettings();
 		standardizedPatientScarSubView = view.getStandardizedPatientScarSubViewImpl();
 		standardizedPatientAnamnesisSubView = view.getStandardizedPatientAnamnesisSubViewImpl();
 		standardizedPatientLangSkillSubView = view.getStandardizedPatientLangSkillSubViewImpl();
@@ -138,7 +141,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		standardizedPatientMediaSubViewImpl.setDelegate(this);
-		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars").fire(new InitializeActivityReceiver());
+		loadDisplaySettings();
+		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new InitializeActivityReceiver());
 	}
 	
 	/**
@@ -236,7 +240,6 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				subView.setDelegate(StandardizedPatientDetailsActivity.this);
 				anamnesisSubViews.put(title, subView);
 				anamnesisCheckTitles.add(title);
-				onRangeChangedAnamnesis(title);
 
 				subView.getTable().addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					@Override
@@ -245,14 +248,21 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 					}
 				});
 			}
+			
+			standardizedPatientAnamnesisSubView.allTitlesAreLoaded();
 		}
 	}
 	
 	private class AnamnesisChecksValueFillReceiver extends OSCEReceiver<Void> {
+		private AnamnesisCheckTitleProxy title;
+
+		public AnamnesisChecksValueFillReceiver(AnamnesisCheckTitleProxy title) {
+			this.title = title;
+		}
 		
 		@Override
 		public void onSuccess(Void response) {
-			requests.anamnesisCheckTitleRequest().findAllAnamnesisCheckTitles().fire(new AnamnesisCheckTitleReceiver());
+			fireAnamnesisChecksValueCountRequest(title);
 		}
 	}
 	
@@ -444,8 +454,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	 ******************/
 
 	protected void initAnamnesis() {
-//		this.anamnesisTable = standardizedPatientAnamnesisSubView.getTable();
-		requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
+		requests.anamnesisCheckTitleRequest().findAllAnamnesisCheckTitles().fire(new AnamnesisCheckTitleReceiver());
 	}
 
 	private void onRangeChangedAnamnesis(AnamnesisCheckTitleProxy title) {
@@ -454,6 +463,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 			// fills the AnamnesisChecksValue table in the database with
 			// NULL-values for unanswered questions
 			Log.info("unanswered questions are shown (fill table)");
+			requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver(title));
 		} else {
 			// requests the number of rows in AnamnesisChecksValue for the
 			// current patient
@@ -483,19 +493,19 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		boolean unansweredQuestions = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
 		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo(); 
 		
-//		if (answeredQuestions && unansweredQuestions) {
+		if (answeredQuestions && unansweredQuestions) {
 			Log.debug("count -- show answered and unanswered");
 			request.countAllAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
-//		} else if (answeredQuestions) {
-//			Log.debug("count -- show only answered");
-//			request.countAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
-//		} else if (unansweredQuestions) {
-//			Log.debug("count -- show only unanswered");
-//			request.countUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
-//		} else {
-//			Log.debug("count -- show none");
-//			receiver.onSuccess(new Long(0));
-//		}
+		} else if (answeredQuestions) {
+			Log.debug("count -- show only answered");
+			request.countAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
+		} else if (unansweredQuestions) {
+			Log.debug("count -- show only unanswered");
+			request.countUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query).fire(receiver);
+		} else {
+			Log.debug("count -- show none");
+			receiver.onSuccess(new Long(0));
+		}
 	}
 
 	
@@ -512,21 +522,21 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		Range range = anamnesisSubViews.get(title).getTable().getVisibleRange();
 		Log.debug("range.getStart():" + range.getStart() + "; range.getLength():" + range.getLength() + ";");
 		
-//		if (answered && unanswered) {
+		if (answered && unanswered) {
 			Log.debug("request -- show answered and unanswered");
 			request.findAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
 					.with(paths).fire(receiver);
-//		} else if (answered) {
-//			Log.debug("request -- show only answered");
-//			request.findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
-//					.with(paths).fire(receiver);
-//		} else if (unanswered) {
-//			Log.debug("request -- show only unanswered");
-//			request.findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
-//					.with(paths).fire(receiver);
-//		} else {
-//			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
-//		}
+		} else if (answered) {
+			Log.debug("request -- show only answered");
+			request.findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
+					.with(paths).fire(receiver);
+		} else if (unanswered) {
+			Log.debug("request -- show only unanswered");
+			request.findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisForm.getId(), title.getId(), query, range.getStart(), range.getLength())
+					.with(paths).fire(receiver);
+		} else {
+			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
+		}
 	}
 	
 	/*******************
@@ -594,6 +604,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		userSettings.setValue("anamnesisPanelOpen", view.isAnamnesisDisclosurePanelOpen());
 		userSettings.setValue("panelOpen", view.isPatientDisclosurePanelOpen());
 		userSettings.setValue("detailsTab", view.getSelectedDetailsTab());
+		userSettings.setValue("anamnesisTab", standardizedPatientAnamnesisSubView.getSelectedTab());
 		userSettings.flush();
 	}
 	
@@ -601,16 +612,19 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		boolean anamnesisPanelOpen = true;
 		boolean panelOpen = true;
 		int detailsTab = 0;
+		int anamnesisTab = 0;
 		
 		if (userSettings.hasSettings()) {
 			anamnesisPanelOpen = userSettings.getBooleanValue("anamnesisPanelOpen");
 			panelOpen = userSettings.getBooleanValue("panelOpen");
 			detailsTab = userSettings.getIntValue("detailsTab");
+			anamnesisTab = userSettings.getIntValue("anamnesisTab");
 		}
 		
 		view.setAnamnesisDisclosurePanelOpen(anamnesisPanelOpen);
 		view.setPatientDisclosurePanelOpen(panelOpen);
 		view.setSelectedDetailsTab(detailsTab);
+		standardizedPatientAnamnesisSubView.setSelectedAnamnesisTab(anamnesisTab);
 	}
 	
 	@Override
@@ -636,14 +650,75 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				Operation.EDIT));
 	}
 
+	
+	//Module 3 : Task B
+	@Override
+	public void statusClicked() {
+
+		final StandardizedPatientStatus newStatus = (standardizedPatientProxy
+				.getStatus() == StandardizedPatientStatus.ACTIVE) ? StandardizedPatientStatus.INACTIVE
+				: StandardizedPatientStatus.ACTIVE;
+
+		Log.info("Status is to : " + standardizedPatientProxy.getStatus());
+		StandardizedPatientRequest standardizedPatientRequest = requests
+				.standardizedPatientRequest();
+		standardizedPatientProxy = standardizedPatientRequest
+				.edit(standardizedPatientProxy);
+		standardizedPatientProxy.setStatus(newStatus);
+		standardizedPatientRequest.persist().using(standardizedPatientProxy)
+				.fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void arg0) {
+						// init();
+						Log.info("Patient is persist with " + newStatus.name());
+						Log.info("Status is change to : " + newStatus.name());
+						view.setStatusIcon(newStatus);
+						placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(), Operation.NEW));
+					}
+
+				});
+
+	}
+	
 	@Override
 	public void deletePatientClicked() {
 		// TODO replace with appropriate message
+
+		if (standardizedPatientProxy.getPatientInSemester() != null
+				&& standardizedPatientProxy.getPatientInSemester().size() > 0) {
+
+			StandardizedPatientRequest standardizedPatientRequest = requests
+					.standardizedPatientRequest();
+			standardizedPatientProxy = standardizedPatientRequest
+					.edit(standardizedPatientProxy);
+			standardizedPatientProxy
+					.setStatus(StandardizedPatientStatus.ANONYMIZED);
+			standardizedPatientRequest.persist()
+					.using(standardizedPatientProxy)
+					.fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void arg0) {
+							// init();
+
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
+									"Warning");
+							dialogBox.showConfirmationDialog(constants
+									.onDeleteRoleAssignedToPatient());
+							view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
+						}
+
+					});
+		
+			//Module 3 : Task B
+		} else {
+		
 		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
             return;
         }
 		
-        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new Receiver<Void>() {
+        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
             public void onSuccess(Void ignore) {
                 if (widget == null) {
                     return;
@@ -651,6 +726,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
             	placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!DELETED"));
             }
         });
+		}
 		
 	}
 	@Override
@@ -775,11 +851,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	
 	@Override
 	public void performAnamnesisSearch() {
-		Log.debug("performAnamnesisSearch() -- ");
-		for (AnamnesisCheckTitleProxy title : anamnesisCheckTitles) {
-			Log.debug("performAnamnesisSearch() -- title == " + title.getText());
-			onRangeChangedAnamnesis(title);
-		}
+		Log.debug("performAnamnesisSearch()");
+		onRangeChangedAnamnesis(anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab()));
 	}
 
 	@Override

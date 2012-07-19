@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -42,9 +44,26 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	public void setOkBtn(Button okBtn) {
 		this.okBtn = okBtn;
 	}
+	
+	// Issue Role 
+		public Button getCancelBtn() {
+			return cancelBtn;
+		}
+		
+		public void setCancelBtn(Button cancelBtn) {
+			this.cancelBtn = cancelBtn;
+		}
+		// E: Issue Role 
 
 	@UiField
 	Label roleLbl;
+	
+
+	// Issue Role 
+	@UiField
+	Button cancelBtn;
+	// E: Issue Role 
+			
 	
 	@UiField(provided = true)
 	ValueListBox<StandardizedRoleProxy> roleLstBox=new ValueListBox<StandardizedRoleProxy>(new Renderer<StandardizedRoleProxy>() {
@@ -136,7 +155,12 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 		this.queListBox = queListBox;
 	}
 
-	
+	// Highlight onViolation
+	ImportTopicPopupViewImpl importTopicPopupView;
+	Map<String, Widget> checklistTopicMap;
+	Map<String, Widget> checklistQuestionMap;
+	// E Highlight onViolation
+		
 	
 	public ImportTopicPopupViewImpl(boolean isImportQuestion,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl TopicView) {
 		super(true);
@@ -148,6 +172,9 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.topic());
 			questionLbl.setText("Questions");
+			// Issue Role 
+			cancelBtn.setText(constants.cancel());
+			// E: Issue Role 
 		}
 		else
 		{
@@ -158,8 +185,22 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.topic());
 			questionLbl.setText("Questions");
+			// Issue Role 
+			cancelBtn.setText(constants.cancel());
+			// E: Issue Role 
 			
 		}
+		// Highlight onViolation
+		importTopicPopupView=this;
+		checklistTopicMap=new HashMap<String, Widget>();
+		checklistTopicMap.put("title", this.getTopicLstBox());
+		checklistTopicMap.put("description", this.getTopicLstBox());
+		
+		checklistQuestionMap=new HashMap<String, Widget>();
+		checklistQuestionMap.put("checkListTopic", topicLstBox);
+		checklistQuestionMap.put("instruction", roleLstBox);
+		checklistQuestionMap.put("question", queListBox);
+		// E Highlight onViolation
 	}
 	
 	public void setDelegate(Delegate delegate) {
@@ -196,14 +237,47 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 		Log.info("okBtnClicked");
 		if(!queListBox.isVisible())
 		{
-			Log.info("Import Topic");
-			delegate.importTopic(this.getTopicLstBox().getValue());
+			Log.info("Import Topic #");
+			//Log.info("Value: " + this.getTopicLstBox().getValue());
+			// Highlight onViolation
+			if(this.getTopicLstBox().getValue()!=null)
+			{
+				delegate.importTopic(this.getTopicLstBox().getValue(),importTopicPopupView);	
+			}
+			
+			
 		}
 		else
 		{
-			delegate.importQuestion(this.getQueListBox().getValue(),this.topicView);
+			if(this.getQueListBox().getValue()!=null)
+			{
+			delegate.importQuestion(this.getQueListBox().getValue(),this.topicView,importTopicPopupView);
+			}
 		}
+		// E Highlight onViolation
 			
 	}
 	
+	// Issue Role
+	@UiHandler("cancelBtn")
+	public void cancelBtnClicked(ClickEvent event)
+	{
+		Log.info("Cancel Topic");
+		hide();
+	}
+	// E: Issue Role
+	
+	// Highlight onViolation
+	@Override
+	public Map getChecklistTopicMap()
+	{
+		return this.checklistTopicMap;
+	}
+	
+	@Override 
+	public Map getChecklistQuestionMap()
+	{
+		return this.checklistQuestionMap;
+	}
+	// E Highlight onViolation	
 }

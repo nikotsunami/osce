@@ -4,14 +4,17 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -36,6 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author niko2
  * 
  */
+
 public class StandardizedRoleDetailsViewImpl extends Composite implements
 		StandardizedRoleDetailsView {
 
@@ -59,7 +63,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	Image arrow;
 	// SPEC End
 	
-ImportTopicPopupView importTopicView;
+	ImportTopicPopupView importTopicView;
 	
 	//Assignment E[
 	
@@ -217,9 +221,40 @@ ImportTopicPopupView importTopicView;
 	}
 
 	@UiHandler("roleTemplateValueButon")
-	public void roleTemplateValueSelction(ClickEvent event){
-		System.out.println(roleTemplateListBox.getValue().getTemplateName());
+	public void roleTemplateValueSelction(ClickEvent event)
+	{	
+		Log.info("call roleTemplateValueSelction");
+		//System.out.println(roleTemplateListBox.getValue().getTemplateName());
+		// Issue Role
+		// Highlight onViolation
+
+/*		if(roleTemplateListBox.getValue()==null)
+		{
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+			 dialogBox.showConfirmationDialog("Select Role Template");
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");	
+					return;
+						}
+					});
+
+		
+//E: Issue Role	
+		}
+		else
+		{*/
+		// E Highlight onViolation
 		delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getValue());
+		// Highlight onViolation
+		//}
+		// E Highlight onViolation
+		// E: Issue Role
 	}
 	
 	@UiField
@@ -264,6 +299,11 @@ ImportTopicPopupView importTopicView;
 	 * HasHTML instead of HasText.
 	 */
 
+	// Highlight onViolation
+		Map<String, Widget> checklistTopicMap;	
+		Map<String, Widget> standardizedRoleTemplateMap;
+	// E Highlight onViolation
+	
 	public StandardizedRoleDetailsViewImpl() {
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -289,6 +329,12 @@ ImportTopicPopupView importTopicView;
 		//Assignment E start]
 		
 		roleTemplateValueButon.setText("Select Role Template");
+		
+		// Highlight onViolation
+			standardizedRoleTemplateMap=new HashMap<String, Widget>();
+			standardizedRoleTemplateMap.put("roleTemplate", roleTemplateListBox);
+		// E Highlight onViolation
+		
 	}
 
 	private void setLabelTexts() {
@@ -353,8 +399,24 @@ ImportTopicPopupView importTopicView;
 	}
 
 	@UiHandler("print")
-	public void onPrintClicked(ClickEvent e) {
-		// delegate.printRoleClicked();
+	public void onPrintClicked(ClickEvent event) {
+		Widget eventSource = (Widget) event.getSource();		
+		showPrintFilterPanel(eventSource.getAbsoluteLeft(), eventSource.getAbsoluteTop());
+//		showPrintFilterPanel(event.getClientX(), event.getClientY());
+	}
+
+//	@UiHandler("print")
+//	public void onPrintClicked(MouseOverEvent event) {
+//		Widget eventSource = (Widget) event.getSource();		
+//		showPrintFilterPanel(eventSource.getAbsoluteLeft(), eventSource.getAbsoluteTop());
+//	}
+
+	private void showPrintFilterPanel(int left, int top) {
+		StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl = StandardizedRolePrintFilterViewImpl
+				.getStandardizedRolePrintFilterViewImpl(getValue(),delegate);				
+		standardizedRolePrintFilterViewImpl.setPopupPosition(left-193, top-5);
+//		standardizedRolePrintFilterViewImpl.setPopupPosition(left, top);
+		standardizedRolePrintFilterViewImpl.show();
 	}
 
 	@UiHandler("delete")
@@ -427,6 +489,7 @@ ImportTopicPopupView importTopicView;
 	@UiHandler("addCheckListTopicButton")
 	public void addCheckListTopicButtonClickHandler(ClickEvent event)
 	{
+		Log.info("Call addCheckListTopicButtonClickHandler");
 		showTopicPopupPanel();
 		
 		//if( addCheckListTopicTxtBox.getValue() != "")
@@ -451,26 +514,52 @@ ImportTopicPopupView importTopicView;
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)topicPopup));
 			
+			// Highlight onViolation
+			checklistTopicMap=new HashMap<String, Widget>();
+			checklistTopicMap.put("title", topicPopup.getTopicTxtBox());
+			checklistTopicMap.put("description", topicPopup.getDescriptionTxtBox());			
+			// E Highlight onViolation
+			
 			topicPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent event) {
+
+					// Highlight onViolation
 					
-					if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
+					/*if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
 					{
 					}	
 					else
-					{
-						delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());
-					
-						((CheckListTopicPopupViewImpl)topicPopup).hide(true);
-				
+					{*/
+					// E Highlight onViolation
+						delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());					
+						//((CheckListTopicPopupViewImpl)topicPopup).hide(true);				
 						topicPopup.getTopicTxtBox().setValue("");
 						topicPopup.getDescriptionTxtBox().setValue("");
-					}
+				// Highlight onViolation
+					//}
+				// E Highlight onViolation
 				}
 		});
+			
+		
+			
+			// Issue Role
+			topicPopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) 
+				{
+					((CheckListTopicPopupViewImpl)topicPopup).hide(true);
+					topicPopup.getTopicTxtBox().setValue("");
+					topicPopup.getDescriptionTxtBox().setValue("");
+				}
+			});
+			// E: Issue Role
 		}
+			
+		
 		
 		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
 		((CheckListTopicPopupViewImpl)topicPopup).show();
@@ -490,44 +579,55 @@ ImportTopicPopupView importTopicView;
 //			if(importTopicView==null)
 			{
 				importTopicView=new ImportTopicPopupViewImpl(false,null);
-				
-				
 				((ImportTopicPopupViewImpl)importTopicView).setAnimationEnabled(true);
-			
 				
 				delegate.setRoleListBoxValue(importTopicView);
 				
-				
-				((ImportTopicPopupViewImpl)importTopicView).setWidth("150px");
-
-			
+				((ImportTopicPopupViewImpl)importTopicView).setWidth("150px");			
 				RootPanel.get().add(((ImportTopicPopupViewImpl)importTopicView));
+				
+				
 				
 				importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
 					
 					@Override
-					public void onClick(ClickEvent event) {
-						
-						//if(importTopicView.getRoleLstBox().getValue()=="" || importTopicView.getTopicLstBox().to.getValue()=="")
+					public void onClick(ClickEvent event) 
+					{
 						{
-						}	
-					//	else
-						{
-						//	delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());
-						
 							((ImportTopicPopupViewImpl)importTopicView).hide(true);
-					
-							//importTopicView.getTopicTxtBox().setValue("");
-							//importTopicView.getDescriptionTxtBox().setValue("");
 						}
-					
-				}
-			});
+					}
+				});
+				// Issue Role
+					importTopicView.getCancelBtn().addClickHandler(new ClickHandler() 
+					{
+						@Override
+					public void onClick(ClickEvent event) 
+						{
+					((ImportTopicPopupViewImpl)importTopicView).hide(true);
+						}
+					});
+				// E: Issue Role
 				
 		}
 			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
 			((ImportTopicPopupViewImpl)importTopicView).show();
 		}
 	//Assignment E]
+		
+		// Highlight onViolation
+		@Override
+		public Map getChecklistTopicMap()
+		{
+			return this.checklistTopicMap;
+		}
+		
+		@Override
+		public Map getStandardizedRoleTemplateMap()
+		{
+			return this.standardizedRoleTemplateMap;
+		}
+		
+		// E Highlight onViolation
 	
 }

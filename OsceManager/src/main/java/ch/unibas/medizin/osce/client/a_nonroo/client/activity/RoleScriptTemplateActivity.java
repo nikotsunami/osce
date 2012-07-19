@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplateDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateViewImpl;
@@ -44,6 +47,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -501,6 +505,11 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		// Issue Role Module
 
 		toolTip.show();
+		
+		// Violation Changes Highlight
+				final Map<String, Widget> popupMap=new HashMap<String, Widget>();
+				popupMap.put("templateName", toolTipLabel);
+				// E Violation Changes Highlight
 
 		toolTipChange.addClickHandler(new ClickHandler() {
 
@@ -511,15 +520,18 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 						.fire(new Receiver<RoleTemplateProxy>() {
 
 							@Override
-							public void onSuccess(RoleTemplateProxy response) {
-								RoleTemplateRequest spReq = requests
-										.roleTemplateRequest();
+							public void onSuccess(RoleTemplateProxy response) 
+							{
+								RoleTemplateRequest spReq = requests.roleTemplateRequest();
 								response = spReq.edit(response);
 								response.setTemplateName(toolTipLabel.getText());
 								response.setDate_edited(new Date());
-								spReq.persist().using(roleTemplate)
-										.fire(new Receiver<Void>() {
-
+								// Violation Changes Highlight
+								spReq.persist().using(roleTemplate).fire(new OSCEReceiver<Void>(popupMap) 
+								{
+								// E Violation Changes Highlight
+								/*spReq.persist().using(roleTemplate).fire(new Receiver<Void>() 
+								{*/
 											@Override
 											public void onFailure(
 													ServerFailure error) {
@@ -560,10 +572,13 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		roleTemplate.setDate_cretaed(new Date());
 		roleTemplate.setDate_edited(new Date());
 
-		roletempreq.persist().using(roleTemplate).fire(new Receiver<Void>() {
-			@Override
-			public void onSuccess(Void arg0) {
-				init();
+		// Violation Changes Highlight
+		Log.info("Map Size: " + view.getAadTemplateMap().size());
+		roletempreq.persist().using(roleTemplate).fire(new OSCEReceiver<Void>(view.getAadTemplateMap()) {
+		// E Violation Changes Highlight
+		@Override
+		public void onSuccess(Void arg0) {
+			init();
 			}
 		});
 	}

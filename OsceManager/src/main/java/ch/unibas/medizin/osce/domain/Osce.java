@@ -68,7 +68,8 @@ public class Osce {
     private Semester semester;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
-    private Set<OsceDay> osce_days = new HashSet<OsceDay>();
+    @OrderBy("osceDate")
+    private List<OsceDay> osce_days = new ArrayList<OsceDay>();
 
     @OrderBy("sequenceNumber")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
@@ -132,13 +133,26 @@ public class Osce {
         return numberNotPossibleStart;
     }
     
-    public static Boolean generateOsceScaffold(Long osceId){
+    public static Boolean generateOsceScaffold(Long osceId) {
     	TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
 		
 		// persist scaffold (osce days and all cascading entities)
 		optGen.createScaffold();
     	
 		// TODO: only return if scaffold has been created
+    	return Boolean.TRUE;
+    }
+    
+    public static Boolean generateAssignments(Long osceId) {
+    	TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
+    	System.out.println(optGen.toString());
+    	log.info(optGen.toString());
+    	
+    	log.info("calling createAssignments()...");
+    	
+    	Set<Assignment> assignments = optGen.createAssignments();
+    	log.info("number of assignments created: " + assignments.size());
+    	
     	return Boolean.TRUE;
     }
    

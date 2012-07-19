@@ -1,0 +1,61 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:gg="urn:import:com.google.gwt.user.datepicker.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+		.popupPanel {
+			margin: 6px 6px;
+		}
+		
+		.popupCheckboxes {
+			width: 120px;
+		}
+		
+		.noOutline {
+			outline-style: none;
+			overflow: hidden;
+		}
+		
+		.floatRight {
+			float: right;
+		}
+	</ui:style>
+
+	<g:FocusPanel addStyleNames="{style.noOutline}" ui:field="filterPanelRoot"
+		width="100%">
+		<g:HTMLPanel addStyleNames="{style.popupPanel}">
+			<span class="ui-icon ui-icon-print" style="margin: 0 10px 6px 0; float:left"></span>
+			<strong>
+				<span style="margin-left: 10px margin-right: 10px" ui:field="printFor"></span>
+			</strong>
+			<g:HorizontalPanel styleName="{style.floatRight} {style.controlsright}">
+				<my:IconButton icon="arrowreturnthick-1-w" ui:field="resetButton" />
+				<my:IconButton icon="print" ui:field="printButton" />
+			</g:HorizontalPanel>
+			<div style="clear:both">
+				<g:VerticalPanel >
+					<g:HorizontalPanel addStyleNames="{style.popupPanel}">
+						<g:Label ui:field="roleItemAceess" />
+						<g:ValueListBox ui:field="roleScript"/>
+					</g:HorizontalPanel>
+					<g:HorizontalPanel>
+						<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+							<!-- <g:CheckBox ui:field="shortName" /> <g:CheckBox ui:field="studyYear" 
+								/> <g:CheckBox ui:field="roleType" /> -->
+							<g:CheckBox ui:field="basicData" />
+							<g:CheckBox ui:field="CheckList" />
+						</g:VerticalPanel>
+
+						<g:VerticalPanel addStyleNames="{style.popupCheckboxes}">
+
+							<g:CheckBox ui:field="roomMaterials" width="110%"
+								wordWrap="false" />
+							<g:CheckBox ui:field="files" />
+						</g:VerticalPanel>
+					</g:HorizontalPanel>
+
+				</g:VerticalPanel>
+			</div>
+		</g:HTMLPanel>
+	</g:FocusPanel>
+</ui:UiBinder> 

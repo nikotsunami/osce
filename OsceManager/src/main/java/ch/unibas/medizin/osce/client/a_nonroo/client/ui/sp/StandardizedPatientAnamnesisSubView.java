@@ -8,14 +8,22 @@ public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 	
 	interface Delegate {
 		public void performAnamnesisSearch();
+		public void storeDisplaySettings();
 	}
 	
 	public void setDelegate(Delegate delegate);
 	
 	public boolean areUnansweredQuestionsShown();
+	
 	public boolean areAnsweredQuestionsShown();
+	
 	public String getSearchString();
+	
 	StandardizedPatientAnamnesisTableSubView addAnamnesisCheckTitle(AnamnesisCheckTitleProxy title);
 
 	public int getSelectedTab();
+
+	public void allTitlesAreLoaded();
+	
+	public void setSelectedAnamnesisTab(int selectedAnamnesisTab);
 }

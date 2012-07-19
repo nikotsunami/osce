@@ -1,11 +1,15 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -47,6 +51,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 	// new MultiWordSuggestOracle();
 	private Delegate delegate;
 	private StandardizedPatientProxy standardizedPatientProxy;
+	private List<StandardizedPatientProxy> standardizedPatientProxies;
 
 	@UiField(provided = true)
 	SuggestBox standardizedPatientSugestionBox = new SuggestBox(
@@ -63,6 +68,9 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 	IconButton standardizedPatientAddButton;
 
 	@UiField
+	IconButton addAllButton;
+
+	@UiField
 	IconButton closeBoxButton;
 
 	@UiHandler("closeBoxButton")
@@ -70,9 +78,37 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		hide();
 	}
 
+	//MODULE 3 : TACK B
+	@UiHandler("addAllButton")
+	public void addAllButtonClicked(ClickEvent e) {
+		Log.info("standardizedPatientProxies.size()" +standardizedPatientProxies.size());
+		if (standardizedPatientProxies.size() > 0 && isActivePatientAvailable()) {
+			delegate.onAddAllActive(standardizedPatientProxies);
+		} 
+		else 
+		{
+			suggestionBoxLbl.setText(constants.patientIsNotAvailable());
+		}
+	}
+
+	private boolean isActivePatientAvailable(){
+		for (Iterator<StandardizedPatientProxy> iterator = standardizedPatientProxies.iterator(); iterator.hasNext();) {
+			StandardizedPatientProxy standardizedPatientProxy = (StandardizedPatientProxy) iterator.next();
+			if(standardizedPatientProxy.getStatus() == StandardizedPatientStatus.ACTIVE)
+				return true;
+		}
+		return false;
+	}	
+	//MODULE 3 : TACK B
+	
 	@UiField
 	Label suggestionBoxLbl;
 
+	
+	// Highlight onViolation
+	Map<String, Widget> patientInSemesterMap;
+		// E Highlight onViolation
+	
 	public ManualStandardizedPatientInSemesterAssignmentPopupViewImpl() {
 		setWidget(BINDER.createAndBindUi(this));
 
@@ -81,34 +117,62 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
 		this.setText(constants.addManually());
-		closeBoxButton.setText(constants.close());
+		this.closeBoxButton.setText(constants.close());
+		this.addAllButton.setText(constants.addAllActive());
 
 		initSuggestBox();
 
 		this.center();
+
+		// Highlight onViolation
+		patientInSemesterMap=new HashMap<String, Widget>();
+		patientInSemesterMap.put("semester", standardizedPatientSugestionBox);
+		patientInSemesterMap.put("standardizedPatient", standardizedPatientSugestionBox);
+		// E Highlight onViolatio
+		 
 	}
 
 	@UiHandler("standardizedPatientAddButton")
 	public void onClickEvent(ClickEvent clickEvent) {
-		if (standardizedPatientSugestionBox.getValue().trim().compareTo("") != 0) {
-			if (this.delegate != null) {
-				if (standardizedPatientProxy != null) {
+		Log.info("Call standardizedPatientAddButton addPatient");
+		/*if (standardizedPatientSugestionBox.getValue().trim().compareTo("") != 0) 
+		{*/
+			if (this.delegate != null) 
+			{
+				
+				// Highlight onViolation
+				/*if (standardizedPatientProxy != null) 
+				{*/					
 					Log.info("delegate is avilable");
-					this.delegate
-							.onStandizedPatientAddBtnClick(standardizedPatientProxy);
-				} else {
-					suggestionBoxLbl.setText(constants.enterPatient());
-					standardizedPatientSugestionBox.setText(constants
-							.enterPatient());
+					if(standardizedPatientProxy==null)
+					{
+						Log.info("Null Proxy");
+						
+						standardizedPatientSugestionBox.addStyleName("higlight_onViolation");
+						return;
+					}
+					else
+					{
+						this.delegate.onStandizedPatientAddBtnClick(standardizedPatientProxy);	
+					}
+					
+				/*} 
+				else 
+				{*/
+					/*suggestionBoxLbl.setText(constants.enterPatient());*/
+					standardizedPatientSugestionBox.setText(constants.enterPatient());
 
-				}
-			} else {
+				/*}*/
+			} 
+			else {
 				Log.info("delegate Value is NULL");
 			}
 			// showPatientAssignmentPopup(false);
-		} else {
+		/*} 
+		else 
+		{
 			Log.info("Suggest Box Value is NULL");
-		}
+		}*/
 
 	}
 
@@ -118,6 +182,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 		this.setDelegate(delegate);
 		this.setStandizedPatientAutocompleteValue(standardizedPatientProxies);
+		this.standardizedPatientProxies = standardizedPatientProxies;
 
 		this.setPopupPosition(parentButton.getAbsoluteLeft(),
 				parentButton.getAbsoluteTop() - getOffsetHeight() / 2 - 6);
@@ -224,7 +289,8 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 	}
 
-	public SuggestBox getStandardizedPatientSugestionBox() {
+	public SuggestBox getStandardizedPatientSugestionBox() 
+	{
 		return standardizedPatientSugestionBox;
 	}
 
@@ -232,4 +298,11 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		return delegate;
 	}
 
+	// Highlight onViolation
+	@Override
+	public Map getPatientInSemesterMap()
+	{
+		return this.patientInSemesterMap;
+	}
+	// E Highlight onViolation
 }

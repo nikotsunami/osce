@@ -4,8 +4,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -63,6 +65,9 @@ public class RoleViewImpl extends Composite implements RoleView {
 	}
 
 	
+	// Highlight onViolation
+		Map<String, Widget> roleTopicMap;
+	// E Highlight onViolation
 	//spec  start
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
@@ -112,7 +117,7 @@ public class RoleViewImpl extends Composite implements RoleView {
 //	ValueListBox<Specialisation> c=new ValueListBox<Specialisation>(new SpecialisationProxyRenderer());
 	
 	@UiField(provided = true)
-	ValueListBox<SpecialisationProxy> SpecialisationBox = new ValueListBox<SpecialisationProxy>(new SpecialisationProxyRenderer());
+	ValueListBox<SpecialisationProxy> SpecialisationBox = new ValueListBox<SpecialisationProxy>(SpecialisationProxyRenderer.instance());
 	
 	private boolean addBoxesShown = true;   
 	
@@ -261,6 +266,19 @@ public class RoleViewImpl extends Composite implements RoleView {
 		newButton.setText(constants.addRoleTopic());
 
 		//spec  end
+		
+		
+		// Highlight onViolation
+		
+		roleTopicMap=new HashMap<String, Widget>();
+		roleTopicMap.put("name", topicName);
+		roleTopicMap.put("description", topicName);
+		roleTopicMap.put("studyYear", studyYearBox);
+		roleTopicMap.put("slotsUntilChange", slots_till_change);
+		roleTopicMap.put("specialisation",SpecialisationBox);
+		
+		
+		// E Highlight onViolation
 	}
 
 	//spec start
@@ -457,6 +475,13 @@ public class RoleViewImpl extends Composite implements RoleView {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	// Highlight onViolation
+	@Override
+	public Map getRoleTopicMap()
+	{
+		return this.roleTopicMap;
+	}
+	//E Highlight onViolation
 	
 }

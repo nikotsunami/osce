@@ -3,9 +3,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 
@@ -68,6 +70,9 @@ DoctorView.Presenter, DoctorView.Delegate {
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 		
+		view.getFilterTitle().clear();
+		
+		initFilterTitleFill();
 		initSearch();
 
 		activityManger.setDisplay(view.getDetailsPanel());
@@ -105,6 +110,28 @@ DoctorView.Presenter, DoctorView.Delegate {
 		});
 		
 	}
+	
+	//Module 6 Start
+	private void initFilterTitleFill()
+	{
+		requests.clinicRequest().findAllClinics().fire(new Receiver<List<ClinicProxy>>() {
+
+			@Override
+			public void onSuccess(List<ClinicProxy> resonse) {
+				
+				view.getFilterTitle().addItem("", "0");
+				ClinicProxy temp = null;
+				for (int i=0; i<resonse.size(); i++)
+				{
+					temp = resonse.get(i);
+					view.getFilterTitle().addItem(temp.getName(), String.valueOf(temp.getId()));
+				}
+				
+			}
+			
+		});
+	}
+	//Module 6 End
 	
 	private void initSearch() {
 		
@@ -216,5 +243,37 @@ DoctorView.Presenter, DoctorView.Delegate {
 		placeController.goTo(place);
 		
 	}
+
+	//Module 6 Start
+	@Override
+	public void changeFilterTitleShown(String selectedTitle) {
+	
+		if (!selectedTitle.equals("0"))
+		{
+		
+			requests.doctorRequestNonRoo().findDoctorByClinicID(Long.parseLong(selectedTitle)).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+
+				@Override
+				public void onSuccess(List<DoctorProxy> response) {
+					view.getTable().setRowCount(response.size());
+					view.getTable().setRowData(response);
+				
+				}
+			});
+		}
+		else
+		{
+			requests.doctorRequest().findAllDoctors().with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+
+				@Override
+				public void onSuccess(List<DoctorProxy> response) {
+					view.getTable().setRowCount(response.size());
+					view.getTable().setRowData(response);
+				}
+			});
+		}
+		
+	}
+	//Module 6 End
 
 }

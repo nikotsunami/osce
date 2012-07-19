@@ -29,6 +29,8 @@ import ch.unibas.medizin.osce.shared.Sorting;
 public interface RoleParticipantRequestNonRoo extends RequestContext 
 {	
 	abstract Request<List<RoleParticipantProxy>> findDoctorWithStandardizedRoleAndRoleTopic(Long id,Integer type);
+	
+	abstract Request<List<RoleParticipantProxy>> findRoleParticipatentByDoctor(DoctorProxy proxy);
 }
 
 

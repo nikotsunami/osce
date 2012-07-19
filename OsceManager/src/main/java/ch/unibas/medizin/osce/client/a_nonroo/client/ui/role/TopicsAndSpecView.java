@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 
@@ -8,6 +10,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 
 public interface TopicsAndSpecView extends IsWidget{
 	
@@ -37,4 +40,9 @@ public interface TopicsAndSpecView extends IsWidget{
 
 	CellTable<SpecialisationProxy> getTable();
 	String[] getPaths();
+	
+	// Violation Changes Highlight
+	public Map getMap();
+	public TextBox getTextBox();
+	// E Violation Changes Highlight
 }

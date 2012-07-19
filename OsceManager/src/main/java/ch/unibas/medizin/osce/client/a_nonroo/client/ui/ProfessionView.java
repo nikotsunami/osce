@@ -21,6 +21,8 @@ public interface ProfessionView  extends IsWidget{
 		void deleteClicked(ProfessionProxy prof);
 		
 		void performSearch(String q);
+		
+		void updateClicked(ProfessionProxy proxy, String value);
 	}
 
 	CellTable<ProfessionProxy> getTable();

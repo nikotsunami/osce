@@ -100,8 +100,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	UiBinder<Widget, OsceDetailsViewImpl> {
 	}
 
-
-
+	
 
 	int left=0,top=0;
 

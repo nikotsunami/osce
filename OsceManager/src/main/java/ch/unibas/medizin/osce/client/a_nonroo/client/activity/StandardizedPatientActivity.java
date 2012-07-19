@@ -743,7 +743,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private String humanReadableAnamnesisAnswer(AnamnesisCheckProxy proxy, String answer) {
 		switch(proxy.getType()) {
 		case QUESTION_OPEN:
-		case QUESTION_TITLE:
 			return answer;
 		case QUESTION_YES_NO:
 			if ("1".equals(answer))

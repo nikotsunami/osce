@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -25,4 +26,8 @@ public interface RoleRoleParticipantSubView {
 	}
 	public void setDelegate(Delegate delegate);
 	//void setDoctorListBoxValues(List<DoctorProxy> values);
+
+	// Highlight onViolation
+	Map getRoleParticipantMap();
+	// E Highlight onViolation
 }

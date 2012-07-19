@@ -9,8 +9,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public  class MessageConfirmationDialogBox extends DialogBox{
@@ -30,7 +30,8 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	}
 
 	
-
+	Label msgLbl;
+	
 	public  Button getNoBtnl() {
 		return this.noBtnl;
 	}
@@ -39,21 +40,27 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 
 	 Button noBtnl;
 	
-	public MessageConfirmationDialogBox(String msg) {
+	public MessageConfirmationDialogBox(String caption) {
 		// TODO Auto-generated constructor stub
 		
 		vp=new VerticalPanel();
 		hp=new HorizontalPanel();
-		vp.add(new HTML(msg));
+		//vp.add(new HTML(msg));
 		yesBtn=new Button();
 		noBtnl=new Button();
 		yesBtn.setText(constants.yes());
 		noBtnl.setText(constants.no());
+		
+		msgLbl=new Label();
+		vp.add(msgLbl);
 		hp.add(yesBtn);
 		hp.add(noBtnl);
 		hp.setSpacing(10);
 		vp.add(hp);
-		super.setText("Warning");
+		super.getCaption().asWidget().addStyleName("confirmbox");
+		
+		//super.setText("Warning");
+		super.setText(caption);
 		this.add(vp);
 		setAnimationEnabled(true);
 		setGlassEnabled(true);
@@ -77,15 +84,54 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	}
 	public void showDialog()
 	{
+		
 		super.center();
 		super.show();
+		
+	}
+	public void showYesNoDialog(String str)
+	{
+		msgLbl.setText(str);
+		this.getNoBtnl().addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent arg0) {
+
+				dialogBox.hide();
+			}
+		});
+		
+		super.center();
+		super.show();
+		
 	}
 	
 	public void showConfirmationDialog()
 	{
 		this.getYesBtn().setVisible(false);
+		
 		this.getNoBtnl().setText(constants.okBtn());
 		this.getCaption().setText(constants.success());
+		this.showDialog();
+		
+		this.getNoBtnl().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+			
+				dialogBox.hide();	
+			}
+		});
+	}
+	
+	public void showConfirmationDialog(String msg)
+	{
+		this.getYesBtn().setVisible(false);
+		
+		msgLbl.setText(msg);
+		
+		this.getNoBtnl().setText(constants.okBtn());
+		//this.getCaption().setText(constants.success());
 		this.showDialog();
 		this.getNoBtnl().addClickHandler(new ClickHandler() {
 			

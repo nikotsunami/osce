@@ -8,7 +8,10 @@ import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -29,6 +32,14 @@ public class StudentsViewImpl extends Composite implements StudentsView {
 
 	private Presenter presenter;
 
+	@UiField
+	TabPanel studentTabPanel;
+	
+	/*@UiField
+	SimplePanel name;*/
+	
+	public SimplePanel studentDetailPanel = new SimplePanel();
+	
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -61,5 +72,23 @@ public class StudentsViewImpl extends Composite implements StudentsView {
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public TabPanel getStudentTabPanel(){
+		return this.studentTabPanel;
+		
+	}
+	
+	/*@Override
+	public SimplePanel getNamePanel(){
+		return this.name;
+		
+	}*/
+	
+	@Override
+	public SimplePanel getStudentDetailPanel(){
+		return this.studentDetailPanel;
+		
 	}
 }

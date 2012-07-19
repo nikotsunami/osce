@@ -230,7 +230,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 						
 					
 						
-						Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
+						List<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
 						if(setOsceDays.size()==0){
 							Log.info("OsceDay null for proxy : " +osceProxy.getId());
 							osceDayViewImpl.setOsceDayProxy(null);
@@ -865,6 +865,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 
 		@Override
 		public void saveOsceData(OsceProxy osceProxy) {
+			Log.info("Call saveOsceData");
+			
 			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();
 			OsceRequest osceReq = requests.osceRequest();
 			osceProxy = osceReq.edit(osceProxy);
@@ -875,23 +877,49 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 			osceProxy.setMaxNumberStudents(circuitOsceSubViewImp.maxStudentTextBox.getValue());
 			osceProxy.setNumberCourses(circuitOsceSubViewImp.maxParcourTextBox.getValue());
 			osceProxy.setNumberRooms(circuitOsceSubViewImp.maxRoomsTextBox.getValue());
-			
-			osceReq.persist().using(osceProxy).fire(new OSCEReceiver<Void>() {
-
+			// Highlight onViolation
+			Log.info("Map Size: " + circuitOsceSubViewImp.osceMap.size());
+			osceReq.persist().using(osceProxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
+			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("Osce Value Updated");
-					Window.alert("Osce Data Updated sucessfully");
+					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					dialogBox.showConfirmationDialog(constants.updateOsce());
+					dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							
+						}
+					});
+					
+						dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							
+						}
+					});
+					//Window.alert("Osce Data Updated sucessfully");
 					
 				}
 			});
 		}
 		@Override
 		public void clearAll(OsceProxy proxy) {
+			// Highlight onViolation
+			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();
+			// E Highlight onViolation
+			
 			OsceRequest osceReq = requests.osceRequest();
 			proxy = osceReq.edit(proxy);			
-			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);			
-			osceReq.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);		
+			// Highlight onViolation
+			osceReq.persist().using(proxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
+				// E Highlight onViolation
 
 				@Override
 				public void onSuccess(Void response) {
@@ -1069,6 +1097,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 											public void onSuccess(Object response) 
 											{
 												// TODO Auto-generated method stub	
+												final OscePostBlueprintProxy oscePostBlueprintProxy=(OscePostBlueprintProxy)response;
 												Log.info("~~Total Widget Before is:" + newPostAddHP.getWidgetCount());											
 												
 												Log.info("~~Total Widget After is:" + newPostAddHP.getWidgetCount());
@@ -1102,7 +1131,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 																			public void onSuccess(
 																					Object response) {
 																				Log.info("~Success Call....");	
-																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy1, (((OscePostBlueprintProxy)response))),newPostAddHP.getWidgetCount());
+																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response))),newPostAddHP.getWidgetCount());
 																				
 																			}
 																	
@@ -1117,7 +1146,30 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 													newPostAddHP.insert(setNewOsceBluePrintHP(((OscePostBlueprintProxy)response)),newPostAddHP.getWidgetCount());
 												}
 												
-												Window.alert("Osce Post Blueprint Saved Successfully.");
+												final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+												dialogBox.showConfirmationDialog(constants.saveOsceBlueprint());
+												dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+													
+													@Override
+													public void onClick(ClickEvent event) {
+														dialogBox.hide();
+													
+														
+														
+													}
+												});
+												
+													dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+													
+													@Override
+													public void onClick(ClickEvent event) {
+														dialogBox.hide();
+														
+													
+														
+													}
+												});
+												//Window.alert("Osce Post Blueprint Saved Successfully.");
 												osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().setValue(null);
 												osceCreatePostBluePrintSubViewImpl.getRoleTopicListBox().setValue(null);
 												osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().setValue(null);
@@ -1197,6 +1249,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					}
 					oscePostSubViewImpl.add(tempOscePostSubViewImpl);	
 					tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity);
+					tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
 					//oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW						
 					oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImpl);	// ADD SUBVIEW IN POSTVIEW
 					oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	
@@ -1213,6 +1266,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							tempOscePostSubViewImplNext.getRoleTopicLbl().setText(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName());
 							oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
 							tempOscePostSubViewImplNext.getPostNameLbl().setText("Post "+ oscePostBlueprintProxyNext.getSequenceNumber());
+							tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
 							Log.info("OsceBluerint Next Id: " + oscePostBlueprintProxyNext.getId());												
 							oscePostSubViewImpl.add(tempOscePostSubViewImplNext);	
 							oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity);
@@ -1235,6 +1289,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 				{
 					
 					Log.info("~specializationEditClicked() from Activity");
+					
+					oscePostSubViewImpledit.oscePostBlueprintProxy=this.oscePostBlueprintProxy;					
 					requests.specialisationRequest().findAllSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() 
 					{
 						public void onSuccess(List<SpecialisationProxy> response) 
@@ -1255,8 +1311,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getListBox().setValue(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
 							
 						
-						}
-					});			
+							}
+					});	
 				}
 
 				@Override
@@ -1265,6 +1321,11 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					if(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation()==null)
 					{
 						Window.alert("Select Specialisation.");
+						return;
+					}
+					if(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation()==null)
+					{
+						Window.alert("Please Select Specialisation.");
 						return;
 					}
 					Log.info("~roleEditClicked() from Activity" + oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation().getId());	
@@ -1306,6 +1367,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					Log.info("~okClicked() from Activity");			
 					Log.info("savSpecialisation");
 					
+					//oscePostSubViewImplok.oscePostBlueprintProxy=oscePostBlueprintProxy;
+					
 					Log.info("oscePostSubViewImpledit" + oscePostSubViewImplok.oscePostBlueprintProxy.getId());	
 					Log.info("oscePostSubViewImpledit" + oscePostSubViewImplok.oscePostBlueprintProxy.getId());
 										
@@ -1321,7 +1384,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					oscePostBlueprintProxy.setRoleTopic(null);
 					
 					oscePostSubViewImplok.oscePostBlueprintProxy=oscePostBlueprintProxy;
-					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>()
+					Log.info("oscePostSubViewImplok : " + oscePostSubViewImplok.oscePostBluePrintMap.size());
+					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>(oscePostSubViewImplok.oscePostBluePrintMap)
 					{
 						@Override
 						public void onSuccess(Void response) 
@@ -1354,7 +1418,8 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					oscePostBlueprintProxy=oscePostBlueprintRequest.edit(oscePostBlueprintProxy);
 					oscePostBlueprintProxy.setRoleTopic(roleTopicProxy);
 					oscePostSubViewImplok.oscePostBlueprintProxy=oscePostBlueprintProxy;
-					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>()
+					Log.info("oscePostSubViewImplok : " + oscePostSubViewImplok.oscePostBluePrintMap.size());
+					oscePostBlueprintRequest.persist().using(oscePostBlueprintProxy).fire(new OSCEReceiver<Void>(oscePostSubViewImplok.oscePostBluePrintMap)
 					{
 						@Override
 						public void onSuccess(Void response) 
@@ -1637,9 +1702,9 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							newDateWithStartTime.setMinutes(new Integer(mts));
 							
 							Date newDateWitnEndTime=new Date();
-							 hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
+							hrs=osceDayViewImpl.endTimeTextBox.getValue().substring(0, 2);
 							newDateWitnEndTime.setHours(new Integer(hrs));
-							 mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
+							mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
 							newDateWitnEndTime.setMinutes(new Integer(mts));
 							
 							
@@ -1664,13 +1729,15 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							Log.info("Parsing exception During new Day persist");
 						}
 						
-						osceDayReq.persist().using(osceDayProxy).fire(new Receiver<Void>() {
-
+						// Highlight onViolation	
+						Log.info(""+osceDayViewImpl.osceDayMap.size());
+						osceDayReq.persist().using(osceDayProxy).fire(new OSCEReceiver<Void>(osceDayViewImpl.osceDayMap) {
+						// E Highlight onViolation
+							
 							@Override
 							public void onSuccess(Void response) {
-								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.osceDaySuccess());
-								
-								dialogbox.showConfirmationDialog();
+								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.success());								
+								dialogbox.showConfirmationDialog(constants.osceDaySuccess());
 								Log.info("Osce Day Saved successfully");
 							}
 						});
@@ -1754,14 +1821,15 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							Log.info("Parsing exception During Day persist");
 						}
 						//osceDayProxy.setOsce(osceProxy);
-						
-						osceDayReq.persist().using(osceDayProxy).fire(new Receiver<Void>() {
-
+						// Highlight onViolation	
+						Log.info(""+osceDayViewImpl.osceDayMap.size());
+						osceDayReq.persist().using(osceDayProxy).fire(new OSCEReceiver<Void>(osceDayViewImpl.osceDayMap) {
+						// E: Highlight onViolation	
 							@Override
 							public void onSuccess(Void response) {
-								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.osceDaySuccess());
+								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.success());
 								
-								dialogbox.showConfirmationDialog();
+								dialogbox.showConfirmationDialog(constants.osceDaySuccess());
 								Log.info("Osce Day Updated successfully");
 							}
 						}); 
@@ -1824,7 +1892,10 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					proxy.setLabel(sequenceOsceSubViewImpl.nameOfSequence.getText());
 					sequenceOsceSubViewImpl.osceSequenceProxy=proxy;
 					
-					osceSequenceRequest.persist().using(proxy).fire(new Receiver<Void>() {
+					// Highlight onViolation
+					Log.info("Map Size: "+sequenceOsceSubViewImpl.osceSequenceMap.size());
+					osceSequenceRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(sequenceOsceSubViewImpl.osceSequenceMap) {
+					// E Highlight onViolation
 						@Override
 						public void onSuccess(Void response) {	
 							// TODO Auto-generated method stub

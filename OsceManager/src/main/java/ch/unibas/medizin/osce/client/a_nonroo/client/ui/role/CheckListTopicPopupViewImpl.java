@@ -59,10 +59,22 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 	public Button getOkBtn() {
 		return okBtn;
 	}
-
+	
 	public void setOkBtn(Button okBtn) {
 		this.okBtn = okBtn;
 	}
+	
+	// Issue Role 
+	public Button getCancelBtn() {
+		return cancelBtn;
+	}
+	
+	public void setCancelBtn(Button cancelBtn) {
+		this.cancelBtn = cancelBtn;
+	}
+	// E: Issue Role 
+
+	
 
 	@UiField
 	Label descriptionLbl;
@@ -75,12 +87,20 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 	
 	@UiField
 	Button okBtn;
+	
+	// Issue Role 
+	@UiField
+	Button cancelBtn;
+	// E: Issue Role 
 			
 	
 	public CheckListTopicPopupViewImpl() {
 		super(true);
 		add(BINDER.createAndBindUi(this));
 		okBtn.setText(constants.okBtn());
+		// Issue Role 
+		cancelBtn.setText(constants.cancel());
+		// E: Issue Role 
 	}
 	
 	public void setDelegate(Delegate delegate) {

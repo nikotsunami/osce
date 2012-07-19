@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
@@ -42,6 +43,7 @@ public interface RoleOtherSearchCriteriaView extends IsWidget{
     
 	//SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+	Map getSimpleSearchCriteriaMap();
     
     //void setListBoxItem(String length);
     

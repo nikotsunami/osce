@@ -508,5 +508,57 @@ public interface OsceConstants extends Constants {
 	public String patientInformation();
 
 	public String close();
+	
+	public String patientAlreadyAssigned();
+	
+	public String pleaseSelectRole();
+	
+	public String patientIsNotAccepted();
 	// MODULE 3 : END
+
+	public String updateOsce();
+	
+	public String warning();
+	
+	public String deleteTask();
+	
+	public String saveOsceBlueprint();
+	
+	// MODULE 6 START
+	public String importstudent();
+	// MODULE 6 END
+
+	// Issue : 120
+	public String fileDetail();
+
+	public String printFor();
+
+	public String basicData();
+
+	public String roleScript();
+
+	public String standardizedRole();
+
+	public String optionDetail();
+
+	public String roleBaseItemName();
+	// Issue : 120
+	
+	//Module 7
+	public String version();
+	public String oscedoc();
+	public String starttimedoc();
+	public String endtimedoc();
+	//moduel 7
+
+	//Module 3 : Task : B
+	
+	public String addAllActive();
+	public String onDeleteRoleAssignedToPatient();
+	public String deletePatientInSemester();
+	public String active();
+	public String inActive();
+	public String patientIsNotAvailable();
+	
+	//Module 3 : Task : B	
 }

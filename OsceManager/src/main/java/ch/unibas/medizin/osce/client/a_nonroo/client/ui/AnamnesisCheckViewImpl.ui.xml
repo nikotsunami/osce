@@ -2,7 +2,22 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	<ui:style src="../styles.css" />
+	<ui:style src="../styles.css" type="ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl.Style">
+	.contentFormat {
+		margin-left: 3px;
+		width: 98%;
+	}
+	
+	.loadingImageContainer {
+		width: 32px;
+		margin: 10px auto;
+	}
+	
+	.hilight {
+		background-color: #f1b532;
+	}
+	</ui:style>
+	 <ui:with field='uiIcons' type='ch.unibas.medizin.osce.client.style.resources.UiIcons'/>
 	
 
 	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
@@ -14,27 +29,15 @@
 						<my:IconButton icon="arrowrefresh-1-w" ui:field="refreshButton" />
 						<g:ListBox width="150px"  ui:field="filterTitle"/>
 					</div>
-
-<!-- 			 <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />   -->
-                   <g:ScrollPanel ui:field="scrollPanel" height="400px" width="100%" styleName="scrollPanelTest">
-                        <g:VerticalPanel ui:field="anamnesisCheckPanel" width="100%"></g:VerticalPanel>
-                   </g:ScrollPanel>
-
-					<div class="{style.textBoxStyle} {style.controlsleft}">
-						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
-						<div class="{style.textBoxStyle}">
-							<g:Label width="140px" />
-						</div>
-
+					<div ui:field='loadingImageContainer' class="{style.loadingImageContainer}">
+						<g:Image ui:field='loadingRing' resource='{uiIcons.loadingRing}'/>
 					</div>
-					<div class="{style.textBoxStyle} {style.controlsleft}">
-					<g:Button width="80px" text="Save Order" ui:field="saveOrder"></g:Button>
-                    </div>
-<!-- 					<div class="{style.listBoxStyle}">
-						<g:ListBox width="50px" ui:field="rangeNum" />
+					<g:VerticalPanel ui:field="anamnesisCheckPanel" width="98%" spacing="4" addStyleNames="{style.contentFormat}"/>
+
+					<div class="{style.controls} {style.textBoxStyle} {style.controlsleft}">
+						<g:TextBox ui:field="newTitleText"></g:TextBox>
+						<my:IconButton ui:field="newButton" icon="plusthick" />
 					</div>
- -->
-					<!-- <g:SimplePanel ui:field="detailsPanel"></g:SimplePanel> -->
 				</g:HTMLPanel>
 			</g:ScrollPanel>
 		</g:west>

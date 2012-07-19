@@ -1,27 +1,19 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView.Delegate;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
-import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
-import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
-import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
-import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
-import ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
-import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -30,6 +22,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -39,8 +32,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -79,7 +70,11 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
         }
     });
 	
-		
+	
+	// Highlight onViolation
+	Map<String, Widget> roleParticipantMap;	
+	// E Highlight onViolation
+	
 	@UiField
 	public IconButton btnAddAuthor;
 	
@@ -98,6 +93,14 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		
 		initWidget(uiBinder.createAndBindUi(this));	
 		initTable();
+		
+		// Highlight onViolation
+		roleParticipantMap=new HashMap<String, Widget>();
+		roleParticipantMap.put("doctor", lstDoctor);
+		roleParticipantMap.put("standardizedRole", lstDoctor);
+		roleParticipantMap.put("type", lstDoctor);
+		roleParticipantMap.put("email", lstDoctor);
+		// E Highlight onViolation
 				
 	}
 	private void initTable() 
@@ -150,11 +153,37 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		
 		addColumn(new ActionCell<RoleParticipantProxy>(OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleParticipantProxy>() 
 		{
-					public void execute(RoleParticipantProxy roleParticipantProxy) {
-						if(Window.confirm(constants.reallyDelete()))
+					public void execute(final RoleParticipantProxy roleParticipantProxy) {
+						/*if(Window.confirm(constants.reallyDelete()))
 						{
 							delegate.deleteDoctorClicked(roleParticipantProxy,0);
-						}
+						}*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									delegate.deleteDoctorClicked(roleParticipantProxy,0);
+									Log.info("yes click");	
+									
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValueDoctor<RoleParticipantProxy>() {
 					public RoleParticipantProxy getValue(RoleParticipantProxy roleParticipantProxy) {
@@ -165,11 +194,39 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		
 		addColumnRe(new ActionCell<RoleParticipantProxy>(OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleParticipantProxy>() 
 				{
-							public void execute(RoleParticipantProxy roleParticipantProxy) {
-								if(Window.confirm(constants.reallyDelete()))
+							public void execute(final RoleParticipantProxy roleParticipantProxy) {
+								/*if(Window.confirm(constants.reallyDelete()))
 								{
 									delegate.deleteDoctorClicked(roleParticipantProxy,1);
-								}
+								}*/
+								
+								// Issue Role
+								 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+								 dialogBox.showYesNoDialog(constants.reallyDelete());
+								 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+										
+										@Override
+										public void onClick(ClickEvent event) {
+											dialogBox.hide();
+											delegate.deleteDoctorClicked(roleParticipantProxy,1);
+											Log.info("yes click");	
+											
+											return;
+
+												}
+											});
+
+									dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+										
+										@Override
+										public void onClick(ClickEvent event) {
+											dialogBox.hide();
+											Log.info("no click");
+											return;
+											
+										}
+									});
+								// E: Issue Role
 							}
 						}), "", new GetValueReviewerDoctor<RoleParticipantProxy>() {
 							public RoleParticipantProxy getValue(RoleParticipantProxy roleParticipantProxy) {
@@ -225,8 +282,8 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 			
 	@UiHandler("btnAddAuthor")
 	public void btnAddAuthorClicked(ClickEvent event)
-	{		
-			delegate.AddAuthorClicked();		
+	{				
+		delegate.AddAuthorClicked();		
 	}
 	
 	@UiHandler("btnAddReviewer")
@@ -245,4 +302,14 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 	public String[] getPaths() {
 		return paths.toArray(new String[paths.size()]);
 	}
+	
+	// Highlight onViolation
+	
+	@Override
+	public Map getRoleParticipantMap()
+	{
+		return this.roleParticipantMap;
+	}
+	
+	// E Highlight onViolation
 }

@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
@@ -17,9 +19,14 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
 	 * TODO: PS: Pass two different values: for display purpose and for search (iterated values)
 	 */
 	interface Delegate {
+		
 		void addAdvSeaBasicButtonClicked(Long objectId, String value, String displayValue, BindType bindType, PossibleFields possibleFields, Comparison comparition);
+	
 	}
   
     void setDelegate(Delegate delegate);
 	void display(Button addBasicData);
+	// Highlight onViolation
+	Map getAdvanceSearchCriteriaMap();
+	// E Highlight onViolation
 }

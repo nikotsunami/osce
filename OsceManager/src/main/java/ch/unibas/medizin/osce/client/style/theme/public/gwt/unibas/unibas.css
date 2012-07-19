@@ -2322,6 +2322,12 @@ background: rgb(255,255,204)  ;
 .flexTableRow:hover {
 	background: #f1b532;
 }
+
+.flexTable-Button-Disabled {
+	cursor: default;
+	color: #888;
+	background: #888;
+}
 /* MODULE 3 : END */
 
 
@@ -2337,6 +2343,7 @@ background: rgb(255,255,204)  ;
 	margin-top: 7px;
 	margin-left: 5px;	
 }
+
 .upIcon {
 	width: 15px;
 	height: 15px;	
@@ -2353,4 +2360,75 @@ background: rgb(255,255,204)  ;
 	width: 15px;
 	height: 15px;	
 	background-image: url("images/right.png");
-}	
+}
+
+/*Module 3:Assignment D*/
+.count{
+	
+}
+.count-yellow{
+	background: rgb(255,255,204) !important;
+	
+}
+.count-red{
+	background: rgb(243,216,220) !important;
+}
+.count-green{
+	background: rgb(106,255,106) !important;
+}
+.highlight-role{
+	
+	background: rgb(153,252,139) !important;
+}
+.dashed{
+	border:dashed rgb(145,214,236); 
+	border-width:5px 0 0 0; 
+	height:0;
+	line-height:0px;
+	font-size:0;
+	margin:0;
+	padding:0;
+}
+.sequenceLbl{
+	font-size: 40px;
+	color: rgb(145,214,236);
+	margin-top: 20px;
+}
+
+/*Module 3:Assignment D*/
+
+/* Module 3 d { */
+
+.highlight-oscdaypanel{
+	background: #B2B2FF !important;
+	
+}
+
+.discloserPanel_Selected_header_Color{
+	
+	/*background-color:green;*/
+	background:url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #F1B532;		
+}
+.discloserPanel_DeSlected_header_Color{
+	
+	background:url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #F1B532;		
+}
+
+.highlight-role{
+	
+	background: rgb(153,252,139) !important;
+}
+.confirmbox{
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50  !important;
+}
+.higlight_onViolation{
+	background-color: #FFC7C7;
+	border-color: red;
+	border-width: 1px;	
+	border-style: solid;
+	border-spacing: 2px;
+}
+
+
+/* Module 3 d }*/
+/* MODULE 3 : END */

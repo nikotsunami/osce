@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.RoleAssignmentViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.RoleSubViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 
 import com.google.gwt.event.shared.EventBus;
@@ -17,8 +19,18 @@ public class RoleSelectedEvent extends GwtEvent<RoleSelectedHandler> {
 
 	private StandardizedRoleProxy standardizedRoleProxy;
 	private RoleAssignmentViewImpl assignmentViewImpl;
+	private OsceDayProxy osceDayProxy;
+	
 
 	// TODO: Replace this view by Detailed View ...
+
+	public OsceDayProxy getOsceDayProxy() {
+		return osceDayProxy;
+	}
+
+	public void setOsceDayProxy(OsceDayProxy osceDayProxy) {
+		this.osceDayProxy = osceDayProxy;
+	}
 
 	/**
 	 * Register a handler for RoleSelectedEvent events on the eventbus.
@@ -35,9 +47,10 @@ public class RoleSelectedEvent extends GwtEvent<RoleSelectedHandler> {
 	}
 
 	public RoleSelectedEvent(StandardizedRoleProxy standardizedRoleProxy,
-			RoleAssignmentViewImpl assignmentViewImpl) {
+			OsceDayProxy osceDayProxy) {
 		this.standardizedRoleProxy = standardizedRoleProxy;
-		this.assignmentViewImpl = assignmentViewImpl;
+		this.osceDayProxy=osceDayProxy;
+		
 	}
 
 	public RoleSelectedEvent() {
@@ -73,3 +86,5 @@ public class RoleSelectedEvent extends GwtEvent<RoleSelectedHandler> {
 		this.standardizedRoleProxy = standardizedRoleProxy;
 	}
 }
+
+	

@@ -3,7 +3,7 @@
   xmlns:g='urn:import:com.google.gwt.user.client.ui'
   xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
   xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
-  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
   xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' >

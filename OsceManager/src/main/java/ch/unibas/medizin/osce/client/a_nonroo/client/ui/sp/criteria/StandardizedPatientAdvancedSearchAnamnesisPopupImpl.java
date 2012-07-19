@@ -2,7 +2,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -93,6 +95,10 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	private AnamnesisCheckProxy selectedProxy;
 	private List<String> possibleAnswers;
 
+	// Highlight onViolation
+	public Map<String, Widget> advanceSearchCriteriaMap;
+	// E Highlight onViolation
+	
 	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
 		
 		anamnesisQuestionSuggestBox = new SuggestBox(new ProxySuggestOracle<AnamnesisCheckProxy>(new AbstractRenderer<AnamnesisCheckProxy>() {
@@ -162,6 +168,12 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		acceptableBooleanValues.add(new Boolean(false));
 		anamnesisAnswerYesNoSelector.setValue(true);
 		anamnesisAnswerYesNoSelector.setAcceptableValues(acceptableBooleanValues);
+		
+		// Highlight onViolation
+				advanceSearchCriteriaMap=new HashMap<String, Widget>();				
+				advanceSearchCriteriaMap.put("bindType", bindType);
+				advanceSearchCriteriaMap.put("comparation", comparison);					
+				// E Highlight onViolation
 	}
 	
 	private void displayAnswerFieldForProxy(AnamnesisCheckProxy proxy) {
@@ -216,6 +228,9 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	
 	@UiHandler("addAnamnesisValueButton")
 	public void addAnamnesisValueButtonClicked(ClickEvent e) {
+		// Highlight onViolation
+		Log.info("Call addAnamnesisValueButton");
+		// E Highlight onViolation
 		String answer = "";
 		if (currentAnswerWidget == anamnesisAnswerMCSelector) {
 			answer = createMultipleChoiceString(anamnesisAnswerMCSelector.getValue().intValue(), possibleAnswers.size());
@@ -255,5 +270,11 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	@Override
 	public SuggestBox getAnamnesisQuestionSuggestBox() {
 		return anamnesisQuestionSuggestBox;
+	}
+
+	@Override
+	public Map getMap() {
+		// TODO Auto-generated method stub
+		return this.advanceSearchCriteriaMap;
 	}
 }

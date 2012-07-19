@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -23,7 +24,7 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 		// Edit Clicked from StandardizedRoleDetailViewImpl implementation in
 		// RoleDetailActivity
 		void deleteRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
-		// void createRole(StandardizedRoleProxy standardizedRoleProxy);
+		// void createRole(StandardizedRoleProxy standardizedRoleProxy);		
 	void previousRoleClicked(StandardizedRoleProxy standardizedRoleProxy);//spec
 
 	//Assignment E[
@@ -36,7 +37,12 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 			
 			void roleTemplateValueButtonClicked(RoleTemplateProxy value);
 
-			void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy);//spec
+			void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
+
+		public void getRoleScriptListPickerValues(StandardizedRolePrintFilterViewImpl  standardizedRolePrintFilterViewImpl);
+
+		void printRoleClicked(StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl);
+			//spec
 	}
 
 	/*
@@ -75,6 +81,15 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 	// SPEC END =
     void setRoleTemplateListBox(List<RoleTemplateProxy> roleTemplateproxy);
 	VerticalPanel getRoleBaseItemVerticalPanel();
+
+	// Highlight onViolation
+	Map getChecklistTopicMap();
+
+	Map getStandardizedRoleTemplateMap();
+
+	// E Highlight onViolation
+
+	
 	
 
 }

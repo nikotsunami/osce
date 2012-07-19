@@ -198,4 +198,27 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 	public void goTo(Place place) {
 		placeControler.goTo(place);
 	}
+
+	@Override
+	public void editClicked(RoomProxy proxy, String name, double length, double width) {
+		// TODO Auto-generated method stub
+		
+		RoomRequest roomrequest = requests.roomRequest();
+		proxy = roomrequest.edit(proxy);
+		
+		proxy.setRoomNumber(name);
+		proxy.setLength(length);
+		proxy.setWidth(width);
+		
+		roomrequest.persist().using(proxy).fire(new Receiver<Void>() {
+
+			@Override
+			public void onSuccess(Void arg0) {
+				// TODO Auto-generated method stub
+				init();
+				Log.info("~~Record Updated Successfully");
+			}
+		});
+		
+	}
 }

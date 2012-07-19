@@ -7,13 +7,9 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.shared.Sorting;
 
-
-import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
-
-import com.google.gwt.view.client.Range;
 
 @SuppressWarnings("deprecation")
 @Service(StandardizedPatient.class)
@@ -38,5 +34,12 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
                          , int firstResult, int maxResults
 	);
          abstract Request<String> getPdfPatientsBySearch(Long standardizedPatientId);
-         //By Spec]End
+
+	abstract Request<Long> countPatientsByAdvancedCriteria(
+			List<AdvancedSearchCriteriaProxy> searchCriteria);
+
+	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedCriteria(
+			List<AdvancedSearchCriteriaProxy> searchCriteria);
+
+	// By Spec]End
 }

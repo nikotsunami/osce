@@ -1,8 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.List;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsViewImpl;
@@ -11,6 +14,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView.Presen
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -20,6 +26,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
+import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -77,9 +84,40 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 				if(response instanceof DoctorProxy){
 					Log.info(((DoctorProxy) response).getName());
 					init((DoctorProxy) response);
+					
+					initOsceTable((DoctorProxy) response);
+					initRoleTable((DoctorProxy) response);
+				}			
+			}
+		});
+		
+	
+	}
+	
+	private void initOsceTable(DoctorProxy doctorProxy)
+	{
+		
+		requests.osceDayRequestNooRoo().findOsceDayByDoctorAssignment(doctorProxy).with("osce").fire(new OSCEReceiver<List<OsceDayProxy>>() 
+				{
+
+			@Override
+			public void onSuccess(List<OsceDayProxy> response) {
+				
+				view.getTable().setRowData(response);
+			}
+			
+		});		
 				}
 
+	private void initRoleTable(DoctorProxy doctorProxy)
+	{
 				
+		requests.roleParticipantRequestNonRoo().findRoleParticipatentByDoctor(doctorProxy).with("standardizedRole").fire(new OSCEReceiver<List<RoleParticipantProxy>>() 
+		{
+			@Override
+			public void onSuccess(List<RoleParticipantProxy> response) {
+				
+				view.getRoleTable().setRowData(response);
 			}
 		});
 	}

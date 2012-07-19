@@ -4,7 +4,9 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -125,7 +127,8 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
-	public OsceDayViewImpl() {
+	
+		public OsceDayViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		setLabels();
 		//init();
@@ -166,6 +169,11 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		}
 		
 	}
+	
+	// Highlight onViolation
+	public Map<String, Widget> osceDayMap;
+	// E Highlight onViolation
+	
 	public void setLabels()
 	{
 		dayLabel.setText(constants.day());
@@ -178,6 +186,14 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		lbEndTimeLabel.setText(constants.lbendtime());
 		studentsLabel.setText(constants.student());
 		saveOsceDayValue.setText("Save");
+
+		// Highlight onViolation
+			osceDayMap=new HashMap<String, Widget>();
+			osceDayMap.put("osceDate", dateTextBox);
+			osceDayMap.put("timeStart", startTimeTextBox);
+			osceDayMap.put("timeEnd", endTimeTextBox);
+		// E Highlight onViolation
+		
 	}
 
 	@Override

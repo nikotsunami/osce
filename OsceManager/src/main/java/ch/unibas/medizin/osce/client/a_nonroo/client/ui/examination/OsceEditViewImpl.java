@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -169,6 +171,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
+	// Highlight onViolation
+		Map<String, Widget> osceMap;
+	// E Highlight onViolation
+
+		
 	public OsceEditViewImpl() {
 		System.out.println("my edit");
 		initWidget(BINDER.createAndBindUi(this));
@@ -178,6 +185,22 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
 		
+		
+		// Highlight onViolation
+				osceMap=new HashMap<String, Widget>();
+				osceMap.put("name", name);
+				osceMap.put("shortBreak", shortBreak);
+				osceMap.put("numberCourses", numberCourses);
+				osceMap.put("LongBreak", LongBreak);
+				osceMap.put("maxNumberStudents", maxNumberStudents);
+				osceMap.put("lunchBreak", lunchBreak);
+				osceMap.put("studyYear", studyYear);
+				osceMap.put("postLength", postLength);
+				osceMap.put("isRepeOsce", isRepeOsce);
+				osceMap.put("osceValue", osceValue);
+				osceMap.put("copiedOsce", copiedOsce);
+				osceMap.put("middleBreak", middleBreak);
+				// E Highlight onViolation
 	}
 
 
@@ -300,8 +323,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		
 	}
 	
-	
-	
+
+	// Highlight onViolation
+	@Override
+	public Map getOsceMap()
+	{
+		return this.osceMap;
+	}
+	// E Highlight onViolation	
 	
 	
 }

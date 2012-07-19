@@ -22,6 +22,7 @@ public class OsMaConstant {
 	//By Spec[start
 	public static String FILENAME = "StandardizedPatientList.csv";
 	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
+	public static String ROLE_FILE_NAME_PDF_FORMAT = "StandardizedRoleDetails.pdf";
 	public static String BLANK_FIELD_MESSAGE = "Please enter details for";
 	
 	// For Osce Status of Tabpanel
@@ -36,8 +37,14 @@ public class OsMaConstant {
 		
 		// Module 3 {
 				public static int OSCECOOKIEDAY = 0;
-				public static int OSCEDAYTIMESCHEDULE =6000;
+				public static int OSCEDAYTIMESCHEDULE =600000;
 				
 				// Module 3 }
+				
+				public static final SafeHtml FLAG_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-flag\"></span>").toSafeHtml();
+				public static final SafeHtml COMMENT_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-comment\"></span>").toSafeHtml();
+				public static final SafeHtml SEARCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-search\"></span>").toSafeHtml();
+				public static final SafeHtml WRENCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-wrench\"></span>").toSafeHtml();
+				
 	//By Spec]End
 }

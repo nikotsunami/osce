@@ -2,9 +2,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
@@ -22,6 +25,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -36,8 +40,8 @@ import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RoomMaterialsDetailsSubViewImpl extends Composite implements
-		RoomMaterialsDetailsSubView {
+public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMaterialsDetailsSubView 
+{
 
 	private static RoomMaterialsDetailsSubViewImplUiBinder uiBinder = GWT
 			.create(RoomMaterialsDetailsSubViewImplUiBinder.class);
@@ -56,6 +60,10 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	// Issue Role Module
 		RoomMaterialsPopupViewImpl roomMaterialsPopupViewImpl;
 		// E: Issue Role Module
+		
+		// Highlight onViolation
+		Map<String, Widget> usedMaterialMap;
+		// E Highlight onViolation
 	
 	@UiField(provided = true)
 	CellTable<UsedMaterialProxy> table;
@@ -101,6 +109,14 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	/*	used_from.setAcceptableValues(java.util.Arrays
 				.asList(MaterialUsedFromTypes.values()));*/
 
+		// Highlight onViolation
+		usedMaterialMap=new HashMap<String, Widget>();
+		usedMaterialMap.put("materialCount", roomMaterialsPopupViewImpl.materialCount);
+		usedMaterialMap.put("used_from", roomMaterialsPopupViewImpl.used_from);
+		usedMaterialMap.put("materialList", roomMaterialsPopupViewImpl.materialList);	
+		// E Highlight onViolation
+		
+		
 	}
 
 	// Issue Role Module
@@ -259,10 +275,36 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 
 		addColumn(new ActionCell<UsedMaterialProxy>(OsMaConstant.DELETE_ICON,
 				new ActionCell.Delegate<UsedMaterialProxy>() {
-					public void execute(UsedMaterialProxy usedMaterialProxy) {
-						if (Window.confirm("wirklich löschen?"))
-							delegate.deleteUsedFromClicked(usedMaterialProxy,
-									standardizedRoleProxy);
+					public void execute(final UsedMaterialProxy usedMaterialProxy) {
+						
+						/*if (Window.confirm("wirklich löschen?"))
+							delegate.deleteUsedFromClicked(usedMaterialProxy,standardizedRoleProxy);*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog("wirklich löschen?");
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("yes click");	
+									delegate.deleteUsedFromClicked(usedMaterialProxy,standardizedRoleProxy);									
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
 
 					}
 				}), "", new GetValue<UsedMaterialProxy>() {
@@ -343,5 +385,13 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements
 	public RoomMaterialsPopupViewImpl getRoomMaterialsPopupViewImpl() {
 		return roomMaterialsPopupViewImpl;
 	}
+	
+	// Highlight onViolation
+	@Override
+	public Map getUsedMaterialMap()
+	{
+		return this.usedMaterialMap;
+	}
+	// E Highlight onViolation
 
 }

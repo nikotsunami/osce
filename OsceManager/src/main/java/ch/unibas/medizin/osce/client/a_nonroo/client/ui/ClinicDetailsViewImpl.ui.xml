@@ -45,7 +45,10 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<g:VerticalPanel ui:field="doctors"/>
+				<g:StackPanel ui:field="specialTabPanel" width="400px">
+					<!--  <b:CellTable ui:field="tables" addStyleNames="{style.standardTable}" />-->
+				</g:StackPanel>
+				
 				</g:HTMLPanel>
 			</g:Tab>
 		</g:TabPanel>

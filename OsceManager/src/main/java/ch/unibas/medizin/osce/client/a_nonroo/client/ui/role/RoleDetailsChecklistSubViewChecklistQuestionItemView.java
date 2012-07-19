@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 
@@ -33,4 +35,12 @@ public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends Is
 	  public ChecklistQuestionProxy getProxy();
 	  
 	  public void setProxy(ChecklistQuestionProxy proxy);
+	
+		// Highlight onViolation
+	  	Map getChecklistQuestionMap();
+	  	Map getChecklistOptionMap();
+	  	Map getChecklistCriteriaMap();
+	  	// E Highlight onViolation
+		
+		
 }

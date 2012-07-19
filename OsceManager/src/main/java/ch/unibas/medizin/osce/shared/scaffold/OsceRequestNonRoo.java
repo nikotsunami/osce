@@ -4,9 +4,7 @@ import java.util.List;
 
 
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.domain.Osce;
-import ch.unibas.medizin.osce.shared.Sorting;
 
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
@@ -23,5 +21,6 @@ public interface OsceRequestNonRoo extends RequestContext{
 	public abstract Request<List<OsceProxy>> findAllOsceOnSemesterId(Long id);
 	
 	public abstract Request<Boolean> generateOsceScaffold(Long osceId);
-
+	
+	public abstract Request<Boolean> generateAssignments(Long osceId);
 }

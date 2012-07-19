@@ -3,7 +3,9 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -113,6 +115,10 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+	public Map<String, Widget> osceSequenceMap;
+			// E Highlight onViolation
 	public SequenceOsceSubViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		sequenceOsceSubViewImpl=this;
@@ -121,6 +127,15 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		chaneNameOfSequence.setVisible(false);
 		ok.setVisible(false);
 		ok.setText("ok");
+		
+		// Highlight onViolation
+		osceSequenceMap=new HashMap<String, Widget>();
+		osceSequenceMap.put("label", nameOfSequence);
+		osceSequenceMap.put("numberRotation", nameOfSequence);
+		osceSequenceMap.put("osceDay", nameOfSequence);
+		
+		
+				// E Highlight onViolation
 	}
 
 	

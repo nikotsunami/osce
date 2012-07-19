@@ -1,73 +1,77 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.util;
 
-import java.util.Arrays;
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
-import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
-import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
-import ch.unibas.medizin.osce.shared.RoleTypes;
-import ch.unibas.medizin.osce.shared.Semesters;
-import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.DoubleBox;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-//public class SemesterPopupViewImpl extends DialogBox implements SemesterPopupView
-public class OSCEReceiverPopupViewImpl extends PopupPanel implements OSCEReceiverPopupView
-{
-//	private static final Binder BINDER = GWT.create(Binder.class);
-	
-private static OSCEReceiverPopupViewImplUiBinder uiBinder = GWT.create(OSCEReceiverPopupViewImplUiBinder.class);
-	
-	interface OSCEReceiverPopupViewImplUiBinder extends UiBinder<Widget, OSCEReceiverPopupViewImpl> {
-	}
-	
-	private Delegate delegate;
-	
-	@UiField
-	public Label lblTitle;
-	
-	@UiField
-	public Label lblErrMessage;
-	
-	@UiField
-	public Button btnOk;
-	
-	@UiHandler("btnOk")
-	public void btnOkClicked(ClickEvent event)
-	{
-		Log.info("Ok Button Clicked.");
-		hide();
-	}
+public class OSCEReceiverPopupViewImpl extends DialogBox
+{	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
+	VerticalPanel panel = new VerticalPanel();
+	HorizontalPanel HPbtn=new HorizontalPanel();
+	Button btnOk=new Button();
+	private DialogBox dialogBox;
 	
 	
-	public OSCEReceiverPopupViewImpl() 
-	{		
-		Log.info("Call SemesterPopupViewImpl() Constructor");				
-		setWidget(uiBinder.createAndBindUi(this));			
+	public OSCEReceiverPopupViewImpl() {
+		dialogBox=this;
+		super.getCaption().asWidget().addStyleName("confirmbox");
+		super.setText("Violation Message");
+		Log.info("Call OSCEReceiverPopupViewImpl() Constructor");		
+		
+		this.add(panel);
+		//center();		
+		setGlassEnabled(true);	
 		setAnimationEnabled(true);
-		setAutoHideEnabled(true);
-		//setWidth("300px");
-		//setHeight("150px");
-		center();
-		//setGlassEnabled(true);	
+		setAutoHideEnabled(true);	
+		//setWidth("500px");
+		//setVisible(false);
+		this.hide();
+		HPbtn.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);	
+		btnOk.setText(constants.okBtn());
+		btnOk.addStyleName("marginTop15");
+		HPbtn.add(btnOk);
+		btnOk.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();				
+			}
+		});
+		
 	}
+
+	public void showMessage(String message) {
+		Log.info("Call showMessage" + message);		
+		
 	
-	public void setDelegate(Delegate delegate) {
-		this.delegate = delegate;
+		panel.setWidth("500px");
+		panel.add(new HTML(message));		
+		panel.add(HPbtn);
+
+		
+		
+		
+		display();
 	}
-	
+
+	private void display() {		
+		Log.info("display() call....." + panel.getWidgetCount());				
+		//dialogBox.setVisible(true);		
+		dialogBox.show();	
+		dialogBox.center();
+
+	}
+	/*
+	 * public void setDelegate(Delegate delegate) { this.delegate = delegate; }
+	 */
+
 }

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
-import java.util.List;
+
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
@@ -22,7 +23,7 @@ public class PatientInSemesterSelectedEvent extends
 
 	private PatientInSemesterProxy patientInSemesterProxy;
 
-	private List<OsceDayProxy> osceDayProxies;
+	private Set<OsceDayProxy> osceDayProxies;
 
 	/**
 	 * Register a handler for PatientInSemesterSelectedEvent events on the
@@ -39,7 +40,7 @@ public class PatientInSemesterSelectedEvent extends
 		return eventBus.addHandler(TYPE, handler);
 	}
 
-	public List<StandardizedRoleProxy> refreshPanels() {
+	public Set<StandardizedRoleProxy> refreshPanels() {
 		// TODO : TO be Implemented for Refresh All Panel.
 		return null;
 	}
@@ -53,17 +54,17 @@ public class PatientInSemesterSelectedEvent extends
 		this.patientInSemesterProxy = patientInSemesterProxy;
 	}
 
-	public List<OsceDayProxy> getOsceDayProxies() {
+	public Set<OsceDayProxy> getOsceDayProxies() {
 		return osceDayProxies;
 	}
 
-	public void setOsceDayProxies(List<OsceDayProxy> osceDayProxies) {
+	public void setOsceDayProxies(Set<OsceDayProxy> osceDayProxies) {
 		this.osceDayProxies = osceDayProxies;
 	}
 
 	public PatientInSemesterSelectedEvent(
 			PatientInSemesterProxy patientInSemesterProxy,
-			List<OsceDayProxy> osceDayProxies) {
+			Set<OsceDayProxy> osceDayProxies) {
 		this.patientInSemesterProxy = patientInSemesterProxy;
 		this.osceDayProxies = osceDayProxies;
 	}

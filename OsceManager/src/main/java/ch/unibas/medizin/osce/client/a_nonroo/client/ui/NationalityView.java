@@ -25,6 +25,8 @@ public interface NationalityView  extends IsWidget{
 		void deleteClicked(NationalityProxy nation);
 		
 		void performSearch(String q);
+		
+		void updateClicked(NationalityProxy nation, String value);
 	}
 
     CellTable<NationalityProxy> getTable();
@@ -34,4 +36,7 @@ public interface NationalityView  extends IsWidget{
     
 //	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+    
+    public EditPopView getEditPopupView();
+    
 }

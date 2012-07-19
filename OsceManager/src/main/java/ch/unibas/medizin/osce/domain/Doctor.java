@@ -88,7 +88,8 @@ public class Doctor {
    		//Log.info("~QUERY BEFOREE EXECUTION role topic id : " + roleTopicid + " Standardized Role ID: " + stadRoleid);		
    		//String queryString="SELECT doc from Doctor doc";
    		//String queryString="select d from Doctor d where d.id not in(select r.doctor from RoleParticipant r join r.standardizedRole sr where sr.id="+stadRoleid+") and d.specialisation in (select s.id from Specialisation s join s.roleTopics rt join rt.standardizedRoles sr where sr.id="+stadRoleid+")";// WORKING		
-   		String queryString="select d from Doctor d where d.id not in(select r.doctor from RoleParticipant r join r.standardizedRole sr where sr.id="+stadRoleid+") and d.specialisation in (select s.id from Specialisation s join s.roleTopics rt join rt.standardizedRoles sr where s.id=rt.specialisation and rt.id=sr.roleTopic and sr.id="+stadRoleid+")";
+   		//String queryString="select d from Doctor d where d.id not in(select r.doctor from RoleParticipant r join r.standardizedRole sr where sr.id="+stadRoleid+") and d.specialisation in (select s.id from Specialisation s join s.roleTopics rt join rt.standardizedRoles sr where s.id=rt.specialisation and rt.id=sr.roleTopic and sr.id="+stadRoleid+")";
+   		String queryString="select d from Doctor d where d.id not in(select r.doctor from RoleParticipant r join r.standardizedRole sr where sr.id="+stadRoleid+")";
    		//select d.* from doctor d where d.id not in(select r.doctor from role_participant r join standardized_role sr where sr.id = 2 ) and d.specialisation in (select s.id from specialisation s join role_topic rt join standardized_role sr where s.id = rt.specialisation and rt.id = sr.role_topic and sr.id = 2 );
    		Log.info("~QUERY String: " + queryString);
    		TypedQuery<Doctor> q = em.createQuery(queryString, Doctor.class);
@@ -102,5 +103,19 @@ public class Doctor {
    	}
    	
    	// SPEC END =
+    
+   	//Module 6 Start
+	public static java.util.List<Doctor> findDoctorByClinicID(Long clinicid)  
+   	{
+   		EntityManager em = entityManager();
+   		String queryString="select d from Doctor d where d.clinic.id = " + clinicid;
+   		TypedQuery<Doctor> q = em.createQuery(queryString, Doctor.class);
+   		java.util.List<Doctor> result = q.getResultList();
+   		return result;
+   	}
+   	
+   	//Module 6 End
+  
+   	
     
 }

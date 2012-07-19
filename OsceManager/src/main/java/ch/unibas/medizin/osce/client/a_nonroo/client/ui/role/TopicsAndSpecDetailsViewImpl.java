@@ -2,19 +2,23 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -90,6 +94,9 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	@UiField (provided = true)
 	public QuickSearchBox searchBox;
 	
+	// Violation Changes Highlight
+	Map<String, Widget> viewPopupMapAdd;
+	// E Violation Changes Highlight
 	
 //	@UiField
 //	public SplitLayoutPanel splitLayoutPanel;
@@ -154,9 +161,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		
 		btnSave.setText(constants.save());
 		btnCancel.setText(constants.cancel());
-		
-		
-				
+			
 		popupLabelVP.add(lblRoleTopic);
 		popupLabelVP.add(lblMaxStudent);
 		popupLabelVP.add(lblStudyYear);
@@ -175,6 +180,13 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		addRolePopup.setPopupPosition(event.getClientX(), event.getClientY());
 		addRolePopup.show();
 		
+		// Violation Changes Highlight
+					viewPopupMapAdd=new HashMap<String, Widget>();
+					viewPopupMapAdd.put("name",AddTextBox);
+					viewPopupMapAdd.put("slotsUntilChange",slots_till_change);
+					viewPopupMapAdd.put("studyYear",StudyYearListBox);
+				// E Violation Changes Highlight
+		
 		btnSave.addClickHandler(new ClickHandler() 
 		{		
 			@Override
@@ -182,15 +194,33 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				Log.info("Click on Save Role Button.");
 				Log.info("==>" + AddTextBox.getValue()+"==>" + slots_till_change.getValue(slots_till_change.getSelectedIndex())+"==>" + StudyYearListBox.getValue());
 				
-				if(AddTextBox.getValue()==null || StudyYearListBox.getValue()==null || AddTextBox.getText().equals(""))
+	// Violation Changes Highlight
+				
+				
+				/*if(AddTextBox.getValue()==null || StudyYearListBox.getValue()==null || AddTextBox.getText().equals(""))
 				{
 					Window.alert("Please Enter appropriate value for Role Base Item");
-				}
-				else
-				{
+					// Issue Role
+					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					 dialogBox.showConfirmationDialog("Please Enter appropriate value for Role Base Item");
+					 
+					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("ok click");	
+							return;
+								}
+							});
+					 	//E: Issue Role
+				}*/
+				//else
+				//{
 				delegate.newClicked(AddTextBox.getValue(),slots_till_change.getValue(slots_till_change.getSelectedIndex()),StudyYearListBox.getValue());
-				addRolePopup.hide();
-				}
+				//addRolePopup.hide();
+				//}
+				// E Violation Changes Highlight
 			}
 		});
 		
@@ -200,6 +230,13 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 			public void onClick(ClickEvent event) 
 			{
 				Log.info("Click on Cancel Role Button.");
+				// Violation Changes Highlight
+
+				AddTextBox.removeStyleName("higlight_onViolation");
+				slots_till_change.removeStyleName("higlight_onViolation");
+				StudyYearListBox.removeStyleName("higlight_onViolation");
+				
+				// E Violation Changes Highlight
 				addRolePopup.hide();
 			}
 		});
@@ -381,10 +418,35 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		//Delete Buuton
 		addColumn(new ActionCell<RoleTopicProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTopicProxy>() {
-					public void execute(RoleTopicProxy roletopic) {
+					public void execute(final RoleTopicProxy roletopic) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(roletopic);
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(roletopic);*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");	
+									delegate.deleteClicked(roletopic);
+									return;
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValue<RoleTopicProxy>() {
 			public RoleTopicProxy getValue(RoleTopicProxy roletopic) {
@@ -436,4 +498,39 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	public Widget asWidget() {
 		return this;
 	}
+	// Violation Changes Highlight	
+	@Override
+	public Map viewPopupMapAdd() 
+	{
+		
+		return this.viewPopupMapAdd;
+	}
+	
+
+	@Override
+	public PopupPanel getAddPopupPanel() 
+	{
+		return this.addRolePopup;
+		
+	}
+	
+
+	@Override
+	public TextBox getAddTextBox() {
+		// TODO Auto-generated method stub
+		return this.AddTextBox;
+	}
+
+	@Override
+	public ListBox getslots_till_change() {
+		// TODO Auto-generated method stub
+		return this.slots_till_change;
+	}
+
+	@Override
+	public ValueListBox<StudyYears> getStudyYearListBox() {
+		// TODO Auto-generated method stub
+		return this.StudyYearListBox;
+	}
+	// E Violation Changes Highlight
 }

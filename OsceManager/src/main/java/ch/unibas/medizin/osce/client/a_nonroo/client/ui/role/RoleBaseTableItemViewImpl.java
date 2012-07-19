@@ -1,15 +1,18 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -27,13 +30,11 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RoleBaseTableItemViewImpl extends Composite implements
@@ -47,6 +48,10 @@ RoleBaseTableItemView {
 
 	}
 
+	// Violation Changes Highlight
+		Map<String, Widget> viewMap;
+	// E Violation Changes Highlight
+	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private Presenter presenter;
 	private Delegate delegate;
@@ -159,19 +164,83 @@ RoleBaseTableItemView {
 	  }
 	@UiHandler("AddSubItem")
 	public void addRoleBaseSubItemClickHandler(ClickEvent event) {
-		System.out.println("Calling method to add Sub items..");
+		/*System.out.println("Calling method to add Sub items..");
 		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);
 		// Issue Role Module
 		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);		
 		delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table,this);		
 		// Issue Role Module
+		 * 
+		 
+*/		
 		
+		System.out.println("Calling method to add Sub items..");
+		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);
+		// Issue Role Module
+		//delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table);		
+
+		// Issue Role V2 
+
+		// Violation Changes Highlight
+
+		/*if(txtSubItem.getText().trim().equals(""))
+		{
+			Log.info("TextBox Value is Null");
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+				
+			 dialogBox.showConfirmationDialog("Please Add SubItem.");
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");
+					
+						}
+					});			
+			
+		}
+		else
+		{*/
+			Log.info("TextBox Value is Not Null");
+			delegate.addRoleBaseSubItem(roleBasedItemProxy,this.table,this);		
+		//}
+			// E Violation Changes Highlight
+		
+ 
 	}
 	
 	@UiHandler("close")
 	public void deleteButtonClicked(ClickEvent event){
-		if(Window.confirm("wirklich löschen?"))
-		delegate.deleteButtonClickEvent(roleBasedItemProxy);
+		/*if(Window.confirm("wirklich löschen?"))
+		delegate.deleteButtonClickEvent(roleBasedItemProxy);*/
+		// Issue Role
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 dialogBox.showYesNoDialog(constants.reallyDelete());
+				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();							
+							Log.info("yes click");
+							delegate.deleteButtonClickEvent(roleBasedItemProxy);
+							return;
+
+								}
+							});
+
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							Log.info("no click");
+							return;
+							
+						}
+					});
+				// E: Issue Role
 	}
 	/**
 	 * Because this class has a default constructor, it can be used as a binder
@@ -198,6 +267,14 @@ RoleBaseTableItemView {
 		//AddSubItem.setStyleName("padding=10");
 		
 	//	accessLabel1=new Label();
+		
+
+		// Violation Changes Highlight
+		
+		viewMap=new HashMap<String, Widget>();
+		viewMap.put("itemName", txtSubItem);
+				
+		// E Violation Changes Highlight
 	}
 	
 	public void setValue(RoleBaseItemProxy roleBaseItemProxy)
@@ -299,10 +376,37 @@ RoleBaseTableItemView {
 
 		addColumn(new ActionCell<RoleTableItemProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTableItemProxy>() {
-					public void execute(RoleTableItemProxy roleTableItem) {
+					public void execute(final RoleTableItemProxy roleTableItem) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);
+					
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);*/
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");
+									delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
 					}
 				}), "", new GetValue<RoleTableItemProxy>() {
 			public RoleTableItemProxy getValue(RoleTableItemProxy roleTableItem) {
@@ -377,6 +481,14 @@ RoleBaseTableItemView {
 //		return this.accessLabel1;
 //	}
 
-	
+	// Violation Changes Highlight
+
+	@Override
+	public Map getViewMap() {
+		// TODO Auto-generated method stub
+		return this.viewMap;
+	}
+
+	// E Violation Changes Highlight	
 	
 }

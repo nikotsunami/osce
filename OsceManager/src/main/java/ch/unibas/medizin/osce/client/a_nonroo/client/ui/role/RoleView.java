@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
@@ -67,5 +68,8 @@ void setAuthorAutocompleteValue(List<DoctorProxy> values);
 void setReviewerAutocompleteValue(List<DoctorProxy> values);
 void setSpecialisationAutocompleteValue(List<SpecialisationProxy> values);
 
+//Highlight onViolation
+Map getRoleTopicMap();
+//E Highlight onViolation
 
 }

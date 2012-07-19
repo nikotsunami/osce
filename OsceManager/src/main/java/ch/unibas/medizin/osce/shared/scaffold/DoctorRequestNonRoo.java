@@ -22,4 +22,8 @@ public interface DoctorRequestNonRoo extends RequestContext {
 	abstract Request<List<DoctorProxy>> findDoctorWithRoleTopic(Long standroleid);
 	// SPEC END =
 	
+	//Module 6 Start
+	abstract Request<List<DoctorProxy>> findDoctorByClinicID(Long clinicid);
+	//Module 6 End
+	
 }

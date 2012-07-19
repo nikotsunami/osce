@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsView.Delegate;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -35,6 +37,10 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 	interface OsceFilterPopupUiBinder extends
 	UiBinder<Widget, OsceTaskPopViewImpl> {
 	}
+	
+	// Highlight onViolation
+	Map<String, Widget> taskMap;
+		// E Highlight onViolation
 	
 	@UiField
 	FocusPanel filterPanelRoot;
@@ -128,6 +134,13 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 			
 		});
 	
+		// Highlight onViolation		
+		taskMap=new HashMap<String, Widget>();
+		taskMap.put("name", taskName);
+		taskMap.put("deadline", deadline);
+		taskMap.put("administrator", administrator);
+		
+		// E Highlight onViolation
 		
 	}
 		
@@ -177,7 +190,7 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 		Date futureDate=new Date();
 		futureDate.setYear(today.getYear()+2);
 		
-		if(taskName.getValue().length()<3 )
+		/*if(taskName.getValue().length()<3 )
 		{
 			Window.alert("please enter proper  name of atleast 3 charater");
 			return;
@@ -186,7 +199,7 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 		{
 			Window.alert("please select administrator value");
 			return;
-		}
+		}*/
 		
 		/*else if(deadline.getValue()==null)
 		{
@@ -207,18 +220,22 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 			return;
 		}*/
 		
-		System.out.println("before save call"+proxy+"---"+editProxy);
+		//System.out.println("before save call"+proxy+"---"+editProxy);
 		delegate.saveClicked(isedit,taskName.getText(),administrator.getValue(),deadline.getValue(),proxy,editProxy);
 		isedit=false;
 		taskName.setValue("");
 		deadline.getTextBox().setValue("");
-		hide();
+		//hide();
 		
 		
 	}
-
-
-
+	// Highlight onViolation	
+	@Override
+	public Map getTaskMap()
+	{
+		return this.taskMap;
+	}
+	// E Highlight onViolation
 
 	
 

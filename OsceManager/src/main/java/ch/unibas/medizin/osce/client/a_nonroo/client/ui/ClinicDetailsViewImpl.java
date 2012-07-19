@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,6 +19,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -56,7 +58,7 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	@UiField
 	SpanElement city;
 	@UiField
-	VerticalPanel doctors;
+	StackPanel specialTabPanel;
 
 	ClinicProxy proxy;
 
@@ -70,6 +72,9 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	@UiField
 	SpanElement displayRenderer;
 
+
+		
+	int selectedTab = 0 ;
 	/**
 	 * Because this class has a default constructor, it can be used as a binder
 	 * template. In other words, it can be used in other *.ui.xml files as
@@ -83,7 +88,7 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		initWidget(uiBinder.createAndBindUi(this));
 
-		clinicPanel.selectTab(0);
+		clinicPanel.selectTab(selectedTab);
 
 		clinicPanel.getTabBar().setTabText(0, constants.generalInformation());
 		clinicPanel.getTabBar().setTabText(1, constants.doctors());
@@ -101,7 +106,10 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 			
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
+				Log.info("tab selection" + event.getSelectedItem());
 				if (delegate != null) {
+					Log.info("Delegate SET here Impl");
+				
 					delegate.storeDisplaySettings();
 				}
 			}
@@ -158,6 +166,15 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 		delegate.editClicked();
 	}
 
+	public StackPanel getSpecialTabPanel() {
+		return this.specialTabPanel;
+	}
+
+	public void setSpecialTabPanel(StackPanel specialTabPanel) {
+		this.specialTabPanel = specialTabPanel;
+	}
+
+	
 	@Override
 	public int getSelectedDetailsTab() {
 		return clinicPanel.getTabBar().getSelectedTab();

@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -27,5 +29,6 @@ public interface StandardizedPatientAdvancedSearchNationalityPopup extends IsWid
 	void display(Button addNationality);
 
 	ValueListBox<NationalityProxy> getNationalityBox();
+	Map getMap();
 
 }

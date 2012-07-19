@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -32,6 +34,7 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 	}
 	
 	private Delegate delegate;
+	
 	
 	@UiField 
 	public TextBox txtYear;
@@ -70,7 +73,9 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
-	
+	// Highlight onViolation
+		public Map<String, Widget> semesterMap;
+	// E Highlight onViolation
 	
 	public SemesterPopupViewImpl() 
 	{
@@ -86,10 +91,20 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 		enumSemester.setAcceptableValues(Arrays.asList(Semesters.values()));
 		enumSemester.setValue(Semesters.HS);
 		
+		// Highlight onViolation
+		semesterMap=new HashMap<String, Widget>();
+		semesterMap.put("semester", enumSemester);
+		semesterMap.put("calYear", txtYear);
+		semesterMap.put("maximalYearEarnings",txtMaxYearEarning);
+		semesterMap.put("pricestatist", txtPriceStatist);
+		semesterMap.put("priceStandardizedPartient", txtPriceSP);
+		// E Highlight onViolation
+		
 	}
 	
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
 	}
 	
+		
 }

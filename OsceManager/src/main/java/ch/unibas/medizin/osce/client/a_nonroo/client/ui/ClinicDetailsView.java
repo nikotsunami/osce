@@ -3,7 +3,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 
 public interface ClinicDetailsView extends IsWidget{
 	
@@ -24,4 +27,5 @@ public interface ClinicDetailsView extends IsWidget{
     void setPresenter(Presenter systemStartActivity);
 	public int getSelectedDetailsTab();
 	public void setSelectedDetailsTab(int detailsTab);
+	StackPanel getSpecialTabPanel();
 }

@@ -19,4 +19,8 @@ public interface RoleBaseItemRequestNoonRoo   extends RequestContext{
 	public abstract InstanceRequest<RoleBaseItemProxy, Void> baseItemDownButtonClicked();
 	abstract Request<List<RoleBaseItemProxy>> findAllRoleBaseItemOnTemplateId(Integer id);
 	public abstract Request<List<RoleBaseItemProxy>> findRoleBaseItemByStandardizedRole(Long id);
+	public abstract Request<List<RoleBaseItemProxy>> findRoleBaseItemByStandardizedRoleAndRoleTemplateId(Long srID, Integer rtId);
+	public abstract Request<List<RoleBaseItemProxy>> findRoleBaseItemByTemplateId(Integer rtId);
+	public abstract Request<Boolean> createRoleBaseItemValueForStandardizedRole(Long srID,Integer rtId);
+	
 }

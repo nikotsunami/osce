@@ -4,10 +4,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
@@ -24,6 +27,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -66,6 +70,9 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 	private OsMaRequestFactory requests;
 	StandardizedRoleProxy proxy;
 
+	// Highlight onViolation
+	Map<String, Widget> simpleSearchCriteriaMap;
+	// E Highlight onViolation
 
 	@UiField
 	Button addSimpleSearch;
@@ -99,12 +106,51 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 
 		System.out.println(searchName.getValue() + "*"+ SearchValue.getValue() + "*");
 		if ((searchName.getValue().trim().compareToIgnoreCase("") == 0)|| (searchName.getValue() == null)) {
-			Window.confirm("Search Name cant not be left blank.");
+			//Window.confirm("Search Name cant not be left blank.");
+			
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Search Name cant not be left blank.");
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");
+					return;
+						}
+					});
+
+			
+			
 			return;
+			// E: Issue Role
+			
+			
 		}
 		if ((SearchValue.getValue().trim().compareToIgnoreCase("") == 0)|| (SearchValue.getValue() == null)) {
-			Window.confirm("Search Value cant not be left blank.");
-			return;
+			/*Window.confirm("Search Value cant not be left blank.");
+			return;*/
+			
+			// Issue Role
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 dialogBox.showConfirmationDialog("Search Value cant not be left blank.");
+			 
+			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();							
+					Log.info("ok click");
+					return;
+						}
+					});
+
+		
+		return;
+			// E: Issue Role
+			
 		}
 
 		delegate.newSimpleSearchClicked(searchName.getValue(),SearchValue.getValue(), this.getValue());
@@ -132,6 +178,12 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 		
 		init();
 		addSimpleSearch.setText(constants.addSimpleSearchCriteria());
+		
+		// Highlight onViolation
+		simpleSearchCriteriaMap=new HashMap<String, Widget>();
+		simpleSearchCriteriaMap.put("name", searchName);
+		simpleSearchCriteriaMap.put("value", SearchValue);		
+		// E Highlight onViolation
 	}
 
 	public String[] getPaths() {
@@ -196,11 +248,40 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 
 		addColumn(new ActionCell<SimpleSearchCriteriaProxy>(OsMaConstant.DELETE_ICON,
 				new ActionCell.Delegate<SimpleSearchCriteriaProxy>() {
-					public void execute(SimpleSearchCriteriaProxy file) {
+					public void execute(final SimpleSearchCriteriaProxy file) {
 						// Window.alert("You clicked " +
 						// institution.getInstitutionName());
-						if (Window.confirm("wirklich löschen?"))
-							delegate.simpleSearchDeleteClicked(file, getValue());
+						
+						//if (Window.confirm("wirklich löschen?"))
+						
+						// Issue Role
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 dialogBox.showYesNoDialog("wirklich löschen?");
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									
+									Log.info("yes click");	
+									delegate.simpleSearchDeleteClicked(file, getValue());
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+						// E: Issue Role
+							
 					}
 				}), "", new GetValue<SimpleSearchCriteriaProxy>() {
 			public SimpleSearchCriteriaProxy getValue(SimpleSearchCriteriaProxy simpleSearch) {
@@ -278,5 +359,13 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 	public StandardizedRoleProxy getValue() {
 		return proxy;
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getSimpleSearchCriteriaMap()
+	{
+		return this.simpleSearchCriteriaMap;
+	}
+	// E Highlight onViolation
 
 }
