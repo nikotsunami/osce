@@ -4,7 +4,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -12,8 +14,8 @@ import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
-//import ch.unibas.medizin.osce.client.shared.Gender;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
@@ -61,7 +63,7 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
             return obj == null ? "" : renderer.render(obj);
         }
     });
-
+	
 	@UiField
 	TextBox title;
 	@UiField
@@ -96,6 +98,11 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 
 	private Presenter presenter;
 
+	// Highlight onViolation
+		Map<String, Widget> doctorMap;	
+		public int selTab=0;
+	// E Highlight onViolation
+	
 	
 	public DoctorEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
@@ -124,10 +131,27 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 			
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
+				// Highlight onViolation
+				Log.info("Change Tab" + doctorPanel.getTabBar().getSelectedTab());
+				selTab=doctorPanel.getTabBar().getSelectedTab();
+				// E Highlight onViolation
 				if (delegate != null)
 					delegate.storeDisplaySettings();
 			}
 		});
+		
+		// Highlight onViolation
+						
+		doctorMap=new HashMap<String, Widget>();
+		doctorMap.put("title",title );
+		doctorMap.put("name", name);
+		doctorMap.put("preName", preName);
+		doctorMap.put("gender",gender );
+		doctorMap.put("email", email);
+		doctorMap.put("telephone", telephone);
+		doctorMap.put("clinic", clinic);
+		
+		// E Highlight onViolation
 	}
 
 
@@ -216,4 +240,18 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	public int getSelectedDetailsTab() {
 		return doctorPanel.getTabBar().getSelectedTab();
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getDoctorMap() {
+		
+		return this.doctorMap;
+	}
+	@Override
+	public int getSelectedTab() {
+		
+		return this.selTab;
+	}
+	
+	// E Highlight onViolation
 }

@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -33,4 +35,14 @@ public interface SpokenLanguageView  extends IsWidget{
 //	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
     String getSearchTerm();
+
+    // Highlight onViolation
+    SpokenLanguageViewImpl getSpokenLanguageView();
+    EditPopView getEditPopView();
+    Map getLanguageMap();
+    Map getNewLanguageMap();
+ // E Highlight onViolation
+	
+    
+    
 }

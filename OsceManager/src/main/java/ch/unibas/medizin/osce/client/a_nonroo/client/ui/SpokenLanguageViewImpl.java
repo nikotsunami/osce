@@ -4,8 +4,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -94,6 +96,7 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
+		
 		delegate.newClicked(newLanguage.getValue());
 		newLanguage.setValue("");
 	}
@@ -109,6 +112,13 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+		Map<String, Widget> spokenLanguageMap;
+		Map<String, Widget> spokenLanguageNewMap;
+		SpokenLanguageViewImpl langView;
+	// E Highlight onViolation
+	
 	public SpokenLanguageViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<SpokenLanguageProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -127,6 +137,14 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addLanguage());
+		
+		// Highlight onViolation
+		langView=this;
+	
+		spokenLanguageNewMap=new HashMap<String, Widget>();
+		spokenLanguageNewMap.put("languageName",newLanguage);
+		spokenLanguageNewMap.put("langskills", newLanguage);
+		// E Highlight onViolation
 		
 	}
 
@@ -310,22 +328,32 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 			((EditPopViewImpl)editPopView).getEditTextbox().setValue(lang.getLanguageName());
 			RootPanel.get().add(((EditPopViewImpl)editPopView));
 			
+			// Highlight onViolation
+			spokenLanguageMap=new HashMap<String, Widget>();
+			spokenLanguageMap.put("languageName", ((EditPopViewImpl)editPopView).getEditTextbox());
+			spokenLanguageMap.put("langskills", ((EditPopViewImpl)editPopView).getEditTextbox());
+			// E Highlight onViolation
+			
 			editPopView.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					
-					if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
+					// Highlight onViolation
+				
+					/*if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
 					}
 					else
-					{
+					{*/
+					// E Highlight onViolation
 						delegate.updateClicked(lang, ((EditPopViewImpl)editPopView).getEditTextbox().getValue());
 						((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
-						((EditPopViewImpl)editPopView).hide(true);
-					}
+						// Highlight onViolation
+					/*	((EditPopViewImpl)editPopView).hide(true);
+					}*/
+						// E Highlight onViolation
 				}
 			});
 			
@@ -341,4 +369,29 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 			((EditPopViewImpl)editPopView).setPopupPosition(left-150, top - 50);
 			((EditPopViewImpl)editPopView).show();
 		}
+
+	// Highlight onViolation
+
+	@Override
+	public SpokenLanguageViewImpl getSpokenLanguageView() {
+		// TODO Auto-generated method stub
+		return this.langView;
+	}
+
+	@Override
+	public EditPopView getEditPopView() {
+		// TODO Auto-generated method stub
+		return this.editPopView;
+	}
+	
+	@Override
+	public Map getLanguageMap() {
+		return this.spokenLanguageMap;
+	}
+	
+	@Override
+	public Map getNewLanguageMap() {
+		return this.spokenLanguageNewMap;
+	}
+	// E Highlight onViolation
 }

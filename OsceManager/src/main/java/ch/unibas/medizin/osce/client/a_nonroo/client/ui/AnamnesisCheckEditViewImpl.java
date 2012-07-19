@@ -2,7 +2,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -112,6 +114,11 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	
 	ArrayList<HorizontalPanel> mCFields = new ArrayList<HorizontalPanel>();
 
+	// Highlight onViolation
+	Map<String, Widget> anamnesisCheckMap;
+	// E Highlight onViolation
+	
+	
 	public AnamnesisCheckEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		
@@ -193,6 +200,13 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		type.setValue(AnamnesisCheckTypes.values()[0]);
 		type.setAcceptableValues(Arrays.asList(AnamnesisCheckTypes.values()));
+		
+		// Highlight onViolation
+		anamnesisCheckMap=new HashMap<String, Widget>();
+		anamnesisCheckMap.put("text", text);		
+		anamnesisCheckMap.put("type", type);
+		anamnesisCheckMap.put("value",valuePanel);
+		// E Highlight onViolation
 		
 		
 	}
@@ -425,5 +439,13 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			}
 		}	
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getAnamnesisCheckMap() 
+	{
+		return this.anamnesisCheckMap;
+	}
+	// E Highlight onViolation
 
 }

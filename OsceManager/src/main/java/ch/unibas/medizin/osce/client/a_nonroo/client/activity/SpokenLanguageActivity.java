@@ -5,6 +5,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -179,8 +180,10 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		SpokenLanguageProxy lang = langReq.create(SpokenLanguageProxy.class);
 		//reques.edit(scar);
 		lang.setLanguageName(name);
-		
-		langReq.persist().using(lang).fire(new Receiver<Void>(){
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getNewLanguageMap().size());
+		langReq.persist().using(lang).fire(new OSCEReceiver<Void>(view.getNewLanguageMap()){
+		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
 				init();
@@ -214,9 +217,17 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		SpokenLanguageRequest langRequest = requests.spokenLanguageRequest();
 		proxy = langRequest.edit(proxy);
 		proxy.setLanguageName(value);
-		langRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+		
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getSpokenLanguageView().getLanguageMap().size());
+		langRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getSpokenLanguageView().getLanguageMap()) {
+		// E Highlight onViolation			
 			@Override
-			public void onSuccess(Void response) {
+			public void onSuccess(Void response) 
+			{
+				// Highlight onViolation
+				((EditPopViewImpl)view.getEditPopView()).hide();
+				// E: Highlight onViolation
 				init();				
 			}
 		});

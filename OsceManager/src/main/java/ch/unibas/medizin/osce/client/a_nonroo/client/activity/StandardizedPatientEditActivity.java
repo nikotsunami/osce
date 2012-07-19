@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
@@ -45,6 +47,7 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 public class StandardizedPatientEditActivity extends AbstractActivity implements
 StandardizedPatientEditView.Presenter, 
@@ -323,8 +326,28 @@ StandardizedPatientEditView.Delegate {
 		cal.setYear(view.getYear());
 		cal.setDay(view.getDay());
 		standardizedPatient.setBirthday(cal.getDate());
-		editorDriver.flush().fire(new OSCEReceiver<Void>() {
-
+		// Highlight onViolation
+	
+		Map<String, Widget> tempMap=new HashMap<String, Widget>();
+		
+		if(view.getSelectedTab()==0 || view.getSelectedTab()==1)
+		{
+			Log.info("Map Size: " + view.getStandardizedPatientMap().size());	
+			tempMap=view.getStandardizedPatientMap();
+		}
+		else if(view.getSelectedTab()==2)
+		{
+			Log.info("Map Size: " + bankaccountView.getBankAccountMap().size());
+			tempMap=bankaccountView.getBankAccountMap();
+		}
+		else if(view.getSelectedTab()==3)
+		{
+			Log.info("Map Size:" + descriptionView.getDescriptionMap().size());	
+			tempMap=descriptionView.getDescriptionMap();
+		}
+		
+		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getStandardizedPatientMap()) {
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("StandardizedPatient successfully saved.");

@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
@@ -37,4 +39,12 @@ public interface RoomView extends IsWidget{
 
 	//	SimplePanel getDetailsPanel();
 	void setPresenter(Presenter systemStartActivity);
+	
+	// Highlight onViolation
+		RoomView getRoomView();
+		RoomEditPopupView getRoomEditPopView();
+		Map getRoomMap();
+		Map getNewRoomMap();
+		
+	// E Highlight onViolation
 }

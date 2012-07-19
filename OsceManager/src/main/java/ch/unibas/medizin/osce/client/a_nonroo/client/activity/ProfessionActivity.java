@@ -1,12 +1,15 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -25,6 +28,7 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -44,7 +48,8 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	private ActivityManager activityManger;
 	private ProfessionDetailsActivityMapper ProfessionDetailsActivityMapper;
 	
-
+	
+	
 	public ProfessionActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
     	this.placeController = placeController;
@@ -186,7 +191,10 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		ProfessionProxy profession = profReq.create(ProfessionProxy.class);
 		profession.setProfession(name);
 		
-		profReq.persist().using(profession).fire(new Receiver<Void>(){
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getNewLanguageMap().size());
+		profReq.persist().using(profession).fire(new OSCEReceiver<Void>(view.getNewLanguageMap()){
+		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
 				init();
@@ -221,9 +229,15 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		ProfessionRequest profRequest = requests.professionRequest();
 		proxy = profRequest.edit(proxy);
 		proxy.setProfession(value);
-		profRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+		// Highlight onViolation		
+		Log.info("Map Size: " + view.getProfessionMap().size());
+		profRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getProfessionMap()) {
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
+				// Highlight onViolation	
+				((EditPopViewImpl)view.getEditPopView()).hide();
+				// E Highlight onViolation
 				init();			
 			}
 		});

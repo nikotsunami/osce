@@ -495,7 +495,10 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		AnamnesisCheckTitleProxy anamnesisCheckTitle = request.create(AnamnesisCheckTitleProxy.class);
 		anamnesisCheckTitle.setText(titleText);
 		
-		request.persist().using(anamnesisCheckTitle).fire(new OSCEReceiver<Void>() {
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getAnamnesisCheckTitleMap().size());
+		request.persist().using(anamnesisCheckTitle).fire(new OSCEReceiver<Void>(view.getAnamnesisCheckTitleMap()) {
+		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				view.filterTitle(null);

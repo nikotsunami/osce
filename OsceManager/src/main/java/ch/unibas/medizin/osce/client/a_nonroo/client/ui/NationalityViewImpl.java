@@ -4,19 +4,19 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
@@ -94,8 +94,14 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
     
     @UiHandler ("newButton")
     public void newButtonClicked(ClickEvent event) {
-    	delegate.newClicked(newNationality.getValue());
-    	newNationality.setValue("");
+    	
+    	 // Highlight onViolation
+    	nationalityNewMap=new HashMap<String, Widget>();
+    	nationalityNewMap.put("nationality",newNationality);	
+    	nationalityNewMap.put("standardizedpatients",newNationality);		
+		 // E Highlight onViolation
+		 delegate.newClicked(newNationality.getValue());
+		 newNationality.setValue("");
     }
 
 	/**
@@ -109,6 +115,12 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+    // Highlight onViolation
+    Map<String, Widget> nationalityMap;
+    Map<String, Widget> nationalityNewMap;
+    // E Highlight onViolation
+   
+    
 	public NationalityViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<NationalityProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -127,6 +139,8 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addNationality());
+		
+		
 	}
 	
 	public String[] getPaths() {
@@ -303,22 +317,32 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		((EditPopViewImpl)editPopView).getEditTextbox().setValue(nation.getNationality());
 		RootPanel.get().add(((EditPopViewImpl)editPopView));
 		
+		 // Highlight onViolation
+		nationalityMap=new HashMap<String, Widget>();
+		 nationalityMap.put("nationality",((EditPopViewImpl)editPopView).getEditTextbox());	
+		 nationalityMap.put("standardizedpatients",((EditPopViewImpl)editPopView).getEditTextbox());		
+		 // E Highlight onViolation
+		 
 		editPopView.getOkBtn().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
 				
-				if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
+				// Highlight onViolation
+				/*if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
 				{
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 					messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
 				}
 				else
-				{
+				{*/
+				// E Highlight onViolation
 					delegate.updateClicked(nation, ((EditPopViewImpl)editPopView).getEditTextbox().getValue());
 					((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
-					((EditPopViewImpl)editPopView).hide(true);
-				}
+				// Highlight onViolation
+				/*	((EditPopViewImpl)editPopView).hide(true);
+				}*/
+				// E Highlight onViolation
 			}
 		});
 		
@@ -340,5 +364,18 @@ public class NationalityViewImpl extends Composite implements  NationalityView {
 		// TODO Auto-generated method stub
 		return editPopView;
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getNationalityMap() 
+	{	
+		return this.nationalityMap;
+	}
+
+	@Override
+	public Map getNationalityNewMap() {
+		return this.nationalityNewMap;
+	}
+	// E Highlight onViolation	
 	
 }

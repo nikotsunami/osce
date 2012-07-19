@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 
@@ -20,4 +21,9 @@ public interface StandardizedPatientScarSubView extends IsWidget {
 	public void setDelegate(Delegate delegate);
 	public ValueListBox<ScarProxy> getScarBox();
 	public void setScarBoxValues(List<ScarProxy> values);
+
+	// Highlight onViolation
+	Map getAnemnasisFormMap();
+	// E Highlight onViolation
+	
 }

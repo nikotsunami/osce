@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarViewImpl;
@@ -169,8 +170,11 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		//reques.edit(scar);
 		scar.setBodypart(name);
 		scar.setTraitType(traitType);
-		
-		scarReq.persist().using(scar).fire(new Receiver<Void>(){
+
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getScarMap().size());
+		scarReq.persist().using(scar).fire(new OSCEReceiver<Void>(view.getScarMap()){
+		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
 				init();

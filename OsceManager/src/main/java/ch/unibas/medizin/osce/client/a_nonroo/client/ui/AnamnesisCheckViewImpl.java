@@ -3,8 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -136,6 +138,7 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	@UiHandler("newButton")
 	public void newButtonClicked(ClickEvent event) {
+		Log.info("Call newButtonClicked");
 		delegate.addNewTitleClicked(newTitleText.getText());
 	}
 
@@ -148,6 +151,11 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	 * depending on the widget that is used, it may be necessary to implement
 	 * HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+	Map<String, Widget> anamnesisCheckTitleMap;
+	// E Highlight onViolation
+	
 	public AnamnesisCheckViewImpl() {
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
@@ -159,6 +167,14 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 //		initList();
+		
+		// Highlight onViolation
+		anamnesisCheckTitleMap=new HashMap<String, Widget>();
+		anamnesisCheckTitleMap.put("text", newTitleText);
+		anamnesisCheckTitleMap.put("sort_order", newTitleText);
+		
+		// E Highlight onViolation
+		
 	}
 
 	public String[] getPaths() {
@@ -435,5 +451,13 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		};
 		timer.schedule(2500);
 	}
+	
+	// Highlight onViolation
+	@Override
+	public Map getAnamnesisCheckTitleMap() 
+	{		
+		return this.anamnesisCheckTitleMap;
+	}
+	// E Highlight onViolation
 }
 
