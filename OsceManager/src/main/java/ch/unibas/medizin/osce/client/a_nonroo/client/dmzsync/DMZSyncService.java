@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync;
 
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -8,6 +9,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface DMZSyncService extends RemoteService {
 	void pushToDMZ(Long standardizedPatientId) throws DMZSyncException;
 	void pullFromDMZ(Long standardizedPatientId) throws DMZSyncException;
+	
+	String sync(String locale) throws DMZSyncException;
 	
 	public static class ServiceFactory {
 		private static DMZSyncServiceAsync instance = null; 

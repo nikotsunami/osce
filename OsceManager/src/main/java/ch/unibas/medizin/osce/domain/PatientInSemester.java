@@ -23,6 +23,10 @@ import javax.persistence.TypedQuery;
 
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.List;
+
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -46,14 +50,26 @@ public class PatientInSemester {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="accepted_trainings")	
 	private Set<Training> trainings = new HashSet<Training>();
+	
+	
+	public static PatientInSemester findPatientInSemesterByStandardizedPatient(StandardizedPatient patient){
+		if(patient == null)
+			return null;
+		EntityManager em = entityManager();
+		TypedQuery<PatientInSemester> query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.standardizedPatient = :standardizedPatient", PatientInSemester.class);
+		query.setParameter("standardizedPatient", patient);
+        List<PatientInSemester> resultList = query.getResultList();
+        if (resultList == null || resultList.size() == 0)
+            return null;
+        return resultList.get(0);
+	}
 
 	private static String selectBase = "SELECT o ";
 	private static String selectCountBase = "SELECT COUNT(o) ";
 	private static String queryBase = "FROM PatientInSemester AS o WHERE o.standardizedPatient.id In ( ";
 	private static String semesterCriteriaQuery = " ) and semester.id = :semesterId";
 
-	public static List<PatientInSemester> findPatientInSemesterByAdvancedCriteria(
-			Long semesterId, List<AdvancedSearchCriteria> searchCriteria) {
+	public static List<PatientInSemester> findPatientInSemesterByAdvancedCriteria(Long semesterId, List<AdvancedSearchCriteria> searchCriteria) {
 
 		EntityManager em = entityManager();
 		String stanardizedPatientString = getStanardizedPatientIDList(searchCriteria);

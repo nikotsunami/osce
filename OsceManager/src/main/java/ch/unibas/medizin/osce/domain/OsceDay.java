@@ -21,6 +21,10 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.List;
+
 import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
@@ -50,9 +54,18 @@ public class OsceDay {
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
 	 private Set<OsceSequence> osceSequences = new HashSet<OsceSequence>();
 
-	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "osceDays")
-	
+	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "osceDays")	
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
+
+	public static OsceDay findOsceDayByOsceDate(Date osceDate){
+		EntityManager em = entityManager();
+		TypedQuery<OsceDay> query = em.createQuery("SELECT o FROM OsceDay AS o WHERE o.osceDate = :osceDate", OsceDay.class);
+		query.setParameter("osceDate", osceDate);
+        List<OsceDay> resultList = query.getResultList();
+        if (resultList == null || resultList.size() == 0)
+            return null;
+        return resultList.get(0);
+	}
 	
 	// Module 3 d {
 	

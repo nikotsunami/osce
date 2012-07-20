@@ -27,6 +27,8 @@ public interface RoleAssignmentView extends IsWidget {
 
 		public void onDetailViewClicked(
 				PatientInSemesterData patientInSemesterData);
+		
+		public void surveyImpBtnClicked();
 
 		public String onAdvancedSearchCriteriaClicked(
 				AdvancedSearchCriteriaProxy advancedSearchCriteriaProxy);

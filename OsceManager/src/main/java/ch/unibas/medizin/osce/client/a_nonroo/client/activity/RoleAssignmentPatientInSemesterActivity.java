@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -31,6 +34,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -67,7 +71,20 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.Range;
+
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 @SuppressWarnings("deprecation")
 public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
@@ -90,6 +107,9 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	//Module 3 : Assignment E : Stop
 	// 
 	private OscePostProxy oscePostProxy;
+	private DMZSyncServiceAsync dmxSyncService = null;
+	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
+	//Module 3 {
 	// Module 3 {
 	private static final OsceConstants constants = GWT.create(OsceConstants.class);
 	// private SemesterProxy semesterProxy;
@@ -154,7 +174,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	public RoleAssignmentPatientInSemesterActivity(OsMaRequestFactory requests,
 			PlaceController placeController, RoleAssignmentPlace place) {
 
-		this.requests = requests;
+		this.requests = requests;		
 		this.placeController = placeController;
 		this.place = place;
 		this.handlerManager = place.handler;
@@ -205,7 +225,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
+		dmxSyncService = DMZSyncService.ServiceFactory.instance();
 		view = new RoleAssignmentViewImpl();
 		view.setDelegate(this);
 		RoleSelectedEvent.register(requests.getEventBus(), view);
@@ -1466,6 +1486,88 @@ public void initPatientInSemesterData(
 		fireAdvancedSearchRangeRequest(standardizedRoleID, range, callback);
 	}
 
+	@Override
+	public void surveyImpBtnClicked(){
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+		dmxSyncService.sync(locale,new AsyncCallback<String>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+			   try {
+		          throw caught;
+		        } catch (DMZSyncException e) {
+		        	Window.alert(messageLookup.serverReturndError()+messageLookup.getString(e.getType())+e.getMessage());
+		        } catch (Throwable e) {
+		        	Window.alert(messageLookup.serverReturndError()+e.getMessage());
+		        }
+				
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				
+				
+				String[] messages = result.split("#&"); 
+								
+				DialogBox dialogBox = createDialogBox(messages);
+				dialogBox.center();
+				dialogBox.show();
+
+			}
+			
+		});
+	}
+	
+	
+	
+	/**
+   * Create the dialog box for this example.
+   *
+   * @return the new dialog box
+   */
+  private DialogBox createDialogBox(String[] messages) {
+		// Create a dialog box and set the caption text
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setText("Show the return messages from DMZ");
+
+		// Create a table to layout the content
+		VerticalPanel dialogContents = new VerticalPanel();
+		dialogContents.setSpacing(4);
+		dialogBox.setWidget(dialogContents);
+		for(String message : messages){
+			// Add some text to the top of the dialog
+			HTML details = new HTML(message+"<br/><br/>");
+			dialogContents.add(details);
+			dialogContents.setCellHorizontalAlignment(
+				details, HasHorizontalAlignment.ALIGN_LEFT);
+		}
+		
+		// Add a close button at the bottom of the dialog
+		Button closeButton = new Button(
+			"close", new ClickHandler() {
+			  public void onClick(ClickEvent event) {
+				dialogBox.hide();
+			  }
+			});
+		
+		dialogContents.add(closeButton);
+		if (LocaleInfo.getCurrentLocale().isRTL()) {
+		  dialogContents.setCellHorizontalAlignment(
+			  closeButton, HasHorizontalAlignment.ALIGN_LEFT);
+
+		} else {
+		  dialogContents.setCellHorizontalAlignment(
+			  closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
+		}
+		
+		// Return the dialog box
+		return dialogBox;
+  }
+
+	
+	
+	
+	
 	private void initAdvanceSearchCriteriaList(int size) {
 		advanceSearchCriteriaList = new ArrayList<Boolean>();
 		int i = 0;

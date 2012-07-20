@@ -749,7 +749,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				Window.alert(messageLookup.exportSuccessful());
 			}
 			
-		});
+		});	
+		
 	}
 	
 	@Override

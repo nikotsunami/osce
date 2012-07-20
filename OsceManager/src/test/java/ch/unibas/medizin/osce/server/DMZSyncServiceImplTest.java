@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.util.Date;
 
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.domain.Administrator;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
@@ -20,6 +19,11 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.ContextConfiguration;
 import junit.framework.Assert;
 
+import ch.unibas.medizin.osce.domain.OsceDay;
+import ch.unibas.medizin.osce.domain.Training;
+import ch.unibas.medizin.osce.domain.PatientInSemester;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @ContextConfiguration(locations = { "/META-INF/spring/applicationContext2.xml" })
 public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
@@ -27,25 +31,215 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
     private MyDMZSyncServiceImpl instance  = null;
     private StandardizedPatient currentSP  = null;
     private String dataFromDMZ  = null;
+	private String expectedURL = null;
+	private String locale = null;
 
     private StandardizedPatient testData = null;
+	private StandardizedPatient patient1 = null;
+	private StandardizedPatient patient2 = null;
+	private String returnData = null;
+	
     
     @Before
     public void setUp() throws Exception {
         instance = new MyDMZSyncServiceImpl();
-        currentSP  =  new StandardizedPatient();
-        setUpData(currentSP, 55);
+        currentSP  =  new StandardizedPatient();			
+		
+		setUpData(currentSP, 55);
     }
 
     @After
     public void tearDown() throws Exception {
-        instance = null;
+		instance = null;
         currentSP = null;
         dataFromDMZ  = null;
+		locale = null;
+		patient1 = null;
+		patient2 = null;
+		expectedURL = null;
+		returnData = null;
+		
+    }
+    
+    @Test
+    public void testSync(){
+    	String returnJson = null;
+		String excpetedReturn = "osce for date 2012-6-18 12:00 already in DMZ doing nothing#&";
+			   excpetedReturn+="osce for date 12-6-20 12:00 already in DMZ doing nothing#&";	
+			   excpetedReturn+="osce for date 12-6-20 12:00 already in DMZ doing nothing#&";	
+			   excpetedReturn+="warning patient Daniel Kohler was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Marianne Lamarie was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Ferdinand Preussler was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Karl Meyer was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Bettina Buser was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Max Peter was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Ruth Musyl was not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push#&";	
+			   excpetedReturn+="warning patient Delphine Landwerlin was not found in the DMZ. Please manually push";	
+			   
+		//Test sync create
+	    patient1 = new StandardizedPatient();
+		patient1.setPreName("perName1");
+		patient1.setName("name1");
+		patient1.persist();
+		patient1.merge();
+		patient2 = new StandardizedPatient();
+		patient2.setPreName("perName2");
+		patient2.setName("name2");
+		patient2.persist();
+		patient2.merge();
+		
+		PatientInSemester pSemester = PatientInSemester.findPatientInSemesterByStandardizedPatient(patient1);
+		assertEquals(null,pSemester);
+		
+		List<StandardizedPatient> patients = StandardizedPatient.findAllStandardizedPatients();
+
+		returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:00Z\"},{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"trainings\" : [{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T09:00:02Z\",\"timeEnd\":\"2012-07-17T19:00:00Z\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";
+		
+		try {
+			locale = "en";
+    
+			returnJson = instance.sync(locale);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());
+		}
+		
+			
+		//assertEquals(2,patients.size());
+	
+		List<OsceDay> osceDays = OsceDay.findAllOsceDays();
+		assertEquals(4,osceDays.size());
+		
+		OsceDay osceDay1 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-10T00:00:00Z"));
+		assertNotNull(osceDay1);	
+		OsceDay osceDay2 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-20T00:00:00Z"));
+		assertNotNull(osceDay2);
+		OsceDay osceDay3 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-18T00:00:00Z"));
+		assertNotNull(osceDay3);
+		OsceDay osceDay4 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-21T00:00:00Z"));
+		assertNotNull(osceDay4);
+		
+		
+		List<Training> trainings = Training.findAllTrainings();
+		assertEquals(5,trainings.size());
+		
+		Training training1 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T11:00:02Z"));
+		assertNotNull(training1);
+		assertEquals("training1",training1.getName());
+		assertEquals(convertToDate("2012-07-17T17:15:55Z"),training1.getTimeEnd());
+		Training training2 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-25T00:00:00Z"),convertToDate("2012-07-25T08:30:00Z"));
+		assertNotNull(training2);
+		assertEquals("training2",training2.getName());
+		assertEquals(convertToDate("2012-07-25T15:30:00Z"),training2.getTimeEnd());
+		Training training3 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T07:00:02Z"));
+		assertNotNull(training3);
+		assertEquals("training1",training3.getName());
+		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training3.getTimeEnd());
+		Training training4 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T10:00:02Z"));
+		assertNotNull(training4);
+		assertEquals("training1",training4.getName());
+		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training4.getTimeEnd());
+		Training training5 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T09:00:02Z"));
+		assertNotNull(training5);
+		assertEquals("tttttt",training5.getName());
+		assertEquals(convertToDate("2012-07-17T19:00:00Z"),training5.getTimeEnd());
+		
+		List<PatientInSemester> semesters = PatientInSemester.findAllPatientInSemesters();
+		assertEquals(2,semesters.size());
+		
+		PatientInSemester semester = PatientInSemester.findPatientInSemesterByStandardizedPatient(patient1);
+		assertTrue(semester.getAccepted());
+		//assertEquals(3,semester.getTrainings().size());
+		
+		PatientInSemester semester2 = PatientInSemester.findPatientInSemesterByStandardizedPatient(patient2);
+		assertFalse(semester2.getAccepted());
+		
+		assertEquals(excpetedReturn,returnJson);
+		
+		
+		
+		
+		
+		//Test sync update
+		try {
+			locale = "en";
+			returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-01-01T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:00Z\"},{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"trainings\" : [{\"name\":\"testTraining\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:00:00Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-01T00:00:00Z\",\"timeStart\":\"2012-07-01T08:30:00Z\",\"timeEnd\":\"2012-07-01T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T09:00:02Z\",\"timeEnd\":\"2012-07-17T19:00:00Z\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";	
+			returnJson = instance.sync(locale);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());
+		}
+		
+	
+		osceDays = OsceDay.findAllOsceDays();
+		assertEquals(5,osceDays.size());
+		
+		osceDay1 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-10T00:00:00Z"));
+		assertNotNull(osceDay1);	
+	    osceDay2 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-20T00:00:00Z"));
+		assertNotNull(osceDay2);
+		osceDay3 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-18T00:00:00Z"));
+		assertNotNull(osceDay3);
+		osceDay4 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-06-21T00:00:00Z"));
+		assertNotNull(osceDay4);
+		OsceDay osceDay5 = OsceDay.findOsceDayByOsceDate(convertToDate("2012-01-01T00:00:00Z"));
+		assertNotNull(osceDay5);
+		
+		
+		trainings = Training.findAllTrainings();
+		assertEquals(6,trainings.size());
+		
+		training1 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T11:00:02Z"));
+		assertNotNull(training1);
+		assertEquals("testTraining",training1.getName());
+		assertEquals(convertToDate("2012-07-17T17:00:00Z"),training1.getTimeEnd());
+		training2 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-25T00:00:00Z"),convertToDate("2012-07-25T08:30:00Z"));
+		assertNotNull(training2);
+		assertEquals("training2",training2.getName());
+		assertEquals(convertToDate("2012-07-25T15:30:00Z"),training2.getTimeEnd());
+		training3 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T07:00:02Z"));
+		assertNotNull(training3);
+		assertEquals("training1",training3.getName());
+		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training3.getTimeEnd());
+		training4 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T10:00:02Z"));
+		assertNotNull(training4);
+		assertEquals("training1",training4.getName());
+		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training4.getTimeEnd());
+		training5 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T09:00:02Z"));
+		assertNotNull(training5);
+		assertEquals("tttttt",training5.getName());
+		assertEquals(convertToDate("2012-07-17T19:00:00Z"),training5.getTimeEnd());
+		Training training6 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-01T00:00:00Z"),convertToDate("2012-07-01T08:30:00Z"));
+		assertNotNull(training6);
+		assertEquals("training2",training6.getName());
+		assertEquals(convertToDate("2012-07-01T15:30:00Z"),training6.getTimeEnd());
+		
+		
+		semesters = PatientInSemester.findAllPatientInSemesters();
+		assertEquals(2,semesters.size());
+		
+		semester = PatientInSemester.findPatientInSemesterByStandardizedPatient(patient1);
+		assertTrue(semester.getAccepted());
+		//assertEquals(3,semester.getTrainings().size());
+		
+		semester2 = PatientInSemester.findPatientInSemesterByStandardizedPatient(patient2);
+		assertFalse(semester2.getAccepted());
+	
+    }
+   
+    
+    private String getSendJsonData(){
+    	
+    	return "{\"language\": "+locale+",\"osceDay\":[{\"osceDate\": \"2012-06-18T00:00:00Z\"},{\"osceDate\": \"2012-06-20T00:00:00Z\"},{\"osceDate\": \"2012-06-20T00:00:00Z\"},{\"osceDate\": \"2012-06-10T00:00:00Z\"},{\"osceDate\": \"2012-06-21T00:00:00Z\"}],\"trainings\":[{\"name\" : \"training1\",\"trainingDate\" : \"2012-07-17T00:00:00Z\",\"timeStart\" : \"2012-07-17T11:00:02Z\",\"timeEnd\": \"2012-07-17T17:15:55Z\"},{\"name\" : \"training2\",\"trainingDate\" : \"2012-07-25T00:00:00Z\",\"timeStart\": \"2012-07-25T08:30:00Z\",\"timeEnd\": \"2012-07-25T15:30:00Z\"},{\"name\" : \"training1\",\"trainingDate\" : \"2012-07-17T00:00:00Z\",\"timeStart\" : \"2012-07-17T07:00:02Z\",\"timeEnd\": \"2012-07-17T14:15:55Z\"},{\"name\" : \"training1\",\"trainingDate\" : \"2012-07-17T00:00:00Z\",\"timeStart\" : \"2012-07-17T10:00:02Z\",\"timeEnd\": \"2012-07-17T14:15:55Z\"},{\"name\" : \"tttttt\",\"trainingDate\" : \"2012-07-17T00:00:00Z\",\"timeStart\" : \"2012-07-17T09:00:02Z\",\"timeEnd\": \"2012-07-17T19:00:00Z\"}],\"standardizedPatient\":[{\"id\": 19,\"preName\": \"Daniel\",\"name\": \"Kohler\"},{\"id\": 20,\"preName\": \"Marianne\",\"name\": \"Lamarie\"},{\"id\": 21,\"preName\": \"Ferdinand\",\"name\": \"Preussler\"},{\"id\": 22,\"preName\": \"Karl\",\"name\": \"Meyer\"},{\"id\": 23,\"preName\": \"Bettina\",\"name\": \"Buser\"},{\"id\": 24,\"preName\": \"Carla Joanna\",\"name\": \"Velazquez\"},{\"id\": 25,\"preName\": \"Max\",\"name\": \"Peter\"},{\"id\": 26,\"preName\": \"Ruth\",\"name\": \"Musyl\"},{\"id\": 27,\"preName\": \"Ljiljana\",\"name\": \"Ivanovic\"},{\"id\": 28,\"preName\": \"Benjamin\",\"name\": \"Adenauer\"},{\"id\": 29,\"preName\": \"Delphine\",\"name\": \"Landwerlin\"},{\"id\": 30,\"preName\": \"Carl\",\"name\": \"Collars\"}]}";
     }
 
-
-     @Test
+    @Test 
     public void testPullFromDMZ() {
     	
     	testData =  new StandardizedPatient();
@@ -57,16 +251,18 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
         
         try {
 			instance.pullFromDMZ(testData.getId());
-		} catch (DMZSyncException e1) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			e1.getCause().printStackTrace();
+			Assert.fail("error occured " + e1.getMessage());
 		}
 
 		
 		StandardizedPatient patient = StandardizedPatient.findStandardizedPatient(testData.getId());
-		
+	
 		assertEquals(testData.getId(), (Long)instance.spParam);
-	    assertEquals(Gender.FEMALE,patient.getGender());
+	   // assertEquals(Gender.FEMALE,patient.getGender());
 	    assertEquals("Buser",patient.getName());
 	
 	    assertEquals("Bettina",patient.getPreName());
@@ -90,34 +286,6 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 	    assertEquals(null,patient.getImmagePath());
 	
 	    assertEquals(null,patient.getVideoPath());
-	     
-//	     assertTrue(instance.updateData != null);
-//	     assertEquals(testData.getId(), (Long)instance.spParam);
-//	     assertEquals(Gender.FEMALE,instance.updateData.getGender());
-//	     assertEquals("Buser",instance.updateData.getName());
-//	
-//	     assertEquals("Bettina",instance.updateData.getPreName());
-//	
-//	     assertEquals("Rankenbergweg 1",instance.updateData.getStreet());
-//	
-//	     assertEquals("Basel",instance.updateData.getCity());
-//	
-//	     assertEquals((Integer)4051,instance.updateData.getPostalCode());
-//	
-//	     assertEquals(null,instance.updateData.getTelephone());
-//	
-//	     assertEquals(null,instance.updateData.getTelephone2());
-//	
-//	     assertEquals("078 586 29 84",instance.updateData.getMobile());
-//	
-//	     assertEquals((Integer)182,instance.updateData.getHeight());
-//	
-//	     assertEquals((Integer)82,instance.updateData.getWeight());
-//	
-//	     assertEquals(null,instance.updateData.getImmagePath());
-//	
-//	     assertEquals(null,instance.updateData.getVideoPath());
-        
         
          Date expectedDate = null ;
          try {
@@ -128,7 +296,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
              expectedDate = (Date)formatter.parse(str_date);
  
          } catch (ParseException e){
-             System.out.println("Exception :"+e);
+			 fail("format error");
  
          }
 
@@ -140,47 +308,52 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
     }
 
 
-   @Test
+    @Test 
     public void testPullFemaleFromDMZ() {
-        dataFromDMZ  = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":5,\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"anamnesisChecksValues\":[{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":10,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":8,\"origId\":5,\"sortOrder\":6,\"text\":\"Leiden Sie unter Diabetes?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":2,\"origId\":11,\"sortOrder\":5,\"text\":\"Disease history category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":15,\"truth\":false},{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":9,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":4,\"origId\":1,\"sortOrder\":2,\"text\":\"Rauchen Sie?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":1,\"origId\":10,\"sortOrder\":1,\"text\":\"Personal lifestyle category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":14,\"truth\":false}],\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"scars\":[],\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"Basel\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":2,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":null,\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
-
         testData =  new StandardizedPatient();
         testData.setName("patient2");
         testData.persist();
         testData.merge();
-        
+
+		dataFromDMZ  = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":"+testData.getId()+",\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"anamnesisChecksValues\":[{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":10,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":8,\"origId\":5,\"sortOrder\":6,\"text\":\"Leiden Sie unter Diabetes?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":2,\"origId\":11,\"sortOrder\":5,\"text\":\"Disease history category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":15,\"truth\":false},{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":9,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":4,\"origId\":1,\"sortOrder\":2,\"text\":\"Rauchen Sie?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":1,\"origId\":10,\"sortOrder\":1,\"text\":\"Personal lifestyle category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":14,\"truth\":false}],\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"scars\":[],\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"Basel\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":2,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":null,\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
+
+                
         try {
 			instance.pullFromDMZ(testData.getId());
-		} catch (DMZSyncException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());
 		}
-//		assertTrue(instance.updateData != null);
-//        assertEquals(testData.getId(), (Long)instance.spParam);
-//        assertEquals(Gender.FEMALE,instance.updateData.getGender());
-//        assertEquals("Buser",instance.updateData.getName());
-//
-//        assertEquals("Bettina",instance.updateData.getPreName());
-//
-//        assertEquals("Rankenbergweg 1",instance.updateData.getStreet());
-//
-//        assertEquals("Basel",instance.updateData.getCity());
-//
-//        assertEquals((Integer)4051,instance.updateData.getPostalCode());
-//
-//        assertEquals(null,instance.updateData.getTelephone());
-//
-//        assertEquals(null,instance.updateData.getTelephone2());
-//
-//        assertEquals("078 586 29 84",instance.updateData.getMobile());
-//
-//        assertEquals((Integer)182,instance.updateData.getHeight());
-//
-//        assertEquals((Integer)82,instance.updateData.getWeight());
-//
-//        assertEquals(null,instance.updateData.getImmagePath());
-//
-//        assertEquals(null,instance.updateData.getVideoPath());
+		StandardizedPatient patient = StandardizedPatient.findStandardizedPatient(testData.getId());
+	
+        assertEquals(testData.getId(), (Long)instance.spParam);
+        assertEquals(Gender.FEMALE,patient.getGender());
+        assertEquals("Buser",patient.getName());
+
+        assertEquals("Bettina",patient.getPreName());
+
+        assertEquals("Rankenbergweg 1",patient.getStreet());
+
+        assertEquals("Basel",patient.getCity());
+
+        assertEquals((Integer)4051,patient.getPostalCode());
+
+        assertEquals(null,patient.getTelephone());
+
+        assertEquals(null,patient.getTelephone2());
+
+        assertEquals("078 586 29 84",patient.getMobile());
+
+        assertEquals((Integer)182,patient.getHeight());
+
+        assertEquals((Integer)82,patient.getWeight());
+
+        assertEquals(null,patient.getImmagePath());
+
+        assertEquals(null,patient.getVideoPath());
 
 
 
@@ -191,9 +364,12 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
     public void testPushToDMZ() {
         try {
 			instance.pushToDMZ(22L);
-		} catch (DMZSyncException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());			
 		}
 
         assertEquals((Long)22L, (Long)instance.spParam);
@@ -203,7 +379,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 
     }
 
-   @Test
+   @Test 
     public void testPreProcessData() {
          String data  = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":5,\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"anamnesisChecksValues\":[{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":10,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":8,\"origId\":5,\"sortOrder\":6,\"text\":\"Leiden Sie unter Diabetes?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":2,\"origId\":11,\"sortOrder\":5,\"text\":\"Disease history category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":15,\"truth\":false},{\"class\":\"sp_portal.local.AnamnesisChecksValue\",\"id\":9,\"anamnesisCheck\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":4,\"origId\":1,\"sortOrder\":2,\"text\":\"Rauchen Sie?\",\"title\":{\"class\":\"sp_portal.local.AnamnesisCheck\",\"id\":1,\"origId\":10,\"sortOrder\":1,\"text\":\"Personal lifestyle category\",\"title\":null,\"type\":4,\"userSpecifiedOrder\":null,\"value\":\"\"},\"type\":1,\"userSpecifiedOrder\":null,\"value\":\"\"},\"anamnesisChecksValue\":null,\"anamnesisForm\":{\"_ref\":\"../..\",\"class\":\"sp_portal.local.AnamnesisForm\"},\"comment\":null,\"origId\":14,\"truth\":false}],\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"scars\":[],\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"Basel\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":1,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":null,\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
 
@@ -219,16 +395,19 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 
 
 
-    //@Test
+    @Test
     public void testSendData() {
-        MyDMZSyncServiceImpl2 instance2 = new MyDMZSyncServiceImpl2();
+        MyDMZSyncServiceImpl instance2 = new MyDMZSyncServiceImpl();
 
         String data = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":23,\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"PaulVille\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":1,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":\"9999999999\",\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
         try {
-			instance2.sendData(data);
-		} catch (DMZSyncException e) {
+		    String url = instance2.getHostAddress() + "/sp_portal/DataImportExport/importSP";
+			instance2.sendData(data,url);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());			
 		}
 
     }
@@ -240,10 +419,11 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			ret = instance2.getDMZDataForPatient(23L);
 
-	        System.err.println("Data returned is " + ret );
-		} catch (DMZSyncException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());						
 		}
 
     }
@@ -303,6 +483,27 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
         //sp.persist();
 
     }
+	
+	/**
+	 *The date of the format string into "yyyy-MM-dd 'T' HH: MM: ss 'Z'" format
+	 */
+	private Date convertToDate(String dateStr){
+		DateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+		Date date=null;
+		try {
+			if(dateStr!=null && !dateStr.equals("")){
+				date = sdf.parse(dateStr);
+			}else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return date;
+	}
+	
 
 
     private class MyDMZSyncServiceImpl extends DMZSyncServiceImpl{
@@ -319,15 +520,17 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
        /**
         * Send data to the DMZ server
         */
-       protected void sendData(String json){
-            System.out.println(" >>> json is: "+ json);
+       protected String sendData(String json,String url){
             sentData = json;
+            expectedURL = url;
+            return returnData;
+
        }
 
-
-       protected void updatePatient(StandardizedPatient patient,StandardizedPatient newPatient){
-    	   updateData = newPatient;
-       }
+		protected String getSyncJsonData(String locale){
+		
+			return getSendJsonData();
+		}
 
         /**
          * Request data from the DMZ
@@ -359,11 +562,6 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
         }
 
 
-
-
-
-
-
         /**
          * Save a patient
          */
@@ -375,6 +573,9 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
              return "http://localhost:8090";
          }
     }
+	
+	
+	
 
 
 }
