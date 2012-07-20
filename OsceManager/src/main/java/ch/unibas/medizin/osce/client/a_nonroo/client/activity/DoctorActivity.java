@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -69,6 +70,10 @@ DoctorView.Presenter, DoctorView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (DoctorViewImpl)view);
+		//by spec
 		
 		view.getFilterTitle().clear();
 		

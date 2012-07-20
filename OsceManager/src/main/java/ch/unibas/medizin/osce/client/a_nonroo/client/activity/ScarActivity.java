@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.shared.TraitTypes;
@@ -64,6 +65,10 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (ScarViewImpl)view);
+		//by spec
 		
 		init();
 

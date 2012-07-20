@@ -12,6 +12,8 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
@@ -53,7 +55,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguageView {
+public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguageView, RecordChangeHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -394,4 +396,20 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		return this.spokenLanguageNewMap;
 	}
 	// E Highlight onViolation
+	
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
 }

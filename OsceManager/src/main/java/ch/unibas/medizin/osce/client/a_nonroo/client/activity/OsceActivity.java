@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -111,6 +112,10 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		this.widget = panel;
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (OsceViewImpl) view);
+		//by spec
 		setTable(view.getTable());
 		
 		/*requests.semesterRequest().findSemester(1L).fire(new OSCEReceiver<SemesterProxy>() {

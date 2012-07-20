@@ -551,6 +551,10 @@ public interface OsceConstants extends Constants {
 	public String endtimedoc();
 	//moduel 7
 
+        //issue 124
+	public String tableSize();
+	//issue 124
+
 	//Module 3 : Task : B
 	
 	public String addAllActive();
