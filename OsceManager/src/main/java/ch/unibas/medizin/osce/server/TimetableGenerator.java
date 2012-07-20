@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.aspectj.weaver.patterns.ConcreteCflowPointcut.Slot;
 
 import ch.unibas.medizin.osce.domain.*;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -417,10 +416,11 @@ public class TimetableGenerator {
 	 * Remove old calculated scaffold (when OsceStatus is changed from GENERATED to BLUEPRINT again)
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	private void removeOldScaffold() {
 		// temp variables for first OSCE day (used to re-create OSCE day after deleting whole scaffold)
-		Date dayRefTimeStart = osceDayRef.getTimeStart();
-		Date dayRefTimeEnd = osceDayRef.getTimeEnd();
+//		Date dayRefTimeStart = osceDayRef.getTimeStart();
+//		Date dayRefTimeEnd = osceDayRef.getTimeEnd();
 		
 		//SPEC[		
 		log.info("removeOldScaffold start");
@@ -478,17 +478,17 @@ public class TimetableGenerator {
 			
 			osceDayRef = firstDay;
 		}
-		else
-		{
-			// re-create new OSCE day
-			OsceDay newDay = new OsceDay();
-			newDay.setOsce(osce);
-			newDay.setOsceDate(dayRefTimeStart);
-			newDay.setTimeStart(dayRefTimeStart);
-			newDay.setTimeEnd(dayRefTimeEnd);
-			newDay.persist();
-			osceDayRef = newDay;
-		}
+//		else
+//		{
+//			// re-create new OSCE day
+//			OsceDay newDay = new OsceDay();
+//			newDay.setOsce(osce);
+//			newDay.setOsceDate(dayRefTimeStart);
+//			newDay.setTimeStart(dayRefTimeStart);
+//			newDay.setTimeEnd(dayRefTimeEnd);
+//			newDay.persist();
+//			osceDayRef = newDay;
+//		}
 		
 		//SPEC]
 	}
@@ -799,8 +799,7 @@ public class TimetableGenerator {
 								if(posts.get(i).requiresSimpat()) {
 									// SIMPATS START
 									OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(i), osceSequence).getSingleResult();
-									// TODO re-activate this after testing
-//									if(!post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+									if(!post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
 										
 										// finalize SP assignment - after last rotation of a parcour as well as if change during or after rotation is needed
 										// (assuming that assignment has been initialized already)
@@ -861,7 +860,7 @@ public class TimetableGenerator {
 											
 											simpatAdded = true;
 										}
-//									}
+									}
 									// SIMPATS END
 								}
 
@@ -1132,8 +1131,7 @@ public class TimetableGenerator {
 	 * @return
 	 */
 	private String debugTimeStartEnd(Assignment ass) {
-		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-		String timeString = format.format(ass.getTimeStart()) + " - " + format.format(ass.getTimeEnd());
+		String timeString = debugTime(ass.getTimeStart()) + " - " + debugTime(ass.getTimeEnd());
 		return timeString;
 	}
 	
