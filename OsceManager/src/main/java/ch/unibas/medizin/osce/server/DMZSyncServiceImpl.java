@@ -6,7 +6,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.json.client.JSONObject;
+import org.json.JSONObject;
+import org.json.JSONArray;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -20,6 +21,7 @@ import flexjson.ObjectBinder;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.DMZSyncExceptionType;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.Locale;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.WorkPermission;
@@ -29,6 +31,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -40,6 +43,14 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import java.lang.String;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import com.google.gwt.i18n.client.LocaleInfo;
+import org.json.JSONException;
+import ch.unibas.medizin.osce.shared.Locale;
+
 
 public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		DMZSyncService {
@@ -54,6 +65,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	public void pushToDMZ(Long standardizedPatientId) throws DMZSyncException {
 			StandardizedPatient patient = findPatient(standardizedPatientId);
 			String json = "";
+			String url = "";
 			if(patient !=null){
 				try{
 					//,"anamnesisForm.anamnesischecksvalues.anamnesischeck"
@@ -70,7 +82,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				}catch(Exception e){
 					throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
 				}
-				sendData(json);
+				url = getHostAddress() + "/sp_portal/DataImportExport/importSP";	
+				sendData(json,url);
 			}else{
 				throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
 			}
@@ -83,7 +96,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		String data = getDMZDataForPatient(standardizedPatientId);
 		
 		data =preProcessData(data);
-		
 		JSONDeserializer deserializer = new JSONDeserializer()
 				.use("anamnesisForm.createDate",
 						new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"))
@@ -96,21 +108,372 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				.use("anamnesisForm.scars.values.traitType", new TraitTypeTransformet())
 				.use("anamnesisForm.anamnesischecksvalues.values.anamnesischeck.type", new AnamnesisChecksTypeTransformet());
 		
-		
-		StandardizedPatient newPatient = (StandardizedPatient) (deserializer
-				.use(null, StandardizedPatient.class).deserialize(data));
-		
+		String unExpectedData=standardizedPatientId+"not found";
+		StandardizedPatient newPatient = null;
+		if(!data.equals(unExpectedData)){
+				newPatient = (StandardizedPatient) (deserializer
+						.use(null, StandardizedPatient.class).deserialize(data));
+		}else{
+			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
+		}
+
 		
 		
 		StandardizedPatient patient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
-		
+	
 		if( patient != null){
 			updatePatient(patient,newPatient);
 		}else{
-			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
+//			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
 //			savePatient(newPatient);
 		}
+
 	}
+	
+	@Override
+	public String sync(String locale) throws DMZSyncException{
+	
+		String json = getSyncJsonData(locale);
+		String url = getHostAddress() + "/sp_portal/OsceSync/syncJson";
+		String returnJson = sendData(json,url);
+		String message = "";
+		if(!json.equals("")){	
+			try{
+				JSONObject myjson = new JSONObject(returnJson);
+				syncOsceDayAndTraining(myjson);
+				message = getReturnMessage(myjson);
+			}catch(Exception e){
+			
+			}
+		}
+
+		return message;
+	}
+	
+	/**
+	 * get the return message	
+	 */
+	private String getReturnMessage(JSONObject myjson){
+		String message = "";
+		try{
+			
+			if(myjson!=null){			
+			
+				JSONArray jsonArray = myjson.getJSONArray("message");			
+				for(int i =0;i<jsonArray.length();i++){
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					
+					if(jsonObject.get("key")!=JSONObject.NULL){
+						if(jsonObject.get("key")!=JSONObject.NULL){
+							message+=jsonObject.get("key").toString();
+						}
+						if(i != jsonArray.length()-1){
+							message+="#&";
+						}
+					}
+					
+				}
+			
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			
+		}
+		
+		return message;
+	
+	}
+	
+	
+	
+	private void syncOsceDayAndTraining(JSONObject myjson){
+		//String locale = getRequest().getHeader("Accept-Language")getLocalName();
+		//System.out.println("%%%%%%%%%%%%%%%%%%%%locale: "+locale);
+
+//		String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
+//		System.out.println("--------------------- currentLocale "+currentLocale+"------------------------------------");
+		
+		
+				
+			try{
+				
+				if(myjson!=null){
+					syncOsceDay(myjson);
+				    
+					syncTraining(myjson);
+					
+					syncPatientInSemester(myjson);
+				}
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				
+			}
+		
+		
+	}
+	
+	/**
+	 * sync the class of OsceDay
+	 * */
+	private void syncOsceDay(JSONObject myjson) throws JSONException{
+		JSONArray jsonArray = myjson.getJSONArray("osceDay");			
+	    for(int i =0;i<jsonArray.length();i++){
+	    	JSONObject jsonObject = jsonArray.getJSONObject(i);
+			Date osceDate = null;
+			if(jsonObject.get("osceDate")!=JSONObject.NULL){
+	    	   osceDate = convertToDate(jsonObject.get("osceDate").toString());
+			}
+	    	if(osceDate!=null){
+		    	OsceDay osceDay = OsceDay.findOsceDayByOsceDate(osceDate);
+		    	
+		    	if(osceDay == null){
+		    		osceDay = new OsceDay();
+		    		osceDay.setOsceDate(osceDate);
+		    		osceDay.merge();
+		    	}
+	    	}
+	    	
+	    }
+	}
+	
+	/**
+	 * sync the class of PatientInSemester
+	 * */
+	private void syncPatientInSemester(JSONObject myjson) throws JSONException{
+	JSONArray jsonArray = myjson.getJSONArray("patientInSemester");			
+    for(int i =0;i<jsonArray.length();i++){
+    	JSONObject jsonObject = jsonArray.getJSONObject(i);
+		Boolean accepted = null;
+		if(jsonObject.get("accepted")!=JSONObject.NULL){
+			accepted = jsonObject.getBoolean("accepted");
+		}
+		Long patientId = null;
+		StandardizedPatient patient = null;
+		if(jsonObject.get("standarizedPatientId")!=JSONObject.NULL){
+	         patientId = jsonObject.getLong("standarizedPatientId");  
+			 patient = StandardizedPatient.findStandardizedPatient(patientId);
+		}
+	    if(patient != null){
+			 PatientInSemester semester =PatientInSemester.findPatientInSemesterByStandardizedPatient(patient);
+			 
+			 if(semester!=null){
+				 semester.setStandardizedPatient(patient);
+				 semester.setAccepted(accepted);
+				 //semester.flush();
+				 setOsceDays(jsonObject,semester);
+				 setTrainings(jsonObject,semester);						 
+				 semester.merge();
+				 semester.flush();
+				 
+			 }else {
+				 semester = new PatientInSemester();	
+				 semester.setStandardizedPatient(patient);
+				 semester.setAccepted(accepted);
+				// semester.flush();
+				 setOsceDays(jsonObject,semester);
+				 setTrainings(jsonObject,semester);
+				 semester.merge();
+				 semester.flush();
+			 }
+		 
+	    }
+
+    	
+    }
+}
+	
+	/**
+	 * save accepted osceDays
+	 * */
+	private void setOsceDays(JSONObject jsonObject,PatientInSemester semester)throws JSONException{
+		 JSONArray osceDayArray = jsonObject.getJSONArray("acceptedOsce");
+		 Set<OsceDay> jsonOsceDays = new HashSet<OsceDay>();
+		 for(int j = 0; j<osceDayArray.length(); j++){
+			OsceDay osceDay = null;
+			if(osceDayArray.getJSONObject(j).get("osceDate")!=JSONObject.NULL){
+				 String osceDate = osceDayArray.getJSONObject(j).get("osceDate").toString();	
+				 osceDay = OsceDay.findOsceDayByOsceDate(convertToDate(osceDate));		
+			}			
+			
+			 if(osceDay!=null){
+//				 osceDay.getPatientInSemesters().add(semester);
+//				 osceDay.persist();
+				 jsonOsceDays.add(osceDay);
+				 
+			 }
+			 
+		 }
+		 semester.setOsceDays(jsonOsceDays);
+		// semester.persist();
+//		 for(OsceDay osceDay : semester.getOsceDays()){
+//			 if(!jsonOsceDays.contains(osceDay)){
+//				 osceDay.getPatientInSemesters().remove(semester);
+//				 osceDay.persist();
+//			 }
+//		 }
+		 
+		 
+	}
+	/**
+	 * save accepted trainings
+	 * */
+	private void setTrainings(JSONObject jsonObject,PatientInSemester semester)throws JSONException{
+		JSONArray trainingArray = jsonObject.getJSONArray("acceptedTrainings");
+		 Set<Training> jsonTrainings = new HashSet<Training>();
+		 for(int i = 0; i<trainingArray.length(); i++){
+			Training training = null;
+			if(trainingArray.getJSONObject(i).get("trainingDate")!=JSONObject.NULL && 
+			trainingArray.getJSONObject(i).get("timeStart")!=JSONObject.NULL){
+				 String trainingDate = trainingArray.getJSONObject(i).get("trainingDate").toString();
+				 String timeStart = trainingArray.getJSONObject(i).get("timeStart").toString();
+				 training = Training.findTrainingByTrainingDateAndTimeStart(convertToDate(trainingDate),convertToDate(timeStart));
+			 }
+			 if(training!=null){		
+//				 training.getPatientInSemesters().add(semester);
+//				 training.persist();
+				 jsonTrainings.add(training);
+			 }
+		 }
+		 semester.setTrainings(jsonTrainings);
+	//	 semester.persist();
+//		 for(Training training : semester.getTrainings()){
+//			 if(!jsonTrainings.contains(training)){
+//				 System.out.println("########### not contains");
+//				 training.getPatientInSemesters().remove(semester);
+//				 training.persist();
+//			 }
+//		 }
+		
+	}
+	
+	/**
+	 * sync the class of Training
+	 * */
+	private void syncTraining(JSONObject myjson) throws JSONException{
+		JSONArray jsonArray = myjson.getJSONArray("trainings");			
+	    for(int i =0;i<jsonArray.length();i++){
+	    	JSONObject jsonObject = jsonArray.getJSONObject(i);
+			Date trainingDate = null;
+			Date timeStart = null;
+			if(jsonObject.get("trainingDate") != JSONObject.NULL &&
+			    jsonObject.get("timeStart") != JSONObject.NULL){
+	    	     trainingDate = convertToDate(jsonObject.get("trainingDate").toString());
+	    	     timeStart = convertToDate(jsonObject.get("timeStart").toString());
+			}
+	    	if(trainingDate!=null && timeStart!=null){
+		    	Training training = Training.findTrainingByTrainingDateAndTimeStart(trainingDate,timeStart);
+		    	if(training == null){
+		    		training = new Training();
+		    		training.setName(jsonObject.get("name").toString());
+		    		training.setTrainingDate(trainingDate);
+		    		training.setTimeStart(timeStart);
+		    		training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
+		    		training.merge();
+		    	}else {
+		    		training.setName(jsonObject.get("name").toString());
+		    		training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
+		    		training.merge();
+				}
+
+	    	}	    		    	
+	    }
+	}
+	
+	/**
+	 *get the json data which the sync method needed. 
+	 **/
+	protected String getSyncJsonData(String locale){
+		
+		List<OsceDay> osceDays = OsceDay.findAllOsceDays();
+		StringBuilder sb = new StringBuilder();
+		sb.append("{").append("\"osceDay\":[");
+		int i = 0; 
+		for(OsceDay osceDay : osceDays){
+			i++;
+			sb.append("{\"osceDate\": \""+convertToString(osceDay.getOsceDate())+"\"}");
+			if(i != osceDays.size()){
+				sb.append(",");
+			}
+		}
+		sb.append("],");
+		
+		List<Training> trainings = Training.findAllTrainings();
+		sb.append("\"trainings\":[");
+		int j = 0; 
+		for(Training training : trainings){
+			j++;
+			sb.append("{");
+			sb.append("\"name\" : "+"\""+training.getName()+"\",");
+			sb.append("\"trainingDate\" : \""+convertToString(training.getTrainingDate())+"\",");
+			sb.append("\"timeStart\" : \""+convertToString(training.getTimeStart())+"\",");
+			sb.append("\"timeEnd\": \""+convertToString(training.getTimeEnd())+"\"");
+			sb.append("}");
+			if(j != trainings.size()){
+				sb.append(",");
+			}
+		}
+		sb.append("],");
+		
+		List<StandardizedPatient> standardizedPatients = StandardizedPatient.findAllStandardizedPatients();
+		sb.append("\"standardizedPatient\":[");
+		int l = 0; 
+		for(StandardizedPatient patient : standardizedPatients){
+			l++;
+			sb.append("{");
+			sb.append("\"id\": "+patient.getId()+",");
+			sb.append("\"preName\": "+"\""+patient.getPreName()+"\",");
+			sb.append("\"name\": "+"\""+patient.getName()+"\"");
+			sb.append("}");
+			if(l != standardizedPatients.size()){
+				sb.append(",");
+			}
+		}
+		sb.append("],");
+		sb.append("\"language\":");
+		sb.append("\""+locale+"\"");
+		sb.append("}");
+		return sb.toString();
+	}
+
+	/**
+	 * Time is converted to a string
+	 **/
+	private String convertToString(Date date){
+		DateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+		String dateStr=null;
+		try {
+			if(date !=null){
+				dateStr = sdf.format(date);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dateStr;
+	}
+	
+	/**
+	 *The date of the format string into "yyyy-MM-dd 'T' HH: MM: ss 'Z'" format
+	 */
+	private Date convertToDate(String dateStr){
+		DateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+		Date date=null;
+		try {
+			if(dateStr!=null && !dateStr.equals("")){
+				date = sdf.parse(dateStr);
+			}else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return date;
+	}
+	
 	
 	private static String dmzSyncExceptionType = "";
 	private static String errorMsg = "";
@@ -133,7 +496,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			patient.setMobile(newPatient.getMobile());
 			patient.setHeight(newPatient.getHeight());
 			patient.setWeight(newPatient.getWeight());
-
+			
 			patient.setImmagePath(newPatient.getImmagePath());
 			patient.setVideoPath(newPatient.getVideoPath());
 			patient.setBirthday(newPatient.getBirthday());
@@ -146,6 +509,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getNationality() != null){
 					Nationality nationality = Nationality.findNationality(newPatient.getNationality().getId());
+					
 					if(nationality != null){
 						nationality.setNationality(newPatient.getNationality().getNationality());
 						patient.setNationality(nationality);
@@ -158,6 +522,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getProfession() !=null){
 					Profession profession = Profession.findProfession(newPatient.getProfession().getId());
+										   
 					if(profession != null){
 						profession.setProfession(newPatient.getProfession().getProfession()); 
 						patient.setProfession(profession);
@@ -183,14 +548,15 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			try{
 				if(newPatient.getBankAccount() !=null){
 					Bankaccount bankAccount = Bankaccount.findBankaccount(newPatient.getBankAccount().getId());
+					
 				  	if(bankAccount != null){
-				  		bankAccount.setBankName(newPatient.getBankAccount().getBankName());
+						bankAccount.setBankName(newPatient.getBankAccount().getBankName());
 						bankAccount.setIBAN(newPatient.getBankAccount().getIBAN());
 						bankAccount.setBIC(newPatient.getBankAccount().getBIC());
 						bankAccount.setOwnerName(newPatient.getBankAccount().getOwnerName());
 						bankAccount.setPostalCode(newPatient.getBankAccount().getPostalCode());
 						bankAccount.setCity(newPatient.getBankAccount().getCity());
-				  		patient.setBankAccount(bankAccount);
+						patient.setBankAccount(bankAccount);
 					}	
 				}
 			}catch(Exception e){
@@ -216,7 +582,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 								if(newChecksValue.getId() != null){
 									AnamnesisChecksValue checksValue =AnamnesisChecksValue.findAnamnesisChecksValue(newChecksValue.getId());
 									if(checksValue!=null){
-										
 										updateChecksValue(checksValue, newChecksValue,anamnesisForm);
 									}else{
 										saveChecksValue(newChecksValue, anamnesisForm);
@@ -244,16 +609,20 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				}
 				throw e;
 			}
+			
+	
+			//patient.flush();
 			patient.merge();
+			patient.flush();
 		
 		} catch (Exception e){
-			e.printStackTrace();
 			if(dmzSyncExceptionType==null &&dmzSyncExceptionType.equals("")){
 				setDMZSyncExceptionTypeAndErrorMsg(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,e.getMessage());
 			}
-			throw new DMZSyncException(dmzSyncExceptionType,errorMsg);
+			
+			
+			throw new DMZSyncException(dmzSyncExceptionType,errorMsg,e);
 		}
-		
 	}
 	
 	/**
@@ -305,6 +674,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		data = data.replaceAll("\"_ref\"","\"ignoreMe\"");
 		data = data.replaceAll("\"iban\"","\"IBAN\"");
 		data = data.replaceAll("\"bic\"","\"BIC\"");
+//		data = data.replaceAll("\"description\":{","\"descriptions\":{");
 
 		return data;
 
@@ -371,24 +741,23 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			
 		}
 	}
-
+	
 	private class AnamnesisChecksTypeTransformet implements ObjectFactory {
 
 		public Object instantiate(ObjectBinder context, Object value,
 				Type targetType, Class targetClass) {
 			Integer valueI = (Integer) value;
 			if (valueI == 0) {
-				return AnamnesisCheckTypes.QUESTION_MULT_M;
-			} else if(valueI == 1){
-				return AnamnesisCheckTypes.QUESTION_MULT_S;
-			} else if(valueI == 2){
 				return AnamnesisCheckTypes.QUESTION_OPEN;
-			} else if(valueI == 4){
+			} else if(valueI == 1){
 				return AnamnesisCheckTypes.QUESTION_YES_NO;
-			}  else {
+			} else if(valueI == 2){
+				return AnamnesisCheckTypes.QUESTION_MULT_S;
+			} else if(valueI == 3){
+				return AnamnesisCheckTypes.QUESTION_MULT_M;
+			} else {
 				return null;
-			}
-			
+			}			
 		}
 	}
 	
@@ -415,14 +784,14 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 * Send data to the DMZ server
 	 * @throws DMZSyncException 
 	 */
-	protected void sendData(String json) throws DMZSyncException {
+	protected String sendData(String json,String url) throws DMZSyncException {
 
 		HttpClient httpClient = new HttpClient();
+		String ret = "";
+		//String hostAddress = getHostAddress();
 
-		String hostAddress = getHostAddress();
-
-	    String url = hostAddress + "/sp_portal/DataImportExport/importSP";
-	    //String url = hostAddress + "/DataImportExport/importSP";
+	    //String url = hostAddress + "/sp_portal/DataImportExport/importSP";
+	
 	    
 		PostMethod postMethod = new PostMethod(url);
 
@@ -434,6 +803,10 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		int statusCode = 0;
 		try {
 			statusCode = httpClient.executeMethod(postMethod);
+			//if(json.contains("osceDay")){
+				byte[] responseBody = postMethod.getResponseBody();
+			    ret = new String(responseBody);
+			//}
 		} catch (HttpException e) {
 			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,url+": "+e.getMessage());
 		} catch (IOException e1) {
@@ -442,8 +815,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
 		if (!(statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY)) {
 			System.err.println("field.");
-			return;
 		}
+		return ret;
 	}
 
 	/**

@@ -23,10 +23,10 @@ public class AnamnesisCheckIntegrationTest {
     	title.persist();
     	title.merge();
     	
-        AnamnesisCheck check0 = createAnamnesisCheck(14,null, "question1", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
-        AnamnesisCheck check1 = createAnamnesisCheck(15,null, "question2", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
-        AnamnesisCheck check2 = createAnamnesisCheck(16,null, "question3", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
-        AnamnesisCheck check3 = createAnamnesisCheck(17,null, "question4", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
+        AnamnesisCheck check0 = createAnamnesisCheck(14,null, "question1", null, null ,title);
+        AnamnesisCheck check1 = createAnamnesisCheck(15,null, "question2", null, null ,title);
+        AnamnesisCheck check2 = createAnamnesisCheck(16,null, "question3", null, null ,title);
+        AnamnesisCheck check3 = createAnamnesisCheck(17,null, "question4", null, null ,title);
                        
         check1.moveDown();
                 
@@ -45,10 +45,10 @@ public class AnamnesisCheckIntegrationTest {
     	title.persist();
     	title.merge();
     	
-        AnamnesisCheck check0 = createAnamnesisCheck(14,null, "question1", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
-        AnamnesisCheck check1 = createAnamnesisCheck(15,null, "question2", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
-        AnamnesisCheck check2 = createAnamnesisCheck(16,null, "question3", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
-        AnamnesisCheck check3 = createAnamnesisCheck(17,null, "question4", AnamnesisCheckTypes.QUESTION_TITLE, null ,title);
+        AnamnesisCheck check0 = createAnamnesisCheck(14,null, "question1", null, null ,title);
+        AnamnesisCheck check1 = createAnamnesisCheck(15,null, "question2", null, null ,title);
+        AnamnesisCheck check2 = createAnamnesisCheck(16,null, "question3", null, null ,title);
+        AnamnesisCheck check3 = createAnamnesisCheck(17,null, "question4", null, null ,title);
                        
         check1.moveUp();
                 

@@ -117,7 +117,7 @@ public class RoleAssignmentViewImpl extends Composite implements
 	@UiHandler("surveyImpBtn")
 	public void onSurveyImpBtnClicked(ClickEvent event) {
 		// TODO : import patient detail logic
-
+		delegate.surveyImpBtnClicked();
 	}
 
 	@UiHandler("autoAssignmentBtn")

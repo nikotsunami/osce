@@ -14,10 +14,16 @@ public class DMZSyncException extends Exception implements Serializable{
 
 	private String msg = "";
 	private String type = "";
-	
+
 	public DMZSyncException(String type,String msg){
 		this.msg = msg;
 		this.type = type;
+	}
+	
+	public DMZSyncException(String type,String msg, Throwable t){
+		this.msg = msg;
+		this.type = type;
+		initCause(t);
 	}	
 	
 	@Override
