@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListRequest;
@@ -115,6 +116,11 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 		this.widget = panel;
 		this.view = roomMaterialsView;
 		widget.setWidget(roomMaterialsView.asWidget());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (RoomMaterialsViewImpl)view);
+		//by spec
+		
 		setTable(view.getTable());
 
 		init();

@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
@@ -145,6 +146,10 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		this.view = roleScriptTemplateView;
 		widget.setWidget(roleScriptTemplateView.asWidget());
 
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (RoleScriptTemplateViewImpl)view);
+		//by spec
+		
 		// widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 

@@ -6,6 +6,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsP
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 
@@ -64,6 +66,10 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (AdministratorViewImpl)view);
+		//by spec
 		
 		init();
 

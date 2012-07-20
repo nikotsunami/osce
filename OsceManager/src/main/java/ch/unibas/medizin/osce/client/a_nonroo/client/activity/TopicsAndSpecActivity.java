@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationRequest;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -144,6 +145,9 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		this.view = topicsAndSpecView;
 		widget.setWidget(topicsAndSpecView.asWidget());
 			
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (TopicsAndSpecViewImpl)view);
+		//by spec
 		
 		setTable(view.getTable());
 		table.addColumnSortHandler(new ColumnSortEvent.Handler() {

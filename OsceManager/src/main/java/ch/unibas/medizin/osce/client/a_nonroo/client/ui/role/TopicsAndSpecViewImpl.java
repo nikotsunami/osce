@@ -8,6 +8,8 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -44,7 +46,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecView {
+public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecView, RecordChangeHandler {
 	
 	private static TopicsAndSpecViewUiBinder uiBinder = GWT
 			.create(TopicsAndSpecViewUiBinder.class);
@@ -308,4 +310,21 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 		return this.AddTextBox;		
 	}
 	// E Violation Changes Highlight
+	
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
+
 }

@@ -12,6 +12,8 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
@@ -53,7 +55,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class RoleViewImpl extends Composite implements RoleView {
+public class RoleViewImpl extends Composite implements RoleView, RecordChangeHandler {
 
 //	private static RoleViewUiBinder uiBinder = GWT
 //			.create(RoleViewUiBinder.class);
@@ -484,4 +486,20 @@ public class RoleViewImpl extends Composite implements RoleView {
 	}
 	//E Highlight onViolation
 	
+	// by spec
+		@Override
+		public void onRecordChange(RecordChangeEvent event) {
+			int pagesize = 0;
+
+			if (event.getRecordValue() == "ALL") {
+				pagesize = table.getRowCount();
+				OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+			} else {
+				pagesize = Integer.parseInt(event.getRecordValue());
+			}
+
+			table.setPageSize(pagesize);
+		}
+		// by spec
+
 }

@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
@@ -304,6 +305,11 @@ public class RoleActivity extends AbstractActivity implements
 
 		this.filterView=view.getFilter();
 		widget.setWidget(roleView.asWidget());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (RoleViewImpl)view);
+		//by spec
+		
 	//	final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		final RoleView systemStartView = new RoleViewImpl();
 		// spec start

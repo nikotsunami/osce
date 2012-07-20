@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -34,7 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author nikotsunami
  *
  */
-public class ClinicViewImpl extends Composite implements  ClinicView {
+public class ClinicViewImpl extends Composite implements  ClinicView, RecordChangeHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -238,4 +240,20 @@ public class ClinicViewImpl extends Composite implements  ClinicView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	// by spec
+		@Override
+		public void onRecordChange(RecordChangeEvent event) {
+			int pagesize = 0;
+
+			if (event.getRecordValue() == "ALL") {
+				pagesize = table.getRowCount();
+				OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+			} else {
+				pagesize = Integer.parseInt(event.getRecordValue());
+			}
+
+			table.setPageSize(pagesize);
+		}
+		// by spec
 }

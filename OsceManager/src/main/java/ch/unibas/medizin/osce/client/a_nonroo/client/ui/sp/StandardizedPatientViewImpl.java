@@ -15,12 +15,16 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -40,7 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author nikotsunami
  *
  */
-public class StandardizedPatientViewImpl extends Composite implements  StandardizedPatientView {
+public class StandardizedPatientViewImpl extends Composite implements  StandardizedPatientView, RecordChangeHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -454,4 +458,20 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		return searchBox;
 	}
 
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+
+	}
+	// by spec
 }
