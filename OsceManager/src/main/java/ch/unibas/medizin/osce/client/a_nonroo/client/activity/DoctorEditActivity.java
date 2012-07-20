@@ -2,13 +2,16 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorEditViewImpl;
@@ -35,6 +38,7 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class DoctorEditActivity extends AbstractActivity implements
@@ -50,6 +54,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 	private DoctorDetailsPlace place;
 	private DoctorProxy doctorProxy;
+	OfficeEditView officeView;
 	//private Operation operation;	
 
 	private RequestFactoryEditorDriver<DoctorProxy,DoctorEditViewImpl> editorDriver;
@@ -104,7 +109,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		this.widget = panel;
 		this.view = doctorEditView;
 		
-		OfficeEditView officeView = new OfficeEditViewImpl();
+		officeView= new OfficeEditViewImpl();
 		view.getOfficePanel().add(officeView);
 		officeDriver = officeView.createEditorDriver();
 
@@ -216,14 +221,28 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		// office data is read from view (data save is cascaded, therefore office has to be updated before doctor is saved!)
 		officeDriver.flush();
 		
-		editorDriver.flush().fire(new Receiver<Void>() {
+		// Highlight onViolation
+		Map<String, Widget> tempMap=new HashMap<String, Widget>();
+		
+		
+		if(view.getSelectedTab()==0)
+		{
+			Log.info("Map Size: " + view.getDoctorMap().size());
+			tempMap=view.getDoctorMap();
+		}
+		else
+		{
+			Log.info("Map Size: " +officeView.getOfficeMap().size());
+			tempMap=officeView.getOfficeMap();
+		}
+		editorDriver.flush().fire(new OSCEReceiver<Void>(tempMap) {
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Doctor successfully saved.");
 
 				//saveOffice();
 				save = true;
-				
 				placeController.goTo(new DoctorDetailsPlace(doctor.stableId(), Operation.NEW));
 			}
 
@@ -232,7 +251,8 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 				Log.error(error.getMessage());
 
 			}
-			@Override
+			// Highlight onViolation
+			/*@Override
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
@@ -242,7 +262,8 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 				Log.warn(" in Doctor -" + message);
 
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
-			}
+			}*/
+			// E Highlight onViolation
 		}); 
 	}
 	

@@ -5,12 +5,11 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -178,8 +177,10 @@ NationalityView.Presenter, NationalityView.Delegate {
 		NationalityRequest nationReq = requests.nationalityRequest();
 		NationalityProxy nation = nationReq.create(NationalityProxy.class);
 		nation.setNationality(name);
-		
-		nationReq.persist().using(nation).fire(new Receiver<Void>(){
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getNationalityNewMap().size());
+		nationReq.persist().using(nation).fire(new OSCEReceiver<Void>(view.getNationalityNewMap()){
+		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
 				init();
@@ -189,7 +190,9 @@ NationalityView.Presenter, NationalityView.Delegate {
 	
 	@Override
 	public void deleteClicked(NationalityProxy nation) {
-		requests.nationalityRequest().remove().using(nation).fire(new Receiver<Void>() {
+		// Highlight onViolation
+		requests.nationalityRequest().remove().using(nation).fire(new OSCEReceiver<Void>() {
+		// Highlight onViolation
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
 				init();
@@ -215,10 +218,15 @@ NationalityView.Presenter, NationalityView.Delegate {
 		NationalityRequest nationrequest = requests.nationalityRequest();
 		nation = nationrequest.edit(nation);
 		nation.setNationality(value);
-		nationrequest.persist().using(nation).fire(new OSCEReceiver<Void>() {
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getNationalityMap().size());
+		nationrequest.persist().using(nation).fire(new OSCEReceiver<Void>(view.getNationalityMap()) 
+		// E Highlight onViolation
+		{
 
 			@Override
 			public void onSuccess(Void response) {
+				((EditPopViewImpl)view.getEditPopupView()).hide();
 				init();
 				
 			}

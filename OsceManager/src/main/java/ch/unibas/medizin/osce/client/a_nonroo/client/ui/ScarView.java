@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
@@ -34,4 +36,8 @@ public interface ScarView extends IsWidget{
     
 //	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+    
+ // Highlight onViolation
+    Map getScarMap();
+ // E Highlight onViolation
 }

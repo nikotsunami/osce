@@ -2,6 +2,9 @@
 
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
 //import ch.unibas.medizin.osce.client.shared.Gender;
@@ -37,6 +40,10 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 
 	private Delegate delegate;
 
+	// Highlight onViolation
+	Map<String, Widget> descriptionMap;
+	// E Highlight onViolation
+	
 	public DescriptionEditViewImpl() {
 		description = new RichTextArea();
 		description.setSize("100%", "14em");
@@ -44,6 +51,11 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 		toolbar.setWidth("100%");
 		initWidget(BINDER.createAndBindUi(this));
 //		toolbar.setRichText(description);
+		
+		// Highlight onViolation
+		descriptionMap=new HashMap<String, Widget>();
+		descriptionMap.put("description", description);
+		// E Highlight onViolation
 	}
 
 	interface Binder extends UiBinder<Widget, DescriptionEditViewImpl> {
@@ -73,5 +85,11 @@ public class DescriptionEditViewImpl extends Composite implements DescriptionEdi
 	public void setDescriptionContent(String description) {
 		// TODO Auto-generated method stub
 		this.description.setHTML(description);
+	}
+
+	@Override
+	public Map getDescriptionMap() {
+		// TODO Auto-generated method stub
+		return this.descriptionMap;
 	}
 }

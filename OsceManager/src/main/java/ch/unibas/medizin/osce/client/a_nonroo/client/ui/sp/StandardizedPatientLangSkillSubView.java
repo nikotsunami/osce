@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -22,4 +23,8 @@ public interface StandardizedPatientLangSkillSubView {
     
 	void setDelegate(Delegate delegate);
 	void setLanguagePickerValues(List<SpokenLanguageProxy> values);
+	
+	// Highlight onViolation
+	Map getLanguageSkillMap();
+	// E Highlight onViolation
 }

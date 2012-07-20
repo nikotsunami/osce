@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Collection;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
@@ -23,4 +24,8 @@ public interface StandardizedPatientBankaccountEditSubView extends IsWidget {
 	RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> createEditorDriver();
 
 	void setCountryPickerValues(Collection<NationalityProxy> values);
+	
+	// Highlight onViolation
+	Map getBankAccountMap();
+	// E Highlight onViolation
 }

@@ -1,8 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -66,6 +68,10 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 
 	private boolean addBoxesShown = true;
 
+	// Highlight onViolation
+	Map<String, Widget> anemnasisFormMap;
+	// E Highlight onViolation
+	
 	public StandardizedPatientScarSubViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -76,6 +82,12 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		scarAddButton.setText(constants.addTrait());
+		
+		// Highlight onViolation
+		anemnasisFormMap=new HashMap<String, Widget>();
+		anemnasisFormMap.put("scar", scarBox);
+		// E Highlight onViolation
+		
 	}
 
 	@UiHandler("scarAddButton")
@@ -207,4 +219,13 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		scarBox.setValue(values.get(0));
 		scarBox.setAcceptableValues(values);
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getAnemnasisFormMap() 
+	{		
+		return this.anemnasisFormMap;
+	}
+	// E Highlight onViolation
+
 }

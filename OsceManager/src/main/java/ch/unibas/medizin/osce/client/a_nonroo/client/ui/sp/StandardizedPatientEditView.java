@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
@@ -61,4 +62,10 @@ public interface StandardizedPatientEditView extends IsWidget {
 	
 	//String getPatientId();
 	//void setPatientId(String patientId);
+	
+	// Highlight onViolation
+	Map getStandardizedPatientMap();
+	int getSelectedTab();
+	// E Highlight onViolation
+
 }

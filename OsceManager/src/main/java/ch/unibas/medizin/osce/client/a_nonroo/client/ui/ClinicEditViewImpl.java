@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
@@ -69,6 +71,11 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 	@UiField
 	SpanElement labelCity;
 
+	// Highlight onViolation
+		Map<String, Widget> clinicMap;		
+		ClinicEditView clinicView;
+	// E Highlight onViolation
+	
 	public ClinicEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		
@@ -94,6 +101,17 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 				}
 			}
 		});
+		
+		// Highlight onViolation
+		clinicView=this;
+		
+		clinicMap=new HashMap<String, Widget>();
+		clinicMap.put("name", name);
+		clinicMap.put("street", street);
+		clinicMap.put("city", city);
+		clinicMap.put("postalCode", postalCode);
+		clinicMap.put("doctors", doctors);
+		// E Highlight onViolation
 	}
 
 	@Override
@@ -174,4 +192,19 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 		return clinicPanel.getTabBar().getSelectedTab();
 	}
 
+	// Highlight onViolation
+
+				@Override
+				public ClinicEditView getClinicView() {
+					// TODO Auto-generated method stub
+					return this.clinicView;
+				}
+
+				@Override
+				public Map getClinicMap() {
+					// TODO Auto-generated method stub
+					return this.clinicMap;
+				}
+				
+	// E Highlight onViolation				
 }

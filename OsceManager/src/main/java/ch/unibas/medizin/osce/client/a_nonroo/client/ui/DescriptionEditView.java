@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -25,4 +27,8 @@ public interface DescriptionEditView extends IsWidget {
 	String getDescriptionContent();
 
 	void setDescriptionContent(String description);
+	
+	// Highlight onViolation
+	Map getDescriptionMap();
+	// E Highlight onViolation
 }

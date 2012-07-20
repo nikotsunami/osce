@@ -4,8 +4,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -108,6 +110,13 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+				Map<String, Widget> professionMap;
+				Map<String, Widget> professionNewMap;
+				ProfessionView profView;
+			// E Highlight onViolation
+				
 	public ProfessionViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ProfessionProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -126,6 +135,15 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addProfession());
+		
+		// Highlight onViolation
+		profView=this;
+		
+		professionNewMap=new HashMap<String, Widget>();
+		professionNewMap.put("profession",newProfession);
+		professionNewMap.put("standardizedpatients",newProfession);
+	
+		// E Highlight onViolation
 	}
 
 	public String[] getPaths() {
@@ -303,22 +321,34 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 			((EditPopViewImpl)editPopView).getEditTextbox().setValue(proxy.getProfession());
 			RootPanel.get().add(((EditPopViewImpl)editPopView));
 			
+			// Highlight onViolation
+						professionMap=new HashMap<String, Widget>();
+						professionMap.put("profession", ((EditPopViewImpl)editPopView).getEditTextbox());
+						professionMap.put("standardizedpatients", ((EditPopViewImpl)editPopView).getEditTextbox());
+						// E Highlight onViolation
+			
 			editPopView.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent event) {
 					
-					if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
+					// Highlight onViolation
+
+					/*if (((EditPopViewImpl)editPopView).getEditTextbox().getValue().equals(""))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
 					}
 					else
-					{
+					{*/
+					// E Highlight onViolation
 						delegate.updateClicked(proxy, ((EditPopViewImpl)editPopView).getEditTextbox().getValue());
 						((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
-						((EditPopViewImpl)editPopView).hide(true);
-					}
+						
+					// Highlight onViolation
+						//((EditPopViewImpl)editPopView).hide(true);
+					//}
+					// E Highlight onViolation
 				}
 			});
 			
@@ -334,4 +364,32 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView {
 			((EditPopViewImpl)editPopView).setPopupPosition(left-150, top - 50);
 			((EditPopViewImpl)editPopView).show();
 		}
+		
+		
+		// Highlight onViolation
+
+		@Override
+		public ProfessionView getProfessionView() {
+			// TODO Auto-generated method stub
+			return this.profView;
+		}
+
+		@Override
+		public EditPopView getEditPopView() {
+			// TODO Auto-generated method stub
+			return this.editPopView;
+		}
+		
+		@Override
+		public Map getProfessionMap() {
+			return this.professionMap;
+		}
+		
+		@Override
+		public Map getNewLanguageMap() {
+			return this.professionNewMap;
+		}
+		// E Highlight onViolation
+		
+		
 }

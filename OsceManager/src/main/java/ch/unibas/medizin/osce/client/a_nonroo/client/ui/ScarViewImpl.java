@@ -5,8 +5,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -18,6 +20,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
@@ -88,6 +91,7 @@ public class ScarViewImpl extends Composite implements ScarView {
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
+		Log.info("CAll newButtonClicked");
 		delegate.newClicked(traitTypeBox.getValue(), newBodypart.getValue());
 		newBodypart.setValue("");
 	}
@@ -103,6 +107,11 @@ public class ScarViewImpl extends Composite implements ScarView {
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+	Map<String, Widget> scarMap;
+	// E Highlight onViolation
+	
 	public ScarViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -123,6 +132,13 @@ public class ScarViewImpl extends Composite implements ScarView {
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addTrait());
+		
+		// Highlight onViolation
+		scarMap=new HashMap<String, Widget>();
+		scarMap.put("bodypart",newBodypart );
+		scarMap.put("traitType", traitTypeBox);
+		// E Highlight onViolation
+		
 	}
 
 	public String[] getPaths() {
@@ -237,4 +253,12 @@ public class ScarViewImpl extends Composite implements ScarView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	// Highlight onViolation
+
+@Override
+public Map getScarMap() 
+{	
+	return this.scarMap;
+}
+// E Highlight onViolation
 }

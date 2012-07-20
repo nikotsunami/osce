@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -21,4 +23,9 @@ public interface OfficeEditView extends IsWidget {
 	}
 
 	RequestFactoryEditorDriver<OfficeProxy, OfficeEditViewImpl> createEditorDriver();
+	
+	// Highlight onViolation
+		Map getOfficeMap();
+	// E Highlight onViolation
+
 }

@@ -2,7 +2,9 @@
 
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 
@@ -62,9 +64,19 @@ public class AdministratorEditViewImpl extends Composite implements Administrato
 
 	private Presenter presenter;
 
+	// Highlight onViolation
+	Map<String, Widget> administratorMap;
+	// E Highlight onViolation
 	
 	public AdministratorEditViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		
+		// Highlight onViolation
+		administratorMap=new HashMap<String, Widget>();
+		administratorMap.put("name", name);
+		administratorMap.put("preName", preName);
+		administratorMap.put("email", email);
+		// E Highlight onViolation
 	}
 
 
@@ -135,5 +147,12 @@ public class AdministratorEditViewImpl extends Composite implements Administrato
 	public void setPresenter(Presenter doctorEditActivity) {
 		this.presenter=doctorEditActivity;
 	}
-	
+
+	// Highlight onViolation
+	@Override
+	public Map getAdministratorMap() 
+	{
+		return this.administratorMap;
+	}
+	// E Highlight onViolation
 }
