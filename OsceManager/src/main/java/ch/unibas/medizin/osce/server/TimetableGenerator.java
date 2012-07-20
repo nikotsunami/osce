@@ -130,17 +130,13 @@ public class TimetableGenerator {
 	 * Calculate break posts for each rotation at each parcour.
 	 */
 	private void calcAddBreakPosts() {
-//		log.info("inside calcAddBreakPosts");
-		
-//		log.info(numberPosts + " " + numberBreakPosts);
-		
 		// add break posts to regular posts
 		int nPosts = numberPosts + numberBreakPosts;
 		
-//		log.info("nPosts: "+nPosts);
-		
 		int maxRotations = numberStudents / (nPosts * numberParcours);
 		
+//		log.info(numberPosts + " " + numberBreakPosts);
+//		log.info("nPosts: "+nPosts);
 //		log.info("maxRotations: "+maxRotations);
 		
 		// init all rotations of parcours with number of break posts
@@ -196,7 +192,7 @@ public class TimetableGenerator {
 	
 	public void calcTimeNeeded() {
 		numberDays = (int) Math.ceil((double) rotations[0].size() / (double) rotationsPerDay);
-		log.info(numberDays);
+//		log.info(numberDays);
 		
 		boolean numberDaysVerified = false;
 		
@@ -205,8 +201,6 @@ public class TimetableGenerator {
 			int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
 			
 			rotationsByDay.clear();
-			
-			log.info("max rotations: " + rotationsMax);
 			
 			for(int i = 0; i < numberDays; i++) {
 				if(i == numberDays - 1 && numberDays > 1)
@@ -222,7 +216,7 @@ public class TimetableGenerator {
 			// days
 			for(int i = 0; i < numberDays; i++) {
 				slotsSinceLastSimpatChange = 0;
-				log.info("day " + i + " (rotations: " + rotationsByDay.get(i) + ")");
+				log.info("day " + i + " (rotations: " + rotationsByDay.get(i) + ") / rotationsMax: " + rotationsMax);
 				
 				// rotations
 				for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
@@ -359,9 +353,11 @@ public class TimetableGenerator {
 		if(days.size() == 1) {
 			OsceDay osceDay = days.iterator().next();
 			
+			log.info("rotations for day 0:" + rotationsByDay.get(0));
+			
 			int[] rotSeq = new int[2];
-			rotSeq[0] = rotationsPerDay / 2;
-			rotSeq[1] = rotationsPerDay - rotSeq[0];
+			rotSeq[0] = rotationsByDay.get(0) / 2;
+			rotSeq[1] = rotationsByDay.get(0) - rotSeq[0];
 			
 			// create sequence for each half day
 			for(int i = 0; i < 2; i++) {
@@ -558,15 +554,17 @@ public class TimetableGenerator {
 		Calendar dayCal = Calendar.getInstance();
 		dayCal.setTime(day0.getTimeStart());
 		
-		rotationsByDay.set(0, rotationsPerDay);
+		int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
+		
+		rotationsByDay.set(0, rotationsMax);
 		
 		// number of rotations we still have to assign to further days
-		int rotationsTotal = rotations[0].size() - rotationsPerDay;
+		int rotationsLeft = rotations[0].size() - rotationsMax;
 		
-		if(numberDays > 1) {
+		if(numberDays > 1 && rotationsLeft > 0) {
 			// create new days and corresponding sequences and parcours
 			for(int i = 1; i < numberDays; i++) {
-				rotationsByDay.set(i, rotationsTotal);
+				rotationsByDay.set(i, rotationsLeft);
 				dayCal.add(Calendar.DATE, i);
 				
 				OsceDay day = new OsceDay();
@@ -578,7 +576,7 @@ public class TimetableGenerator {
 				day.persist();
 				days.add(day);
 				
-				rotationsTotal -= rotationsPerDay;
+				rotationsLeft -= rotationsPerDay;
 			}
 		}
 		

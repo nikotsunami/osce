@@ -159,7 +159,6 @@ public class Osce {
     public static Boolean generateAssignments(Long osceId) {
     	TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
     	System.out.println(optGen.toString());
-    	log.info(optGen.toString());
     	
     	log.info("calling createAssignments()...");
     	
