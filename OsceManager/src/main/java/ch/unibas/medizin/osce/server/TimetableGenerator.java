@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.aspectj.weaver.patterns.ConcreteCflowPointcut.Slot;
 
 import ch.unibas.medizin.osce.domain.*;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -69,10 +70,10 @@ public class TimetableGenerator {
 			e.printStackTrace();
 		}
 		
-		int numberPosts = osce.getOscePostBlueprints().size();
+		int numberPostsWithRoom = osce.numberPostsWithRooms();
 		
 		// max number of courses (decrease while looking for optimum)
-		int numberParcoursMax = osce.getNumberRooms() / numberPosts;
+		int numberParcoursMax = osce.getNumberRooms() / numberPostsWithRoom;
 		
 		TimetableGenerator ttGen;
 		TimetableGenerator optGen = null;
@@ -80,9 +81,9 @@ public class TimetableGenerator {
 		
 		for(int nParcours = numberParcoursMax; nParcours >= 1; nParcours--) {
 			
-			// iterate until (numberPosts - 1) since a number of breaks equal to
-			// numberPosts would result in an additional rotation.
-			for(int breakPosts = 0; breakPosts <= (numberPosts - 1); breakPosts++) {
+			// iterate until (numberPosts - number of posts with post_type=BREAK).
+			// NOTE: a number of breaks equal to numberPosts would result in an additional rotation.
+			for(int breakPosts = 0; breakPosts <= 0; breakPosts++) {
 //				System.out.println("optimize for breakPosts = " + breakPosts + ", nParcours = " + nParcours);
 //				log.info("optimize for breakPosts = " + breakPosts + ", nParcours = " + nParcours);
 				ttGen = new TimetableGenerator(osce, breakPosts, nParcours);
@@ -97,45 +98,13 @@ public class TimetableGenerator {
 			}
 		}
 		
+		log.info("optimal timetable");
+		log.info("===============================");
+		optGen.calcTimeNeeded();
+		
 		return optGen;
 	}
 	
-	/**
-	 * Check OSCE for valid information set needed to omptimize
-	 * 
-	 * @param osce
-	 */
-	private static void checkOsce(Osce osce) throws Exception {
-		String errString = "missing information: %s";
-		
-		if(osce.getMaxNumberStudents() == null || osce.getMaxNumberStudents() <= 0)
-			throw new Exception(String.format(errString, "maximum number of students"));
-		
-		if(osce.getNumberRooms() == null || osce.getNumberRooms() <= 0)
-			throw new Exception(String.format(errString, "number of rooms available"));
-		
-		if(osce.getPostLength() == null || osce.getPostLength() <= 0)
-			throw new Exception(String.format(errString, "post length"));
-		
-		if(osce.getShortBreak() == null || osce.getShortBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of short break (after a post)"));
-		
-		if(osce.getShortBreakSimpatChange() == null || osce.getShortBreakSimpatChange() <= 0)
-			throw new Exception(String.format(errString, "duration of simpat change break (when a change of simpat is needed WITHIN rotation)"));
-		
-		if(osce.getMiddleBreak() == null || osce.getMiddleBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of middle break (after a rotation)"));
-		
-		if(osce.getLongBreak() == null || osce.getLongBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of long break (when a change of simpat is needed AFTER rotation)"));
-		
-		if(osce.getLunchBreak() == null || osce.getLunchBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of lunch break"));
-		
-		if(!(osce.getOsce_days().size() > 0))
-			throw new Exception(String.format(errString, "no OsceDay for this Osce defined"));
-	}
-
 	@SuppressWarnings("unchecked")
 	public TimetableGenerator(Osce osce, int nBreakPosts, int nParcours) {
 		
@@ -149,10 +118,7 @@ public class TimetableGenerator {
 
 		osceDayRef = osce.getOsce_days().iterator().next();
 		numberMinsDayMax = (int) (osceDayRef.getTimeEnd().getTime() - osceDayRef.getTimeStart().getTime()) / (60 * 1000);
-		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) /
-							(numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak() +
-									osce.getLongBreak() / numberSlotsUntilSPChange +
-									osce.getMiddleBreak());
+		rotationsPerDay = 1;
 		
 		rotations = new ArrayList[nParcours];
 		for(int i = 0; i < nParcours; i++) {
@@ -164,11 +130,18 @@ public class TimetableGenerator {
 	 * Calculate break posts for each rotation at each parcour.
 	 */
 	private void calcAddBreakPosts() {
+//		log.info("inside calcAddBreakPosts");
+		
+//		log.info(numberPosts + " " + numberBreakPosts);
 		
 		// add break posts to regular posts
-		int nPosts = numberPosts + numberBreakPosts - osce.numberPostsNotPossibleStart();
+		int nPosts = numberPosts + numberBreakPosts;
+		
+//		log.info("nPosts: "+nPosts);
 		
 		int maxRotations = numberStudents / (nPosts * numberParcours);
+		
+//		log.info("maxRotations: "+maxRotations);
 		
 		// init all rotations of parcours with number of break posts
 		for(int i = 0; i < numberParcours; i++) {
@@ -214,80 +187,99 @@ public class TimetableGenerator {
 			}
 		}
 		
-//		numberDays = (int) Math.ceil((double) timeNeeded / (double) NUMBER_MINS_DAY_MAX);
-//		numberDays = (int) Math.ceil((double) rotations[0].size() / (double) rotationsPerDay);
+		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) /
+							(numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak() +
+							osce.getLongBreak() / numberSlotsUntilSPChange +
+							osce.getMiddleBreak());
+//		log.info("rotations per day: " + rotationsPerDay);
 	}
 	
 	public void calcTimeNeeded() {
 		numberDays = (int) Math.ceil((double) rotations[0].size() / (double) rotationsPerDay);
-//		System.out.println(numberDays);
+		log.info(numberDays);
 		
-		int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
-//		System.out.println("max rotations: " + rotationsMax);
+		boolean numberDaysVerified = false;
 		
-		for(int i = 0; i < numberDays; i++) {
-			if(i == numberDays - 1 && numberDays > 1)
-				rotationsByDay.add(i, (rotations[0].size() % rotationsPerDay));
-			else
-				rotationsByDay.add(i, rotationsMax);
-		}
-		
-		timeNeeded = 0;
-		int timeNeededCurrentDay = 0;
-		int slotsSinceLastSimpatChange = 0;
-		
-		// days
-		for(int i = 0; i < numberDays; i++) {
-			slotsSinceLastSimpatChange = 0;
-//			System.out.println("day " + i + " (rotations: " + rotationsByDay.get(i) + ")");
+		while(numberDaysVerified == false) {
 			
-			// rotations
-			for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
-				int numberBreakPostsThisRotation = rotations[0].get(j);
-				
-				// add break posts to regular posts
-				int nPostsGeneral = numberPosts + numberBreakPosts - osce.numberPostsNotPossibleStart();
-				int nPostsThisRotation = nPostsGeneral + numberBreakPostsThisRotation;
-				
-//				System.out.println("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ")");
-				
-				// posts
-				for(int k = 0; k < nPostsThisRotation; k++) {
-					timeNeededCurrentDay += postLength;
-					
-					if(simpatChangeWithinSlots(slotsSinceLastSimpatChange)) {
-						slotsSinceLastSimpatChange = 0;
-						timeNeededCurrentDay += osce.getShortBreakSimpatChange();
-//						System.out.print("  short break for SP change");
-					} else {
-						if(k < nPostsThisRotation - 1)
-							timeNeededCurrentDay += osce.getShortBreak();
-					}
-					
-					slotsSinceLastSimpatChange++;
-				}
-				
-				// additional breaks
-				if(j < rotations[0].size() - 1) {
-					if(lunchBreakNeeded((j + 1) % rotationsMax)) {
-						slotsSinceLastSimpatChange = 0;
-						timeNeededCurrentDay += osce.getLunchBreak();
-//						System.out.print("  lunch break");
-					} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1))) {
-						slotsSinceLastSimpatChange = 0;
-						timeNeededCurrentDay += osce.getLongBreak();
-//						System.out.print("  long break");
-					} else {
-						timeNeededCurrentDay += osce.getMiddleBreak();
-//						System.out.print("  middle break");
-					}
-					System.out.println();
-				}
+			int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
+			
+			rotationsByDay.clear();
+			
+			log.info("max rotations: " + rotationsMax);
+			
+			for(int i = 0; i < numberDays; i++) {
+				if(i == numberDays - 1 && numberDays > 1)
+					rotationsByDay.add(i, (rotations[0].size() % rotationsPerDay));
+				else
+					rotationsByDay.add(i, rotationsMax);
 			}
 			
-			timeNeededByDay.add(i, timeNeededCurrentDay);
+			timeNeeded = 0;
+			int timeNeededCurrentDay = 0;
+			int slotsSinceLastSimpatChange = 0;
 			
-			timeNeeded += timeNeededCurrentDay;
+			// days
+			for(int i = 0; i < numberDays; i++) {
+				slotsSinceLastSimpatChange = 0;
+				log.info("day " + i + " (rotations: " + rotationsByDay.get(i) + ")");
+				
+				// rotations
+				for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
+					int numberBreakPostsThisRotation = rotations[0].get(j);
+					
+					// add break posts to regular posts
+					int nPostsGeneral = numberPosts + numberBreakPosts;
+					int nPostsThisRotation = nPostsGeneral + numberBreakPostsThisRotation;
+					
+					log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ")");
+					
+					// posts
+					for(int k = 0; k < nPostsThisRotation; k++) {
+						timeNeededCurrentDay += postLength;
+						
+						if(simpatChangeWithinSlots(slotsSinceLastSimpatChange)) {
+							slotsSinceLastSimpatChange = 0;
+							timeNeededCurrentDay += osce.getShortBreakSimpatChange();
+	//						System.out.print("  short break for SP change");
+						} else {
+							if(k < nPostsThisRotation - 1)
+								timeNeededCurrentDay += osce.getShortBreak();
+						}
+						
+						slotsSinceLastSimpatChange++;
+					}
+					
+					// additional breaks
+					if(j < rotations[0].size() - 1) {
+						if(lunchBreakNeeded((j + 1) % rotationsMax)) {
+							slotsSinceLastSimpatChange = 0;
+							timeNeededCurrentDay += osce.getLunchBreak();
+	//						System.out.print("  lunch break");
+						} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1))) {
+							slotsSinceLastSimpatChange = 0;
+							timeNeededCurrentDay += osce.getLongBreak();
+	//						System.out.print("  long break");
+						} else {
+							timeNeededCurrentDay += osce.getMiddleBreak();
+	//						System.out.print("  middle break");
+						}
+					}
+				}
+				
+				timeNeededByDay.add(i, timeNeededCurrentDay);
+				
+				timeNeeded += timeNeededCurrentDay;
+			}
+			
+			// see whether calculated time fits into the time available of first day - do another round if not
+			int numberDays2 = (int) Math.ceil((double) timeNeeded / (double) numberMinsDayMax);
+			if(numberDays == 1 && numberDays < numberDays2) {
+				numberDays = numberDays2;
+				rotationsPerDay--;
+			} else {
+				numberDaysVerified = true;
+			}
 		}
 	}
 	
@@ -308,11 +300,11 @@ public class TimetableGenerator {
 		sb.append(" students: " + numberStudents);
 		sb.append(" posts: " + numberPosts);
 		sb.append(" post length (min): " + postLength + "\n");
+		sb.append("max number of minutes per day: " + numberMinsDayMax + "\n");
 		sb.append("number of required days: " + numberDays + "\n");
 		sb.append("max number of rotations per parcour (per day): " + rotationsPerDay + "\n");
-		sb.append("start time: "+osceDay.getTimeStart()+"\n");
-		sb.append("end time: "+osceDay.getTimeEnd()+"\n");
-		sb.append("diff in minutes: "+numberMinsDayMax+"\n");
+		sb.append("start time first day: "+osceDay.getTimeStart()+"\n");
+		sb.append("end time first day: "+osceDay.getTimeEnd()+"\n");
 		sb.append("--------------------------------------\n");
 
 		sb.append("number of parcours: " + numberParcours + "\n");
@@ -330,7 +322,7 @@ public class TimetableGenerator {
 				while(it.hasNext()) {
 					int slots = it.next();
 					sb.append(slots + " ");
-					courseSlotsTotal += numberPosts + slots - osce.numberPostsNotPossibleStart();
+					courseSlotsTotal += numberPosts + slots;
 				}
 				sb.append("\n        total number of slots in parcour: " + courseSlotsTotal +  "\n");
 				
@@ -361,7 +353,7 @@ public class TimetableGenerator {
 		removeOldScaffold();
 		
 		Set<OsceDay> days = insertOsceDays();
-		Set<OsceSequence> osceSequences = new HashSet<OsceSequence>();
+		List<OsceSequence> osceSequences = new ArrayList<OsceSequence>();
 		
 		// only one day --> seq A in the morning, seq B in the afternoon
 		if(days.size() == 1) {
@@ -477,7 +469,7 @@ public class TimetableGenerator {
 		if(firstDay != null)
 		{
 			log.info("First Day not null : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());						
-			Set<OsceSequence> setOsceSeq = firstDay.getOsceSequences();
+			List<OsceSequence> setOsceSeq = firstDay.getOsceSequences();
 			Iterator<OsceSequence> itOsceSeq = setOsceSeq.iterator();
 			//firstDay.getOsceSequences().removeAll(setOsceSeq);			
 			while(itOsceSeq.hasNext())
@@ -606,14 +598,6 @@ public class TimetableGenerator {
 		
 		List<OsceDay> days = new ArrayList<OsceDay>(osce.getOsce_days());
 		
-		// sort days
-		Collections.sort(days, new Comparator<OsceDay>() {
-			public int compare(OsceDay day1, OsceDay day2) {
-				return (int) (day1.getTimeStart().getTime() - day2.getTimeStart().getTime());
-			}
-
-		});
-		
 		// get posts (sorted by sequenceNumber)
 		List<OscePostBlueprint> posts = osce.getOscePostBlueprints();
 		
@@ -630,7 +614,6 @@ public class TimetableGenerator {
 		
 		// iterate over all days
 		Iterator<OsceDay> itDays = days.iterator();
-//		OsceDay prevDay = null;
 		while (itDays.hasNext()) {
 			OsceDay osceDay = (OsceDay) itDays.next();
 			
@@ -640,19 +623,17 @@ public class TimetableGenerator {
 			
 			// iterate over sequences ("A", "B", etc.)
 			Iterator<OsceSequence> itSeq = osceDay.getOsceSequences().iterator();
-//			OsceSequence prevSequence = null;
 			while (itSeq.hasNext()) {
 				OsceSequence osceSequence = (OsceSequence) itSeq.next();
 				
-				System.out.println("===============================");
-				System.out.println("sequence " + osceSequence.getLabel());
-				System.out.println("===============================");
+//				System.out.println("===============================");
+//				System.out.println("sequence " + osceSequence.getLabel());
+//				System.out.println("===============================");
 				
 				// number of rotations for current sequence (valid for all parcours in this sequence)
 				int numberRotations = osceSequence.getNumberRotation();
 				
 				// arrays only need to be 1 dim since each course is isolated from each other
-//				Assignment[] exaAss = new Assignment[numberPosts];
 				Assignment[] simAss = new Assignment[numberPosts];
 				
 				Date parcourStartTime = sequenceStartTime;
@@ -663,40 +644,50 @@ public class TimetableGenerator {
 				while (itParc.hasNext()) {
 					Course course = (Course) itParc.next();
 					
-					System.out.println("-------------------------------");
-					System.out.println("parcour " + course.getColor());
-					System.out.println("-------------------------------");
+//					System.out.println("-------------------------------");
+//					System.out.println("parcour " + course.getColor());
+//					System.out.println("-------------------------------");
 					
 					postsSinceSimpatChange = 0;
-					
-					// flag to define which room-assignment to take for double posts
-					boolean useAltOscePostRoom = false;
 					
 					// used for automatic simpat assignment (see IFS constraints for details)
 					int simpatSequenceNumber = 1;
 					
 					Date rotationStartTime = parcourStartTime;
 					
+					// flag to define which room-assignment to take for double posts (this flag is
+					// switched whenever a room-assignment for a double-post is inserted in order to avoid overlapping)
+					boolean useFirstPartOfDoublePost = false;
+					
+					boolean earlyStartFirst = false;
+					
 					// create assignments for rotations (given by sequence)
 					for(int currRotationNumber = rotationOffset; currRotationNumber < (rotationOffset + numberRotations); currRotationNumber++) {
 						int numberBreakPosts = rotations[parcourIndex].get(currRotationNumber);
 						int numberSlotsTotal = posts.size() + numberBreakPosts;
 						
-						System.out.println("rotation "+(currRotationNumber - rotationOffset + 1)+"/"+numberRotations+" (total rotation: "+currRotationNumber+"/"+(rotationOffset + numberRotations - 1)+"), numberBreakPosts: "+numberBreakPosts+", numberSlotsTotal: "+numberSlotsTotal);
+						Set<Assignment> assThisRotation = new HashSet<Assignment>();
 						
+//						System.out.println("rotation "+(currRotationNumber - rotationOffset + 1)+"/"+numberRotations+" (total rotation: "+currRotationNumber+"/"+(rotationOffset + numberRotations - 1)+"), numberBreakPosts: "+numberBreakPosts+", numberSlotsTotal: "+numberSlotsTotal);
+						
+						// reset to the point in time where the rotation starts (necessary since
+						// we increase the time while going through all posts of a rotation)
 						time = rotationStartTime;
 						
 						// get max slots from current rotation (defines when next rotation is about to
 						// start since rotations need to start at the same time!)
 						int maxPostsCurrentRotation = numberPosts + getMaxBreakPostsCurrentRotation(osceSequence.getCourses(), currRotationNumber);
 						
-						boolean changeSimpatDuringRotation = simpatChangeWithinSlots(numberSlotsTotal);
-						boolean changeSimpatAfterRotation = simpatChangeWithinSlots(postsSinceSimpatChange + 2*numberPosts);
-						
-//						boolean newDay = (prevDay != null && prevDay != osceDay);
-//						boolean newSequence = (prevSequence != null && prevSequence != osceSequence);
 						boolean firstRotation = currRotationNumber == rotationOffset;
 						boolean lastRotation = currRotationNumber == (rotationOffset + numberRotations - 1);
+						boolean changeSimpatDuringRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsTotal);
+
+						// calculate slots that this and next rotation have - used to check whether a SP change after the rotation is necessary
+						int numberSlotsThisAndNextRotation = numberSlotsTotal + numberPosts;
+						if(currRotationNumber < (rotationOffset + numberRotations) - 1) {
+							numberSlotsThisAndNextRotation += rotations[parcourIndex].get(currRotationNumber + 1);
+						}
+						boolean changeSimpatAfterRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsThisAndNextRotation);
 						
 						// check whether new simpat has been added (and increment sequenceNumber if so)
 						boolean simpatAdded = false;
@@ -705,82 +696,89 @@ public class TimetableGenerator {
 						// (in the end, we want to have a n*n matrix where n denotes the number of posts in this OSCE)
 						for(int i = 0; i < numberSlotsTotal; i++) {
 							
-							// STUDENTS START
-//							System.out.println("STUDENT ASSIGNMENTS");
+							// flag to determine whether the student started the rotation early - if so,
+							// the last assignment (which would be the second part of the double post)
+							// will not be created
+							boolean hadEarlyStart = false;
+							
 							// post must be a possible start (PAUSE - which is at the end is always a possible start)
-							if(i == (numberSlotsTotal - 1) || posts.get(i).isPossibleStart()) {
+							// fill slots for one student in current rotation
+							int postIndex = i;
+							for(int j = i; j < (numberSlotsTotal + i); j++) {
 
-								// fill slots for one student in current rotation
-								int index = i;
-								for(int j = i; j < (numberSlotsTotal + i); j++) {
+								// STUDENTS START
+								Date endTime = dateAddMin(time, osce.getPostLength());
+								Assignment ass = new Assignment();
+								ass.setType(AssignmentTypes.STUDENT);
+								ass.setOsceDay(osceDay);
+								ass.setSequenceNumber(studentIndex);
+								ass.setTimeStart(time);
 
-									// STUDENTS START
-									Date endTime = dateAddMin(time, osce.getPostLength());
-									Assignment ass = new Assignment();
-									ass.setType(AssignmentTypes.STUDENT);
-									ass.setOsceDay(osceDay);
-									ass.setSequenceNumber(studentIndex);
-									// TODO: evaluate if second break post (in the middle of the course) is needed
-									
-									// insert post or break post (no OscePostRoom assignment)
-									if(numberBreakPosts == 0 || j != numberSlotsTotal - 1) {
-										OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(index % posts.size()), osceSequence).getSingleResult();
-										OscePostRoom opr = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
-										
-										// alternate between room assignments. Alternative room assignment is in subsequent post
-										// (this is for "double-posts" but at the moment only for post_type = ANAMNESIS_THERAPY, since
-										// this is the only "double-post" which is located in the same room and therefore needs an alternative
-										// assignment) 
-										// TODO: verify this if-clause!
-										if(post.getOscePostBlueprint().getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
-											System.out.println("inside...");
-											if(useAltOscePostRoom) {
-												System.out.println("use alt oscepostroom");
-												OscePostBlueprint otherPartOfDoublePostBlueprint = post.getOscePostBlueprint().otherPartOfDoublePost();
-												System.out.println(otherPartOfDoublePostBlueprint.getSequenceNumber());
-												OscePost otherPartOfDoublePost = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(otherPartOfDoublePostBlueprint, osceSequence).getSingleResult();
-												System.out.println(otherPartOfDoublePost.getId());
-												OscePostRoom oprAlt = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, otherPartOfDoublePost).getSingleResult();
-												System.out.println(oprAlt.getRoom().getRoomNumber());
-												if(oprAlt != null) {
-													ass.setOscePostRoom(oprAlt);
-												}
-											} else {
-												ass.setOscePostRoom(opr);
-											}
-											
-											// alternate between two states
-											useAltOscePostRoom = !useAltOscePostRoom;
-											
+								boolean createAssignment = true;
+
+								// the last assignment of a student with early start will not be created
+								// (this would be the second part of a double post)
+								if(hadEarlyStart && j == (numberSlotsTotal + i) - 1) {
+									createAssignment = false;
+								}
+
+								// insert post or break post (no OscePostRoom assignment)
+								if(numberBreakPosts == 0 || j != numberSlotsTotal - 1) {
+									OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(postIndex % posts.size()), osceSequence).getSingleResult();
+									OscePostBlueprint postBP = post.getOscePostBlueprint();
+									OscePostRoom opr = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
+									PostType postType = postBP.getPostType();
+
+									// ANAMNESIS_THERAPY has double post in same room an therefore needs alteration of room assignments
+									// all other room assignments are straightforward
+									if(postType.equals(PostType.ANAMNESIS_THERAPY)) {
+
+										// determine which part of the double-post to use - skip the other part by not creating an assignment
+										if((!useFirstPartOfDoublePost && !postBP.isFirstPartOfDoublePost()) || 
+												(useFirstPartOfDoublePost && postBP.isFirstPartOfDoublePost())) {
+
+											ass.setOscePostRoom(opr);
+
 											// add another post-time since this is a double post
 											endTime = dateAddMin(endTime, osce.getPostLength() + osce.getShortBreak());
-											
-											// skip next post as it is just used to get second room assignment for double post
-											j++;
 										} else {
-											ass.setOscePostRoom(opr);
+											createAssignment = false;
 										}
-										
-										index++;
+
+										// switch alternation flag (= make sure that in the next iteration, the other part of the double post is used)
+										if(!postBP.isFirstPartOfDoublePost()) {
+											useFirstPartOfDoublePost = !useFirstPartOfDoublePost;
+										}
+									} else {
+										ass.setOscePostRoom(opr);
 									}
 									
-									ass.setTimeStart(time);
+									// handle early start (only 1 student per rotation - this student will automatically finish the rotation early)
+									if(i == (postIndex % posts.size())) {
+										if((postType.equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost()) ||
+												postType.equals(PostType.ANAMNESIS_THERAPY) &&!postBP.isFirstPartOfDoublePost()) {
+											
+											ass.setTimeStart(dateSubtractMin(time, osce.getPostLength() + osce.getShortBreak()));
+											endTime = dateSubtractMin(endTime, osce.getPostLength() + osce.getShortBreak());
+
+											hadEarlyStart = true;
+
+											// stay at same part of double post if number of posts is odd (= no free slot at the other part of the double-post)
+											if(numberSlotsTotal % 2 == 1) {
+												useFirstPartOfDoublePost = !useFirstPartOfDoublePost;
+											}
+										}
+									}
+
+									postIndex++;
+								}
+
+								if(createAssignment) {
 									ass.setTimeEnd(endTime);
-									assignments.add(ass);
+									assThisRotation.add(ass);
 
-//									if(i == 1)
-									String room = "none";
-									if(ass.getOscePostRoom() != null) {
-										room = ass.getOscePostRoom().getRoom().getRoomNumber();
-									}
-//									System.out.println("parcour "+course.getColor()+", rotation "+currRotationNumber+", student "+studentIndex+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted...");
-									System.out.println("\t student "+studentIndex+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted...");
-
-									if(j == (numberSlotsTotal + i) - 1)
-										System.out.println("\t ---");
-									
 									time = dateAddMin(time, osce.getPostLength());
-									
+
 									if(j < (numberSlotsTotal + i) - 1) {
 										// add short break between posts
 										// if, for example, there is a maximum of 8 posts and the most difficult role-topic needs a SimPat change after
@@ -792,104 +790,86 @@ public class TimetableGenerator {
 										}
 									}
 								}
-								
-								studentIndex++;
-								postsSinceSimpatChange++;
 							}
+
+							studentIndex++;
+							postsSinceSimpatChange++;
 							// STUDENTS END
 							
 							if(i < numberPosts) {
-//								// EXAMINERS START
-//								System.out.println("EXAMINER ASSIGNMENTS");
-//								
-//								// finalize examiner assignment - after lunch break or when starting a new day
-//								// (assuming that assignment has been initialized already)
-//								if((newDay || newSequence || lastRotation) && exaAss[i] instanceof Assignment) {
-//									// subtract time at examiner change
-//									Date end = null;
-//									if(newSequence) {
-//										end = dateSubtractMin(rotationStartTime, osce.getLunchBreak());
-//									} else if(lastRotation) {
-//										end = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (postLength + osce.getShortBreak()) - osce.getShortBreak());
-//									} else if(newDay) {
-//										end = timeBeforeDayChange;
-//										//end = dateAddMin(timeBeforeDayChange, maxPostsCurrentRotation * (postLength + osce.getShortBreak()) - osce.getShortBreak());
-//									} else {
-//										end = dateSubtractMin(rotationStartTime, osce.getMiddleBreak());
-//									}
-//									exaAss[i].setTimeEnd(end);
-//									
-////									System.out.println("parcour "+course.getColor()+", rotation "+rotationIndex+", ("+exaAss[i].debugExaminator()+") inserted...");
-//								}
-//								
-//								// initialize examiner assignment
-//								if(firstRotation || newDay || newSequence) {
-//									OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(i), osceSequence).getSingleResult();
-//									OscePostRoom opr = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
-//									
-//									exaAss[i] = new Assignment();
-//									exaAss[i].setType(AssignmentTypes.EXAMINER);
-//									exaAss[i].setOsceDay(osceDay);
-//									exaAss[i].setTimeStart(rotationStartTime);
-//									exaAss[i].setOscePostRoom(opr);
-//									//exaAss[i].setSlotNumber((courseRunNr == 0 || dayChanged ? 1 : 2)); // for examiners, there is only slot number 1 or 2
-//									assignments.add(exaAss[i]);
-//								}
-//								// EXAMINERS END
-								
-								
-								// SIMPATS START
-								OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(i), osceSequence).getSingleResult();
-								if(!post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
-									// finalize SP assignment - after last rotation of a parcour as well as if change during or after rotation is needed
-									// (assuming that assignment has been initialized already)
-									if((lastRotation || changeSimpatAfterRotation || changeSimpatDuringRotation) && simAss[i] instanceof Assignment) {
-										simAss[i].setTimeEnd(time);
-
-//										String room = "none";
-//										if(simAss[i].getOscePostRoom() != null) {
-//											room = simAss[i].getOscePostRoom().getRoom().getRoomNumber();
-//										}
-//										System.out.println("(room: "+room+", "+debugTimeStartEnd(simAss[i])+") inserted...");
-									}
-
-									// initialize SP assignment at the beginning of the first rotation of a parcour or whenever a SP change is necessary
-									if(firstRotation || changeSimpatAfterRotation || changeSimpatDuringRotation) {
-										OscePostRoom opr = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
-
-										Date startTime = rotationStartTime;
-										if(!firstRotation) {
-											startTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()));
-
-											if(changeSimpatDuringRotation) {
-												startTime = dateSubtractMin(startTime, osce.getShortBreakSimpatChange());
-											} else {
-												startTime = dateSubtractMin(startTime, osce.getShortBreak());
+								// not all types of posts need an SP
+								if(posts.get(i).requiresSimpat()) {
+									// SIMPATS START
+									OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(i), osceSequence).getSingleResult();
+									// TODO re-activate this after testing
+//									if(!post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+										
+										// finalize SP assignment - after last rotation of a parcour as well as if change during or after rotation is needed
+										// (assuming that assignment has been initialized already)
+										if((lastRotation || changeSimpatAfterRotation || changeSimpatDuringRotation) && simAss[i] instanceof Assignment) {
+											Date endTime = time;
+											
+											// adapt time for early start
+											// TODO: fix incorrect calculation caused by OscePostRoom switching
+											if(posts.get(i).getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+												if((earlyStartFirst && posts.get(i).isFirstPartOfDoublePost()) ||
+														(!earlyStartFirst && !posts.get(i).isFirstPartOfDoublePost())) {
+													endTime = dateSubtractMin(endTime, osce.getPostLength() + osce.getShortBreak());
+												}
 											}
-
-											if(changeSimpatAfterRotation) {
-												startTime = dateAddMin(startTime, osce.getLongBreak());
-											} else {
-												startTime = dateAddMin(startTime, osce.getMiddleBreak());
-											}
+											
+											simAss[i].setTimeEnd(endTime);
 										}
 
-										simAss[i] = new Assignment();
-										simAss[i].setType(AssignmentTypes.PATIENT);
-										simAss[i].setOsceDay(osceDay);
-										simAss[i].setSequenceNumber(simpatSequenceNumber);
-										simAss[i].setTimeStart(startTime);
-										simAss[i].setOscePostRoom(opr);
-										assignments.add(simAss[i]);
-										
-										simpatAdded = true;
-									}
+										// initialize SP assignment at the beginning of the first rotation of a parcour or whenever a SP change is necessary
+										if(firstRotation || changeSimpatAfterRotation || changeSimpatDuringRotation) {
+											OscePostRoom opr = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
+
+											Date startTime = rotationStartTime;
+											if(!firstRotation) {
+												startTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()));
+
+												if(changeSimpatDuringRotation) {
+													startTime = dateSubtractMin(startTime, osce.getShortBreakSimpatChange());
+												} else {
+													startTime = dateSubtractMin(startTime, osce.getShortBreak());
+												}
+
+												if(changeSimpatAfterRotation) {
+													startTime = dateAddMin(startTime, osce.getLongBreak());
+												} else {
+													startTime = dateAddMin(startTime, osce.getMiddleBreak());
+												}
+											}
+											
+											// adapt time for early start
+											// TODO: fix incorrect calculation caused by OscePostRoom switching
+											if(posts.get(i).getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+												if((earlyStartFirst && posts.get(i).isFirstPartOfDoublePost()) ||
+														(!earlyStartFirst && !posts.get(i).isFirstPartOfDoublePost())) {
+													startTime = dateSubtractMin(startTime, osce.getPostLength() + osce.getShortBreak());
+												}
+											}
+											
+//											endTime = dateSubtractMin(endTime, osce.getPostLength() + osce.getShortBreak());
+
+											simAss[i] = new Assignment();
+											simAss[i].setType(AssignmentTypes.PATIENT);
+											simAss[i].setOsceDay(osceDay);
+											simAss[i].setSequenceNumber(simpatSequenceNumber);
+											simAss[i].setTimeStart(startTime);
+											simAss[i].setOscePostRoom(opr);
+											assThisRotation.add(simAss[i]);
+											
+											simpatAdded = true;
+										}
+//									}
+									// SIMPATS END
 								}
-								// SIMPATS END
+
+								// reset time to start time of next course
+								time = new Date((long) (rotationStartTime.getTime()));
 							}
-							
-							// reset time to start time of next course
-							time = new Date((long) (rotationStartTime.getTime()));
 						}
 						
 						if(simpatAdded)
@@ -915,6 +895,16 @@ public class TimetableGenerator {
 							rotationStartTime = dateAddMin(time, osce.getMiddleBreak());
 						}
 						
+						// switch assignments if earlyStartFirst
+						if(earlyStartFirst == true) {
+							assThisRotation = switchOscePostRoom(assThisRotation);
+						}
+						
+						assignments.addAll(assThisRotation);
+						
+						if(numberSlotsTotal % 2 == 1) {
+							earlyStartFirst = !earlyStartFirst;
+						}
 					}
 					
 					parcourIndex++;
@@ -927,14 +917,107 @@ public class TimetableGenerator {
 			}
 		}
 		
+		printAllStudents(assignments);
+		printAllSP(assignments);
+		
 		// studentsLeft should be 0 here - all students meant to be assigned
 		if((studentIndex - 1) != osce.getMaxNumberStudents()) {
-			System.out.println("number of created slots does not equal the number of students - PROBLEM!");
+			log.error("number of created slots does not equal the number of students!");
 		} else {
-			System.out.println("hooray! number of created slots is enough to examine all student!");
+			log.info("[SUCCESS] hooray! number of created slots is enough to examine all student!");
 		}
 		
 		return assignments;
+	}
+	
+	private void printAllStudents(Set<Assignment> assThisRotation) {
+		List<Assignment> assList = new ArrayList<Assignment>(assThisRotation);
+		Collections.sort(assList, new Comparator<Assignment>() {
+			public int compare(Assignment ass1, Assignment ass2) {
+				if(ass1.getSequenceNumber() == ass2.getSequenceNumber()) {
+					return (int) (ass1.getTimeStart().getTime() - ass2.getTimeStart().getTime());
+				} else {
+					return (int) (ass1.getSequenceNumber() - ass2.getSequenceNumber());
+				}
+			}
+			
+		});
+		
+		Iterator<Assignment> it = assList.iterator();
+		int oldSeq = 0;
+		while(it.hasNext()) {
+			Assignment ass = (Assignment) it.next();
+			
+			if(ass.getSequenceNumber() > oldSeq) {
+				System.out.println("\t ---");
+				oldSeq = ass.getSequenceNumber();
+			}
+			
+			if(ass.getType().equals(AssignmentTypes.STUDENT))
+				System.out.println(debugStudent(ass));
+		}
+		
+	}
+	
+	private void printAllSP(Set<Assignment> assignments) {
+		List<Assignment> assList = new ArrayList<Assignment>(assignments);
+		Collections.sort(assList, new Comparator<Assignment>() {
+			public int compare(Assignment ass1, Assignment ass2) {
+				if(ass1.getSequenceNumber() == ass2.getSequenceNumber()) {
+					return (int) (ass1.getTimeStart().getTime() - ass2.getTimeStart().getTime());
+				} else {
+					return (int) (ass1.getSequenceNumber() - ass2.getSequenceNumber());
+				}
+			}
+			
+		});
+		
+		Iterator<Assignment> it = assList.iterator();
+		while(it.hasNext()) {
+			Assignment ass = (Assignment) it.next();
+			
+			if(ass.getType().equals(AssignmentTypes.PATIENT))
+				System.out.println(debugSP(ass));
+		}
+		
+	}
+
+	private Set<Assignment> switchOscePostRoom(Set<Assignment> assThisRotation) {
+		Iterator<Assignment> it = assThisRotation.iterator();
+		OscePostRoom opr1 = null;
+		OscePostRoom opr2 = null;
+		while (it.hasNext() && (opr1 == null || opr2 == null)) {
+			Assignment ass = (Assignment) it.next();
+			
+			if(ass.getOscePostRoom() != null) {
+				OscePostBlueprint postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
+				if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+					if(postBP.isFirstPartOfDoublePost()) {
+						opr1 = ass.getOscePostRoom();
+					} else {
+						opr2 = ass.getOscePostRoom();
+					}
+				}
+			}
+		}
+		
+		it = assThisRotation.iterator();
+		while(it.hasNext()) {
+			Assignment ass = (Assignment) it.next();
+			
+			if(ass.getOscePostRoom() != null) {
+				OscePostBlueprint postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
+				if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+					if(postBP.isFirstPartOfDoublePost()) {
+						ass.setOscePostRoom(opr2);
+					} else {
+						ass.setOscePostRoom(opr1);
+					}
+				}
+			}
+		}
+		
+		return assThisRotation;
 	}
 	
 	/**
@@ -986,15 +1069,6 @@ public class TimetableGenerator {
 	private boolean lunchBreakNeeded(int rotationNr) {
 		return rotationNr == rotationsPerDay / 2;
 	}
-
-	/** Check for a long break (after a certain number of student slots)
-	 * 
-	 * @param postsSinceBreak
-	 * @return
-	 */
-	private boolean longBreakNeeded(int postsSinceBreak) {
-		return (postsSinceBreak >= numberSlotsUntilSPChange);
-	}
 	
 	/**
 	 * Get maximum of posts (of all parallel parcours) for current rotation
@@ -1019,6 +1093,42 @@ public class TimetableGenerator {
 	}
 	
 	/**
+	 * Check OSCE for valid information set needed to optimize
+	 * 
+	 * @param osce
+	 */
+	private static void checkOsce(Osce osce) throws Exception {
+		String errString = "missing information: %s";
+		
+		if(osce.getMaxNumberStudents() == null || osce.getMaxNumberStudents() <= 0)
+			throw new Exception(String.format(errString, "maximum number of students"));
+		
+		if(osce.getNumberRooms() == null || osce.getNumberRooms() <= 0)
+			throw new Exception(String.format(errString, "number of rooms available"));
+		
+		if(osce.getPostLength() == null || osce.getPostLength() <= 0)
+			throw new Exception(String.format(errString, "post length"));
+		
+		if(osce.getShortBreak() == null || osce.getShortBreak() <= 0)
+			throw new Exception(String.format(errString, "duration of short break (after a post)"));
+		
+		if(osce.getShortBreakSimpatChange() == null || osce.getShortBreakSimpatChange() <= 0)
+			throw new Exception(String.format(errString, "duration of simpat change break (when a change of simpat is needed WITHIN rotation)"));
+		
+		if(osce.getMiddleBreak() == null || osce.getMiddleBreak() <= 0)
+			throw new Exception(String.format(errString, "duration of middle break (after a rotation)"));
+		
+		if(osce.getLongBreak() == null || osce.getLongBreak() <= 0)
+			throw new Exception(String.format(errString, "duration of long break (when a change of simpat is needed AFTER rotation)"));
+		
+		if(osce.getLunchBreak() == null || osce.getLunchBreak() <= 0)
+			throw new Exception(String.format(errString, "duration of lunch break"));
+		
+		if(!(osce.getOsce_days().size() > 0))
+			throw new Exception(String.format(errString, "no OsceDay for this Osce defined"));
+	}
+	
+	/**
 	 * Print debug information on assignment (namely start- and end-time consiting only of HH:mm)
 	 * @param ass
 	 * @return
@@ -1027,5 +1137,29 @@ public class TimetableGenerator {
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		String timeString = format.format(ass.getTimeStart()) + " - " + format.format(ass.getTimeEnd());
 		return timeString;
+	}
+	
+	private String debugTime(Date date) {
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		return format.format(date);
+	}
+	
+	private String debugStudent(Assignment ass) {
+		String room = "none";
+		OscePostBlueprint postBP = null;
+		if(ass.getOscePostRoom() != null) {
+			room = ass.getOscePostRoom().getRoom().getRoomNumber();
+			postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
+		}
+		
+		return "\t student "+ass.getSequenceNumber()+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted..." + (postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) ? "first: " + postBP.isFirstPartOfDoublePost() : "");
+	}
+	
+	private String debugSP(Assignment ass) {
+		String room = "none";
+		if(ass.getOscePostRoom() != null) {
+			room = ass.getOscePostRoom().getRoom().getRoomNumber();
+		}
+		return "(room: "+room+", "+debugTimeStartEnd(ass)+") inserted...";
 	}
 }
