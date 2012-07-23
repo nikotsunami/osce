@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
@@ -37,7 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author nikotsunami
  *
  */
-public class DoctorViewImpl extends Composite implements  DoctorView {
+public class DoctorViewImpl extends Composite implements  DoctorView,RecordChangeHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -309,4 +311,20 @@ public class DoctorViewImpl extends Composite implements  DoctorView {
 	public ListBox getFilterTitle() {
 		return filterTitle;
 	}
+	
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
 }

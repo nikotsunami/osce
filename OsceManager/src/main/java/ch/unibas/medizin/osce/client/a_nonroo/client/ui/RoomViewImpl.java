@@ -14,6 +14,8 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -48,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class RoomViewImpl extends Composite implements RoomView {
+public class RoomViewImpl extends Composite implements RoomView, RecordChangeHandler {
 
 	private static RoomViewUiBinder uiBinder = GWT
 			.create(RoomViewUiBinder.class);
@@ -493,5 +495,22 @@ public class RoomViewImpl extends Composite implements RoomView {
 				return this.roomNewMap;
 			}
 			// E Highlight onViolation
-	
+			//by spec
+			@Override
+			public void onRecordChange(RecordChangeEvent event) {
+				int pagesize = 0;
+				
+				if (event.getRecordValue() == "ALL")
+				{
+					pagesize = table.getRowCount();
+					OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+				}
+				else
+				{
+					pagesize = Integer.parseInt(event.getRecordValue());
+				}
+						
+				table.setPageSize(pagesize);
+			}
+			//by spec
 }

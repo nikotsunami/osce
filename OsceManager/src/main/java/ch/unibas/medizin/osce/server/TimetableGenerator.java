@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.aspectj.weaver.patterns.ConcreteCflowPointcut.Slot;
 
 import ch.unibas.medizin.osce.domain.*;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -417,10 +416,11 @@ public class TimetableGenerator {
 	 * Remove old calculated scaffold (when OsceStatus is changed from GENERATED to BLUEPRINT again)
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	private void removeOldScaffold() {
 		// temp variables for first OSCE day (used to re-create OSCE day after deleting whole scaffold)
-		Date dayRefTimeStart = osceDayRef.getTimeStart();
-		Date dayRefTimeEnd = osceDayRef.getTimeEnd();
+//		Date dayRefTimeStart = osceDayRef.getTimeStart();
+//		Date dayRefTimeEnd = osceDayRef.getTimeEnd();
 		
 		//SPEC[		
 		log.info("removeOldScaffold start");
@@ -478,17 +478,17 @@ public class TimetableGenerator {
 			
 			osceDayRef = firstDay;
 		}
-		else
-		{
-			// re-create new OSCE day
-			OsceDay newDay = new OsceDay();
-			newDay.setOsce(osce);
-			newDay.setOsceDate(dayRefTimeStart);
-			newDay.setTimeStart(dayRefTimeStart);
-			newDay.setTimeEnd(dayRefTimeEnd);
-			newDay.persist();
-			osceDayRef = newDay;
-		}
+//		else
+//		{
+//			// re-create new OSCE day
+//			OsceDay newDay = new OsceDay();
+//			newDay.setOsce(osce);
+//			newDay.setOsceDate(dayRefTimeStart);
+//			newDay.setTimeStart(dayRefTimeStart);
+//			newDay.setTimeEnd(dayRefTimeEnd);
+//			newDay.persist();
+//			osceDayRef = newDay;
+//		}
 		
 		//SPEC]
 	}
@@ -610,6 +610,25 @@ public class TimetableGenerator {
 		// first be 0 and 4 after first iteration of sequences)
 		int rotationOffset = 0;
 		
+		// check when ANAMNESIS_THERAPY occurs (defines which part of the double-post is first used
+//		Iterator<OscePostBlueprint> it = posts.iterator();
+//		int postCounter = 0;
+//		List<Boolean> useFirstPartBooleans = new ArrayList<Boolean>();
+//		while (it.hasNext()) {
+//			OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
+//			log.info(oscePostBlueprint.getPostType() + " " + oscePostBlueprint.isFirstPartOfDoublePost());
+//			if(oscePostBlueprint.getPostType().equals(PostType.ANAMNESIS_THERAPY) && oscePostBlueprint.isFirstPartOfDoublePost()) {
+//				if(postCounter % 2 == 1)
+//					useFirstPartBooleans.add(false);
+//				else
+//					useFirstPartBooleans.add(true);
+//				log.info("useFirstPartBooleans " + postCounter + ": " + useFirstPartBooleans.get(0));
+//			}
+//			
+//			postCounter++;
+//		}
+//		log.info("size of useFirstPartBooleans: " + useFirstPartBooleans.size());
+		
 		// iterate over all days
 		Iterator<OsceDay> itDays = days.iterator();
 		while (itDays.hasNext()) {
@@ -657,6 +676,8 @@ public class TimetableGenerator {
 					// switched whenever a room-assignment for a double-post is inserted in order to avoid overlapping)
 					boolean useFirstPartOfDoublePost = false;
 					
+					// flag to define whether the assignments of ANAMNESIS_THERAPY have to be switched in the end (to avoid
+					// time overlapping)
 					boolean earlyStartFirst = false;
 					
 					// create assignments for rotations (given by sequence)
@@ -672,6 +693,10 @@ public class TimetableGenerator {
 						// we increase the time while going through all posts of a rotation)
 						time = rotationStartTime;
 						
+						// flag to define whether the first part of an ANAMNESIS_THERAPY is on an odd position
+						// (see end of rotation loop for more detail
+						boolean startedOdd = false;
+						
 						// get max slots from current rotation (defines when next rotation is about to
 						// start since rotations need to start at the same time!)
 						int maxPostsCurrentRotation = numberPosts + getMaxBreakPostsCurrentRotation(osceSequence.getCourses(), currRotationNumber);
@@ -679,7 +704,7 @@ public class TimetableGenerator {
 						boolean firstRotation = currRotationNumber == rotationOffset;
 						boolean lastRotation = currRotationNumber == (rotationOffset + numberRotations - 1);
 						boolean changeSimpatDuringRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsTotal);
-
+						
 						// calculate slots that this and next rotation have - used to check whether a SP change after the rotation is necessary
 						int numberSlotsThisAndNextRotation = numberSlotsTotal + numberPosts;
 						if(currRotationNumber < (rotationOffset + numberRotations) - 1) {
@@ -713,12 +738,15 @@ public class TimetableGenerator {
 								ass.setTimeStart(time);
 
 								boolean createAssignment = true;
-
+								
 								// the last assignment of a student with early start will not be created
 								// (this would be the second part of a double post)
 								if(hadEarlyStart && j == (numberSlotsTotal + i) - 1) {
 									createAssignment = false;
 								}
+								
+//								log.info("744 i = " + i + ", j = " + j);
+//								log.info("numberBreakPosts = " + numberBreakPosts + ", numberSlotsTotal = " + numberSlotsTotal);
 
 								// insert post or break post (no OscePostRoom assignment)
 								if(numberBreakPosts == 0 || j != numberSlotsTotal - 1) {
@@ -726,11 +754,21 @@ public class TimetableGenerator {
 									OscePostBlueprint postBP = post.getOscePostBlueprint();
 									OscePostRoom opr = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
 									PostType postType = postBP.getPostType();
+									
+//									log.info("post_type = " + postBP.getPostType());
 
 									// ANAMNESIS_THERAPY has double post in same room an therefore needs alteration of room assignments
 									// all other room assignments are straightforward
 									if(postType.equals(PostType.ANAMNESIS_THERAPY)) {
-
+										
+//										log.info("post_type = ANAMNESIS_THERAPY - part " + (postBP.isFirstPartOfDoublePost() ? "first" : "second"));
+										
+										// check if first part of double post is on odd position (has an impact on further rotations - see at the end of rotation loop)
+										if(i == 0 && postBP.isFirstPartOfDoublePost()) {
+											startedOdd = postBP.getSequenceNumber() % 2 == 1;
+											useFirstPartOfDoublePost = startedOdd;
+										}
+										
 										// determine which part of the double-post to use - skip the other part by not creating an assignment
 										if((!useFirstPartOfDoublePost && !postBP.isFirstPartOfDoublePost()) || 
 												(useFirstPartOfDoublePost && postBP.isFirstPartOfDoublePost())) {
@@ -746,6 +784,7 @@ public class TimetableGenerator {
 										// switch alternation flag (= make sure that in the next iteration, the other part of the double post is used)
 										if(!postBP.isFirstPartOfDoublePost()) {
 											useFirstPartOfDoublePost = !useFirstPartOfDoublePost;
+//											log.info("set to flag to " + useFirstPartOfDoublePost + " (line 773)");
 										}
 									} else {
 										ass.setOscePostRoom(opr);
@@ -764,18 +803,23 @@ public class TimetableGenerator {
 											// stay at same part of double post if number of posts is odd (= no free slot at the other part of the double-post)
 											if(numberSlotsTotal % 2 == 1) {
 												useFirstPartOfDoublePost = !useFirstPartOfDoublePost;
+//												log.info("set to flag to " + useFirstPartOfDoublePost + " (line 791)");
 											}
 										}
 									}
 
 									postIndex++;
 								}
+								
+//								log.info("804 i = " + i + ", j = " + j);
 
 								if(createAssignment) {
 									ass.setTimeEnd(endTime);
 									assThisRotation.add(ass);
 
 									time = dateAddMin(time, osce.getPostLength());
+									
+//									System.out.println(debugStudent(ass));
 
 									if(j < (numberSlotsTotal + i) - 1) {
 										// add short break between posts
@@ -799,8 +843,7 @@ public class TimetableGenerator {
 								if(posts.get(i).requiresSimpat()) {
 									// SIMPATS START
 									OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(posts.get(i), osceSequence).getSingleResult();
-									// TODO re-activate this after testing
-//									if(!post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+									if(!post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
 										
 										// finalize SP assignment - after last rotation of a parcour as well as if change during or after rotation is needed
 										// (assuming that assignment has been initialized already)
@@ -861,7 +904,7 @@ public class TimetableGenerator {
 											
 											simpatAdded = true;
 										}
-//									}
+									}
 									// SIMPATS END
 								}
 
@@ -900,8 +943,14 @@ public class TimetableGenerator {
 						
 						assignments.addAll(assThisRotation);
 						
+						// switch assignments of next rotation if number of slots is odd
 						if(numberSlotsTotal % 2 == 1) {
 							earlyStartFirst = !earlyStartFirst;
+							
+							// switch start part of double post if first part of double is on odd position
+							if(startedOdd == true) {
+								useFirstPartOfDoublePost = !useFirstPartOfDoublePost;
+							}
 						}
 					}
 					
@@ -980,7 +1029,16 @@ public class TimetableGenerator {
 		
 	}
 
+	/**
+	 * Switches room assignments of OscePostRooms - this saves difficult computations
+	 * for time-slots that have early start and need therefore be altered after rotation with
+	 * odd number of posts.
+	 * @param assThisRotation set of assignments where OscePostRoom assignments need to be switched
+	 * @return switched OscePostRoom assignments for all posts with post_type = ANAMNESIS_THERAPY
+	 */
 	private Set<Assignment> switchOscePostRoom(Set<Assignment> assThisRotation) {
+		
+		// find the two different OscePostRoomAssignments
 		Iterator<Assignment> it = assThisRotation.iterator();
 		OscePostRoom opr1 = null;
 		OscePostRoom opr2 = null;
@@ -990,6 +1048,8 @@ public class TimetableGenerator {
 			if(ass.getOscePostRoom() != null) {
 				OscePostBlueprint postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
 				if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+//					OscePostBlueprint otherPart = postBP.otherPartOfDoublePost();
+					
 					if(postBP.isFirstPartOfDoublePost()) {
 						opr1 = ass.getOscePostRoom();
 					} else {
@@ -1132,8 +1192,7 @@ public class TimetableGenerator {
 	 * @return
 	 */
 	private String debugTimeStartEnd(Assignment ass) {
-		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-		String timeString = format.format(ass.getTimeStart()) + " - " + format.format(ass.getTimeEnd());
+		String timeString = debugTime(ass.getTimeStart()) + " - " + debugTime(ass.getTimeEnd());
 		return timeString;
 	}
 	

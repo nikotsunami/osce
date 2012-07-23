@@ -8,6 +8,8 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.OsceEditActivity;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -35,7 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class OsceViewImpl extends Composite implements  OsceView {
+public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHandler {
 
 	private static OsceViewUiBinder uiBinder = GWT
 			.create(OsceViewUiBinder.class);
@@ -347,4 +349,21 @@ public class OsceViewImpl extends Composite implements  OsceView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
+
 }

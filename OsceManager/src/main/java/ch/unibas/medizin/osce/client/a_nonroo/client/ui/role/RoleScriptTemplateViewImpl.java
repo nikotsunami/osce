@@ -7,6 +7,8 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -43,7 +45,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptTemplateView {
+public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptTemplateView, RecordChangeHandler {
 
 	
 	private static RoleScriptTemplateViewUiBinder uiBinder = GWT
@@ -340,4 +342,21 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		return this.addTemplateMap;
 	}
 	// E Violation Changes Highlight
+	
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
+
 }

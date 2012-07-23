@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -37,7 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class LogViewImpl extends Composite implements LogView {
+public class LogViewImpl extends Composite implements LogView, RecordChangeHandler {
 
 	private static LogViewUiBinder uiBinder = GWT
 			.create(LogViewUiBinder.class);
@@ -218,4 +220,20 @@ public class LogViewImpl extends Composite implements LogView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	// by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
 }

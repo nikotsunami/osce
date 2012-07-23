@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -69,6 +70,10 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (ProfessionViewImpl)view);
+		//by spec
 
 		init();
 
