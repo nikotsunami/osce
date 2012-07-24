@@ -104,7 +104,6 @@ public class OsceSequence {
 				newOscePost.setOscePostBlueprint(oldOscePost.getOscePostBlueprint());
 				newOscePost.setOsceSequence(newOsceSequence);
 				newOscePost.setSequenceNumber(oldOscePost.getSequenceNumber());
-				newOscePost.setIsPossibleStart(oldOscePost.getIsPossibleStart());
 				
 				posts.add(newOscePost);
 			}

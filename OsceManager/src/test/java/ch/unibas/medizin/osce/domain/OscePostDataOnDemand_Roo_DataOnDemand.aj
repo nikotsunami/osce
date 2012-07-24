@@ -8,7 +8,6 @@ import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.StandardizedRoleDataOnDemand;
-import java.lang.Boolean;
 import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -33,17 +32,11 @@ privileged aspect OscePostDataOnDemand_Roo_DataOnDemand {
     
     public OscePost OscePostDataOnDemand.getNewTransientOscePost(int index) {
         OscePost obj = new OscePost();
-        setIsPossibleStart(obj, index);
         setOscePostBlueprint(obj, index);
         setOsceSequence(obj, index);
         setSequenceNumber(obj, index);
         setStandardizedRole(obj, index);
         return obj;
-    }
-    
-    public void OscePostDataOnDemand.setIsPossibleStart(OscePost obj, int index) {
-        Boolean isPossibleStart = Boolean.TRUE;
-        obj.setIsPossibleStart(isPossibleStart);
     }
     
     public void OscePostDataOnDemand.setOscePostBlueprint(OscePost obj, int index) {

@@ -22,7 +22,7 @@ public class OscePostBlueprint {
 
     private static Logger log = Logger.getLogger(OscePostBlueprint.class);
 
-    private Boolean isPossibleStart;
+    private Boolean isFirstPart;
 
     @ManyToOne
     private RoleTopic roleTopic;
@@ -88,14 +88,17 @@ public class OscePostBlueprint {
      */
     public boolean isFirstPartOfDoublePost() {
     	// if last post, then start from beginning (means sequenceNumber > 0)
-    	int qSequenceNumber = this.getSequenceNumber();
-    	if(this.getSequenceNumber() == this.getOsce().getOscePostBlueprints().size()) {
-    		qSequenceNumber = 0;
-    	}
-    	OscePostBlueprint nextPost = findNextOscePostBlueprintByOsceAndSequenceNumber(this.getOsce(), qSequenceNumber);
-        if (nextPost != null && nextPost.getPostType().equals(this.getPostType())) {
-            return true;
-        }
+//    	int qSequenceNumber = this.getSequenceNumber();
+//    	if(this.getSequenceNumber() == this.getOsce().getOscePostBlueprints().size()) {
+//    		qSequenceNumber = 0;
+//    	}
+//    	OscePostBlueprint nextPost = findNextOscePostBlueprintByOsceAndSequenceNumber(this.getOsce(), qSequenceNumber);
+//        if (nextPost != null && nextPost.getPostType().equals(this.getPostType())) {
+//            return true;
+//        }
+    	if(getIsFirstPart() != null)
+    		return getIsFirstPart();
+    	
         return false;
     }
     

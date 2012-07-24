@@ -15,8 +15,6 @@ import javax.persistence.CascadeType;
 @RooEntity(finders = { "findOscePostsByOscePostBlueprintAndOsceSequence" })
 public class OscePost {
 
-    private Boolean isPossibleStart;
-
     @ManyToOne
     private OscePostBlueprint oscePostBlueprint;
 
