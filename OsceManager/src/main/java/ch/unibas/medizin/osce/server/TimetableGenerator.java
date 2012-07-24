@@ -684,6 +684,8 @@ public class TimetableGenerator {
 						}
 						boolean changeSimpatAfterRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsThisAndNextRotation);
 						
+						Date nextRotationStartTime = null;
+						
 						// iterate through all posts as many times as there are posts
 						// (in the end, we want to have a n*n matrix where n denotes the number of posts in this OSCE)
 						for(int i = 0; i < numberSlotsTotal; i++) {
@@ -837,56 +839,48 @@ public class TimetableGenerator {
 							}
 							// STUDENTS END
 							
-							log.info("students inserted");
+							// calculate time when next rotation starts
+							nextRotationStartTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()) - osce.getShortBreak());
 							
+							// if SP was changed during rotation, add the SP change-break and subtract the normal break
+							if(changeSimpatDuringRotation) {
+								nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getShortBreakSimpatChange() - osce.getShortBreak());
+								postsSinceSimpatChange = numberSlotsTotal / 2;
+							}
+							
+							// add middle break at the end of each rotation (except for last rotation, where either
+							// lunch break or nothing is added)
+							if(!lastRotation) {
+								if(changeSimpatAfterRotation) {
+									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak());
+									postsSinceSimpatChange = 0;
+									
+									if(post != null && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+										Date startTimeNew = nextRotationStartTime;
+										
+										if(numberSlotsTotal % 2 == 1 && (!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) || (earlyStartFirst && postBP.isFirstPartOfDoublePost()))
+											startTimeNew = dateSubtractMin(startTimeNew, osce.getPostLength() + osce.getShortBreak());
+										
+										changeSP(i, osceDay, time, startTimeNew, oscePR);
+										log.warn("change SP assignment for post " + i + " " + debugTime(time) + " / " + debugTime(nextRotationStartTime));
+									}
+								} else {
+									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getMiddleBreak());
+								}
+							}
+							
+							log.info("students inserted");
 							log.info("post " + i + " finished");
 						}
 						
+						rotationStartTime = nextRotationStartTime;
+						
 						// increase number of already performed posts since SPs were last changed
-						postsSinceSimpatChange += numberSlotsTotal;
+						if(!changeSimpatAfterRotation && !changeSimpatDuringRotation)
+							postsSinceSimpatChange += numberSlotsTotal;
 						
 						// increase lower bound of student indexes
 						studentIndexLowerBound += numberSlotsTotal;
-						
-						// calculate time when next rotation starts
-						rotationStartTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()) - osce.getShortBreak());
-						
-						// if SP was changed during rotation, add the SP change-break and subtract the normal break
-						if(changeSimpatDuringRotation) {
-							rotationStartTime = dateAddMin(rotationStartTime, osce.getShortBreakSimpatChange() - osce.getShortBreak());
-							postsSinceSimpatChange = numberSlotsTotal / 2;
-						}
-						
-						// add middle break at the end of each rotation (except for last rotation, where either
-						// lunch break or nothing is added)
-						if(!lastRotation) {
-							if(changeSimpatAfterRotation) {
-								rotationStartTime = dateAddMin(rotationStartTime, osce.getLongBreak());
-								postsSinceSimpatChange = 0;
-								
-								// switch all SPs at this point in time
-								for(int i = 0; i < posts.size(); i++) {
-									OscePostBlueprint postBP = posts.get(i);
-									
-									if(postBP.requiresSimpat()) {
-										OscePost post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(postBP, osceSequence).getSingleResult();
-										OscePostRoom oscePR = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
-										
-										if(post != null && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
-											changeSP(i, osceDay, time, rotationStartTime, oscePR);
-											log.warn("change SP assignment for post " + i + " " + debugTime(time) + " / " + debugTime(rotationStartTime));
-										}
-									}
-								}
-							} else {
-								rotationStartTime = dateAddMin(rotationStartTime, osce.getMiddleBreak());
-							}
-						}
-						
-						// switch assignments if earlyStartFirst
-//						if(earlyStartFirst == true) {
-//							assThisRotation = switchOscePostRoom(assThisRotation);
-//						}
 						
 						assignments.addAll(assThisRotation);
 						
@@ -1023,55 +1017,6 @@ public class TimetableGenerator {
 				System.out.println(debugSP(ass));
 		}
 		
-	}
-
-	/**
-	 * Switches room assignments of OscePostRooms - this saves difficult computations
-	 * for time-slots that have early start and need therefore be altered after rotation with
-	 * odd number of posts.
-	 * @param assThisRotation set of assignments where OscePostRoom assignments need to be switched
-	 * @return switched OscePostRoom assignments for all posts with post_type = ANAMNESIS_THERAPY
-	 */
-	private Set<Assignment> switchOscePostRoom(Set<Assignment> assThisRotation) {
-		
-		// find the two different OscePostRoomAssignments
-		Iterator<Assignment> it = assThisRotation.iterator();
-		OscePostRoom opr1 = null;
-		OscePostRoom opr2 = null;
-		while (it.hasNext() && (opr1 == null || opr2 == null)) {
-			Assignment ass = (Assignment) it.next();
-			
-			if(ass.getOscePostRoom() != null) {
-				OscePostBlueprint postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
-				if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
-//					OscePostBlueprint otherPart = postBP.otherPartOfDoublePost();
-					
-					if(postBP.isFirstPartOfDoublePost()) {
-						opr1 = ass.getOscePostRoom();
-					} else {
-						opr2 = ass.getOscePostRoom();
-					}
-				}
-			}
-		}
-		
-		it = assThisRotation.iterator();
-		while(it.hasNext()) {
-			Assignment ass = (Assignment) it.next();
-			
-			if(ass.getOscePostRoom() != null) {
-				OscePostBlueprint postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
-				if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
-					if(postBP.isFirstPartOfDoublePost()) {
-						ass.setOscePostRoom(opr2);
-					} else {
-						ass.setOscePostRoom(opr1);
-					}
-				}
-			}
-		}
-		
-		return assThisRotation;
 	}
 	
 	/**
