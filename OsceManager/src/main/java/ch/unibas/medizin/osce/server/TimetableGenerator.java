@@ -708,6 +708,7 @@ public class TimetableGenerator {
 							// post must be a possible start (PAUSE - which is at the end is always a possible start)
 							// fill slots for one student in current rotation
 							int studentIndexOffset = (i + 1);
+							
 							for(int j = 0; j < numberSlotsTotal; j++) {
 								
 								boolean firstTimeSlot = j == 0;
@@ -722,20 +723,34 @@ public class TimetableGenerator {
 								// Slot 3:		4 5 1 2 3
 								// Slot 4:		3 4 5 1 2
 								// Slot 5:		2 3 4 5 1
-								studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
+								// NOTE: student indices for first part of PREPARATION are the same as for second part, but with early start
+								if(postBP != null && postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost()) {
+									studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
+								} else {
+									studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
+								}
+								
+								log.info("index " + studentIndex);
 								
 								Date startTime = time;
 								
 								if(postBP != null) {
 									// skip last student assignment of first part of double post if number of slots is odd (consider schema) - only finalize last SP assignment
-									if(numberSlotsTotal % 2 == 1 && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) && postBP.isFirstPartOfDoublePost() && j == numberSlotsTotal - 1) {
+									boolean skipLastAssignment = numberSlotsTotal % 2 == 1 && j == numberSlotsTotal - 1 && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) &&
+											((!earlyStartFirst && postBP.isFirstPartOfDoublePost()) ||
+											(earlyStartFirst && !postBP.isFirstPartOfDoublePost()));
+									if(skipLastAssignment) {
 										break;
 									}
 									
 									// early start
-									if(firstTimeSlot && ((postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost()) ||
-										(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) && !postBP.isFirstPartOfDoublePost()))) {
-	
+									boolean isAnamnesisTherapy = firstTimeSlot && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) &&
+											((!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) ||
+											(earlyStartFirst && postBP.isFirstPartOfDoublePost()));
+									boolean isPreparation = firstTimeSlot && postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost();
+									log.info("anamnesisFirstSlot " + isAnamnesisTherapy);
+									log.info("preparationAllSlots " + isPreparation);
+									if(isAnamnesisTherapy || isPreparation) {
 										startTime = dateSubtractMin(startTime, osce.getPostLength());
 										
 										if(changeSimpatDuringRotation && j == numberSlotsTotal / 2) {
@@ -774,7 +789,7 @@ public class TimetableGenerator {
 								assThisRotation.add(ass);
 
 								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
-									if(postBP.isFirstPartOfDoublePost()) {
+									if((!earlyStartFirst && postBP.isFirstPartOfDoublePost()) || (earlyStartFirst && !postBP.isFirstPartOfDoublePost())) {
 										lastTimeSlot = j == numberSlotsTotal - 1;
 									}
 									lastTimeSlot = j == numberSlotsTotal - 2;
@@ -869,9 +884,9 @@ public class TimetableGenerator {
 						}
 						
 						// switch assignments if earlyStartFirst
-						if(earlyStartFirst == true) {
-							assThisRotation = switchOscePostRoom(assThisRotation);
-						}
+//						if(earlyStartFirst == true) {
+//							assThisRotation = switchOscePostRoom(assThisRotation);
+//						}
 						
 						assignments.addAll(assThisRotation);
 						
