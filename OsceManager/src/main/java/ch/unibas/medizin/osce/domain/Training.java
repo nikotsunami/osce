@@ -55,5 +55,16 @@ public class Training {
         return resultList.get(0);
 	}
 	
+	public static Training findTrainingByTrainingDateAndName(Date trainingDate,String name){
+		EntityManager em = entityManager();
+		TypedQuery<Training> query = em.createQuery("SELECT o FROM Training AS o WHERE o.trainingDate = :trainingDate and o.name = :name", Training.class);
+		query.setParameter("trainingDate", trainingDate);
+		query.setParameter("name", name);
+        List<Training> resultList = query.getResultList();
+        if (resultList == null || resultList.size() == 0)
+            return null;
+        return resultList.get(0);
+	}
+	
 	
 }

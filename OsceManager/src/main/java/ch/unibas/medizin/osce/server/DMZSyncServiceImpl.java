@@ -340,13 +340,21 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	    	JSONObject jsonObject = jsonArray.getJSONObject(i);
 			Date trainingDate = null;
 			Date timeStart = null;
+			String name = null;
 			if(jsonObject.get("trainingDate") != JSONObject.NULL &&
-			    jsonObject.get("timeStart") != JSONObject.NULL){
+			    jsonObject.get("timeStart") != JSONObject.NULL &&
+				jsonObject.get("name") != JSONObject.NULL){
 	    	     trainingDate = convertToDate(jsonObject.get("trainingDate").toString());
 	    	     timeStart = convertToDate(jsonObject.get("timeStart").toString());
+				 name = jsonObject.get("name").toString();
 			}
-	    	if(trainingDate!=null && timeStart!=null){
-		    	Training training = Training.findTrainingByTrainingDateAndTimeStart(trainingDate,timeStart);
+	    	if(trainingDate!=null){
+				Training training = null;
+				if(timeStart!=null){
+					training = Training.findTrainingByTrainingDateAndTimeStart(trainingDate,timeStart);
+				}else if(timeStart==null && name!=null){
+					training = Training.findTrainingByTrainingDateAndName(trainingDate,name);
+				}
 		    	if(training == null){
 		    		training = new Training();
 		    		training.setName(jsonObject.get("name").toString());
@@ -356,6 +364,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		    		training.merge();
 		    	}else {
 		    		training.setName(jsonObject.get("name").toString());
+					training.setTimeStart(convertToDate(jsonObject.get("timeStart").toString()));
 		    		training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
 		    		training.merge();
 				}
@@ -388,7 +397,11 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		for(Training training : trainings){
 			j++;
 			sb.append("{");
-			sb.append("\"name\" : "+"\""+training.getName()+"\",");
+			String name = "";
+			if(training.getName() !=null ){
+				name = training.getName();
+			}
+			sb.append("\"name\" : "+"\""+name+"\",");
 			sb.append("\"trainingDate\" : \""+convertToString(training.getTrainingDate())+"\",");
 			sb.append("\"timeStart\" : \""+convertToString(training.getTimeStart())+"\",");
 			sb.append("\"timeEnd\": \""+convertToString(training.getTimeEnd())+"\"");
@@ -426,7 +439,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	private String convertToString(Date date){
 		DateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-		String dateStr=null;
+		String dateStr="";
 		try {
 			if(date !=null){
 				dateStr = sdf.format(date);
