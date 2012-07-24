@@ -31,6 +31,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
@@ -329,5 +330,14 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			}
 		}
 		Window.open(url, "_self", "");
+	}
+
+	@Override
+	public void changeRecordValue(String val) {
+	
+		Log.info("~~Selected Record Value : " + val);
+		//handlerManager.fireEvent(new RecordChangeEvent(val));
+		requestFactory.getEventBus().fireEvent(new RecordChangeEvent(val));
+		
 	}
 }

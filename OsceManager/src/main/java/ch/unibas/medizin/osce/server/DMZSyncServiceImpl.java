@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import org.json.JSONException;
 import ch.unibas.medizin.osce.shared.Locale;
+import com.allen_sauer.gwt.log.client.Log;
 
 
 public class DMZSyncServiceImpl extends RemoteServiceServlet implements
@@ -143,7 +144,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				syncOsceDayAndTraining(myjson);
 				message = getReturnMessage(myjson);
 			}catch(Exception e){
-			
+				Log.debug(e.getMessage());
 			}
 		}
 
@@ -153,10 +154,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * get the return message	
 	 */
-	private String getReturnMessage(JSONObject myjson){
+	private String getReturnMessage(JSONObject myjson)throws JSONException{
 		String message = "";
-		try{
-			
+					
 			if(myjson!=null){			
 			
 				JSONArray jsonArray = myjson.getJSONArray("message");			
@@ -175,41 +175,23 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				}
 			
 			}
-		}catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			
-		}
-		
+				
 		return message;
 	
 	}
 	
 	
 	
-	private void syncOsceDayAndTraining(JSONObject myjson){
-		//String locale = getRequest().getHeader("Accept-Language")getLocalName();
-		//System.out.println("%%%%%%%%%%%%%%%%%%%%locale: "+locale);
-
-//		String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
-//		System.out.println("--------------------- currentLocale "+currentLocale+"------------------------------------");
-		
-		
-				
-			try{
-				
-				if(myjson!=null){
-					syncOsceDay(myjson);
-				    
-					syncTraining(myjson);
-					
-					syncPatientInSemester(myjson);
-				}
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				
-			}
+	private void syncOsceDayAndTraining(JSONObject myjson)throws JSONException{
+			
+		if(myjson!=null){
+			syncOsceDay(myjson);
+			
+			syncTraining(myjson);
+			
+			syncPatientInSemester(myjson);
+		}
+			
 		
 		
 	}
@@ -449,7 +431,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				dateStr = sdf.format(date);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.debug(e.getMessage());
 		}
 		return dateStr;
 	}
@@ -468,7 +450,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				return null;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.debug(e.getMessage());
 			return null;
 		}
 		return date;

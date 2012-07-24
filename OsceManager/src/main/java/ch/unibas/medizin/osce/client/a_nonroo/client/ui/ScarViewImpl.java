@@ -13,6 +13,8 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -52,7 +54,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class ScarViewImpl extends Composite implements ScarView {
+public class ScarViewImpl extends Composite implements ScarView, RecordChangeHandler {
 
 	private static ScarViewUiBinder uiBinder = GWT
 			.create(ScarViewUiBinder.class);
@@ -261,4 +263,21 @@ public Map getScarMap()
 	return this.scarMap;
 }
 // E Highlight onViolation
+
+//by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
+	}
+	// by spec
+
 }

@@ -9,6 +9,8 @@ import java.util.Set;
 import org.hibernate.cfg.annotations.ListBinder;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -40,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author nikotsunami
  *
  */
-public class AdministratorViewImpl extends Composite implements  AdministratorView {
+public class AdministratorViewImpl extends Composite implements  AdministratorView, RecordChangeHandler {
 
 	private static AdministratorViewUiBinder uiBinder = GWT
 			.create(AdministratorViewUiBinder.class);
@@ -214,4 +216,23 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+
+	//by spec
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+		
+		if (event.getRecordValue() == "ALL")
+		{
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		}
+		else
+		{
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+				
+		table.setPageSize(pagesize);
+	}
+	//by spec
 }

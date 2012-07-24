@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomEditPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomRequest;
 import ch.unibas.medizin.osce.shared.TraitTypes;
@@ -66,6 +67,10 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (RoomViewImpl)view);
+		//by spec
 
 		init();
 

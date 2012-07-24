@@ -102,7 +102,12 @@ public class OscePostBlueprint {
      * @return
      */
     public boolean isFirstPartOfDoublePost() {
-    	OscePostBlueprint nextPost = findNextOscePostBlueprintByOsceAndSequenceNumber(this.getOsce(), this.getSequenceNumber());
+    	// if last post, then start from beginning (means sequenceNumber > 0)
+    	int qSequenceNumber = this.getSequenceNumber();
+    	if(this.getSequenceNumber() == this.getOsce().getOscePostBlueprints().size()) {
+    		qSequenceNumber = 0;
+    	}
+    	OscePostBlueprint nextPost = findNextOscePostBlueprintByOsceAndSequenceNumber(this.getOsce(), qSequenceNumber);
         if (nextPost != null && nextPost.getPostType().equals(this.getPostType())) {
             return true;
         }

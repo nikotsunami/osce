@@ -6,6 +6,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LogView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LogViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryRequest;
 import ch.unibas.medizin.osce.shared.TraitTypes;
@@ -62,6 +64,10 @@ public class LogActivity extends AbstractActivity implements LogView.Presenter, 
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (LogViewImpl)view);
+		//by spec
 
 		init();
 
