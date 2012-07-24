@@ -66,21 +66,6 @@ public class OscePostBlueprint {
     }
 
     /**
-     * Post is a possible starting point for a student if post is not a double post
-     * or if it is a double post, then only the first part is a possible starting point.
-     * @return whether from this post can be started or not
-     */
-    public boolean isPossibleStart() {
-        switch(this.getPostType()) {
-            case NORMAL: return true;
-            case BREAK: return true;
-            case PREPARATION: return isFirstPartOfDoublePost();
-            case ANAMNESIS_THERAPY: return isFirstPartOfDoublePost();
-        }
-        return false;
-    }
-
-    /**
      * Get the other part of a double post (first part, if given post is second part and vice versa)
      * @return
      */
