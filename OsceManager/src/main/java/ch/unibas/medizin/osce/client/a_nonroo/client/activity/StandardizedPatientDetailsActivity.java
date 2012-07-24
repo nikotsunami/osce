@@ -214,14 +214,16 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		}
 	}
 	
-	
-	private class LangSkillUpdateReceiver extends OSCEReceiver<Void> {
+	// Highlight onViolation
+
+	/*private class LangSkillUpdateReceiver extends OSCEReceiver<Void> {
 		@Override
 		public void onSuccess(Void response) {
 			Log.debug("Langskills updated successfully");
 			fillLangSkills();
 		}
-	}
+	}*/
+	// E Highlight onViolation
 	
 	  ///////////////////////
 	 /////	ANAMNESIS  /////
@@ -365,14 +367,15 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		}
 	}
 	
-	
-	private class ScarUpdateReceiver extends OSCEReceiver<Void>{
+	// Highlight onViolation	
+	/*private class ScarUpdateReceiver extends OSCEReceiver<Void>{
 		@Override
 		public void onSuccess(Void arg0) {
 			Log.debug("scar updated...");
 			fillScar();
 		}
-	}
+	}*/
+	// E Highlight onViolation
 
 	private void init() {
 		view.setValue(standardizedPatientProxy);
@@ -782,7 +785,17 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 
 	@Override
 	public void deleteLangSkillClicked(LangSkillProxy langSkill) {
-		requests.langSkillRequest().remove().using(langSkill).fire(new LangSkillUpdateReceiver());
+		// Highlight onViolation
+		//requests.langSkillRequest().remove().using(langSkill).fire(new LangSkillUpdateReceiver());
+		requests.langSkillRequest().remove().using(langSkill).fire(new OSCEReceiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				Log.debug("Langskills updated successfully");
+				fillLangSkills();	
+			};
+		});
+		
+		// E Highlight onViolation
 	}
 	
 	@Override
@@ -799,12 +812,26 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				anamnesisForm.getScars().remove(scarProxy);
 				break;
 			}
-		}anamReq.persist().using(anamnesisForm).fire(new ScarUpdateReceiver());
+			// Highlight onViolation
+		//}anamReq.persist().using(anamnesisForm).fire(new ScarUpdateReceiver());
+		}anamReq.persist().using(anamnesisForm).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.debug("scar updated...");
+				fillScar();
+			}
+		});
+		// E Highlight onViolation
 	}
 
 	@Override
 	public void addScarClicked() {
 		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
+		
+		// Highlight onViolation
+		Log.info("Map Size" + standardizedPatientScarSubView.getAnemnasisFormMap().size());
+		// E Highlight onViolation
 		
 		ScarProxy scar = scarBox.getValue();
 		Log.debug("Add scar (" + scar.getBodypart() + " - id " + scar.getId() + ") to anamnesis-form (" + anamnesisForm.getId() + ")");
@@ -812,8 +839,16 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		anamnesisForm = anamReq.edit(anamnesisForm);
 		
 		anamnesisForm.getScars().add(scar);
-		
-		anamReq.persist().using(anamnesisForm).fire(new ScarUpdateReceiver());
+		// Highlight onViolation		
+		anamReq.persist().using(anamnesisForm).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.debug("scar updated...");
+				fillScar();				
+			}
+		});
+		// E Highlight onViolation
 	}
 	
 	@Override
@@ -828,7 +863,20 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		Log.debug("add skill " + langSkillLevel.toString() + " in language " + spokenLanguageProxy.getLanguageName());
 		
 		// write new langSkill to database and re-initialize table
-		langSkillRequest.persist().using(langSkillProxy).fire(new LangSkillUpdateReceiver());
+		// Highlight onViolation
+		Log.info("Map Size: " + standardizedPatientLangSkillSubView.getLanguageSkillMap().size());
+		//langSkillRequest.persist().using(langSkillProxy).fire(new LangSkillUpdateReceiver());
+		
+		langSkillRequest.persist().using(langSkillProxy).fire(new OSCEReceiver<Void>(standardizedPatientLangSkillSubView.getLanguageSkillMap()) {
+
+			@Override
+			public void onSuccess(Void response) {				
+				Log.debug("Langskills updated successfully");
+				fillLangSkills();
+			}
+		});
+		
+		// E Highlight onViolation
 	}
 
 	@Override

@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.NationalityProxyRenderer;
@@ -215,6 +217,11 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	private Presenter presenter;
 	private CalendarUtil cal = new CalendarUtil();
 
+	// Highlight onViolation
+	Map<String, Widget> standardizedPatientMap;
+	int selectedTab=2;
+	// E Highlight onViolation
+	
 	public StandardizedPatientEditViewImpl() {
 		
 		initWidget(BINDER.createAndBindUi(this));
@@ -237,6 +244,10 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		patientPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
+				// Highlight onViolation
+				Log.info("Selected Tab:" + patientPanel.getTabBar().getSelectedTab());
+				selectedTab=patientPanel.getTabBar().getSelectedTab();
+				// E Highlight onViolation
 				if (delegate != null)
 					delegate.storeDisplaySettings();
 			}
@@ -273,6 +284,30 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 				day.setAcceptableValues(getIntegerList(1, cal.getDaysInMonth()));
 			}
 		});
+		
+		standardizedPatientMap=new HashMap<String, Widget>();
+		
+		standardizedPatientMap.put("name",name);
+		standardizedPatientMap.put("preName",preName);
+		standardizedPatientMap.put("street",street);
+		standardizedPatientMap.put("postalCode",postalCode);
+		standardizedPatientMap.put("city",city);		
+		standardizedPatientMap.put("telephone",telephone);
+		standardizedPatientMap.put("mobile",mobile);
+		standardizedPatientMap.put("email",email);
+		standardizedPatientMap.put("telephone2",telephone2);
+		standardizedPatientMap.put("birthday",day);
+		standardizedPatientMap.put("birthday",month);
+		standardizedPatientMap.put("birthday",year);
+		standardizedPatientMap.put("gender",gender);
+		standardizedPatientMap.put("height",height);
+		standardizedPatientMap.put("weight",weight);
+		standardizedPatientMap.put("profession",profession);
+		standardizedPatientMap.put("nationality",nationality);
+		standardizedPatientMap.put("maritalStatus",maritalStatus);
+		standardizedPatientMap.put("workPermission",workPermission);
+		standardizedPatientMap.put("socialInsuranceNo",socialInsuranceNo);
+		
 	}
 	
 	private List<Integer> getIntegerList(int minValue, int maxValue) {
@@ -621,4 +656,20 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	public void setSelectedDetailsTab(int detailsTab) {
 		patientPanel.getTabBar().selectTab(detailsTab);
 	}
+
+	// Highlight onViolation
+
+	@Override
+	public Map getStandardizedPatientMap() {
+
+		return this.standardizedPatientMap;
+	}
+	
+	@Override
+	public int getSelectedTab() {
+
+		return this.selectedTab;
+	}
+	
+	// E Highlight onViolation
 }

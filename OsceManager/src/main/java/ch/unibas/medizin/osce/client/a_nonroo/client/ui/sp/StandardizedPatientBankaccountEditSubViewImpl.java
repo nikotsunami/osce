@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.NationalityProxyRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -56,6 +58,10 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	interface Binder extends UiBinder<Widget, StandardizedPatientBankaccountEditSubViewImpl> {}
 	interface Driver extends RequestFactoryEditorDriver<BankaccountProxy, StandardizedPatientBankaccountEditSubViewImpl> {}
 	
+	// Highlight onViolation
+	Map<String, Widget> bankAccountMap;
+	// E Highlight onViolation
+	
 	public StandardizedPatientBankaccountEditSubViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		OsceConstants constants = GWT.create(OsceConstants.class);
@@ -66,6 +72,17 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 		labelBankCity.setInnerText(constants.city());
 		labelBankCountry.setInnerText(constants.country());
 		labelOwnerName.setInnerText(constants.ownerName());
+		
+		// Highlight onViolation
+		bankAccountMap=new HashMap<String, Widget>();
+		bankAccountMap.put("bankName", bankName);
+		bankAccountMap.put("IBAN", IBAN);
+		bankAccountMap.put("BIC", BIC);
+		bankAccountMap.put("ownerName", ownerName);
+		bankAccountMap.put("postalCode", postalCode);
+		bankAccountMap.put("city", city);
+		bankAccountMap.put("country", country);		
+		// E Highlight onViolation
 	}
 	
 	
@@ -85,5 +102,12 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	@Override
 	public void setCountryPickerValues(Collection<NationalityProxy> values) {
 		country.setAcceptableValues(values);
+	}
+
+
+	@Override
+	public Map getBankAccountMap() {
+		// TODO Auto-generated method stub
+		return this.bankAccountMap;
 	}
 }

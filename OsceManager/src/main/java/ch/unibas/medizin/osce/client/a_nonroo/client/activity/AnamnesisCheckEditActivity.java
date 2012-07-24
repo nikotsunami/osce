@@ -8,6 +8,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewImpl;
@@ -418,14 +419,18 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 							// }
 
 							// save data
-							request.fire(new Receiver<Void>() {
+							// Highlight onViolation
+							Log.info("Map Size: " + view.getAnamnesisCheckMap().size());
+							request.fire(new OSCEReceiver<Void>(view.getAnamnesisCheckMap()) {
+							// E Highlight onViolation
 
 								public void onFailure(ServerFailure error) {
 									Log.error(error.getMessage());
 
 								}
 
-								@Override
+								// Highlight onViolation
+								/*@Override
 								public void onViolation(Set<Violation> errors) {
 									Iterator<Violation> iter = errors
 											.iterator();
@@ -436,8 +441,9 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 									}
 									Log.warn(" in AnamnesisCheck -" + message);
 
-								}
-
+								}*/
+								// E Highlight onViolation
+								
 								@Override
 								public void onSuccess(Void response) {
 									Log

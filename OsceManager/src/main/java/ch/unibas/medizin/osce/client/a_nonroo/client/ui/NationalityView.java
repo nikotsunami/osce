@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -38,5 +40,11 @@ public interface NationalityView  extends IsWidget{
     void setPresenter(Presenter systemStartActivity);
     
     public EditPopView getEditPopupView();
+    
+ // Highlight onViolation
+    Map getNationalityMap();
+    Map getNationalityNewMap();
+ // E Highlight onViolation
+    
     
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorEditViewImpl;
@@ -170,15 +171,18 @@ public class AdministratorEditActivity extends AbstractActivity implements
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
-
-		editorDriver.flush().fire(new Receiver<Void>() {
-
+		
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getAdministratorMap().size());
+		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getAdministratorMap()) {
+		// E Highlight onViolation
 			public void onFailure(ServerFailure error) {
 				Log.error(error.getMessage());
 
 			}
-
-			@Override
+		// Highlight onViolation
+	
+		/*	@Override
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
@@ -190,7 +194,8 @@ public class AdministratorEditActivity extends AbstractActivity implements
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
 
 			}
-
+*/
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Administrator successfully saved.");

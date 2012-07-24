@@ -2,12 +2,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.shared.Gender;
-//import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -58,6 +59,12 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 	SpanElement labelTelephone;
 
 	private Delegate delegate;
+	
+	// Highlight onViolation
+	Map<String, Widget> officeMap;
+	// E Highlight onViolation
+
+	
 
 	public OfficeEditViewImpl() {
 		OsceConstants constants = GWT.create(OsceConstants.class);
@@ -70,6 +77,17 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 		labelPreName.setInnerText(constants.preName() + ":");
 		labelEmail.setInnerText(constants.email() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
+		
+		// Highlight onViolation
+		officeMap=new HashMap<String, Widget>();
+		officeMap.put("gender",gender);		
+		officeMap.put("title",title);
+		officeMap.put("name",name);
+		officeMap.put("preName",preName);
+		officeMap.put("email",email);
+		officeMap.put("telephone",telephone);	
+		// E Highlight onViolation
+		
 	}
     
 	interface Binder extends UiBinder<Widget, OfficeEditViewImpl> {
@@ -89,7 +107,12 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 		driver.initialize(this);
 		return driver;
 	}
-	
 
-
+	// Highlight onViolation
+	@Override
+	public Map getOfficeMap() 
+	{		
+		return this.officeMap;
+	}
+	// E Highlight onViolation	
 }

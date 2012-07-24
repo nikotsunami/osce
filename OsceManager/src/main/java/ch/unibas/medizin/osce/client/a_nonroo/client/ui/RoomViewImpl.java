@@ -4,8 +4,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -107,13 +109,24 @@ public class RoomViewImpl extends Composite implements RoomView {
 			
 			RootPanel.get().add(((RoomEditPopupViewImpl)roomEditPopup));
 			
+			// Highlight onViolation
+			
+			roomNewMap=new HashMap<String, Widget>();
+			roomNewMap.put("roomNumber",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber());
+			roomNewMap.put("oscePostRooms",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber());
+			roomNewMap.put("length",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength());
+			roomNewMap.put("width",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth());
+			
+			// E Highlight onViolation
+			
 			roomEditPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent arg0) {
 					// TODO Auto-generated method stub
-					
-					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
+					// Highlight onViolation
+
+					/*if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
@@ -121,8 +134,9 @@ public class RoomViewImpl extends Composite implements RoomView {
 						//Window.alert("Enter Correct Value");
 					}
 					else
-					{
-						double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
+					{*/
+					// E Highlight onViolation
+					double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
 						double roomWidth = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()) : 0;
 						
 						delegate.newClicked(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue() , roomLength, roomWidth);
@@ -131,8 +145,11 @@ public class RoomViewImpl extends Composite implements RoomView {
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
-						((RoomEditPopupViewImpl)roomEditPopup).hide(true);
-					}
+						// Highlight onViolation
+						/*						
+						((RoomEditPopupViewImpl)roomEditPopup).hide(true);					
+					 }*/
+						// E Highlight onViolation
 					
 				}
 			});
@@ -172,6 +189,13 @@ public class RoomViewImpl extends Composite implements RoomView {
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	// Highlight onViolation
+	Map<String, Widget> roomMap;
+	Map<String, Widget> roomNewMap;
+	RoomView roomView;
+// E Highlight onViolation
+	
 	public RoomViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<RoomProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -191,6 +215,12 @@ public class RoomViewImpl extends Composite implements RoomView {
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addRoom());
+		
+		// Highlight onViolation
+		roomView=this;
+				
+						
+				// E Highlight onViolation
 	}
 
 	public String[] getPaths() {
@@ -212,30 +242,46 @@ public class RoomViewImpl extends Composite implements RoomView {
 			
 			RootPanel.get().add(((RoomEditPopupViewImpl)roomEditPopup));
 			
+			// Highlight onViolation
+			
+			roomMap=new HashMap<String, Widget>();
+			roomMap.put("roomNumber",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber());
+			roomMap.put("oscePostRooms",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber());
+			roomMap.put("length",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength());
+			roomMap.put("width",((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth());
+			
+			// E Highlight onViolation
+			
 			roomEditPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent arg0) {
 					// TODO Auto-generated method stub
-					
-					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
+					// Highlight onViolation
+				
+					/*if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
 					}
 					else
-					{
+					{*/
+					// E Highlight onViolation
 						double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
 						double roomWidth = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()) : 0;
 						
 						delegate.editClicked(proxy, ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue() , roomLength, roomWidth);
 						//Window.alert("Button Clicked");
 						
+						// Highlight onViolation
+						/*
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().setValue(constants.roomNumber());
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
+						
 						((RoomEditPopupViewImpl)roomEditPopup).hide(true);
-					}
+					}*/
+						// E Highlight onViolation
 					
 				}
 			});
@@ -422,4 +468,30 @@ public class RoomViewImpl extends Composite implements RoomView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	// Highlight onViolation
+
+			@Override
+			public RoomView getRoomView() {
+				// TODO Auto-generated method stub
+				return this.roomView;
+			}
+
+			@Override
+			public RoomEditPopupView getRoomEditPopView() {
+				// TODO Auto-generated method stub
+				return this.roomEditPopup;
+			}
+			
+			@Override
+			public Map getRoomMap() {
+				return this.roomMap;
+			}
+			
+			@Override
+			public Map getNewRoomMap() {
+				return this.roomNewMap;
+			}
+			// E Highlight onViolation
+	
 }

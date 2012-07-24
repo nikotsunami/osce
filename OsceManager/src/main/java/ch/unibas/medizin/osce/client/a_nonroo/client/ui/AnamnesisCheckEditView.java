@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
@@ -41,4 +42,8 @@ public interface AnamnesisCheckEditView extends IsWidget {
 	String getSelectedInsideTitle();
 
 	String getSelectedPreviousQuestion();
+	
+	// Highlight onViolation
+	Map getAnamnesisCheckMap();
+	// E Highlight onViolation
 }

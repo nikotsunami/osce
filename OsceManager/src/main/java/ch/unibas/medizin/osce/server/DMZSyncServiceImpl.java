@@ -164,9 +164,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 					JSONObject jsonObject = jsonArray.getJSONObject(i);
 					
 					if(jsonObject.get("key")!=JSONObject.NULL){
-						if(jsonObject.get("key")!=JSONObject.NULL){
+					//	if(jsonObject.get("key")!=JSONObject.NULL){
 							message+=jsonObject.get("key").toString();
-						}
+					//	}
 						if(i != jsonArray.length()-1){
 							message+="#&";
 						}

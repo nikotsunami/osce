@@ -22,6 +22,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 @RooJavaBean
@@ -112,25 +113,37 @@ public class Osce {
 	}
 	
 	/**
-     * Get the number of all posts cannot be started from (flag is_possible_start). This number is defined
-     * basically by the number of posts that have post_type = ANAMNESIS_THERAPY or
-     * post_type = PREPARATION
-     * 
-     * TODO adapt this method according to description (at the moment, just posts with flag
-     * is_possible_start = false are counted)
-     * 
-     * @return number of posts that cannot be started from
+     * Get the number of posts that need to have a room assigned (needed for calculation of number of parcours).
+     * This number is basically defined by the number of posts that have post_type = BREAK
+     * @return number of posts that need to have a room assigned
      */
-    public int numberPostsNotPossibleStart() {
-        int numberNotPossibleStart = 0;
+    public int numberPostsWithRooms() {
+        int numberPostsWithRooms = 0;
+        Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
+        while (it.hasNext()) {
+        	OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
+            if (!oscePostBlueprint.getPostType().equals(PostType.BREAK)) {
+                numberPostsWithRooms++;
+            }
+        }
+        return numberPostsWithRooms;
+    }
+    
+    /**
+     * Get the number of posts that are of post_type = BREAK.
+     * NOTE: Only for manually defined break posts
+     * @return number of break posts
+     */
+    public int numberManualBreakPosts() {
+    	int numberManualBreakPosts = 0;
         Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
         while (it.hasNext()) {
         	OscePostBlueprint oscePost = (OscePostBlueprint) it.next();
-            if (oscePost.getIsPossibleStart() == false) {
-                numberNotPossibleStart++;
+            if (oscePost.getPostType().equals(PostType.BREAK)) {
+                numberManualBreakPosts++;
             }
         }
-        return numberNotPossibleStart;
+        return numberManualBreakPosts;
     }
     
     public static Boolean generateOsceScaffold(Long osceId) {
@@ -146,7 +159,6 @@ public class Osce {
     public static Boolean generateAssignments(Long osceId) {
     	TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
     	System.out.println(optGen.toString());
-    	log.info(optGen.toString());
     	
     	log.info("calling createAssignments()...");
     	

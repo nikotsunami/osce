@@ -3,7 +3,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomEditPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
@@ -12,6 +14,8 @@ import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -169,8 +173,10 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		room.setRoomNumber(name);
 		room.setLength(length);
 		room.setWidth(width);
-
-		roomReq.persist().using(room).fire(new Receiver<Void>(){
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getNewRoomMap().size());
+		roomReq.persist().using(room).fire(new OSCEReceiver<Void>(view.getNewRoomMap()){
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
 				init();
@@ -210,12 +216,17 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		proxy.setLength(length);
 		proxy.setWidth(width);
 		
-		roomrequest.persist().using(proxy).fire(new Receiver<Void>() {
-
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getRoomMap().size());
+		roomrequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getRoomMap()) {
+			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
 				// TODO Auto-generated method stub
 				init();
+				// Highlight onViolation
+				((RoomEditPopupViewImpl)view.getRoomEditPopView()).hide();				
+				// E Highlight onViolation
 				Log.info("~~Record Updated Successfully");
 			}
 		});

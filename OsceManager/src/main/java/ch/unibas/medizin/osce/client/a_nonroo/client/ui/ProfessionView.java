@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -32,4 +34,11 @@ public interface ProfessionView  extends IsWidget{
 
 //	SimplePanel getDetailsPanel();
 	void setPresenter(Presenter systemStartActivity);
+	// Highlight onViolation
+	ProfessionView getProfessionView();
+	EditPopView getEditPopView();
+	Map getProfessionMap();
+	Map getNewLanguageMap();
+	
+	// E Highlight onViolation
 }

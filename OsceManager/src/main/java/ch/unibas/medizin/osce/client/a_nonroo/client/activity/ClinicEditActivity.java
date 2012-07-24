@@ -9,6 +9,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicEditViewImpl;
@@ -170,14 +171,17 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 		Log.info("saveClicked");
 		
 		// TODO: bug(2011-11-17) - selected doctors are not saved
-
-		editorDriver.flush().fire(new Receiver<Void>() {
+		// Highlight onViolation
+		Log.info("Map Size: " + view.getClinicMap().size());
+		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getClinicMap()) {
+			// E Highlight onViolation
 			
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
 
 			}
-			@Override
+			// Highlight onViolation
+/*			@Override
 			public void onViolation(Set<Violation> errors) {
 				Iterator<Violation> iter = errors.iterator();
 				String message = "";
@@ -188,6 +192,7 @@ ClinicEditView.Presenter, ClinicEditView.Delegate {
 
 				// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
 			}
+*/			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Clinic successfully saved.");

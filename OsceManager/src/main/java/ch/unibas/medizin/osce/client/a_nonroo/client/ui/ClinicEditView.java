@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.Collection;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -29,5 +30,11 @@ public interface ClinicEditView extends IsWidget {
 	void setDoctorsPickerValues(Collection<DoctorProxy> values);
 	void setSelectedDetailsTab(int detailsTab);
 	int getSelectedDetailsTab();
+	
+	// Highlight onViolation
+	ClinicEditView getClinicView();
+	Map getClinicMap();
+	
+	// E Highlight onViolation
 
 }

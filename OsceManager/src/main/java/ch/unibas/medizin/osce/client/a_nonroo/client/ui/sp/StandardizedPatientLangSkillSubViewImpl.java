@@ -1,8 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
@@ -70,6 +72,10 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	@UiField(provided = true)
     ValueListBox<LangSkillLevel> langSkillBox = new ValueListBox<LangSkillLevel>(new EnumRenderer<LangSkillLevel>());
 	
+	// Highlight onViolation
+	Map<String, Widget> languageSkillMap;
+	// E Highlight onViolation
+	
 	public StandardizedPatientLangSkillSubViewImpl() {
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -83,6 +89,12 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		langSkillAddButton.setText(constants.addLangSkill());
 		langSkillBox.setValue(LangSkillLevel.values()[0]);
 		langSkillBox.setAcceptableValues(Arrays.asList(LangSkillLevel.values()));
+		
+		// Highlight onViolation
+		languageSkillMap=new HashMap<String, Widget>();
+		languageSkillMap.put("spokenlanguage", languageBox);
+		languageSkillMap.put("skill", langSkillBox);
+		// E Highlight onViolation
 	}
 	
 	private void initTable() {
@@ -216,4 +228,11 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		languageBox.setValue(values.get(0));
 		languageBox.setAcceptableValues(values);
 	}
+
+	// Highlight onViolation
+	@Override
+	public Map getLanguageSkillMap() {
+		return this.languageSkillMap;
+	}
+	// E Highlight onViolation
 }
