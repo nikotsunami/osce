@@ -51,6 +51,7 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import org.json.JSONException;
 import ch.unibas.medizin.osce.shared.Locale;
 import com.allen_sauer.gwt.log.client.Log;
+import java.text.ParseException;
 
 
 public class DMZSyncServiceImpl extends RemoteServiceServlet implements
@@ -144,7 +145,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				syncOsceDayAndTraining(myjson);
 				message = getReturnMessage(myjson);
 			}catch(Exception e){
-				Log.debug(e.getMessage());
+				Log.error(e.getMessage());
 			}
 		}
 
@@ -431,7 +432,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				dateStr = sdf.format(date);
 			}
 		} catch (Exception e) {
-			Log.debug(e.getMessage());
+			Log.error(e.getMessage());
 		}
 		return dateStr;
 	}
@@ -449,8 +450,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}else {
 				return null;
 			}
-		} catch (Exception e) {
-			Log.debug(e.getMessage());
+		} catch (ParseException e) {
+			Log.error("Date format in JSON string incorrect. Date string was " + dateStr ,e.getMessage());
+			
 			return null;
 		}
 		return date;
