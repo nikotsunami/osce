@@ -726,10 +726,17 @@ public class TimetableGenerator {
 								// Slot 4:		3 4 5 1 2
 								// Slot 5:		2 3 4 5 1
 								// NOTE: student indices for first part of PREPARATION are the same as for second part, but with early start
-								if(postBP != null && postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost()) {
-									studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
-								} else {
-									studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
+								studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
+								if(postBP != null) {
+									if(postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost()) {
+										studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
+									} else if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) && earlyStartFirst) {
+										if(postBP.isFirstPartOfDoublePost()) {
+											studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
+										} else {
+											studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 2)) % numberSlotsTotal;
+										}
+									}
 								}
 								
 								log.info("index " + studentIndex);
@@ -737,21 +744,11 @@ public class TimetableGenerator {
 								Date startTime = time;
 								
 								if(postBP != null) {
-									// skip last student assignment of first part of double post if number of slots is odd (consider schema) - only finalize last SP assignment
-									boolean skipLastAssignment = numberSlotsTotal % 2 == 1 && j == numberSlotsTotal - 1 && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) &&
-											((!earlyStartFirst && postBP.isFirstPartOfDoublePost()) ||
-											(earlyStartFirst && !postBP.isFirstPartOfDoublePost()));
-									if(skipLastAssignment) {
-										break;
-									}
-									
 									// early start
 									boolean isAnamnesisTherapy = firstTimeSlot && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) &&
 											((!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) ||
 											(earlyStartFirst && postBP.isFirstPartOfDoublePost()));
 									boolean isPreparation = firstTimeSlot && postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost();
-									log.info("anamnesisFirstSlot " + isAnamnesisTherapy);
-									log.info("preparationAllSlots " + isPreparation);
 									if(isAnamnesisTherapy || isPreparation) {
 										startTime = dateSubtractMin(startTime, osce.getPostLength());
 										
@@ -765,16 +762,14 @@ public class TimetableGenerator {
 								
 								Date endTime = dateAddMin(startTime, osce.getPostLength());
 								
-								if(postBP != null) {	
-									// ANAMNESIS_THERAPY --> double length
-									if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
-										endTime = dateAddMin(endTime, osce.getPostLength());
-										
-										if(changeSimpatDuringRotation && j == numberSlotsTotal / 2) {
-											endTime = dateAddMin(endTime, osce.getShortBreakSimpatChange());
-										} else {
-											endTime = dateAddMin(endTime, osce.getShortBreak());
-										}
+								// ANAMNESIS_THERAPY --> double length
+								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+									endTime = dateAddMin(endTime, osce.getPostLength());
+
+									if(changeSimpatDuringRotation && j == numberSlotsTotal / 2) {
+										endTime = dateAddMin(endTime, osce.getShortBreakSimpatChange());
+									} else {
+										endTime = dateAddMin(endTime, osce.getShortBreak());
 									}
 								}
 								
@@ -790,11 +785,16 @@ public class TimetableGenerator {
 								ass.setOscePostRoom(oscePR);
 								assThisRotation.add(ass);
 
-								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
-									if((!earlyStartFirst && postBP.isFirstPartOfDoublePost()) || (earlyStartFirst && !postBP.isFirstPartOfDoublePost())) {
-										lastTimeSlot = j == numberSlotsTotal - 1;
+								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) ) {
+									if(numberSlotsTotal % 2 == 1) {
+										if((!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) || (earlyStartFirst && postBP.isFirstPartOfDoublePost())) {
+											lastTimeSlot = j == numberSlotsTotal - 1;
+										} else {
+											lastTimeSlot = j == numberSlotsTotal - 3;
+										}
+									} else {
+										lastTimeSlot = j == numberSlotsTotal - 2;
 									}
-									lastTimeSlot = j == numberSlotsTotal - 2;
 								}
 								
 								// handle SP assignments
@@ -804,15 +804,17 @@ public class TimetableGenerator {
 										// create first SP slot
 										if(firstRotation && firstTimeSlot) {
 											createSPAssignment(i, osceDay, startTime, oscePR);
-											log.info("create SP assignment for post " + i + " " + debugTime(startTime));
+											log.warn("create SP assignment for post " + i + " " + debugTime(startTime));
 										}
 										// finalize last SP slot
 										if(lastRotation && lastTimeSlot) {
 											finalizeSPAssignment(i, endTime);
-											log.info("finalize SP assignment for post " + i + " " + debugTime(endTime));
+											log.warn("finalize SP assignment for post " + i + " " + debugTime(endTime));
 										}
 									}
 								}
+								
+								log.info("student-index " + studentIndex + " - " + lastTimeSlot);
 								
 								if(!lastTimeSlot) {
 									// add short break between posts
@@ -821,21 +823,38 @@ public class TimetableGenerator {
 									if(changeSimpatDuringRotation && halfTimeSlots) {
 										Date endTimeNew = dateAddMin(endTime, osce.getShortBreakSimpatChange());
 										
-										if(i < posts.size() && postBP.requiresSimpat() && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material))
+										if(post != null && postBP != null && postBP.requiresSimpat() && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material))
 											changeSP(i, osceDay, endTime, endTimeNew, oscePR);
 										
 										endTime = endTimeNew;
 									} else {
 										endTime = dateAddMin(endTime, osce.getShortBreak());
 									}
+								} else {
+									if(!lastRotation && changeSimpatAfterRotation) {
+										
+										if(post != null && postBP != null && postBP.requiresSimpat() && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+											Date endTimeOld = endTime;
+											Date startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
+											
+											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
+											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew));
+										}
+									}
 								}
 								
 								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
 									// skip next time-slot
 									j++;
+									// TODO: insert second OscePostRoom-assignment here
 								}
 								
 								time = endTime;
+								
+								// leave loop after last time slot (otherwise we would have too many time slots for double posts)
+								if(lastTimeSlot) {
+									break;
+								}
 							}
 							// STUDENTS END
 							
@@ -854,16 +873,6 @@ public class TimetableGenerator {
 								if(changeSimpatAfterRotation) {
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak());
 									postsSinceSimpatChange = 0;
-									
-									if(post != null && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
-										Date startTimeNew = nextRotationStartTime;
-										
-										if(numberSlotsTotal % 2 == 1 && (!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) || (earlyStartFirst && postBP.isFirstPartOfDoublePost()))
-											startTimeNew = dateSubtractMin(startTimeNew, osce.getPostLength() + osce.getShortBreak());
-										
-										changeSP(i, osceDay, time, startTimeNew, oscePR);
-										log.warn("change SP assignment for post " + i + " " + debugTime(time) + " / " + debugTime(nextRotationStartTime));
-									}
 								} else {
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getMiddleBreak());
 								}
