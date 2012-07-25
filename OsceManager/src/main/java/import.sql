@@ -209,20 +209,13 @@ INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, act
 INSERT INTO `standardized_role` (role_topic, short_name, long_name, version, active, role_type, study_year) VALUES (4, 'Naht - B', 'Naht - Version B', 0, 1, 0, 3);
 
 INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`max_number_students`,`middle_break`,`name`,`number_courses`,`number_posts`,`number_rooms`,`osce_status`,`post_length`,`short_break`,`short_break_simpat_change`,`study_year`,`version`,`copied_osce`,`semester`) VALUES (1,15,0,1,45,130,5,'Test 1',0,NULL,16,2,13,1,3,3,0,NULL,1);
-INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`max_number_students`,`middle_break`,`name`,`number_courses`,`number_posts`,`number_rooms`,`osce_status`,`post_length`,`short_break`,`short_break_simpat_change`,`study_year`,`version`,`copied_osce`,`semester`) VALUES (2,15,0,1,35,120,5,'Test 2',0,NULL,16,2,20,1,3,3,0,NULL,1);
 
 INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (1,'2012-06-18 19:00:00','2012-06-18 09:00:00',0,1,'2012-06-18 00:00:00');
-INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (2,'2012-06-19 12:00:00','2012-06-19 09:00:00',0,2,'2012-06-19 00:00:00');
-INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (3,'2012-06-18 11:00:00','2012-06-18 09:00:00',0,2,'2012-06-20 00:00:00');
 
 INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 1, 1, 1, 0, 1, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 2, 2, 1, 2, 2, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 3, 3, 1, 2, 3, 0);
+INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 2, 2, 1, 0, 2, 0);
+INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 3, 3, 1, 0, 3, 0);
 INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 4, 4, 1, 0, 4, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 1, 1, 2, 2, 1, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 2, 2, 2, 3, 2, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 3, 3, 2, 0, 3, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 4, 4, 2, 0, 4, 0);
 
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 4, 1, 0);
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('B', 4, 1, 0);

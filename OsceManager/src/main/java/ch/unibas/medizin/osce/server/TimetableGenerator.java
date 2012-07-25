@@ -599,6 +599,9 @@ public class TimetableGenerator {
 	public Set<Assignment> createAssignments() {
 		assignments = new HashSet<Assignment>();
 		
+//		int securityType = 1; // temporary 1 = simple, 2 = federal exam
+//		OSCESecurityStatus securityType = osce.getSecurity();
+		
 		List<OsceDay> days = new ArrayList<OsceDay>(osce.getOsce_days());
 		
 		// get posts (sorted by sequenceNumber)
@@ -690,6 +693,7 @@ public class TimetableGenerator {
 						// (in the end, we want to have a n*n matrix where n denotes the number of posts in this OSCE)
 						for(int i = 0; i < numberSlotsTotal; i++) {
 							OscePostBlueprint postBP = null;
+							PostType postType = null;
 							OscePost post = null;
 							OscePostRoom oscePR = null;
 							
@@ -697,9 +701,10 @@ public class TimetableGenerator {
 							
 							if(i < posts.size()) {
 								postBP = posts.get(i);
+								postType = postBP.getPostType();
 								post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(postBP, osceSequence).getSingleResult();
 								
-								if(!postBP.getPostType().equals(PostType.BREAK))
+								if(!postType.equals(PostType.BREAK))
 									oscePR = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
 							}
 							
@@ -728,10 +733,10 @@ public class TimetableGenerator {
 								// NOTE: student indices for first part of PREPARATION are the same as for second part, but with early start
 								studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
 								if(postBP != null) {
-									if(postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost()) {
+									if(postType.equals(PostType.PREPARATION) && postBP.getIsFirstPart()) {
 										studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
-									} else if(postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) && earlyStartFirst) {
-										if(postBP.isFirstPartOfDoublePost()) {
+									} else if(postType.equals(PostType.ANAMNESIS_THERAPY) && earlyStartFirst) {
+										if(postBP.getIsFirstPart()) {
 											studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
 										} else {
 											studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 2)) % numberSlotsTotal;
@@ -745,14 +750,14 @@ public class TimetableGenerator {
 								
 								if(postBP != null) {
 									// early start
-									boolean isAnamnesisTherapy = firstTimeSlot && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) &&
-											((!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) ||
-											(earlyStartFirst && postBP.isFirstPartOfDoublePost()));
-									boolean isPreparation = firstTimeSlot && postBP.getPostType().equals(PostType.PREPARATION) && postBP.isFirstPartOfDoublePost();
-									if(isAnamnesisTherapy || isPreparation) {
+									boolean isAnamnesisTherapy = postType.equals(PostType.ANAMNESIS_THERAPY) &&
+											((!earlyStartFirst && !postBP.getIsFirstPart()) ||
+											(earlyStartFirst && postBP.getIsFirstPart()));
+									boolean isPreparation = postType.equals(PostType.PREPARATION) && postBP.getIsFirstPart();
+									if(firstTimeSlot && (isAnamnesisTherapy || isPreparation)) {
 										startTime = dateSubtractMin(startTime, osce.getPostLength());
 										
-										if(changeSimpatDuringRotation && j == numberSlotsTotal / 2) {
+										if(changeSimpatDuringRotation && halfTimeSlots) {
 											startTime = dateSubtractMin(startTime, osce.getShortBreakSimpatChange());
 										} else {
 											startTime = dateSubtractMin(startTime, osce.getShortBreak());
@@ -763,10 +768,10 @@ public class TimetableGenerator {
 								Date endTime = dateAddMin(startTime, osce.getPostLength());
 								
 								// ANAMNESIS_THERAPY --> double length
-								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
 									endTime = dateAddMin(endTime, osce.getPostLength());
 
-									if(changeSimpatDuringRotation && j == numberSlotsTotal / 2) {
+									if(changeSimpatDuringRotation && halfTimeSlots) {
 										endTime = dateAddMin(endTime, osce.getShortBreakSimpatChange());
 									} else {
 										endTime = dateAddMin(endTime, osce.getShortBreak());
@@ -785,9 +790,9 @@ public class TimetableGenerator {
 								ass.setOscePostRoom(oscePR);
 								assThisRotation.add(ass);
 
-								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) ) {
+								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY) ) {
 									if(numberSlotsTotal % 2 == 1) {
-										if((!earlyStartFirst && !postBP.isFirstPartOfDoublePost()) || (earlyStartFirst && postBP.isFirstPartOfDoublePost())) {
+										if((!earlyStartFirst && !postBP.getIsFirstPart()) || (earlyStartFirst && postBP.getIsFirstPart())) {
 											lastTimeSlot = j == numberSlotsTotal - 1;
 										} else {
 											lastTimeSlot = j == numberSlotsTotal - 3;
@@ -798,8 +803,7 @@ public class TimetableGenerator {
 								}
 								
 								// handle SP assignments
-								if(i < posts.size() && postBP.requiresSimpat()) {
-									
+								if(post != null && post.requiresSimpat()) {
 									if(post != null && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
 										// create first SP slot
 										if(firstRotation && firstTimeSlot) {
@@ -823,8 +827,10 @@ public class TimetableGenerator {
 									if(changeSimpatDuringRotation && halfTimeSlots) {
 										Date endTimeNew = dateAddMin(endTime, osce.getShortBreakSimpatChange());
 										
-										if(post != null && postBP != null && postBP.requiresSimpat() && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material))
+										if(post != null && post.requiresSimpat()) {
 											changeSP(i, osceDay, endTime, endTimeNew, oscePR);
+											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
+										}
 										
 										endTime = endTimeNew;
 									} else {
@@ -833,17 +839,17 @@ public class TimetableGenerator {
 								} else {
 									if(!lastRotation && changeSimpatAfterRotation) {
 										
-										if(post != null && postBP != null && postBP.requiresSimpat() && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+										if(post != null && post.requiresSimpat()) {
 											Date endTimeOld = endTime;
 											Date startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
 											
 											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
-											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew));
+											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
 										}
 									}
 								}
 								
-								if(postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY)) {
+								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
 									// skip next time-slot
 									j++;
 									// TODO: insert second OscePostRoom-assignment here
@@ -921,20 +927,11 @@ public class TimetableGenerator {
 		Iterator<Assignment> itAss = assignments.iterator();
 		while (itAss.hasNext()) {
 			Assignment assignment = (Assignment) itAss.next();
-//			log.info("persisting " + assignment.getSequenceNumber());
 			assignment.persist();
 		}
 		
 //		printAllStudents(assignments);
 //		printAllSP(assignments);
-		
-		// studentsLeft should be 0 here - all students meant to be assigned
-//		log.info(assignments.size());
-//		if(assignments.size() != osce.getMaxNumberStudents()) {
-//			log.error("number of created slots does not equal the number of students!");
-//		} else {
-//			log.info("[SUCCESS] hooray! number of created slots is enough to examine all student!");
-//		}
 		
 		return assignments;
 	}
@@ -1147,7 +1144,7 @@ public class TimetableGenerator {
 			postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
 		}
 		
-		return "\t student "+ass.getSequenceNumber()+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted..." + (postBP != null && postBP.getPostType().equals(PostType.ANAMNESIS_THERAPY) ? "first: " + postBP.isFirstPartOfDoublePost() : "");
+		return "\t student "+ass.getSequenceNumber()+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted..." + (postBP != null && postBP.equals(PostType.ANAMNESIS_THERAPY) ? "first: " + postBP.getIsFirstPart() : "");
 	}
 	
 	private String debugSP(Assignment ass) {
