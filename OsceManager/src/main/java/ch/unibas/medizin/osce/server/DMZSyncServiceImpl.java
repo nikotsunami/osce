@@ -113,8 +113,13 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		String unExpectedData=standardizedPatientId+"not found";
 		StandardizedPatient newPatient = null;
 		if(!data.equals(unExpectedData)){
+			try{
 				newPatient = (StandardizedPatient) (deserializer
 						.use(null, StandardizedPatient.class).deserialize(data));
+			}catch(flexjson.JSONException e){
+				Log.error("Error deserialize json data: "+e.getMessage());
+				throw new DMZSyncException(DMZSyncExceptionType.SYNC_PATIENT_EXCEPTION,"Error json data.");
+			}
 		}else{
 			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
 		}
@@ -124,7 +129,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		StandardizedPatient patient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
 	
 		if( patient != null){
-			updatePatient(patient,newPatient);
+			if(newPatient!=null){
+				updatePatient(patient,newPatient);
+			}
 		}else{
 //			throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
 //			savePatient(newPatient);
@@ -834,14 +841,14 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		try {
 			
 			int statusCode = httpClient.executeMethod(getMethod);
-			if (statusCode != HttpStatus.SC_OK) {
-				System.err.println("Method failed: "
-						+ getMethod.getStatusLine());
-			}
+			
 
 			byte[] responseBody = getMethod.getResponseBody();
 
 			ret = new String(responseBody);
+			if (statusCode != HttpStatus.SC_OK) {
+				throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,ret);
+			}
 		} catch (HttpException e) {
 			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,url+": "+e.getMessage());
 		} catch (IOException e) {

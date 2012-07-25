@@ -522,7 +522,6 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			e.printStackTrace();
 			e.getCause().printStackTrace();
 			Assert.fail("error occured " + e.getMessage());
 		}
@@ -554,10 +553,25 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 
         assertEquals(null,patient.getVideoPath());
 
-
-
-
     }
+	
+	
+    @Test 
+    public void testPullErrorJsonFromDMZ() {
+        testData =  new StandardizedPatient();
+        testData.setName("patient");
+        testData.persist();
+        testData.merge();
+
+		dataFromDMZ  = "abc"; 
+        try {
+			instance.pullFromDMZ(testData.getId());
+			Assert.fail("Pull StandardizedPatient from DMZ by error json data without throws Exception!");
+		} catch (Exception e) {	
+		}
+		
+    }	
+
 
     @Test
     public void testPushToDMZ() {
@@ -565,7 +579,6 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 			instance.pushToDMZ(22L);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			e.printStackTrace();
 			e.getCause().printStackTrace();
 			Assert.fail("error occured " + e.getMessage());			
@@ -806,6 +819,15 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 				if(osceDay!=null){
 					osceDay.remove();
 					osceDay.flush();
+				}
+			}
+			
+			List<StandardizedPatient> patients = StandardizedPatient.findAllStandardizedPatients();
+			for(StandardizedPatient patient : patients){
+				StandardizedPatient rPatient = StandardizedPatient.findStandardizedPatient(patient.getId());
+				if(rPatient!=null){
+					rPatient.remove();
+					rPatient.flush();
 				}
 			}
 									
