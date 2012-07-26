@@ -15,6 +15,9 @@ import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -62,12 +65,20 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	@UiField
 	IconButton langSkillAddButton;
 	
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	@UiField
+	public DefaultSuggestBox<SpokenLanguageProxy, EventHandlingValueHolderItem<SpokenLanguageProxy>> languageBox;
+
+	/*
 	@UiField(provided = true)
     ValueListBox<SpokenLanguageProxy> languageBox = new ValueListBox<SpokenLanguageProxy>(new AbstractRenderer<SpokenLanguageProxy>() {
         public String render(SpokenLanguageProxy obj) {
             return obj == null ? "" : String.valueOf(obj.getLanguageName());
         }
     });
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	@UiField(provided = true)
     ValueListBox<LangSkillLevel> langSkillBox = new ValueListBox<LangSkillLevel>(new EnumRenderer<LangSkillLevel>());
@@ -175,7 +186,17 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 	
 	@UiHandler("langSkillAddButton")
 	public void langSkillAddButtonClicked(ClickEvent e) {
-		delegate.addLangSkillClicked(languageBox.getValue(), langSkillBox.getValue());
+		//Issue # 122 : Replace pull down with autocomplete.
+		//delegate.addLangSkillClicked(languageBox.getValue(), langSkillBox.getValue());
+		if(languageBox.getSelected()!=null)
+		{
+		delegate.addLangSkillClicked(languageBox.getSelected(), langSkillBox.getValue());
+		}
+		else
+		{
+			Log.info("null selection not allowed");
+		}
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 
@@ -184,11 +205,23 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		return langTable;
 	}
 
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
 	@Override
 	public ValueListBox<SpokenLanguageProxy> getLanguageBox() {
+	//	return languageBox;
+		return null;
+	}
+	
+	@Override
+	public DefaultSuggestBox<SpokenLanguageProxy, EventHandlingValueHolderItem<SpokenLanguageProxy>> getNewLanguageBox() {
+		// TODO Auto-generated method stub
 		return languageBox;
 	}
 
+	//Issue # 122 : Replace pull down with autocomplete.
+	
 	@Override
 	public ValueListBox<LangSkillLevel> getLangSkillBox() {
 		return langSkillBox;
@@ -225,14 +258,31 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 			return;
 		}
 		showAddBoxes();
-		languageBox.setValue(values.get(0));
-		languageBox.setAcceptableValues(values);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		DefaultSuggestOracle<SpokenLanguageProxy> suggestOracle1 = (DefaultSuggestOracle<SpokenLanguageProxy>) languageBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		languageBox.setSuggestOracle(suggestOracle1);
+		languageBox.setRenderer(new AbstractRenderer<SpokenLanguageProxy>() {
+
+			@Override
+			public String render(SpokenLanguageProxy object) {
+				// TODO Auto-generated method stub
+				return object.getLanguageName();
 	}
+		});
+
+	}
+		/*languageBox.setValue(values.get(0));
+		languageBox.setAcceptableValues(values);*/
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 
 	// Highlight onViolation
 	@Override
 	public Map getLanguageSkillMap() {
 		return this.languageSkillMap;
 	}
-	// E Highlight onViolation
+
+	
 }

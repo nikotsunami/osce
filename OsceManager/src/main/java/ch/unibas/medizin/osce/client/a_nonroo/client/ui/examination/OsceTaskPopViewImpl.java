@@ -10,6 +10,10 @@ import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -61,10 +65,17 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 	@UiField
 	public DateBox deadline;
 	
+	//Issue # 122 : Replace pull down with autocomplete.
 	
-	@UiField(provided = true)
+	
+/*	@UiField(provided = true)
 	public ValueListBox<AdministratorProxy> administrator = new ValueListBox<AdministratorProxy>(ch.unibas.medizin.osce.client.managed.ui.AdministratorProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.AdministratorProxy>());
+*/
 
+	@UiField
+	public DefaultSuggestBox<AdministratorProxy, EventHandlingValueHolderItem<AdministratorProxy>> administrator;
+
+	//Issue # 122 : Replace pull down with autocomplete.
 	private Delegate delegate;
 		
 	public OsceProxy proxy;
@@ -138,7 +149,10 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 		taskMap=new HashMap<String, Widget>();
 		taskMap.put("name", taskName);
 		taskMap.put("deadline", deadline);
-		taskMap.put("administrator", administrator);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//taskMap.put("administrator", administrator);
+		taskMap.put("administrator", administrator.getTextField().advancedTextBox);
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 		// E Highlight onViolation
 		
@@ -170,7 +184,16 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 	@Override
 	public void setAdministratorValue(List<AdministratorProxy> emptyList) {
 		// TODO Auto-generated method stub
-		administrator.setAcceptableValues(emptyList);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		//administrator.setAcceptableValues(emptyList);
+		
+		DefaultSuggestOracle<AdministratorProxy> suggestOracle1 = (DefaultSuggestOracle<AdministratorProxy>) administrator.getSuggestOracle();
+		suggestOracle1.setPossiblilities(emptyList);
+		administrator.setSuggestOracle(suggestOracle1);
+		administrator.setRenderer(new AdministratorProxyRenderer());
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 	}
 
@@ -221,7 +244,10 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 		}*/
 		
 		//System.out.println("before save call"+proxy+"---"+editProxy);
-		delegate.saveClicked(isedit,taskName.getText(),administrator.getValue(),deadline.getValue(),proxy,editProxy);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//delegate.saveClicked(isedit,taskName.getText(),administrator.getValue(),deadline.getValue(),proxy,editProxy);
+		delegate.saveClicked(isedit,taskName.getText(),administrator.getSelected(),deadline.getValue(),proxy,editProxy);
+		//Issue # 122 : Replace pull down with autocomplete.
 		isedit=false;
 		taskName.setValue("");
 		deadline.getTextBox().setValue("");

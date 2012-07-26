@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -62,6 +64,15 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 	@UiField (provided = true)
 	public SimplePager pagerReviewer;
 		
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+
+
+	
+	@UiField
+	public DefaultSuggestBox<DoctorProxy, EventHandlingValueHolderItem<DoctorProxy>> lstDoctor;
+	
+	/*
 	@UiField(provided = true)
     public ValueListBox<DoctorProxy> lstDoctor = new ValueListBox<DoctorProxy>(new AbstractRenderer<DoctorProxy>() {
         public String render(DoctorProxy obj) 
@@ -69,7 +80,8 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
             return obj == null ? "" : String.valueOf(obj.getName());
         }
     });
-	
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	// Highlight onViolation
 	Map<String, Widget> roleParticipantMap;	
@@ -96,7 +108,7 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		
 		// Highlight onViolation
 		roleParticipantMap=new HashMap<String, Widget>();
-		roleParticipantMap.put("doctor", lstDoctor);
+		roleParticipantMap.put("doctor", lstDoctor.getTextField().advancedTextBox);
 		roleParticipantMap.put("standardizedRole", lstDoctor);
 		roleParticipantMap.put("type", lstDoctor);
 		roleParticipantMap.put("email", lstDoctor);

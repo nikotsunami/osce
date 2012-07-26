@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 	
 	<ui:style src="../styles.css" />
 
@@ -10,10 +10,18 @@
 		<g:west size="400">
 			<g:ScrollPanel>
 				<g:HTMLPanel>
-					<div class="{style.controls} {style.controlsleft}">
-						<my:QuickSearchBox ui:field="searchBox" />
-						<g:ListBox width="150px"  ui:field="filterTitle"/>
-						<b:SimplePager display="{table}" ui:field="pager" />
+					<!-- <div class="{style.controls} {style.controlsleft}"> -->
+					<div>
+					<table><tr><td>
+						<my:QuickSearchBox ui:field="searchBox" /></td>
+						<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+						<td>
+						<i:DefaultSuggestBox  ui:field="filterTitle" ></i:DefaultSuggestBox>
+						</td>
+						<!-- <g:ListBox width="150px"  ui:field="filterTitle"/> -->
+						<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+						<td>
+						<b:SimplePager display="{table}" ui:field="pager" /></td></tr></table>
 					</div>
 					
 					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />

@@ -37,12 +37,15 @@ public interface AnamnesisCheckEditView extends IsWidget {
 
 	void setSeletedInsideTitle(String anamnesisCheckTitleId);
 
+	//Issue # 122 : Replace pull down with autocomplete.
 	void setSeletedPreviousQuestion(String previousSortId);
+	void setSeletedPreviousQuestion(AnamnesisCheckProxy anamnesisCheckList );
+	//Issue # 122 : Replace pull down with autocomplete.
 
 	String getSelectedInsideTitle();
 
 	String getSelectedPreviousQuestion();
-	
+	void setSeletedInsideTitle(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy);
 	// Highlight onViolation
 	Map getAnamnesisCheckMap();
 	// E Highlight onViolation

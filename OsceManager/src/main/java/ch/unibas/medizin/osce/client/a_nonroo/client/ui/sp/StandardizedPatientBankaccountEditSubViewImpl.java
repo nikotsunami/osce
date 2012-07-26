@@ -2,12 +2,16 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.NationalityProxyRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -50,8 +54,15 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	IntegerBox postalCode;
 	@UiField
 	TextBox city;
-	@UiField (provided = true)
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	@UiField
+	public DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> country;
+
+	/*@UiField (provided = true)
 	ValueListBox<NationalityProxy> country = new ValueListBox<NationalityProxy>(new NationalityProxyRenderer());
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	@UiField
 	TextBox ownerName;
 	
@@ -101,13 +112,24 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 
 	@Override
 	public void setCountryPickerValues(Collection<NationalityProxy> values) {
-		country.setAcceptableValues(values);
+	//	country.setAcceptableValues(values);
+	//}
+
+		//Issue # 122 : Replace pull down with autocomplete.
+		DefaultSuggestOracle<NationalityProxy> suggestOracle1 = (DefaultSuggestOracle<NationalityProxy>) country.getSuggestOracle();
+		suggestOracle1.setPossiblilities((List)values);
+		country.setSuggestOracle(suggestOracle1);
+		country.setRenderer(new NationalityProxyRenderer());
+
+		//country.setAcceptableValues(values);
+
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 
 	@Override
 	public Map getBankAccountMap() {
 		// TODO Auto-generated method stub
-		return this.bankAccountMap;
+		return null;
 	}
 }

@@ -183,10 +183,25 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 			public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
 				GWT.log("find titles sucess response size = "+response.size());
 				view.setInsideTitleListBox(response);
+				
 				if(place.getOperation() == Operation.EDIT && anamnesisCheck.getAnamnesisCheckTitle() != null){
-					view.setSeletedInsideTitle(String.valueOf(anamnesisCheck.getAnamnesisCheckTitle().getId()));
+					//Issue # 122 : Replace pull down with autocomplete.
+					//view.setSeletedInsideTitle(String.valueOf(anamnesisCheck.getAnamnesisCheckTitle().getId()));
+					view.setSeletedInsideTitle(anamnesisCheck.getAnamnesisCheckTitle());
+					//Issue # 122 : Replace pull down with autocomplete.
 				}else if(place.getOperation() == Operation.CREATE && place.getTitleId() != null){
-					view.setSeletedInsideTitle(String.valueOf(place.getTitleId()));
+					requests.anamnesisCheckTitleRequest().findAnamnesisCheckTitle(Long.parseLong(place.getTitleId())).fire(new Receiver<AnamnesisCheckTitleProxy>() {
+
+						@Override
+						public void onSuccess(AnamnesisCheckTitleProxy response) {
+							// TODO Auto-generated method stub
+							view.setSeletedInsideTitle(response);
+						}
+					});
+					//Issue # 122 : Replace pull down with autocomplete.
+					//view.setSeletedInsideTitle(String.valueOf(place.getTitleId()));
+					//view.setSeletedInsideTitle(String.valueOf(place.getTitleId()));
+					//Issue # 122 : Replace pull down with autocomplete.
 
 				}
 			}
@@ -254,8 +269,13 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 				@Override
 				public void onSuccess(AnamnesisCheckProxy response) {
+					Log.info("inside success"+ response);
 					if(response != null && response.getSort_order() !=null ){
-						view.setSeletedPreviousQuestion(String.valueOf(response.getSort_order()));
+						//Issue # 122 : Replace pull down with autocomplete.
+						//view.setSeletedPreviousQuestion(String.valueOf(response.getSort_order()));
+						view.setSeletedPreviousQuestion(response);
+						//Issue # 122 : Replace pull down with autocomplete.
+						Log.info("inside success if "+ response);
 					}
 				}
 			});

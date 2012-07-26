@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleRequest;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.Operation;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 
@@ -36,6 +37,7 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.UIObject;
@@ -247,8 +249,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     }
 
     String getSelectedTitleId() {
-        return view.getFilterTitle().getValue(
-                view.getFilterTitle().getSelectedIndex());
+    	//Issue # 122 : Replace pull down with autocomplete.
+        /*return view.getFilterTitle().getValue(
+                view.getFilterTitle().getSelectedIndex());*/
+    	if(view.getNewFilterTitle().getSelected()!=null)
+    		return view.getNewFilterTitle().getSelected().getId().toString();
+    	else
+    		return "";
+      //Issue # 122 : Replace pull down with autocomplete.
     }
 
     @Override
@@ -317,9 +325,16 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
      */
     private AnamnesisCheckTitleProxy getSelectedFilterTitle() {
         for (AnamnesisCheckTitleProxy title : anamnesisCheckTitles) {
-            if (view.getFilterTitle().getSelectedIndex() != -1 && getSelectedTitleId().equals(String.valueOf(title.getId()))) {
+        	//Issue # 122 : Replace pull down with autocomplete.
+            /*if (view.getFilterTitle().getSelectedIndex() != -1 && getSelectedTitleId().equals(String.valueOf(title.getId()))) {
                 return title;
             }
+            */
+        	if (view.getNewFilterTitle().getSelected() != null && getSelectedTitleId().equals(String.valueOf(title.getId()))) {
+                return title;
+            }
+            
+          //Issue # 122 : Replace pull down with autocomplete.
         }
         return null;
     }
@@ -331,6 +346,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
      *
      */
     public void setAnamnesisCheckTitleList(List<AnamnesisCheckTitleProxy> titles) {
+    	//Issue # 122 : Replace pull down with autocomplete.
+    	/*
  		view.getFilterTitle().clear();
     	Log.debug("fireTitleValueRequest sucess and getFilterTitle = "+place.getFilterTileId());
         view.getFilterTitle().addItem(constants.filterTitle(),"");
@@ -348,6 +365,22 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             }
             idx++;
         }
+        */
+    	DefaultSuggestOracle<AnamnesisCheckTitleProxy> suggestOracle1 = (DefaultSuggestOracle<AnamnesisCheckTitleProxy>) view.getNewFilterTitle().getSuggestOracle();
+    	suggestOracle1.setPossiblilities(titles);
+    	view.getNewFilterTitle().setSuggestOracle(suggestOracle1);
+    	
+    	view.getNewFilterTitle().setRenderer(new AbstractRenderer<AnamnesisCheckTitleProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckTitleProxy object) {
+				// TODO Auto-generated method stub
+				return object.getText();
+			}
+		});
+
+    	
+
     }
 
     @Override

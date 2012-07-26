@@ -15,11 +15,14 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -82,8 +85,15 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	@UiField
 	SimplePanel detailsPanel;
 	
+	//Issue # 122 : Replace pull down with autocomplete.
+	/*
 	@UiField
 	ListBox filterTitle;
+	 */
+	@UiField
+	public DefaultSuggestBox<AnamnesisCheckTitleProxy, EventHandlingValueHolderItem<AnamnesisCheckTitleProxy>> filterTitle;
+
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	@UiField
 	IconButton refreshButton;
@@ -109,13 +119,17 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		delegate.performSearch();
 	}
 
-	@UiHandler("filterTitle")
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+/*	@UiHandler("filterTitle")
 	public void filterTitleChangeHandler(ChangeEvent event) {
 
 		delegate.changeFilterTitleShown(filterTitle.getItemText(filterTitle
 				.getSelectedIndex()));
 
-	}
+	}*/
+	//Issue # 122 : Replace pull down with autocomplete.
+	
 
 //	@UiHandler("rangeNum")
 //	public void rangeNumChangeHandler(ChangeEvent event) {
@@ -168,13 +182,18 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		init();
 //		initList();
 		
-		// Highlight onViolation
-		anamnesisCheckTitleMap=new HashMap<String, Widget>();
-		anamnesisCheckTitleMap.put("text", newTitleText);
-		anamnesisCheckTitleMap.put("sort_order", newTitleText);
+		//Issue # 122 : Replace pull down with autocomplete.
+		filterTitle.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				// TODO Auto-generated method stub
+				delegate.changeFilterTitleShown(filterTitle.getText());
 		
-		// E Highlight onViolation
+				}
 		
+		});
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 	public String[] getPaths() {
@@ -240,6 +259,15 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	@Override
 	public ListBox getFilterTitle() {
+		//Issue # 122 : Replace pull down with autocomplete.
+		//return filterTitle;
+		return null;
+		//Issue # 122 : Replace pull down with autocomplete.
+	}
+	
+	@Override
+	public DefaultSuggestBox<AnamnesisCheckTitleProxy, EventHandlingValueHolderItem<AnamnesisCheckTitleProxy>> getNewFilterTitle()
+	{
 		return filterTitle;
 	}
 
@@ -430,6 +458,9 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	
 	@Override
 	public void filterTitle(AnamnesisCheckTitleProxy title) {
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		/*
 		if (title == null) {
 			filterTitle.setSelectedIndex(0);
 		} else {		
@@ -440,7 +471,8 @@ public class AnamnesisCheckViewImpl extends Composite implements
 				}
 			}
 		}
-		
+		*/
+		//Issue # 122 : Replace pull down with autocomplete.
 		filterTitle.addStyleName(style.hilight());
 		Timer timer = new Timer() {
 			

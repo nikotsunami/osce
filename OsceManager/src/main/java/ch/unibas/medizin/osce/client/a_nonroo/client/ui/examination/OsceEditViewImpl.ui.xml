@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
 	 xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
-	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 	<ui:style src="../../styles.css" />
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
@@ -17,7 +17,8 @@
 	</g:HTMLPanel>
 	<g:HTMLPanel>
     
-		<g:TabPanel ui:field="oscePanel" addStyleNames="gwt-InvertedTabPanel" width="100%">
+		<!-- <g:TabPanel ui:field="oscePanel" addStyleNames="gwt-InvertedTabPanel" width="100%"> -->
+		 <g:TabPanel ui:field="oscePanel"  width="100%"> 
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 	<g:HTMLPanel>
@@ -31,7 +32,8 @@
 		</div>
 		<div ui:field='errors' class='{style.errors}'></div>
 		<br></br>
-		<table class="{style.fields}" id="boundElementHolder">
+		<!-- <table class="{style.fields}" id="boundElementHolder"> -->
+		<table>
 
 			<tr >
 				<td id="name">
@@ -118,7 +120,10 @@
 			<td><div class="{style.label}">OSCE for Task:</div></td>
 			<td>
 				
-				  	 <g:ValueListBox ui:field="osceValue" />
+				  	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+				  	<!--  <g:ValueListBox ui:field="osceValue" /> -->
+				  	<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
 			</td>
 			</tr>
 			
@@ -127,7 +132,11 @@
 					<div class="{style.label}">OSCE Repe </div>
 				</td>
 				<td>
-					<g:ValueListBox ui:field="copiedOsce" />
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					<!--  <g:ValueListBox ui:field="copiedOsce" /> -->
+				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
+				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					
 				</td>
 			
 			<td id="shortBreak">

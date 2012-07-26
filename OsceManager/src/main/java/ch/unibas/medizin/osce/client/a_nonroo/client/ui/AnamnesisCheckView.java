@@ -6,6 +6,8 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -70,4 +72,9 @@ public interface AnamnesisCheckView extends IsWidget{
 	// Highlight onViolation
 	Map getAnamnesisCheckTitleMap();
 	// E Highlight onViolation
+
+//Issue # 122 : Replace pull down with autocomplete.
+	DefaultSuggestBox<AnamnesisCheckTitleProxy, EventHandlingValueHolderItem<AnamnesisCheckTitleProxy>> getNewFilterTitle();
+	//Issue # 122 : Replace pull down with autocomplete.
+
 }

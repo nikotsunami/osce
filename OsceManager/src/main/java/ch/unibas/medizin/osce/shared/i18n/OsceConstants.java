@@ -565,4 +565,11 @@ public interface OsceConstants extends Constants {
 	public String patientIsNotAvailable();
 	
 	//Module 3 : Task : B	
+	
+	//Module 3 : Task : I	
+	public String OSCESecurityChange();
+	public String avgOfSPPerPost();
+	public String securityType();
+	
+	//Module 3 : Task : I	
 }

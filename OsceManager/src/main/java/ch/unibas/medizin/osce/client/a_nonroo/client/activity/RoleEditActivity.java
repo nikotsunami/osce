@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.managed.request.CheckListRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -157,7 +158,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("edit");
 			//spec start
 			Log.info("Proxy ID : " + place.getProxyId());
-			requests.find(place.getProxyId()).with("standardizedRoles" , "checkList" ,"keywords", "advancedSearchCriteria", "simpleSearchCriteria","oscePosts","roleTemplate").with("roleTopic")
+			requests.find(place.getProxyId()).with("standardizedRoles" , "checkList" ,"keywords", "advancedSearchCriteria", "simpleSearchCriteria","oscePosts","roleTemplate","roleTopic")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -183,6 +184,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 											findAllRoleTopic(standardizedRole.getRoleTopic().getId().intValue()).
 											fire(new RoleTopicRecevier());
 //								}
+									Log.info("roletopic --"+ roleTopic);
+									
+									
+									
+									roleTopic=((StandardizedRoleProxy) response).getRoleTopic();
+									((RoleEditViewImpl)view).roleTopic.setRenderer(new RoleTopicProxyRenderer());
+									((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
+									
+									
+									Log.info("value--"+((RoleEditViewImpl)view).roleTopic.getSelected());
+									Log.info("roletopic --"+ roleTopic);
 								init();
 							}
 						}
@@ -193,7 +205,16 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("new StandardizedRole");
 			((RoleEditViewImpl)view).roleTopic.setVisible(false);
 			((RoleEditViewImpl)view).labelRoleTopic.setInnerText("");
-			((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);
+			((RoleEditViewImpl)view).roleTopic.setRenderer(new RoleTopicProxyRenderer());
+			((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
+			//Issue # 122 : Replace pull down with autocomplete.
+			//((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);
+		//	((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
+			/*((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
+			((RoleEditViewImpl)view).roleTopic.getTextField().setText(roleTopic.getName());
+			((RoleEditViewImpl)view).roleTopic.getTextField().advancedTextBox.setText(roleTopic.getName());
+			*/
+			//Issue # 122 : Replace pull down with autocomplete.
 			init();
 		}
 		widget.setWidget(view.asWidget());
@@ -251,7 +272,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 						
 						RoleEditViewImpl test1 = new RoleEditViewImpl();
 						test1 = (RoleEditViewImpl) view;
-						test1.roleTopic.setValue(proxy1);
+						//Issue # 122 : Replace pull down with autocomplete.
+						//test1.roleTopic.setValue(proxy1);
+						//test1.roleTopic.setSelected(proxy1);
+						//Issue # 122 : Replace pull down with autocomplete.
 						//	requests.roleTopicRequestNonRoo().
 						//			findAllRoleTopic(proxy1.getId().intValue()).
 						//			fire(new RoleTopicRecevier());
@@ -264,13 +288,26 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			
 			//requests.roleTopicRequestNonRoo().findAllRoleTopic(Integer.parseInt(standardizedRole.getRoleTopic().getId().toString())).fire(new RoleTopicRecevier());
 			Log.info("create");
-			((RoleEditViewImpl)view).roleTopic.setValue(this.roleTopic);
+			//Issue # 122 : Replace pull down with autocomplete.
+			//((RoleEditViewImpl)view).roleTopic.setValue(this.roleTopic);
+			//((RoleEditViewImpl)view).roleTopic.setSelected(this.roleTopic);
+			//((RoleEditViewImpl)view).roleTopic.getTextField().advancedTextBox.setValue(this.roleTopic.getName());
+			//Issue # 122 : Replace pull down with autocomplete.
 		} else {
 			//set TabText when edit clicked
 			view.getRoleDetailPanel().getTabBar().setTabText(RoleDetailsActivity.getSelecTab(), standardizedRole.getShortName());
 			System.out
 					.println("====================standardizedRole not null in RoleEditActivity=============");
 			standardizedRole = request.edit(standardizedRole);
+			
+			Log.info("roletopic befor =====--"+ standardizedRole.getRoleTopic());
+			
+		//	((RoleEditViewImpl)view).roleTopic.setRenderer(new roletopicre)
+		//	((RoleEditViewImpl)view).roleTopic.setSelected(standardizedRole.getRoleTopic())
+		//	((RoleEditViewImpl)view).roleTopic.setText(standardizedRole.getRoleTopic().getName());
+			//((RoleEditViewImpl)view).roleTopic.getTextField().advancedTextBox.setText(standardizedRole.getRoleTopic().getName());
+			Log.info("roletopic after--"+ standardizedRole.getRoleTopic());
+			
 			//spec start
 			//checkListProxy=request.edit(standardizedRole.getCheckList());
 		
@@ -287,6 +324,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 //spec end
 		
 	
+		
 	//	checkListRequest.persist().using(checkListProxy);//spec
 		
 		
@@ -337,7 +375,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		}
 		
 	//	((RoleEditViewImpl)view).roleTopic.setValue(this.roleTopic);
-		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
+		//Issue # 122 : Replace pull down with autocomplete.
+		//standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
+		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getSelected());
+		//Issue # 122 : Replace pull down with autocomplete.
 //		checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 //		standardizedRole.setCheckList(checkListProxy);//spec
 		
@@ -401,8 +442,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					proxy.setSubVersion(1);
 					
 					proxy.setCheckList(checkListProxy);//spec
-					proxy.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
-					
+					//Issue # 122 : Replace pull down with autocomplete.
+					//proxy.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
+					proxy.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getSelected());
+					//Issue # 122 : Replace pull down with autocomplete.
 
 					majorRequest1 = this.requests.standardizedRoleRequest();
 					oldProxy= majorRequest1.create(StandardizedRoleProxy.class);
@@ -444,7 +487,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 			standardizedRole.setCheckList(checkListProxy);//spec
 			System.out.println("Checklist----2: "+checkListProxy.getTitle());
-			((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);
+			
+			//Issue # 122 : Replace pull down with autocomplete.
+			/*((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
+			((RoleEditViewImpl)view).roleTopic.getTextField().advancedTextBox.setText(roleTopic.getName());*/
+			//Issue # 122 : Replace pull down with autocomplete.
 			save();
 		}
 		
@@ -518,9 +565,13 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	{
 		Log.info("Call Save()");
 		
-		if(((RoleEditViewImpl)view).roleTopic.getValue().getId()!=roleTopic.getId())
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		//if(((RoleEditViewImpl)view).roleTopic.getValue().getId()!=roleTopic.getId())
+		
+		if(((RoleEditViewImpl)view).roleTopic.getSelected().getId()!=roleTopic.getId())
 		{
-			 
+			//Issue # 122 : Replace pull down with autocomplete.	 
 		 System.out.println("not Same");
 			
 		 //
@@ -554,7 +605,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			
 		 //
 			
-			Log.info(" save role---"+oldProxy);
+			Log.info(" save role---check"+oldProxy.getShortName());
 			// Highlight onViolation
 			Log.info("Map Size: " + view.getStandardizedRoleMap().size());
 			majorRequest1.persist().using(oldProxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
@@ -654,10 +705,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				
 				((RoleEditViewImpl)view).active.setValue(false);
 				
-				((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
+				/*((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
 				((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
 				((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
-				((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+				((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());*/
 				//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
 				
 				save();
@@ -677,7 +728,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	public int findTabIndex()
 	{
 		int i=0;
-		
+		if(roleTopic.getStandardizedRoles()==null)
+		{
+			Log.info("st role null");
+			return 1;
+		}
 		Iterator<StandardizedRoleProxy> iterator=roleTopic.getStandardizedRoles().iterator();
 		
 		while(iterator.hasNext())

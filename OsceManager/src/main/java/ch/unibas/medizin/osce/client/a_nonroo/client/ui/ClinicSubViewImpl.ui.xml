@@ -5,7 +5,7 @@
 <ui:style src="../styles.css" />
 	
 	<g:HTMLPanel>
-	<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
+	<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" width="100%" />
 	</g:HTMLPanel>
 	
 </ui:UiBinder> 

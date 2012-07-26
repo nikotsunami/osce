@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -22,6 +23,7 @@ import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -70,13 +72,9 @@ DoctorView.Presenter, DoctorView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
-		
-		//by spec
-		RecordChangeEvent.register(requests.getEventBus(), (DoctorViewImpl)view);
-		//by spec
-		
-		view.getFilterTitle().clear();
-		
+		//Issue # 122 : Replace pull down with autocomplete.
+		//view.getFilterTitle().clear();
+		//Issue # 122 : Replace pull down with autocomplete.
 		initFilterTitleFill();
 		initSearch();
 
@@ -124,14 +122,31 @@ DoctorView.Presenter, DoctorView.Delegate {
 			@Override
 			public void onSuccess(List<ClinicProxy> resonse) {
 				
-				view.getFilterTitle().addItem("", "0");
+				//Issue # 122 : Replace pull down with autocomplete.
+				DefaultSuggestOracle<ClinicProxy> suggestOracle1 = (DefaultSuggestOracle<ClinicProxy>) view.getSuggestBox().getSuggestOracle();
+				suggestOracle1.setPossiblilities(resonse);
+				view.getSuggestBox().setSuggestOracle(suggestOracle1);
+
+				view.getSuggestBox().setRenderer(new AbstractRenderer<ClinicProxy>() {
+
+						@Override
+						public String render(ClinicProxy object) {
+							// TODO Auto-generated method stub
+							return object.getName();
+						}
+					});
+				
+				
+
+				/*view.getFilterTitle().addItem("", "0");
 				ClinicProxy temp = null;
 				for (int i=0; i<resonse.size(); i++)
 				{
 					temp = resonse.get(i);
 					view.getFilterTitle().addItem(temp.getName(), String.valueOf(temp.getId()));
 				}
-				
+				*/
+				//Issue # 122 : Replace pull down with autocomplete.
 			}
 			
 		});
@@ -250,9 +265,12 @@ DoctorView.Presenter, DoctorView.Delegate {
 	}
 
 	//Module 6 Start
-	@Override
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	/*@Override
 	public void changeFilterTitleShown(String selectedTitle) {
 	
+		
 		if (!selectedTitle.equals("0"))
 		{
 		
@@ -278,7 +296,39 @@ DoctorView.Presenter, DoctorView.Delegate {
 			});
 		}
 		
+	}*/
+	
+	@Override
+	public void changeFilterTitleShown() {
+	
+		Log.info("change event in changeFilterTitleShown method");
+		if (view.getSuggestBox().getSelected()==null)
+		{
+		
+			requests.doctorRequestNonRoo().findDoctorByClinicID(Long.parseLong("0")).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+
+				@Override
+				public void onSuccess(List<DoctorProxy> response) {
+					view.getTable().setRowCount(response.size());
+					view.getTable().setRowData(response);
+				
 	}
+			});
+		}
+		else
+		{
+			requests.doctorRequest().findAllDoctors().with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+
+				@Override
+				public void onSuccess(List<DoctorProxy> response) {
+					view.getTable().setRowCount(response.size());
+					view.getTable().setRowData(response);
+				}
+			});
+		}
+		
+	}
+	//Issue # 122 : Replace pull down with autocomplete.
 	//Module 6 End
 
 }

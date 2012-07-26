@@ -113,7 +113,11 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 		usedMaterialMap=new HashMap<String, Widget>();
 		usedMaterialMap.put("materialCount", roomMaterialsPopupViewImpl.materialCount);
 		usedMaterialMap.put("used_from", roomMaterialsPopupViewImpl.used_from);
-		usedMaterialMap.put("materialList", roomMaterialsPopupViewImpl.materialList);	
+		//Issue # 122 : Replace pull down with autocomplete.
+		//usedMaterialMap.put("materialList", roomMaterialsPopupViewImpl.materialList);
+		usedMaterialMap.put("materialList", roomMaterialsPopupViewImpl.materialList.getTextField().advancedTextBox);
+		//lstDoctor.getTextField().advancedTextBox
+		//Issue # 122 : Replace pull down with autocomplete.
 		// E Highlight onViolation
 		
 		
@@ -177,7 +181,9 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 		roomMaterialsPopupViewImpl.cancel.setText(constants.cancel());
 		roomMaterialsPopupViewImpl.materialCount.setValue(null);
 		roomMaterialsPopupViewImpl.used_from.setValue(null);
-		roomMaterialsPopupViewImpl.materialList.setValue(null);
+		//Issue # 122 : Replace pull down with autocomplete.
+		roomMaterialsPopupViewImpl.materialList.setSelected(null);
+		//Issue # 122 : Replace pull down with autocomplete.
 		roomMaterialsPopupViewImpl.setProxy(this.standardizedRoleProxy);
 		roomMaterialsPopupViewImpl.show();	
 		

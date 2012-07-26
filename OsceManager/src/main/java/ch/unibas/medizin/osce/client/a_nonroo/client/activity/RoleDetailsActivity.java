@@ -100,9 +100,15 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
+import ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistQuestionProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer;
 import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
@@ -197,6 +203,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	
 	// Assignment I
+	public String selectedKeyword;
 		private PopupPanel toolTip;
 		private HorizontalPanel toolTipContentPanel;
 		private TextBox toolTipTextBox;
@@ -1040,7 +1047,18 @@ public class RoleDetailsActivity extends AbstractActivity implements
 										{
 											//Issue Role
 											//standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
-											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
+											//Issue # 122 : Replace pull down with autocomplete.
+											
+											//standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
+											
+											DefaultSuggestOracle<DoctorProxy> suggestOracle1 = (DefaultSuggestOracle<DoctorProxy>) standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.getSuggestOracle();
+											suggestOracle1.setPossiblilities(response);
+
+
+											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setSuggestOracle(suggestOracle1);
+
+											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new DoctorProxyRenderer());
+											//Issue # 122 : Replace pull down with autocomplete.
 										}
 										// SPEC END MODIFIED =
 									}
@@ -1872,7 +1890,18 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					roles.add(sp);
 				}
 			}
-			popupView.getRoleLstBox().setAcceptableValues(roles);
+			//Issue # 122 : Replace pull down with autocomplete.
+			
+			Log.info("before value set");
+			 DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>) popupView.getView().roleLstBox.getSuggestOracle();
+			 suggestOracle1.setPossiblilities(roles);
+			 popupView.getView().roleLstBox.setSuggestOracle(suggestOracle1);
+			Log.info("before value set 1");
+			 popupView.getView().roleLstBox.setRenderer(new StandardizedRoleProxyRenderer());
+			Log.info("after value set");
+			//popupView.getRoleLstBox().setAcceptableValues(roles);
+			
+			//Issue # 122 : Replace pull down with autocomplete.
 		}
 		
 		public void roleListBoxValueSelected(StandardizedRoleProxy proxy,final ImportTopicPopupViewImpl importPopupView)
@@ -1883,7 +1912,20 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 				@Override
 				public void onSuccess(CheckListProxy response) {
-					importPopupView.getTopicLstBox().setAcceptableValues(response.getCheckListTopics());
+					//Issue # 122 : Replace pull down with autocomplete.
+					//importPopupView.getTopicLstBox().setAcceptableValues(response.getCheckListTopics());
+					
+					if(response!=null)
+					{
+					 DefaultSuggestOracle<ChecklistTopicProxy> suggestOracle1 = (DefaultSuggestOracle<ChecklistTopicProxy>) importPopupView.getView().topicLstBox.getSuggestOracle();
+					 suggestOracle1.setPossiblilities(response.getCheckListTopics());
+					 importPopupView.getView().topicLstBox.setSuggestOracle(suggestOracle1);
+					Log.info("before value set 1");
+					importPopupView.getView().topicLstBox.setRenderer(new ChecklistTopicProxyRenderer());
+					}
+					//importPopupView.getView().topicLstBox.setRenderer(new CheckListProxyRenderer());
+					Log.info("after value set");
+					//Issue # 122 : Replace pull down with autocomplete.
 					
 				}
 			});
@@ -1893,11 +1935,23 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		public void topicListBoxValueSelected(ChecklistTopicProxy proxy,final ImportTopicPopupViewImpl importPopupView)
 		{
 			Log.info("topicListBox Selected");
-			Log.info("topic Id "+proxy.getId());
+		//	Log.info("topic Id "+proxy.getId());
+			if(proxy==null)
+				return;
 			requests.checklistTopicRequest().findChecklistTopic(proxy.getId()).with("checkListQuestions").with("checkListQuestions.checkListCriterias").with("checkListQuestions.checkListOptions").fire(new Receiver<ChecklistTopicProxy>() {
 				@Override
 				public void onSuccess(ChecklistTopicProxy response) {
-					importPopupView.getQueListBox().setAcceptableValues(response.getCheckListQuestions());
+					//Issue # 122 : Replace pull down with autocomplete.
+					if(response!=null)
+					{
+					 DefaultSuggestOracle<ChecklistQuestionProxy> suggestOracle1 = (DefaultSuggestOracle<ChecklistQuestionProxy>) importPopupView.getView().queListBox.getSuggestOracle();
+					 suggestOracle1.setPossiblilities(response.getCheckListQuestions());
+					 importPopupView.getView().queListBox.setSuggestOracle(suggestOracle1);
+					Log.info("before value set 1");
+					importPopupView.getView().queListBox.setRenderer(new ChecklistQuestionProxyRenderer());
+					}
+				//	importPopupView.getQueListBox().setAcceptableValues(response.getCheckListQuestions());
+					//Issue # 122 : Replace pull down with autocomplete.
 					
 				}
 			});
@@ -3025,7 +3079,18 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				RoleParticipantProxy roleParticipantProxy = roleParticipantRequest.create(RoleParticipantProxy.class);
 		
 				roleParticipantProxy.setType(RoleParticipantTypes.AUTHOR);	// If Author
-				roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
+				
+				//Issue # 122 : Replace pull down with autocomplete.
+				
+				
+				//roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
+				//Log.info("selected value--"+standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getSelected().getName());
+				roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getSelected());
+				
+				Log.info("after value set suggest box");
+				
+				//Issue # 122 : Replace pull down with autocomplete.
+				
 				roleParticipantProxy.setStandardizedRole(standardizedRoleDetailsView[selectedTabId].getValue());
 				
 				//Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
@@ -3107,7 +3172,15 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		RoleParticipantProxy roleParticipantProxy = roleParticipantRequest.create(RoleParticipantProxy.class);
 
 		roleParticipantProxy.setType(RoleParticipantTypes.REVIEWER);// IfReviewer
-		roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		//roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue());
+		//Log.info("selected value--"+standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getSelected().getName());
+		roleParticipantProxy.setDoctor(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getSelected());
+		Log.info("after value set suggest box");
+		//Issue # 122 : Replace pull down with autocomplete.
+		
 		roleParticipantProxy.setStandardizedRole(standardizedRoleDetailsView[selectedTabId].getValue());
 		
 		//Log.info("~Stand Role Id: " + roleParticipantProxy.getStandardizedRole().getId());
@@ -3151,8 +3224,20 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		Log.info("~Click on Add Keyword for Role");
 		
 		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
-		final String selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue();
+		//Issue # 122 : Replace pull down with autocomplete.
+		//final String selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.value();
 		
+		if(standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getSelected()==null)
+		{
+			Log.info("null value");
+		  selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getTextField().getText();
+		}
+		else
+		{
+			Log.info("not null value");
+			  selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getSelected().getName();
+		}
+		//Issue # 122 : Replace pull down with autocomplete.
 		Log.info("~Set Value To Null");
 		//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());
 		
@@ -3264,7 +3349,11 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								Log.info("~srRequest.persist()");	
 								Log.info("Add new Recoerd in standardized_role_keywords Table");
 								// Highlight onViolation			
-								standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue("");
+								
+								//Issue # 122 : Replace pull down with autocomplete.
+								//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue("");
+								standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setSelected(null);
+								//Issue # 122 : Replace pull down with autocomplete.
 								// E Highlight onViolation
 									
 								// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
@@ -3307,7 +3396,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 										}
 								}); 
 								
-								standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.addChangeListener(new ChangeListener() 
+								
+								//Issue # 122 : Replace pull down with autocomplete.
+								/*standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.addChangeListener(new ChangeListener() 
 								{									
 									@Override
 									public void onChange(Widget sender) 
@@ -3316,6 +3407,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 										standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());	
 									}
 								});	
+							*/
+								
+								
+								//Issue # 122 : Replace pull down with autocomplete.
 							}
 						});
 						
@@ -3512,7 +3607,12 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				Log.info("~Success Call....");
 				Log.info("~refreshDoctorList");
 				Log.info("~Set Data In ValueListBox" + "Resp. Size: " + response.size());				
-				standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setValue(null);
+				
+				//Issue # 122 : Replace pull down with autocomplete.
+				//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setValue(null);
+				standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setSelected(null);
+				//Issue # 122 : Replace pull down with autocomplete.
+				
 				// SPEC START MODIFIED =
 				if(response.size()==0)
 				{											
@@ -3522,7 +3622,18 @@ public class RoleDetailsActivity extends AbstractActivity implements
 				else
 				{
 					//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(true);
-					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
+					//Issue # 122 : Replace pull down with autocomplete.
+				
+					//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setAcceptableValues(response);
+					
+					DefaultSuggestOracle<DoctorProxy> suggestOracle1 = (DefaultSuggestOracle<DoctorProxy>) standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getSuggestOracle();
+					suggestOracle1.setPossiblilities(response);
+					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setSuggestOracle(suggestOracle1);
+					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new DoctorProxyRenderer());
+	
+					//Issue # 122 : Replace pull down with autocomplete.
+					
+					
 				}
 				// SPEC END MODIFIED =
 			}

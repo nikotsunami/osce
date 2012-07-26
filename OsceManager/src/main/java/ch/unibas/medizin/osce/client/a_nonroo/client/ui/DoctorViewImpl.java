@@ -10,14 +10,18 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
@@ -78,15 +82,29 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 		delegate.newClicked();
 	}
 
-	//Module 6 Start
-	@UiField
-	ListBox filterTitle;
 	
-	@UiHandler("filterTitle")
+	//Module 6 Start
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	/*@UiField
+	ListBox filterTitle;*/
+	
+	@UiField
+	public DefaultSuggestBox<ClinicProxy, EventHandlingValueHolderItem<ClinicProxy>> filterTitle;
+	
+	
+	
+	
+/*	@UiHandler("filterTitle")
 	public void filterTitleChangeHandler(ChangeEvent event) {
 		delegate.changeFilterTitleShown(filterTitle.getValue(filterTitle.getSelectedIndex()));
 
 	}
+	
+	*/
+	
+	
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	//Module 6 End
 
@@ -122,6 +140,19 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addDoctor());
+		
+		filterTitle.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				// TODO Auto-generated method stub
+				//Issue # 122 : Replace pull down with autocomplete.
+				//delegate.changeFilterTitleShown(filterTitle.getValue(filterTitle.getSelectedIndex()));
+				//delegate.changeFilterTitleShown(filterTitle.getTextField().advancedTextBox.getValue());
+				delegate.changeFilterTitleShown();
+				//Issue # 122 : Replace pull down with autocomplete.
+			}
+		});
 	}
 
 	public String[] getPaths() {
@@ -308,23 +339,25 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	
 	//Module 6
 	@Override
+	
+	//Issue # 122 : Replace pull down with autocomplete.
 	public ListBox getFilterTitle() {
-		return filterTitle;
+		//return filterTitle;
+		return null;
 	}
 	
 	// by spec
 	@Override
-	public void onRecordChange(RecordChangeEvent event) {
-		int pagesize = 0;
-
-		if (event.getRecordValue() == "ALL") {
-			pagesize = table.getRowCount();
-			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
-		} else {
-			pagesize = Integer.parseInt(event.getRecordValue());
+	public DefaultSuggestBox<ClinicProxy, EventHandlingValueHolderItem<ClinicProxy>> getSuggestBox()
+	{
+		return filterTitle;
 		}
 
-		table.setPageSize(pagesize);
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
-	// by spec
+
+	//Issue # 122 : Replace pull down with autocomplete.
 }

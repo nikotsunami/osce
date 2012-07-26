@@ -26,11 +26,15 @@ import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.KeywordProxyRenderer;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -108,6 +112,12 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 	//public TextBox textbox;;
 		
 	// Issue Role Module
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+		
+	@UiField
+	public DefaultSuggestBox<KeywordProxy, EventHandlingValueHolderItem<KeywordProxy>> keywordSugestionBox;
+	/*
 		@UiField(provided = true)
 		public SuggestBox keywordSugestionBox =  //new SuggestBox(keywordoracle);
 				new SuggestBox(
@@ -119,6 +129,9 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 									}
 								}// ));
 								, ",;:. \t?!_-/\\"));
+		*/
+		//Issue # 122 : Replace pull down with autocomplete.
+		
 		
 		//public TextBox textbox;
 		// Issue Role Module
@@ -147,8 +160,8 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		
 		// Highlight onViolation
 		keywordMap=new HashMap<String, Widget>();
-		keywordMap.put("name", keywordSugestionBox);
-		keywordMap.put("standardizedRoles", keywordSugestionBox);
+		keywordMap.put("name", keywordSugestionBox.getTextField().advancedTextBox);
+		keywordMap.put("standardizedRoles", keywordSugestionBox.getTextField().advancedTextBox);
 		// E Highlight onViolation
 		
 				
@@ -328,10 +341,20 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		//keywordSugestionBox = new SuggestBox(keywordoracle, new TextBox());
 		keywordSugestionBox = new SuggestBox(keywordoracle, textbox);*/
 		// Issue Role Module		
-				((ProxySuggestOracle<KeywordProxy>) keywordSugestionBox	.getSuggestOracle()).addAll(values);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+
+		DefaultSuggestOracle<KeywordProxy> suggestOracle1 = (DefaultSuggestOracle<KeywordProxy>) keywordSugestionBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		keywordSugestionBox.setSuggestOracle(suggestOracle1);
+		keywordSugestionBox.setRenderer(new KeywordProxyRenderer());
+	
+
+				//((ProxySuggestOracle<KeywordProxy>) keywordSugestionBox	.getSuggestOracle()).addAll(values);
 				// E Issue Role Module
 				
-		
+				//Issue # 122 : Replace pull down with autocomplete.
 	}
 	
 	private <C> void addColumn(Cell<C> cell, String headerText,	final GetValue<C> getter, FieldUpdater<KeywordProxy, C> fieldUpdater) 

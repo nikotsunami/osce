@@ -33,6 +33,8 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
@@ -80,7 +82,13 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	private List<AnamnesisCheckTitleProxy> anamnesisCheckTitles = new ArrayList<AnamnesisCheckTitleProxy>();
 	
 	private CellTable<ScarProxy> scarTable;
+	
 	private ValueListBox<ScarProxy> scarBox;
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	private DefaultSuggestBox<ScarProxy, EventHandlingValueHolderItem<ScarProxy>> newScarBox;
+	
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	private StandardizedPatientScarSubView standardizedPatientScarSubView;
 	private StandardizedPatientAnamnesisSubView standardizedPatientAnamnesisSubView;
@@ -551,6 +559,9 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		// variable assignment vs. filling in values)
 		this.scarTable = standardizedPatientScarSubView.getTable();
 		this.scarBox = standardizedPatientScarSubView.getScarBox();
+		//Issue # 122 : Replace pull down with autocomplete.
+		this.newScarBox=standardizedPatientScarSubView.getNewScarBox();
+		//Issue # 122 : Replace pull down with autocomplete.
 		scarTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			@Override
 			public void onRangeChange(RangeChangeEvent event) {
@@ -829,11 +840,10 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	public void addScarClicked() {
 		AnamnesisFormRequest anamReq = requests.anamnesisFormRequest();
 		
-		// Highlight onViolation
-		Log.info("Map Size" + standardizedPatientScarSubView.getAnemnasisFormMap().size());
-		// E Highlight onViolation
-		
-		ScarProxy scar = scarBox.getValue();
+		//Issue # 122 : Replace pull down with autocomplete.
+		//ScarProxy scar = scarBox.getValue();
+		ScarProxy scar = newScarBox.getSelected();
+		//Issue # 122 : Replace pull down with autocomplete.
 		Log.debug("Add scar (" + scar.getBodypart() + " - id " + scar.getId() + ") to anamnesis-form (" + anamnesisForm.getId() + ")");
 		
 		anamnesisForm = anamReq.edit(anamnesisForm);

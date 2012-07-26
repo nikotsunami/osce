@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.ValueListBox;
 
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 
 public interface StandardizedPatientLangSkillSubView {
@@ -19,6 +21,9 @@ public interface StandardizedPatientLangSkillSubView {
 	
 	CellTable<LangSkillProxy> getLangSkillTable();
 	ValueListBox<SpokenLanguageProxy> getLanguageBox();
+	//Issue # 122 : Replace pull down with autocomplete.
+	DefaultSuggestBox<SpokenLanguageProxy, EventHandlingValueHolderItem<SpokenLanguageProxy>> getNewLanguageBox();
+	//Issue # 122 : Replace pull down with autocomplete.
 	ValueListBox<LangSkillLevel> getLangSkillBox(); 
     
 	void setDelegate(Delegate delegate);

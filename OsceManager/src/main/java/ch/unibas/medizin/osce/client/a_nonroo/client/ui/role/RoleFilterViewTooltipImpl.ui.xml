@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 	<ui:style src="../../styles.css">
 	.standardTable input {
 		width: 100%;
@@ -75,18 +75,32 @@
 					<g:TextBox ui:field="ComplexityText" styleName="{style.text}"></g:TextBox>
 			</g:HorizontalPanel >
 			<g:HorizontalPanel styleName="{style.popupPanel}">
+			
 					<g:Label ui:field="Author" styleName="{style.Author}">Author</g:Label>
-					<g:SuggestBox ui:field="autherSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					<!-- <g:SuggestBox ui:field="autherSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
+					
+					<i:DefaultSuggestBox ui:field="autherSugestionBox" pixelSize="180,25" styleName="{style.listBoxStyle}"></i:DefaultSuggestBox>
+					
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					<!-- <g:ValueListBox ui:field="AuthorListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
 			</g:HorizontalPanel>
 			<g:HorizontalPanel styleName="{style.popupPanel}">
 					<g:Label ui:field="Reviewer" styleName="{style.Reviewer}">Reviewer</g:Label>
-					<g:SuggestBox ui:field="reviewerSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					<i:DefaultSuggestBox ui:field="reviewerSugestionBox" pixelSize="180,25" styleName="{style.listBoxStyle}"></i:DefaultSuggestBox>
+					<!-- <g:SuggestBox ui:field="reviewerSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					<!-- <g:ValueListBox ui:field="ReviewerListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
 			</g:HorizontalPanel >
 			<g:HorizontalPanel styleName="{style.popupPanel}">
 					<g:Label ui:field="Specification" styleName="{style.Specification}">Specification</g:Label>
-					<g:SuggestBox ui:field="SpecificationSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					<i:DefaultSuggestBox ui:field="SpecificationSugestionBox" pixelSize="180,25" styleName="{style.listBoxStyle}"></i:DefaultSuggestBox>
+					
+					<!-- <g:SuggestBox ui:field="SpecificationSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					<!-- <g:ValueListBox ui:field="SpecificationListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
 			</g:HorizontalPanel>
 			<g:HorizontalPanel styleName="{style.popupPanel}">
@@ -98,7 +112,10 @@
 			
 			<g:HorizontalPanel styleName="{style.popupPanel}">
 					<g:Label ui:field="Keywordlbl" styleName="{style.Keywordlbl}">Keyword</g:Label>
-					<g:SuggestBox ui:field="KeywordSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox>
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					<i:DefaultSuggestBox ui:field="KeywordSugestionBox" pixelSize="180,25" styleName="{style.listBoxStyle}"></i:DefaultSuggestBox>
+					<!-- <g:SuggestBox ui:field="KeywordSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 				<!-- 	<g:ValueListBox ui:field="KeywordListBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:ValueListBox> -->
 			</g:HorizontalPanel>
 			

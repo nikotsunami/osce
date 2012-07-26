@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:s="urn:import:javax.swing" xmlns:t="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client"  xmlns:impl="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl" xmlns:o="urn:import:org.apache.xpath.operations">
 
 	<ui:style src="../../styles.css" />
 		<!-- spec start -->
@@ -22,21 +22,40 @@
 				<div class="{style.controls} {style.controlsleft}">
 				 <b:SimplePager ui:field="pager" display="{table}" />
 				 </div>
-				<div class="{style.controls} {style.controlsleft}">
+			 	<!-- <div class="{style.controls} {style.controlsleft}"> -->
+			
+		<!-- <div class="{style.controls}  {style.controlsleft}" > -->
+		<div><table><tr><td>
 					<g:TextBox ui:field="topicName" />
 					<!-- 
 					<g:ValueListBox ui:field="traitTypeBox1"></g:ValueListBox>
 					-->
-					<g:ListBox ui:field="slots_till_change"></g:ListBox>
+					</td><td>
+					<g:ListBox ui:field="slots_till_change"></g:ListBox></td>
+					<td>
 					<g:ValueListBox ui:field="studyYearBox"></g:ValueListBox>
+					</td>
 					
 				<!-- 	<g:ListBox ui:field="SpecialisationId"></g:ListBox>-->
-					<g:ValueListBox ui:field="SpecialisationBox"></g:ValueListBox>
+				<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					
+				
+					<!-- <g:ValueListBox ui:field="SpecialisationBox"></g:ValueListBox> -->
+					<td>
+					<impl:DefaultSuggestBox ui:field="SpecialisationBox"></impl:DefaultSuggestBox>
+				</td>
+					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					<td>
 					<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
-					
-					
-					
+					</td>
+					</tr>
+					</table>
+				</div>
+				<div>
+				<!--  <my:CustomSuggestBox ui:field="cSuggestBox" ></my:CustomSuggestBox>
+			 	<t:MySuggestionBoxDemo ui:field="suggestdemo"></t:MySuggestionBoxDemo> 
+			 	<i:DefaultIconedSuggestBox ui:field="checkdemo"></i:DefaultIconedSuggestBox> --> 
+			 <!--  	<impl:DefaultSuggestBox ui:field="defaultsuggest"></impl:DefaultSuggestBox> --> 
 				</div>
 				
 				</g:HTMLPanel>

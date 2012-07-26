@@ -1,11 +1,14 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.mortbay.log.StdErrLog;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -53,6 +56,8 @@ import ch.unibas.medizin.osce.client.managed.request.OsceSequenceRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsceStatus;
@@ -78,6 +83,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.Receiver;
+import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -647,8 +654,12 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 		{
 			Log.info("saveStandardizedRole ");
 			OscePostProxy oscePostProxy=(OscePostProxy)view.getProxy();
-			final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getListBox().getValue();
+		//	final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getListBox().getValue();
 			
+			//Issue # 122 : Replace pull down with autocomplete.
+			//final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getListBox().getValue();
+			final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getNewListBox().getSelected();
+			//Issue # 122 : Replace pull down with autocomplete.
 			OscePostRequest oscePostRequest=requests.oscePostRequest();
 			oscePostProxy=oscePostRequest.edit(oscePostProxy);
 			oscePostProxy.setStandardizedRole(standardizedRoleProxy);
@@ -681,7 +692,34 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					((OscePostSubViewImpl)view).popupView.setOscePostSubView(view);
 					((OscePostSubViewImpl)view).popupView.setProxy(view.getOscePostProxy());
 					((OscePostSubViewImpl)view).showPopUpView();
-					((OscePostSubViewImpl)view).popupView.getListBox().setAcceptableValues(list);
+	
+					//Issue # 122 : Replace pull down with autocomplete.
+					DefaultSuggestOracle<Object> suggestOracle1 = ((DefaultSuggestOracle<Object>) (((OscePostSubViewImpl)view).popupView.getNewListBox().getSuggestOracle()));
+					suggestOracle1.setPossiblilities(list);
+					((OscePostSubViewImpl)view).popupView.getNewListBox().setSuggestOracle(suggestOracle1);
+					
+					//((OscePostSubViewImpl)view).popupView.getNewListBox().setRenderer(new StandardizedRoleProxyRenderer());
+					((OscePostSubViewImpl)view).popupView.getNewListBox().setRenderer(new Renderer<Object>() {
+
+						@Override
+						public String render(Object object) {
+							// TODO Auto-generated method stub
+							//return object.getShortName();
+							return ((StandardizedRoleProxy)object).getLongName();
+						}
+
+						@Override
+						public void render(Object object,
+								Appendable appendable) throws IOException {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+
+
+					//((OscePostSubViewImpl)view).popupView.getListBox().setAcceptableValues(list);
+					
+					//Issue # 122 : Replace pull down with autocomplete.
 					
 				}
 			});
@@ -1297,18 +1335,74 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 						{				
 							
 							//Log.info("oscePostSubViewImpledit: " + oscePostSubViewImpledit.oscePostBlueprintProxy.getId());
+							if(response==null)
+							{
+								Log.info("response null");
+							}
 							
 							((OscePostSubViewImpl)oscePostSubViewImpledit).createOptionPopup();						
 							HorizontalPanel spHorizontalPanel=((OscePostSubViewImpl)oscePostSubViewImpledit).getSpecializationHP();
 							HorizontalPanel rtHorizontalPanel=((OscePostSubViewImpl)oscePostSubViewImpledit).getRoleTopicHP();
 							
-							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).setPopupPosition(spHorizontalPanel.getAbsoluteLeft()-40, rtHorizontalPanel.getAbsoluteTop()-80);					
-							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getListBox().setValue(null);
+							
+							//Issue # 122 : Replace pull down with autocomplete.
+							//((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).setPopupPosition(spHorizontalPanel.getAbsoluteLeft()-40, rtHorizontalPanel.getAbsoluteTop()-80);					
+							//Issue # 122 : Replace pull down with autocomplete.
+							//((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getListBox().setValue(null);
+							//((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getNewListBox().setSelected(null);
+							//Issue # 122 : Replace pull down with autocomplete.
 							ArrayList proxy=new ArrayList();
 							proxy.addAll(response);
-							((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getListBox().setAcceptableValues(proxy);
+							
+							
+							
+							//Issue # 122 : Replace pull down with autocomplete.
+							
+							//((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getListBox().setAcceptableValues(proxy);
+							//((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).show();										
+							//((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getListBox().setValue(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
+							
+							
+							DefaultSuggestOracle<Object> suggestOracle1 = ((DefaultSuggestOracle<Object>)((((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getNewListBox().getSuggestOracle())));
+							suggestOracle1.setPossiblilities(proxy);
+							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getNewListBox().setSuggestOracle(suggestOracle1);
+							
+							//((OscePostSubViewImpl)view).popupView.getNewListBox().setRenderer(new StandardizedRoleProxyRenderer());
+							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getNewListBox().setRenderer(new Renderer<Object>() {
+
+								@Override
+								public String render(Object object) {
+									// TODO Auto-generated method stub
+									//return object.getShortName();
+									if(((SpecialisationProxy)object)==null)
+									{
+										Log.info("in if");
+										return "";
+									}
+									else
+									{
+										Log.info("in else");
+									return ((SpecialisationProxy)object).getName();
+									}
+								}
+
+								@Override
+								public void render(Object object,
+										Appendable appendable) throws IOException {
+									// TODO Auto-generated method stub
+									
+								}
+							});
+							
+							
+							((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getNewListBox().setSelected(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
+							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).setPopupPosition(spHorizontalPanel.getAbsoluteLeft()-40, rtHorizontalPanel.getAbsoluteTop()-80);
 							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).show();										
-							((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getListBox().setValue(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
+							
+
+							//((OscePostSubViewImpl)view).popupView.getListBox().setAcceptableValues(list);
+							
+							//Issue # 122 : Replace pull down with autocomplete.
 							
 						
 							}
@@ -1344,18 +1438,70 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 						public void onSuccess(List<RoleTopicProxy> response) 
 						{
 							Log.info("Find RoleTopic for Specialization Size: " + response.size());	
-							((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setValue(null);
+							//Issue # 122 : Replace pull down with autocomplete.
+							//((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setValue(null);
+							//((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().setSelected(null);
+							//Issue # 122 : Replace pull down with autocomplete.
 							ArrayList proxy=new ArrayList();
 							proxy.addAll(response);
-							((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setAcceptableValues(proxy);	
+							
+							//Issue # 122 : Replace pull down with autocomplete.
+							
+							
+							DefaultSuggestOracle<Object> suggestOracle1 = ((DefaultSuggestOracle<Object>) (((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().getSuggestOracle()));
+							suggestOracle1.setPossiblilities(proxy);
+							((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().setSuggestOracle(suggestOracle1);
+							
+							//((OscePostSubViewImpl)view).popupView.getNewListBox().setRenderer(new StandardizedRoleProxyRenderer());
+							((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().setRenderer(new Renderer<Object>() {
+
+								@Override
+								public String render(Object object) {
+									// TODO Auto-generated method stub
+									//return object.getShortName();
+									return ((RoleTopicProxy)object).getName();
+								}
+
+								@Override
+								public void render(Object object,
+										Appendable appendable) throws IOException {
+									// TODO Auto-generated method stub
+									
+								}
+							});
+							
+							//((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setAcceptableValues(proxy);
+							
 							if(oscePostSubViewImpledit.oscePostBlueprintProxy.getRoleTopic()==null)
 							{
 								Log.info("Null Role Topic.");
 							}
 							else
 							{						
-								((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setValue(oscePostSubViewImpledit.oscePostBlueprintProxy.getRoleTopic());	
+								
+								((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().setRenderer(new Renderer<Object>() {
+
+									@Override
+									public String render(Object object) {
+										// TODO Auto-generated method stub
+										//return object.getShortName();
+										return ((RoleTopicProxy)object).getName();
 							}					
+
+									@Override
+									public void render(Object object,
+											Appendable appendable) throws IOException {
+										// TODO Auto-generated method stub
+										
+									}
+								});
+								((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().setSelected(oscePostSubViewImpledit.oscePostBlueprintProxy.getRoleTopic());
+								//((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setValue(oscePostSubViewImpledit.oscePostBlueprintProxy.getRoleTopic());	
+							}		
+							
+							//Issue # 122 : Replace pull down with autocomplete.
+								
+										
 						}
 					});
 					
@@ -1373,8 +1519,12 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					Log.info("oscePostSubViewImpledit" + oscePostSubViewImplok.oscePostBlueprintProxy.getId());
 										
 					OscePostBlueprintProxy oscePostBlueprintProxy=oscePostSubViewImplok.oscePostBlueprintProxy;
-					final SpecialisationProxy specialisationProxy=(SpecialisationProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getListBox().getValue();
+				//	final SpecialisationProxy specialisationProxy=(SpecialisationProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getListBox().getValue();
 					
+					//Issue # 122 : Replace pull down with autocomplete.
+					//final SpecialisationProxy specialisationProxy=(SpecialisationProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getListBox().getValue();
+					final SpecialisationProxy specialisationProxy=(SpecialisationProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getNewListBox().getSelected();
+					//Issue # 122 : Replace pull down with autocomplete.
 					Log.info("Specialisation Selected: " + specialisationProxy.getName());
 					
 					OscePostBlueprintRequest oscePostBlueprintRequest=requests.oscePostBlueprintRequest();
@@ -1410,8 +1560,10 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 					Log.info("oscePostSubViewImpledit" + oscePostSubViewImplok.oscePostBlueprintProxy.getId());	
 					
 					OscePostBlueprintProxy oscePostBlueprintProxy=oscePostSubViewImplok.oscePostBlueprintProxy;
-					final RoleTopicProxy roleTopicProxy=(RoleTopicProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getListBox().getValue();
-					
+					//Issue # 122 : Replace pull down with autocomplete.
+					//final RoleTopicProxy roleTopicProxy=(RoleTopicProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getListBox().getValue();
+					final RoleTopicProxy roleTopicProxy=(RoleTopicProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getNewListBox().getSelected();
+					//Issue # 122 : Replace pull down with autocomplete.
 					Log.info("Role Topic Selected: " + roleTopicProxy.getName());
 					
 					OscePostBlueprintRequest oscePostBlueprintRequest=requests.oscePostBlueprintRequest();

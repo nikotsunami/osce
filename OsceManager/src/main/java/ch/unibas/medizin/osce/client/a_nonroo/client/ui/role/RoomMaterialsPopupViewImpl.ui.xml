@@ -6,7 +6,7 @@
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
-  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 <ui:style src="../../styles.css" >
 .marginTop15
@@ -33,7 +33,12 @@
 				<g:Label styleName="{style.marginTop15}">Use For: </g:Label>
 			</g:VerticalPanel>
 			<g:VerticalPanel>
-				<g:ValueListBox ui:field="materialList" styleName="{style.marginTop7}"></g:ValueListBox>
+			
+			<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+				<!-- <g:ValueListBox ui:field="materialList" styleName="{style.marginTop7}"></g:ValueListBox> -->
+				<i:DefaultSuggestBox ui:field="materialList" styleName="{style.marginTop7}"></i:DefaultSuggestBox>
+			<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+				
 				<g:IntegerBox ui:field="materialCount" styleName="{style.marginTop7}"></g:IntegerBox>
 				<my:FocusableValueListBox ui:field="used_from" styleName="{style.marginTop7}"></my:FocusableValueListBox>	
 			</g:VerticalPanel>				

@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 	<ui:style src="../../styles.css">
 	.standardTable input {
 		width: 100%;
@@ -55,7 +55,8 @@
 		<g:HTMLPanel addStyleNames="{style.popupPanel}">
 			<div style="clear:both">
 <!-- 				<g:VerticalPanel > -->
-					<table id='boundElementHolder' class="{style.fields}">
+					<!-- <table id='boundElementHolder' class="{style.fields}"> -->
+					<table>
 		    			<tr id="name">
 								<td>
 									<span class="{style.label}">Name:</span>
@@ -79,7 +80,10 @@
 									<span class="{style.label}">Administrator:</span>
 								</td>
 								<td>
-									 	<g:ValueListBox ui:field="administrator" />
+								<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									 	<i:DefaultSuggestBox ui:field="administrator"></i:DefaultSuggestBox>
+									 	<!-- <g:ValueListBox ui:field="administrator" /> -->
+									 	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 								</td>
 						</tr>
 			

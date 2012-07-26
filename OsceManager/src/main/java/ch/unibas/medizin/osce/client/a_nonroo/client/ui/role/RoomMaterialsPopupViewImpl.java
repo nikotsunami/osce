@@ -1,13 +1,18 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Collection;
+import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -58,13 +63,22 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 	@UiField
 	Button cancel;
 	
-	@UiField(provided = true)
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
+	public DefaultSuggestBox<MaterialListProxy, EventHandlingValueHolderItem<MaterialListProxy>> materialList;
+
+	
+	/*@UiField(provided = true)
 	ValueListBox<MaterialListProxy> materialList = new ValueListBox<MaterialListProxy>(
 			new AbstractRenderer<MaterialListProxy>() {
 				public String render(MaterialListProxy obj) {
 					return obj == null ? "" : String.valueOf(obj.getName());
 				}
-			});
+			});*/
+	
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	public void setProxy(StandardizedRoleProxy standardizedRoleProxy)
 	{
@@ -86,9 +100,24 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 	
 	}
 	
+	//Issue # 122 : Replace pull down with autocomplete.
 	@Override
-	public void setMaterialListPickerValues(Collection<MaterialListProxy> values) {
-		materialList.setAcceptableValues(values);
+	public void setMaterialListPickerValues(List<MaterialListProxy> values) {
+	//public void setMaterialListPickerValues(Collection<MaterialListProxy> values) {
+		
+		
+			//materialList.setAcceptableValues(values);
+		
+
+			DefaultSuggestOracle<MaterialListProxy> suggestOracle1 = (DefaultSuggestOracle<MaterialListProxy>) materialList.getSuggestOracle();
+			suggestOracle1.setPossiblilities(values);
+			
+			
+			materialList.setSuggestOracle(suggestOracle1);
+			
+			materialList.setRenderer(new MaterialListProxyRenderer());
+
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	
 	@UiHandler("saveRoomMaterial")
@@ -166,7 +195,10 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 				
 		//Log.info("="+materialCount.getValue()+"="+used_from.getValue()+"="+materialList.getValue().getName());		
 		//Log.info("Stand.Role.Proxy: " + this.standardizedRoleProxy.getShortName());
-		delegate.newUsedMaterialButtonClicked(materialCount.getValue(),used_from.getValue(), this.standardizedRoleProxy,materialList.getValue());
+		//Issue # 122 : Replace pull down with autocomplete.
+		//delegate.newUsedMaterialButtonClicked(materialCount.getValue(),used_from.getValue(), this.standardizedRoleProxy,materialList.getValue());
+		delegate.newUsedMaterialButtonClicked(materialCount.getValue(),used_from.getValue(), this.standardizedRoleProxy,materialList.getSelected());
+		//Issue # 122 : Replace pull down with autocomplete.
 		// Highlight onViolation
 		//hide();
 		// E Highlight onViolation
