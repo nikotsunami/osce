@@ -59,7 +59,6 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
         setOscePostRoom(obj, index);
         setPatientInRole(obj, index);
         setSequenceNumber(obj, index);
-        setSlotNumber(obj, index);
         setStudent(obj, index);
         setTimeEnd(obj, index);
         setTimeStart(obj, index);
@@ -90,11 +89,6 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
     public void AssignmentDataOnDemand.setSequenceNumber(Assignment obj, int index) {
         Integer sequenceNumber = new Integer(index);
         obj.setSequenceNumber(sequenceNumber);
-    }
-    
-    public void AssignmentDataOnDemand.setSlotNumber(Assignment obj, int index) {
-        Integer slotNumber = new Integer(index);
-        obj.setSlotNumber(slotNumber);
     }
     
     public void AssignmentDataOnDemand.setStudent(Assignment obj, int index) {

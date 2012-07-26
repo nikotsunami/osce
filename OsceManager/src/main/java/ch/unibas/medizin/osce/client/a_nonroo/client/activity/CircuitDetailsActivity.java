@@ -1079,7 +1079,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 							oscePostBlueprintProxy1.setOsce(osceProxy);					
 							oscePostBlueprintProxy1.setPostType((PostType)osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue());
 							oscePostBlueprintProxy1.setSpecialisation((osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue())==null? null:(SpecialisationProxy)osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue());
-							oscePostBlueprintProxy1.setIsPossibleStart(null);
+//							oscePostBlueprintProxy1.setIsPossibleStart(null);
 							oscePostBlueprintProxy1.setSequenceNumber(++maxSeq);
 							
 							oscePostRequest.persist().using(oscePostBlueprintProxy1).fire(new OSCEReceiver<Void>() 
@@ -1114,7 +1114,7 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 													oscePostBlueprintProxyNew.setPostType((PostType)osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue());
 													oscePostBlueprintProxyNew.setSpecialisation((osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue())==null? null:(SpecialisationProxy)osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue());
 													
-													oscePostBlueprintProxyNew.setIsPossibleStart(null);
+//													oscePostBlueprintProxyNew.setIsPossibleStart(null);
 													oscePostBlueprintProxyNew.setSequenceNumber(++maxSeq);
 													Log.info(""+oscePostBlueprintProxyNew.getPostType().name());
 													Log.info(""+oscePostBlueprintProxyNew.getOsce().getId());
