@@ -18,6 +18,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 @RooJavaBean
 @RooToString
@@ -45,10 +48,42 @@ public class Training {
 	
 	
 	public static Training findTrainingByTrainingDateAndTimeStart(Date trainingDate,Date timeStart){
+		if(trainingDate == null){
+			return null;
+		}
+
+		Calendar calBegin = Calendar.getInstance();
+		calBegin.setTime(trainingDate);
+		calBegin.add(Calendar.MINUTE,-1);
+		Date minDate = calBegin.getTime();
+		
+		Calendar calEnd = Calendar.getInstance();
+
+		calEnd.setTime(trainingDate);
+		calEnd.add(Calendar.MINUTE,1);
+		Date maxDate = calEnd.getTime();
+		
+		if(timeStart == null){
+			return null;
+		}
+
+		Calendar calStartMin = Calendar.getInstance();
+		calStartMin.setTime(timeStart);
+		calStartMin.add(Calendar.MINUTE,-1);
+		Date minStartDate = calStartMin.getTime();
+		
+		Calendar calEndMax = Calendar.getInstance();
+		calEndMax.setTime(timeStart);
+		calEndMax.add(Calendar.MINUTE,1);
+		Date maxStartDate = calEndMax.getTime();
+		
+	
 		EntityManager em = entityManager();
-		TypedQuery<Training> query = em.createQuery("SELECT o FROM Training AS o WHERE o.trainingDate = :trainingDate and o.timeStart = :timeStart", Training.class);
-		query.setParameter("trainingDate", trainingDate);
-		query.setParameter("timeStart", timeStart);
+		TypedQuery<Training> query = em.createQuery("SELECT o FROM Training AS o WHERE o.trainingDate < :maxDate and o.trainingDate > :minDate and o.timeStart < :maxStartDate and o.timeStart > :minStartDate", Training.class);
+		query.setParameter("maxDate", maxDate);
+		query.setParameter("minDate", minDate);
+		query.setParameter("maxStartDate", maxStartDate);
+		query.setParameter("minStartDate", minStartDate);
         List<Training> resultList = query.getResultList();
         if (resultList == null || resultList.size() == 0)
             return null;
@@ -56,10 +91,27 @@ public class Training {
 	}
 	
 	public static Training findTrainingByTrainingDateAndName(Date trainingDate,String name){
+		if(trainingDate == null){
+			return null;
+		}
+
+		Calendar calBegin = Calendar.getInstance();
+		calBegin.setTime(trainingDate);
+		calBegin.add(Calendar.MINUTE,-1);
+		Date minDate = calBegin.getTime();
+		
+		Calendar calEnd = Calendar.getInstance();
+
+		calEnd.setTime(trainingDate);
+		calEnd.add(Calendar.MINUTE,1);
+		Date maxDate = calEnd.getTime();
+
 		EntityManager em = entityManager();
-		TypedQuery<Training> query = em.createQuery("SELECT o FROM Training AS o WHERE o.trainingDate = :trainingDate and o.name = :name", Training.class);
-		query.setParameter("trainingDate", trainingDate);
+		TypedQuery<Training> query = em.createQuery("SELECT o FROM Training AS o WHERE o.trainingDate < :maxDate and o.trainingDate > :minDate and o.name = :name", Training.class);
+		query.setParameter("maxDate", maxDate);
+		query.setParameter("minDate", minDate);
 		query.setParameter("name", name);
+
         List<Training> resultList = query.getResultList();
         if (resultList == null || resultList.size() == 0)
             return null;
