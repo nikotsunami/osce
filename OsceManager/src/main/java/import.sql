@@ -194,7 +194,7 @@ INSERT INTO `specialisation` (name, version) VALUES ('Arms', 0);
 INSERT INTO `specialisation` (name, version) VALUES ('Legs', 0);
 INSERT INTO `specialisation` (name, version) VALUES ('Sewing', 0);
 
-INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('HNO', 'Ear-Nose-Throat', 2, 10, 1, 0);
+INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('HNO', 'Ear-Nose-Throat', 2, 1, 1, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Arm', 'Arm Problems', 2, 10, 2, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Knie', 'Knee Problem', 2, 0, 3, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Naht', 'Stiching up sth.', 2, 0, 4, 0);

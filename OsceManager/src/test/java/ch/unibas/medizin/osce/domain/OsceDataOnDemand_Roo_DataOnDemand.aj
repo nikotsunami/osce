@@ -6,7 +6,9 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import java.lang.Boolean;
 import java.lang.Integer;
@@ -47,7 +49,9 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         setNumberPosts(obj, index);
         setNumberRooms(obj, index);
         setOsceStatus(obj, index);
+        setPatientAveragePerPost(obj, index);
         setPostLength(obj, index);
+        setSecurity(obj, index);
         setSemester(obj, index);
         setShortBreak(obj, index);
         setShortBreakSimpatChange(obj, index);
@@ -115,9 +119,19 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         obj.setOsceStatus(osceStatus);
     }
     
+    public void OsceDataOnDemand.setPatientAveragePerPost(Osce obj, int index) {
+        PatientAveragePerPost patientAveragePerPost = PatientAveragePerPost.class.getEnumConstants()[0];
+        obj.setPatientAveragePerPost(patientAveragePerPost);
+    }
+    
     public void OsceDataOnDemand.setPostLength(Osce obj, int index) {
         Integer postLength = new Integer(index);
         obj.setPostLength(postLength);
+    }
+    
+    public void OsceDataOnDemand.setSecurity(Osce obj, int index) {
+        OSCESecurityStatus security = OSCESecurityStatus.class.getEnumConstants()[0];
+        obj.setSecurity(security);
     }
     
     public void OsceDataOnDemand.setSemester(Osce obj, int index) {
