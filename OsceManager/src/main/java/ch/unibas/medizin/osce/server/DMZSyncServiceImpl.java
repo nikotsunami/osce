@@ -102,7 +102,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				.use("anamnesisForm.createDate",
 						new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"))
 				.use("birthday",
-						new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"))
+						new DateTransformer("yyyy-MM-dd"))
 				.use("gender", new GenderTransformer())
 				.use("maritalStatus", new MaritalStatusTransformer())
 				.use("workPermission", new WorkPermissionTransformer())
