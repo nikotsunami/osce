@@ -1531,10 +1531,10 @@ public void initPatientInSemesterData(
 
 			@Override
 			public void onSuccess(String result) {
-				
+				GWT.log("################onSuccess result = "+result);
 				
 				String[] messages = result.split("#&"); 
-								
+				GWT.log("################onSuccess messages = "+messages);				
 				DialogBox dialogBox = createDialogBox(messages);
 				dialogBox.center();
 				dialogBox.show();

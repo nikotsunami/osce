@@ -144,11 +144,25 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				JSONObject myjson = new JSONObject(returnJson);
 				syncOsceDayAndTraining(myjson);
 				message = getReturnMessage(myjson);
-			}catch(Exception e){
+			}catch(DMZSyncException e){
+				throw e;
+			}catch(JSONException e){
+				
 				Log.error(e.getMessage());
+				e.printStackTrace();
+				
+				throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,e.getMessage());
+				
+			}catch(Exception e){
+				
+				Log.error(e.getMessage());
+				e.printStackTrace();
+				
+				throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,e.getMessage());
+				
 			}
+			
 		}
-
 		return message;
 	}
 	
@@ -157,7 +171,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 */
 	private String getReturnMessage(JSONObject myjson)throws JSONException{
 		String message = "";
-					
+	
+
+// TODO convert to StringBuffer before I scream				
 			if(myjson!=null){			
 			
 				JSONArray jsonArray = myjson.getJSONArray("message");			
@@ -183,14 +199,30 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	
 	
 	
-	private void syncOsceDayAndTraining(JSONObject myjson)throws JSONException{
+	private void syncOsceDayAndTraining(JSONObject myjson)throws JSONException,DMZSyncException{
 			
 		if(myjson!=null){
-			syncOsceDay(myjson);
+			try{
+				syncOsceDay(myjson);
+			}catch(Exception e){
+				Log.error(e.getMessage());
+				throw new DMZSyncException(DMZSyncExceptionType.SYNC_OSCEDAY_EXCEPTION,e.getMessage());
+			}
 			
-			syncTraining(myjson);
+			try{
+				syncTraining(myjson);
+			}catch(Exception e){
+				Log.error(e.getMessage());
+				throw new DMZSyncException(DMZSyncExceptionType.SYNC_TRAINING_EXCEPTION,e.getMessage());
+			}
 			
-			syncPatientInSemester(myjson);
+			try{
+				syncPatientInSemester(myjson);
+			}catch(Exception e){
+				Log.error(e.getMessage());
+				throw new DMZSyncException(DMZSyncExceptionType.SYNC_PATIENTINSEMESTER_EXCEPTION,e.getMessage());
+			}
+
 		}
 			
 		
@@ -206,7 +238,11 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	    	JSONObject jsonObject = jsonArray.getJSONObject(i);
 			Date osceDate = null;
 			if(jsonObject.get("osceDate")!=JSONObject.NULL){
-	    	   osceDate = convertToDate(jsonObject.get("osceDate").toString());
+			   try {
+	    	       osceDate = convertToDate(jsonObject.get("osceDate").toString());
+				} catch (DMZSyncException e){
+				   Log.error(e.getMessage());
+				}
 			}
 	    	if(osceDate!=null){
 		    	OsceDay osceDay = OsceDay.findOsceDayByOsceDate(osceDate);
@@ -224,7 +260,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * sync the class of PatientInSemester
 	 * */
-	private void syncPatientInSemester(JSONObject myjson) throws JSONException{
+	private void syncPatientInSemester(JSONObject myjson) throws JSONException,DMZSyncException{
 	JSONArray jsonArray = myjson.getJSONArray("patientInSemester");			
     for(int i =0;i<jsonArray.length();i++){
     	JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -277,7 +313,11 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			OsceDay osceDay = null;
 			if(osceDayArray.getJSONObject(j).get("osceDate")!=JSONObject.NULL){
 				 String osceDate = osceDayArray.getJSONObject(j).get("osceDate").toString();	
+				 try{
 				 osceDay = OsceDay.findOsceDayByOsceDate(convertToDate(osceDate));		
+				 } catch (DMZSyncException e){
+				   Log.error(e.getMessage());
+				 }
 			}			
 			
 			 if(osceDay!=null){
@@ -308,10 +348,26 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		 for(int i = 0; i<trainingArray.length(); i++){
 			Training training = null;
 			if(trainingArray.getJSONObject(i).get("trainingDate")!=JSONObject.NULL && 
-			trainingArray.getJSONObject(i).get("timeStart")!=JSONObject.NULL){
-				 String trainingDate = trainingArray.getJSONObject(i).get("trainingDate").toString();
-				 String timeStart = trainingArray.getJSONObject(i).get("timeStart").toString();
-				 training = Training.findTrainingByTrainingDateAndTimeStart(convertToDate(trainingDate),convertToDate(timeStart));
+			 trainingArray.getJSONObject(i).get("timeStart")!=JSONObject.NULL &&
+			 trainingArray.getJSONObject(i).get("name")!=JSONObject.NULL){
+				String trainingDateStr = trainingArray.getJSONObject(i).get("trainingDate").toString();
+				String timeStartStr = trainingArray.getJSONObject(i).get("timeStart").toString();
+				String name = trainingArray.getJSONObject(i).get("name").toString();
+				Date trainingDate = null;
+				Date timeStart = null;
+				try{
+					trainingDate = convertToDate(trainingDateStr);
+					timeStart = convertToDate(timeStartStr);
+				} catch (DMZSyncException e){
+				   Log.error(e.getMessage());
+				}
+				
+				if(timeStart!=null){	
+					training = Training.findTrainingByTrainingDateAndTimeStart(trainingDate,timeStart);
+				}else if(timeStart==null && name!=null){
+					training = Training.findTrainingByTrainingDateAndName(trainingDate,name);
+				}
+				 //training = Training.findTrainingByTrainingDateAndTimeStart(convertToDate(trainingDate),convertToDate(timeStart));
 			 }
 			 if(training!=null){		
 //				 training.getPatientInSemesters().add(semester);
@@ -344,13 +400,17 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			if(jsonObject.get("trainingDate") != JSONObject.NULL &&
 			    jsonObject.get("timeStart") != JSONObject.NULL &&
 				jsonObject.get("name") != JSONObject.NULL){
+				try{
 	    	     trainingDate = convertToDate(jsonObject.get("trainingDate").toString());
 	    	     timeStart = convertToDate(jsonObject.get("timeStart").toString());
+				 } catch (DMZSyncException e){
+				   Log.error(e.getMessage());
+				}
 				 name = jsonObject.get("name").toString();
 			}
 	    	if(trainingDate!=null){
 				Training training = null;
-				if(timeStart!=null){
+				if(timeStart!=null){	
 					training = Training.findTrainingByTrainingDateAndTimeStart(trainingDate,timeStart);
 				}else if(timeStart==null && name!=null){
 					training = Training.findTrainingByTrainingDateAndName(trainingDate,name);
@@ -360,12 +420,20 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		    		training.setName(jsonObject.get("name").toString());
 		    		training.setTrainingDate(trainingDate);
 		    		training.setTimeStart(timeStart);
-		    		training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
+					try{
+						training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
+					} catch (DMZSyncException e){
+						Log.error(e.getMessage());
+					}
 		    		training.merge();
 		    	}else {
 		    		training.setName(jsonObject.get("name").toString());
-					training.setTimeStart(convertToDate(jsonObject.get("timeStart").toString()));
-		    		training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
+					try{
+						training.setTimeStart(convertToDate(jsonObject.get("timeStart").toString()));
+						training.setTimeEnd(convertToDate(jsonObject.get("timeEnd").toString()));
+					} catch (DMZSyncException e){
+						Log.error(e.getMessage());
+					}
 		    		training.merge();
 				}
 
@@ -453,7 +521,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	/**
 	 *The date of the format string into "yyyy-MM-dd 'T' HH: MM: ss 'Z'" format
 	 */
-	private Date convertToDate(String dateStr){
+	private Date convertToDate(String dateStr)throws DMZSyncException{
 		DateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 		Date date=null;
@@ -465,8 +533,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}
 		} catch (ParseException e) {
 			Log.error("Date format in JSON string incorrect. Date string was " + dateStr ,e.getMessage());
+				
+			throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
 			
-			return null;
 		}
 		return date;
 	}

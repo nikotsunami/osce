@@ -16,4 +16,7 @@ public class DMZSyncExceptionType {
 	public static final String SYNC_BANKACCOUNT_EXCEPTION = "syncBankaccountException"; 
 	public static final String SYNC_ANAMNESISFROM_EXCEPTION = "syncAnamnesisFormException"; 
 	public static final String SYNC_ANAMNESISCHECKVALUES_EXCEPTION = "syncAnamnesisCheckValuesException"; 
+	public static final String SYNC_OSCEDAY_EXCEPTION = "syncOsceDayException";
+	public static final String SYNC_TRAINING_EXCEPTION = "syncTrainingException";
+	public static final String SYNC_PATIENTINSEMESTER_EXCEPTION = "syncPatientInsemesterException";
 }
