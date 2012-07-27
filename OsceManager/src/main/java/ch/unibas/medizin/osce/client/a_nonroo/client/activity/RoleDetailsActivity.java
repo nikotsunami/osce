@@ -134,6 +134,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -1057,7 +1058,24 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setSuggestOracle(suggestOracle1);
 
-											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new DoctorProxyRenderer());
+										//	standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new DoctorProxyRenderer());
+											
+											standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new AbstractRenderer<DoctorProxy>() {
+
+												@Override
+												public String render(DoctorProxy object) {
+													// TODO Auto-generated method stub
+													if(object!=null)
+													{
+													return object.getName()+"";
+													}
+													else
+													{
+														return "";
+													}
+												}
+											});
+
 											//Issue # 122 : Replace pull down with autocomplete.
 										}
 										// SPEC END MODIFIED =
@@ -1897,7 +1915,23 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			 suggestOracle1.setPossiblilities(roles);
 			 popupView.getView().roleLstBox.setSuggestOracle(suggestOracle1);
 			Log.info("before value set 1");
-			 popupView.getView().roleLstBox.setRenderer(new StandardizedRoleProxyRenderer());
+			 //popupView.getView().roleLstBox.setRenderer(new StandardizedRoleProxyRenderer());
+			popupView.getView().roleLstBox.setRenderer(new AbstractRenderer<StandardizedRoleProxy>() {
+
+				@Override
+				public String render(StandardizedRoleProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getShortName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+
 			Log.info("after value set");
 			//popupView.getRoleLstBox().setAcceptableValues(roles);
 			
@@ -1921,7 +1955,23 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					 suggestOracle1.setPossiblilities(response.getCheckListTopics());
 					 importPopupView.getView().topicLstBox.setSuggestOracle(suggestOracle1);
 					Log.info("before value set 1");
-					importPopupView.getView().topicLstBox.setRenderer(new ChecklistTopicProxyRenderer());
+					//importPopupView.getView().topicLstBox.setRenderer(new ChecklistTopicProxyRenderer());
+					importPopupView.getView().topicLstBox.setRenderer(new AbstractRenderer<ChecklistTopicProxy>() {
+
+						@Override
+						public String render(ChecklistTopicProxy object) {
+							// TODO Auto-generated method stub
+							if(object!=null)
+							{
+							return object.getTitle();
+							}
+							else
+							{
+								return "";
+							}
+						}
+					});
+
 					}
 					//importPopupView.getView().topicLstBox.setRenderer(new CheckListProxyRenderer());
 					Log.info("after value set");
@@ -1948,7 +1998,22 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					 suggestOracle1.setPossiblilities(response.getCheckListQuestions());
 					 importPopupView.getView().queListBox.setSuggestOracle(suggestOracle1);
 					Log.info("before value set 1");
-					importPopupView.getView().queListBox.setRenderer(new ChecklistQuestionProxyRenderer());
+					//importPopupView.getView().queListBox.setRenderer(new ChecklistQuestionProxyRenderer());
+					importPopupView.getView().queListBox.setRenderer(new AbstractRenderer<ChecklistQuestionProxy>() {
+
+						@Override
+						public String render(ChecklistQuestionProxy object) {
+							// TODO Auto-generated method stub
+							if(object!=null)
+							{
+							return object.getQuestion();
+							}
+							else
+							{
+								return "";
+							}
+						}
+					});
 					}
 				//	importPopupView.getQueListBox().setAcceptableValues(response.getCheckListQuestions());
 					//Issue # 122 : Replace pull down with autocomplete.
@@ -3629,7 +3694,23 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					DefaultSuggestOracle<DoctorProxy> suggestOracle1 = (DefaultSuggestOracle<DoctorProxy>) standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getSuggestOracle();
 					suggestOracle1.setPossiblilities(response);
 					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setSuggestOracle(suggestOracle1);
-					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new DoctorProxyRenderer());
+					//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new DoctorProxyRenderer());
+					standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setRenderer(new AbstractRenderer<DoctorProxy>() {
+
+						@Override
+						public String render(DoctorProxy object) {
+							// TODO Auto-generated method stub
+							if(object!=null)
+							{
+							return object.getName();
+							}
+							else
+							{
+								return "";
+							}
+						}
+					});
+
 	
 					//Issue # 122 : Replace pull down with autocomplete.
 					

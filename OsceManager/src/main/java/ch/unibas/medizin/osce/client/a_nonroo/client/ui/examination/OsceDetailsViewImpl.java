@@ -284,8 +284,25 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		int y = eventSource.getAbsoluteTop();
 		filterPanel.setPopupPosition(x, y);
 		filterPanel.show();
-		filterPanel.administrator.setRenderer(new AdministratorProxyRenderer());
+		//Issue # 122 : Replace pull down with autocomplete.
+		//filterPanel.administrator.setRenderer(new AdministratorProxyRenderer());
+		filterPanel.administrator.setRenderer(new AbstractRenderer<AdministratorProxy>() {
+
+			@Override
+			public String render(AdministratorProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		filterPanel.administrator.setSelected(null);
+		//Issue # 122 : Replace pull down with autocomplete.
 		filterPanel.deadline.setValue(null);
 		filterPanel.taskName.setValue(null);
 		//Log.info(filterPanel.getSpecialisationBox().getValue());
@@ -524,7 +541,23 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		filterPanel.taskName.setText(task.getName());
 		filterPanel.deadline.setValue(task.getDeadline());
 		//Issue # 122 : Replace pull down with autocomplete.
-		filterPanel.administrator.setRenderer(new AdministratorProxyRenderer());
+		//filterPanel.administrator.setRenderer(new AdministratorProxyRenderer());
+		filterPanel.administrator.setRenderer(new AbstractRenderer<AdministratorProxy>() {
+
+			@Override
+			public String render(AdministratorProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+				
+			}
+		});
 		filterPanel.administrator.setSelected(task.getAdministrator());
 		//Issue # 122 : Replace pull down with autocomplete.
 		filterPanel.editProxy=task;

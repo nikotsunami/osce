@@ -348,8 +348,24 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		DefaultSuggestOracle<KeywordProxy> suggestOracle1 = (DefaultSuggestOracle<KeywordProxy>) keywordSugestionBox.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
 		keywordSugestionBox.setSuggestOracle(suggestOracle1);
-		keywordSugestionBox.setRenderer(new KeywordProxyRenderer());
-	
+		//keywordSugestionBox.setRenderer(new KeywordProxyRenderer());
+		
+		keywordSugestionBox.setRenderer(new AbstractRenderer<KeywordProxy>() {
+
+			@Override
+			public String render(KeywordProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+					return object.getName();	
+				}
+				else
+				{
+					return "";
+				}
+				
+			}
+		});
 
 				//((ProxySuggestOracle<KeywordProxy>) keywordSugestionBox	.getSuggestOracle()).addAll(values);
 				// E Issue Role Module

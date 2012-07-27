@@ -375,7 +375,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			@Override
 			public String render(AnamnesisCheckTitleProxy object) {
 				// TODO Auto-generated method stub
+				if(object!=null)
+				{
 				return object.getText();
+				}
+				else
+				{
+					return "";
+				}
 			}
 		});
 

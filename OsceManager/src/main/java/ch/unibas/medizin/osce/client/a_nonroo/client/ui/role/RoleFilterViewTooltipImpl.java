@@ -832,7 +832,14 @@ public List<String> getWhereFilters() {
 				@Override
 				public String render(KeywordProxy object) {
 					// TODO Auto-generated method stub
+					if(object!=null)
+					{
 					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
 				}
 			});
 		
@@ -864,7 +871,14 @@ public List<String> getWhereFilters() {
 				@Override
 				public String render(DoctorProxy object) {
 					// TODO Auto-generated method stub
+					if(object!=null)
+					{
 					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
 				}
 			});
 
@@ -898,7 +912,14 @@ public List<String> getWhereFilters() {
 				@Override
 				public String render(DoctorProxy object) {
 					// TODO Auto-generated method stub
+					if(object!=null)
+					{
 					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
 				}
 			});
 		
@@ -930,7 +951,14 @@ public List<String> getWhereFilters() {
 				@Override
 				public String render(SpecialisationProxy object) {
 					// TODO Auto-generated method stub
+					if(object!=null)
+					{
 					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
 				}
 			});
 		

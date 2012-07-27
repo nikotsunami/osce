@@ -29,6 +29,7 @@ import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class RoleEditActivity extends AbstractActivity implements RoleEditView.Presenter, RoleEditView.Delegate,RoleEditCheckListSubView.Delegate,RoleEditCheckListSubView.Presenter {
@@ -187,11 +188,28 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 									Log.info("roletopic --"+ roleTopic);
 									
 									
-									
+									//Issue # 122 : Replace pull down with autocomplete.
 									roleTopic=((StandardizedRoleProxy) response).getRoleTopic();
-									((RoleEditViewImpl)view).roleTopic.setRenderer(new RoleTopicProxyRenderer());
+									//((RoleEditViewImpl)view).roleTopic.setRenderer(new RoleTopicProxyRenderer());
+									((RoleEditViewImpl)view).roleTopic.setRenderer(new AbstractRenderer<RoleTopicProxy>() {
+
+										@Override
+										public String render(RoleTopicProxy object) {
+											// TODO Auto-generated method stub
+											if(object!=null)
+											{
+												return object.getName();	
+											}
+											else
+											{
+												return "";
+											}
+											
+										}
+									});
+
 									((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
-									
+									//Issue # 122 : Replace pull down with autocomplete.
 									
 									Log.info("value--"+((RoleEditViewImpl)view).roleTopic.getSelected());
 									Log.info("roletopic --"+ roleTopic);
@@ -203,9 +221,26 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			
 		} else {
 			Log.info("new StandardizedRole");
+			//Issue # 122 : Replace pull down with autocomplete.
 			((RoleEditViewImpl)view).roleTopic.setVisible(false);
 			((RoleEditViewImpl)view).labelRoleTopic.setInnerText("");
-			((RoleEditViewImpl)view).roleTopic.setRenderer(new RoleTopicProxyRenderer());
+			((RoleEditViewImpl)view).roleTopic.setRenderer(new AbstractRenderer<RoleTopicProxy>() {
+
+				@Override
+				public String render(RoleTopicProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+			//Issue # 122 : Replace pull down with autocomplete.
+			//((RoleEditViewImpl)view).roleTopic.setRenderer(new RoleTopicProxyRenderer());
 			((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
 			//Issue # 122 : Replace pull down with autocomplete.
 			//((RoleEditViewImpl)view).roleTopic.setValue(roleTopic);

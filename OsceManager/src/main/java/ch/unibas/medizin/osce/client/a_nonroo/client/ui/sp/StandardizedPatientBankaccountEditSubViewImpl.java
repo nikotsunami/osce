@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -119,8 +120,22 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 		DefaultSuggestOracle<NationalityProxy> suggestOracle1 = (DefaultSuggestOracle<NationalityProxy>) country.getSuggestOracle();
 		suggestOracle1.setPossiblilities((List)values);
 		country.setSuggestOracle(suggestOracle1);
-		country.setRenderer(new NationalityProxyRenderer());
+		//country.setRenderer(new NationalityProxyRenderer());
+		country.setRenderer(new AbstractRenderer<NationalityProxy>() {
 
+			@Override
+			public String render(NationalityProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getNationality();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		//country.setAcceptableValues(values);
 
 		//Issue # 122 : Replace pull down with autocomplete.

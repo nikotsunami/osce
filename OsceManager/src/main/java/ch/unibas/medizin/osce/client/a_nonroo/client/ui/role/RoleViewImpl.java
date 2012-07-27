@@ -459,7 +459,22 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) SpecialisationBox.getSuggestOracle();
 	suggestOracle1.setPossiblilities(values);
 	SpecialisationBox.setSuggestOracle(suggestOracle1);
-	SpecialisationBox.setRenderer(new SpecialisationProxyRenderer());
+	//SpecialisationBox.setRenderer(new SpecialisationProxyRenderer());
+	SpecialisationBox.setRenderer(new AbstractRenderer<SpecialisationProxy>() {
+
+		@Override
+		public String render(SpecialisationProxy object) {
+			// TODO Auto-generated method stub
+			if(object!=null)
+			{
+			return object.getName();
+			}
+			else
+			{
+				return "";
+			}
+		}
+	});
 	//SpecialisationBox.setRendererWidth("100px");
 	SpecialisationBox.setWidth(120);
 	

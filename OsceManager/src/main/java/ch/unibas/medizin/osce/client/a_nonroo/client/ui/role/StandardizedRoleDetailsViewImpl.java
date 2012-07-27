@@ -235,7 +235,22 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		DefaultSuggestOracle<RoleTemplateProxy> suggestOracle1 = (DefaultSuggestOracle<RoleTemplateProxy>) roleTemplateListBox.getSuggestOracle();
 		suggestOracle1.setPossiblilities(roleTemplateproxy);
 		roleTemplateListBox.setSuggestOracle(suggestOracle1);
-		roleTemplateListBox.setRenderer(new RoleTemplateProxyRenderer());
+		//roleTemplateListBox.setRenderer(new RoleTemplateProxyRenderer());
+		roleTemplateListBox.setRenderer(new AbstractRenderer<RoleTemplateProxy>() {
+
+			@Override
+			public String render(RoleTemplateProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getTemplateName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		//Issue # 122 : Replace pull down with autocomplete.
 	}
 

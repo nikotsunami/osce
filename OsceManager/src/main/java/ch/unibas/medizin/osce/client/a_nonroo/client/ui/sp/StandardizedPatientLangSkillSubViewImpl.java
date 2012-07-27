@@ -268,7 +268,14 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 			@Override
 			public String render(SpokenLanguageProxy object) {
 				// TODO Auto-generated method stub
+				if(object!=null)
+				{	
 				return object.getLanguageName();
+				}
+				else
+				{
+					return "";
+				}
 	}
 		});
 

@@ -599,7 +599,22 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 				DefaultSuggestOracle<NationalityProxy> suggestOracle1 = (DefaultSuggestOracle<NationalityProxy>) nationality.getSuggestOracle();
 				suggestOracle1.setPossiblilities((List)values);
 				nationality.setSuggestOracle(suggestOracle1);
-				nationality.setRenderer(new NationalityProxyRenderer());
+				//nationality.setRenderer(new NationalityProxyRenderer());
+				nationality.setRenderer(new AbstractRenderer<NationalityProxy>() {
+
+					@Override
+					public String render(NationalityProxy object) {
+						// TODO Auto-generated method stub
+						if(object!=null)
+						{
+						return object.getNationality();
+						}
+						else
+						{
+							return "";
+						}
+					}
+				});
 				//nationality.setAcceptableValues(values);
 		
 		//Issue # 122 : Replace pull down with autocomplete.
@@ -619,7 +634,22 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		DefaultSuggestOracle<ProfessionProxy> suggestOracle1 = (DefaultSuggestOracle<ProfessionProxy>) profession.getSuggestOracle();
 		suggestOracle1.setPossiblilities((List)values);
 		profession.setSuggestOracle(suggestOracle1);
-		profession.setRenderer(new ProfessionProxyRenderer());
+		//profession.setRenderer(new ProfessionProxyRenderer());
+		profession.setRenderer(new AbstractRenderer<ProfessionProxy>() {
+
+			@Override
+			public String render(ProfessionProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getProfession();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 
 		//profession.setAcceptableValues(values);		
 		

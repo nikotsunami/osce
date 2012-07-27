@@ -33,6 +33,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -426,9 +427,23 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		DefaultSuggestOracle<RoleTopicProxy> suggestOracle1 = (DefaultSuggestOracle<RoleTopicProxy>) roleTopic.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
 		roleTopic.setSuggestOracle(suggestOracle1);
-		roleTopic.setRenderer(new RoleTopicProxyRenderer());
+		//roleTopic.setRenderer(new RoleTopicProxyRenderer());
 			
+		roleTopic.setRenderer(new AbstractRenderer<RoleTopicProxy>() {
 
+			@Override
+			public String render(RoleTopicProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	

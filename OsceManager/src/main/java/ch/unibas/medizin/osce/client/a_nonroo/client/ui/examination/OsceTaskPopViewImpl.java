@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -191,8 +192,23 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 		DefaultSuggestOracle<AdministratorProxy> suggestOracle1 = (DefaultSuggestOracle<AdministratorProxy>) administrator.getSuggestOracle();
 		suggestOracle1.setPossiblilities(emptyList);
 		administrator.setSuggestOracle(suggestOracle1);
-		administrator.setRenderer(new AdministratorProxyRenderer());
+		//administrator.setRenderer(new AdministratorProxyRenderer());
 		
+		administrator.setRenderer(new AbstractRenderer<AdministratorProxy>() {
+
+			@Override
+			public String render(AdministratorProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		//Issue # 122 : Replace pull down with autocomplete.
 		
 	}

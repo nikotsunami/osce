@@ -925,7 +925,14 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 						@Override
 						public String render(RoleItemAccessProxy object) {
 							// TODO Auto-generated method stub
+							if(object!=null)
+							{
 							return object.getName();
+							}
+							else
+							{
+								return "";
+							}
 						}
 					});
 					//Issue # 122 : Replace pull down with autocomplete.

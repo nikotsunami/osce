@@ -245,7 +245,23 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		DefaultSuggestOracle<ScarProxy> suggestOracle1 = (DefaultSuggestOracle<ScarProxy>) scarBox.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
 		scarBox.setSuggestOracle(suggestOracle1);
-		scarBox.setRenderer(new ScarProxyRenderer());
+		//scarBox.setRenderer(new ScarProxyRenderer());
+		scarBox.setRenderer(new AbstractRenderer<ScarProxy>() {
+
+			@Override
+			public String render(ScarProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getBodypart();
+				}
+				else
+				{
+					return "";
+				}
+				//return object.get;
+			}
+		});
 
 		
 		//scarBox.setValue(values.get(0));

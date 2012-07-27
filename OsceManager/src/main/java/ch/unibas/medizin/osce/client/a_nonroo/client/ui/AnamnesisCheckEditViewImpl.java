@@ -457,7 +457,14 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			@Override
 			public String render(AnamnesisCheckTitleProxy object) {
 				// TODO Auto-generated method stub
-				return object.getText();
+				if(object!=null)
+				{
+					return object.getText();
+				}
+				else
+				{
+					return "";
+				}
 			}
 		});
 		
@@ -485,8 +492,17 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 			@Override
 			public String render(AnamnesisCheckProxy object) {
+				
 				// TODO Auto-generated method stub
-				return object.getValue();
+				if(object!=null)
+				{
+					return object.getValue();	
+				}
+				else
+				{
+					return "";
+				}
+				
 			}
 		});
 		previousQuestionListBox.setWidth(300);
@@ -547,7 +563,22 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	public void setSeletedInsideTitle(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy)
 	{
 		Log.info("new value setter setSeletedInsideTitle");
-		insideTitleListBox.setRenderer(new AnamnesisCheckTitleProxyRenderer());
+		insideTitleListBox.setRenderer(new AbstractRenderer<AnamnesisCheckTitleProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckTitleProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getText();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//insideTitleListBox.setRenderer(new AnamnesisCheckTitleProxyRenderer());
 		insideTitleListBox.setSelected(anamnesisCheckTitleProxy);
 		
 	}
@@ -575,8 +606,22 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			AnamnesisCheckProxy anamnesisCheckList) {
 		// TODO Auto-generated method stub
 		Log.info("previous value set setSeletedPreviousQuestion");
-		previousQuestionListBox.setRenderer(new AnamnesisCheckProxyRenderer());
-		
+		//previousQuestionListBox.setRenderer(new AnamnesisCheckProxyRenderer());
+		previousQuestionListBox.setRenderer(new AbstractRenderer<AnamnesisCheckProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getText();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		previousQuestionListBox.setSelected(anamnesisCheckList);
 		
 		

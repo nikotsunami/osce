@@ -115,7 +115,18 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 			
 			materialList.setSuggestOracle(suggestOracle1);
 			
-			materialList.setRenderer(new MaterialListProxyRenderer());
+			//materialList.setRenderer(new MaterialListProxyRenderer());
+			materialList.setRenderer(new AbstractRenderer<MaterialListProxy>() {
+
+				@Override
+				public String render(MaterialListProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					return object.getName()+" ";
+					else
+						return "";
+				}
+			});
 
 		//Issue # 122 : Replace pull down with autocomplete.
 	}

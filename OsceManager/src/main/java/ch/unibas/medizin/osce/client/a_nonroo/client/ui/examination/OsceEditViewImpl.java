@@ -340,7 +340,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 			@Override
 			public String render(OsceProxy object) {
 				// TODO Auto-generated method stub
+				if(object!=null)
+				{
 				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
 			}
 		});
 		//osceValue.setRenderer(new SpecialisationProxyRenderer());
@@ -356,7 +363,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 			@Override
 			public String render(OsceProxy object) {
 				// TODO Auto-generated method stub
+				if(object!=null)
+				{
 				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
 			}
 		});
 

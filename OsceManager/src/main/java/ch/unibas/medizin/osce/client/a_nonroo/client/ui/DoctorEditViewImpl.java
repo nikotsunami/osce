@@ -241,7 +241,22 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		DefaultSuggestOracle<ClinicProxy> suggestOracle1 = (DefaultSuggestOracle<ClinicProxy>) clinic.getSuggestOracle();
 		suggestOracle1.setPossiblilities((List)clinicList);
 		clinic.setSuggestOracle(suggestOracle1);
-		clinic.setRenderer(new ClinicProxyRenderer());
+		//clinic.setRenderer(new ClinicProxyRenderer());
+		clinic.setRenderer(new AbstractRenderer<ClinicProxy>() {
+
+			@Override
+			public String render(ClinicProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 		//clinic.setAcceptableValues(clinicList);
 		//Issue # 122 : Replace pull down with autocomplete.
 	}

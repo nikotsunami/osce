@@ -330,7 +330,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		/*((ProxySuggestOracle<StandardizedPatientProxy>) standardizedPatientSugestionBox
 				.getSuggestOracle()).addAll(values);
 		*/
-		
+		Log.info("list size==="+values.size());
 
 		DefaultSuggestOracle<StandardizedPatientProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedPatientProxy>) standardizedPatientSugestionBox.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
@@ -339,9 +339,17 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		standardizedPatientSugestionBox.setRenderer(new AbstractRenderer<StandardizedPatientProxy>() {
 
 			@Override
+			
 			public String render(StandardizedPatientProxy object) {
 				// TODO Auto-generated method stub
-				return object.getName();
+				if(object.getName()!=null)
+				{
+				return object.getName()+" "+object.getPreName();}
+				else
+				{
+					return "";
+				}
+				
 			}
 		});
 		

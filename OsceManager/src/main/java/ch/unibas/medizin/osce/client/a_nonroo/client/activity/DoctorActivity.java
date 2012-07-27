@@ -132,7 +132,14 @@ DoctorView.Presenter, DoctorView.Delegate {
 						@Override
 						public String render(ClinicProxy object) {
 							// TODO Auto-generated method stub
+							if(object!=null)
+							{
 							return object.getName();
+							}
+							else
+							{
+								return "";
+							}
 						}
 					});
 				
