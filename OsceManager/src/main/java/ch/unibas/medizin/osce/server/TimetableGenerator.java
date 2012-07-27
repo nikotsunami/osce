@@ -36,11 +36,14 @@ public class TimetableGenerator {
 	
 	// automatically assign sequence labels
 	private static final String[] sequences = {"A", "B", "C", "D", "E"};
+
+	// insert a long in the middle of a rotation if time of rotation (breaks excluded) exceeds this threshold
+	private static final int LONG_BREAK_MIDDLE_THRESHOLD = 40;
 	
 	private Osce osce;
 	private OsceDay osceDayRef;				// reference to first OSCE day (will not be removed if scaffold is re-created)
 	private int numberMinsDayMax;			// needed for optimization purposes (will be overwritten with "osceDay.getTimeEnd() - osceDay.getTimeStart()")
-	private int numberSlotsUntilSPChange;		// maximum number of slots that can be placed without a short break in between (defined by "slotsUntilChange" of most difficult role)
+	private int numberSlotsUntilSPChange;	// maximum number of slots that can be placed without a short break in between (defined by "slotsUntilChange" of most difficult role)
 	private int numberDays;					// number of required days
 	private int numberStudents;				// number of students to base schedule on
 	private int numberPosts;				// number of posts defined by the OSCE
@@ -67,7 +70,7 @@ public class TimetableGenerator {
 	 * @return optimal timetable
 	 */
 	public static TimetableGenerator getOptimalSolution(Osce osce) {
-//		log.info("calculating optimal solution for osce " + osce.getId());
+		log.info("calculating optimal solution for osce " + osce.getId());
 		
 		try {
 			checkOsce(osce);
@@ -89,7 +92,6 @@ public class TimetableGenerator {
 			// iterate until (numberPosts - number of posts with post_type=BREAK).
 			// NOTE: a number of breaks equal to numberPosts would result in an additional rotation.
 			for(int breakPosts = 0; breakPosts <= 0; breakPosts++) {
-//				System.out.println("optimize for breakPosts = " + breakPosts + ", nParcours = " + nParcours);
 //				log.info("optimize for breakPosts = " + breakPosts + ", nParcours = " + nParcours);
 				ttGen = new TimetableGenerator(osce, breakPosts, nParcours);
 				ttGen.calcAddBreakPosts();
@@ -190,14 +192,14 @@ public class TimetableGenerator {
 		
 		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) /
 							(numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak() +
+							(numberPosts * postLength > LONG_BREAK_MIDDLE_THRESHOLD ? osce.getLongBreak() : 0) +
 							osce.getLongBreak() / numberSlotsUntilSPChange +
 							osce.getMiddleBreak());
-//		log.info("rotations per day: " + rotationsPerDay);
 	}
 	
 	public void calcTimeNeeded() {
 		numberDays = (int) Math.ceil((double) rotations[0].size() / (double) rotationsPerDay);
-//		log.info(numberDays);
+		log.info("calculating time needed (" + numberDays + " day(s)");
 		
 		boolean numberDaysVerified = false;
 		
@@ -215,11 +217,12 @@ public class TimetableGenerator {
 			}
 			
 			timeNeeded = 0;
-			int timeNeededCurrentDay = 0;
 			int slotsSinceLastSimpatChange = 0;
 			
 			// days
 			for(int i = 0; i < numberDays; i++) {
+				int timeNeededCurrentDay = 0;
+				
 				slotsSinceLastSimpatChange = 0;
 				log.info("day " + i + " (rotations: " + rotationsByDay.get(i) + ") / rotationsMax: " + rotationsMax);
 				
@@ -231,37 +234,51 @@ public class TimetableGenerator {
 					int nPostsGeneral = numberPosts + numberBreakPosts;
 					int nPostsThisRotation = nPostsGeneral + numberBreakPostsThisRotation;
 					
-					log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ")");
+					// index where a SP needs to be changed during the rotation (in the middle if there is
+					// only one change, after number of slots of most complicated role otherwise)
+					int changeIndex = nPostsThisRotation / numberSlotsUntilSPChange > 1 ? numberSlotsUntilSPChange : nPostsThisRotation / 2 + 1;
+					
+					boolean longBreakInRotationHalf = nPostsThisRotation * osce.getPostLength() > LONG_BREAK_MIDDLE_THRESHOLD;
+					
+					log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
 					
 					// posts
 					for(int k = 0; k < nPostsThisRotation; k++) {
+						boolean halfTimeSlots = k == nPostsThisRotation / 2 - 1;
+						
 						timeNeededCurrentDay += postLength;
 						
-						if(simpatChangeWithinSlots(slotsSinceLastSimpatChange)) {
-							slotsSinceLastSimpatChange = 0;
-							timeNeededCurrentDay += osce.getShortBreakSimpatChange();
-	//						System.out.print("  short break for SP change");
+						if(longBreakInRotationHalf && halfTimeSlots) {
+//							slotsSinceLastSimpatChange = 0;
+							timeNeededCurrentDay += osce.getLongBreak();
 						} else {
-							if(k < nPostsThisRotation - 1)
-								timeNeededCurrentDay += osce.getShortBreak();
+							if(simpatChangeWithinSlots(slotsSinceLastSimpatChange) && k % changeIndex == changeIndex - 1) {
+								slotsSinceLastSimpatChange = 0;
+								timeNeededCurrentDay += osce.getShortBreakSimpatChange();
+							} else {
+								if(k < nPostsThisRotation - 1)
+									timeNeededCurrentDay += osce.getShortBreak();
+							}
 						}
 						
 						slotsSinceLastSimpatChange++;
 					}
 					
+					log.info("  rotation " + j + " end: " + timeNeededCurrentDay);
+					
 					// additional breaks
-					if(j < rotations[0].size() - 1) {
+					if(j < rotationsByDay.get(i) - 1) {
 						if(lunchBreakNeeded((j + 1) % rotationsMax)) {
 							slotsSinceLastSimpatChange = 0;
 							timeNeededCurrentDay += osce.getLunchBreak();
-	//						System.out.print("  lunch break");
+							log.info("  lunch break");
 						} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1))) {
 							slotsSinceLastSimpatChange = 0;
 							timeNeededCurrentDay += osce.getLongBreak();
-	//						System.out.print("  long break");
+							log.info("  long break");
 						} else {
 							timeNeededCurrentDay += osce.getMiddleBreak();
-	//						System.out.print("  middle break");
+							log.info("  middle break");
 						}
 					}
 				}
@@ -347,9 +364,11 @@ public class TimetableGenerator {
 	 * 
 	 */
 	public void createScaffold() {
-		
+		log.info("remove old scaffold");
 		// remove old scaffold if existing (and re-create first OSCE day
 		removeOldScaffold();
+		
+		log.info("old scaffold removed");
 		
 		Set<OsceDay> days = insertOsceDays();
 		List<OsceSequence> osceSequences = new ArrayList<OsceSequence>();
@@ -372,6 +391,7 @@ public class TimetableGenerator {
 				seq.setNumberRotation(rotSeq[i]);
 				seq.setOsceDay(osceDay);
 				
+				// insert parcours
 				Set<Course> parcours = insertParcoursForSequence(seq);
 				
 				// insert posts
@@ -381,6 +401,9 @@ public class TimetableGenerator {
 				seq.setOscePosts(posts);
 				
 				seq.persist();
+				
+				// insert osce_post_rooms
+				Set<OscePostRoom> oscePostRooms = insertOscePostRoomsForParcoursAndPosts(parcours, posts);
 				
 				osceSequences.add(seq);
 			}
@@ -408,6 +431,9 @@ public class TimetableGenerator {
 				seq.setOscePosts(posts);
 				
 				seq.persist();
+				
+				// insert osce_post_rooms
+				Set<OscePostRoom> oscePostRooms = insertOscePostRoomsForParcoursAndPosts(parcours, posts);
 				
 				osceSequences.add(seq);
 				
@@ -592,6 +618,29 @@ public class TimetableGenerator {
 		return days;
 	}
 	
+	
+	private Set<OscePostRoom> insertOscePostRoomsForParcoursAndPosts(Set<Course> parcours, List<OscePost> posts) {
+		Set<OscePostRoom> oscePostRooms = new HashSet<OscePostRoom>();
+		
+		Iterator<Course> itParcour = parcours.iterator();
+		while (itParcour.hasNext()) {
+			Course parcour = (Course) itParcour.next();
+			
+			Iterator<OscePost> itPost = posts.iterator();
+			while (itPost.hasNext()) {
+				OscePost oscePost = (OscePost) itPost.next();
+				
+				OscePostRoom opr = new OscePostRoom();
+				opr.setCourse(parcour);
+				opr.setOscePost(oscePost);
+				opr.setRoom(null);
+				
+				opr.persist();
+			}
+		}
+		
+		return oscePostRooms;
+	}
 	/**
 	 * Create assignments for students, SimPats and examiners.
 	 * @return set containing all assignments
@@ -606,11 +655,6 @@ public class TimetableGenerator {
 		
 		// get posts (sorted by sequenceNumber)
 		List<OscePostBlueprint> posts = osce.getOscePostBlueprints();
-		
-		// number of student left to assign (will be decremented while running)
-		int studentIndex = 1;
-		
-		int postsSinceSimpatChange = 0;	// SimPat change
 		
 		// total number of rotations is split among sequences, rotationOffset will be incremented
 		// by the number of rotations of a sequence after handling it.
@@ -651,7 +695,7 @@ public class TimetableGenerator {
 					
 					log.info("parcour " + course.getColor() + " started");
 					
-					postsSinceSimpatChange = 0;
+					int postsSinceSimpatChange = 0;
 					
 					simpatSequenceNumber = 1;
 					
@@ -677,12 +721,18 @@ public class TimetableGenerator {
 						int maxPostsCurrentRotation = numberPosts + getMaxBreakPostsCurrentRotation(osceSequence.getCourses(), currRotationNumber);
 						
 						boolean firstRotation = currRotationNumber == rotationOffset;
+						boolean halfRotations = currRotationNumber == (rotationOffset + numberRotations) / 2 - 1;
 						boolean lastRotation = currRotationNumber == (rotationOffset + numberRotations - 1);
 						boolean changeSimpatDuringRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsTotal);
 						
+						// insert long break in the middle of a rotation if the time of all posts exceeds some threshold
+						boolean longBreakInRotationHalf = numberSlotsTotal * osce.getPostLength() > LONG_BREAK_MIDDLE_THRESHOLD;
+						
+						// index where a SP needs to be changed during the rotation (in the middle if there is
+						// only one change, after number of slots of most complicated role otherwise)
 						int changeIndex = numberSlotsTotal / numberSlotsUntilSPChange > 1 ? numberSlotsUntilSPChange : numberSlotsTotal / 2 + 1;
 						
-						// calculate slots that this and next rotation have - used to check whether a SP change after the rotation is necessary
+						// calculate slots that this and next rotation have and check whether a SP change after the rotation is necessary
 						int numberSlotsThisAndNextRotation = numberSlotsTotal + numberPosts;
 						if(currRotationNumber < (rotationOffset + numberRotations) - 1) {
 							numberSlotsThisAndNextRotation += rotations[parcourIndex].get(currRotationNumber + 1);
@@ -721,6 +771,7 @@ public class TimetableGenerator {
 							for(int j = 0; j < numberSlotsTotal; j++) {
 								
 								boolean firstTimeSlot = j == 0;
+								boolean halfTimeSlots = j == numberSlotsTotal / 2 - 1;
 								boolean lastTimeSlot = j == numberSlotsTotal - 1;
 								
 								// calculate student index for current time slot j in post i
@@ -732,7 +783,7 @@ public class TimetableGenerator {
 								// Slot 4:		3 4 5 1 2
 								// Slot 5:		2 3 4 5 1
 								// NOTE: student indices for first part of PREPARATION are the same as for second part, but with early start
-								studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
+								int studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
 								if(postBP != null) {
 									if(postType.equals(PostType.PREPARATION) && postBP.getIsFirstPart()) {
 										studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
@@ -788,6 +839,8 @@ public class TimetableGenerator {
 								ass.setTimeEnd(endTime);
 								ass.setOscePostRoom(oscePR);
 								assThisRotation.add(ass);
+								
+								log.info("added assignment for student " + studentIndex);
 
 								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY) ) {
 									if(numberSlotsTotal % 2 == 1) {
@@ -801,21 +854,23 @@ public class TimetableGenerator {
 									}
 								}
 								
+								log.info("calculated lastTimeSlot");
+								
 								// handle SP assignments
-								if(post != null && post.requiresSimpat()) {
-									if(post != null && !post.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
-										// create first SP slot
-										if(firstRotation && firstTimeSlot) {
-											createSPAssignment(i, osceDay, startTime, oscePR);
-											log.warn("create SP assignment for post " + i + " " + debugTime(startTime));
-										}
-										// finalize last SP slot
-										if(lastRotation && lastTimeSlot) {
-											finalizeSPAssignment(i, endTime);
-											log.warn("finalize SP assignment for post " + i + " " + debugTime(endTime));
-										}
+								if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
+									// create first SP slot
+									if(firstRotation && firstTimeSlot) {
+										createSPAssignment(i, osceDay, startTime, oscePR);
+										log.warn("create SP assignment for post " + i + " " + debugTime(startTime));
+									}
+									// finalize last SP slot
+									if(lastRotation && lastTimeSlot) {
+										finalizeSPAssignment(i, endTime);
+										log.warn("finalize SP assignment for post " + i + " " + debugTime(endTime));
 									}
 								}
+								
+								log.info("handled SP assignments");
 								
 								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
 									// skip next time-slot
@@ -828,21 +883,28 @@ public class TimetableGenerator {
 									// if, for example, there is a maximum of 8 posts and the most difficult role-topic needs a SimPat change after
 									// 5 students, there is only one possible SimPat change during a rotation (best placed in the middle)
 									if(changeSimpatDuringRotation && (j % changeIndex == changeIndex - 1)) {
-										Date endTimeNew = dateAddMin(endTime, osce.getShortBreakSimpatChange());
+										Date endTimeNew;
+										if(halfTimeSlots && longBreakInRotationHalf)
+											endTimeNew = dateAddMin(endTime, osce.getLongBreak());
+										else
+											endTimeNew = dateAddMin(endTime, osce.getShortBreakSimpatChange());
 										
-										if(post != null && post.requiresSimpat()) {
+										if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
 											changeSP(i, osceDay, endTime, endTimeNew, oscePR);
 											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
 										}
 										
 										endTime = endTimeNew;
 									} else {
-										endTime = dateAddMin(endTime, osce.getShortBreak());
+										if(halfTimeSlots && longBreakInRotationHalf)
+											endTime = dateAddMin(endTime, osce.getLongBreak());
+										else
+											endTime = dateAddMin(endTime, osce.getShortBreak());
 									}
 								} else {
 									if(!lastRotation && changeSimpatAfterRotation) {
 										
-										if(post != null && post.requiresSimpat()) {
+										if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
 											Date endTimeOld = endTime;
 											Date startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
 											
@@ -880,16 +942,26 @@ public class TimetableGenerator {
 								
 								nextRotationStartTime = dateAddMin(nextRotationStartTime, numberBreakDuringRotation * (osce.getShortBreakSimpatChange() - osce.getShortBreak()));
 								postsSinceSimpatChange = numberSlotsTotal % numberSlotsUntilSPChange;
+								
+								if(longBreakInRotationHalf)
+									nextRotationStartTime = dateSubtractMin(nextRotationStartTime, osce.getShortBreakSimpatChange() - osce.getShortBreak());
 							}
+							
+							if(longBreakInRotationHalf)
+								nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak() - osce.getShortBreak());
 							
 							// add middle break at the end of each rotation (except for last rotation, where either
 							// lunch break or nothing is added)
 							if(!lastRotation) {
-								if(changeSimpatAfterRotation) {
-									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak());
-									postsSinceSimpatChange = 0;
-								} else {
-									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getMiddleBreak());
+								if(osceDay.getOsceSequences().size() == 1 && halfRotations)
+									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
+								else {
+									if(changeSimpatAfterRotation) {
+										nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak());
+										postsSinceSimpatChange = 0;
+									} else {
+										nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getMiddleBreak());
+									}
 								}
 							}
 							log.info("next rotation start time: " + nextRotationStartTime);
@@ -925,7 +997,8 @@ public class TimetableGenerator {
 				log.info("sequence " + osceSequence.getLabel() + " finished");
 				
 				// add lunch break after sequence one (WARNING: more than two sequences a day is not taken into account!)
-				sequenceStartTime = dateAddMin(time, osce.getLunchBreak());
+				if(osceDay.getOsceSequences().size() > 1)
+					sequenceStartTime = dateAddMin(time, osce.getLunchBreak());
 				
 				rotationOffset += osceSequence.getNumberRotation();
 			}
