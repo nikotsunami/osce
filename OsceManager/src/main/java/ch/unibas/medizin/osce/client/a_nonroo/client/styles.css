@@ -202,9 +202,9 @@
 
 .banner {
 	background-color: #777;
-	-moz-border-radius-topleft: 10px;
+	border-top-left-radius: 10px;
 	-webkit-border-top-left-radius: 10px;
-	-moz-border-radius-topright: 10px;
+	border-top-right-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
 	margin-top: 1.5em;
 	height: 4em;
@@ -253,9 +253,9 @@
 	border: 1px solid #ddf;
 	overflow-y: auto;
 	overflow-x: hidden;
-	-moz-border-radius-bottomleft: 10px;
+	border-bottom-left-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
-	-moz-border-radius-bottomright: 10px;
+	border-bottom-right-radius: 10px;
 	-webkit-border-bottom-right-radius: 10px;
 }
 
@@ -405,7 +405,7 @@ body {
 /*     left: 20px; */
 /*     right: 20px; */
 /* By SPEC] end */
-	-moz-border-radius: 12px 12px 12px 12px;
+	border-radius: 12px 12px 12px 12px;
 	background-color: #EBEBEB;
 	height: 30px;
 	max-height: 30px;
@@ -424,10 +424,7 @@ body {
 	border-right-width: 1px;
 	border-bottom-width: 1px;
 	border-left-width: 1px;
-	-moz-border-radius-bottomleft: 16px;
-	-moz-border-radius-bottomright: 16px;
-	-moz-border-radius-topleft: 16px;
-	-moz-border-radius-topright: 16px;	
+	border-radius: 10px;
 }
 
 .tabStyle { /*position: relative;*/
@@ -482,7 +479,7 @@ body {
 /*Module 3*/
 .roleLlb {
 
-	-moz-border-radius: 16px 16px 0px 0px;
+	border-radius: 16px 16px 0px 0px;
 	background-color: #EBEBEB;
 	height: 30px;
 	max-height: 30px;
@@ -512,7 +509,7 @@ body {
 }
 .patientInRoleLbl {
 
-	-moz-border-radius: 16px 16px 16px 16px;
+	border-radius: 16px 16px 16px 16px;
 	background-color: #EBEBEB;
 	height: 30px;
 	max-height: 20px;
@@ -555,11 +552,11 @@ body {
 	border-right-width: 1px;
 	border-bottom-width: 1px;
 	border-left-width: 1px;
-	-moz-border-radius: 16px 16px 10px 10px;
+	border-radius: 16px 16px 10px 10px;
 }
 .oscePostHeader {
 
-	-moz-border-radius: 16px 16px 0px 0px;
+	border-radius: 16px 16px 0px 0px;
 	background-color: #EBEBEB;
 	height: 30px;
 	max-height: 30px;
@@ -574,3 +571,47 @@ body {
 }
 
 /*Module 3*/
+/*Module 8*/
+.oscePost-rect{
+		
+	background-color: #EBEBEB;
+	height: 30px;
+	max-height: 20px;
+	min-height: 20px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 3px;
+	/*margin-bottom: 5px;*/
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+.slot-rect{
+	background-color: #EBEBEB;
+	
+	/*margin-bottom: 5px;*/
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+.student-slot-rect{
+	background-color: #EBEBEB;
+	
+	/*margin-bottom: 5px;*/
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 0px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+.student-label{
+	font-size: 8px;
+	text-align: center;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+
+<ui:style src="../../styles.css" />
+
+
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+
+<g:VerticalPanel spacing="0" width="230px">
+
+	<g:HorizontalPanel spacing="10" width="100%">
+		<g:Label ui:field="examinerNameLbl" visible="false" addStyleNames="{style.label}"></g:Label>
+		<g:SuggestBox ui:field="examinerSuggestionBox" visible="false"></g:SuggestBox>
+		<g:Label ui:field="examinerNameValue" visible="false" addStyleNames="{style.label}"></g:Label>
+		<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>
+		<g:Button ui:field="saveBtn" visible="false"></g:Button>
+	</g:HorizontalPanel>
+
+	<g:HorizontalPanel spacing="10" width="100%">
+		<g:Label ui:field="nameLbl" visible="false" addStyleNames="{style.label}"></g:Label>
+		<g:Label ui:field="nameValue" visible="false" addStyleNames="{style.label}"></g:Label>
+		
+	</g:HorizontalPanel>
+	<g:HorizontalPanel spacing="10" width="100%">
+		<g:Label ui:field="startTimeLbl" visible="false" addStyleNames="{style.label}"></g:Label>
+		<g:Label ui:field="startTimeValue" visible="false" addStyleNames="{style.label}"></g:Label>
+		
+	</g:HorizontalPanel>
+	<g:HorizontalPanel spacing="10" width="100%">
+		<g:Label ui:field="endTimeLbl" visible="false" addStyleNames="{style.label}"></g:Label>
+		<g:Label ui:field="endTimeValue" visible="false" addStyleNames="{style.label}"></g:Label>
+		<g:ValueListBox ui:field="endTimeListBox" visible="false"></g:ValueListBox>
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel spacing="10" horizontalAlignment="center" width="100%">
+		<g:Button ui:field="okButton" visible="false"></g:Button>
+		<g:Button ui:field="cancelButton" visible="false"></g:Button>
+	</g:HorizontalPanel>
+</g:VerticalPanel>
+	
+
+</ui:UiBinder>

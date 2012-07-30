@@ -4,6 +4,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 
 
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,9 +30,44 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 	private String animField;
 	private String animBounds;
 	
-	public final SimplePanel sp=new SimplePanel();;
+	private OsceDayProxy osceDayProxy;
+	
+	private OsceSequenceProxy osceSequenceProxy;
+	
+	public SimplePanel sp=null;
+	
+	private ContentView contentView;
+	
+	
+	
+	public ContentView getContentView() {
+		return contentView;
+	}
 
-	final private static int NUM_FRAMES = 8;
+	public void setContentView(ContentView contentView) {
+		this.contentView = contentView;
+	}
+
+	
+
+	public OsceSequenceProxy getOsceSequenceProxy() {
+		return osceSequenceProxy;
+	}
+
+	public void setOsceSequenceProxy(OsceSequenceProxy osceSequenceProxy) {
+		this.osceSequenceProxy = osceSequenceProxy;
+	}
+
+	public OsceDayProxy getOsceDayProxy() {
+		return osceDayProxy;
+	}
+
+	public void setOsceDayProxy(OsceDayProxy osceDayProxy) {
+		this.osceDayProxy = osceDayProxy;
+	}
+	//public  SimplePanel sp=null;
+
+	final private static int NUM_FRAMES = 20;
 
 	private Widget currentlyExpanded = null;
 	private Widget currentlyExpandedLabel = null;
@@ -42,7 +80,7 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 	
 	@Override
 	public void setDelegate(Delegate delegate) {
-		// TODO Auto-generated method stub
+		this.delegate=delegate;
 		
 	}
 	
@@ -75,9 +113,10 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 		header.setStylePrimaryName(getStylePrimaryName()+"-title");
 		header.addStyleName("tabStyle");
 		header.addStyleName("patientTopContainer");
-		 //sp=new SimplePanel();
+		sp=new SimplePanel();
 		sp.setWidget(content);
-
+		
+		final SimplePanel contentSP=sp;
 	/*	header.addHandler(new ClickHandler() {
 			
 			@Override
@@ -91,23 +130,47 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				expand(header, sp);
+				
+				
+				if(currentlyExpanded!=contentSP && osceDayProxy !=null)
+				{
+					retrieveContent( header, contentSP.getWidget());
+					
+					expand(header, contentSP);
+				}
+				else
+					expand(header, contentSP);
 				
 			}
 		});
 	
 		aPanel.add(header);
-		sp.setStylePrimaryName(getStylePrimaryName()+"-content");
-		DOM.setStyleAttribute(sp.getElement(), animField, "0px");
-		DOM.setStyleAttribute(sp.getElement(), "overflow", "hidden");
-		aPanel.add(sp);
+		contentSP.setStylePrimaryName(getStylePrimaryName()+"-content");
+		DOM.setStyleAttribute(contentSP.getElement(), animField, "0px");
+		DOM.setStyleAttribute(contentSP.getElement(), "overflow", "hidden");
+		aPanel.add(contentSP);
 	}
-	
+	public void retrieveContent(Widget header,Widget sp)
+	{
+		delegate.retrieveContent(this,header,sp);
+	}
 	public void expand(final Widget header, final Widget content) {
 
 		if(currentlyExpanded != null)
-		DOM.setStyleAttribute(currentlyExpanded.getElement(),
-		"overflow", "hidden");
+		{
+			DOM.setStyleAttribute(currentlyExpanded.getElement(),
+					"overflow", "hidden");
+			
+			
+			
+			//Element elem = content.getElement();
+			//DOM.setStyleAttribute(elem, "overflow", "scroll");
+			//DOM.setStyleAttribute(elem, animField, "auto");
+			/*Widget w = currentlyExpanded;
+			Element elem = w.getElement();
+			//int oSh = DOM.getIntAttribute(elem, animBounds);
+			DOM.setStyleAttribute(elem, animField, "0px");*/
+		}
 		final Timer t = new Timer() {
 			int frame = 0;
 
@@ -121,6 +184,7 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 
 			}
 			if (currentlyExpanded != content) {
+				
 				Widget w = content;
 				Element elem = w.getElement();
 				int oSh = DOM.getIntAttribute(elem, animBounds);
@@ -130,7 +194,7 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 				frame++;
 				
 				if (frame <= NUM_FRAMES) {
-					schedule(45);
+					schedule(30);
 					} else {
 					if(currentlyExpanded != null) {
 					//currentlyExpanded.removeStyleDependentName("selected");

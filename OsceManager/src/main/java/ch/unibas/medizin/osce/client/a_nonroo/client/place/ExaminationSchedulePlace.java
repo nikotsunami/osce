@@ -1,15 +1,27 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
 
+import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
 public class ExaminationSchedulePlace extends OsMaPlace {
 
 	private String token;
-
+	
+	public HandlerManager handler;
+	public SemesterProxy semesterProxy;
+	public ExaminationSchedulePlace(String token, HandlerManager handler,SemesterProxy semesterProxy) 
+	{
+		Log.info("~Get Semester : " + semesterProxy.getCalYear() + ": In Circuit Constrcutor");
+		this.semesterProxy=semesterProxy;
+		this.handler=handler;
+		this.token = token;					
+	}
+	
 	public ExaminationSchedulePlace(){
 		Log.debug("ExaminationSchedulePlace.ExaminationSchedulePlace");
 		this.token = "ExaminationSchedulePlace";

@@ -586,4 +586,28 @@ public interface OsceConstants extends Constants {
 	//modul 3 changes {
 	public String backupViewHeading();
 	//modul 3 changes }
+	
+	//Module 8[
+	public String shortBreak();
+	
+	public String middleBreak();
+	
+	public String numOfRooms();
+	
+	public String studentAssignment();
+	
+	public String spAssignment();
+	
+	public String examinerName();
+	
+	public String postType();
+	
+	public String spName();
+	
+	public String patientNotAssigned();
+	
+	public String studentNotAssigned();
+	
+	public String examinerNotNull();
+	//Module 8]
 }

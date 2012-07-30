@@ -4,9 +4,9 @@
  <ui:style src="../../styles.css" />
 	
 	
-	<g:VerticalPanel width="550px"  height="235px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" >
-		
-			
+	<g:VerticalPanel ui:field="contentPanel" width="550px"  height="235px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" spacing="10">
+		<g:ScrollPanel ui:field="scrollPanel" width="550px"  height="235px">
+			<g:HTMLPanel>
 			<g:AbsolutePanel ui:field="postAP">
 			<!--  <g:ScrollPanel width="550px" >-->
 			<g:HorizontalPanel ui:field="postHP" spacing="5">
@@ -16,7 +16,9 @@
 			<!--  </g:ScrollPanel> -->
 			</g:AbsolutePanel>
 			
-			
+			<g:HorizontalPanel ui:field="oscePostHP"></g:HorizontalPanel>
+			</g:HTMLPanel>
+		</g:ScrollPanel>	
 	</g:VerticalPanel>
 	
 	

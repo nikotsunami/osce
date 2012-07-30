@@ -435,7 +435,8 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("examinationSchedule")
 	void examinationScheduleClicked(ClickEvent event) {
-		placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace"));
+		//placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace"));
+		placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace",handlerManager,lstSemester.getValue()));
 	}
 	
 	@UiHandler("summonings")
