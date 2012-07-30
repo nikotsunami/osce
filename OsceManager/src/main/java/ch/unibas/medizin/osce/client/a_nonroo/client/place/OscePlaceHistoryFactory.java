@@ -63,6 +63,10 @@ public class OscePlaceHistoryFactory {
 	private final RoleAssignmentPlace.Tokenizer spRoleAssignmentPlaceTokenizer;
 	
 	//By SPEC role management]
+	
+	//by learning objective
+	private final ImportObjectiveViewPlace.Tokenizer importObjectiveTokenizer;
+	//by learning objective
 
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
@@ -119,6 +123,8 @@ public class OscePlaceHistoryFactory {
 		this.roomMaterialsDetailsPlaceTokenizer = new RoomMaterialsDetailsPlace.Tokenizer(requestFactory);
         this.spRoleAssignmentPlaceTokenizer = new RoleAssignmentPlace.Tokenizer(requestFactory);
 		//By Spec Role Management]
+        
+        this.importObjectiveTokenizer = new ImportObjectiveViewPlace.Tokenizer(requestFactory);
 	}
 
 
@@ -281,6 +287,12 @@ public class OscePlaceHistoryFactory {
 		return spRoleAssignmentPlaceTokenizer;
 	}
 	//By SPec Role Management]
+	
+	
+	public PlaceTokenizer<ImportObjectiveViewPlace> getImportObjectiveTokenizer(){
+		return importObjectiveTokenizer;
+	}
+	
 	
 
 }

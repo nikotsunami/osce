@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
@@ -148,7 +149,7 @@ public class OsMaMainNav extends Composite {
 
 		roles.setText(constants.roles());
 		
-		
+		importObjective.setText(constants.importObjective());
 		
 		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
@@ -299,6 +300,10 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor bellSchedule;			// Klingelplan erstellen
 	
+	//learning objective
+	@UiField
+	Anchor importObjective;
+	
 	/* commented by spec
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
@@ -312,6 +317,14 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor roleAssignments;			// Rollenzuweisung
 	*/
+	
+	//learning objective
+	@UiHandler("importObjective")
+	void importObjectiveClicked(ClickEvent event)
+	{
+		placeController.goTo(new ImportObjectiveViewPlace("ImportObjectiveViewPlace"));
+	}
+	//learning objective
 
 	@UiHandler("people")
 	void patientsClicked(ClickEvent event) {

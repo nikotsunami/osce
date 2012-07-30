@@ -1,0 +1,80 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="../../styles.css" >
+.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+.padleft5
+	{
+		padding-left: 5px;
+	}
+	.standardTable input {
+		width: 100%;
+		opacity: 0.8;
+	}
+	
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+		width: 680px;
+	}
+	.right{
+		
+		float:right;
+	}
+	.paddRight{
+		float: right;		
+	}
+	.left{
+		float: left;
+	}
+</ui:style>
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+
+<g:VerticalPanel spacing="5">
+	<g:HorizontalPanel  spacing="3">
+	
+		<g:Label ui:field="mainClssiLbl" styleName="{style.right}" width="100px"></g:Label>
+		<g:ValueListBox width="125px" ui:field="mainClassiListBox"/>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="3">
+	
+		<g:Label ui:field="classiTopicLbl" styleName="{style.right}" width="100px"></g:Label>
+		<g:ValueListBox width="125px" ui:field="classiTopicListBox"/>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="3">
+	
+		<g:Label ui:field="topicLbl" styleName="{style.right}" width="100px"></g:Label>
+		<g:ValueListBox width="125px" ui:field="topicListBox"/>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="3">
+	
+		<g:Label ui:field="levelLbl" styleName="{style.right}" width="100px"></g:Label>
+		<g:ValueListBox width="125px" ui:field="levelListBox"/>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="3" horizontalAlignment="center">
+		<g:Button ui:field="okBtn"></g:Button>
+		<g:Button ui:field="cancelBtn"></g:Button>
+	</g:HorizontalPanel>
+</g:VerticalPanel>
+
+</ui:UiBinder> 

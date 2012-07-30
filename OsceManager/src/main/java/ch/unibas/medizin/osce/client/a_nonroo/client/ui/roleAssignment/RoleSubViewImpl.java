@@ -58,6 +58,30 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 	
 	OsceDaySubViewImpl osceDaySubViewImpl;
 	
+	//modul 3 changes {
+	private RoleSubView backUpRoleView;
+	
+	
+	public void setBackUpRoleView(RoleSubView backUpRoleView) {
+		this.backUpRoleView = backUpRoleView;
+	}
+
+	public RoleSubView getBackUpRoleView() {
+		return backUpRoleView;
+	}
+	public boolean isBackUpPanel=false;
+	
+	@Override
+	public boolean getIsBackupPanel(){
+		return this.isBackUpPanel;
+	}
+	
+	@Override
+	public void setIsBackupPanel(boolean isBeckupPanel){
+		this.isBackUpPanel=isBeckupPanel;
+	}
+	//modul 3 changes }
+	
 	public OsceDaySubViewImpl getOsceDaySubViewImpl() {
 		return osceDaySubViewImpl;
 	}
@@ -127,6 +151,18 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 	
 	@UiField
 	Label countLbl;
+	
+//	modul 3 changes {
+	
+	@UiField
+	Label backUpLabel;
+	
+	public Label getBackUpLabel(){
+		return this.backUpLabel;
+	}
+
+
+//	modul 3 changes }
 	
 	public Label getCountLbl() {
 		return countLbl;
@@ -280,8 +316,13 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 	@UiHandler("roleHeader")
 	public void roleHeaderClicked(ClickEvent event)
 	{
-		Log.info("roleHeader Clicked");
+		Log.info("roleHeader Clicked : Is backup" + isBackUpPanel);
+		//modul 3 changes {
 		
+		if(this.isBackUpPanel==true)
+			return;
+		
+		//modul 3 changes }
 		this.roleHeader.getWidget().addStyleName("highlight-role");
 		delegate.roleSelected(this);
 	}
@@ -311,13 +352,19 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 	public void onRoleSelectedEventReceived(RoleSelectedEvent event) {
 		
 		Log.info("onRoleSelectedEventReceived");
-		if(event.getStandardizedRoleProxy().getId()!=roleProxy.getId() )
+		if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId()!=roleProxy.getId())
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
 		}
 		
 	}
 
+	@Override
+	public Label getbackupLabel() {
+		
+		return this.backUpLabel;
+	}
+	
 
 
 }

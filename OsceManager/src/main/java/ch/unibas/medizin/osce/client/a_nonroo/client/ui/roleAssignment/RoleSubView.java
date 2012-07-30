@@ -57,4 +57,17 @@ public interface RoleSubView extends IsWidget{
 	 public OsceDaySubViewImpl getOsceDaySubViewImpl();
 	 
 	 public void setOsceDaySubViewImpl(OsceDaySubViewImpl osceDaySubViewImpl);
+	 
+		//modul 3 changes {
+
+	 public Label getbackupLabel();
+	 
+	 public boolean getIsBackupPanel();
+	 
+	 public void setIsBackupPanel(boolean isBackup);
+	 
+	 public RoleSubView getBackUpRoleView() ;
+	 public void setBackUpRoleView(RoleSubView backUpRoleView) ;
+	 
+	//modul 3 changes }
 }

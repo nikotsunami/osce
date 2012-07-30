@@ -571,5 +571,19 @@ public interface OsceConstants extends Constants {
 	public String avgOfSPPerPost();
 	public String securityType();
 	
-	//Module 3 : Task : I	
+	//Module 3 : Task : I
+	
+	//learning objective
+	public String importObjective();
+	public String minorBtnLbl();
+	public String majorBtnLbl();
+	public String mainClassi();
+	public String classiTopic();
+	public String skillLevel();
+	public String topicLbl();
+	//learning objective
+	
+	//modul 3 changes {
+	public String backupViewHeading();
+	//modul 3 changes }
 }

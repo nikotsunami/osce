@@ -1552,6 +1552,11 @@ td.datePickerMonth {
 	width: 37px;
 }
 
+.skillTable{
+	overflow: hidden;
+	white-space: nowrap;
+}
+
   /****************************************/
  /******** BUTTON BORDER *****************/
 /****************************************/

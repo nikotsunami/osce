@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css"></ui:style>
+
+
+	<g:HTMLPanel addStyleNames="{style.patientDetails}">				
+		<b:CellTable ui:field="majorTable" width="100%" addStyleNames="{style.standardTable}"/>					
+		<b:SimplePager display="{majorTable}" ui:field="pagerMajor" />
+		<my:IconButton ui:field="btnAddMajor" icon="plusthick" ></my:IconButton>		
+		<b:CellTable  ui:field="minorTable" width="100%" addStyleNames="{style.standardTable}"/>
+		<b:SimplePager display="{minorTable}" ui:field="pagerMinor" />
+		<my:IconButton ui:field="btnAddMinor" icon="plusthick"></my:IconButton>			
+	</g:HTMLPanel>
+</ui:UiBinder> 

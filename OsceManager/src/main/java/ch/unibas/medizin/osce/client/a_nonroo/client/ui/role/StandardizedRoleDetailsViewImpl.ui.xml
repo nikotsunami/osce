@@ -114,7 +114,7 @@
 					<g:Tab>
 						<g:TabHTML>Learning</g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">
-							<g:Label>Learning Components</g:Label>
+							<r:RoleLearningSubViewImpl ui:field="roleLearningSubViewImpl"></r:RoleLearningSubViewImpl>
 						</g:HTMLPanel>
 					</g:Tab>
 				</g:TabPanel>

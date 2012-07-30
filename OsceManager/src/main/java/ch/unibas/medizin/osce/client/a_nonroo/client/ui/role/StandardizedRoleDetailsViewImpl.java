@@ -105,6 +105,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		@UiField
 		RoleKeywordSubViewImpl roleKeywordSubViewImpl; 
 		// SPEC END =
+		
+	@UiField
+	RoleLearningSubViewImpl roleLearningSubViewImpl;
 	
 	// Panels
 
@@ -666,5 +669,10 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		}
 		
 		// E Highlight onViolation
+		
+		@Override
+		public RoleLearningSubViewImpl getRoleLearningSubViewImpl() {
+			return roleLearningSubViewImpl;
+		}
 	
 }
