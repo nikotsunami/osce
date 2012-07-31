@@ -836,14 +836,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	protected String sendData(String json,String url) throws DMZSyncException {
 
 		HttpClient httpClient = new HttpClient();
-		String ret = "";
-		//String hostAddress = getHostAddress();
-
-	    //String url = hostAddress + "/sp_portal/DataImportExport/importSP";
-	
+		String ret = "";	
 	    
 		PostMethod postMethod = new PostMethod(url);
-		//postMethod.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET);
 
 		NameValuePair[] registerInform = new NameValuePair[1];
 		registerInform[0] = new NameValuePair("data", json);
@@ -857,7 +852,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				ret = postMethod.getResponseBodyAsString();
 				
 				
-			//}
 		} catch (HttpException e) {
 			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,url+": "+e.getMessage());
 		} catch (IOException e1) {
@@ -893,7 +887,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
 		HttpClient httpClient = new HttpClient();
 		String url = getHostAddress() + "/sp_portal/DataImportExport/exportSP?id="	+ standardizedPatientId;
-	//	String url = getHostAddress() + "/dataImportExport/exportSP?id="	+ standardizedPatientId;
 		GetMethod getMethod = new GetMethod(url);
 
 		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
@@ -902,7 +895,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			
 			int statusCode = httpClient.executeMethod(getMethod);
 			if (statusCode != HttpStatus.SC_OK) {
-				System.err.println("Method failed: "
+				Log.error("Method failed: "
 						+ getMethod.getStatusLine());
 			}
 
