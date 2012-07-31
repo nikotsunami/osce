@@ -132,12 +132,18 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
 	}
 	
+	
+    /**
+     *Synchronise OsceDay,Training and PatientInSemester
+     */
 	@Override
 	public String sync(String locale) throws DMZSyncException{
 	
 		String json = getSyncJsonData(locale);
 		String url = getHostAddress() + "/sp_portal/OsceSync/syncJson";
+		//Send OSCE data to DMZ and return DMZ data
 		String returnJson = sendData(json,url);
+		System.out.println(">>>>>>>>>>>>returnJson = "+returnJson);
 		String message = "";
 		if(!json.equals("")){	
 			try{
@@ -170,10 +176,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 * get the return message	
 	 */
 	private String getReturnMessage(JSONObject myjson)throws JSONException{
-		String message = "";
-	
-
-// TODO convert to StringBuffer before I scream				
+		StringBuffer message = new StringBuffer();		
 			if(myjson!=null){			
 			
 				JSONArray jsonArray = myjson.getJSONArray("message");			
@@ -181,11 +184,12 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 					JSONObject jsonObject = jsonArray.getJSONObject(i);
 					
 					if(jsonObject.get("key")!=JSONObject.NULL){
-					//	if(jsonObject.get("key")!=JSONObject.NULL){
-							message+=jsonObject.get("key").toString();
-					//	}
+
+							message.append(jsonObject.get("key").toString());
+
 						if(i != jsonArray.length()-1){
-							message+="#&";
+
+							message.append("#&");
 						}
 					}
 					
@@ -193,7 +197,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			
 			}
 				
-		return message;
+		return message.toString();
 	
 	}
 	
@@ -280,7 +284,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			 if(semester!=null){
 				 semester.setStandardizedPatient(patient);
 				 semester.setAccepted(accepted);
-				 //semester.flush();
 				 setOsceDays(jsonObject,semester);
 				 setTrainings(jsonObject,semester);						 
 				 semester.merge();
@@ -290,7 +293,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				 semester = new PatientInSemester();	
 				 semester.setStandardizedPatient(patient);
 				 semester.setAccepted(accepted);
-				// semester.flush();
 				 setOsceDays(jsonObject,semester);
 				 setTrainings(jsonObject,semester);
 				 semester.merge();
@@ -321,21 +323,13 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}			
 			
 			 if(osceDay!=null){
-//				 osceDay.getPatientInSemesters().add(semester);
-//				 osceDay.persist();
+
 				 jsonOsceDays.add(osceDay);
 				 
 			 }
 			 
 		 }
 		 semester.setOsceDays(jsonOsceDays);
-		// semester.persist();
-//		 for(OsceDay osceDay : semester.getOsceDays()){
-//			 if(!jsonOsceDays.contains(osceDay)){
-//				 osceDay.getPatientInSemesters().remove(semester);
-//				 osceDay.persist();
-//			 }
-//		 }
 		 
 		 
 	}
@@ -367,23 +361,15 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				}else if(timeStart==null && name!=null){
 					training = Training.findTrainingByTrainingDateAndName(trainingDate,name);
 				}
-				 //training = Training.findTrainingByTrainingDateAndTimeStart(convertToDate(trainingDate),convertToDate(timeStart));
+				 
 			 }
 			 if(training!=null){		
-//				 training.getPatientInSemesters().add(semester);
-//				 training.persist();
+
 				 jsonTrainings.add(training);
 			 }
 		 }
 		 semester.setTrainings(jsonTrainings);
-	//	 semester.persist();
-//		 for(Training training : semester.getTrainings()){
-//			 if(!jsonTrainings.contains(training)){
-//				 System.out.println("########### not contains");
-//				 training.getPatientInSemesters().remove(semester);
-//				 training.persist();
-//			 }
-//		 }
+
 		
 	}
 	
@@ -860,6 +846,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	
 	    
 		PostMethod postMethod = new PostMethod(url);
+		//postMethod.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET);
 
 		NameValuePair[] registerInform = new NameValuePair[1];
 		registerInform[0] = new NameValuePair("data", json);
@@ -869,9 +856,10 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		int statusCode = 0;
 		try {
 			statusCode = httpClient.executeMethod(postMethod);
-			//if(json.contains("osceDay")){
-				byte[] responseBody = postMethod.getResponseBody();
-			    ret = new String(responseBody);
+			
+				ret = postMethod.getResponseBodyAsString();
+				
+				
 			//}
 		} catch (HttpException e) {
 			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,url+": "+e.getMessage());
@@ -882,6 +870,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		if (!(statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY)) {
 			System.err.println("field.");
 		}
+		System.out.println("###############ret = "+ret);
 		return ret;
 	}
 
@@ -1016,7 +1005,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				
 				for (AnamnesisChecksValue aCheckValue : patient.getAnamnesisForm().getAnamnesischecksvalues()){
 					
-					// TODO
+					
 					
 					if (aCheckValue.getAnamnesischeck() != null) {
 
@@ -1055,6 +1044,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	
 	HttpServletRequest getRequest(){
 		HttpServletRequest ret = getThreadLocalRequest();
+		
 		return ret;
 	}
 	
