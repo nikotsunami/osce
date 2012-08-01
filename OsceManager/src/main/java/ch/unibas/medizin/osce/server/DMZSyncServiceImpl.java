@@ -52,6 +52,7 @@ import org.json.JSONException;
 import ch.unibas.medizin.osce.shared.Locale;
 import com.allen_sauer.gwt.log.client.Log;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 
 public class DMZSyncServiceImpl extends RemoteServiceServlet implements
@@ -64,13 +65,15 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
 	
 	@Override
-	public void pushToDMZ(Long standardizedPatientId) throws DMZSyncException {
+	public List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException {
 			StandardizedPatient patient = findPatient(standardizedPatientId);
 			String json = "";
 			String url = "";
+			List<String> errorMessages = null;
 			if(patient !=null){
 				try{
 					//,"anamnesisForm.anamnesischecksvalues.anamnesischeck"
+					
 					JSONSerializer serializer = new JSONSerializer();
 					json = serializer
 					       .include("*.class","anamnesisForm","anamnesisForm.anamnesischecksvalues"
@@ -80,19 +83,65 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 						   .transform(new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"), "birthday")
 						   .transform(new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"), "anamnesisForm.createDate")
 						   .serialize(patient);
-					
+				
+					json = processSendJson(json,locale);
 				}catch(Exception e){
 					throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
 				}
 				url = getHostAddress() + "/sp_portal/DataImportExport/importSP";	
-				sendData(json,url);
+				String returnJson = sendData(json,url);
+				errorMessages = getSendReturnErrorMessage(returnJson);
 			}else{
 				throw new DMZSyncException(DMZSyncExceptionType.PATIENT_EXIST_EXCEPTION,"");
 			}
+			
+			return errorMessages;
 	}
 	
-
-
+	/**
+	 * process the send json data
+	 */
+	private String processSendJson(String json,String locale)
+	{
+		StringBuilder jsonStr = new StringBuilder();
+		jsonStr.append("{");
+		jsonStr.append("\"StandardizedPatient\":");
+		jsonStr.append(json);
+		jsonStr.append(",");
+		jsonStr.append("\"languages\":{\"language\": \""+locale+"\"}");
+		jsonStr.append("}");
+		return jsonStr.toString();
+	}
+	
+	/**
+	 * get the error message which is send error field json data to DMZ
+	 */
+	protected List<String> getSendReturnErrorMessage(String json){
+		List<String> returnStr =new ArrayList<String>();
+		
+		try{			
+			JSONObject myjson = new JSONObject(json);
+			if(myjson!=null && myjson.has("errors")){			
+				
+				JSONArray jsonArray = myjson.getJSONArray("errors");			
+				for(int i =0;i<jsonArray.length();i++){
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					
+					if(jsonObject.get("error")!=JSONObject.NULL){
+					
+						returnStr.add(jsonObject.get("error").toString());
+					}
+					
+				}
+			
+			}
+		}catch(JSONException e){
+			Log.error("Error get return error Message: "+e.getMessage());
+		}
+				
+		return returnStr;
+	}
+	
 	@Override
 	public void pullFromDMZ(Long standardizedPatientId)  throws DMZSyncException {
 		String data = getDMZDataForPatient(standardizedPatientId);

@@ -58,6 +58,9 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 
+import com.google.gwt.i18n.client.LocaleInfo;
+import ch.unibas.medizin.osce.client.style.widgets.SimpleShowErrorDialogBox;
+
 @SuppressWarnings("deprecation")
 public class StandardizedPatientDetailsActivity extends AbstractActivity implements
 StandardizedPatientDetailsView.Presenter, 
@@ -745,7 +748,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	}
 	@Override
 	public void sendClicked(){
-		dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+		dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(),locale,new AsyncCallback<List<String>>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -759,8 +763,19 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				Window.alert(messageLookup.exportSuccessful());
+			public void onSuccess(List<String> result) {
+				if(result.size()<=0){
+					Window.alert(messageLookup.exportSuccessful());
+					return;
+				}
+				
+				SimpleShowErrorDialogBox dialogBox = null;
+				if(dialogBox == null){
+					String dialogTitle = messageLookup.getString("err_DialogBoxTitle");
+					String dialogCloseButton = messageLookup.getString("err_DialogBoxCloseButton");
+					dialogBox = new SimpleShowErrorDialogBox(dialogTitle,result,dialogCloseButton);
+				}
+				dialogBox.show();
 			}
 			
 		});	

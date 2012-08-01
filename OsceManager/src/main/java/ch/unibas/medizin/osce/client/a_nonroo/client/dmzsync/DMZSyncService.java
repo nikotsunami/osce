@@ -5,9 +5,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import java.util.List;
+
 @RemoteServiceRelativePath("dmzsync")
 public interface DMZSyncService extends RemoteService {
-	void pushToDMZ(Long standardizedPatientId) throws DMZSyncException;
+	List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException;
 	void pullFromDMZ(Long standardizedPatientId) throws DMZSyncException;
 	
 	String sync(String locale) throws DMZSyncException;
