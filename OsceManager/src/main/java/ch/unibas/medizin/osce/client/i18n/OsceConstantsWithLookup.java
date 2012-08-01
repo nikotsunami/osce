@@ -159,5 +159,6 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
  		public String PREPARATION();
  		
  // 5C: SPEC END
-    
+    public String err_DialogBoxTitle();
+	public String err_DialogBoxCloseButton();
 }

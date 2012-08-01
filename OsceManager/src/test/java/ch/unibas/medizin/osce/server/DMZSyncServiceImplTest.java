@@ -30,6 +30,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 
 @ContextConfiguration(locations = { "/META-INF/spring/applicationContext2.xml" })
 public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
@@ -459,7 +461,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 
 		
 		StandardizedPatient patient = StandardizedPatient.findStandardizedPatient(testData.getId());
-	
+
 		assertEquals(testData.getId(), (Long)instance.spParam);
 	   // assertEquals(Gender.FEMALE,patient.getGender());
 	    assertEquals("Buser",patient.getName());
@@ -576,7 +578,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
     @Test
     public void testPushToDMZ() {
         try {
-			instance.pushToDMZ(22L);
+			instance.pushToDMZ(22L,"en");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -740,6 +742,10 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
             return returnData;
 
        }
+	   protected List<String> getSendReturnErrorMessage(String json){
+			List<String> returnJstr = null;
+			return returnJstr;
+	   }
 
 		protected String getSyncJsonData(String locale){
 		
