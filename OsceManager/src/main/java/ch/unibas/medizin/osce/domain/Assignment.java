@@ -39,7 +39,6 @@ public class Assignment {
     @ManyToOne
     private OsceDay osceDay;
 
-    @NotNull
     @ManyToOne
     private OscePostRoom oscePostRoom;
 

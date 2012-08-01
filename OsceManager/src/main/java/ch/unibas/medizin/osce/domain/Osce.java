@@ -21,7 +21,9 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.TimetableGenerator;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
@@ -63,6 +65,12 @@ public class Osce {
 
     @Enumerated
     private OsceStatus osceStatus;
+    
+    @Enumerated
+    private OSCESecurityStatus security;
+    
+    @Enumerated
+    private PatientAveragePerPost patientAveragePerPost;
     
     @NotNull
     @ManyToOne
@@ -200,6 +208,29 @@ public class Osce {
 		TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId ,Osce.class);
 		return q.getResultList();
 				
+	}
+    
+	public static Integer initOsceBySecurity() {
+
+		List<Osce> osces = findAllOsces();
+		int i =0;
+
+		for (Iterator<Osce> iterator = osces.iterator(); iterator.hasNext();) {
+			Osce osce = (Osce) iterator.next();
+			System.out.println("osce.security" + osce.security);
+
+			if (osce.security == null) {
+
+				// System.out.println("\n\n Removed PIR is : "+patientInRole.getId());
+				osce.security = OSCESecurityStatus.FEDERAL_EXAM;
+				osce.persist();
+				i++;
+
+			}
+
+		}
+		return i;
+
 	}
     
     //spec end

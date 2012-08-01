@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -20,6 +22,8 @@ public interface StandardizedPatientScarSubView extends IsWidget {
 	public String[] getPaths();
 	public void setDelegate(Delegate delegate);
 	public ValueListBox<ScarProxy> getScarBox();
+	
+	public DefaultSuggestBox<ScarProxy, EventHandlingValueHolderItem<ScarProxy>> getNewScarBox();
 	public void setScarBoxValues(List<ScarProxy> values);
 
 	// Highlight onViolation

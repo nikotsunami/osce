@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
 	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 	<ui:style src="../styles.css">
 	</ui:style>
@@ -22,7 +22,8 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table id='boundElementHolder' class="{style.fields}">
+					<!-- <table id='boundElementHolder' class="{style.fields}"> -->
+					<table>
 						<colgroup>
 							<col></col>
 							<col></col>
@@ -42,11 +43,21 @@
 							</tr>
 							<tr id='insideTitle'>
                                 <td><span class='{style.label}' ui:field="labelinsideTitle" /></td>
-                                <td ><g:ListBox ui:field='insideTitleListBox' /></td>
+                                <td >
+                                <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+                                <!-- <g:ListBox ui:field='insideTitleListBox' /> -->
+                                <i:DefaultSuggestBox ui:field='insideTitleListBox'></i:DefaultSuggestBox>
+                                <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+                                </td>
                             </tr>
                             <tr id='previousQuestion'>
                                 <td><span class='{style.label}' ui:field="labelpreviousQuestion" /></td>
-                                <td ><g:ListBox ui:field='previousQuestionListBox' /></td>
+                                <td >
+                                <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+                                <!-- <g:ListBox ui:field='previousQuestionListBox' /> -->
+                                <i:DefaultSuggestBox ui:field='previousQuestionListBox'></i:DefaultSuggestBox>
+                                <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+                                </td>
                             </tr>
 						</tbody>
 					</table>

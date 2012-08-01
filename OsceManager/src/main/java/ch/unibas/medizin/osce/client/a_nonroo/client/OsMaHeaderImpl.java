@@ -118,8 +118,13 @@ public class OsMaHeaderImpl extends Composite implements OsMaHeader {
 		}	
 		else
 		{
-			OsMaConstant.TABLE_PAGE_SIZE = Integer.parseInt(temp);
-			selectRecordBox.setValue(temp);
+			if (!temp.equals("ALL"))
+			{
+				OsMaConstant.TABLE_PAGE_SIZE = Integer.parseInt(temp);
+				selectRecordBox.setValue(temp);
+			}
+			//OsMaConstant.TABLE_PAGE_SIZE = Integer.parseInt(temp);
+			//selectRecordBox.setValue(temp);
 		}
 	}
 

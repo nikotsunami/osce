@@ -275,9 +275,9 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 	
 	private void loadDisplaySettings() {
 		int detailsTab = 0;
-		if (userSettings.hasSettings()) {
+		/*if (userSettings.hasSettings()) {
 			detailsTab = userSettings.getIntValue("detailsTab");
-		}
+		}*/
 		
 		view.setSelectedDetailsTab(detailsTab);
 	}

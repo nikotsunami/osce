@@ -12,8 +12,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.Gender;
+//import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -74,8 +79,18 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	TextBox email;
 	@UiField
 	TextBox telephone;
-	@UiField(provided = true)
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	/*@UiField(provided = true)
 	ValueListBox<ClinicProxy> clinic = new ValueListBox<ClinicProxy>(ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ClinicProxy>());
+	*/
+	@UiField
+	public DefaultSuggestBox<ClinicProxy, EventHandlingValueHolderItem<ClinicProxy>> clinic;
+
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	
 	@UiField
 	SimplePanel officePanel;
 	
@@ -221,7 +236,29 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 
 	@Override
 	public void setClinicPickerValues(Collection<ClinicProxy> clinicList) {
-		clinic.setAcceptableValues(clinicList);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		DefaultSuggestOracle<ClinicProxy> suggestOracle1 = (DefaultSuggestOracle<ClinicProxy>) clinic.getSuggestOracle();
+		suggestOracle1.setPossiblilities((List)clinicList);
+		clinic.setSuggestOracle(suggestOracle1);
+		//clinic.setRenderer(new ClinicProxyRenderer());
+		clinic.setRenderer(new AbstractRenderer<ClinicProxy>() {
+
+			@Override
+			public String render(ClinicProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//clinic.setAcceptableValues(clinicList);
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	
 	@Override

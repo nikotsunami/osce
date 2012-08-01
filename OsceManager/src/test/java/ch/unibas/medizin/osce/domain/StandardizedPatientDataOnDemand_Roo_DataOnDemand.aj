@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.domain.ProfessionDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import java.lang.Integer;
 import java.lang.String;
@@ -74,6 +75,7 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
         setPreName(obj, index);
         setProfession(obj, index);
         setSocialInsuranceNo(obj, index);
+        setStatus(obj, index);
         setStreet(obj, index);
         setTelephone(obj, index);
         setTelephone2(obj, index);
@@ -187,6 +189,11 @@ privileged aspect StandardizedPatientDataOnDemand_Roo_DataOnDemand {
             socialInsuranceNo = socialInsuranceNo.substring(0, 13);
         }
         obj.setSocialInsuranceNo(socialInsuranceNo);
+    }
+    
+    public void StandardizedPatientDataOnDemand.setStatus(StandardizedPatient obj, int index) {
+        StandardizedPatientStatus status = StandardizedPatientStatus.class.getEnumConstants()[0];
+        obj.setStatus(status);
     }
     
     public void StandardizedPatientDataOnDemand.setStreet(StandardizedPatient obj, int index) {

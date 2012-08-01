@@ -8,6 +8,8 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -60,6 +62,14 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 		this.oscePostSubView = oscePostSubView;
 	}
 
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+
+	
+	@UiField
+	public DefaultSuggestBox<Object, EventHandlingValueHolderItem<Object>> listBox;
+
+	/*
 	@UiField(provided=true)
 	ValueListBox<EntityProxy> listBox=new ValueListBox<EntityProxy>(new Renderer<EntityProxy>() {
 
@@ -110,13 +120,23 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 		}
 	});
 	
+	*/
 	
+	//Issue # 122 : Replace pull down with autocomplete.
 
+	//Issue # 122 : Replace pull down with autocomplete.
 	public ValueListBox<EntityProxy> getListBox() {
+		//return listBox;
+		return null;
+	}
+
+	@Override
+	public DefaultSuggestBox<Object, EventHandlingValueHolderItem<Object>> getNewListBox() {
+		// TODO Auto-generated method stub
 		return listBox;
 	}
 
-	
+	//Issue # 122 : Replace pull down with autocomplete.
 
 	@UiField
 	Button okBtn;
@@ -141,7 +161,10 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 		
 		Log.info("Event :" + event.getAssociatedType());
 		//event.getAssociatedType()
-		EntityProxy object=listBox.getValue();
+		//Issue # 122 : Replace pull down with autocomplete.
+		//EntityProxy object=listBox.getValue();
+		Object object=listBox.getSelected();
+		//Issue # 122 : Replace pull down with autocomplete.
 		Log.info("okBtnClicked  :" + object);
 		
 		
@@ -153,6 +176,7 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 		
 		
 	}
+	
 	
 	
 }

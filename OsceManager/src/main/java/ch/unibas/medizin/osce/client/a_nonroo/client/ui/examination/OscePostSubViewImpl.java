@@ -180,7 +180,11 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					EntityProxy object=((ListBoxPopupViewImpl)popupView).listBox.getValue();
+					
+					//Issue # 122 : Replace pull down with autocomplete.
+					//EntityProxy object=((ListBoxPopupViewImpl)popupView).listBox.getValue();
+					Object object=((ListBoxPopupViewImpl)popupView).listBox.getSelected();
+					//Issue # 122 : Replace pull down with autocomplete.
 					Log.info("okBtnClicked  :" + object);
 					
 					if(object instanceof SpecialisationProxy)

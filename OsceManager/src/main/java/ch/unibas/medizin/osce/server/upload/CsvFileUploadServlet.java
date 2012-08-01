@@ -146,13 +146,15 @@ public class CsvFileUploadServlet extends HttpServlet {
 	        	{
 	        		id = "0";
 	        	}
-	        	Long ctr = Student.findStudentByIDOrByEmail(id, student.get(student.getHeader(3)));
+	        	
+	        	List<Student> studentList = Student.findStudentByEmail(student.get(student.getHeader(3)));
+	        	//Long ctr = Student.findStudentByIDOrByEmail(id, student.get(student.getHeader(3)));
 	         	String name;
 	         	String email;
 	         	String prename;
 	           	String gender;
 	         	
-	         	if (ctr == 0)
+	         	if (studentList.size() == 0)
 	         	{
 	         		name=student.get(student.getHeader(0));
 	         		prename=student.get(student.getHeader(1));
@@ -188,7 +190,7 @@ public class CsvFileUploadServlet extends HttpServlet {
 	         		
 	         		Long oscecount = null;
 	         		try{
-	         			oscecount = StudentOsces.findStudentByStudIdOrOsceId(id, Long.parseLong(osceid));
+	         			oscecount = StudentOsces.findStudentByStudIdAndOsceId(s.getId(), Long.parseLong(osceid));
 	         		}catch(Exception e)
 	         		{
 	         			e.printStackTrace();
@@ -218,20 +220,10 @@ public class CsvFileUploadServlet extends HttpServlet {
 	         	else
 	         	{
 	         		System.out.println("~~Record is Already there");
-	         		
-	         	/*	List<Student> studlist = Student.findStudentByEmail(student.get(student.getHeader(3)));
-	         		
-	         		Student stud = studlist.get(0);
-	         		
-	         		Long tempid = Long.parseLong(osceid);
-	         		
-	         		System.out.println("~~Temp id : " + tempid); */
-	         		
-	         		
-	         		
+	  
 	         		Long oscecount = null;
 	         		try{
-	         			oscecount = StudentOsces.findStudentByStudIdOrOsceId(student.get(student.getHeader(3)), Long.parseLong(osceid));
+	         			oscecount = StudentOsces.findStudentByStudIdAndOsceId(studentList.get(0).getId(), Long.parseLong(osceid));  
 	         		}catch(Exception e)
 	         		{
 	         			e.printStackTrace();

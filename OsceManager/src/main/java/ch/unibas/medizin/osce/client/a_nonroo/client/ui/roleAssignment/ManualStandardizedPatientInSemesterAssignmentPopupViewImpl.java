@@ -8,6 +8,9 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -15,6 +18,8 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -53,7 +58,13 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 	private StandardizedPatientProxy standardizedPatientProxy;
 	private List<StandardizedPatientProxy> standardizedPatientProxies;
 
-	@UiField(provided = true)
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
+	public DefaultSuggestBox<StandardizedPatientProxy, EventHandlingValueHolderItem<StandardizedPatientProxy>> standardizedPatientSugestionBox;
+
+	/*@UiField(provided = true)
 	SuggestBox standardizedPatientSugestionBox = new SuggestBox(
 			new ProxySuggestOracle<StandardizedPatientProxy>(
 					new AbstractRenderer<StandardizedPatientProxy>() {
@@ -63,6 +74,8 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 						}
 					}// ));
 					, ",;:. \t?!_-/\\"));
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
 
 	@UiField
 	IconButton standardizedPatientAddButton;
@@ -126,8 +139,14 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 		// Highlight onViolation
 		patientInSemesterMap=new HashMap<String, Widget>();
-		patientInSemesterMap.put("semester", standardizedPatientSugestionBox);
-		patientInSemesterMap.put("standardizedPatient", standardizedPatientSugestionBox);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		//patientInSemesterMap.put("semester", standardizedPatientSugestionBox);
+		//patientInSemesterMap.put("standardizedPatient", standardizedPatientSugestionBox);
+		
+		patientInSemesterMap.put("semester", standardizedPatientSugestionBox.getTextField().advancedTextBox);
+		patientInSemesterMap.put("standardizedPatient", standardizedPatientSugestionBox.getTextField().advancedTextBox);
+		//Issue # 122 : Replace pull down with autocomplete.
 		// E Highlight onViolatio
 		 
 	}
@@ -160,7 +179,10 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 				else 
 				{*/
 					/*suggestionBoxLbl.setText(constants.enterPatient());*/
-					standardizedPatientSugestionBox.setText(constants.enterPatient());
+					//Issue # 122 : Replace pull down with autocomplete.
+					//standardizedPatientSugestionBox.setText(constants.enterPatient());
+					//standardizedPatientSugestionBox.getTextField().advancedTextBox.setText(constants.enterPatient());
+					//Issue # 122 : Replace pull down with autocomplete.
 
 				/*}*/
 			} 
@@ -206,7 +228,8 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 		// standardizedPatientSugestionBox
 
-		standardizedPatientSugestionBox.setText(constants.enterPatient());
+		//Issue # 122 : Replace pull down with autocomplete.
+/*		standardizedPatientSugestionBox.setText(constants.enterPatient());
 		standardizedPatientSugestionBox.getTextBox().addFocusHandler(
 				new FocusHandler() {
 					@Override
@@ -230,7 +253,13 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 						}
 					}
 				});
+*/
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 
+		/*
 		standardizedPatientSugestionBox
 				.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
 
@@ -252,12 +281,36 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 			public void onChange(Widget sender) {
 				// TODO Auto-generated method stub
 				System.out.println("on Change");
-				standardizedPatientSugestionBox.setValue(((SuggestBox) sender)
-						.getTextBox().getValue());
+				standardizedPatientSugestionBox.setValue(((SuggestBox) sender).getTextBox().getValue());
 				suggestionBoxLbl.setText("");
 			}
+		});*/
+		
+		standardizedPatientSugestionBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				// TODO Auto-generated method stub
+			Log.info("value change handler");	
+			//Issue # 122 : Replace pull down with autocomplete.
+			//if(this.roleLstBox.getValue()==null)
+				if(standardizedPatientSugestionBox.getSelected()!=null)
+				{
+					standardizedPatientProxy=standardizedPatientSugestionBox.getSelected();
+				}
+				else
+				{
+					standardizedPatientProxy=null;
+				}
+			}
+			
+			
 		});
 	}
+
+		
+		
+	//Issue # 122 : Replace pull down with autocomplete.
 
 	@Override
 	public void setDelegate(Delegate delegate) {
@@ -272,8 +325,36 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 		// Log.info("List of Values of SP is: " + values.size());
 
-		((ProxySuggestOracle<StandardizedPatientProxy>) standardizedPatientSugestionBox
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		/*((ProxySuggestOracle<StandardizedPatientProxy>) standardizedPatientSugestionBox
 				.getSuggestOracle()).addAll(values);
+		*/
+		Log.info("list size==="+values.size());
+
+		DefaultSuggestOracle<StandardizedPatientProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedPatientProxy>) standardizedPatientSugestionBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		standardizedPatientSugestionBox.setSuggestOracle(suggestOracle1);
+		
+		standardizedPatientSugestionBox.setRenderer(new AbstractRenderer<StandardizedPatientProxy>() {
+
+			@Override
+			
+			public String render(StandardizedPatientProxy object) {
+				// TODO Auto-generated method stub
+				if(object.getName()!=null)
+				{
+				return object.getName()+" "+object.getPreName();}
+				else
+				{
+					return "";
+				}
+				
+			}
+		});
+		
+
+		//Issue # 122 : Replace pull down with autocomplete.
 
 		// for (int i = 0; i < values.size(); i++) {
 		// if (values.get(i) != null) {
@@ -291,7 +372,10 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 	public SuggestBox getStandardizedPatientSugestionBox() 
 	{
-		return standardizedPatientSugestionBox;
+		//Issue # 122 : Replace pull down with autocomplete.
+		//return standardizedPatientSugestionBox;
+		//Issue # 122 : Replace pull down with autocomplete.
+		return null;
 	}
 
 	public Delegate getDelegate() {

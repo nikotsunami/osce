@@ -1,11 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+  xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 <ui:style src="../../styles.css" />
  
   <g:HTMLPanel addStyleNames="{style.patientDetails}">
-	<table class="{style.fields}">
+	<!-- <table class="{style.fields}"> -->
+	<table>
 		<colgroup>
 			<col></col>
 			<col></col>
@@ -31,7 +32,12 @@
 		</tr>
 		<tr>
 			<td><span class="{style.label}" ui:field="labelBankCountry" /></td>
-			<td><g:ValueListBox ui:field="country" /></td>
+			<td>
+			<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+			<!-- <g:ValueListBox ui:field="country" /> -->
+			<i:DefaultSuggestBox ui:field="country"></i:DefaultSuggestBox>
+			<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+			</td>
 		</tr>
 		<tr>
 		</tr>

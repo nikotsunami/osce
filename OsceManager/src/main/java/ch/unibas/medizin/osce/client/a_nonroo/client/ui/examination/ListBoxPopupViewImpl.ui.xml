@@ -6,7 +6,7 @@
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
-  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 <ui:style src="../../styles.css" >
 .noOutline {
@@ -52,8 +52,17 @@
 
 	
 	<g:VerticalPanel  spacing="10" horizontalAlignment="center">
-		<g:ValueListBox ui:field="listBox"></g:ValueListBox>
+	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+		<g:HorizontalPanel>
+		
+		<!-- <g:ValueListBox ui:field="listBox"></g:ValueListBox> -->
+		
+		<i:DefaultSuggestBox ui:field="listBox"></i:DefaultSuggestBox>
+		
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<g:Button ui:field="okBtn"></g:Button>
+		
+		</g:HorizontalPanel>
 	</g:VerticalPanel>
 
 	

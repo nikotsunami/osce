@@ -1,6 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -20,8 +23,10 @@ public interface DoctorView  extends IsWidget{
 		void newClicked();
 		
 		void performSearch(String q);
-		
-		void changeFilterTitleShown(String selectedTitle);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//void changeFilterTitleShown(String selectedTitle);
+		void changeFilterTitleShown();
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
     CellTable<DoctorProxy> getTable();
@@ -34,4 +39,5 @@ public interface DoctorView  extends IsWidget{
     
     //Module : 6
     ListBox getFilterTitle();
+	DefaultSuggestBox<ClinicProxy, EventHandlingValueHolderItem<ClinicProxy>> getSuggestBox();
 }

@@ -6,7 +6,7 @@
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
-  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
  
   
 
@@ -37,7 +37,8 @@
 					<g:Tab>
 						<g:TabHTML>Role Detail</g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">	
-							<table class="{style.fields}">
+							<!-- <table class="{style.fields}"> -->
+							<table>
 							<colgroup>
 								<col></col>
 								<col></col>						
@@ -68,7 +69,12 @@
 								</tr>
 								<tr id="roleTopic">
 									<td><span class="{style.label}" ui:field="labelRoleTopic" /></td>
-									<td><my:FocusableValueListBox ui:field="roleTopic" /></td>
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									
+								 	<td><i:DefaultSuggestBox ui:field="roleTopic"></i:DefaultSuggestBox></td> 
+									
+									<!-- <my:FocusableValueListBox ui:field="roleTopic" /> -->
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
 								</tr>
 								</tbody>

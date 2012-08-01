@@ -3,7 +3,7 @@
 	xmlns:a="urn:import:ch.unibas.medizin.osce.client.managed.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:r="urn:import:ch.unibas.medizin.osce.client.scaffold.ui"
 	xmlns:l="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui"
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 	<ui:style src="../styles.css" />
 		
@@ -21,7 +21,8 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
-					<table id="boundElementHolder" class="{style.fields}">
+					<!-- <table id="boundElementHolder" class="{style.fields}"> -->
+					<table>
 					<colgroup>
 						<col></col>
 						<col></col>					
@@ -53,7 +54,12 @@
 						</tr>
 						<tr id="clinic">
 							<td><span class="{style.label}" ui:field="labelClinic" /></td>
-							<td><g:ValueListBox ui:field="clinic" /></td>
+							<td>
+							<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+							<!-- <g:ValueListBox ui:field="clinic" /> -->
+							<i:DefaultSuggestBox ui:field="clinic"></i:DefaultSuggestBox>
+							<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+							</td>
 						</tr>
 					</tbody>
 					</table>

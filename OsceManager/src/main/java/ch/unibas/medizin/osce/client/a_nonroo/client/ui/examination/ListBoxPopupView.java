@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -17,6 +20,8 @@ public interface ListBoxPopupView extends IsWidget{
 	public Button getOkBtn();
 	
 	public ValueListBox<EntityProxy> getListBox();
+	
+	public DefaultSuggestBox<Object, EventHandlingValueHolderItem<Object>> getNewListBox();
 	
 	public EntityProxy getProxy();
 	

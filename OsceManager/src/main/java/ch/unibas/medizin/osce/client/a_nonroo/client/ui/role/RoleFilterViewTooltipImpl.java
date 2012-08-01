@@ -14,6 +14,9 @@ import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
@@ -28,6 +31,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -146,18 +150,52 @@ public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 	@UiField
 	Label Keywordlbl;
 	
+	//Issue # 122 : Replace pull down with autocomplete.
 	
-	@UiField(provided = true)
+/*	@UiField(provided = true)
 	SuggestBox KeywordSugestionBox =  new SuggestBox(keywordoracle);
+*/	
+	@UiField
+	public DefaultSuggestBox<KeywordProxy, EventHandlingValueHolderItem<KeywordProxy>> KeywordSugestionBox;
+
 	
-	@UiField(provided = true)
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	/*@UiField(provided = true)
 	SuggestBox autherSugestionBox =  new SuggestBox(autheroracle);
+	*/
+	@UiField
+	public DefaultSuggestBox<DoctorProxy, EventHandlingValueHolderItem<DoctorProxy>> autherSugestionBox;
+
 	
-	@UiField(provided = true)
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
+	public DefaultSuggestBox<DoctorProxy, EventHandlingValueHolderItem<DoctorProxy>> reviewerSugestionBox;
+
+	
+/*	@UiField(provided = true)
 	SuggestBox reviewerSugestionBox =  new SuggestBox(revieweroracle);
+*/	
+	//Issue # 122 : Replace pull down with autocomplete.
 	
-	@UiField(provided = true)
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	
+	@UiField
+	public DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> SpecificationSugestionBox;
+
+	
+	/*@UiField(provided = true)
 	SuggestBox SpecificationSugestionBox =  new SuggestBox(specificationoracle);
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	
 	
@@ -321,27 +359,32 @@ public List<String> getWhereFilters() {
 		
 		}
 		
-				
-		if(autherSugestionBox.getValue()!="")
+		//Issue # 122 : Replace pull down with autocomplete.		
+		if(autherSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
 			
 			tableFilters.add(" join sr.roleParticipants rp_autor ");
 			
-			whereFilters.add("(rp_autor.type = 0  and rp_autor.doctor.name like'%"+autherSugestionBox.getValue()+"%') ");
+			whereFilters.add("(rp_autor.type = 0  and rp_autor.doctor.name like'%"+autherSugestionBox.getTextField().advancedTextBox.getValue()+"%') ");
 		}
-		if(reviewerSugestionBox.getValue()!="")
+		//Issue # 122 : Replace pull down with autocomplete.
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		if(reviewerSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
 		
 			tableFilters.add(" join sr.roleParticipants rp_rev ");
 			
-			whereFilters.add("(rp_rev.type = 1  and rp_rev.doctor.name like '%"+reviewerSugestionBox.getValue()+"%') ");
+			whereFilters.add("(rp_rev.type = 1  and rp_rev.doctor.name like '%"+reviewerSugestionBox.getTextField().advancedTextBox.getValue()+"%') ");
 		}
-		if(SpecificationSugestionBox.getValue()!="")
+		//Issue # 122 : Replace pull down with autocomplete.
+		//Issue # 122 : Replace pull down with autocomplete.
+		if(SpecificationSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
 			tableFilters.add(" join rt.specialisation sp");
-			whereFilters.add(" sp.name like'%"+SpecificationSugestionBox.getValue() + "%'");
+			whereFilters.add(" sp.name like'%"+SpecificationSugestionBox.getTextField().advancedTextBox.getValue() + "%'");
 		}
-		if(KeywordSugestionBox.getValue()!="")
+		if(KeywordSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
 			
 			if(Keyword.isChecked())
@@ -350,10 +393,12 @@ public List<String> getWhereFilters() {
 			}
 			else
 			tableFilters.add(" join sr.keywords k");
-			whereFilters.add("k.name like'%"+KeywordSugestionBox.getValue()+"%'");
+			whereFilters.add("k.name like'%"+KeywordSugestionBox.getTextField().advancedTextBox.getValue()+"%'");
 				
 				
 		}
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 		if(StudyYearListBox.getValue()!=null)
 		{
@@ -478,7 +523,7 @@ public List<String> getWhereFilters() {
 		}
 		
 		
-		KeywordSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+		/*KeywordSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
 			
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -497,8 +542,9 @@ public List<String> getWhereFilters() {
 				KeywordSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());	
 			}
 		});
-
-		autherSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+*/
+		//Issue # 122 : Replace pull down with autocomplete.
+/*		autherSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
 			
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -518,9 +564,10 @@ public List<String> getWhereFilters() {
 				autherSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());	
 			}
 		});
+*/		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
-		
-		reviewerSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+		/*reviewerSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
 			
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -539,10 +586,10 @@ public List<String> getWhereFilters() {
 			//	System.out.println("change listner keyword : " + ((SuggestBox)sender).getTextBox().getValue());
 				reviewerSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());	
 			}
-		});
+		});*/
 		
 		
-		SpecificationSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+		/*SpecificationSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
 			
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -561,7 +608,7 @@ public List<String> getWhereFilters() {
 			//	System.out.println("change listner keyword : " + ((SuggestBox)sender).getTextBox().getValue());
 				SpecificationSugestionBox.setValue(((SuggestBox)sender).getTextBox().getValue());	
 			}
-		});
+		});*/
 
 
 
@@ -766,22 +813,46 @@ public List<String> getWhereFilters() {
 	@Override
 	public void setKeywordAutocompleteValue(List<KeywordProxy> values) {
 		// TODO Auto-generated method stub
-		
-		int index=0;
+		//Issue # 122 : Replace pull down with autocomplete.
+		/*int index=0;
 		while(index<values.size())
 		{		
 			keywordoracle.add(values.get(index).getName());
 			index++;
 		}
 		KeywordSugestionBox = new SuggestBox(keywordoracle, new TextBox());
+		*/
+		DefaultSuggestOracle<KeywordProxy> suggestOracle1 = (DefaultSuggestOracle<KeywordProxy>) KeywordSugestionBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		KeywordSugestionBox.setSuggestOracle(suggestOracle1);
 		
+
+		KeywordSugestionBox.setRenderer(new AbstractRenderer<KeywordProxy>() {
 		
+				@Override
+				public String render(KeywordProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 	}
 
 	@Override
 	public void setAuthorAutocompleteValue(List<DoctorProxy> values) {
-		// TODO Auto-generated method stub
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		/*// TODO Auto-generated method stub
 		int index=0;
 		while(index<values.size())
 		{		
@@ -789,6 +860,30 @@ public List<String> getWhereFilters() {
 			index++;
 		}
 		autherSugestionBox = new SuggestBox(autheroracle, new TextBox());
+		*/
+		DefaultSuggestOracle<DoctorProxy> suggestOracle1 = (DefaultSuggestOracle<DoctorProxy>) autherSugestionBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		autherSugestionBox.setSuggestOracle(suggestOracle1);
+		
+
+		autherSugestionBox.setRenderer(new AbstractRenderer<DoctorProxy>() {
+
+				@Override
+				public String render(DoctorProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 	}
 
@@ -796,31 +891,78 @@ public List<String> getWhereFilters() {
 	public void setReviewerAutocompleteValue(List<DoctorProxy> values) {
 		// TODO Auto-generated method stub
 		
-		int index=0;
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		/*int index=0;
 		while(index<values.size())
 		{		
 			revieweroracle.add(values.get(index).getName());
 			index++;
 		}
 		reviewerSugestionBox = new SuggestBox(revieweroracle, new TextBox());
+		*/
+		
+		DefaultSuggestOracle<DoctorProxy> suggestOracle1 = (DefaultSuggestOracle<DoctorProxy>) reviewerSugestionBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		reviewerSugestionBox.setSuggestOracle(suggestOracle1);
 		
 		
+		reviewerSugestionBox.setRenderer(new AbstractRenderer<DoctorProxy>() {
+		
+				@Override
+				public String render(DoctorProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 	@Override
 	public void setSpecialisationAutocompleteValue(
 			List<SpecialisationProxy> values) {
 		// TODO Auto-generated method stub
+		//Issue # 122 : Replace pull down with autocomplete.
 		
-		int index=0;
+		/*int index=0;
 		while(index<values.size())
 		{		
 			specificationoracle.add(values.get(index).getName());
 			index++;
 		}
 		SpecificationSugestionBox = new SuggestBox(specificationoracle, new TextBox());
+		*/
+		
+		DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) SpecificationSugestionBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		SpecificationSugestionBox.setSuggestOracle(suggestOracle1);
 		
 		
+		SpecificationSugestionBox.setRenderer(new AbstractRenderer<SpecialisationProxy>() {
+
+				@Override
+				public String render(SpecialisationProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 	@Override

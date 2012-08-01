@@ -151,4 +151,7 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
  		public String Fixed_Status();
  		public String Closed_Status();
     
+	public String SIMPLE();
+
+	public String FEDERAL_EXAM();
 }

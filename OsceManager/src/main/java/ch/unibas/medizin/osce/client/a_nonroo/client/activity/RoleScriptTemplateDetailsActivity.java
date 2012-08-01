@@ -18,6 +18,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemVi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
@@ -26,12 +28,17 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTableItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.ui.RoleItemAccessProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -41,6 +48,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -57,6 +65,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 @SuppressWarnings("deprecation")
@@ -881,9 +890,18 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		toolTipContentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		toolTipContentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 	
-		final ValueListBox<RoleItemAccessProxy> accessList = new ValueListBox<RoleItemAccessProxy>(RoleItemAccessProxyRenderer.instance());
+		//Issue # 122 : Replace pull down with autocomplete.
+		final DefaultSuggestBox<RoleItemAccessProxy, EventHandlingValueHolderItem<RoleItemAccessProxy>> accessList=new DefaultSuggestBox<RoleItemAccessProxy, EventHandlingValueHolderItem<RoleItemAccessProxy>>();
+		
+		
+		
+		/*final ValueListBox<RoleItemAccessProxy> accessList = new ValueListBox<RoleItemAccessProxy>(RoleItemAccessProxyRenderer.instance());
+		
 		accessList.setWidth("150px");
 		accessList.setHeight("22px");
+		*/
+		//Issue # 122 : Replace pull down with autocomplete.
+		
 		
 					
 		
@@ -891,10 +909,49 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 
 			@Override
 			public void onSuccess(List<RoleItemAccessProxy> response) {
-					accessList.setAcceptableValues(response);
+					
+				//Issue # 122 : Replace pull down with autocomplete.
+				//accessList.setAcceptableValues(response);
+				
+				//Issue # 122 : Replace pull down with autocomplete.
+					
+					//Issue # 122 : Replace pull down with autocomplete.
+					DefaultSuggestOracle<RoleItemAccessProxy> suggestOracle1 = (DefaultSuggestOracle<RoleItemAccessProxy>) accessList.getSuggestOracle();
+					suggestOracle1.setPossiblilities(response);
+					accessList.setSuggestOracle(suggestOracle1);
+					//accessList1.setRenderer(new RoleItemAccessProxyRenderer());
+					accessList.setRenderer(new AbstractRenderer<RoleItemAccessProxy>() {
+
+						@Override
+						public String render(RoleItemAccessProxy object) {
+							// TODO Auto-generated method stub
+							if(object!=null)
+							{
+							return object.getName();
+							}
+							else
+							{
+								return "";
+							}
+						}
+					});
+					//Issue # 122 : Replace pull down with autocomplete.
+					
+
+
+
+					
+					
+						
+
 				}
 		});
+		//Issue # 122 : Replace pull down with autocomplete.
 		toolTipContentPanel.add(accessList);
+		//toolTipContentPanel.add(accessList);
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		
 	
 		
 	     toolTip.add(toolTipContentPanel);   // you can add any widget here
@@ -903,6 +960,85 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		toolTip.setPopupPosition(xPosition - 100,yPosition-50);
 	    
 	      toolTip.show();
+	      
+	    //Issue # 122 : Replace pull down with autocomplete.
+	   accessList.addHandler(new ChangeHandler() {
+		
+		@Override
+		public void onChange(ChangeEvent event) {
+			// TODO Auto-generated method stub
+			
+			if(accessList.getSelected()!=null)
+			{
+				 
+						boolean flag=false;
+						
+						
+						Log.info("Selected data : " +accessList.getSelected().getName());
+						
+						RoleBaseTableAccessViewImpl roleBaseTableAccssViewImpl = new RoleBaseTableAccessViewImpl();
+					
+						roleBaseTableAccssViewImpl.setDelegate(roleScriptTemplateDetailsActivity);
+					
+						//roleBaseTableAccssViewImpl.setRoleItemAccessProxy(event.getValue());
+						if(roleBasedItemProxy.getRoleItemAccess() != null)
+						{
+							
+							 Iterator<RoleItemAccessProxy> roleBaseProxy = roleBasedItemProxy.getRoleItemAccess().iterator(); 
+							 while(roleBaseProxy.hasNext())
+							 {
+								 if(roleBaseProxy.next().getId().longValue()==accessList.getSelected().getId().longValue()){
+									 flag=true;
+								 }
+							 }
+						}
+						if(flag){
+							Window.alert("Same Role Access Is not assign twice");
+							return ;
+						}
+						
+						roleBaseTableAccssViewImpl.accessDataLabel.setText(accessList.getSelected().getName());
+						accessDataPanel.add(roleBaseTableAccssViewImpl);
+										
+						RoleBaseItemProxy editRoleBasedItemProxy = roleBasedItemProxy;
+						
+						RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
+						editRoleBasedItemProxy = roleBaseItemReq.edit(editRoleBasedItemProxy);
+						
+						Set<RoleItemAccessProxy> setRoleItemAccessProxy = editRoleBasedItemProxy.getRoleItemAccess();
+				
+				
+						setRoleItemAccessProxy.add(accessList.getSelected());
+						
+						editRoleBasedItemProxy.setRoleItemAccess(setRoleItemAccessProxy);
+						
+						// PERSIST TEST
+						roleBaseItemReq.persist().using(editRoleBasedItemProxy).fire(new Receiver<Void>() {
+
+							@Override
+							public void onSuccess(Void response) {
+								
+								Log.info("Successfully added access : " + response);
+								toolTip.hide();
+								view.getTableItem().clear();
+								init();
+								init2();						
+							}
+							
+						});
+						
+						
+				   
+			}
+				
+		}
+	});
+	   
+	 //Issue # 122 : Replace pull down with autocomplete.
+	      
+	 //Issue # 122 : Replace pull down with autocomplete.
+	  
+	   /*
 	      accessList.addValueChangeHandler(new ValueChangeHandler<RoleItemAccessProxy>() {
 						
 			
@@ -969,8 +1105,12 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 				
 			}
 		});
-		
+		*/
+	 //Issue # 122 : Replace pull down with autocomplete.
 	}
+	
+	
+		
 
 	@Override
 	public void deleteAccessType(RoleBaseItemProxy roleBasedItemProxy,Label dataAccessLabel,RoleItemAccessProxy roleItemAccessProxy) {

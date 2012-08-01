@@ -41,13 +41,12 @@ public class StudentOsces {
     	return q.getResultList();
     }
     
-    public static Long findStudentByStudIdOrOsceId(String studemail, Long osceid)
+    public static Long findStudentByStudIdAndOsceId(Long studid, Long osceid)
     {
     	EntityManager em = entityManager();
-    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM StudentOsces o WHERE o.student.email LIKE :studid AND o.osce.id LIKE :osceid", Long.class);
-     	q.setParameter("studid", "%" + studemail + "%");
-     	q.setParameter("osceid", osceid);
-     	return q.getSingleResult();
+    	String s = "SELECT COUNT(o) FROM StudentOsces o WHERE o.student =" + studid +" AND o.osce ="+ osceid;
+    	TypedQuery<Long> q = em.createQuery(s, Long.class);
+       	return q.getSingleResult();
     }
     
     public static Long countStudentByName(String name1,Long id) {

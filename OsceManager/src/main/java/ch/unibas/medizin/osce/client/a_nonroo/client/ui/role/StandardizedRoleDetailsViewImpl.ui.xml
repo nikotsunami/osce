@@ -6,7 +6,7 @@
 	xmlns:m="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
-	xmlns:r="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role">
+	xmlns:r="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 	<!-- <g:HorizontalPanel> <g:Label>OM</g:Label> </g:HorizontalPanel> -->
 	<ui:style src="../../styles.css">
 		.description {
@@ -199,8 +199,12 @@
 						<!-- m:RoleBaseTableItemViewImpl ui:field="roleBaseTableItemViewImpl"></m:RoleBaseTableItemViewImpl-->
 						</g:VerticalPanel>
 						<div>
-						<g:ValueListBox ui:field="roleTemplateListBox"></g:ValueListBox>
-						<my:IconButton ui:field="roleTemplateValueButon" icon="plusthick"></my:IconButton>
+						<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+						<!-- <g:ValueListBox ui:field="roleTemplateListBox"></g:ValueListBox> -->
+						<table><tr><td>
+						<i:DefaultSuggestBox ui:field="roleTemplateListBox"></i:DefaultSuggestBox></td>
+						<!-- //Issue # 122 : Replace pull down with autocomplete. --><td>
+						<my:IconButton ui:field="roleTemplateValueButon" icon="plusthick"></my:IconButton></td></tr></table>
 						</div>
 					</g:HTMLPanel>
 				</g:Tab>

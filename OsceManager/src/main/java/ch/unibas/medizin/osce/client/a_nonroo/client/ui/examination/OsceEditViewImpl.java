@@ -16,6 +16,9 @@ import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.client.scaffold.ui.ShortBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 
@@ -125,14 +128,30 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	public ValueListBox<SemesterProxy> semester = new ValueListBox<SemesterProxy>(ch.unibas.medizin.osce.client.managed.ui.SemesterProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.SemesterProxy>());
 */
 	
-	@UiField(provided = true)
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
 	@Ignore
-	public ValueListBox<OsceProxy> osceValue = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
-
-	@UiField(provided = true)
-	public ValueListBox<OsceProxy> copiedOsce = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
+	public DefaultSuggestBox<OsceProxy, EventHandlingValueHolderItem<OsceProxy>> osceValue;
 
 	
+	
+	/*@UiField(provided = true)
+	@Ignore
+	public ValueListBox<OsceProxy> osceValue = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
+*/
+	//Issue # 122 : Replace pull down with autocomplete.
+
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
+	public DefaultSuggestBox<OsceProxy, EventHandlingValueHolderItem<OsceProxy>> copiedOsce;
+
+	/*
+	@UiField(provided = true)
+	public ValueListBox<OsceProxy> copiedOsce = new ValueListBox<OsceProxy>(ch.unibas.medizin.osce.client.managed.ui.OsceProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.OsceProxy>());
+*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	/*
 	@UiField
 	OsceDaySetEditor osce_days;
@@ -197,8 +216,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 				osceMap.put("studyYear", studyYear);
 				osceMap.put("postLength", postLength);
 				osceMap.put("isRepeOsce", isRepeOsce);
-				osceMap.put("osceValue", osceValue);
-				osceMap.put("copiedOsce", copiedOsce);
+				//Issue # 122 : Replace pull down with autocomplete.
+				//osceMap.put("osceValue", osceValue);
+				osceMap.put("osceValue", osceValue.getTextField().advancedTextBox);
+				//Issue # 122 : Replace pull down with autocomplete.
+				//Issue # 122 : Replace pull down with autocomplete.
+				//osceMap.put("copiedOsce", copiedOsce);
+				osceMap.put("copiedOsce", copiedOsce.getTextField().advancedTextBox);
+				//Issue # 122 : Replace pull down with autocomplete.
 				osceMap.put("middleBreak", middleBreak);
 				// E Highlight onViolation
 	}
@@ -305,15 +330,66 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@Override
 	public void setOsceValues(List<OsceProxy> emptyList) {
 		// TODO Auto-generated method stub
-		osceValue.setAcceptableValues(emptyList);
-		copiedOsce.setAcceptableValues(emptyList);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//osceValue.setAcceptableValues(emptyList);
+		DefaultSuggestOracle<OsceProxy> suggestOracle1 = (DefaultSuggestOracle<OsceProxy>) osceValue.getSuggestOracle();
+		suggestOracle1.setPossiblilities(emptyList);
+		osceValue.setSuggestOracle(suggestOracle1);
+		osceValue.setRenderer(new AbstractRenderer<OsceProxy>() {
+
+			@Override
+			public String render(OsceProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//osceValue.setRenderer(new SpecialisationProxyRenderer());
+		//copiedOsce.setAcceptableValues(emptyList);
+		//copiedOsce.setSuggestOracle(suggestOracle1);
+		//copiedOsce.setRenderer(new AbstractRenderer<OsceProxy>() {
+
+		DefaultSuggestOracle<OsceProxy> suggestOracle = (DefaultSuggestOracle<OsceProxy>) copiedOsce.getSuggestOracle();
+		suggestOracle1.setPossiblilities(emptyList);
+		copiedOsce.setSuggestOracle(suggestOracle1);
+		copiedOsce.setRenderer(new AbstractRenderer<OsceProxy>() {
+
+			@Override
+			public String render(OsceProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+
+		//Issue # 122 : Replace pull down with autocomplete.
+		
 	}
 	
 	@Override
 	public Set<TaskProxy> getTaskValue()
 	{
-		
-		return osceValue.getValue().getTasks();
+		//Issue # 122 : Replace pull down with autocomplete.
+		//return osceValue.getValue().getTasks();
+		if(osceValue.getSelected()!=null)
+		{
+		return osceValue.getSelected().getTasks();
+		}
+		else
+			return null;
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 

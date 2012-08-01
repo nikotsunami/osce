@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 	<ui:style src="../../styles.css">
 	
 	.roleParticipantTable { 	 	
@@ -11,7 +11,16 @@
 	}
 </ui:style>
 	<g:HTMLPanel addStyleNames="{style.patientDetails}">				
-		<g:ValueListBox ui:field="lstDoctor" /> 
+		
+		<!-- Issue # 122 : Replace pull down with autocomplete.
+ -->
+
+		<i:DefaultSuggestBox ui:field="lstDoctor"></i:DefaultSuggestBox>
+		
+		<!-- <g:ValueListBox ui:field="lstDoctor" /> -->
+		
+		<!-- Issue # 122 : Replace pull down with autocomplete.
+ --> 
 		<b:CellTable pageSize="8" ui:field="authorTable" width="100%" addStyleNames="{style.standardTable}"/>					
 		<b:SimplePager display="{authorTable}" ui:field="pagerAuthor" />
 		<my:IconButton ui:field="btnAddAuthor" icon="plusthick" >Author</my:IconButton>		

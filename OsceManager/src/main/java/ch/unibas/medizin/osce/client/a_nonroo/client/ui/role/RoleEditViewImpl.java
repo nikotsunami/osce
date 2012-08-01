@@ -15,6 +15,9 @@ import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
@@ -30,6 +33,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -133,10 +137,14 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	@UiField
 	public SpanElement labelRoleTopic;
 		
-	@UiField(provided = true)
+	//Issue # 122 : Replace pull down with autocomplete.	
+	@UiField
+	public DefaultSuggestBox<RoleTopicProxy, EventHandlingValueHolderItem<RoleTopicProxy>> roleTopic;
+	//
+	/*@UiField(provided = true)
 	public FocusableValueListBox<RoleTopicProxy> roleTopic = new FocusableValueListBox<RoleTopicProxy>(RoleTopicProxyRenderer.instance());
-	//spec end
-	
+	*///spec end
+	//Issue # 122 : Replace pull down with autocomplete.
 	// Labels 
 	@UiField
 	SpanElement labelShortName;
@@ -413,7 +421,30 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		}
 	
 		System.out.println("roletopic set");
-		roleTopic.setAcceptableValues(values);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//roleTopic.setAcceptableValues(values);
+		
+		DefaultSuggestOracle<RoleTopicProxy> suggestOracle1 = (DefaultSuggestOracle<RoleTopicProxy>) roleTopic.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		roleTopic.setSuggestOracle(suggestOracle1);
+		//roleTopic.setRenderer(new RoleTopicProxyRenderer());
+			
+		roleTopic.setRenderer(new AbstractRenderer<RoleTopicProxy>() {
+
+			@Override
+			public String render(RoleTopicProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	
 	// Highlight onViolation

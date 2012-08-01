@@ -12,8 +12,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.RoleTemplateProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -201,6 +205,12 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 //		return roleBaseTableItemViewImpl;
 //	}
 	
+	//Issue # 122 : Replace pull down with autocomplete.
+	@UiField
+	public DefaultSuggestBox<RoleTemplateProxy, EventHandlingValueHolderItem<RoleTemplateProxy>> roleTemplateListBox;
+
+	
+	/*
 	@UiField(provided = true)
 	public ValueListBox<RoleTemplateProxy> roleTemplateListBox = new ValueListBox<RoleTemplateProxy>(new AbstractRenderer<RoleTemplateProxy>() {
 
@@ -211,13 +221,37 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		}
 		
 	}); 
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	@UiField
 	public IconButton roleTemplateValueButon;
 	
 	@Override
 	public void setRoleTemplateListBox(List<RoleTemplateProxy> roleTemplateproxy) {
-		roleTemplateListBox.setAcceptableValues(roleTemplateproxy);
+		//Issue # 122 : Replace pull down with autocomplete.
 		
+	//	roleTemplateListBox.setAcceptableValues(roleTemplateproxy);
+		
+		DefaultSuggestOracle<RoleTemplateProxy> suggestOracle1 = (DefaultSuggestOracle<RoleTemplateProxy>) roleTemplateListBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(roleTemplateproxy);
+		roleTemplateListBox.setSuggestOracle(suggestOracle1);
+		//roleTemplateListBox.setRenderer(new RoleTemplateProxyRenderer());
+		roleTemplateListBox.setRenderer(new AbstractRenderer<RoleTemplateProxy>() {
+
+			@Override
+			public String render(RoleTemplateProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getTemplateName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 	@UiHandler("roleTemplateValueButon")
@@ -250,7 +284,10 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		else
 		{*/
 		// E Highlight onViolation
-		delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getValue());
+		//Issue # 122 : Replace pull down with autocomplete.
+		//delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getValue());
+		delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getSelected());
+		//Issue # 122 : Replace pull down with autocomplete.
 		// Highlight onViolation
 		//}
 		// E Highlight onViolation
@@ -332,7 +369,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		
 		// Highlight onViolation
 			standardizedRoleTemplateMap=new HashMap<String, Widget>();
-			standardizedRoleTemplateMap.put("roleTemplate", roleTemplateListBox);
+			standardizedRoleTemplateMap.put("roleTemplate", roleTemplateListBox.getTextField().advancedTextBox);
 		// E Highlight onViolation
 		
 	}

@@ -33,11 +33,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleFulfilCriteriaEven
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
-import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleRequest;
@@ -46,7 +47,9 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -56,35 +59,29 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.Range;
-
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 @SuppressWarnings("deprecation")
 public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
@@ -119,7 +116,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	
 	//change
 	private List<OsceDaySubViewImpl> osceDaySubViewImplList=new ArrayList<OsceDaySubViewImpl>();
-	private DisclosurePanel disCloserPanel;
+//	private DisclosurePanel disCloserPanel;
 	private StudentsActivity activity;
 	private boolean isAssignedFirst =false;
 	// private HashMap<String,Object> timerMap;
@@ -272,7 +269,14 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	
 	//timerMap = new HashMap<String, Object>();
 	//Module 3:Assignment D
-	requests.find(semesterProxy.stableId()).with("osces","osces.osce_days").fire(new OSCEReceiver<Object>() {
+	
+	requests.osceRequestNonRoo().initOsceBySecurity().fire(new OSCEReceiver<Object>() {
+		@Override
+		public void onSuccess(Object response) {
+			Log.info("Osce Changed : "+response);
+	
+	
+	requests.find(semesterProxy.stableId()).with("osces","osces.osce_days","osces.osce_days.osce").fire(new OSCEReceiver<Object>() {
 
 		@Override
 		public void onSuccess(Object response) {
@@ -314,8 +318,23 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					osceDayProxy=iteratorOSceDayProxy.next();
 					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_FIXED){
 					OsceDaySubViewImpl osceDaySubViewImpl = new OsceDaySubViewImpl();
+                                        osceDaySubViewImpl.setOsceProxy(osceProxy);
 					osceDaySubViewImpl.setDelegate(spRoleAssignmentActivity);
 					osceDaySubViewImpl.setOsceDayProxy(osceDayProxy);
+					StudyYears studyYear =osceProxy.getStudyYear();
+					String name =semesterProxy.getSemester().name();
+
+					if(studyYear != null && name !=null){
+						String header = "" +studyYear +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate());
+//						osceDaySubViewImpl.simpleDiscloserPanel.getHeaderTextAccessor().setText(header);
+						
+						osceDaySubViewImpl.getHeaderPanelForTitle(header);
+						osceDaySubViewContainerPanel.add(osceDaySubViewImpl);
+					}
+					else{
+						Window.alert("Semester and study year must not empty to show on OSce Day");
+					}
+					
 					
 					// Module 3 d {
 					
@@ -343,17 +362,17 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					}
 					//change
 					
-					StudyYears studyYear =osceProxy.getStudyYear();
-					String name =semesterProxy.getSemester().name();
+					//StudyYears studyYear =osceProxy.getStudyYear();
+					//String name =semesterProxy.getSemester().name();
 					//Date date =osceDayProxy.getOsceDate();
 						
-					if(studyYear != null && name !=null){
-						osceDaySubViewImpl.simpleDiscloserPanel.getHeaderTextAccessor().setText("" +studyYear +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()));
-						osceDaySubViewContainerPanel.add(osceDaySubViewImpl);
-					}
-					else{
-						Window.alert("Semester and study year must not empty to show on OSce Day");
-					}
+					//if(studyYear != null && name !=null){
+					//	osceDaySubViewImpl.simpleDiscloserPanel.getHeaderTextAccessor().setText("" +studyYear +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()));
+					//	osceDaySubViewContainerPanel.add(osceDaySubViewImpl);
+					//}
+					//else{
+					//	Window.alert("Semester and study year must not empty to show on OSce Day");
+					//}
 						
 							
 				}
@@ -367,6 +386,8 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 			
 	}
 });
+	
+		}});
 	
 	requests.getEventBus().fireEvent(
 			new ApplicationLoadingScreenEvent(false));
@@ -877,7 +898,7 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 
 @Override
 public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl) {
-			Log.info("Cookie Removed for :" +osceDayProxy.getId());
+//			Log.info("Cookie Removed for :" +osceDayProxy.getId());
 			Cookies.removeCookie(osceDayProxy.getId().toString());
 			//timerMap.remove(osceDayProxy.getId().toString());
 	
@@ -1128,7 +1149,7 @@ public void initPatientInSemesterData(
 	@Override
 	public void onStandizedPatientAddBtnClick(StandardizedPatientProxy standardizedPatientProxy) 
 	{
-		Log.info("Call onStandizedPatientAddBtnClick");
+	//	Log.info("Call onStandizedPatientAddBtnClick");
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
 		
@@ -1343,8 +1364,8 @@ public void initPatientInSemesterData(
 								public void onSuccess(
 										List<PatientInSemesterProxy> patientInSemesterProxies) {
 
-//									Log.info("patientInSemesterProxies"
-//											+ patientInSemesterProxies.size());
+//								//	Log.info("patientInSemesterProxies"
+//								//			+ patientInSemesterProxies.size());
 									if (patientInSemesterProxies != null
 											&& patientInSemesterProxies.size() > 0) {
 										Log.info("Return from isRoleCriteriaFulfill");
@@ -1531,10 +1552,10 @@ public void initPatientInSemesterData(
 
 			@Override
 			public void onSuccess(String result) {
-				
+				GWT.log("################onSuccess result = "+result);
 				
 				String[] messages = result.split("#&"); 
-								
+				GWT.log("################onSuccess messages = "+messages);				
 				DialogBox dialogBox = createDialogBox(messages);
 				dialogBox.center();
 				dialogBox.show();
@@ -1773,9 +1794,73 @@ public void initPatientInSemesterData(
 		}
 		
 	}
-	
+
 	// Module 3 Task B
+
+/* MODULE 3 : Assignment I */
+	@Override
+	public void onOSCESecurityChange(final OsceProxy osceProxy,
+			OSCESecurityStatus osceSecurityStatus,
+			PatientAveragePerPost patientAveragePerPost,
+			final boolean isSecurityChange) {
+
+		OsceRequest osceRequest = requests.osceRequest();
+
+		OsceProxy tempOsceProxy = osceRequest.edit(osceProxy);
+		if (isSecurityChange) {
+			tempOsceProxy.setSecurity(osceSecurityStatus);
+		} else {
+			tempOsceProxy.setPatientAveragePerPost(patientAveragePerPost);
+		}
+		
+		Log.debug("isSecurityChange is : "
+				+ isSecurityChange);
+
+		osceRequest.persist().using(tempOsceProxy)
+				.fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void arg0) {
+
+						if (isSecurityChange) {
+							requests.patientInRoleRequestNonRoo()
+									.removePatientInRoleByOSCE(
+											osceProxy.getId())
+									.fire(new OSCEReceiver<Integer>() {
+										
+										public void onSuccess(Integer response) {
+											Log.debug("No. of Patient removed from day is : "
+													+ response.intValue());
+											
+											initOsceDaySubView();
+											initPatientInSemester(true,false);	
+
+											view.getDataTable()
+													.setNavigationButtonEnable(
+															false);
+										}
+										
+										public void onViolation(java.util.Set<com.google.gwt.requestfactory.shared.Violation> errors) {
+											
+											
+										}
+										
+										public void onFailure(ServerFailure error) {
+											error.getStackTraceString();
+											System.out.println(error.getMessage() +"\n"+error.getStackTraceString());
+										}
+
+									});
+						}
+						else{
+							initOsceDaySubView();
+						}
+					}
 	
+				});
+	}
+
+/* MODULE 3 : Assignment I */	
 	
 	
 }

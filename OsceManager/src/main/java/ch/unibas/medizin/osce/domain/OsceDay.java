@@ -25,6 +25,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Calendar;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -60,9 +61,25 @@ public class OsceDay {
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
 
 	public static OsceDay findOsceDayByOsceDate(Date osceDate){
+		if(osceDate == null){
+			return null;
+		}
+
+		Calendar calBegin = Calendar.getInstance();
+		calBegin.setTime(osceDate);
+		calBegin.add(Calendar.MINUTE,-1);
+		Date minDate = calBegin.getTime();
+		
+		Calendar calEnd = Calendar.getInstance();
+
+		calEnd.setTime(osceDate);
+		calEnd.add(Calendar.MINUTE,1);
+		Date maxDate = calEnd.getTime();
+
 		EntityManager em = entityManager();
-		TypedQuery<OsceDay> query = em.createQuery("SELECT o FROM OsceDay AS o WHERE o.osceDate = :osceDate", OsceDay.class);
-		query.setParameter("osceDate", osceDate);
+		TypedQuery<OsceDay> query = em.createQuery("SELECT o FROM OsceDay AS o WHERE o.osceDate < :maxDate and o.osceDate > :minDate", OsceDay.class);
+		query.setParameter("maxDate", maxDate);
+		query.setParameter("minDate", minDate);
         List<OsceDay> resultList = query.getResultList();
         if (resultList == null || resultList.size() == 0)
             return null;

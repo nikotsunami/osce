@@ -363,9 +363,12 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 					save = true;
 					
 					//save tasks
-					if(((OsceEditViewImpl)view).osceValue.getValue()!=null)
+					//Issue # 122 : Replace pull down with autocomplete.
+					/*if(((OsceEditViewImpl)view).osceValue.getValue()!=null)
+					{*/
+					if(((OsceEditViewImpl)view).osceValue.getSelected()!=null)
 					{
-						
+						//Issue # 122 : Replace pull down with autocomplete.	
 					
 					requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
 
@@ -387,7 +390,16 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 							// TODO Auto-generated method stub
 							System.out.println("max value:---"+response.getName());
 							
-							Iterator<TaskProxy> taskIterator=((OsceEditViewImpl)view).osceValue.getValue().getTasks().iterator();
+							//Issue # 122 : Replace pull down with autocomplete.
+							if(((OsceEditViewImpl)view).osceValue.getSelected()==null)
+							{
+								return;
+							}
+					//Issue # 122 : Replace pull down with autocomplete.
+					//Issue # 122 : Replace pull down with autocomplete.
+					//Iterator<TaskProxy> taskIterator=((OsceEditViewImpl)view).osceValue.getValue().getTasks().iterator();
+					Iterator<TaskProxy> taskIterator=((OsceEditViewImpl)view).osceValue.getSelected().getTasks().iterator();
+					//Issue # 122 : Replace pull down with autocomplete.
 							while(taskIterator.hasNext())
 							{
 								TaskProxy tp=taskIterator.next();

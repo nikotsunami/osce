@@ -3,8 +3,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -38,6 +41,8 @@ public interface OsceDaySubView extends IsWidget{
 						OsceDaySubViewImpl osceDaySubViewImpl);
 				
 				// module 3 d }
+		
+		void onOSCESecurityChange(OsceProxy osceProxy,OSCESecurityStatus osceSecurityStatus,PatientAveragePerPost patientAveragePerPost,boolean isSecurityChange);
 		
 		
 	}

@@ -6,7 +6,7 @@
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
-  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 <ui:style src="../../styles.css" >
 .noOutline {
@@ -47,22 +47,29 @@
 	<g:HorizontalPanel  spacing="10">
 	
 		<g:Label ui:field="roleLbl" width="55px"></g:Label>
-		
-		<g:ValueListBox ui:field="roleLstBox"></g:ValueListBox>
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+		<!-- <g:ValueListBox ui:field="roleLstBox"></g:ValueListBox>-->
+		<i:DefaultSuggestBox ui:field="roleLstBox"> </i:DefaultSuggestBox> 
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel  spacing="10">
 	
 		<g:Label ui:field="topicLbl" width="55px"></g:Label>
-		<g:ValueListBox ui:field="topicLstBox"></g:ValueListBox>
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+		<!-- <g:ValueListBox ui:field="topicLstBox"></g:ValueListBox> -->
+		<i:DefaultSuggestBox ui:field="topicLstBox" ></i:DefaultSuggestBox>
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel  spacing="10">
 	
 		<g:Label ui:field="questionLbl"></g:Label>
-		<g:ValueListBox ui:field="queListBox"></g:ValueListBox>
-		
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+		<!-- <g:ValueListBox ui:field="queListBox"></g:ValueListBox> -->
+		<i:DefaultSuggestBox ui:field="queListBox"></i:DefaultSuggestBox>
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel  spacing="10" horizontalAlignment="center">

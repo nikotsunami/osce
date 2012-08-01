@@ -3,15 +3,17 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
 	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
 	xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
-	xmlns:b='urn:import:com.google.gwt.user.cellview.client'>
+	xmlns:b='urn:import:com.google.gwt.user.cellview.client' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 	<ui:style src="../../styles.css">
 		
 	</ui:style>
 	<g:VerticalPanel spacing="10">
 		<g:HorizontalPanel spacing="10">
-			<g:SuggestBox ui:field="standardizedPatientSugestionBox"
-				width="150px" />
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+			<!-- <g:SuggestBox ui:field="standardizedPatientSugestionBox" width="150px" /> -->
+			<i:DefaultSuggestBox ui:field="standardizedPatientSugestionBox"></i:DefaultSuggestBox>
+			<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 			<my:IconButton ui:field="standardizedPatientAddButton"
 				icon="plusthick"></my:IconButton>
 				<my:IconButton ui:field="addAllButton" icon="plusthick"></my:IconButton>

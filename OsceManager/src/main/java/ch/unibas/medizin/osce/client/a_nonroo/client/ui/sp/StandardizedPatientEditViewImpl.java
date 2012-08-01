@@ -26,9 +26,13 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.LangSkillSetEditor;
+import ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
@@ -154,10 +158,28 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	});
 	
 
-	@UiField(provided = true)
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+		@UiField
+		public DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> nationality;
+
+
+		
+	/*@UiField(provided = true)
 	FocusableValueListBox<NationalityProxy> nationality = new FocusableValueListBox<NationalityProxy>(new NationalityProxyRenderer());
-	@UiField(provided = true)
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
+	public DefaultSuggestBox<ProfessionProxy, EventHandlingValueHolderItem<ProfessionProxy>> profession;
+
+	/*@UiField(provided = true)
 	FocusableValueListBox<ProfessionProxy> profession = new FocusableValueListBox<ProfessionProxy>(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance(), new com.google.gwt.requestfactory.ui.client.EntityProxyKeyProvider<ch.unibas.medizin.osce.client.managed.request.ProfessionProxy>());
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
+	
 	@UiField(provided = true)
 	FocusableValueListBox<MaritalStatus> maritalStatus = new FocusableValueListBox<MaritalStatus>(new EnumRenderer<MaritalStatus>());
 	@UiField(provided = true)
@@ -571,7 +593,33 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //		if (values!= null) {
 //			nationality.setValue(values.iterator().next());
 //		}
-		nationality.setAcceptableValues(values);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+				DefaultSuggestOracle<NationalityProxy> suggestOracle1 = (DefaultSuggestOracle<NationalityProxy>) nationality.getSuggestOracle();
+				suggestOracle1.setPossiblilities((List)values);
+				nationality.setSuggestOracle(suggestOracle1);
+				//nationality.setRenderer(new NationalityProxyRenderer());
+				nationality.setRenderer(new AbstractRenderer<NationalityProxy>() {
+
+					@Override
+					public String render(NationalityProxy object) {
+						// TODO Auto-generated method stub
+						if(object!=null)
+						{
+						return object.getNationality();
+						}
+						else
+						{
+							return "";
+						}
+					}
+				});
+				//nationality.setAcceptableValues(values);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		
 	}
 
 
@@ -580,7 +628,32 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //		if (values != null) {
 //			profession.setValue(values.iterator().next());
 //		}
-		profession.setAcceptableValues(values);		
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		DefaultSuggestOracle<ProfessionProxy> suggestOracle1 = (DefaultSuggestOracle<ProfessionProxy>) profession.getSuggestOracle();
+		suggestOracle1.setPossiblilities((List)values);
+		profession.setSuggestOracle(suggestOracle1);
+		//profession.setRenderer(new ProfessionProxyRenderer());
+		profession.setRenderer(new AbstractRenderer<ProfessionProxy>() {
+
+			@Override
+			public String render(ProfessionProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getProfession();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+
+		//profession.setAcceptableValues(values);		
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 //	@Override
 //	public String getPatientId() {

@@ -10,8 +10,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
+import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckTitleProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -20,6 +25,8 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -85,10 +92,26 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	@UiField
 	SpanElement labelpreviousQuestion;
 
+	
+	
+	//Issue # 122 : Replace pull down with autocomplete.
 	@UiField
+	public DefaultSuggestBox<AnamnesisCheckTitleProxy, EventHandlingValueHolderItem<AnamnesisCheckTitleProxy>> insideTitleListBox;
+
+	/*@UiField
 	ListBox insideTitleListBox;
+	*/
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
 	@UiField
+	public DefaultSuggestBox<AnamnesisCheckProxy, EventHandlingValueHolderItem<AnamnesisCheckProxy>> previousQuestionListBox;
+
+/*	@UiField
 	ListBox	previousQuestionListBox;
+*/
+	//Issue # 122 : Replace pull down with autocomplete.
 
 //	@UiField
 //	DateBox createDate;
@@ -137,7 +160,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 //		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
 //		previousQuestionListBox.addItem(constants.previousQuestion(), "");
 		
-		insideTitleListBox.addItem(constants.insideTitle(), "");
+		//Issue # 122 : Replace pull down with autocomplete.
+		//insideTitleListBox.addItem(constants.insideTitle(), "");
+		//Issue # 122 : Replace pull down with autocomplete.
 		insideTitleListBox.setVisible(false);
 		
 		addValueField();
@@ -171,6 +196,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 			
 		});
 		
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		/*
 		insideTitleListBox.addChangeListener(new ChangeListener() {
 			
 			@Override
@@ -179,6 +207,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 				resetpreviousQuestion(type.getValue());
 			}
 		});
+		*/
+		//Issue # 122 : Replace pull down with autocomplete.
+		
 		
 		Log.info("type.getValue() = " + type.getValue());
 		
@@ -201,20 +232,35 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		type.setValue(AnamnesisCheckTypes.values()[0]);
 		type.setAcceptableValues(Arrays.asList(AnamnesisCheckTypes.values()));
 		
-		// Highlight onViolation
-		anamnesisCheckMap=new HashMap<String, Widget>();
-		anamnesisCheckMap.put("text", text);		
-		anamnesisCheckMap.put("type", type);
-		anamnesisCheckMap.put("value",valuePanel);
-		// E Highlight onViolation
+		//Issue # 122 : Replace pull down with autocomplete.
+		insideTitleListBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				
+				// TODO Auto-generated method stub
+				Log.info("change handler");
+				resetpreviousQuestion(type.getValue());
+			}
+		});
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 		
 	}
 	
 	private void resetpreviousQuestion(AnamnesisCheckTypes selectedValue){
-		previousQuestionListBox.clear();
-		previousQuestionListBox.addItem(constants.thisIsTheFirstQuestion(), "");
-		delegate.changePreviousQuestion(selectedValue,insideTitleListBox.getValue(insideTitleListBox.getSelectedIndex()));
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		//previousQuestionListBox.clear();
+		//previousQuestionListBox.addItem(constants.thisIsTheFirstQuestion(), "");
+		
+		Log.info("in method resetpreviousQuestion ");
+		//delegate.changePreviousQuestion(selectedValue,insideTitleListBox.getValue(insideTitleListBox.getSelectedIndex()));
+		delegate.changePreviousQuestion(selectedValue,insideTitleListBox.getSelected().getId().toString());
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	
 	private IconButton createDeleteButton() {
@@ -355,7 +401,12 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		labelinsideTitle.setInnerText(constants.insideTitle() + ":");
 		insideTitleListBox.setVisible(true);
 		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
-		previousQuestionListBox.addItem(constants.thisIsTheFirstQuestion(), "");
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		//previousQuestionListBox.addItem(constants.thisIsTheFirstQuestion(), "");
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		
 		if (type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_M || type.getValue() == AnamnesisCheckTypes.QUESTION_MULT_S){
 			setMultipleFields(true);
@@ -385,61 +436,201 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 	@Override
 	public void setInsideTitleListBox(List<AnamnesisCheckTitleProxy> titleList) {
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		/*
 		for(AnamnesisCheckTitleProxy title : titleList){
 			if (title != null) {
 				insideTitleListBox.addItem(title.getText(), String.valueOf(title.getId()));
 			}
 		}
 		insideTitleListBox.setSelectedIndex(insideTitleListBox.getItemCount() - 1);
+		*/
+		
+		DefaultSuggestOracle<AnamnesisCheckTitleProxy> suggestOracle1 = (DefaultSuggestOracle<AnamnesisCheckTitleProxy>) insideTitleListBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(titleList);
+		insideTitleListBox.setSuggestOracle(suggestOracle1);
+
+		insideTitleListBox.setRenderer(new AbstractRenderer<AnamnesisCheckTitleProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckTitleProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+					return object.getText();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
 
 	@Override
 	public void setPreviousQuestionListBox(List<AnamnesisCheckProxy> anamnesisCheckList) {
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		/*
 		for(AnamnesisCheckProxy anamnesisCheck : anamnesisCheckList){
 			if (anamnesisCheck != null) {
 				previousQuestionListBox.addItem(anamnesisCheck.getText(), String.valueOf(anamnesisCheck.getSort_order()));
 			}
 		}
 		
+		*/
+		DefaultSuggestOracle<AnamnesisCheckProxy> suggestOracle1 = (DefaultSuggestOracle<AnamnesisCheckProxy>) previousQuestionListBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(anamnesisCheckList);
+		previousQuestionListBox.setSuggestOracle(suggestOracle1);
+
+		previousQuestionListBox.setRenderer(new AbstractRenderer<AnamnesisCheckProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckProxy object) {
+				
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+					return object.getValue();	
+				}
+				else
+				{
+					return "";
+				}
+				
+			}
+		});
+		previousQuestionListBox.setWidth(300);
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	
 	@Override
 	public String getSelectedInsideTitle() {
-		int selectedIndex = insideTitleListBox.getSelectedIndex();
-		String selectedInsideTitle = insideTitleListBox.getValue(selectedIndex);
+		//Issue # 122 : Replace pull down with autocomplete.
+		
+		//int selectedIndex = insideTitleListBox.getSelectedIndex();
+		
+	//	String selectedInsideTitle = insideTitleListBox.getValue(selectedIndex);
+		String selectedInsideTitle = insideTitleListBox.getSelected().getId().toString();
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 		return selectedInsideTitle;
 	}
 
 	@Override
 	public String getSelectedPreviousQuestion() {
-		int selectedIndex = previousQuestionListBox.getSelectedIndex();
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		/*int selectedIndex = previousQuestionListBox.getSelectedIndex();
 		String selectedPreviousQuestion = previousQuestionListBox.getValue(selectedIndex);
 		return selectedPreviousQuestion;
+		*/
+		
+		if(previousQuestionListBox.getSelected()==null)
+		{
+			return "0";
+		}
+		else
+		{
+			return previousQuestionListBox.getSelected().getId().toString();
+	}
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 
+	
+	//Issue # 122 : Replace pull down with autocomplete.
 	@Override
 	public void setSeletedInsideTitle(String anamnesisCheckTitleId) {
+		
+		Log.info("old value setter setSeletedInsideTitle");
+		insideTitleListBox.setText(anamnesisCheckTitleId);
+		/*
 		for (int i = 0; i < insideTitleListBox.getItemCount(); i++) {
 			GWT.log("insideTitleListBox.getValue(i) = "+insideTitleListBox.getValue(i));
 			if (insideTitleListBox.getValue(i).equals(anamnesisCheckTitleId)) {
 				insideTitleListBox.setSelectedIndex(i);
 			}
 		}
+		*/
+	}
+	
+	@Override
+	public void setSeletedInsideTitle(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy)
+	{
+		Log.info("new value setter setSeletedInsideTitle");
+		insideTitleListBox.setRenderer(new AbstractRenderer<AnamnesisCheckTitleProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckTitleProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getText();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//insideTitleListBox.setRenderer(new AnamnesisCheckTitleProxyRenderer());
+		insideTitleListBox.setSelected(anamnesisCheckTitleProxy);
 		
 	}
+	//Issue # 122 : Replace pull down with autocomplete.
 
+	//Issue # 122 : Replace pull down with autocomplete.
 	@Override
 	public void setSeletedPreviousQuestion(String previousSortId) {
+		
+		
 		GWT.log("?????previousSortId = "+previousSortId);
+		/*
 		for (int i = 0; i < previousQuestionListBox.getItemCount(); i++) {
 			GWT.log("previousQuestionListBox.getValue(i) = "+previousQuestionListBox.getValue(i));
 			if (previousQuestionListBox.getValue(i).equals(previousSortId)) {
 				previousQuestionListBox.setSelectedIndex(i);
 			}
 		}	
+		*/
 	}
 
+	// Highlight onViolation
+	@Override
+	public void setSeletedPreviousQuestion(
+			AnamnesisCheckProxy anamnesisCheckList) {
+		// TODO Auto-generated method stub
+		Log.info("previous value set setSeletedPreviousQuestion");
+		//previousQuestionListBox.setRenderer(new AnamnesisCheckProxyRenderer());
+		previousQuestionListBox.setRenderer(new AbstractRenderer<AnamnesisCheckProxy>() {
+
+			@Override
+			public String render(AnamnesisCheckProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getText();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		previousQuestionListBox.setSelected(anamnesisCheckList);
+		
+		
+	}
+	// E Highlight onViolation
+
+
+	//Issue # 122 : Replace pull down with autocomplete.
+	
 	// Highlight onViolation
 	@Override
 	public Map getAnamnesisCheckMap() 

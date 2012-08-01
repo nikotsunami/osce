@@ -149,7 +149,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		assertNotNull(training3);
 		assertEquals("training1",training3.getName());
 		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training3.getTimeEnd());
-		Training training4 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T10:00:02Z"));
+		Training training4 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T07:00:02Z"));
 		assertNotNull(training4);
 		assertEquals("training1",training4.getName());
 		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training4.getTimeEnd());
@@ -177,7 +177,8 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		//Test sync update
 		try {
 			locale = "en";
-			returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-01-01T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:00Z\"},{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"trainings\" : [{\"name\":\"testTraining\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:00:00Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-01T00:00:00Z\",\"timeStart\":\"2012-07-01T08:30:00Z\",\"timeEnd\":\"2012-07-01T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T09:00:02Z\",\"timeEnd\":\"2012-07-17T19:00:00Z\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";	
+			returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-01-01T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:00Z\"},{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"trainings\" : [{\"name\":\"testTraining\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:00:00Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-01T00:00:00Z\",\"timeStart\":\"2012-07-01T08:30:00Z\",\"timeEnd\":\"2012-07-01T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:59Z\",\"timeStart\":\"\",\"timeEnd\":\"\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";	
+			//,\"timeStart\":\"2012-07-17T09:00:02Z\",\"timeEnd\":\"2012-07-17T19:00:00Z\"
 			returnJson = instance.sync(locale);	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -220,10 +221,10 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		assertNotNull(training4);
 		assertEquals("training1",training4.getName());
 		assertEquals(convertToDate("2012-07-17T14:15:55Z"),training4.getTimeEnd());
-		training5 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-17T00:00:00Z"),convertToDate("2012-07-17T09:00:02Z"));
+		training5 = Training.findTrainingByTrainingDateAndName(convertToDate("2012-07-17T00:00:59Z"),"tttttt");
 		assertNotNull(training5);
 		assertEquals("tttttt",training5.getName());
-		assertEquals(convertToDate("2012-07-17T19:00:00Z"),training5.getTimeEnd());
+		assertEquals(null,training5.getTimeEnd());
 		Training training6 = Training.findTrainingByTrainingDateAndTimeStart(convertToDate("2012-07-01T00:00:00Z"),convertToDate("2012-07-01T08:30:00Z"));
 		assertNotNull(training6);
 		assertEquals("training2",training6.getName());
@@ -240,6 +241,24 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		semester2 = PatientInSemester.findPatientInSemesterByStandardizedPatient(patient2);
 		assertFalse(semester2.getAccepted());
 	
+	
+		//Test sync when date has some second diffrent
+		try {
+			locale = "en";
+			returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-01-01T00:00:42Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:59Z\"},{\"osceDate\":\"2012-06-21T00:00:30Z\"}],\"trainings\" : [{\"name\":\"testTraining\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:00:00Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-01T00:00:00Z\",\"timeStart\":\"2012-07-01T08:29:03Z\",\"timeEnd\":\"2012-07-01T15:29:01Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:01:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:59Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:43Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:59Z\",\"timeStart\":\"\",\"timeEnd\":\"\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";	
+			returnJson = instance.sync(locale);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getCause().printStackTrace();
+			Assert.fail("error occured " + e.getMessage());
+		}
+		
+	
+		osceDays = OsceDay.findAllOsceDays();
+		assertEquals(5,osceDays.size());
+		
+		trainings = Training.findAllTrainings();
+		assertEquals(7,trainings.size());
     }
    
    
@@ -262,7 +281,6 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		assertEquals(null,pSemester);
 		
 		returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-13-1\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:00Z\"},{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"trainings\" : [{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T09:00:02Z\",\"timeEnd\":\"2012-07-17T19:00:00Z\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-25-07\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";
-		
 		try {
 			locale = "en";
     
@@ -270,9 +288,9 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			e.getCause().printStackTrace();
-			Assert.fail("error occured " + e.getMessage());
+			//e.printStackTrace();
+			//e.getCause().printStackTrace();
+			Assert.fail("Expected Error never occured " );
 		}
 		
 			
@@ -320,9 +338,9 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			e.getCause().printStackTrace();
-			Assert.fail("error occured " + e.getMessage());
+			//e.printStackTrace();
+			//e.getCause().printStackTrace();
+			Assert.fail("Expected Error never occured " );
 		}
 		
 		List<Training> trainings = Training.findAllTrainings();
@@ -376,12 +394,12 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 			locale = "en";
     
 			instance.sync(locale);
-			
+			Assert.fail("excepted error did not happen");
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			e.getCause().printStackTrace();
-			Assert.fail("error occured " + e.getMessage());
+			//e.printStackTrace();
+		
+			
 		}
 		
 		List<Training> trainings = Training.findAllTrainings();
@@ -418,11 +436,11 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
     
 			instance.sync(locale);
 			
-			
+			Assert.fail("Expected Error never occured " );
 		} catch (Exception e) {
-			e.printStackTrace();
-			e.getCause().printStackTrace();
-			Assert.fail("error occured " + e.getMessage());
+			//e.printStackTrace();
+
+			
 		}
 		
 		List<Training> trainings = Training.findAllTrainings();

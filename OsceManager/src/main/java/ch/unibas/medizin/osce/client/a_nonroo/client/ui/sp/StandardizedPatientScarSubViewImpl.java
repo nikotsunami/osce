@@ -15,6 +15,9 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -63,9 +66,16 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	
 	private List<AbstractEditableCell<?, ?>> editableCells;
 	
+	//Issue # 122 : Replace pull down with autocomplete.
+	
+	@UiField
+	public DefaultSuggestBox<ScarProxy, EventHandlingValueHolderItem<ScarProxy>> scarBox;
+
+	/*
 	@UiField(provided = true)
     ValueListBox<ScarProxy> scarBox = new ValueListBox<ScarProxy>(new ScarProxyRenderer());
-
+*/
+	//Issue # 122 : Replace pull down with autocomplete.
 	private boolean addBoxesShown = true;
 
 	// Highlight onViolation
@@ -171,8 +181,19 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	}
 	
 	public ValueListBox<ScarProxy> getScarBox() {
+		//Issue # 122 : Replace pull down with autocomplete.
+		//return scarBox;
+		return null;
+		//Issue # 122 : Replace pull down with autocomplete.
+	}
+	
+	//Issue # 122 : Replace pull down with autocomplete.
+	public DefaultSuggestBox<ScarProxy, EventHandlingValueHolderItem<ScarProxy>> getNewScarBox()
+	{
 		return scarBox;
 	}
+
+	//Issue # 122 : Replace pull down with autocomplete.
 
 	@Override
 	public CellTable<ScarProxy> getTable() {
@@ -216,16 +237,44 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		}
 		
 		showAddBoxes();
-		scarBox.setValue(values.get(0));
-		scarBox.setAcceptableValues(values);
-	}
+	//	scarBox.setValue(values.get(0));
+	//	scarBox.setAcceptableValues(values);
+	
 
-	// Highlight onViolation
-	@Override
-	public Map getAnemnasisFormMap() 
-	{		
-		return this.anemnasisFormMap;
+		//Issue # 122 : Replace pull down with autocomplete.
+		DefaultSuggestOracle<ScarProxy> suggestOracle1 = (DefaultSuggestOracle<ScarProxy>) scarBox.getSuggestOracle();
+		suggestOracle1.setPossiblilities(values);
+		scarBox.setSuggestOracle(suggestOracle1);
+		//scarBox.setRenderer(new ScarProxyRenderer());
+		scarBox.setRenderer(new AbstractRenderer<ScarProxy>() {
+
+			@Override
+			public String render(ScarProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getBodypart();
+				}
+				else
+				{
+					return "";
+				}
+				//return object.get;
+			}
+		});
+
+		
+		//scarBox.setValue(values.get(0));
+		//scarBox.setAcceptableValues(values);
+		
+		//Issue # 122 : Replace pull down with autocomplete.
 	}
 	// E Highlight onViolation
+
+	@Override
+	public Map getAnemnasisFormMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

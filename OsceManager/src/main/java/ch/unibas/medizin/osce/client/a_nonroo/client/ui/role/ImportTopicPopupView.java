@@ -6,6 +6,7 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -14,6 +15,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 public interface ImportTopicPopupView extends IsWidget{
 
 	interface Delegate {
+		
 		
 		public void roleListBoxValueSelected(StandardizedRoleProxy proxy,ImportTopicPopupViewImpl view);
 		
@@ -35,13 +37,20 @@ public interface ImportTopicPopupView extends IsWidget{
 	public Button getCancelBtn() ;
 	// E: Issue Role
 	
-	public ValueListBox<StandardizedRoleProxy> getRoleLstBox();
+	//Issue # 122 : Replace pull down with autocomplete.
+	//public ValueListBox<StandardizedRoleProxy> getRoleLstBox();
+	//public DefaultSuggestBox<StandardizedRoleProxy> getRoleLstBox();
+	//Issue # 122 : Replace pull down with autocomplete.
 	
 	public ValueListBox<ChecklistTopicProxy> getTopicLstBox();
 	
-	public void setRoleLstBox(ValueListBox<StandardizedRoleProxy> roleLstBox) ;
+	//public void setRoleLstBox(ValueListBox<StandardizedRoleProxy> roleLstBox) ;
 	
 	public void setTopicLstBox(ValueListBox<ChecklistTopicProxy> topicLstBox);
+
+	//Issue # 122 : Replace pull down with autocomplete.
+	public ImportTopicPopupViewImpl getView();
+	//Issue # 122 : Replace pull down with autocomplete.
 
 	// Highlight onViolation
 	Map getChecklistTopicMap();

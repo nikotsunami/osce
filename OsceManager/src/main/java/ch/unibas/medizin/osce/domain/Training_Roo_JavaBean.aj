@@ -6,8 +6,8 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.Semester;
 import java.lang.String;
-import java.util.Set;
 import java.util.Date;
+import java.util.Set;
 
 privileged aspect Training_Roo_JavaBean {
     
@@ -26,8 +26,7 @@ privileged aspect Training_Roo_JavaBean {
     public void Training.setSemester(Semester semester) {
         this.semester = semester;
     }
-
-
+    
     public Date Training.getTrainingDate() {
         return this.trainingDate;
     }
@@ -35,8 +34,7 @@ privileged aspect Training_Roo_JavaBean {
     public void Training.setTrainingDate(Date trainingDate) {
         this.trainingDate = trainingDate;
     }
-
-
+    
     public Date Training.getTimeStart() {
         return this.timeStart;
     }
@@ -52,7 +50,6 @@ privileged aspect Training_Roo_JavaBean {
     public void Training.setTimeEnd(Date timeEnd) {
         this.timeEnd = timeEnd;
     }
-
     
     public Set<PatientInSemester> Training.getPatientInSemesters() {
         return this.patientInSemesters;
