@@ -76,4 +76,13 @@ public class PatientInRoleSubViewImpl extends Composite implements PatientInRole
 		delegate.deletePatientInRole(this);
 	}
 
+	//modul 3 changes {
+	
+	@Override
+	public IconButton getDeleteButton(){
+		return this.deletePatientInRole;
+	}
+	
+	//modul 3 changes }
+
 }

@@ -14,7 +14,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
@@ -185,6 +187,13 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			CircuitDetailsPlace circuitDetailsPlace = (CircuitDetailsPlace) place;
 			return new CircuitPlace(circuitDetailsPlace.getToken());
 		}
+		
+		if(place instanceof ExaminationScheduleDetailPlace)
+		{
+			ExaminationScheduleDetailPlace examinationScheduleDetailPlace=(ExaminationScheduleDetailPlace)place;
+			return new ExaminationSchedulePlace(examinationScheduleDetailPlace.getToken());
+		}
+		
 		if (place instanceof StudentsPlace)
 			return (StudentsPlace) place;
 
@@ -245,6 +254,11 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		if (place instanceof RoleAssignmentPlace)
 			return (RoleAssignmentPlace) place;
 		//by spec role management]
+		
+		//by learning objective
+		if (place instanceof ImportObjectiveViewPlace)
+			return (ImportObjectiveViewPlace) place;
+		//by learning objective
 
 		return null;
 	}

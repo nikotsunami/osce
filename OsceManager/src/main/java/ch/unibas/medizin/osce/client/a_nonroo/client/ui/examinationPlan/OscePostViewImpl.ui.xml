@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
+	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination" xmlns:d="urn:import:com.google.gwt.dom.client">
+	 <ui:style src="../../styles.css" />
+
+	<g:HTMLPanel>
+	
+	<g:VerticalPanel>
+			<g:FocusPanel ui:field="oscePostPanel" width="78px" height="30px" addStyleNames="{style.oscePost-rect} ">
+				<g:Label ui:field="oscePostLbl" ></g:Label>
+			</g:FocusPanel>
+			
+			<g:HorizontalPanel ui:field="slotsHP" width="90px" spacing="0" horizontalAlignment="left" >
+				<g:VerticalPanel ui:field="studentSlotsVP" width="30px"   spacing="0" ></g:VerticalPanel>
+				<g:VerticalPanel ui:field="spSlotsVP" width="30px"   spacing="0" >
+				
+				</g:VerticalPanel>
+				<g:VerticalPanel ui:field="examinerVP"  spacing="0" ></g:VerticalPanel>
+			</g:HorizontalPanel>
+	</g:VerticalPanel>
+	
+	
+	</g:HTMLPanel>
+	
+	
+	
+</ui:UiBinder> 

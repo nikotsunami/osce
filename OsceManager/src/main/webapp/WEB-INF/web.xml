@@ -138,6 +138,16 @@
   <servlet-mapping>
     <servlet-name>CsvFileUploadServlet</servlet-name>
     <url-pattern>/CsvFileUploadServlet</url-pattern>
+  </servlet-mapping>
+  
+  <!-- XLS File upload servlet -->    
+  <servlet>
+    <servlet-name>ExcelFileImportServlet</servlet-name>
+    <servlet-class>ch.unibas.medizin.osce.server.upload.ExcelFileImportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExcelFileImportServlet</servlet-name>
+    <url-pattern>/ExcelFileImportServlet</url-pattern>
   </servlet-mapping>  
 
 <!-- dmz sync service -->    

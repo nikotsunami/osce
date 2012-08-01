@@ -4,7 +4,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 public interface PatientInRoleSubView extends IsWidget{
 	
 	interface Delegate {
@@ -22,4 +22,9 @@ public interface PatientInRoleSubView extends IsWidget{
 	 public RoleSubView getRoleSubView() ;
 	 
 	 public void setRoleSubView(RoleSubView roleSubView);
+	 
+	 //modul 3 changes {
+	 
+	 public IconButton getDeleteButton();
+		//modul 3 changes }
 }

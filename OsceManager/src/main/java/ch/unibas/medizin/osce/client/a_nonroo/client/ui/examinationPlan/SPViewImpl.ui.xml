@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
+	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
+	 <ui:style src="../../styles.css" />
+
+	<g:HTMLPanel>
+		<g:FocusPanel width="30px"  addStyleNames=" {style.student-slot-rect} " ui:field="spPanel">
+			<g:Label ui:field="spLbl" addStyleNames="{style.student-label}"></g:Label>
+		</g:FocusPanel>			
+	
+	</g:HTMLPanel>
+	
+	
+	
+</ui:UiBinder> 

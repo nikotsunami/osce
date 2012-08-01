@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.CircuitDetailsActivity;
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.HorizontalPanelDropController;
@@ -11,6 +12,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ContentViewImpl extends Composite implements  ContentView{
@@ -24,8 +27,48 @@ public class ContentViewImpl extends Composite implements  ContentView{
 		return postHP;
 	}
 	
+	@UiField
+	 ScrollPanel  scrollPanel;
+	
+	public ScrollPanel getScrollPanel() {
+		return scrollPanel;
+	}
+
+	
+
+	@UiField
+	 VerticalPanel contentPanel;
+	
+	public VerticalPanel getContentPanel() {
+		return contentPanel;
+	}
+
+	
+
+	@UiField
+	HorizontalPanel oscePostHP;
+	
+	private CourseProxy courseProxy;
 	
 	
+	public CourseProxy getCourseProxy() {
+		return courseProxy;
+	}
+
+
+
+	public void setCourseProxy(CourseProxy courseProxy) {
+		this.courseProxy = courseProxy;
+	}
+
+
+
+	public HorizontalPanel getOscePostHP() {
+		return oscePostHP;
+	}
+
+	
+
 	public void setPostHP(HorizontalPanel postHP) {
 		this.postHP = postHP;
 	}

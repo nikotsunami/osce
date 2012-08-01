@@ -4,7 +4,7 @@
  <ui:style src="../../styles.css" />
 	<g:HorizontalPanel>
 	
-	<g:VerticalPanel width="50px"  height="230px" verticalAlignment="middle" horizontalAlignment="center" >
+	<g:VerticalPanel ui:field="headerPanel" width="50px"  height="230px" verticalAlignment="middle" horizontalAlignment="center" >
 		
 		<g:VerticalPanel  height="25px" horizontalAlignment="center" verticalAlignment="middle">
 			<s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton>

@@ -120,6 +120,14 @@
         	<!-- <scope>system</scope>
         	<systemPath>${project.basedir}/lib/javacsv-2.0.jar</systemPath> -->
         </dependency>
+        
+         <!-- Dependency for POI for Excel import -->
+        <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.2-FINAL</version>
+		</dependency>
+        
         <!-- Dependency for video upload -->
         <dependency>
 			<groupId>com.itextpdf</groupId>

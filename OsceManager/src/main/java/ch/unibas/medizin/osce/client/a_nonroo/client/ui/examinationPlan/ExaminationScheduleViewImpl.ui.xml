@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 
+	<ui:style src="../../styles.css" />
+	
+	<g:HTMLPanel>
+		<!-- h1>Postenlauf - MainView</h1-->
+		<g:TabPanel ui:field="osceTabPanel" width="100%">
+			<!-- g:Tab>
+				<g:TabHTML ></g:TabHTML>
+				<g:Label>Hello</g:Label>
+			</g:Tab-->					
+		</g:TabPanel>
+		<!-- g:SimplePanel ui:field="circuitDetailPanel"></g:SimplePanel-->
+	</g:HTMLPanel>
+</ui:UiBinder> 

@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.shared.ColorPicker;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface HeaderView extends IsWidget{
 
@@ -33,4 +34,6 @@ interface Delegate {
 	 public void changeHeaderColor(ColorPicker value);
 	 
 	 public IconButton getDeleteBtn();
+	 
+	 public VerticalPanel getHeaderPanel() ;
 }

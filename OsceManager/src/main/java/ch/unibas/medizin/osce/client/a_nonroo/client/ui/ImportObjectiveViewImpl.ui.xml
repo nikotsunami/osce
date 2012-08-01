@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:style src="../styles.css" />
+	
+	<g:HTMLPanel>
+	<g:FormPanel ui:field="uploadFormPanel">
+		<g:HorizontalPanel spacing="8">
+			<g:Label styleName="{style.label}" ui:field="importLabel"></g:Label>
+			<g:FileUpload ui:field="fileUpload" name="fileUpload1" />
+			<g:Button ui:field="importfile" />
+		</g:HorizontalPanel>
+	</g:FormPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

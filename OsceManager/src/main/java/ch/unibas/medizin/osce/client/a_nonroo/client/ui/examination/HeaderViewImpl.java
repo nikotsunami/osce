@@ -35,6 +35,16 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 	Label headerLabel;
 	
 	@UiField
+	VerticalPanel headerPanel;
+	
+	
+	public VerticalPanel getHeaderPanel() {
+		return headerPanel;
+	}
+
+	
+
+	@UiField
 	VerticalPanel labelVP;
 	
 	@UiField(provided=true)
