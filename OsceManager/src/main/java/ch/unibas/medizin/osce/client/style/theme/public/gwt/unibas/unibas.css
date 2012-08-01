@@ -2479,4 +2479,23 @@ background: rgb(255,255,204)  ;
 .rightBottom-radius{
 	border-bottom-right-radius: 6px;
 }
+
+.arrow-popup{ 
+	position:absolute; 
+	bottom:-8px; 
+	left:51px;
+    width: 0; 
+    height: 0; 
+    border-left:8px solid transparent; 
+    border-right: 8px solid transparent; 
+    border-top: 8px solid #fff;
+    }
+
+.gwt-PopupPanel {
+    background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    border: 1px solid #AAAAAA;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 0.9;
+    clip: inherit !important;
+}
 /* Module 8 End }*/

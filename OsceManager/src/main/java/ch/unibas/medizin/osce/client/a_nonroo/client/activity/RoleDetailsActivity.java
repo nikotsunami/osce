@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView;
@@ -40,8 +42,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFileSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleFileSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleLearningPopUpView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleLearningSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOtherSearchCriteriaView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubViewImpl;
@@ -76,19 +76,15 @@ import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicRequest;
-import ch.unibas.medizin.osce.client.managed.request.ClassificationTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileRequest;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordRequest;
-import ch.unibas.medizin.osce.client.managed.request.MainClassificationProxy;
-import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
-import ch.unibas.medizin.osce.client.managed.request.MainSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
-import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
-import ch.unibas.medizin.osce.client.managed.request.MinorSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
@@ -100,15 +96,13 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaRequest;
-import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
-import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
-import ch.unibas.medizin.osce.client.managed.request.TopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.client.managed.ui.CheckListProxyRenderer;
@@ -130,6 +124,11 @@ import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 import ch.unibas.medizin.osce.shared.ViewType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.dnd.client.DragEndEvent;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.DragStartEvent;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -143,12 +142,14 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -160,6 +161,7 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -186,18 +188,17 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		StandardizedPatientAdvancedSearchNationalityPopup.Delegate,		
 		RoleRoleParticipantSubView.Delegate, 
 		RoleKeywordSubView.Delegate,
+		ImportTopicPopupView.Delegate,DragHandler,
+		
 		RoleDetailsChecklistSubViewChecklistTopicItemView.Delegate,
 		RoleDetailsChecklistSubViewChecklistQuestionItemView.Delegate,
-		ImportTopicPopupView.Delegate,
+		
 		RoleDetailsChecklistSubViewChecklistCriteriaItemView.Delegate,
 		RoleDetailsChecklistSubViewChecklistOptionItemView.Delegate,
 		RoleBaseTableItemView.Delegate,RoleBaseTableItemValueView.Delegate,
 		// Issue Role Module
-		RoomMaterialsPopupView.Delegate,
+		RoomMaterialsPopupView.Delegate
 		// E Issue Role Module
-		//learning objective
-		RoleLearningSubView.Delegate,
-		RoleLearningPopUpView.Delegate
 		
 
 {
@@ -211,12 +212,19 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	private TabPanel roleDetailTabPanel;
 	public Iterator<StandardizedRoleProxy> stRoleIterator;
 	public RoleDetailsActivity roleDetailActivity;
+	public RoleDetailsChecklistSubViewChecklistCriteriaItemView tempCriView;
+	public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl tempQueView;
+	
+	//try 
+	int arrayIndx = 0;
+	public StandardizedRoleDetailsView[] standardizedRoleDetailsView_sample;
+	
 	public StandardizedRoleDetailsViewImpl[] standardizedRoleDetailsView;
 	public RoleEditCheckListSubViewImpl[] roleEditCheckListSubView;
 	private ViewType role_script_Scerrn= ViewType.role_script;
 	private static int selecTab = 0;
 
-	
+	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl reViewImpl;
 	// Assignment I
 	public String selectedKeyword;
 		private PopupPanel toolTip;
@@ -236,6 +244,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	public int mapVar=0;
 	// E Highlight onViolation
 	
+RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemViewImpl;
 	public RoleRoleParticipantSubViewImpl roleRoleParticipantSubViewImpl;
 	public RoleDetailsViewImpl roleDetailsViewImpl;
 	public RoleKeywordSubViewImpl roleKeywordSubViewImpl;
@@ -248,6 +257,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	
 	public CheckListTopicPopupView topicPopup;
 	
+	RoleDetailsChecklistSubViewChecklistTopicItemView checklistTopicItemView;
 	// SPEC END =
 	
 	
@@ -298,6 +308,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 
 	private SingleSelectionModel<AdvancedSearchCriteriaProxy> selectionAdvanceSearchModel;
 
+	RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl checklistQuestionItemViewImpl;
 	// ]Assignment F
 
 	public static int getSelecTab() {
@@ -342,6 +353,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		this.view = roleDetailsView;
 		this.roleDetailActivity = this;
 
+		
+		checklistTopicItemView = new RoleDetailsChecklistSubViewChecklistTopicItemViewImpl();
+	
 		roleDetailTabPanel = view.getRoleDetailTabPanel();
 		
 
@@ -1120,30 +1134,6 @@ public class RoleDetailsActivity extends AbstractActivity implements
 								standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().setKeywordAutocompleteValue(response);
 							}
 						});
-						
-						standardizedRoleDetailsView[index].getRoleLearningSubViewImpl().setDelegate(roleDetailActivity);
-						
-						final int innerindex2 = index;
-						
-						requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
-
-							@Override
-							public void onSuccess(List<MainSkillProxy> response) {								
-								standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
-								standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());
-								Log.info("~~DATA SET");
-							}
-						});
-										
-						requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
-
-							@Override
-							public void onSuccess(List<MinorSkillProxy> response) {
-								standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowData(response);
-								standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowCount(response.size());
-								Log.info("DATA IS SET FOR MINOR TABLE");
-							}
-						});						
 
 						// SPEC END =
 						
@@ -1434,12 +1424,16 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					//create Topic View
 					int i=0;
 					standardizedRoleDetailsView[selectedtab].checkListsVerticalPanel.clear();
+					//standardizedRoleDetailsView[selectedtab].checkListAP.clear();
+					
+					topicView.getDragController().makeDraggable(topicView.getqueVP());
+		
 					while(topicIterator.hasNext())
 					{
 						ChecklistTopicProxy topicProxy=topicIterator.next();
 						RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView=createCheckListTopic(selectedtab,topicProxy);
 						//topicView=createCheckListTopic(selectedtab,topicProxy);
-						
+						reViewImpl = topicView;
 						//create Question View
 						Iterator<ChecklistQuestionProxy> questionIterator=topicProxy.getCheckListQuestions().iterator();
 						
@@ -1487,6 +1481,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	}
 
 	private void init(RoleTopicProxy proxy) {
+		final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+		Log.info("Init Selected for tab" +selectedtab);
 	}
 
 	@Override
@@ -1678,6 +1674,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view).checkListTopicLbl.setText(proxy.getTitle());
 			standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.insert(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view), standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.getWidgetCount());
 			standardizedRoleDetailsView[selectedTab].checkListTopicView.add(view);
+			standardizedRoleDetailsView[selectedTab].getDragController().makeDraggable(view.asWidget(),view.getDraglbl());
+			standardizedRoleDetailsView[selectedTab].getDragController().addDragHandler(roleDetailActivity);
+			view.getTopicsdiscloserVP();
+			
+			Log.info("MAKE draggable~~~~");
+			//view.getDragController().makeDraggable((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view.asWidget(),view.getDraglbl());
+			
 			
 			return (RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view;
 		}
@@ -1730,6 +1733,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			proxy.setSequenceNumber(topicView.checkListQuestionVerticalPanel.getWidgetCount());
 			
 			// Highlight onViolation
+			Log.info("Map ::"+standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab).getChecklistQuestionMap());
 			Log.info("Map Size: "+ standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab).getChecklistQuestionMap().size());
 			request.persist().using(proxy).fire(new OSCEReceiver<Void>(standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab).getChecklistQuestionMap()) {
 			// E Highlight onViolation
@@ -1739,7 +1743,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 					Log.info("Call Success...");	
 					((CheckListTopicPopupViewImpl)(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)(standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab))).questionPopup)).hide();
 					createQuestionView(selectedtab,proxy,topicView);
-					
+				roleTopicInit(topicView.getProxy(), topicView);	
 				}
 			});
 		}
@@ -1753,6 +1757,13 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			
 			questionView.setDelegate(this);
 			topicView.checkListQuestionVerticalPanel.insert(questionView, topicView.checkListQuestionVerticalPanel.getWidgetCount());
+			topicView.getDragController().makeDraggable(questionView.asWidget(), questionView.getQuestionItemLbl());
+			topicView.getDragController().addDragHandler(roleDetailActivity);
+			topicView.getCheckListQuestionVerticalPanel();
+		//	roleTopicInit(topicView.getProxy(),topicView);
+			Log.info("after View Created");
+	
+			
 			return (RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)questionView;
 		}
 		
@@ -4556,198 +4567,100 @@ public class RoleDetailsActivity extends AbstractActivity implements
 			}
 	/*	});*/
 
-	@Override
-	public void minorDeleteClicked(final MinorSkillProxy minorSkill) {
+@Override
+	public void onDragStart(DragStartEvent event) {
+		// TODO Auto-generated method stub
+
+		Log.info("in Drag Start");
+	
 		
-		requests.minorSkillRequest().remove().using(minorSkill).fire(new Receiver<Void>() {
-			public void onSuccess(Void ignore) {
-				refreshMinorSkillData();
-			}
-		});
 	}
 
 	@Override
-	public void majorDeleteClicked(final MainSkillProxy mainSkill) {
-
-		requests.mainSkillRequest().remove().using(mainSkill).fire(new Receiver<Void>() {
-			public void onSuccess(Void ignore) {
-				refreshMainSkillData();
-			}
-		});	
+	public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
+		// TODO Auto-generated method stub
+		Log.info("onPreviewDragEnd~~~~~~");
 	}
 
 	@Override
-	public void setMainClassiPopUpListBox(final RoleLearningPopUpView popupView) {	
-		popupView.setDelegate(this);		
-			
-		requests.mainClassificationRequest().findAllMainClassifications().fire(new Receiver<List<MainClassificationProxy>>() {
+	public void onPreviewDragStart(DragStartEvent event)
+			throws VetoDragException {
+		// TODO Auto-generated method stub
+		Log.info("onPreviewDragStart~~~~~~");
+	}
 
-			@Override
-			public void onSuccess(List<MainClassificationProxy> response) {
-				popupView.getMainClassiListBox().setAcceptableValues(response);
-			}
-		});
+	@Override
+	public void onDragEnd(DragEndEvent event) {
+		// TODO Auto-generated method stub
 		
 	
-	}
-
-	@Override
-	public void mainClassiListBoxClicked(MainClassificationProxy proxy,
-		final RoleLearningPopUpView popupView) {	
-		requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(proxy).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
-
-			@Override
-			public void onSuccess(List<ClassificationTopicProxy> response) {
-				popupView.getClassiTopicListBox().setAcceptableValues(response);
-				classiTopicListBoxClicked(response.get(0), popupView);
-			}
-		});
-	}
-
-	@Override
-	public void classiTopicListBoxClicked(ClassificationTopicProxy proxy,
-			final RoleLearningPopUpView popupView) {
-		requests.topicRequestNonRoo().findTopicByClassiTopic(proxy).fire(new OSCEReceiver<List<TopicProxy>>() {
-
-			@Override
-			public void onSuccess(List<TopicProxy> response) {
-				popupView.getTopicListBox().setAcceptableValues(response);
-			}
-		});
 		
-	}
-
-	@Override
-	public void addMainSkillClicked(TopicProxy topicProxy, SkillLevelProxy skillLevelProxy) {
+	int j = 0;
+	
 		
-		Long skillLevelId;
-		
-		if (skillLevelProxy == null)
-		{
-			skillLevelId = 0l;
-		}
-		else
-		{
-			skillLevelId = skillLevelProxy.getId();
-		}
+		if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)
+			{
+			Log.info("if called ~~~~~~");
+			VerticalPanel vpQ=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource()).getParent());
 			
-		requests.skillRequestNonRoo().findSkillByTopicIDAndSkillLevelID(topicProxy.getId(), skillLevelId).fire(new OSCEReceiver<List<SkillProxy>>() {
 			
-			@Override
-			public void onSuccess(List<SkillProxy> response) {
-				if (response.size() == 0)
-				{
-					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-					dialogBox.showConfirmationDialog("Incorrect Topic and Skill Level is Selected");
-				}
-				else
-				{	
-					MainSkillRequest mainSkillRequest = requests.mainSkillRequest();
-					MainSkillProxy mainSkillProxy = mainSkillRequest.create(MainSkillProxy.class);
-					
-					mainSkillProxy.setRole(standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getValue());
-					mainSkillProxy.setSkill(response.get(0));
-					
-					mainSkillRequest.persist().using(mainSkillProxy).fire(new OSCEReceiver<Void>() {
-
-						@Override
-						public void onSuccess(Void response) 
-						{
-							refreshMainSkillData();
-							Log.info("Record Inserted Successfully");
-						}
-						
-					});
-				}
-			}
-		});
-		
-	}
-
-	@Override
-	public void addMinorSkillClicked(TopicProxy topicProxy, SkillLevelProxy skillLevelProxy) {
-		
-		Long skillLevelId;
-		
-		if (skillLevelProxy == null)
-		{
-			skillLevelId = 0l;
-		}
-		else
-		{
-			skillLevelId = skillLevelProxy.getId();
-		}
+			for(int i=0;i<vpQ.getWidgetCount();i++)
+			{
+				Log.info("value~~~~"+ i);
+				
+				updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i+j+1);
 			
-		requests.skillRequestNonRoo().findSkillByTopicIDAndSkillLevelID(topicProxy.getId(), skillLevelId).fire(new OSCEReceiver<List<SkillProxy>>() {
-			
-			@Override
-			public void onSuccess(List<SkillProxy> response) {
-				if (response.size() == 0)
-				{
-					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-					dialogBox.showConfirmationDialog("Incorrect Topic and Skill Level is Selected");
-				}
-				else
-				{	
-					MinorSkillRequest minorSkillRequest = requests.minorSkillRequest();
-					MinorSkillProxy mainSkillProxy = minorSkillRequest.create(MinorSkillProxy.class);
-					
-					mainSkillProxy.setRole(standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getValue());
-					mainSkillProxy.setSkill(response.get(0));
-					
-					minorSkillRequest.persist().using(mainSkillProxy).fire(new OSCEReceiver<Void>() {
-
-						@Override
-						public void onSuccess(Void response) 
-						{
-							refreshMinorSkillData();
-							Log.info("Record Inserted Successfully");
-						}
-						
-					});
-				}
-			}
-		});		
-	}
-
-	@Override
-	public void setSkillLevelPopupListBox(final RoleLearningPopUpView popupView) {
-		
-		popupView.setDelegate(this);		
-		requests.skillLevelRequest().findAllSkillLevels().fire(new OSCEReceiver<List<SkillLevelProxy>>() {
-			@Override
-			public void onSuccess(List<SkillLevelProxy> response) {
-						popupView.getLevelListBox().setAcceptableValues(response);
+				j++;
+				
 				
 			}
-		});
-	}	
-	
-	public void refreshMainSkillData()
-	{
-		requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
-
-			@Override
-			public void onSuccess(List<MainSkillProxy> response) {
-				standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getRoleLearningSubViewImpl().majorTable.setRowData(response);
-				standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());
+		
+		
 			}
-		});
 
-	}
+		else if (event.getSource() instanceof RoleDetailsChecklistSubViewChecklistTopicItemViewImpl ){
+			Log.info("else if called ~~~~");
+			VerticalPanel vp=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource()).getParent());
+		
+		
+		for(int i=0;i<vp.getWidgetCount();i++)
+		{
+			
+			Log.info("value~~~~"+ i);
+			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i+j+1);
+			j++;
+		
+		}
+		}
+		else{
+			Log.info("no selected event");
+		}
+		
+}
+
+
+
+	private void updateQueSequence(ChecklistQuestionProxy proxy, int i) {
+		// TODO Auto-generated method stub
+		ChecklistQuestionRequest request = requests.checklistQuestionRequest();
+		proxy = request.edit(proxy);
+		proxy.setSequenceNumber(i);
+		request.persist().using(proxy).fire();
 	
-	public void refreshMinorSkillData()
-	{
-		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
-
-			@Override
-			public void onSuccess(List<MinorSkillProxy> response) {
-				standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getRoleLearningSubViewImpl().minorTable.setRowData(response);
-				standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()].getRoleLearningSubViewImpl().minorTable.setRowCount(response.size());
-			}
-		});
-
+		Log.info("que seque no saved successfully~~~~~"+ i);
 	}
+
+	private void updateSequence(ChecklistTopicProxy proxy, int i) {
+		// TODO Auto-generated method stub
+		ChecklistTopicRequest request = requests.checklistTopicRequest();
+		proxy= request.edit(proxy);
+		proxy.setSort_order(i);
+		request.persist().using(proxy).fire();
+		
+		Log.info("at update method::::");
+	}
+
+
 	
 }
 

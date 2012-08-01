@@ -48,9 +48,13 @@
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
 <g:HTMLPanel styleName="{style.criteria}">
-<g:HorizontalPanel styleName="{style.patientControls}" spacing="5" >
+
+<g:AbsolutePanel ui:field="roleCriteriaAP">
+<g:HorizontalPanel styleName="{style.patientControls}" spacing="4" ui:field="roleCriteriaHP">
 	<g:Label ui:field="criteriaLbl" width="100px" wordWrap="true" ></g:Label>
-	<my:IconButton ui:field="delete" icon="close" ></my:IconButton>
+	<my:IconButton ui:field="delete" icon="trash" ></my:IconButton>
 </g:HorizontalPanel>
+	</g:AbsolutePanel>
+
 </g:HTMLPanel>
 </ui:UiBinder>

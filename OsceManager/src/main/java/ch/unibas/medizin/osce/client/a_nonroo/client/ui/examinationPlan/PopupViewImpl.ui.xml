@@ -14,7 +14,9 @@
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
 
 <g:VerticalPanel spacing="0" width="230px">
-
+	
+	<g:HTMLPanel>
+	<div class="arrow-popup"></div>
 	<g:HorizontalPanel spacing="10" width="100%">
 		<g:Label ui:field="examinerNameLbl" visible="false" addStyleNames="{style.label}"></g:Label>
 		<g:SuggestBox ui:field="examinerSuggestionBox" visible="false"></g:SuggestBox>
@@ -43,6 +45,7 @@
 		<g:Button ui:field="okButton" visible="false"></g:Button>
 		<g:Button ui:field="cancelButton" visible="false"></g:Button>
 	</g:HorizontalPanel>
+	</g:HTMLPanel>
 </g:VerticalPanel>
 	
 

@@ -417,6 +417,24 @@ body {
 }
 
 }
+.roleQuetion{
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	
+		-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;
+	
+	/* -moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: px;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;	 */
+}
 .patientTopContainer{
 	border-color: #808080;
 	border-style: solid;
@@ -424,7 +442,11 @@ body {
 	border-right-width: 1px;
 	border-bottom-width: 1px;
 	border-left-width: 1px;
-	border-radius: 10px;
+	
+	-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;	
 }
 
 .tabStyle { /*position: relative;*/

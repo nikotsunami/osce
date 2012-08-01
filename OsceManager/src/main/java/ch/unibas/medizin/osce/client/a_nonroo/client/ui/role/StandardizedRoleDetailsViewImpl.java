@@ -8,11 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
-import ch.unibas.medizin.osce.client.managed.ui.RoleTemplateProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
@@ -20,6 +18,8 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -29,6 +29,7 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -36,7 +37,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 /**
@@ -73,6 +73,27 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	
 	public ArrayList<RoleDetailsChecklistSubViewChecklistTopicItemView> checkListTopicView = new ArrayList<RoleDetailsChecklistSubViewChecklistTopicItemView>();
 	
+	
+	// to drag
+	@UiField
+	public AbsolutePanel checkListAP;
+	PickupDragController dragController;
+	
+	
+	public PickupDragController getDragController() {
+		return dragController;
+	}
+	VerticalPanelDropController dropController;
+	
+	
+	public AbsolutePanel getCheckListAP() {
+		return checkListAP;
+	}
+
+	public void setCheckListAP(AbsolutePanel checkListAP) {
+		this.checkListAP = checkListAP;
+	}
+
 	@UiField
 	public VerticalPanel checkListsVerticalPanel;
 	
@@ -375,6 +396,10 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			standardizedRoleTemplateMap.put("roleTemplate", roleTemplateListBox.getTextField().advancedTextBox);
 		// E Highlight onViolation
 		
+	dragController = new PickupDragController(checkListAP,false);
+		dropController = new VerticalPanelDropController(checkListsVerticalPanel);
+		dragController.registerDropController(dropController);
+		dragController.setBehaviorScrollIntoView(true);
 	}
 
 	private void setLabelTexts() {

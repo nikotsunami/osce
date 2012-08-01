@@ -15,17 +15,38 @@
 	}
 .padleft5
 	{
-		padding-left: 5px;
+		padding-left: 3px;
 	}
 	.standardTable input {
-		width: 100%;
+		width: 90%;
 		opacity: 0.8;
 	}
 	
+	.borderDP{
+	
+	border: 10;
+	
+}
+			.exp{
+	
+background-color:#B8A9A2;
+
+}
+			.expbtn{
+	background-color:#DFDAD6;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px; 
+	
+	
+}
+
 	.icon
 	{
 		float: left;
-		margin: 4px;
+		margin: 3px;
 	}
 	
 	.icon:hover {
@@ -34,56 +55,77 @@
 	
 	.maxWidth {
 		margin-bottom: 8px;
-		width: 100%;
+		width: 90%;
 	}
-	.right{
-		
-		float:right
+	
+	.marginQue{
+	margin-left:9px;
+	margin-right:9px;
 	}
 </ui:style>
+
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
 <g:HTMLPanel width="100%">
 
-	<g:VerticalPanel addStyleNames="{style.tabStyle} {style.patientTopContainer} {style.maxWidth}">
-		<g:HorizontalPanel styleName="{style.patientControls}   {style.maxWidth}">
+		
+		<g:VerticalPanel ui:field="topicsdiscloserVP" verticalAlignment="middle">
+			<g:VerticalPanel addStyleNames="{style.tabStyle} {style.patientTopContainer} {style.maxWidth}" ui:field="discloserVP">
+		
+
+		<g:HorizontalPanel styleName="{style.patientControls}   {style.maxWidth} {style.exp}" >
 			<g:HorizontalPanel width="10px">
 			<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
 			</g:HorizontalPanel>
 			<g:VerticalPanel>
-				<g:Label  addStyleNames="{style.label}" ui:field="checkListTopicLbl" ></g:Label>
+				<g:Label  addStyleNames="{style.label}" ui:field="checkListTopicLbl" width="550px"> </g:Label>
 				<g:Label  addStyleNames="{style.label}" ui:field="descriptionLbl" ></g:Label>
 			</g:VerticalPanel>
 			<g:HTMLPanel>
 				<div  class="{style.controlsright}">
 					<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>								
-					
+					<g:HorizontalPanel width="90%"  >
 					<my:IconButton  ui:field="delete" icon="trash"></my:IconButton>
 					<my:IconButton  ui:field="edit" icon="pencil"></my:IconButton>
-					<g:Image ui:field="down" styleName="{style.icon} {style.right} " resource="{uiIcons.triangle1South}"></g:Image>
-					<g:Image ui:field="up" styleName="{style.icon} {style.right} " resource="{uiIcons.triangle1North}"></g:Image>
 					
-				</div>
+					<g:Image ui:field="down" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+					<g:Image ui:field="up" styleName="{style.icon}  " resource="{uiIcons.triangle1North}"></g:Image>
+					</g:HorizontalPanel>
+					</div>
 			</g:HTMLPanel>
 		</g:HorizontalPanel>
-		
-	<g:DisclosurePanel  animationEnabled="true" open="true" ui:field="checkListTopicDisclosurePanel"  width="100%">
-	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel" horizontalAlignment="left" width="100%">
-		
-		
+
+		<g:AbsolutePanel ui:field="topicAP">
+	<g:DisclosurePanel  animationEnabled="true" open="true" styleName="{style.borderDP} " ui:field="checkListTopicDisclosurePanel"  width="90%" >
+	
+
+	<g:AbsolutePanel ui:field="queAP">
+
+	<g:HorizontalPanel  spacing="4" styleName="{style.marginQue}">
+
+	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel"  width="100%">
 	</g:VerticalPanel>
+
+
+	</g:HorizontalPanel>
+	</g:AbsolutePanel>
 	
 	</g:DisclosurePanel>
-	<g:HorizontalPanel spacing="10">
+	</g:AbsolutePanel>
 	
-		
-		<g:VerticalPanel ui:field="questionButtonVP">
+	<g:HorizontalPanel  borderWidth="0" spacing="5">
+	<g:VerticalPanel ui:field="questionButtonVP">
 			
-		</g:VerticalPanel>
-		<g:HorizontalPanel spacing="10" ui:field="addQuestionHP">
-			<g:Button ui:field="addCheckListQuestionButton"></g:Button>
-			<g:Button ui:field="importQuestionButton"></g:Button>
+			</g:VerticalPanel>
+		<g:VerticalPanel spacing="5" ui:field="addQuestionHP">
+		<g:HorizontalPanel spacing="8">
+			<g:Button ui:field="addCheckListQuestionButton" styleName="{style.expbtn}"></g:Button>
+			<g:Button ui:field="importQuestionButton" styleName="{style.expbtn}"></g:Button>
 		</g:HorizontalPanel>
+		
+		</g:VerticalPanel>
 	</g:HorizontalPanel>
 	</g:VerticalPanel>
+</g:VerticalPanel>
+
 </g:HTMLPanel>
 </ui:UiBinder>

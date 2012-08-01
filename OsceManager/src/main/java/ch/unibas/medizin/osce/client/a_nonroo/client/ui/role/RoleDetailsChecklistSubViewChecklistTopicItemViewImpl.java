@@ -9,6 +9,10 @@ import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.allen_sauer.gwt.dnd.client.drop.HorizontalPanelDropController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,6 +21,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -31,8 +36,40 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 
 	private static final Binder BINDER = GWT.create(Binder.class);
 	
+	private final UiIcons uiIcons = GWT.create(UiIcons.class);
+	
+	private ChecklistTopicProxy proxy;
+	
+	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView;
+	
 	private Delegate delegate;
 	
+
+	AbsolutePanel discloserAP;
+	
+	public void setDiscloserAP(AbsolutePanel discloserAP) {
+		this.discloserAP = discloserAP;
+	}
+
+
+	@UiField
+	VerticalPanel discloserVP;
+	
+	
+	@UiField
+	VerticalPanel topicsdiscloserVP;
+	
+	
+	
+	
+	public VerticalPanel getTopicsdiscloserVP() {
+		return topicsdiscloserVP;
+	}
+
+	public void setTopicsdiscloserVP(VerticalPanel topicsdiscloserVP) {
+		this.topicsdiscloserVP = topicsdiscloserVP;
+	}
+
 
 	@UiField
 	public Button addCheckListQuestionButton;
@@ -50,7 +87,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	Image arrow;
 	
 	@UiField
-	HorizontalPanel addQuestionHP;
+	VerticalPanel addQuestionHP;
 	
 	@UiField
 	public Button importQuestionButton;
@@ -59,8 +96,19 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	public Label checkListTopicLbl;
 	
 	@UiField
+	public AbsolutePanel queAP;
+	
+	
+
+	
+	@UiField
 	public VerticalPanel checkListQuestionVerticalPanel;
 	
+	public VerticalPanel getCheckListQuestionVerticalPanel() {
+		return checkListQuestionVerticalPanel;
+	}
+
+
 	@UiField 
 	public Label descriptionLbl;
 	
@@ -75,6 +123,76 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	
 	@UiField
 	Image up;
+	
+//	@UiField
+//	public Label draglbl;
+	
+	@UiField
+	public AbsolutePanel topicAP;
+	
+	//change SPEC
+	
+	
+	@Override
+	public VerticalPanel getqueVP()
+	{
+	return this.checkListQuestionVerticalPanel;
+	}
+	
+	@Override
+	public AbsolutePanel getTopicAP()
+	{
+	return this.topicAP;
+	}
+
+	
+	@Override
+	public VerticalPanel getDiscloserVP()
+	{
+	return this.discloserVP;
+	}
+	
+	@Override
+	public AbsolutePanel getDiscloserAP()
+	{
+	return this.discloserAP;
+	}
+
+
+//	AbsolutePositionDropController dropControllerAP;
+	
+	PickupDragController dragController;
+	
+	PickupDragController dragControllerTopics;
+	
+	
+	public PickupDragController getDragController() {
+		return dragController;
+	}
+	
+	public PickupDragController getDragControllerTopics() {
+		return dragControllerTopics;
+	}
+//	public AbsolutePositionDropController getDropControllerAP() {
+//		return dropControllerAP;
+//	}
+
+	
+	VerticalPanelDropController dropController;
+	VerticalPanelDropController dropControllerTopics;
+	
+	@Override
+	public VerticalPanelDropController getDropTopicsController() {
+		// TODO Auto-generated method stub
+		return dropControllerTopics;
+	}
+	
+	@Override
+	public DisclosurePanel getRoleDetailsTopicDP()
+	{
+		return this.checkListTopicDisclosurePanel;
+	}
+	//End
 	
 	@UiHandler("down")
 	public void topicMoveDown(ClickEvent event){
@@ -91,11 +209,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	@UiField
 	DisclosurePanel checkListTopicDisclosurePanel;
 	
-	private final UiIcons uiIcons = GWT.create(UiIcons.class);
-	
-	private ChecklistTopicProxy proxy;
-	
-	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView;
+
 	
 	public ChecklistTopicProxy getProxy() {
 		return proxy;
@@ -114,12 +228,25 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	
 	public RoleDetailsChecklistSubViewChecklistTopicItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		
+	
+		
+		addCheckListQuestionButton.setTitle(constants.addCheckListQuestion());
 		addCheckListQuestionButton.setText(constants.addCheckListQuestion());
 		importQuestionButton.setText(constants.importQuestion());
 		
 		topicView=this;
 		
+		dragController = new PickupDragController(topicAP,false);
+		dropController = new VerticalPanelDropController(checkListQuestionVerticalPanel);
+		dragController.registerDropController(dropController);
+		dragController.setBehaviorScrollIntoView(true);
 		
+		
+//		dragControllerTopics = new PickupDragController(discloserAP, false);
+//		dropControllerTopics = new VerticalPanelDropController(discloserVP);
+//		dragControllerTopics.registerDropController(dropControllerTopics);
+//		dragControllerTopics.setBehaviorBoundaryPanelDrop(true);
 	}
 	
 	public void setDelegate(Delegate delegate) {
@@ -168,7 +295,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 				public void onClick(ClickEvent event) {
 					Log.info("Call onClick");
 					// Highlight onViolation
-					
+					//comment by user
 					/*if(questionPopup.getTopicTxtBox().getValue()=="" || questionPopup.getDescriptionTxtBox().getValue()=="")
 					{
 					}	
@@ -393,9 +520,9 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	// Highlight onViolation
 	
 	@Override
-	public Map getChecklistQuestionMap()
-	{
-		return this.checklistQuestionMap;
+	public Label getDraglbl() {
+		// TODO Auto-generated method stub
+		return checkListTopicLbl;
 	}
 	
 	@Override
@@ -403,6 +530,13 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	{
 		return this.checklistTopicMap;
 	}
+
+	@Override
+	public Map getChecklistQuestionMap() {
+		// TODO Auto-generated method stub
+		return this.checklistQuestionMap;
+	}
 	
-	// E Highlight onViolation
+
+
 }

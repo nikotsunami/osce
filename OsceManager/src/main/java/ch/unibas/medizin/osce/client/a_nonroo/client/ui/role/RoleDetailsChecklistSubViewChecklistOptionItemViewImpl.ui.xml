@@ -43,14 +43,14 @@
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
 <g:HTMLPanel>
-<g:VerticalPanel >
-	<g:HorizontalPanel addStyleNames="{style.patientControls}" spacing="5">
+
+	<g:HorizontalPanel addStyleNames="{style.patientControls}" spacing="4" ui:field="opinionHP">
 	
 	<g:Label ui:field="optionLbl" width="75px" wordWrap="true" ></g:Label>
 	<g:Label ui:field="optionValueLbl" width="25px" wordWrap="true"></g:Label>
-	<my:IconButton ui:field="deleteBtn" icon="close"></my:IconButton>
+	<my:IconButton ui:field="deleteBtn" icon="trash"></my:IconButton>
 	</g:HorizontalPanel>
-</g:VerticalPanel>
+
 	
 </g:HTMLPanel>
 </ui:UiBinder>

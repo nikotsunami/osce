@@ -6,8 +6,13 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends IsWidget{
 
@@ -31,16 +36,17 @@ public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends Is
 	  public Label getQuestionInstruction();
 
 	  public void setQuestionInstruction(Label questionInstruction);
-	  
+	  public Map getChecklistQuestionMap();
+	  public Map getChecklistOptionMap();
+	  public Map getChecklistCriteriaMap();
 	  public ChecklistQuestionProxy getProxy();
 	  
 	  public void setProxy(ChecklistQuestionProxy proxy);
 	
-		// Highlight onViolation
-	  	Map getChecklistQuestionMap();
-	  	Map getChecklistOptionMap();
-	  	Map getChecklistCriteriaMap();
-	  	// E Highlight onViolation
+	public FlowPanel getRoleQueFP();
+	public  HorizontalPanel getRoleQueHP();
+	public  AbsolutePanel getRoleQueAP();
 		
+	public PickupDragController getDragController();
 		
 }

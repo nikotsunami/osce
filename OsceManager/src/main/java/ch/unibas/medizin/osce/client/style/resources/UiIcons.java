@@ -69,4 +69,14 @@ public interface UiIcons extends ClientBundle {
 
 	@Source("images/loading.gif")
 	public ImageResource loading();
+	
+	@Source("images/icons/icon-question.png")
+	public ImageResource question();
+	
+	@Source("images/icons/icon-options.png")
+	public ImageResource options();
+	
+	@Source("images/icons/icon-criteria.png")
+	public ImageResource criteria();
+	
 }

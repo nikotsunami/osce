@@ -8,6 +8,8 @@
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
   xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
 
+
+
 <ui:style src="../../styles.css" >
 .noOutline {
 		outline-style: none;
@@ -15,17 +17,17 @@
 	}
 .padleft5
 	{
-		padding-left: 5px;
+		padding-left: 3px;
 	}
 	.standardTable input {
-		width: 100%;
-		opacity: 0.8;
+		width: 90%;
+		opacity: 0.3;
 	}
 	
 	.icon
 	{
 		float: left;
-		margin: 4px;
+		margin: 2px;
 	}
 	
 	.icon:hover {
@@ -33,13 +35,36 @@
 	}
 	
 	.maxWidth {
-		margin-bottom: 8px;
-		width: 100%;
-	}
+		margin-bottom: 3px;
+		width: 90%;
+				-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;
+		}
+		
+		.exp{
+	
+background-color: #DFDAD6;
+border-bottom-color:#808080;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;
+
+}
+	.borderDP{
+	
+	border: 10;
+}
+
+	
 	.right{
 		
 		float:right
 	}
+	.middle
+	{
+	float:inherit;
+}
 	.criteria{
 	
 		margin-left: 5px;
@@ -48,62 +73,114 @@
 	.editQuestionBtn{
 	
 		margin-left: 100%;
+		
 	}
+	.crtariaTop{
+	
+	margin-top: 5px;
+}
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
-<g:HTMLPanel>
-	<g:VerticalPanel ui:field="checkListQuestionItemVerticalPanel"  horizontalAlignment="left" styleName="{style.maxWidth} " addStyleNames="{style.tabStyle} {style.patientTopContainer}">
-		<g:HorizontalPanel>
+<g:HTMLPanel  width="100%">
+	<g:VerticalPanel ui:field="checkListQuestionItemVerticalPanel"  styleName="{style.maxWidth} {style.roleQuetion}" addStyleNames="{style.tabStyle} {style.roleQuetion}" >
 		
-			<g:VerticalPanel width="500px" spacing="8">
-				<g:HorizontalPanel spacing="8">
-					<g:VerticalPanel spacing="5">
-						<g:Label ui:field="questionItemLbl" ></g:Label>
-						<g:Label ui:field="questionInstruction" ></g:Label>
-					</g:VerticalPanel>
-					
-					<g:VerticalPanel ui:field="editQuestionVP" horizontalAlignment="right">
+		
+		
+		<g:VerticalPanel styleName="{style.exp}" verticalAlignment="middle">
+	
+		<g:HorizontalPanel>
+		<g:AbsolutePanel ui:field="roleQueAP">
+		<g:HorizontalPanel ui:field="roleQueHP">
+	
+		
+			<g:VerticalPanel width="100%" verticalAlignment="middle">
+			
+
+ 	
+<g:HorizontalPanel spacing="5" >
+		<g:VerticalPanel spacing="5" >
+		<g:HorizontalPanel spacing="5" verticalAlignment="middle">
+		<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+		<g:Image  styleName="{style.icon}" resource="{uiIcons.question}"></g:Image>			
+						
+						<g:VerticalPanel>
+						<g:Label ui:field="questionItemLbl" width="500px"></g:Label>
+							<g:Label ui:field="questionInstruction" ></g:Label>
+						
+		
+						</g:VerticalPanel>
+			<g:HorizontalPanel width="1px" horizontalAlignment="right" verticalAlignment="middle"  >
+						<g:VerticalPanel ui:field="editQuestionVP">
 						<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>
 					</g:VerticalPanel>
-				</g:HorizontalPanel>
-				
-					<!--  <g:FlowPanel width="100px">-->
-					<g:FlowPanel ui:field="criteriaHorizontalPanel"  styleName="style.criteria" width="120%"><!-- e3 -->
-						
-					</g:FlowPanel>
+				<g:VerticalPanel verticalAlignment="middle">
+					<my:IconButton ui:field="delete" icon="trash" ></my:IconButton>
+				</g:VerticalPanel>
+					<g:Image ui:field="down" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+			
+			<g:Image ui:field="up" styleName="{style.icon} " resource="{uiIcons.triangle1North}"></g:Image>
+	
+			</g:HorizontalPanel>
+		</g:HorizontalPanel>
 					
-						<g:VerticalPanel spacing="8" ui:field="addBtnPanel">
-							<my:IconButton ui:field="addCriteriaButton" icon="plusthick"></my:IconButton>
-						</g:VerticalPanel> 
+						
+	</g:VerticalPanel>
+	</g:HorizontalPanel>
+			</g:VerticalPanel>	
+			
+					</g:HorizontalPanel>
+		</g:AbsolutePanel>
+			</g:HorizontalPanel>
+		
+			</g:VerticalPanel>	
+					<!--  <g:FlowPanel width="100px">-->
+			
+					
+				
 <!-- 					</g:FlowPanel> -->
 				
-			</g:VerticalPanel>
 			
 			
-			<g:Image ui:field="down" styleName="{style.icon}  {style.right}" resource="{uiIcons.triangle1South}"></g:Image>
+			<!--move label  -->
 			
-			<g:Image ui:field="up" styleName="{style.icon} {style.right} " resource="{uiIcons.triangle1North}"></g:Image>
+
 			
-			<g:VerticalPanel width="150px" >
-			<g:VerticalPanel  spacing="3" horizontalAlignment="right" >
-				<g:VerticalPanel ui:field="optionVerticalPanel"><!-- e4 -->
-				
-				</g:VerticalPanel >
-			</g:VerticalPanel>
-				<g:VerticalPanel ui:field="addOptionVerticalPanel" spacing="8" horizontalAlignment="left">
-					<my:IconButton ui:field="addOptionButton" icon="plusthick" ></my:IconButton>
-				</g:VerticalPanel>
-			</g:VerticalPanel>
+			<!--Edit delete  -->
 			
-			<g:HorizontalPanel width="1px" horizontalAlignment="right" verticalAlignment="middle" spacing="8" >
-				<g:VerticalPanel verticalAlignment="middle">
-					<my:IconButton ui:field="delete" icon="close" ></my:IconButton>
-				</g:VerticalPanel>
-			</g:HorizontalPanel>
-			
-			
-		</g:HorizontalPanel>
+
+	<g:DisclosurePanel  animationEnabled="true" open="true" styleName="{style.borderDP}" ui:field="checkListQuestionDisclosurePanel"  width="100%" >
+		
+		<g:VerticalPanel spacing="2" ui:field="addBtnPanel">
+		<g:HorizontalPanel spacing="2" styleName="{style.crtariaTop}"><g:Image  styleName="{style.icon} " resource="{uiIcons.criteria}"></g:Image>			
+			<g:Label>Criteria</g:Label> <my:IconButton ui:field="addCriteriaButton" height="18px"  icon="plusthick" ></my:IconButton></g:HorizontalPanel>
 	
+			<g:FlowPanel ui:field="criteriaHorizontalPanel"  styleName="style.criteria" width="100%">
+					</g:FlowPanel>
+					
+	
+	
+		
+		<g:VerticalPanel ui:field="addOptionVerticalPanel" spacing="2" >
+							
+		<g:HorizontalPanel spacing="2"><g:Image  styleName="{style.icon} " resource="{uiIcons.options}"></g:Image>			
+			<g:Label>Option</g:Label>
+			<my:IconButton ui:field="addOptionButton" icon="plusthick" height="18px" ></my:IconButton></g:HorizontalPanel>
+				
+				<g:HorizontalPanel ui:field="optionVerticalPanel" spacing="4">
+				
+				</g:HorizontalPanel>
+			
+				
+			
+		</g:VerticalPanel>
+		
+		
+		</g:VerticalPanel> 
+		
+		
+		</g:DisclosurePanel>
+		
+
 	</g:VerticalPanel>
 	
 </g:HTMLPanel>

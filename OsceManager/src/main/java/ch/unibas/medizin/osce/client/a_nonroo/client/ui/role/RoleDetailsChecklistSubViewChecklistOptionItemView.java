@@ -3,8 +3,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface RoleDetailsChecklistSubViewChecklistOptionItemView  extends IsWidget{
 
@@ -14,12 +18,12 @@ public interface RoleDetailsChecklistSubViewChecklistOptionItemView  extends IsW
 		
 		void deleteOption(RoleDetailsChecklistSubViewChecklistOptionItemViewImpl optionView);
 	}
-	
-	public Label getOptionLbl();
+ Label getOptionLbl();
 	
 	public Label getOptionValueLbl();
 	
 	public ChecklistOptionProxy getProxy();
 	
 	public void setProxy(ChecklistOptionProxy proxy) ;
+
 }

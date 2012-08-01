@@ -5,16 +5,18 @@ import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.HorizontalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiHandler;
-
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -29,6 +31,37 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	@UiField
 	Label criteriaLbl;
 	
+	//Spec
+
+	@UiField
+	public AbsolutePanel roleCriteriaAP;
+	
+	@Override
+	public AbsolutePanel getRoleCriteriaAP()
+	{
+		Log.info("Impl Drag getRoleCriteriaAP Called");
+		return this.roleCriteriaAP;
+	}
+	
+	@UiField
+	HorizontalPanel roleCriteriaHP;
+	
+	
+	PickupDragController dragController;
+	
+	public PickupDragController getDragController() {
+		Log.info("Impl Drag controller Called");
+		return dragController;
+	}
+	
+	HorizontalPanelDropController dropController;
+	
+	public HorizontalPanel getRoleCriteriaHP(){
+		Log.info("Impl Drag getRoleCriteriaHP Called");
+		return this.roleCriteriaHP;
+	}
+	
+	//End
 	public ChecklistCriteriaProxy proxy;
 	
 	public ChecklistCriteriaProxy getProxy() {

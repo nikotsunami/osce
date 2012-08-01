@@ -4,6 +4,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -22,4 +25,8 @@ public interface RoleDetailsChecklistSubViewChecklistCriteriaItemView extends Is
 	  public ChecklistCriteriaProxy getProxy();
 	  
 	  public void setProxy(ChecklistCriteriaProxy proxy);
+	  public HorizontalPanel getRoleCriteriaHP();
+	  public AbsolutePanel getRoleCriteriaAP();
+
+	public PickupDragController getDragController();
 }

@@ -16,6 +16,14 @@
 		.padleft5 {
 			padding-left: 5px;
 		}
+		.max-width{
+	max-width: 70%;
+		}
+		
+				.exp{
+	
+background-color: #B8A9A2;
+}
 	</ui:style>
 
 	<g:HTMLPanel>
@@ -125,23 +133,24 @@
 				<g:Tab>
 					
 				<g:TabHTML>CheckList</g:TabHTML>
-						
 					
-							<g:HTMLPanel addStyleNames="{style.patientDetails}" width="100%">
+								
+								
+							<g:HTMLPanel addStyleNames="{style.patientDetails}">
 							<!--  Assignment E			-->		
-								<g:VerticalPanel width="100%">
-										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="100%">
+								<g:VerticalPanel width="80%"><g:AbsolutePanel ui:field="checkListAP">
+										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="80%">
 										
 										
 										
-										</g:VerticalPanel>
+										</g:VerticalPanel></g:AbsolutePanel>
 										
 									<g:HorizontalPanel spacing="10" ui:field="addTopicHP">		
 											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
 											
-											<g:Button ui:field="addCheckListTopicButton"> </g:Button>
-											
-											<g:Button ui:field="importTopicButton"></g:Button>
+											<g:Button ui:field="addCheckListTopicButton" styleName="{style.exp}"> </g:Button>
+											<g:Button ui:field="importTopicButton" styleName="{style.exp}"></g:Button>
+										
 										</g:HorizontalPanel>
 								</g:VerticalPanel>
 							</g:HTMLPanel>	
