@@ -30,7 +30,8 @@ public class OsceSequence {
 	 private OsceDay osceDay;
 	 
 	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceSequence")
-	 private Set<Course> courses = new HashSet<Course>();
+	 @OrderBy("color")
+	 private List<Course> courses = new ArrayList<Course>();
 	 
 	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceSequence")
 	 @OrderBy("sequenceNumber")
@@ -50,7 +51,7 @@ public class OsceSequence {
 			newOsceSequence.setOsceDay(osceSequence.getOsceDay());		
 			
 			log.info("Cources : " + osceSequence.getCourses());
-			Set<Course> parcours = insertParcoursForSequence(osceSequence,newOsceSequence);
+			List<Course> parcours = insertParcoursForSequence(osceSequence,newOsceSequence);
 			
 			// insert posts
 			log.info("Osce Post : " + osceSequence.getOscePosts());
@@ -72,8 +73,8 @@ public class OsceSequence {
 		 * @param seq
 		 * @return
 		 */
-		private  static Set<Course> insertParcoursForSequence(OsceSequence seq, OsceSequence newOsceSequence) {
-			Set<Course> parcours = new HashSet<Course>();
+		private  static List<Course> insertParcoursForSequence(OsceSequence seq, OsceSequence newOsceSequence) {
+			List<Course> parcours = new ArrayList<Course>();
 			
 			for(Course oldCourse:seq.getCourses()) {
 				Course c = new Course();
