@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import ch.unibas.medizin.osce.domain.*;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.PostType;
-import ch.unibas.medizin.osce.shared.RoleTypes;
 
 /**
  * Generates an optimal timetable for an OSCE with respect to minimizing the time required.
@@ -92,7 +91,6 @@ public class TimetableGenerator {
 			// iterate until (numberPosts - number of posts with post_type=BREAK).
 			// NOTE: a number of breaks equal to numberPosts would result in an additional rotation.
 			for(int breakPosts = 0; breakPosts <= 0; breakPosts++) {
-//				log.info("optimize for breakPosts = " + breakPosts + ", nParcours = " + nParcours);
 				ttGen = new TimetableGenerator(osce, breakPosts, nParcours);
 				ttGen.calcAddBreakPosts();
 				ttGen.calcTimeNeeded();
@@ -405,7 +403,7 @@ public class TimetableGenerator {
 				seq.persist();
 				
 				// insert osce_post_rooms
-				Set<OscePostRoom> oscePostRooms = insertOscePostRoomsForParcoursAndPosts(parcours, posts);
+				insertOscePostRoomsForParcoursAndPosts(parcours, posts);
 				
 				osceSequences.add(seq);
 			}
@@ -435,7 +433,7 @@ public class TimetableGenerator {
 				seq.persist();
 				
 				// insert osce_post_rooms
-				Set<OscePostRoom> oscePostRooms = insertOscePostRoomsForParcoursAndPosts(parcours, posts);
+				insertOscePostRoomsForParcoursAndPosts(parcours, posts);
 				
 				osceSequences.add(seq);
 				
@@ -757,7 +755,7 @@ public class TimetableGenerator {
 								post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(postBP, osceSequence).getSingleResult();
 								
 								if(!postType.equals(PostType.BREAK))
-									oscePR = OscePostRoom.findOscePostRoomsByCourseAndOscePost(course, post).getSingleResult();
+									oscePR = OscePostRoom.firstOscePostRoomByCourseAndOscePost(course, post, (i + 1));
 							}
 							
 							// reset to the point in time where the rotation starts (necessary since
@@ -817,28 +815,24 @@ public class TimetableGenerator {
 								
 								Date endTime = dateAddMin(startTime, osce.getPostLength());
 								
-								// ANAMNESIS_THERAPY --> double length
-								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
-									endTime = dateAddMin(endTime, osce.getPostLength());
-
-									if(changeSimpatDuringRotation && (j % changeIndex == changeIndex - 1)) {
-										endTime = dateAddMin(endTime, osce.getShortBreakSimpatChange());
-									} else {
-										endTime = dateAddMin(endTime, osce.getShortBreak());
-									}
-								}
-								
 								if(currRotationNumber < 1)
 									log.info("\t student index " + studentIndex + " for post " + i);
 
-								Assignment ass = new Assignment();
-								ass.setType(AssignmentTypes.STUDENT);
-								ass.setOsceDay(osceDay);
-								ass.setSequenceNumber(studentIndex);
-								ass.setTimeStart(startTime);
-								ass.setTimeEnd(endTime);
-								ass.setOscePostRoom(oscePR);
-								assThisRotation.add(ass);
+								assThisRotation.add(createStudentAssignment(osceDay, oscePR, studentIndex, startTime, endTime));
+								
+								// ANAMNESIS_THERAPY --> double length in same room BUT different role for second part!
+								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
+									// WARNING! only short break (no shortBreakSimpatChange) is handled here. This is on
+									// purpose, since SP change during a double-post might cause big trouble!
+									Date startTime2 = dateAddMin(endTime, osce.getShortBreak());
+									Date endTime2 = dateAddMin(startTime2, osce.getPostLength());
+									
+									OscePostRoom oscePRAlt = OscePostRoom.altOscePostRoom(oscePR);
+									
+									assThisRotation.add(createStudentAssignment(osceDay, oscePRAlt, studentIndex, startTime2, endTime2));
+									
+									endTime = endTime2;
+								}
 								
 								log.info("added assignment for student " + studentIndex);
 
@@ -875,7 +869,6 @@ public class TimetableGenerator {
 								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
 									// skip next time-slot
 									j++;
-									// TODO: insert second OscePostRoom-assignment here
 								}
 								
 								if(!lastTimeSlot) {
@@ -1020,6 +1013,26 @@ public class TimetableGenerator {
 //		printAllSP(assignments);
 		
 		return assignments;
+	}
+
+	/**
+	 * Create new student assignment
+	 * @param osceDay day on which this assignment takes place
+	 * @param oscePR post-room-assignment
+	 * @param studentIndex student which is examined in this assignment
+	 * @param startTime time when the assignment starts
+	 * @param endTime time when the assignment ends
+	 * @return
+	 */
+	private Assignment createStudentAssignment(OsceDay osceDay, OscePostRoom oscePR, int studentIndex, Date startTime, Date endTime) {
+		Assignment ass2 = new Assignment();
+		ass2.setType(AssignmentTypes.STUDENT);
+		ass2.setOsceDay(osceDay);
+		ass2.setSequenceNumber(studentIndex);
+		ass2.setTimeStart(startTime);
+		ass2.setTimeEnd(endTime);
+		ass2.setOscePostRoom(oscePR);
+		return ass2;
 	}
 	
 	/**
