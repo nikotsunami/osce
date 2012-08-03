@@ -36,6 +36,7 @@ privileged aspect OscePostDataOnDemand_Roo_DataOnDemand {
         setOsceSequence(obj, index);
         setSequenceNumber(obj, index);
         setStandardizedRole(obj, index);
+        setValue(obj, index);
         return obj;
     }
     
@@ -57,6 +58,11 @@ privileged aspect OscePostDataOnDemand_Roo_DataOnDemand {
     public void OscePostDataOnDemand.setStandardizedRole(OscePost obj, int index) {
         StandardizedRole standardizedRole = standardizedRoleDataOnDemand.getRandomStandardizedRole();
         obj.setStandardizedRole(standardizedRole);
+    }
+    
+    public void OscePostDataOnDemand.setValue(OscePost obj, int index) {
+        Integer value = 0;
+        obj.setValue(value);
     }
     
     public OscePost OscePostDataOnDemand.getSpecificOscePost(int index) {

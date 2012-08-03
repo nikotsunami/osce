@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.domain;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDataOnDemand;
 import ch.unibas.medizin.osce.domain.OsceDay;
+import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +37,7 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
         setOsceDate(obj, index);
         setTimeEnd(obj, index);
         setTimeStart(obj, index);
+        setValue(obj, index);
         return obj;
     }
     
@@ -57,6 +59,11 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
     public void OsceDayDataOnDemand.setTimeStart(OsceDay obj, int index) {
         Date timeStart = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setTimeStart(timeStart);
+    }
+    
+    public void OsceDayDataOnDemand.setValue(OsceDay obj, int index) {
+        Integer value = 0;
+        obj.setValue(value);
     }
     
     public OsceDay OsceDayDataOnDemand.getSpecificOsceDay(int index) {
