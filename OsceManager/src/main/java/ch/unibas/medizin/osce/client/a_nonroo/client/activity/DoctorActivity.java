@@ -7,7 +7,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
@@ -274,14 +273,14 @@ DoctorView.Presenter, DoctorView.Delegate {
 	//Module 6 Start
 	
 	//Issue # 122 : Replace pull down with autocomplete.
-	/*@Override
-	public void changeFilterTitleShown(String selectedTitle) {
+	@Override
+	public void changeFilterTitleShown(ClinicProxy selectedTitle) {
 	
 		
-		if (!selectedTitle.equals("0"))
+		if (selectedTitle != null)
 		{
 		
-			requests.doctorRequestNonRoo().findDoctorByClinicID(Long.parseLong(selectedTitle)).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+			requests.doctorRequestNonRoo().findDoctorByClinicID(selectedTitle.getId()).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {
@@ -303,9 +302,9 @@ DoctorView.Presenter, DoctorView.Delegate {
 			});
 		}
 		
-	}*/
+	}
 	
-	@Override
+/*	@Override
 	public void changeFilterTitleShown() {
 	
 		Log.info("change event in changeFilterTitleShown method");
@@ -334,7 +333,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 			});
 		}
 		
-	}
+	}*/
 	//Issue # 122 : Replace pull down with autocomplete.
 	//Module 6 End
 
