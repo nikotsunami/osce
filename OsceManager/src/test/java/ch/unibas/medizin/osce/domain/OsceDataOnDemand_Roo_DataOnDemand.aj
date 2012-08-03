@@ -4,6 +4,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceSecurityType;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
@@ -48,6 +49,7 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         setNumberCourses(obj, index);
         setNumberPosts(obj, index);
         setNumberRooms(obj, index);
+        setOsceSecurityTypes(obj, index);
         setOsceStatus(obj, index);
         setPatientAveragePerPost(obj, index);
         setPostLength(obj, index);
@@ -112,6 +114,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public void OsceDataOnDemand.setNumberRooms(Osce obj, int index) {
         Integer numberRooms = new Integer(index);
         obj.setNumberRooms(numberRooms);
+    }
+    
+    public void OsceDataOnDemand.setOsceSecurityTypes(Osce obj, int index) {
+        OsceSecurityType osceSecurityTypes = OsceSecurityType.class.getEnumConstants()[0];
+        obj.setOsceSecurityTypes(osceSecurityTypes);
     }
     
     public void OsceDataOnDemand.setOsceStatus(Osce obj, int index) {
