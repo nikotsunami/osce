@@ -202,117 +202,117 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
 		
-		requests.osceRequestNonRoo().generateAssignments(1l).fire(new Receiver<Boolean>() {
+//		requests.osceRequestNonRoo().generateAssignments(1l).fire(new Receiver<Boolean>() {
+//
+//			@Override
+//			public void onSuccess(Boolean response) {
+//				// TODO Auto-generated method stub
+////				requests.osceRequestNonRoo().generateAssignments(1l).fire();
+//			}
+//			
+//		});
+		
+		//By SPEC[Start 
+		//StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
+		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
+		//By SPEC] End
+		systemStartView.setPresenter(this);
 
+		this.widget = panel;
+		this.view = systemStartView;
+		widget.setWidget(systemStartView.asWidget());
+		
+		//by spec
+		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
+		//by spec
+		this.table = view.getTable();
+
+		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
+		standartizedPatientAdvancedSearchSubView.setDelegate(this);
+
+		// BY SPEC v(Start)
+		this.iconButton = this.view.getExportButton();
+
+		this.iconButton.addClickHandler(new ClickHandler() {
+
+			@SuppressWarnings("deprecation")
 			@Override
-			public void onSuccess(Boolean response) {
-				// TODO Auto-generated method stub
-//				requests.osceRequestNonRoo().generateAssignments(1l).fire();
+			public void onClick(ClickEvent arg0) {
+				Range range = table.getVisibleRange();
+				requests.standardizedPatientRequestNonRoo()
+						.getCSVMapperFindPatientsByAdvancedSearchAndSort(
+								"name", Sorting.ASC, quickSearchTerm,
+								searchThrough, searchCriteria // , filePath
+								,range.getStart(),range.getLength()								
+						).fire(new StandardizedPatientCsvFileReceiver());
+
 			}
-			
+		});
+
+		// BY SPEC v(Stop)
+		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
+		
+		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				StandardizedPatientActivity.this.onRangeChanged();
+			}
 		});
 		
-//		//By SPEC[Start 
-//		//StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
-//		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
-//		//By SPEC] End
-//		systemStartView.setPresenter(this);
-//
-//		this.widget = panel;
-//		this.view = systemStartView;
-//		widget.setWidget(systemStartView.asWidget());
-//		
-//		//by spec
-//		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
-//		//by spec
-//		this.table = view.getTable();
-//
-//		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
-//		standartizedPatientAdvancedSearchSubView.setDelegate(this);
-//
-//		// BY SPEC v(Start)
-//		this.iconButton = this.view.getExportButton();
-//
-//		this.iconButton.addClickHandler(new ClickHandler() {
-//
-//			@SuppressWarnings("deprecation")
-//			@Override
-//			public void onClick(ClickEvent arg0) {
-//				Range range = table.getVisibleRange();
-//				requests.standardizedPatientRequestNonRoo()
-//						.getCSVMapperFindPatientsByAdvancedSearchAndSort(
-//								"name", Sorting.ASC, quickSearchTerm,
-//								searchThrough, searchCriteria // , filePath
-//								,range.getStart(),range.getLength()								
-//						).fire(new StandardizedPatientCsvFileReceiver());
-//
-//			}
-//		});
-//
-//		// BY SPEC v(Stop)
-//		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
-//		
-//		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
-//			public void onRangeChange(RangeChangeEvent event) {
-//				StandardizedPatientActivity.this.onRangeChanged();
-//			}
-//		});
-//		
-//		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
-//			@Override
-//			public void onColumnSort(ColumnSortEvent event) {
-//				//By SPEC[Start
-//				Column<StandardizedPatientProxy,String> col = (Column<StandardizedPatientProxy,String>) event.getColumn();
-//				int index = table.getColumnIndex(col); 
-//				String[] path =	systemStartView.getPaths();	            			
-//				sortname = path[index];
-//				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;				
-//				//By SPEC]end
-//				StandardizedPatientActivity.this.onRangeChanged();
-//			}
-//		});
-//		
-//		PlaceChangeEvent.Handler placeChangeHandler = new PlaceChangeEvent.Handler() {
-//			@Override
-//			public void onPlaceChange(PlaceChangeEvent event) {
-//				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
-//				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
-//					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
-//					Operation op = spdPlace.getOperation();
-//					if (op == Operation.NEW) {
-//						getSearchStringByEntityProxyId((EntityProxyId<StandardizedPatientProxy>)spdPlace.getProxyId());
-//					}
-//				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
-//					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
-//					if (place.getToken().contains("DELETED")) {
-//						initSearch();
-//					}
-//				}
-//			}
-//		};
-//		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, placeChangeHandler);
-//		
-//		initSearch();
-//		
-//		activityManger.setDisplay(view.getDetailsPanel());
-//		
-//		// Inherit the view's key provider
-//		ProvidesKey<StandardizedPatientProxy> keyProvider = ((AbstractHasData<StandardizedPatientProxy>) table).getKeyProvider();
-//		selectionModel = new SingleSelectionModel<StandardizedPatientProxy>(keyProvider);
-//		table.setSelectionModel(selectionModel);
-//
-//		// adds a selection handler to the table so that if a valid patient is selected,
-//		// the corresponding details view is shown (via showDetails())
-//		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-//			public void onSelectionChange(SelectionChangeEvent event) {
-//				StandardizedPatientProxy selectedObject = selectionModel.getSelectedObject();
-//				if (selectedObject != null) {
-//					Log.debug(selectedObject.getName() + " selected!");
-//					showDetails(selectedObject);
-//				}
-//			}
-//		});
-//		view.setDelegate(this);
+		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				//By SPEC[Start
+				Column<StandardizedPatientProxy,String> col = (Column<StandardizedPatientProxy,String>) event.getColumn();
+				int index = table.getColumnIndex(col); 
+				String[] path =	systemStartView.getPaths();	            			
+				sortname = path[index];
+				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;				
+				//By SPEC]end
+				StandardizedPatientActivity.this.onRangeChanged();
+			}
+		});
+		
+		PlaceChangeEvent.Handler placeChangeHandler = new PlaceChangeEvent.Handler() {
+			@Override
+			public void onPlaceChange(PlaceChangeEvent event) {
+				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
+				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
+					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
+					Operation op = spdPlace.getOperation();
+					if (op == Operation.NEW) {
+						getSearchStringByEntityProxyId((EntityProxyId<StandardizedPatientProxy>)spdPlace.getProxyId());
+					}
+				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
+					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
+					if (place.getToken().contains("DELETED")) {
+						initSearch();
+					}
+				}
+			}
+		};
+		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, placeChangeHandler);
+		
+		initSearch();
+		
+		activityManger.setDisplay(view.getDetailsPanel());
+		
+		// Inherit the view's key provider
+		ProvidesKey<StandardizedPatientProxy> keyProvider = ((AbstractHasData<StandardizedPatientProxy>) table).getKeyProvider();
+		selectionModel = new SingleSelectionModel<StandardizedPatientProxy>(keyProvider);
+		table.setSelectionModel(selectionModel);
+
+		// adds a selection handler to the table so that if a valid patient is selected,
+		// the corresponding details view is shown (via showDetails())
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+			public void onSelectionChange(SelectionChangeEvent event) {
+				StandardizedPatientProxy selectedObject = selectionModel.getSelectedObject();
+				if (selectedObject != null) {
+					Log.debug(selectedObject.getName() + " selected!");
+					showDetails(selectedObject);
+				}
+			}
+		});
+		view.setDelegate(this);
 	}
 	
 	/**
