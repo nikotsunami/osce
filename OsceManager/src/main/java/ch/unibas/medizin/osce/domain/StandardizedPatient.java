@@ -1,10 +1,19 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -15,10 +24,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -29,6 +40,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
@@ -416,7 +428,7 @@ public class StandardizedPatient {
     public static List<StandardizedPatient> findPatientsByAdvancedSearchAndSort(String sortColumn, Sorting order,
             String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria,
             Integer firstResult, Integer maxResults) {
-        //you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
+    /*    //you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
         EntityManager em = entityManager();
         PatientSearch simpatSearch = new PatientSearch(false);
         simpatSearch.initSortig(sortColumn, order);
@@ -445,6 +457,14 @@ public class StandardizedPatient {
         q.setMaxResults(maxResults);
         List<StandardizedPatient> result  = q.getResultList();
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result; */
+    	
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria(sortColumn, order, searchWord, searchThrough, searchCriteria));
+		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+		typedQuery.setFirstResult(firstResult);
+		typedQuery.setMaxResults(maxResults);
+		List<StandardizedPatient> result  = typedQuery.getResultList();
+    	 
         return result;
     }
 
@@ -495,7 +515,7 @@ public class StandardizedPatient {
     public static Long countPatientsByAdvancedSearchAndSort(String searchWord,
             List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria) {
         //you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
-        EntityManager em = entityManager();
+       /* EntityManager em = entityManager();
         PatientSearch simpatSearch = new PatientSearch(true);
         //context (simple) search
         simpatSearch.initSimpleSearch(searchWord, searchThrough);
@@ -520,12 +540,20 @@ public class StandardizedPatient {
         }
         Long result  = q.getSingleResult();
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
-        return result;
+        return result; */
+    	
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("name", Sorting.ASC, searchWord, searchThrough, searchCriteria));
+		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+		List<StandardizedPatient> result  = typedQuery.getResultList();
+		Long result1  = Long.parseLong(String.valueOf(result.size()));
+        Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        
+        return result1;
     }
     
     public static Long countPatientsByAdvancedCriteria(List<AdvancedSearchCriteria> searchCriteria) {
 
-        EntityManager em = entityManager();
+     /*   EntityManager em = entityManager();
         PatientSearch simpatSearch = new PatientSearch(true);
         Iterator<AdvancedSearchCriteria> iter = searchCriteria.iterator();
         while (iter.hasNext()) {
@@ -547,12 +575,20 @@ public class StandardizedPatient {
         }
         Long result  = q.getSingleResult();
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result; */
+    	
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria));
+		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+		List<StandardizedPatient> resultList  = typedQuery.getResultList();
+       
+		Long result = Long.parseLong(String.valueOf(resultList.size()));
+        Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result;
     }
     
     public static List<StandardizedPatient> findPatientsByAdvancedCriteria(List<AdvancedSearchCriteria> searchCriteria) {
 
-        EntityManager em = entityManager();
+      /*  EntityManager em = entityManager();
         PatientSearch simpatSearch = new PatientSearch(false);
         
 
@@ -577,7 +613,268 @@ public class StandardizedPatient {
        
         List<StandardizedPatient> result  = q.getResultList();
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result; */
+    	
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria));
+		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+		
+		
+		List<StandardizedPatient> result  = typedQuery.getResultList();
+       
+        Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result;
+    }
+    
+    public static CriteriaQuery<StandardizedPatient> generatePatientsSearchCriteria(String sortColumn, Sorting order,
+            String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria)
+    {
+    	Predicate predicate = null;   	
+		
+		List<Predicate> simSearchPredicates = new ArrayList<Predicate>();
+		
+		Expression<String> field = null;
+    	
+		Join<StandardizedPatient, AnamnesisForm> join1 = null;
+		
+    	String val = "";
+    	String bindtype = "";        	
+   
+    	CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
+		CriteriaQuery<StandardizedPatient> criteriaQuery = criteriaBuilder.createQuery(StandardizedPatient.class);
+		Root<StandardizedPatient> from = criteriaQuery.from(StandardizedPatient.class);
+		CriteriaQuery<StandardizedPatient> select = criteriaQuery.select(from);
+		
+		select.distinct(true);  	
+    	
+    	if (searchWord != "" && searchThrough.size() != 0 && sortColumn != "" && order != null)
+    	{
+    		if (searchWord == "")
+        		searchWord = "*";       
+        	
+    		
+    		//Simple Search
+    		for (int i=0; i<searchThrough.size(); i++)
+    		{
+    			field = from.get(searchThrough.get(i));
+    			predicate = criteriaBuilder.disjunction();
+    			predicate = criteriaBuilder.like(field, "%" + searchWord + "%");
+    			simSearchPredicates.add(predicate);
+    		}		
+    		
+    		if (order == Sorting.ASC)
+    			select.orderBy(criteriaBuilder.asc(from.get(sortColumn)));
+    		else if (order == Sorting.DESC)
+    			select.orderBy(criteriaBuilder.desc(from.get(sortColumn)));
+    		
+    		Log.info("~~Inside IF OF SIMPLE SEARCH");
+    	}
+    	
+    		Predicate advPredicate = null;    		
+    		//Advance Search
+        	if (searchCriteria.size() > 0)
+        	{
+        		AdvancedSearchCriteria searchCr = new AdvancedSearchCriteria();
+        		
+        		searchCr = searchCriteria.get(0);
+        		
+        		bindtype = String.valueOf(searchCr.getBindType());       		   		
+        		
+        		Log.info("~~SEARCH WORD : " + searchWord);
+        		
+        		if (!searchWord.equals(""))
+        		{
+        			Predicate p = criteriaBuilder.disjunction();
+        			p = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+  			        			
+        			if (bindtype == String.valueOf(BindType.OR))
+        			{				
+        				advPredicate = criteriaBuilder.or(p);
+        			}
+        			else if (bindtype == String.valueOf(BindType.AND))
+        			{
+        				advPredicate = criteriaBuilder.and(p);
+        			}
+        			Log.info("~~INSIDE IF ");
+        		}       		
+    		        		
+        		Predicate predicate1 = null;
+        		
+    			for (int i=0; i<searchCriteria.size(); i++)
+    			{
+    				Log.info("~~Criteria Size : " + searchCriteria.size());
+    				
+    				searchCr = searchCriteria.get(i);
+    				
+    				if (searchCr.getField() == PossibleFields.NATIONALITY)
+    				{
+    					Log.info("~~INSIDE NATIONALITY");
+    					
+    					val = String.valueOf(searchCr.getObjectId());   					
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(from.get("nationality"),Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(from.get("nationality"),Integer.parseInt(val));
+    				}
+    				
+    				else if (searchCr.getField() == PossibleFields.LANGUAGE)
+    				{
+    					Log.info("~~INSIDE LANGUAGE");
+    					
+    					val = String.valueOf(searchCr.getObjectId());				
+    								
+    					Join<StandardizedPatient, LangSkill> langJoin1 = from.join("langskills", JoinType.LEFT);
+    										
+    					Predicate pre1 = criteriaBuilder.equal(langJoin1.get("spokenlanguage").get("id"), Integer.parseInt(val));				
+    					Predicate pre2 = null;
+    					
+    					Expression<LangSkillLevel> skillLevel = langJoin1.get("skill");
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						pre2 = criteriaBuilder.equal(skillLevel, LangSkillLevel.valueOf(searchCr.getValue()));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						pre2 = criteriaBuilder.notEqual(skillLevel, LangSkillLevel.valueOf(searchCr.getValue()));
+    					else if (searchCr.getComparation() == Comparison.MORE)
+    						pre2 = criteriaBuilder.greaterThan(skillLevel, LangSkillLevel.valueOf(searchCr.getValue()));
+    					else if (searchCr.getComparation() == Comparison.LESS)
+    						pre2 = criteriaBuilder.lessThan(skillLevel, LangSkillLevel.valueOf(searchCr.getValue()));
+    						
+    					predicate1 = criteriaBuilder.and(pre1,pre2);    					
+    				}
+    				else if (searchCr.getField() == PossibleFields.ANAMNESIS)
+    				{
+    					Log.info("~~INSIDE SCAR");
+    					
+    					val = String.valueOf(searchCr.getObjectId());
+    					
+    					if (join1 == null)
+    						join1 = from.join("anamnesisForm", JoinType.LEFT);
+    					
+    					Join<AnamnesisForm, AnamnesisChecksValue> join2 = join1.join("anamnesischecksvalues", JoinType.LEFT);
+    					Join<AnamnesisChecksValue, AnamnesisCheck> join3 = join2.join("anamnesischeck", JoinType.LEFT);
+    					
+    					Predicate pre1 = criteriaBuilder.equal(join3.get("id"), Integer.parseInt(val));
+    					Predicate pre2 = null;
+    					
+    					Expression<String> anamnesVal = join2.get("anamnesisChecksValue");				
+    					
+    					String value = searchCr.getValue();				
+    					
+    					if (value.length() == 1)
+    					{
+    						Boolean truthValue = Integer.parseInt(searchCr.getValue()) == 1 ? true : false;
+    						pre2 = criteriaBuilder.equal(join2.get("truth"), truthValue);
+    					}						
+    					else
+    					{
+    						pre2 = criteriaBuilder.like(anamnesVal, "%" + value + "%");
+    					}
+    					
+    					predicate1 = criteriaBuilder.and(pre1,pre2);
+    				}
+    				else if (searchCr.getField() == PossibleFields.SCAR)
+    				{
+    					Log.info("~~INSIDE SCAR");
+    					
+    					val = String.valueOf(searchCr.getObjectId());								
+    					
+    					if (join1 == null)
+    						join1 = from.join("anamnesisForm");
+    					
+    					Join<AnamnesisForm, Scar> join2 = join1.join("scars", JoinType.LEFT);
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(join2.get("id"), Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(join2.get("id"), Integer.parseInt(val));
+    				}
+    				else if (searchCr.getField() == PossibleFields.HEIGHT)
+    				{
+    					Log.info("~~INSIDE HEIGHT");
+    					val = searchCr.getValue();
+    					
+    					Expression<Integer> temp = from.get("height");
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(from.get("height"), Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(from.get("height"), Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.MORE)					
+    						predicate1 = criteriaBuilder.gt(temp, Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.LESS)
+    						predicate1 = criteriaBuilder.lt(temp, Integer.parseInt(val));    				
+    				}
+    				else if (searchCr.getField() == PossibleFields.WEIGHT)
+    				{
+    					Log.info("~~INSIDE WEIGHT");
+    					val = searchCr.getValue();
+    					Expression<Integer> temp = from.get("weight");
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(from.get("weight"), Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(from.get("weight"), Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.MORE)					
+    						predicate1 = criteriaBuilder.gt(temp, Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.LESS)
+    						predicate1 = criteriaBuilder.lt(temp, Integer.parseInt(val));					
+    				}
+    				else if (searchCr.getField() == PossibleFields.BMI)
+    				{
+    					Log.info("~~INSIDE BMI");
+    					val = searchCr.getValue();
+    					
+    					Expression<Integer> heght = from.get("height");
+    					Expression<Integer> weght = from.get("weight");
+    					
+    					Expression<Number> ex = criteriaBuilder.quot(weght, criteriaBuilder.prod((criteriaBuilder.quot(heght, 100)), (criteriaBuilder.quot(heght, 100)))); 
+    								
+    					Expression<Integer> temp = criteriaBuilder.toInteger(ex);
+    							
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(temp, Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(temp, Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.MORE)					
+    						predicate1 = criteriaBuilder.gt(temp, Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.LESS)
+    						predicate1 = criteriaBuilder.lt(temp, Integer.parseInt(val));
+    									
+    				}
+    				
+    				if (searchCr.getBindType() == BindType.AND)
+    				{
+    					if (advPredicate == null)
+    						advPredicate = criteriaBuilder.and(predicate1);
+    					else
+    						advPredicate = criteriaBuilder.and(advPredicate, predicate1);
+    				}
+    				else if (searchCr.getBindType() == BindType.OR)
+    				{
+    					if (advPredicate == null)
+    						advPredicate = criteriaBuilder.or(predicate1);
+    					else
+    						advPredicate = criteriaBuilder.or(advPredicate, predicate1);
+    				}
+    			}
+    			
+    			criteriaQuery.where(advPredicate);
+        	}
+        	else if (searchCriteria.size() == 0)
+        	{
+        		criteriaQuery.select(from);
+        	}
+        	//Advance Search
+        	else
+        	{
+        		Predicate r = criteriaBuilder.disjunction();
+    			r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+        		criteriaQuery.where(r);
+        	}
+    		
+    	
+    	return criteriaQuery;
+
     }
     
     

@@ -24,6 +24,12 @@ public interface CircuitOsceSubView extends IsWidget {
 
 		void clearAll(OsceProxy proxy);
 		// TODO define methods to be delegated!
+		
+		// Module 5 changes {
+		void osceGenratedButtonClicked();
+		
+		void fixedButtonClicked(OsceProxy proxy);
+		// Module 5 changes }
 	}
 
 	String[] getPaths();
@@ -31,5 +37,8 @@ public interface CircuitOsceSubView extends IsWidget {
 	void setDelegate(Delegate delegate);
 
 	void setPresenter(Presenter systemStartActivity);
+	
+	
+
 
 }

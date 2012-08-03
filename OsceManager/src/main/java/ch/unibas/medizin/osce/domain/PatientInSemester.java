@@ -5,14 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
-import com.allen_sauer.gwt.log.client.Log;
-
-import ch.unibas.medizin.osce.domain.Semester;
-
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.JoinTable;
@@ -21,11 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 
-import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import org.springframework.roo.addon.entity.RooEntity;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.tostring.RooToString;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.List;
+import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
@@ -51,6 +43,7 @@ public class PatientInSemester {
 	@JoinTable(name="accepted_trainings")	
 	private Set<Training> trainings = new HashSet<Training>();
 	
+	private Integer value=0; 
 	
 	public static PatientInSemester findPatientInSemesterByStandardizedPatient(StandardizedPatient patient){
 		if(patient == null)

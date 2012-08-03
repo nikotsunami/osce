@@ -8,13 +8,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.ShortBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -47,6 +47,32 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	@UiField 
 	Button generateBtn;
 
+	// Module 5 changes {
+
+	@UiField
+	Button fixedBtn;
+	
+
+	public void setFixBtnStyle(boolean enabled){
+		Log.info("Satting Fixed Button Visability To : " + enabled);
+		if(!enabled){
+			fixedBtn.setEnabled(false);
+			fixedBtn.setStyleName("flexTable-Button-Disabled");
+		}
+		else{
+			fixedBtn.setEnabled(true);
+			fixedBtn.removeStyleName("flexTable-Button-Disabled");
+		}	
+		
+	}
+	
+	@UiHandler("fixedBtn")
+	public void fixedButtonClicked(ClickEvent event){
+		Log.info("Fixed Button Clicked");
+		delegate.fixedButtonClicked(proxy);
+	}
+	// Module 5 changes }
+	
 	protected Set<String> paths = new HashSet<String>();
 	
 	private OsceProxy proxy;
@@ -145,16 +171,7 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		clearAllBtn.setText(constants.clearAll());	
 		generateBtn.setText(constants.generate());
 		
-		// Highlight onViolation
-		osceMap=new HashMap<String, Widget>();
-		osceMap.put("shortBreak", shortBreakTextBox);
-		osceMap.put("LongBreak", longBreakTextBox);
-		osceMap.put("lunchBreak", launchBreakTextBox);
-		osceMap.put("maxNumberStudents", maxStudentTextBox);
-		osceMap.put("numberCourses", maxParcourTextBox);
-		osceMap.put("numberRooms", maxRoomsTextBox);
-		// E Highlight onViolation
-		
+		fixedBtn.setText("Fixed");
 	}
 
 	public String[] getPaths() {
@@ -175,11 +192,14 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		this.presenter = presenter;
 	}
 	
+	// Module 5 changes {
 	@UiHandler("generateBtn")
 	public void generateButtonClicked(ClickEvent event)
 	{
-		//TODO
+		Log.info("Genrated Button Clicked");
+		delegate.osceGenratedButtonClicked();
 	}
+	// Module 5 changes }
 	
 	
 }

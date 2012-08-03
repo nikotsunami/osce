@@ -123,6 +123,9 @@ public class RoleAssignmentViewImpl extends Composite implements
 	@UiHandler("autoAssignmentBtn")
 	public void onAutoAssignmentBtnClicked(ClickEvent event) {
 		// TODO : Auto assignment detail logic
+		// Module 3 f {
+				delegate.autoAssignmentBtnClicked();
+				// Module 3 f }
 
 	}
 

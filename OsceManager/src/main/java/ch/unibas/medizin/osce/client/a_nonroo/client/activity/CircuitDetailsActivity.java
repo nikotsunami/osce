@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
-//import org.mortbay.log.StdErrLog;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -38,9 +35,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostSubV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubView.Delegate;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubViewImpl;
-
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -56,7 +51,6 @@ import ch.unibas.medizin.osce.client.managed.request.OsceSequenceRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
-import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -83,7 +77,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -200,7 +193,11 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 						circuitOsceSubViewImpl.setClearAllBtn(((OsceProxy)response).getOsceStatus() == OsceStatus.OSCE_GENRATED);
 						circuitOsceSubViewImpl.setDelegate(activity);
 						
+						// Module 5 changes {
 						
+						setOsceFixedButtonStyle(circuitOsceSubViewImpl,osceProxy);
+						
+						// Module 5 changes }
 
 						//Assignment E:Module 5[
 						//5C:SPEC START		
@@ -465,6 +462,15 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 			// spec End==
 	
 	}
+public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSubViewImpl, OsceProxy osceProxy){
+
+	if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED || osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
+	 circuitOsceSubViewImpl.setFixBtnStyle(true);	
+	}
+	else{
+		circuitOsceSubViewImpl.setFixBtnStyle(false);
+	}
+}
 		
 		
 	//sequence start
@@ -2193,10 +2199,79 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 						*/
 					}
 		
+	// Module 5 changes {
 				
-				
+				@Override
+				public void osceGenratedButtonClicked() {
 					
-		
+					circuitOsceSubViewImpl.setFixBtnStyle(true);
+					Log.info("Genrated Button Clicked Event at Circuit Details Activity");
+					Log.info("OSceProxy is :" + osceProxy.getId());
+					//requests.oscePostBluePrintRequestNonRoo().isBluePrintHasBreakAsLast(osceProxy.getId());
+					int totalOscePosts=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP().getWidgetCount();
+					Log.info("Total OscePost is :"+totalOscePosts);
+					OscePostViewImpl lastview=(OscePostViewImpl)oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP().getWidget(totalOscePosts-1);
+					Log.info(lastview.getPostTypeLbl().getText());
+					if(lastview.getPostTypeLbl().getText().equalsIgnoreCase(PostType.BREAK.name())){
+						Log.info("Break Is at Last In BluePrint");
+						final MessageConfirmationDialogBox messageDialog = new MessageConfirmationDialogBox("Warning");
+						messageDialog.showYesNoDialog(constants.warningBreakIsAtEnd());
+						
+						messageDialog.getYesBtn().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								Log.info("Yes Button Clicked");
+								messageDialog.showConfirmationDialog("You Can Moov Ahead");
+							}
+						});
+						
+						messageDialog.getNoBtnl().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								messageDialog.hide();
+								
+							}
+						});
+					}
+				}
+				
+				@Override
+				public void fixedButtonClicked(final OsceProxy osceProxy) {
+					Log.info("Fixed Button Clicked Event At CircuitDetails Acticity");
+					Log.info("OsceProxy is :"+ osceProxy.getId());
+					Log.info("Osce Status is :" + osceProxy.getOsceStatus());
+					
+					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
+						final MessageConfirmationDialogBox message = new MessageConfirmationDialogBox("Alert");
+						message.showYesNoDialog(constants.confirmationWhenStatusIsChangingFormClosedToFix());
+						message.getYesBtn().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								
+								Log.info("Yes Button Clicked So user wants to go Ahead remove all role of osce");
+								message.showConfirmationDialog("You Can Moov Ahead");
+								//To DO
+								//requests.osceRequestNonRoo().deleteAllPatentInRoleForOsce(osceProxy.getId());
+							}
+						});
+						
+						message.getNoBtnl().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								
+								message.hide();
+							}
+						});
+					}
+					
+				}
+				// Module 5 changes }
+
+				
 				
 				//  OSCE Day Assignment END
 				

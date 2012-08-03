@@ -75,7 +75,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -316,7 +315,9 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				while(iteratorOSceDayProxy.hasNext()){
 					
 					osceDayProxy=iteratorOSceDayProxy.next();
-					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_FIXED){
+					// Module 3 f {
+					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
+						// Module 3 f }
 					OsceDaySubViewImpl osceDaySubViewImpl = new OsceDaySubViewImpl();
                                         osceDaySubViewImpl.setOsceProxy(osceProxy);
 					osceDaySubViewImpl.setDelegate(spRoleAssignmentActivity);
@@ -1973,7 +1974,33 @@ public void initPatientInSemesterData(
 				});
 	}
 
-/* MODULE 3 : Assignment I */	
+/* MODULE 3 : Assignment I */
+	
+	// module 3 f {
+
+			@Override
+			public void autoAssignmentBtnClicked() {
+				
+				// For Loding Image
+				
+				requests.getEventBus().fireEvent(
+						new ApplicationLoadingScreenEvent(true));
+				
+				requests.osceRequestNonRoo().autoAssignPatientInsemester(semesterProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("@@Algoritham Implemented Successfully");
+				
+						requests.getEventBus().fireEvent(
+								new ApplicationLoadingScreenEvent(false));
+					}
+				});
+				
+			}
+			
+			// module 3 f }
+
 	
 	
 }
