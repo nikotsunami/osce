@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,11 +22,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.List;
-import java.util.Calendar;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -48,6 +44,8 @@ public class OsceDay {
 
 	@ManyToOne
 	private Osce osce;
+	
+	private Integer value=0;
 
 	/*
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")

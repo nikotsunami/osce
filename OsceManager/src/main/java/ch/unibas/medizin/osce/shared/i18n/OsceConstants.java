@@ -610,4 +610,10 @@ public interface OsceConstants extends Constants {
 	
 	public String examinerNotNull();
 	//Module 8]
+	
+	// Module 5 changes {
+			public String warningBreakIsAtEnd(); 
+			
+			public String confirmationWhenStatusIsChangingFormClosedToFix();
+			// Module 5 changes }
 }

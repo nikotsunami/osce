@@ -149,7 +149,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 				//Issue # 122 : Replace pull down with autocomplete.
 				//delegate.changeFilterTitleShown(filterTitle.getValue(filterTitle.getSelectedIndex()));
 				//delegate.changeFilterTitleShown(filterTitle.getTextField().advancedTextBox.getValue());
-				delegate.changeFilterTitleShown();
+				delegate.changeFilterTitleShown(filterTitle.getSelected());
 				//Issue # 122 : Replace pull down with autocomplete.
 			}
 		});

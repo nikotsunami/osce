@@ -57,6 +57,8 @@
 				<g:Button ui:field="clearAllBtn" ></g:Button>
 				<g:Label  styleName="{style.padleft25}"></g:Label>
 				<g:Button ui:field="generateBtn"></g:Button>
+				<g:Label  styleName="{style.padleft25}"></g:Label>
+				<g:Button ui:field="fixedBtn"></g:Button>
 			</g:HorizontalPanel>
 		</g:VerticalPanel>
 	</g:HTMLPanel>

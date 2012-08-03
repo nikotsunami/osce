@@ -4,10 +4,10 @@
 package ch.unibas.medizin.osce.domain;
 
 import ch.unibas.medizin.osce.domain.Osce;
-import ch.unibas.medizin.osce.domain.OsceSecurityType;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.StudyYears;

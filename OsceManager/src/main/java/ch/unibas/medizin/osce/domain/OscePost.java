@@ -1,16 +1,17 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-import javax.persistence.ManyToOne;
-import java.util.Set;
-import ch.unibas.medizin.osce.domain.OscePostRoom;
-import ch.unibas.medizin.osce.shared.RoleTypes;
 
-import java.util.HashSet;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 
 @RooJavaBean
 @RooToString
@@ -33,6 +34,8 @@ public class OscePost {
     private OsceSequence osceSequence;
 
     private Integer sequenceNumber;
+    
+    private Integer value=0;
     
     /**
      * Check whether post requires SP (based on post_type).

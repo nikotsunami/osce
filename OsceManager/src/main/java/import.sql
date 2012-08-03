@@ -194,7 +194,7 @@ INSERT INTO `specialisation` (name, version) VALUES ('Arms', 0);
 INSERT INTO `specialisation` (name, version) VALUES ('Legs', 0);
 INSERT INTO `specialisation` (name, version) VALUES ('Sewing', 0);
 
-INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('HNO', 'Ear-Nose-Throat', 2, 1, 1, 0);
+INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('HNO', 'Ear-Nose-Throat', 2, 10, 1, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Arm', 'Arm Problems', 2, 10, 2, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Knie', 'Knee Problem', 2, 0, 3, 0);
 INSERT INTO `role_topic` (name, description, study_year, slots_until_change, specialisation, version) VALUES ('Naht', 'Stiching up sth.', 2, 0, 4, 0);
@@ -213,8 +213,8 @@ INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`m
 INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (1,'2012-06-18 19:00:00','2012-06-18 09:00:00',0,1,'2012-06-18 00:00:00');
 
 INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 1, 1, 1, 0, 1, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 2, 2, 1, 0, 2, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 3, 3, 1, 0, 3, 0);
+INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 2, 2, 1, 2, 2, 0);
+INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 3, 3, 1, 2, 3, 0);
 INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 4, 4, 1, 0, 4, 0);
 
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 4, 1, 0);
@@ -279,6 +279,24 @@ INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (29, 13, 5, 8)
 INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (30, 14, 6, 8);
 INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (31, 15, 7, 8);
 INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (32, 16, 8, 8);
+
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (33, 2, 3, 1);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (34, 3, 2, 1);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (35, 6, 3, 2);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (36, 7, 2, 2);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (37, 10, 3, 3);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (38, 11, 2, 3);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (39, 14, 3, 4);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (40, 15, 2, 4);
+
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (41, 2, 7, 5);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (42, 3, 6, 5);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (43, 6, 7, 6);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (44, 7, 6, 6);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (45, 10, 7, 7);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (46, 11, 6, 7);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (47, 14, 7, 8);
+INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (48, 15, 6, 8);
 
 --INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (33, 1, 1, 9);
 --INSERT INTO `osce_post_room` (id, room, osce_post, course) VALUES (34, 2, 2, 9);

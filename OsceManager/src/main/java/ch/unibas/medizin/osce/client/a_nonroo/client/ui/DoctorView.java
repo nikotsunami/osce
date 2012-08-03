@@ -24,8 +24,8 @@ public interface DoctorView  extends IsWidget{
 		
 		void performSearch(String q);
 		//Issue # 122 : Replace pull down with autocomplete.
-		//void changeFilterTitleShown(String selectedTitle);
-		void changeFilterTitleShown();
+		void changeFilterTitleShown(ClinicProxy selectedTitle);
+		//void changeFilterTitleShown();
 		//Issue # 122 : Replace pull down with autocomplete.
 	}
 

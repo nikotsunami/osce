@@ -64,6 +64,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	ClassificationTopicRequestNonRoo classificationTopicRequestNonRoo();
 	TopicRequestNonRoo topicRequestNonRoo();
 	SkillRequestNonRoo skillRequestNonRoo();
-	
+	OscePostBluePrintRequestNonRoo oscePostBluePrintRequestNonRoo();
 	AssignmentRequestNonRoo assignmentRequestNonRoo();
 }

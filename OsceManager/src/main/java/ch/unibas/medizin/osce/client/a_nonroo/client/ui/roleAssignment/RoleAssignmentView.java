@@ -37,6 +37,11 @@ public interface RoleAssignmentView extends IsWidget {
 		
 		public void onDeleteButtonClicked(PatientInSemesterData patientInSemesterData);
 		
+		// module 3 f {
+		public void autoAssignmentBtnClicked();
+		
+		// module 3 f }
+		
 	}
 
 	void setDelegate(Delegate delegate);
