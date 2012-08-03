@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.domain.SemesterDataOnDemand;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedPatientDataOnDemand;
 import java.lang.Boolean;
+import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,6 +39,7 @@ privileged aspect PatientInSemesterDataOnDemand_Roo_DataOnDemand {
         setAccepted(obj, index);
         setSemester(obj, index);
         setStandardizedPatient(obj, index);
+        setValue(obj, index);
         return obj;
     }
     
@@ -54,6 +56,11 @@ privileged aspect PatientInSemesterDataOnDemand_Roo_DataOnDemand {
     public void PatientInSemesterDataOnDemand.setStandardizedPatient(PatientInSemester obj, int index) {
         StandardizedPatient standardizedPatient = standardizedPatientDataOnDemand.getRandomStandardizedPatient();
         obj.setStandardizedPatient(standardizedPatient);
+    }
+    
+    public void PatientInSemesterDataOnDemand.setValue(PatientInSemester obj, int index) {
+        Integer value = 0;
+        obj.setValue(value);
     }
     
     public PatientInSemester PatientInSemesterDataOnDemand.getSpecificPatientInSemester(int index) {

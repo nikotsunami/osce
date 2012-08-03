@@ -154,6 +154,50 @@ public class Osce {
         return numberManualBreakPosts;
     }
     
+    /**
+     * Get number of student-slots that are covered by one SimPat-slot
+     * @return number of student-slots covered by one SimPat-slot
+     */
+    public int simpatAssignmentSlots() {
+        List<Assignment> assignments = Assignment.retrieveAssignmentsOfTypeSP(this);
+        if (assignments.get(0) != null) {
+            Assignment assignment = assignments.get(0);
+            long secs = (assignment.getTimeEnd().getTime() - assignment.getTimeStart().getTime()) / 1000;
+            int assignmentMinutes = (int) (secs / 60);
+            int assignmentSlots = assignmentMinutes / (this.getPostLength() + 1);
+            return assignmentSlots;
+        }
+        return 0;
+    }
+    
+    /**
+     * Get all role topics used in this OSCE
+     * @return set containing role topics
+     */
+    public Set<RoleTopic> usedRoleTopics() {
+        Set<RoleTopic> roles = new HashSet<RoleTopic>();
+        Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
+        while (it.hasNext()) {
+        	OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
+            roles.add(oscePostBlueprint.getRoleTopic());
+        }
+        return roles;
+    }
+
+    /**
+     * Get all roles used in this OSCE
+     * @return set containing roles
+     */
+    public Set<StandardizedRole> usedRoles() {
+        Set<StandardizedRole> roles = new HashSet<StandardizedRole>();
+        Iterator<RoleTopic> it = usedRoleTopics().iterator();
+        while (it.hasNext()) {
+            RoleTopic roleTopic = (RoleTopic) it.next();
+            roles.addAll(roleTopic.getStandardizedRoles());
+        }
+        return roles;
+    }
+    
     public static Boolean generateOsceScaffold(Long osceId) {
     	TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
 		
