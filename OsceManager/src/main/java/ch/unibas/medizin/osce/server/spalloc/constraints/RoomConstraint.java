@@ -21,9 +21,8 @@ public class RoomConstraint extends GlobalConstraint<VarAssignment, ValPatient> 
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
 		for (VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
-//            if (a.getOscePostRoom().equals(patient.variable().getOsceAssignment().getOscePostRoom()) && 
-//            		a.getSlotNumber() == patient.variable().getOsceAssignment().getSlotNumber())
-//                continue;
+			
+			// do not compare the current assignment with itself!
 			if(a.equals(patient.variable().getOsceAssignment()))
 				continue;
             
@@ -42,8 +41,10 @@ public class RoomConstraint extends GlobalConstraint<VarAssignment, ValPatient> 
 		Assignment a1 = p1.variable().getOsceAssignment();
 		Assignment a2 = p2.variable().getOsceAssignment();
 		
-		if(a1.getSequenceNumber() == a2.getSequenceNumber() && !a1.getOscePostRoom().equals(a2.getOscePostRoom()) 
-				&& p1.getPatient().equals(p2.getPatient())) {
+		// check if time ranges overlap or start at the same time (then they would also end at the same time)
+		if(p1.getPatient().equals(p2.getPatient()) &&
+				!a1.getOscePostRoom().equals(a2.getOscePostRoom()) &&
+				(a1.getTimeStart().before(a2.getTimeEnd()) && a2.getTimeStart().before(a1.getTimeEnd()) || a1.getTimeStart().equals(a2.getTimeStart()))) {
 			return false;
 		}
 

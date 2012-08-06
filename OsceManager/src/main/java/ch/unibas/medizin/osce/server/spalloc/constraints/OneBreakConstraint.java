@@ -18,16 +18,20 @@ public class OneBreakConstraint extends GlobalConstraint<VarAssignment, ValPatie
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
+		VarAssignment varAssignment = patient.variable();
+		Assignment assignment = patient.variable().getOsceAssignment();
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
 			
-			if(a.equals(patient.variable().getOsceAssignment())/* || (a.getSlotNumber() + 1 != assignment.getSlotNumber() &&
-					a.getSlotNumber() - 1 != assignment.getSlotNumber())*/)
+			// skip check of assignment with itself and assignments that are further away than +/- 1
+			if(assignment.equals(a) ||
+					(varAssignment.getNextAssignment() != assignment &&
+					varAssignment.getPrevAssignment() != assignment))
 				continue;
 			
 			ValPatient p = va.getAssignment();
-			if(p.hasAssignments() && p.hasTwoConcurrentBreaks()) {
+			if(p.hasAssignments() && assignment.getOscePostRoom().equals(null) && a.getOscePostRoom().equals(null)) {
 				conflicts.add(p);
 			}
 		}

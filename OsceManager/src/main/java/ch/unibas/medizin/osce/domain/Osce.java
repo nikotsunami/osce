@@ -177,20 +177,6 @@ public class Osce {
         }
         return 0;
     }
-    
-    /**
-     * Get all role topics used in this OSCE
-     * @return set containing role topics
-     */
-    public Set<RoleTopic> usedRoleTopics() {
-        Set<RoleTopic> roles = new HashSet<RoleTopic>();
-        Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
-        while (it.hasNext()) {
-        	OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
-            roles.add(oscePostBlueprint.getRoleTopic());
-        }
-        return roles;
-    }
 
     /**
      * Get all roles used in this OSCE
@@ -198,10 +184,15 @@ public class Osce {
      */
     public Set<StandardizedRole> usedRoles() {
         Set<StandardizedRole> roles = new HashSet<StandardizedRole>();
-        Iterator<RoleTopic> it = usedRoleTopics().iterator();
+        
+        Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
         while (it.hasNext()) {
-            RoleTopic roleTopic = (RoleTopic) it.next();
-            roles.addAll(roleTopic.getStandardizedRoles());
+        	OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
+            Iterator<OscePost> itPost = oscePostBlueprint.getOscePosts().iterator();
+            while (itPost.hasNext()) {
+				OscePost oscePost = (OscePost) itPost.next();
+				roles.add(oscePost.getStandardizedRole());
+			}
         }
         return roles;
     }

@@ -213,8 +213,8 @@ INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`m
 INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (1,'2012-06-18 19:00:00','2012-06-18 09:00:00',0,1,'2012-06-18 00:00:00');
 
 INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 1, 1, 1, 0, 1, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (1, 2, 2, 1, 2, 2, 0);
-INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 3, 3, 1, 2, 3, 0);
+INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 2, 2, 1, 0, 2, 0);
+INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 3, 3, 1, 0, 3, 0);
 INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, osce, post_type, specialisation, version) VALUES (0, 4, 4, 1, 0, 4, 0);
 
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 4, 1, 0);

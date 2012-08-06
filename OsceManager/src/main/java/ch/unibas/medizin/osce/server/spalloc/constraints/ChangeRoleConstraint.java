@@ -21,21 +21,24 @@ public class ChangeRoleConstraint extends GlobalConstraint<VarAssignment, ValPat
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
+		VarAssignment varAssignment = patient.variable();
 		Assignment assignment = patient.variable().getOsceAssignment();
 		OsceModel model = (OsceModel) patient.variable().getModel();
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
 			
-			if(assignment.equals(a) || (a.getSequenceNumber() + 1 != assignment.getSequenceNumber() &&
-					a.getSequenceNumber() - 1 != assignment.getSequenceNumber()))
+			// skip check of assignment with itself and assignments that are further away than +/- 1
+			if(assignment.equals(a) ||
+					(varAssignment.getNextAssignment() != assignment &&
+					varAssignment.getPrevAssignment() != assignment))
 				continue;
 			
 			ValPatient p = va.getAssignment();
 			RoleTopic roleTopic = a.getOscePostRoom().getOscePost().getStandardizedRole().getRoleTopic();
-			if(roleTopic.getSlotsUntilChange() > 0 && 
-					2 * model.getNrSimPatAssignmentSlots() > roleTopic.getSlotsUntilChange() &&
-					p.getPatient().equals(patient.getPatient())) {
+			if(p.getPatient().equals(patient.getPatient()) &&
+					roleTopic.getSlotsUntilChange() > 0 && 
+					2 * model.getNrSimPatAssignmentSlots() > roleTopic.getSlotsUntilChange()) {
 				conflicts.add(p);
 			}
 		}

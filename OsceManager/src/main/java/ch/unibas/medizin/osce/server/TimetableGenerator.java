@@ -1012,7 +1012,31 @@ public class TimetableGenerator {
 //		printAllStudents(assignments);
 //		printAllSP(assignments);
 		
+		createSPBreakAssignments();
+		
 		return assignments;
+	}
+	
+	/**
+	 * Generate break slots for SP (time-slots with same times as
+	 * "normal" posts but with osce_post_room = null). SP that are
+	 * not allocated to any post at a given time are allocated to this
+	 * assignment.
+	 */
+	private void createSPBreakAssignments() {
+		List<Assignment> refAssignments = Assignment.retrieveAssignmentsOfTypeSPUniqueTimes(osce);
+		Iterator<Assignment> it = refAssignments.iterator();
+		while (it.hasNext()) {
+			Assignment assignment = (Assignment) it.next();
+			
+			Assignment ass = new Assignment();
+			ass.setType(AssignmentTypes.PATIENT);
+			ass.setOscePostRoom(null);
+			ass.setOsceDay(assignment.getOsceDay());
+			ass.setTimeStart(assignment.getTimeStart());
+			ass.setTimeEnd(assignment.getTimeEnd());
+			ass.persist();
+		}
 	}
 
 	/**

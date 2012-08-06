@@ -13,7 +13,6 @@ import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
-import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import net.sf.cpsolver.ifs.model.Model;
 import net.sf.cpsolver.ifs.util.ToolBox;
 
@@ -81,7 +80,7 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 * Load assignments for this OSCE
 	 */
 	public void loadAssignments() {
-		this.assignments = Assignment.retrieveAssignments(osce);
+		this.assignments = Assignment.retrieveAssignmentsOfTypeSP(osce);
 	}
 	
 	/**
@@ -103,6 +102,7 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 		// get all roles used in this osce
 		Set<StandardizedRole> roles = osce.usedRoles();
 		
+		// TODO: reconsider this fragment below - why is there no link from PatientInRole to StandardizedRole anymore?
 		Iterator<PatientInRole> it = PatientInRole.findAllPatientInRoles().iterator();
 		while (it.hasNext()) {
 			PatientInRole patientInRole = (PatientInRole) it.next();
@@ -248,6 +248,7 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 		return numberSlotsMax;
 	}
 	
+	// TODO: reconsider calculation of the penalty-value (soft constraints)
 	@Override
 	public double getTotalValue() {
 		
@@ -276,34 +277,11 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	public void generateModel() {
 		Iterator<Assignment> it = assignments.iterator();
 		while(it.hasNext()) {
-			Assignment thisAssignment = it.next();
-			
-			// get next assignment if existing
-			Assignment prevAssignment = null;
-			if(thisAssignment.getSequenceNumber() > 1) {
-				prevAssignment = Assignment.findAssignmentsByOscePostRoomAndOsceDayAndTypeAndSequenceNumber(
-						thisAssignment.getOscePostRoom(), thisAssignment.getOsceDay(), AssignmentTypes.PATIENT,
-						thisAssignment.getSequenceNumber() - 1).getSingleResult();
-				//prevAssignment = getPrevAssignmentDebug(assignments, thisAssignment);
-				
-//				System.out.print(prevAssignment.getSlotNumber());
-			}
-			
-			// get previous assignment if existing
-			Assignment nextAssignment = null;
-			if(thisAssignment.getSequenceNumber() < getNumberSlots()) {
-				nextAssignment = Assignment.findAssignmentsByOscePostRoomAndOsceDayAndTypeAndSequenceNumber(
-						thisAssignment.getOscePostRoom(), thisAssignment.getOsceDay(), AssignmentTypes.PATIENT,
-						thisAssignment.getSequenceNumber() + 1).getSingleResult();
-				//nextAssignment = getNextAssignmentDebug(assignments, thisAssignment);
-			}
-			
-//			System.out.println();
-			
+			Assignment thisAssignment = it.next();			
 			VarAssignment assignment = new VarAssignment(thisAssignment);
 			List<ValPatient> values = generateValues(assignment);
-			assignment.setPrevAssignment(prevAssignment);
-			assignment.setNextAssignment(nextAssignment);
+			assignment.setPrevAssignment(thisAssignment.retrieveAssignmentNeighbourOfTypeSP(-1));
+			assignment.setNextAssignment(thisAssignment.retrieveAssignmentNeighbourOfTypeSP(+1));
 			assignment.setValues(values);
 			assignment.setInitialAssignment(ToolBox.random(values));
 			addVariable(assignment);

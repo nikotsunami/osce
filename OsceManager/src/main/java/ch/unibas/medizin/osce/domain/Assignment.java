@@ -4,6 +4,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
+import ch.unibas.medizin.osce.shared.PostType;
+
 import javax.persistence.Enumerated;
 import java.util.Date;
 import java.util.List;
@@ -80,6 +82,33 @@ public class Assignment {
         Log.info("retrieveAssignmenstOfTypeSP query String :" + queryString);
         Log.info("Assignment List Size :" + assignmentList.size());
         return assignmentList;
+    }
+    
+    public static List<Assignment> retrieveAssignmentsOfTypeSPUniqueTimes(Osce osce) {
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce AND o.type = :type AND o.oscePostRoom.oscePost.oscePostBlueprint.postType = :postType GROUP BY o.timeStart ORDER BY o.timeStart";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osce", osce);
+        q.setParameter("postType", PostType.NORMAL);
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        List<Assignment> assignmentList = q.getResultList();
+        return assignmentList;
+    }
+    
+    public Assignment retrieveAssignmentNeighbourOfTypeSP(int neighbour) {
+        EntityManager em = Assignment.entityManager();
+        String sortOrder = (neighbour == -1 ? "DESC" : "ASC");
+        TypedQuery<Assignment> q = em.createQuery("SELECT o FROM Assignment AS o WHERE o.oscePostRoom = :oscePostRoom AND o.osceDay = :osceDay AND o.type = :type ORDER BY o.timeStart " + sortOrder, Assignment.class);
+        q.setParameter("oscePostRoom", this.getOscePostRoom());
+        q.setParameter("osceDay", this.getOsceDay());
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        q.setMaxResults(1);
+        
+        if(q.getResultList().size() == 1) {
+        	return q.getSingleResult();
+        }
+        
+        return null;
     }
 
     public static List<Assignment> retrieveAssignments(Long osceDayId, Long osceSequenceId, Long courseId, Long oscePostId) {
