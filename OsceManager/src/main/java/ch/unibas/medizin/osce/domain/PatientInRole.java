@@ -28,6 +28,7 @@ public class PatientInRole {
 	Boolean fit_criteria;
 	Boolean is_backup;
 	
+	Boolean stayInPost;
 	
 	private static List<PatientInRole> getPatientIRoleList(Long osceId) {
 
