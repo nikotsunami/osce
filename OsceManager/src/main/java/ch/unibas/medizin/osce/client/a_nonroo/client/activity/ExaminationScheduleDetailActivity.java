@@ -53,6 +53,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -331,8 +332,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							studentView.setAssignmentProxy(assignmentProxy);
 							studentView.setDelegate(activity);
 							
+							NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber());
+							
+							
 							if(assignmentProxy.getSequenceNumber() !=null)
-								studentView.getStudentLbl().setText("S"+assignmentProxy.getSequenceNumber().toString());
+								studentView.getStudentLbl().setText("S"+NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber()));
 							
 							
 							if(j==response.size()-1 && oscePostProxy.getId()==1)
@@ -532,7 +536,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									if(assignmentProxy.getSequenceNumber() != null)
 									{
 										
-										examinationView.getExaminerLbl().setText("E"+assignmentProxy.getSequenceNumber().toString());
+										examinationView.getExaminerLbl().setText("E"+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
 									}
 									
 									oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
@@ -643,7 +647,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									spView.getSpPanel().setWidth("45px");
 									if(assignmentProxy.getSequenceNumber() != null)
 									{
-										spView.getSpLbl().setText("SP"+assignmentProxy.getSequenceNumber().toString());
+										spView.getSpLbl().setText("SP"+NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber()));
 										
 									}
 									
@@ -663,7 +667,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									spView.getSpPanel().setWidth("45px");
 									if(assignmentProxy.getSequenceNumber() != null)
 									{
-										spView.getSpLbl().setText("SP"+assignmentProxy.getSequenceNumber().toString());
+										spView.getSpLbl().setText("SP"+NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber()));
 										
 									}
 									
@@ -683,7 +687,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								spView.getSpPanel().setHeight(spSlotLength+"px");
 								if(assignmentProxy.getSequenceNumber() != null)
 								{
-									spView.getSpLbl().setText("SP"+assignmentProxy.getSequenceNumber().toString());
+									spView.getSpLbl().setText("SP"+NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber()));
 									
 								}
 								
