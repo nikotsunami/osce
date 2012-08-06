@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class SPViewImpl extends Composite implements SPView{
@@ -97,7 +96,7 @@ public class SPViewImpl extends Composite implements SPView{
 			RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-130);
+			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				

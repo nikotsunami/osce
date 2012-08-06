@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -58,7 +56,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -273,7 +270,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
 			
 			//create Student Slots
-			if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK)
+			//if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK)
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 			.with("student","oscePostRoom").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
@@ -281,9 +278,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				public void onSuccess(List<AssignmentProxy> response) {
 					requests.getEventBus().fireEvent(
 							new ApplicationLoadingScreenEvent(true));
+					Log.info("onSuccess retrieveContent : response size type Student :" + response.size());
 					Log.info("onSuccess retrieveContent : response size :" + response.size());
-					
-					final List<AssignmentProxy> studentAssignmentProxy=response;
+					if(response.size()==0)
+					{
+						requests.getEventBus().fireEvent(
+								new ApplicationLoadingScreenEvent(false));
+						return;
+					}
+						final List<AssignmentProxy> studentAssignmentProxy=response;
 					//create Empty examiner slot
 					
 					//calculate Examination duration
@@ -594,7 +597,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				}
 			});
 			
-			//create SP Slots
+			if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK)
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeSP(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 			.with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 

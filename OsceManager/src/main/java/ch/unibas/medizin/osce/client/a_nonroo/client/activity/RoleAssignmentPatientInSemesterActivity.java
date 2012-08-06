@@ -416,7 +416,7 @@ public void discloserPanelOpened(final OsceDayProxy osceDayProxy,final OsceDaySu
 		Log.info("Cookie Created for :" + osceDayProxy.getId());
 		
 	}
-		refreshData(osceDayProxy);
+		//refreshData(osceDayProxy);
 	
 		
 		
@@ -1018,9 +1018,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	
 }
 
-public void refreshData(OsceDayProxy osceDayProxy){
-	//Do Data Refreshing Task
-}
+
 
 
 // Module 3 }
@@ -1990,7 +1988,14 @@ public void initPatientInSemesterData(
 
 					@Override
 					public void onSuccess(Void response) {
-						Log.info("@@Algoritham Implemented Successfully");
+						Log.info("@@Algoritham Implemented Successfully Patient Assign In Role Automatically");
+						Iterator<OsceDaySubViewImpl> osceDaySubViewImplIterator =osceDaySubViewImplList.iterator();
+						OsceDaySubViewImpl osceDaySubViewImpl;
+						while(osceDaySubViewImplIterator.hasNext()){
+							osceDaySubViewImpl=osceDaySubViewImplIterator.next();
+							refreshOsceSequences(osceDaySubViewImpl.getOsceDayProxy(),osceDaySubViewImpl );
+						}
+						
 				
 						requests.getEventBus().fireEvent(
 								new ApplicationLoadingScreenEvent(false));

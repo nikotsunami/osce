@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StudentViewImpl extends Composite implements StudentView{
@@ -100,7 +99,7 @@ public class StudentViewImpl extends Composite implements StudentView{
 			RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-130);
+			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -117,6 +116,7 @@ public class StudentViewImpl extends Composite implements StudentView{
 			//setDAta
 			popupView.getNameValue().setText(assignmentProxy.getStudent().getName());
 			popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
+			Log.info("student end time " + assignmentProxy.getTimeEnd());
 			popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
 			
 		}

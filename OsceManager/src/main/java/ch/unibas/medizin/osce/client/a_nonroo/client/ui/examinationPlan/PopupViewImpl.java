@@ -3,11 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 import java.io.IOException;
 import java.util.Date;
 
-
-
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
-import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -20,7 +16,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -176,10 +171,11 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeLbl.setVisible(true);
 		endTimeValue.setVisible(true);
 		endTimeLbl.setText(constants.endtime());
-		endTimeValue.removeFromParent();
+		//endTimeValue.removeFromParent();
+		endTimeListBox.removeFromParent();
 		
 		okButton.setVisible(true);
-		okButton.setText(constants.okBtn());
+		okButton.setText(constants.close());
 		cancelButton.setVisible(false);
 		saveBtn.removeFromParent();
 	}
