@@ -1004,6 +1004,7 @@ public void deleteBackupRoles(RoleSubView view,PatientInRoleProxy patientInRoleP
 		Log.info("patientInRoleProxy Id  backup :" +((PatientInRoleSubView)backupRoleView.getPatientInRoleVP().getWidget(count)).getPatientInRoleProxy().getId());
 		if((long)((PatientInRoleSubView)backupRoleView.getPatientInRoleVP().getWidget(count)).getPatientInRoleProxy().getId()==(long)patientInRoleProxy.getId()){
 			((PatientInRoleSubViewImpl)backupRoleView.getPatientInRoleVP().getWidget(count)).removeFromParent();
+			break;
 		}
 	}
 }
