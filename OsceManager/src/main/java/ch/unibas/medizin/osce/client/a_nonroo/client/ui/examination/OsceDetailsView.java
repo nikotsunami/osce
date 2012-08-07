@@ -1,11 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
-import java.util.Date;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -24,7 +22,6 @@ public interface OsceDetailsView extends IsWidget{
 	 */
 	interface Delegate {
 		void osceEditClicked();
-		void osceGenerateClicked();
 		
 		void osceDeleteClicked();
 		void deleteClicked(TaskProxy task);

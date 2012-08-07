@@ -12,20 +12,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceTaskPopView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicRequest;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
-import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
-import ch.unibas.medizin.osce.domain.Osce;
-import ch.unibas.medizin.osce.server.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -171,15 +161,6 @@ public void init()
 				Operation.EDIT));
 
 	}
-
-	@Override
-	public void osceGenerateClicked() {
-//		Log.info("generate clicked");
-		
-//		requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire();
-		requests.osceRequestNonRoo().generateAssignments(osceProxy.getId()).fire();
-	}	
-	
 	
 	@Override
 	public void osceDeleteClicked() {
