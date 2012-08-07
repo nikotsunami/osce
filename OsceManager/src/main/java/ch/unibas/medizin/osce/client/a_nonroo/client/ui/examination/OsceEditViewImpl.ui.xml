@@ -4,7 +4,12 @@
 	 xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
 	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
-	<ui:style src="../../styles.css" />
+	<ui:style src="../../styles.css" >
+	.leftpadding10{
+	padding-left: 50px;
+
+	}
+	</ui:style>
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
 	<g:HTMLPanel styleName="{style.patientControls}">
 	
@@ -26,9 +31,9 @@
 			<h3 class='{style.header}' ui:field="editTitle">
 				<ui:msg>Edit OSCE</ui:msg>
 			</h3>
-			<h3 class='{style.header}' ui:field='createTitle'>
+			<!-- h3 class='{style.header}' ui:field='createTitle'>
 				<ui:msg>New OSCE</ui:msg>
-			</h3>
+			</h3 -->
 		</div>
 		<div ui:field='errors' class='{style.errors}'></div>
 		<br></br>
@@ -37,7 +42,7 @@
 
 			<tr >
 				<td id="name">
-					<div class="{style.label}">OSCE:</div>
+					<div class="{style.label}">OSCE :</div>
 				</td>
 				
 				<td>
@@ -45,7 +50,7 @@
 				</td>
 				
 				<td id="shortBreak">
-					<div class="{style.label}">Short Break:</div>
+					<div class="{style.label} {style.leftpadding10}"> Short Break :</div>
 				</td>
 				
 				<td>
@@ -55,7 +60,7 @@
 			
 			<tr >
 				<td id="numberCourses">
-					<div class="{style.label}">max. Parcour:</div>
+					<div class="{style.label}">max. Parcour :</div>
 				</td>
 				
 				<td>
@@ -63,7 +68,7 @@
 				</td>
 				
 				<td id="LongBreak">
-					<div class="{style.label}">Long Break:</div>
+					<div class="{style.label} {style.leftpadding10}">Long Break :</div>
 				</td>
 				
 				<td>
@@ -74,7 +79,7 @@
 			
 			<tr >
 				<td id="maxNumberStudents">
-					<div class="{style.label}">Max Number Students:</div>
+					<div class="{style.label}">Max Students :</div>
 				</td>
 				
 				<td>
@@ -82,7 +87,7 @@
 				</td>
 				
 				<td id="lunchBreak">
-					<div class="{style.label}">Lunch Break:</div>
+					<div class="{style.label} {style.leftpadding10}">Lunch Break :</div>
 				</td>
 				
 				<td>
@@ -91,7 +96,7 @@
 			</tr>
 			<tr >
 				<td id="studyYear">
-					<div class="{style.label}">Study Year:</div>
+					<div class="{style.label}">Study Year :</div>
 				</td>
 				
 				<td>
@@ -101,7 +106,7 @@
 				</td>
 				
 				<td id="postLength">
-					<div class="{style.label}">Post Length:</div>
+					<div class="{style.label} {style.leftpadding10}">Post Length :</div>
 				</td>
 				
 				<td>
@@ -110,14 +115,34 @@
 			</tr>
 			
 			<tr >
-			<td  id="isRepeOsce">
-					<div class="{style.label}">Is Repe Osce:</div>
+							
+				<td id="maxNoRoom">
+					<div class="{style.label}">Maximum Rooms :</div>
+				</td>
+				 
+				<td>
+					<g:IntegerBox ui:field="numberRooms"></g:IntegerBox>
+			</td>
+			
+			<td id="shortBreak">
+					<div class="{style.label} {style.leftpadding10}">Middle Break :</div>
+				</td>
+				 
+				<td>
+			<r:ShortBox ui:field="middleBreak" /> 
+			</td>
+			</tr>
+			
+			<tr >
+			
+			 <td  id="isRepeOsce">
+					<div class="{style.label}">Is Repe Osce :</div>
 				</td>
 				<td>
 					<g:CheckBox ui:field="isRepeOsce" /> 
 				</td>
-			
-			<td><div class="{style.label}">OSCE for Task:</div></td>
+				
+			<td><div class="{style.label} {style.leftpadding10}">OSCE for Task :</div></td>
 			<td>
 				
 				  	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
@@ -126,28 +151,19 @@
 				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
 			</td>
 			</tr>
-			
-			<tr >
-			<td  id="osceRepe">
+			<tr>
+				<td  id="osceRepe">
 					<div class="{style.label}">OSCE Repe </div>
 				</td>
 				<td>
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
-					<!--  <g:ValueListBox ui:field="copiedOsce" /> -->
+					 <!-- <g:ValueListBox ui:field="copiedOsce" /> -->
 				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
 				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					
 				</td>
 			
-			<td id="shortBreak">
-					<div class="{style.label}">Middle Break:</div>
-				</td>
-				 
-				<td>
-					<r:ShortBox ui:field="middleBreak" />
-			</td>
 			</tr>
-			
 			
 		<!--	<tr>
 				

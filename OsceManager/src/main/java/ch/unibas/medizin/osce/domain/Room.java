@@ -3,6 +3,9 @@ package ch.unibas.medizin.osce.domain;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.allen_sauer.gwt.log.client.Log;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -49,5 +52,14 @@ public class Room {
         q.setMaxResults(maxResults);
         
         return q.getResultList();
+    }
+    
+    public static Integer countTotalRooms(){
+    	Log.info("Finding countTotalRooms() ");
+    	EntityManager em = entityManager();
+    	String query="select count(o) from Room o";
+    	TypedQuery<Long> q = em.createQuery(query, Long.class);
+    	Integer result=q.getSingleResult()!=null && q.getSingleResult() != 0 ?(Integer)q.getSingleResult().intValue(): 0;
+    	return result;
     }
 }

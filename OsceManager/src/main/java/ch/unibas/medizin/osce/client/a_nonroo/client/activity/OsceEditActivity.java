@@ -16,7 +16,6 @@ import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
-
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -120,6 +119,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			}
 		});*/
 
+		
 		requests.osceRequest().findAllOsces().with("tasks").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			public void onSuccess(List<OsceProxy> response) {
@@ -178,6 +178,19 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 		widget.setWidget(view.asWidget());
 		// setTable(view.getTable());
 
+		// change {
+		
+		requests.roomRequestNonRoo().countTotalRooms().fire(new Receiver<Integer>() {
+
+			@Override
+			public void onSuccess(Integer response) {
+				Log.info("Response Of countTotalRooms()  :" + response);
+				((OsceEditViewImpl)view).numberRooms.setValue(response);
+			}
+		});
+		
+		
+		// change }
 	}
 
 	private void init() {
@@ -287,6 +300,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
 			//osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getValue());
 			osceProxy.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
+			osceProxy.setNumberRooms(((OsceEditViewImpl)view).numberRooms.getValue());
 			osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);
 			//Set<TaskProxy> setTaskProxy = new HashSet<TaskProxy>();
 			//setTaskProxy=((OsceEditViewImpl)view).osceValue.getValue().getTasks();
