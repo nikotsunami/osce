@@ -28,6 +28,7 @@ import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 //import com.google.gwt.requestfactory.shared..OSCEReceiver;
+import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.Window;
