@@ -59,18 +59,6 @@ public class Assignment {
 
     private Integer sequenceNumber;
 
-    public static List<Assignment> retrieveAssignments(Osce osce) {
-        Log.info("retrieveAssignmenstOfTypeSP :");
-        EntityManager em = entityManager();
-        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce";
-        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
-        q.setParameter("osce", osce);
-        List<Assignment> assignmentList = q.getResultList();
-        Log.info("retrieveAssignmenstOfTypeSP query String :" + queryString);
-        Log.info("Assignment List Size :" + assignmentList.size());
-        return assignmentList;
-    }
-
     public static List<Assignment> retrieveAssignmentsOfTypeSP(Osce osce) {
         Log.info("retrieveAssignmenstOfTypeSP :");
         EntityManager em = entityManager();
@@ -81,6 +69,17 @@ public class Assignment {
         List<Assignment> assignmentList = q.getResultList();
         Log.info("retrieveAssignmenstOfTypeSP query String :" + queryString);
         Log.info("Assignment List Size :" + assignmentList.size());
+        return assignmentList;
+    }
+    
+    public static List<Assignment> retrieveAssignmentsOfTypeStudent(Long osceId) {
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce.id = :osceId AND o.type = :type";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osceId", osceId);
+        q.setParameter("type", AssignmentTypes.STUDENT);
+        List<Assignment> assignmentList = q.getResultList();
+        Log.info("retrieveAssignmentsOfTypeStudent query String :" + queryString);
         return assignmentList;
     }
     

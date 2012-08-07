@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.domain.Assignment;
 
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.requestfactory.server.ServiceLayer;
@@ -24,13 +22,13 @@ import com.google.gwt.requestfactory.server.SimpleRequestProcessor;
 import com.google.gwt.requestfactory.server.testing.InProcessRequestTransport;
 import com.google.gwt.requestfactory.server.testing.RequestFactoryMagic;
 import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.vm.RequestFactorySource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ContextConfiguration(locations = { "/META-INF/spring/applicationContext.xml"})
 
 public class TimetableGeneratorTest extends TestCase {
+	@SuppressWarnings("deprecation")
 	OsMaRequestFactory requestFactory = RequestFactoryMagic.create(OsMaRequestFactory.class);
 
 	SimpleEventBus eventBus = new SimpleEventBus();
@@ -48,89 +46,43 @@ public class TimetableGeneratorTest extends TestCase {
 
 			@Override
 			public void onSuccess(Boolean response) {
-				// TODO Auto-generated method stub
 				requestFactory.osceRequestNonRoo().generateAssignments(1l).fire();
 			}
 			
 		});
+		requestFactory.osceRequest().findOsce(osceId).fire(new Receiver<OsceProxy>() {
+
+			@Override
+			public void onSuccess(OsceProxy response) {
+				osce = response;
+			}
+		});
 		System.out.println("setup end");
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void testCalculation() {
-		try{
-			System.out.println("request : " + requestFactory.osceRequest());
-			requestFactory.osceRequest().findOsce(osceId).fire(new Receiver<OsceProxy>() {
+	public void testStudentSlotLength() {
+		requestFactory.assignmentRequestNonRoo().retrieveAssignmentsOfTypeStudent(osceId).fire(new Receiver<List<AssignmentProxy>>() {
 
-				@Override
-				public void onSuccess(OsceProxy response) {
-					System.out.println("found : " + response.getName());
-					osce = response;
-					assertEquals(osceId, osce.getId().longValue());
-					System.out.println("end");
+			@Override
+			public void onSuccess(List<AssignmentProxy> response) {
+				Iterator<AssignmentProxy> it = response.iterator();
+				while (it.hasNext()) {
+					AssignmentProxy ass = (AssignmentProxy) it.next();
 					
+					assertNotNull(ass);
+					assertNotNull(ass.getTimeEnd());
+					assertNotNull(ass.getTimeStart());
+
+					int slotLength = (int) (ass.getTimeEnd().getTime() - ass.getTimeStart().getTime()) / (1000 * 60);
 					
-					List<OsceDayProxy> osceDays = osce.getOsce_days();
+					assertNotNull(osce);
+					assertNotNull(osce.getPostLength());
 
-					Iterator<OsceDayProxy> it = osceDays.iterator();
-					OsceDayProxy prevDay = null;
-					while (it.hasNext()) {
-						OsceDayProxy osceDay = (OsceDayProxy) it.next();
-
-						if(prevDay != null && osceDay != null) {
-							// compare dates
-						}
-
-						prevDay = osceDay;
-					}
-
-					OsceDayProxy osceDay = osceDays.get(0);
-					assertNotNull(osceDay);
-					assertEquals(2, osceDay.getOsceSequences().size());
+					assertEquals(slotLength, osce.getPostLength().intValue());
 				}
-
-			});
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+			}
+		});
 	}
-	
-//	@SuppressWarnings("deprecation")
-//	@Test
-//	public void testEndTimes() {
-//		requestFactory.osceRequest().findOsce(osceId).fire(new Receiver<OsceProxy>() {
-//
-//			@Override
-//			public void onSuccess(OsceProxy response) {
-//				System.out.println("found : " + response.getName());
-//				osce = response;
-//				assertEquals(osceId, osce.getId().longValue());
-//				System.out.println("end");
-//				
-//				
-//				List<OsceDayProxy> osceDays = osce.getOsce_days();
-//
-//				Iterator<OsceDayProxy> it = osceDays.iterator();
-//				while (it.hasNext()) {
-//					OsceDayProxy osceDay = (OsceDayProxy) it.next();
-//
-//					if(osceDay != null) {
-//						requestFactory.assignmentRequestNonRoo().findLastAssignmentsByOsceDay(osceDay).fire(new Receiver<AssignmentProxy>() {
-//
-//							@Override
-//							public void onSuccess(AssignmentProxy lastAssignment) {
-//								assertEquals(lastAssignment.getTimeEnd(), lastAssignment.getOsceDay().getTimeEnd());
-//							}
-//						});
-//					}
-//				}
-//
-//				OsceDayProxy osceDay = osceDays.get(0);
-//				assertNotNull(osceDay);
-//				assertEquals(2, osceDay.getOsceSequences().size());
-//			}
-//
-//		});
-//	}
 }
