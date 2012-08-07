@@ -62,7 +62,7 @@ public class Assignment {
     public static List<Assignment> retrieveAssignmentsOfTypeSP(Osce osce) {
         Log.info("retrieveAssignmenstOfTypeSP :");
         EntityManager em = entityManager();
-        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce AND o.type = :type";
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce AND o.type = :type AND o.oscePostRoom IS NOT NULL";
         TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
         q.setParameter("osce", osce);
         q.setParameter("type", AssignmentTypes.PATIENT);

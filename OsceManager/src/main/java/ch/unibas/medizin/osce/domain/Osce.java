@@ -24,6 +24,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import com.allen_sauer.gwt.log.client.Log;
 
 import ch.unibas.medizin.osce.server.TimetableGenerator;
+import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
@@ -216,6 +217,17 @@ public class Osce {
     	Set<Assignment> assignments = optGen.createAssignments();
     	log.info("number of assignments created: " + assignments.size());
     	
+    	return Boolean.TRUE;
+    }
+    
+    public static Boolean autoAssignPatientInRole(Long osceId) {
+    	try {
+    		SPAllocator spAlloc = new SPAllocator(Osce.findOsce(osceId));
+    		spAlloc.getSolution();
+    		spAlloc.printSolution();
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
     	return Boolean.TRUE;
     }
    

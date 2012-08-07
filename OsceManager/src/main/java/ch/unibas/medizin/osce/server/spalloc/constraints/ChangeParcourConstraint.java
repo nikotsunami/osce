@@ -16,8 +16,6 @@ import net.sf.cpsolver.ifs.model.GlobalConstraint;
  * @author dk
  *
  */
-
-// TODO: this constraint only need to be emerged if the SP change occurs during a rotation!
 public class ChangeParcourConstraint extends GlobalConstraint<VarAssignment, ValPatient> {
 
 	@Override
@@ -38,9 +36,9 @@ public class ChangeParcourConstraint extends GlobalConstraint<VarAssignment, Val
 			int diffInMinutes;
 			
 			if(a.getSequenceNumber() - 1 == assignment.getSequenceNumber()) {
-				diffInMinutes = (int) ((assignment.getTimeEnd().getTime() - a.getTimeStart().getTime()) / (1000 * 60 * 60));
+				diffInMinutes = (int) ((assignment.getTimeEnd().getTime() - a.getTimeStart().getTime()) / (1000 * 60));
 			} else {
-				diffInMinutes = (int) ((a.getTimeEnd().getTime() - assignment.getTimeStart().getTime()) / (1000 * 60 * 60));
+				diffInMinutes = (int) ((a.getTimeEnd().getTime() - assignment.getTimeStart().getTime()) / (1000 * 60));
 			}
 			
 			// if time between two assignments is larger than shortBreakSimpatChange, the change occurs during a rotation

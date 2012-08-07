@@ -44,7 +44,8 @@ public class RoomConstraint extends GlobalConstraint<VarAssignment, ValPatient> 
 		// check if time ranges overlap or start at the same time (then they would also end at the same time)
 		if(p1.getPatient().equals(p2.getPatient()) &&
 				!a1.getOscePostRoom().equals(a2.getOscePostRoom()) &&
-				(a1.getTimeStart().before(a2.getTimeEnd()) && a2.getTimeStart().before(a1.getTimeEnd()) || a1.getTimeStart().equals(a2.getTimeStart()))) {
+				(a1.getTimeStart().getTime() <= a2.getTimeEnd().getTime() && a2.getTimeStart().getTime() <= a1.getTimeEnd().getTime() ||
+					a1.getTimeStart().equals(a2.getTimeStart()))) {
 			return false;
 		}
 
