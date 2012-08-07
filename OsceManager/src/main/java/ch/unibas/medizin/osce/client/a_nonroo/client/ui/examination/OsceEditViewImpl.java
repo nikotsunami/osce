@@ -21,7 +21,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
-
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -55,9 +55,10 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	Element editTitle;
 
-	@UiField
-	Element createTitle;
-
+// change{
+	/*@UiField
+	Element createTitle;*/
+	// change}
 	@UiField
 	TabPanel oscePanel;
 	
@@ -95,8 +96,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	public ShortBox middleBreak;
 	
+	// change {
 	
+	@UiField
+	public IntegerBox numberRooms;
 	
+	// change }
 	/*@UiField
 	TaskSetEditor tasks;
 	*/
@@ -203,7 +208,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		TabPanelHelper.moveTabBarToBottom(oscePanel);
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
-		
+		copiedOsce.setEnabled(false);
 		
 		// Highlight onViolation
 				osceMap=new HashMap<String, Widget>();
@@ -226,6 +231,27 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 				//Issue # 122 : Replace pull down with autocomplete.
 				osceMap.put("middleBreak", middleBreak);
 				// E Highlight onViolation
+				
+				if(isRepeOsce.isChecked()==true)
+				{
+					copiedOsce.setEnabled(true);
+				}
+				
+				isRepeOsce.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+					
+					@Override
+					public void onValueChange(ValueChangeEvent<Boolean> event) {
+						// TODO Auto-generated method stub
+						if(event.getValue()==true)
+						{
+							copiedOsce.setEnabled(true);
+						}
+						else
+						{
+							copiedOsce.setEnabled(false);
+						}
+					}
+				});
 	}
 
 
@@ -240,12 +266,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		if (creating) {
 			title.setInnerText(constants.addOsce());
 			editTitle.getStyle().setDisplay(Display.NONE);
-			createTitle.getStyle().clearDisplay();
+			// change{	//	createTitle.getStyle().clearDisplay();
 			oscePanel.getTabBar().setTabText(0, "New OSCE");
 		} else {
 			title.setInnerText(constants.editOsce());
 			editTitle.getStyle().clearDisplay();
-			createTitle.getStyle().setDisplay(Display.NONE);
+			// change{	createTitle.getStyle().setDisplay(Display.NONE);
 			oscePanel.getTabBar().setTabText(0, "Edit OSCE");
 		}
 	}
@@ -293,11 +319,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 		if (edit) {
 			editTitle.getStyle().clearDisplay();
-			createTitle.getStyle().setDisplay(Display.NONE);
+			// change{	createTitle.getStyle().setDisplay(Display.NONE);
 			title.setInnerText(constants.editOsce());
 		} else {
 			editTitle.getStyle().setDisplay(Display.NONE);
-			createTitle.getStyle().clearDisplay();
+			// change{createTitle.getStyle().clearDisplay();
 			title.setInnerText(constants.addOsce());
 		}
 
@@ -350,6 +376,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 				}
 			}
 		});
+		//change {
+		osceValue.setWidth(110);
+		//change }
 		//osceValue.setRenderer(new SpecialisationProxyRenderer());
 		//copiedOsce.setAcceptableValues(emptyList);
 		//copiedOsce.setSuggestOracle(suggestOracle1);
@@ -374,6 +403,10 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 			}
 		});
 
+		// change {
+		copiedOsce.setWidth(110);
+		
+		// change }
 		//Issue # 122 : Replace pull down with autocomplete.
 		
 	}

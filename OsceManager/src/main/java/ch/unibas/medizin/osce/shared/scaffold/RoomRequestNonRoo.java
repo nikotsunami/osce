@@ -17,4 +17,6 @@ public interface RoomRequestNonRoo extends RequestContext {
 	abstract Request<Long> countRoomsByName(String name);
 	
 	abstract Request<List<RoomProxy>> findRoomEntriesByName(String name, int firstResult, int maxResults);
+	
+	abstract Request<Integer> countTotalRooms();
 }

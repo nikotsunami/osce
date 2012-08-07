@@ -64,6 +64,7 @@ public class Osce {
 
     private Boolean isRepeOsce;
 
+    @NotNull
     private Integer numberRooms;
 
     private Boolean isValid;
