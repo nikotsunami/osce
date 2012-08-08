@@ -109,15 +109,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 		});
 		*/
 		
-		/*requests.semesterRequest().findAllSemesters().fire(new Receiver<List<SemesterProxy>>() {
-
-			public void onSuccess(List<SemesterProxy> response) {
 				
-				view.setSemsterValues(response);
-			}
-		});*/
-
-		
 		requests.osceRequest().findAllOsces().with("tasks").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			public void onSuccess(List<OsceProxy> response) {
@@ -178,14 +170,14 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 
 		// change {
 		
-		requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
+		/*requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
 
 			@Override
 			public void onSuccess(Integer response) {
 				Log.info("Response Of countTotalRooms()  :" + response);
 				((OsceEditViewImpl)view).numberRooms.setValue(response);
 			}
-		});
+		});*/
 		
 		
 		// change }
@@ -200,6 +192,15 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			OsceProxy osce = request.create(OsceProxy.class);
 			this.osce = osce;
 			view.setEditTitle(false);
+			
+			requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
+
+				@Override
+				public void onSuccess(Integer response) {
+					Log.info("Response Of countTotalRooms()  Is:" + response);
+					((OsceEditViewImpl)view).numberRooms.setValue(response);
+				}
+			});
 
 		} else {
 
