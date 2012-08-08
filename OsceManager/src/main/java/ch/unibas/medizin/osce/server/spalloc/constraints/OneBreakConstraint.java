@@ -9,7 +9,7 @@ import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 import net.sf.cpsolver.ifs.model.GlobalConstraint;
 
 /**
- * This constraint assures that a SimPat's break is not longer than one slot.
+ * This constraint assures that a SP is in break at least once
  * 
  * @author dk
  *
@@ -31,7 +31,7 @@ public class OneBreakConstraint extends GlobalConstraint<VarAssignment, ValPatie
 				continue;
 			
 			ValPatient p = va.getAssignment();
-			if(p.hasAssignments() && assignment.getOscePostRoom().equals(null) && a.getOscePostRoom().equals(null)) {
+			if(p.hasAssignments() && p.getNumberBreaks() < 1) {
 				conflicts.add(p);
 			}
 		}

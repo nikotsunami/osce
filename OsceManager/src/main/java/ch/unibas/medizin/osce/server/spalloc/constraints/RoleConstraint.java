@@ -5,6 +5,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 
 import net.sf.cpsolver.ifs.model.GlobalConstraint;
 
@@ -24,8 +25,9 @@ public class RoleConstraint extends GlobalConstraint<VarAssignment, ValPatient> 
 		StandardizedRole patientRole = patient.getPatientInRole().getOscePost().getStandardizedRole();
 		StandardizedRole assignmentRole = patient.variable().getOsceAssignment().getOscePostRoom().getOscePost().getStandardizedRole();
 		
-		// check for correct role
-		if(!patientRole.equals(assignmentRole))
+		// check for correct role ("statist" is always valid role and therefore NO conflict. "material" is take
+		// into account since posts with role-type "material" do not have SP assignments
+		if(!patientRole.equals(assignmentRole) && !assignmentRole.getRoleType().equals(RoleTypes.Statist))
 			conflicts.add(patient);
 	}
 }

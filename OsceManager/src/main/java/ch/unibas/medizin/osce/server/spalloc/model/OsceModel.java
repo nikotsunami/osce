@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.server.spalloc.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +45,16 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	private List<Assignment> assignments;
 	private List<PatientInRole> patients;
 	private Map<StandardizedPatient, Map<Integer, Assignment>> patientAssignments;
+	private Set<StandardizedPatient> allPatients = new HashSet<StandardizedPatient>(); 
 	
 	// used for caching since Assignment.findAssignmentsByOscePostRoomAndType(...)
 	// does not have to be called on each cp-solver iteration (slow!)
-	private int osceNrSimPatAssignmentSlots;
+	private int nrStudentSlotsCoveredBySPSlot;
 	
 	public OsceModel(Osce osce) {
 		this.osce = osce;
 		
-		osceNrSimPatAssignmentSlots = osce.simpatAssignmentSlots();
+		nrStudentSlotsCoveredBySPSlot = osce.simpatAssignmentSlots();
 		
 		patientAssignments = new HashMap<StandardizedPatient, Map<Integer, Assignment>>();
 		loadAssignments();
@@ -72,8 +74,8 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 * Get number of student-slots that are covered by one SimPat-slot
 	 * @return number of student-slots covered by one SimPat-slot
 	 */
-	public int getNrSimPatAssignmentSlots() {
-		return osceNrSimPatAssignmentSlots;
+	public int getNrStudentSlotsCoveredBySPSlot() {
+		return nrStudentSlotsCoveredBySPSlot;
 	}
 	
 	/**
@@ -84,15 +86,7 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	}
 	
 	/**
-	 * debug only...correct records are loaded from db by loadAssignments()
-	 * @deprecated
-	 */
-	public void setAssignments(List<Assignment> assignments) {
-		this.assignments = assignments;
-	}
-	
-	/**
-	 * Load all SimPat that initially define the domain of the variables (VarAssignment)
+	 * Load all SimPat that define the initial domain of the variables (VarAssignment)
 	 */
 	public void loadPatients() {
 		List<PatientInRole> patients = new ArrayList<PatientInRole>();
@@ -109,58 +103,12 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 			
 			if(patientsInSemester.contains(patientInRole.getPatientInSemester()) && roles.contains(patientInRole.getOscePost().getStandardizedRole())) {
 				patients.add(patientInRole);
+				
+				allPatients.add(patientInRole.getPatientInSemester().getStandardizedPatient());
 			}
 		}
 		
 		this.patients = patients;
-	}
-	
-	/**
-	 * debug only...correct records are loaded from db by loadAssignments()
-	 * @deprecated
-	 */
-	public void setPatients(List<PatientInRole> patients) {
-		this.patients = patients;
-	}
-	
-	/**
-	 * debug only correct sorted records should be read from db
-	 * @deprecated
-	 */
-	@SuppressWarnings("unused")
-	private Assignment getPrevAssignmentDebug(List<Assignment> assignments, Assignment thisA) {
-		Iterator<Assignment> it = assignments.iterator();
-		while (it.hasNext()) {
-			Assignment assignment = (Assignment) it.next();
-			
-			if(assignment.getOscePostRoom().equals(thisA.getOscePostRoom()) &&
-					assignment.getOsceDay().equals(thisA.getOsceDay()) &&
-					assignment.getSequenceNumber() == thisA.getSequenceNumber() - 1) {
-				return assignment;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * debug only correct sorted records should be read from db
-	 * @deprecated
-	 */
-	@SuppressWarnings("unused")
-	private Assignment getNextAssignmentDebug(List<Assignment> assignments, Assignment thisA) {
-		Iterator<Assignment> it = assignments.iterator();
-		while (it.hasNext()) {
-			Assignment assignment = (Assignment) it.next();
-			
-			if(assignment.getOscePostRoom().equals(thisA.getOscePostRoom()) &&
-					assignment.getOsceDay().equals(thisA.getOsceDay()) &&
-					assignment.getSequenceNumber() == thisA.getSequenceNumber() + 1) {
-				return assignment;
-			}
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -200,15 +148,15 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	/**
 	 * Get assignment for patient (StandardizedPatient) in specific slot
 	 * @param p SimPat
-	 * @param slotNumber number of the slot to get
+	 * @param sequenceNumber number of the slot to get
 	 * @return assignment for a SimPat during the slot
 	 */
-	public Assignment getPatientAssignment(StandardizedPatient p, Integer slotNumber) {
+	public Assignment getPatientAssignment(StandardizedPatient p, Integer sequenceNumber) {
 		if(patientAssignments.containsKey(p)) {
 			Map<Integer, Assignment> assignmentMap = patientAssignments.get(p);
 			
-			if(assignmentMap.containsKey(slotNumber)) {
-				return assignmentMap.get(slotNumber);
+			if(assignmentMap.containsKey(sequenceNumber)) {
+				return assignmentMap.get(sequenceNumber);
 			}
 		}
 		
@@ -218,7 +166,7 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	/**
 	 * Get all assignment of a patient (StandardizedPatient)
 	 * @param p SimPat
-	 * @return map (slotnumber, assignment) of assignments for a patient
+	 * @return map (sequenceNumber, assignment) of assignments for a patient
 	 */
 	public Map<Integer, Assignment> getAssignmentsByPatient(StandardizedPatient p) {
 		return patientAssignments.get(p);
@@ -248,7 +196,13 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 		return numberSlotsMax;
 	}
 	
-	// TODO: reconsider calculation of the penalty-value (soft constraints)
+	/**
+	 * Optimize with the following soft constraints:
+	 * - number of SP employed -> more = better
+	 * - number of SP with 1 assignment -> less = better
+	 * - number of SP employed at any time -> less = better (this should
+	 * 		actually not occur if OneBreakConstraint is active!)
+	 */
 	@Override
 	public double getTotalValue() {
 		
@@ -262,7 +216,7 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 			}
 		}
 		
-		return weightNrPatients * patientAssignments.size() +
+		return weightNrPatients * (allPatients.size() - patientAssignments.size()) +
 				weightSingleAssignments * nrSingleAssignments +
 				weightAllAssignments * nrAllAssignments;
 	}
@@ -316,18 +270,18 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	public void beforeUnassigned(long iteration, ValPatient patient) {
 		super.beforeUnassigned(iteration, patient);
 		
-//		VarAssignment a = patient.variable();
-//		removePatientAssignment(patient.getPatient(), a.getOsceAssignment());
+		VarAssignment a = patient.variable();
+		removePatientAssignment(patient.getPatient(), a.getOsceAssignment());
 		
-		patientAssignments.clear();
-		
-		for(VarAssignment va : assignedVariables()) {
-			Assignment a = va.getOsceAssignment();
-			
-			if(a != null) {
-				setPatientAssignment(va.getAssignment().getPatient(), a);
-			}
-		}
+//		patientAssignments.clear();
+//		
+//		for(VarAssignment va : assignedVariables()) {
+//			Assignment a = va.getOsceAssignment();
+//			
+//			if(a != null) {
+//				setPatientAssignment(va.getAssignment().getPatient(), a);
+//			}
+//		}
 	}
 
 	/* with current knowledge, this can also be done by the methods in OsceModelListener
@@ -336,16 +290,17 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	public void afterAssigned(long iteration, ValPatient patient) {
 		super.afterAssigned(iteration, patient);
 		
-//		VarAssignment a = patient.variable();
-//		setPatientAssignment(patient.getPatient(), a.getOsceAssignment());
-		patientAssignments.clear();
+		VarAssignment a = patient.variable();
+		setPatientAssignment(patient.getPatient(), a.getOsceAssignment());
 		
-		for(VarAssignment va : assignedVariables()) {
-			Assignment a = va.getOsceAssignment();
-			
-			if(a != null) {
-				setPatientAssignment(va.getAssignment().getPatient(), a);
-			}
-		}
+//		patientAssignments.clear();
+//		
+//		for(VarAssignment va : assignedVariables()) {
+//			Assignment a = va.getOsceAssignment();
+//			
+//			if(a != null) {
+//				setPatientAssignment(va.getAssignment().getPatient(), a);
+//			}
+//		}
 	}
 }

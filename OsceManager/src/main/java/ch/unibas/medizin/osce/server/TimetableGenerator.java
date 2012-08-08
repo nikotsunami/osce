@@ -57,7 +57,7 @@ public class TimetableGenerator {
 
 	private Set<Assignment> assignments;
 
-	private int simpatSequenceNumber;
+//	private int simpatSequenceNumber;
 
 	private long[] simAssLastId;
 	
@@ -695,7 +695,7 @@ public class TimetableGenerator {
 					
 					int postsSinceSimpatChange = 0;
 					
-					simpatSequenceNumber = 1;
+//					simpatSequenceNumber = 1;
 					
 					Date rotationStartTime = parcourStartTime;
 					
@@ -1012,30 +1012,21 @@ public class TimetableGenerator {
 //		printAllStudents(assignments);
 //		printAllSP(assignments);
 		
-		createSPBreakAssignments();
+		correctSPSequenceNumbers();
 		
 		return assignments;
 	}
 	
-	/**
-	 * Generate break slots for SP (time-slots with same times as
-	 * "normal" posts but with osce_post_room = null). SP that are
-	 * not allocated to any post at a given time are allocated to this
-	 * assignment.
-	 */
-	private void createSPBreakAssignments() {
+	private void correctSPSequenceNumbers() {
 		List<Assignment> refAssignments = Assignment.retrieveAssignmentsOfTypeSPUniqueTimes(osce);
+		
+		int sequenceNumber = 1;
+		
 		Iterator<Assignment> it = refAssignments.iterator();
 		while (it.hasNext()) {
 			Assignment assignment = (Assignment) it.next();
-			
-			Assignment ass = new Assignment();
-			ass.setType(AssignmentTypes.PATIENT);
-			ass.setOscePostRoom(null);
-			ass.setOsceDay(assignment.getOsceDay());
-			ass.setTimeStart(assignment.getTimeStart());
-			ass.setTimeEnd(assignment.getTimeEnd());
-			ass.persist();
+			Assignment.updateSequenceNumbersByTime(sequenceNumber, assignment.getTimeStart(), assignment.getTimeEnd());
+			sequenceNumber++;
 		}
 	}
 
@@ -1070,7 +1061,7 @@ public class TimetableGenerator {
 		Assignment ass = new Assignment();
 		ass.setType(AssignmentTypes.PATIENT);
 		ass.setOsceDay(osceDay);
-		ass.setSequenceNumber(simpatSequenceNumber++);
+//		ass.setSequenceNumber(simpatSequenceNumber++);
 		ass.setTimeStart(startTime);
 		ass.setTimeEnd(startTime);
 		ass.setOscePostRoom(oscePR);

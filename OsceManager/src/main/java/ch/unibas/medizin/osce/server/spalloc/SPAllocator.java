@@ -1,7 +1,10 @@
 package ch.unibas.medizin.osce.server.spalloc;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.spalloc.constraints.ChangeParcourConstraint;
 import ch.unibas.medizin.osce.server.spalloc.constraints.ChangeRoleConstraint;
@@ -24,8 +28,13 @@ import ch.unibas.medizin.osce.server.spalloc.constraints.StayInPostConstraint;
 import ch.unibas.medizin.osce.server.spalloc.model.OsceModel;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
+import ch.unibas.medizin.osce.shared.AssignmentTypes;
 
 /**
+ * This component allows for allocating SPs to a previous generated timetable (set up by
+ * TimetableGenerator). The optimal allocation is found by employing IFS with predefined
+ * hard and soft constraints (see package ch.unibas.medizin.osce.server.spalloc.constraints.*).
+ * 
  * @author dk
  *
  */
@@ -35,13 +44,20 @@ public class SPAllocator {
 	private Osce osce;
 	
 	private Solution<VarAssignment, ValPatient> solution;
+
+	private List<Assignment> refAssignments;
 	
+	/**
+	 * Initialize SPAllocator with OSCE
+	 * @param osce
+	 */
 	public SPAllocator(Osce osce) {
 		this.osce = osce;
+		refAssignments = Assignment.retrieveAssignmentsOfTypeSPUniqueTimes(osce);
 	}
 	
 	/**
-	 * Run SimPat-Allocator on timetable of dummy OSCE.
+	 * Run SPAllocator on timetable of OSCE.
 	 * @param osce
 	 * @return solution given by the IFS
 	 */
@@ -71,6 +87,7 @@ public class SPAllocator {
         cfg.setProperty("Variable.Class", "net.sf.cpsolver.ifs.heuristics.GeneralVariableSelection");
         cfg.setProperty("Extensions.Classes", "net.sf.cpsolver.ifs.extension.ConflictStatistics");
         
+        // initialize solver with given properties and set an initial solution
 		Solver<VarAssignment, ValPatient> solver = new Solver<VarAssignment, ValPatient>(cfg);
 		solver.setInitalSolution(model);
 		
@@ -84,7 +101,6 @@ public class SPAllocator {
         solution.restoreBest();
 
         log.info("Best solution:" + ToolBox.dict2string(solution.getExtendedInfo(), 1));
-        
         log.info("Best solution found after " + solution.getBestTime() + " seconds (" + solution.getBestIteration() + " iterations).");
         log.info("Number of assigned variables is " + solution.getModel().assignedVariables().size());
         log.info("Total value of the solution is " + solution.getModel().getTotalValue());
@@ -92,11 +108,10 @@ public class SPAllocator {
         return solution;
 	}
 	
+	/**
+	 * Print solution of the CPSolver - for debugging only
+	 */
 	public void printSolution() {
-		// get detailed information on SimPat-Allocator's results
-        int nrTwoConcBreaks = 0;
-        int[] nrAssignments = new int[((OsceModel) solution.getModel()).getNumberSlots()];
-        Set<StandardizedPatient> usedPatients = new HashSet<StandardizedPatient>();
         for (VarAssignment va : ((OsceModel) solution.getModel()).variables()) {
         	Assignment a = va.getOsceAssignment();
 
@@ -117,6 +132,7 @@ public class SPAllocator {
         }
         
 		// print assignments per SimPat
+        Set<StandardizedPatient> usedPatients = new HashSet<StandardizedPatient>();
         for(VarAssignment va : ((OsceModel) solution.getModel()).assignedVariables()) {
         	if (va.getOsceAssignment() != null) {
         		ValPatient p = va.getAssignment();
@@ -130,24 +146,13 @@ public class SPAllocator {
         				System.out.print("    ");
         				System.out.print(assignmentMap.get(index).getOscePostRoom().getCourse().getColor() + ", ");
         				System.out.print(assignmentMap.get(index).getOscePostRoom().getOscePost().getStandardizedRole().getShortName());
-        				System.out.print(", " + assignmentMap.get(index).getSequenceNumber());
+        				System.out.print(", " + debugTime(assignmentMap.get(index).getTimeStart()) + " - " + debugTime(assignmentMap.get(index).getTimeEnd()));
         				System.out.println();
         			}
-        			System.out.println("    min key: " + p.minSlotNumber());
-        			System.out.println("    max key: " + p.maxSlotNumber());
         			System.out.println("    nr. assignments: " + p.getNumberAssignments());
-        			System.out.println("    nr. concurrent breaks: " + p.hasTwoConcurrentBreaks());
         			System.out.println();
 
-        			if(p != null && p.hasAssignments()) {
-        				if(p.getNumberAssignments() > 1 && p.hasTwoConcurrentBreaks()) {
-        					nrTwoConcBreaks++;
-        				}
-        				
-        				nrAssignments[p.getNumberAssignments() - 1]++;
-        			}
-
-        			usedPatients.add(p.getPatient());
+        			usedPatients.add(p.getPatientInRole().getPatientInSemester().getStandardizedPatient());
         		}
         	}
         }
@@ -156,5 +161,69 @@ public class SPAllocator {
         System.out.println("Best solution found after " + solution.getBestTime() + " seconds (" + solution.getBestIteration() + " iterations).");
         System.out.println("Number of assigned variables is " + solution.getModel().assignedVariables().size());
         System.out.println("Total value of the solution is " + solution.getModel().getTotalValue());
+	}
+	
+	/**
+	 * Update assignment records with allocated SPs and add break for SPs when they
+	 * are not allocated to any assignment for a given time-slot.
+	 */
+	public void saveSolution() {
+		Set<PatientInRole> usedPatients = new HashSet<PatientInRole>();
+		
+		// link Assignments to PatientInRole
+		for(VarAssignment va : ((OsceModel) solution.getModel()).assignedVariables()) {
+			Assignment a = va.getOsceAssignment();
+			
+        	if (a != null) {
+        		ValPatient p = va.getAssignment();
+        		a.setPatientInRole(p.getPatientInRole());
+        		a.flush();
+        		usedPatients.add(p.getPatientInRole());
+        	}
+        }
+		
+		// save SP in break assignment if assignments exists but not for all SP slots
+		OsceModel model = ((OsceModel) solution.getModel());
+		Iterator<PatientInRole> it = usedPatients.iterator();
+		int numberSlots = model.getNumberSlots();
+		
+		while (it.hasNext()) {
+			PatientInRole patientInRole = (PatientInRole) it.next();
+			
+			StandardizedPatient sp = patientInRole.getPatientInSemester().getStandardizedPatient();
+			
+			for(int i = 1; i <= numberSlots; i++) {
+				if(model.getPatientAssignment(sp, i) == null) {
+					createSPBreakAssignments(patientInRole, i);
+					log.info(sp.getName() + ", " + sp.getPreName() + " added break for patient " + patientInRole.getId() + " and slot " + i);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Generate break slot for SP (time-slots with same times as
+	 * "normal" posts but with osce_post_room = null). SP that are
+	 * not allocated to any post at a given time are allocated to this
+	 * assignment.
+	 */
+	private void createSPBreakAssignments(PatientInRole p, int sequenceNumber) {
+		Assignment assignment = refAssignments.get(sequenceNumber - 1);
+		if(assignment != null) {
+			Assignment ass = new Assignment();
+			ass.setType(AssignmentTypes.PATIENT);
+			ass.setOscePostRoom(null);
+			ass.setOsceDay(assignment.getOsceDay());
+			ass.setTimeStart(assignment.getTimeStart());
+			ass.setTimeEnd(assignment.getTimeEnd());
+			ass.setSequenceNumber(sequenceNumber);
+			ass.setPatientInRole(p);
+			ass.persist();
+		}
+	}
+	
+	private String debugTime(Date date) {
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		return format.format(date);
 	}
 }

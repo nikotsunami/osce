@@ -28,7 +28,9 @@ public class StayInPostConstraint extends GlobalConstraint<VarAssignment, ValPat
 			if(assignment.equals(a) || p.getPatientInRole().getStayInPost() == null || p.getPatientInRole().getStayInPost() == false)
 				continue;
 			
-			if(p.getPatient().equals(patient.getPatient()) && p.getPatientInRole().getStayInPost() && !assignment.getOscePostRoom().equals(a.getOscePostRoom()))
+			if(p.getPatient().equals(patient.getPatient()) &&
+					p.getPatientInRole().getStayInPost() &&
+					!assignment.getOscePostRoom().equals(a.getOscePostRoom()))
 				conflicts.add(p);
 		}
 	}

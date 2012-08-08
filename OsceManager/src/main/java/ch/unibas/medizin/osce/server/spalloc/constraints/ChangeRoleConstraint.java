@@ -38,7 +38,7 @@ public class ChangeRoleConstraint extends GlobalConstraint<VarAssignment, ValPat
 			RoleTopic roleTopic = a.getOscePostRoom().getOscePost().getStandardizedRole().getRoleTopic();
 			if(p.getPatient().equals(patient.getPatient()) &&
 					roleTopic.getSlotsUntilChange() > 0 && 
-					2 * model.getNrSimPatAssignmentSlots() > roleTopic.getSlotsUntilChange()) {
+					2 * model.getNrStudentSlotsCoveredBySPSlot() > roleTopic.getSlotsUntilChange()) {
 				conflicts.add(p);
 			}
 		}

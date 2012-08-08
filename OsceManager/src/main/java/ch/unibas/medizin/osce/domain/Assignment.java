@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.shared.PostType;
 
 import javax.persistence.Enumerated;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.persistence.EntityManager;
@@ -70,6 +71,22 @@ public class Assignment {
         Log.info("retrieveAssignmenstOfTypeSP query String :" + queryString);
         Log.info("Assignment List Size :" + assignmentList.size());
         return assignmentList;
+    }
+    
+    public static void updateSequenceNumbersByTime(int sequenceNumber, Date timeStart, Date timeEnd) {
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE ((timeStart <= :timeEnd AND :timeStart <= timeEnd) OR (timeStart = :timeStart AND timeEnd = :timeEnd)) AND oscePostRoom IS NOT NULL";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("timeStart", timeStart);
+        q.setParameter("timeEnd", timeEnd);
+        List<Assignment> assignmentList = q.getResultList();
+        
+        Iterator<Assignment> it = assignmentList.iterator();
+        while (it.hasNext()) {
+			Assignment assignment = (Assignment) it.next();
+			assignment.setSequenceNumber(sequenceNumber);
+			assignment.flush();
+		}
     }
     
     public static List<Assignment> retrieveAssignmentsOfTypeStudent(Long osceId) {
