@@ -226,6 +226,7 @@ public class Osce {
     		SPAllocator spAlloc = new SPAllocator(Osce.findOsce(osceId));
     		spAlloc.getSolution();
     		spAlloc.printSolution();
+    		spAlloc.saveSolution();
     	} catch(Exception e) {
     		e.printStackTrace();
     	}
@@ -482,7 +483,7 @@ public class Osce {
 							 					
 							 						 Log.info("Search Criteria Found For Role1 List : "+sortedPatientInSemester1.getId());
 							 						 
-							 						if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal){
+							 						if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal && (getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
 							 							PatientInRole newPatientAssignToRole = new PatientInRole();
 							 							newPatientAssignToRole.setFit_criteria(true);
 							 							newPatientAssignToRole.setIs_backup(false);
@@ -529,7 +530,7 @@ public class Osce {
 												 			
 												 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
 												 				
-											 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)){
+											 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1) && (getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
 											 			
 											 						Log.info("Search Criteria Found For Role2 List"+sortedPatientInSemester1.getId());
 											 						
@@ -579,7 +580,7 @@ public class Osce {
 													 			
 													 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
 													 				
-												 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)){
+												 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)&& (getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
 												 			
 												 					// Assign SP To Role 1 
 												 						
@@ -686,6 +687,8 @@ public class Osce {
 													
 													OscePost post = (OscePost) spFitsCriteriaForOsceDay.next();
 													
+														// If Patient In Not Assign In Any Role Than Assign It.
+														if((getTotalRolesFroOscePost(post.getId(),sortedPatientInSemester2.getId())==0)){
 													Log.info("Assigning SP in role In which Sp fits");
 													
 													PatientInRole patientInRole = new PatientInRole();
@@ -696,7 +699,15 @@ public class Osce {
 													patientInRole.persist();
 													
 													first_SP=false;
+													    }
+														// else Update the Backup Value As true Of All ready Assign Patient In Role.
+														else{
 													
+																PatientInRole patientInRole = findPatientInRoleBasedOnOsceAndPatientInSem(post.getId(),sortedPatientInSemester2.getId());
+																Log.info("Value Updated To Assign Role In Backup for PatientIn Sem" + patientInRole.getId());
+																patientInRole.setIs_backup(true);
+																patientInRole.persist();
+														}
 												  }
 												}
 											}
@@ -729,7 +740,7 @@ public class Osce {
 														listOfPatientInSemesterSatisfyCriteria2=PatientInSemester.findPatientInSemesterByAdvancedCriteria(semester.getId(), listAdvanceSearchCriteria2);
 														
 														if(listOfPatientInSemesterSatisfyCriteria2 != null){
-															if(listOfPatientInSemesterSatisfyCriteria2.contains(sortedPatientInSemester2)){
+															if(listOfPatientInSemesterSatisfyCriteria2.contains(sortedPatientInSemester2)&& (getTotalRolesFroOscePost(post.getId(),sortedPatientInSemester2.getId())==0)){
 															
 																// To Do Assign SP To Break;
 																
@@ -741,6 +752,11 @@ public class Osce {
 																patientInRole2.setPatientInSemester(sortedPatientInSemester2);
 																patientInRole2.persist();
 																ifFits=true;
+															}
+															else{
+																PatientInRole patientInRole=findPatientInRoleBasedOnOsceAndPatientInSem(post.getId(), sortedPatientInSemester2.getId());
+																patientInRole.setIs_backup(true);
+																patientInRole.persist();
 															}
 															
 														}
@@ -778,6 +794,23 @@ public class Osce {
 		 		}
 	  	}
 	  
+	  public static Integer getTotalRolesFroOscePost(Long oscePostId,Long patientInSemesterId){
+		  Log.info("Inside getTotalRolesFroOscePost() where postIdis :" +oscePostId + " and SemId Is : " + patientInSemesterId );
+		  EntityManager em = entityManager();
+		  String query="select count(pir) from PatientInRole as pir where pir.oscePost=" + oscePostId + " and pir.patientInSemester=" +patientInSemesterId;
+		  Log.info("Query Is :" + query);
+		  TypedQuery<Long> q = em.createQuery(query, Long.class);
+		  Integer result= q.getSingleResult() != null && q.getSingleResult() != 0 ? q.getSingleResult().intValue() : 0 ;
+		  return result;
+	  }
+	  public static PatientInRole findPatientInRoleBasedOnOsceAndPatientInSem(Long oscePostId,Long patientInSemId){
+		  Log.info("In Side findPatientInRoleBasedOnOsceAndPatientInSem() With PostId" + oscePostId +" and SemId" + patientInSemId);
+		  EntityManager em = entityManager();
+		  String query="select pir from PatientInRole as pir where pir.oscePost=" + oscePostId + " and pir.patientInSemester=" +patientInSemId;
+		  Log.info("Query Is :" + query);
+		  TypedQuery<PatientInRole> q = em.createQuery(query, PatientInRole.class);
+		  return q.getSingleResult();
+	  }
 	  public static int findCountOfTimeSlot(List<Assignment> assignmentList,int breakCount){
 		  
 	  Assignment previousAssignment;
