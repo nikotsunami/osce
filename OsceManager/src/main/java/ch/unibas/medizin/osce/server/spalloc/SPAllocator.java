@@ -178,7 +178,9 @@ public class SPAllocator {
         		ValPatient p = va.getAssignment();
         		a.setPatientInRole(p.getPatientInRole());
         		a.flush();
-        		usedPatients.add(p.getPatientInRole());
+        		
+        		if(!usedPatients.contains(p.getPatientInRole()))
+        				usedPatients.add(p.getPatientInRole());
         	}
         }
 		
