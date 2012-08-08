@@ -183,6 +183,7 @@ public class SPAllocator {
         }
 		
 		// save SP in break assignment if assignments exists but not for all SP slots
+		Assignment.clearSPBreakAssignments(osce);
 		OsceModel model = ((OsceModel) solution.getModel());
 		Iterator<PatientInRole> it = usedPatients.iterator();
 		int numberSlots = model.getNumberSlots();
@@ -194,7 +195,7 @@ public class SPAllocator {
 			
 			for(int i = 1; i <= numberSlots; i++) {
 				if(model.getPatientAssignment(sp, i) == null) {
-					createSPBreakAssignments(patientInRole, i);
+					createSPBreakAssignment(patientInRole, i);
 					log.info(sp.getName() + ", " + sp.getPreName() + " added break for patient " + patientInRole.getId() + " and slot " + i);
 				}
 			}
@@ -207,7 +208,7 @@ public class SPAllocator {
 	 * not allocated to any post at a given time are allocated to this
 	 * assignment.
 	 */
-	private void createSPBreakAssignments(PatientInRole p, int sequenceNumber) {
+	private void createSPBreakAssignment(PatientInRole p, int sequenceNumber) {
 		Assignment assignment = refAssignments.get(sequenceNumber - 1);
 		if(assignment != null) {
 			Assignment ass = new Assignment();

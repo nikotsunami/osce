@@ -89,6 +89,26 @@ public class Assignment {
 		}
     }
     
+    /**
+	 * Clear all SP break assignments (necessary since another run
+	 * of the IFS might give different SP allocations and therefore
+	 * different SP break assignments).
+	 */
+    public static void clearSPBreakAssignments(Osce osce) {
+    	EntityManager em = entityManager();
+    	String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce AND o.type = :type AND oscePostRoom IS NULL";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osce", osce);
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        List<Assignment> assignmentList = q.getResultList();
+        
+        Iterator<Assignment> it = assignmentList.iterator();
+        while (it.hasNext()) {
+        	Assignment assignment = (Assignment) it.next();
+        	assignment.remove();
+        }
+    }
+    
     public static List<Assignment> retrieveAssignmentsOfTypeStudent(Long osceId) {
         EntityManager em = entityManager();
         String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce.id = :osceId AND o.type = :type";
