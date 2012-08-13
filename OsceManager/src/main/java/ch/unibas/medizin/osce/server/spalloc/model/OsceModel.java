@@ -96,12 +96,13 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 		// get all roles used in this osce
 		Set<StandardizedRole> roles = osce.usedRoles();
 		
-		// TODO: reconsider this fragment below - why is there no link from PatientInRole to StandardizedRole anymore?
 		Iterator<PatientInRole> it = PatientInRole.findAllPatientInRoles().iterator();
 		while (it.hasNext()) {
 			PatientInRole patientInRole = (PatientInRole) it.next();
 			
-			if(patientsInSemester.contains(patientInRole.getPatientInSemester()) && roles.contains(patientInRole.getOscePost().getStandardizedRole())) {
+			if(patientInRole.getOscePost() != null &&
+					patientsInSemester.contains(patientInRole.getPatientInSemester()) &&
+					roles.contains(patientInRole.getOscePost().getStandardizedRole())) {
 				patients.add(patientInRole);
 				
 				allPatients.add(patientInRole.getPatientInSemester().getStandardizedPatient());

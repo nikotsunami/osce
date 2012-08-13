@@ -82,8 +82,8 @@ public class SPAllocator {
 		// set properties for solving the problem
 		DataProperties cfg = new DataProperties();
         cfg.setProperty("Termination.Class", "net.sf.cpsolver.ifs.termination.GeneralTerminationCondition");
-        cfg.setProperty("Termination.StopWhenComplete", "true");
-        cfg.setProperty("Termination.TimeOut", "5");
+        cfg.setProperty("Termination.StopWhenComplete", "false");
+        cfg.setProperty("Termination.TimeOut", "10");
         cfg.setProperty("Comparator.Class", "net.sf.cpsolver.ifs.solution.GeneralSolutionComparator");
         cfg.setProperty("Value.Class", "net.sf.cpsolver.ifs.heuristics.GeneralValueSelection");
         cfg.setProperty("Value.WeightConflicts", "1");
