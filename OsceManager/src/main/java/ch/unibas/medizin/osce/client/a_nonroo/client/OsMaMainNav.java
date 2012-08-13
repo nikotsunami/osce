@@ -76,7 +76,19 @@ public class OsMaMainNav extends Composite {
 	
 	public OsMaMainNav() {
 		initWidget(uiBinder.createAndBindUi(this));
+		registerLoading();
+	}
 		
+	private void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+						event.display();
+					}
+				});
 	}
 
 	private OsMaRequestFactory requests;
@@ -197,6 +209,7 @@ public class OsMaMainNav extends Composite {
 				//handlerManager.fireEvent(new SelectChangeEvent(lstSemester.getValue()));				
 			}			
 		});
+		registerLoading();
 		
 		// G: SPEC END =		
 	}
@@ -328,7 +341,9 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("people")
 	void patientsClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new StandardizedPatientPlace("PatientPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 
 	@UiHandler("scars")
@@ -399,15 +414,6 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("roleAssignment")
 	void roleAssignmentClicked(ClickEvent event) {
-		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
-				new ApplicationLoadingScreenHandler() {
-					@Override
-					public void onEventReceived(
-							ApplicationLoadingScreenEvent event) {
-						Log.info("~~~~~~~~ApplicationLoadingScreenEvent onEventReceived Called");
-						event.display();
-					}
-				});
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));

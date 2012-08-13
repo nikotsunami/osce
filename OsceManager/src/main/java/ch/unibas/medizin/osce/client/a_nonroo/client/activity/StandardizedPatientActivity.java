@@ -277,12 +277,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			public void onPlaceChange(PlaceChangeEvent event) {
 				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
 				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
+					view.setDetailPanel(true);
 					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
 					Operation op = spdPlace.getOperation();
 					if (op == Operation.NEW) {
 						getSearchStringByEntityProxyId((EntityProxyId<StandardizedPatientProxy>)spdPlace.getProxyId());
 					}
 				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
+					view.setDetailPanel(false);
 					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
 					if (place.getToken().contains("DELETED")) {
 						initSearch();

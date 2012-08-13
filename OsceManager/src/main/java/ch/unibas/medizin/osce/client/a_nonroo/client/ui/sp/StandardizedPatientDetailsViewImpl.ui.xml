@@ -30,7 +30,7 @@
 	<!-- Spec added disclosure class above-->	
 	
 	<g:HTMLPanel>
-	
+	<!--<marquee ui:field="marquee" loop="1" scrollamount="10" behavior="slide"-->
 <!--	<g:HTMLPanel>
   	<div class='{style.arrowUp}' id="arrowUpDown"></div> -->
 	
@@ -246,7 +246,7 @@
 	
 	
 	</g:VerticalPanel>
-		
+     <!--/marquee-->
 </g:HTMLPanel>
 	
 <!-- 	<g:HTMLPanel> -->

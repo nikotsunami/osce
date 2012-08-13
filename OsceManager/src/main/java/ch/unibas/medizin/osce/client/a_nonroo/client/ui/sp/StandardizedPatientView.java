@@ -34,6 +34,7 @@ public interface StandardizedPatientView  extends IsWidget{
     
     public void setDelegate(Delegate delegate);
     public void updateSearch();
+    public void setDetailPanel(boolean isDetailPlace);
     
     public SimplePanel getDetailsPanel();
     public void setPresenter(Presenter systemStartActivity);
