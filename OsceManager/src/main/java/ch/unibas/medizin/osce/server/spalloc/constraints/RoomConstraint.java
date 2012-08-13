@@ -6,8 +6,6 @@ import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 
-import net.sf.cpsolver.ifs.model.GlobalConstraint;
-
 /**
  * This constraint assures that a SimPat is not assigned to multiple rooms at the same
  * time and a room does not contain more than one SimPat at a time.
@@ -15,7 +13,7 @@ import net.sf.cpsolver.ifs.model.GlobalConstraint;
  * @author dk
  *
  */
-public class RoomConstraint extends GlobalConstraint<VarAssignment, ValPatient> {
+public class RoomConstraint extends AssignmentConstraint {
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
@@ -44,11 +42,32 @@ public class RoomConstraint extends GlobalConstraint<VarAssignment, ValPatient> 
 		// check if time ranges overlap or start at the same time (then they would also end at the same time)
 		if(p1.getPatient().equals(p2.getPatient()) &&
 				!a1.getOscePostRoom().equals(a2.getOscePostRoom()) &&
-				(a1.getTimeStart().getTime() <= a2.getTimeEnd().getTime() && a2.getTimeStart().getTime() <= a1.getTimeEnd().getTime() ||
-					a1.getTimeStart().equals(a2.getTimeStart()))) {
+				(timeSlotsOverlap(a1, a2) || timeSlotsSameStart(a1, a2))) {
 			return false;
 		}
 
 		return true;
+	}
+	
+	/**
+	 * Return true if time slots overlap in time. This can occur when,
+	 * for example, comparing a time slot with early start and another one
+	 * with normal start.
+	 * @param a1
+	 * @param a2
+	 * @return
+	 */
+	private boolean timeSlotsOverlap(Assignment a1, Assignment a2) {
+		return a1.getTimeStart().getTime() <= a2.getTimeEnd().getTime() && a2.getTimeStart().getTime() <= a1.getTimeEnd().getTime();
+	}
+	
+	/**
+	 * Compare start times of two assignments for their equality
+	 * @param a1
+	 * @param a2
+	 * @return
+	 */
+	private boolean timeSlotsSameStart(Assignment a1, Assignment a2) {
+		return a1.getTimeStart().equals(a2.getTimeStart());
 	}
 }

@@ -8,8 +8,6 @@ import ch.unibas.medizin.osce.server.spalloc.model.OsceModel;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 
-import net.sf.cpsolver.ifs.model.GlobalConstraint;
-
 /**
  * This constraint assures that a SimPat changes the role (for roles that have a limitation
  * of slots) after playing it for a certain number of slots.
@@ -17,7 +15,7 @@ import net.sf.cpsolver.ifs.model.GlobalConstraint;
  * @author dk
  *
  */
-public class ChangeRoleConstraint extends GlobalConstraint<VarAssignment, ValPatient> {
+public class ChangeRoleConstraint extends AssignmentConstraint {
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
@@ -27,14 +25,12 @@ public class ChangeRoleConstraint extends GlobalConstraint<VarAssignment, ValPat
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
+			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself and assignments that are further away than +/- 1
-			if(assignment.equals(a) ||
-					(varAssignment.getNextAssignment() != assignment &&
-					varAssignment.getPrevAssignment() != assignment))
+			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || p.getPatientInRole().getStayInPost().equals(true))
 				continue;
 			
-			ValPatient p = va.getAssignment();
 			RoleTopic roleTopic = a.getOscePostRoom().getOscePost().getStandardizedRole().getRoleTopic();
 			if(p.getPatient().equals(patient.getPatient()) &&
 					roleTopic.getSlotsUntilChange() > 0 && 

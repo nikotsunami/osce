@@ -4,10 +4,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
-import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 import ch.unibas.medizin.osce.shared.RoleTypes;
-
-import net.sf.cpsolver.ifs.model.GlobalConstraint;
 
 /**
  * This constraint assures that only SimPats are assigned that are capable of
@@ -16,7 +13,7 @@ import net.sf.cpsolver.ifs.model.GlobalConstraint;
  * @author dk
  *
  */
-public class RoleConstraint extends GlobalConstraint<VarAssignment, ValPatient> {
+public class RoleConstraint extends AssignmentConstraint {
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {

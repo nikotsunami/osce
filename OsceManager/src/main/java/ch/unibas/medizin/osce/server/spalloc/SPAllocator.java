@@ -183,8 +183,8 @@ public class SPAllocator {
         		a.setPatientInRole(p.getPatientInRole());
         		a.flush();
         		
-        		if(!usedPatients.contains(p.getPatientInRole()))
-        				usedPatients.add(p.getPatientInRole().getPatientInSemester());
+        		if(!usedPatients.contains(p.getPatientInRole().getPatientInSemester()))
+        			usedPatients.add(p.getPatientInRole().getPatientInSemester());
         	}
         }
 		

@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import net.sf.cpsolver.ifs.model.Model;
 import net.sf.cpsolver.ifs.util.ToolBox;
 
@@ -251,15 +252,19 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 * @see ch.unibas.medizin.osce.server.spalloc.model.VarAssignment
 	 * @see ch.unibas.medizin.osce.server.spalloc.model.ValPatient
 	 */
-	// TODO consider only assigning SimPats that fit role of Assignment (db might take
-	// the load off CPSolver)
 	public List<ValPatient> generateValues(VarAssignment vAssignment) {
 		List<ValPatient> values = new ArrayList<ValPatient>();
 		
 		Iterator<PatientInRole> it = patients.iterator();
 		while(it.hasNext()) {
 			PatientInRole patient = it.next();
-			values.add(new ValPatient(vAssignment, patient));
+			
+			StandardizedRole patientRole = patient.getOscePost().getStandardizedRole();
+			StandardizedRole assignmentRole = vAssignment.getOsceAssignment().getOscePostRoom().getOscePost().getStandardizedRole();
+			
+			// only generate values for SPs that are able to play the desired role (line is basically equal to RoleConstraint!)
+			if(patientRole.equals(assignmentRole) || assignmentRole.getRoleType().equals(RoleTypes.Statist))
+				values.add(new ValPatient(vAssignment, patient));
 		}
 		
 		return values;

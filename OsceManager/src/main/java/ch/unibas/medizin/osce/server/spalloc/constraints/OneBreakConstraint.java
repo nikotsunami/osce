@@ -6,15 +6,13 @@ import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 
-import net.sf.cpsolver.ifs.model.GlobalConstraint;
-
 /**
  * This constraint assures that a SP is in break at least once
  * 
  * @author dk
  *
  */
-public class OneBreakConstraint extends GlobalConstraint<VarAssignment, ValPatient> {
+public class OneBreakConstraint extends AssignmentConstraint {
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
@@ -23,14 +21,12 @@ public class OneBreakConstraint extends GlobalConstraint<VarAssignment, ValPatie
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
+			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself and assignments that are further away than +/- 1
-			if(assignment.equals(a) ||
-					(varAssignment.getNextAssignment() != assignment &&
-					varAssignment.getPrevAssignment() != assignment))
+			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || p.getPatientInRole().getStayInPost().equals(true))
 				continue;
 			
-			ValPatient p = va.getAssignment();
 			if(p.hasAssignments() && p.getNumberBreaks() < 1) {
 				conflicts.add(p);
 			}

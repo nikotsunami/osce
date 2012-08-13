@@ -5,7 +5,6 @@ import java.util.Set;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
-import net.sf.cpsolver.ifs.model.GlobalConstraint;
 
 /**
  * This constraint assures that a patient who is meant to stay in the same post
@@ -14,7 +13,7 @@ import net.sf.cpsolver.ifs.model.GlobalConstraint;
  * @author dk
  *
  */
-public class StayInPostConstraint extends GlobalConstraint<VarAssignment, ValPatient> {
+public class StayInPostConstraint extends AssignmentConstraint {
 
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
@@ -25,12 +24,12 @@ public class StayInPostConstraint extends GlobalConstraint<VarAssignment, ValPat
 			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself patients that should not stay in post
-			if(assignment.equals(a) || p.getPatientInRole().getStayInPost() == null || p.getPatientInRole().getStayInPost() == false)
+			if(assignment.equals(a) || p.getPatientInRole().getStayInPost().equals(false))
 				continue;
 			
-			if(p.getPatient().equals(patient.getPatient()) &&
+			if(!p.getPatient().equals(patient.getPatient()) &&
 					p.getPatientInRole().getStayInPost() &&
-					!assignment.getOscePostRoom().equals(a.getOscePostRoom()))
+					assignment.getOscePostRoom().equals(a.getOscePostRoom()))
 				conflicts.add(p);
 		}
 	}
