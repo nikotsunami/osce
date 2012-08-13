@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+
 import net.sf.cpsolver.ifs.solution.Solution;
 import net.sf.cpsolver.ifs.solver.Solver;
 import net.sf.cpsolver.ifs.util.DataProperties;
@@ -18,6 +21,7 @@ import org.apache.log4j.Logger;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.PatientInRole;
+import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.spalloc.constraints.ChangeParcourConstraint;
 import ch.unibas.medizin.osce.server.spalloc.constraints.ChangeRoleConstraint;
@@ -168,7 +172,7 @@ public class SPAllocator {
 	 * are not allocated to any assignment for a given time-slot.
 	 */
 	public void saveSolution() {
-		Set<PatientInRole> usedPatients = new HashSet<PatientInRole>();
+		Set<PatientInSemester> usedPatients = new HashSet<PatientInSemester>();
 		
 		// link Assignments to PatientInRole
 		for(VarAssignment va : ((OsceModel) solution.getModel()).assignedVariables()) {
@@ -180,48 +184,56 @@ public class SPAllocator {
         		a.flush();
         		
         		if(!usedPatients.contains(p.getPatientInRole()))
-        				usedPatients.add(p.getPatientInRole());
+        				usedPatients.add(p.getPatientInRole().getPatientInSemester());
         	}
         }
 		
 		// save SP in break assignment if assignments exists but not for all SP slots
 		Assignment.clearSPBreakAssignments(osce);
 		OsceModel model = ((OsceModel) solution.getModel());
-		Iterator<PatientInRole> it = usedPatients.iterator();
+		Iterator<PatientInSemester> it = usedPatients.iterator();
 		int numberSlots = model.getNumberSlots();
 		
 		while (it.hasNext()) {
-			PatientInRole patientInRole = (PatientInRole) it.next();
-			
-			StandardizedPatient sp = patientInRole.getPatientInSemester().getStandardizedPatient();
+			PatientInSemester sp = (PatientInSemester) it.next();
 			
 			for(int i = 1; i <= numberSlots; i++) {
-				if(model.getPatientAssignment(sp, i) == null) {
-					createSPBreakAssignment(patientInRole, i);
-					log.info(sp.getName() + ", " + sp.getPreName() + " added break for patient " + patientInRole.getId() + " and slot " + i);
+				if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null) {
+					createSPBreakAssignment(sp, i);
+					log.info(sp.getStandardizedPatient().getName() + ", " + sp.getStandardizedPatient().getPreName() + " added break for patient " + sp.getId() + " and slot " + i);
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Generate break slot for SP (time-slots with same times as
-	 * "normal" posts but with osce_post_room = null). SP that are
-	 * not allocated to any post at a given time are allocated to this
+	 * Generate break slot for SP (time-slots with same times as "normal"
+	 * posts but with osce_post_room = null and patientInRole.isBreak = true).
+	 * SP that are not allocated to any post at a given time are allocated to this
 	 * assignment.
 	 */
-	private void createSPBreakAssignment(PatientInRole p, int sequenceNumber) {
+	private void createSPBreakAssignment(PatientInSemester p, int sequenceNumber) {
 		Assignment assignment = refAssignments.get(sequenceNumber - 1);
 		if(assignment != null) {
-			Assignment ass = new Assignment();
-			ass.setType(AssignmentTypes.PATIENT);
-			ass.setOscePostRoom(null);
-			ass.setOsceDay(assignment.getOsceDay());
-			ass.setTimeStart(assignment.getTimeStart());
-			ass.setTimeEnd(assignment.getTimeEnd());
-			ass.setSequenceNumber(sequenceNumber);
-			ass.setPatientInRole(p);
-			ass.persist();
+			try {
+				// get "break role" for this SP
+				PatientInRole breakRole = PatientInRole.findPatientInRolesByPatientInSemesterAndOscePost(p, null).getSingleResult();
+				
+				// create break assignment
+				Assignment ass = new Assignment();
+				ass.setType(AssignmentTypes.PATIENT);
+				ass.setOscePostRoom(null);
+				ass.setOsceDay(assignment.getOsceDay());
+				ass.setTimeStart(assignment.getTimeStart());
+				ass.setTimeEnd(assignment.getTimeEnd());
+				ass.setSequenceNumber(sequenceNumber);
+				ass.setPatientInRole(breakRole);
+				ass.persist();
+			} catch(NoResultException e) {
+				log.error(e.getMessage());
+			} catch(NonUniqueResultException e) {
+				log.error(e.getMessage());
+			}
 		}
 	}
 	
