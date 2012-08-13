@@ -217,7 +217,7 @@ public class SPAllocator {
 		if(assignment != null) {
 			try {
 				// get "break role" for this SP
-				PatientInRole breakRole = PatientInRole.findPatientInRolesByPatientInSemesterAndOscePost(p, null).getSingleResult();
+				PatientInRole breakRole = PatientInRole.findPatientInRolesByPatientInSemesterAndOscePostIsNull(p).getSingleResult();
 				
 				// create break assignment
 				Assignment ass = new Assignment();
