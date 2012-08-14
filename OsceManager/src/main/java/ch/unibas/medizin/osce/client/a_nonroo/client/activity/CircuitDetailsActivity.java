@@ -693,7 +693,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			Log.info(new Integer(OsceStatus.OSCE_BLUEPRINT.ordinal()).toString());
 			if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT))
 				deletePostClicked((OscePostViewImpl)view);
-			
+				setOsceFixedButtonStyle(circuitOsceSubViewImpl, osceProxy);
 		}
 		public void saveStandardizedRole(final ListBoxPopupView view)
 		{
@@ -1124,6 +1124,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								view.getScrollPanel().addStyleDependentName("BluePrint");
 								
 								saveOscePostBlueprint(osceProxy);
+								setOsceFixedButtonStyle(circuitOsceSubViewImpl, osceProxy);
 							}
 							
 						});
@@ -1177,6 +1178,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										Log.info("~oscePostBlueprintRequest.persist()");	
 										Log.info("Add New Post in Keyword Table");
 										Log.info("Data Saved Successfully....");	
+										setOsceFixedButtonStyle(circuitOsceSubViewImpl, osceProxy);
 										requests.find(oscePostBlueprintProxy1.stableId()).with("roleTopic","specialisation").fire(new OSCEReceiver<Object>() {
 
 											@Override
@@ -2271,7 +2273,17 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							@Override
 							public void onClick(ClickEvent event) {
 								Log.info("Yes Button Clicked");
-								requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId());
+								messageDialog.hide();
+								requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+									@Override
+									public void onSuccess(Boolean response) {
+										if(response==true){
+											Log.info("Schedule Genrated Successfully");
+										}
+										
+									}
+								});
 								
 							}
 						});
@@ -2284,6 +2296,20 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								
 							}
 						});
+					}
+					else{
+					
+						requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+							@Override
+							public void onSuccess(Boolean response) {
+								if(response==true){
+									Log.info("Schedule Genrated Successfully");
+								}
+								
+							}
+						});
+
 					}
 				}
 				}
