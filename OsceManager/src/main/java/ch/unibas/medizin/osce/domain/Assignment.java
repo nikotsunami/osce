@@ -73,12 +73,13 @@ public class Assignment {
         return assignmentList;
     }
     
-    public static void updateSequenceNumbersByTime(int sequenceNumber, Date timeStart, Date timeEnd) {
+    public static void updateSequenceNumbersOfTypeSPByTime(int sequenceNumber, Date timeStart, Date timeEnd) {
         EntityManager em = entityManager();
-        String queryString = "SELECT o FROM Assignment AS o WHERE ((timeStart <= :timeEnd AND :timeStart <= timeEnd) OR (timeStart = :timeStart AND timeEnd = :timeEnd)) AND oscePostRoom IS NOT NULL";
+        String queryString = "SELECT o FROM Assignment AS o WHERE ((o.timeStart <= :timeEnd AND :timeStart <= o.timeEnd) OR (o.timeStart = :timeStart AND o.timeEnd = :timeEnd)) AND o.type = :type AND o.oscePostRoom IS NOT NULL";
         TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
         q.setParameter("timeStart", timeStart);
         q.setParameter("timeEnd", timeEnd);
+        q.setParameter("type", AssignmentTypes.PATIENT);
         List<Assignment> assignmentList = q.getResultList();
         
         Iterator<Assignment> it = assignmentList.iterator();

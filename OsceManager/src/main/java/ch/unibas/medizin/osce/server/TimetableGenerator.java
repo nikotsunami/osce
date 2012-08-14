@@ -1025,7 +1025,7 @@ public class TimetableGenerator {
 		Iterator<Assignment> it = refAssignments.iterator();
 		while (it.hasNext()) {
 			Assignment assignment = (Assignment) it.next();
-			Assignment.updateSequenceNumbersByTime(sequenceNumber, assignment.getTimeStart(), assignment.getTimeEnd());
+			Assignment.updateSequenceNumbersOfTypeSPByTime(sequenceNumber, assignment.getTimeStart(), assignment.getTimeEnd());
 			sequenceNumber++;
 		}
 	}
