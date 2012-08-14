@@ -23,8 +23,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import com.allen_sauer.gwt.log.client.Log;
 
-import ch.unibas.medizin.osce.server.TimetableGenerator;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
+import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;

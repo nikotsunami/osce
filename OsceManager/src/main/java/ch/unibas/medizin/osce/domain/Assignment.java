@@ -59,6 +59,26 @@ public class Assignment {
     private Doctor examiner;
 
     private Integer sequenceNumber;
+    
+    /**
+	 * Create new student assignment
+	 * @param osceDay day on which this assignment takes place
+	 * @param oscePR post-room-assignment
+	 * @param studentIndex student which is examined in this assignment
+	 * @param startTime time when the assignment starts
+	 * @param endTime time when the assignment ends
+	 * @return
+	 */
+	public static Assignment createStudentAssignment(OsceDay osceDay, OscePostRoom oscePR, int studentIndex, Date startTime, Date endTime) {
+		Assignment ass2 = new Assignment();
+		ass2.setType(AssignmentTypes.STUDENT);
+		ass2.setOsceDay(osceDay);
+		ass2.setSequenceNumber(studentIndex);
+		ass2.setTimeStart(startTime);
+		ass2.setTimeEnd(endTime);
+		ass2.setOscePostRoom(oscePR);
+		return ass2;
+	}
 
     public static List<Assignment> retrieveAssignmentsOfTypeSP(Osce osce) {
         Log.info("retrieveAssignmenstOfTypeSP :");

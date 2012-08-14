@@ -1,10 +1,8 @@
-package ch.unibas.medizin.osce.server;
+package ch.unibas.medizin.osce.server.ttgen;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.*;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
+import ch.unibas.medizin.osce.shared.ColorPicker;
+import ch.unibas.medizin.osce.shared.OsceSequences;
 import ch.unibas.medizin.osce.shared.PostType;
 
 /**
@@ -30,12 +30,6 @@ public class TimetableGenerator {
 	
 	static Logger log = Logger.getLogger(TimetableGenerator.class);
 	
-	// automatically assign colors to parcours
-	private static final String[] parcourColors = {"blue", "green", "red", "yellow", "purple", "orange", "turquise", "brown"};
-	
-	// automatically assign sequence labels
-	private static final String[] sequences = {"A", "B", "C", "D", "E"};
-
 	// insert a long in the middle of a rotation if time of rotation (breaks excluded) exceeds this threshold
 	private static final int LONG_BREAK_MIDDLE_THRESHOLD = 200;
 	
@@ -54,12 +48,8 @@ public class TimetableGenerator {
 	private List<Integer> rotationsByDay = new ArrayList<Integer>();	// number of rotations for each day
 	private int timeNeeded;					// total time required to perform the OSCE (without breaks)
 	private List<Integer> timeNeededByDay = new ArrayList<Integer>();	// time need per individual day (required to calculate exact end-time of each day)
-
-	private Set<Assignment> assignments;
-
-//	private int simpatSequenceNumber;
-
-	private long[] simAssLastId;
+	private Set<Assignment> assignments;	// this set contains all student assignments (after createAssignments() is invoked)
+	private long[] simAssLastId;			// SPs are not created and finalized in one step - therefore it is necessary to keep a record of the SP that still needs to be finalized
 	
 	/**
 	 * Calculate an optimal timetable with respect to the given parameters by trying and comparing
@@ -72,7 +62,7 @@ public class TimetableGenerator {
 		log.info("calculating optimal solution for osce " + osce.getId());
 		
 		try {
-			checkOsce(osce);
+			OsceVerifier.verifyOsce(osce);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,10 +130,6 @@ public class TimetableGenerator {
 		
 		int maxRotations = numberStudents / (nPosts * numberParcours);
 		
-//		log.info(numberPosts + " " + numberBreakPosts);
-//		log.info("nPosts: "+nPosts);
-//		log.info("maxRotations: "+maxRotations);
-		
 		// init all rotations of parcours with number of break posts
 		for(int i = 0; i < numberParcours; i++) {
 			for(int j = 0; j < maxRotations; j++) {
@@ -173,7 +159,6 @@ public class TimetableGenerator {
 		int rotationIndex = 0;
 		for(int i = 0; i < diff; i++) {
 			rotations[parcourIndex].set(rotationIndex, numberPostsNew);
-//			System.out.println(parcourIndex + " - " + rotations[parcourIndex].get(rotationIndex));
 
 			if(parcourIndex >= rotations.length - 1) {
 				parcourIndex = 0;
@@ -292,7 +277,7 @@ public class TimetableGenerator {
 			if(numberMinsDayMax < timeNeededByDay.get(0)) {
 				//numberDays = numberDays2;
 				rotationsPerDay--;
-				log.warn("do another round... | numberDays = " + numberDays + ", numberDays2 = " + numberDays2 + ", numberMinsDayMax = " + numberMinsDayMax + ", timeNeededByDay.get(0) = " + timeNeededByDay.get(0) + ", timeNeeded = " + timeNeeded);
+				log.info("do another round... | numberDays = " + numberDays + ", numberDays2 = " + numberDays2 + ", numberMinsDayMax = " + numberMinsDayMax + ", timeNeededByDay.get(0) = " + timeNeededByDay.get(0) + ", timeNeeded = " + timeNeeded);
 			} else {
 				numberDaysVerified = true;
 			}
@@ -387,7 +372,7 @@ public class TimetableGenerator {
 			for(int i = 0; i < 2; i++) {
 				// insert sequence
 				OsceSequence seq = new OsceSequence();
-				seq.setLabel(sequences[i]);
+				seq.setLabel(OsceSequences.getConstByIndex(i).toString());
 				seq.setNumberRotation(rotSeq[i]);
 				seq.setOsceDay(osceDay);
 				
@@ -417,7 +402,7 @@ public class TimetableGenerator {
 				
 				// insert sequence
 				OsceSequence seq = new OsceSequence();
-				seq.setLabel(sequences[i]);
+				seq.setLabel(OsceSequences.getConstByIndex(i).toString());
 				seq.setNumberRotation(rotationsByDay.get(i));
 				seq.setOsceDay(osceDay);
 				
@@ -450,35 +435,25 @@ public class TimetableGenerator {
 	 */
 	@SuppressWarnings("deprecation")
 	private void removeOldScaffold() {
-		// temp variables for first OSCE day (used to re-create OSCE day after deleting whole scaffold)
-//		Date dayRefTimeStart = osceDayRef.getTimeStart();
-//		Date dayRefTimeEnd = osceDayRef.getTimeEnd();
-		
 		//SPEC[		
 		log.info("removeOldScaffold start");
 		Iterator<OsceDay> itDay = osce.getOsce_days().iterator();		
 		OsceDay firstDay = itDay.next();							
 		OsceDay removeDay = null;
 		log.info("First Day : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());
-		while(itDay.hasNext())
-		{			
+		while(itDay.hasNext()) {			
 			OsceDay nextDay = itDay.next();
 			log.info("Next Day : " + nextDay.getId() + " : " + nextDay.getOsceDate().toLocaleString());
-			if(firstDay.getOsceDate().after(nextDay.getOsceDate()))
-			{
+			if(firstDay.getOsceDate().after(nextDay.getOsceDate())) {
 				log.info("First Day after Next Day");
-				if(firstDay.getPatientInSemesters() == null || firstDay.getPatientInSemesters().size()==0)
-				{
+				if(firstDay.getPatientInSemesters() == null || firstDay.getPatientInSemesters().size() == 0) {
 					removeDay = firstDay;					
 				}
 				
 				firstDay = nextDay;
-			}
-			else
-			{
+			} else {
 				log.info("Next Day after First Day");
-				if(nextDay.getPatientInSemesters() == null || nextDay.getPatientInSemesters().size()==0)
-				{
+				if(nextDay.getPatientInSemesters() == null || nextDay.getPatientInSemesters().size() == 0) {
 					log.info("Next Day going to be deleted");
 					removeDay = nextDay;
 					log.info("Next Day is deleted");					
@@ -489,19 +464,15 @@ public class TimetableGenerator {
 			osce.getOsce_days().remove(removeDay);
 			removeDay.remove();			
 			log.info("Next Day is deleted");
-			
-			
 		}
 		
 		
-		if(firstDay != null)
-		{
+		if(firstDay != null) {
 			log.info("First Day not null : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());						
 			List<OsceSequence> setOsceSeq = firstDay.getOsceSequences();
 			Iterator<OsceSequence> itOsceSeq = setOsceSeq.iterator();
 			//firstDay.getOsceSequences().removeAll(setOsceSeq);			
-			while(itOsceSeq.hasNext())
-			{				
+			while(itOsceSeq.hasNext()) {				
 				OsceSequence osceSequence = itOsceSeq.next();
 				log.info("Removing osce sequence : " + osceSequence.getId() );
 				firstDay.getOsceSequences().remove(osceSequence);
@@ -510,17 +481,6 @@ public class TimetableGenerator {
 			
 			osceDayRef = firstDay;
 		}
-//		else
-//		{
-//			// re-create new OSCE day
-//			OsceDay newDay = new OsceDay();
-//			newDay.setOsce(osce);
-//			newDay.setOsceDate(dayRefTimeStart);
-//			newDay.setTimeStart(dayRefTimeStart);
-//			newDay.setTimeEnd(dayRefTimeEnd);
-//			newDay.persist();
-//			osceDayRef = newDay;
-//		}
 		
 		//SPEC]
 	}
@@ -537,7 +497,7 @@ public class TimetableGenerator {
 		
 		for(int j = 0; j < numberParcours; j++) {
 			Course c = new Course();
-			c.setColor(parcourColors[j]);
+			c.setColor(ColorPicker.getConstByIndex(j).toString());
 			c.setOsce(osce);
 			c.setOsceSequence(seq);
 			parcours.add(c);
@@ -695,8 +655,6 @@ public class TimetableGenerator {
 					
 					int postsSinceSimpatChange = 0;
 					
-//					simpatSequenceNumber = 1;
-					
 					Date rotationStartTime = parcourStartTime;
 					
 					simAssLastId = new long[numberPosts];
@@ -818,7 +776,7 @@ public class TimetableGenerator {
 								if(currRotationNumber < 1)
 									log.info("\t student index " + studentIndex + " for post " + i);
 
-								assThisRotation.add(createStudentAssignment(osceDay, oscePR, studentIndex, startTime, endTime));
+								assThisRotation.add(Assignment.createStudentAssignment(osceDay, oscePR, studentIndex, startTime, endTime));
 								
 								// ANAMNESIS_THERAPY --> double length in same room BUT different role for second part!
 								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY)) {
@@ -829,7 +787,7 @@ public class TimetableGenerator {
 									
 									OscePostRoom oscePRAlt = OscePostRoom.altOscePostRoom(oscePR);
 									
-									assThisRotation.add(createStudentAssignment(osceDay, oscePRAlt, studentIndex, startTime2, endTime2));
+									assThisRotation.add(Assignment.createStudentAssignment(osceDay, oscePRAlt, studentIndex, startTime2, endTime2));
 									
 									endTime = endTime2;
 								}
@@ -855,12 +813,12 @@ public class TimetableGenerator {
 									// create first SP slot
 									if(firstRotation && firstTimeSlot) {
 										createSPAssignment(i, osceDay, startTime, oscePR);
-										log.warn("create SP assignment for post " + i + " " + debugTime(startTime));
+										log.info("create SP assignment for post " + i + " " + debugTime(startTime));
 									}
 									// finalize last SP slot
 									if(lastRotation && lastTimeSlot) {
 										finalizeSPAssignment(i, endTime);
-										log.warn("finalize SP assignment for post " + i + " " + debugTime(endTime));
+										log.info("finalize SP assignment for post " + i + " " + debugTime(endTime));
 									}
 								}
 								
@@ -884,7 +842,7 @@ public class TimetableGenerator {
 										
 										if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
 											changeSP(i, osceDay, endTime, endTimeNew, oscePR);
-											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
+											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
 										}
 										
 										endTime = endTimeNew;
@@ -908,7 +866,7 @@ public class TimetableGenerator {
 											}
 											
 											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
-											log.warn("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
+											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
 										}
 									}
 								}
@@ -1009,9 +967,6 @@ public class TimetableGenerator {
 			assignment.persist();
 		}
 		
-//		printAllStudents(assignments);
-//		printAllSP(assignments);
-		
 		correctSPSequenceNumbers();
 		
 		return assignments;
@@ -1031,26 +986,6 @@ public class TimetableGenerator {
 	}
 
 	/**
-	 * Create new student assignment
-	 * @param osceDay day on which this assignment takes place
-	 * @param oscePR post-room-assignment
-	 * @param studentIndex student which is examined in this assignment
-	 * @param startTime time when the assignment starts
-	 * @param endTime time when the assignment ends
-	 * @return
-	 */
-	private Assignment createStudentAssignment(OsceDay osceDay, OscePostRoom oscePR, int studentIndex, Date startTime, Date endTime) {
-		Assignment ass2 = new Assignment();
-		ass2.setType(AssignmentTypes.STUDENT);
-		ass2.setOsceDay(osceDay);
-		ass2.setSequenceNumber(studentIndex);
-		ass2.setTimeStart(startTime);
-		ass2.setTimeEnd(endTime);
-		ass2.setOscePostRoom(oscePR);
-		return ass2;
-	}
-	
-	/**
 	 * Create new SP assignment for post i at specific time
 	 * @param i index of the post in "posts"
 	 * @param osceDay day on which this assignment is put
@@ -1061,7 +996,6 @@ public class TimetableGenerator {
 		Assignment ass = new Assignment();
 		ass.setType(AssignmentTypes.PATIENT);
 		ass.setOsceDay(osceDay);
-//		ass.setSequenceNumber(simpatSequenceNumber++);
 		ass.setTimeStart(startTime);
 		ass.setTimeEnd(startTime);
 		ass.setOscePostRoom(oscePR);
@@ -1095,48 +1029,6 @@ public class TimetableGenerator {
 	private void changeSP(int i, OsceDay osceDay, Date endTimeOld, Date startTimeNew, OscePostRoom oscePR) {
 		finalizeSPAssignment(i, endTimeOld);
 		createSPAssignment(i, osceDay, startTimeNew, oscePR);
-	}
-	
-	@SuppressWarnings("unused")
-	private void printAllStudents(Set<Assignment> assThisRotation) {
-		List<Assignment> assList = new ArrayList<Assignment>(assThisRotation);
-		Collections.sort(assList, new Comparator<Assignment>() {
-			public int compare(Assignment ass1, Assignment ass2) {
-				if(ass1.getSequenceNumber() == ass2.getSequenceNumber()) {
-					return (int) (ass1.getTimeStart().getTime() - ass2.getTimeStart().getTime());
-				} else {
-					return (int) (ass1.getSequenceNumber() - ass2.getSequenceNumber());
-				}
-			}
-			
-		});
-		
-		Iterator<Assignment> it = assList.iterator();
-		int oldSeq = 0;
-		while(it.hasNext()) {
-			Assignment ass = (Assignment) it.next();
-			
-			if(ass.getSequenceNumber() > oldSeq) {
-				System.out.println("\t ---");
-				oldSeq = ass.getSequenceNumber();
-			}
-			
-			if(ass.getType().equals(AssignmentTypes.STUDENT))
-				System.out.println(debugStudent(ass));
-		}
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void printAllSP(Set<Assignment> assignments) {
-		Iterator<Assignment> it = assignments.iterator();
-		while(it.hasNext()) {
-			Assignment ass = (Assignment) it.next();
-			
-			if(ass.getType().equals(AssignmentTypes.PATIENT))
-				System.out.println(debugSP(ass));
-		}
-		
 	}
 	
 	/**
@@ -1199,73 +1091,8 @@ public class TimetableGenerator {
 		return maxPosts;
 	}
 	
-	/**
-	 * Check OSCE for valid information set needed to optimize
-	 * 
-	 * @param osce
-	 */
-	private static void checkOsce(Osce osce) throws Exception {
-		String errString = "missing information: %s";
-		
-		if(osce.getMaxNumberStudents() == null || osce.getMaxNumberStudents() <= 0)
-			throw new Exception(String.format(errString, "maximum number of students"));
-		
-		if(osce.getNumberRooms() == null || osce.getNumberRooms() <= 0)
-			throw new Exception(String.format(errString, "number of rooms available"));
-		
-		if(osce.getPostLength() == null || osce.getPostLength() <= 0)
-			throw new Exception(String.format(errString, "post length"));
-		
-		if(osce.getShortBreak() == null || osce.getShortBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of short break (after a post)"));
-		
-		if(osce.getShortBreakSimpatChange() == null || osce.getShortBreakSimpatChange() <= 0)
-			throw new Exception(String.format(errString, "duration of simpat change break (when a change of simpat is needed WITHIN rotation)"));
-		
-		if(osce.getMiddleBreak() == null || osce.getMiddleBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of middle break (after a rotation)"));
-		
-		if(osce.getLongBreak() == null || osce.getLongBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of long break (when a change of simpat is needed AFTER rotation)"));
-		
-		if(osce.getLunchBreak() == null || osce.getLunchBreak() <= 0)
-			throw new Exception(String.format(errString, "duration of lunch break"));
-		
-		if(!(osce.getOsce_days().size() > 0))
-			throw new Exception(String.format(errString, "no OsceDay for this Osce defined"));
-	}
-	
-	/**
-	 * Print debug information on assignment (namely start- and end-time consiting only of HH:mm)
-	 * @param ass
-	 * @return
-	 */
-	private String debugTimeStartEnd(Assignment ass) {
-		String timeString = debugTime(ass.getTimeStart()) + " - " + debugTime(ass.getTimeEnd());
-		return timeString;
-	}
-	
 	private String debugTime(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		return format.format(date);
-	}
-	
-	private String debugStudent(Assignment ass) {
-		String room = "none";
-		OscePostBlueprint postBP = null;
-		if(ass.getOscePostRoom() != null) {
-			room = ass.getOscePostRoom().getRoom().getRoomNumber();
-			postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
-		}
-		
-		return "\t student "+ass.getSequenceNumber()+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted..." + (postBP != null && postBP.equals(PostType.ANAMNESIS_THERAPY) ? "first: " + postBP.getIsFirstPart() : "");
-	}
-	
-	private String debugSP(Assignment ass) {
-		String room = "none";
-		if(ass.getOscePostRoom() != null) {
-			room = ass.getOscePostRoom().getRoom().getRoomNumber();
-		}
-		return "(room: "+room+", "+debugTimeStartEnd(ass)+") inserted...";
 	}
 }
