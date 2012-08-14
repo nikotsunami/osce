@@ -10,12 +10,31 @@ import javax.persistence.Enumerated;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import javax.validation.constraints.NotNull;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.Query;
+import org.springframework.expression.spel.ast.Assign;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.roo.addon.entity.RooEntity;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.tostring.RooToString;
+
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.shared.AssignmentTypes;
+import ch.unibas.medizin.osce.shared.PostType;
+
 import com.allen_sauer.gwt.log.client.Log;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import javax.persistence.ManyToOne;
@@ -211,4 +230,75 @@ public class Assignment {
         Log.info("Assignment List Size :" + assignmentList.size());
         return assignmentList;
     }
+    
+  //Testing task {
+
+    public static List<Assignment> findAssignmentForTestBasedOnCriteria(Long osceDayId,List<AssignmentTypes> type,Long postRoomId){
+    	Log.info("Inside findAssignmentForTestBasedOnCriteria() ");
+    /*	EntityManager em = entityManager();
+    	String query="select a from Assignment a where a.osceDay = " + osceDayId+" and a.type In(:osceType) and a.oscePostRoom = "+ postRoomId+" order by a.type, a.oscePostRoom, a.timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	q.setParameter("osceType",type==null ? AssignmentTypes.STUDENT+","+AssignmentTypes.PATIENT+","+AssignmentTypes.EXAMINER : type);  */
+    	
+    	//q.setParameter("postRoomId", postRoomId<=0  ? "a.oscePostRoom": postRoomId);
+    	//q.setParameter("courseId", courseId==0 || courseId < 0 ?"a.oscePostRoom.course" : courseId);
+    	
+    	CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
+		CriteriaQuery<Assignment> criteriaQuery = criteriaBuilder.createQuery(Assignment.class);
+		Root<Assignment> from = criteriaQuery.from(Assignment.class);
+		CriteriaQuery<Assignment> select = criteriaQuery.select(from);
+		
+		select.orderBy(criteriaBuilder.asc(from.get("type")), criteriaBuilder.asc(from.get("oscePostRoom")), criteriaBuilder.asc(from.get("timeStart")));
+		
+		Predicate pre1 = criteriaBuilder.disjunction();
+		pre1 = criteriaBuilder.equal(from.get("osceDay"), osceDayId);
+		
+		if (postRoomId > 0)
+		{
+			Predicate pre2 = criteriaBuilder.disjunction();
+			pre2 = criteriaBuilder.equal(from.get("oscePostRoom"), postRoomId);
+			pre1 = criteriaBuilder.and(pre1,pre2);
+		}
+		
+		if (!type.equals(null))
+		{
+			Predicate pre3 = criteriaBuilder.disjunction();
+			pre3 =from.get("type").in(type);
+			pre1 = criteriaBuilder.and(pre1, pre3);
+		}
+		
+		criteriaQuery.where(pre1);
+    	
+		TypedQuery<Assignment> typedQuery = entityManager().createQuery(select);
+		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());	
+		
+    	//Log.info("Query is :" +query);
+		List<Assignment> assignmentList = typedQuery.getResultList();
+		Log.info("~~RESULT SIZE : " + assignmentList.size());
+		
+    	return assignmentList;
+    }
+    
+    public static Integer findTotalStudentsBasedOnOsce(Long osceId){
+    	
+    	Log.info("Inside findTotalStudentsBasedOnOsce() ");
+    	EntityManager em = entityManager();
+    	String query="select count(a) from Assignment as a,OsceDay as od where od.osce="+osceId+ " and a.osceDay=od.id and a.type = :type";
+    	TypedQuery<Long> q = em.createQuery(query, Long.class);
+    	q.setParameter("type", AssignmentTypes.STUDENT);
+    	Log.info("Query is :" +query);
+    	Integer result = q.getSingleResult() != null && q.getSingleResult() != 0 ? q.getSingleResult().intValue() : 0 ;
+    	return result;
+    }
+    
+    public static List<Assignment> findAssignmentBasedOnOsceDay(Long osceDayId){
+    	
+    	Log.info("Inside findAssignmentBasedOnOsceDay() ");
+    	EntityManager em = entityManager();
+    	String query="select a from Assignment a where a.osceDay="+osceDayId + " order by a.type,a.oscePostRoom,a.timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	Log.info("Query is :" +query + "Result Size" + q.getResultList().size());
+    	return q.getResultList();
+    }
+    //Testing task }
 }

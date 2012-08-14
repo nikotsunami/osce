@@ -464,12 +464,51 @@ OsceCreatePostBluePrintSubView.Delegate,OsceDayView.Delegate ,SequenceOsceSubVie
 	}
 public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSubViewImpl, OsceProxy osceProxy){
 
-	if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED || osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
+	/*if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED || osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
 	 circuitOsceSubViewImpl.setFixBtnStyle(true);	
 	}
 	else{
 		circuitOsceSubViewImpl.setFixBtnStyle(false);
+	}*/
+	
+	if(osceProxy.getOsceStatus()==OsceStatus.OSCE_NEW){
+		circuitOsceSubViewImpl.setClearAllBtn(false);
+		circuitOsceSubViewImpl.clearAllBtn.setStyleName("flexTable-Button-Disabled");
+		circuitOsceSubViewImpl.setGenratedBtnStyle(false);
+		circuitOsceSubViewImpl.setFixBtnStyle(false);
+		circuitOsceSubViewImpl.setClosedBtnStyle(false);
 	}
+	else if(osceProxy.getOsceStatus()==OsceStatus.OSCE_BLUEPRINT){
+		circuitOsceSubViewImpl.setClearAllBtn(false);
+		circuitOsceSubViewImpl.clearAllBtn.setStyleName("flexTable-Button-Disabled");
+		circuitOsceSubViewImpl.setGenratedBtnStyle(true);
+		circuitOsceSubViewImpl.setFixBtnStyle(false);
+		circuitOsceSubViewImpl.setClosedBtnStyle(false);
+	}
+	else if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED){
+		circuitOsceSubViewImpl.setClearAllBtn(true);
+		circuitOsceSubViewImpl.clearAllBtn.removeStyleName("flexTable-Button-Disabled");
+		 circuitOsceSubViewImpl.setFixBtnStyle(true);
+		 circuitOsceSubViewImpl.setGenratedBtnStyle(false);
+		 circuitOsceSubViewImpl.setClosedBtnStyle(false);
+	}
+	else if(osceProxy.getOsceStatus()==OsceStatus.OSCE_FIXED){
+		circuitOsceSubViewImpl.setClearAllBtn(false);
+		circuitOsceSubViewImpl.clearAllBtn.setStyleName("flexTable-Button-Disabled");
+		 circuitOsceSubViewImpl.setFixBtnStyle(false);
+		 circuitOsceSubViewImpl.setGenratedBtnStyle(true);
+		 circuitOsceSubViewImpl.setClosedBtnStyle(true);
+	}
+	else if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
+		
+		circuitOsceSubViewImpl.setClearAllBtn(false);
+		circuitOsceSubViewImpl.clearAllBtn.setStyleName("flexTable-Button-Disabled");
+		circuitOsceSubViewImpl.fixedBtn.setText("re-Open");
+		 circuitOsceSubViewImpl.setFixBtnStyle(true);
+		 circuitOsceSubViewImpl.setGenratedBtnStyle(false);
+		 circuitOsceSubViewImpl.setClosedBtnStyle(false);
+	}
+	
 }
 		
 		
@@ -961,6 +1000,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			OsceRequest osceReq = requests.osceRequest();
 			proxy = osceReq.edit(proxy);			
 			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);		
+			circuitOsceSubViewImp.setClearAllBtn(false);
+			circuitOsceSubViewImp.clearAllBtn.setStyleName("flexTable-Button-Disabled");
 			// Highlight onViolation
 			osceReq.persist().using(proxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
 				// E Highlight onViolation
@@ -1070,6 +1111,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						OsceRequest osceRequest=requests.osceRequest();
 						osceProxy=osceRequest.edit(osceProxy);
 						osceProxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);
+						
 						osceRequest.persist().using(osceProxy).fire(new OSCEReceiver<Void>() {
 
 							@Override
@@ -2204,9 +2246,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				@Override
 				public void osceGenratedButtonClicked() {
 					
+					circuitOsceSubViewImpl.setClearAllBtn(true);
+					circuitOsceSubViewImpl.clearAllBtn.removeStyleName("flexTable-Button-Disabled");
+					circuitOsceSubViewImpl.setGenratedBtnStyle(false);
 					circuitOsceSubViewImpl.setFixBtnStyle(true);
+					circuitOsceSubViewImpl.fixedBtn.setText(constants.fixedButtonString());
+					circuitOsceSubViewImpl.setClosedBtnStyle(false);
+					
 					Log.info("Genrated Button Clicked Event at Circuit Details Activity");
 					Log.info("OSceProxy is :" + osceProxy.getId());
+					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_BLUEPRINT){
 					//requests.oscePostBluePrintRequestNonRoo().isBluePrintHasBreakAsLast(osceProxy.getId());
 					int totalOscePosts=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP().getWidgetCount();
 					Log.info("Total OscePost is :"+totalOscePosts);
@@ -2222,7 +2271,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							@Override
 							public void onClick(ClickEvent event) {
 								Log.info("Yes Button Clicked");
-								messageDialog.showConfirmationDialog("You Can Moov Ahead");
+								requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId());
+								
 							}
 						});
 						
@@ -2236,9 +2286,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						});
 					}
 				}
+				}
 				
 				@Override
 				public void fixedButtonClicked(final OsceProxy osceProxy) {
+					
+					circuitOsceSubViewImpl.setFixBtnStyle(false);
+					circuitOsceSubViewImpl.setClosedBtnStyle(true);
+					circuitOsceSubViewImpl.setGenratedBtnStyle(true);
+					circuitOsceSubViewImpl.clearAllBtn.setStyleName("flexTable-Button-Disabled");
+					circuitOsceSubViewImpl.setClearAllBtn(false);
 					Log.info("Fixed Button Clicked Event At CircuitDetails Acticity");
 					Log.info("OsceProxy is :"+ osceProxy.getId());
 					Log.info("Osce Status is :" + osceProxy.getOsceStatus());
@@ -2253,6 +2310,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								
 								Log.info("Yes Button Clicked So user wants to go Ahead remove all role of osce");
 								message.showConfirmationDialog("You Can Moov Ahead");
+								circuitOsceSubViewImpl.setFixBtnStyle(true);
+								circuitOsceSubViewImpl.fixedBtn.setText(constants.fixedButtonString());
+								
 								//To DO
 								//requests.osceRequestNonRoo().deleteAllPatentInRoleForOsce(osceProxy.getId());
 							}
@@ -2271,8 +2331,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				}
 				// Module 5 changes }
 
-				
-				
+				@Override
+				public void closeButtonClicked(OsceProxy proxy) {
+					Log.info("Closed Button Clicked");
+					circuitOsceSubViewImpl.clearAllBtn.setStyleName("flexTable-Button-Disabled");
+					circuitOsceSubViewImpl.setClearAllBtn(false);
+					circuitOsceSubViewImpl.setClosedBtnStyle(false);
+					circuitOsceSubViewImpl.setGenratedBtnStyle(false);
+					circuitOsceSubViewImpl.setFixBtnStyle(true);
+					circuitOsceSubViewImpl.fixedBtn.setText(constants.reopenButtonString());
+				}
 				//  OSCE Day Assignment END
 				
 				

@@ -30,6 +30,10 @@ public interface CircuitOsceSubView extends IsWidget {
 		
 		void fixedButtonClicked(OsceProxy proxy);
 		// Module 5 changes }
+		// change {
+		void closeButtonClicked(OsceProxy proxy);
+		
+		// change }
 	}
 
 	String[] getPaths();

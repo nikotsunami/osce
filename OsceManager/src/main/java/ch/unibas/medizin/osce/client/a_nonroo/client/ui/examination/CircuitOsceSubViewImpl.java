@@ -50,9 +50,12 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	// Module 5 changes {
 
 	@UiField
-	Button fixedBtn;
-	
+	public Button fixedBtn;
 
+	// change {
+	@UiField
+	Button closedBtn;
+	// change }
 	public void setFixBtnStyle(boolean enabled){
 		Log.info("Satting Fixed Button Visability To : " + enabled);
 		if(!enabled){
@@ -66,11 +69,46 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		
 	}
 	
+	public void setGenratedBtnStyle(boolean enabled){
+		Log.info("Satting Genrated Button Visability To : " + enabled);
+		if(!enabled){
+			generateBtn.setEnabled(false);
+			generateBtn.setStyleName("flexTable-Button-Disabled");
+		}
+		else{
+			generateBtn.setEnabled(true);
+			generateBtn.removeStyleName("flexTable-Button-Disabled");
+		}	
+		
+	}
+	
+	public void setClosedBtnStyle(boolean enabled){
+		Log.info("Satting Closed Button Visability To : " + enabled);
+		if(!enabled){
+			closedBtn.setEnabled(false);
+			closedBtn.setStyleName("flexTable-Button-Disabled");
+		}
+		else{
+			closedBtn.setEnabled(true);
+			closedBtn.removeStyleName("flexTable-Button-Disabled");
+		}	
+		
+	}
 	@UiHandler("fixedBtn")
 	public void fixedButtonClicked(ClickEvent event){
 		Log.info("Fixed Button Clicked");
 		delegate.fixedButtonClicked(proxy);
 	}
+	
+	// change {
+	@UiHandler("closedBtn")
+	public void closeButtonClicked(ClickEvent event){
+		Log.info("Close Button Clicked");
+		delegate.closeButtonClicked(proxy);
+		
+	}
+	// change }
+	
 	// Module 5 changes }
 	
 	protected Set<String> paths = new HashSet<String>();
@@ -171,7 +209,10 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		clearAllBtn.setText(constants.clearAll());	
 		generateBtn.setText(constants.generate());
 		
-		fixedBtn.setText("Fixed");
+		// change {
+		fixedBtn.setText(constants.fixedButtonString());
+		closedBtn.setText(constants.closedButtonString());
+		// change {
 	}
 
 	public String[] getPaths() {

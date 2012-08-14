@@ -615,5 +615,8 @@ public interface OsceConstants extends Constants {
 			public String warningBreakIsAtEnd(); 
 			
 			public String confirmationWhenStatusIsChangingFormClosedToFix();
+	public String fixedButtonString();
+	public String closedButtonString();
+	public String reopenButtonString();
 			// Module 5 changes }
 }
