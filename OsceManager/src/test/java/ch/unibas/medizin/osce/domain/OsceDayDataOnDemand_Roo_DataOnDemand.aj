@@ -33,12 +33,18 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
     
     public OsceDay OsceDayDataOnDemand.getNewTransientOsceDay(int index) {
         OsceDay obj = new OsceDay();
+        setLunchBreakStart(obj, index);
         setOsce(obj, index);
         setOsceDate(obj, index);
         setTimeEnd(obj, index);
         setTimeStart(obj, index);
         setValue(obj, index);
         return obj;
+    }
+    
+    public void OsceDayDataOnDemand.setLunchBreakStart(OsceDay obj, int index) {
+        Date lunchBreakStart = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setLunchBreakStart(lunchBreakStart);
     }
     
     public void OsceDayDataOnDemand.setOsce(OsceDay obj, int index) {

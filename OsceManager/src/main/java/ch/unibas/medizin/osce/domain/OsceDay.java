@@ -41,6 +41,10 @@ public class OsceDay {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date timeEnd;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "M-")
+	private Date lunchBreakStart;
 
 	@ManyToOne
 	private Osce osce;
