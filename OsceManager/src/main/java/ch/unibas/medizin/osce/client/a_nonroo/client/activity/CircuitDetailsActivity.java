@@ -2366,6 +2366,38 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					circuitOsceSubViewImpl.setGenratedBtnStyle(false);
 					circuitOsceSubViewImpl.setFixBtnStyle(true);
 					circuitOsceSubViewImpl.fixedBtn.setText(constants.reopenButtonString());
+					
+					// dk invoke SPAllocator [
+					final MessageConfirmationDialogBox message = new MessageConfirmationDialogBox("Alert");
+					message.showYesNoDialog(constants.confirmationWhenStatusIsChangingFormClosedToFix());
+					message.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							
+							Log.info("Yes Button Clicked - user wants to go ahead and close the osce");
+							//message.showConfirmationDialog("You Can Moov Ahead");
+							circuitOsceSubViewImpl.setFixBtnStyle(true);
+							circuitOsceSubViewImpl.fixedBtn.setText(constants.fixedButtonString());
+							
+							requests.osceRequestNonRoo().generateAssignments(osceProxy.getId()).fire(new Receiver<Boolean>() {
+
+								@Override
+								public void onSuccess(Boolean response) {
+									message.showConfirmationDialog("osce has been closed - assignments generated!");
+								}
+							});
+						}
+					});
+					
+					message.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							message.hide();
+						}
+					});
+					// ] dk
 				}
 				//  OSCE Day Assignment END
 				
