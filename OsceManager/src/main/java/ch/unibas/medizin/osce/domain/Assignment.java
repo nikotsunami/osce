@@ -69,7 +69,7 @@ public class Assignment {
     private OscePostRoom oscePostRoom;
 
     @ManyToOne
-    private Student student;
+    private StudentOsces osceStudent;
 
     @ManyToOne
     private PatientInRole patientInRole;
