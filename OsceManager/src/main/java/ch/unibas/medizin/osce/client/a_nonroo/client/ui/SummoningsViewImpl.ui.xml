@@ -2,11 +2,115 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.widgets.richtext">
 	 
-	<ui:style src="../styles.css" />
+	<ui:style src="../styles.css">
+		.panelStyle {
+			width: 320px;
+			height: 400px;
+			border-color: #AAAAAA;
+			border-width: thin;
+			border-style: solid;
+			padding: 0px;
+			margin-top: 0px;
+			margin-left:30px;
+			margin-bottom: 5px;
+			-moz-border-radius: 4px;
+		}
+		
+		.commonStyle {
+			margin-top: 5px;
+			margin-bottom: 10px;
+			margin-left: 23px;
+			margin-right: 23px;
+			width: 140px;
+		}
+		
+		.topAlign {
+			vertical-align: top;
+		}
+		
+		.scrollpanelStyle
+		{
+			height:400px; 
+			width:320px;			
+		}
+		.headerLabelPanel{
+			padding-left: 30px;
+			padding-bottom: 12px;
+			padding-top: 10px;
+			font-size: large;
+		}
+	</ui:style>
 	
 	<g:HTMLPanel>
-		<h1>Aufgebote versenden - MainView</h1>
+			<g:HorizontalPanel>
+<!-- 			<g:SplitLayoutPanel ui:field="splitLayoutPanel"> -->
+<!-- 				<g:west size="200"> -->
+					<g:VerticalPanel>
+						<g:HTMLPanel addStyleNames="{style.headerLabelPanel}">
+							<g:Label ui:field="lblSP">Standardized Patient</g:Label>
+						</g:HTMLPanel>
+						
+					<g:VerticalPanel addStyleNames="{style.panelStyle}">
+						
+						<g:VerticalPanel >
+							<g:HorizontalPanel addStyleNames="listHeaderPanelStyle">
+								<g:HorizontalPanel >
+									<g:RadioButton name="RBSP" ui:field="rbSelectedSP">Selected</g:RadioButton>
+									<g:RadioButton name="RBSP" ui:field="rbAllSP">All</g:RadioButton>
+								</g:HorizontalPanel>
+							</g:HorizontalPanel>
+							<g:ScrollPanel addStyleNames="listPanelStyle">
+								<g:VerticalPanel ui:field="vpSP">
+								</g:VerticalPanel>
+							</g:ScrollPanel>
+							<g:HorizontalPanel>
+								<g:Button ui:field="btnSendMailSP" addStyleNames="{style.commonStyle}">Send
+									Email to SP</g:Button>
+								<g:Button ui:field="btnPrintCopySP" addStyleNames="{style.commonStyle}">Print
+									copy for SP</g:Button>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+						
+					</g:VerticalPanel>  
+				</g:VerticalPanel>
+<!-- 				</g:west> -->
+<!-- 				<g:center> -->
+				
+					
+					<g:VerticalPanel>
+					
+						<g:HTMLPanel addStyleNames="{style.headerLabelPanel}">
+							<g:Label ui:field="lblExaminor" >Examiner</g:Label>
+						</g:HTMLPanel>
+						
+						<g:VerticalPanel addStyleNames="{style.panelStyle}">
+							<g:VerticalPanel>
+								<g:HorizontalPanel addStyleNames="listHeaderPanelStyle">
+									<g:HorizontalPanel>
+										<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor">Selected</g:RadioButton>
+										<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor">All</g:RadioButton>
+										</g:HorizontalPanel>
+									</g:HorizontalPanel>
+							<g:ScrollPanel addStyleNames="listPanelStyle">
+								<g:VerticalPanel ui:field="vpExaminor">
+								</g:VerticalPanel>
+							</g:ScrollPanel>
+							<g:HorizontalPanel>
+								<g:Button ui:field="btnSendMailExaminor" addStyleNames="{style.commonStyle}">Send
+									Email to Examinor</g:Button>
+								<g:Button ui:field="btnPrintCopyExaminor" addStyleNames="{style.commonStyle}">Print
+									copy for Examinor</g:Button>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+						
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+<!-- 				</g:center> -->
+<!-- 			</g:SplitLayoutPanel> -->
+		</g:HorizontalPanel>
 	</g:HTMLPanel>
+	
+	
 </ui:UiBinder> 

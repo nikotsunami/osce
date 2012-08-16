@@ -39,4 +39,7 @@ public interface OsceRequestNonRoo extends RequestContext{
 		//public abstract Request<Void> deleteAllPatentInRoleForOsce(Long osceId);
 		
 		// Module 5 changes }
+		// Module10 Create plans
+		abstract Request<Long> findOsceIdByOsceName(String osceName);
+		// E Module10 Create plans
 }

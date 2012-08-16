@@ -45,12 +45,12 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 	private CircuitDetailsActivityMapper circuitDetailsActivityMapper;
 	private ActivityManager activityManager;
 	private OsceProxy osceProxy;
-	private SemesterProxy semesterProxy;
+	private static SemesterProxy semesterProxy;
 	
 	private List<OsceProxy> osceProxyList = new ArrayList<OsceProxy>();
 	
 	
-	public HandlerManager handlerManager;// = new HandlerManager(this);
+	public static HandlerManager handlerManager;// = new HandlerManager(this);
 
 	
 	// G: SPEC START =
@@ -60,8 +60,8 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 				this.requests = requests;		
 				this.placeController = placeController;
 				this.place=circuitPlace;
-				this.handlerManager = circuitPlace.handler;
-				this.semesterProxy=circuitPlace.semesterProxy;
+				this.handlerManager = CircuitPlace.handler;
+				this.semesterProxy=CircuitPlace.semesterProxy;
 				Log.info("Semester Proxy : " + semesterProxy.getCalYear() + " :in CircuitActivity Constructor.");
 				//System.out.println("Proxy: " + place.semesterProxy.getCalYear());
 				

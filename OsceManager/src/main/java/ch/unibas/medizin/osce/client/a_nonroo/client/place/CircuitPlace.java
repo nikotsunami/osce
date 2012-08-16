@@ -12,7 +12,7 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
 public class CircuitPlace extends OsMaPlace {
 
 	private String token;
-	public SemesterProxy semesterProxy;
+	public static  SemesterProxy semesterProxy;
 
 
 	public CircuitPlace(){
@@ -20,7 +20,7 @@ public class CircuitPlace extends OsMaPlace {
 		this.token = "CircuitPlace";
 	}
 
-	public HandlerManager handler;
+	public static HandlerManager   handler;
 	public CircuitPlace(String token, HandlerManager handler,SemesterProxy semesterProxy) 
 	{
 		Log.info("~Get Semester : " + semesterProxy.getCalYear() + ": In Circuit Constrcutor");

@@ -94,7 +94,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-CheckBox label {
-	bottom: 3px;
+	bottom: 6px;
     position: relative;
 }
 
@@ -1269,7 +1269,7 @@ a:hover, .gwt-Anchor:hover {
 	border-radius: 4px;
 	
 	border: 1px solid #AAAAAA;
-	height: 21px;
+	height: 25px;
 	font-size: 90%;
 }
 
@@ -2781,4 +2781,44 @@ color: #f1b532;
     opacity: 0.9;
     clip: inherit !important;
 }
+
+/* Module10 Create plans*/
+.schedulePanelStyle
+{	
+	background: url("images/SchedulePanelBackground.png") repeat-y;
+	width: 320px;
+	-moz-border-radius: 4px;
+}
+.printPopupPanel
+{
+	border-radius:10px;
+	
+}
+/* E Module10 Create plans */
+
+/* Module 9 */
+
+.listHeaderPanelStyle{
+	
+	background-color: #D2AE50;
+	width: 100%;
+}
+.listPanelStyle
+{	
+			height: 385px;
+			border-left : 0px;
+			border-top : 1px;
+			border-right : 0px;
+			border-bottom : 1px;
+			border-style: solid;
+			border-color: #AAAAAA;
+			padding-top: 7px;
+			margin-top: 0px;
+			margin-bottom: 5px;
+			-moz-border-radius: 4px; 
+			background: url("images/SchedulePanelBackground.png") repeat;
+}
+
+/* Module 9*/
+
 /* Module 8 End }*/

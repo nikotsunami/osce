@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
@@ -53,6 +54,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -105,7 +107,7 @@ public class OsMaMainNav extends Composite {
 		OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@Inject
-	public OsMaMainNav(OsMaRequestFactory requests, PlaceController placeController) {
+	public OsMaMainNav(OsMaRequestFactory requests, PlaceController placeController,final PlaceHistoryHandler placeHistoryHandler) {
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		this.requests = requests;
@@ -181,6 +183,11 @@ public class OsMaMainNav extends Composite {
 						lstSemester.setAcceptableValues(response);	
 						if(response != null && response.size()>0)
 							lstSemester.setValue(response.get(0));
+						
+						
+						ExaminationSchedulePlace.semesterProxy=lstSemester.getValue();
+						CircuitPlace.semesterProxy=lstSemester.getValue();
+						placeHistoryHandler.handleCurrentHistory();
 				}
 		});
 			
@@ -209,7 +216,10 @@ public class OsMaMainNav extends Composite {
 				//handlerManager.fireEvent(new SelectChangeEvent(lstSemester.getValue()));				
 			}			
 		});
-		registerLoading();
+		
+		ExaminationSchedulePlace.handler=handlerManager;
+		CircuitPlace.handler=handlerManager;
+		
 		
 		// G: SPEC END =		
 	}
@@ -430,6 +440,8 @@ public class OsMaMainNav extends Composite {
 	@UiHandler("circuit")
 	void circuitClicked(ClickEvent event) 
 	{
+		CircuitPlace.handler=handlerManager;
+		CircuitPlace.semesterProxy=lstSemester.getValue();
 		placeController.goTo(new CircuitPlace("CircuitPlace",handlerManager,lstSemester.getValue()));
 	}
 
@@ -442,17 +454,27 @@ public class OsMaMainNav extends Composite {
 	@UiHandler("examinationSchedule")
 	void examinationScheduleClicked(ClickEvent event) {
 		//placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace"));
+		ExaminationSchedulePlace.handler=handlerManager;
+		ExaminationSchedulePlace.semesterProxy=lstSemester.getValue();
+		
 		placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace",handlerManager,lstSemester.getValue()));
 	}
 	
 	@UiHandler("summonings")
 	void summoningsClicked(ClickEvent event) {
-		placeController.goTo(new SummoningsPlace("SummoningsPlace"));
+//		placeController.goTo(new SummoningsPlace("SummoningsPlace"));
+		placeController.goTo(new SummoningsPlace("SummoningsPlace", handlerManager, lstSemester.getValue()));
 	}
 
 	@UiHandler("individualSchedules")
 	void individualSchedulesClicked(ClickEvent event) {
-		placeController.goTo(new IndividualSchedulesPlace("IndividualSchedulesPlace"));
+		//placeController.goTo(new IndividualSchedulesPlace("IndividualSchedulesPlace"));
+		// Module10 Create plans
+		Log.info("Click on individual Schedules.");
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		placeController.goTo(new IndividualSchedulesPlace("IndividualSchedulesPlace", handlerManager, lstSemester.getValue()));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		// E Module10 Create plans
 	}
 
 	@UiHandler("bellSchedule")

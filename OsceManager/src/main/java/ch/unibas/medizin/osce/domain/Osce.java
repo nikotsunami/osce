@@ -1074,4 +1074,19 @@ public class Osce {
 	}
 
 	//module 3 f }
+	
+	//Module10 Create plans
+
+	 public static Long findOsceIdByOsceName(String osceName)
+	 {
+		 	Log.info("Call findOsceIdByOsceName for Name" + osceName);	
+			EntityManager em = entityManager();		
+			String queryString = "select o.id from Osce as o where name= '"+osceName +"'";
+			Log.info("Query String: " + queryString);
+			TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+			Long result  = q.getSingleResult();        
+			Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+			return result;   
+	 }
+	//E Module10 Create plans
 }

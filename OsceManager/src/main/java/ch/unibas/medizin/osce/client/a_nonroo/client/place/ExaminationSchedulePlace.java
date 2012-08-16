@@ -12,13 +12,13 @@ public class ExaminationSchedulePlace extends OsMaPlace {
 
 	private String token;
 	
-	public HandlerManager handler;
-	public SemesterProxy semesterProxy;
+	public static HandlerManager handler;
+	public static SemesterProxy semesterProxy;
 	public ExaminationSchedulePlace(String token, HandlerManager handler,SemesterProxy semesterProxy) 
 	{
 		Log.info("~Get Semester : " + semesterProxy.getCalYear() + ": In Circuit Constrcutor");
-		this.semesterProxy=semesterProxy;
-		this.handler=handler;
+		//this.semesterProxy=semesterProxy;
+		//this.handler=handler;
 		this.token = token;					
 	}
 	

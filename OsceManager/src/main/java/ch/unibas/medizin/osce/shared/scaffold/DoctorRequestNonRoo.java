@@ -26,4 +26,8 @@ public interface DoctorRequestNonRoo extends RequestContext {
 	abstract Request<List<DoctorProxy>> findDoctorByClinicID(Long clinicid);
 	//Module 6 End
 	
+	// Module10 Create plans
+		abstract Request<List<DoctorProxy>> findDoctorByOsceId(Long doctorid);
+		// E Module10 Create plans
+	
 }

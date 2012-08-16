@@ -128,7 +128,16 @@ public class OsMaApp {
 
 //		detailsActivityManager.setDisplay(shell.getDetailsPanel());
 		
-		OsMaMainNav nav = new OsMaMainNav(requestFactory, placeController);
+		/* Browser history integration */
+		OscePlaceHistoryMapper mapper = GWT.create(OscePlaceHistoryMapper.class);
+		mapper.setFactory(oscePlaceHistoryFactory);
+		PlaceHistoryHandler placeHistoryHandler = new PlaceHistoryHandler(mapper);
+		placeHistoryHandler.register(placeController, eventBus, new StandardizedPatientPlace());
+		
+		OsMaMainNav nav = new OsMaMainNav(requestFactory, placeController,placeHistoryHandler);
+		
+		
+		
 		OsMaHeader header = new OsMaHeaderImpl();
 		header.setDelegate(new OsMaHeaderLogic(requestFactory, placeController, eventBus));
 		
@@ -136,13 +145,10 @@ public class OsMaApp {
 		shell.setHeader(header);
 
 
-		/* Browser history integration */
-		OscePlaceHistoryMapper mapper = GWT.create(OscePlaceHistoryMapper.class);
-		mapper.setFactory(oscePlaceHistoryFactory);
-		PlaceHistoryHandler placeHistoryHandler = new PlaceHistoryHandler(mapper);
+	
 //		ProxyListPlace defaultPlace = getTopPlaces().iterator().next();
-		placeHistoryHandler.register(placeController, eventBus, new StandardizedPatientPlace());
-		placeHistoryHandler.handleCurrentHistory();
+		
+		//placeHistoryHandler.handleCurrentHistory();
 	}
 
 }

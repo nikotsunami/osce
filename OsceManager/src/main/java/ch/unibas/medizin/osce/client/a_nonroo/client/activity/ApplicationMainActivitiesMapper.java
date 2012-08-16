@@ -144,12 +144,16 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 
 		if (place instanceof SummoningsPlace) {
 			Log.debug("is SummoningsPlace");
-			return new SummoningsActivity(requests, placeController);
+//			return new SummoningsActivity(requests, placeController);
+			return new SummoningsActivity((SummoningsPlace)place, requests, placeController);
 		}
 
 		if (place instanceof IndividualSchedulesPlace) {
 			Log.debug("is IndividualSchedulesPlace");
-			return new IndividualSchedulesActivity(requests, placeController);
+			//return new IndividualSchedulesActivity(requests, placeController);
+			// Module10 Create plans
+			return new IndividualSchedulesActivity(requests, placeController,(IndividualSchedulesPlace)place);
+			// E Module10 Create plans
 		}
 
 		if (place instanceof BellSchedulePlace) {

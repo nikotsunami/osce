@@ -1,0 +1,124 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:d="urn:import:com.google.gwt.dom.client">
+
+	<ui:style src="../styles.css">
+		.panelStyle {
+			width: 320px;
+			height: 400px;
+			border-width: thin;
+			border-style: solid;
+			padding: 0px;
+			margin-top: 68px;
+			margin-bottom: 5px;
+			margin-left: 68px;
+		}
+				
+		.commonStyle {
+			margin-top: 15px;
+			margin-bottom: 5px;
+			margin-left: 160px;
+			width: 140px;
+		}
+		
+		.topAlign {
+			vertical-align: top;
+		}
+		
+		.scrollpanelStyle
+		{
+			height:400px; 
+			width:320px;			
+		}
+		
+		.verticlePanelStyle
+		{
+			-moz-border-radius: 4px;
+				
+		}
+	</ui:style>
+
+
+	<g:HTMLPanel>	
+	<g:ScrollPanel width='1230px' height='800px'><!-- Assignment E:Module 5 -->
+	 <g:HorizontalPanel> 	
+		<!-- <g:SplitLayoutPanel ui:field="splitLayoutPanel">		  
+			<g:west size="400">			 -->							
+					<g:VerticalPanel>					
+						<!--<g:DisclosurePanel>
+							 <g:HTMLPanel>		 -->	
+							<g:DisclosurePanel ui:field="disclosureDataPanelStud" open="true" addStyleNames="{style.panelStyle}">
+							<g:header></g:header>
+								<!-- <g:VerticalPanel addStyleNames="{style.panelStyle}" ui:field="dataPanelVPStud" > -->
+								<g:VerticalPanel ui:field="dataPanelVPStud" >
+									<g:HorizontalPanel>
+										<g:RadioButton name="RBstudent" ui:field="rbSelectedStud">Selected</g:RadioButton>
+										<g:RadioButton name="RBstudent" ui:field="rbAllStud">All</g:RadioButton>
+									</g:HorizontalPanel>
+									<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">															
+										<g:VerticalPanel ui:field="vpStudent">																							
+										</g:VerticalPanel>							
+									</g:ScrollPanel>
+								</g:VerticalPanel>
+							</g:DisclosurePanel>
+								<g:HorizontalPanel>
+									<!-- <g:Button ui:field="btnSendMailStudent" addStyleNames="{style.commonStyle}">Send Email to Student</g:Button> -->
+									<g:Button ui:field="btnPrintCopyStudent" addStyleNames="{style.commonStyle}">Print copy for Student</g:Button>
+								</g:HorizontalPanel>										
+						</g:VerticalPanel> 												
+		 	<!-- </g:west>
+
+			<g:center size="400"> 	  -->			
+					<g:VerticalPanel>						
+						<g:DisclosurePanel ui:field="disclosureDataPanelSP" open="true" addStyleNames="{style.panelStyle}">
+							<g:header></g:header>
+							<g:VerticalPanel ui:field="dataPanelVPSP">
+								<g:HorizontalPanel>
+									<g:RadioButton name="RBSP" ui:field="rbSelectedSP">Selected</g:RadioButton>
+									<g:RadioButton name="RBSP" ui:field="rbAllSP">All</g:RadioButton>
+								</g:HorizontalPanel>
+								<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">
+									<g:VerticalPanel ui:field="vpSP">
+									</g:VerticalPanel>
+								</g:ScrollPanel>
+							</g:VerticalPanel>
+						</g:DisclosurePanel>
+						<g:HorizontalPanel>
+							<!-- <g:Button ui:field="btnSendMailSP" addStyleNames="{style.commonStyle}">Send
+								Email to SP</g:Button> -->
+							<g:Button ui:field="btnPrintCopySP" addStyleNames="{style.commonStyle}">Print copy for SP</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>						
+		<!-- 	 </g:center>
+
+			<g:east size="400">	 	 -->	
+					<g:VerticalPanel>						
+						<g:DisclosurePanel ui:field="disclosureDataPanelExaminer" open="true" addStyleNames="{style.panelStyle}">
+							<g:header></g:header>
+							<g:VerticalPanel ui:field="dataPanelVPExaminer">
+								<g:HorizontalPanel>
+									<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor">Selected</g:RadioButton>
+									<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor">All</g:RadioButton>
+								</g:HorizontalPanel>
+								<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">
+									<g:VerticalPanel ui:field="vpExaminor">
+									</g:VerticalPanel>
+								</g:ScrollPanel>
+							</g:VerticalPanel>
+						</g:DisclosurePanel>
+						<g:HorizontalPanel>
+							<!-- <g:Button ui:field="btnSendMailExaminor" addStyleNames="{style.commonStyle}">Send
+								Email to Examinor</g:Button> -->
+							<g:Button ui:field="btnPrintCopyExaminor" addStyleNames="{style.commonStyle}">Print
+								copy for Examinor</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>		
+		<!-- 	</g:east>
+			</g:SplitLayoutPanel> -->	
+		 </g:HorizontalPanel> 
+		</g:ScrollPanel>	
+	</g:HTMLPanel>
+	
+</ui:UiBinder> 

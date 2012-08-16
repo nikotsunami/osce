@@ -53,9 +53,9 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 		this.requests = requests;		
 		this.placeController = placeController;
 		this.place=examinationSchedulePlace;
-		this.handlerManager = examinationSchedulePlace.handler;
-		this.semesterProxy=examinationSchedulePlace.semesterProxy;
-		Log.info("Semester Proxy : " + semesterProxy.getCalYear() + " :in CircuitActivity Constructor.");
+		this.handlerManager = ExaminationSchedulePlace.handler;
+		this.semesterProxy=ExaminationSchedulePlace.semesterProxy;
+		//Log.info("Semester Proxy : " + semesterProxy.getCalYear() + " :in CircuitActivity Constructor.");
 		//System.out.println("Proxy: " + place.semesterProxy.getCalYear());
 		
 		examinationScheduleDetailActivityMapper = new ExaminationScheduleDetailActivityMapper(requests,placeController);

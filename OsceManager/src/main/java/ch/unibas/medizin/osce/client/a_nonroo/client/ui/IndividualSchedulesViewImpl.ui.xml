@@ -7,6 +7,11 @@
 	<ui:style src="../styles.css" />
 	
 	<g:HTMLPanel>
-		<h1>Individuelle Pläne - MainView</h1>
+		<g:TabPanel  ui:field="osceTab" width="100%">
+			 <!-- <g:Tab>
+				<g:TabHTML >OM</g:TabHTML>
+				<g:Label>Hello</g:Label>
+			</g:Tab> -->
+		</g:TabPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -53,6 +53,26 @@ public class PatientInSemester {
         if (resultList == null || resultList.size() == 0) return null;
         return resultList.get(0);
     }
+    
+ // Module10 Create plans	
+ 	public static List<PatientInSemester> findPatientInSemesterBySemesterPatient(
+ 			Long standardizedPatientId, Long semesterId) {
+ 		if (standardizedPatientId == null || semesterId == null)
+ 			return null;
+ 		EntityManager em = entityManager();
+ 		TypedQuery<PatientInSemester> query = em
+ 				.createQuery(
+ 						"SELECT o FROM PatientInSemester AS o WHERE o.standardizedPatient.id = :standardizedPatientId and o.semester.id = :semesterId",
+ 						PatientInSemester.class);
+ 		query.setParameter("standardizedPatientId", standardizedPatientId);
+ 		query.setParameter("semesterId", semesterId);
+
+ 		List<PatientInSemester> resultList = query.getResultList();
+ 		if (resultList == null || resultList.size() == 0)
+ 			return null;
+ 		return resultList;
+ 	}
+ 	// E Module10 Create plans
 
     private static String selectBase = "SELECT o ";
 

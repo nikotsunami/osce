@@ -877,5 +877,23 @@ public class StandardizedPatient {
 
     }
     
+ // Module10 Create plans
+    //Find Standardized patient by Osce Id
+    public static List<StandardizedPatient> findPatientsByOsceId(long osceId)
+    {
+		Log.info("Call findPatientsByOsceId for id" + osceId);	
+		EntityManager em = entityManager();
+		String queryString = "select distinct sp from Osce as o, OsceDay as od, Assignment as assi, PatientInRole as pir, PatientInSemester as pis, StandardizedPatient as sp " +
+							 "where o.id=od.osce and od.id=assi.osceDay and assi.patientInRole=pir.id and pir.patientInSemester=pis.id and pis.standardizedPatient=sp.id and o.id=" + osceId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<StandardizedPatient> q = em.createQuery(queryString,StandardizedPatient.class);		
+		List<StandardizedPatient> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result;    	    
+    }
+    
+	
+   
+ // E Module10 Create plans
     
 }

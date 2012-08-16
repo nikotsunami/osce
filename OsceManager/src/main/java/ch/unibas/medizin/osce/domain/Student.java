@@ -3,6 +3,9 @@ package ch.unibas.medizin.osce.domain;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.allen_sauer.gwt.log.client.Log;
+
 import ch.unibas.medizin.osce.shared.Gender;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
@@ -36,6 +39,12 @@ public class Student {
     @Size(max = 40)
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
     private String email;
+    
+    // Module10 Create plans
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
+    private Set<Assignment> assignments = new HashSet<Assignment>();
+    // E Module10 Create plans
+    
 
     // dk, 2012-02-10: split up m to n relationship since students
     // need flag whether they are enrolled or not
@@ -82,6 +91,21 @@ public class Student {
         
         return q.getResultList();
     }
-    
+
+    // Module10 Create plans
+    //Find Student by Osce Id
+    public static List<Student> findStudentByOsceId(long osceId)
+    {
+		Log.info("Call findStudentByOsceId for id" + osceId);	
+		EntityManager em = entityManager();
+		String queryString = "select distinct stud from Student as stud, OsceDay as od, Assignment as assi, Osce as o " +
+				"where o.id=od.osce and od.id=assi.osceDay and assi.student=stud.id and o.id=" + osceId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Student> q = em.createQuery(queryString,Student.class);		
+		List<Student> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result;    	    
+    }
+ // E Module10 Create plans
    
 }

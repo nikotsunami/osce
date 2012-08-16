@@ -42,4 +42,8 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 			List<AdvancedSearchCriteriaProxy> searchCriteria);
 
 	// By Spec]End
+	
+	// Module10 Create plans
+		abstract Request<List<StandardizedPatientProxy>> findPatientsByOsceId(long osceId);		
+		// E Module10 Create plans
 }

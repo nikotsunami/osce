@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
@@ -205,6 +206,14 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 
 		if (place instanceof IndividualSchedulesPlace)
 			return (IndividualSchedulesPlace) place;
+		
+		// Module10 Create plans
+		if (place instanceof IndividualSchedulesDetailsPlace)
+		{			
+			IndividualSchedulesDetailsPlace individualSchedulesDetailsPlace = (IndividualSchedulesDetailsPlace) place;
+			return new IndividualSchedulesPlace(individualSchedulesDetailsPlace.getToken());
+		}
+		// E Module10 Create plans
 
 		if (place instanceof BellSchedulePlace)
 			return (BellSchedulePlace) place;

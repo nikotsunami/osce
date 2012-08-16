@@ -70,6 +70,9 @@ public class Assignment {
 
     @ManyToOne
     private StudentOsces osceStudent;
+    
+    @ManyToOne
+    private Student student;
 
     @ManyToOne
     private PatientInRole patientInRole;
@@ -301,4 +304,204 @@ public class Assignment {
     	return q.getResultList();
     }
     //Testing task }
+    
+ // Module10 Create plans
+    //Find  Assignemtn by SP Id and Semester Id
+    public static List<Assignment> findAssignmentsBySPIdandSemesterId(long spId,long semId,long pirId)
+    {
+		Log.info("Call findAssignmentBySPIdandSemesterId for SP id" + spId + "for Semester" +semId);	
+		EntityManager em = entityManager();
+		/*select * from assignment where patient_in_role in (
+	    		select patient_in_role.id from patient_in_role where patient_in_semester in (select patient_in_semester.id from patient_in_semester,standardized_patient 
+	    		where  patient_in_semester.standardized_patient=standardized_patient.id
+	    		       and standardized_patient.id=19
+	    		       and patient_in_semester.semester=1));*/
+		String queryString = "select assi from Assignment assi where assi.patientInRole in (select pir.id from PatientInRole pir where pir.patientInSemester in " +
+				"(select pis.id from PatientInSemester pis, StandardizedPatient sp where pis.standardizedPatient=sp.id and sp.id="+spId+" and pis.semester="+semId+")) and assi.patientInRole="+pirId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Assignment> findAssignmentsByOsceDayAndPatientInRole(long osceDayId,long patientInrRoleId)
+    {
+		Log.info("Call findAssignmentsByOsceDayAndPatientInRole for OsceDay id" + osceDayId + "for Patient_In_Role" +patientInrRoleId);	
+		EntityManager em = entityManager();
+		/*select * from assignment where patient_in_role in (
+	    		select patient_in_role.id from patient_in_role where patient_in_semester in (select patient_in_semester.id from patient_in_semester,standardized_patient 
+	    		where  patient_in_semester.standardized_patient=standardized_patient.id
+	    		       and standardized_patient.id=19
+	    		       and patient_in_semester.semester=1));*/
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + "and patientInRole= " + patientInrRoleId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Long> findDistinctOsceDayByStudentId(long studId)
+    {
+    	Log.info("Call findDistinctOsceDayByStudentId for Student id" + studId);	
+		EntityManager em = entityManager();		
+		String queryString = "select distinct osceDay.id from Assignment where student="+studId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		List<Long> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Assignment> findAssignmentsByOsceDayAndStudent(long osceDayId,long studentId)
+    {
+		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +studentId);	
+		EntityManager em = entityManager();		
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + "and student= " + studentId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Long> findDistinctOsceDayByExaminerId(long examinerId)
+    {
+    	Log.info("Call findDistinctOsceDayByExaminerId for Student id" + examinerId);	
+		EntityManager em = entityManager();		
+		String queryString = "select distinct osceDay.id from Assignment where examiner="+examinerId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		List<Long> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    /*public static List<Assignment> findAssignmentsByOsceDayAndExaminer(long osceDayId,long examinerId)
+    {
+		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +examinerId);	
+		EntityManager em = entityManager();		
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + "and examiner= " + examinerId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }*/
+    
+    public static List<Long> findDistinctPIRByOsceDayAndExaminer(long osceDayId,long examinerId)
+    {
+		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +examinerId);	
+		EntityManager em = entityManager();		
+		//select distinct patient_in_role from assignment where osce_day=1 and examiner=5;
+		String queryString = "select distinct patientInRole.id from Assignment where osceDay= "+osceDayId + "and examiner= " + examinerId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		List<Long> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Assignment> findAssignmentsByOsceDayExaminerAndPIR(long osceDayId,long examinerId,long pirId)
+    {
+		Log.info("Call findAssignmentsByOsceDayExaminerAndPIR for OsceDay id" + osceDayId + "for Examiner" +examinerId + "PIR Id " + pirId);	
+		EntityManager em = entityManager();		
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.patientInRole= "+ pirId;
+		//String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.oscePostRoom= "+ pirId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Assignment> findAssignmentsByOsceDayExaminerAndOscePostRoomId(long osceDayId,long examinerId,long oscePostRoomId)
+    {
+		Log.info("Call findAssignmentsByOsceDayExaminerAndPIR for OsceDay id" + osceDayId + "for Examiner" +examinerId + "oscePostRoom Id " + oscePostRoomId);	
+		EntityManager em = entityManager();		
+		//String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.patientInRole= "+ pirId;
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.oscePostRoom= "+ oscePostRoomId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Long> findDistinctoscePostRoomByOsceDayAndExaminer(long osceDayId,long examinerId)
+    {
+		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +examinerId);	
+		EntityManager em = entityManager();		
+		//select distinct patient_in_role from assignment where osce_day=1 and examiner=5;
+		String queryString = "select distinct oscePostRoom.id from Assignment where osceDay= "+osceDayId + "and examiner= " + examinerId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		List<Long> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Long> findDistinctOsceDayIdByPatientInRoleId(long pirId)
+    {
+    	Log.info("Call findDistinctOsceDayByPatientInRoleIdId for Student id" + pirId);	
+		EntityManager em = entityManager();		
+		String queryString = "select distinct osceDay.id from Assignment where patientInRole="+pirId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		List<Long> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    public static List<Assignment> findAssignmentsByOsceDayAndPIRId(long osceDayId,long pirId)
+    {
+		Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
+		EntityManager em = entityManager();		
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole= "+ pirId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+        
+    // E Module10 Create plans    
+    
+    //Module 9
+    
+    public static List<StandardizedPatient> findAssignedSP(Long semesterId)  
+   	{
+   		EntityManager em = entityManager();
+   		
+   		String queryString="select sp ";
+   		queryString += "from Assignment a, StandardizedPatient sp, PatientInSemester pis, PatientInRole pir ";
+   		queryString += "where pis.semester = "+semesterId+" ";
+   		queryString += "and pis.id = pir.patientInSemester ";
+   		queryString += "and pir.id = a.patientInRole ";
+   		queryString += "and sp.id=pis.standardizedPatient ";
+   		
+   		TypedQuery<StandardizedPatient> q = em.createQuery(queryString, StandardizedPatient.class);
+   		List<StandardizedPatient> result = q.getResultList();
+   		return result;
+   	}
+    
+    public static List<Doctor> findAssignedExaminer(Long semesterId)  
+   	{
+   		EntityManager em = entityManager();
+   		
+   		String queryString="select d ";
+   		queryString += "from Assignment a, Osce o, OsceDay od, Doctor d ";
+   		queryString += "where o.semester = "+semesterId+" ";
+   		queryString += "and o.id = od.osce ";
+   		queryString += "and od.id = a.osceDay ";
+   		queryString += "and d.id = a.examiner ";
+   		
+   		TypedQuery<Doctor> q = em.createQuery(queryString, Doctor.class);
+   		List<Doctor> result = q.getResultList();
+   		return result;
+   	}
+    
+    // Module 9
+    
 }

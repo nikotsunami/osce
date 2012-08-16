@@ -130,6 +130,8 @@ public interface OsceConstants extends Constants {
 	public String enterQuestion();
 
 	public String examinationSchedule();
+	
+	public String error();
 
 	public String exams();
 
@@ -192,6 +194,8 @@ public interface OsceConstants extends Constants {
 	public String no();
 
 	public String noMatter();
+	
+	public String noSelection();
 
 	public String officeDetails();
 
@@ -618,5 +622,10 @@ public interface OsceConstants extends Constants {
 	public String fixedButtonString();
 	public String closedButtonString();
 	public String reopenButtonString();
-			// Module 5 changes }
+	
+	// Module 5 changes }
+
+	// Module10 Create plans
+		public String examiner();
+	// E Module10 Create plans
 }

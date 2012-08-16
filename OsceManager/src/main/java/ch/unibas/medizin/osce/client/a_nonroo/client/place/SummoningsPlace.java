@@ -1,7 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
 
+import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
@@ -9,6 +12,9 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
 public class SummoningsPlace extends OsMaPlace {
 
 	private String token;
+	
+	public HandlerManager handlerManager;
+	public SemesterProxy semesterProxy;
 
 	public SummoningsPlace(){
 		Log.debug("SummoningsPlace.SummoningsPlace");
@@ -17,6 +23,22 @@ public class SummoningsPlace extends OsMaPlace {
 
 	public SummoningsPlace(String token){
 		this.token = token;
+	}
+	
+	public SummoningsPlace(String token,HandlerManager handler){
+		this.handlerManager = handler;
+		this.token = token;
+	}
+	
+	public SummoningsPlace(String token,HandlerManager handler,SemesterProxy semesterProxy){
+		Log.info("Semester Proxy: "+semesterProxy.getCalYear());
+		this.semesterProxy = semesterProxy;
+		this.handlerManager = handler;
+		this.token = token;
+	}
+	
+	public SemesterProxy getSemesterProxy() {
+		return semesterProxy;
 	}
 
 	public String getToken() {

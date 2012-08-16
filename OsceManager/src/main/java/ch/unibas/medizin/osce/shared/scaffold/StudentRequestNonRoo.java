@@ -18,6 +18,10 @@ public interface StudentRequestNonRoo extends RequestContext{
 	
 	abstract Request<List<StudentProxy>> findStudentEntriesByName(String name, int firstResult, int maxResults);
 
+	// Module10 Create plans
+			abstract Request<List<StudentProxy>> findStudentByOsceId(long OsceId);
+		// E Module10 Create plans
+
 	
 
 }

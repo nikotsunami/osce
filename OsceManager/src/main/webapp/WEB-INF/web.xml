@@ -183,4 +183,32 @@
   	<servlet-name>RoleFileUploadServlet</servlet-name>
   	<url-pattern>/RoleFileUploadServlet</url-pattern>
   </servlet-mapping>
+  
+  <!--    Module10 Create plans -->
+  
+  <servlet>
+		<servlet-name>individualScheduleServiceImpl</servlet-name>
+		<servlet-class>ch.unibas.medizin.osce.server.IndividualScheduleServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>individualScheduleServiceImpl</servlet-name>
+		<url-pattern>/osMaEntry/schedule</url-pattern>
+	</servlet-mapping>
+ <!-- E Module10 Create plans -->  
+ 
+ <servlet>
+		<servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.gwtrpcspring.RemoteServiceDispatcher</servlet-class>
+	</servlet>
+	<servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+    	<url-pattern>/osMaEntry/email</url-pattern>
+    </servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/osMaEntry/summonings</url-pattern>
+	</servlet-mapping>
+ 
 </web-app>

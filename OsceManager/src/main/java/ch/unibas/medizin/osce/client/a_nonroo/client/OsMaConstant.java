@@ -46,5 +46,21 @@ public class OsMaConstant {
 				public static final SafeHtml SEARCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-search\"></span>").toSafeHtml();
 				public static final SafeHtml WRENCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-wrench\"></span>").toSafeHtml();
 				
-	//By Spec]End
+		//By Spec]End
+				
+		// Module10 Create plans
+				public static final String PRINT_SCHEDULE_TEMPLATE="C:\\TEMPLATES\\PRINTPLAN_TEMPLATE\\";
+		// E Module10 Create plans
+				
+				//Module 9 Start
+				
+				public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\Templates\\mailTemplates\\";
+				public static String DEFAULT_MAIL_TEMPLATE = "default\\defaultTemplate.txt";
+//				public static String DEFAULT_MAIL_TEMPLATE_PATH = "usr/oscemanager/Templates/mailTemplates/";
+//				public static String DEFAULT_MAIL_TEMPLATE = "default/defaultTemplate.txt";
+				public static String FROM_MAIL_ID = "friendz.k.friendz@gmail.com";
+				public static String FROM_NAME = "Mail Sender";
+				public static String MAIL_SUBJECT = "Invitaion from OSCE";
+				
+				//Module 9 End
 }

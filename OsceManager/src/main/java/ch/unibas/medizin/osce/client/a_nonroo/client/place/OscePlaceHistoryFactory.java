@@ -39,8 +39,12 @@ public class OscePlaceHistoryFactory {
 	private final OscePlace.Tokenizer oscePlaceTokenizer;
 	private final OsceDetailsPlace.Tokenizer osceDetailsPlaceTokenizer;
 	private final CircuitPlace.Tokenizer circuitPlaceTokenizer;
+	private final CircuitDetailsPlace.Tokenizer circuitDetailsPlaceTokenizer ;
 	private final StudentsPlace.Tokenizer studentsPlaceTokenizer;
+	//module 8
 	private final ExaminationSchedulePlace.Tokenizer examinationSchedulePlaceTokenizer;
+	private final ExaminationScheduleDetailPlace.Tokenizer examinationScheduleDetailPlaceTokenizer;
+	//module 8]
 	private final SummoningsPlace.Tokenizer summoningsTokenizer;
 	private final IndividualSchedulesPlace.Tokenizer individualSchedulesPlaceTokenizer;
 	private final BellSchedulePlace.Tokenizer bellSchedulePlaceTokenizer;
@@ -102,8 +106,10 @@ public class OscePlaceHistoryFactory {
 		this.oscePlaceTokenizer = new OscePlace.Tokenizer(requestFactory);
 		this.osceDetailsPlaceTokenizer = new OsceDetailsPlace.Tokenizer(requestFactory);
 		this.circuitPlaceTokenizer = new CircuitPlace.Tokenizer(requestFactory);
+		this.circuitDetailsPlaceTokenizer=new CircuitDetailsPlace.Tokenizer(requestFactory);
+		
 		this.studentsPlaceTokenizer = new StudentsPlace.Tokenizer(requestFactory);
-		this.examinationSchedulePlaceTokenizer = new ExaminationSchedulePlace.Tokenizer(requestFactory);
+		
 		this.summoningsTokenizer = new SummoningsPlace.Tokenizer(requestFactory);
 		this.individualSchedulesPlaceTokenizer = new IndividualSchedulesPlace.Tokenizer(requestFactory);
 		this.bellSchedulePlaceTokenizer = new BellSchedulePlace.Tokenizer(requestFactory);
@@ -125,6 +131,12 @@ public class OscePlaceHistoryFactory {
 		//By Spec Role Management]
         
         this.importObjectiveTokenizer = new ImportObjectiveViewPlace.Tokenizer(requestFactory);
+        
+        //Module 8[
+        this.examinationSchedulePlaceTokenizer = new ExaminationSchedulePlace.Tokenizer(requestFactory);
+        this.examinationScheduleDetailPlaceTokenizer = new ExaminationScheduleDetailPlace.Tokenizer(requestFactory);
+		
+        //Module 8]
 	}
 
 
@@ -214,14 +226,24 @@ public class OscePlaceHistoryFactory {
 		return circuitPlaceTokenizer;
 	}
 	
+	public PlaceTokenizer<CircuitDetailsPlace> getCircuitDetailsPlaceTokenizer()
+	{
+		return circuitDetailsPlaceTokenizer;
+	}
+	
 	public PlaceTokenizer<StudentsPlace> getStudentsPlaceTokenizer() {
 		return studentsPlaceTokenizer;
 	}
 	
+	//Module 8[
 	public PlaceTokenizer<ExaminationSchedulePlace> getExaminationSchedulePlaceTokenizer() {
 		return examinationSchedulePlaceTokenizer;
 	}
 	
+	public PlaceTokenizer<ExaminationScheduleDetailPlace> getExaminationScheduleDetailPlaceTokenizer(){
+		return examinationScheduleDetailPlaceTokenizer;
+	}
+	//Module 8]
 	public PlaceTokenizer<SummoningsPlace> getSummoningsPlaceTokenizer() {
 		return summoningsTokenizer;
 	}

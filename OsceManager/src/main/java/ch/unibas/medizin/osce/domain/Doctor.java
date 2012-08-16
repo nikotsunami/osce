@@ -59,6 +59,9 @@ public class Doctor {
     @ManyToOne
     private Specialisation specialisation;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "examiner")
+	 private Set<Assignment> assignments = new HashSet<Assignment>();
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
@@ -115,6 +118,22 @@ public class Doctor {
    	}
    	
    	//Module 6 End
+	
+	// Module10 Create plans
+    //Find Student by Osce Id
+    public static List<Doctor> findDoctorByOsceId(Long osceId)
+    {
+		Log.info("Call findDoctorByOsceId for id" + osceId);	
+		EntityManager em = entityManager();
+		String queryString = "select distinct d from Doctor as d, OsceDay as od, Assignment as assi, Osce as o " +
+				"where o.id=od.osce and od.id=assi.osceDay and assi.examiner=d.id and o.id=" + osceId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Doctor> q = em.createQuery(queryString,Doctor.class);		
+		List<Doctor> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result;    	    
+    }
+ // E Module10 Create plans
   
    	
     
