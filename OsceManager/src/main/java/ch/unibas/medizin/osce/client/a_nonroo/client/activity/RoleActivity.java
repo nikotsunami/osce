@@ -385,13 +385,16 @@ public class RoleActivity extends AbstractActivity implements
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
 				System.out.println("======================================Selection Change==================================");
+				
 				RoleTopicProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject.getId() != null) {
+					view.setDetailPanel(true);
 					Log.debug(selectedObject.getName() + " selected!");
 					showDetails(selectedObject);
 				}
 				else
 				{
+					view.setDetailPanel(false);
 					System.out.println("==============No Role Found===============");
 				}
 			}

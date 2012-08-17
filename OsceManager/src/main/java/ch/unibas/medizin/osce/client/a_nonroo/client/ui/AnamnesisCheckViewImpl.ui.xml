@@ -21,9 +21,9 @@
 	
 
 	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
-		<g:west size="400">
-			<g:ScrollPanel>
-				<g:HTMLPanel>
+		<g:west size="1225">
+		
+				<g:HTMLPanel ui:field="westPanel">
 					<!-- <div class="{style.controls} {style.controlsleft} "> -->
 					<div>
 					<table><tr><td>
@@ -44,10 +44,10 @@
 						<my:IconButton ui:field="newButton" icon="plusthick" />
 					</div>
 				</g:HTMLPanel>
-			</g:ScrollPanel>
+		
 		</g:west>
 		<g:center>
-			<g:ScrollPanel>
+			<g:ScrollPanel ui:field="scrollPanel">
 				<g:SimplePanel ui:field="detailsPanel"></g:SimplePanel>
 			</g:ScrollPanel>
 		</g:center>

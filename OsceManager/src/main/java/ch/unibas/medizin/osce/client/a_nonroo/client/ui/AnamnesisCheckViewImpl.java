@@ -41,9 +41,11 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -106,6 +108,16 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	
 	@UiField
 	TextBox newTitleText;
+	
+	@UiField
+	HTMLPanel westPanel;
+	
+	@UiField
+	ScrollPanel scrollPanel;
+	
+	int widthSize=Integer.parseInt(constants.widthSize()),decreaseSize=0;
+	Timer timer;
+	
 	
 	@UiHandler("newTitleText")
 	public void enterButtonPressed(KeyUpEvent event) {
@@ -217,8 +229,40 @@ public class AnamnesisCheckViewImpl extends Composite implements
 
 	@Override
 	public SimplePanel getDetailsPanel() {
+		scrollPanel.setVisible(true);
 		return detailsPanel;
 	}
+
+	public void setDetailPanel(boolean isDetailPlace) {
+
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+//		widthSize = 1200;
+//		decreaseSize = 0;
+//		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+		if (isDetailPlace) {
+
+			timer = new Timer() {
+				@Override
+				public void run() {
+					if (decreaseSize <= 705) {
+						splitLayoutPanel.setWidgetSize(westPanel, 1225
+								- decreaseSize);
+						decreaseSize += 5;
+					} else {
+						timer.cancel();
+					}
+				}
+			};
+			timer.schedule(1);
+			timer.scheduleRepeating(1);
+
+		} else {
+			widthSize = Integer.parseInt(constants.widthSize());
+			decreaseSize = 0;
+			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+		}
+	}
+	
 
 	@Override
 	public void setPresenter(Presenter presenter) {

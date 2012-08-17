@@ -40,4 +40,5 @@ public interface DoctorView  extends IsWidget{
     //Module : 6
     ListBox getFilterTitle();
 	DefaultSuggestBox<ClinicProxy, EventHandlingValueHolderItem<ClinicProxy>> getSuggestBox();
+	   public void setDetailPanel(boolean isDetailPlace);
 }

@@ -979,6 +979,12 @@ public List<String> getWhereFilters() {
 		return null;
 	}
 	// E Highlight onViolation
+
+	@Override
+	public void setDetailPanel(boolean isDetailPlace) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 	

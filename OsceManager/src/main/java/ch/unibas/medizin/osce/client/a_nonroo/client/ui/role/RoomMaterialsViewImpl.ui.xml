@@ -6,9 +6,9 @@
 	<ui:style src="../../styles.css" />
 		
 	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
-		<g:west size="400">
-			<g:ScrollPanel>
-				<g:HTMLPanel>
+		<g:west size="1225">
+			<!-- <g:ScrollPanel> -->
+				<g:HTMLPanel ui:field="westPanel">
 					<!-- <g:Button addStyleNames="{style.button}" ui:field="showSubview"> 
 						Go To Detail </g:Button> -->
 
@@ -27,10 +27,10 @@
 					</div>
 
 				</g:HTMLPanel>
-			</g:ScrollPanel>
+		<!-- 	</g:ScrollPanel> -->
 		</g:west>
 		<g:center>
-			<g:ScrollPanel>
+			<g:ScrollPanel ui:field="scrollPanel">
 				<g:SimplePanel ui:field="detailsPanel"></g:SimplePanel>
 			</g:ScrollPanel>
 		</g:center>

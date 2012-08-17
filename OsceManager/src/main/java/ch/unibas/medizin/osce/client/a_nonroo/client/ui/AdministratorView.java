@@ -23,7 +23,7 @@ public interface AdministratorView  extends IsWidget{
     String[] getPaths();
     
     void setDelegate(Delegate delegate);
-    
+    public void setDetailPanel(boolean isDetailPlace);
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter administratorActivity);
 }

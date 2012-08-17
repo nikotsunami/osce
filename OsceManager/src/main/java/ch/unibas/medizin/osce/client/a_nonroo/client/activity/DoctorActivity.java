@@ -103,10 +103,14 @@ DoctorView.Presenter, DoctorView.Delegate {
 			@Override
 			public void onPlaceChange(PlaceChangeEvent event) {
 				if (event.getNewPlace() instanceof DoctorDetailsPlace) {
+					view.setDetailPanel(true);
 					DoctorDetailsPlace place = (DoctorDetailsPlace) event.getNewPlace();
 					if (place.getOperation() == Operation.NEW) {
 						initSearch();
 					}
+				}
+				else{
+					view.setDetailPanel(false);
 				}
 			}
 		});

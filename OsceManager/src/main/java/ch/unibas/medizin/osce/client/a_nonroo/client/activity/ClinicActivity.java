@@ -76,11 +76,16 @@ ClinicView.Presenter, ClinicView.Delegate {
 
 		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
+				
 				if (event.getNewPlace() instanceof ClinicDetailsPlace) {
+					view.setDetailPanel(true);
 					ClinicDetailsPlace place = (ClinicDetailsPlace) event.getNewPlace();
 					if (place.getOperation() == Operation.NEW) {
 						initSearch();
 					} 
+				}
+				else{
+					view.setDetailPanel(false);
 				}
 			}
 		});

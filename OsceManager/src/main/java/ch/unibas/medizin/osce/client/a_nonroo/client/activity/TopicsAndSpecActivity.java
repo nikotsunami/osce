@@ -176,8 +176,12 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			public void onSelectionChange(SelectionChangeEvent event) {
 				SpecialisationProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject != null) {
+					view.setDetailPanel(true);
 					Log.debug(selectedObject.getName() + " selected!");
 					showDetails(selectedObject);
+				}
+				else{
+					view.setDetailPanel(false);
 				}
 			}
 		});

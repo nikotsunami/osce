@@ -39,6 +39,7 @@ public interface RoleScriptTemplateView extends IsWidget{
 		SimplePanel getDetailsPanel();
 	    void setPresenter(Presenter roleScriptTemplateActivity);
 	    
+	    public void setDetailPanel(boolean isDetailPlace);
 	 // Violation Changes Highlight
     	public Map getAadTemplateMap();
 	 // E Violation Changes Highlight

@@ -28,4 +28,5 @@ public interface OsceView  extends IsWidget{
 
 	SimplePanel getDetailsPanel();
 	void setPresenter(Presenter osceActivity);
+	public void setDetailPanel(boolean isDetailPlace);
 }

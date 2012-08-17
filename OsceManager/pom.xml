@@ -61,6 +61,11 @@
           <url>https://service.teklabs.com/nexus/content/repositories/public-releases/</url>
           <name>Repo for gwt-18n-project</name>
         </repository>
+        
+        <repository>
+     		 <id>Octo Technology Nexus</id>
+   			 <url>http://forge.octo.com/nexus/content/groups/public</url>
+ 		 </repository>
     </repositories>
     
     <pluginRepositories>
@@ -541,6 +546,17 @@
         	<type>jar</type>
         	<scope>test</scope>
         </dependency>
+         <dependency>
+   			<groupId>org.gwtrpcspring</groupId>
+   			<artifactId>gwtrpc-spring</artifactId>
+   			<version>1.01</version>
+		</dependency>
+
+   		 <dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>smtp</artifactId>
+			<version>1.4.5-rc1</version>
+		</dependency>
     </dependencies>
     <build>
          <plugins>

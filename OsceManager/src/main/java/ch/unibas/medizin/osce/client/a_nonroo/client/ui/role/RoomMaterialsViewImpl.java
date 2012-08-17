@@ -33,7 +33,10 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,6 +75,16 @@ public class RoomMaterialsViewImpl extends Composite implements
 	@UiField(provided = true)
 	SimplePager Pager;
 
+	@UiField
+	HTMLPanel westPanel;
+	
+	@UiField
+	ScrollPanel scrollPanel;
+	
+	int widthSize=1225,decreaseSize=0;
+	Timer timer;
+	
+	
 	@UiHandler("AddButton")
 	public void newButtonClicked(ClickEvent event) {
 		delegate.editClicked();
@@ -310,6 +323,35 @@ public class RoomMaterialsViewImpl extends Composite implements
 		return detailsPanel;
 	}
 
+	public void setDetailPanel(boolean isDetailPlace) {
+
+		splitLayoutPanel.animate(150000);
+//		widthSize = 1200;
+//		decreaseSize = 0;
+//		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+		if (isDetailPlace) {
+
+			timer = new Timer() {
+				@Override
+				public void run() {
+					if (decreaseSize <= 705) {
+						splitLayoutPanel.setWidgetSize(westPanel, 1225
+								- decreaseSize);
+						decreaseSize += 5;
+					} else {
+						timer.cancel();
+					}
+				}
+			};
+			timer.schedule(1);
+			timer.scheduleRepeating(1);
+
+		} else {
+			widthSize = 1225;
+			decreaseSize = 0;
+			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+		}
+	}
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;

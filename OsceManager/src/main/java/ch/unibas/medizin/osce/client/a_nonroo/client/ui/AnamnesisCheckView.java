@@ -61,6 +61,9 @@ public interface AnamnesisCheckView extends IsWidget{
     void setSearchFocus(boolean focused);
 	ListBox getFilterTitle();
     
+	public void setDetailPanel(boolean isDetailPlace);
+    
+	
     QuickSearchBox getSearchBox();
 
     VerticalPanel getAnamnesisCheckPanel();

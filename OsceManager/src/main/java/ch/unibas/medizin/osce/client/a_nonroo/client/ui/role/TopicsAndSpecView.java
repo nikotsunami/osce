@@ -40,7 +40,7 @@ public interface TopicsAndSpecView extends IsWidget{
 
 	CellTable<SpecialisationProxy> getTable();
 	String[] getPaths();
-	
+	public void setDetailPanel(boolean isDetailPlace);
 	// Violation Changes Highlight
 	public Map getMap();
 	public TextBox getTextBox();

@@ -29,11 +29,14 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,6 +75,16 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 
 	private Presenter presenter;
 
+	@UiField
+	HTMLPanel westPanel;
+	
+	@UiField
+	ScrollPanel scrollPanel;
+	
+	int widthSize=Integer.parseInt(constants.widthSize());
+	int decreaseSize=0;
+	Timer timer;
+	
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
 		delegate.newClicked();
@@ -212,6 +225,38 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 		return detailsPanel;
 	}
 
+	public void setDetailPanel(boolean isDetailPlace) {
+
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+		//splitLayoutPanel.animate(150000);
+//		widthSize = 1200;
+//		decreaseSize = 0;
+//		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+		if (isDetailPlace) {
+
+			timer = new Timer() {
+				@Override
+				public void run() {
+					if (decreaseSize <= 705) {
+						splitLayoutPanel.setWidgetSize(westPanel, 1225
+								- decreaseSize);
+						decreaseSize += 5;
+					} else {
+						timer.cancel();
+					}
+				}
+			};
+			timer.schedule(1);
+
+			timer.scheduleRepeating(1);
+
+		} else {
+			widthSize = Integer.parseInt(constants.widthSize());
+			decreaseSize = 0;
+			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+		}
+	}
+	
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;

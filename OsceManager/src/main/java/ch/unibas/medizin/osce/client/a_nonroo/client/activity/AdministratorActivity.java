@@ -87,9 +87,13 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 						AdministratorProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
+							view.setDetailPanel(true);
 							Log.debug(selectedObject.getEmail()
 									+ " selected!");
 							showDetails(selectedObject);
+						}
+						else{
+							view.setDetailPanel(false);
 						}
 					}
 				});
@@ -188,6 +192,7 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 	@Override
 	public void newClicked() {
 		Log.info("new clicked");
+		view.setDetailPanel(true);
 		placeController.goTo(new AdministratorDetailsPlace(Operation.CREATE));
 	}
 

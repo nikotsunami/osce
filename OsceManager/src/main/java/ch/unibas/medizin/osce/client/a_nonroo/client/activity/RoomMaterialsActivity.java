@@ -140,8 +140,12 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 						MaterialListProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
+							view.setDetailPanel(true);
 							Log.debug(selectedObject.getName() + " selected!");
 							showDetails(selectedObject);
+						}
+						else{
+							view.setDetailPanel(false);
 						}
 					}
 				});
@@ -360,6 +364,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 	@Override
 	public void editClicked() {
 		Log.info("new clicked");
+		view.setDetailPanel(true);
 		goTo(new RoomMaterialsDetailsPlace(Operation.CREATE));
 	}
 

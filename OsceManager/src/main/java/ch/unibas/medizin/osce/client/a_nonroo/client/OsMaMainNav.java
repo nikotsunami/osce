@@ -9,6 +9,7 @@ import org.springframework.transaction.config.TxNamespaceHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
@@ -68,6 +69,7 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+
 
 public class OsMaMainNav extends Composite {
 
@@ -216,6 +218,7 @@ public class OsMaMainNav extends Composite {
 				//handlerManager.fireEvent(new SelectChangeEvent(lstSemester.getValue()));				
 			}			
 		});
+	registerLoading();
 		
 		ExaminationSchedulePlace.handler=handlerManager;
 		CircuitPlace.handler=handlerManager;
@@ -363,32 +366,49 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("anamnesisChecks")
 	void anamnesisChecksClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new AnamnesisCheckPlace("AnamnesisCheckPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 	}
 
 	@UiHandler("clinics")
 	void clinicClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new ClinicPlace("ClinicPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 
 	@UiHandler("doctors")
 	void doctorClicked(ClickEvent event) {
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new DoctorPlace("DoctorPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 
 	@UiHandler("administrators")
 	void administratorsClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new AdministratorPlace("AdministratorPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 	}
 
 	@UiHandler("nationalities")
 	void nationalitiesClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new NationalityPlace("NationalityPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 	}
 
 	@UiHandler("languages")
 	void languagesClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new SpokenLanguagePlace("SpokenLanguagePlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 	}
 
 	@UiHandler("professions")
@@ -409,17 +429,26 @@ public class OsMaMainNav extends Composite {
 	//By Spec[
 	@UiHandler("topicsAndSpec")
 	void topicsAndSpecClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new TopicsAndSpecPlace("TopicsAndSpecPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 	}
 	
 	@UiHandler("roleScriptTemplate")
 	void roleScriptTemplateClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new RoleScriptTemplatePlace("RoleScriptTemplatePlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 	}
 	
 	@UiHandler("roomMaterials")
 	void roomMaterialsClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new RoomMaterialsPlace("RoomMaterialsPlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+	
 	}
 
 	@UiHandler("roleAssignment")
@@ -433,8 +462,11 @@ public class OsMaMainNav extends Composite {
 	@UiHandler("osces")
 	void oscesClicked(ClickEvent event) 
 	{
-		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new OscePlace("OscePlace",handlerManager,lstSemester.getValue()));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
+		//placeController.goTo(new OscePlace("OscePlace",handlerManager,lstSemester.getValue()));
 	}
 
 	@UiHandler("circuit")
@@ -442,7 +474,12 @@ public class OsMaMainNav extends Composite {
 	{
 		CircuitPlace.handler=handlerManager;
 		CircuitPlace.semesterProxy=lstSemester.getValue();
-		placeController.goTo(new CircuitPlace("CircuitPlace",handlerManager,lstSemester.getValue()));
+		
+		 if (placeController.getWhere() instanceof CircuitDetailsPlace) {		      
+		      return;
+		    }
+		 else
+		     placeController.goTo(new CircuitPlace("CircuitPlace",handlerManager,lstSemester.getValue()));
 	}
 
 	@UiHandler("students")
@@ -456,8 +493,11 @@ public class OsMaMainNav extends Composite {
 		//placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace"));
 		ExaminationSchedulePlace.handler=handlerManager;
 		ExaminationSchedulePlace.semesterProxy=lstSemester.getValue();
-		
-		placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace",handlerManager,lstSemester.getValue()));
+		 if (placeController.getWhere() instanceof ExaminationScheduleDetailPlace) {		      
+		      return;
+		    }
+		 else
+		    placeController.goTo(new ExaminationSchedulePlace("ExaminationSchedulePlace",handlerManager,lstSemester.getValue()));
 	}
 	
 	@UiHandler("summonings")
@@ -484,7 +524,10 @@ public class OsMaMainNav extends Composite {
 	
 	@UiHandler("roles")
 	void rolesClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		placeController.goTo(new RolePlace("RolePlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+	
 	}
 	
 	/* commented by spec

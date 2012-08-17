@@ -125,11 +125,13 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             @Override
             public void onPlaceChange(PlaceChangeEvent event) {
                 if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
+                	view.setDetailPanel(true);
                     AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
                     if (place.getOperation() == Operation.NEW) {
                         getSearchStringByEntityProxyId((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId());
                     }
                 } else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {
+                    view.setDetailPanel(false);
                     AnamnesisCheckPlace place = (AnamnesisCheckPlace) event.getNewPlace();
                     if (place.getToken().contains("!DELETED")) {
 //                        initSearch();

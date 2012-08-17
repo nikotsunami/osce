@@ -491,4 +491,6 @@ public interface OsceConstants extends Constants {
     //Issue Role Module
     public String leavePageWarn();
     public String enterKeyword();	
+    public String animationTime();
+    public String widthSize();
 }

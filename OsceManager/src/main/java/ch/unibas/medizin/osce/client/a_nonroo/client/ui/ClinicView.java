@@ -28,4 +28,5 @@ public interface ClinicView  extends IsWidget{
     
 	SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
+    public void setDetailPanel(boolean isDetailPlace);
 }

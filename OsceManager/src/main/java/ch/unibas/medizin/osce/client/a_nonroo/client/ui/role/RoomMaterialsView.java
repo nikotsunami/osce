@@ -40,4 +40,6 @@ public interface RoomMaterialsView extends IsWidget {
 	public String getQuery();
 
 	public void updateSearch();
+
+	public void setDetailPanel(boolean isDetailPlace);
 }

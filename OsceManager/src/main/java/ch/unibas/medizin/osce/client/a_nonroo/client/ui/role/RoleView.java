@@ -67,6 +67,7 @@ void setKeywordAutocompleteValue(List<KeywordProxy> values);
 void setAuthorAutocompleteValue(List<DoctorProxy> values);
 void setReviewerAutocompleteValue(List<DoctorProxy> values);
 void setSpecialisationAutocompleteValue(List<SpecialisationProxy> values);
+public void setDetailPanel(boolean isDetailPlace);
 
 //Highlight onViolation
 Map getRoleTopicMap();

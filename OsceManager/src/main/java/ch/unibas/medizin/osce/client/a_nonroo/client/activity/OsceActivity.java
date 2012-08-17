@@ -240,6 +240,8 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 
 	protected void showDetails(OsceProxy osce) {
 		Log.debug("show details for osce with id " + osce.getId());
+		
+		view.setDetailPanel(true);
 		goTo(new OsceDetailsPlace(osce.stableId(), Operation.DETAILS));
 	}
 	

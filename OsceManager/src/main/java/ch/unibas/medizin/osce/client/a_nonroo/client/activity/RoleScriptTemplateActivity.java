@@ -192,9 +192,13 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 						RoleTemplateProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
+							view.setDetailPanel(true);
 							Log.debug(selectedObject.getTemplateName()
 									+ " selected!");
 							showDetails(selectedObject);
+						}
+						else{
+							view.setDetailPanel(false);
 						}
 					}
 				});
