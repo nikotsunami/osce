@@ -2328,9 +2328,15 @@ background: rgb(255,255,204)  ;
 }
 
 .flexTable-Button-Disabled {
-	cursor: default;
-	color: #888;
-	background: #888;
+	border: 1px solid #999999;
+    border-radius: 4px 4px 4px 4px;
+    color: #888888;
+    cursor: default;
+    font-size: 90%;
+    height: 23px;
+    outline-style: none !important;
+    padding: 3px 6px 3px 0;
+	/*background: #888;*/
 }
 /* MODULE 3 : END */
 
@@ -2560,7 +2566,8 @@ color: #f1b532;
 
     /* padding-right: 20px; */
     border: 1px solid #AAA;
-    -moz-border-radius: 4px;
+    border-radius: 4px;
+ 	
     /*padding: 6px;*/
     background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
     opacity: 0.9;
@@ -2590,7 +2597,7 @@ color: #f1b532;
 }
 
 .eu-nextstreet-AdvancedTextBoxErrorText {
-    -moz-border-radius: 6px;
+   
     border-radius: 6px;
     
     text-shadow: 1px 1px 1px #a90329;
@@ -2604,7 +2611,7 @@ color: #f1b532;
     background-color: #ff9999;
     
     border: 0px;
-    -moz-border-radius: 6px;
+   
     border-radius: 6px;
     
     -webkit-box-shadow: 1px 1px 8px #ff9999;
@@ -2616,7 +2623,7 @@ color: #f1b532;
     color: gray;
     
     border: 0px;
-    -moz-border-radius: 6px;
+   
     border-radius: 6px;
     
     -webkit-box-shadow: 1px 1px 8px #9fa7eb;
@@ -2657,7 +2664,7 @@ color: #f1b532;
 
 .eu-nextstreet-MultiChoiceItem {
     -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
+    
     border-radius: 5px;
     background-color: #CBDDFA;
 }
@@ -2677,7 +2684,7 @@ color: #f1b532;
 .customControls {
 /* By SPEC[start */
 /
-    -moz-border-radius: 4px;    
+    border-radius: 4px;    
     /* border: 1px solid #AAAAAA; */
     border: none;    
     height: 21px;
@@ -2787,7 +2794,7 @@ color: #f1b532;
 {	
 	background: url("images/SchedulePanelBackground.png") repeat-y;
 	width: 320px;
-	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 .printPopupPanel
 {
@@ -2815,7 +2822,7 @@ color: #f1b532;
 			padding-top: 7px;
 			margin-top: 0px;
 			margin-bottom: 5px;
-			-moz-border-radius: 4px; 
+			border-radius: 4px; 
 			background: url("images/SchedulePanelBackground.png") repeat;
 }
 
