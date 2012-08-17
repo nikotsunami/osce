@@ -862,7 +862,10 @@ public class StandardizedPatient {
         	}
         	else if (searchCriteria.size() == 0)
         	{
-        		criteriaQuery.select(from);
+        		Predicate r = criteriaBuilder.disjunction();
+    			r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+        		criteriaQuery.where(r);
+        		//criteriaQuery.select(from);
         	}
         	//Advance Search
         	else

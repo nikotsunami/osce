@@ -6,8 +6,10 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -31,6 +33,26 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiField
 	Label shortBreakTxt;
 	
+	@UiField
+	Label shortBreakSimPatChangeTxt;
+	
+	@UiField
+	Label shortBreakSimPatChangeValue;
+	
+	@UiField
+	Label longBreakTxt;
+	
+	@UiField
+	Label longBreakValue;
+	
+	public Label getShortBreakSimPatChangeValue() {
+		return shortBreakSimPatChangeValue;
+	}
+
+	public Label getLongBreakValue() {
+		return longBreakValue;
+	}
+
 	public Label getShortBreakTxt() {
 		return shortBreakTxt;
 	}
@@ -124,6 +146,8 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		numOfRoomsTxt.setText(constants.numOfRooms());
 		studentAssignmentButton.setText(constants.studentAssignment());
 		spAssignmentButton.setText(constants.spAssignment());
+		shortBreakSimPatChangeTxt.setText(constants.simpatChangeBreak());
+		longBreakTxt.setText(constants.longBreak());
 	}
 	
 	@Override
@@ -134,5 +158,17 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+	
+	@UiHandler("studentAssignmentButton")
+	public void studentAssignmentButtonClicked(ClickEvent event)
+	{
+		
+	}
+	
+	@UiHandler("spAssignmentButton")
+	public void spAssignmentButtonClicked(ClickEvent event)
+	{
+		delegate.autoAssignSP(osceProxy.getId());
 	}
 }

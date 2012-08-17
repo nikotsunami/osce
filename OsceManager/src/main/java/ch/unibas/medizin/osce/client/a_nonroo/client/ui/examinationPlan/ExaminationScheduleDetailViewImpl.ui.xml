@@ -17,6 +17,12 @@
 			<g:Label ui:field="shortBreakTxt" addStyleNames="{style.label}"></g:Label>
 			<g:Label ui:field="shortBreakValue"></g:Label>
 			
+			<g:Label ui:field="shortBreakSimPatChangeTxt" addStyleNames="{style.label}"></g:Label>
+			<g:Label ui:field="shortBreakSimPatChangeValue"></g:Label>
+			
+			<g:Label ui:field="longBreakTxt" addStyleNames="{style.label}"></g:Label>
+			<g:Label ui:field="longBreakValue"></g:Label>
+			
 			<g:Label ui:field="middleBreakTxt" addStyleNames="{style.label}"></g:Label>
 			<g:Label ui:field="middleBreakValue"></g:Label>
 			

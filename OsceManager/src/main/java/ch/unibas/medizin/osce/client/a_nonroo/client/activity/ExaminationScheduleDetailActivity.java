@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.ContentView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.ContentViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.ExaminationScheduleDetailView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.ExaminationScheduleDetailViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.ExaminationView;
@@ -51,6 +52,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -140,10 +143,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				{
 					
 					Log.info("Osce Proxy Name :" + osceProxy.getName());
+					examinationScheduleDetailView.setOsceProxy(osceProxy);
+					
 					examinationScheduleDetailView.getShortBreakValue().setText(osceProxy.getShortBreak().toString());
 					examinationScheduleDetailView.getMiddleBreakValue().setText(osceProxy.getMiddleBreak().toString());
 					examinationScheduleDetailView.getLunchTimeValue().setText(osceProxy.getLunchBreak().toString());
 					examinationScheduleDetailView.getNumOfRoomsValue().setText(osceProxy.getNumberRooms().toString());
+					examinationScheduleDetailView.getLongBreakValue().setText(osceProxy.getLongBreak().toString());
+					examinationScheduleDetailView.getShortBreakSimPatChangeValue().setText(osceProxy.getShortBreakSimpatChange().toString());
 					
 					Iterator<OsceDayProxy> osceDayProxyIterator=osceProxy.getOsce_days().iterator();
 					while(osceDayProxyIterator.hasNext())
@@ -1367,6 +1374,32 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		});
 	}
 	
+	public void autoAssignSP(long id){
+		requests.osceRequestNonRoo().autoAssignPatientInRole(id).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				
+				Log.info("autoAssignSP :" + response);
+				MessageConfirmationDialogBox dialogBox =new MessageConfirmationDialogBox(constants.success());
+				dialogBox.showConfirmationDialog(constants.autoSPSuccess());
+				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						requests.getEventBus().fireEvent(
+								new ApplicationLoadingScreenEvent(true));
+						init();
+						
+						requests.getEventBus().fireEvent(
+								new ApplicationLoadingScreenEvent(false));
+						
+					}
+				});
+				
+			}
+		});
+	}
 	
 	
 	

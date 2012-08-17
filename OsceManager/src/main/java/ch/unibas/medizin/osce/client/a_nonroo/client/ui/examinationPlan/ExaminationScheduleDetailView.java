@@ -17,6 +17,7 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 	 */
 	interface Delegate {
 		// TODO define methods to be delegated!
+		public void autoAssignSP(long id);
 	}
 	
 	 void setDelegate(Delegate delegate);
@@ -37,6 +38,11 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 	 public OsceProxy getOsceProxy();
 	 
 	 public void setOsceProxy(OsceProxy osceProxy);
+	 
+	 public Label getShortBreakSimPatChangeValue();
+	 
+	 public Label getLongBreakValue();
+	 
 	 
 	 
 }

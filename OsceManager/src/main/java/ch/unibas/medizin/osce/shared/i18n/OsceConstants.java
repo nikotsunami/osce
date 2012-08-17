@@ -628,4 +628,10 @@ public interface OsceConstants extends Constants {
 	// Module10 Create plans
 		public String examiner();
 	// E Module10 Create plans
+		
+		public String simpatChangeBreak();
+		
+		public String longBreak();
+		
+		public String autoSPSuccess();
 }

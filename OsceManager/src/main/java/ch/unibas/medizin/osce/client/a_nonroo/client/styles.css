@@ -425,10 +425,7 @@ body {
 	border-bottom-width: 1px;
 	border-left-width: 1px;
 	
-		-moz-border-radius-bottomleft: 16px;
-	-moz-border-radius-bottomright: 16px;
-	-moz-border-radius-topleft: 16px;
-	-moz-border-radius-topright: 16px;
+		border-radius: 16px
 	
 	/* -moz-border-radius-bottomleft: 16px;
 	-moz-border-radius-bottomright: px;
@@ -443,10 +440,9 @@ body {
 	border-bottom-width: 1px;
 	border-left-width: 1px;
 	
-	-moz-border-radius-bottomleft: 16px;
-	-moz-border-radius-bottomright: 16px;
-	-moz-border-radius-topleft: 16px;
-	-moz-border-radius-topright: 16px;	
+	
+	border-radius:8px;
+	
 }
 
 .tabStyle { /*position: relative;*/
