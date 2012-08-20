@@ -123,7 +123,11 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	private OsMaConstant osMaConstant = GWT.create(OsMaConstant.class);
 	private boolean isPatientInSemesterFulfill;
 	
-
+	// change {
+		private OsceDayProxy roleSelectedInOsceDay;
+		private OsceDayProxy osce_DayAtDelete;
+		private PatientInRoleProxy patientInRole;
+		// change }
 	private List<Boolean> advanceSearchCriteriaList;
 	private List<AdvancedSearchCriteriaProxy> advancedSearchCriteriaProxies;
 	private RoleSubViewImpl roleSubViewSelected;
@@ -964,34 +968,39 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 	});
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 }
+//change {
 
 public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView)
 {
-	Log.info("deletePatientInRole");
-	requests.patientInRoleRequest().remove().using(patientInRoleView.getPatientInRoleProxy()).fire(new OSCEReceiver<Void>() {
+	
+	Log.info("deletePatientInRole PatientInRoleProxy: " + patientInRoleView.getPatientInRoleProxy().getId());
+	
+	
+	requests.patientInRoleRequestNonRoo().deletePatientInRole(patientInRoleView.getPatientInRoleProxy()).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
-		public void onSuccess(Void response) {
-			Log.info("deletePatientInRole : onSuccess");
-			
-			
-			//refreshOsceSequences(patientInRoleView.getRoleSubView().getOsceDayProxy(), patientInRoleView.getRoleSubView().getOsceDaySubViewImpl());
-			refreshAllRoleSubeView(patientInRoleView.getRoleSubView().getOsceDaySubViewImpl(), patientInRoleView.getRoleSubView().getOsceSequenceProxy());
-			initPatientInSemester(true,false);
-			
-//modul 3 changes {
-			
-			Log.info("Removing Role From Backup Panel");
-			PatientInRoleProxy patientInRoleProxy= patientInRoleView.getPatientInRoleProxy();
-			Log.info("patientInRoleProxy Id :" + patientInRoleProxy.getId());
-			deleteBackupRoles(patientInRoleView.getRoleSubView(), patientInRoleProxy);
-		
-			//modul 3 changes }
+		public void onSuccess(Boolean response) {
+			Log.info("PatientInRole Deleted Successfully :" + response);
+			if(response==true){
+				//refreshOsceSequences(patientInRoleView.getRoleSubView().getOsceDayProxy(), patientInRoleView.getRoleSubView().getOsceDaySubViewImpl());
+				refreshAllRoleSubeView(patientInRoleView.getRoleSubView().getOsceDaySubViewImpl(), patientInRoleView.getRoleSubView().getOsceSequenceProxy());
+				initPatientInSemester(true,false);
+				
+				//modul 3 changes {
+				
+				Log.info("Removing Role From Backup Panel");
+				PatientInRoleProxy patientInRoleProxy= patientInRoleView.getPatientInRoleProxy();
+				Log.info("patientInRoleProxy Id :" + patientInRoleProxy.getId());
+				deleteBackupRoles(patientInRoleView.getRoleSubView(), patientInRoleProxy);
+			}
 			
 		}
 	});
+	
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-}
+}	
+
+//change }
 //Module 3:Assignment D]
 
 //modul 3 changes {
@@ -1383,54 +1392,107 @@ public void initPatientInSemesterData(
 
 	
 	private void onPersistPatientInRole(final PatientInSemesterProxy patientInSemesterProxy){
-		PatientInRoleRequest patientInRoleRequest = requests
-				.patientInRoleRequest();
-		PatientInRoleProxy patientInRoleProxy = patientInRoleRequest
-				.create(PatientInRoleProxy.class);
-
-		patientInRoleProxy
-				.setPatientInSemester(patientInSemesterProxy);
-		patientInRoleProxy.setOscePost(oscePostProxy);
-		Log.info("isPatientInSemesterFulfill is " + isPatientInSemesterFulfill);
-		patientInRoleProxy
-				.setFit_criteria(isPatientInSemesterFulfill);
-		patientInRoleProxy.setIs_backup(false);
-
-		patientInRoleRequest.persist()
-				.using(patientInRoleProxy)
-				.fire(new OSCEReceiver<Void>() {
+		// change {
+		
+				requests.patientInRoleRequestNonRoo().getTotalTimePatientAssignInRole(roleSelectedInOsceDay.getId(), patientInSemesterProxy.getId()).fire( new OSCEReceiver<Integer>() {
 
 					@Override
-					public void onSuccess(Void arg0) {
-						System.out
-								.println("patientInRoleProxy saved successfully"
-										+ patientInSemesterProxy
-												.getOsceDays()
-												.size());
-						requests.getEventBus()
-								.fireEvent(
-										new PatientInSemesterSelectedEvent(
-												patientInSemesterProxy,
-												patientInSemesterProxy
-														.getOsceDays()));
-						// refreshRoleSubView(roleSubViewSelected);
-						refreshAllRoleSubeView(
-								roleSubViewSelected
-										.getOsceDaySubViewImpl(),
-								roleSubViewSelected
-										.getOsceSequenceProxy());
-						//For reload whole table pass true , false else reload only selected patient pass false , true
-//						initPatientInSemester(false,true);		
-						initPatientInSemester(true,false);
-						
-						view.getDataTable()
-								.setNavigationButtonEnable(
-										false);
-					}
+					public void onSuccess(Integer response) {
 
+						Log.info("Total Times Role Assifn Is :" + response);
+						
+						if(response > 0){
+							assignPatientInRoleNormally(patientInSemesterProxy);
+						}
+						else if(response==0){
+							assignPatientInRoleWithOnePostNull(patientInSemesterProxy);
+						}
+					}
 				});
-	}
-	
+				
+		}
+
+			private void assignPatientInRoleWithOnePostNull(final PatientInSemesterProxy patientInSemesterProxy){
+				PatientInRoleRequest patientInRoleRequest = requests.patientInRoleRequest();
+				PatientInRoleProxy patientInRoleProxy = patientInRoleRequest.create(PatientInRoleProxy.class);
+
+				patientInRoleProxy.setPatientInSemester(patientInSemesterProxy);
+				patientInRoleProxy.setOscePost(oscePostProxy);
+				Log.info("isPatientInSemesterFulfill is " + isPatientInSemesterFulfill);
+				patientInRoleProxy.setFit_criteria(isPatientInSemesterFulfill);
+				patientInRoleProxy.setIs_backup(false);
+
+				patientInRoleRequest.persist().using(patientInRoleProxy).fire(new OSCEReceiver<Void>() {
+
+							@Override
+							public void onSuccess(Void arg0) {
+								System.out.println("patientInRoleProxy saved successfully with Given Post and sem :" + patientInSemesterProxy);
+								
+								PatientInRoleRequest patientInRoleRequest2 = requests.patientInRoleRequest();
+								PatientInRoleProxy patientInRoleProxy2 = patientInRoleRequest2.create(PatientInRoleProxy.class);
+
+								patientInRoleProxy2.setPatientInSemester(patientInSemesterProxy);
+								patientInRoleProxy2.setOscePost(null);
+								Log.info("isPatientInSemesterFulfill is " + isPatientInSemesterFulfill);
+								patientInRoleProxy2.setFit_criteria(isPatientInSemesterFulfill);
+								patientInRoleProxy2.setIs_backup(false);
+
+								patientInRoleRequest2.persist().using(patientInRoleProxy2).fire( new OSCEReceiver<Void>() {
+
+									@Override
+									public void onSuccess(Void response) {
+										
+											System.out.println("patientInRoleProxy saved successfully with Post NULL and sem :" + patientInSemesterProxy);
+											
+											requests.getEventBus().fireEvent(new PatientInSemesterSelectedEvent(patientInSemesterProxy,patientInSemesterProxy.getOsceDays()));
+											// refreshRoleSubView(roleSubViewSelected);
+											refreshAllRoleSubeView(roleSubViewSelected.getOsceDaySubViewImpl(),	roleSubViewSelected.getOsceSequenceProxy());
+											//For reload whole table pass true , false else reload only selected patient pass false , true
+											//initPatientInSemester(false,true);		
+											initPatientInSemester(true,false);
+							
+											view.getDataTable().setNavigationButtonEnable(false);
+							
+										}
+								});
+
+						   	}
+						});
+
+						
+						
+		}
+			private void assignPatientInRoleNormally(final PatientInSemesterProxy patientInSemesterProxy){
+				
+				PatientInRoleRequest patientInRoleRequest = requests.patientInRoleRequest();
+				PatientInRoleProxy patientInRoleProxy = patientInRoleRequest.create(PatientInRoleProxy.class);
+
+				patientInRoleProxy.setPatientInSemester(patientInSemesterProxy);
+				patientInRoleProxy.setOscePost(oscePostProxy);
+				Log.info("isPatientInSemesterFulfill is " + isPatientInSemesterFulfill);
+				patientInRoleProxy.setFit_criteria(isPatientInSemesterFulfill);
+				patientInRoleProxy.setIs_backup(false);
+
+				patientInRoleRequest.persist().using(patientInRoleProxy).fire(new OSCEReceiver<Void>() {
+
+							@Override
+							public void onSuccess(Void arg0) {
+								System.out.println("patientInRoleProxy saved successfully"+ patientInSemesterProxy.getOsceDays().size());
+								requests.getEventBus().fireEvent(new PatientInSemesterSelectedEvent(patientInSemesterProxy,patientInSemesterProxy.getOsceDays()));
+								// refreshRoleSubView(roleSubViewSelected);
+								refreshAllRoleSubeView(roleSubViewSelected.getOsceDaySubViewImpl(),roleSubViewSelected.getOsceSequenceProxy());
+								//For reload whole table pass true , false else reload only selected patient pass false , true
+//								initPatientInSemester(false,true);		
+								initPatientInSemester(true,false);
+								
+								view.getDataTable().setNavigationButtonEnable(
+												false);
+							}
+
+						});
+			}
+			
+			// change }	
 	
 	public void firePatientInSemesterSelectedEvent(
 			final PatientInSemesterProxy patientInSemesterProxy) {
@@ -1838,6 +1900,10 @@ public void initPatientInSemesterData(
 		@Override
 		public void roleSelectedevent(StandardizedRoleProxy standardizedRoleProxy,
 				final OsceDaySubViewImpl osceDaySubViewImpl) {
+			
+			// change {
+				roleSelectedInOsceDay=osceDaySubViewImpl.getOsceDayProxy();
+			// change }
 			Log.info("Inside roleSelectedevent() at RoleAssignmentPatientInSemesterActivity.java");
 			
 			requests.osceDayRequestNooRoo().findRoleAssignedInOsceDay(standardizedRoleProxy.getId(),osceDaySubViewImpl.getOsceDayProxy().getId()).fire(new OSCEReceiver<Boolean>() {

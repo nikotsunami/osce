@@ -66,7 +66,98 @@ public class PatientInRole {
         q.setParameter("patientInSemester", patientInSemester);
         return q;
     }
+    // change {
+    public static Integer getTotalTimePatientAssignInRole(Long osceDayId,Long patientInSemesterId){
+    	Log.info("Inside getTotalTimePatientAssignInRole with OsceDay Id" + osceDayId + " and Semester Id :" + patientInSemesterId);
+    	EntityManager em = entityManager();
+    	String query="select count(pir) from PatientInRole as pir,OsceSequence as os,OscePost as op  where pir.patientInSemester="+patientInSemesterId +" and pir.oscePost=op.id" 
+    	 +" and op.osceSequence=os.id and os.osceDay="+osceDayId;
+        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        Log.info("Query Is " + query);
+        Integer result = q.getSingleResult() != null && q.getSingleResult() != 0 ? q.getSingleResult().intValue() : 0 ;
+    	return result;
+    }
     
+    public static Boolean deletePatientInRole(PatientInRole patientInRole){
+    	Boolean flag =false;
+    	Log.info("Inside deletePatientInRole() ");
+    	Log.info("PatientInRole Is :" + patientInRole.getId());
+    	Log.info("PatientInSemester Is :" + patientInRole.getPatientInSemester().getId());
+    	
+    	OsceDay osceDay =getOsceDayBasedonPostId(patientInRole.getId());
+    	Log.info("OSceDay Is :" + osceDay.getId());
+    	
+    	Integer count=getTotalTimePatientAssignInRole(osceDay.getId(),patientInRole.getPatientInSemester().getId());
+    	Log.info("Number of PatientIn Role Is " +count);
+    	
+    	if(count==1){
+    		flag=deletPatientInRoleAlongWithPostNull(patientInRole);
+    	}
+    	else{
+    		flag=deletPatientInRoleNormally(patientInRole);
+    	}
+    	
+    	return flag;
+    }
+    private static Boolean deletPatientInRoleAlongWithPostNull(PatientInRole patientInRole){
+    	Boolean flag=false;
+    	Boolean flag2=false;
+    	PatientInSemester patientInsem = patientInRole.getPatientInSemester();
+    	Log.info("PatientInSem Is " + patientInsem.getId());
+    	
+    	PatientInRole patientInRolenew =patientInRole;
+    	patientInRolenew.remove();
+
+    	if(PatientInRole.findPatientInRole(patientInRolenew.getId())==null){
+    		flag=true;
+    	}
+    	flag2=deletePatientInRoleWithPostNull(patientInsem.getId());
+    	if(flag==true && flag2==true){
+    		return true;
+    	}
+    	return false;
+    }
+   
+    private static Boolean deletPatientInRoleNormally(PatientInRole patientInRole){
+    	
+    	Boolean flag=false;
+    
+    	patientInRole.remove();
+
+    	if(PatientInRole.findPatientInRole(patientInRole.getId())==null){
+    		flag=true;
+    	}
+    	return flag;
+    	
+    }
+    public static OsceDay getOsceDayBasedonPostId(Long pirId){
+    	Log.info("Inside getOsceDayBasedonPostId with semesterId " +pirId) ;
+    	EntityManager em = entityManager();
+    	String query="select od from OsceDay as od,OsceSequence as os,OscePost as op where op.id In(select pir.oscePost from PatientInRole as pir where pir.id="+ pirId +")"
+    	+" and op.osceSequence=os.id and os.osceDay=od.id";
+        TypedQuery<OsceDay> q = em.createQuery(query, OsceDay.class);
+        Log.info("Query Is " + query);
+        return q.getSingleResult();
+    }
+    
+    public static Boolean deletePatientInRoleWithPostNull(Long patientInSemId){
+    	
+    	Log.info("Inside deletePatientInRoleWithPostNull with patientInSemId : " +patientInSemId);
+    	EntityManager em = entityManager();
+    	String query="select p from PatientInRole as p where p.patientInSemester="+patientInSemId +" and p.oscePost Is NULL ";
+    	Log.info("Query Is " + query);
+        TypedQuery<PatientInRole> q = em.createQuery(query, PatientInRole.class);
+        PatientInRole pir =  q.getSingleResult();
+        pir.remove();
+        if(PatientInRole.findPatientInRole(pir.getId())==null){
+        return true;
+        }
+        else{
+        	return false;
+        }
+    }
+   
+ // change }
  // Module10 Create plans
     //Find  patient in ROle by SP Id and Semester Id
     public static List<PatientInRole> findPatientsInRoleForAssignmentBySPIdandSemesterId(long spId,long semId)
