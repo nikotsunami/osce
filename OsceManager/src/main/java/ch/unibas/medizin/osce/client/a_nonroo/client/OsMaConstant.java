@@ -57,7 +57,7 @@ public class OsMaConstant {
 //				public static String DEFAULT_MAIL_TEMPLATE_PATH = "usr/oscemanager/Templates/mailTemplates/";
 				public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\Templates\\mailTemplates\\";
 				public static String DEFAULT_MAIL_TEMPLATE = "./osMaEntry/gwt/unibas/templates/defaultTemplate.txt";
-				public static String FROM_MAIL_ID = "friendz.k.friendz@gmail.com";
+				public static String FROM_MAIL_ID = "userId@gmail.com";
 				public static String FROM_NAME = "Mail Sender";
 				public static String MAIL_SUBJECT = "Invitaion from OSCE";
 				
