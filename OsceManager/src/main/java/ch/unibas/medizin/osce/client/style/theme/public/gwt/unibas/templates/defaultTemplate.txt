@@ -1,0 +1,15 @@
+<div>
+
+Dear [toName],
+<p>
+&nbsp;&nbsp;&nbsp;   You have following assignments:
+
+<br/><br/>
+	[assignment]
+</p>
+
+<br/>
+Regards,<br/>
+[fromName]
+
+</div>

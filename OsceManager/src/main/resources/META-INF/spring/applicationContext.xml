@@ -72,10 +72,10 @@
     <!--     Mail Configuration -->
     
     <bean id="sender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
-    	<property name="host" value="smtp.spec-india.com" ></property>
-    	<property name="port" value="587" ></property>
-    	<property name="username" value="sankit" ></property>
-    	<property name="password" value="password1" ></property>
+    	<property name="host" value="${smtp.host}" ></property>
+    	<property name="port" value="${smtp.port}" ></property>
+    	<property name="username" value="${smtp.username}" ></property>
+    	<property name="password" value="${smtp.password}"></property>
     	<property name="javaMailProperties">
     		<props>
     			<prop key="mail.transport.protocol">smtp</prop>

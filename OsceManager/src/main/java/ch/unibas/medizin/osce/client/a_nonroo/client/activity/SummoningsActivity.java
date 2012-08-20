@@ -14,6 +14,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -93,6 +95,17 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
     	constants = GWT.create(OsceConstants.class);
     	semesterProxy = place.semesterProxy;
 
+    	ApplicationLoadingScreenEvent.initialCounter();
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
+						event.display();
+					}
+				});
+    	
     	this.addSelectChangeHandler(new SelectChangeHandler() 
 		{			
 			@Override
@@ -140,13 +153,15 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		
 		lstChkSp=new ArrayList<CheckBox>(0);
 		lstChkExaminor=new ArrayList<CheckBox>(0);
-		
+		  
 		requests.assignmentRequestNonRoo().findAssignedExaminer(semesterProxy.getId()).fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 			@Override
 			public void onSuccess(List<DoctorProxy> response) {
 				
-				Log.info("Get List of Examinor(Doctor) with Size: " + response.size());		
+				Log.info("Get List of Examinor(Doctor) with Size: " + response.size());
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
 				Iterator<DoctorProxy> iteratorExaminor=response.iterator();		
 				if(response.size()>0)
@@ -201,17 +216,19 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					view.getVpExaminor().clear();
 				}
 				
-				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				
 			}
 		});
 		
+		  
 		requests.assignmentRequestNonRoo().findAssignedSP(semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 					
 					@Override
 					public void onSuccess(List<StandardizedPatientProxy> response) {
 						
-						Log.info("Get List of SP with Size: " + response.size());		
+						Log.info("Get List of SP with Size: " + response.size());
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 						
 						Iterator<StandardizedPatientProxy> iteratorSP=response.iterator();												
 						if(response.size()>0)
@@ -258,41 +275,6 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 										}
 									}
 								});
-								// For Testing
-								
-//								List<CheckBox> boxs = new ArrayList<CheckBox>(0);
-//								CellTable<CheckBox> cellTable = new CellTable<CheckBox>(10);
-//								Column<CheckBox, Boolean> chekColumn = new Column<CheckBox, Boolean>(new CheckboxCell(true, false)) {
-//									
-//									@Override
-//									public Boolean getValue(CheckBox object) {
-//										return object.getValue();
-//									}
-//								};
-//								Column<CheckBox, String> nameColumn = new Column<CheckBox, String>(new TextCell()) {
-//
-//									@Override
-//									public String getValue(CheckBox object) {
-//										// TODO Auto-generated method stub
-//										return object.getText();
-//									}
-//								};
-//								
-//								cellTable.addColumn(chekColumn);
-//								cellTable.addColumn(nameColumn);
-//								for(int i=0;i<100;i++){
-//									
-//									CheckBox checkBox = new CheckBox();
-//									checkBox.setText("Check"+i+1);
-//									boxs.add(checkBox);
-//									view.getVpSP().insert(checkBox, view.getVpSP().getWidgetCount());
-//								}
-//								
-//								cellTable.setRowData(boxs);
-//								view.getVpSP().insert(cellTable, view.getVpSP().getWidgetCount());
-								
-								
-								// For Testing
 								
 							}
 
@@ -301,7 +283,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 						}else{
 							view.getVpSP().clear();
 						}
-						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						
 					}
 					
@@ -440,28 +422,22 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				}
 			}
 		
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		popupView = new SummoningsPopupViewImpl();
-		
 		summoningsServiceAsync.getTemplateContent("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
 				new AsyncCallback<String[]>() {
 					
 					@Override
 					public void onSuccess(String[] response) {
-						if(!"".equals(response[0])){
-							
-							popupView.setMessageContent(response[1]);
-						}else{
-							Log.info("Error loading template.. Invalid Path");
-							
-							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-							confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-						}
-							
+						
+						popupView.setMessageContent(response[1]);
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					}
 					
 					@Override
 					public void onFailure(Throwable throwable) {
 						Log.error("ERROR : "+throwable.getMessage());
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					}
 				});
 		
@@ -475,35 +451,34 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				int selectedIndex = popupView.getSemesterList().getSelectedIndex();
 				String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));  
 				summoningsServiceAsync.getTemplateContent("email\\emailTemplate_SP"+selectedValue+".txt", 
 						new AsyncCallback<String[]>() {
 							
 							@Override
 							public void onSuccess(String[] response) {
-								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 									
 									popupView.setMessageContent(response[1]);
-								}else if(!"".equals(response[0])){
+									
+								}else{
 									
 									Log.info("Error loading template");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 									confirmationDialogBox.showConfirmationDialog("Template not found");
-								}else{
-									
-									Log.info("Error loading template.. Invalid Path");
-									
-									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
 								}
+								
 							}
 							
 							@Override
 							public void onFailure(Throwable throwable) {
 								Log.error("ERROR : "+throwable.getMessage());
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							}
 						});
+				
 			}
 		});
 		
@@ -514,11 +489,13 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.sendSPMail(semesterProxy.getId(),spIds, new AsyncCallback<Boolean>() {
 					
 					@Override
 					public void onSuccess(Boolean result) {
 						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						if(result){
 							popupView.hide();
 							Log.info("Mail Sent Successfully");
@@ -536,6 +513,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					@Override
 					public void onFailure(Throwable caught) {
 						Log.error("ERROR : "+caught.getMessage());
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					}
 				});
 			}
@@ -547,17 +525,24 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.saveTemplate("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
 						new AsyncCallback<Boolean>() {
 							
 							@Override
 							public void onSuccess(Boolean result) {
-								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								if(result){
 									Log.info("Template saved successfully.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 									confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+								}else if(!result){
+									
+									Log.info("Error saving template : Default template path is not set.");
+									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+									confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+									
 								}else{
 									Log.info("Error saving template");
 									
@@ -570,7 +555,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							
 							@Override
 							public void onFailure(Throwable throwable) {
-								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								Log.error("ERROR : "+throwable.getMessage());
 							}
 						});
@@ -583,12 +568,13 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.deleteTemplate("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt",
 						new AsyncCallback<Boolean>() {
 							
 							@Override
 							public void onSuccess(Boolean result) {
-								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								if(result){
 									
 									Log.info("Template restored successfully.");
@@ -596,20 +582,14 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 									confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
 									
-									summoningsServiceAsync.getTemplateContent("default\\defaultTemplate.txt", 
+									summoningsServiceAsync.getTemplateContent("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
 											new AsyncCallback<String[]>() {
 												
 												@Override
 												public void onSuccess(String[] response) {
-													if(!"".equals(response[0])){
 														
-														popupView.setMessageContent(response[1]);
-													}else{
-														Log.info("Error loading template.. Invalid Path");
-														
-														confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-														confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-													}
+													popupView.setMessageContent(response[1]);
+													
 												}
 												
 												@Override
@@ -630,7 +610,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							
 							@Override
 							public void onFailure(Throwable throwable) {
-								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								Log.error("ERROR : "+throwable.getMessage());
 							}
 						});
@@ -688,29 +668,22 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				}
 			}
 		
+		  
 		popupView = new SummoningsPopupViewImpl();
-		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
 				new AsyncCallback<String[]>() {
 					
 					@Override
 					public void onSuccess(String[] response) {
-						
-						if(!"".equals(response[0])){
-							popupView.setMessageContent(response[1]);
-						}else{
-							
-							Log.info("Error loading template.. Invalid Path");
-							
-							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-							confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-						}
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						popupView.setMessageContent(response[1]);
 					
 					}
 					
 					@Override
 					public void onFailure(Throwable caught) {
-						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						Log.error("ERROR : "+caught.getMessage());
 					}
 				});
@@ -725,32 +698,29 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				int selectedIndex = popupView.getSemesterList().getSelectedIndex();
 				String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+selectedValue+".txt", 
 						new AsyncCallback<String[]>() {
 							
 							@Override
 							public void onSuccess(String[] response) {
 								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 									
 									popupView.setMessageContent(response[1]);
-								}else if(!"".equals(response[0])){
+								}else{
 									
 									Log.info("Error loading template");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 									confirmationDialogBox.showConfirmationDialog("Template not found");
-								}else{
-									
-									Log.info("Error loading template.. Invalid Path");
-									
-									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
 								}
 							}
 							
 							@Override
 							public void onFailure(Throwable throwable) {
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								Log.error("ERROR : "+throwable.getMessage());
 							}
 						});
@@ -764,11 +734,13 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.sendExaminerMail(semesterProxy.getId(),examinerIds, new AsyncCallback<Boolean>() {
 					
 					@Override
 					public void onSuccess(Boolean result) {
 						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						if(result){
 						
 							popupView.hide();
@@ -787,6 +759,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					@Override
 					public void onFailure(Throwable caught) {
 						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						Log.error("ERROR : "+caught.getMessage());
 					}
 				});
@@ -799,17 +772,25 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.saveTemplate("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
 						new AsyncCallback<Boolean>() {
 							
 							@Override
 							public void onSuccess(Boolean result) {
 								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								if(result){
 									Log.error("Template saved successfully.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 									confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+								}else if(!result){
+									
+									Log.info("Error saving template : Default template path is not set.");
+									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+									confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+									
 								}else{
 									Log.error("Error saving template.");
 									
@@ -822,6 +803,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							@Override
 							public void onFailure(Throwable caught) {
 								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								Log.error("ERROR : "+caught.getMessage());
 							}
 						});
@@ -834,12 +816,14 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				summoningsServiceAsync.deleteTemplate("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt",
 						new AsyncCallback<Boolean>() {
 							
 							@Override
 							public void onSuccess(Boolean result) {
 								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								if(result){
 									
 									Log.info("Template restored successfully.");
@@ -847,22 +831,13 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 									confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
 									
-									summoningsServiceAsync.getTemplateContent("default\\defaultTemplate.txt", 
+									summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
 											new AsyncCallback<String[]>() {
 												
 												@Override
 												public void onSuccess(String[] response) {
 													
-													if(!"".equals(response[0])){
-														
-														popupView.setMessageContent(response[1]);
-													}else{
-														
-														Log.info("Error loading template.. Invalid Path");
-														
-														confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-														confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-													}
+													popupView.setMessageContent(response[1]);
 												}
 												
 												@Override
@@ -883,6 +858,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							@Override
 							public void onFailure(Throwable caught) {
 								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								Log.error("ERROR : "+caught.getMessage());
 							}
 						});
@@ -920,27 +896,23 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				}
 			}
 			
+			  
 			popupView = new SummoningsPopupViewImpl();
-			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
 					new AsyncCallback<String[]>() {
 						
 						@Override
 						public void onSuccess(String[] response) {
-							if(!"".equals(response[0])){
-								popupView.setMessageContent(response[1]);
-							}else{
-								
-								Log.info("Error loading template.. Invalid Path");
-								
-								confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-								confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-							}
+							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							popupView.setMessageContent(response[1]);
 						}
 						
 						@Override
 						public void onFailure(Throwable caught) {
 							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.error("ERROR : "+caught.getMessage());
 						}
 					});
@@ -955,32 +927,30 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					int selectedIndex = popupView.getSemesterList().getSelectedIndex();
 					String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_SP"+selectedValue+".txt", 
 							new AsyncCallback<String[]>() {
 								
 								@Override
 								public void onSuccess(String[] response) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 										
 										popupView.setMessageContent(response[1]);
-									}else if(!"".equals(response[0])){
+									}else{
 										
 										Log.info("Error loading template");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 										confirmationDialogBox.showConfirmationDialog("Template not found");
-									}else{
-										
-										Log.info("Error loading template.. Invalid Path");
-										
-										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
 									}
 								}
 								
 								@Override
 								public void onFailure(Throwable throwable) {
+									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									Log.error("ERROR : "+throwable.getMessage());
 								}
 							});
@@ -995,16 +965,19 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				@Override
 				public void onClick(ClickEvent arg0) {
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.generateSPMailPDF(semesterProxy.getId(),spIds, new AsyncCallback<String>() {
 						
 						@Override
 						public void onSuccess(String response) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							popupView.hide();
 							Window.open(response, "_blank", "enabled");
 						}
 						
 						@Override
 						public void onFailure(Throwable caught) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.error("ERROR : "+caught.getMessage());
 						}
 					});
@@ -1018,17 +991,25 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				@Override
 				public void onClick(ClickEvent arg0) {
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.saveTemplate("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
 							new AsyncCallback<Boolean>() {
 								
 								@Override
 								public void onSuccess(Boolean result) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									if(result){
 										Log.info("Template saved successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 										confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+									}else if(!result){
+										
+										Log.info("Error saving template : Default template path is not set.");
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+										
 									}else{
 										Log.info("Error saving template.");
 										
@@ -1041,6 +1022,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								@Override
 								public void onFailure(Throwable caught) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									Log.error("ERROR : "+caught.getMessage());
 								}
 							});
@@ -1053,12 +1035,14 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				@Override
 				public void onClick(ClickEvent arg0) {
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.deleteTemplate("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt",
 							new AsyncCallback<Boolean>() {
 								
 								@Override
 								public void onSuccess(Boolean result) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									if(result){
 										
 										Log.info("Template restored successfully.");
@@ -1066,21 +1050,13 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 										confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
 										
-										summoningsServiceAsync.getTemplateContent("default\\defaultTemplate.txt", 
+										summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
 												new AsyncCallback<String[]>() {
 													
 													@Override
 													public void onSuccess(String[] response) {
 														
-														if(!"".equals(response[0])){
-															popupView.setMessageContent(response[1]);
-														}else{
-															
-															Log.info("Error loading template.. Invalid Path");
-															
-															confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-															confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-														}
+														popupView.setMessageContent(response[1]);
 													}
 													
 													@Override
@@ -1102,6 +1078,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								@Override
 								public void onFailure(Throwable caught) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									Log.error("ERROR : "+caught.getMessage());
 								}
 							});
@@ -1142,28 +1119,23 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				}
 			}
 			
+			  
 			popupView = new SummoningsPopupViewImpl();
 			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
 					new AsyncCallback<String[]>() {
 						
 						@Override
 						public void onSuccess(String[] response) {
-							
-							if(!"".equals(response[0])){
-								popupView.setMessageContent(response[1]);
-							}else{
-								
-								Log.info("Error loading template.. Invalid Path");
-								
-								confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-								confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-							}
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							popupView.setMessageContent(response[1]);
 						}
 						
 						@Override
 						public void onFailure(Throwable caught) {
 							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.error("ERROR : "+caught.getMessage());
 						}
 					});
@@ -1178,32 +1150,30 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					int selectedIndex = popupView.getSemesterList().getSelectedIndex();
 					String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 					
+					  
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_Ex"+selectedValue+".txt", 
 							new AsyncCallback<String[]>() {
 								
 								@Override
 								public void onSuccess(String[] response) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 										
 										popupView.setMessageContent(response[1]);
-									}else if(!"".equals(response[0])){
+									}else{
 										
 										Log.info("Error loading template");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 										confirmationDialogBox.showConfirmationDialog("Template not found");
-									}else{
-										
-										Log.info("Error loading template.. Invalid Path");
-										
-										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
 									}
 								}
 								
 								@Override
 								public void onFailure(Throwable throwable) {
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									Log.error("ERROR : "+throwable.getMessage());
 								}
 							});
@@ -1218,16 +1188,19 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				@Override
 				public void onClick(ClickEvent arg0) {
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.generateExaminerMailPDF(semesterProxy.getId(),examinerIds, new AsyncCallback<String>() {
 						
 						@Override
 						public void onSuccess(String response) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							popupView.hide();
 							Window.open(response, "_blank", "enabled");
 						}
 						
 						@Override
 						public void onFailure(Throwable caught) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.error("ERROR : "+caught.getMessage());
 						}
 					});
@@ -1241,19 +1214,26 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				@Override
 				public void onClick(ClickEvent arg0) {
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.saveTemplate("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
 							new AsyncCallback<Boolean>() {
 								
 								@Override
 								public void onSuccess(Boolean result) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									if(result){
 										Log.info("Template saved successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 										confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
-									}
-									else{
+									}else if(!result){
+										
+										Log.info("Error saving template : Default template path is not set.");
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+										
+									}else{
 										Log.info("Error saving template.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
@@ -1265,6 +1245,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								@Override
 								public void onFailure(Throwable caught) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									Log.error("ERROR : "+caught.getMessage());
 								}
 							});
@@ -1277,33 +1258,27 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				@Override
 				public void onClick(ClickEvent arg0) {
 					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					summoningsServiceAsync.deleteTemplate("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt",
 							new AsyncCallback<Boolean>() {
 								
 								@Override
 								public void onSuccess(Boolean result) {
 									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									if(result){
 										Log.info("Template restored successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 										confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
 										
-										summoningsServiceAsync.getTemplateContent("default\\defaultTemplate.txt", 
+										summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
 												new AsyncCallback<String[]>() {
 													
 													@Override
 													public void onSuccess(String[] response) {
 														
-														if(!"".equals(response[0])){
-															popupView.setMessageContent(response[1]);
-														}else{
-															
-															Log.info("Error loading template.. Invalid Path");
-															
-															confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-															confirmationDialogBox.showConfirmationDialog("Invalid Template Path");
-														}
+														popupView.setMessageContent(response[1]);
 													}
 													
 													@Override
@@ -1322,6 +1297,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								
 								@Override
 								public void onFailure(Throwable caught) {
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									Log.error("ERROR : "+caught.getMessage());
 								}
 							});

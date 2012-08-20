@@ -596,7 +596,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				return new String[]{templateName,FileUtils.readFileToString(file)};
 			}else{
 				
-				file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH + OsMaConstant.DEFAULT_MAIL_TEMPLATE);
+				file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE);
 				
 				if(file.isFile())
 					return new String[]{OsMaConstant.DEFAULT_MAIL_TEMPLATE,FileUtils.readFileToString(file)};
@@ -620,6 +620,9 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		
 		File file = null;
 		try {
+			
+			if(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH == null || OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH.equals(""))
+				return false;
 			
 			file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
 			
@@ -651,13 +654,13 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 			file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
 			
-			if(file.isFile()){
+			if(file.isFile())
 				FileUtils.deleteQuietly(file);
-				return true;
-			}else{
+			else
 				Log.error("Template file does not exist.");
-				return false;
-			}
+			
+			return true;
+			
 		} catch (Exception e) {
 			Log.error(e.getMessage());
 			e.printStackTrace();
