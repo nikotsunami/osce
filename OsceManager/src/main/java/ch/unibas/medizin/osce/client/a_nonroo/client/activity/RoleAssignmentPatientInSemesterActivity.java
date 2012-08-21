@@ -2056,6 +2056,8 @@ public void initPatientInSemesterData(
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("@@Algoritham Implemented Successfully Patient Assign In Role Automatically");
+						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+						dialogBox.showConfirmationDialog(constants.autoAssignmentSuccess());
 						Iterator<OsceDaySubViewImpl> osceDaySubViewImplIterator =osceDaySubViewImplList.iterator();
 						OsceDaySubViewImpl osceDaySubViewImpl;
 						while(osceDaySubViewImplIterator.hasNext()){

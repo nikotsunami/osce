@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
+import groovy.transform.ToString;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -1044,7 +1046,7 @@ public class Osce {
 	Log.info("OSce Day At getPatientAccptedInOsceDayByRoleCountAscAndValueASC():" +osceDay.getId());
 	
 	String queryString = "select pis from PatientInSemester as pis, PatientInRole as pir "
-			+ "where pis.id IN("+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
+			+ "where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
 			+ "and pir.patientInSemester=pis.id  GROUP BY pir.patientInSemester ORDER BY pis.value,count(pir.patientInSemester)";
 			Log.info(queryString);
 		TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
@@ -1058,8 +1060,11 @@ public class Osce {
 			
 		Log.info("Size of PatientIn Sem at getPatientAccptedInOsceDayByRoleCountAscAndValueDESC()" + osceDay.getPatientInSemesters().size());
 		Log.info("OSceDay is At getPatientAccptedInOsceDayByRoleCountAscAndValueDESC () " + osceDay.getId());	
+		String idList="";
+		
+		
 			String queryString = "select pis from PatientInSemester as pis, PatientInRole as pir "
-					+ "where pis.id IN("+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
+					+ "where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
 					+ "and pir.patientInSemester=pis.id  GROUP BY pir.patientInSemester ORDER BY pis.value DESC,count(pir.patientInSemester)";
 					Log.info(queryString);
 				TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
@@ -1151,7 +1156,7 @@ public class Osce {
 		Log.info("OsceDay At findPatientInSemByCountOfAssignAsBackup() " +osceDay.getId());
 		EntityManager em = entityManager();
 		String queryString="select pis from PatientInSemester as pis, PatientInRole as pir "
-					+ "where pis.id IN("+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
+					+ "where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
 					+ " and pir.patientInSemester=pis.id and pir.is_backup=1";
 		TypedQuery<PatientInSemester> q =em.createQuery(queryString,PatientInSemester.class);
 		return q.getResultList();
@@ -1162,7 +1167,7 @@ public class Osce {
 		EntityManager em = entityManager();
 		Log.info("Osce Post Is :" + oscePost.getId());
 		Log.info("Osce Day Id Is :" + osceDayId);
-		String queryString="select a from Assignment as a where a.osceDay="+ osceDayId + " and a.oscePostRoom In(" + getOscePostRoomIdList(oscePost.getOscePostRooms()) + ") ORDER BY a.timeStart";
+		String queryString="select a from Assignment as a where a.osceDay="+ osceDayId + " and a.oscePostRoom In(''" + getOscePostRoomIdList(oscePost.getOscePostRooms()) + ") ORDER BY a.timeStart";
 		Log.info("findAllAssignmentForOsceDayAndOscePost() Query is :" + queryString);
 		TypedQuery<Assignment> q =em.createQuery(queryString, Assignment.class);
 		return q.getResultList();
@@ -1177,7 +1182,7 @@ public class Osce {
 		}
 		Iterator<PatientInSemester> patientInsemesterlistIterator = patientInsemesterlist.iterator();
 		StringBuilder patientInSemesterId = new StringBuilder();
-
+		patientInSemesterId.append(",");
 		while (patientInsemesterlistIterator.hasNext()) {
 			PatientInSemester patientInSemester = patientInsemesterlistIterator.next();
 
@@ -1186,6 +1191,7 @@ public class Osce {
 				patientInSemesterId.append(" ,");
 			}
 		}
+		
 		return patientInSemesterId.toString();
 	}
 	private static String getOscePostRoomIdList(Set<OscePostRoom> oscePostRoomSet){
@@ -1197,7 +1203,7 @@ public class Osce {
 		}
 		Iterator<OscePostRoom> oscePostRoomSetIterator = oscePostRoomSet.iterator();
 		StringBuilder oscePostRoomId = new StringBuilder();
-
+		oscePostRoomId.append(",");
 		while (oscePostRoomSetIterator.hasNext()) {
 			OscePostRoom oscePostRoom = oscePostRoomSetIterator.next();
 

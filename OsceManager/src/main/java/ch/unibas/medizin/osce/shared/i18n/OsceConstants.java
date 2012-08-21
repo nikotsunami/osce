@@ -634,4 +634,6 @@ public interface OsceConstants extends Constants {
 		public String longBreak();
 		
 		public String autoSPSuccess();
+		
+		public String autoAssignmentSuccess();
 }
