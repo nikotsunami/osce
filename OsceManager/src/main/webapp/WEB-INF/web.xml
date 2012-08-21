@@ -15,7 +15,7 @@
 
     <context-param>
         <param-name>DMZ_HOST_ADDRESS</param-name>
-        <param-value>http://192.168.2.40:8090</param-value>
+	<param-value>http://lzm-svl-1.meddek.unibas.ch:8080</param-value>
     </context-param>
     
     

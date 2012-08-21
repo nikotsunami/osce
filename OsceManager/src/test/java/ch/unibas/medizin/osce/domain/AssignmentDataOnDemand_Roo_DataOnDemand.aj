@@ -12,6 +12,8 @@ import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OscePostRoomDataOnDemand;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInRoleDataOnDemand;
+import ch.unibas.medizin.osce.domain.Student;
+import ch.unibas.medizin.osce.domain.StudentDataOnDemand;
 import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.domain.StudentOscesDataOnDemand;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -52,6 +54,9 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private PatientInRoleDataOnDemand AssignmentDataOnDemand.patientInRoleDataOnDemand;
     
+    @Autowired
+    private StudentDataOnDemand AssignmentDataOnDemand.studentDataOnDemand;
+    
     public Assignment AssignmentDataOnDemand.getNewTransientAssignment(int index) {
         Assignment obj = new Assignment();
         setExaminer(obj, index);
@@ -60,6 +65,7 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
         setOsceStudent(obj, index);
         setPatientInRole(obj, index);
         setSequenceNumber(obj, index);
+        setStudent(obj, index);
         setTimeEnd(obj, index);
         setTimeStart(obj, index);
         setType(obj, index);
@@ -94,6 +100,11 @@ privileged aspect AssignmentDataOnDemand_Roo_DataOnDemand {
     public void AssignmentDataOnDemand.setSequenceNumber(Assignment obj, int index) {
         Integer sequenceNumber = new Integer(index);
         obj.setSequenceNumber(sequenceNumber);
+    }
+    
+    public void AssignmentDataOnDemand.setStudent(Assignment obj, int index) {
+        Student student = studentDataOnDemand.getRandomStudent();
+        obj.setStudent(student);
     }
     
     public void AssignmentDataOnDemand.setTimeEnd(Assignment obj, int index) {
