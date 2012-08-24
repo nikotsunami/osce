@@ -11,6 +11,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
@@ -99,6 +101,18 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 
 		activityManger.setDisplay(null);
 	}
+	
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 
 	/**
 	 * Initializes the corresponding views and initializes the tables as well as
@@ -140,7 +154,9 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 						MaterialListProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							view.setDetailPanel(true);
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.debug(selectedObject.getName() + " selected!");
 							showDetails(selectedObject);
 						}

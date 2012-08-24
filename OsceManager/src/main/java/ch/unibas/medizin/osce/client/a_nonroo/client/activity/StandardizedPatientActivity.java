@@ -28,6 +28,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
@@ -171,6 +173,18 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}
 		activityManger.setDisplay(null);
 	}
+	
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 
 	// By spec V(Start)
 	/**
@@ -275,18 +289,24 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		PlaceChangeEvent.Handler placeChangeHandler = new PlaceChangeEvent.Handler() {
 			@Override
 			public void onPlaceChange(PlaceChangeEvent event) {
+				//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				Log.debug("PlaceChangeEvent: " + event.getNewPlace().toString());
 				if (event.getNewPlace() instanceof StandardizedPatientDetailsPlace) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					StandardizedPatientDetailsPlace spdPlace = (StandardizedPatientDetailsPlace) event.getNewPlace();
 					Operation op = spdPlace.getOperation();
 					if (op == Operation.NEW) {
 						getSearchStringByEntityProxyId((EntityProxyId<StandardizedPatientProxy>)spdPlace.getProxyId());
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					}
 				} else if (event.getNewPlace() instanceof StandardizedPatientPlace) {
 					view.setDetailPanel(false);
+					//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					StandardizedPatientPlace place = (StandardizedPatientPlace) event.getNewPlace();
 					if (place.getToken().contains("DELETED")) {
+						//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						initSearch();
 					}
 				}

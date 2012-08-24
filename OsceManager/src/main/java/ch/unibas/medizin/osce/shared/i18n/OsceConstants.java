@@ -636,4 +636,8 @@ public interface OsceConstants extends Constants {
 		public String autoSPSuccess();
 		
 		public String autoAssignmentSuccess();
+		public String animationTime();
+	    public String widthSize();
+	    public String widthMin();
+		
 }

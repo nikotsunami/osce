@@ -8,6 +8,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
@@ -104,6 +106,18 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		activityManager.setDisplay(null);
 	}
 
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -240,9 +254,11 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 
 	protected void showDetails(OsceProxy osce) {
 		Log.debug("show details for osce with id " + osce.getId());
-		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		view.setDetailPanel(true);
 		goTo(new OsceDetailsPlace(osce.stableId(), Operation.DETAILS));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
 	}
 	
 	
@@ -298,7 +314,11 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	@Override
 	public void newClicked() {
 		Log.info("create clicked");
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		view.setDetailPanel(true);
 		placeController.goTo(new OsceDetailsPlace(Operation.CREATE));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+	
 	}
 
 	

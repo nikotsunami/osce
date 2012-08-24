@@ -7,6 +7,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
@@ -62,6 +64,18 @@ DoctorView.Presenter, DoctorView.Delegate {
 			placeChangeHandlerRegistration.removeHandler();
 		}
 	}
+	
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -103,10 +117,13 @@ DoctorView.Presenter, DoctorView.Delegate {
 			@Override
 			public void onPlaceChange(PlaceChangeEvent event) {
 				if (event.getNewPlace() instanceof DoctorDetailsPlace) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					DoctorDetailsPlace place = (DoctorDetailsPlace) event.getNewPlace();
 					if (place.getOperation() == Operation.NEW) {
 						initSearch();
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					}
 				}
 				else{

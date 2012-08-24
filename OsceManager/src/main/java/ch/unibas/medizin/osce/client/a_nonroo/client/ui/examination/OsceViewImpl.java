@@ -359,7 +359,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.animate(150000);
+		/*splitLayoutPanel.animate(150000);
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
@@ -384,7 +384,9 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 			widthSize = 1225;
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+		}*/
+		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
 	}
 	@Override
 	public void setPresenter(Presenter presenter) {

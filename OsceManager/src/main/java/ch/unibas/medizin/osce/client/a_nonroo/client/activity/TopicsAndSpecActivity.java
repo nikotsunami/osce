@@ -10,6 +10,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationRequest;
@@ -115,6 +117,17 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 
 	}
 
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 	
 	public Sorting sortorder = Sorting.ASC;
 	public String sortname = "name";
@@ -176,7 +189,9 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			public void onSelectionChange(SelectionChangeEvent event) {
 				SpecialisationProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject != null) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					Log.debug(selectedObject.getName() + " selected!");
 					showDetails(selectedObject);
 				}

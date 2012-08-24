@@ -15,6 +15,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -128,6 +130,17 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		activityManger.setDisplay(null);
 	}
 
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 	/**
 	 * Initializes the corresponding views and initializes the tables as well as
 	 * their corresponding handlers.
@@ -192,7 +205,9 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 						RoleTemplateProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							view.setDetailPanel(true);
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.debug(selectedObject.getTemplateName()
 									+ " selected!");
 							showDetails(selectedObject);

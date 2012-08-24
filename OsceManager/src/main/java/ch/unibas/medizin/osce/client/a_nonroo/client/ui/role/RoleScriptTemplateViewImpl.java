@@ -308,32 +308,8 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.animate(150000);
-//		widthSize = 1200;
-//		decreaseSize = 0;
-//		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		if (isDetailPlace) {
-
-			timer = new Timer() {
-				@Override
-				public void run() {
-					if (decreaseSize <= 705) {
-						splitLayoutPanel.setWidgetSize(westPanel, 1225
-								- decreaseSize);
-						decreaseSize += 5;
-					} else {
-						timer.cancel();
-					}
-				}
-			};
-			timer.schedule(1);
-			timer.scheduleRepeating(1);
-
-		} else {
-			widthSize = 1225;
-			decreaseSize = 0;
-			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
 	}
 
 	@Override

@@ -304,7 +304,9 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.animate(150000);
+		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
+		/*splitLayoutPanel.animate(150000);
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
@@ -329,7 +331,7 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 			widthSize = 1225;
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+		}*/
 	}
 
 	@Override

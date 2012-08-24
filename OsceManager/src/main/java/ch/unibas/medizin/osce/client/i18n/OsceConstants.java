@@ -493,4 +493,5 @@ public interface OsceConstants extends Constants {
     public String enterKeyword();	
     public String animationTime();
     public String widthSize();
+    public String widthMin();
 }

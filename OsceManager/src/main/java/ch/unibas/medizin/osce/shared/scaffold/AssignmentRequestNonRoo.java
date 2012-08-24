@@ -1,11 +1,13 @@
 package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -29,12 +31,35 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeExaminer(Long osceDayId,Long osceSequenceId,Long courseId,Long oscePostId);
 
 	//Testing task {
-		public abstract Request<List<AssignmentProxy>> findAssignmentForTestBasedOnCriteria(Long osceDayId,List<AssignmentTypes> type,Long oscePostRoomId);
+	
+	// Test Case 2
+	
+	public abstract Request<List<AssignmentProxy>> findAssignmentForTestBasedOnCriteria(Long osceDayId,List<AssignmentTypes> type,Long oscePostRoomId);
 		
-		public abstract Request<Integer> findTotalStudentsBasedOnOsce(Long osceId);
+	// Test Case 3	
+	
+	public abstract Request<Integer> findTotalStudentsBasedOnOsce(Long osceId);
 		
-		public abstract Request<List<AssignmentProxy>> findAssignmentBasedOnOsceDay(Long osceDayId);
-		//Testing task }
+	// Test Case 4	
+	
+	public abstract Request<List<AssignmentProxy>> findAssignmentBasedOnOsceDay(Long osceDayId);
+	
+	// Test Case 5
+	
+	public abstract Request<List<OscePostBlueprintProxy>>findOscePostBluePrintForOsceWithTypePreparation(Long osceId);
+	public abstract Request<List<CourseProxy>>findParcoursForOsce(Long osceId);
+	public abstract Request<List<AssignmentProxy>> findAssignmentBasedOnGivenCourseAndPost(Long courseId,Long bluePrintId);	
+	
+	// Test Case 6 
+	
+	public abstract Request<List<OscePostBlueprintProxy>>findOscePostBluePrintForOsce(Long osceId);
+	public abstract Request<OscePostRoomProxy>findRoomForCourseAndBluePrint(Long courseId,Long bluePrintId);
+	
+	// Test Case 7 
+	
+	public abstract Request<List<AssignmentProxy>>findAssignmtForOsceDayAndSeq(Integer studentSeqNo,Long osceDayId);
+
+	//Testing task }
 
 		// Module10 Create plans		
 		public abstract Request<List<AssignmentProxy>> findAssignmentsBySPIdandSemesterId(long spId,long semId,long pirId);

@@ -437,12 +437,13 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		return detailsPanel;
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
-
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));		
+		
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		if (isDetailPlace) {
+		/*if (isDetailPlace) {
 
 			timer = new Timer() {
 				@Override
@@ -463,7 +464,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 			widthSize = Integer.parseInt(constants.widthSize());
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+		}*/
 	}
 	
 	

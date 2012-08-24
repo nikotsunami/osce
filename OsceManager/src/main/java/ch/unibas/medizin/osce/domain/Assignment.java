@@ -1,12 +1,5 @@
 package ch.unibas.medizin.osce.domain;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-import ch.unibas.medizin.osce.shared.AssignmentTypes;
-import ch.unibas.medizin.osce.shared.PostType;
-
-import javax.persistence.Enumerated;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -19,29 +12,20 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Query;
-import org.springframework.expression.spel.ast.Assign;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.PostType;
 
 import com.allen_sauer.gwt.log.client.Log;
-import ch.unibas.medizin.osce.domain.OsceDay;
-import javax.persistence.ManyToOne;
-import ch.unibas.medizin.osce.domain.OscePostRoom;
-import ch.unibas.medizin.osce.domain.Student;
-import ch.unibas.medizin.osce.domain.PatientInRole;
-import ch.unibas.medizin.osce.domain.Doctor;
 
 @RooJavaBean
 @RooToString
@@ -236,6 +220,7 @@ public class Assignment {
     
   //Testing task {
 
+    // Test Case 2
     public static List<Assignment> findAssignmentForTestBasedOnCriteria(Long osceDayId,List<AssignmentTypes> type,Long postRoomId){
     	Log.info("Inside findAssignmentForTestBasedOnCriteria() ");
     /*	EntityManager em = entityManager();
@@ -281,7 +266,7 @@ public class Assignment {
 		
     	return assignmentList;
     }
-    
+    // Test Case 3
     public static Integer findTotalStudentsBasedOnOsce(Long osceId){
     	
     	Log.info("Inside findTotalStudentsBasedOnOsce() ");
@@ -293,7 +278,7 @@ public class Assignment {
     	Integer result = q.getSingleResult() != null && q.getSingleResult() != 0 ? q.getSingleResult().intValue() : 0 ;
     	return result;
     }
-    
+    // Test Case 4
     public static List<Assignment> findAssignmentBasedOnOsceDay(Long osceDayId){
     	
     	Log.info("Inside findAssignmentBasedOnOsceDay() ");
@@ -303,6 +288,70 @@ public class Assignment {
     	Log.info("Query is :" +query + "Result Size" + q.getResultList().size());
     	return q.getResultList();
     }
+    // Test case 5 
+    public static List<Course> findParcoursForOsce(Long osceId){
+    	
+    	Log.info("Inside findParcoursForOsce() With Osce IS "+ osceId);
+    	EntityManager em = entityManager();
+    	String query="select c from Course as c,OsceSequence as os, OsceDay as od where od.osce="+osceId + " and os.osceDay=od.id and c.osceSequence=os.id" ;
+    	TypedQuery<Course> q = em.createQuery(query, Course.class);
+    	Log.info("Query is :" +query);
+    	return q.getResultList();
+    }
+    public static List<OscePostBlueprint>findOscePostBluePrintForOsceWithTypePreparation(Long osceId){
+
+    	Log.info("Inside findOscePostBluePrintForOsceWithTypePreparation() With Osce IS "+ osceId);
+    	EntityManager em = entityManager();
+    	String query="select opb from OscePostBlueprint as opb where opb.osce="+osceId + " and opb.postType=3 order by opb.sequenceNumber";
+    	TypedQuery<OscePostBlueprint> q = em.createQuery(query, OscePostBlueprint.class);
+    	Log.info("Query is :" +query);
+    	return q.getResultList();
+    }
+    
+    public static List<Assignment> findAssignmentBasedOnGivenCourseAndPost(Long courseId,Long bluePrintId){
+    	
+    	Log.info("Inside findAssignmentBasedOnGivenCourseAndPost() With course Id IS "+ courseId + " and bluePrint Id Is :" + bluePrintId);
+    	EntityManager em = entityManager();
+    	String query="select a from Assignment as a where a.type=0 and a.oscePostRoom IN (select opr.id from OscePostRoom as opr where opr.course=" + courseId + 
+    			" and opr.oscePost IN(select op.id from OscePost as op where op.oscePostBlueprint="+bluePrintId +")) order by a.sequenceNumber";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	Log.info("Query is :" +query);
+    	return q.getResultList();
+    }
+   
+    // Test Case 6
+    public static List<OscePostBlueprint> findOscePostBluePrintForOsce(Long osceId){
+    	
+    	Log.info("Inside findOscePostBluePrintForOsce() With Osce IS "+ osceId);
+    	EntityManager em = entityManager();
+    	String query="select opb from OscePostBlueprint as opb where opb.osce="+osceId + " and opb.postType=2 order by opb.sequenceNumber";
+    	TypedQuery<OscePostBlueprint> q = em.createQuery(query, OscePostBlueprint.class);
+    	Log.info("Query is :" +query);
+    	Log.info("Result is :" + q.getResultList().size());
+    	return q.getResultList();
+    }
+    
+    public static OscePostRoom findRoomForCourseAndBluePrint(Long courseId,Long blueprintId){
+    	
+    	Log.info("Inside findRoomForCourseAndBluePrint() With course Id IS "+ courseId + " and bluePrint Id Is " + blueprintId);
+    	EntityManager em = entityManager();
+    	String query="select opr from OscePostRoom as opr,OscePost as op where op.oscePostBlueprint="+blueprintId + " and opr.oscePost=op.id and opr.course="+courseId ;
+    	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+    	Log.info("Query is :" +query);
+    	return q.getSingleResult();
+    }
+    
+    // Test Case 7
+    public static List<Assignment> findAssignmtForOsceDayAndSeq(Integer studentSeqNo,Long osceDayId){
+    	
+    	Log.info("Inside findAssignmentsByOsceDayAndSequenceNo() ");
+    	EntityManager em = entityManager();
+    	String query="select a from Assignment as a where a.osceDay="+osceDayId + " and a.type=0 and a.sequenceNumber="+studentSeqNo +" order by a.timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	Log.info("Query is :" +query);
+    	return q.getResultList();
+    }
+    
     //Testing task }
     
  // Module10 Create plans
@@ -377,8 +426,8 @@ public class Assignment {
 		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
         return result;    	    
     }
-    
-    /*public static List<Assignment> findAssignmentsByOsceDayAndExaminer(long osceDayId,long examinerId)
+    /*
+    public static List<Assignment> findAssignmentsByOsceDayAndExaminer(long osceDayId,long examinerId)
     {
 		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +examinerId);	
 		EntityManager em = entityManager();		

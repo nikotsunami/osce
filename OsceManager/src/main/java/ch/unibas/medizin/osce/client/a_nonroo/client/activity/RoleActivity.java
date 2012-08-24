@@ -14,6 +14,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -111,7 +113,17 @@ public class RoleActivity extends AbstractActivity implements
 	public void onStop() {
 		activityManager.setDisplay(null);
 	}
-
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 	// spec start
 	
 	private class SpecialisationBoxValuesReceiver extends Receiver<List<SpecialisationProxy>> {
@@ -388,7 +400,9 @@ public class RoleActivity extends AbstractActivity implements
 				
 				RoleTopicProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject.getId() != null) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					Log.debug(selectedObject.getName() + " selected!");
 					showDetails(selectedObject);
 				}

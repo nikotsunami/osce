@@ -226,8 +226,11 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	}
 
 	public void setDetailPanel(boolean isDetailPlace) {
+		
+		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
 
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+		/*splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
 		//splitLayoutPanel.animate(150000);
 //		widthSize = 1200;
 //		decreaseSize = 0;
@@ -254,7 +257,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			widthSize = Integer.parseInt(constants.widthSize());
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+		}*/
 	}
 	
 	@Override

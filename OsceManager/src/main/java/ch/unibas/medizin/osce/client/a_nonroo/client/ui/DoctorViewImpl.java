@@ -346,11 +346,12 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		if (isDetailPlace) {
+		/*if (isDetailPlace) {
 
 			timer = new Timer() {
 				@Override
@@ -371,7 +372,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 			widthSize = Integer.parseInt(constants.widthSize());
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+		}*/
 	}
 	
 

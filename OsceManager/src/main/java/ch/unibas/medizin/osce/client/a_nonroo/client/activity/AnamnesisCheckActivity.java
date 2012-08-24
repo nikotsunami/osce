@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckTitlePopup
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckTitlePopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
@@ -97,6 +99,18 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	    }
 	    request = null;
     }
+    
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
 
     @Override
     public String mayStop() {
@@ -125,9 +139,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
             @Override
             public void onPlaceChange(PlaceChangeEvent event) {
                 if (event.getNewPlace() instanceof AnamnesisCheckDetailsPlace) {
+                	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
                 	view.setDetailPanel(true);
+                	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
                     AnamnesisCheckDetailsPlace place = (AnamnesisCheckDetailsPlace) event.getNewPlace();
                     if (place.getOperation() == Operation.NEW) {
+                    	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
                         getSearchStringByEntityProxyId((EntityProxyId<AnamnesisCheckProxy>)place.getProxyId());
                     }
                 } else if (event.getNewPlace() instanceof AnamnesisCheckPlace) {

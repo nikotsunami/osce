@@ -7,6 +7,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -57,6 +59,18 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 		activityManger.setDisplay(null);
 	}
 	
+	public void registerLoading() {
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+					event.display();
+					}
+				});
+	}
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("SystemStartActivity.start()");
@@ -87,7 +101,9 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 						AdministratorProxy selectedObject = selectionModel
 								.getSelectedObject();
 						if (selectedObject != null) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							view.setDetailPanel(true);
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							Log.debug(selectedObject.getEmail()
 									+ " selected!");
 							showDetails(selectedObject);
