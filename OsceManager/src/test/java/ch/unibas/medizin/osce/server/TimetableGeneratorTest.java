@@ -116,8 +116,14 @@ public class TimetableGeneratorTest extends TestCase {
 	@Test
 	public void testBreaksBetweenTimeSlots(){
 
+		// Give OsceDay Id,OscePostRoom Id and type as input for which we want to test this test-suite
+		
 		Long osceDayId=1l;
-		final int responseSize=38;
+		Long oscePostRoomId=1l;
+		List<AssignmentTypes> type= new ArrayList<AssignmentTypes>();
+		
+		// UnComment the below line and specify response size when we have Response size To test
+		// final int responseSize=38; 
 		
 		requestFactory.osceDayRequest().findOsceDay(osceDayId).with("osce").fire(new OSCEReceiver<OsceDayProxy>() {
 
@@ -128,28 +134,26 @@ public class TimetableGeneratorTest extends TestCase {
 				System.out.println("Osce For Osce Day 1 Is :" + osceProxy.getId());
 			}
 		});
-		List<AssignmentTypes> type= new ArrayList<AssignmentTypes>();
+		
+		
+		// Specify for which type we want to test this test-suite Comment All if we want to test for all types.
+		
 		type.add(AssignmentTypes.STUDENT);
 		type.add(AssignmentTypes.PATIENT);
 		type.add(AssignmentTypes.EXAMINER);
-		
-		Long oscePostRoomId=1l;
-		
-		
-		
 		
 		requestFactory.assignmentRequestNonRoo().findAssignmentForTestBasedOnCriteria(osceDayId,type,oscePostRoomId).with("oscePostRoom").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
-				System.out.println("List Size Is :" + response.size());
-				assertEquals(response.size(),responseSize);
+				Log.info("List Size Is :" + response.size());
+				//assertEquals(response.size(),responseSize);
 				
 				Iterator<AssignmentProxy> assignmentIterator = response.iterator();
 				
 				AssignmentProxy assignmentProxyprivious =assignmentIterator.next();
 				
-				System.out.println("Assignmnet privios is :" + assignmentProxyprivious.getId());
+				Log.info("Assignmnet privios is :" + assignmentProxyprivious.getId());
 								
 				while(assignmentIterator.hasNext()){
 
@@ -183,8 +187,12 @@ public class TimetableGeneratorTest extends TestCase {
 	@Test
 	public void testTotalOsceStudentWithDiffSeqSlots(){
 		
+		// Give OsceId as input for which we want to test this test-suite.
 		Long osceId=1l;
-		final Integer resultValue=530;
+		
+		// UnComment the below line and specify response size when we have Response size To test
+		// final Integer resultValue=530; 
+		
 		requestFactory.osceRequest().findOsce(osceId).fire(new OSCEReceiver<OsceProxy>() {
 
 			@Override
@@ -198,7 +206,7 @@ public class TimetableGeneratorTest extends TestCase {
 			@Override
 			public void onSuccess(Integer response) {
 				Log.info("Total Student Is :" + response);
-				assertEquals(response,resultValue);
+				//assertEquals(response,resultValue);
 				
 				assertEquals(osceProxy.getMaxNumberStudents(),response);
 				
@@ -211,8 +219,11 @@ public class TimetableGeneratorTest extends TestCase {
 	@Test
 	public void testStarTimeEndEndTimeOfSlotBasedOnOsceDayTimes(){
 
+		// Give OsceDayId as input for which we want to test this test-suite.
 		Long osceDayId=1l;
-		final int responseSize=630;
+		
+		// UnComment the below line and specify response size when we have Response size To test
+		//final int responseSize=630;
 		
 		requestFactory.osceDayRequest().findOsceDay(osceDayId).fire(new OSCEReceiver<OsceDayProxy>() {
 
@@ -220,7 +231,7 @@ public class TimetableGeneratorTest extends TestCase {
 			public void onSuccess(OsceDayProxy response) {
 				assertNotNull(response);
 				osceDayProxy=response;
-				System.out.println("OsceDay  Is :" + osceDayProxy.getId());
+				Log.info("OsceDay  Is :" + osceDayProxy.getId());
 			}
 		});
 		
@@ -229,14 +240,14 @@ public class TimetableGeneratorTest extends TestCase {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
-				System.out.println("List Size Is :" + response.size());
+				Log.info("List Size Is :" + response.size());
 				//assertEquals(response.size(),responseSize);
 				
 				Iterator<AssignmentProxy> assignmentIterator = response.iterator();
 				
 				AssignmentProxy assignmentProxyprivious =assignmentIterator.next();
 				
-				System.out.println("Assignmnet privios is :" + assignmentProxyprivious.getId());
+				Log.info("Assignmnet privios is :" + assignmentProxyprivious.getId());
 				
 				assertEquals(assignmentProxyprivious.getTimeStart(),osceDayProxy.getTimeStart());
 				
@@ -264,7 +275,10 @@ public class TimetableGeneratorTest extends TestCase {
 		@Test
 		public void testPrepqrationPostAlwaysStartOneTimeSlotEarlier(){
 			
+			// Give OsceId as input for which we want to test this test-suite.
+			
 			Long osceId=1l;
+			
 			requestFactory.assignmentRequestNonRoo().findOscePostBluePrintForOsceWithTypePreparation(osceId).fire(new OSCEReceiver<List<OscePostBlueprintProxy>>() {
 
 				@Override
@@ -329,7 +343,7 @@ public class TimetableGeneratorTest extends TestCase {
 												if(value1.getTime() < value2.getTime()){
 													result=true;
 												}
-												assertEquals(result, true);
+												assertTrue(result);
 											}
 										}
 									});
@@ -350,7 +364,11 @@ public class TimetableGeneratorTest extends TestCase {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testTwoConsucitiveAnamnesisTherapyPostHaveSamePostRooms(){
+		
+		// Give OsceId as input for which we want to test this test-suite.
+		
 		Long osceId=1l;
+		
 		requestFactory.assignmentRequestNonRoo().findOscePostBluePrintForOsce(osceId).fire(new OSCEReceiver<List<OscePostBlueprintProxy>>() {
 
 			@Override
@@ -416,6 +434,9 @@ public class TimetableGeneratorTest extends TestCase {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testNoTimeSlotHasSameStudentWithSameSequenceNumber(){
+		
+		// Give OsceId and student sequence No (sequence_number of assignment) as input for which we want to test this test-suite.
+		
 		Long osceDayId= 1l;
 		Integer studentSequenceNo=5;
 		 
@@ -438,7 +459,7 @@ public class TimetableGeneratorTest extends TestCase {
 					else{
 						flag=false;
 					}
-					assertEquals(flag, true);
+					assertTrue(flag);
 					priviousAssignment=currentAssignment;
 				}
 				

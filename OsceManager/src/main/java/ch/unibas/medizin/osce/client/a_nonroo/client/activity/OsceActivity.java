@@ -257,7 +257,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		view.setDetailPanel(true);
 		goTo(new OsceDetailsPlace(osce.stableId(), Operation.DETAILS));
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 		
 	}
 	

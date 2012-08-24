@@ -248,8 +248,9 @@ public class Assignment {
 			pre1 = criteriaBuilder.and(pre1,pre2);
 		}
 		
-		if (!type.equals(null))
+		if (!type.equals(null) && type.size() > 0)
 		{
+			Log.info("Is Side When Type is > 0 ");
 			Predicate pre3 = criteriaBuilder.disjunction();
 			pre3 =from.get("type").in(type);
 			pre1 = criteriaBuilder.and(pre1, pre3);
