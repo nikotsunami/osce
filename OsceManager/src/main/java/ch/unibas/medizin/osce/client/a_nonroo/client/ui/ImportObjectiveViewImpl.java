@@ -67,10 +67,10 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 		                //Window.alert("Error: no file is selected. Please select a file to be uploaded.");
 		                event.cancel();
 		            }
-		            else if(!fileName.endsWith("xls") && !fileName.endsWith("xlsx"))
+		            else if(!fileName.endsWith("xls"))
 		            {
 		            	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
-		            	dialogBox.showConfirmationDialog("Error: file format not supported. Only supports XML and XLSX");
+		            	dialogBox.showConfirmationDialog("Error: file format not supported. Only supports XLS");
 		              //  Window.alert("Error: file format not supported. Only supports XML and XLSX");
 		            	event.cancel();
 		            }

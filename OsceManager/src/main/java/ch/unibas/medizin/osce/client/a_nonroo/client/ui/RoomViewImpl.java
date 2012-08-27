@@ -128,7 +128,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					// TODO Auto-generated method stub
 					// Highlight onViolation
 
-					/*if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
+					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
@@ -136,7 +136,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 						//Window.alert("Enter Correct Value");
 					}
 					else
-					{*/
+					{
 					// E Highlight onViolation
 					double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
 						double roomWidth = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()) : 0;
@@ -149,8 +149,8 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
 						// Highlight onViolation
 						/*						
-						((RoomEditPopupViewImpl)roomEditPopup).hide(true);					
-					 }*/
+						((RoomEditPopupViewImpl)roomEditPopup).hide(true);		*/			
+					 }
 						// E Highlight onViolation
 					
 				}
@@ -261,13 +261,13 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					// TODO Auto-generated method stub
 					// Highlight onViolation
 				
-					/*if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
+					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
 					}
 					else
-					{*/
+					{
 					// E Highlight onViolation
 						double roomLength = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()) : 0;
 						double roomWidth = ((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue().length() > 0 ? Double.parseDouble(((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()) : 0;
@@ -281,8 +281,8 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().setValue(constants.roomLength());
 						((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().setValue(constants.roomWidth());
 						
-						((RoomEditPopupViewImpl)roomEditPopup).hide(true);
-					}*/
+						((RoomEditPopupViewImpl)roomEditPopup).hide(true); */
+					}
 						// E Highlight onViolation
 					
 				}
