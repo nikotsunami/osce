@@ -32,6 +32,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
 /**
@@ -62,7 +63,8 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	private HandlerRegistration rangeChangeHandler;
 	
 	public int currenttab= 0;	
-	public StudentSubDetailsView[] subDetailsView;
+	public StudentSubDetailsViewImpl[] subDetailsView;
+	
 	public int arrarycount = 0;
 	
 	String q = "";
@@ -123,6 +125,39 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 		
 		this.widget = panel;
 		init();
+		
+		view.getStudentTabPanel1().addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+			
+				Log.info("~~ Selected Item : " + event.getSelectedItem());
+				Widget w = view.getStudentTabPanel1().getWidget(event.getSelectedItem());
+				
+				Log.info("~~ Selected Item : " + (w instanceof StudentSubDetailsViewImpl));
+			
+				currenttab = event.getSelectedItem();
+				
+				Log.info("~~Current Tab : " + currenttab);
+				
+				osceProxy = osceProxyList.get(currenttab);
+				
+				Log.info("~~OSCEPROXY ID : " + osceProxy.getId());
+				
+				subDetailsView[currenttab].getHidden().setValue(String.valueOf(osceProxy.getId()));
+				
+				if(tabIndex == event.getSelectedItem())
+				{
+					view_s = subDetailsView[event.getSelectedItem()];
+					
+					init2("");
+				}
+				System.out.println("view--"+view_s);
+				view_s.getHidden().setValue(String.valueOf(osceProxy.getId()));
+			
+				Log.info("After TabIndex");
+			}
+		});
 
 }
 	
@@ -144,37 +179,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	
 		Log.info("~~Semester Proxy : " + semesterProxy.getId());
 		
-		view.getStudentTabPanel().addSelectionHandler(new SelectionHandler<Integer>() {
-			
-			@Override
-			public void onSelection(SelectionEvent<Integer> event) {
-			
-				Log.info("~~ Selected Item : " + event.getSelectedItem());
-				Widget w = view.getStudentTabPanel().getWidget(event.getSelectedItem());
-			
-				Log.info("~~ Selected Item : " + (w instanceof StudentSubDetailsViewImpl));
-			
-				currenttab = event.getSelectedItem();
-				
-				Log.info("~~Current Tab : " + currenttab);
-				
-				osceProxy = osceProxyList.get(currenttab);
-				
-				Log.info("~~OSCEPROXY ID : " + osceProxy.getId());
-				
-				//subDetailsView[currenttab].getHidden().setValue(String.valueOf(osceProxy.getId()));
-				
-				if(tabIndex == event.getSelectedItem())
-				{
-					view_s = studentSubDetailsView;
-					init2("");
-				}
-				
-				view_s.getHidden().setValue(String.valueOf(osceProxy.getId()));
-			
-				Log.info("After TabIndex");
-			}
-		});
+		
 		
 		
 		
@@ -205,19 +210,21 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				OsceProxy osceProxy = osceList.next();
 				String osceLable = osceProxy.getStudyYear()==null?"":osceProxy.getStudyYear() + "." + osceProxy.getSemester().getSemester().name();
 				
-				final StudentSubDetailsView studentSubDetailsView = new StudentSubDetailsViewImpl(osceProxy);
-				
+				final StudentSubDetailsViewImpl studentSubDetailsView = new StudentSubDetailsViewImpl(osceProxy);
+				subDetailsView[tabIndex]=studentSubDetailsView;
+			//	final StudentSubDetailsViewImpl studentSubDetailsView1 = new StudentSubDetailsViewImpl(osceProxy);
 				studentSubDetailsView.setDelegate(studentsActivity);
-		
-				view.getStudentTabPanel().insert(studentSubDetailsView, osceLable,tabIndex);
-				
+		System.out.println("insert before--"+studentSubDetailsView);
+				view.getStudentTabPanel1().insert(studentSubDetailsView, osceLable,tabIndex);
+				//view.getStudentTabPanel1().selectTab(0);
+			//	view.getStudentTabPanel1().insert(studentSubDetailsView1, "test", 0);
 //				StudentTabByTabSelection(1,response);
 //				if(tabIndex == 0)
 //				{
 //					view_s = studentSubDetailsView;
 //					init2("");
 //				}
-			
+		System.out.println("ARRAY COUNT--"+arrarycount);
 		requests.studentOsceRequestNonRoo().findStudentOsceByOsce(osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 
 					@Override
@@ -239,11 +246,12 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 
 				}
 			
-				view.getStudentTabPanel().selectTab(0);
 				
 				}
 			}
 		});
+		
+		
 		
 				
 	}
@@ -267,12 +275,14 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	}
 
 	private void init2(final String q) {
-		
+		System.out.println("Size--"+subDetailsView.length + "current tab--"+currenttab);
 		StudentSubDetailsView tempdetlview = subDetailsView[currenttab];
 		
 		view_s = tempdetlview;
+		System.out.println("View-s--"+view_s);
 		
 		table = view_s.getTable();
+		/*
 		// fix to avoid having multiple rangeChangeHandlers attached
 		if (rangeChangeHandler!=null){
 			rangeChangeHandler.removeHandler();
@@ -292,7 +302,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				
 				onRangeChanged(q);
 			}
-		});
+		});*/
 	}
 	protected void onRangeChanged(String q) {
 		

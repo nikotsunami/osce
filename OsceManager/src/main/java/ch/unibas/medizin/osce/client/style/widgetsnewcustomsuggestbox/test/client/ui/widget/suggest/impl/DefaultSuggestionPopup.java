@@ -13,15 +13,18 @@ public class DefaultSuggestionPopup<T> extends PopupPanel implements
 
 	public DefaultSuggestionPopup() {
 		this(true, false);
+		super.getElement().getStyle().setZIndex(2);
 	}
 
 	public DefaultSuggestionPopup(boolean autoHide) {
 		this(autoHide, false);
+		super.getElement().getStyle().setZIndex(2);
 	}
 
 	public DefaultSuggestionPopup(boolean autoHide, boolean modal) {
 		super(autoHide, modal);
 		setStylePrimaryName(POPUP_STYLE);
+		super.getElement().getStyle().setZIndex(2);
 	}
 
 	@Override

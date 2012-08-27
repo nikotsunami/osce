@@ -358,7 +358,12 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-Image {
+	display: block !important;
 	
+}
+
+.gwt-ImageResource{
+	display: block;
 }
 
 .gwt-Label {
@@ -559,110 +564,129 @@ a:hover, .gwt-Anchor:hover {
 	/*padding: 6px;*/
 	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
 	opacity: 0.9;
+	z-index: 1;
 	
 	/* Hack for compatibility with customized tabpanel */
 	/* z-index: 200; */
 }
 
 .gwt-DecoratedPopupPanel .popupContent {
-	
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupMiddleCenter {
 	padding: 3px;
 	background: #e3e3e3;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopCenter {
 	background: url(images/hborder.png) repeat-x;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomCenter {
 	background: url(images/hborder.png) repeat-x 0px -4px;
 	-background: url(images/hborder_ie6.png) repeat-x 0px -4px;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupMiddleLeft {
 	background: url(images/vborder.png) repeat-y;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupMiddleRight {
 	background: url(images/vborder.png) repeat-y -4px 0px;
 	-background: url(images/vborder_ie6.png) repeat-y -4px 0px;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopLeftInner {
 	width: 5px;
 	height: 5px;
 	zoom: 1;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopRightInner {
 	width: 8px;
 	height: 5px;
 	zoom: 1;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomLeftInner {
 	width: 5px;
 	height: 8px;
 	zoom: 1;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomRightInner {
 	width: 8px;
 	height: 8px;
 	zoom: 1;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopLeft {
 	background: url(images/corner.png) no-repeat 0px -10px;
 	-background: url(images/corner_ie6.png) no-repeat 0px -10px;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopRight {
 	background: url(images/corner.png) no-repeat -5px -10px;
 	-background: url(images/corner_ie6.png) no-repeat -5px -10px;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomLeft {
 	background: url(images/corner.png) no-repeat 0px -15px;
 	-background: url(images/corner_ie6.png) no-repeat 0px -15px;
+	z-index: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomRight {
 	background: url(images/corner.png) no-repeat -5px -15px;
 	-background: url(images/corner_ie6.png) no-repeat -5px -15px;
+	z-index: 1;
 }
 
 * html .gwt-DecoratedPopupPanel .popupTopLeftInner {
 	width: 5px;
 	height: 5px;
 	overflow: hidden;
+	z-index: 1;
 }
 
 * html .gwt-DecoratedPopupPanel .popupTopRightInner {
 	width: 8px;
 	height: 5px;
 	overflow: hidden;
+	z-index: 1;
 }
 
 * html .gwt-DecoratedPopupPanel .popupBottomLeftInner {
 	width: 5px;
 	height: 8px;
 	overflow: hidden;
+	z-index: 1;
 }
 
 * html .gwt-DecoratedPopupPanel .popupBottomRightInner {
 	width: 8px;
 	height: 8px;
 	overflow: hidden;
+	z-index: 1;
 }
 
 .gwt-PopupPanelGlass {
 	background-color: #000;
 	opacity: 0.3;
 	filter: alpha(opacity = 30);
+	z-index: 1;
 }
 
 .gwt-PushButton-up,.gwt-PushButton-up-hovering,.gwt-PushButton-up-disabled,.gwt-PushButton-down,.gwt-PushButton-down-hovering,.gwt-PushButton-down-disabled
@@ -1045,11 +1069,93 @@ a:hover, .gwt-Anchor:hover {
 	overflow: hidden;
 } */
 
-.gwt-TabBar {
+
+.testdemo
+{
+	width: 30%;
+}
+.ScrolledTabLayoutPanel {
+	/*
+	 background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+    border: 1px solid #AAAAAA;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    color: #222222;
+    font-weight: bold;
+    padding: 8px 10px 0;*/
+   /*
     background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
     border: 1px solid #AAAAAA;
     color: #222222;
     font-weight: bold;
+    padding: 8px 10px 0;
+    
+    -moz-border-radius-topleft: 16px;
+    -moz-border-radius-topright: 16px;
+    */
+    /*
+    background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+    border: 1px solid #AAAAAA;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    color: #222222;
+    font-weight: bold;
+    padding: 8px 10px 0;
+    width:20%px;
+    height: auto;
+    top: 1px;
+    padding-top: 16px;
+    padding-left: 16px;
+     
+    */
+    	
+   /*
+   border-color: #aaaaaa;
+	border-style: solid;
+	border-width: 0 1px 1px 1px;
+	-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	
+	overflow: hidden;
+	padding: 6px;
+	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
+   */ 
+   
+   /* background: none repeat scroll 0 0 transparent !important; */
+  
+  	/*width:3000px;  */
+    color: #222222;
+    font-weight: bold;
+    padding: 12px 10px 0 16px;    	
+	float: left;
+	/* height: auto;
+	width: auto; */
+	
+}
+/*
+.gwt-LayoutPanel{
+	
+	border-color: #808080;
+	border-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	-moz-border-radius-bottomleft: 16px;
+	-moz-border-radius-bottomright: 16px;
+	-moz-border-radius-topleft: 16px;
+	-moz-border-radius-topright: 16px;	
+	
+}
+*/
+
+.gwt-TabBar {
+    background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+    border: 1px solid #AAAAAA;
+    
+    color: #222222;
+    font-weight: bold;
+    height: auto !important;
     padding: 8px 10px 0;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
@@ -1080,6 +1186,13 @@ a:hover, .gwt-Anchor:hover {
     position: relative;
     bottom: -1px;
     margin: 0 -6px;
+     top: 1px;
+   
+   
+    
+   
+
+    
 }
 
 .gwt-TabBar .gwt-TabBarItem:hover {
@@ -1130,6 +1243,8 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-TabPanel {
+	overflow-x: scroll;
+    overflow-y: hidden;
 	
 }
 
@@ -1140,7 +1255,9 @@ a:hover, .gwt-Anchor:hover {
 	border-bottom-left-radius: 16px;
 	border-bottom-right-radius: 16px;
 	
-	overflow: hidden;
+	
+ 	/*overflow-x: scroll;
+    overflow-y: hidden;*/
 	padding: 6px;
 	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
 }
@@ -1492,39 +1609,154 @@ td.datePickerMonth {
 	
 }
 
-.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
+.gwt-TabLayoutPanel .gwt-TabBarItem {
+	top: 1px;
+   /*
+    background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+ border-top-left-radius: 12px;
+    border-top-right-radius: 12px;  
+    border: 1px solid #AAAAAA;
+    color: #454545;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: bold;
+    line-height: 1em;
+    outline-style: none;
+    text-decoration: none;
+    padding: 7px 20px;
+    
+    position: relative;
+    bottom: -1px;
+    margin: 0 -6px;
+    width:40px;
+    
+    overflow: hidden;
+
+ -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-bottomleft: 12px;
+    -moz-border-radius-bottomright: 12px;
+    border: 1px solid #AAAAAA;
+    top: -1px;
+*/
+    
+}
+/*
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs .gwt-TabLayoutPanel .gwt-TabBarItem {
+	 background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+    -moz-border-radius-topleft: 12px;
+    -moz-border-radius-topright: 12px;
+    border: 1px solid #AAAAAA;
+    color: #454545;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: bold;
+    line-height: 1em;
+    outline-style: none;
+    text-decoration: none;
+    padding: 7px 20px;
+    
+    position: relative;
+    bottom: -1px;
+    margin: 0 -6px;
+    width:40px;
+    
+    overflow: hidden;
+
+	
 	
 }
-
+*/
 .gwt-TabLayoutPanelContentContainer {
+	top: 1px;
+	
+	/*
 	border-color: #bcbcbc;
 	border-style: solid;
-	border-width: 2px 1px 1px;
+	border-width: 2px 1px 1px;*/
 }
 
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
+	top: 1px;
+	 background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-color: #AAAAAA;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    padding: 13px;
+    position: absolute;
+    top: 1px;
+     border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    height: auto;
+    overflow:auto;
+    overflow-y:auto;
+    
+	/*
 	border-color: #bcbcbc;
 	border-style: solid;
 	border-width: 1px;
 	overflow: hidden;
 	padding: 6px;
+	*/
+	/*
+	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-color: #AAAAAA;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    position:absolute;
+   
+    padding: 6px;
+    */
+    /* overflow-x: scroll;
+    overflow-y: hidden;*/
+   
+   
 }
 
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
-	margin-left: 6px;
-	padding: 3px 6px 3px 6px;
-	cursor: pointer;
-	cursor: hand;
-	color: black;
-	font-weight: bold;
-	text-align: center;
-	background: #e3e3e3;
+	
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+ border-top-left-radius: 12px;
+    border-top-right-radius: 12px;   
+/* 
+-moz-border-radius-topleft: 12px;
+    -moz-border-radius-topright: 12px;
+*/
+    border: 1px solid #AAAAAA;
+    color: #454545;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: bold;
+    line-height: 1em;
+    outline-style: none;
+    text-decoration: none;
+    padding: 7px 20px;
+   
+    position: relative;
+    bottom: -3px;
+    margin: 0 -6px;
+    
+   /*width:40px;
+    overflow-x: scroll;
+    overflow-y: hidden;*/
 }
 
-.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
-	cursor: default;
-	background: #bcbcbc;
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected  {
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
+    color: #454545;
+   
 }
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab:HOVER {
+	 background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
+    color: #454545;
+    }
+
+
 
 .gwt-SplitLayoutPanel-HDragger {
 	background: white url('images/HDragger.png') center center no-repeat;
@@ -2232,7 +2464,10 @@ background: rgb(255,255,204)  ;
 	border-right-width: 1px;
 	border-bottom-width: 1px;
 	border-left-width: 1px;
-	
+	 border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+ border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
 	border-radius: 10px;
 }
 .gwt-Button {
@@ -2829,3 +3064,136 @@ color: #f1b532;
 /* Module 9*/
 
 /* Module 8 End }*/
+.gwt-InvertedTabLayoutPanel .gwt-TabLayoutPanelTabs {
+	border-bottom: 1px solid #AAAAAA;
+	padding: 0 10px 8px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.gwt-InvertedTabLayoutPanel .gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border: 1px solid #AAAAAA;
+    top: -1px;
+}
+
+.gwt-InvertedTabLayoutPanel .gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab-selected {
+	border-top: 0 none;
+    padding: 8px 20px 7px;
+}
+.gwt-InvertedTabPanel .gwt-TabLayoutPanelContent {
+	border-width: 1px 1px 0 1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+}
+.gwt-TabLayoutPanel
+{
+   
+}
+.gwt-TabLayoutPanelTabs {
+	background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+    border: 1px solid #AAAAAA;
+    color: #222222;
+    font-weight: bold;
+    padding: 8px 10px 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+.gwt-TabLayoutPanelContent {
+ 	border-color: #aaaaaa;
+	border-style: solid;
+	border-width: 0 1px 1px 1px;
+	border-bottom-left-radius: 16px;
+	border-bottom-right-radius: 16px;
+	
+	overflow: hidden;
+	padding: 6px;
+	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
+}
+.gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab {
+	 background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border: 1px solid #AAAAAA;
+    color: #454545;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: bold;
+    line-height: 1em;
+    outline-style: none;
+    text-decoration: none;
+    padding: 7px 20px;
+    
+    position: relative;
+    bottom: -1px;
+    margin: 0 -6px;
+}
+.gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab:HOVER{
+	background: url("images/ui-bg_glass_75_f1b532_1x400.png") repeat-x scroll 50% 50% #f1b532;
+    color: #454545;
+}
+.gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab-selected {
+ 	border-bottom: 0 none;
+    padding: 7px 20px 8px;
+}
+.gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab-selected:HOVER {
+	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
+    color: #454545;
+}
+
+
+.horizontalPanelStyle{
+	 
+   /* border: 1px solid #AAAAAA;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  width: 25%;
+  height: 100%;
+  */
+    /*  background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") ; */ 
+     background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC; 
+    border: 1px solid #AAAAAA;
+     border-bottom-colors: none;
+    border-image: none;
+    border-left-colors: none;
+    border-right-colors: none;
+    border-top-colors: none;
+
+    border-left: 1px solid #AAAAAA;
+    border-right: 1px solid #AAAAAA;
+    border-top: 1px solid #AAAAAA;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+     border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    width: 100%;
+    /*height: 100%;*/
+   /*  height: auto;
+    width: auto;
+    */ 
+    
+   
+ 
+}
+
+.tabpanel_tabbar_no_scroll {
+	overflow: hidden !important;
+	 width: 8% !important;
+}
+.gwt-TabLayoutPanelContentContainer{
+	z-index: 1;
+}
+
+.autoHeight
+{
+	background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+}

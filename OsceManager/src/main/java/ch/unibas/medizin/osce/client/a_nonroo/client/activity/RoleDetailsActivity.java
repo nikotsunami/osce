@@ -113,6 +113,7 @@ import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -209,7 +210,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	private RoleDetailsView view; // --
 	private RoleDetailsPlace place;
 	private StandardizedRoleProxy standardizedRoleProxy;
-	private TabPanel roleDetailTabPanel;
+	//ScrolledTab Changes start
+	//private TabPanel roleDetailTabPanel;
+	private ScrolledTabLayoutPanel roleDetailTabPanel;
+	//ScrolledTab Changes end
 	public Iterator<StandardizedRoleProxy> stRoleIterator;
 	public RoleDetailsActivity roleDetailActivity;
 	public RoleDetailsChecklistSubViewChecklistCriteriaItemView tempCriView;
@@ -356,7 +360,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		
 		checklistTopicItemView = new RoleDetailsChecklistSubViewChecklistTopicItemViewImpl();
 	
-		roleDetailTabPanel = view.getRoleDetailTabPanel();
+		roleDetailTabPanel = (ScrolledTabLayoutPanel)view.getRoleDetailTabPanel();
 		
 
 		// SPEC START =
@@ -479,8 +483,14 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved");
+						//ScrolledTab Changes start
+						/*
 						init(standRoleProxy.getId(), roleDetailTabPanel
 								.getTabBar().getSelectedTab());
+						*/
+						init(standRoleProxy.getId(), roleDetailTabPanel
+								.getSelectedIndex());
+						//ScrolledTab Changes end
 
 					}
 				});
@@ -496,8 +506,14 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved");
+						//ScrolledTab Changes start
+						/*
 						init(standRoleProxy.getId(), roleDetailTabPanel
 								.getTabBar().getSelectedTab());
+						*/
+						init(standRoleProxy.getId(), roleDetailTabPanel
+								.getSelectedIndex());
+						//ScrolledTab Changes end
 					}
 				});
 	}
@@ -509,8 +525,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		requests.fileRequest().remove().using(proxy).fire(new Receiver<Void>() {
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
-				init(standRoleProxy.getId(), roleDetailTabPanel.getTabBar()
-						.getSelectedTab());
+				//ScrolledTab Changes start
+				/*init(standRoleProxy.getId(), roleDetailTabPanel.getTabBar()
+						.getSelectedTab());*/
+				init(standRoleProxy.getId(), roleDetailTabPanel.getSelectedIndex());
+				//ScrolledTab Changes end
 			}
 		});
 
@@ -530,8 +549,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		Log.info("call newFileClicked");
 
 		if (fileName != null) {
-			sortOrder = fileTable[roleDetailTabPanel.getTabBar()
-					.getSelectedTab()].getRowCount() + 1;
+			//ScrolledTab Changes start
+			//sortOrder = fileTable[roleDetailTabPanel.getTabBar().getSelectedTab()].getRowCount() + 1;
+			sortOrder = fileTable[roleDetailTabPanel.getSelectedIndex()].getRowCount() + 1;
+			//ScrolledTab Changes end
 			Log.debug("Add File");
 
 			FileRequest fileReq = requests.fileRequest();
@@ -549,7 +570,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 				@Override
 				public void onSuccess(Void arg0) 
 				{
-					init(proxy.getId(), roleDetailTabPanel.getTabBar().getSelectedTab());
+					//ScrolledTab Changes start
+					//init(proxy.getId(), roleDetailTabPanel.getTabBar().getSelectedTab());
+					init(proxy.getId(), roleDetailTabPanel.getSelectedIndex());
+					//ScrolledTab Changes end
 				}
 			});
 		}
@@ -618,8 +642,13 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 		usedMaterialProxy.setStandardizedRole(standardizedRoleProxy);
 		usedMaterialProxy.setMaterialList(materialList);
+		//ScrolledTab Changes start
+		/*usedMaterialProxy.setSort_order(usedMaterialTable[roleDetailTabPanel
+				.getTabBar().getSelectedTab()].getRowCount() + 1);*/
 		usedMaterialProxy.setSort_order(usedMaterialTable[roleDetailTabPanel
-				.getTabBar().getSelectedTab()].getRowCount() + 1);
+		                                  				.getSelectedIndex()].getRowCount() + 1);
+		//ScrolledTab Changes end
+		
 
 		// Highlight onViolation
 		/*	Log.debug("Add UsedMaterial (" + usedMaterialProxy.getMaterialCount()
@@ -634,8 +663,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					public void onSuccess(Void response) {
 						Log.debug("UsedMaterialReceiver Added successfully");
 						standardizedRoleDetailsView[selecTab].getRoomMaterialsDetailsSubViewImpl().getRoomMaterialsPopupViewImpl().hide();
-						initUsedMaterial2(standardizedRoleProxy.getId(),roleDetailTabPanel.getTabBar().getSelectedTab());
-
+						//ScrolledTab Changes start
+						//initUsedMaterial2(standardizedRoleProxy.getId(),roleDetailTabPanel.getTabBar().getSelectedTab());
+						initUsedMaterial2(standardizedRoleProxy.getId(),roleDetailTabPanel.getSelectedIndex());
+						//ScrolledTab Changes end
 					}
 				});
 	}
@@ -697,8 +728,16 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved UsedMaterial");
+						
+						//ScrolledTab Changes start
+						/*
 						initUsedMaterial2(standardizedRoleProxy.getId(),
 								roleDetailTabPanel.getTabBar().getSelectedTab());
+						*/
+						initUsedMaterial2(standardizedRoleProxy.getId(),
+								roleDetailTabPanel.getSelectedIndex());
+						
+						//ScrolledTab Changes end
 					}
 				});
 
@@ -713,8 +752,15 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved UsedMaterial");
-						initUsedMaterial2(standardizedRoleProxy.getId(),
+						
+						//ScrolledTab Changes start
+						/*initUsedMaterial2(standardizedRoleProxy.getId(),
 								roleDetailTabPanel.getTabBar().getSelectedTab());
+						*/
+						initUsedMaterial2(standardizedRoleProxy.getId(),
+								roleDetailTabPanel.getSelectedIndex());
+						
+						//ScrolledTab Changes start
 					}
 				});
 	}
@@ -727,8 +773,15 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 				.fire(new Receiver<Void>() {
 					public void onSuccess(Void ignore) {
 						Log.debug("Sucessfully deleted");
-						initUsedMaterial2(standardizedRoleProxy.getId(),
+						
+						//ScrolledTab Changes start
+						/*initUsedMaterial2(standardizedRoleProxy.getId(),
 								roleDetailTabPanel.getTabBar().getSelectedTab());
+						*/
+						initUsedMaterial2(standardizedRoleProxy.getId(),
+								roleDetailTabPanel.getSelectedIndex());
+						
+						//ScrolledTab Changes start
 					}
 				});
 	}
@@ -779,6 +832,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					int index = 0; // Array Object bIndex (SET VALUE TO OBJECT)
 					// int objcnt=-1; // Total Objects (INITIALIZE THE OBJECT)
 					int totalrole = roleDetailTabPanel.getWidgetCount(); // Total Role Tabs
+					
 					int size = ((RoleTopicProxy) response).getStandardizedRoles().size(); // Total Size of Data (standardized_role)
 					
 					System.out.println("Total Role: " + totalrole);
@@ -1412,7 +1466,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	//assignment E [
 		public void roleTopicInit(final ChecklistTopicProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView)
 		{
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
+			//ScrolledTab Changes start
 			System.out.println("Checklist Id is "+standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId());
 			requests.checkListRequest().findCheckList(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).with("checkListTopics").with("checkListTopics.checkListQuestions").with("checkListTopics.checkListQuestions.checkListCriterias").with("checkListTopics.checkListQuestions.checkListOptions").fire(new Receiver<CheckListProxy>() {
 
@@ -1481,7 +1538,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	}
 
 	private void init(RoleTopicProxy proxy) {
-		final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+		//ScrolledTab Changes start
+		//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+		final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+		//ScrolledTab Changes end
 		Log.info("Init Selected for tab" +selectedtab);
 	}
 
@@ -1572,9 +1632,18 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		Log.info("edit clicked");
 		System.out
 				.println("============================Jump to StandardizedPatientDetailActivity editPatientClicked() =========================");
-		System.out.println("==>"
+		
+		//ScrolledTab Changes start
+		/*System.out.println("==>"
 				+ roleDetailTabPanel.getTabBar().getSelectedTab());
 		int selTabID = roleDetailTabPanel.getTabBar().getSelectedTab();
+		*/
+		System.out.println("==>"
+				+ roleDetailTabPanel.getSelectedIndex());
+		int selTabID = roleDetailTabPanel.getSelectedIndex();
+		
+		//ScrolledTab Changes end
+		
 		goTo(new RoleDetailsPlace(standardizedRoleProxy.stableId(),
 				Operation.EDIT));
 	}
@@ -1688,8 +1757,12 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		public void saveCheckListTopic(final String checkListTopic,final String description)
 		{
 			Log.info("Call saveCheckListTopic");
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
 			
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
+			//ScrolledTab Changes end
 			ChecklistTopicRequest request=requests.checklistTopicRequest();
 			
 			final ChecklistTopicProxy proxy=request.create(ChecklistTopicProxy.class);
@@ -1723,7 +1796,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		public void saveCheckListQuestion(String Question,String Instruction,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView)
 		{
 			Log.info("saveCheckListQuestion called");
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
+			//ScrolledTab Changes end
 			 ChecklistQuestionRequest request=requests.checklistQuestionRequest();
 			
 			final ChecklistQuestionProxy proxy=request.create(ChecklistQuestionProxy.class);
@@ -1771,7 +1847,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		public void saveCriteria(final String criteria,final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
 		{
 			Log.info("saveCriteria");
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
+			//ScrolledTab Changes end
 			ChecklistCriteriaRequest request = requests.checklistCriteriaRequest();
 			
 			final ChecklistCriteriaProxy proxy=request.create(ChecklistCriteriaProxy.class);
@@ -1804,8 +1883,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		public void saveOption(String option,String value,final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
 		{
 			Log.info("saveOption");
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
-			
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
+			//ScrolledTab Changes end
 			ChecklistOptionRequest request=requests.checklistOptionRequest();
 			
 			final ChecklistOptionProxy proxy=request.create(ChecklistOptionProxy.class);
@@ -1941,7 +2022,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		public void setRoleListBoxValue(ImportTopicPopupView popupView)
 		{
 			popupView.setDelegate(this);			
-			StandardizedRoleProxy proxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getTabBar().getSelectedTab()].getValue();			
+			
+			//ScrolledTab Changes start
+			//StandardizedRoleProxy proxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getTabBar().getSelectedTab()].getValue();
+			StandardizedRoleProxy proxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			//ScrolledTab Changes end
 			ArrayList<StandardizedRoleProxy> roles=new ArrayList<StandardizedRoleProxy>();
 			
 			Iterator<StandardizedRoleProxy> iterator=roleTopicProxy.getStandardizedRoles().iterator();
@@ -2085,7 +2170,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			}*/
 			// E Highlight onViolation
 			
-			final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			//ScrolledTab Changes start
+			//final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			final int selectedTab=view.getRoleDetailTabPanel().getSelectedIndex();
+			//ScrolledTab Changes start
 			CheckListProxy checklsitProxy=standardizedRoleDetailsView[selectedTab].getValue().getCheckList();
 			
 			ChecklistTopicRequest request=requests.checklistTopicRequest();
@@ -2202,7 +2290,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		// E Highlight onViolation
 		{
 			Log.info("import Question");
-			final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			//ScrolledTab Changes start
+			//final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			final int selectedTab=view.getRoleDetailTabPanel().getSelectedIndex();
+			//ScrolledTab Changes start
 			//final ChecklistQuestionProxy queProxy;
 			CheckListProxy checklsitProxy=standardizedRoleDetailsView[selectedTab].getValue().getCheckList();
 			
@@ -2341,7 +2432,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 		@Override
 		public void topicMoveDown(final ChecklistTopicProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			//ScrolledTab Changes end
 			requests.checklistTopicRequestNonRoo()
 			.topicMoveDown(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy)
 			.fire(new Receiver<Void>() {
@@ -2357,7 +2452,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 		@Override
 		public void topicMoveUp(final ChecklistTopicProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			//ScrolledTab Changes end
 			requests.checklistTopicRequestNonRoo().topicMoveUp(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy).fire(new Receiver<Void>() {
 				@Override
 				public void onSuccess(Void response) {
@@ -2371,7 +2469,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 		@Override
 		public void questionMoveUp(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView,final ChecklistTopicProxy topicProxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			//ScrolledTab Changes end
 			CheckListProxy checkListProxy=standardizedRoleDetailsView[selectedtab].getValue().getCheckList();
 			System.out.println("Topic Id is "+topicProxy);System.out.println("Topic titlke is "+topicProxy);
 			requests.checklistQuestionRequestNonRoo().questionMoveUp(topicProxy.getId()).using(questionView.getProxy()).fire(new Receiver<Void>() {
@@ -2388,7 +2490,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 		@Override
 		public void questionMoveDown(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView,final ChecklistTopicProxy topicProxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
-			final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			
+			//ScrolledTab Changes start
+			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			//ScrolledTab Changes end
 			CheckListProxy checkListProxy=standardizedRoleDetailsView[selectedtab].getValue().getCheckList();
 //			System.out.println("Topic Id is "+topicProxy.getId());System.out.println("Topic titlke is "+topicProxy.getTitle());
 			System.out.println("Topic Id is "+topicProxy);System.out.println("Topic titlke is "+topicProxy);
@@ -2607,7 +2713,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 						public void onClick(ClickEvent event) {
 							dialogBox.hide();							
 							Log.info("yes click");	
-							final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+							
+							//ScrolledTab Changes start
+							//final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+							final int selectedTab = roleDetailTabPanel.getSelectedIndex();
+							//ScrolledTab Changes end
 							final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
 									.getId();
 
@@ -2700,7 +2810,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		searchCriteriaProxy.setObjectId(objectId);
 		searchCriteriaProxy.setShownValue(shownValue);
 
-		final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+		//ScrolledTab Changes start
+		//final int selectedTab = roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTab = roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		searchCriteriaProxy
 				.setStandardizedRole((StandardizedRoleProxy) standardizedRoleProxies[selectedTab]);
 		final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
@@ -3001,8 +3114,15 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved");
-						simpleSearchInit(standRoleProxy.getId(),
+						
+						//ScrolledTab Changes start
+						/*simpleSearchInit(standRoleProxy.getId(),
 								roleDetailTabPanel.getTabBar().getSelectedTab());
+						*/
+						simpleSearchInit(standRoleProxy.getId(),
+								roleDetailTabPanel.getSelectedIndex());
+						
+						//ScrolledTab Changes end
 
 					}
 				});
@@ -3018,8 +3138,15 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					@Override
 					public void onSuccess(Void response) {
 						Log.info("moved");
-						simpleSearchInit(standRoleProxy.getId(),
+						
+						//ScrolledTab Changes start
+						/*simpleSearchInit(standRoleProxy.getId(),
 								roleDetailTabPanel.getTabBar().getSelectedTab());
+						*/
+						simpleSearchInit(standRoleProxy.getId(),
+								roleDetailTabPanel.getSelectedIndex());
+						
+						//ScrolledTab Changes end
 					}
 				});
 
@@ -3041,8 +3168,15 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					.fire(new Receiver<Void>() {
 						public void onSuccess(Void ignore) {
 							Log.debug("Sucessfully deleted");
-							simpleSearchInit(standRoleProxy.getId(),
+							
+							//ScrolledTab Changes start
+							/*simpleSearchInit(standRoleProxy.getId(),
 									roleDetailTabPanel.getTabBar().getSelectedTab());
+							*/
+							simpleSearchInit(standRoleProxy.getId(),
+									roleDetailTabPanel.getSelectedIndex());
+							
+							//ScrolledTab Changes end
 						}
 					});
 				}
@@ -3069,7 +3203,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		
 		if (SearchName != null) 
 		{
-			simpleSearchSortOrder = simpleSearchcriteriaTable[roleDetailTabPanel.getTabBar().getSelectedTab()].getRowCount() + 1;
+			//ScrolledTab Changes start
+			//simpleSearchSortOrder = simpleSearchcriteriaTable[roleDetailTabPanel.getTabBar().getSelectedTab()].getRowCount() + 1;
+			simpleSearchSortOrder = simpleSearchcriteriaTable[roleDetailTabPanel.getSelectedIndex()].getRowCount() + 1;
+			//ScrolledTab Changes start
 			Log.debug("Add Simple Search");
 
 			SimpleSearchCriteriaRequest simpleSearchreq = requests
@@ -3090,9 +3227,16 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 						@Override
 						public void onSuccess(Void arg0) {
 							Log.info("Simple Search Criteria added..");
-							simpleSearchInit(standRoleProxy.getId(),
+							
+							//ScrolledTab Changes start
+							/*simpleSearchInit(standRoleProxy.getId(),
 									roleDetailTabPanel.getTabBar()
 											.getSelectedTab());
+							*/
+							simpleSearchInit(standRoleProxy.getId(),
+									roleDetailTabPanel.getSelectedIndex());
+							
+							//ScrolledTab Changes end
 						}
 					});
 		}
@@ -3118,7 +3262,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 				// TODO Auto-generated method stub
 				
 				StandardizedRoleDetailsViewImpl previousRole;	
-				previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+				
+				//ScrolledTab Changes start
+				//previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+				previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()];
+				//ScrolledTab Changes end
 				StandardizedRoleProxy roleProxy=response.getPreviousVersion();
 				if(roleProxy!=null)
 				{
@@ -3127,8 +3275,12 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					//goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(),	Operation.DETAILS));
 				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).roleTopic.stableId(),Operation.DETAILS));
 				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).stableId(),Operation.DETAILS));
-					previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+					//previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
 					
+					//ScrolledTab Changes start
+					//previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+					previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()];
+					//ScrolledTab Changes end
 					previousRole.edit.setEnabled(false);
 					previousRole.delete.setEnabled(false);
 					previousRole.home.setVisible(true);
@@ -3162,7 +3314,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void AddAuthorClicked() 
 	{
 		Log.info("~Call AddAuthorClicked:RoleDetailActivity");		
-		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();	
+		//ScrolledTab Changes start
+		//final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId = roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		
 		// Highlight onViolation
 		
@@ -3252,8 +3407,12 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void AddReviewerClicked() 
 	{
 		Log.info("~Call AddReviewerClicked:RoleDetailActivity");
-		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
+		//final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
 		
+		//ScrolledTab Changes start
+		//final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId = roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		// Highlight onViolation
 		/*		if(standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.getValue() == null)
 		{
@@ -3337,7 +3496,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			
 		Log.info("~Click on Add Keyword for Role");
 		
-		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		//ScrolledTab Changes start
+		//final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId=roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
+		
 		//Issue # 122 : Replace pull down with autocomplete.
 		//final String selectedKeyword=standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.value();
 		
@@ -3547,7 +3710,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	@Override
 	public void deleteKeywordClicked(KeywordProxy keywordProxy) 
 	{
-		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		
+		//ScrolledTab Changes start
+		//final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId=roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		Log.info("~DeleteKeywordClicked");
 		Log.info("~Delete Keyword for Role: " + standardizedRoleDetailsView[selectedTabId].getValue().getId());
 		Log.info("~Delete Keyword: " + keywordProxy.getName());
@@ -3616,7 +3783,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	@Override
 	public void deleteDoctorClicked(RoleParticipantProxy roleParticipantProxy,int i) 
 	{
-		final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		
+		//ScrolledTab Changes start
+		//final int selectedTabId=roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId=roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		final int flag=i;
 		Log.info("delete clicked");
 		Log.info("~Delete Doctor" + i +"Clicked Name: " + roleParticipantProxy.getDoctor().getName() );				
@@ -3672,7 +3843,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void refreshRelationshipProxy()
 	{
 		// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
-		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
+		//ScrolledTab Changes start
+		//final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId = roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new OSCEReceiver<Object>()
 		{
 			@Override
@@ -3710,7 +3884,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void refreshDoctorList()
 	{
 		// REFRESH LIST VIEW		
-		final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();		
+		//ScrolledTab Changes start
+		//final int selectedTabId = roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int selectedTabId = roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		// Issue Role
 		//	V4
 		//requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
@@ -3941,7 +4118,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	@Override
 	public void roleTemplateValueButtonClicked(final RoleTemplateProxy roleTemplateProxy) {
 	Log.info("Call roleTemplateValueButtonClicked");		
-		selectedtab=roleDetailTabPanel.getTabBar().getSelectedTab();
+	
+		//ScrolledTab Changes start
+		//selectedtab=roleDetailTabPanel.getTabBar().getSelectedTab();
+	selectedtab=roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		standardizedRoleProxy= standardizedRoleDetailsView[selectedtab].getValue();
 		StandardizedRoleRequest request = requests.standardizedRoleRequest();
 		standardizedRoleProxy = request.edit(standardizedRoleProxy);
@@ -4146,7 +4327,10 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			final RoleTableItemValueProxy roleTableItemValueProxy,final Long roleBaseItemProxyid,
 			final CellTable<RoleTableItemValueProxy> table,int left,int top) {
 	
-		final int strId =roleDetailTabPanel.getTabBar().getSelectedTab();
+		//ScrolledTab Changes start
+		//final int strId =roleDetailTabPanel.getTabBar().getSelectedTab();
+		final int strId =roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		
 		toolTip= new PopupPanel(true);
 		
@@ -4259,7 +4443,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		
 		//description.setEnabled(false);
 		System.out.println("Major Change Or minor change--"+majorOrMinar);
-		selectedtab =roleDetailTabPanel.getTabBar().getSelectedTab();
+		
+		//ScrolledTab Changes start
+		//selectedtab =roleDetailTabPanel.getTabBar().getSelectedTab();
+		selectedtab =roleDetailTabPanel.getSelectedIndex();
+		//ScrolledTab Changes end
 		standardizedRoleProxy= standardizedRoleDetailsView[selectedtab].getValue();
 		if(majorOrMinar==0)
 		{
@@ -4543,8 +4731,12 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					//goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(),	Operation.DETAILS));
 				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).roleTopic.stableId(),Operation.DETAILS));
 				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).stableId(),Operation.DETAILS));
-					homeRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+				//	homeRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
 					
+					//ScrolledTab Changes start
+					//homeRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
+					homeRole=standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()];
+					//ScrolledTab Changes end
 					homeRole.edit.setEnabled(true);
 					homeRole.delete.setEnabled(true);
 					homeRole.home.setVisible(false);

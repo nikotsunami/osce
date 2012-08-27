@@ -65,7 +65,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		setAnimationEnabled(true);
 		setGlassEnabled(true);
 		dialogBox=this;
-		
+		this.getElement().getStyle().setZIndex(3);
 	}
 	public static MessageConfirmationDialogBox create(String msg)
 	{
@@ -86,6 +86,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	{
 		
 		super.center();
+		this.getElement().getStyle().setZIndex(3);
 		super.show();
 		
 	}
@@ -102,6 +103,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		});
 		
 		super.center();
+		this.getElement().getStyle().setZIndex(3);
 		super.show();
 		
 	}

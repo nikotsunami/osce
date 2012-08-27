@@ -7,7 +7,7 @@
 	<ui:style src="../styles.css" />
 	
 	
-<g:VerticalPanel>
+<g:VerticalPanel width="100%" height="100%">
 
 
 	<g:HTMLPanel>

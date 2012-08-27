@@ -39,6 +39,7 @@ public class OSCEReceiverPopupViewImpl extends DialogBox
 		btnOk.setText(constants.okBtn());
 		btnOk.addStyleName("marginTop15");
 		HPbtn.add(btnOk);
+		this.getElement().getStyle().setZIndex(1);
 		btnOk.addClickHandler(new ClickHandler() {
 			
 			@Override

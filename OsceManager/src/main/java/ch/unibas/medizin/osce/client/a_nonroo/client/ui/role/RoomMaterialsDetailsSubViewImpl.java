@@ -174,7 +174,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 	{
 	
 		roomMaterialsPopupViewImpl.setAnimationEnabled(true);
-		roomMaterialsPopupViewImpl.setWidth("200px");
+		roomMaterialsPopupViewImpl.setWidth("300px");
 		roomMaterialsPopupViewImpl.setHeight("140px");
 		roomMaterialsPopupViewImpl.setPopupPosition(event.getClientX(),event.getClientY());
 		roomMaterialsPopupViewImpl.saveRoomMaterial.setText(constants.save());
@@ -185,6 +185,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 		roomMaterialsPopupViewImpl.materialList.setSelected(null);
 		//Issue # 122 : Replace pull down with autocomplete.
 		roomMaterialsPopupViewImpl.setProxy(this.standardizedRoleProxy);
+		roomMaterialsPopupViewImpl.getElement().getStyle().setZIndex(2);
 		roomMaterialsPopupViewImpl.show();	
 		
 	}

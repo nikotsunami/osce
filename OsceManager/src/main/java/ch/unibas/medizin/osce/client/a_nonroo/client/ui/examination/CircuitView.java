@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -28,7 +30,10 @@ public interface CircuitView extends IsWidget{
     
     void setPresenter(Presenter systemStartActivity);
 
-    TabPanel getCircuitTabPanel();
+  //ScrolledTab Changes start
+    //TabPanel getCircuitTabPanel();
+    ScrolledTabLayoutPanel getCircuitTabPanel();
+  //ScrolledTab Changes start
     
     public SimplePanel getCircuitDetailPanel();
     

@@ -3,18 +3,54 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	 <ui:style src="../styles.css" />
+	 <ui:style src="../styles.css" >
+		.scrollAuto1{
+
 	
-	<g:HTMLPanel>
+		}
+	 </ui:style>
+	
+	
+
 		<!-- h1>Postenlauf - MainView</h1-->
-		<g:TabPanel ui:field="studentTabPanel" width="50%">
+		<!-- <g:TabPanel ui:field="studentTabPanel" width="50%">
 		
-		<!-- <g:SimplePanel ui:field="name"></g:SimplePanel> -->
-			<!-- g:Tab>
+		<g:SimplePanel ui:field="name"></g:SimplePanel>
+			g:Tab>
 				<g:TabHTML ></g:TabHTML>
 				<g:Label>Hello</g:Label>
-			</g:Tab-->					
-		</g:TabPanel>
+			</g:Tab					
+		</g:TabPanel> -->
 		
-			</g:HTMLPanel>
+		 <!-- <g:HTMLPanel height="90%" width="90%"> --> 
+		<g:HorizontalPanel ui:field="horizontalStudentTabPanel1"  height="50%" width="100%">
+		<my:ScrolledTabLayoutPanel ui:field="studentTabPanel1" barHeight="40"  width="100%" height="100%">
+		
+		
+	<!-- 	<g:TabPanel ui:field="firstcheck" width="50%" ></g:TabPanel> -->
+				
+		</my:ScrolledTabLayoutPanel>
+		</g:HorizontalPanel>
+		<!-- </g:HTMLPanel> -->
+		
+		
+		<!-- <g:HTMLPanel>
+		<g:HorizontalPanel ui:field="test1" height="100%">
+		<my:ScrolledTabLayoutPanel ui:field="scrollpanel" barHeight="40" width="50%" >
+		
+		 <my:tab>
+                    <my:header >
+                        <b>+</b>
+                        
+                    </my:header>
+                    <g:Label>able</g:Label>
+          </my:tab>
+		<g:TabPanel ui:field="firstcheck" width="50%" ></g:TabPanel>
+				
+		</my:ScrolledTabLayoutPanel>
+		</g:HorizontalPanel>
+		</g:HTMLPanel> -->
+			
+		
+		
 </ui:UiBinder> 

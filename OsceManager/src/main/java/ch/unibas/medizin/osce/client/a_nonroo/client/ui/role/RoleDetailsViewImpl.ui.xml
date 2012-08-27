@@ -15,18 +15,33 @@
 	
 	</ui:style>
 
-<g:HTMLPanel>
-	  <g:TabPanel ui:field="roleDetailPanel" width="100%">
-	<!-- 	<g:Tab>
-			<g:TabHTML>Kohler</g:TabHTML>
-			<n:StandardizedRoleDetailsViewImpl ui:field="standardizedRoleDetailsViewImpl"></n:StandardizedRoleDetailsViewImpl> 
-		</g:Tab>  -->
+<!-- <g:HTMLPanel> -->
+	  <!-- //ScrolledTab Changes start -->
+	<!--   <g:TabPanel ui:field="roleDetailPanel" width="100%">
 		<g:Tab>
 			<g:TabHTML >+</g:TabHTML>
 			<g:Label>LBL Role SubView1</g:Label>
 		</g:Tab>					
-	</g:TabPanel>
-</g:HTMLPanel>
+	</g:TabPanel> -->
+	<g:HorizontalPanel ui:field="horizontalRoleDetailPanel" width="100%">
+		<!-- <g:HTMLPanel > -->
+		<g:TabLayoutPanel ui:field="roleDetailPanel" barHeight="40" >
+		
+		 <g:tab>
+                    <g:header>
+                        <b>+</b>
+                        
+                    </g:header> 
+                    <g:Label>Add Tab</g:Label>
+                  
+          </g:tab>
+	<!-- 	<g:TabPanel ui:field="firstcheck" width="50%" ></g:TabPanel> -->
+		
+		</g:TabLayoutPanel>
+		</g:HorizontalPanel>
+		<!-- </g:HTMLPanel> -->
+	<!-- //ScrolledTab Changes end -->
+<!-- </g:HTMLPanel> -->
  
 	
 </ui:UiBinder> 

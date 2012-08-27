@@ -7,12 +7,34 @@
 	
 	<g:HTMLPanel>
 		<!-- h1>Postenlauf - MainView</h1-->
-		<g:TabPanel ui:field="circuitTabPanel" width="100%">
-			<!-- g:Tab>
+		<!-- //ScrolledTab Changes start -->
+		<!-- <g:TabPanel ui:field="circuitTabPanel" width="100%">
+			g:Tab>
 				<g:TabHTML ></g:TabHTML>
 				<g:Label>Hello</g:Label>
-			</g:Tab-->					
+			</g:Tab					
 		</g:TabPanel>
+		 -->
+		<g:HorizontalPanel ui:field="horizontalCircuitTabPanel">
+		<!-- <g:HTMLPanel> -->
+		<my:ScrolledTabLayoutPanel ui:field="circuitTabPanel" barHeight="40" width="100%" >
+		
+		<!--  <g:tab>
+                    <g:header>
+                        <b></b>
+                        
+                    </g:header> 
+                    <g:Label>Add Tab</g:Label>
+                  
+          </g:tab> -->
+	<!-- 	<g:TabPanel ui:field="firstcheck" width="50%" ></g:TabPanel> -->
+		
+		</my:ScrolledTabLayoutPanel>
+		<!-- </g:HTMLPanel> -->
+		</g:HorizontalPanel>
+		
+		<!-- //ScrolledTab Changes end -->
+	
 		<!-- g:SimplePanel ui:field="circuitDetailPanel"></g:SimplePanel-->
 	</g:HTMLPanel>
 </ui:UiBinder> 

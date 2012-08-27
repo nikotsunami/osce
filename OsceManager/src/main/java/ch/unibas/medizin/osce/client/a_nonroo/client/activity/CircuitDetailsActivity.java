@@ -1682,7 +1682,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// OSCE Day Assignment Start 
 				
 				public void setOsceStatusStyle(String style){
-					circuitOsceSubViewImpl.setStyleName(style);
+					//circuitOsceSubViewImpl.setStyleName(style);
+					circuitOsceSubViewImpl.addStyleName(style);
 				}
 				public void setDayStatusStyle(String style){
 					osceDayViewImpl.setStyleName(style);

@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -27,7 +29,10 @@ public interface StudentsView extends IsWidget{
     
     void setPresenter(Presenter systemStartActivity);
     
-    TabPanel getStudentTabPanel();
+  //ScrolledTab Changes start
+    //TabPanel getStudentTabPanel();
+    ScrolledTabLayoutPanel getStudentTabPanel1();
+  //ScrolledTab Changes 
     
     public SimplePanel getStudentDetailPanel();
 }

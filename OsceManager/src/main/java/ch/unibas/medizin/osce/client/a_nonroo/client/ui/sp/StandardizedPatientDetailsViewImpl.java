@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
@@ -16,6 +17,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -28,6 +30,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -64,11 +67,34 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiField
 	SpanElement anamnesisPanelTitle;
 	
-	// Panels
-	@UiField
-	TabPanel patientPanel;
+	
+	//ScrolledTab Changes start
 
-	// SubViews
+		/*@UiField
+		TabPanel circuitTabPanel;*/
+		
+		//private final UiIcons uiIcons = GWT.create(UiIcons.class);
+		public ImageResource icon1 = uiIcons.triangle1West(); 
+		public ImageResource icon2=  uiIcons.triangle1East();
+		Unit u=Unit.PX;
+		
+
+		@UiField
+		HorizontalPanel horizontalPatientPanel;
+
+		/*// Panels
+		@UiField
+		TabPanel patientPanel;
+*/
+		
+		
+		@UiField(provided=true)
+		ScrolledTabLayoutPanel patientPanel=new ScrolledTabLayoutPanel(40L, u, icon1, icon2);
+		
+		//ScrolledTab Changes end
+
+		
+		// SubViews
 	@UiField 
 	StandardizedPatientScarSubViewImpl standardizedPatientScarSubViewImpl;
 	@UiField
@@ -214,11 +240,22 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	 */
 	public StandardizedPatientDetailsViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		//TabPanelHelper.moveTabBarToBottom(patientPanel);
+		horizontalPatientPanel.addStyleName("horizontalPanelStyle");
+		horizontalPatientPanel.add(patientPanel);
+		patientPanel.setHeight("250px");
+		//roleDetailPanel.addStyleName("autoHeight");
+		//patientPanel.setWidth("570px");
+		
+		//patientPanel.addStyleName("gwt-InvertedTabPanel");
+		
 		
 		patientPanel.selectTab(0);
 		
 		// reorder the Tab- and Content-Panels
-		TabPanelHelper.moveTabBarToBottom(patientPanel);
+		//ScrolledTab Changes start
+		
+		//ScrolledTab Changes start
 		pull.setText(constants.pull());
 		send.setText(constants.send());
 		print.setText(constants.print());
@@ -251,12 +288,37 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	}
 	
 	private void setTabTexts() {
-		patientPanel.getTabBar().setTabText(0, constants.contactInfo());
+		
+		//ScrolledTab Changes start
+		patientPanel.setTabText(0, constants.contactInfo());
+		patientPanel.setTabText(1, constants.details());
+		patientPanel.setTabText(2, constants.bankAccount());
+		patientPanel.setTabText(3, constants.description());
+		patientPanel.setTabText(4, constants.languageSkills());
+		patientPanel.setTabText(5, constants.traits());
+		
+		patientPanel.tabLIstBox.addItem(constants.contactInfo());
+		patientPanel.tabLIstBox.addItem(constants.details());
+		patientPanel.tabLIstBox.addItem(constants.bankAccount());
+		patientPanel.tabLIstBox.addItem(constants.description());
+		patientPanel.tabLIstBox.addItem(constants.languageSkills());
+		patientPanel.tabLIstBox.addItem(constants.traits());
+		
+		/*patientPanel.getTabWidget(0).setTitle(constants.contactInfo());
+		patientPanel.getTabWidget(1).setTitle(constants.details());
+		patientPanel.getTabWidget(2).setTitle(constants.bankAccount());
+		patientPanel.getTabWidget(3).setTitle(constants.description());
+		patientPanel.getTabWidget(4).setTitle(constants.languageSkills());
+		patientPanel.getTabWidget(5).setTitle(constants.traits());
+		*/
+		
+		/*patientPanel.getTabBar().setTabText(0, constants.contactInfo());
 		patientPanel.getTabBar().setTabText(1, constants.details());
 		patientPanel.getTabBar().setTabText(2, constants.bankAccount());
 		patientPanel.getTabBar().setTabText(3, constants.description());
 		patientPanel.getTabBar().setTabText(4, constants.languageSkills());
-		patientPanel.getTabBar().setTabText(5, constants.traits());
+		patientPanel.getTabBar().setTabText(5, constants.traits());*/
+		//ScrolledTab Changes start
 	}
 	
 	private void setLabelTexts() {
@@ -438,9 +500,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		return anamnesisDisclosurePanel.isOpen();
 	}
 	
+	
 	@Override
 	public int getSelectedDetailsTab() {
-		return patientPanel.getTabBar().getSelectedTab();
+		//ScrolledTab Changes start
+		//return patientPanel.getTabBar().getSelectedTab();
+		return patientPanel.getSelectedIndex();
+		//ScrolledTab Changes start
 	}
 	
 	@UiHandler("anamnesisPanelArrow")
@@ -477,5 +543,6 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@Override
 	public void setSelectedDetailsTab(int tab) {
 		patientPanel.selectTab(tab);
+		
 	}
 }

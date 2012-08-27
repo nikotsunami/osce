@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" >
 	<ui:style src="../../styles.css">
 	.description {	}
 	
@@ -50,7 +50,7 @@
 	
 <!-- 	</g:HTMLPanel> -->
 
-	<g:VerticalPanel addStyleNames="{style.tabStyle}">
+	<g:VerticalPanel addStyleNames="{style.tabStyle}" >
 		
 	<g:HTMLPanel styleName="{style.patientControls}">
 		<g:Image ui:field="patientPanelArrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
@@ -67,9 +67,31 @@
 	</g:HTMLPanel>
 
 	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="patientDisclosurePanel" width="100%">
-		<g:TabPanel ui:field="patientPanel" styleName="gwt-InvertedTabPanel {style.maxWidth}" width="100%">
-			<g:Tab>
-				<g:TabHTML></g:TabHTML>
+	
+	<!-- //ScrolledTab Changes start -->
+	 <g:HorizontalPanel ui:field="horizontalPatientPanel"> 
+	 	<!--  <g:HTMLPanel> -->
+	<g:TabLayoutPanel ui:field="patientPanel"  barHeight="40"  >
+	
+	
+		
+		<!-- <g:TabPanel ui:field="patientPanel" styleName="gwt-InvertedTabPanel {style.maxWidth}" width="100%"> -->
+		<!-- 	 <g:tab>
+                    <g:header>
+                        <b>+</b>
+                        
+                    </g:header> 
+                    <g:Label>Add Tab</g:Label>
+                  
+         
+			</g:tab> 
+			-->
+				 <g:tab> 
+
+				<!-- <g:TabHTML></g:TabHTML> -->
+				<g:header>                       
+                 </g:header> 
+                    
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
 					
 					<table class="{style.fields}">
@@ -118,10 +140,13 @@
 						</tbody>
 					</table>
 				</g:HTMLPanel>
-			</g:Tab>
+			</g:tab>
 	
-				<g:Tab>
-					<g:TabHTML></g:TabHTML>
+				<g:tab>
+					<!-- <g:TabHTML></g:TabHTML> -->
+					<g:header>                       
+                 </g:header> 
+                
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<table class="{style.fields}">
 							<colgroup>
@@ -169,9 +194,12 @@
 							</tbody>
 						</table>
 					</g:HTMLPanel>
-				</g:Tab>
-				<g:Tab>
-					<g:TabHTML></g:TabHTML>
+				</g:tab>
+				<g:tab>
+					<!-- <g:TabHTML></g:TabHTML> -->
+					<g:header>                       
+                 </g:header> 
+                
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<table class="{style.fields}">
 							<colgroup>
@@ -210,27 +238,43 @@
 							</tbody>
 						</table>
 					</g:HTMLPanel>
-				</g:Tab>
+				</g:tab>
 				
-				<g:Tab>
-					<g:TabHTML></g:TabHTML>
+				<g:tab>
+					<!-- <g:TabHTML></g:TabHTML> -->
+					<g:header>                       
+                 </g:header> 
+                
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<div ui:field="description" class="{style.description}"></div>
 					</g:HTMLPanel>
-				</g:Tab>
+				</g:tab>
 				
 				
-				<g:Tab>
-					<g:TabHTML></g:TabHTML>
+				<g:tab>
+					<!-- <g:TabHTML></g:TabHTML> -->
+					<g:header>                       
+                 </g:header> 
+                
 					<n:StandardizedPatientLangSkillSubViewImpl ui:field="standardizedPatientLangSkillSubViewImpl"></n:StandardizedPatientLangSkillSubViewImpl>
-				</g:Tab>
+				</g:tab>
 				
-				<g:Tab>
-					<g:TabHTML>ScarSubView</g:TabHTML>
+				<g:tab>
+					<!-- <g:TabHTML>ScarSubView</g:TabHTML> -->
+					<g:header>
+					ScarSubView                       
+                 </g:header> 
+                
 					<n:StandardizedPatientScarSubViewImpl ui:field="standardizedPatientScarSubViewImpl"></n:StandardizedPatientScarSubViewImpl>
-				</g:Tab>
+				</g:tab>
 				
-			</g:TabPanel>
+			<!-- </g:TabPanel> -->
+			</g:TabLayoutPanel>
+			<!--  </g:HTMLPanel> -->
+		</g:HorizontalPanel>
+		
+		<!-- //ScrolledTab Changes start -->
+		
 		</g:DisclosurePanel>
 		
 	<g:HTMLPanel styleName="{style.patientControls} {style.distanceToTop}">

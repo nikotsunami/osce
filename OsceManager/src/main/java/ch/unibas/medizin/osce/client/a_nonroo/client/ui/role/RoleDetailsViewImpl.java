@@ -11,10 +11,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView.Presenter;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -22,8 +25,16 @@ import ch.unibas.medizin.osce.shared.Operation;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -32,9 +43,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabBar.Tab;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 /**
@@ -52,8 +65,26 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 	private Presenter presenter;
 	StandardizedRoleProxy proxy;
 	
-	@UiField
+	//ScrolledTab Changes start
+
+/*	@UiField
 	TabPanel roleDetailPanel;
+*/	
+	private final UiIcons uiIcons = GWT.create(UiIcons.class);
+	public ImageResource icon1 = uiIcons.triangle1West(); 
+	public ImageResource icon2=  uiIcons.triangle1East();
+	Unit u=Unit.PX;
+	
+
+	@UiField
+	HorizontalPanel horizontalRoleDetailPanel;
+	
+	
+	@UiField(provided=true)
+	ScrolledTabLayoutPanel roleDetailPanel=new ScrolledTabLayoutPanel(40L, u, icon1, icon2);
+	
+	
+	//ScrolledTab Changes end
 	
 	private Delegate delegate;
 	
@@ -156,14 +187,90 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 		delete.setText(constants.delete());
 		*/
 		
+		//ScrolledTab Changes start
+		horizontalRoleDetailPanel.addStyleName("horizontalPanelStyle");
+		//horizontalRoleDetailPanel.getElement().getStyle().setHeight(Integer.parseInt(this.getElement().getStyle().getHeight()), Unit.PX);
+		//horizontalRoleDetailPanel.add(roleDetailPanel);
+		roleDetailPanel.setHeight("690px");
+		//roleDetailPanel.addStyleName("autoHeight");
+		//roleDetailPanel.setWidth("700px");
+		//roleDetailPanel.addStyleName("autoHeight");
+		
+		
+		
+		roleDetailPanel.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				
+				if(roleDetailPanel.getSelectedIndex()==(roleDetailPanel.getWidgetCount()-1) )
+				{
+					Log.info("roleDetailPanel plus clicked");
+					delegate.createRole();			
+				}
+				
+				
+			}
+		}, ClickEvent.getType());
+		
+		/*roleDetailPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				// TODO Auto-generated method stub
+			Log.info("selection handler");	
+			}
+		});
+		
+		roleDetailPanel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+			
+			@Override
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+				// TODO Auto-generated method stub
+			Log.info("before selection--"+event.getItem());	
+			}
+		});*/
+		/*roleDetailPanel.addHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				if(roleDetailPanel.getSelectedIndex()==(roleDetailPanel.getWidgetCount()-1))
+				{
+					Log.info("roleDetailPanel plus clicked");
+					delegate.createRole();			
+				}
+				else
+				{
+					Log.info("roleDetailPanel clicked");			
+				}
+			}
+		}, ClickEvent.getType());
+		*///ScrolledTab Changes end
+		
+		
 		setTabTexts();
 		setLabelTexts();
+		
+		
 		
 		init();
 		/*roleDisclosurePanel.setContent(rolePanel);
 		roleDisclosurePanel.setStyleName("");*/
 	}
 	
+	/*public HasSelectionHandlers<Integer> getTabSelected() {
+		return this;
+		}*/
+
+	
+	
+		public HandlerRegistration
+		addSelectionHandler(SelectionHandler<Integer> handler) {
+		return addHandler(handler,SelectionEvent.getType());
+		}
+		
 	public void init()
 	{
 		
@@ -219,9 +326,13 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 		return this;
 	}
 	
-	@UiHandler("roleDetailPanel")
+	
+	
+	/*@UiHandler("roleDetailPanel")
 	public void roleDetailPanelClicked(SelectionEvent<Integer> click)
 	{		
+		//ScrolledTab Changes start
+		
 		if(roleDetailPanel.getTabBar().getSelectedTab()==(roleDetailPanel.getWidgetCount()-1))
 		{
 			Log.info("roleDetailPanel plus clicked");
@@ -232,8 +343,21 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 			Log.info("roleDetailPanel clicked");			
 		}
 		
+		
+		
+		if(roleDetailPanel.getSelectedIndex()==(roleDetailPanel.getWidgetCount()-1) )
+		{
+			Log.info("roleDetailPanel plus clicked");
+			delegate.createRole();			
+		}
+		else
+		{
+			Log.info("roleDetailPanel clicked");			
+		}
+		//ScrolledTab Changes end
+		
 	}
-	
+	*/
 	public StandardizedRoleProxy getValue() {
 		return proxy;
 	}
@@ -244,9 +368,20 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 		return standardizedRoleDetailsViewImpl;
 	}
 	
-	@Override
+	//ScrolledTab Changes start
+	
+	
+	/*
 	public TabPanel getRoleDetailTabPanel()
 	{
 		return roleDetailPanel;
 	}	
+	*/
+	@Override
+	public ScrolledTabLayoutPanel getRoleDetailTabPanel()
+	{
+		return roleDetailPanel;
+	}	
+	
+	//ScrolledTab Changes start
 }

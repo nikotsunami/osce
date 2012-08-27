@@ -152,7 +152,9 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
 		standardizedPatientMediaSubViewImpl.setDelegate(this);
-		loadDisplaySettings();
+		//ScrolledTab Changes start
+		//loadDisplaySettings();
+		//ScrolledTab Changes start
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new InitializeActivityReceiver());
 	}
 	
@@ -859,6 +861,12 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		//ScarProxy scar = scarBox.getValue();
 		ScarProxy scar = newScarBox.getSelected();
 		//Issue # 122 : Replace pull down with autocomplete.
+		if(scar==null || anamnesisForm==null)
+		{
+			Log.info("scar and anamnesisForm Null");
+			return;
+			
+		}
 		Log.debug("Add scar (" + scar.getBodypart() + " - id " + scar.getId() + ") to anamnesis-form (" + anamnesisForm.getId() + ")");
 		
 		anamnesisForm = anamReq.edit(anamnesisForm);
