@@ -148,7 +148,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		patientInSemesterMap.put("standardizedPatient", standardizedPatientSugestionBox.getTextField().advancedTextBox);
 		//Issue # 122 : Replace pull down with autocomplete.
 		// E Highlight onViolatio
-		 
+		this.getElement().getStyle().setZIndex(1); 
 	}
 
 	@UiHandler("standardizedPatientAddButton")
