@@ -18,6 +18,8 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 	interface Delegate {
 		// TODO define methods to be delegated!
 		public void autoAssignSP(long id);
+		
+		public void autoAssignStudent(long id);
 	}
 	
 	 void setDelegate(Delegate delegate);

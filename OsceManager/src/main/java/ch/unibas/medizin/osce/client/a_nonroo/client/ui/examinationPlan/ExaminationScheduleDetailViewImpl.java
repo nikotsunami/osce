@@ -163,7 +163,7 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiHandler("studentAssignmentButton")
 	public void studentAssignmentButtonClicked(ClickEvent event)
 	{
-		
+		delegate.autoAssignStudent(osceProxy.getId());
 	}
 	
 	@UiHandler("spAssignmentButton")

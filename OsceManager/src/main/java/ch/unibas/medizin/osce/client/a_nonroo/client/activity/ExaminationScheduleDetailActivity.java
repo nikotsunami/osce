@@ -1381,8 +1381,17 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			public void onSuccess(Boolean response) {
 				
 				Log.info("autoAssignSP :" + response);
-				MessageConfirmationDialogBox dialogBox =new MessageConfirmationDialogBox(constants.success());
+				MessageConfirmationDialogBox dialogBox=null;
+				if(response)
+				{
+				dialogBox =new MessageConfirmationDialogBox(constants.success());
 				dialogBox.showConfirmationDialog(constants.autoSPSuccess());
+				}
+				else
+				{
+					dialogBox =new MessageConfirmationDialogBox(constants.failure());
+					dialogBox.showConfirmationDialog(constants.autoSPFailure());
+				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
 					
 					@Override
@@ -1401,7 +1410,42 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		});
 	}
 	
-	
+	public void autoAssignStudent(long id)
+	{
+		Log.info("autoAssignStudent Clicked :");
+		requests.osceRequestNonRoo().autoAssignStudent(id).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				Log.info("autoAssignStudent :" + response);
+				MessageConfirmationDialogBox dialogBox=null;
+				if(response)
+				{
+				dialogBox =new MessageConfirmationDialogBox(constants.success());
+				dialogBox.showConfirmationDialog(constants.autoStudentSuccess());
+				}
+				else
+				{
+					dialogBox =new MessageConfirmationDialogBox(constants.failure());
+					dialogBox.showConfirmationDialog(constants.autoStudentFailure());
+				}
+				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						requests.getEventBus().fireEvent(
+								new ApplicationLoadingScreenEvent(true));
+						init();
+						
+						requests.getEventBus().fireEvent(
+								new ApplicationLoadingScreenEvent(false));
+						
+					}
+				
+			});
+			}
+		});
+	}
 	
     		
 }

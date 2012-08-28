@@ -29,6 +29,8 @@ public interface OsceRequestNonRoo extends RequestContext{
 	
 	public abstract Request<Boolean> autoAssignPatientInRole(Long osceId);
 	
+	public abstract Request<Boolean> autoAssignStudent(Long osceId);
+	
 	// module 3 f {
 		public abstract Request<Void> autoAssignPatientInsemester(Long semesterId);
 

@@ -246,6 +246,57 @@ public class Osce {
     }
    
     //spec start
+    //This method assigns students in Assignment Table.
+    public static Boolean autoAssignStudent(Long osceId)
+    {
+    	EntityManager em = entityManager();
+    	
+    	try{
+    	
+    	
+    	//retrieve distinct sequence number of student
+    	String seqQuery="select distinct sequenceNumber from Assignment where type=0 and osceDay in (select id from OsceDay where osce="+osceId+")";
+    	
+    	//retrieve studentOsces    	
+    	String studentWuery="SELECT student FROM StudentOsces s where  s.isEnrolled=true and osce="+osceId +" order by student";
+    	
+    	
+    	TypedQuery<Integer> seqTypedQuery = em.createQuery(seqQuery, Integer.class);
+    	List<Integer> seqList=seqTypedQuery.getResultList();
+    	
+    	TypedQuery<Student> studentTypedQuery = em.createQuery(studentWuery,Student.class);
+    	
+    	List<Student> studentList=studentTypedQuery.getResultList();
+    	
+    	String assignmentQueryString="select a from Assignment a  where sequenceNumber=:sequenceNumber and type=0 and osceDay in (select id from OsceDay where osce="+osceId+")";
+    	TypedQuery<Assignment> assignmentTypedQuery = em.createQuery(assignmentQueryString,Assignment.class);
+    
+    	
+   
+    	
+//    	em.getTransaction().begin();
+    	for(int i=0;i<studentList.size();i++)
+    	{
+    			Integer sequence=seqList.get(i);
+    		
+    			assignmentTypedQuery.setParameter("sequenceNumber", sequence);
+    			List<Assignment> assignmentList=assignmentTypedQuery.getResultList();
+    			for(Assignment assignment:assignmentList)
+    			{
+    				assignment.setStudent(studentList.get(i));
+    				assignment.persist();
+    			}
+    	
+    	}
+   // 	em.getTransaction().commit();
+    	return true;
+    	}
+    	catch (Exception e) {
+			e.printStackTrace();
+		//	em.getTransaction().rollback();
+			return false;
+		}
+    }
     
     public static List<Osce> findAllOsceBySemster(Long id) {
     	EntityManager em = entityManager();

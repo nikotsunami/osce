@@ -640,4 +640,11 @@ public interface OsceConstants extends Constants {
 	    public String widthSize();
 	    public String widthMin();
 		
+	    public String autoStudentSuccess();
+		
+		public String autoStudentFailure();
+		
+		public String autoSPFailure();
+		
+		public String failure();
 }
