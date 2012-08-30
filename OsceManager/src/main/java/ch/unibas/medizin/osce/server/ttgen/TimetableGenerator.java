@@ -670,6 +670,7 @@ public class TimetableGenerator {
 				day.setTimeStart(dayCal.getTime());
 				day.setTimeEnd(dateAddMin(dayCal.getTime(), timeNeededByDay.get(i)));
 				day.setLunchBreakStart(lunchBreakByDay.get(i));
+				day.setLunchBreakAfterRotation(rotationsByDay.get(i) / 2);
 				
 				day.persist();
 				days.add(day);
@@ -971,7 +972,13 @@ public class TimetableGenerator {
 										
 										if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
 											Date endTimeOld = endTime;
-											Date startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
+											
+											Date startTimeNew = endTimeOld;
+											
+											if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber)
+												startTimeNew = dateAddMin(endTimeOld, osce.getLunchBreak());
+											else
+												startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
 											
 											// fix new start time for SP (next rotation) when lastTimeSlot and switch of assignments will occur
 											if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY) && numberSlotsTotal % 2 == 1 &&
@@ -1019,8 +1026,10 @@ public class TimetableGenerator {
 							// lunch break or nothing is added)
 							if(!lastRotation) {
 								// add lunch break after half of rotations or after specified number of rotations
-								if(osceDay.getOsceSequences().size() == 1 && (((osceDay.getLunchBreakAfterRotation() == null || osceDay.getLunchBreakAfterRotation() == 0) && halfRotations) ||
-										(osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber))) {
+//								if(osceDay.getOsceSequences().size() == 1 && (((osceDay.getLunchBreakAfterRotation() == null || osceDay.getLunchBreakAfterRotation() == 0) && halfRotations) ||
+//										(osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber))) {
+								log.warn(osceDay.getLunchBreakAfterRotation() + " " + currRotationNumber);
+								if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber) {
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
 									// trick to make sure postsSinceSimpatChange is 0 after outer loop (is incremented by numberSlotsTotal in outer-loop)
 									postsSinceSimpatChange = -1 * numberSlotsTotal;
