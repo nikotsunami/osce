@@ -236,6 +236,8 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 							circuitOsceSubViewImpl.maxRoomsTextBox.setEnabled(true);
 							circuitOsceSubViewImpl.shortBreakSimpatTextBox.setEnabled(true);
 							circuitOsceSubViewImpl.middleBreakTextBox.setEnabled(true);
+							
+							circuitOsceSubViewImpl.saveOsce.setEnabled(true);
 							// E Module 5 bug Report Change
 							
 						if((osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
@@ -428,6 +430,8 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 							circuitOsceSubViewImpl.maxRoomsTextBox.setEnabled(false);
 							circuitOsceSubViewImpl.shortBreakSimpatTextBox.setEnabled(false);
 							circuitOsceSubViewImpl.middleBreakTextBox.setEnabled(false);
+							
+							circuitOsceSubViewImpl.saveOsce.setEnabled(false);
 									
 							// E Module 5 bug Report Change
 							
