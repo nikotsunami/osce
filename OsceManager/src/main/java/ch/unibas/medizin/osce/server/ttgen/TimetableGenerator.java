@@ -334,40 +334,59 @@ public class TimetableGenerator {
 	public void updateLunchBreakAfterRotation(long osceDayId, int lunchBreakAfterRotation) {
 		
 		OsceDay thisDay = OsceDay.findOsceDay(osceDayId);
-		Iterator<OsceDay> allDays = thisDay.getOsce().getOsce_days().iterator();
-		int index = 0;
-		while (allDays.hasNext()) {
-			OsceDay osceDay = (OsceDay) allDays.next();
-			if(osceDay.equals(thisDay))
-				break;
-			else
-				index++;
-		}
+		int thisIndex = getOsceDayIndex(thisDay);
 		
-		calcDayTimeByDayIndex(index, lunchBreakAfterRotation);
+		calcDayTimeByDayIndex(thisIndex, lunchBreakAfterRotation);
 		
-		thisDay.setLunchBreakStart(lunchBreakByDay.get(index));
-		thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(index)));
+		thisDay.setLunchBreakAfterRotation(lunchBreakAfterRotation);
+		thisDay.setLunchBreakStart(lunchBreakByDay.get(thisIndex));
+		thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(thisIndex)));
 		thisDay.flush();
+	}
+
+	/**
+	 * Find OSCE day index in list
+	 * @param osceDay
+	 * @return
+	 */
+	private int getOsceDayIndex(OsceDay osceDay) {
+		int index = 0;
+		Iterator<OsceDay> allDays = osceDay.getOsce().getOsce_days().iterator();
+		while (allDays.hasNext()) {
+			OsceDay currDay = (OsceDay) allDays.next();
+			if(!currDay.equals(currDay))
+				index++;
+			else
+				return index;
+		}
+		return -1;
 	}
 	
 	/**
 	 * Update lunch-break-(start-) and end-times. Invoked when shifting rotation.
-	 * NOTE: 	unresolved issue: after a rotation shift, lunch break are reset
-	 * 			to default (0 = after half of rotations)
+	 * In a rotation shift, always two days are involved, these days should be updated
+	 * (re-calculation of times) after shifting rotations.
 	 */
-	public void updateTimesAfterRotationShift() {
+	public void updateTimesAfterRotationShift(long osceDayId1, long osceDayId2) {
 		rotationsByDay.clear();
 		timeNeededByDay.clear();
 		timeNeeded = 0;
-
-		for(int i = 0; i < numberDays; i++) {
-			OsceDay thisDay = osce.getOsce_days().get(i);
+		
+		OsceDay dayFrom = OsceDay.findOsceDay(osceDayId1);
+		OsceDay dayTo = OsceDay.findOsceDay(osceDayId2);
+		List<Integer> osceDaysToUpdate = new ArrayList<Integer>();
+		osceDaysToUpdate.add(getOsceDayIndex(dayFrom));
+		osceDaysToUpdate.add(getOsceDayIndex(dayTo));
+		
+		Iterator<Integer> it = osceDaysToUpdate.iterator();
+		while (it.hasNext()) {
+			Integer osceDayIndex = (Integer) it.next();
+			OsceDay thisDay = osce.getOsce_days().get(osceDayIndex);
 			
-			rotationsByDay.add(i, osce.getOsce_days().get(i).totalNumberRotations());
-			calcDayTimeByDayIndex(i, 0);
+			rotationsByDay.add(osceDayIndex, thisDay.totalNumberRotations());
+			calcDayTimeByDayIndex(osceDayIndex, thisDay.getLunchBreakAfterRotation());
 			
-			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(i)));
+			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(osceDayIndex)));
 			thisDay.flush();
 		}
 	}

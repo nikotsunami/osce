@@ -23,6 +23,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
+
 import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
@@ -45,6 +47,8 @@ public class OsceDay {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date lunchBreakStart;
+	
+	private Integer lunchBreakAfterRotation;
 
 	@ManyToOne
 	private Osce osce;
@@ -62,6 +66,10 @@ public class OsceDay {
 	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "osceDays")
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
 	
+	/**
+	 * Sum up number of rotations of sequences belonging to this OSCE day
+	 * @return
+	 */
 	public int totalNumberRotations() {
 		int nrRotations = 0;
 		
@@ -73,6 +81,33 @@ public class OsceDay {
 		
 		return nrRotations;
 	}
+	
+	/**
+	 * Set lunch_break after a specified number of rotations.
+	 */
+	public static Boolean updateLunchBreak(Long osceDayId, Integer afterRotation) {
+    	try {
+    		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+    		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osceDay.getOsce());
+    		optGen.updateLunchBreakAfterRotation(osceDayId, afterRotation);
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+    	return true;
+    }
+	
+	public static Boolean updateTimesAfterRotationShift(Long osceDayIdFrom, Long osceDayIdTo) {
+    	try {
+    		OsceDay osceDay = OsceDay.findOsceDay(osceDayIdFrom);
+    		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osceDay.getOsce());
+        	optGen.updateTimesAfterRotationShift(osceDayIdFrom, osceDayIdTo);
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+    	return true;
+    }
 
 	public static OsceDay findOsceDayByOsceDate(Date osceDate){
 		if(osceDate == null){
