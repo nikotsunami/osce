@@ -61,6 +61,18 @@ public class OsceDay {
 
 	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "osceDays")
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
+	
+	public int totalNumberRotations() {
+		int nrRotations = 0;
+		
+		Iterator<OsceSequence> it = getOsceSequences().iterator();
+		while (it.hasNext()) {
+			OsceSequence osceSequence = (OsceSequence) it.next();
+			nrRotations += osceSequence.getNumberRotation();
+		}
+		
+		return nrRotations;
+	}
 
 	public static OsceDay findOsceDayByOsceDate(Date osceDate){
 		if(osceDate == null){

@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.domain.*;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.OsceSequences;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 
 /**
@@ -178,11 +179,6 @@ public class TimetableGenerator {
 			}
 		}
 		
-//		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) /
-//				(numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak() +
-//				(numberPosts * postLength > LONG_BREAK_MIDDLE_THRESHOLD ? osce.getLongBreak() : 0) +
-//				osce.getLongBreak() / numberSlotsUntilSPChange +
-//				(numberPosts * postLength > LONG_BREAK_MIDDLE_THRESHOLD ? 0 : osce.getMiddleBreak()));
 		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) / (numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak());
 	}
 	
@@ -204,6 +200,18 @@ public class TimetableGenerator {
 			timeNeeded = 0;
 			
 			for(int i = 0; i < numberDays; i++) {
+//				// only handle status BLUEPRINT and GENERATED (as structural changes are not possible afterwards)
+//				switch(osce.getOsceStatus()) {
+//					case OSCE_BLUEPRINT:
+//						if(i == numberDays - 1 && numberDays > 1)
+//							rotationsByDay.add(i, (rotations[0].size() % rotationsPerDay > 0 ? rotations[0].size() % rotationsPerDay : rotationsPerDay));
+//						else
+//							rotationsByDay.add(i, rotationsMax);
+//						break;
+//					case OSCE_GENRATED:
+//						rotationsByDay.add(i, osce.getOsce_days().get(i).totalNumberRotations());
+//						break;
+//				}
 				if(i == numberDays - 1 && numberDays > 1)
 					rotationsByDay.add(i, (rotations[0].size() % rotationsPerDay > 0 ? rotations[0].size() % rotationsPerDay : rotationsPerDay));
 				else
@@ -212,6 +220,7 @@ public class TimetableGenerator {
 			
 			// days
 			for(int i = 0; i < numberDays; i++) {
+				// TODO: fix issue that lunch break is reset to half of rotations (= 0)
 				calcDayTimeByDayIndex(i, 0);
 			}
 			
@@ -234,12 +243,18 @@ public class TimetableGenerator {
 	 * @param lunchBreakAfterRotation rotation after which the lunch break should be placed (0 for half of all rotations)
 	 */
 	private void calcDayTimeByDayIndex(int i, int lunchBreakAfterRotation) {
-		int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
+		int rotationsMax;
 		
-		int slotsSinceLastSimpatChange;
+		// take information from DB if OSCE scaffold has already been generated
+		if(osce.getOsceStatus().equals(OsceStatus.OSCE_BLUEPRINT))
+			rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
+		else
+			rotationsMax = rotationsByDay.get(i);
+				
+		
+		int slotsSinceLastSimpatChange = 0;
 		int timeNeededCurrentDay = 0;
 		
-		slotsSinceLastSimpatChange = 0;
 		log.info("day " + i + " (rotations: " + rotationsByDay.get(i) + ") / rotationsMax: " + rotationsMax);
 		
 		// rotations
@@ -336,8 +351,25 @@ public class TimetableGenerator {
 		thisDay.flush();
 	}
 	
-	private double getTimeNeeded() {
-		return timeNeeded;
+	/**
+	 * Update lunch-break-(start-) and end-times. Invoked when shifting rotation.
+	 * NOTE: 	unresolved issue: after a rotation shift, lunch break are reset
+	 * 			to default (0 = after half of rotations)
+	 */
+	public void updateTimesAfterRotationShift() {
+		rotationsByDay.clear();
+		timeNeededByDay.clear();
+		timeNeeded = 0;
+
+		for(int i = 0; i < numberDays; i++) {
+			OsceDay thisDay = osce.getOsce_days().get(i);
+			
+			rotationsByDay.add(i, osce.getOsce_days().get(i).totalNumberRotations());
+			calcDayTimeByDayIndex(i, 0);
+			
+			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(i)));
+			thisDay.flush();
+		}
 	}
 	
 	/**
@@ -1155,5 +1187,9 @@ public class TimetableGenerator {
 	private String debugTime(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		return format.format(date);
+	}
+	
+	private double getTimeNeeded() {
+		return timeNeeded;
 	}
 }
