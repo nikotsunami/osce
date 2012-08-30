@@ -174,5 +174,11 @@ public class OscePostViewImpl  extends Composite implements  OscePostView{
 		Log.info("milan");
 	}
 	
-	
+	// Module 5 bug Report Change
+	@Override
+	public IconButton getDeletePostButton()
+	{
+		return this.deletePost;
+	}
+	// E Module 5 bug Report Change	
 }

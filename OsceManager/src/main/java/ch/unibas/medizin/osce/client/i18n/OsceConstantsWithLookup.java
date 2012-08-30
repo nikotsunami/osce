@@ -161,4 +161,13 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
  // 5C: SPEC END
     public String err_DialogBoxTitle();
 	public String err_DialogBoxCloseButton();
+	
+	// Module 5 bug Report Change
+	public String OSCE_SEQUENCES_A();
+	public String OSCE_SEQUENCES_B();
+	public String OSCE_SEQUENCES_C();
+	public String OSCE_SEQUENCES_D();
+	public String OSCE_SEQUENCES_E();
+	
+// E Module 5 bug Report Change
 }

@@ -11,9 +11,9 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
-import ch.unibas.medizin.osce.client.scaffold.ui.ShortBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -21,8 +21,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -65,12 +63,17 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 	@UiField
 	public Label nameOfSequence;
 	
-	@UiField
+	// Module 5 bug Report Change
+	
+	/*@UiField
 	public TextBox chaneNameOfSequence;
+	@UiField(provided = true)
+	public FocusableValueListBox<OsceSequences> chaneNameOfSequence = new FocusableValueListBox<OsceSequences>(new EnumRenderer<OsceSequences>());	
+	// E Module 5 bug Report Change
 
 	@UiField
 	public Button ok;
-	
+	*/
 	@UiField
 	public IconButton edit;
 	
@@ -87,22 +90,47 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 	}
 	
 	@UiHandler("edit")
-	public void changeNameClicked(ClickEvent event){
-	//	delegate.saveOsceData(proxy);
-		ok.setVisible(true);
-		chaneNameOfSequence.setVisible(true);
-		chaneNameOfSequence.setText(nameOfSequence.getText());
+	public void changeNameClicked(ClickEvent event)
+        {
+	// Module 5 bug Report Change
+		//chaneNameOfSequence.setValue(nameOfSequence.getText());
+		Log.info("Click Edit Button.");		
+		//chaneNameOfSequence.setAcceptableValues(Arrays.asList(OsceSequences.values()));
+		//chaneNameOfSequence.setValue(OsceSequences.getSequenceByString(nameOfSequence.getText().charAt(0)));
+		delegate.editOsceSequence(event,sequenceOsceSubViewImpl);
+		
+		
+		//ok.setVisible(true);
+		//chaneNameOfSequence.setVisible(true);
+		// E Module 5 bug Report Change
+		//	delegate.saveOsceData(proxy);
+		
 	}
-	
-	@UiHandler("ok")
-	public void okClicked(ClickEvent event){
+		// Module 5 bug Report Change
+/*	@UiHandler("ok")
+	public void okClicked(ClickEvent event)
+	{
+		
+		// Module 5 bug Report Change
+		Log.info("Ok Clicked");
+		if((((chaneNameOfSequence.getListBox().getItemText(chaneNameOfSequence.getListBox().getSelectedIndex())).trim()).compareToIgnoreCase(""))==0)
+		{
+			MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
+			dialog.showConfirmationDialog("Please Select atleast one Sequence");
+			return;
+		}
+		else
+		{
+		// E Module 5 bug Report Change
 		delegate.saveSequenceLabel(sequenceOsceSubViewImpl);
 		ok.setVisible(false);
 		chaneNameOfSequence.setVisible(false);
+		}
 	//	nameOfSequence.setText(chaneNameOfSequence.getText());
 		
-	}
+	}*/
 	
+	// E Module 5 bug Report Change	
 	
 	/**
 	 * Because this class has a default constructor, it can
@@ -124,9 +152,12 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		sequenceOsceSubViewImpl=this;
 		init();
 		spliteSequence.setText("Splite");
-		chaneNameOfSequence.setVisible(false);
+		
+		// Module 5 bug Report Change
+		/*chaneNameOfSequence.setVisible(false);
 		ok.setVisible(false);
-		ok.setText("ok");
+		ok.setText("ok");*/
+		// E Module 5 bug Report Change
 		
 		// Highlight onViolation
 		osceSequenceMap=new HashMap<String, Widget>();
@@ -144,9 +175,11 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		sequenceOsceSubViewImpl=this;
 		init();
 		spliteSequence.setText("Splite");
-		chaneNameOfSequence.setVisible(false);
+		// Module 5 bug Report Change
+		/*chaneNameOfSequence.setVisible(false);
 		ok.setVisible(false);
-		ok.setText("ok");
+		ok.setText("ok");*/
+		// E Module 5 bug Report Change
 		osceSequenceProxy=sequence;
 	}
 

@@ -647,4 +647,11 @@ public interface OsceConstants extends Constants {
 		public String autoSPFailure();
 		
 		public String failure();
+		
+		// Module 5 bug Report Change
+				public String post();
+				public String lunchBreakStart();
+				public String osceSequence(); 
+			// E Module 5 bug Report Change
+				
 }

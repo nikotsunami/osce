@@ -9,11 +9,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.gwt.user.datepicker.client.DateBox.Format;
 
 /**
  * @author dk
@@ -101,6 +100,12 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	
 	@UiField
 	Label lunchBreakLabel;
+	
+	// Module 5 bug Report Change
+	@UiField
+	Label lunchBreakStartLabel;
+	// E Module 5 bug Report Change
+	
 	
 	@UiField
 	Label lbEndTimeLabel;
@@ -183,6 +188,11 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		endTimeLable.setText(constants.endtime());
 		calculationsLabel.setText(constants.calculation());
 		lunchBreakLabel.setText(constants.lunchbreak());
+		
+		// Module 5 bug Report Change
+		lunchBreakStartLabel.setText(constants.lunchBreakStart());
+		// E Module 5 bug Report Change
+		
 		lbEndTimeLabel.setText(constants.lbendtime());
 		studentsLabel.setText(constants.student());
 		saveOsceDayValue.setText("Save");

@@ -27,7 +27,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 	<!--h1>Osce Day</h1-->
-		<g:HTMLPanel styleName="{style.patientTopContainer}" height="300px" width="250px">
+		<g:HTMLPanel styleName="{style.patientTopContainer}" height="350px" width="250px">
 			<g:HorizontalPanel horizontalAlignment="center" width="250px">
 				 <g:Label ui:field="dayLabel"  styleName="{style.spacing10} {style.label}" ></g:Label>
 			 </g:HorizontalPanel>
@@ -48,7 +48,10 @@
 				<g:TextBox ui:field="endTimeTextBox"></g:TextBox>
 			</g:HorizontalPanel>
 			<g:Label ui:field="calculationsLabel"  styleName="{style.spacing10} {style.label}" ></g:Label>
+
+								
 			<g:Label ui:field="lunchBreakLabel"  styleName="{style.spacing10}"></g:Label>
+			<g:Label ui:field="lunchBreakStartLabel"  styleName="{style.spacing10}"></g:Label>
 			<g:Label ui:field="lbEndTimeLabel"  styleName="{style.spacing10}"></g:Label>
 			<g:Label ui:field="studentsLabel"  styleName="{style.spacing10}"></g:Label>
 				<g:VerticalPanel styleName="{style.margin79}" horizontalAlignment="center">

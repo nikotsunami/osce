@@ -87,7 +87,9 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 		setAutoHideEnabled(false);
 		center();
 		setText("Semester");
-				
+		
+		this.getElement().getStyle().setZIndex(1);
+		
 		enumSemester.setAcceptableValues(Arrays.asList(Semesters.values()));
 		enumSemester.setValue(Semesters.HS);
 		

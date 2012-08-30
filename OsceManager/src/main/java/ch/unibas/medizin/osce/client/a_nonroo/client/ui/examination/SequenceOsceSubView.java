@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -24,7 +25,11 @@ public interface SequenceOsceSubView extends IsWidget{
 		void saveOsceDataSplit(SequenceOsceSubViewImpl sequenceOsceSubViewImpl);
 		// TODO define methods to be delegated!
 
-		void saveSequenceLabel(SequenceOsceSubViewImpl sequenceOsceSubViewImpl);
+		
+		// Module 5 bug Report Change
+		/*void saveSequenceLabel(SequenceOsceSubViewImpl sequenceOsceSubViewImpl);*/
+			void editOsceSequence(ClickEvent event,SequenceOsceSubViewImpl sequenceOsceSubViewImpl);
+		// E Module 5 bug Report Change
 	}
 
     String[] getPaths();
