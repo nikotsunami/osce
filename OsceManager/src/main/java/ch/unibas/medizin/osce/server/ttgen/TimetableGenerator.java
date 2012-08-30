@@ -1016,7 +1016,9 @@ public class TimetableGenerator {
 							// add middle break at the end of each rotation (except for last rotation, where either
 							// lunch break or nothing is added)
 							if(!lastRotation) {
-								if(osceDay.getOsceSequences().size() == 1 && halfRotations) {
+								// add lunch break after half of rotations or after specified number of rotations
+								if(osceDay.getOsceSequences().size() == 1 && (((osceDay.getLunchBreakAfterRotation() == null || osceDay.getLunchBreakAfterRotation() == 0) && halfRotations) ||
+										(osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber))) {
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
 									// trick to make sure postsSinceSimpatChange is 0 after outer loop (is incremented by numberSlotsTotal in outer-loop)
 									postsSinceSimpatChange = -1 * numberSlotsTotal;
