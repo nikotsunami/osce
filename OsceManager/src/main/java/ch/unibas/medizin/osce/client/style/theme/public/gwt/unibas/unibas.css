@@ -955,32 +955,39 @@ a:hover, .gwt-Anchor:hover {
 
 .gwt-SuggestBoxPopup {
 	margin-left: 4px;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup strong {
 	background-color: #F1B532;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .item {
 	padding: 2px 4px;
 	color: #424242;
 	cursor: default;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .item-selected {
 	background: #F1B532;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .item-selected strong {
 	background: #FCFDB5;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupContent {
 	background: white;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup {
-	border: 1px solid #aaa;
+	border: 1px solid #aaa
+	z-index: 2 !important;;
 }
 
 /* .gwt-SuggestBoxPopup .suggestPopupTopCenter {
@@ -3232,3 +3239,18 @@ color: #f1b532;
 	margin-left:20px !important;
 	margin-top:10px !important;
 }
+
+
+.gwt-DateBox {
+  z-index: 2 !important;
+}
+
+.dateBoxPopup {
+	z-index: 2 !important;
+}
+
+.gwt-DatePicker {
+  z-index: 2 !important;
+}
+
+

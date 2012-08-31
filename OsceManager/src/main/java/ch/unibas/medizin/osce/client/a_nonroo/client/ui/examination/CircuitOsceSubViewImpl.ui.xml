@@ -81,8 +81,8 @@
 				<!--  E Module 5 bug Report Change -->
 				
 				<td><my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton></td>
-				<td><g:Button ui:field="generateBtn" styleName="{style.buttonStyle}"></g:Button></td>
-				<td><g:Button ui:field="closedBtn" styleName="{style.buttonStyle}"></g:Button></td>	
+				<td><g:Button ui:field="generateBtn" width="80px"></g:Button></td>
+				<td><g:Button ui:field="closedBtn" width="80px"></g:Button></td>	
 			</tr>
 			<tr>
 				<td><g:Label ui:field="maxStudentLabel"  styleName="{style.padLeft0}">Max Students :</g:Label></td>
@@ -97,8 +97,8 @@
 				<td><s:ShortBox ui:field="shortBreakSimpatTextBox"></s:ShortBox></td>
 				<!--  E Module 5 bug Report Change -->
 				
-				<td><g:Button ui:field="clearAllBtn" styleName="{style.buttonStyle}"></g:Button></td>
-				<td><g:Button ui:field="fixedBtn" styleName="{style.buttonStyle}"></g:Button></td>				
+				<td><g:Button ui:field="clearAllBtn" width="80px"></g:Button></td>
+				<td><g:Button ui:field="fixedBtn" width="80px"></g:Button></td>				
 				<td><g:Label></g:Label></td>
 			</tr>
 		</Table>

@@ -2107,7 +2107,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						public boolean dayStartTimeflag=true;
 						@Override
 						public void onBlur(BlurEvent event) {
-							if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED){
+							if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED && !osceDayViewImpl.startTimeTextBox.getValue().equals("")){
 							if(osceDayViewImpl.startTimeTextBox.getValue() !=null ){
 								
 								if(! checkStarttimeValidation()){
@@ -2155,7 +2155,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 						}
 							else{
-									if(osceDayViewImpl.startTimeTextBox.getValue() !=null )
+									if(osceDayViewImpl.startTimeTextBox.getValue() !=null && !osceDayViewImpl.startTimeTextBox.getValue().equals(""))
 									if(! checkStarttimeValidation()){
 										return;
 									}
@@ -2168,7 +2168,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						
 						@Override
 						public void onBlur(BlurEvent event) {
-							if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED){
+							if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED && !osceDayViewImpl.endTimeTextBox.getValue().equals("")){
 								
 								if(osceDayViewImpl.endTimeTextBox.getValue() !=null ){
 									
@@ -2208,7 +2208,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 							}
 							else{
-								if(osceDayViewImpl.endTimeTextBox.getValue() !=null ){
+								if(osceDayViewImpl.endTimeTextBox.getValue() !=null && !osceDayViewImpl.endTimeTextBox.getValue().equals("")){
 									
 									if(! checkEndTimeValidation())
 									return;
@@ -2225,7 +2225,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 							//Window.alert("please Enter valid formatted Time Valid format is HH:MM");
 						MessageConfirmationDialogBox sTimeValueDialog=new MessageConfirmationDialogBox(constants.warning());
-						sTimeValueDialog.showConfirmationDialog("Please Enter valid formatted Time Valid format is HH:MM");						
+						sTimeValueDialog.showConfirmationDialog("Please Enter valid formatted Time Valid format is HH:MM");
+						osceDayViewImpl.startTimeTextBox.setValue("");
 						// E Module 5 bug Report Change
 						
 						dayStartTimeValidflag=false;
@@ -2239,6 +2240,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//Window.alert("Please Enter Valid Hour (Allowed Till 24)");
 						MessageConfirmationDialogBox dialog1=new MessageConfirmationDialogBox(constants.warning());
 						dialog1.showConfirmationDialog("Please Enter Valid Hour (Allowed Till 24)");
+						osceDayViewImpl.startTimeTextBox.setValue("");
 						// Module 5 bug Report Change
 						
 						dayStartTimeValidflag=false;
@@ -2250,6 +2252,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//Window.alert("Please Enter Valid Minutes (Allowed Till 59)");
 						MessageConfirmationDialogBox dialog2=new MessageConfirmationDialogBox(constants.warning());
 						dialog2.showConfirmationDialog("Please Enter Valid Minutes (Allowed Till 59)");
+						osceDayViewImpl.startTimeTextBox.setValue("");
 						// E Module 5 bug Report Change
 						dayStartTimeValidflag=false;
 						return dayStartTimeValidflag;
@@ -2263,7 +2266,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("please Enter valid formatted Time Valid format is HH:MM");
 						MessageConfirmationDialogBox startTimedialog=new MessageConfirmationDialogBox(constants.warning());
-						startTimedialog.showConfirmationDialog("Please Enter valid formatted Time Valid format is HH:MM)");						
+						startTimedialog.showConfirmationDialog("Please Enter valid formatted Time Valid format is HH:MM)");	
+						osceDayViewImpl.endTimeTextBox.setValue("");
 						// Module 5 bug Report Change						
 
 						dayEndTimeValidFlag=false;
@@ -2276,6 +2280,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//Window.alert("Please Enter Valid Hour (Allowed Till 24)");
 						MessageConfirmationDialogBox startTimedialog1=new MessageConfirmationDialogBox(constants.warning());
 						startTimedialog1.showConfirmationDialog("Please Enter Valid Hour (Allowed Till 24)");
+						osceDayViewImpl.endTimeTextBox.setValue("");
 						// Module 5 bug Report Change						
 						
 						dayEndTimeValidFlag=false;
@@ -2288,6 +2293,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//Window.alert("Please Enter Valid Minutes (Allowed Till 59)");
 						MessageConfirmationDialogBox startTimedialog2=new MessageConfirmationDialogBox(constants.warning());
 						startTimedialog2.showConfirmationDialog("Please Enter Valid Minutes (Allowed Till 59)");
+						osceDayViewImpl.endTimeTextBox.setValue("");
 						// Module 5 bug Report Change		
 						
 						dayEndTimeValidFlag=false;
