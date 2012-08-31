@@ -47,7 +47,7 @@
 							<tr id="shortname">						
 								<td><span class="{style.label}" ui:field="labelShortName"/></td>
 								<td><g:TextBox ui:field='shortName'/></td>
-								<td align="right"><span class="{style.label}" ui:field="LabelActive"/><b>Active :</b></td>
+								<td align="right"><span class="{style.label}" ui:field="labelActive"/></td>
 								<td align="right" valign="top">
 								
 								

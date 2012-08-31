@@ -28,9 +28,9 @@
 	<g:HTMLPanel>		
 		<g:HorizontalPanel>
 			<g:VerticalPanel>
-				<g:Label styleName="{style.marginTop15}">Name: </g:Label>
-				<g:Label styleName="{style.marginTop15}">Number: </g:Label>
-				<g:Label styleName="{style.marginTop15}">Use For: </g:Label>
+				<g:Label styleName="{style.marginTop15}" ui:field="name">Name: </g:Label>
+				<g:Label styleName="{style.marginTop15}" ui:field="number">Number: </g:Label>
+				<g:Label styleName="{style.marginTop15}" ui:field="useFor">Use For: </g:Label>
 			</g:VerticalPanel>
 			<g:VerticalPanel>
 			

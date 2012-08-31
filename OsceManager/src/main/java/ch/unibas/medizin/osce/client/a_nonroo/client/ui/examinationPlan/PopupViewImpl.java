@@ -191,7 +191,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		startTimeLbl.setVisible(true);		
 		startTimeValue.setVisible(true);
-		startTimeLbl.setText(constants.roletopic());
+		startTimeLbl.setText(constants.roleTopic());
 		
 		okButton.setVisible(true);
 		okButton.setText(constants.close());

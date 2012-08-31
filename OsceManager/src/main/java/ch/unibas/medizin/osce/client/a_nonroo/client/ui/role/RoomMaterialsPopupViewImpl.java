@@ -5,7 +5,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
@@ -51,8 +51,8 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 	
 	
 	@UiField(provided = true)
-	FocusableValueListBox<MaterialUsedFromTypes> used_from = new FocusableValueListBox<MaterialUsedFromTypes>(
-			new EnumRenderer<MaterialUsedFromTypes>());
+	FocusableValueListBox<MaterialUsedFromTypes> used_from = 
+			new FocusableValueListBox<MaterialUsedFromTypes>(new EnumRenderer<MaterialUsedFromTypes>());
 
 	@UiField
 	IntegerBox materialCount;
@@ -62,6 +62,15 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 	
 	@UiField
 	Button cancel;
+	
+	@UiField
+	Label name;
+	
+	@UiField
+	Label number;
+	
+	@UiField
+	Label useFor;
 	
 	
 	//Issue # 122 : Replace pull down with autocomplete.
@@ -97,7 +106,9 @@ public class RoomMaterialsPopupViewImpl extends PopupPanel implements RoomMateri
 		add(BINDER.createAndBindUi(this));
 		used_from.setAcceptableValues(java.util.Arrays.asList(MaterialUsedFromTypes.values()));		
 		//this.standardizedRoleProxy=standardizedRoleProxy;	
-	
+		name.setText(constants.roomMaterialName() + ":");
+		number.setText(constants.roomMaterialNumber() + ":");
+		useFor.setText(constants.roomMaterialUser() + ":");
 	}
 	
 	//Issue # 122 : Replace pull down with autocomplete.

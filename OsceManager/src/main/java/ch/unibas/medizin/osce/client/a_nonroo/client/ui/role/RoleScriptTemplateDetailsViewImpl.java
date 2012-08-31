@@ -9,7 +9,7 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -155,7 +155,7 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 		
 		init();
 		// todo
-		AddItem.setText("Add item");
+		AddItem.setText(constants.addItem());
 		
 		// Violation Changes Highlight
 				viewMap=new HashMap<String, Widget>();
@@ -187,7 +187,7 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 				return renderer.render(object.getItem_name());
 				
 			}
-		},"deleted_item_name");
+		}, constants.deletedItemName());
 		
 		addColumn(new ActionCell<RoleBaseItemProxy>(
 				/*OsMaConstant.EDIT_ICON */new SafeHtml() {

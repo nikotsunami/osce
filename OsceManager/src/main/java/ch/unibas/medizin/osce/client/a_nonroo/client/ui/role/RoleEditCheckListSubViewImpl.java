@@ -3,15 +3,16 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,10 +22,10 @@ import com.google.gwt.user.client.ui.Widget;
  */
 //file by spec
 //Editor<StandardizedRoleProxy>
-public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditCheckListSubView ,Editor<CheckListProxy>
-{
+public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditCheckListSubView ,Editor<CheckListProxy> {
 	private static final Binder BINDER = GWT.create(Binder.class);
-		private Delegate delegate;
+	private Delegate delegate;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -40,6 +41,8 @@ public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditC
 	
 	@UiField
 	public TextBox title;
+	@UiField
+	public SpanElement labelName;
 	
 		
 	/*private static RoleEditCheckListSubViewImplUiBinder uiBinder = GWT.create(RoleEditCheckListSubViewImplUiBinder.class);
@@ -57,7 +60,7 @@ public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditC
 	}
 	
 	public void init() {
-		// TODO implement this!
+		labelName.setInnerText(constants.name() + ":");
 	}
 
 	private Presenter presenter;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 
@@ -13,6 +14,8 @@ import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.MaterialType;
+import ch.unibas.medizin.osce.shared.PriceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -163,21 +166,14 @@ public class RoomMaterialsViewImpl extends Composite implements
 				this.setSortable(true);
 			}
 
-			Renderer<String> renderer = new AbstractRenderer<String>() {
-
-				public String render(String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
+			Renderer<MaterialType> renderer = new EnumRenderer<MaterialType>();
 
 			@Override
 			public String getValue(MaterialListProxy materialListProxy) {
-				return renderer
-						.render((materialListProxy.getType().name() == null) ? ""
-								: materialListProxy.getType().name());
+				return renderer.render(materialListProxy.getType());
 
 			}
-		}, constants.type());
+		}, constants.roomMaterialType());
 
 		paths.add("price");
 		table.addColumn(new TextColumn<MaterialListProxy>() {
@@ -206,23 +202,14 @@ public class RoomMaterialsViewImpl extends Composite implements
 				this.setSortable(true);
 			}
 
-			Renderer<String> renderer = new AbstractRenderer<String>() {
-
-				public String render(String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
+			Renderer<PriceType> renderer = new EnumRenderer<PriceType>();
 
 			@Override
 			public String getValue(MaterialListProxy materialListProxy) {
-				return renderer
-						.render((materialListProxy.getPriceType().name() == null) ? ""
-								: materialListProxy.getPriceType().name());
+				return renderer.render(materialListProxy.getPriceType());
 
 			}
 		}, constants.roomMaterialPriceType());
-
-		table.addColumnStyleName(2, "iconCol");
 
 		// // Edit Button
 		// addColumn(new ActionCell<MaterialListProxy>("Edit",
@@ -282,7 +269,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 				return materialListProxy;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
 	}
 
 	private <C> void addColumn(Cell<C> cell, String headerText,

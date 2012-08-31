@@ -18,7 +18,7 @@
 <g:HTMLPanel>
 	<table class="{style.fields}">
 	<tr id="shortname">						
-		<td><g:Label styleName="{style.label}">Name</g:Label></td>
+		<td><span styleName="{style.label}" ui:field="labelName">Name</span></td>
 		<td><g:TextBox ui:field='title'/></td>
 	</tr>
 	</table>

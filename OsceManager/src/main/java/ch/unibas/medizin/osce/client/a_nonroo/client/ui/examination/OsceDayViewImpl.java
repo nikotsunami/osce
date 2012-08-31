@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -185,7 +185,7 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		lunchBreakLabel.setText(constants.lunchbreak());
 		lbEndTimeLabel.setText(constants.lbendtime());
 		studentsLabel.setText(constants.student());
-		saveOsceDayValue.setText("Save");
+		saveOsceDayValue.setText(constants.save());
 
 		// Highlight onViolation
 			osceDayMap=new HashMap<String, Widget>();

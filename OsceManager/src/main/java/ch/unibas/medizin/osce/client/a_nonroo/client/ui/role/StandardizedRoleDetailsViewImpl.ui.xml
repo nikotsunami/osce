@@ -51,7 +51,7 @@ background-color: #B8A9A2;
 				<g:TabPanel ui:field="rolePanel" styleName="gwt-InvertedTabPanel"
 					width="100%">
 					<g:Tab>
-						<g:TabHTML>RoleDetail</g:TabHTML>
+						<g:TabHTML><!-- RoleDetail --></g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">
 							<table class="{style.fields}">
 								<colgroup>
@@ -102,7 +102,7 @@ background-color: #B8A9A2;
 						</g:HTMLPanel>
 					</g:Tab>
 					<g:Tab>
-						<g:TabHTML>RoleParticipants</g:TabHTML>
+						<g:TabHTML><!-- RoleParticipants --></g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}" width="100%">						
 						<!-- SPEC START = -->						
 						<r:RoleRoleParticipantSubViewImpl ui:field="roleRoleParticipantSubViewImpl"></r:RoleRoleParticipantSubViewImpl>
@@ -111,7 +111,7 @@ background-color: #B8A9A2;
 					</g:Tab>
 
 					<g:Tab>
-						<g:TabHTML>Keyword</g:TabHTML>
+						<g:TabHTML><!-- Keyword --></g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">						
 						<!-- SPEC START = -->	
 						<r:RoleKeywordSubViewImpl ui:field="roleKeywordSubViewImpl"></r:RoleKeywordSubViewImpl>
@@ -120,7 +120,7 @@ background-color: #B8A9A2;
 					</g:Tab>
 
 					<g:Tab>
-						<g:TabHTML>Learning</g:TabHTML>
+						<g:TabHTML><!-- Learning --></g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">
 							<r:RoleLearningSubViewImpl ui:field="roleLearningSubViewImpl"></r:RoleLearningSubViewImpl>
 						</g:HTMLPanel>
@@ -132,7 +132,7 @@ background-color: #B8A9A2;
 					<!--  Assignment E		start	-->		
 				<g:Tab>
 					
-				<g:TabHTML>CheckList</g:TabHTML>
+				<g:TabHTML><!-- CheckList --></g:TabHTML>
 					
 								
 								
@@ -157,7 +157,7 @@ background-color: #B8A9A2;
 				</g:Tab>
 				<!--  Assignment E		end	-->	
 				<g:Tab>
-					<g:TabHTML>Search Criteria</g:TabHTML>
+					<g:TabHTML><!-- Search Criteria --></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<g:VerticalPanel width="100%">
 							<o:StandartizedPatientAdvancedSearchSubViewImpl
@@ -165,7 +165,7 @@ background-color: #B8A9A2;
 						</g:VerticalPanel>
 						<g:VerticalPanel width="100%">
 							<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
-								<g:Label addStyleNames="{style.label}">Other Criteria</g:Label>
+								<g:Label addStyleNames="{style.label}" ui:field="labelOtherCriteria">Other Criteria</g:Label>
 								<g:HTMLPanel>
 									<div class="{style.controlsright}">
 										<h3 class="{style.header}" style="display:inline">
@@ -182,7 +182,7 @@ background-color: #B8A9A2;
 				</g:Tab>
 
 				<g:Tab>
-					<g:TabHTML>Room Materials</g:TabHTML>
+					<g:TabHTML><!-- Room Materials --></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<g:Label><!-- Room Materials -->
 						</g:Label>
@@ -192,7 +192,7 @@ background-color: #B8A9A2;
 				</g:Tab>
 
 				<g:Tab>
-					<g:TabHTML>File</g:TabHTML>
+					<g:TabHTML><!-- File --></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<m:RoleFileSubViewImpl ui:field="roleFileSubViewImpl"></m:RoleFileSubViewImpl>
 						<!-- <g:Label class="{style.label}" ui:field="labelRoomMaterials" /> -->
@@ -201,7 +201,7 @@ background-color: #B8A9A2;
 				</g:Tab>
 
 				<g:Tab>
-					<g:TabHTML>Role Script</g:TabHTML>
+					<g:TabHTML><!-- Role Script --></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<!-- g:Label>Role Script</g:Label-->
 						<g:VerticalPanel ui:field="roleBaseItemPanel" addStyleNames="{style.tabStyle}" spacing="10">

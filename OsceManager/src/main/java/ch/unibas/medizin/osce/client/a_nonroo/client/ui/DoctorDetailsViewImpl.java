@@ -324,7 +324,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 			public String getValue(RoleParticipantProxy object) {
 				return renderer.render(object.getStandardizedRole().getShortName());
 			}
-		}, constants.shortName());
+		}, constants.roleAcronym());
 		
 		paths1.add("version");
 		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -276,7 +276,7 @@ RoleBaseTableItemValueView {
 				return renderer.render(object.getRoleTableItem().getItemName());
 				
 			}
-		},"Item Name");
+		}, constants.itemName());
 		
 		
 //			paths.add("item_value");
@@ -299,7 +299,7 @@ RoleBaseTableItemValueView {
 			};
 			
 			table.setColumnWidth(slotColumn, "210px");
-			table.addColumn(slotColumn,"Item Value");
+			table.addColumn(slotColumn,constants.itemValue());
 			
 			
 			addColumn(new ActionCell<RoleTableItemValueProxy>(

@@ -262,8 +262,8 @@ RoleBaseTableItemView {
 		
 		init();
 		// todo
-		AccessButton.setText("access");
-		AddSubItem.setText("Add Subitem");
+		AccessButton.setText(constants.roleAccess());
+		AddSubItem.setText(constants.addRoleSubItem());
 		//AddSubItem.setStyleName("padding=10");
 		
 	//	accessLabel1=new Label();
@@ -273,6 +273,9 @@ RoleBaseTableItemView {
 		
 		viewMap=new HashMap<String, Widget>();
 		viewMap.put("itemName", txtSubItem);
+		
+		pencil.setText(constants.edit());
+		close.setText(constants.delete());
 				
 		// E Violation Changes Highlight
 	}
@@ -317,7 +320,7 @@ RoleBaseTableItemView {
 				return renderer.render(object.getItemName());
 				
 			}
-		},"item_name");
+		}, constants.roleItemName());
 		
 		addColumn(new ActionCell<RoleTableItemProxy>(
 				OsMaConstant.UP_ICON, new ActionCell.Delegate<RoleTableItemProxy>() {
@@ -343,7 +346,7 @@ RoleBaseTableItemView {
 				return roleTableItem;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(2, "iconCol");
 		
 		/*addColumn(new ActionCell<RoleTableItemProxy>(
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoleTableItemProxy>() {
@@ -371,7 +374,7 @@ RoleBaseTableItemView {
 				return roleTableItem;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
 		// Issue Role Module E
 
 		addColumn(new ActionCell<RoleTableItemProxy>(
@@ -413,7 +416,7 @@ RoleBaseTableItemView {
 				return roleTableItem;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
 	}
 	
 	

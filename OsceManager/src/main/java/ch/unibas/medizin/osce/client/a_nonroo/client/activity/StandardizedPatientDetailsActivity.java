@@ -21,7 +21,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
-import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;

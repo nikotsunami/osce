@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationRequest;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -71,7 +72,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	private PopupPanel toolTip;
 	private HorizontalPanel toolTipContentPanel;
 	private TextBox toolTipLabel;
-	private Button toolTipChange;
+	private IconButton toolTipChange;
 	
 	// Violation Changes Highlight
 		public Map<String, Widget> viewMap;
@@ -402,7 +403,8 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			toolTipLabel.setWidth("120px");
 			toolTipLabel.setHeight("25px");
 			
-			toolTipChange = new Button("Save");
+			toolTipChange = new IconButton(constants.save());
+			toolTipChange.setIcon("disk");
 		 
 			toolTipChange.setWidth("40px");
 			toolTipChange.setHeight("25px");       

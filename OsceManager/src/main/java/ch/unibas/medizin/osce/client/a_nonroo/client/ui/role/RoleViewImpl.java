@@ -15,7 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -372,7 +372,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 			public String getValue(RoleTopicProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, constants.topic());
+		}, constants.roleTopic());
 		
 		
 		

@@ -18,9 +18,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateV
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.scaffold.RoleTemplateRequestNonRoo;
@@ -85,7 +86,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 	private PopupPanel toolTip;
 	private HorizontalPanel toolTipContentPanel;
 	private TextBox toolTipLabel;
-	private Button toolTipChange;
+	private IconButton toolTipChange;
 
 	public Sorting sortorder = Sorting.ASC;
 	public String sortname = "templateName";
@@ -509,7 +510,8 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		toolTipLabel.setWidth("120px");
 		toolTipLabel.setHeight("25px");
 
-		toolTipChange = new Button("Save");
+		toolTipChange = new IconButton(constants.save());
+		toolTipChange.setIcon("disk");
 
 		toolTipChange.setWidth("40px");
 		toolTipChange.setHeight("25px");

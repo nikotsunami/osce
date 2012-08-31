@@ -86,7 +86,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 	private PopupPanel toolTip;
 	private HorizontalPanel toolTipContentPanel;
 	private TextBox toolTipLabel;
-	private Button toolTipChange;
+	private IconButton toolTipChange;
 		
 	private int sizeOfTable;
 	private final OsceConstants constants = GWT.create(OsceConstants.class);	
@@ -478,7 +478,8 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 				toolTipLabel.setWidth("120px");
 				toolTipLabel.setHeight("25px");
 				
-				toolTipChange = new Button("Save");
+				toolTipChange = new IconButton(constants.save());
+				toolTipChange.setIcon("disk");
 			 
 				toolTipChange.setWidth("40px");
 				toolTipChange.setHeight("25px");       
@@ -645,7 +646,8 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		toolTipLabel.setWidth("120px");
 		toolTipLabel.setHeight("25px");
 		
-		toolTipChange = new Button("Save");
+		toolTipChange = new IconButton(constants.save());
+		toolTipChange.setIcon("disk");
 	 
 		toolTipChange.setWidth("40px");
 		toolTipChange.setHeight("25px");       

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -182,7 +182,7 @@ public class RoomMaterialsEditViewImpl extends Composite implements
 	}
 
 	private void setLabelTexts() {
-		labelType.setInnerText(constants.type() + ":");
+		labelType.setInnerText(constants.roomMaterialType() + ":");
 		labelName.setInnerText(constants.roomMaterialName() + ":");
 		labelPrice.setInnerText(constants.roomMaterialPrice() + ":");
 		labelPriceType.setInnerText(constants.roomMaterialPriceType() + ":");

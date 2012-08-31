@@ -1,9 +1,12 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
+import ch.unibas.medizin.osce.shared.MaterialType;
+import ch.unibas.medizin.osce.shared.PriceType;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -77,7 +80,7 @@ public class RoomMaterialsDetailsViewImpl extends Composite implements
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
 
-		labelType.setInnerText(constants.type() + ":");
+		labelType.setInnerText(constants.roomMaterialType() + ":");
 		labelName.setInnerText(constants.roomMaterialName() + ":");
 		labelPrice.setInnerText(constants.roomMaterialPrice() + ":");
 		labelPriceType.setInnerText(constants.roomMaterialPriceType() + ":");
@@ -102,14 +105,15 @@ public class RoomMaterialsDetailsViewImpl extends Composite implements
 				: materialListProxy.getName());
 
 		type.setInnerText(materialListProxy.getType() == null ? ""
-				: materialListProxy.getType().name());
+				: new EnumRenderer<MaterialType>().render(proxy.getType()));
 
 		// : new EnumRenderer<MaterialType>().render(materialListProxy
 		// .getType()));
 
 		price.setInnerText(proxy.getPrice() == null ? "" : String.valueOf(proxy
 				.getPrice()));
-		priceType.setInnerText(proxy.getPriceType().name());
+		priceType.setInnerText(materialListProxy.getType() == null ? ""
+				: new EnumRenderer<PriceType>().render(proxy.getPriceType()));
 
 	}
 

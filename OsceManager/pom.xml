@@ -770,7 +770,7 @@
                 <executions>
                     <execution>
                     	<configuration>
-                  			<extraJvmArgs>-Xmx12G</extraJvmArgs>
+                    		<extraJvmArgs>-Xmx12G</extraJvmArgs>
                     	</configuration>
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>

@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import com.google.gwt.core.client.GWT;

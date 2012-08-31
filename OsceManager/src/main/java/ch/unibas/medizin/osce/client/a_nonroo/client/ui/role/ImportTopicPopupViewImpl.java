@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.management.relation.RoleList;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -222,7 +222,7 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			this.topicView=TopicView;
 			okBtn.setText(constants.okBtn());
 			roleLbl.setText(constants.role());
-			topicLbl.setText(constants.topic());
+			topicLbl.setText(constants.roleTopic());
 			questionLbl.setText("Questions");
 			// Issue Role 
 			cancelBtn.setText(constants.cancel());
@@ -237,7 +237,7 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			questionLbl.setVisible(false);
 			okBtn.setText(constants.okBtn());
 			roleLbl.setText(constants.role());
-			topicLbl.setText(constants.topic());
+			topicLbl.setText(constants.roleTopic());
 			questionLbl.setText("Questions");
 			// Issue Role 
 			cancelBtn.setText(constants.cancel());

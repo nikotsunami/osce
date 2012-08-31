@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;

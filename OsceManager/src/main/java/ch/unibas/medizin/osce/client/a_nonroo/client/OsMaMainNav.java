@@ -66,6 +66,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -155,7 +156,8 @@ public class OsMaMainNav extends Composite {
 		roleAssignment.setText(constants.roleAssignments());
 		//By Spec]
 		
-		osces.setText(constants.osces());
+		labelSemester.setText(constants.semester() + ":");
+		osces.setText(constants.manageOsces());
 		circuit.setText(constants.circuit());
 		students.setText(constants.students());
 		examinationSchedule.setText(constants.examinationSchedule());
@@ -325,6 +327,8 @@ public class OsMaMainNav extends Composite {
 	Anchor individualSchedules; 	// Individuelle Pläne drucken
 	@UiField
 	Anchor bellSchedule;			// Klingelplan erstellen
+	@UiField
+	Label labelSemester;
 	
 	//learning objective
 	@UiField

@@ -3,7 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.text.shared.AbstractRenderer;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.shared.Comparison;
 
 public class EnumRenderer<T extends Enum<?>> extends AbstractRenderer<T> {

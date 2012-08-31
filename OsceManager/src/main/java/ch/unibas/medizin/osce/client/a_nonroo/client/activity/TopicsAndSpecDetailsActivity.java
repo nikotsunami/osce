@@ -13,10 +13,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsViewImpl;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicRequest;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
@@ -355,7 +356,8 @@ TopicsAndSpecDetailsView.Delegate
 	       StudyYearListBox.setWidth("50px");
 		   StudyYearListBox.setHeight("22px");
 		   
-		   Button toolTipChange = new Button("Save");
+		   IconButton toolTipChange = new IconButton(constants.save());
+		   toolTipChange.setIcon("disk");
 	       toolTipChange.setWidth("55px");
 	       toolTipChange.setHeight("22px");
 	         // newButton.setWidth();

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
@@ -136,6 +136,9 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	//spec statrt
 	@UiField
 	public SpanElement labelRoleTopic;
+	
+	@UiField
+	public SpanElement labelActive;
 		
 	//Issue # 122 : Replace pull down with autocomplete.	
 	@UiField
@@ -180,7 +183,6 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		TabPanelHelper.moveTabBarToBottom(rolePanel);
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
-		rolePanel.getTabBar().setTabText(0, constants.roleDetail());
 		//rolePanel.getTabBar().setTabText(1,  constants.roleParticipants());
 		//rolePanel.getTabBar().setTabText(2, constants.keywords());
 		//rolePanel.getTabBar().setTabText(3, constants.learningObjectives());	
@@ -204,20 +206,22 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	}
 	private void setTabTexts() {
 		rolePanel.getTabBar().setTabText(0, constants.roleDetail());
-		//rolePanel.getTabBar().setTabText(1,  constants.roleParticipants());
+		rolePanel.getTabBar().setTabText(1,  constants.checkList());
 		//rolePanel.getTabBar().setTabText(2, constants.keywords());
 		//rolePanel.getTabBar().setTabText(3, constants.learningObjectives());	
 	}
 	private void setLabelTexts() {
-		labelShortName.setInnerText(constants.shortName() + ":");
-		labellongName.setInnerText(constants.name() + ":");
+		labelShortName.setInnerText(constants.roleAcronym() + ":");
+		labellongName.setInnerText(constants.roleName() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");		
 		labelstudyYear.setInnerText(constants.studyYear() + ":");
-		labelRoleTopic.setInnerText(constants.roletopic());//spec
+		labelRoleTopic.setInnerText(constants.roleTopic());//spec
+		labelActive.setInnerText(constants.roleActive());
 	}
 	
 	public void setCreating(boolean creating) {
 		if (creating) {
+			roleDetailPanel.getTabBar().setTabText(0, constants.newRole());
 			title.setInnerText(constants.addRole());
 		} else {
 			title.setInnerText(constants.editRole());

@@ -23,7 +23,7 @@
 				
 						<div class="{style.controls} {style.controlsleft}">
 							<my:QuickSearchBox ui:field="searchBox" />
-							<g:Button  ui:field="FilterButton"/>
+							<!-- <g:Button  ui:field="FilterButton"/> -->
 						</div>
 						
 						<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>

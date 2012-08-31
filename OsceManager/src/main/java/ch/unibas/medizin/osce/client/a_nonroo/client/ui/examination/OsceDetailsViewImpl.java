@@ -13,7 +13,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
@@ -95,7 +95,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		osceDetailPanel.selectTab(0);
-		osceDetailPanel.getTabBar().setTabText(0, constants.osces());
+		osceDetailPanel.getTabBar().setTabText(0, constants.manageOsces());
 		TabPanelHelper.moveTabBarToBottom(osceDetailPanel);
 		
 		

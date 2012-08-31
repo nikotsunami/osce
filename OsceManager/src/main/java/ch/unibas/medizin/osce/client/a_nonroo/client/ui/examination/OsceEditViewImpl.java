@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
@@ -204,7 +204,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		System.out.println("my edit");
 		initWidget(BINDER.createAndBindUi(this));
 		oscePanel.selectTab(0);
-		oscePanel.getTabBar().setTabText(0, constants.osces());
+		oscePanel.getTabBar().setTabText(0, constants.manageOsces());
 		TabPanelHelper.moveTabBarToBottom(oscePanel);
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());

@@ -150,8 +150,15 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
  		public String Genrated_Status();
  		public String Fixed_Status();
  		public String Closed_Status();
-    
-	public String SIMPLE();
-
-	public String FEDERAL_EXAM();
+ 		
+ // 5C: SPEC START =
+ 		
+ 		public String NORMAL();
+ 		public String BREAK();
+ 		public String ANAMNESIS_THERAPY();
+ 		public String PREPARATION();
+ 		
+ // 5C: SPEC END
+    public String err_DialogBoxTitle();
+	public String err_DialogBoxCloseButton();
 }

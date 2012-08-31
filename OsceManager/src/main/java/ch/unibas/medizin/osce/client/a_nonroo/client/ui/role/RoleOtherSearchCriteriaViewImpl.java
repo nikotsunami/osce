@@ -11,7 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -255,8 +255,8 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 						//if (Window.confirm("wirklich löschen?"))
 						
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
-						 dialogBox.showYesNoDialog("wirklich löschen?");
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override
@@ -290,6 +290,8 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 		}, null);
 
 		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
 
 		// initList();
 	}

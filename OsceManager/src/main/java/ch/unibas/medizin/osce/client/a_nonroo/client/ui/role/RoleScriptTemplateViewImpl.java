@@ -9,7 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -129,7 +129,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<RoleTemplateProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
-		
+		newButton.setText(constants.addRoleScriptTemplate());
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -220,7 +220,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 			public String getValue(RoleTemplateProxy object) {
 				return DateTimeFormat.getShortDateFormat().format(object.getDate_cretaed());
 			}
-		}, "Date Created");
+		}, constants.dateCreated());
 		paths.add("date_edited");
 		table.addColumn(new TextColumn<RoleTemplateProxy>() {
 
@@ -238,7 +238,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 			public String getValue(RoleTemplateProxy object) {
 				return DateTimeFormat.getShortDateFormat().format(object.getDate_edited());
 			}
-		}, "Date Edited");
+		}, constants.dateEdited());
 		//Edit Button
 					// Issue Role Module
 		addColumn(new ActionCell<RoleTemplateProxy>(
@@ -253,7 +253,6 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 						return roleTemplate;
 					}
 				}, null);
-				table.addColumnStyleName(1, "iconCol");
 		// E Issue Role Module
 		addColumn(new ActionCell<RoleTemplateProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTemplateProxy>() {
@@ -262,7 +261,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 						/*if(Window.confirm("wirklich löschen?"))
 							delegate.deleteClicked(roleTemplate);*/
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
@@ -293,8 +292,11 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 				return roleTemplate;
 			}
 		}, null);
-		
+
+		table.addColumnStyleName(1, "iconCol");
 		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
 	}
 	
 	@Override

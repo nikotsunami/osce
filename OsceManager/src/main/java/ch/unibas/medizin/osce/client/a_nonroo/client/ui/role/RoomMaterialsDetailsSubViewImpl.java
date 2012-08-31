@@ -9,7 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
@@ -246,7 +246,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 				return ((usedMaterialProxy.getMaterialCount() == null) ? ""
 						: usedMaterialProxy.getMaterialCount().toString());
 			}
-		}, constants.number());
+		}, constants.roomMaterialNumber());
 
 		paths.add("used_from");
 		table.addColumn(new TextColumn<UsedMaterialProxy>() {
@@ -257,7 +257,7 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 				return ((usedMaterialProxy.getUsed_from().name() == null) ? ""
 						: usedMaterialProxy.getUsed_from().name());
 			}
-		}, constants.forWho());
+		}, constants.roomMaterialUser());
 
 		addColumn(new ActionCell<UsedMaterialProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<UsedMaterialProxy>() {
@@ -320,7 +320,9 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 				return usedMaterialProxy;
 			}
 		}, null);
-		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
+		table.addColumnStyleName(5, "iconCol");
 		roomMaterialsPopupViewImpl = new RoomMaterialsPopupViewImpl(standardizedRoleProxy);
 
 	}

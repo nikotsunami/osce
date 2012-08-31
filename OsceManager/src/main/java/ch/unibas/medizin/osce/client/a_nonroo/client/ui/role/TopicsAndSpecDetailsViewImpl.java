@@ -118,8 +118,8 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	
 	
 	
-	@UiField
-	Button FilterButton;
+//	@UiField
+//	Button FilterButton;
 	
 	// Issue Role
 	@UiHandler ("AddButton")
@@ -285,8 +285,8 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		init();
 //		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		
-		FilterButton.setText("Filter");
-		AddButton.setText("add topic");
+//		FilterButton.setText("Filter");
+		AddButton.setText(constants.addRoleTopic());
 		//todo
 	}
 	
@@ -349,7 +349,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				return renderer.render(object.getName());
 				
 			}
-		},constants.roletopic());
+		},constants.roleTopic());
 	
 		paths.add("slots_until_change");
 		TextColumn<RoleTopicProxy> slotColumn=new TextColumn<RoleTopicProxy>() {
@@ -411,9 +411,6 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				return roletopic;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
-
-		
 		
 		//Delete Buuton
 		addColumn(new ActionCell<RoleTopicProxy>(
@@ -453,7 +450,8 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				return roletopic;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
 
 	}
 	

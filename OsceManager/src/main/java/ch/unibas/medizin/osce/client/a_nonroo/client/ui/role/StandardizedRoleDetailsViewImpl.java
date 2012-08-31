@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -160,6 +161,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	SpanElement labelroletype;
 	@UiField
 	SpanElement labelstudyYear;
+	
+	@UiField
+	Label labelOtherCriteria;
 
 	// Temp Fields
 
@@ -376,6 +380,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		print.setText(constants.print());
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
+		previous.setText(constants.previousRole());
+		home.setText(constants.homeRole());
 
 		roleDisclosurePanel.setContent(rolePanel);
 		roleDisclosurePanel.setStyleName("");
@@ -389,7 +395,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		importTopicButton.setText(constants.importTopic());
 		//Assignment E start]
 		
-		roleTemplateValueButon.setText("Select Role Template");
+		roleTemplateValueButon.setText(constants.selectRoleTemplate());
 		
 		// Highlight onViolation
 			standardizedRoleTemplateMap=new HashMap<String, Widget>();
@@ -401,13 +407,28 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		dragController.registerDropController(dropController);
 		dragController.setBehaviorScrollIntoView(true);
 	}
+	
+	private void setTabTexts() {
+		rolePanel.getTabBar().setTabText(0, constants.roleDetail());
+		rolePanel.getTabBar().setTabText(1, constants.roleParticipants());
+		rolePanel.getTabBar().setTabText(0, constants.keyword());
+		rolePanel.getTabBar().setTabText(0, constants.learning());
+		
+		roleSubPanel.getTabBar().setTabText(0, constants.checkList());
+		roleSubPanel.getTabBar().setTabText(1, constants.roleParticipants());
+		roleSubPanel.getTabBar().setTabText(2, constants.roomMaterials());
+		roleSubPanel.getTabBar().setTabText(3, constants.roleFile());
+		roleSubPanel.getTabBar().setTabText(4, constants.roleScript());
+	}
 
 	private void setLabelTexts() {
 		labelLongNameHeader.setText("");
-		labelShortName.setInnerText(constants.shortName() + ":");
+		labelShortName.setInnerText(constants.roleAcronym() + ":");
 		labellongName.setInnerText(constants.name() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");
 		labelstudyYear.setInnerText(constants.studyYear() + ":");
+		
+		labelOtherCriteria.setText(constants.furtherCriteria());
 	}
 
 	@UiHandler("previous")

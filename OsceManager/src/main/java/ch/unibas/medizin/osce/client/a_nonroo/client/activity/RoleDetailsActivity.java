@@ -247,7 +247,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		private PopupPanel toolTip;
 		private HorizontalPanel toolTipContentPanel;
 		private TextBox toolTipTextBox;
-		private Button toolTipChange;
+		private IconButton toolTipChange;
 		//private final OsceConstants constants = GWT.create(OsceConstants.class);
 		private RoleBaseTableItemViewImpl[] roleBaseTableItemViewImpl;
 		// End I
@@ -4386,7 +4386,8 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		toolTipTextBox.setWidth("120px");
 		toolTipTextBox.setHeight("25px");
 		
-		toolTipChange = new Button("Save");
+		toolTipChange = new IconButton(constants.save());
+		toolTipChange.setIcon("disk");
 	 
 		toolTipChange.setWidth("40px");
 		toolTipChange.setHeight("25px");       

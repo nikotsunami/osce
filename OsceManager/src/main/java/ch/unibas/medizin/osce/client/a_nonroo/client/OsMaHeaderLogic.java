@@ -249,7 +249,7 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		} else if (place instanceof NationalityPlace) {
 			placeDescription = constants.nationalities();
 		} else if (place instanceof OscePlace) {
-			placeDescription = constants.osces();
+			placeDescription = constants.manageOsces();
 		} else if (place instanceof ProfessionPlace) {
 			placeDescription = constants.professions();
 		} else if (place instanceof RoleAssignmentsPlace) {

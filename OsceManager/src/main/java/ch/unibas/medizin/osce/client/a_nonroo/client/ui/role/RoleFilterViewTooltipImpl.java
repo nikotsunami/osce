@@ -8,7 +8,7 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -508,12 +508,17 @@ public List<String> getWhereFilters() {
 		
 		//TopicName  Keyword ItemName ItemName RoleName CheckListItem ItemValue
 		
-		initCheckBox(TopicName, "name", constants.topic());
+		initCheckBox(TopicName, "name", constants.roleTopic());
 		initCheckBox(Keyword, "keyword", constants. keyword());
 		initCheckBox(ItemName, "itemName", constants.itemName());
 		initCheckBox(RoleName, "roles", constants.roleName());
 		initCheckBox(CheckListItem, "checkListItem", constants.checkListItem());
 		initCheckBox(ItemValue, "itemValue", constants.itemValue());
+		Complexity.setText(constants.roleComplexity());
+		Author.setText(constants.author());
+		Specification.setText(constants.specification());
+		StudyYear.setText(constants.studyYear());
+		Keyword.setText(constants.keyword());
 		
 		maxApplicableFilters = fields.size();
 		Iterator<CheckBoxItem> fieldIter = fields.iterator();

@@ -76,8 +76,8 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	@UiField (provided = true)
 	public QuickSearchBox searchBox;
 	
-	@UiField
-	Button FilterButton;
+//	@UiField
+//	Button FilterButton;
 	
 
 
@@ -130,8 +130,8 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 				initWidget(uiBinder.createAndBindUi(this));
 				init();
 				splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);		
-				FilterButton.setText("Filter");	
-				AddButton.setText("add Specialization");
+//				FilterButton.setText("Filter");	
+				AddButton.setText(constants.addDiscipline());
 				
 				// Violation Changes Highlight
 				Log.info("Call TopicsAndSpecViewImpl Constructor..");

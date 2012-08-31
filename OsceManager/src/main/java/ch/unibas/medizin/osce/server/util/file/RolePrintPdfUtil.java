@@ -607,8 +607,8 @@ public class RolePrintPdfUtil {
 		Log.info("usedMaterials size " + usedMaterials.size());
 
 		roomMaterialTable.addCell(getPdfCellBold(constants.roomMaterialName()));
-		roomMaterialTable.addCell(getPdfCellBold(constants.number()));
-		roomMaterialTable.addCell(getPdfCellBold(constants.forWho()));
+		roomMaterialTable.addCell(getPdfCellBold(constants.roomMaterialNumber()));
+		roomMaterialTable.addCell(getPdfCellBold(constants.roomMaterialUser()));
 		if (usedMaterials.size() > 0) {
 			isValueAvailable[2] = true;
 			for (UsedMaterial usedMaterial : usedMaterials) {
@@ -733,7 +733,7 @@ public class RolePrintPdfUtil {
 		String studyYear = (standardizedRole.getStudyYear() != null) ? enumConstants
 				.getString(standardizedRole.getStudyYear().toString()) : "-";
 
-		table.addCell(getPdfCellBold(constants.shortName() + ":"));
+		table.addCell(getPdfCellBold(constants.roleAcronym() + ":"));
 		// TODO format date
 		table.addCell(getPdfCell(shortName));
 

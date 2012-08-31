@@ -15,7 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDetailsView.Delegate;
 
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
@@ -156,7 +156,7 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 		initTable();
 //		initSearchBox();
 		initSuggestBox();
-		KeywordAddButton.setText("Add Keyword");
+		KeywordAddButton.setText(constants.addKeyword());
 		
 		// Highlight onViolation
 		keywordMap=new HashMap<String, Widget>();

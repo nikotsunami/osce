@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
-import ch.unibas.medizin.osce.client.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 
 import com.allen_sauer.gwt.log.client.Log;
