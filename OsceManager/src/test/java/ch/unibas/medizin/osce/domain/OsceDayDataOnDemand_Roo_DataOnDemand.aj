@@ -33,6 +33,7 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
     
     public OsceDay OsceDayDataOnDemand.getNewTransientOsceDay(int index) {
         OsceDay obj = new OsceDay();
+        setLunchBreakAfterRotation(obj, index);
         setLunchBreakStart(obj, index);
         setOsce(obj, index);
         setOsceDate(obj, index);
@@ -40,6 +41,11 @@ privileged aspect OsceDayDataOnDemand_Roo_DataOnDemand {
         setTimeStart(obj, index);
         setValue(obj, index);
         return obj;
+    }
+    
+    public void OsceDayDataOnDemand.setLunchBreakAfterRotation(OsceDay obj, int index) {
+        Integer lunchBreakAfterRotation = new Integer(index);
+        obj.setLunchBreakAfterRotation(lunchBreakAfterRotation);
     }
     
     public void OsceDayDataOnDemand.setLunchBreakStart(OsceDay obj, int index) {

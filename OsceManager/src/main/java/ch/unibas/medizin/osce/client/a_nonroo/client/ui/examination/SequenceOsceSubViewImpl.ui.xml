@@ -59,8 +59,12 @@
 		<!-- <g:Button ui:field="edit">Edit</g:Button> -->
 	<my:IconButton ui:field="edit" icon="pencil"> </my:IconButton>
 		</g:HorizontalPanel>
-		<g:TextBox ui:field="chaneNameOfSequence" width="30px" ></g:TextBox>
-		<g:Button ui:field="ok"></g:Button>
+		 <!-- Module 5 bug Report Change -->
+			<!-- <g:TextBox ui:field="chaneNameOfSequence" width="30px" ></g:TextBox> -->
+			<!-- <my:FocusableValueListBox ui:field="chaneNameOfSequence" width="40px" styleName="{style.margin10}"></my:FocusableValueListBox> 
+		 <g:Button ui:field="ok"></g:Button>-->
+		<!--  E Module 5 bug Report Change -->
+		
 		<!-- 	<s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton> -->
 		</g:VerticalPanel>
 		

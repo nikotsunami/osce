@@ -21,8 +21,6 @@ public interface OsceRequestNonRoo extends RequestContext{
 	
 	public abstract Request<Boolean> generateOsceScaffold(Long osceId);
 	
-	public abstract Request<Boolean> updateLunchBreak(Long osceDayId, int afterRotation);
-	
 	public abstract Request<Boolean> generateAssignments(Long osceId);
 	
 	public abstract Request<Integer> initOsceBySecurity();	

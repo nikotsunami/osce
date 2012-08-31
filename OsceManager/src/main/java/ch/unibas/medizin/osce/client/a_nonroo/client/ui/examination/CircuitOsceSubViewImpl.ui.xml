@@ -28,40 +28,79 @@
 		{
 			margin-Left: 20px;
 		}
+		
+		
+		.padLeft0
+		{
+			padding-left: 0px;
+		}
+		.padLeft10
+		{
+			padding-left: 10px;
+		}
+		.padLeft5
+		{
+			padding-left: 5px;
+		}
+		.padLeft43
+		{
+			padding-left: 43px;
+		}
+		.padLeft15
+		{
+			padding-left: 15px;
+		}
+		.marginRight5
+		{
+			margin-right: 5px;
+		}
+		.marginLeft30
+		{
+			margin-left: 30px;
+		}
+		.buttonStyle
+		{
+			width:80px;
+		}
+		
 	</ui:style>
 	<g:HTMLPanel>
 		<!-- h1>CircuitOsceSubView</h1 -->
-		<g:VerticalPanel spacing="8">
-			<g:HorizontalPanel ui:field="osceHorizontalPanel1">
-				<g:Label ui:field="shortBreakLabel" styleName="{style.padleft8}">Short Break :</g:Label>
-				<s:ShortBox ui:field="shortBreakTextBox"></s:ShortBox>
-
-				<g:Label ui:field="longBreakLabel" styleName="{style.padleft30}">Long Break :</g:Label>
-				<s:ShortBox ui:field="longBreakTextBox"></s:ShortBox>
-
-				<g:Label ui:field="launchBreakLabel" styleName="{style.padleft33}">Launch Break
-					:</g:Label>
-				<s:ShortBox ui:field="launchBreakTextBox"></s:ShortBox>
-			</g:HorizontalPanel>
-			<g:HorizontalPanel>
-				<g:Label ui:field="maxStudentLabel">Max Students :</g:Label>
-				<g:IntegerBox ui:field="maxStudentTextBox"></g:IntegerBox>
-
-				<g:Label ui:field="maxParcourLabel" styleName="{style.padleft25}">Max Parcour :</g:Label>
-				<g:IntegerBox ui:field="maxParcourTextBox"></g:IntegerBox>
-
-				<g:Label ui:field="maxRoomsLabel" styleName="{style.padleft25}">Max No Rooms :</g:Label>
-				<g:IntegerBox ui:field="maxRoomsTextBox" styleName="{style.marginRight20}"></g:IntegerBox>
-				<my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton>
-				<g:Label  styleName="{style.padleft25}"></g:Label>	
-				<g:Button ui:field="clearAllBtn" ></g:Button>
-				<g:Label  styleName="{style.padleft25}"></g:Label>
-				<g:Button ui:field="generateBtn"></g:Button>
-				<g:Label  styleName="{style.padleft25}"></g:Label>
-				<g:Button ui:field="fixedBtn"></g:Button>
-				<g:Label  styleName="{style.padleft25}"></g:Label>
-				<g:Button ui:field="closedBtn"></g:Button>
-			</g:HorizontalPanel>
-		</g:VerticalPanel>
+		<Table>
+			<tr>
+				<td><g:Label ui:field="shortBreakLabel" styleName="{style.padLeft0}">Short Break :</g:Label></td>
+				<td><s:ShortBox ui:field="shortBreakTextBox"></s:ShortBox></td>
+				<td><g:Label ui:field="longBreakLabel" styleName="{style.padLeft5}">Long Break :</g:Label></td>
+				<td><s:ShortBox ui:field="longBreakTextBox"></s:ShortBox></td>
+				<td><g:Label ui:field="launchBreakLabel" styleName="{style.padLeft15}">Launch Break:</g:Label></td>
+				<td><s:ShortBox ui:field="launchBreakTextBox"></s:ShortBox></td>				
+				
+				<!--  Module 5 bug Report Change -->
+				<td><g:Label ui:field="middleBreakLabel" styleName="{style.padLeft43}">Middle Break:</g:Label></td>
+				<td><s:ShortBox ui:field="middleBreakTextBox"></s:ShortBox></td>
+				<!--  E Module 5 bug Report Change -->
+				
+				<td><my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton></td>
+				<td><g:Button ui:field="generateBtn" width="80px"></g:Button></td>
+				<td><g:Button ui:field="closedBtn" width="80px"></g:Button></td>	
+			</tr>
+			<tr>
+				<td><g:Label ui:field="maxStudentLabel"  styleName="{style.padLeft0}">Max Students :</g:Label></td>
+				<td><g:IntegerBox ui:field="maxStudentTextBox"></g:IntegerBox></td>
+				<td><g:Label ui:field="maxParcourLabel" styleName="{style.padLeft5}">Max Parcour :</g:Label></td>
+				<td><g:IntegerBox ui:field="maxParcourTextBox"></g:IntegerBox></td>
+				<td><g:Label ui:field="maxRoomsLabel" styleName="{style.padLeft5}">Max No Rooms :</g:Label></td>
+				<td><g:IntegerBox ui:field="maxRoomsTextBox"></g:IntegerBox></td>
+					
+				<!--  Module 5 bug Report Change -->
+				<td><g:Label ui:field="shortBreakSimpatLabel" styleName="{style.padLeft5}">Short Break Simpat:</g:Label></td>
+				<td><s:ShortBox ui:field="shortBreakSimpatTextBox"></s:ShortBox></td>
+				<!--  E Module 5 bug Report Change -->
+				
+				<td><g:Button ui:field="clearAllBtn" width="80px"></g:Button></td>
+				<td><g:Button ui:field="fixedBtn" width="80px"></g:Button></td>				
+				<td><g:Label></g:Label></td>
+			</tr>
+		</Table>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -246,6 +246,13 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		
 		//Issue # 122 : Replace pull down with autocomplete.
 		
+		anamnesisCheckMap = new HashMap<String, Widget>();
+		anamnesisCheckMap.put("type", type);
+		anamnesisCheckMap.put("text", text);
+		anamnesisCheckMap.put("value", valuePanel);
+		anamnesisCheckMap.put("anamnesisCheckTitle", insideTitleListBox);
+		anamnesisCheckMap.put("anamnesischecksvalues", previousQuestionListBox);
+		
 		
 	}
 	

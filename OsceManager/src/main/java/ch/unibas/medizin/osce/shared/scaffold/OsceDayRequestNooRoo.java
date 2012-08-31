@@ -19,4 +19,7 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 	public abstract Request<Boolean> findRoleAssignedInOsceDay(Long standardizedRoleId, Long OsceDayId);
 	
 	abstract Request<java.util.List<OsceDayProxy>> findOsceDayByDoctorAssignment(DoctorProxy proxy);
+	
+	public abstract Request<Boolean> updateLunchBreak(Long osceDayId, Integer afterRotation);
+	public abstract Request<Boolean> updateTimesAfterRotationShift(Long osceDayIdFrom, Long osceDayIdTo);
 }

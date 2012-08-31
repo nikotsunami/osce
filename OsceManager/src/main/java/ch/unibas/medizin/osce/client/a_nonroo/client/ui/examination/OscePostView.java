@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -30,7 +31,7 @@ public interface OscePostView extends IsWidget{
 	 public void setAnemanis(boolean isAnemanis);
 	 
 	 public OscePostProxy getNextOscePostProxy();
-	 
+	
 	 public void setNextOscePostProxy(OscePostProxy nextOscePostProxy);
 	 
 	 public OscePostBlueprintProxy getOscePostBlueprintProxy() ;
@@ -42,4 +43,9 @@ public interface OscePostView extends IsWidget{
 	 
 	 public void setOscePostBlueprintProxyNext(
 				OscePostBlueprintProxy oscePostBlueprintProxyNext);
+
+	 	// Module 5 bug Report Change
+		public IconButton getDeletePostButton();
+		// E Module 5 bug Report Change
+		 
 }

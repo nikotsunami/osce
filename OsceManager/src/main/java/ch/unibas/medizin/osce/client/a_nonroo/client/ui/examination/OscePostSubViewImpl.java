@@ -13,7 +13,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -83,6 +82,19 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 	public IconButton getSpecializationedit() {
 		return specializationedit;
 	}
+
+	// Module 5 bug Report Change
+	public IconButton getRoomedit() {
+		return roomedit;
+	}
+	public IconButton getRoleTopicEdit() {
+		return roleTopicedit;
+	}
+	public IconButton getStandardizedRoleEdit() {
+		return standardizedRoleedit;
+	}
+	// E Module 5 bug Report Change
+	
 
 	@UiField
 	public Label postNameLbl;

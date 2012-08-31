@@ -11,19 +11,16 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.ShortBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
-import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -45,7 +42,9 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	private Delegate delegate;
 	
 	@UiField 
-	Button generateBtn;
+	// Module 5 bug Report Change
+	public Button generateBtn;
+	// E Module 5 bug Report Change
 
 	// Module 5 changes {
 
@@ -130,14 +129,33 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 
 	private Presenter presenter;
 	
-	@UiField
-	public HorizontalPanel osceHorizontalPanel1;
+	// Module 5 bug Report Change
+	/*@UiField
+	public HorizontalPanel osceHorizontalPanel1;*/
+	// E Module 5 bug Report Change
 	
 	@UiField
 	Label shortBreakLabel;
 	
 	@UiField
 	public ShortBox shortBreakTextBox;
+	
+	// Module 5 bug Report Change
+	
+	@UiField
+	Label middleBreakLabel;		  
+	
+	@UiField
+	public ShortBox middleBreakTextBox;
+	
+	@UiField
+	Label shortBreakSimpatLabel;		  
+	
+	@UiField
+	public ShortBox shortBreakSimpatTextBox;
+
+	// Module 5 bug Report Change
+	
 	
 	@UiField
 	Label longBreakLabel;
@@ -208,6 +226,27 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		saveOsce.setText(constants.save());
 		clearAllBtn.setText(constants.clearAll());	
 		generateBtn.setText(constants.generate());
+		
+		// Module 5 bug Report Change
+		osceMap=new HashMap<String, Widget>();
+		osceMap.put("shortBreak", shortBreakTextBox);
+		osceMap.put("LongBreak", longBreakTextBox);
+		osceMap.put("lunchBreak", launchBreakTextBox);
+		osceMap.put("maxNumberStudents", maxStudentTextBox);
+		osceMap.put("numberCourses", maxParcourTextBox);
+		osceMap.put("numberRooms", maxRoomsTextBox);
+		osceMap.put("shortBreakSimpatChange", shortBreakSimpatTextBox);
+		osceMap.put("middleBreak", middleBreakTextBox);
+		
+		shortBreakTextBox.setEnabled(false);
+		longBreakTextBox.setEnabled(false);
+		launchBreakTextBox.setEnabled(false);
+		maxStudentTextBox.setEnabled(false);
+		maxParcourTextBox.setEnabled(false);
+		maxRoomsTextBox.setEnabled(false);
+		shortBreakSimpatTextBox.setEnabled(false);
+		middleBreakTextBox.setEnabled(false);
+		// E Module 5 bug Report Change
 		
 		// change {
 		fixedBtn.setText(constants.fixedButtonString());

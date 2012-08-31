@@ -955,32 +955,39 @@ a:hover, .gwt-Anchor:hover {
 
 .gwt-SuggestBoxPopup {
 	margin-left: 4px;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup strong {
 	background-color: #F1B532;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .item {
 	padding: 2px 4px;
 	color: #424242;
 	cursor: default;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .item-selected {
 	background: #F1B532;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .item-selected strong {
 	background: #FCFDB5;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupContent {
 	background: white;
+	z-index: 2 !important;
 }
 
 .gwt-SuggestBoxPopup {
-	border: 1px solid #aaa;
+	border: 1px solid #aaa
+	z-index: 2 !important;;
 }
 
 /* .gwt-SuggestBoxPopup .suggestPopupTopCenter {
@@ -2571,6 +2578,7 @@ background: rgb(255,255,204)  ;
     height: 23px;
     outline-style: none !important;
     padding: 3px 6px 3px 0;
+    width:80px;
 	/*background: #888;*/
 }
 /* MODULE 3 : END */
@@ -3197,3 +3205,52 @@ color: #f1b532;
 {
 	background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
 }
+
+.checkdemo
+{
+	position: static;
+}
+.osceSequencePopupPanelSize
+{
+	border-radius:4px !important; 
+	height:70px !important;
+	width: 190px !important;	
+}
+.osceSequencePopuplable
+{
+	margin-top:7px !important;
+	margin-left:5px !important;
+}
+.osceSequencePopupComboBox
+{
+	width:70 !important;
+	margin-left:12px !important;
+	margin-top:5px !important;
+}
+.osceSequencePopupSaveButton
+{
+	width:70 !important;
+	margin-left:10px !important;
+	margin-top:10px !important;
+}
+.osceSequencePopupCloseButton
+{
+	width:70 !important;
+	margin-left:20px !important;
+	margin-top:10px !important;
+}
+
+
+.gwt-DateBox {
+  z-index: 2 !important;
+}
+
+.dateBoxPopup {
+	z-index: 2 !important;
+}
+
+.gwt-DatePicker {
+  z-index: 2 !important;
+}
+
+
