@@ -531,13 +531,13 @@ INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (147,'1986-06-10 00
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (148,'1985-09-26 00:00:00',0);
 INSERT INTO `anamnesis_form` (id,create_date,version) VALUES (149,'1980-05-16 00:00:00',0);
 
-INSERT INTO `anamnesis_check_title` VALUES (4,NULL,'Referenzen',0);
-INSERT INTO `anamnesis_check_title` VALUES (6,NULL,'Persönlichkeitsmerkmale',0);
-INSERT INTO `anamnesis_check_title` VALUES (7,NULL,'Krankengeschichte',0);
-INSERT INTO `anamnesis_check_title` VALUES (8,NULL,'Nach dem Rollenspiel',0);
-INSERT INTO `anamnesis_check_title` VALUES (9,NULL,'Evaluation für den internen Gebrauch',0);
-INSERT INTO `anamnesis_check_title` VALUES (11,NULL,'Körperliche Untersuchung falls für die Rolle erforderlich',0);
-INSERT INTO `anamnesis_check_title` VALUES (12,NULL,'Stammdaten',0);
+INSERT INTO `anamnesis_check_title` VALUES (4,4,'Referenzen',0);
+INSERT INTO `anamnesis_check_title` VALUES (6,1,'Persönlichkeitsmerkmale',0);
+INSERT INTO `anamnesis_check_title` VALUES (7,3,'Krankengeschichte',0);
+INSERT INTO `anamnesis_check_title` VALUES (8,6,'Nach dem Rollenspiel',0);
+INSERT INTO `anamnesis_check_title` VALUES (9,7,'Evaluation für den internen Gebrauch',0);
+INSERT INTO `anamnesis_check_title` VALUES (11,5,'Körperliche Untersuchung falls für die Rolle erforderlich',0);
+INSERT INTO `anamnesis_check_title` VALUES (12,2,'Stammdaten',0);
 
 INSERT INTO `anamnesis_check` (id,sort_order,text,type,user_specified_order,value,version,anamnesis_check_title,title) VALUES (2,1,'Empfohlen oder geschickt von:',0,NULL,'',1,4,NULL);
 INSERT INTO `anamnesis_check` (id,sort_order,text,type,user_specified_order,value,version,anamnesis_check_title,title) VALUES (3,2,'Motivation als Simpat zu arbeiten:',0,NULL,'',1,4,NULL);
