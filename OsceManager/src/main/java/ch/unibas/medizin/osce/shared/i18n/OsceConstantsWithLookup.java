@@ -250,5 +250,20 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 
 	public String WIDOWED();
 
+	public String PROFESSION_EQUALS();
+	
+	public String PROFESSION_NOT_EQUALS();
+	
+	public String WORKPERMISSION_EQUALS();
+	
+	public String WORKPERMISSION_NOT_EQUALS();
+	
+	public String MARITIALSTATUS_EQUALS();
+	
+	public String MARITIALSTATUS_NOT_EQUALS();
+	
+	public String AGE();
+	
+	public String GENDER();
 }
 

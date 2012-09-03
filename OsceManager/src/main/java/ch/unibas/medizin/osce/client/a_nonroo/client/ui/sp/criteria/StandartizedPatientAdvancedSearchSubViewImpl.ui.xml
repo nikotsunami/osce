@@ -4,17 +4,25 @@
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	 
-	<ui:style src="../../../styles.css" />
+	<ui:style src="../../../styles.css" >
+		.advSearchBtn
+		{
+			margin: 3px;
+		}
+	</ui:style>
 	
 <g:HTMLPanel styleName="{style.listView}">
     <div style="height:3em;"/>
-	<g:HorizontalPanel spacing ="4">
-		<my:IconButton ui:field="addBasicData" icon="wrench"/>
-	    <my:IconButton ui:field="addScar" icon="search"/>
-	    <my:IconButton ui:field="addAnamnesis" icon="pencil"/>
-	    <my:IconButton ui:field="addLanguage" icon="comment"/>
-	    <my:IconButton ui:field="addNationality" icon="flag" />
-  	</g:HorizontalPanel>
+    <g:FlowPanel ui:field="buttonFlowPanel">
+		<my:IconButton ui:field="addBasicData" icon="wrench" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addScar" icon="search" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addAnamnesis" icon="pencil" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addLanguage" icon="comment" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addNationality" icon="flag" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addProfession" icon="search" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addWorkPermission" icon="search" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addMaritialStatus" icon="search" addStyleNames="{style.advSearchBtn}" />
+  	</g:FlowPanel>
     <b:CellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
     <div class="{style.controls}">      
       <b:SimplePager ui:field="pager" display="{table}"/>

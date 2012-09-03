@@ -160,7 +160,16 @@
     <url-pattern>/osMaEntry/dmzsync</url-pattern>
   </servlet-mapping>
     
-
+	<!-- eOSCE sync service -->    
+  <servlet>
+    <servlet-name>eOSCESyncService</servlet-name>
+    <servlet-class>ch.unibas.medizin.osce.server.eOSCESyncServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>eOSCESyncService</servlet-name>
+    <url-pattern>/osMaEntry/eoscesync</url-pattern>
+  </servlet-mapping>
+	
     
 <!-- spec video upload -->
 <servlet>

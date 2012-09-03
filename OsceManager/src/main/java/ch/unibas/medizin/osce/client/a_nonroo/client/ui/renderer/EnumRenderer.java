@@ -11,7 +11,7 @@ public class EnumRenderer<T extends Enum<?>> extends AbstractRenderer<T> {
 	private final Type rendererType;
 	
 	public static enum Type {
-		DEFAULT, NUMERIC, LANGSKILL, ANAMNESIS, NATIONALITY, SCAR
+		DEFAULT, NUMERIC, LANGSKILL, ANAMNESIS, NATIONALITY, SCAR, PROFESSION, WORKPERMISSION, MARITIALSTATUS
 	}
 	
 	public EnumRenderer() {

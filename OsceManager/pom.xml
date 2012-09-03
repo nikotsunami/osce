@@ -166,6 +166,21 @@
 			<version>3.2-FINAL</version>
 		</dependency>
 		
+		<!--  Dependency for Amazon S3 -->
+    	  
+        <dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.0.002</version>
+		</dependency>
+		
+		<!--  Dependency for SQLite Databse -->
+		<dependency>
+   			<groupId>org.xerial</groupId>
+   			<artifactId>sqlite-jdbc</artifactId>
+   			<version>3.6.20</version>
+		</dependency> 
+		
 		<!-- Dependency for Unitime CPSolver -->
 		<dependency>
 			<groupId>org.unitime</groupId>
@@ -760,18 +775,15 @@
                 <configuration>
                     <logLevel>INFO</logLevel>
                     <style>PRETTY</style>
-                    <runTarget>/OsMaEntry.html</runTarget>
+                    <runTarget>/ApplicationScaffold.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <modules>
-                        <module>${project.groupId}.OsMaEntry</module>
+                        <module>${project.groupId}.ApplicationScaffold</module>
                     </modules>
                     <copyWebapp>true</copyWebapp>
                 </configuration>
                 <executions>
                     <execution>
-			<configuration>
-				<extraJvmArgs>-Xmx12G</extraJvmArgs>
-			</configuration>
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>

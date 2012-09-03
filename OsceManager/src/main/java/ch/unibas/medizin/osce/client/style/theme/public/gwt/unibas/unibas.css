@@ -3254,3 +3254,54 @@ color: #f1b532;
 }
 
 
+/* Dock Menu */
+
+.dockButton{
+	width : 105px;
+	position: absolute;
+	top: this.parentNode.top; 
+	
+	-moz-transform: rotate(-90deg) translate(-103%, -6%);
+   -moz-transform-origin: 0% 0%;
+   -o-transform: rotate(-90deg) translate(-55%, 95%);
+   -o-transform-origin: 0% 100%;
+   -webkit-transform: rotate(-90deg) translate(-55%, 95%);
+   -webkit-transform-origin: 0% 100%;
+   transform: rotate(-90deg) translate(-55%, 95%);
+   transform-origin: 0% 100%;
+}
+.verticalFlip{
+	 -moz-transform: scaleY(-1);
+     -o-transform: scaleY(-1);
+     -webkit-transform: scaleY(-1);
+     transform: scaleY(-1);
+     filter: FlipY;
+     -ms-filter: "FlipY";
+}
+.menuOpenContainer{
+	width: 225px;
+}
+.menuCloseContainer{
+	width: 23px;
+}
+
+.noBorder{
+	border: 0px solid white; 
+}
+/* Dock Menu */
+
+/* eosce */
+.eOSCElable
+{
+	padding-top: 6px;
+}
+.eOSCEHorizontalPanel
+{
+	padding-top: 6px;
+}
+.schedulePanelStyle
+{	
+	background: url("images/SchedulePanelBackground.png") repeat-y;
+	width: 320px;
+	-moz-border-radius: 4px;
+}

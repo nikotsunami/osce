@@ -44,4 +44,6 @@ public class Semester {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semester")
     private Set<Training> training = new HashSet<Training>();
     
+    private Integer preparationRing;
+    
 }

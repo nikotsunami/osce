@@ -62,4 +62,7 @@ public class OsMaConstant {
 				public static String MAIL_SUBJECT = "Invitaion from OSCE";
 				
 				//Module 9 End
+				
+				//public static String DEFAULT_IMPORT_EOSCE_PATH = "usr/oscemanager/eOSCE/import/";
+				public static String DEFAULT_IMPORT_EOSCE_PATH = "C:\\oscemanager\\eOSCE\\imporst\\";
 }
