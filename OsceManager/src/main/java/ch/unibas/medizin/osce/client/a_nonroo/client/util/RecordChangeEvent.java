@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.shared.EventBus;

@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.OsceDay;
@@ -30,6 +29,7 @@ import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.ItemDefination;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.util;
 
 import com.allen_sauer.gwt.log.client.Log;

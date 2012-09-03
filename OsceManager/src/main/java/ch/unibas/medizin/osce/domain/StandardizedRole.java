@@ -13,7 +13,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.domain.RoleTopic;
 
 import javax.persistence.CascadeType;
@@ -24,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import javax.persistence.Enumerated;
