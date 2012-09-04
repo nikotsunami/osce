@@ -62,6 +62,9 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		addAnamnesis.setText(constants.anamnesisValues());
 		addLanguage.setText(constants.languages());
 		addNationality.setText(constants.nationality());
+		addProfession.setText(constants.profession());
+		addWorkPermission.setText(constants.workPermission());
+		addMaritialStatus.setText(constants.maritalStatus());
 	}
 
 	@UiField
@@ -74,6 +77,13 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
     IconButton addLanguage;
     @UiField
     IconButton addNationality;
+    
+    @UiField
+    IconButton addProfession;
+    @UiField
+    IconButton addWorkPermission;
+    @UiField
+    IconButton addMaritialStatus;
 
 	@UiHandler("addBasicData")
 	void onAddBasicDataClick(ClickEvent e) {
@@ -98,6 +108,21 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	@UiHandler("addNationality")
 	void onAddNationalityClick(ClickEvent e) {
 		delegate.addNationalityCriteriaClicked(addNationality);
+	}
+	
+	@UiHandler("addProfession")
+	void onAddProfessionClick(ClickEvent e) {
+		delegate.addPorfessionClicked(addProfession);
+	}
+	
+	@UiHandler("addWorkPermission")
+	void onAddWorkPermissionClick(ClickEvent e) {
+		delegate.addWorkPermissionClicked(addWorkPermission);
+	}
+	
+	@UiHandler("addMaritialStatus")
+	void onAddMaritialStatusClick(ClickEvent e) {
+		delegate.addMaritialStatusClicked(addMaritialStatus);
 	}
 	
 	@UiField (provided = true)

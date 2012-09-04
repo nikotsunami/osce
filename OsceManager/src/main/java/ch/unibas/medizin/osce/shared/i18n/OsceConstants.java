@@ -692,5 +692,64 @@ public interface OsceConstants extends Constants {
 
 	public String yes();
 
-}
+	// eosce
+	public String importeosce();
 
+	public String importBtn();
+
+	public String processed();
+
+	public String unprocessed();
+
+	public String processedfiles();
+
+	public String unprocessedfiles();
+
+	public String importprocessmsg();
+
+	public String eosceerrormsg();
+
+	public String confirmation();
+
+	public String unprocessedmsg();
+
+	public String fetcherrormsg();
+
+	public String importerror();
+
+	public String importsuccess();
+
+	public String processedmsg();
+
+	public String delerror();
+
+	public String delsuccess();
+
+	// eosce
+
+	// Module : 15[
+	public String bellScheduleUpload();
+
+	public String bellScheduleExport();
+
+	public String plusTime();
+
+	public String minusTime();
+
+	public String bellSchedule();
+
+	public String moveTime();
+
+	public String minute();
+
+	public String dateHeader();
+
+	public String timeHeader();
+
+	public String toneHeader();
+
+	public String validateMinute();
+
+	public String validatePlusMinus();
+	// ]Module : 15
+}

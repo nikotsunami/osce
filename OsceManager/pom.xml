@@ -166,6 +166,21 @@
 			<version>3.2-FINAL</version>
 		</dependency>
 		
+		<!--  Dependency for Amazon S3 -->
+    	  
+        <dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.0.002</version>
+		</dependency>
+		
+		<!--  Dependency for SQLite Databse -->
+		<dependency>
+   			<groupId>org.xerial</groupId>
+   			<artifactId>sqlite-jdbc</artifactId>
+   			<version>3.6.20</version>
+		</dependency> 
+		
 		<!-- Dependency for Unitime CPSolver -->
 		<dependency>
 			<groupId>org.unitime</groupId>
@@ -770,7 +785,7 @@
                 <executions>
                     <execution>
 			<configuration>
-				<extraJvmArgs>-Xmx12G</extraJvmArgs>
+				<extraJvmArgs>-Xmx12g</extraJvmArgs>
 			</configuration>
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>

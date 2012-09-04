@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
@@ -158,7 +159,7 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 
 		if (place instanceof BellSchedulePlace) {
 			Log.debug("is BellSchedulePlace");
-			return new BellScheduleActivity(requests, placeController);
+			return new BellScheduleActivity(requests, placeController, (BellSchedulePlace) place);
 		}
 
 		if (place instanceof RolePlace) {
@@ -203,6 +204,14 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new ImportObjectiveViewActivity(requests, placeController);
 		}
 				//by learning objective
+		
+		//by eosce
+		if (place instanceof ImporteOSCEPlace)
+		{
+			Log.info("is ImporteOSCEPlace");
+			return new ImporteOSCEActivity(requests, placeController);
+		}
+				//by eosce
 
 		return null;
 	}

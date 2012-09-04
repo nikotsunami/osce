@@ -1,10 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.transaction.config.TxNamespaceHandler;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
@@ -16,16 +12,17 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -40,8 +37,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopu
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
-
-
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterRequest;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -56,13 +51,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -90,7 +82,7 @@ public class OsMaMainNav extends Composite {
 					@Override
 					public void onEventReceived(
 							ApplicationLoadingScreenEvent event) {
-						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+//						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
 						event.display();
 					}
 				});
@@ -156,8 +148,8 @@ public class OsMaMainNav extends Composite {
 		roleAssignment.setText(constants.roleAssignments());
 		//By Spec]
 		
-		labelSemester.setText(constants.semester() + ":");
-		osces.setText(constants.manageOsces());
+	//	labelSemester.setText(constants.semester() + ":");
+	//	osces.setText(constants.manageOsces());
 		circuit.setText(constants.circuit());
 		students.setText(constants.students());
 		examinationSchedule.setText(constants.examinationSchedule());
@@ -168,6 +160,8 @@ public class OsMaMainNav extends Composite {
 		roles.setText(constants.roles());
 		
 		importObjective.setText(constants.importObjective());
+		
+		importeOSCE.setText(constants.importeosce());
 		
 		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
@@ -334,6 +328,10 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor importObjective;
 	
+	//eosce
+	@UiField
+	Anchor importeOSCE;
+	
 	/* commented by spec
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
@@ -347,6 +345,12 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor roleAssignments;			// Rollenzuweisung
 	*/
+	
+	@UiHandler("importeOSCE")
+	void importeOSCEClicked(ClickEvent event)
+	{
+		placeController.goTo(new ImporteOSCEPlace("ImporteOSCEPlace"));
+	}
 	
 	//learning objective
 	@UiHandler("importObjective")
@@ -523,7 +527,9 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("bellSchedule")
 	void bellScheduleClicked(ClickEvent event) {
-		placeController.goTo(new BellSchedulePlace("BellSchedulePlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		placeController.goTo(new BellSchedulePlace("BellSchedulePlace",handlerManager, lstSemester.getValue()));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 	
 	@UiHandler("roles")
@@ -782,7 +788,8 @@ public class OsMaMainNav extends Composite {
 						}						
 			});
 			Log.info("~Semester Proxy Find: " + semesterProxy.getCalYear());
-			lstSemester.setValue(semesterProxy);			
+			lstSemester.setValue(semesterProxy);
+			handlerManager.fireEvent(new SelectChangeEvent(lstSemester.getValue()));			
 		}
 		
 	// G: SPEC END =

@@ -1,6 +1,9 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -629,6 +632,8 @@ public class StandardizedPatient {
             String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria)
     {
     	Predicate predicate = null;   	
+    	
+    	Predicate simplePredicate = null;
 		
 		List<Predicate> simSearchPredicates = new ArrayList<Predicate>();
 		
@@ -650,16 +655,41 @@ public class StandardizedPatient {
     	{
     		if (searchWord == "")
         		searchWord = "*";       
-        	
-    		
+        
     		//Simple Search
-    		for (int i=0; i<searchThrough.size(); i++)
+    		String str[] = searchWord.split(" ");
+    		
+    		for (int j=0; j<str.length; j++)
     		{
-    			field = from.get(searchThrough.get(i));
-    			predicate = criteriaBuilder.disjunction();
-    			predicate = criteriaBuilder.like(field, "%" + searchWord + "%");
-    			simSearchPredicates.add(predicate);
-    		}		
+    			System.out.println("SEARCH WORD : " + str[j]);
+    			
+    			for (int i=0; i<searchThrough.size(); i++)
+        		{
+        			field = from.get(searchThrough.get(i));
+        			predicate = criteriaBuilder.disjunction();
+        			
+        			if (searchThrough.get(i).equals("descriptions"))
+        			{
+        				field = from.get(searchThrough.get(i)).get("description");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else
+        			{
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			
+        			simSearchPredicates.add(predicate);
+        		}		
+    			
+    			if (simplePredicate == null)
+    				simplePredicate = criteriaBuilder.and(criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()])));
+    			else
+    				simplePredicate = criteriaBuilder.and(simplePredicate, criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()])));
+    			
+    			simSearchPredicates.clear();
+    		}
+    		
+    		
     		
     		if (order == Sorting.ASC)
     			select.orderBy(criteriaBuilder.asc(from.get(sortColumn)));
@@ -683,16 +713,16 @@ public class StandardizedPatient {
         		
         		if (!searchWord.equals(""))
         		{
-        			Predicate p = criteriaBuilder.disjunction();
-        			p = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+        			//Predicate p = criteriaBuilder.disjunction();
+        			//p = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
   			        			
         			if (bindtype == String.valueOf(BindType.OR))
         			{				
-        				advPredicate = criteriaBuilder.or(p);
+        				advPredicate = criteriaBuilder.or(simplePredicate);
         			}
         			else if (bindtype == String.valueOf(BindType.AND))
         			{
-        				advPredicate = criteriaBuilder.and(p);
+        				advPredicate = criteriaBuilder.and(simplePredicate);
         			}
         			Log.info("~~INSIDE IF ");
         		}       		
@@ -819,6 +849,67 @@ public class StandardizedPatient {
     					else if (searchCr.getComparation() == Comparison.LESS)
     						predicate1 = criteriaBuilder.lt(temp, Integer.parseInt(val));					
     				}
+    				else if (searchCr.getField() == PossibleFields.GENDER)
+    				{
+    					Log.info("~~INSIDE GENDER");
+    					val = searchCr.getValue();
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    					{
+    						if (val.trim().toLowerCase().equals("male"))
+    							predicate1 = criteriaBuilder.equal(from.get("gender"), Gender.MALE);
+    						else if (val.trim().toLowerCase().equals("female"))
+    							predicate1 = criteriaBuilder.equal(from.get("gender"), Gender.FEMALE);
+    					}
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    					{
+    						if (val.trim().toLowerCase().equals("male"))
+    							predicate1 = criteriaBuilder.notEqual(from.get("gender"), Gender.MALE);
+    						else if (val.trim().toLowerCase().equals("female"))
+    							predicate1 = criteriaBuilder.notEqual(from.get("gender"), Gender.FEMALE);
+    					}
+    				}
+    				else if (searchCr.getField() == PossibleFields.AGE)
+    				{
+    					Log.info("~~INSIDE AGE");
+    					val = searchCr.getValue();
+    					
+    					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    					Calendar cal = Calendar.getInstance();
+    					//cal.set(1985, 02, 25);
+    					
+    					System.out.println("cal before : " + cal.getTime());
+    					cal.add(Calendar.YEAR, -(Integer.parseInt(val)));
+    					System.out.println("cal after : " + cal.getTime());
+    					
+    					Date dt = new Date();
+    					try{
+    						dt = dateFormat.parse(dateFormat.format(cal.getTime()));
+    						dt.setHours(0);
+    						dt.setMinutes(0);
+    						dt.setSeconds(0);     						
+    					}catch(Exception e){
+    						e.printStackTrace();
+    					}
+    					
+    					System.out.println("DATE : " + dt);
+    					
+    					Expression<Date> date = from.get("birthday");
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(date, dt);
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(date, dt);
+    					else if (searchCr.getComparation() == Comparison.LESS)
+    					{
+    						//bcoz we compare date after subtracting age from current date
+    						predicate1 = criteriaBuilder.greaterThan(date, dt);
+    					}
+    					else if (searchCr.getComparation() == Comparison.MORE)
+    					{
+    						//bcoz we compare date after subtracting age from current date
+    						predicate1 = criteriaBuilder.lessThan(date, dt);
+    					}
+    				}
     				else if (searchCr.getField() == PossibleFields.BMI)
     				{
     					Log.info("~~INSIDE BMI");
@@ -841,6 +932,37 @@ public class StandardizedPatient {
     						predicate1 = criteriaBuilder.lt(temp, Integer.parseInt(val));
     									
     				}
+    				else if (searchCr.getField() == PossibleFields.PROFESSION)
+    				{
+    					Log.info("~~INSIDE PROFESSION");
+    					val = String.valueOf(searchCr.getObjectId());
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(from.get("profession"), Integer.parseInt(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(from.get("profession"), Integer.parseInt(val));
+    						
+    				}
+    				else if (searchCr.getField() == PossibleFields.WORKPERMISSION)
+    				{
+    					Log.info("~~INSIDE WORKPERMISSION");
+    					val = searchCr.getValue();
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(from.get("workPermission"), WorkPermission.valueOf(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(from.get("workPermission"), WorkPermission.valueOf(val));
+    				}
+    				else if (searchCr.getField() == PossibleFields.MARITIALSTATUS)
+    				{
+    					Log.info("~~INSIDE MARITIALSTATUS");
+    					val = searchCr.getValue();
+    					
+    					if (searchCr.getComparation() == Comparison.EQUALS)
+    						predicate1 = criteriaBuilder.equal(from.get("maritalStatus"), MaritalStatus.valueOf(val));
+    					else if (searchCr.getComparation() == Comparison.NOT_EQUALS)
+    						predicate1 = criteriaBuilder.notEqual(from.get("maritalStatus"), MaritalStatus.valueOf(val));
+    				}
     				
     				if (searchCr.getBindType() == BindType.AND)
     				{
@@ -862,17 +984,17 @@ public class StandardizedPatient {
         	}
         	else if (searchCriteria.size() == 0)
         	{
-        		Predicate r = criteriaBuilder.disjunction();
-    			r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
-        		criteriaQuery.where(r);
+        		//Predicate r = criteriaBuilder.disjunction();
+    			//r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+        		criteriaQuery.where(simplePredicate);
         		//criteriaQuery.select(from);
         	}
         	//Advance Search
         	else
         	{
-        		Predicate r = criteriaBuilder.disjunction();
-    			r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
-        		criteriaQuery.where(r);
+        		//Predicate r = criteriaBuilder.disjunction();
+    			//r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+        		criteriaQuery.where(simplePredicate);
         	}
     		
     	

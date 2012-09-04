@@ -1,12 +1,52 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+
 	<ui:style src="../styles.css" />
-	
-	<g:HTMLPanel>
-		<h1>Klingelplan - MainView</h1>
-	</g:HTMLPanel>
+		
+	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
+		<g:west size="1230">
+			<g:ScrollPanel>
+				<g:HTMLPanel>
+
+					<div class="{style.controls} {style.controlsleft}">
+						<g:Label ui:field="lblTitle" addStyleNames="{style.label}"></g:Label>
+						<b:SimplePager display="{table}" ui:field="pager" />
+					</div>
+
+					<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
+
+					<g:VerticalPanel>
+						<g:Label ui:field="lblMoveTime" addStyleNames="{style.label}" />
+
+						<g:HorizontalPanel spacing="6">
+
+							<g:RadioButton name="time" ui:field="plusTime"
+								addStyleNames="{style.label}" />
+
+							<g:RadioButton name="time" ui:field="minusTime"
+								addStyleNames="{style.label}" />
+
+							<g:IntegerBox ui:field="timeBox" />
+							<g:Label ui:field="lblMin" addStyleNames="{style.label}"></g:Label>
+
+							<g:Button ui:field="okBtn" />
+							<g:Label ui:field="lblValidator" />
+						</g:HorizontalPanel>
+
+						<g:HorizontalPanel spacing="4">
+							<g:Button ui:field="bellScheduleUpload" />
+							<g:Button ui:field="bellScheduleExport" />
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:HTMLPanel>
+			</g:ScrollPanel>
+		</g:west>
+		<g:center>
+			<g:ScrollPanel>
+				<g:SimplePanel></g:SimplePanel>
+			</g:ScrollPanel>
+		</g:center>
+	</g:SplitLayoutPanel>
 </ui:UiBinder> 

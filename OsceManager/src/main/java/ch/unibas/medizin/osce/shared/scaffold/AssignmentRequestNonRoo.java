@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
-import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
@@ -11,6 +10,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
+import ch.unibas.medizin.osce.shared.TimeBell;
 
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
@@ -71,5 +71,18 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	    abstract Request<List<DoctorProxy>> findAssignedExaminer(Long semesterId);
 	    
 		//Module 9
+
+	// Module : 15
+	public abstract Request<List<AssignmentProxy>> getAssignmentsBySemester(
+			Long semesterId);
+
+	public abstract Request<Integer> getCountAssignmentsBySemester(
+			Long semesterId);
+
+	public abstract Request<String> getQwtBellSchedule(// List<AssignmentProxy>
+														// assignmentProxies,
+			Long semesterId, Integer time, TimeBell isPlusTime);
+
+	// Module : 15
 
 }

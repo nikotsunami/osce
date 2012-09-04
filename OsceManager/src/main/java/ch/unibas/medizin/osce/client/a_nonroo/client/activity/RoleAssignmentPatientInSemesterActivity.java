@@ -164,7 +164,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					@Override
 					public void onEventReceived(
 							ApplicationLoadingScreenEvent event) {
-						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
+//						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
 						event.display();
 					}
 				});

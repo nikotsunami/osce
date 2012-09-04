@@ -266,4 +266,14 @@ public class OsceDay {
 
 	}
 	//Module : 6 END
+
+	// Module : 15
+	public static List<OsceDay> findAllOsceDaysOrderByDate() {
+		return entityManager().createQuery(
+				"SELECT o FROM OsceDay o order by o.osceDate asc",
+				OsceDay.class).getResultList();
+	}
+
+	// Module : 15
+
 }
