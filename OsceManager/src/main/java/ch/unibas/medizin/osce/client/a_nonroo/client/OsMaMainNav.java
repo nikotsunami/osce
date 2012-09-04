@@ -149,7 +149,7 @@ public class OsMaMainNav extends Composite {
 		//By Spec]
 		
 	//	labelSemester.setText(constants.semester() + ":");
-	//	osces.setText(constants.manageOsces());
+		osces.setText(constants.manageOsces());
 		circuit.setText(constants.circuit());
 		students.setText(constants.students());
 		examinationSchedule.setText(constants.examinationSchedule());

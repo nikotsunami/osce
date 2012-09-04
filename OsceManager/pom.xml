@@ -596,6 +596,16 @@
         </dependency>
     </dependencies>
     <build>
+    	<!--  for server side i18n -->
+    	<resources>
+    		<resource>
+    			<directory>src/main/java/ch/unibas/medizin/osce/shared/i18n</directory>
+    			<targetPath>ch/unibas/medizin/osce/shared/i18n</targetPath>
+    			<includes>
+    				<include>*.properties</include>
+    			</includes>
+    		</resource>
+    	</resources>
          <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

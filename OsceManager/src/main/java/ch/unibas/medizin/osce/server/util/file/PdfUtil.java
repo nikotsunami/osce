@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
@@ -17,8 +15,10 @@ import ch.unibas.medizin.osce.domain.Scar;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.StandardizedPatientDetailsConstants;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
-import com.allen_sauer.gwt.log.client.Log;
+import org.apache.log4j.Logger;
 
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -45,6 +45,7 @@ import com.mattbertolini.hermes.Hermes;
 
 public class PdfUtil {
 	private static final float titleTableSpacing = 0.0f;
+    private static Logger log = Logger.getLogger(StandardizedPatient.class);
 
 	private Font defaultFont = new Font(Font.FontFamily.HELVETICA, 10);
 	private Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -75,7 +76,7 @@ public class PdfUtil {
 			constants = Hermes.get(OsceConstants.class, locale.toString());
 			enumConstants = Hermes.get(OsceConstantsWithLookup.class, locale.toString());
 		} catch (IOException e) {
-			Log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
+			log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
 		}
 		
 	}
@@ -121,7 +122,7 @@ public class PdfUtil {
 			signPara.setAlignment(Element.ALIGN_LEFT);
 			document.add(signPara);
 		} catch (DocumentException e) {
-			Log.error("In addSignature of Pdf Creation:" + e.getMessage());
+			log.error("In addSignature of Pdf Creation:" + e.getMessage());
 		}
 
 	}
@@ -149,7 +150,7 @@ public class PdfUtil {
 		try {
 			document.add(preface);
 		} catch (Exception e) {
-			Log.error("In addStatndadizedPatientImage: " + e.getMessage());
+			log.error("In addStatndadizedPatientImage: " + e.getMessage());
 		}
 	}
 
@@ -164,7 +165,7 @@ public class PdfUtil {
 			float width = image.getWidth();
 			float height = image.getHeight();
 
-			Log.debug("PdfUtil - Image width: " + width + ", Image height: "
+			log.debug("PdfUtil - Image width: " + width + ", Image height: "
 					+ height);
 			image.scaleAbsolute(30f, 30f);
 			// 523 * 0.4, ~7 lines of text
@@ -172,7 +173,7 @@ public class PdfUtil {
 			image.setAlignment(Element.ALIGN_LEFT);
 			return image;
 		} catch (Exception e) {
-			Log.error("In loadImage( \"" + path + "\"): " + e.getMessage());
+			log.error("In loadImage( \"" + path + "\"): " + e.getMessage());
 			return null;
 		}
 	}
@@ -189,7 +190,7 @@ public class PdfUtil {
 		try {
 			document.add(contactDetails);
 		} catch (DocumentException e) {
-			Log.error("in PdfUtil.addContactDetails(): " + e.getMessage());
+			log.error("in PdfUtil.addContactDetails(): " + e.getMessage());
 		}
 	}
 
@@ -204,7 +205,7 @@ public class PdfUtil {
 		try {
 			document.add(details);
 		} catch (DocumentException e) {
-			Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+			log.error("in PdfUtil.addDetails(): " + e.getMessage());
 		}
 	}
 
@@ -219,7 +220,7 @@ public class PdfUtil {
 		try {
 			document.add(bankAccount);
 		} catch (DocumentException e) {
-			Log.error("in PdfUtil.addBankAccount(): " + e.getMessage());
+			log.error("in PdfUtil.addBankAccount(): " + e.getMessage());
 		}
 	}
 
@@ -234,7 +235,7 @@ public class PdfUtil {
 		try {
 			document.add(traits);
 		} catch (DocumentException e) {
-			Log.error("in PdfUtil.addTraits(): " + e.getMessage());
+			log.error("in PdfUtil.addTraits(): " + e.getMessage());
 		}
 	}
 
@@ -263,7 +264,7 @@ public class PdfUtil {
 		try {
 			document.add(anamnesis);
 		} catch (DocumentException e) {
-			Log.error("in PdfUtil.addAnamnesis(): " + e.getMessage());
+			log.error("in PdfUtil.addAnamnesis(): " + e.getMessage());
 		}
 	}
 
@@ -455,10 +456,10 @@ public class PdfUtil {
 					writer.addAnnotation(field);
 				}
 			} catch (IOException e) {
-				Log.error("in PdfUtil.CheckBoxCellEvent.cellLayout() : "
+				log.error("in PdfUtil.CheckBoxCellEvent.cellLayout() : "
 						+ e.getMessage());
 			} catch (DocumentException e) {
-				Log.error("in PdfUtil.CheckBoxCellEvent.cellLayout() : "
+				log.error("in PdfUtil.CheckBoxCellEvent.cellLayout() : "
 						+ e.getMessage());
 			}
 		}
@@ -712,7 +713,7 @@ public class PdfUtil {
 			return table;
 
 		} catch (Exception e) {
-			Log.error("In createTable for PDf standardized patient : "
+			log.error("In createTable for PDf standardized patient : "
 					+ e.getMessage());
 			return null;
 		}

@@ -502,7 +502,7 @@ public class StandardizedPatient {
 			PdfUtil pdfUtil = new PdfUtil();
 			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
 			fileName = standardizedPatient.name + "_"
-					+ standardizedPatient.preName + "_ "
+					+ standardizedPatient.preName + "_"
 					+ OsMaConstant.FILE_NAME_PDF_FORMAT;
 			pdfUtil.writeFile(fileName, standardizedPatient);
 		} catch (Exception e) {
