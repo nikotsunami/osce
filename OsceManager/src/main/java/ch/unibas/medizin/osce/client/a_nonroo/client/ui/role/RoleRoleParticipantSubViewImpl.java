@@ -103,11 +103,12 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		authorTable = new CellTable<RoleParticipantProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		reviewerTable = new CellTable<RoleParticipantProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
+		
+		initWidget(uiBinder.createAndBindUi(this));
+		initTable();
+		
 		btnAddReviewer.setText(constants.addReviewer());
 		btnAddAuthor.setText(constants.addAuthor());
-		
-		initWidget(uiBinder.createAndBindUi(this));	
-		initTable();
 		
 		// Highlight onViolation
 		roleParticipantMap=new HashMap<String, Widget>();
