@@ -751,36 +751,49 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	@Override
 	public void sendClicked(){
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-		dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(),locale,new AsyncCallback<List<String>>(){
+		if(standardizedPatientProxy!=null){
+			if(standardizedPatientProxy.getEmail()!=null && !standardizedPatientProxy.getEmail().equals("")){
+				//if(standardizedPatientProxy.getSocialInsuranceNo()!=null && !standardizedPatientProxy.getSocialInsuranceNo().equals("")){
+					dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(),locale,new AsyncCallback<List<String>>(){
 
-			@Override
-			public void onFailure(Throwable caught) {
-				try {
-		          throw caught;
-		        } catch (DMZSyncException e) {
-		        	Window.alert(messageLookup.serverReturndError()+ messageLookup.getString(e.getType())+e.getMessage());
-		        } catch (Throwable e) {
-		        	Window.alert(messageLookup.serverReturndError()+ e.getMessage());
-			    }
-			}
+						@Override
+						public void onFailure(Throwable caught) {
+							try {
+					          throw caught;
+					        } catch (DMZSyncException e) {
+					        	Window.alert(messageLookup.serverReturndError()+ messageLookup.getString(e.getType())+e.getMessage());
+					        } catch (Throwable e) {
+					        	Window.alert(messageLookup.serverReturndError()+ e.getMessage());
+						    }
+						}
 
-			@Override
-			public void onSuccess(List<String> result) {
-				if(result.size()<=0){
-					Window.alert(messageLookup.exportSuccessful());
-					return;
-				}
+						@Override
+						public void onSuccess(List<String> result) {
+						
+							if(result.size()<=0){
+								Window.alert(messageLookup.exportSuccessful());
+								return;
+							}
+							
+							SimpleShowErrorDialogBox dialogBox = null;
+							if(dialogBox == null){
+								String dialogTitle = messageLookup.getString("err_DialogBoxTitle");
+								String dialogCloseButton = messageLookup.getString("err_DialogBoxCloseButton");
+								dialogBox = new SimpleShowErrorDialogBox(dialogTitle,result,dialogCloseButton);
+							}
+							dialogBox.show();
+						}
+						
+					});	
 				
-				SimpleShowErrorDialogBox dialogBox = null;
-				if(dialogBox == null){
-					String dialogTitle = messageLookup.getString("err_DialogBoxTitle");
-					String dialogCloseButton = messageLookup.getString("err_DialogBoxCloseButton");
-					dialogBox = new SimpleShowErrorDialogBox(dialogTitle,result,dialogCloseButton);
-				}
-				dialogBox.show();
+			}else{
+				Window.alert("the email is null");
 			}
 			
-		});	
+			
+		}
+		
+	
 		
 	}
 	
