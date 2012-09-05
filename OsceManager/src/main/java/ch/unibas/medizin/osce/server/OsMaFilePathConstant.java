@@ -35,6 +35,36 @@ public class OsMaFilePathConstant {
 		//public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
 		public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "usr/oscemanager/eosce/export/unprocessed/";
 		//public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
+		
+		//Module 8 (Assessment Plan)[
+		
+				//image path under webapps
+				public static String appImageUploadDirectory="/osMaEntry/gwt/unibas/sp/images";
+				
+				//path of outside of webapps for parmanent storage of images
+				//linux
+				public static String localImageUploadDirectory="usr/oscemanager/sp/images/";				
+				//windows
+				//public static String localImageUploadDirectory="d://sp//images/";
+				
+				
+				public static String realImagePath="";
+				//public static String imagesrcPath="/osMaEntry/gwt/unibas/sp/images/";
+				
+				//video path under webapps
+				public static String appVideoUploadDirectory="/osMaEntry/gwt/unibas/sp/videos";
+				
+				//path of outside of webapps for parmanent storage of images
+				//linux
+				public static String localVideoUploadDirectory="usr/oscemanager/sp/images/";
+				//windows
+				//public static String localVideoUploadDirectory="d://sp//videos/";
+				
+				public static String realVideoPath="";//
+				//public static String videosrcPath="/osMaEntry/gwt/unibas/sp/videos/";
+				
+				
+				//Module 8]
 	
 
 }

@@ -1,34 +1,19 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientEditViewImpl.Binder;
-import ch.unibas.medizin.osce.client.managed.request.MediaContentProxy;
-import ch.unibas.medizin.osce.client.managed.request.MediaContentTypeProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.editor.client.Editor;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 
 import fr.hd3d.html5.video.client.VideoSource;
 import fr.hd3d.html5.video.client.VideoWidget;
@@ -43,16 +28,34 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	//file upload
-	@UiField
+	/*@UiField
 	FileUpload fileUpload;
 	@UiField
 	FormPanel uploadFormPanel;
+	
+	*/
+	
 	@UiField
 	Image uploadMessage;
-	@UiField
+	
+	
+	
+	/*@UiField
 	public TextBox id;
 	@UiField
-	public TextBox name;
+	public TextBox name;*/
+	
+	private StandardizedPatientProxy standardizedPatientProxy;
+	
+	public StandardizedPatientProxy getStandardizedPatientProxy() {
+		return standardizedPatientProxy;
+	}
+
+	public void setStandardizedPatientProxy(
+			StandardizedPatientProxy standardizedPatientProxy) {
+		this.standardizedPatientProxy = standardizedPatientProxy;
+	}
+
 	
 	VideoWidget videoPlayer=null;
 	//spec video upload
@@ -67,7 +70,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 
 	
 	//file upload
-		@UiField
+		/*@UiField
 		FileUpload videoFileUpload;
 		@UiField
 		FormPanel videoUploadFormPanel;
@@ -76,7 +79,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		@UiField
 		public TextBox vid;
 		@UiField
-		public TextBox vname;
+		public TextBox vname;*/
 		
 		@UiField
 		public HorizontalPanel videoPanel;
@@ -84,6 +87,12 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	
 	//end file upload
 	private Delegate delegate;
+	
+	public Delegate getDelegate() {
+		return delegate;
+	}
+
+
 	private Presenter presenter;
 
 	/**
@@ -91,6 +100,8 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	 */
 	public StandardizedPatientMediaSubViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+
+	/*	
 		//spec start
 		id.setVisible(false);
 		name.setVisible(false);
@@ -187,7 +198,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		
 		vname.setName("vname");
 		
-		
+		*/
 	   	 //spec
 	}
 	
@@ -209,13 +220,22 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 
 	@Override
 	public void setMediaContent(String description) {
-		uploadMessage.setUrl(description);
+		
+		if(description==null || description.equals(""))
+			return;
+	
+		uploadMessage.setUrl(description + "?date=" + new Date().getTime());
 		int height = uploadMessage.getHeight();
 		int width = uploadMessage.getWidth();
 		double ratio = (double) width/height;
 		
 		Log.info("width, height, ratio: " + width + ", " + height + ", " + ratio);
 		
+		if(height==0)
+		{
+			uploadMessage.setHeight("100px");
+			uploadMessage.setWidth("93px");
+		}
 		if (height > 100) {
 			height = 100;
 			uploadMessage.setHeight("" + height + "px");
@@ -235,11 +255,16 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	@Override 
 	public void setVideoMediaContent(String description) {
 		//spec display video
-		if(description == null)
+		if(description == null || description.equals(""))
 			return;
+		 if(videoPlayer == null)
 		 videoPlayer = new VideoWidget(true, true, "");
 	        List<VideoSource> sources = new ArrayList<VideoSource>();
 	      
+	        Log.info("setVideoMediaContent Video Source path" +description);
+	        
+	        
+	        
 	        sources.add(new VideoSource(description));
 	        videoPlayer.setSources(sources);
 	        videoPlayer.setPixelSize(100, 120);

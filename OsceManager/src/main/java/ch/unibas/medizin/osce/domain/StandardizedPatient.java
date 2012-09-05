@@ -40,6 +40,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
+import ch.unibas.medizin.osce.server.util.file.FileUtil;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.BindType;
@@ -1017,7 +1018,17 @@ public class StandardizedPatient {
         return result;    	    
     }
     
-	
+    //SPEC[
+    public static Boolean copyImageAndVideo(String imagePath,String videoPath)
+    {
+    	if(imagePath!=null || imagePath!="")
+    		FileUtil.copyImageFile(imagePath);
+    	if(videoPath!=null || videoPath !="")
+    		FileUtil.copyvideoFile(videoPath);
+    	
+    	return true;
+    }
+    //SPEC]
    
  // E Module10 Create plans
     

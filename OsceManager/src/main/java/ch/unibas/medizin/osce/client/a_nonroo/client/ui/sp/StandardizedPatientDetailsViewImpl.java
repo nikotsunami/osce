@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -67,6 +68,15 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiField
 	SpanElement anamnesisPanelTitle;
 	
+	@UiField
+	IconButton imageUpload;
+	
+	@UiField 
+	IconButton videoUpload;
+	
+	UploadPopupViewImpl uploadPopUpView;
+	
+	UploadPopupViewImpl videoUploadPopUpView;
 	
 	//ScrolledTab Changes start
 
@@ -543,6 +553,49 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@Override
 	public void setSelectedDetailsTab(int tab) {
 		patientPanel.selectTab(tab);
+		
+	}
+	
+	@UiHandler("imageUpload")
+	public void imageUploadClicked(ClickEvent event)
+	{
+		Log.info("imageUpload Clicked");
+		
+		createUploadPopUp();
+		
+		
+	}
+	public void createUploadPopUp()
+	{
+		if(uploadPopUpView==null)
+		{
+			uploadPopUpView=new UploadPopupViewImpl();
+			uploadPopUpView.setAnimationEnabled(true);
+			RootPanel.get().add(uploadPopUpView);
+			uploadPopUpView.setPopupPosition(imageUpload.getAbsoluteLeft()-50, imageUpload.getAbsoluteTop()-90);
+		}
+		uploadPopUpView.id.setValue(this.getValue().getId().toString());
+		uploadPopUpView.name.setValue(this.getValue().getName());
+		uploadPopUpView.setStandardizedPatientMediaSubViewImpl(this.getStandardizedPatientMediaSubViewImpl());
+		
+		uploadPopUpView.show();
+		
+	}
+	@UiHandler("videoUpload")
+	public void videoUploadClicked(ClickEvent event)
+	{
+		if(videoUploadPopUpView==null)
+		{
+			videoUploadPopUpView=new UploadPopupViewImpl(true);
+			videoUploadPopUpView.setAnimationEnabled(true);
+			RootPanel.get().add(videoUploadPopUpView);
+			videoUploadPopUpView.setPopupPosition(imageUpload.getAbsoluteLeft()-5, imageUpload.getAbsoluteTop()-90);
+		}
+		videoUploadPopUpView.id.setValue(this.getValue().getId().toString());
+		videoUploadPopUpView.name.setValue(this.getValue().getName());
+		videoUploadPopUpView.setStandardizedPatientMediaSubViewImpl(this.getStandardizedPatientMediaSubViewImpl());
+		
+		videoUploadPopUpView.show();
 		
 	}
 }

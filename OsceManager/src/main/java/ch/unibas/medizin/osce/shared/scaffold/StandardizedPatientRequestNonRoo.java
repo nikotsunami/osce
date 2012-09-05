@@ -46,4 +46,9 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 	// Module10 Create plans
 		abstract Request<List<StandardizedPatientProxy>> findPatientsByOsceId(long osceId);		
 		// E Module10 Create plans
+		
+		//SPEC[
+		
+        abstract Request<Boolean> copyImageAndVideo(String imagePath,String videoPath);
+         //SPEC]
 }

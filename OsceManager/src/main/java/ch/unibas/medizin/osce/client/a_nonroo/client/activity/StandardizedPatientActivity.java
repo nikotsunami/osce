@@ -92,10 +92,8 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class StandardizedPatientActivity extends AbstractActivity implements StandardizedPatientView.Presenter, StandardizedPatientView.Delegate,
 		StandartizedPatientAdvancedSearchSubView.Delegate, StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
-		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate,
-		//issue 
-		StandardizedPatientAdvancedSearchProfessionPopup.Delegate, StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,
-		StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate{
+		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate,StandardizedPatientAdvancedSearchProfessionPopup.Delegate
+		,StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate{
 
 	/** Holds the applications request factory */
 	private OsMaRequestFactory requests;
@@ -452,9 +450,60 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Shows the details place for a given StandardizedPatientProxy
 	 * @param StandardizedPatient the patient of whom details should be displayed
 	 */
-	protected void showDetails(StandardizedPatientProxy StandardizedPatient) {
-		Log.debug(StandardizedPatient.getName());
-		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), Operation.DETAILS));
+	protected void showDetails(StandardizedPatientProxy standardizedPatient) {
+		Log.debug(standardizedPatient.getName());
+		
+		//upload image[
+		copyImageAndVideo(standardizedPatient.getImmagePath(),standardizedPatient.getVideoPath(),standardizedPatient);
+		//upload image]
+		//goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
+	}
+	
+	private class CopyReceiver extends Receiver<Boolean>{
+		@Override
+		public void onSuccess(Boolean response) {
+			System.out.println("CopyReceiver :" + response);
+		}
+	}
+	
+	/*
+	 * By SPEC
+	 * 
+	 */
+	private void copyImageAndVideo(String imagePath,String videoPath,final StandardizedPatientProxy standardizedPatient)
+	{
+		/*copyService.copyImagesAndVideo(id, new AsyncCallback<Boolean>() {
+
+            public void onFailure(Throwable caught) {
+              Window.alert("RPC to sendEmail() failed.");
+            }
+
+         
+
+			@Override
+			public void onSuccess(Boolean result) {
+				// TODO Auto-generated method stub
+				System.out.println("Success");
+			}
+          });
+          */
+		if(imagePath ==null || videoPath == null || imagePath.equals("") || videoPath.equals(""))
+		{
+			goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
+			return;
+		}
+		requests.standardizedPatientRequestNonRoo().copyImageAndVideo(imagePath,videoPath).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				System.out.println("CopyReceiver :" + response);
+				
+				goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
+			}
+		});
+		
+		
+
 	}
 	
 	//By SPEC[Start

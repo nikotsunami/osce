@@ -776,4 +776,6 @@ public interface OsceConstants extends Constants {
 	
 	//nationality issue
 	public String nationaltiywarning();
+	
+	public String videoUpload();
 }
