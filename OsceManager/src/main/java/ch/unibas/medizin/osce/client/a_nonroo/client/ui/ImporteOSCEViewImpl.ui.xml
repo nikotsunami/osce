@@ -17,11 +17,15 @@
 			height:400px; 
 			width:320px;			
 		}
+		
+		.tabPanel{
+			margin-left: 20px;
+		}
 </ui:style>
-	<g:HTMLPanel>
+	<g:HTMLPanel addStyleNames="{style.tabPanel}" >
 		<g:HorizontalPanel>
-			<g:RadioButton ui:field="processed" name="status" checked="true">Processed</g:RadioButton>
-			<g:RadioButton ui:field="unprocessed" name="status">Unprocessed</g:RadioButton>
+			<g:RadioButton ui:field="processed" name="status" checked="true"></g:RadioButton>
+			<g:RadioButton ui:field="unprocessed" name="status"></g:RadioButton>
 		</g:HorizontalPanel>	
 		
 		<g:DisclosurePanel ui:field="disclouserPanelFlie" open="true" addStyleNames="{style.panelStyle}">

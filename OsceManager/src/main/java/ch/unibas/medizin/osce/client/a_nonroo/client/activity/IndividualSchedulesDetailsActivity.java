@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.PrintTemplatePopupViewIm
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -113,6 +114,8 @@ IndividualSchedulesDetailsView.Delegate
 			widget.setWidget(individualSchedulesDetailsView.asWidget());			
 			view.setDelegate(this);			
 			individualSchedulesDetailsView.setDelegate(this);	
+			
+			MenuClickEvent.register(requests.getEventBus(), (IndividualSchedulesDetailsViewImpl)view);
 			
 			ApplicationLoadingScreenEvent.initialCounter();
 			ApplicationLoadingScreenEvent.register(requests.getEventBus(),

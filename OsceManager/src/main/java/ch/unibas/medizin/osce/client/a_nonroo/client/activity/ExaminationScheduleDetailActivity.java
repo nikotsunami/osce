@@ -35,6 +35,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.StudentV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.StudentViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentRequest;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
@@ -129,6 +130,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		widget.setWidget(examinationScheduleDetailView.asWidget());
 		this.view=examinationScheduleDetailView;
 		
+		MenuClickEvent.register(requests.getEventBus(), (ExaminationScheduleDetailViewImpl)view);
 		
 		requests.find(place.getProxyId()).with("osce_days","osce_days.osceSequences","osce_days.osceSequences.courses","osce_days.osceSequences.oscePosts","osce_days.osceSequences.oscePosts.oscePostBlueprint","osce_days.osceSequences.oscePosts.standardizedRole","osce_days.osceSequences.oscePosts.standardizedRole.roleTopic").fire(new OSCEReceiver<Object>() {
 

@@ -3,9 +3,15 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	 <ui:style src="../../styles.css" />
+<ui:style src="../../styles.css" >
+.tabPanel{
+	margin-left: 20px;
+	width : 1155px;
+	height : 900px;
+}
+</ui:style>
 	
-	<g:HTMLPanel>
+	<g:HTMLPanel addStyleNames="{style.tabPanel}" >
 		<!-- h1>Postenlauf - MainView</h1-->
 		<!-- //ScrolledTab Changes start -->
 		<!-- <g:TabPanel ui:field="circuitTabPanel" width="100%">

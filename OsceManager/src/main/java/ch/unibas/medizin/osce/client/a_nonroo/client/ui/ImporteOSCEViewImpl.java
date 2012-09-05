@@ -56,6 +56,8 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	public ImporteOSCEViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		disclouserPanelFlie.addStyleName("schedulePanelStyle");
+		processed.setText(constants.processed());
+		unprocessed.setText(constants.unprocessed());
 		importButton.setText(constants.importBtn());
 		delButton.setText(constants.delete());
 		delButton.setEnabled(true);

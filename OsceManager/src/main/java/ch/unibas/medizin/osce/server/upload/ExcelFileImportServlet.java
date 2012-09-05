@@ -28,6 +28,7 @@ import ch.unibas.medizin.osce.domain.Skill;
 import ch.unibas.medizin.osce.domain.SkillHasAppliance;
 import ch.unibas.medizin.osce.domain.SkillLevel;
 import ch.unibas.medizin.osce.domain.Topic;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -38,7 +39,7 @@ public class ExcelFileImportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
 
-	 private static String appUploadDirectory="osMaEntry\\gwt\\unibas\\role\\images\\";
+	 private static String appUploadDirectory=OsMaFilePathConstant.EXCEL_FILEPATH;
 			
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {

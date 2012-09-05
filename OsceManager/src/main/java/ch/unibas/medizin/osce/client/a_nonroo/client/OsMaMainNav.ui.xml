@@ -2,12 +2,47 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+<ui:style src="styles.css" >
 
-	<ui:style src="styles.css" />
+.leftbar{
+	
+	padding: 0px 5px 3px 5px;
+	border-color: #AAAAAA;
+	border-style: solid; 
+	border-right-width: 0px;
+	border-top-width: 0px;
+	border-left-width: 0px;
+	border-bottom-width: 0px;
+}	
+
+.closeButton{
+	
+	float: right;
+	margin-right: 2px;
+}
+
+.headerLabel{
+	vertical-align: middle;
+	margin: 6px 0 0 12px;
+}
+
+</ui:style>
 
 	<g:HTMLPanel>
-		<g:DisclosurePanel ui:field="simPatDataPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header></g:header>
+	
+	<g:HorizontalPanel addStyleNames='{style.mainNavPanel}' >
+	
+		<g:DockPanel ui:field="dockPanel" addStyleNames='{style.leftbar}' >		
+		</g:DockPanel>
+		
+		<g:VerticalPanel ui:field="menuContainer">
+		<g:DisclosurePanel ui:field="simPatDataPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
+			<g:customHeader>
+				<g:HorizontalPanel>
+					<g:Label ui:field="simPatDataPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="simPatClose" ></s:IconButton>
+				</g:HorizontalPanel>
+			</g:customHeader>
 			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="people"></g:Anchor>
@@ -16,8 +51,13 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		
-		<g:DisclosurePanel ui:field="doctorDataPanel" open="false" addStyleNames='{style.mainNavPanel}'>
-			<g:header></g:header>
+		<g:DisclosurePanel ui:field="doctorDataPanel" width="182px" open="false" addStyleNames='{style.mainNavPanel}'>
+			<g:customHeader>
+				<g:HorizontalPanel>
+					<g:Label ui:field="doctorDataPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="doctorClose" />
+				</g:HorizontalPanel>
+			</g:customHeader>
 			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="clinics"></g:Anchor>
@@ -26,8 +66,13 @@
 		</g:DisclosurePanel>
 
 		<!-- By Spec Start -->
-		<g:DisclosurePanel ui:field="rolePanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header></g:header>
+		<g:DisclosurePanel ui:field="rolePanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
+			<g:customHeader>
+				<g:HorizontalPanel>
+					<g:Label ui:field="rolePanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="roleClose" />
+				</g:HorizontalPanel>
+			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="roles"></g:Anchor>
 				<g:Anchor ui:field="topicsAndSpec"></g:Anchor>
@@ -40,8 +85,13 @@
 		
 		
 		
-		<g:DisclosurePanel ui:field="examinationsPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header></g:header>
+		<g:DisclosurePanel ui:field="examinationsPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
+			<g:customHeader>
+				<g:HorizontalPanel>
+					<g:Label ui:field="examinationsPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="examinationsClose" />
+				</g:HorizontalPanel>
+			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 			<!-- G: SPEC START = -->						
 			<g:Label ui:field="labelSemester">Semester:</g:Label>				
@@ -63,16 +113,26 @@
 		</g:DisclosurePanel>
 	
                 <!-- module: 3  SPEC START = -->
-		<g:DisclosurePanel ui:field="roleAssignmentPanel" open="true" addStyleNames='{style.mainNavPanel}'>
-			<g:header></g:header>
+		<g:DisclosurePanel ui:field="roleAssignmentPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
+			<g:customHeader>
+				<g:HorizontalPanel>
+					<g:Label ui:field="roleAssignmentPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="roleAssignmentClose" />
+				</g:HorizontalPanel>
+			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="roleAssignment"></g:Anchor>				
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		<!-- module: 3  SPEC END = -->
 		
-		<g:DisclosurePanel ui:field="administrationPanel" open="false" addStyleNames='{style.mainNavPanel}'>
-			<g:header></g:header>
+		<g:DisclosurePanel ui:field="administrationPanel" width="182px" open="false" addStyleNames='{style.mainNavPanel}'>
+			<g:customHeader>
+				<g:HorizontalPanel>
+					<g:Label ui:field="administrationPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="administrationClose" />
+				</g:HorizontalPanel>
+			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="administrators"></g:Anchor>
 				<g:Anchor ui:field="nationalities"></g:Anchor>
@@ -94,6 +154,10 @@
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 -->	
+		
+	</g:VerticalPanel>
+		
+</g:HorizontalPanel>
 	</g:HTMLPanel>
 
 

@@ -13,7 +13,7 @@
 			padding: 0px;
 			margin-top: 68px;
 			margin-bottom: 5px;
-			margin-left: 68px;
+			margin-left: 48px;
 		}
 				
 		.commonStyle {
@@ -42,7 +42,7 @@
 
 
 	<g:HTMLPanel>	
-	<g:ScrollPanel width='1230px' height='800px'><!-- Assignment E:Module 5 -->
+	<g:ScrollPanel  height='650px'  ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
 	 <g:HorizontalPanel> 	
 		<!-- <g:SplitLayoutPanel ui:field="splitLayoutPanel">		  
 			<g:west size="400">			 -->							

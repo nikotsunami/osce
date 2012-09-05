@@ -9,14 +9,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.Cell;
@@ -39,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class LogViewImpl extends Composite implements LogView, RecordChangeHandler {
+public class LogViewImpl extends Composite implements LogView, RecordChangeHandler, MenuClickHandler {
 
 	private static LogViewUiBinder uiBinder = GWT
 			.create(LogViewUiBinder.class);
@@ -102,8 +105,15 @@ public class LogViewImpl extends Composite implements LogView, RecordChangeHandl
 
 	public void init() {
 		OsceConstants constants = GWT.create(OsceConstants.class);
+		
+        int splitLeft = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+splitLeft+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 
@@ -236,4 +246,24 @@ public class LogViewImpl extends Composite implements LogView, RecordChangeHandl
 		table.setPageSize(pagesize);
 	}
 	// by spec
+	
+	
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+			
+			if(OsMaMainNav.getMenuStatus() == 0)
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+			else
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		}
+			
+	}
+
 }

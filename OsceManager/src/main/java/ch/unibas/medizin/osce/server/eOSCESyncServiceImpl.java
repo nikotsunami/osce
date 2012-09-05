@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.mortbay.log.Log;
 
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncException;
@@ -43,7 +44,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static String appUploadDirectory= OsMaConstant.DEFAULT_IMPORT_EOSCE_PATH;
+	private static String appUploadDirectory= OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH;
 	
 	
 	public List<String> processedFileList() throws eOSCESyncException
@@ -67,17 +68,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			ase.printStackTrace();
+			Log.info(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			ace.printStackTrace();
+			Log.info(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.info(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
@@ -107,17 +108,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			ase.printStackTrace();
+			Log.info(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			ace.printStackTrace();
+			Log.info(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.info(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
@@ -143,17 +144,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			ase.printStackTrace();
+			Log.info(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			ace.printStackTrace();
+			Log.info(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.info(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 	}
@@ -199,7 +200,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.info(e.getMessage());
 		} 
 		
 	}
@@ -242,17 +243,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			ase.printStackTrace();
+			Log.info(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			ace.printStackTrace();
+			Log.info(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.info(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 	}
@@ -346,7 +347,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.info(e.getMessage());
 		}
 		
 	}

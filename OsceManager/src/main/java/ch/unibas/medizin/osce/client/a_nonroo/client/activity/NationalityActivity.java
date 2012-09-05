@@ -8,8 +8,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -69,6 +69,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
 		
 		init();
 

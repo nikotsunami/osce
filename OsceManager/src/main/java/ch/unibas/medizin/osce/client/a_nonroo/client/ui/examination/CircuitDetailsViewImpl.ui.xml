@@ -6,11 +6,11 @@
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
 	 <ui:style src="../../styles.css" />
 
-	<g:ScrollPanel width="100%" height='800px'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
+	<g:ScrollPanel width='1130px' height='650px'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
 	
 	<!-- h1>Circuit Details Place</h1  -->
 	
-		<g:VerticalPanel  width="100%">
+		<g:VerticalPanel  >
 		
 		
 			<e:CircuitOsceSubViewImpl ui:field="circuitOsceSubViewImpl"></e:CircuitOsceSubViewImpl>
@@ -23,7 +23,7 @@
 		<!-- L: SPEC END = -->
 			
 			<!-- Assignment E:Module 5 -->
-			<g:VerticalPanel ui:field="generateVP" width="100%" >
+			<g:VerticalPanel ui:field="generateVP">
 				
 			</g:VerticalPanel>
 			<!-- Assignment E:Module 5 -->

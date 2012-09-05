@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LogViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -87,6 +88,8 @@ ClinicView.Presenter, ClinicView.Delegate {
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (ClinicViewImpl)view);
 		//by spec
+
+		MenuClickEvent.register(requests.getEventBus(), (ClinicViewImpl)view);
 
 		placeChangeHandlerRegistration = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {

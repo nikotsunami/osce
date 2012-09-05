@@ -6,7 +6,7 @@
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
 	 <ui:style src="../../styles.css" />
 
-	<g:ScrollPanel width='1230px' height='750px'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
+	<g:ScrollPanel height='650px'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
 	
 	<!-- h1>Circuit Details Place</h1  -->
 	

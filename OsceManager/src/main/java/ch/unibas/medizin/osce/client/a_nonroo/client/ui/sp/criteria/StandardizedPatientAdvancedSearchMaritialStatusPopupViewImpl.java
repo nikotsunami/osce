@@ -69,7 +69,7 @@ public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
 		maritialStatusBox.setValue(MaritalStatus.values()[0]);
 		maritialStatusBox.setAcceptableValues(Arrays.asList(MaritalStatus.values()));
 		addMaritialStatusButton.setText(constants.add());
-		maritialStatusButton.setText(constants.workPermission());
+		maritialStatusButton.setText(constants.maritalStatus());
 		
 		// Highlight onViolation			
 		advanceSearchCriteriaMap=new HashMap<String, Widget>();

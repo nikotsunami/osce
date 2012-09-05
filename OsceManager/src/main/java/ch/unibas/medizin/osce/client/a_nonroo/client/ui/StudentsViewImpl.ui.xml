@@ -8,6 +8,10 @@
 
 	
 		}
+		.containerPanel{
+		margin-left: 20px;
+		width: 600px;
+}
 	 </ui:style>
 	
 	
@@ -23,6 +27,7 @@
 		</g:TabPanel> -->
 		
 		 <!-- <g:HTMLPanel height="90%" width="90%"> --> 
+		 <g:HorizontalPanel  addStyleNames="{style.containerPanel}" >
 		<g:HorizontalPanel ui:field="horizontalStudentTabPanel1"  height="50%" width="100%">
 		<my:ScrolledTabLayoutPanel ui:field="studentTabPanel1" barHeight="40"  width="100%" height="100%">
 		
@@ -30,6 +35,7 @@
 	<!-- 	<g:TabPanel ui:field="firstcheck" width="50%" ></g:TabPanel> -->
 				
 		</my:ScrolledTabLayoutPanel>
+		</g:HorizontalPanel>
 		</g:HorizontalPanel>
 		<!-- </g:HTMLPanel> -->
 		

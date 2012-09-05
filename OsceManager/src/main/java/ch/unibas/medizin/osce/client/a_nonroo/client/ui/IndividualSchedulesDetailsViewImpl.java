@@ -6,6 +6,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,7 +27,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class IndividualSchedulesDetailsViewImpl extends Composite implements IndividualSchedulesDetailsView {
+public class IndividualSchedulesDetailsViewImpl extends Composite implements IndividualSchedulesDetailsView, MenuClickHandler {
 
 	private static IndividualSchedulesDetailsViewUiBinder uiBinder = GWT.create(IndividualSchedulesDetailsViewUiBinder.class);
 
@@ -44,6 +48,9 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 
 	private Presenter presenter;
 		
+	@UiField
+	ScrollPanel scrollPanel;
+	
 	@UiField
 	VerticalPanel vpStudent;
 	
@@ -147,6 +154,9 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 
 	public void init() 
 	{
+		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+		 scrollPanel.setWidth(panelWidth);
+		
 		//DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 50px; right: 5px; bottom: 0px;");
 		/*disclosureDataPanelStud.addOpenHandler<DisclosurePanel>(new OpenHandler<DisclosurePanel>() 
 		{
@@ -362,5 +372,15 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	public DisclosurePanel getDisclosureExaminerPanel()
 	{
 		return this.disclosureDataPanelExaminer;
+	}
+	
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+		scrollPanel.setWidth(panelWidth);
+		
 	}
 }

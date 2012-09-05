@@ -995,14 +995,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			File file = null;
 			try {
 				
-				file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
 				
 				if(file.isFile()){
 					
 					return new String[]{templateName,FileUtils.readFileToString(file)};
 				}else{
 					
-					file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateSP.txt");
+					file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateSP.txt");
 					
 					if(file.isFile())
 						return new String[]{"DefaultTemplateSP.txt",FileUtils.readFileToString(file)};
@@ -1028,14 +1028,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 									
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
 			
 			if(file.isFile()){
 				
 				return new String[]{templateName,FileUtils.readFileToString(file)};
 			}else{
 				
-				file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateStud.txt");
+				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateStud.txt");
 				
 				if(file.isFile())
 					return new String[]{"DefaultTemplateStud.txt",FileUtils.readFileToString(file)};
@@ -1061,14 +1061,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
 			
 			if(file.isFile()){
 				
 				return new String[]{templateName,FileUtils.readFileToString(file)};
 			}else{
 				
-				file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateExaminor.txt");
+				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateExaminor.txt");
 				
 				if(file.isFile())
 					return new String[]{"DefaultTemplateExaminor.txt",FileUtils.readFileToString(file)};
@@ -1094,7 +1094,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
 			
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);
@@ -1122,7 +1122,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
 			
 			if(file.isFile()){
 				FileUtils.deleteQuietly(file);

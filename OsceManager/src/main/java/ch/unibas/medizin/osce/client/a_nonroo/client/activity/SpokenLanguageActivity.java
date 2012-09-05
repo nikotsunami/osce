@@ -8,9 +8,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageRequest;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -69,6 +68,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (SpokenLanguageViewImpl)view);
 		//by spec
+		MenuClickEvent.register(requests.getEventBus(), (SpokenLanguageViewImpl)view);
 		
 		init();
 

@@ -6,25 +6,25 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.unibas.medizin.osce.shared.OsMaConstant;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author nikotsunami
  *
  */
-public class StandardizedPatientViewImpl extends Composite implements  StandardizedPatientView, RecordChangeHandler {
+public class StandardizedPatientViewImpl extends Composite implements  StandardizedPatientView, RecordChangeHandler, MenuClickHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -76,6 +76,9 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	
 	@UiField
 	ScrollPanel scrollPanel;
+	
+	@UiField
+	ScrollPanel mainScrollPanel;
 	
 	int widthSize=1225,decreaseSize=0;
 	Timer timer;
@@ -187,8 +190,18 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 
 	public void init() {
+		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		
 //    	paths.add("id");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //
@@ -468,9 +481,19 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	
 	public void setDetailPanel(boolean isDetailPlace) {
 
-	
-		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
+		if (isDetailPlace) {
+			splitLayoutPanel.setWidgetSize(
+					mainScrollPanel,
+					Integer.parseInt(constants.widthSize())
+							- Integer.parseInt(constants.widthMin()));
+			splitLayoutPanel
+					.animate(Integer.parseInt(constants.animationTime()));
+		} else {
+			splitLayoutPanel.setWidgetSize(mainScrollPanel,
+					Integer.parseInt(constants.widthSize()));
+//			splitLayoutPanel
+//			.animate(Integer.parseInt(constants.animationTime()));
+		}
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
@@ -528,4 +551,21 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 
 	}
 	// by spec
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+			
+			if(OsMaMainNav.getMenuStatus() == 0)
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+			else
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		}
+	}
 }

@@ -104,7 +104,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				}
 				
 				toNames.add(patient.getName()+" "+patient.getPreName());
-				fromNames.add(OsMaConstant.FROM_NAME);
+				fromNames.add(OsMaFilePathConstant.FROM_NAME);
 				
 				assignmentList.add(assignments);
 				assignments = null;
@@ -191,7 +191,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				}
 				
 				toNames.add(examiner.getName()+" "+examiner.getPreName());
-				fromNames.add(OsMaConstant.FROM_NAME);
+				fromNames.add(OsMaFilePathConstant.FROM_NAME);
 				
 				assignmentList.add(assignments);
 				assignments = null;
@@ -326,8 +326,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			timeFormat = new SimpleDateFormat("hh:mm");
 			
 			toMailIds = new ArrayList<String>(0);
-			fromMailId = OsMaConstant.FROM_MAIL_ID;
-			subject = OsMaConstant.MAIL_SUBJECT;
+			fromMailId = OsMaFilePathConstant.FROM_MAIL_ID;
+			subject = OsMaFilePathConstant.MAIL_SUBJECT;
 			
 			for(Long id : spIds){
 				
@@ -370,7 +370,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				}
 				
 				toNames.add(patient.getName()+" "+patient.getPreName());
-				fromNames.add(OsMaConstant.FROM_NAME);
+				fromNames.add(OsMaFilePathConstant.FROM_NAME);
 				
 				assignmentList.add(assignments);
 				toMailIds.add(patient.getEmail());
@@ -438,8 +438,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			timeFormat = new SimpleDateFormat("hh:mm");
 			
 			toMailIds = new ArrayList<String>(0);
-			fromMailId = OsMaConstant.FROM_MAIL_ID;
-			subject = OsMaConstant.MAIL_SUBJECT;
+			fromMailId = OsMaFilePathConstant.FROM_MAIL_ID;
+			subject = OsMaFilePathConstant.MAIL_SUBJECT;
 			
 			for(Long id : examinerIds){
 				
@@ -477,7 +477,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 				
 				toNames.add(examiner.getName()+" "+examiner.getPreName());
-				fromNames.add(OsMaConstant.FROM_NAME);
+				fromNames.add(OsMaFilePathConstant.FROM_NAME);
 				
 				assignmentList.add(assignments);
 				toMailIds.add(examiner.getEmail());
@@ -589,17 +589,17 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
+			file = new File(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
 			
 			if(file.isFile()){
 				
 				return new String[]{templateName,FileUtils.readFileToString(file)};
 			}else{
 				
-				file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE);
+				file = new File(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE);
 				
 				if(file.isFile())
-					return new String[]{OsMaConstant.DEFAULT_MAIL_TEMPLATE,FileUtils.readFileToString(file)};
+					return new String[]{OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE,FileUtils.readFileToString(file)};
 				else
 					return new String[]{"",""};
 			}
@@ -621,10 +621,10 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		File file = null;
 		try {
 			
-			if(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH == null || OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH.equals(""))
+			if(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH == null || OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH.equals(""))
 				return false;
 			
-			file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
+			file = new File(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
 			
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);
@@ -652,7 +652,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
+			file = new File(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH + templateName);
 			
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);

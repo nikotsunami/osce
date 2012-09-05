@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.BellScheduleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.BellScheduleViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
@@ -119,6 +120,11 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 		RecordChangeEvent.register(requests.getEventBus(),
 				(BellScheduleViewImpl) view);
+		
+		
+		MenuClickEvent.register(requests.getEventBus(),
+				(BellScheduleViewImpl) view);
+		
 		setTable(view.getTable());
 
 		init();
