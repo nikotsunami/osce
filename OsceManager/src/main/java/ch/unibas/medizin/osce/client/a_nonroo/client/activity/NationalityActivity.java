@@ -45,6 +45,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 	private ActivityManager activityManger;
 	private NationalityDetailsActivityMapper nationalityDetailsActivityMapper;
 	
+	Boolean flag = false;
+	
 
 	public NationalityActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
@@ -132,8 +134,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 		Log.debug(nationality.getNationality());
 		
-		goTo(new NationalityDetailsPlace(nationality.stableId(),
-				Operation.DETAILS));
+		//goTo(new NationalityDetailsPlace(nationality.stableId(),
+		//		Operation.DETAILS));
 	}
 	
 
@@ -242,6 +244,23 @@ NationalityView.Presenter, NationalityView.Delegate {
 		});
 		
 		
+	}
+	
+	@Override
+	public boolean checkNationality(String name) {
+		
+		
+		requests.nationalityRequestNonRoo().findNationalitiesByName(name, 0, 10).fire(new OSCEReceiver<List<NationalityProxy>>() {
+
+			@Override
+			public void onSuccess(List<NationalityProxy> response) {
+				if (response.size() == 0)
+					flag = true;
+				else 
+					flag = false;				
+			}
+		});
+		return flag;
 	}
 
 }

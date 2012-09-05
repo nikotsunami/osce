@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
@@ -105,8 +106,16 @@ public class NationalityViewImpl extends Composite implements  NationalityView, 
     	nationalityNewMap.put("nationality",newNationality);	
     	nationalityNewMap.put("standardizedpatients",newNationality);		
 		 // E Highlight onViolation
-		 delegate.newClicked(newNationality.getValue());
-		 newNationality.setValue("");
+    	if (delegate.checkNationality(newNationality.getValue()))
+    	{
+    		delegate.newClicked(newNationality.getValue());
+    		 newNationality.setValue("");
+    	}
+    	else
+    	{
+    		MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+    		messageConfirmationDialogBox.showConfirmationDialog(constants.nationaltiywarning());
+    	}
     }
 
 	/**
@@ -251,10 +260,25 @@ public class NationalityViewImpl extends Composite implements  NationalityView, 
 		
 		addColumn(new ActionCell<NationalityProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<NationalityProxy>() {
-					public void execute(NationalityProxy nation) {
+					public void execute(final NationalityProxy nation) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(nation);
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(nation);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<NationalityProxy>() {
 			public NationalityProxy getValue(NationalityProxy nation) {

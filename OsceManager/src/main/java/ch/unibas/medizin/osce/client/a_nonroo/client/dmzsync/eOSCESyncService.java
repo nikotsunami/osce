@@ -18,6 +18,15 @@ public interface eOSCESyncService extends RemoteService {
 	
 	void importFileList(List<String> fileList, Boolean flag) throws eOSCESyncException;
 	
+	//export
+	void exportOsceFile(Long semesterID) throws eOSCESyncException;
+	
+	List<String> exportProcessedFileList() throws eOSCESyncException;
+	
+	List<String> exportUnprocessedFileList() throws eOSCESyncException;
+	
+	void putAmazonS3Object(List<String> fileList, Boolean flag) throws eOSCESyncException;
+	
 	public static class ServiceFactory {
 		private static eOSCESyncServiceAsync instance = null; 
 		

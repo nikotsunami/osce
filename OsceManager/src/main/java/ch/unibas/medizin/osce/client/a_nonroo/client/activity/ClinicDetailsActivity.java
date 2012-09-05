@@ -149,11 +149,13 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 	
 		clinicSubView.setDelegate(clinicDetailsActivity);
 		String clinicLable= "" ;
-		if(l.get(0) != null && l.get(0).getSpecialisation()!= null){
+		
+		//if(l.get(0) != null && l.get(0).getSpecialisation()!= null)
+		if(l.size() > 0){
 			
 			Log.info("Data is  available");
 		
-	 clinicLable =l.get(0).getSpecialisation().getName();
+			clinicLable =l.get(0).getSpecialisation().getName();
 		}
 
 	//	view.setValue(ClinicProxy);

@@ -29,6 +29,12 @@ public class OsMaFilePathConstant {
 				
 		public static String PRINT_SCHEDULE_TEMPLATE = "usr/oscemanager/TEMPLATES/PRINTPLAN_TEMPLATE/";
 		//  public static final String PRINT_SCHEDULE_TEMPLATE="C:\\TEMPLATES\\PRINTPLAN_TEMPLATE\\";
+		
+		//Export OSCE File Path
+		public static String EXPORT_OSCE_PROCESSED_FILEPATH = "usr/oscemanager/eosce/export/processed/";
+		//public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
+		public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "usr/oscemanager/eosce/export/unprocessed/";
+		//public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
 	
 
 }

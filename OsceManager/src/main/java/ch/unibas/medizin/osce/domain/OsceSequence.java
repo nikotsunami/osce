@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -110,5 +112,13 @@ public class OsceSequence {
 			}
 			
 			return posts;
+		}
+		
+		public static List<OsceSequence> findOsceSequenceByOsceDay(long id)
+		{
+			EntityManager em = entityManager();
+	    	String query = "SELECT a FROM OsceSequence a WHERE osceDay.id = " + id;
+	    	TypedQuery<OsceSequence> q = em.createQuery(query, OsceSequence.class);
+	    	return q.getResultList();
 		}
 }

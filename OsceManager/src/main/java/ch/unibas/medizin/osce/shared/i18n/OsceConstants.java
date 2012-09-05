@@ -752,4 +752,28 @@ public interface OsceConstants extends Constants {
 
 	public String validatePlusMinus();
 	// ]Module : 15
+	
+	//export osce
+	public String exportosce();
+	
+	public String exportprocessed();
+		
+	public String exportunprocessed();
+	
+	public String exporterror();
+	
+	public String exportprocessederror();
+	
+	public String exportunprocessederror();
+	
+	public String exportsuccess();
+	
+	public String exportprocessedlabel();
+	
+	public String exportprocessedmsg();
+	
+	public String exportwarning();
+	
+	//nationality issue
+	public String nationaltiywarning();
 }

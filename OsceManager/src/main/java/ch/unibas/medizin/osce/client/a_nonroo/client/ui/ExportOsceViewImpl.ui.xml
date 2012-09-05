@@ -1,0 +1,43 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<ui:style src="../styles.css">
+		.panelStyle {
+			width: 320px;
+			height: 400px;
+			border-width: thin;
+			border-style: solid;
+			padding: 0px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			margin-left: 5px;
+		}
+		.scrollpanelStyle
+		{
+			height:400px; 
+			width:320px;			
+		}
+		.dockhtml
+		{
+			margin-left: 20px;
+		}
+</ui:style>
+	<g:HTMLPanel addStyleNames="{style.dockhtml}">
+	
+		<g:HorizontalPanel>
+			<g:RadioButton ui:field="unprocessed" name="status" checked="true"></g:RadioButton>
+			<g:RadioButton ui:field="processed" name="status"></g:RadioButton>			
+		</g:HorizontalPanel>
+			
+		<g:DisclosurePanel ui:field="disclouserPanelFlie" open="true" addStyleNames="{style.panelStyle}">
+			<g:header></g:header>
+			
+			<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">															
+				<g:VerticalPanel ui:field="fileListPanel">																							
+				</g:VerticalPanel>							
+			</g:ScrollPanel>
+		</g:DisclosurePanel>		
+		
+		<g:Button ui:field="exportButton"></g:Button>		
+	</g:HTMLPanel>
+</ui:UiBinder> 

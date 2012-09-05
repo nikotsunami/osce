@@ -13,8 +13,11 @@ import java.util.List;
 import java.util.Set;
 import ch.unibas.medizin.osce.domain.Assignment;
 import java.util.HashSet;
+
+import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+import javax.persistence.TypedQuery;
 
 @RooJavaBean
 @RooToString
@@ -76,4 +79,13 @@ public class OscePostRoom {
     		
     	return null;
     }
+    
+    public static List<OscePostRoom> findOscePostRoomByCourse(long id)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT o FROM OscePostRoom o WHERE course.id in(SELECT c.id FROM Course c WHERE osceSequence.id = " + id +")";
+    	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+    	return q.getResultList();
+    }
+    
 }

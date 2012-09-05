@@ -29,6 +29,8 @@ public interface NationalityView  extends IsWidget{
 		void performSearch(String q);
 		
 		void updateClicked(NationalityProxy nation, String value);
+		
+		public boolean checkNationality(String name);
 	}
 
     CellTable<NationalityProxy> getTable();

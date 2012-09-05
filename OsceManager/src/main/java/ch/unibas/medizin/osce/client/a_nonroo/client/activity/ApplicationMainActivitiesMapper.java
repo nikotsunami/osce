@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
@@ -212,6 +213,12 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new ImporteOSCEActivity(requests, placeController);
 		}
 				//by eosce
+		
+		if (place instanceof ExportOscePlace)
+		{
+			Log.info("is ExportOscePlace");
+			return new ExportOsceActivity(requests, placeController, (ExportOscePlace)place);
+		}
 
 		return null;
 	}

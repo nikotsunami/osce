@@ -47,6 +47,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+
 /**
  * @author dk
  *
@@ -410,10 +412,25 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 		
 		addColumn(new ActionCell<RoomProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoomProxy>() {
-					public void execute(RoomProxy room) {
+					public void execute(final RoomProxy room) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(room);
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(room);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<RoomProxy>() {
 			public RoomProxy getValue(RoomProxy room) {

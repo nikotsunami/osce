@@ -10,4 +10,10 @@ public interface eOSCESyncServiceAsync {
 	void processedFileList(AsyncCallback<List<String>> cb);
 	void unprocessedFileList(AsyncCallback<List<String>> cb);
 	void importFileList(List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
+	
+	//export
+	void exportOsceFile(Long semesterID, AsyncCallback<Void> cb);
+	void exportProcessedFileList(AsyncCallback<List<String>> cb);
+	void exportUnprocessedFileList(AsyncCallback<List<String>> cb);
+	void putAmazonS3Object(List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
 }

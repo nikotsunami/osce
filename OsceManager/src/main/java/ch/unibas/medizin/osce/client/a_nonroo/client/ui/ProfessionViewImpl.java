@@ -49,6 +49,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 
 /**
  * @author nikotsunami
@@ -252,10 +253,25 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView, Re
 		
 		addColumn(new ActionCell<ProfessionProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ProfessionProxy>() {
-					public void execute(ProfessionProxy prof) {
+					public void execute(final ProfessionProxy prof) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(prof);
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(prof);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<ProfessionProxy>() {
 			public ProfessionProxy getValue(ProfessionProxy prof) {

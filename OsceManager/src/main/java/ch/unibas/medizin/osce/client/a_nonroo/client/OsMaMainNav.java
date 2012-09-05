@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
@@ -535,6 +536,8 @@ public class OsMaMainNav extends Composite {
 		
 		importeOSCE.setText(constants.importeosce());
 		
+		exportOSCE.setText(constants.exportosce());
+		
 		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
 		*/
@@ -767,6 +770,15 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor roleAssignments;			// Rollenzuweisung
 	*/
+	
+	@UiField
+	Anchor exportOSCE;
+	
+	@UiHandler("exportOSCE")
+	void exportOSCEClicked(ClickEvent event)
+	{
+		placeController.goTo(new ExportOscePlace("ExportOscePlace", handlerManager, lstSemester.getValue()));
+	}
 	
 	@UiHandler("importeOSCE")
 	void importeOSCEClicked(ClickEvent event)

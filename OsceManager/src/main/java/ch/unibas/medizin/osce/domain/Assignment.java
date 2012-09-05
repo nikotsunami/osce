@@ -666,4 +666,22 @@ public class Assignment {
 	}
 
 	// Module : 15
+	
+	public static List<Assignment> findAssignmentByOscePostRoom(Long id, int rotationoffset, int timeslot)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT a FROM Assignment a WHERE oscePostRoom.id = " + id + " AND type = 0 ORDER BY timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	q.setFirstResult(rotationoffset);
+    	q.setMaxResults(timeslot);
+    	return q.getResultList();
+    }
+    
+    public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Date time_start, Date time_end)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT a FROM Assignment a WHERE oscePostRoom.id = " + id + " AND type = 2 AND timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	return q.getResultList();
+    }
 }

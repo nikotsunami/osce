@@ -102,6 +102,7 @@
 			</g:HorizontalPanel> 
 		<!-- G: SPEC END = -->	
 				<g:Anchor ui:field="importeOSCE"></g:Anchor>
+				<g:Anchor ui:field="exportOSCE"></g:Anchor>
 				<g:Anchor ui:field="osces"></g:Anchor>
 				<g:Anchor ui:field="circuit"></g:Anchor>
 				<g:Anchor ui:field="students"></g:Anchor>

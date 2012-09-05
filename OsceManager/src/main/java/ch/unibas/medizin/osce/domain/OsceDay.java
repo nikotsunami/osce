@@ -275,5 +275,14 @@ public class OsceDay {
 	}
 
 	// Module : 15
+	
+	public static List<OsceDay> findOsceDayByOsce(Long id)
+	{
+		EntityManager em = entityManager();
+		String query = "SELECT o FROM OsceDay o where osce = " + id;
+		TypedQuery<OsceDay> q = em.createQuery(query, OsceDay.class);
+		return q.getResultList();
+	}
+	
 
 }
