@@ -4,12 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.TypedQuery;
 
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.allen_sauer.gwt.log.client.Log;
 
 import ch.unibas.medizin.osce.shared.RoleTypes;
 
@@ -53,4 +57,18 @@ public class OscePost {
 	    }
     	return false;
     }
+    
+    //Module 5 Bug Report Solution
+	public static java.util.List<OscePost> findOscePostByOsceSequence(Long osceSequenceId)
+	{
+		Log.info("~~Inside findOscePostByOsceSequence Method");
+		EntityManager em = entityManager();		
+		String queryString="select op from OscePost op where op.osceSequence= "+osceSequenceId;		
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<OscePost> q = em.createQuery(queryString, OscePost.class);
+		java.util.List<OscePost> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);
+		return result;
+	}
+	  //E Module 5 Bug Report Solution
 }

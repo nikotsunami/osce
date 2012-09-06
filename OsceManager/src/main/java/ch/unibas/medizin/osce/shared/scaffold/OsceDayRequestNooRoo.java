@@ -22,4 +22,10 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 	
 	public abstract Request<Boolean> updateLunchBreak(Long osceDayId, Integer afterRotation);
 	public abstract Request<Boolean> updateTimesAfterRotationShift(Long osceDayIdFrom, Long osceDayIdTo);
+	
+	//Module 5 Bug Report Solution
+		public abstract Request<String> schedulePostpone(OsceDayProxy osceDayProxy);
+		public abstract Request<String> scheduleEarlier(OsceDayProxy osceDayProxy);
+		public abstract Request<Long> findOsceIdByOsceDayId(Long osceDayId);
+		//E Module 5 Bug Report Solution
 }

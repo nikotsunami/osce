@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 
@@ -37,5 +38,9 @@ public interface SequenceOsceSubView extends IsWidget{
     void setDelegate(Delegate delegate);
     
     void setPresenter(Presenter systemStartActivity);
+
+	//Module 5 Bug Report Solution	
+	public Label getSequenceRotationLable();
+	//E Module 5 Bug Report Solution
 
 }

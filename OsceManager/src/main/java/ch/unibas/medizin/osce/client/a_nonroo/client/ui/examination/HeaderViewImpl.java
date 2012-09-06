@@ -16,6 +16,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,7 +43,8 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 		return headerPanel;
 	}
 
-	
+	@UiField
+	public VerticalPanel headerSimplePanel;
 
 	@UiField
 	VerticalPanel labelVP;
@@ -59,13 +61,15 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 		
 	});
 	
-	@UiField
+	//Module 5 Bug Report Solution
+	/*@UiField
 	IconButton deleteBtn;
 	
 	
 	public IconButton getDeleteBtn() {
 		return deleteBtn;
-	}
+	}*/
+	//E Module 5 Bug Report Solution
 
 	public ValueListBox<ColorPicker> getColorPicker() {
 		return colorPicker;
@@ -151,10 +155,19 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 			this.addStyleDependentName("selected" +value.toString());
 	}
 	
-	@UiHandler("deleteBtn")
+	// Module 5 Bug Report Solution
+	/*@UiHandler("deleteBtn")
 	public void deleteParcour(ClickEvent event)
 	{
 		Log.info("delete Parcour Clicked");
 		delegate.deleteCourse(this);
+	}*/
+
+	public VerticalPanel getHeaderSimplePanel()
+	{
+		return this.headerSimplePanel;
 	}
+	
+	//E Module 5 Bug Report Solution
+		
 }

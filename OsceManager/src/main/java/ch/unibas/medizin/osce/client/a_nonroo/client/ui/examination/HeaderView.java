@@ -33,7 +33,10 @@ interface Delegate {
 	 
 	 public void changeHeaderColor(ColorPicker value);
 	 
-	 public IconButton getDeleteBtn();
+	// Module 5 Bug Report Solution
+	 /*public IconButton getDeleteBtn();*/
+	 public VerticalPanel getHeaderSimplePanel();
+	//E Module 5 Bug Report Solution
 	 
 	 public VerticalPanel getHeaderPanel() ;
 }

@@ -778,4 +778,9 @@ public interface OsceConstants extends Constants {
 	public String nationaltiywarning();
 	
 	public String videoUpload();
+	
+	//Module 5 Bug Report Solution
+	public String schedulePostpone();
+	public String scheduleEarlier();
+//E Module 5 Bug Report Solution
 }

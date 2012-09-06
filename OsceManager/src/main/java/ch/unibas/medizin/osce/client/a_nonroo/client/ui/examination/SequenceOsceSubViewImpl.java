@@ -80,8 +80,12 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 	@UiField
 	public Button spliteSequence;
 	
+	//Module 5 Bug Report Solution
+	/*@UiField
+	public TextBox sequenceRotation;*/
 	@UiField
-	public TextBox sequenceRotation;
+	Label sequenceRotation;
+	//E Module 5 Bug Report Solution
 	
 	
 	@UiHandler("spliteSequence")
@@ -203,7 +207,12 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		this.presenter = presenter;
 	}
 	
-	
+	//Module 5 Bug Report Solution
+	@Override
+	public Label getSequenceRotationLable() {
+		return this.sequenceRotation;
+	}
+	//E Module 5 Bug Report Solution
 	
 	
 }

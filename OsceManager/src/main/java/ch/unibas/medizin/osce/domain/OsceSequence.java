@@ -17,6 +17,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -49,7 +51,28 @@ public class OsceSequence {
 		 	
 		 	OsceSequence newOsceSequence = new OsceSequence();
 			newOsceSequence.setLabel(osceSequence.getLabel());
+			//Module 5 Bug Report Solution
+			//newOsceSequence.setNumberRotation(osceSequence.getNumberRotation());
+			osceSequence.setNumberRotation((osceSequence.getNumberRotation()-1));
+			osceSequence.persist();
+			newOsceSequence.setNumberRotation(1);
+			//E Module 5 Bug Report Solution
+			
+			/*// Module 5 bug Report Change
+			//newOsceSequence.setNumberRotation(osceSequence.getNumberRotation());
+			if(osceSequence.getNumberRotation()%2==0)
+			{
+				newOsceSequence.setNumberRotation(((osceSequence.getNumberRotation())/2));
+				osceSequence.setNumberRotation(((osceSequence.getNumberRotation())/2));
+				osceSequence.persist();
+			}
+			else
+			{
+				log.info("Number_rotations of the two resulting sequences != number_rotations of the old sequence");
 			newOsceSequence.setNumberRotation(osceSequence.getNumberRotation());
+			}
+			
+			// E Module 5 bug Report Change */
 			newOsceSequence.setOsceDay(osceSequence.getOsceDay());		
 			
 			log.info("Cources : " + osceSequence.getCourses());
@@ -114,11 +137,17 @@ public class OsceSequence {
 			return posts;
 		}
 		
-		public static List<OsceSequence> findOsceSequenceByOsceDay(long id)
+		//Module 5 Bug Report Solution
+		public static java.util.List<OsceSequence> findOsceSequenceByOsceDay(Long osceDayId)
 		{
-			EntityManager em = entityManager();
-	    	String query = "SELECT a FROM OsceSequence a WHERE osceDay.id = " + id;
-	    	TypedQuery<OsceSequence> q = em.createQuery(query, OsceSequence.class);
-	    	return q.getResultList();
+			//Log.info("~~Inside findOsceSequenceByOsceDay Method");
+			EntityManager em = entityManager();	
+			String queryString="select os from OsceSequence os where os.osceDay= "+osceDayId;
+			Log.info("~QUERY String: " + queryString);
+			TypedQuery<OsceSequence> q = em.createQuery(queryString, OsceSequence.class);
+			java.util.List<OsceSequence> result = q.getResultList();
+			//Log.info("~QUERY Result : " + result);
+			return result;
 		}
+		//E Module 5 Bug Report Solution
 }

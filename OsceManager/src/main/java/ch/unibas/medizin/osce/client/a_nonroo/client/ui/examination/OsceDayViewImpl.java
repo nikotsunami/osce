@@ -19,6 +19,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -112,11 +114,44 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	@UiField
 	IconButton saveOsceDayValue;
 	
+	//Module 5 Bug Report Solution
+	@UiField
+	IconButton btnSchedulePostpone;
+	@UiField
+	IconButton btnScheduleEarlier;
+	@UiField
+	HTMLPanel mainDayHP;
+	@UiField
+	HorizontalPanel scheduleHP;	
+	@UiField
+	VerticalPanel calculationVPanel;
+	@UiField
+	VerticalPanel saveVPanel;
+	@UiField
+	Label lunchBreakStartValueLabel;
+	//E Module 5 Bug Report Solution
+	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
 		Log.info("OsceDay Save Button Clicked");
 		delegate.saveOsceDayValue(osceDayProxy,insertflag);
 	}
+	
+	//Module 5 Bug Report Solution
+	@UiHandler("btnSchedulePostpone")
+	public void btnSchedulePostponeClicked(ClickEvent event)
+	{
+		Log.info("Schedule Postpone Clicked");
+		delegate.schedulePostpone(osceDayProxy);
+	}
+	@UiHandler("btnScheduleEarlier")
+	public void btnScheduleEarlierClicked(ClickEvent event)
+	{
+		Log.info("Schedule Earlier Clicked");
+		delegate.scheduleEarlier(osceDayProxy);
+	}	
+	//E Module 5 Bug Report Solution
+	
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -211,4 +246,48 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}	
+	
+	//Module 5 Bug Report Solution
+	public IconButton getSaveOsceDayValueButton()
+	{
+		return this.saveOsceDayValue;
+	}
+	public IconButton getSchedulePostponenButton()
+	{
+		return this.btnSchedulePostpone;
+	}
+	public IconButton getScheduleEarlierButton()
+	{
+		return this.btnScheduleEarlier;
+	}
+	public Label getOsceDayLabel()
+	{
+		return this.dayLabel;
+	}
+	public HTMLPanel getMainDayHP()
+	{
+		return this.mainDayHP;
+	}
+	public HorizontalPanel getScheduleHP()
+	{
+		return this.scheduleHP;
+	}
+	public VerticalPanel getDayContentVerticalPanel()
+	{
+		return this.dayContentVerticalPanel;
+	}
+	public VerticalPanel getCalculationVerticalPanel()
+	{
+		return this.calculationVPanel;
+}
+	public VerticalPanel getSaveVerticlePanel()
+	{
+		return this.saveVPanel;
+	}
+	public Label getLunchBreakStartValueLabel()
+	{
+		return this.lunchBreakStartValueLabel;
+	}
+	//E Module 5 Bug Report Solution
+	
 }
