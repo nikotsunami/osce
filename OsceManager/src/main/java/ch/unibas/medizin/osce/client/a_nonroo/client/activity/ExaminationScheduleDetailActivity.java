@@ -204,7 +204,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								//headerView.getColorPicker().setValue(color);
 								
 								
-								headerView.getDeleteBtn().setVisible(false);
+								//headerView.getDeleteBtn().setVisible(false);
 								headerView.getColorPicker().setVisible(false);
 								headerView.getHeaderPanel().setHeight("360px");
 								
