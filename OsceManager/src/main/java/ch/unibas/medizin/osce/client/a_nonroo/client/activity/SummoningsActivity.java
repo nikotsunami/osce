@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -458,7 +459,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							@Override
 							public void onSuccess(String[] response) {
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-								if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+								if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 									
 									popupView.setMessageContent(response[1]);
 									
@@ -706,7 +707,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							public void onSuccess(String[] response) {
 								
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-								if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+								if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 									
 									popupView.setMessageContent(response[1]);
 								}else{
@@ -935,7 +936,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								public void onSuccess(String[] response) {
 									
 									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-									if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+									if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 										
 										popupView.setMessageContent(response[1]);
 									}else{
@@ -1159,7 +1160,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								public void onSuccess(String[] response) {
 									
 									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-									if(!OsMaConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+									if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
 										
 										popupView.setMessageContent(response[1]);
 									}else{
