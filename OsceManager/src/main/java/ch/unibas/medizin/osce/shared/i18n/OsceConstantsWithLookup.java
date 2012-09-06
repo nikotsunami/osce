@@ -249,6 +249,8 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String WEIGHT();
 
 	public String WIDOWED();
+	
+	public String runTimeException();
 
 }
 

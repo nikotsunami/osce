@@ -19,4 +19,5 @@ public class DMZSyncExceptionType {
 	public static final String SYNC_OSCEDAY_EXCEPTION = "syncOsceDayException";
 	public static final String SYNC_TRAINING_EXCEPTION = "syncTrainingException";
 	public static final String SYNC_PATIENTINSEMESTER_EXCEPTION = "syncPatientInsemesterException";
+	public static final String RUN_TIME_EXCEPTION="runTimeException";
 }
