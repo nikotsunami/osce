@@ -7,10 +7,11 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -172,6 +173,9 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 		StudentsView systemStartView = new StudentsViewImpl();
 		systemStartView.setPresenter(this);
 		this.view = systemStartView;
+		
+		MenuClickEvent.register(requests.getEventBus(), (StudentsViewImpl)view);
+		
 		Log.info("aa111");
 		widget.setWidget(systemStartView.asWidget());
 		view.setDelegate(this);

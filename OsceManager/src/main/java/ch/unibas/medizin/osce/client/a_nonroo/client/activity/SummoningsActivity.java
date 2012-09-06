@@ -20,27 +20,18 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -459,7 +450,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							@Override
 							public void onSuccess(String[] response) {
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-								if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+								if(response[2].equals("found")){
 									
 									popupView.setMessageContent(response[1]);
 									
@@ -707,7 +698,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							public void onSuccess(String[] response) {
 								
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-								if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+								if(response[2].equals("found")){
 									
 									popupView.setMessageContent(response[1]);
 								}else{
@@ -936,7 +927,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								public void onSuccess(String[] response) {
 									
 									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-									if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+									if(response[2].equals("found")){
 										
 										popupView.setMessageContent(response[1]);
 									}else{
@@ -1160,7 +1151,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								public void onSuccess(String[] response) {
 									
 									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-									if(!OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE.equals(response[0])){
+									if(response[2].equals("found")){
 										
 										popupView.setMessageContent(response[1]);
 									}else{

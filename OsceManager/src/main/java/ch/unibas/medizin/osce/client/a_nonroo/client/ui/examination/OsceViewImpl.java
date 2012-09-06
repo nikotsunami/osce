@@ -115,8 +115,11 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 	}
 
 	public void init() {
+		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
 
 		//spec start add tabel data
 		

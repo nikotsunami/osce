@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsView, MenuClickHandler {
+public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsView{
 
 	private static CircuitDetailsViewUiBinder uiBinder = GWT
 			.create(CircuitDetailsViewUiBinder.class);
@@ -98,8 +98,8 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 
 	public void init() {
 		
-		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-		 scrollPanel.setWidth(panelWidth);
+//		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+//		 scrollPanel.setWidth(panelWidth);
 	}
 
 	@Override
@@ -129,14 +129,14 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 		}
 		// L: SPEC END =
 
-		@Override
-		public void onMenuClicked(MenuClickEvent event) {
-			
-			OsMaMainNav.setMenuStatus(event.getMenuStatus());
-			
-			String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-			scrollPanel.setWidth(panelWidth);
-			
-			
-		}
+//		@Override
+//		public void onMenuClicked(MenuClickEvent event) {
+//			
+//			OsMaMainNav.setMenuStatus(event.getMenuStatus());
+//			
+////			String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+////			scrollPanel.setWidth(panelWidth);
+//			
+//			
+//		}
 }

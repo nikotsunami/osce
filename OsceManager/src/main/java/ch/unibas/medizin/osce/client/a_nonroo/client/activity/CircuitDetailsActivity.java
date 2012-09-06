@@ -38,7 +38,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostView
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SequenceOsceSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -298,7 +297,17 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								//osceDayViewImpl.setOsceDayProxy(osceDays.next());
 								OsceDayProxy osceDays=osceDaysIterator.next();
 								osceDayViewImpl.setOsceDayProxy(osceDays);
-								osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));
+
+								
+								if(osceDays.getLunchBreakStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
+								}
+								
 								
 								/*if(osceDays.getOsceSequences().size()>1)
 								{
@@ -632,7 +641,16 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								}*/
 								
 								osceDayViewImpl.setOsceDayProxy(osceDayProxy);
-								osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5));
+								
+								if(osceDayProxy.getLunchBreakStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5));	
+								}
+								
 								//Module 5 Bug Report Solution
 								if(osceDayProxy.getOsceSequences().size()>1)
 								{

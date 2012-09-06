@@ -143,10 +143,10 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style","position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
 		
-		if(OsMaMainNav.getMenuStatus() == 0)
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-		else
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//		if(OsMaMainNav.getMenuStatus() == 0)
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//		else
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 
 		initAdvancedCriteria();
 	}
@@ -305,13 +305,13 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
 		
-		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
-			
-			if(OsMaMainNav.getMenuStatus() == 0)
-				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-			else
-				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
-		}
+//		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+//			
+//			if(OsMaMainNav.getMenuStatus() == 0)
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//			else
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//		}
 			
 	}
 	
