@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -322,6 +323,9 @@ public class RoleActivity extends AbstractActivity implements
 		RecordChangeEvent.register(requests.getEventBus(), (RoleViewImpl)view);
 		//by spec
 		
+		MenuClickEvent.register(requests.getEventBus(), (RoleViewImpl)view);
+		
+
 	//	final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		final RoleView systemStartView = new RoleViewImpl();
 		// spec start

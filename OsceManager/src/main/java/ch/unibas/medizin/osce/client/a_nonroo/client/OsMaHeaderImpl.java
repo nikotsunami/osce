@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.resources.UiStyles;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Locale;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;

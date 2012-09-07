@@ -3,20 +3,22 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -59,8 +61,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
  * @author dk
  * 
  */
-public class AnamnesisCheckViewImpl extends Composite implements
-		AnamnesisCheckView {
+public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckView, MenuClickHandler {
 
 	// private AnamnesisCheckPlace place = null;
 
@@ -213,13 +214,19 @@ public class AnamnesisCheckViewImpl extends Composite implements
 	}
 
 	public void init() {
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better
 		// solution...?!)
-		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
-				OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addTitle());
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
-				"position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style","position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 	}
 
 	@Override
@@ -535,5 +542,23 @@ public class AnamnesisCheckViewImpl extends Composite implements
 		return this.anamnesisCheckTitleMap;
 	}
 	// E Highlight onViolation
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+			
+			if(OsMaMainNav.getMenuStatus() == 0)
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+			else
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		}
+			
+	}
 }
 

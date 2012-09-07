@@ -24,6 +24,7 @@ public class AnamnesisCheckTitle {
     @Size(max = 255)
     private String text;
 
+    @NotNull
     private Integer sort_order;
 
     @Override

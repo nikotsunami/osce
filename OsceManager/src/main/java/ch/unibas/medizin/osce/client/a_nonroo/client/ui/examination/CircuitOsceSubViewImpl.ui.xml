@@ -28,8 +28,6 @@
 		{
 			margin-Left: 20px;
 		}
-		
-		
 		.padLeft0
 		{
 			padding-left: 0px;
@@ -62,6 +60,10 @@
 		{
 			width:80px;
 		}
+		.textBoxFieldStyle
+		{
+			width: 50px;
+		}
 		
 	</ui:style>
 	<g:HTMLPanel>
@@ -69,38 +71,44 @@
 		<Table>
 			<tr>
 				<td><g:Label ui:field="shortBreakLabel" styleName="{style.padLeft0}">Short Break :</g:Label></td>
-				<td><s:ShortBox ui:field="shortBreakTextBox"></s:ShortBox></td>
+				<td><s:ShortBox ui:field="shortBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
 				<td><g:Label ui:field="longBreakLabel" styleName="{style.padLeft5}">Long Break :</g:Label></td>
-				<td><s:ShortBox ui:field="longBreakTextBox"></s:ShortBox></td>
+				<td><s:ShortBox ui:field="longBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
 				<td><g:Label ui:field="launchBreakLabel" styleName="{style.padLeft15}">Launch Break:</g:Label></td>
-				<td><s:ShortBox ui:field="launchBreakTextBox"></s:ShortBox></td>				
+				<td><s:ShortBox ui:field="launchBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>				
 				
 				<!--  Module 5 bug Report Change -->
 				<td><g:Label ui:field="middleBreakLabel" styleName="{style.padLeft43}">Middle Break:</g:Label></td>
-				<td><s:ShortBox ui:field="middleBreakTextBox"></s:ShortBox></td>
+				<td><s:ShortBox ui:field="middleBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
 				<!--  E Module 5 bug Report Change -->
 				
-				<td><my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton></td>
-				<td><g:Button ui:field="generateBtn" width="80px"></g:Button></td>
-				<td><g:Button ui:field="closedBtn" width="80px"></g:Button></td>	
+				<td>
+				<g:HorizontalPanel spacing="4">
+				<my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton>
+				</g:HorizontalPanel>								
+				</td>
 			</tr>
 			<tr>
 				<td><g:Label ui:field="maxStudentLabel"  styleName="{style.padLeft0}">Max Students :</g:Label></td>
-				<td><g:IntegerBox ui:field="maxStudentTextBox"></g:IntegerBox></td>
+				<td><g:IntegerBox ui:field="maxStudentTextBox" styleName="{style.textBoxFieldStyle}"></g:IntegerBox></td>
 				<td><g:Label ui:field="maxParcourLabel" styleName="{style.padLeft5}">Max Parcour :</g:Label></td>
-				<td><g:IntegerBox ui:field="maxParcourTextBox"></g:IntegerBox></td>
+				<td><g:IntegerBox ui:field="maxParcourTextBox" styleName="{style.textBoxFieldStyle}"></g:IntegerBox></td>
 				<td><g:Label ui:field="maxRoomsLabel" styleName="{style.padLeft5}">Max No Rooms :</g:Label></td>
-				<td><g:IntegerBox ui:field="maxRoomsTextBox"></g:IntegerBox></td>
+				<td><g:IntegerBox ui:field="maxRoomsTextBox" styleName="{style.textBoxFieldStyle}"></g:IntegerBox></td>
 					
 				<!--  Module 5 bug Report Change -->
 				<td><g:Label ui:field="shortBreakSimpatLabel" styleName="{style.padLeft5}">Short Break Simpat:</g:Label></td>
-				<td><s:ShortBox ui:field="shortBreakSimpatTextBox"></s:ShortBox></td>
+				<td><s:ShortBox ui:field="shortBreakSimpatTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
 				<!--  E Module 5 bug Report Change -->
-				
-				<td><g:Button ui:field="clearAllBtn" width="80px"></g:Button></td>
-				<td><g:Button ui:field="fixedBtn" width="80px"></g:Button></td>				
-				<td><g:Label></g:Label></td>
-			</tr>
+				<td>
+					<g:HorizontalPanel spacing="4">
+					<g:Button ui:field="generateBtn" width="80px"></g:Button>
+					<g:Button ui:field="fixedBtn"  width="80px"></g:Button>
+					<g:Button ui:field="clearAllBtn"  width="80px"></g:Button>
+					<g:Button ui:field="closedBtn"  width="80px"></g:Button>
+					</g:HorizontalPanel>
+				</td>			
+			</tr>									
 		</Table>
 	</g:HTMLPanel>
 </ui:UiBinder> 

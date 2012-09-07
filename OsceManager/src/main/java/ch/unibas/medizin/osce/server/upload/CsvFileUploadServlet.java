@@ -26,6 +26,7 @@ import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.domain.StudentOsces;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -38,10 +39,8 @@ import com.csvreader.CsvReader;
 @SuppressWarnings("serial")
 public class CsvFileUploadServlet extends HttpServlet {
 
-	 private static String appUploadDirectory="osMaEntry\\gwt\\unibas\\role\\images\\";
-	 private static String localUploadDirectory="d://role//images/";
-	 private static String srcPath="/osMaEntry/gwt/unibas/role/images/";
-		
+	 private static String appUploadDirectory=OsMaFilePathConstant.CSV_FILEPATH;
+			
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		

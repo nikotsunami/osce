@@ -10,19 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-
-import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
@@ -50,12 +49,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 
 /**
  * @author dk
  *
  */
-public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguageView, RecordChangeHandler {
+public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguageView, RecordChangeHandler, MenuClickHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -163,8 +163,15 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		    }
 		});
 		
+		int splitLeft = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+splitLeft+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		
 		table.addDomHandler(new ClickHandler() {
 			
@@ -248,10 +255,25 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		
 		addColumn(new ActionCell<SpokenLanguageProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<SpokenLanguageProxy>() {
-					public void execute(SpokenLanguageProxy lang) {
+					public void execute(final SpokenLanguageProxy lang) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(lang);
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(lang);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<SpokenLanguageProxy>() {
 			public SpokenLanguageProxy getValue(SpokenLanguageProxy lang) {
@@ -412,4 +434,23 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 		table.setPageSize(pagesize);
 	}
 	// by spec
+	
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+			
+			if(OsMaMainNav.getMenuStatus() == 0)
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+			else
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		}
+			
+	}
+
 }

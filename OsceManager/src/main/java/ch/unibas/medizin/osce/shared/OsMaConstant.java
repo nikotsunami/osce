@@ -1,4 +1,4 @@
-package ch.unibas.medizin.osce.client.a_nonroo.client;
+package ch.unibas.medizin.osce.shared;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -26,40 +26,23 @@ public class OsMaConstant {
 	public static String BLANK_FIELD_MESSAGE = "Please enter details for";
 	
 	// For Osce Status of Tabpanel
+	public static String NEW_STATUS="Osce_New_Status";
+	public static String BluePrint_Status="Osce_BluePrint_Status";
+	public static String Genrated_Status="Osce_Genrated_Status";
+	public static String Fixed_Status="Osce_Fixed_Status";
+	public static String Closed_Status="Osce_Closed_Status";
 	
-		public static String NEW_STATUS="Osce_New_Status";
-		public static String BluePrint_Status="Osce_BluePrint_Status";
-		public static String Genrated_Status="Osce_Genrated_Status";
-		public static String Fixed_Status="Osce_Fixed_Status";
-		public static String Closed_Status="Osce_Closed_Status";
-		
-		//By Spec]End
-		
-		// Module 3 {
-				public static int OSCECOOKIEDAY = 0;
-				public static int OSCEDAYTIMESCHEDULE =600000;
-				
-				// Module 3 }
-				
-				public static final SafeHtml FLAG_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-flag\"></span>").toSafeHtml();
-				public static final SafeHtml COMMENT_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-comment\"></span>").toSafeHtml();
-				public static final SafeHtml SEARCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-search\"></span>").toSafeHtml();
-				public static final SafeHtml WRENCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-wrench\"></span>").toSafeHtml();
-				
-		//By Spec]End
-				
-		// Module10 Create plans
-				public static final String PRINT_SCHEDULE_TEMPLATE="C:\\TEMPLATES\\PRINTPLAN_TEMPLATE\\";
-		// E Module10 Create plans
-				
-				//Module 9 Start
-				
-//				public static String DEFAULT_MAIL_TEMPLATE_PATH = "usr/oscemanager/Templates/mailTemplates/";
-				public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\Templates\\mailTemplates\\";
-				public static String DEFAULT_MAIL_TEMPLATE = "./osMaEntry/gwt/unibas/templates/defaultTemplate.txt";
-				public static String FROM_MAIL_ID = "userId@gmail.com";
-				public static String FROM_NAME = "Mail Sender";
-				public static String MAIL_SUBJECT = "Invitaion from OSCE";
-				
-				//Module 9 End
+	//By Spec]End
+	
+	// Module 3 {
+	public static int OSCECOOKIEDAY = 0;
+	public static int OSCEDAYTIMESCHEDULE =600000;
+	
+	// Module 3 }
+	public static final SafeHtml FLAG_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-flag\"></span>").toSafeHtml();
+	public static final SafeHtml COMMENT_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-comment\"></span>").toSafeHtml();
+	public static final SafeHtml SEARCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-search\"></span>").toSafeHtml();
+	public static final SafeHtml WRENCH_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-wrench\"></span>").toSafeHtml();
+	//By Spec]End
+	
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
@@ -15,6 +14,7 @@ import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -103,11 +103,12 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 		authorTable = new CellTable<RoleParticipantProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		reviewerTable = new CellTable<RoleParticipantProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
+		
+		initWidget(uiBinder.createAndBindUi(this));
+		initTable();
+		
 		btnAddReviewer.setText(constants.addReviewer());
 		btnAddAuthor.setText(constants.addAuthor());
-		
-		initWidget(uiBinder.createAndBindUi(this));	
-		initTable();
 		
 		// Highlight onViolation
 		roleParticipantMap=new HashMap<String, Widget>();

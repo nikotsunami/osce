@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 
 import java.util.ArrayList;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
@@ -13,6 +12,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
@@ -62,6 +62,9 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		addAnamnesis.setText(constants.anamnesisValues());
 		addLanguage.setText(constants.languages());
 		addNationality.setText(constants.nationality());
+		addProfession.setText(constants.profession());
+		addWorkPermission.setText(constants.workPermission());
+		addMaritialStatus.setText(constants.maritalStatus());
 	}
 
 	@UiField
@@ -74,6 +77,13 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
     IconButton addLanguage;
     @UiField
     IconButton addNationality;
+    
+    @UiField
+    IconButton addProfession;
+    @UiField
+    IconButton addWorkPermission;
+    @UiField
+    IconButton addMaritialStatus;
 
 	@UiHandler("addBasicData")
 	void onAddBasicDataClick(ClickEvent e) {
@@ -98,6 +108,21 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	@UiHandler("addNationality")
 	void onAddNationalityClick(ClickEvent e) {
 		delegate.addNationalityCriteriaClicked(addNationality);
+	}
+	
+	@UiHandler("addProfession")
+	void onAddProfessionClick(ClickEvent e) {
+		delegate.addPorfessionClicked(addProfession);
+	}
+	
+	@UiHandler("addWorkPermission")
+	void onAddWorkPermissionClick(ClickEvent e) {
+		delegate.addWorkPermissionClicked(addWorkPermission);
+	}
+	
+	@UiHandler("addMaritialStatus")
+	void onAddMaritialStatusClick(ClickEvent e) {
+		delegate.addMaritialStatusClicked(addMaritialStatus);
 	}
 	
 	@UiField (provided = true)

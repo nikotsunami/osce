@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
@@ -134,6 +135,8 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (RoomMaterialsViewImpl)view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (RoomMaterialsViewImpl)view);
 		
 		setTable(view.getTable());
 

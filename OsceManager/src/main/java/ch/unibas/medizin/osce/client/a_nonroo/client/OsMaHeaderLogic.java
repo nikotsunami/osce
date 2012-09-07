@@ -11,7 +11,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
@@ -285,6 +287,14 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		
 		else if (place instanceof ImportObjectiveViewPlace){
 			placeDescription = constants.importObjective();
+		}
+		//by eosce
+		else if (place instanceof ImporteOSCEPlace){
+			placeDescription = "ImporteOSCEPlace";
+		}
+				//by eosce
+		else if (place instanceof ExportOscePlace){
+			placeDescription = "ExportOSCEPlace";
 		}
 		
 		//By spec Role Management]

@@ -2,14 +2,17 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedHandler;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.shared.BindType;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.cell.client.ActionCell;
@@ -38,8 +41,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.RowCountChangeEvent;
 
-public class RoleAssignmentViewImpl extends Composite implements
-		RoleAssignmentView, RoleSelectedHandler {
+public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentView, RoleSelectedHandler, MenuClickHandler {
 
 	private static RoleAssignmentViewImplUiBinder uiBinder = GWT
 			.create(RoleAssignmentViewImplUiBinder.class);
@@ -137,8 +139,14 @@ public class RoleAssignmentViewImpl extends Composite implements
 
 	public void init() {
 
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
-				"position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style","position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+//		if(OsMaMainNav.getMenuStatus() == 0)
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//		else
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 
 		initAdvancedCriteria();
 	}
@@ -287,4 +295,24 @@ public class RoleAssignmentViewImpl extends Composite implements
 		 return table;
 	}
 
+	
+	
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+//		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+//			
+//			if(OsMaMainNav.getMenuStatus() == 0)
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//			else
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//		}
+			
+	}
+	
 }

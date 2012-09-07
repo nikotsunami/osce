@@ -20,10 +20,12 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 
 import ch.unibas.medizin.osce.domain.MediaContent;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -33,7 +35,8 @@ public class RoleFileUploadServlet extends HttpServlet {
     //private static String UPLOAD_DIRECTORY="d://sp//images";
 
     //SPEC[Start
-    private static String appUploadDirectory="osMaEntry\\gwt\\unibas\\role\\images\\";
+    private static String appUploadDirectory=OsMaFilePathConstant.ROLE_IMAGE_FILEPATH;
+    		
     private static String localUploadDirectory="d://role//images/";
     private static String srcPath="/osMaEntry/gwt/unibas/role/images/";
     //SPEC]End
@@ -127,9 +130,9 @@ public class RoleFileUploadServlet extends HttpServlet {
 
                //Upload File to Application Directory
            //   appUploadDirectory=session.getServletContext().getRealPath(".") + appUploadDirectory;
-                File appUploadedFile = new File(uploadDir, fileName);
+                File appUploadedFile = new File(appUploadDirectory, fileName);
 
-
+                FileUtils.touch(appUploadedFile);
                appUploadedFile.createNewFile();
                     //save
                     item.write(appUploadedFile);
@@ -139,12 +142,12 @@ public class RoleFileUploadServlet extends HttpServlet {
 
                 //upload file to local directory
 
-                File localUploadedFile = new File( localUploadDirectory, fileName);
+           /*     File localUploadedFile = new File( localUploadDirectory, fileName);
                localUploadedFile.createNewFile();
                     //save
                     item.write(localUploadedFile);
                     //resp.setStatus(HttpServletResponse.SC_CREATED);
-                    Log.info("file name " + fileName);
+                    Log.info("file name " + fileName); */
 
 
 
@@ -167,8 +170,8 @@ public class RoleFileUploadServlet extends HttpServlet {
         resp.setContentType("text/html");
 
         //return application path
-        resp.getOutputStream().write((srcPath+fileName).getBytes());
+    /*    resp.getOutputStream().write((srcPath+fileName).getBytes());
         cntxtpath="";
-        resp.getOutputStream().flush();
+        resp.getOutputStream().flush();*/
     }
 }

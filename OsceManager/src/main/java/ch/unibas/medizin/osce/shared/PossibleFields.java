@@ -9,6 +9,12 @@ import java.util.List;
  *
  */
 public enum PossibleFields {
+	//issue
+	AGE(" stdPat.birthday "),
+	GENDER(" stdPat.gender "),
+	PROFESSION(" stdPat.profession.id "),
+	WORKPERMISSION(""),
+	MARITIALSTATUS(""),
 	COMMENT(" stdPat.descriptions "), 
 	HEIGHT(" stdPat.height "), 
 	WEIGHT(" stdPat.weight "), 

@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -22,8 +25,11 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
+import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.TimeBell;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -554,4 +560,128 @@ public class Assignment {
     
     // Module 9
     
+	// Module : 15
+
+	public static List<Assignment> getAssignmentsBySemester(Long semesterId) {
+		Log.info("retrieveAssignmenstOfTypeExaminer :");
+		EntityManager em = entityManager();
+
+		List<Assignment> assignmentList = new ArrayList<Assignment>();
+
+		List<OsceDay> osceDays = OsceDay.findAllOsceDaysOrderByDate();
+
+		OsceDay osceDay = null;
+		OsceSequence osceSequence = null;
+		OscePost oscePost = null;
+		Course course = null;
+
+		for (Iterator<OsceDay> iterator = osceDays.iterator(); iterator
+				.hasNext();) {
+
+			osceDay = (OsceDay) iterator.next();
+
+			List<OsceSequence> osceSequences = osceDay.getOsceSequences();
+
+			if (osceSequences != null && osceSequences.size() > 0) {
+				osceSequence = osceSequences.get(0);
+
+				List<OscePost> oscePosts = osceSequence.getOscePosts();
+
+				if (oscePosts != null && oscePosts.size() > 0) {
+					oscePost = oscePosts.get(0);
+				}
+
+				List<Course> courses = osceSequence.getCourses();
+
+				if (courses != null && courses.size() > 0) {
+					course = courses.get(0);
+				}
+
+			}
+
+			// SELECT o.osce_date,a.* FROM osce.assignment a ,osce.osce_day o
+			// where
+			// osce_day=1 and a.type=0 and a.osce_day = o.id and
+			// a.osce_post_room
+			// in(select opr.id from osce_post_room opr where osce_post=1 and
+			// course=1 ) order by a.osce_day asc,o.osce_date asc,a.time_start
+			// asc ;
+			// and op.osce_sequence=1;
+
+			String queryString = "SELECT a FROM Assignment as a where a.type=0 and a.osceDay.osce.semester.id="
+					+ semesterId
+					+ " and a.osceDay.id="
+					+ osceDay.getId()
+					+ "  and a.oscePostRoom.id in(select opr.id from OscePostRoom opr where opr.oscePost.id="
+					+ oscePost.getId()
+					+ " and opr.course.id="
+					+ course.getId()
+					+ " ) order by a.osceDay asc,a.osceDay.osceDate asc,a.timeStart asc ";
+			TypedQuery<Assignment> query = em.createQuery(queryString,
+					Assignment.class);
+
+			assignmentList.addAll(query.getResultList());
+
+			Log.info("retrieveAssignmenstOfTypeExaminer query String :"
+					+ queryString);
+			Log.info("Assignment List Size :" + assignmentList.size());
+		}
+		// return bellAssignmentTypes;
+		return assignmentList;
+	}
+
+	public static Integer getCountAssignmentsBySemester(Long semesterId) {
+		return new Integer(getAssignmentsBySemester(semesterId).size());
+	}
+
+	public static String getQwtBellSchedule(// List<Assignment> assignments,
+			Long semesterId, Integer time, TimeBell isPlusTime) {
+		try {
+			List<Assignment> assignments = getAssignmentsBySemester(semesterId);
+			Semester semester = Semester.findSemester(semesterId);
+
+			QwtUtil qwtUtil = new QwtUtil();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = new Date();
+
+			String fileName = new String(dateFormat.format(date) + ".qwt");
+			qwtUtil.open(fileName, false);
+
+			List<BellAssignmentType> bellAssignmentTypes = QwtUtil
+					.getBellAssignmentType(assignments, time, isPlusTime,
+							semester);
+			qwtUtil.writeQwt(bellAssignmentTypes);
+
+			// qwtUtil.writeQwt(assignments);
+
+			qwtUtil.close();
+			return fileName;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// return OsMaConstant.FILENAME;
+		return "";
+	}
+
+	// Module : 15
+	
+	public static List<Assignment> findAssignmentByOscePostRoom(Long id, int rotationoffset, int timeslot)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT a FROM Assignment a WHERE oscePostRoom.id = " + id + " AND type = 0 ORDER BY timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	q.setFirstResult(rotationoffset);
+    	q.setMaxResults(timeslot);
+    	return q.getResultList();
+    }
+    
+    public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Date time_start, Date time_end)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT a FROM Assignment a WHERE oscePostRoom.id = " + id + " AND type = 2 AND timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	return q.getResultList();
+    }
 }

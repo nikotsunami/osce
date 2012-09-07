@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,13 +16,14 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.scaffold.RoleTemplateRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -45,7 +45,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -163,6 +162,8 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (RoleScriptTemplateViewImpl)view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (RoleScriptTemplateViewImpl)view);
 		
 		// widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());

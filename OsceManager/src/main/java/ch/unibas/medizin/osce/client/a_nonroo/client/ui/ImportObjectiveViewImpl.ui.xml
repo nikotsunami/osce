@@ -2,10 +2,14 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	
-	<ui:style src="../styles.css" />
+<ui:style src="../styles.css" >
+.uploadForm{
+	margin-left: 20px;
+}
+</ui:style>
 	
 	<g:HTMLPanel>
-	<g:FormPanel ui:field="uploadFormPanel">
+	<g:FormPanel ui:field="uploadFormPanel" addStyleNames="{style.uploadForm}" >
 		<g:HorizontalPanel spacing="8">
 			<g:Label styleName="{style.label}" ui:field="importLabel"></g:Label>
 			<g:FileUpload ui:field="fileUpload" name="fileUpload1" />

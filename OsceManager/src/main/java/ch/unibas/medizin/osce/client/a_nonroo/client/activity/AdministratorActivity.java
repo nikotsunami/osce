@@ -6,9 +6,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsP
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AdministratorViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -19,7 +19,6 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
@@ -84,6 +83,8 @@ AdministratorView.Presenter, AdministratorView.Delegate {
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (AdministratorViewImpl)view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (AdministratorViewImpl)view);
 		
 		init();
 

@@ -5,9 +5,10 @@
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
 	 <ui:style src="../../styles.css" />
-
-	<g:ScrollPanel width="100%" height='800px'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
+		
 	
+	<g:ScrollPanel width="100%" height='100%'   ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
+	<!-- Module 5 Bug Report Solution Change Above Scroll Panel Height 800px to 100% E Module 5 Bug Report Solution -->
 	<!-- h1>Circuit Details Place</h1  -->
 	
 		<g:VerticalPanel  width="100%">

@@ -2,16 +2,12 @@ package ch.unibas.medizin.osce.server.upload;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
-
 import java.util.List;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -20,14 +16,19 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
-
-import ch.unibas.medizin.osce.domain.MediaContent;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 
 public class UploadServlet extends HttpServlet {
 
-	private static String UPLOAD_DIRECTORY=".";
+	//private static String UPLOAD_DIRECTORY="d://sp//images";
+	
+	//SPEC[Start
+	private static String appUploadDirectory="";
+	private static String localUploadDirectory=OsMaFilePathConstant.localImageUploadDirectory;
+//	private static String srcPath=OsMaFilePathConstant.imagesrcPath;
+	//SPEC]End
 	/**
 	 * Generated 
 	 */
@@ -39,6 +40,14 @@ public class UploadServlet extends HttpServlet {
             		"Unsupported content");
 		}
 	    
+		
+		//SPEC[Start
+		  appUploadDirectory=getServletConfig().getServletContext().getRealPath(OsMaFilePathConstant.appImageUploadDirectory);
+		  if(OsMaFilePathConstant.realImagePath.equals(""))
+			  OsMaFilePathConstant.realImagePath=appUploadDirectory;
+	//	appUploadDirectory=cntxtpath+appUploadDirectory;
+		//SPEC]End
+		
     	// Create a factory for disk-based file items
         FileItemFactory factory = new DiskFileItemFactory();
 
@@ -80,7 +89,9 @@ public class UploadServlet extends HttpServlet {
             {
             	if (item.isFormField())
             	{
-            		fileName=fileName +"_"+item.getString();
+            		
+            			fileName= item.getString()+"_"+fileName;
+            	
             	}
             	else
             	{
@@ -88,10 +99,13 @@ public class UploadServlet extends HttpServlet {
                     
             			
                         temp=FilenameUtils. getName(item.getName());
+                        String []a=temp.split("\\.");
+                        temp=a[a.length-1];
                    
             	}
             }
-            fileName=fileName+"_"+temp;
+            fileName=fileName.substring(0, fileName.length()-1);
+            fileName=fileName+"."+temp;
             //spec
             for (FileItem item : items) {
                 // process only file upload - discard other form item types
@@ -108,17 +122,32 @@ public class UploadServlet extends HttpServlet {
             	{
              
                 
+               //Upload File to Application Directory
+           // 	appUploadDirectory=session.getServletContext().getRealPath(".") + appUploadDirectory;
+                File appUploadedFile = new File(appUploadDirectory, fileName);
                
-                File uploadedFile = new File(UPLOAD_DIRECTORY, fileName);
+              
                 
-                if(uploadedFile.createNewFile()) {
+               appUploadedFile.createNewFile();
                 	//save
-                	item.write(uploadedFile);
+                	item.write(appUploadedFile);
                 	//resp.setStatus(HttpServletResponse.SC_CREATED);
                 	Log.info("file name " + fileName);
-                }
+             
+                
+                //upload file to local directory
+                
+                File localUploadedFile = new File( localUploadDirectory, fileName);
+               localUploadedFile.createNewFile();
+                	//save
+                	item.write(localUploadedFile);
+                	//resp.setStatus(HttpServletResponse.SC_CREATED);
+                	Log.info("file name " + fileName);
+                
+                
+                
                 System.out.println("File Name :" +fileName);
-                MediaContent.createMedia(new Long(19), fileName);
+            //    MediaContent.createMedia(new Long(19), fileName);
             	}
             }
         } catch (Exception e) {
@@ -126,15 +155,18 @@ public class UploadServlet extends HttpServlet {
         	Log.error("An error occurred while creating the file : " + e.getMessage());
         }
         //service info
-        Log.info("Attribtue names: ");
+      /*  Log.info("Attribtue names: ");
         Enumeration<?> enu = request.getAttributeNames();
         while (enu.hasMoreElements()) {
           Log.info("Attribute name: " + enu.nextElement().toString());
         }
+        */
         Log.info("Content type: " + request.getContentType());
         //TODO: resolve the content type and show different links
         resp.setContentType("text/html");
-        resp.getOutputStream().write((fileName).getBytes());
+        
+        //return application path
+        resp.getOutputStream().write((OsMaFilePathConstant.appImageUploadDirectory+"/"+fileName).getBytes());
         resp.getOutputStream().flush();
 	}
 }

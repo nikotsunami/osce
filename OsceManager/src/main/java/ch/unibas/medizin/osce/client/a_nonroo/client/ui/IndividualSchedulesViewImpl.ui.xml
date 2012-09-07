@@ -4,10 +4,14 @@
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	 
-	<ui:style src="../styles.css" />
+<ui:style src="../styles.css" >
+.tabPanel{
+	margin-left: 20px;
+}
+</ui:style>
 	
 	<g:HTMLPanel>
-		<g:TabPanel  ui:field="osceTab" width="100%">
+		<g:TabPanel  ui:field="osceTab" width="100%" addStyleNames="{style.tabPanel}" >
 			 <!-- <g:Tab>
 				<g:TabHTML >OM</g:TabHTML>
 				<g:Label>Hello</g:Label>

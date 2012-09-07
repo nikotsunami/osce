@@ -2,6 +2,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -13,10 +16,11 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ExaminationScheduleDetailViewImpl extends Composite implements ExaminationScheduleDetailView{
+public class ExaminationScheduleDetailViewImpl extends Composite implements ExaminationScheduleDetailView, MenuClickHandler{
 	
 	private static ExaminationScheduleDetailViewImplUiBinder uiBinder = GWT
 			.create(ExaminationScheduleDetailViewImplUiBinder.class);
@@ -29,6 +33,9 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	private Presenter presenter;
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	@UiField
+	ScrollPanel scrollPanel;
 	
 	@UiField
 	Label shortBreakTxt;
@@ -148,6 +155,9 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		spAssignmentButton.setText(constants.spAssignment());
 		shortBreakSimPatChangeTxt.setText(constants.simpatChangeBreak());
 		longBreakTxt.setText(constants.longBreak());
+		
+		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+		 scrollPanel.setWidth(panelWidth);
 	}
 	
 	@Override
@@ -171,4 +181,16 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	{
 		delegate.autoAssignSP(osceProxy.getId());
 	}
+	
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+		scrollPanel.setWidth(panelWidth);
+		
+	}
+
 }

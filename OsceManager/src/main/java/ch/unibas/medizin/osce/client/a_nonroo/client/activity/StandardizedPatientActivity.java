@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaHeaderLogic;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -20,53 +18,57 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchMaritialStatusPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchNationalityPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchNationalityPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchProfessionPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchProfessionPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchScarPopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchWorkPermissionPopup;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchWorkPermissionPopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
-
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.WorkPermission;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
-
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -90,7 +92,8 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class StandardizedPatientActivity extends AbstractActivity implements StandardizedPatientView.Presenter, StandardizedPatientView.Delegate,
 		StandartizedPatientAdvancedSearchSubView.Delegate, StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
-		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate{
+		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate,StandardizedPatientAdvancedSearchProfessionPopup.Delegate
+		,StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate{
 
 	/** Holds the applications request factory */
 	private OsMaRequestFactory requests;
@@ -138,6 +141,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
 	/** Holds a reference to the nationalityPopup if open */
 	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
+	
+	//issue
+	private StandardizedPatientAdvancedSearchProfessionPopup professionPopup;
+	private StandardizedPatientAdvancedSearchWorkPermissionPopup workPermissionPopup;
+	private StandardizedPatientAdvancedSearchMaritialStatusPopupView maritialStausPopup;
 	
 	// BY SPEC v(Start)
 
@@ -239,6 +247,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl) view);
+		
 		this.table = view.getTable();
 
 		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
@@ -439,9 +450,60 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Shows the details place for a given StandardizedPatientProxy
 	 * @param StandardizedPatient the patient of whom details should be displayed
 	 */
-	protected void showDetails(StandardizedPatientProxy StandardizedPatient) {
-		Log.debug(StandardizedPatient.getName());
-		goTo(new StandardizedPatientDetailsPlace(StandardizedPatient.stableId(), Operation.DETAILS));
+	protected void showDetails(StandardizedPatientProxy standardizedPatient) {
+		Log.debug(standardizedPatient.getName());
+		
+		//upload image[
+		copyImageAndVideo(standardizedPatient.getImmagePath(),standardizedPatient.getVideoPath(),standardizedPatient);
+		//upload image]
+		//goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
+	}
+	
+	private class CopyReceiver extends Receiver<Boolean>{
+		@Override
+		public void onSuccess(Boolean response) {
+			System.out.println("CopyReceiver :" + response);
+		}
+	}
+	
+	/*
+	 * By SPEC
+	 * 
+	 */
+	private void copyImageAndVideo(String imagePath,String videoPath,final StandardizedPatientProxy standardizedPatient)
+	{
+		/*copyService.copyImagesAndVideo(id, new AsyncCallback<Boolean>() {
+
+            public void onFailure(Throwable caught) {
+              Window.alert("RPC to sendEmail() failed.");
+            }
+
+         
+
+			@Override
+			public void onSuccess(Boolean result) {
+				// TODO Auto-generated method stub
+				System.out.println("Success");
+			}
+          });
+          */
+		if(imagePath ==null || videoPath == null || imagePath.equals("") || videoPath.equals(""))
+		{
+			goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
+			return;
+		}
+		requests.standardizedPatientRequestNonRoo().copyImageAndVideo(imagePath,videoPath).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				System.out.println("CopyReceiver :" + response);
+				
+				goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
+			}
+		});
+		
+		
+
 	}
 	
 	//By SPEC[Start
@@ -641,6 +703,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			shownValue = constants.weight() + " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
 					+ value + "kg";
+			break;
+		case AGE:
+			shownValue = constants.age() + " " + new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "years";
+			break;
+		case GENDER:
+			shownValue = constants.gender() + " " + new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value;
+			break;
+			
 		}
 		StandardizedPatientRequestNonRoo req = requests.standardizedPatientRequestNonRoo();
 		AdvancedSearchCriteriaProxy criteria = req.create(AdvancedSearchCriteriaProxy.class);
@@ -743,6 +815,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			if (anamnesisPopup == null) {
 				return;
 			}
+		
 			((ProxySuggestOracle<AnamnesisCheckProxy>) anamnesisPopup.getAnamnesisQuestionSuggestBox().getSuggestOracle()).addAll(response);
 		}
 	}
@@ -828,5 +901,85 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		addAdvSeaBasicButtonClicked(languageProxy.getId(), value, displayValue, bindType, PossibleFields.LANGUAGE, comparison);
 	}
 
+	@Override
+	public void addPorfessionClicked(IconButton parentButton) {
+		requests.professionRequest().findAllProfessions().fire(new OSCEReceiver<List<ProfessionProxy>>() {
+
+			@Override
+			public void onSuccess(List<ProfessionProxy> response) {
+				if (professionPopup == null) {
+					return;
+				}
+				List<ProfessionProxy> values = new ArrayList<ProfessionProxy>();
+				values.addAll(response);
+				if (values.size() > 0 ) {
+					professionPopup.getProfessionBox().setValue(values.get(0));
+				}
+				professionPopup.getProfessionBox().setAcceptableValues(values);
+			}
+		});
+
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == professionPopup) {
+				return;
+			}
+		}
+		professionPopup = new StandardizedPatientAdvancedSearchProfessionPopupImpl();
+		professionPopup.setDelegate(this);
+		professionPopup.display(parentButton);
+		advancedSearchPopup = professionPopup;
+		
+	}
+
+	@Override
+	public void addWorkPermissionClicked(IconButton parentButton) {
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == workPermissionPopup) {
+				return;
+			}
+		}
+		workPermissionPopup = new StandardizedPatientAdvancedSearchWorkPermissionPopupImpl();
+		workPermissionPopup.setDelegate(this);
+		workPermissionPopup.display(parentButton);
+		advancedSearchPopup = workPermissionPopup;		
+	}
+
+	@Override
+	public void addMaritialStatusClicked(IconButton parentButton) {
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == maritialStausPopup) {
+				return;
+			}
+		}
+		maritialStausPopup = new StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl();
+		maritialStausPopup.setDelegate(this);
+		maritialStausPopup.display(parentButton);
+		advancedSearchPopup = maritialStausPopup;		
+	}
+
+	@Override
+	public void addProfessionButtonClicked(ProfessionProxy profession,
+			BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.PROFESSION).render(comparison) + " " 
+				+ profession.getProfession();
+		addAdvSeaBasicButtonClicked(profession.getId(), profession.getProfession(), displayValue, bindType, PossibleFields.PROFESSION, comparison);
+	}
+
+	@Override
+	public void addWokPermissionButtonClicked(WorkPermission workpermission,
+			BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.WORKPERMISSION).render(comparison) + " " + workpermission + " WorkPermission";
+		addAdvSeaBasicButtonClicked(null, workpermission.toString(), displayValue, bindType, PossibleFields.WORKPERMISSION, comparison);
+	}
+
+	@Override
+	public void addMaritialStatusButtonClicked(MaritalStatus maritialStatus,
+			BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.MARITIALSTATUS).render(comparison) + " " + maritialStatus; 
+		addAdvSeaBasicButtonClicked(null, maritialStatus.toString(), displayValue, bindType, PossibleFields.MARITIALSTATUS, comparison);
+	}
 
 }

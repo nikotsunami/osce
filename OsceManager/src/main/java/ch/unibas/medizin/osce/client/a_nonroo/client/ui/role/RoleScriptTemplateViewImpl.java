@@ -5,15 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -38,8 +42,6 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -48,7 +50,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptTemplateView, RecordChangeHandler {
+public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptTemplateView, RecordChangeHandler, MenuClickHandler {
 
 	
 	private static RoleScriptTemplateViewUiBinder uiBinder = GWT
@@ -87,7 +89,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	TextBox newBodypart;
 	
 	@UiField
-	Button newButton;
+	IconButton newButton;
 	
 	// Issue Role Module
 	int top =0, left=0;
@@ -129,7 +131,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<RoleTemplateProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
-		newButton.setText(constants.addRoleScriptTemplate());
+
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -142,6 +144,8 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		});
 		
 		initWidget(uiBinder.createAndBindUi(this));
+
+		newButton.setText(constants.addRoleScriptTemplate());
 		
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
@@ -167,8 +171,15 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		    }
 		});
 
+		int splitLeft = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+splitLeft+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		
 		// Issue Role Module
 				table.addDomHandler(new ClickHandler() {
@@ -376,5 +387,22 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	}
 	// by spec
 
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+			
+			if(OsMaMainNav.getMenuStatus() == 0)
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+			else
+				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		}
+			
+	}
 
 }

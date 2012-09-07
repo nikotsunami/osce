@@ -79,18 +79,29 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 		return roomLbl;
 	}
 
+	//Module 5 Bug Report Solution
+	@Override	
 	public IconButton getSpecializationedit() {
+	//E Module 5 Bug Report Solution
 		return specializationedit;
 	}
 
 	// Module 5 bug Report Change
+	@Override
 	public IconButton getRoomedit() {
+	//E Module 5 bug Report Change
 		return roomedit;
 	}
+	//Module 5 Bug Report Solution
+	@Override
 	public IconButton getRoleTopicEdit() {
+	//E Module 5 Bug Report Solution
 		return roleTopicedit;
 	}
+	//Module 5 Bug Report Solution
+	@Override
 	public IconButton getStandardizedRoleEdit() {
+	//Module 5 Bug Report Solution
 		return standardizedRoleedit;
 	}
 	// E Module 5 bug Report Change

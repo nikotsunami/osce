@@ -6,7 +6,7 @@
 	<ui:style src="../../styles.css"></ui:style>
 		
 	<g:HTMLPanel>
-		<g:FormPanel ui:field="uploadFormPanel">
+		<!--  <g:FormPanel ui:field="uploadFormPanel">
 		
 	        <g:HorizontalPanel>
 	            <g:Label styleName="{style.label}"> Image Upload: </g:Label>
@@ -16,11 +16,13 @@
 
 	        </g:HorizontalPanel>
 		</g:FormPanel>
+		-->
 		 <g:HorizontalPanel>			
 	
 	 <g:Image ui:field="uploadMessage" width="60" height="80"></g:Image>
 	 </g:HorizontalPanel>
 	    <!--spec video upload -->
+	    <!--  
 	    <g:FormPanel ui:field="videoUploadFormPanel">
 		
 	        <g:HorizontalPanel>
@@ -34,7 +36,8 @@
 	        </g:HorizontalPanel>
 		
 		</g:FormPanel>			
-	    <div ui:field="videoUploadMessage" />
+		
+	    <div ui:field="videoUploadMessage" />-->	
 	    <g:HorizontalPanel ui:field="videoPanel">
 	    </g:HorizontalPanel>
 	    <!--spec video upload -->

@@ -692,5 +692,95 @@ public interface OsceConstants extends Constants {
 
 	public String yes();
 
-}
+	// eosce
+	public String importeosce();
 
+	public String importBtn();
+
+	public String processed();
+
+	public String unprocessed();
+
+	public String processedfiles();
+
+	public String unprocessedfiles();
+
+	public String importprocessmsg();
+
+	public String eosceerrormsg();
+
+	public String confirmation();
+
+	public String unprocessedmsg();
+
+	public String fetcherrormsg();
+
+	public String importerror();
+
+	public String importsuccess();
+
+	public String processedmsg();
+
+	public String delerror();
+
+	public String delsuccess();
+
+	// eosce
+
+	// Module : 15[
+	public String bellScheduleUpload();
+
+	public String bellScheduleExport();
+
+	public String plusTime();
+
+	public String minusTime();
+
+	public String bellSchedule();
+
+	public String moveTime();
+
+	public String minute();
+
+	public String dateHeader();
+
+	public String timeHeader();
+
+	public String toneHeader();
+
+	public String validateMinute();
+
+	public String validatePlusMinus();
+	// ]Module : 15
+	
+	//export osce
+	public String exportosce();
+	
+	public String exportprocessed();
+		
+	public String exportunprocessed();
+	
+	public String exporterror();
+	
+	public String exportprocessederror();
+	
+	public String exportunprocessederror();
+	
+	public String exportsuccess();
+	
+	public String exportprocessedlabel();
+	
+	public String exportprocessedmsg();
+	
+	public String exportwarning();
+	
+	//nationality issue
+	public String nationaltiywarning();
+	
+	public String videoUpload();
+	
+	//Module 5 Bug Report Solution
+	public String schedulePostpone();
+	public String scheduleEarlier();
+//E Module 5 Bug Report Solution
+}

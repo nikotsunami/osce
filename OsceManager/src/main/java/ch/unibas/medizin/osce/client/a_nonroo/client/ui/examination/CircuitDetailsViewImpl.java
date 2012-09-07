@@ -7,6 +7,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -20,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsView {
+public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsView{
 
 	private static CircuitDetailsViewUiBinder uiBinder = GWT
 			.create(CircuitDetailsViewUiBinder.class);
@@ -93,7 +97,9 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	}
 
 	public void init() {
-		// TODO implement this!
+		
+//		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+//		 scrollPanel.setWidth(panelWidth);
 	}
 
 	@Override
@@ -122,4 +128,15 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 			return this.oSCENewSubViewImpl;
 		}
 		// L: SPEC END =
+
+//		@Override
+//		public void onMenuClicked(MenuClickEvent event) {
+//			
+//			OsMaMainNav.setMenuStatus(event.getMenuStatus());
+//			
+////			String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+////			scrollPanel.setWidth(panelWidth);
+//			
+//			
+//		}
 }

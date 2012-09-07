@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
@@ -25,8 +26,6 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-//import com.google.gwt.requestfactory.shared.Receiver;
-//import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -38,7 +37,7 @@ import com.google.inject.Inject;
 public class OsceActivity extends AbstractActivity implements OsceView.Presenter, OsceView.Delegate {
 
 	private OsMaRequestFactory requests;
-	private PlaceController placeController;
+	private PlaceController placeController;	
 	private AcceptsOneWidget widget;
 	private OsceView view;
 	private OsceView systemStartView; 
@@ -130,6 +129,9 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (OsceViewImpl) view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (OsceViewImpl) view);
+		
 		setTable(view.getTable());
 		
 		/*requests.semesterRequest().findSemester(1L).fire(new OSCEReceiver<SemesterProxy>() {

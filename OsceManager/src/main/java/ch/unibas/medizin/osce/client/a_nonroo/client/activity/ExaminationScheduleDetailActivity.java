@@ -35,6 +35,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.StudentV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.StudentViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentRequest;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
@@ -47,6 +48,7 @@ import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -129,6 +131,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		widget.setWidget(examinationScheduleDetailView.asWidget());
 		this.view=examinationScheduleDetailView;
 		
+		MenuClickEvent.register(requests.getEventBus(), (ExaminationScheduleDetailViewImpl)view);
 		
 		requests.find(place.getProxyId()).with("osce_days","osce_days.osceSequences","osce_days.osceSequences.courses","osce_days.osceSequences.oscePosts","osce_days.osceSequences.oscePosts.oscePostBlueprint","osce_days.osceSequences.oscePosts.standardizedRole","osce_days.osceSequences.oscePosts.standardizedRole.roleTopic").fire(new OSCEReceiver<Object>() {
 
@@ -145,12 +148,37 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					Log.info("Osce Proxy Name :" + osceProxy.getName());
 					examinationScheduleDetailView.setOsceProxy(osceProxy);
 					
-					examinationScheduleDetailView.getShortBreakValue().setText(osceProxy.getShortBreak().toString());
+					/*examinationScheduleDetailView.getShortBreakValue().setText(osceProxy.getShortBreak().toString());
 					examinationScheduleDetailView.getMiddleBreakValue().setText(osceProxy.getMiddleBreak().toString());
 					examinationScheduleDetailView.getLunchTimeValue().setText(osceProxy.getLunchBreak().toString());
 					examinationScheduleDetailView.getNumOfRoomsValue().setText(osceProxy.getNumberRooms().toString());
 					examinationScheduleDetailView.getLongBreakValue().setText(osceProxy.getLongBreak().toString());
-					examinationScheduleDetailView.getShortBreakSimPatChangeValue().setText(osceProxy.getShortBreakSimpatChange().toString());
+					examinationScheduleDetailView.getShortBreakSimPatChangeValue().setText(osceProxy.getShortBreakSimpatChange().toString());*/
+					
+					if(osceProxy.getShortBreak()==null)
+						examinationScheduleDetailView.getShortBreakValue().setText("");
+					else
+						examinationScheduleDetailView.getShortBreakValue().setText(util.getEmptyIfNull(osceProxy.getShortBreak().toString()));
+					if(osceProxy.getMiddleBreak()==null)
+						examinationScheduleDetailView.getMiddleBreakValue().setText("");
+					else
+						examinationScheduleDetailView.getMiddleBreakValue().setText(util.getEmptyIfNull(osceProxy.getMiddleBreak().toString()));					
+					if(osceProxy.getLunchBreak()==null)
+						examinationScheduleDetailView.getLunchTimeValue().setText("");
+					else
+						examinationScheduleDetailView.getLunchTimeValue().setText(util.getEmptyIfNull(osceProxy.getLunchBreak().toString()));
+					if(osceProxy.getNumberRooms()==null)
+						examinationScheduleDetailView.getNumOfRoomsValue().setText("");
+					else						
+						examinationScheduleDetailView.getNumOfRoomsValue().setText(util.getEmptyIfNull(osceProxy.getNumberRooms().toString()));
+					if(osceProxy.getLongBreak()==null)
+						examinationScheduleDetailView.getLongBreakValue().setText("");
+					else						
+						examinationScheduleDetailView.getLongBreakValue().setText(util.getEmptyIfNull(osceProxy.getLongBreak().toString()));
+					if(osceProxy.getShortBreakSimpatChange()==null)
+						examinationScheduleDetailView.getShortBreakSimPatChangeValue().setText("");
+					else
+						examinationScheduleDetailView.getShortBreakSimPatChangeValue().setText(util.getEmptyIfNull(osceProxy.getShortBreakSimpatChange().toString()));
 					
 					Iterator<OsceDayProxy> osceDayProxyIterator=osceProxy.getOsce_days().iterator();
 					while(osceDayProxyIterator.hasNext())
@@ -202,7 +230,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								//headerView.getColorPicker().setValue(color);
 								
 								
-								headerView.getDeleteBtn().setVisible(false);
+								//headerView.getDeleteBtn().setVisible(false);
 								headerView.getColorPicker().setVisible(false);
 								headerView.getHeaderPanel().setHeight("360px");
 								

@@ -33,7 +33,12 @@ public interface OscePostSubView extends IsWidget{
 	 
 	 public Label getRoomLbl() ;
 	 
+	//Module 5 Bug Report Solution
 	 public IconButton getSpecializationedit();
+	 public IconButton getRoleTopicEdit();
+	 public IconButton getRoomedit();
+	 public IconButton getStandardizedRoleEdit();
+		//E Module 5 Bug Report Solution
 	 public Label getStandardizedRoleLbl() ;
 	 public OscePostProxy getOscePostProxy();
 	 public void setOscePostProxy(OscePostProxy oscePostProxy);

@@ -6,6 +6,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 
@@ -15,6 +18,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
@@ -25,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class CircuitViewImpl extends Composite implements CircuitView {
+public class CircuitViewImpl extends Composite implements CircuitView, MenuClickHandler {
 
 	private static CircuitViewUiBinder uiBinder = GWT
 			.create(CircuitViewUiBinder.class);
@@ -50,6 +54,8 @@ public class CircuitViewImpl extends Composite implements CircuitView {
 	public ImageResource icon2=  uiIcons.triangle1East();
 	Unit u=Unit.PX;
 	
+	@UiField
+	HTMLPanel mainHTMLPanel;
 
 	@UiField
 	HorizontalPanel horizontalCircuitTabPanel;
@@ -90,7 +96,12 @@ public class CircuitViewImpl extends Composite implements CircuitView {
 	}
 
 	public void init() {
-		// TODO implement this!
+		
+		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";
+		String width = (OsMaMainNav.getMenuStatus() == 0) ? "1390" : "1210";
+		
+		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : 900px;");
+		
 	}
 
 	@Override
@@ -121,5 +132,16 @@ public class CircuitViewImpl extends Composite implements CircuitView {
 	public SimplePanel getCircuitDetailPanel(){
 		return this.circuitDetailPanel;
 		
+	}
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";
+		String width = (OsMaMainNav.getMenuStatus() == 0) ? "1390" : "1210";
+		
+		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : 900px;");
 	}
 }

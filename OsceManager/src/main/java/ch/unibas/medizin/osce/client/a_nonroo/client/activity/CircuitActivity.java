@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -115,6 +116,9 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		view.setDelegate(this);
+		
+		MenuClickEvent.register(requests.getEventBus(), (CircuitViewImpl)view);
+		
 		view.getCircuitTabPanel().addSelectionHandler(new SelectionHandler<Integer>() {
 			
 			@Override

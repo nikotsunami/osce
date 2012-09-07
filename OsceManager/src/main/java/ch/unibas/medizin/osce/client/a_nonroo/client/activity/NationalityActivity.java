@@ -8,8 +8,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -45,6 +45,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 	private ActivityManager activityManger;
 	private NationalityDetailsActivityMapper nationalityDetailsActivityMapper;
 	
+	Boolean flag = false;
+	
 
 	public NationalityActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
@@ -69,6 +71,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
 		//by spec
+		
+		MenuClickEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
 		
 		init();
 
@@ -130,8 +134,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 		Log.debug(nationality.getNationality());
 		
-		goTo(new NationalityDetailsPlace(nationality.stableId(),
-				Operation.DETAILS));
+		//goTo(new NationalityDetailsPlace(nationality.stableId(),
+		//		Operation.DETAILS));
 	}
 	
 
@@ -240,6 +244,23 @@ NationalityView.Presenter, NationalityView.Delegate {
 		});
 		
 		
+	}
+	
+	@Override
+	public boolean checkNationality(String name) {
+		
+		
+		requests.nationalityRequestNonRoo().findNationalitiesByName(name, 0, 10).fire(new OSCEReceiver<List<NationalityProxy>>() {
+
+			@Override
+			public void onSuccess(List<NationalityProxy> response) {
+				if (response.size() == 0)
+					flag = true;
+				else 
+					flag = false;				
+			}
+		});
+		return flag;
 	}
 
 }

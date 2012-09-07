@@ -17,12 +17,24 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
+
 import ch.unibas.medizin.osce.domain.MediaContent;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 
 public class VideoUploadServlet extends HttpServlet{
-	private static String UPLOAD_DIRECTORY=".";
+	
+	
+	//private static String UPLOAD_DIRECTORY=".";
+	
+		//SPEC[Start
+		private static String appUploadDirectory=OsMaFilePathConstant.appVideoUploadDirectory;
+		private static String localUploadDirectory=OsMaFilePathConstant.localVideoUploadDirectory;
+		//private static String srcPath=OsMaFilePathConstant.videosrcPath;
+		//SPEC]End
+	
+	
 	/**
 	 * Generated 
 	 */
@@ -33,6 +45,14 @@ public class VideoUploadServlet extends HttpServlet{
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
             		"Unsupported content");
 		}
+	    
+		//SPEC[Start
+		//String  cntxtpath=request.getSession().getServletContext().getRealPath(".");
+		appUploadDirectory=getServletConfig().getServletContext().getRealPath(OsMaFilePathConstant.appVideoUploadDirectory);
+		if(OsMaFilePathConstant.realVideoPath.equals(""))
+			OsMaFilePathConstant.realVideoPath=appUploadDirectory;
+		//appUploadDirectory=cntxtpath+appUploadDirectory;
+		//SPEC]End
 	    
     	// Create a factory for disk-based file items
         FileItemFactory factory = new DiskFileItemFactory();
@@ -75,18 +95,23 @@ public class VideoUploadServlet extends HttpServlet{
             {
             	if (item.isFormField())
             	{
-            		fileName=fileName +"_"+item.getString();
+            		if(!item.getString().equals(""))
+            			fileName=item.getString() +"_"+fileName;
             	}
             	else
             	{
             	
                     
             			
-                        temp=FilenameUtils. getName(item.getName());
+            		  temp=FilenameUtils. getName(item.getName());
+                      String []a=temp.split("\\.");
+                      temp=a[a.length-1];
                    
             	}
             }
-            fileName=fileName+"_"+temp;
+            
+            fileName=fileName.substring(0, fileName.length()-1);
+            fileName=fileName+"."+temp;
             //spec
             for (FileItem item : items) {
                 // process only file upload - discard other form item types
@@ -103,17 +128,30 @@ public class VideoUploadServlet extends HttpServlet{
             	{
              
                 
+            		 File appUploadedFile = new File(appUploadDirectory, fileName);
                
-                File uploadedFile = new File(UPLOAD_DIRECTORY, fileName);
                 
-                if(uploadedFile.createNewFile()) {
+                
+                     appUploadedFile.createNewFile();
                 	//save
-                	item.write(uploadedFile);
+                      	item.write(appUploadedFile);
                 	//resp.setStatus(HttpServletResponse.SC_CREATED);
                 	Log.info("file name " + fileName);
-                }
+                   
+                      
+                      //upload file to local directory
+                      
+                      File localUploadedFile = new File( localUploadDirectory, fileName);
+                     localUploadedFile.createNewFile();
+                      	//save
+                      	item.write(localUploadedFile);
+                      	//resp.setStatus(HttpServletResponse.SC_CREATED);
+                      	Log.info("file name " + fileName);
+                      
+                      
+                      
                 System.out.println("File Name :" +fileName);
-                MediaContent.createMedia(new Long(19), fileName);
+             //   MediaContent.createMedia(new Long(19), fileName);
             	}
             }
         } catch (Exception e) {
@@ -121,15 +159,16 @@ public class VideoUploadServlet extends HttpServlet{
         	Log.error("An error occurred while creating the file : " + e.getMessage());
         }
         //service info
-        Log.info("Attribtue names: ");
+     /*   Log.info("Attribtue names: ");
         Enumeration<?> enu = request.getAttributeNames();
         while (enu.hasMoreElements()) {
           Log.info("Attribute name: " + enu.nextElement().toString());
         }
+       */
         Log.info("Content type: " + request.getContentType());
         //TODO: resolve the content type and show different links
         resp.setContentType("text/html");
-        resp.getOutputStream().write((fileName).getBytes());
+        resp.getOutputStream().write((OsMaFilePathConstant.appVideoUploadDirectory+"/"+fileName).getBytes());
         resp.getOutputStream().flush();
 	}
 }

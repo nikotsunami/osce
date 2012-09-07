@@ -14,12 +14,12 @@ import com.google.gwt.requestfactory.shared.Service;
 @SuppressWarnings("deprecation")
 @Service(Scar.class)
 public interface ScarRequestNonRoo extends RequestContext {
+
+	abstract Request<Long> countScarsByAnamnesisForm(Long anamnesisFormId);
 	
 	abstract Request<Long> countScarsByName(String name);
 	
 	abstract Request<List<ScarProxy>> findScarEntriesByName(String name, int firstResult, int maxResults);
-
-	abstract Request<Long> countScarsByAnamnesisForm(Long anamnesisFormId);
 
 	abstract Request<List<ScarProxy>> findScarEntriesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
 

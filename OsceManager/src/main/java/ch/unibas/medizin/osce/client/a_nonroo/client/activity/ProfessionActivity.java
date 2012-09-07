@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
-import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -9,12 +8,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -29,7 +26,6 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -74,6 +70,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (ProfessionViewImpl)view);
 		//by spec
+		MenuClickEvent.register(requests.getEventBus(), (ProfessionViewImpl)view);
 
 		init();
 

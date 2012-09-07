@@ -6,10 +6,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;

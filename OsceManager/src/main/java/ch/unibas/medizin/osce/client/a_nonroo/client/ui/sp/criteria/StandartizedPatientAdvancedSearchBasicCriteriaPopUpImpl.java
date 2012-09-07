@@ -115,7 +115,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		
 		field.setValue(PossibleFields.HEIGHT);
 		field.setAcceptableValues(Arrays.asList(new PossibleFields[] 
-				{PossibleFields.HEIGHT, PossibleFields.WEIGHT, PossibleFields.BMI}));
+				{PossibleFields.HEIGHT, PossibleFields.WEIGHT, PossibleFields.BMI, PossibleFields.AGE, PossibleFields.GENDER}));
 		
 		comparison.setValue(Comparison.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison.values()));
@@ -129,11 +129,25 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 			@Override
 			public void onValueChange(ValueChangeEvent<PossibleFields> event) {
 				if (event.getValue() == PossibleFields.BMI) {
+					comparison.setValue(Comparison.values()[0]);
+					setComparisonPickerValues(Arrays.asList(Comparison.values()));
 					unit.setText("");
 				} else if (event.getValue() == PossibleFields.HEIGHT) {
+					comparison.setValue(Comparison.values()[0]);
+					setComparisonPickerValues(Arrays.asList(Comparison.values()));
 					unit.setText("[cm]");
 				} else if (event.getValue() == PossibleFields.WEIGHT) {
+					comparison.setValue(Comparison.values()[0]);
+					setComparisonPickerValues(Arrays.asList(Comparison.values()));
 					unit.setText("[kg]");
+				} else if (event.getValue() == PossibleFields.GENDER) {
+					comparison.setValue(Comparison.values()[0]);
+					setComparisonPickerValues(Arrays.asList(new Comparison[]{Comparison.EQUALS, Comparison.NOT_EQUALS}));
+					unit.setText("");
+				} else if (event.getValue() == PossibleFields.AGE) {
+					comparison.setValue(Comparison.values()[0]);
+					setComparisonPickerValues(Arrays.asList(Comparison.values()));
+					unit.setText("[years]");
 				}
 			}
 		});

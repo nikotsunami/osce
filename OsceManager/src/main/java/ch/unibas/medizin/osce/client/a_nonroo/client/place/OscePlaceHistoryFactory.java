@@ -70,10 +70,20 @@ public class OscePlaceHistoryFactory {
 	
 	//by learning objective
 	private final ImportObjectiveViewPlace.Tokenizer importObjectiveTokenizer;
-	//by learning objective
+	//by learning objective	
+
+	//by eosce
+	private final ImporteOSCEPlace.Tokenizer importeOSCETokenizer;
+	//by eosce
+	
+	private final ExportOscePlace.Tokenizer exportOSCETokenizer;
 
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
+		this.exportOSCETokenizer = new ExportOscePlace.Tokenizer(requestFactory);
+		
+		this.importeOSCETokenizer = new ImporteOSCEPlace.Tokenizer(requestFactory);
+		
 		this.nationalityPlaceTokenizer = new NationalityPlace.Tokenizer(requestFactory);
 		this.nationalityDetailsPlaceTokenizer = new NationalityDetailsPlace.Tokenizer(requestFactory);
 
@@ -138,7 +148,14 @@ public class OscePlaceHistoryFactory {
 		
         //Module 8]
 	}
-
+	
+	public PlaceTokenizer<ExportOscePlace> getExportOSCETokenizer() {
+		return exportOSCETokenizer;
+	}
+	
+	public PlaceTokenizer<ImporteOSCEPlace> getImporteOSCETokenizer() {
+		return importeOSCETokenizer;
+	}
 
 	public PlaceTokenizer<NationalityPlace> getNationalityPlaceTokenizer() {
 		return nationalityPlaceTokenizer;

@@ -10,16 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -46,11 +47,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+
 /**
  * @author dk
  *
  */
-public class RoomViewImpl extends Composite implements RoomView, RecordChangeHandler {
+public class RoomViewImpl extends Composite implements RoomView, RecordChangeHandler, MenuClickHandler {
 
 	private static RoomViewUiBinder uiBinder = GWT
 			.create(RoomViewUiBinder.class);
@@ -339,9 +342,15 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 			}
 		}, ClickEvent.getType());
 
+         int splitLeft = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
 
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+splitLeft+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 
@@ -403,10 +412,25 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 		
 		addColumn(new ActionCell<RoomProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoomProxy>() {
-					public void execute(RoomProxy room) {
+					public void execute(final RoomProxy room) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(room);
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(room);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<RoomProxy>() {
 			public RoomProxy getValue(RoomProxy room) {
@@ -513,4 +537,24 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 				table.setPageSize(pagesize);
 			}
 			//by spec
+			
+			@Override
+			public void onMenuClicked(MenuClickEvent event) {
+				
+				OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+				int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+				
+				DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+				
+				if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+					
+					if(OsMaMainNav.getMenuStatus() == 0)
+						splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+					else
+						splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+				}
+					
+			}
+			
+
 }

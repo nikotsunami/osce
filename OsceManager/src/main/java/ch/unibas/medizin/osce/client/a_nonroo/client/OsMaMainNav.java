@@ -1,10 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.transaction.config.TxNamespaceHandler;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
@@ -15,17 +11,19 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationScheduleDetailPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExaminationSchedulePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
@@ -39,9 +37,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopu
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
-
-
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterRequest;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -54,20 +51,23 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -90,10 +90,22 @@ public class OsMaMainNav extends Composite {
 					@Override
 					public void onEventReceived(
 							ApplicationLoadingScreenEvent event) {
-						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
+//						Log.info(" ApplicationLoadingScreenEvent onEventReceived Called");
 						event.display();
 					}
 				});
+	}
+
+	private static int menuStatus = 1;
+	
+	
+
+	public static int getMenuStatus() {
+		return menuStatus;
+	}
+
+	public static void setMenuStatus(int menuStatus) {
+		OsMaMainNav.menuStatus = menuStatus;
 	}
 
 	private OsMaRequestFactory requests;
@@ -109,6 +121,335 @@ public class OsMaMainNav extends Composite {
 		// Role Module Issue V4
 		OsceConstants constants = GWT.create(OsceConstants.class);
 	
+	
+		
+	private class CloseClickHandler implements ClickHandler{
+
+		private Panel sourcePanel;
+		private Panel destinationPanel;
+		private Widget dataWidget;
+		
+		private String minimizedText;
+		
+		private PopupPanel popupPanel;
+		
+		private HandlerRegistration handlerRegistration;
+		
+		public CloseClickHandler(Panel sourcePanel, Panel destinationPanel, Widget dataWidget,PopupPanel popupPanel, String minimizedText) {
+			super();
+			this.sourcePanel = sourcePanel;
+			this.destinationPanel = destinationPanel;
+			this.dataWidget = dataWidget;
+			this.minimizedText = minimizedText;
+			this.popupPanel = popupPanel;
+			this.popupPanel.addStyleName("noBorder");
+		}
+
+		@Override
+		public void onClick(ClickEvent event) {
+			
+			Log.info("old Adm");
+			sourcePanel.remove(dataWidget);
+
+			if(!sourcePanel.iterator().hasNext()){
+				
+				sourcePanel.setWidth("0px");
+				
+				sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuOpenContainer");
+				sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuCloseContainer");
+				
+				Log.info("Parent size == 0");
+				menuStatus = 0;
+				
+				requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+				
+			}
+			
+			Button maxButton = new Button(minimizedText);
+			maxButton.addStyleName("dockButton");
+			
+			maxButton.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					
+					popupPanel.clear();
+					
+					Button sourceButton = (Button) event.getSource();
+					
+					setButtonHandler(sourceButton);
+					popupPanel.add(dataWidget);
+					
+					int x = sourceButton.getAbsoluteLeft() + 5;
+					int y = sourceButton.getAbsoluteTop();
+					
+					Log.info("pop-up postion: x="+x+"  y="+y);
+					
+					popupPanel.setPopupPosition(x+20, y);
+					popupPanel.show();
+					
+				}
+			});
+			
+			
+			VerticalPanel panel = new VerticalPanel();
+//			panel.addStyleName("verticalCenter");
+//			panel.setHeight(((minimizedText.length()*7)+5)+"px");
+			panel.setHeight("110px");
+			panel.setWidth("20px");
+			
+			
+			panel.add(maxButton);
+			
+			if(destinationPanel instanceof DockPanel)
+				((DockPanel)destinationPanel).add(panel,DockPanel.NORTH);
+			else
+				destinationPanel.add(panel);
+		}
+		
+		private void setButtonHandler(final Button maxButton) {
+			
+			if(constants.administration().equals(maxButton.getText())){
+				Log.info("administration found");
+				
+				handlerRegistration.removeHandler();
+				administrationClose.setIcon("arrowreturnthick-1-e");
+				administrationClose.addStyleName("verticalFlip");
+				handlerRegistration = administrationClose.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						Log.info("new administration click");
+						sourcePanel.add(dataWidget);
+						
+						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.administration());
+						clickHandler.setHandlerRegistration(administrationClose.addClickHandler(clickHandler));
+						
+						administrationClose.setIcon("arrowreturnthick-1-w");
+						administrationClose.removeStyleName("verticalFlip");
+						
+						handlerRegistration.removeHandler();
+						maxButton.getParent().removeFromParent();
+						
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuCloseContainer");
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuOpenContainer");
+						
+						menuStatus = 1;
+						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+					}
+				});
+				
+			}else if(constants.doctors().equals(maxButton.getText())){
+				
+				Log.info("doctors found");
+				
+				handlerRegistration.removeHandler();
+				doctorClose.setIcon("arrowreturnthick-1-e");
+				doctorClose.addStyleName("verticalFlip");
+				handlerRegistration = doctorClose.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						Log.info("new doctors click");
+						sourcePanel.add(dataWidget);
+						
+						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.doctors());
+						clickHandler.setHandlerRegistration(doctorClose.addClickHandler(clickHandler));
+						
+						doctorClose.setIcon("arrowreturnthick-1-w");
+						doctorClose.removeStyleName("verticalFlip");
+						
+						handlerRegistration.removeHandler();
+						maxButton.getParent().removeFromParent();
+						
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuCloseContainer");
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuOpenContainer");
+						
+						menuStatus = 1;
+						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+					}
+				});
+				
+			}else if(constants.exams().equals(maxButton.getText())){
+				
+				Log.info("exams found");
+				
+				handlerRegistration.removeHandler();
+				examinationsClose.setIcon("arrowreturnthick-1-e");
+				examinationsClose.addStyleName("verticalFlip");
+				handlerRegistration = examinationsClose.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						Log.info("new exams click");
+						sourcePanel.add(dataWidget);
+						
+						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.exams());
+						clickHandler.setHandlerRegistration(examinationsClose.addClickHandler(clickHandler));
+						
+						examinationsClose.setIcon("arrowreturnthick-1-w");
+						examinationsClose.removeStyleName("verticalFlip");
+						
+						handlerRegistration.removeHandler();
+						maxButton.getParent().removeFromParent();
+						
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuCloseContainer");
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuOpenContainer");
+						menuStatus = 1;
+						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+					}
+				});
+				
+			}else if(constants.roleAssignments().equals(maxButton.getText())){
+				
+				Log.info("roleAssignments found");
+				
+				handlerRegistration.removeHandler();
+				roleAssignmentClose.setIcon("arrowreturnthick-1-e");
+				roleAssignmentClose.addStyleName("verticalFlip");
+				handlerRegistration = roleAssignmentClose.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						Log.info("new roleAssignments click");
+						sourcePanel.add(dataWidget);
+						
+						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.roleAssignments());
+						clickHandler.setHandlerRegistration(roleAssignmentClose.addClickHandler(clickHandler));
+						
+						roleAssignmentClose.setIcon("arrowreturnthick-1-w");
+						roleAssignmentClose.removeStyleName("verticalFlip");
+						
+						handlerRegistration.removeHandler();
+						maxButton.getParent().removeFromParent();
+						
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuCloseContainer");
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuOpenContainer");
+						
+						menuStatus = 1;
+						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+					}
+				});
+				
+			}else if(constants.role().equals(maxButton.getText())){
+				
+				Log.info("role found");
+				
+				handlerRegistration.removeHandler();
+				roleClose.setIcon("arrowreturnthick-1-e");
+				roleClose.addStyleName("verticalFlip");
+				handlerRegistration = roleClose.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						Log.info("new role click");
+						sourcePanel.add(dataWidget);
+						
+						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.role());
+						clickHandler.setHandlerRegistration(roleClose.addClickHandler(clickHandler));
+						
+						roleClose.setIcon("arrowreturnthick-1-w");
+						roleClose.removeStyleName("verticalFlip");
+						
+						handlerRegistration.removeHandler();
+						maxButton.getParent().removeFromParent();
+						
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuCloseContainer");
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuOpenContainer");
+						
+						menuStatus = 1;
+						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+					}
+				});
+				
+			}else if(constants.simPat().equals(maxButton.getText())){
+				
+				Log.info("simPat found");
+				
+				handlerRegistration.removeHandler();
+				simPatClose.setIcon("arrowreturnthick-1-e");
+				simPatClose.addStyleName("verticalFlip");
+				handlerRegistration = simPatClose.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						Log.info("new simPat click");
+						sourcePanel.add(dataWidget);
+						
+						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.simPat());
+						clickHandler.setHandlerRegistration(simPatClose.addClickHandler(clickHandler));
+						
+						simPatClose.setIcon("arrowreturnthick-1-w");
+						simPatClose.removeStyleName("verticalFlip");
+						
+						handlerRegistration.removeHandler();
+						maxButton.getParent().removeFromParent();
+						
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().removeClassName("menuCloseContainer");
+						sourcePanel.getParent().getParent().getParent().getParent().getParent().getElement().addClassName("menuOpenContainer");
+						
+						menuStatus = 1;
+						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
+					}
+				});
+			}
+			
+		}
+
+
+		public Panel getSourcePanel() {
+			return sourcePanel;
+		}
+
+
+		public void setSourcePanel(Panel sourcePanel) {
+			this.sourcePanel = sourcePanel;
+		}
+
+
+		public Panel getDestinationPanel() {
+			return destinationPanel;
+		}
+
+
+		public void setDestinationPanel(Panel destinationPanel) {
+			this.destinationPanel = destinationPanel;
+		}
+
+		public Widget getDataWidget() {
+			return dataWidget;
+		}
+
+		public void setDataWidget(Widget dataWidget) {
+			this.dataWidget = dataWidget;
+		}
+
+		public String getMinimizedText() {
+			return minimizedText;
+		}
+
+		public void setMinimizedText(String minimizedText) {
+			this.minimizedText = minimizedText;
+		}
+
+		public HandlerRegistration getHandlerRegistration() {
+			return handlerRegistration;
+		}
+
+		public void setHandlerRegistration(HandlerRegistration handlerRegistration) {
+			this.handlerRegistration = handlerRegistration;
+		}
+		
+		
+		
+	}
+	
 	@Inject
 	public OsMaMainNav(OsMaRequestFactory requests, PlaceController placeController,final PlaceHistoryHandler placeHistoryHandler) {
 		
@@ -116,19 +457,43 @@ public class OsMaMainNav extends Composite {
 		this.requests = requests;
 		this.placeController = placeController;
 		
+		this.menuStatus = 1;
+		
+		CloseClickHandler adminHandler = new CloseClickHandler(menuContainer, dockPanel, administrationPanel, new PopupPanel(true), constants.administration());
+		CloseClickHandler doctorHandler = new CloseClickHandler(menuContainer, dockPanel, doctorDataPanel,new PopupPanel(true) , constants.doctors());
+		CloseClickHandler examsHandler = new CloseClickHandler(menuContainer, dockPanel, examinationsPanel,new PopupPanel(true) , constants.exams());
+		CloseClickHandler roleAssignmentHandler = new CloseClickHandler(menuContainer, dockPanel, roleAssignmentPanel,new PopupPanel(true) , constants.roleAssignments());
+		CloseClickHandler roleHandler = new CloseClickHandler(menuContainer, dockPanel, rolePanel,new PopupPanel(true) , constants.role());
+		CloseClickHandler simPatHandler = new CloseClickHandler(menuContainer, dockPanel, simPatDataPanel,new PopupPanel(true) , constants.simPat());
+		
 		doctorDataPanel.setAnimationEnabled(true);
 		administrationPanel.setAnimationEnabled(true);
 		simPatDataPanel.setAnimationEnabled(true);
 		examinationsPanel.setAnimationEnabled(true);
 		rolePanel.setAnimationEnabled(true);
 
-		simPatDataPanel.getHeaderTextAccessor().setText(constants.simPat());
-		doctorDataPanel.getHeaderTextAccessor().setText(constants.doctors());
-		administrationPanel.getHeaderTextAccessor().setText(constants.administration());
-		examinationsPanel.getHeaderTextAccessor().setText(constants.exams());		
+		simPatHandler.setHandlerRegistration(simPatClose.addClickHandler(simPatHandler));
+		doctorHandler.setHandlerRegistration(doctorClose.addClickHandler(doctorHandler));
+		examsHandler.setHandlerRegistration(examinationsClose.addClickHandler(examsHandler));
+		adminHandler.setHandlerRegistration(administrationClose.addClickHandler(adminHandler));
+		roleHandler.setHandlerRegistration(roleClose.addClickHandler(roleHandler));
+		roleAssignmentHandler.setHandlerRegistration(roleAssignmentClose.addClickHandler(roleAssignmentHandler));
+		
+		simPatDataPanelHeaderText.setText(constants.simPat());
+		doctorDataPanelHeaderText.setText(constants.doctors());
+		examinationsPanelHeaderText.setText(constants.exams());
+		administrationPanelHeaderText.setText(constants.administration());
+		rolePanelHeaderText.setText(constants.role());
+		roleAssignmentPanelHeaderText.setText(constants.roleAssignments());
+		
+//		simPatDataPanel.getHeaderTextAccessor().setText(constants.simPat());
+//		doctorDataPanel.getHeaderTextAccessor().setText(constants.doctors());
+//		administrationPanel.getHeaderTextAccessor().setText(constants.administration());
+//		examinationsPanel.getHeaderTextAccessor().setText(constants.exams());
+		
 		//By Spec[
 		//simulationPatientsPanel.getHeaderTextAccessor().setText(constants.simPat());
-		rolePanel.getHeaderTextAccessor().setText(constants.role());
+		//rolePanel.getHeaderTextAccessor().setText(constants.role());
 		//By SPec]
 
 		people.setText(constants.simulationPatients());
@@ -150,14 +515,14 @@ public class OsMaMainNav extends Composite {
 		roomMaterials.setText(constants.roomMaterials());
 
 		roleAssignmentPanel.setAnimationEnabled(true);
-		roleAssignmentPanel.getHeaderTextAccessor().setText(
-				constants.simulationPatients());
+		//roleAssignmentPanel.getHeaderTextAccessor().setText(
+			//	constants.simulationPatients());
 
 		roleAssignment.setText(constants.roleAssignments());
 		//By Spec]
 		
-		labelSemester.setText(constants.semester() + ":");
-		osces.setText(constants.manageOsces());
+	//	labelSemester.setText(constants.semester() + ":");
+	//	osces.setText(constants.manageOsces());
 		circuit.setText(constants.circuit());
 		students.setText(constants.students());
 		examinationSchedule.setText(constants.examinationSchedule());
@@ -168,6 +533,10 @@ public class OsMaMainNav extends Composite {
 		roles.setText(constants.roles());
 		
 		importObjective.setText(constants.importObjective());
+		
+		importeOSCE.setText(constants.importeosce());
+		
+		exportOSCE.setText(constants.exportosce());
 		
 		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
@@ -250,6 +619,56 @@ public class OsMaMainNav extends Composite {
 	
 	@UiField
 	DisclosurePanel simPatDataPanel;		// Stammdaten
+	
+	
+//	For Test
+	
+	@UiField
+	DockPanel dockPanel;
+	
+//	@UiField
+//	VerticalPanel dockPanel;
+	
+	@UiField
+	VerticalPanel menuContainer;
+	
+	@UiField
+	IconButton simPatClose;
+	
+	@UiField
+	Label simPatDataPanelHeaderText;
+	
+	@UiField
+	IconButton doctorClose;
+	
+	@UiField
+	Label doctorDataPanelHeaderText;
+	
+	@UiField
+	IconButton roleClose;
+	
+	@UiField
+	Label rolePanelHeaderText;
+	
+	@UiField
+	IconButton examinationsClose;
+	
+	@UiField
+	Label examinationsPanelHeaderText;
+	
+	@UiField
+	IconButton roleAssignmentClose;
+	
+	@UiField
+	Label roleAssignmentPanelHeaderText;
+	
+	@UiField
+	IconButton administrationClose;
+	
+	@UiField
+	Label administrationPanelHeaderText;
+
+//	For Test
 	
 	@UiField
 	DisclosurePanel doctorDataPanel;
@@ -334,6 +753,10 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor importObjective;
 	
+	//eosce
+	@UiField
+	Anchor importeOSCE;
+	
 	/* commented by spec
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
@@ -347,6 +770,21 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Anchor roleAssignments;			// Rollenzuweisung
 	*/
+	
+	@UiField
+	Anchor exportOSCE;
+	
+	@UiHandler("exportOSCE")
+	void exportOSCEClicked(ClickEvent event)
+	{
+		placeController.goTo(new ExportOscePlace("ExportOscePlace", handlerManager, lstSemester.getValue()));
+	}
+	
+	@UiHandler("importeOSCE")
+	void importeOSCEClicked(ClickEvent event)
+	{
+		placeController.goTo(new ImporteOSCEPlace("ImporteOSCEPlace"));
+	}
 	
 	//learning objective
 	@UiHandler("importObjective")
@@ -523,7 +961,9 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("bellSchedule")
 	void bellScheduleClicked(ClickEvent event) {
-		placeController.goTo(new BellSchedulePlace("BellSchedulePlace"));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		placeController.goTo(new BellSchedulePlace("BellSchedulePlace",handlerManager, lstSemester.getValue()));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 	
 	@UiHandler("roles")
@@ -782,7 +1222,8 @@ public class OsMaMainNav extends Composite {
 						}						
 			});
 			Log.info("~Semester Proxy Find: " + semesterProxy.getCalYear());
-			lstSemester.setValue(semesterProxy);			
+			lstSemester.setValue(semesterProxy);
+			handlerManager.fireEvent(new SelectChangeEvent(lstSemester.getValue()));			
 		}
 		
 	// G: SPEC END =

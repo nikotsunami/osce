@@ -13,10 +13,10 @@ import com.google.gwt.requestfactory.shared.Service;
 @SuppressWarnings("deprecation")
 @Service(AnamnesisCheckTitle.class)
 public interface AnamnesisCheckTitleRequestNonRoo extends RequestContext{
-	public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> insertNewSortOder(int preSortorder);
-	public abstract Request<AnamnesisCheckTitleProxy> findAnamnesisChecksBySortOder(int sort_order);
-	 public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> oderByPreviousAnamnesisCheckTitle(int preSortorder);
-	 public abstract Request<List<AnamnesisCheckTitleProxy>> findAnamnesisCheckTitlesBySortOderBetween(int lower, int upper);
+	public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> insertNewSortOder(Integer preSortorder);
+//	public abstract Request<AnamnesisCheckTitleProxy> findAnamnesisChecksBySortOder(int sort_order);
+//	 public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> oderByPreviousAnamnesisCheckTitle(int preSortorder);
+//	 public abstract Request<List<AnamnesisCheckTitleProxy>> findAnamnesisCheckTitlesBySortOderBetween(int lower, int upper);
 	 public abstract Request<List<AnamnesisCheckTitleProxy>> getReSortingList(Integer sortFrom);
 		
 	 public abstract Request<Void> reSorting(Integer sortFrom);	 

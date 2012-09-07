@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.OsceDay;
@@ -30,6 +29,7 @@ import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.ItemDefination;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.util;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -995,14 +995,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			File file = null;
 			try {
 				
-				file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
 				
 				if(file.isFile()){
 					
 					return new String[]{templateName,FileUtils.readFileToString(file)};
 				}else{
 					
-					file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateSP.txt");
+					file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateSP.txt");
 					
 					if(file.isFile())
 						return new String[]{"DefaultTemplateSP.txt",FileUtils.readFileToString(file)};
@@ -1028,14 +1028,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 									
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
 			
 			if(file.isFile()){
 				
 				return new String[]{templateName,FileUtils.readFileToString(file)};
 			}else{
 				
-				file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateStud.txt");
+				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateStud.txt");
 				
 				if(file.isFile())
 					return new String[]{"DefaultTemplateStud.txt",FileUtils.readFileToString(file)};
@@ -1061,14 +1061,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
 			
 			if(file.isFile()){
 				
 				return new String[]{templateName,FileUtils.readFileToString(file)};
 			}else{
 				
-				file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateExaminor.txt");
+				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateExaminor.txt");
 				
 				if(file.isFile())
 					return new String[]{"DefaultTemplateExaminor.txt",FileUtils.readFileToString(file)};
@@ -1094,7 +1094,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
 			
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);
@@ -1122,7 +1122,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		try {
 			
-			file = new File(OsMaConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
+			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
 			
 			if(file.isFile()){
 				FileUtils.deleteQuietly(file);

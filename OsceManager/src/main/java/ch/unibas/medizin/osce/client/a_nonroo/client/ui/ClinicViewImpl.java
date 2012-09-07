@@ -6,14 +6,17 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -39,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author nikotsunami
  *
  */
-public class ClinicViewImpl extends Composite implements  ClinicView, RecordChangeHandler {
+public class ClinicViewImpl extends Composite implements  ClinicView, RecordChangeHandler, MenuClickHandler {
 
 	private static SystemStartViewUiBinder uiBinder = GWT
 			.create(SystemStartViewUiBinder.class);
@@ -122,8 +125,15 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 
 	public void init() {
 		
+		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		
 		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+		
+		if(OsMaMainNav.getMenuStatus() == 0)
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+		else
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 
 //        paths.add("id");
 //        table.addColumn(new TextColumn<ClinicProxy>() {
@@ -300,4 +310,23 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 			table.setPageSize(pagesize);
 		}
 		// by spec
+
+
+		@Override
+		public void onMenuClicked(MenuClickEvent event) {
+			
+			OsMaMainNav.setMenuStatus(event.getMenuStatus());		
+			int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+			
+			DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+			
+			if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+				
+				if(OsMaMainNav.getMenuStatus() == 0)
+					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+				else
+					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+			}
+				
+		}
 }

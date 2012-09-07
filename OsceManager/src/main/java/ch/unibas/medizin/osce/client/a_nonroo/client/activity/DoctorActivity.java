@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
@@ -85,6 +86,9 @@ DoctorView.Presenter, DoctorView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		MenuClickEvent.register(requests.getEventBus(), (DoctorViewImpl)view);
+		
 		//Issue # 122 : Replace pull down with autocomplete.
 		//view.getFilterTitle().clear();
 		//Issue # 122 : Replace pull down with autocomplete.

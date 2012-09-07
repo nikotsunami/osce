@@ -401,10 +401,14 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		initMediaView();
 		
 		//spec
+	/*
 		standardizedPatientMediaSubViewImpl.id.setValue(getIdOfStandardizedPatient().toString());
 		standardizedPatientMediaSubViewImpl.name.setValue(getNameOfStandardizedPatient());
 		standardizedPatientMediaSubViewImpl.vid.setValue(getIdOfStandardizedPatient().toString());
 		standardizedPatientMediaSubViewImpl.vname.setValue(getNameOfStandardizedPatient());
+		*/
+		
+		standardizedPatientMediaSubViewImpl.setStandardizedPatientProxy(standardizedPatientProxy);
 		//spec
 	}
 	
@@ -965,13 +969,21 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	 StandardizedPatientRequest stdPatRequest = requests.standardizedPatientRequest();
 	 standardizedPatientProxy = stdPatRequest.edit(standardizedPatientProxy);
 	 standardizedPatientProxy.setImmagePath(results);
-	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
+	 stdPatRequest.persist().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
+
+		@Override
+		public void onSuccess(Void response) {
+			Log.info("uploadSuccesfull");
+			
+		}
+	});
 	}
 	
 	//spec start
 	@Override
 	public void videoUploadSuccesfull(String results) {
 	 StandardizedPatientRequest stdPatRequest = requests.standardizedPatientRequest();
+	 
 	 standardizedPatientProxy = stdPatRequest.edit(standardizedPatientProxy);
 	
 	
@@ -980,7 +992,14 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	 
 	 
 	 
-	 stdPatRequest.persist().using(standardizedPatientProxy).fire();
+	 stdPatRequest.persist().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
+
+		@Override
+		public void onSuccess(Void response) {
+			Log.info("videoUploadSuccesfull");
+			
+		}
+	});
 	}
 	//spec end
 	

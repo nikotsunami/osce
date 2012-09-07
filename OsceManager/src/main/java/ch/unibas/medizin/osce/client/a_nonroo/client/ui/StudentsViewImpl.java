@@ -6,6 +6,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
@@ -34,7 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class StudentsViewImpl extends Composite implements StudentsView {
+public class StudentsViewImpl extends Composite implements StudentsView, MenuClickHandler {
 
 	private static StudentsViewUiBinder uiBinder = GWT
 			.create(StudentsViewUiBinder.class);
@@ -57,6 +60,9 @@ public class StudentsViewImpl extends Composite implements StudentsView {
 	
 	@UiField
 	HorizontalPanel horizontalStudentTabPanel1;
+	
+	@UiField
+	HorizontalPanel containerPanel;
 	
 	
 	private Delegate delegate;
@@ -144,7 +150,11 @@ public class StudentsViewImpl extends Composite implements StudentsView {
 	}
 
 	public void init() {
-		// TODO implement this!
+		
+		
+		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";		
+		containerPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : 600px;");
+
 	}
 
 	@Override
@@ -181,4 +191,15 @@ public class StudentsViewImpl extends Composite implements StudentsView {
 		// TODO Auto-generated method stub
 		return studentTabPanel1;
 	}
+	
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";		
+		containerPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : 600px;");
+	}
+
 }
