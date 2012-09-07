@@ -757,7 +757,6 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		if(standardizedPatientProxy!=null){
 			if(standardizedPatientProxy.getEmail()!=null && !standardizedPatientProxy.getEmail().equals("")){
-				//if(standardizedPatientProxy.getSocialInsuranceNo()!=null && !standardizedPatientProxy.getSocialInsuranceNo().equals("")){
 					dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(),locale,new AsyncCallback<List<String>>(){
 
 						@Override
