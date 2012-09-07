@@ -914,7 +914,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			throw new DMZSyncException(DMZSyncExceptionType.CONNECT_HOST_ADDRESS_EXCEPTION,url+": "+e1.getMessage());
 		}
 		if(ret.equals("Data Error")){
-			throw new DMZSyncException(DMZSyncExceptionType.RUN_TIME_EXCEPTION +": ",ret);
+			throw new DMZSyncException(DMZSyncExceptionType.RUN_TIME_EXCEPTION,": "+ret);
 		}
 
 		if (!(statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY)) {
