@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
-import groovy.transform.ToString;
+//import groovy.transform.ToString;
 
 import java.sql.Time;
 import java.util.ArrayList;
