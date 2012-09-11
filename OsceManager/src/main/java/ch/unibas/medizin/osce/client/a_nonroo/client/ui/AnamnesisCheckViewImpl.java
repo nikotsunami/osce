@@ -3,6 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -207,6 +208,10 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		
 		});
 		//Issue # 122 : Replace pull down with autocomplete.
+		
+		anamnesisCheckTitleMap = new HashMap<String, Widget>();
+		anamnesisCheckTitleMap.put("text", newTitleText);
+		anamnesisCheckTitleMap.put("sort_order", newTitleText);
 	}
 
 	public String[] getPaths() {

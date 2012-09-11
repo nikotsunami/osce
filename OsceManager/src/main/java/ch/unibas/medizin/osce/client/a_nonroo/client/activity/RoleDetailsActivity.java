@@ -5182,6 +5182,61 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		addAdvSeaBasicButtonClicked(null, maritialStatus.toString(), displayValue, bindType, PossibleFields.MARITIALSTATUS, comparison);
 	}
 	
+	
+
+	@Override
+	public void updateOption(final String topic, final String description,
+			final RoleDetailsChecklistSubViewChecklistOptionItemViewImpl optionView) {
+		Log.info("saveOption");
+		//ScrolledTab Changes start
+		//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
+		final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
+		//ScrolledTab Changes end
+		ChecklistOptionRequest request=requests.checklistOptionRequest();
+		
+		ChecklistOptionProxy proxy=optionView.getProxy();
+		proxy = request.edit(proxy);
+		proxy.setOptionName(topic);
+		proxy.setChecklistQuestion(optionView.getProxy().getChecklistQuestion());
+		proxy.setValue(description);
+		
+		// Highlight onViolation
+		request.persist().using(proxy).fire(new OSCEReceiver<Void>(optionView.getChecklistOptionMap()) 
+		{
+		// E Highlight onViolation
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("Option Saved Successfully");	
+				// E Highlight onViolation
+				//createOptionView(selectedtab,proxy,questionView);
+				optionView.getOptionLbl().setText(topic);
+				optionView.getOptionValueLbl().setText(description);
+			}
+		});
+		
+		optionView.setProxy(proxy);
+	}
+
+	@Override
+	public void updateCriteria(final String criteria, final RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl criteriaView) {
+		Log.info("updateCriteria");
+		
+		ChecklistCriteriaRequest request = requests.checklistCriteriaRequest();		
+		ChecklistCriteriaProxy proxy=criteriaView.getProxy();
+		proxy = request.edit(proxy);
+		proxy.setCriteria(criteria);
+		// Highlight onViolation
+		request.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+		// E Highlight onViolation
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("Criteria Saved Successfully");
+				criteriaView.getCriteriaLbl().setText(criteria);
+			}
+		});
+		criteriaView.setProxy(proxy);
+	}
+	
 }
 
 	

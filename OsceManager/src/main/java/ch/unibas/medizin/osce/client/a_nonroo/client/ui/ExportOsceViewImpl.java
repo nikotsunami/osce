@@ -78,6 +78,16 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		delegate.processedClicked();
 	}
 	
+	public boolean checkRadio()
+	{ 
+		if(processed.getValue().booleanValue() == true)
+			return true;
+		else if (unprocessed.getValue().booleanValue() == true)
+			return false;
+		else
+			return true;
+	}
+	
 	@UiHandler("exportButton")
 	public void exportButtonClicked(ClickEvent event)
 	{
@@ -133,4 +143,22 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	public void setPresenter(Presenter systemStartActivity) {
 		this.presenter = systemStartActivity;
 	}
+
+	public RadioButton getProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(RadioButton processed) {
+		this.processed = processed;
+	}
+
+	public RadioButton getUnprocessed() {
+		return unprocessed;
+	}
+
+	public void setUnprocessed(RadioButton unprocessed) {
+		this.unprocessed = unprocessed;
+	}
+	
+	
 }

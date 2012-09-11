@@ -40,14 +40,22 @@
 		
 		float:right
 	}
+	.optionLbl
+	{
+		margin-top: 5px;
+	}
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
 <g:HTMLPanel>
 
-	<g:HorizontalPanel addStyleNames="{style.patientControls}" spacing="4" ui:field="opinionHP">
-	
-	<g:Label ui:field="optionLbl" width="75px" wordWrap="true" ></g:Label>
-	<g:Label ui:field="optionValueLbl" width="25px" wordWrap="true"></g:Label>
+	<g:HorizontalPanel addStyleNames="{style.patientControls}"
+	spacing="4" ui:field="opinionHP">
+	<g:VerticalPanel height="50px">
+		<g:Label ui:field="optionLbl" width="75px" wordWrap="true"></g:Label>
+		<g:Label ui:field="optionValueLbl" addStyleNames="{style.optionLbl}"
+			width="25px"></g:Label>
+	</g:VerticalPanel>
+	<my:IconButton ui:field="editBtn" icon="pencil"></my:IconButton>
 	<my:IconButton ui:field="deleteBtn" icon="trash"></my:IconButton>
 	</g:HorizontalPanel>
 

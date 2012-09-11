@@ -9,6 +9,10 @@
   xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
 
 <ui:style src="../../styles.css" >
+.lableHeader
+	{
+		font-size: 15px;
+	}
 .noOutline {
 		outline-style: none;
 		overflow: hidden;	
@@ -16,6 +20,7 @@
 .padleft5
 	{
 		padding-left: 3px;
+		padding-right: 8px;
 	}
 	.standardTable input {
 		width: 90%;
@@ -39,9 +44,14 @@ background-color:#B8A9A2;
 	border-right-width: 1px;
 	border-bottom-width: 1px;
 	border-left-width: 1px; 
+	border-radius: 10px 10px 10px 10px;
+	height: 25px;
+	cursor: pointer;
+	}
 	
-	
-}
+	.expbtn:hover{
+		background-color: #A09286;
+	}
 
 	.icon
 	{
@@ -77,7 +87,7 @@ background-color:#B8A9A2;
 			<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
 			</g:HorizontalPanel>
 			<g:VerticalPanel>
-				<g:Label  addStyleNames="{style.label}" ui:field="checkListTopicLbl" width="550px"> </g:Label>
+				<g:Label  addStyleNames="{style.label} {style.lableHeader}" ui:field="checkListTopicLbl" width="550px"> </g:Label>
 				<g:Label  addStyleNames="{style.label}" ui:field="descriptionLbl" ></g:Label>
 			</g:VerticalPanel>
 			<g:HTMLPanel>

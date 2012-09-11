@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface ExportOsceView extends IsWidget {
@@ -23,4 +24,5 @@ public interface ExportOsceView extends IsWidget {
 
 	void setPresenter(Presenter systemStartActivity);
 
+	boolean checkRadio();
 }

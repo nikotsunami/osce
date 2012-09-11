@@ -615,7 +615,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		
 		try
 		{
-			AWSCredentials credentials = new BasicAWSCredentials("AKIAITZRA2EUC74T3DIQ", "Ffe6pCbrHRYgfhX0h1Iyyb9wK2PmyHk5bqLF13Zc");
+			AWSCredentials credentials = new BasicAWSCredentials("", "");
 			AmazonS3Client client = new AmazonS3Client(credentials);
 			
 			if (flag)
@@ -626,7 +626,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					
 					File file = new File(path);
 					
-					client.putObject("oscetestspec", fileList.get(i), file);
+					client.putObject("", fileList.get(i), file);
 				
 				//move file to processed				
 					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);

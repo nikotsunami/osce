@@ -26,4 +26,6 @@ public interface AnamnesisCheckTitleRequestNonRoo extends RequestContext{
 	 public abstract InstanceRequest<AnamnesisCheckTitleProxy, Void> moveDown();
 	 public abstract Request<List<AnamnesisCheckTitleProxy>> findAllAnamnesisCheckTitles();
 
+	//issue sol
+	 abstract Request<Integer> findMaxSortOrder();
 }

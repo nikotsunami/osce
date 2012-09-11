@@ -76,6 +76,12 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	@UiField
 	DisclosurePanel checkListQuestionDisclosurePanel;
 	
+	@UiField
+	Label optionLbl;
+	
+	@UiField
+	Label criteriaLbl;
+	
 //	@UiField
 //	public IconButton edit;
 //	
@@ -234,6 +240,10 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			
 	public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		
+		optionLbl.setText(constants.optionlbl());
+		criteriaLbl.setText(constants.criterialbl());
+		
 		questionView=this;
 		
 		Log.info("View IMPL callled");
@@ -298,7 +308,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				}
 			});
 		}
-		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(addBtnPanel.getAbsoluteLeft(), addBtnPanel.getAbsoluteTop()-40);
+		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(addBtnPanel.getAbsoluteLeft(), addBtnPanel.getAbsoluteTop()+60);
 		((CriteriaPopupViewImpl)criteriaPopup).show();
 	}
 	

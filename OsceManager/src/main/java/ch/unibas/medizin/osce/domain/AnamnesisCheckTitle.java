@@ -173,4 +173,13 @@ public class AnamnesisCheckTitle {
     	}
         this.entityManager.persist(this);
     }
+	
+	//issue sol
+	public static Integer findMaxSortOrder()
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(a.sort_order) FROM AnamnesisCheckTitle a";
+		TypedQuery<Integer> q = em.createQuery(sql, Integer.class);
+		return q.getSingleResult();
+	}
 }

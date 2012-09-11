@@ -14,6 +14,8 @@ public interface RoleDetailsChecklistSubViewChecklistCriteriaItemView extends Is
 	
 	interface Delegate {
 		void deleteCriteria(RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl deleteView);
+		
+		void updateCriteria(String criteria, RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl editView);
 	}
 	
 	  void setDelegate(Delegate delegate);

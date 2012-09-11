@@ -23,6 +23,8 @@ public interface ScarView extends IsWidget{
 	 */
 	interface Delegate {
 		void newClicked(TraitTypes traitType, String name);
+		
+		void updateClicked(String name, TraitTypes traitTypes, ScarProxy proxy);
 
 		void deleteClicked(ScarProxy scar);
 		

@@ -32,6 +32,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -48,6 +49,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -93,6 +95,11 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 	protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
+	
+	ScarEditPopupView scarPopupView;
+	
+	int left1 = 0;
+	int top = 0;
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
@@ -169,6 +176,17 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 		else
 			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left1 = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
+
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
 		paths.add("trait_type");
@@ -195,6 +213,18 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 				return renderer.render(object.getBodypart());
 			}
 		}, constants.location());
+		
+		addColumn(new ActionCell<ScarProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<ScarProxy>() {
+					public void execute(ScarProxy scar) {
+						showEditScarPopup(scar);
+					}
+				}), "", new GetValue<ScarProxy>() {
+			public ScarProxy getValue(ScarProxy scar) {
+				return scar;
+			}
+		}, null);
+		
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {
@@ -306,5 +336,62 @@ public Map getScarMap()
 				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		}
 	}
+	
+	public void showEditScarPopup(final ScarProxy scar)
+	{
+		scarPopupView = new ScarEditPopupViewImpl();
+		
+		((ScarEditPopupViewImpl)scarPopupView).setAnimationEnabled(true);
+		
+		scarPopupView.getTraitTypeBox().setValue(scar.getTraitType());
+		
+		scarPopupView.getLocationTxtBox().setText(scar.getBodypart());
+		
+		((ScarEditPopupViewImpl)scarPopupView).setWidth("160px");	
+			
+		RootPanel.get().add(((ScarEditPopupViewImpl)scarPopupView));
 
+		/*	// Highlight onViolation
+		checklistOptionMap=new HashMap<String, Widget>();
+		checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
+		checklistOptionMap.put("name", optionPopup.getTopicTxtBox());
+		checklistOptionMap.put("value", optionPopup.getDescriptionTxtBox());
+			// E Highlight onViolation
+			*/	
+		scarPopupView.getOkBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+					
+				if(scarPopupView.getLocationTxtBox().getValue()=="")
+				{
+				}	
+				else
+				{
+					//delegate.saveCheckListTopic(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue());
+					delegate.updateClicked(scarPopupView.getLocationTxtBox().getValue(), scarPopupView.getTraitTypeBox().getValue(), scar);
+					(((ScarEditPopupViewImpl)scarPopupView)).hide(true);
+					
+					scarPopupView.getLocationTxtBox().setText("");
+					scarPopupView.getTraitTypeBox().setValue(TraitTypes.values()[0]);
+				}
+			}
+		});
+
+		// Issue Role V1 
+		scarPopupView.getCancelBtn().addClickHandler(new ClickHandler() 
+		{				
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				(((ScarEditPopupViewImpl)scarPopupView)).hide(true);					
+				scarPopupView.getLocationTxtBox().setText("");
+				scarPopupView.getTraitTypeBox().setValue(TraitTypes.values()[0]);
+			}
+		});	
+		// E: Issue Role V1
+		
+		(((ScarEditPopupViewImpl)scarPopupView)).setPopupPosition(left1-210, top);
+		(((ScarEditPopupViewImpl)scarPopupView)).show();
+	}
 }

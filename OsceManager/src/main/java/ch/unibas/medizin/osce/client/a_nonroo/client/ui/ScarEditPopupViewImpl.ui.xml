@@ -1,0 +1,51 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+
+<ui:style src="../styles.css" >
+
+	.right{
+		
+		float:right;
+	}
+	.left{
+		float: left;
+	}
+	.rightLbl{
+		margin-right: 22px;
+	}
+	
+</ui:style>
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+
+<g:VerticalPanel spacing="8">
+	<g:HorizontalPanel  spacing="8">
+	
+		<g:Label ui:field="typeLbl" styleName="{style.right} {style.rightLbl}"></g:Label>
+		<g:ValueListBox ui:field="traitTypeBox"></g:ValueListBox>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="8">
+	
+		<g:Label ui:field="locationLbl" styleName="{style.right}"></g:Label>
+		<g:TextBox ui:field="locationTxtBox" styleName="{style.left}" ></g:TextBox>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="8" horizontalAlignment="center">
+		<g:Button ui:field="okBtn"></g:Button>
+		<!-- Issue Role -->
+		<g:Button ui:field="cancelBtn"></g:Button>
+		<!-- E: Issue Role -->
+	</g:HorizontalPanel>
+</g:VerticalPanel>
+	
+
+</ui:UiBinder>

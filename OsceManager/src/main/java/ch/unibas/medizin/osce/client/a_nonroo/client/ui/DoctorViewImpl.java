@@ -139,7 +139,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	public DoctorViewImpl() {
 		CellTable.Resources tableResources = GWT
 				.create(MyCellTableResources.class);
-		table = new CellTable<DoctorProxy>(15, tableResources);
+		table = new CellTable<DoctorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 
 		SimplePager.Resources pagerResources = GWT
 				.create(MySimplePagerResources.class);
@@ -411,8 +411,16 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 
 	@Override
 	public void onRecordChange(RecordChangeEvent event) {
-		// TODO Auto-generated method stub
-		
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
 	}
 
 

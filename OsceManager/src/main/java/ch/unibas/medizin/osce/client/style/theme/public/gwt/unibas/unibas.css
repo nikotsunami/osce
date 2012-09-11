@@ -2777,6 +2777,7 @@ color: #f1b532;
     background: transparent url(images/down.png) no-repeat right 4px;
 /*    background: transparent url('img/arrow.png') no-repeat right 5px;
     border: none;*/
+    padding-right: 20px;
     font-family:Verdana,Arial,sans-serif;
     height: 21px;
         /* ///// padding-right: 10px; */ 

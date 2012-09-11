@@ -17,13 +17,24 @@
 			padding-left: 5px;
 		}
 		.max-width{
-	max-width: 70%;
+			max-width: 70%;
 		}
 		
-				.exp{
-	
-background-color: #B8A9A2;
-}
+		.exp{
+			background-color: #B8A9A2;
+			border-style: solid;
+			border-top-width: 1px;
+			border-right-width: 1px;
+			border-bottom-width: 1px;
+			border-left-width: 1px;
+			border-radius: 10px 10px 10px 10px;
+			height: 25px;
+			cursor: pointer;
+		}
+		
+		.exp:hover{
+			background-color: #8E7676;
+		}
 	</ui:style>
 
 	<g:HTMLPanel>

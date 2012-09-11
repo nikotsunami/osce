@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
@@ -86,6 +87,8 @@ DoctorView.Presenter, DoctorView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		
+		RecordChangeEvent.register(requests.getEventBus(), (DoctorViewImpl)view);
 		
 		MenuClickEvent.register(requests.getEventBus(), (DoctorViewImpl)view);
 		

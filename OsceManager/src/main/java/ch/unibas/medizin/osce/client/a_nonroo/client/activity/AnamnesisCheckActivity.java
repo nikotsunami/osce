@@ -66,6 +66,9 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     private static final String placeToken = "AnamnesisCheckPlace";
     private HandlerRegistration placeChangeHandlerRegistration;
     
+    private Integer sort_order = 0;
+	private String title = "";
+    
     private List<AnamnesisCheckTitleProxy> anamnesisCheckTitles = new ArrayList<AnamnesisCheckTitleProxy>();
 
     public AnamnesisCheckActivity(OsMaRequestFactory requests,
@@ -553,19 +556,34 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	@Override
 	public void addNewTitleClicked(String titleText) {
 		//Log.info("saveClicked");
-		AnamnesisCheckTitleRequest request = requests.anamnesisCheckTitleRequest();
-		AnamnesisCheckTitleProxy anamnesisCheckTitle = request.create(AnamnesisCheckTitleProxy.class);
-		anamnesisCheckTitle.setText(titleText);
+		//Log.info("Map Size: " + view.getAnamnesisCheckTitleMap().size());
 		
-		// Highlight onViolation
-		Log.info("Map Size: " + view.getAnamnesisCheckTitleMap().size());
-		request.persist().using(anamnesisCheckTitle).fire(new OSCEReceiver<Void>(view.getAnamnesisCheckTitleMap()) {
-		// E Highlight onViolation
+		sort_order = 0;
+		title = titleText;
+		requests.anamnesisCheckTitleRequestNonRoo().findMaxSortOrder().fire(new OSCEReceiver<Integer>() {
 			@Override
-			public void onSuccess(Void response) {
-				view.filterTitle(null);
-				fireGetAllTitlesRequest(new FilterTitleReceiver());
-		        getTitlesBySearchStringAndFilter();
+			public void onSuccess(Integer response) {
+				
+				sort_order = response;
+				
+				if (title.trim().equals(""))
+					title = null;
+				
+				AnamnesisCheckTitleRequest request = requests.anamnesisCheckTitleRequest();
+				AnamnesisCheckTitleProxy anamnesisCheckTitle = request.create(AnamnesisCheckTitleProxy.class);
+				anamnesisCheckTitle.setText(title);
+				anamnesisCheckTitle.setSort_order((sort_order+1));
+				
+				// Highlight onViolation
+				request.persist().using(anamnesisCheckTitle).fire(new OSCEReceiver<Void>(view.getAnamnesisCheckTitleMap()) {
+				// E Highlight onViolation
+					@Override
+					public void onSuccess(Void response) {
+						view.filterTitle(null);
+						fireGetAllTitlesRequest(new FilterTitleReceiver());
+				        getTitlesBySearchStringAndFilter();
+					}
+				});
 			}
 		});
 	}

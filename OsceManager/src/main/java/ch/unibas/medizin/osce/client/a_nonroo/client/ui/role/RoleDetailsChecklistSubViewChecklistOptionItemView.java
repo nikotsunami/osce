@@ -17,6 +17,8 @@ public interface RoleDetailsChecklistSubViewChecklistOptionItemView  extends IsW
 	interface Delegate {
 		
 		void deleteOption(RoleDetailsChecklistSubViewChecklistOptionItemViewImpl optionView);
+		
+		void updateOption(String topic, String description, RoleDetailsChecklistSubViewChecklistOptionItemViewImpl optionView);
 	}
  Label getOptionLbl();
 	

@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
@@ -18,6 +21,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -56,9 +60,25 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 	@UiField
 	IconButton deleteBtn;
 	
+	@UiField
+	IconButton editBtn;	
 	
 	ChecklistOptionProxy proxy;
 	
+	public CriteriaPopupView criteriaPopup;
+	
+	public CheckListTopicPopupView optionPopup;
+	
+	Map<String, Widget> checklistOptionMap;
+
+	public Map<String, Widget> getChecklistOptionMap() {
+		return checklistOptionMap;
+	}
+
+	public void setChecklistOptionMap(Map<String, Widget> checklistOptionMap) {
+		this.checklistOptionMap = checklistOptionMap;
+	}
+
 	public ChecklistOptionProxy getProxy() {
 		return proxy;
 	}
@@ -77,6 +97,69 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 	}
 	
 	interface Binder extends UiBinder<Widget, RoleDetailsChecklistSubViewChecklistOptionItemViewImpl> {
+	}
+	
+	@UiHandler("editBtn")
+	public void editOption(ClickEvent event)
+	{
+		optionPopup=new CheckListTopicPopupViewImpl();			
+			
+		((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
+		
+		optionPopup.getDescriptionLbl().setText(constants.optionValue());
+				
+		optionPopup.getTopicLbl().setText(constants.optionName());			
+			
+		optionPopup.getTopicTxtBox().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getOptionName());
+			
+		optionPopup.getDescriptionTxtBox().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getValue());
+			
+		((CheckListTopicPopupViewImpl)optionPopup).setWidth("160px");	
+			
+		RootPanel.get().add(((CheckListTopicPopupViewImpl)optionPopup));
+
+			// Highlight onViolation
+		checklistOptionMap=new HashMap<String, Widget>();
+		checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
+		checklistOptionMap.put("name", optionPopup.getTopicTxtBox());
+		checklistOptionMap.put("value", optionPopup.getDescriptionTxtBox());
+			// E Highlight onViolation
+				
+		optionPopup.getOkBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+					
+				if(optionPopup.getTopicTxtBox().getValue()=="" || optionPopup.getDescriptionTxtBox().getValue()=="")
+				{
+				}	
+				else
+				{
+					//delegate.saveCheckListTopic(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue());
+					delegate.updateOption(optionPopup.getTopicTxtBox().getValue(), optionPopup.getDescriptionTxtBox().getValue(),roleDetailsChecklistSubViewChecklistOptionItemViewImpl);
+					((CheckListTopicPopupViewImpl)optionPopup).hide(true);
+					
+					optionPopup.getTopicTxtBox().setValue("");
+					optionPopup.getDescriptionTxtBox().setValue("");
+				}
+			}
+		});
+
+		// Issue Role V1 
+		optionPopup.getCancelBtn().addClickHandler(new ClickHandler() 
+		{				
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				((CheckListTopicPopupViewImpl)optionPopup).hide(true);					
+				optionPopup.getTopicTxtBox().setValue("");
+				optionPopup.getDescriptionTxtBox().setValue("");
+			}
+		});	
+		// E: Issue Role V1
+		
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(event.getScreenX()-100, event.getScreenY()-250);
+		((CheckListTopicPopupViewImpl)optionPopup).show();
 	}
 	
 	@UiHandler("deleteBtn")

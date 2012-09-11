@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -18,6 +21,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl extends Composite implements RoleDetailsChecklistSubViewChecklistCriteriaItemView{
@@ -32,9 +36,14 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	Label criteriaLbl;
 	
 	//Spec
+	public RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl;
 
 	@UiField
 	public AbsolutePanel roleCriteriaAP;
+	
+	public CriteriaPopupView criteriaPopup;
+	
+	Map<String, Widget> checklistCriteriaMap;
 	
 	@Override
 	public AbsolutePanel getRoleCriteriaAP()
@@ -83,8 +92,13 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	@UiField
 	IconButton delete;
 	
+	//issue
+	@UiField
+	IconButton edit;
+	
 	public RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		this.roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl = this;
 	}
 	
 	public void setDelegate(Delegate delegate) {
@@ -94,25 +108,77 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	interface Binder extends UiBinder<Widget, RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl> {
 	}
 	
+	//issue
+	@UiHandler("edit")
+	public void editOption(ClickEvent event)
+	{
+		criteriaPopup=new CriteriaPopupViewImpl();
+		
+		
+		((CriteriaPopupViewImpl)criteriaPopup).setAnimationEnabled(true);
+	
+		((CriteriaPopupViewImpl)criteriaPopup).setWidth("100px");
+
+		criteriaPopup.getCriteriaTxtBox().setText(roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl.getProxy().getCriteria());
+	
+		RootPanel.get().add(((CriteriaPopupViewImpl)criteriaPopup));
+
+		// Highlight onViolation			
+		checklistCriteriaMap=new HashMap<String, Widget>();
+		checklistCriteriaMap.put("criteria",criteriaPopup.getCriteriaTxtBox());
+		checklistCriteriaMap.put("checklistQuestion",criteriaPopup.getCriteriaTxtBox());
+		// E Highlight onViolation
+		
+		criteriaPopup.getOkBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				if(criteriaPopup.getCriteriaTxtBox().getValue()=="")
+				{
+				}	
+				else
+				{
+					delegate.updateCriteria(criteriaPopup.getCriteriaTxtBox().getValue(),roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl);
+				
+					((CriteriaPopupViewImpl)criteriaPopup).hide(true);
+			
+					((CriteriaPopupViewImpl)criteriaPopup).criteriaTxtBox.setValue("");
+				}
+			}
+		});
+	
+		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(event.getScreenX()-100, event.getScreenY()-125);
+		((CriteriaPopupViewImpl)criteriaPopup).show();
+	}
+	
 	@UiHandler("delete")
 	public void deleteOption(ClickEvent event)
 	{
 		/*if(Window.confirm("are you sure you want to delete this criteria?"))*/
-		final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
-		 dialogBox.showConfirmationDialog("are you sure you want to delete this criteria?");
-		 
-		 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-			
+		final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
+				constants.warning());
+		dialogBox.showYesNoDialog(constants.criteriadelete());
+
+		dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+
 			@Override
 			public void onClick(ClickEvent event) {
-				dialogBox.hide();							
-				Log.info("ok click");	
+				dialogBox.hide();
+				delegate.deleteCriteria(roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl);
+				Log.info("ok click");
 				return;
-					}
-				});
+			}
+		});
 
-			delegate.deleteCriteria(this);
-	}
+		dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();
+			}
+		});
 
 	
+	}
 }

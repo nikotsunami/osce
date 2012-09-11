@@ -783,5 +783,11 @@ public interface OsceConstants extends Constants {
 	//Module 5 Bug Report Solution
 	public String schedulePostpone();
 	public String scheduleEarlier();
-//E Module 5 Bug Report Solution
+	//E Module 5 Bug Report Solution
+	
+	//role issue
+	public String optionlbl();
+	public String criterialbl();
+	public String criteriadelete();
+	public String optiondelete();
 }

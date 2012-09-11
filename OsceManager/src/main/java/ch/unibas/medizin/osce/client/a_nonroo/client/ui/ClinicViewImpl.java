@@ -101,7 +101,7 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 	 */
 	public ClinicViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<ClinicProxy>(15, tableResources);
+		table = new CellTable<ClinicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);

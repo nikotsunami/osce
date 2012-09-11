@@ -68,10 +68,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			@Override
 			public void onSelectionChange(SelectChangeEvent event) {
 				semesterProxy = event.getSemesterProxy();
-				System.out.println("test");
-				//System.out.println("*********SEMESTER ID : " + event.getSemesterProxy().getId());
-				generateXMLFile(event.getSemesterProxy().getId());
-				init();
+				generateXMLFile(event.getSemesterProxy().getId());			
 			}
 		});
 		
@@ -82,30 +79,15 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 							ApplicationLoadingScreenEvent event) {
 						//Log.info("~~~~~~~~ApplicationLoadingScreenEvent onEventReceived Called");
 						event.display();
+						
 					}
 		});
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		eOsceServiceAsync.exportOsceFile(semesterProxy.getId(), new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-				
-				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				
-				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.exporterror());
-			}
-		});		
+		generateXMLFile(semesterProxy.getId());
 		
-		init();
-		
-		view.setDelegate(this);
+		view.setDelegate(this);		
 	}
 	
 	public void addSelectChangeHandler(SelectChangeHandler handler) 
@@ -121,6 +103,10 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		eOsceServiceAsync.exportOsceFile(semesterID, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
+				if (view.checkRadio())
+					processedFileList();
+				else
+					init();
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			}
@@ -143,7 +129,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		{
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
-			
+		
 			eOsceServiceAsync.exportUnprocessedFileList(new AsyncCallback<List<String>>() {
 				@Override
 				public void onFailure(Throwable caught) {
@@ -153,10 +139,8 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 
 				@Override
 				public void onSuccess(List<String> result) {
-					System.out.println("result size : " + result.size());
 					if (result.size() == 0)
 					{
-						System.out.println("SIZE 00000");
 						Label label = new Label();
 						label.setText(constants.exportprocessedmsg());
 						label.addStyleName("eOSCElable");
@@ -192,7 +176,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		}
 	}
 	
-	public void processedClicked()
+	public void processedFileList()
 	{
 		try
 		{
@@ -244,6 +228,11 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		{
 			Log.info(e.getMessage());
 		}
+	}
+	
+	public void processedClicked()
+	{
+		processedFileList();
 	}
 	
 	public void unprocessedClicked()

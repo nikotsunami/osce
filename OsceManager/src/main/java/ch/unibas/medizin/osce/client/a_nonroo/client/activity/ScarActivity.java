@@ -206,4 +206,19 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	public void goTo(Place place) {
 		placeControler.goTo(place);
 	}
+	
+	@Override
+	public void updateClicked(String name, TraitTypes traitTypes, ScarProxy proxy) {
+		ScarRequest scarReq = requests.scarRequest();
+		proxy = scarReq.edit(proxy);
+		proxy.setBodypart(name);
+		proxy.setTraitType(traitTypes);
+		
+		scarReq.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getScarMap()){
+			@Override
+				public void onSuccess(Void arg0) {
+					init();
+				}
+		});	
+	}
 }
