@@ -5,14 +5,25 @@
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../../styles.css" />
 		
+		<!-- //ScrolledTab Changes start -->
 	<g:HTMLPanel>
+	 <g:HorizontalPanel ui:field="horizontalanamnesisPanel"> 
+	 	<!--  <g:HTMLPanel> -->
+	<g:TabLayoutPanel ui:field="anamnesisTabs"  barHeight="40"  >
+		<!-- //ScrolledTab Changes end -->
+	</g:TabLayoutPanel>
+			<!--  </g:HTMLPanel> -->
+		</g:HorizontalPanel>
+	<!-- <g:HTMLPanel>
 		<g:TabPanel ui:field="anamnesisTabs" addStyleNames="{style.tabStyle}" width="100%">
 			
-		</g:TabPanel>
+		</g:TabPanel>-->
+	
 		<div class="{style.controls}">
 			<my:QuickSearchBox ui:field="searchBox" />
 			<g:CheckBox ui:field="showAnswered"></g:CheckBox>
 			<g:CheckBox ui:field="showUnanswered"></g:CheckBox>
 		</div>
+	
 	</g:HTMLPanel>
 </ui:UiBinder> 

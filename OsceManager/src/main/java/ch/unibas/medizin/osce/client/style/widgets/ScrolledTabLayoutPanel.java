@@ -189,7 +189,8 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 							*/
 						/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset))
 				    	{*/
-						if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+						//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+						if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 				    	{
 				    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
 							System.out.println("total width--"+tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft());
@@ -212,7 +213,8 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						    	System.out.println("Left--"+ left.getAbsoluteLeft());
 						    	/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset+50))
 						    	{*/
-						    	if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+						    	//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+						    	if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 						    	{
 						    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
 						    		System.out.println("total width--"+tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft());
@@ -273,7 +275,8 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						{
 							/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset))
 					    	{*/
-							if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+							//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+							if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 					    	{
 					    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
 								System.out.println("in loop position--"+i);

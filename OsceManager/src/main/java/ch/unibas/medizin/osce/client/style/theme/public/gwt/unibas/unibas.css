@@ -986,8 +986,8 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-SuggestBoxPopup {
-	border: 1px solid #aaa
-	z-index: 2 !important;;
+	border: 1px solid #aaa;
+	z-index: 2 !important;
 }
 
 /* .gwt-SuggestBoxPopup .suggestPopupTopCenter {
@@ -1135,6 +1135,7 @@ a:hover, .gwt-Anchor:hover {
     font-weight: bold;
     padding: 12px 10px 0 16px;    	
 	float: left;
+	overflow: hidden !important;
 	/* height: auto;
 	width: auto; */
 	
@@ -3195,7 +3196,7 @@ color: #f1b532;
 
 .tabpanel_tabbar_no_scroll {
 	overflow: hidden !important;
-	 width: 8% !important;
+	 width: 6.0% !important;
 }
 .gwt-TabLayoutPanelContentContainer{
 	z-index: 1;
@@ -3204,6 +3205,25 @@ color: #f1b532;
 .autoHeight
 {
 	background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+}
+
+
+.gwt-DateBox
+{
+	z-index: 2 !important;
+	
+}
+
+.gwt-DateBox {
+  z-index: 2 !important;
+}
+
+.dateBoxPopup {
+	z-index: 2 !important;
+}
+
+.gwt-DatePicker {
+  z-index: 2 !important;
 }
 
 .checkdemo
@@ -3304,4 +3324,22 @@ color: #f1b532;
 	background: url("images/SchedulePanelBackground.png") repeat-y;
 	width: 320px;
 	-moz-border-radius: 4px;
+}
+
+.ui-icon-triangle-1-s1 {
+background: url("images/downArrow.png") ;
+	
+	height: 25px;
+	width: 25px;
+	background-repeat: no-repeat;
+    display: block;
+    overflow: hidden;
+  	height:22px;
+    margin: auto;
+    border-right: 1px solid #AAA;
+}
+.ui-icon-triangle-1-s1:hover{
+
+	
+	border-left: 1px solid #AAA;
 }
