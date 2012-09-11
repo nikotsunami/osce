@@ -77,6 +77,12 @@
           <url>https://service.teklabs.com/nexus/content/repositories/public-releases/</url>
           <name>Repo for gwt-18n-project</name>
         </repository>
+        <!--GwtEvent Service Repository (server Push event) { -->
+        <repository>
+			<id>gwteventservice</id>
+			<url>http://gwteventservice.googlecode.com/svn/maven/repository-snapshots</url>
+		</repository>
+		<!--GwtEvent Service Repository (server Push event) } -->
     </repositories>
     
     <pluginRepositories>
@@ -110,7 +116,15 @@
             <artifactId>groovy-all</artifactId>
             <version>1.8.6</version>
         </dependency>-->
-    
+   <!--GwtEvent Service Dependency (server Push event) { -->
+   
+    <dependency>
+		<groupId>de.novanic.gwteventservice</groupId>
+		<artifactId>gwteventservice</artifactId>
+		<version>1.2.0</version>
+	</dependency>
+		
+    <!--GwtEvent Service Dependency (server Push event) } -->
 <!--     FOR GWTRPC-SPRING -->
     	<dependency>
         	<groupId>org.gwtrpcspring</groupId>

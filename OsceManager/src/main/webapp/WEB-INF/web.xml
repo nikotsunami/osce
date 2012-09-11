@@ -193,6 +193,29 @@
   	<url-pattern>/RoleFileUploadServlet</url-pattern>
   </servlet-mapping>
   
+  <!--ServerPush event  {-->
+  	<servlet>
+		<servlet-name>EventService</servlet-name>
+		<servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>EventService</servlet-name>
+		<url-pattern>/osMaEntry/gwteventservice</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>autoAssignpatientInSemesterService</servlet-name>
+		<servlet-class>ch.unibas.medizin.osce.server.AutoAssignPatientInSemesterServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>autoAssignpatientInSemesterService</servlet-name>
+		<url-pattern>/osMaEntry/autoAssignPatientInSemster</url-pattern>
+	</servlet-mapping>
+	
+  <!--ServerPush event } -->
+  
   <!--    Module10 Create plans -->
   
   <servlet>

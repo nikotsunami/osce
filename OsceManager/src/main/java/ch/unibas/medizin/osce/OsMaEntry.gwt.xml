@@ -18,6 +18,12 @@
 	
 	<inherits name="ch.unibas.medizin.osce.client.style.theme.Unibas"/>
 	
+	<!--ServerPush event  { -->
+	
+	 <inherits name="de.novanic.eventservice.GWTEventService"/>
+	
+	 <!--ServerPush event  } -->
+	 
 	  <!-- servlet>
     <servlet-name>remoteLoggerServiceImpl</servlet-name>
     <servlet-class>com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl</servlet-class>

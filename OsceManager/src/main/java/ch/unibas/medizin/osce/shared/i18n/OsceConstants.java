@@ -694,6 +694,7 @@ public interface OsceConstants extends Constants {
 
 	// eosce
 	public String importeosce();
+	public String autoAssignmentFailure();
 
 	public String importBtn();
 

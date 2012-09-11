@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
+import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterServiceAsync;
+//import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
@@ -46,6 +49,8 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
+import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterListener;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceStatus;
@@ -82,6 +87,14 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.Range;
+
+import de.novanic.eventservice.client.event.RemoteEventService;
+import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
+import de.novanic.eventservice.client.event.domain.Domain;
+import de.novanic.eventservice.client.event.domain.DomainFactory;
+
+
+
 
 @SuppressWarnings("deprecation")
 public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
@@ -136,7 +149,10 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 
 	// Module 3 }
 
-	
+	//ServerPush event {
+	private static final Domain DOMAIN = DomainFactory.getDomain("localhost");
+	private AutoAssignPatientInSemesterServiceAsync autoAssignmentPatientInSemesterService = GWT.create(AutoAssignPatientInSemesterService.class);
+	//ServerPush event }
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
 	}
@@ -2049,35 +2065,73 @@ public void initPatientInSemesterData(
 			@Override
 			public void autoAssignmentBtnClicked() {
 				
-				// For Loding Image
+				//ServerPush event {
+				RemoteEventServiceFactory theEventServiceFactory = RemoteEventServiceFactory.getInstance();
+				final RemoteEventService theEventService = theEventServiceFactory.getRemoteEventService();
 				
-				requests.getEventBus().fireEvent(
-						new ApplicationLoadingScreenEvent(true));
-				
-				requests.osceRequestNonRoo().autoAssignPatientInsemester(semesterProxy.getId()).fire(new OSCEReceiver<Void>() {
-
-					@Override
-					public void onSuccess(Void response) {
-						Log.info("@@Algoritham Implemented Successfully Patient Assign In Role Automatically");
-						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
-						dialogBox.showConfirmationDialog(constants.autoAssignmentSuccess());
-						Iterator<OsceDaySubViewImpl> osceDaySubViewImplIterator =osceDaySubViewImplList.iterator();
-						OsceDaySubViewImpl osceDaySubViewImpl;
-						while(osceDaySubViewImplIterator.hasNext()){
-							osceDaySubViewImpl=osceDaySubViewImplIterator.next();
-							refreshOsceSequences(osceDaySubViewImpl.getOsceDayProxy(),osceDaySubViewImpl );
+				theEventService.addListener(DOMAIN, new AutoAssignPatientInSemesterListener(){
+					public void autoAssignPatientInSemesterEvent(AutoAssignPatientInSemesterEvent event){
+						
+						Log.info("@@Event Received At Client Side After autoAssignPatientInSemester has push it from server");
+						
+						if(event.getResult()==true){
+						
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							theEventService.removeListeners();
+							Log.info("@@Algoritham Implemented Successfully Patient Assign In Role Automatically");
+							
+							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+							dialogBox.showConfirmationDialog(constants.autoAssignmentSuccess());
+							
+							Iterator<OsceDaySubViewImpl> osceDaySubViewImplIterator =osceDaySubViewImplList.iterator();
+							OsceDaySubViewImpl osceDaySubViewImpl;
+							while(osceDaySubViewImplIterator.hasNext()){
+								osceDaySubViewImpl=osceDaySubViewImplIterator.next();
+								refreshOsceSequences(osceDaySubViewImpl.getOsceDayProxy(),osceDaySubViewImpl );
+							}
+							
+						}
+						else{
+						
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							theEventService.removeListeners();
+							
+							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.failure());
+							dialogBox.showConfirmationDialog(constants.autoAssignmentFailure());
 						}
 						
+					}
+				});
 				
-						requests.getEventBus().fireEvent(
-								new ApplicationLoadingScreenEvent(false));
+				
+				// For Loding Image
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				autoAssignmentPatientInSemesterService.autoAssignPatientInSemester(semesterProxy.getId(), new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						theEventService.removeListeners();
+						
+						Log.info("AutoAssignment PatientIn semester Request Failed Due to" + caught.getMessage());
+						caught.printStackTrace();
+						
+						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.failure());
+						dialogBox.showConfirmationDialog(constants.autoAssignmentFailure());
+						
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						Log.info("AutoAssignment PatientIn semester Is executing but response has returned");
+						
 					}
 				});
 				
 			}
-			
+			//ServerPush event }
 			// module 3 f }
-
-	
-	
 }
