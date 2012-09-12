@@ -224,6 +224,19 @@ public class Assignment {
         return assignmentList;
     }
     
+    //retrieve Logical break post
+    public static List<Assignment> retrieveAssignmentOfLogicalBreakPost(Long osceDayId,Long osceSequenceId,Long courseId)
+    {
+    	Log.info("retrieveAssignmentOfLogicalBreakPost :");
+    	 EntityManager em = entityManager();
+         String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom=null  order by a.timeStart asc ";
+         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         List<Assignment> assignmentList = query.getResultList();
+         Log.info("retrieveAssignmentOfLogicalBreakPost query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList.size());
+         return assignmentList;
+    }
+    
   //Testing task {
 
     // Test Case 2

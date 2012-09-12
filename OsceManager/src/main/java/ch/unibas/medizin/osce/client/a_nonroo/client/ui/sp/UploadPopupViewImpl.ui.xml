@@ -13,6 +13,7 @@
 
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
 <g:HTMLPanel>
+<div class="arrow-popup-border"></div>
 <div class="arrow-popup"></div>
 
 <g:HorizontalPanel spacing='10'>

@@ -30,6 +30,7 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 
 	public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeExaminer(Long osceDayId,Long osceSequenceId,Long courseId,Long oscePostId);
 
+	public abstract Request<List<AssignmentProxy>> retrieveAssignmentOfLogicalBreakPost(Long osceDayId,Long osceSequenceId,Long courseId);
 	//Testing task {
 	
 	// Test Case 2

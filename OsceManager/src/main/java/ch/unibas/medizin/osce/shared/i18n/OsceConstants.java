@@ -790,4 +790,6 @@ public interface OsceConstants extends Constants {
 	public String criterialbl();
 	public String criteriadelete();
 	public String optiondelete();
+	
+	public String breakPost();
 }

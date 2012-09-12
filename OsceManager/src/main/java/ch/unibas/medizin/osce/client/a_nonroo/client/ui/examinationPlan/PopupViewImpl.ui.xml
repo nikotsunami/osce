@@ -16,6 +16,7 @@
 <g:VerticalPanel spacing="0" width="230px">
 	
 	<g:HTMLPanel>
+	<div class="arrow-popup-border"></div>
 	<div class="arrow-popup"></div>
 	<g:HorizontalPanel spacing="10" width="100%">
 		<g:Label ui:field="examinerNameLbl" visible="false" addStyleNames="{style.label}"></g:Label>

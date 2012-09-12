@@ -90,7 +90,8 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 	public void oscePostPanelClicked(ClickEvent event)
 	{
 		Log.info("oscePostPanel Clicked");
-		showOscePostPopupView();
+		if(oscePostProxy != null)
+			showOscePostPopupView();
 		
 	}
 	public void showOscePostPopupView()
