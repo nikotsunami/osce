@@ -3353,3 +3353,6 @@ background: url("images/downArrow.png") ;
 	
 	border-left: 1px solid #AAA;
 }
+.videoBorder{
+	border: 1px solid gray;
+}

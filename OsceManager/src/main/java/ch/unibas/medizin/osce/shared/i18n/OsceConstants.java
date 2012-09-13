@@ -326,6 +326,8 @@ public interface OsceConstants extends Constants {
 
 	public String filePath();
 
+	public String fileUploadError();
+
 	public String filterTitle();
 
 	public String fixedButtonString();
@@ -375,6 +377,10 @@ public interface OsceConstants extends Constants {
 	public String inActive();
 
 	public String insideTitle();
+
+	public String invalidImageFileType();
+
+	public String invalidVideoFileType();
 
 	public String itemName();
 
