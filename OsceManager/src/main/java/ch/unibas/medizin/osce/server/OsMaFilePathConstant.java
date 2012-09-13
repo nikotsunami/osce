@@ -54,41 +54,41 @@ public class OsMaFilePathConstant {
 	public static String appImageUploadDirectory = "osMaEntry/gwt/unibas/sp/images";
 
 	// Module 9 End
-	// public static String DEFAULT_IMPORT_EOSCE_PATH = "usr/oscemanager/eOSCE/import/";
-	public static String DEFAULT_IMPORT_EOSCE_PATH = "C:\\oscemanager\\eOSCE\\import\\";
+	public static String DEFAULT_IMPORT_EOSCE_PATH = "usr/oscemanager/eOSCE/import/";
+	// public static String DEFAULT_IMPORT_EOSCE_PATH = "C:\\oscemanager\\eOSCE\\import\\";
 
 	// Role Module
-	// public static String ROLE_IMAGE_FILEPATH = "usr/oscemanager/role/images/";
-	public static String ROLE_IMAGE_FILEPATH = "c:\\oscemanager\\role\\images\\";
+	public static String ROLE_IMAGE_FILEPATH = "usr/oscemanager/role/images/";
+	// public static String ROLE_IMAGE_FILEPATH = "c:\\oscemanager\\role\\images\\";
 
 	// Export OSCE File Path
-	// public static String EXPORT_OSCE_PROCESSED_FILEPATH = "usr/oscemanager/eosce/export/processed/";
-	public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
-	// public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "usr/oscemanager/eosce/export/unprocessed/";
-	public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
+	public static String EXPORT_OSCE_PROCESSED_FILEPATH = "usr/oscemanager/eosce/export/processed/";
+	// public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
+	public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "usr/oscemanager/eosce/export/unprocessed/";
+	// public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
 
-	// public static String DEFAULT_MAIL_TEMPLATE_PATH = "usr/oscemanager/Templates/mailTemplates/";
-	public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\oscemanager\\Templates\\mailTemplates\\";
+	public static String DEFAULT_MAIL_TEMPLATE_PATH = "usr/oscemanager/Templates/mailTemplates/";
+	// public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\oscemanager\\Templates\\mailTemplates\\";
 
-	// public static String PRINT_SCHEDULE_TEMPLATE = "usr/oscemanager/TEMPLATES/PRINTPLAN_TEMPLATE/";
-	public static final String PRINT_SCHEDULE_TEMPLATE = "C:\\oscemanager\\Templates\\";
+	public static String PRINT_SCHEDULE_TEMPLATE = "usr/oscemanager/Templates/";
+	// public static final String PRINT_SCHEDULE_TEMPLATE = "C:\\oscemanager\\Templates\\";
 
 	// Module 8 (Assessment Plan)[
 
 	// path of outside of webapps for parmanent storage of images
 	// linux
-	// public static String localImageUploadDirectory = "usr/oscemanager/sp/images/";
+	public static String localImageUploadDirectory = "usr/oscemanager/sp/images/";
 	// windows
-	public static String localImageUploadDirectory = "c:\\oscemanager\\sp\\images\\";
+	// public static String localImageUploadDirectory = "c:\\oscemanager\\sp\\images\\";
 
 	public static String realImagePath = "";
 	// public static String imagesrcPath="/osMaEntry/gwt/unibas/sp/images/";
 
 	// path of outside of webapps for parmanent storage of images
 	// linux
-	// public static String localVideoUploadDirectory = "usr/oscemanager/sp/images/";
+	public static String localVideoUploadDirectory = "usr/oscemanager/sp/videos/";
 	// windows
-	public static String localVideoUploadDirectory = "c://oscemanager//sp//videos//";
+	// public static String localVideoUploadDirectory = "c://oscemanager//sp//videos//";
 
 	public static String realVideoPath = "";//
 	// public static String videosrcPath="/osMaEntry/gwt/unibas/sp/videos/";
