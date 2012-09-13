@@ -794,4 +794,10 @@ public interface OsceConstants extends Constants {
 	public String optiondelete();
 	
 	public String breakPost();
+	
+	public String fileUploadError();
+	
+	public String invalidImageFileType();
+	
+	public String invalidVideoFileType();
 }
