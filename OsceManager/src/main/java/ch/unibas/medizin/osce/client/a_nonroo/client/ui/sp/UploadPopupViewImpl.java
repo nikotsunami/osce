@@ -177,7 +177,7 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
     	Log.info("Browser :" +browser); 
     	
     	//get browser version
-    	browserVersion=new Double(temp1[1]);
+    	browserVersion=new Double(temp1[1].split("\\.")[0]);
     	
     	
     	//validate type for mozilla firefox
