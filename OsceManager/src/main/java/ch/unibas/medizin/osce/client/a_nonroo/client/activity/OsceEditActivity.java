@@ -19,9 +19,11 @@ import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -47,6 +49,8 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 	public static OsceActivity osceActivity;
 	public static SemesterProxy semester;
 	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	public OsceEditActivity(OsceDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -71,7 +75,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 	@Override
 	public String mayStop() {
 		if (!save && changed())
-			return "Changes will be discarded!";
+			return constants.changesDiscarded();
 		else
 			return null;
 	}

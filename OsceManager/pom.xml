@@ -619,7 +619,10 @@
         </dependency>
     </dependencies>
     <build>
+<<<<<<< Updated upstream
     	
+=======
+>>>>>>> Stashed changes
          <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -808,6 +811,9 @@
                 </configuration>
                 <executions>
                     <execution>
+                    	<configuration>
+                    		<extraJvmArgs>-Xmx12g</extraJvmArgs>
+                    	</configuration>
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>

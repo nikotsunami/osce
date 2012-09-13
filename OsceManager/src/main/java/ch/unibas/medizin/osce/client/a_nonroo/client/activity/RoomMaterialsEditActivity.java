@@ -15,10 +15,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsEditVi
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListRequest;
 import ch.unibas.medizin.osce.shared.Operation;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -39,6 +40,7 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 	private AcceptsOneWidget widget;
 	private RoomMaterialsEditView view;
 	private RoomMaterialsDetailsPlace place;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private RequestFactoryEditorDriver<MaterialListProxy, RoomMaterialsEditViewImpl> editorDriver;
 	private MaterialListProxy materialList;
@@ -68,7 +70,7 @@ public class RoomMaterialsEditActivity extends AbstractActivity implements
 	@Override
 	public String mayStop() {
 		if (!save && changed())
-			return "Changes will be discarded!";
+			return constants.changesDiscarded();
 		else
 			return null;
 	}

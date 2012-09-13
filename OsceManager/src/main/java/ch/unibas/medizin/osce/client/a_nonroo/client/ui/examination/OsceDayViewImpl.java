@@ -226,7 +226,7 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		
 		lbEndTimeLabel.setText(constants.lbendtime());
 		studentsLabel.setText(constants.student());
-		saveOsceDayValue.setText("Save");
+		saveOsceDayValue.setText(constants.save());
 
 		// Highlight onViolation
 			osceDayMap=new HashMap<String, Widget>();

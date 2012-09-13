@@ -11,9 +11,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisFormEditViewImp
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -36,6 +38,7 @@ public class AnamnesisFormEditActivity extends AbstractActivity implements
 	private RequestFactoryEditorDriver<AnamnesisFormProxy, AnamnesisFormEditViewImpl> editorDriver;
 	private AnamnesisFormProxy anamnesisForm;
 	private boolean save;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public AnamnesisFormEditActivity(AnamnesisFormDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
@@ -61,7 +64,7 @@ public class AnamnesisFormEditActivity extends AbstractActivity implements
 	@Override
 	public String mayStop() {
 		if (!save)
-			return "Changes will be discarded!";
+			return constants.changesDiscarded();
 		else
 			return null;
 	}

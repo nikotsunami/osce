@@ -120,10 +120,10 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		comparison.setValue(Comparison.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison.values()));
 		
-		OsceConstants constants = GWT.create(OsceConstants.class);
+		final OsceConstants constants = GWT.create(OsceConstants.class);
 		addAdvSeaBasicButton.setText(constants.add());
 		addBasicData.setText(constants.basicFilter());
-		unit.setText("[cm]");
+		unit.setText("[" + constants.heightUnit() + "]");
 		valueNotAvail.setText("");		
 		field.addValueChangeHandler(new ValueChangeHandler<PossibleFields>() {
 			@Override
@@ -135,11 +135,11 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 				} else if (event.getValue() == PossibleFields.HEIGHT) {
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(Comparison.values()));
-					unit.setText("[cm]");
+					unit.setText("[" + constants.heightUnit() + "]");
 				} else if (event.getValue() == PossibleFields.WEIGHT) {
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(Comparison.values()));
-					unit.setText("[kg]");
+					unit.setText("[" + constants.weightUnit() + "]");
 				} else if (event.getValue() == PossibleFields.GENDER) {
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(new Comparison[]{Comparison.EQUALS, Comparison.NOT_EQUALS}));
@@ -147,7 +147,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 				} else if (event.getValue() == PossibleFields.AGE) {
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(Comparison.values()));
-					unit.setText("[years]");
+					unit.setText("[" + constants.ageUnit() + "]");
 				}
 			}
 		});

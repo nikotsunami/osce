@@ -65,7 +65,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 		<table  class="{style.fields}" >
 			<tr id="name">
 				<td>
-					<span class="{style.label}">Name:</span>
+					<span class="{style.label}" ui:field="labelOsce">Name:</span>
 				</td>
 				<td>
 					<span ui:field="name" />
@@ -73,7 +73,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="version">
 				<td>
-					<span class="{style.label}">Version:</span>
+					<span class="{style.label}" ui:field="labelVersion">Version:</span>
 				</td>
 				<td>
 					<span ui:field="version" />
@@ -81,7 +81,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="maxStud">
 				<td>
-					<span class="{style.label}">max. Studenten:</span>
+					<span class="{style.label}" ui:field="labelMaxStudents">max. Studenten:</span>
 				</td>
 				<td>
 					<span ui:field="maxStud" />
@@ -89,7 +89,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="maxNumberStudents">
 				<td>
-					<span class="{style.label}">max. Parcours:</span>
+					<span class="{style.label}" ui:field="labelMaxCircuits">max. Parcours:</span>
 				</td>
 				<td>
 					<span ui:field="maxNumberStudents" />
@@ -97,7 +97,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="numberCourses">
 				<td>
-					<span class="{style.label}">Postenlänge:</span>
+					<span class="{style.label}" ui:field="labelStationLength">Postenlänge:</span>
 				</td>
 				<td>
 					<span ui:field="postLength" />
@@ -105,7 +105,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="shortBreak">
 				<td>
-					<span class="{style.label}">Short Break:</span>
+					<span class="{style.label}" ui:field="labelShortBreak">Short Break:</span>
 				</td>
 				<td>
 					<span ui:field="shortBreak" />
@@ -113,7 +113,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="LongBreak">
 				<td>
-					<span class="{style.label}">Long Break:</span>
+					<span class="{style.label}" ui:field="labelLongBreak">Long Break:</span>
 				</td>
 				<td>
 					<span ui:field="LongBreak" />
@@ -121,7 +121,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="MiddleBreak">
 				<td>
-					<span class="{style.label}">Middle Break:</span>
+					<span class="{style.label}" ui:field="labelMediumBreak">Middle Break:</span>
 				</td>
 				<td>
 					<span ui:field="MiddleBreak" />
@@ -129,7 +129,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			</tr>
 			<tr id="lunchBreak">
 				<td>
-					<span class="{style.label}">lunch Break:</span>
+					<span class="{style.label}" ui:field="labelLunchBreak">lunch Break:</span>
 				</td>
 				<td>
 					<span ui:field="lunchBreak" />

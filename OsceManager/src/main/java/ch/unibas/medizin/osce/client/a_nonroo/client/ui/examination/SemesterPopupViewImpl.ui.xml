@@ -31,11 +31,11 @@
 	<g:HTMLPanel>	 	
 		 <g:HorizontalPanel>
 			<g:VerticalPanel>
-				<g:Label styleName="{style.topPadding}">Year</g:Label>
-				<g:Label styleName="{style.topPadding}" >Semester</g:Label>
-				<g:Label styleName="{style.topPadding}">Max Year Earning</g:Label>
-				<g:Label styleName="{style.topPadding}">Price statist</g:Label>
-				<g:Label styleName="{style.topPadding}">Price Standardized Patient</g:Label>				
+				<g:Label styleName="{style.topPadding}" ui:field="labelYear">Year</g:Label>
+				<g:Label styleName="{style.topPadding}" ui:field="labelSemester">Semester</g:Label>
+				<g:Label styleName="{style.topPadding}" ui:field="labelMaxYearEarning">Max Year Earning</g:Label>
+				<g:Label styleName="{style.topPadding}" ui:field="labelPriceStatist">Price statist</g:Label>
+				<g:Label styleName="{style.topPadding}" ui:field="labelPriceSimpat">Price Standardized Patient</g:Label>				
 			</g:VerticalPanel>
 			<g:VerticalPanel styleName="{style.panelPadding}">
 				<g:TextBox pixelSize="100,20" styleName="{style.listBoxStyle}{style.textBoxPadding}" ui:field="txtYear"></g:TextBox>				
@@ -48,8 +48,8 @@
 				<g:TextBox pixelSize="100,20" styleName="{style.listBoxStyle}{style.textBoxPadding}" ui:field="txtPriceStatist"></g:TextBox>
 				<g:TextBox pixelSize="100,20" styleName="{style.listBoxStyle}{style.textBoxPadding}" ui:field="txtPriceSP"></g:TextBox>
 				<g:HTMLPanel styleName="{style.buttonPadding}">
-					<g:Button pixelSize="50,20" ui:field="btnSave" text="Save"></g:Button>
-					<g:Button pixelSize="50,20" ui:field="btnClose"  text="Close"></g:Button>
+					<my:IconButton pixelSize="50,20" ui:field="btnSave" text="Save" icon="disk"></my:IconButton>
+					<my:IconButton pixelSize="50,20" ui:field="btnClose"  text="Close" icon="closethick"></my:IconButton>
 				</g:HTMLPanel>			
 			</g:VerticalPanel> 		
 		</g:HorizontalPanel>

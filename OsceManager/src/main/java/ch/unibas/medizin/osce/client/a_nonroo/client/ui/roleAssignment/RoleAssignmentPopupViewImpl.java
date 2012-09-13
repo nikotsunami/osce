@@ -50,7 +50,7 @@ public class RoleAssignmentPopupViewImpl extends DialogBox implements
 		this.setTrainingHeaderText(constants.acceptedTraining());
 		this.setOsceHeaderText(constants.acceptedOSCE());
 		this.setRoleAssignHeaderText(constants.assignedRole());
-		this.okButton.setText("OK");
+		this.okButton.setText(constants.okBtn());
 
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);

@@ -151,7 +151,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 				return renderer.render(s);
 				}
 			}
-		}, "OSCE");
+		}, constants.osce());
 		
 		paths.add("maxNumberStudents");
 		table.addColumn(new TextColumn<OsceProxy>() {
@@ -175,7 +175,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 				return renderer.render(object.getMaxNumberStudents().toString());
 				}
 			}
-		}, constants.maxStudents());
+		}, constants.osceMaxStudents());
 		
 		paths.add("numberCourses");
 		table.addColumn(new TextColumn<OsceProxy>() {
@@ -199,7 +199,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 				return renderer.render(object.getNumberCourses().toString());
 				}
 			}
-		}, constants.maxCircuits());
+		}, constants.osceMaxCircuits());
 		
 		paths.add("postLength");
 		table.addColumn(new TextColumn<OsceProxy>() {
@@ -220,10 +220,10 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 				}
 				else
 				{
-				return renderer.render(object.getPostLength().toString());
+				return renderer.render(object.getPostLength().toString() + " " + constants.min());
 				}
 			}
-		}, constants.stationLength());
+		}, constants.osceStationLength());
 		
 		
 		paths.add("osceBreak");
@@ -263,7 +263,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 					min=min+"/-";
 				}
 				
-				min=min+" min";
+				min=min + " " + constants.min();
 				return min;
 				//return renderer.render(object.getShortBreak().toString()+"/"+object.getLongBreak().toString()+"/"+object.getLunchBreak().toString()+" min");
 			}

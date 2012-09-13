@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -56,10 +57,15 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 	@UiField
 	Button save;
 	
-	
-
 	@UiField
 	Button cancel;
+	
+	@UiField
+	SpanElement labelTaskName;
+	@UiField
+	SpanElement labelDeadline;
+	@UiField
+	SpanElement labelAdministrator;
 	
 	public Boolean isedit;
 	
@@ -85,13 +91,8 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 	
 	public OsceTaskPopViewImpl(){
 		super(true);
-		  
-		
-	
-		
+
 		add(uiBinder.createAndBindUi(this));
-	
-		
 		/*
 		filterPanelRoot.addMouseOutHandler(new MouseOutHandler() {
 			@Override
@@ -111,9 +112,11 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 			}
 		});*/
 		
+		final OsceConstants constants = GWT.create(OsceConstants.class);
 		
-		
-		OsceConstants constants = GWT.create(OsceConstants.class);
+		labelTaskName.setInnerText(constants.osceTaskName());
+		labelDeadline.setInnerText(constants.osceTaskDeadline());
+		labelAdministrator.setInnerText(constants.administrator());
 		
 		deadline.getTextBox().setReadOnly(true);
 		deadline.addValueChangeHandler(new ValueChangeHandler<Date>() {
@@ -133,12 +136,12 @@ public class OsceTaskPopViewImpl extends PopupPanel  implements OsceTaskPopView{
 				d.setYear(date.getYear()+2);*/
 			if(event.getValue().before(today))
 			{
-				Window.alert("Date should be past date");
+				Window.alert(constants.osceWarningPast());
 				deadline.setValue(null);
 			}
 			if(event.getValue().after(futureDate))
 			{
-				Window.alert("Date should be not allowed after 2 year");
+				Window.alert(constants.osceWarningFuture());
 				deadline.setValue(null);
 			}
 			}

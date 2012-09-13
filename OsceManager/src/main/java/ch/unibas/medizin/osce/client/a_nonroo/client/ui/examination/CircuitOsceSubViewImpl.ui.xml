@@ -84,7 +84,7 @@
 				
 				<td>
 				<g:HorizontalPanel spacing="4">
-				<my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton>
+				<my:IconButton ui:field="saveOsce" icon="disk"></my:IconButton>
 				</g:HorizontalPanel>								
 				</td>
 			</tr>
@@ -102,10 +102,10 @@
 				<!--  E Module 5 bug Report Change -->
 				<td>
 					<g:HorizontalPanel spacing="4">
-					<g:Button ui:field="generateBtn" width="80px"></g:Button>
-					<g:Button ui:field="fixedBtn"  width="80px"></g:Button>
-					<g:Button ui:field="clearAllBtn"  width="80px"></g:Button>
-					<g:Button ui:field="closedBtn"  width="80px"></g:Button>
+						<my:IconButton ui:field="generateBtn" icon="refresh" width="100px"></my:IconButton>
+						<my:IconButton ui:field="fixedBtn" icon="pin-s" width="100px"></my:IconButton>				
+						<my:IconButton ui:field="clearAllBtn" width="100px" icon="cancel"></my:IconButton>
+						<my:IconButton ui:field="closedBtn" icon="close" width="100px"></my:IconButton>
 					</g:HorizontalPanel>
 				</td>			
 			</tr>									

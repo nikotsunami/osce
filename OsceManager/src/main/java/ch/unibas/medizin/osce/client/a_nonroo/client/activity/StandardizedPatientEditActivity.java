@@ -35,9 +35,11 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -57,7 +59,8 @@ StandardizedPatientEditView.Delegate {
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private StandardizedPatientEditView view;
-	private StandardizedPatientDetailsPlace place; 
+	private StandardizedPatientDetailsPlace place;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private RequestFactoryEditorDriver<StandardizedPatientProxy,StandardizedPatientEditViewImpl> editorDriver;
 	private StandardizedPatientProxy standardizedPatient;
@@ -99,7 +102,7 @@ StandardizedPatientEditView.Delegate {
 	@Override
 	public String mayStop() {
 		if (!save && changed())
-			return "Changes will be discarded!";
+			return constants.changesDiscarded();
 		else
 			return null;
 	}

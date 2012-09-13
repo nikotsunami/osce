@@ -69,11 +69,6 @@ public class CircuitDetailsViewImpl extends Composite implements CircuitDetailsV
 	}
 	
 	// Day Module Start
-	
-		
-		
-		
-
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other

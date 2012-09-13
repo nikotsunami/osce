@@ -24,7 +24,7 @@ public class OSCEReceiverPopupViewImpl extends DialogBox
 	public OSCEReceiverPopupViewImpl() {
 		dialogBox=this;
 		super.getCaption().asWidget().addStyleName("confirmbox");
-		super.setText("Violation Message");
+		super.setText(constants.violationMessage());
 		Log.info("Call OSCEReceiverPopupViewImpl() Constructor");		
 		
 		this.add(panel);

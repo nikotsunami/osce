@@ -226,6 +226,8 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		saveOsce.setText(constants.save());
 		clearAllBtn.setText(constants.clearAll());	
 		generateBtn.setText(constants.generate());
+		fixedBtn.setText(constants.fixedButtonString());
+		closedBtn.setText(constants.closedButtonString());
 		
 		// Module 5 bug Report Change
 		osceMap=new HashMap<String, Widget>();
@@ -249,9 +251,16 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		// E Module 5 bug Report Change
 		
 		// change {
-		fixedBtn.setText(constants.fixedButtonString());
-		closedBtn.setText(constants.closedButtonString());
 		// change {
+		
+		shortBreakLabel.setText(constants.osceShortBreak());
+		middleBreakLabel.setText(constants.osceMediumBreak());
+		longBreakLabel.setText(constants.osceLongBreak());
+		launchBreakLabel.setText(constants.osceLunchBreak());
+		maxParcourLabel.setText(constants.osceMaxCircuits());
+		maxStudentLabel.setText(constants.osceMaxStudents());
+		maxRoomsLabel.setText(constants.osceMaxRooms());
+		shortBreakSimpatLabel.setText(constants.osceSimpatsInShortBreak());
 	}
 
 	public String[] getPaths() {

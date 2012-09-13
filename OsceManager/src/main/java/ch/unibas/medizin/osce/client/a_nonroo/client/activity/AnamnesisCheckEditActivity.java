@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.ui.AnamnesisCheckProxyRenderer;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -41,6 +42,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	private AcceptsOneWidget widget;
 	private AnamnesisCheckEditView view;
 	private AnamnesisCheckDetailsPlace place;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private RequestFactoryEditorDriver<AnamnesisCheckProxy, AnamnesisCheckEditViewImpl> editorDriver;
 	private AnamnesisCheckProxy anamnesisCheck;
@@ -73,7 +75,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	@Override
 	public String mayStop() {
 		if (!save && changed())
-			return "Changes will be discarded!";
+			return constants.changesDiscarded();
 		else
 			return null;
 	}
