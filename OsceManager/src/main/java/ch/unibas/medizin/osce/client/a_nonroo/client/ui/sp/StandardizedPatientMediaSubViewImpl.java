@@ -261,7 +261,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		 if(videoPlayer == null)
 		 videoPlayer = new VideoWidget(true, true, "");
 		 
-		 
+		 description=description + "?date=" + new Date().getTime();
 		 videoPlayer.addStyleName("videoBorder");
 	        List<VideoSource> sources = new ArrayList<VideoSource>();
 	      
