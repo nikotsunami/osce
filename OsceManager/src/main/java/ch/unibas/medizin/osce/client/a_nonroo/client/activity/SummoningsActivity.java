@@ -416,7 +416,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		popupView = new SummoningsPopupViewImpl();
-		summoningsServiceAsync.getTemplateContent("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
+			summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,true, 
 				new AsyncCallback<String[]>() {
 					
 					@Override
@@ -444,7 +444,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));  
-				summoningsServiceAsync.getTemplateContent("email\\emailTemplate_SP"+selectedValue+".txt", 
+					summoningsServiceAsync.getTemplateContent(selectedValue,false,true, 
 						new AsyncCallback<String[]>() {
 							
 							@Override
@@ -518,7 +518,9 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			public void onClick(ClickEvent arg0) {
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.saveTemplate("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
+//				summoningsServiceAsync.saveTemplate("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
+			//Feature : 154
+				summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),false,true, popupView.getMessageContent(), 
 						new AsyncCallback<Boolean>() {
 							
 							@Override
@@ -561,7 +563,10 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			public void onClick(ClickEvent arg0) {
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.deleteTemplate("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt",
+				//summoningsServiceAsync.deleteTemplate("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt",
+			//Feature : 154
+
+summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,true,
 						new AsyncCallback<Boolean>() {
 							
 							@Override
@@ -574,7 +579,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 									confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
 									
-									summoningsServiceAsync.getTemplateContent("email\\emailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
+			//Feature : 154
+									summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,true,  
 											new AsyncCallback<String[]>() {
 												
 												@Override
@@ -663,7 +669,11 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		  
 		popupView = new SummoningsPopupViewImpl();
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-		summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
+			//Feature : 154
+//		summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
+
+		summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,true,  
+
 				new AsyncCallback<String[]>() {
 					
 					@Override
@@ -691,7 +701,12 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+selectedValue+".txt", 
+			//Feature : 154
+//				summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+selectedValue+".txt", 
+
+
+
+summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,true, 
 						new AsyncCallback<String[]>() {
 							
 							@Override
@@ -765,7 +780,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			public void onClick(ClickEvent arg0) {
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.saveTemplate("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
+			//Feature : 154
+				summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),true,true, popupView.getMessageContent(), 
 						new AsyncCallback<Boolean>() {
 							
 							@Override
@@ -809,7 +825,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			public void onClick(ClickEvent arg0) {
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.deleteTemplate("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt",
+			//Feature : 154
+				summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),true,true,
 						new AsyncCallback<Boolean>() {
 							
 							@Override
@@ -822,8 +839,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 									confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
-									
-									summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
+												//Feature : 154
+									summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,true, 
 											new AsyncCallback<String[]>() {
 												
 												@Override
@@ -891,7 +908,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			  
 			popupView = new SummoningsPopupViewImpl();
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-			summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
+			//Feature : 154
+			summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,false, 
 					new AsyncCallback<String[]>() {
 						
 						@Override
@@ -920,7 +938,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					String selectedValue = popupView.getSemesterList().getValue(selectedIndex);
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_SP"+selectedValue+".txt", 
+			//Feature : 154
+					summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,false, 
 							new AsyncCallback<String[]>() {
 								
 								@Override
@@ -984,7 +1003,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				public void onClick(ClickEvent arg0) {
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.saveTemplate("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
+			//Feature : 154
+					summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),false,false, popupView.getMessageContent(), 
 							new AsyncCallback<Boolean>() {
 								
 								@Override
@@ -1028,7 +1048,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				public void onClick(ClickEvent arg0) {
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.deleteTemplate("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt",
+			//Feature : 154
+					summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,false,
 							new AsyncCallback<Boolean>() {
 								
 								@Override
@@ -1041,8 +1062,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 										confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
-										
-										summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_SP"+semesterProxy.getId().toString()+".txt", 
+													//Feature : 154
+										summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,false, 
 												new AsyncCallback<String[]>() {
 													
 													@Override
@@ -1115,7 +1136,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			popupView = new SummoningsPopupViewImpl();
 			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-			summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
+			//Feature : 154
+			summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,false, 
 					new AsyncCallback<String[]>() {
 						
 						@Override
@@ -1144,7 +1166,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					
 					  
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_Ex"+selectedValue+".txt", 
+			//Feature : 154
+					summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,false, 
 							new AsyncCallback<String[]>() {
 								
 								@Override
@@ -1207,7 +1230,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				public void onClick(ClickEvent arg0) {
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.saveTemplate("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt", popupView.getMessageContent(), 
+			//Feature : 154
+					summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),true,false, popupView.getMessageContent(), 
 							new AsyncCallback<Boolean>() {
 								
 								@Override
@@ -1251,7 +1275,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 				public void onClick(ClickEvent arg0) {
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.deleteTemplate("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt",
+			//Feature : 154
+					summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),true,false,
 							new AsyncCallback<Boolean>() {
 								
 								@Override
@@ -1263,8 +1288,8 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 										confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
-										
-										summoningsServiceAsync.getTemplateContent("mail\\mailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
+													//Feature : 154
+										summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,false, 
 												new AsyncCallback<String[]>() {
 													
 													@Override

@@ -394,6 +394,8 @@ public interface OsceConstants extends Constants {
 
 	public String noSelection();
 
+	public String noDataFound();
+
 	public String noTitle();
 
 	public String numOfRooms();

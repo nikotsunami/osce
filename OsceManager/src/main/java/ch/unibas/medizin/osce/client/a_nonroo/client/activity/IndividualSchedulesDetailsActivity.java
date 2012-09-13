@@ -24,6 +24,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -694,10 +695,12 @@ IndividualSchedulesDetailsView.Delegate
 			});
 			
 			Log.info("Selected Osce: " + osceProxy.getName());
-			final String templateName="UpdatedTemplateStud"+osceProxy.getId()+".txt";
+			//Feature : 154
+//			final String templateName="UpdatedTemplateStud"+osceProxy.getId()+".txt";
 			
 			//spSummoningsServiceAsync.getStudTemplateContent("UpdatedTemplateStud.txt",new AsyncCallback<String>() 
-			spSummoningsServiceAsync.getStudTemplateContent(templateName,new AsyncCallback<String[]>()
+			spSummoningsServiceAsync.getStudTemplateContent(osceProxy.getId().toString(),TemplateTypes.STUDENT,new AsyncCallback<String[]>()
+					//Feature : 154
 			{
 					@Override
 					public void onSuccess(String[] html) 
@@ -739,9 +742,11 @@ IndividualSchedulesDetailsView.Delegate
 							public void onSuccess(Long response) 
 							{
 									Log.info("Osce Id For name: " + response);
-									final String importTemplateName="UpdatedTemplateStud"+response+".txt";
+									//Feature : 154
+//									final String importTemplateName="UpdatedTemplateStud"+response+".txt";
 
-									spSummoningsServiceAsync.getStudTemplateContent(importTemplateName,new AsyncCallback<String[]>()
+									spSummoningsServiceAsync.getStudTemplateContent(response.toString(),TemplateTypes.STUDENT ,new AsyncCallback<String[]>()
+											//Feature : 154
 									{
 													@Override
 													public void onSuccess(String[] html) 
@@ -806,15 +811,18 @@ IndividualSchedulesDetailsView.Delegate
 					public void onClick(ClickEvent event)
 					{
 						Log.info("Click Stud Save Button");
-						
+						//Feature : 154
 						//spSummoningsServiceAsync.saveTemplate("UpdatedTemplateStud.txt", popupStud.getMessageContent(),new AsyncCallback<Boolean>()
-						spSummoningsServiceAsync.deleteTemplate(templateName, new AsyncCallback<Boolean>()
+						spSummoningsServiceAsync.deleteTemplate(osceProxy.getId().toString(),TemplateTypes.STUDENT , new AsyncCallback<Boolean>()
+								//Feature : 154
 								{
 										@Override
 										public void onSuccess(Boolean arg0) 
 										{
-											Log.info("Delete Success..");											
-											spSummoningsServiceAsync.saveTemplate(templateName, popupStud.getMessageContent(),new AsyncCallback<Boolean>()
+											Log.info("Delete Success..");					
+											//Feature : 154
+											spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.STUDENT, popupStud.getMessageContent(),new AsyncCallback<Boolean>()
+													//Feature : 154
 											{
 
 													@Override
@@ -851,8 +859,9 @@ IndividualSchedulesDetailsView.Delegate
 					{
 						Log.info("Click Stud Save Button");
 						
-						//spSummoningsServiceAsync.saveTemplate("UpdatedTemplateStud.txt", popupStud.getMessageContent(),new AsyncCallback<Boolean>() 
-						spSummoningsServiceAsync.saveTemplate(templateName, popupStud.getMessageContent(),new AsyncCallback<Boolean>()
+						//spSummoningsServiceAsync.saveTemplate("UpdatedTemplateStud.txt", popupStud.getMessageContent(),new AsyncCallback<Boolean>()
+						//Feature : 154
+						spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.STUDENT, popupStud.getMessageContent(),new AsyncCallback<Boolean>()
 								{
 
 									@Override
@@ -869,8 +878,9 @@ IndividualSchedulesDetailsView.Delegate
 										//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables,spId,1L,new AsyncCallback<String>() {
 										Log.info("Semester Proxy: " + IndividualSchedulesActivity.semesterProxyForDetail.getId());	
 										
-										//spSummoningsServiceAsync.generateStudentPDFUsingTemplate("UpdatedTemplateStud.txt",studId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>() 
-										spSummoningsServiceAsync.generateStudentPDFUsingTemplate(templateName,studId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>()
+										//spSummoningsServiceAsync.generateStudentPDFUsingTemplate("UpdatedTemplateStud.txt",studId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>()
+										//Feature : 154
+										spSummoningsServiceAsync.generateStudentPDFUsingTemplate(osceProxy.getId().toString(),TemplateTypes.STUDENT,studId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>()
 										{
 
 											@Override
@@ -902,13 +912,15 @@ IndividualSchedulesDetailsView.Delegate
 					{
 						Log.info("Click on Restore Button");
 						//spSummoningsServiceAsync.deleteTemplate("UpdatedTemplateStud.txt", new AsyncCallback<Boolean>() 
-						spSummoningsServiceAsync.deleteTemplate(templateName, new AsyncCallback<Boolean>()
+						//Feature : 154
+						spSummoningsServiceAsync.deleteTemplate(osceProxy.getId().toString(),TemplateTypes.STUDENT, new AsyncCallback<Boolean>()
 						{
 								@Override
 								public void onSuccess(Boolean arg0) 
 								{
-									//spSummoningsServiceAsync.getTemplateContent("DefaultTemplateStud.txt",new AsyncCallback<String>() 
-									spSummoningsServiceAsync.getStudTemplateContent("DefaultTemplateStud.txt",new AsyncCallback<String[]>()
+									//spSummoningsServiceAsync.getTemplateContent("DefaultTemplateStud.txt",new AsyncCallback<String>()
+									//Feature : 154
+									spSummoningsServiceAsync.getStudTemplateContent("00", TemplateTypes.STUDENT,new AsyncCallback<String[]>()
 									{
 												@Override
 												public void onSuccess(String[] html) 
@@ -1045,7 +1057,7 @@ IndividualSchedulesDetailsView.Delegate
 			Log.info("Standardized Patient Osce Size: " + lstSPOsce.size());
 			//Log.info("Standardized Patient Role Size: " + lstSPRole.size());
 			
-			final String templateName="UpdatedTemplateSP"+osceProxy.getId()+".txt";
+	//		final String templateName="UpdatedTemplateSP"+osceProxy.getId()+".txt";
 						
 			final PrintTemplatePopupViewImpl popupSP=new PrintTemplatePopupViewImpl();							
 			Log.info("getTemplate Content.");
@@ -1067,8 +1079,9 @@ IndividualSchedulesDetailsView.Delegate
 			});
 									
 			//Log.info("Selected Value: " + popupSP.getOsceList().getValue(index));
-			//spSummoningsServiceAsync.getTemplateContent("UpdatedTemplateSP.txt",new AsyncCallback<String>() 
-			spSummoningsServiceAsync.getTemplateContent(templateName,new AsyncCallback<String[]>()
+			//spSummoningsServiceAsync.getTemplateContent("UpdatedTemplateSP.txt",new AsyncCallback<String>()
+			//Feature : 154
+			spSummoningsServiceAsync.getTemplateContent( osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT,new AsyncCallback<String[]>()
 			{
 				@Override
 				public void onSuccess(String[] html) 
@@ -1110,9 +1123,9 @@ IndividualSchedulesDetailsView.Delegate
 						public void onSuccess(Long response) 
 						{
 							Log.info("Osce Id For name: " + response);
-							final String importTemplateName="UpdatedTemplateSP"+response+".txt";
-
-							spSummoningsServiceAsync.getTemplateContent(importTemplateName,new AsyncCallback<String[]>()
+//							final String importTemplateName="UpdatedTemplateSP"+response+".txt";
+							//Feature : 154
+							spSummoningsServiceAsync.getTemplateContent(response.toString(),TemplateTypes.STANDARDIZED_PATIENT,new AsyncCallback<String[]>()
 									{
 												@Override
 												public void onSuccess(String[] html) 
@@ -1150,13 +1163,15 @@ IndividualSchedulesDetailsView.Delegate
 				{
 					Log.info("Click Save Button");
 					
-					spSummoningsServiceAsync.deleteTemplate(templateName, new AsyncCallback<Boolean>()
+					//Feature : 154
+					spSummoningsServiceAsync.deleteTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT, new AsyncCallback<Boolean>()
 							{
 									@Override
 									public void onSuccess(Boolean arg0) 
 									{
 										Log.info("Delete SP Template");
-										spSummoningsServiceAsync.saveTemplate(templateName, popupSP.getMessageContent(),new AsyncCallback<Boolean>() 
+										//Feature : 154
+										spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT, popupSP.getMessageContent(),new AsyncCallback<Boolean>() 
 												{
 
 													@Override
@@ -1194,8 +1209,8 @@ IndividualSchedulesDetailsView.Delegate
 				{
 					Log.info("Click Save Button");
 					
-					                
-					spSummoningsServiceAsync.saveTemplate(templateName, popupSP.getMessageContent(),new AsyncCallback<Boolean>() 
+					//Feature : 154
+					spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT, popupSP.getMessageContent(),new AsyncCallback<Boolean>() 
 					{
 
 						@Override
@@ -1211,7 +1226,8 @@ IndividualSchedulesDetailsView.Delegate
 							//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables, new AsyncCallback<String>() {
 							//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables,spId,1L,new AsyncCallback<String>() {
 							Log.info("Semester Proxy: " + IndividualSchedulesActivity.semesterProxyForDetail.getId());
-							spSummoningsServiceAsync.generateSPPDFUsingTemplate(templateName,templateSPVariables,spId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>() 
+							//Feature : 154
+							spSummoningsServiceAsync.generateSPPDFUsingTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT,templateSPVariables,spId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>() 
 							{
 								@Override
 								public void onFailure(Throwable caught) 
@@ -1241,13 +1257,15 @@ IndividualSchedulesDetailsView.Delegate
 				public void onClick(ClickEvent event) 
 				{
 					Log.info("Click on Restore Button");
-					spSummoningsServiceAsync.deleteTemplate(templateName, new AsyncCallback<Boolean>() 
+					//Feature : 154
+					spSummoningsServiceAsync.deleteTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT, new AsyncCallback<Boolean>() 
 					{
 								
 								@Override
 								public void onSuccess(Boolean arg0) 
 								{
-									spSummoningsServiceAsync.getTemplateContent("DefaultTemplateSP.txt",new AsyncCallback<String[]>() 
+									//Feature : 154
+									spSummoningsServiceAsync.getTemplateContent("00",TemplateTypes.STANDARDIZED_PATIENT,new AsyncCallback<String[]>() 
 									{
 												@Override
 												public void onSuccess(String[] html) 
@@ -1326,7 +1344,7 @@ IndividualSchedulesDetailsView.Delegate
 		{
 			Log.info("Call initExaminerPopup");
 			
-			final String templateName="UpdatedTemplateExaminor"+osceProxy.getId()+".txt";
+//			final String templateName="UpdatedTemplateExaminor"+osceProxy.getId()+".txt";
 			
 			final PrintTemplatePopupViewImpl popupExaminer=new PrintTemplatePopupViewImpl();							
 			Log.info("get Stud Template Content.");
@@ -1348,7 +1366,8 @@ IndividualSchedulesDetailsView.Delegate
 			});
 			
 			
-					spSummoningsServiceAsync.getExaminerTemplateContent(templateName,new AsyncCallback<String[]>() 
+			//Feature : 154
+					spSummoningsServiceAsync.getExaminerTemplateContent(osceProxy.getId().toString(),TemplateTypes.EXAMINER,new AsyncCallback<String[]>() 
 					{
 						@Override
 						public void onSuccess(String[] html) 
@@ -1388,9 +1407,9 @@ IndividualSchedulesDetailsView.Delegate
 								public void onSuccess(Long response) 
 								{
 									Log.info("Osce Id For name: " + response);
-									final String importTemplateName="UpdatedTemplateExaminor"+response+".txt";
-
-									spSummoningsServiceAsync.getExaminerTemplateContent(importTemplateName,new AsyncCallback<String[]>()
+//									final String importTemplateName="UpdatedTemplateExaminor"+response+".txt";
+									//Feature : 154
+									spSummoningsServiceAsync.getExaminerTemplateContent(response.toString(),TemplateTypes.EXAMINER,new AsyncCallback<String[]>()
 											{
 														@Override
 														public void onSuccess(String[] html) 
@@ -1428,14 +1447,15 @@ IndividualSchedulesDetailsView.Delegate
 				public void onClick(ClickEvent event)
 				{
 					Log.info("Click Examinor Save Button");
-					
-					spSummoningsServiceAsync.deleteTemplate(templateName, new AsyncCallback<Boolean>()
+					//Feature : 154
+					spSummoningsServiceAsync.deleteTemplate(osceProxy.getId().toString(),TemplateTypes.EXAMINER, new AsyncCallback<Boolean>()
 							{
 								@Override
 									public void onSuccess(Boolean arg0) 
 									{
+									//Feature : 154
 									Log.info("Call Delete Template");
-									spSummoningsServiceAsync.saveTemplate(templateName, popupExaminer.getMessageContent(),new AsyncCallback<Boolean>() 
+									spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.EXAMINER, popupExaminer.getMessageContent(),new AsyncCallback<Boolean>() 
 											{
 
 												@Override
@@ -1476,7 +1496,8 @@ IndividualSchedulesDetailsView.Delegate
 				{
 					Log.info("Click Examinor Save Button");
 					
-					spSummoningsServiceAsync.saveTemplate(templateName, popupExaminer.getMessageContent(),new AsyncCallback<Boolean>() 
+					//Feature : 154
+					spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.EXAMINER, popupExaminer.getMessageContent(),new AsyncCallback<Boolean>() 
 							{
 
 								@Override
@@ -1493,7 +1514,8 @@ IndividualSchedulesDetailsView.Delegate
 									//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables,spId,1L,new AsyncCallback<String>() {
 									Log.info("Semester Proxy: " + IndividualSchedulesActivity.semesterProxyForDetail.getId());	
 									
-									spSummoningsServiceAsync.generateExaminerPDFUsingTemplate(templateName,examinorId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>() 
+									//Feature : 154
+									spSummoningsServiceAsync.generateExaminerPDFUsingTemplate(osceProxy.getId().toString(),TemplateTypes.EXAMINER,examinorId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>() 
 											{
 
 												@Override
@@ -1522,14 +1544,14 @@ IndividualSchedulesDetailsView.Delegate
 				
 				@Override
 				public void onClick(ClickEvent event) 
-				{
+				{			//Feature : 154
 					Log.info("Click on Restore Button");
-					spSummoningsServiceAsync.deleteTemplate(templateName, new AsyncCallback<Boolean>() 
+					spSummoningsServiceAsync.deleteTemplate(osceProxy.getId().toString(),TemplateTypes.EXAMINER, new AsyncCallback<Boolean>() 
 					{
 								@Override
 								public void onSuccess(Boolean arg0) 
-								{
-									spSummoningsServiceAsync.getExaminerTemplateContent("DefaultTemplateExaminor.txt",new AsyncCallback<String[]>() 
+								{			//Feature : 154
+									spSummoningsServiceAsync.getExaminerTemplateContent("00",TemplateTypes.EXAMINER ,new AsyncCallback<String[]>() 
 									{
 												@Override
 												public void onSuccess(String[] html) 

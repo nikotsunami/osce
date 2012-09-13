@@ -226,11 +226,13 @@
 			<systemPath>${project.basedir}/lib/fr.hd3d.html5.video.1.0.jar</systemPath>-->
 		</dependency>
 		<!-- Dependency for using same client side i18n interface on server side -->
+		<!--
 		<dependency>
   			<groupId>com.mattbertolini</groupId>
   			<artifactId>hermes</artifactId>
   			<version>1.2.0</version>
 		</dependency>
+		-->
         <!-- <dependency>
             <groupId>com.teklabs.gwt-i18n-server</groupId>
             <artifactId>gwt-i18n-server</artifactId>
@@ -238,6 +240,13 @@
                  <scope>system</scope>
             <systemPath>${project.basedir}/lib/com.teklabs.gwt-i18n-server-0.10.jar</systemPath>
         </dependency> -->
+        <!--  <dependency>
+            <groupId>com.google.gwt.i18n</groupId>
+            <artifactId>gwt-i18n-server</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/i18n/gwt-i18n-server-1.0.jar</systemPath>
+        </dependency>-->
         <!-- General dependencies for standard applications -->
         <dependency>
             <groupId>junit</groupId>
@@ -569,7 +578,7 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>2.3.0</version>
-            <scope>provided</scope>
+           <!--  <scope>provided</scope> -->
             <classifier/>
         </dependency>
        <dependency>
@@ -790,6 +799,7 @@
                 <configuration>
                     <logLevel>INFO</logLevel>
                     <style>PRETTY</style>
+                    <!-- <runTarget>/OsMaEntry.html</runTarget> -->
                     <runTarget>/ApplicationScaffold.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <modules>

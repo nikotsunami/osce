@@ -16,15 +16,15 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("summonings")
 public interface SummoningsService extends RemoteService {
 
-	Boolean sendMailUsingTemplate(String templateName, Map templateVariables);
+	Boolean sendMailUsingTemplate(String semesterId,Boolean isExaminer, Map templateVariables);
 
-	Boolean saveTemplate(String templateName, String templateContent);
+	Boolean saveTemplate(String semesterId, Boolean isExaminer,Boolean isEmail, String templateContent);
 
-	String[] getTemplateContent(String templateName);
+	String[] getTemplateContent(String semesterId, Boolean isExaminer,Boolean isEmail);
 
-	Boolean deleteTemplate(String templateName);
+	Boolean deleteTemplate(String semesterId, Boolean isExaminer,Boolean isEmail);
 
-	String generateMailPDFUsingTemplate(String templateName,Map templateVariables);
+	String generateMailPDFUsingTemplate(String semesterId,Boolean isExaminer,Map templateVariables);
 
 	String generateSPMailPDF(Long semesterId, List<Long> spIds);
 

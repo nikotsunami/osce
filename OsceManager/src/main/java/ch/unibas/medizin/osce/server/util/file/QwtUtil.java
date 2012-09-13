@@ -74,7 +74,7 @@ public class QwtUtil extends FileUtil {
 							(bellAssignmentType.getOsceDate().getDate()))
 					+ getTimeInSeconds(bellAssignmentType.getOsceTime()) + "00"
 					+ separater);
-			Log.info("rowData : " + rowData);
+//			Log.info("rowData : " + rowData);
 
 			write(rowData.toString());
 			counter++;
@@ -275,10 +275,10 @@ public class QwtUtil extends FileUtil {
 								assignmentNext.getOsceDay().getOsceDate(),
 								assignmentNext.getOsceDay().getOsce().getName());
 
-						System.out
-								.println("assignmentNext.getOsceDay().getTimeStart()"
-										+ assignmentNext.getOsceDay()
-												.getTimeStart());
+//						System.out
+//								.println("assignmentNext.getOsceDay().getTimeStart()"
+//										+ assignmentNext.getOsceDay()
+//												.getTimeStart());
 
 						bellAssignmentType.setOsceTime(getNewDate(
 								assignmentNext.getOsceDay().getTimeStart(),

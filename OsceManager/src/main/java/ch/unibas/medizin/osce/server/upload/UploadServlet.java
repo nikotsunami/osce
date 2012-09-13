@@ -124,6 +124,7 @@ public class UploadServlet extends HttpServlet {
                 
                //Upload File to Application Directory
            // 	appUploadDirectory=session.getServletContext().getRealPath(".") + appUploadDirectory;
+            		
                 File appUploadedFile = new File(appUploadDirectory, fileName);
                
               
@@ -137,7 +138,8 @@ public class UploadServlet extends HttpServlet {
                 
                 //upload file to local directory
                 
-                File localUploadedFile = new File( localUploadDirectory, fileName);
+                Log.info("image path : " + localUploadDirectory+fileName);                             
+                File localUploadedFile = new File( localUploadDirectory+fileName);
                localUploadedFile.createNewFile();
                 	//save
                 	item.write(localUploadedFile);

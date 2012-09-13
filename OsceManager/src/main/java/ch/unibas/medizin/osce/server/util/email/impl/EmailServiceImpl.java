@@ -3,18 +3,13 @@
  */
 package ch.unibas.medizin.osce.server.util.email.impl;
 
-import java.util.Map;
-import java.util.Properties;
-
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.ui.velocity.VelocityEngineUtils;
-
-
 
 import ch.unibas.medizin.osce.client.util.email.EmailService;
 
@@ -29,6 +24,16 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class EmailServiceImpl extends RemoteServiceServlet implements EmailService {
 
 	private JavaMailSender sender;
+	
+	public EmailServiceImpl() {
+
+		ClassPathResource res = new ClassPathResource("META-INF/spring/applicationContext.xml");
+		XmlBeanFactory factory = new XmlBeanFactory(res);
+
+		this.sender = factory.getBean(JavaMailSender.class);
+
+		System.out.println("Sender == = =" + sender);
+	}
 	
 	public Boolean sendMail(final String[] toAddress, final String fromAddress, final String subject, final String message){
 		

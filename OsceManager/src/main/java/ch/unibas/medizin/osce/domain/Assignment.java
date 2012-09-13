@@ -659,7 +659,8 @@ public class Assignment {
 			Date date = new Date();
 
 			String fileName = new String(dateFormat.format(date) + ".qwt");
-			qwtUtil.open(fileName, false);
+			//Feature : 154
+			qwtUtil.open(StandardizedPatient.fetchRealPath() + fileName, false);
 
 			List<BellAssignmentType> bellAssignmentTypes = QwtUtil
 					.getBellAssignmentType(assignments, time, isPlusTime,
@@ -669,7 +670,8 @@ public class Assignment {
 			// qwtUtil.writeQwt(assignments);
 
 			qwtUtil.close();
-			return fileName;
+			//Feature : 154
+			return StandardizedPatient.fetchContextPath() + fileName;
 
 		} catch (Exception e) {
 			e.printStackTrace();

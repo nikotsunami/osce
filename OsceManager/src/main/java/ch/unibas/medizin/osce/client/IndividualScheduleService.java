@@ -6,9 +6,8 @@ package ch.unibas.medizin.osce.client;
 import java.util.List;
 import java.util.Map;
 
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.shared.TemplateTypes;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -19,21 +18,21 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("schedule")
 public interface IndividualScheduleService extends RemoteService {
 
-	String generateSPPDFUsingTemplate(String templateName,Map templateVariables, List<Long> spId,Long semesterId);
-	
-	Boolean saveTemplate(String templateName, String templateContent);
+	Boolean saveTemplate(String osceId,TemplateTypes templateTypes, String templateContent);
 
-	String[] getTemplateContent(String templateName);
-
-	Boolean deleteTemplate(String templateName);
-
-	String[] getStudTemplateContent(String templateName);
+	Boolean deleteTemplate(String osceId,TemplateTypes templateTypes);
 	
-	String generateStudentPDFUsingTemplate(String templateName, List<Long> studId, Long semesterId);
+	String generateStudentPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> studId, Long semesterId);
 	
-	String[] getExaminerTemplateContent(String templateName);
+	String generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes,Map templateVariables, List<Long> spId,Long semesterId);
 	
-	String generateExaminerPDFUsingTemplate(String templateName, List<Long> examinerId, Long semesterId);
+	String generateExaminerPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> examinerId, Long semesterId);
 
+	//String[] getStudTemplateContent(String templateName);
+	String[] getStudTemplateContent(String osceId,TemplateTypes templateTypes);
+	
+	String[] getExaminerTemplateContent(String osceId,TemplateTypes templateTypes);
+	
+	String[] getTemplateContent(String osceId,TemplateTypes templateTypes);
 	
 }

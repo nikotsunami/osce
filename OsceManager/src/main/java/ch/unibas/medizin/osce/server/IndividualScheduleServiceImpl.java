@@ -30,9 +30,11 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -54,9 +56,61 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	static Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 11,Font.BOLD);
 	static Font paragraphTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 14,Font.BOLD);
 	
+//Feature : 154
+	public String fetchContextPath(boolean isDownload) {
+		
+		String contextFileSeparator = "/";
+//		return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getContextPath() + ((isDownload) ? (contextFileSeparator + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + contextFileSeparator) : contextFileSeparator);
+//		System.out.println("\n\n\n\nin Fetch REal Path : "+getServletContext().getContextPath() + ((isDownload) ? (contextFileSeparator + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + contextFileSeparator) : contextFileSeparator));
+		return getServletContext().getContextPath() + ((isDownload) ? (contextFileSeparator + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + contextFileSeparator) : contextFileSeparator);
+	}
+
+	public String fetchRealPath(boolean isDownload) {
+		
+		String fileSeparator = System.getProperty("file.separator");
+//		return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + ((isDownload) ? (OsMaFilePathConstant.DOWNLOAD_DIR_PATH + fileSeparator) : "");
+//		System.out.println("\n\n\n\nin Fetch REal Path : "+getServletContext().getRealPath(fileSeparator) + ((isDownload) ? (OsMaFilePathConstant.DOWNLOAD_DIR_PATH + fileSeparator) : ""));
+		return getServletContext().getRealPath(fileSeparator) + ((isDownload) ? (OsMaFilePathConstant.DOWNLOAD_DIR_PATH + fileSeparator) : "");
+	}
+	
+	public  void fetchTemplateRealPath() {
+
+		String fileSeparator = System.getProperty("file.separator");
+		
+		try {
+
+			System.out.println("Finding servlet context");
+			try{
+				Log.info("real Path for template is :" + getServletContext());
+//				Log.info("real Path for template is :" + RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
+//				return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator;
+				
+//				Log.info("real Path for template is :" + RequestFactoryServlet);
+						
+				Log.info("@@@real Path for template is :" + getServletContext().getRealPath(fileSeparator));
+				Log.info("real Path for template is :" + getThreadLocalRequest().getSession());
+				Log.info("!!!!real Path for template is :" + getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+//			ServletContext servletContext = perThreadRequest.get().getSession().getServletContext();
+//
+//			if (servletContext != null) {
+//				String checkRealPath = servletContext.getRealPath(fileSeparator);
+//				Log.info("checkRealPath is : " + checkRealPath);
+//			} else {
+//				Log.info("checkRealPath is : null...");
+//			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//Feature : 154
 	@Override
 	@SuppressWarnings("rawtypes")
-	public String generateSPPDFUsingTemplate(String templateName,Map templateVariables,List<Long> standPatientId,Long semesterId)	
+	public String generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes,Map templateVariables,List<Long> standPatientId,Long semesterId)	
 	{
 		Log.info("Call generateMailPDFUsingTemplate" + standPatientId.size());
 		
@@ -76,14 +130,16 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		try {
 			
 			document = new Document();
-			file = new File("StandardizedPatient.pdf");
+//Feature : 154
+			file = new File(fetchRealPath(true) + OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT);
 			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			
 			document.open();
 			
 			htmlWorker = new HTMLWorker(document);
 			
-			fileContents = this.getTemplateContent(templateName)[1];		
+//Feature : 154
+			fileContents = this.getTemplateContent(osceId, templateTypes) [1];		
 					
 			String titleContent =new String();                
 			String tempOsceDayContent =new String();     
@@ -287,8 +343,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			}
 			
 			document.close();
-			
-			return "StandardizedPatient.pdf";
+			//Feature : 154
+			return fetchContextPath(true) +  OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT;
 
 		} catch (Exception e) {
 			Log.error("in SummoningsServiceImpl.generateMailPDFUsingTemplate: "	+ e.getMessage());
@@ -341,7 +397,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 
 	@Override
 	@SuppressWarnings("rawtypes")
-	public String generateStudentPDFUsingTemplate(String templateName, List<Long> studId, Long semesterId)
+	public String generateStudentPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> studId, Long semesterId)
 	{
 		Log.info("Call generateStudentPDFUsingTemplate : " + studId.size());
 		Log.info("Semester Proxy ID: " + semesterId);
@@ -368,14 +424,16 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		try {
 			
 			document = new Document();
-			file = new File("Student.pdf");
+//Feature : 154
+			file = new File( fetchRealPath(true)+ OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT);
 			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			
 			document.open();
 			
 			htmlWorker = new HTMLWorker(document);
 			
-			fileContents = this.getTemplateContent(templateName)[1];
+			fileContents = this.getTemplateContent(osceId, templateTypes) [1];
+//Feature : 154
 
 			
 			titleContentStud=new String();
@@ -508,8 +566,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			}
 						
 			document.close();
-			
-			return "Student.pdf";
+			//Feature : 154
+			return fetchContextPath(true)+ OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT;
 
 			
 		}
@@ -530,7 +588,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public String generateExaminerPDFUsingTemplate(String templateName, List<Long> examinerId, Long semesterId)
+	public String generateExaminerPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> examinerId, Long semesterId)
 	{
 		Log.info("Call generateExaminerPDFUsingTemplate : " + examinerId.size());
 		Log.info("Semester Proxy ID: " + semesterId);
@@ -560,14 +618,15 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		{
 			
 			document = new Document();
-			file = new File("Examiner.pdf");
+//Feature : 154
+			file = new File(fetchRealPath(true)+OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT);
 			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			
 			document.open();
 			
 			htmlWorker = new HTMLWorker(document);
-			
-			fileContents = this.getTemplateContent(templateName)[1];
+			//Feature : 154
+			fileContents = this.getTemplateContent(osceId, templateTypes) [1];
 
 			
 			titleContentExaminer=new String();
@@ -733,7 +792,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			}
 			
 			document.close();
-			return "Examiner.pdf";
+//Feature : 154
+			return fetchContextPath(true)+ OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT;
 		}
 		catch (Exception e) 
 		{
@@ -774,7 +834,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			//createRoleScriptDetails();
 		}
 		
-		
+		if(standardizedRole.getRoleTemplate()==null || standardizedRole.getRoleTemplate().getRoleBaseItem()==null)
+		{
+			return;
+		}
 		List<RoleBaseItem> roleBaseItems = standardizedRole.getRoleTemplate().getRoleBaseItem();
 
 		Log.info("roleBaseItems size " + roleBaseItems.size());
@@ -990,22 +1053,27 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	}*/
 	
 	 @Override
-		public String[] getTemplateContent(String templateName){
+		public String[] getTemplateContent(String osceId,TemplateTypes templateTypes){
+//Feature : 154
+	//	System.out.println("Get Template Content Osce Id: " + osceId + "Template Type: " + templateTypes);
 			
 			File file = null;
+		String fileName = "";
 			try {
 				
-				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			fileName =  getUpdatedTemplatePath(osceId, templateTypes);
+			file = new File(fileName);
 				
 				if(file.isFile()){
 					
-					return new String[]{templateName,FileUtils.readFileToString(file)};
+				return new String[] { fileName, FileUtils.readFileToString(file) };
 				}else{
 					
-					file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateSP.txt");
+				fileName =  getDefaultTemplatePath(templateTypes);
+				file = new File(fileName);
 					
 					if(file.isFile())
-						return new String[]{"DefaultTemplateSP.txt",FileUtils.readFileToString(file)};
+					return new String[] { fileName, FileUtils.readFileToString(file) };
 					else
 						return new String[]{"",""};
 				}
@@ -1018,27 +1086,30 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			}finally{
 				file = null;
 			}
-			
+		//Feature : 154	
 		}
 	
 	@Override
-	public String[] getStudTemplateContent(String templateName)
+	public String[] getStudTemplateContent(String osceId,TemplateTypes templateTypes)
 	{
-		Log.info("get file Name: " + templateName);	
+		Log.info("get Osce Id: " + osceId);
+		
 		File file = null;
+		String fileName =null;
 		try {
 									
-			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			fileName = getUpdatedTemplatePath(osceId, templateTypes);
+			file = new File(fileName);
 			
 			if(file.isFile()){
 				
-				return new String[]{templateName,FileUtils.readFileToString(file)};
+				return new String[]{fileName,FileUtils.readFileToString(file)};
 			}else{
-				
-				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateStud.txt");
+				fileName =getDefaultTemplatePath(templateTypes);
+				file = new File(fileName);
 				
 				if(file.isFile())
-					return new String[]{"DefaultTemplateStud.txt",FileUtils.readFileToString(file)};
+					return new String[]{fileName,FileUtils.readFileToString(file)};
 				else
 					return new String[]{"",""};
 			}
@@ -1054,24 +1125,91 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		
 	}
 	
-	@Override
-	public String[] getExaminerTemplateContent(String templateName)
+//Feature : 154
+	public String getDefaultTemplatePath(TemplateTypes templateTypes) 
 	{
-		Log.info("get file Name: " + templateName);	
+		String fileSeparator = System.getProperty("file.separator");
+		
+		System.out.println("Get Default Template Content:  Template Type: " + templateTypes);
+		
+		StringBuffer filePath = new StringBuffer(fetchRealPath(false) + OsMaFilePathConstant.TEMPLATE_PATH + OsMaFilePathConstant.DEFAULT_TEMPLATE_PATH + fileSeparator);
+		
+		switch (templateTypes) {
+		case STUDENT: {
+			System.out.println("Student");
+			filePath.append(OsMaFilePathConstant.DEFAULT_TEMPLATE_STUDENT);
+			break;
+		}
+		case STANDARDIZED_PATIENT: {
+			System.out.println("SP");
+			filePath.append(OsMaFilePathConstant.DEFAULT_TEMPLATE_SP);
+			break;
+		}
+		case EXAMINER: {
+			System.out.println("Examiner");
+			filePath.append(OsMaFilePathConstant.DEFAULT_TEMPLATE_EXAMINER);
+			break;
+		}
+		}
+		filePath.append(OsMaFilePathConstant.TXT_EXTENTION);
+		System.out.println("Default Template File Path: "+filePath);
+		return filePath.toString();
+	}
+	
+	public String getUpdatedTemplatePath(String osceId, TemplateTypes templateTypes) 
+	{
+		String fileSeparator = System.getProperty("file.separator");
+		
+		System.out.println("Get Updated Template Content Osce Id: " + osceId + "Template Type: " + templateTypes);
+		StringBuffer filePath = new StringBuffer(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+OsMaFilePathConstant.UPDATED_TEMPLATE_PATH+fileSeparator);
+
+		switch (templateTypes) {
+		case STUDENT: {
+			System.out.println("Student");
+			filePath.append(OsMaFilePathConstant.UPDATED_TEMPLATE_STUDENT );
+			break;
+		}
+		case STANDARDIZED_PATIENT: {
+			System.out.println("SP");
+			filePath.append(OsMaFilePathConstant.UPDATED_TEMPLATE_SP );
+			break;
+		}
+		case EXAMINER: {
+			System.out.println("Examiner");
+			filePath.append(OsMaFilePathConstant.UPDATED_TEMPLATE_EXAMINER );
+			break;
+		}
+		}
+
+		filePath.append(osceId + OsMaFilePathConstant.TXT_EXTENTION);
+		System.out.println("Updated Template File Path: "+filePath);
+		return filePath.toString();
+	}
+	//Feature : 154
+	
+	@Override
+	public String[] getExaminerTemplateContent(String osceId,TemplateTypes templateTypes)
+	{
+		Log.info("get OsceId: " + osceId);	
 		File file = null;
+		
+		String fileName = "";
+		
 		try {
 			
-			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+ templateName);
+			fileName = getUpdatedTemplatePath(osceId, templateTypes);
+			file = new File(fileName);
 			
 			if(file.isFile()){
 				
-				return new String[]{templateName,FileUtils.readFileToString(file)};
+				return new String[] { fileName, FileUtils.readFileToString(file) };
 			}else{
 				
-				file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+"DefaultTemplateExaminor.txt");
+				fileName = getDefaultTemplatePath(templateTypes);
+				file = new File(fileName);
 				
 				if(file.isFile())
-					return new String[]{"DefaultTemplateExaminor.txt",FileUtils.readFileToString(file)};
+					return new String[] { fileName, FileUtils.readFileToString(file) };
 				else
 					return new String[]{"",""};
 			}
@@ -1088,13 +1226,13 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	}
 	
 	@Override
-	public Boolean saveTemplate(String templateName,String templateContent)
+	public Boolean saveTemplate(String osceId,TemplateTypes templateTypes,String templateContent)
 	{
 		Log.info("Go to save Template");
 		File file = null;
 		try {
-			
-			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
+			//Feature : 154
+			file = new File(getUpdatedTemplatePath(osceId, templateTypes));
 			
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);
@@ -1117,12 +1255,12 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	}
 	
 	@Override
-	public Boolean deleteTemplate(String templateName){
+	public Boolean deleteTemplate(String osceId,TemplateTypes templateTypes){
 		
 		File file = null;
 		try {
-			
-			file = new File(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+templateName);
+			//Feature : 154
+			file = new File(getUpdatedTemplatePath(osceId, templateTypes));
 			
 			if(file.isFile()){
 				FileUtils.deleteQuietly(file);
