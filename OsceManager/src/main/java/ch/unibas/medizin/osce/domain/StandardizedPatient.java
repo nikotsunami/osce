@@ -1067,6 +1067,8 @@ public class StandardizedPatient {
     //SPEC[
     public static Boolean copyImageAndVideo(String imagePath,String videoPath)
     {
+    	OsMaFilePathConstant.realImagePath=RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.appImageUploadDirectory);
+    	OsMaFilePathConstant.realVideoPath=RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.appVideoUploadDirectory);
     	if(imagePath!=null || imagePath!="")
     		FileUtil.copyImageFile(imagePath);
     	if(videoPath!=null || videoPath !="")
