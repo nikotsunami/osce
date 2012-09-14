@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.style.widgets;
 
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -51,7 +52,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         
         public HorizontalPanel tabBarFlowPanel = new HorizontalPanel();
        public TabBar b=new TabBar();
-       
+       public HorizontalPanel hh=new HorizontalPanel();
         public HorizontalPanel horizontalPanelForButton = new HorizontalPanel();
        // public HorizontalPanel h2= new HorizontalPanel();
         public ScrollPanel scrollPanel= new ScrollPanel();
@@ -59,6 +60,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         public IconButton left=new IconButton();
         public IconButton right=new IconButton();
         public IconButton down =new IconButton();
+      
         
         public PopupPanel tabList=new PopupPanel();
         public ListBox tabLIstBox=new ListBox();
@@ -81,11 +83,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                 left.setIcon("triangle-1-w");
         		right.setIcon("triangle-1-e");
         		down.setIcon("triangle-1-s");
-        		
-        		
-                tabBarFlowPanel.setWidth("3000px");
-                /*left.setText("left");
-                right.setText("right");*/
+        	
                 horizontalPanelForButton.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
                 horizontalPanelForButton.setHeight((barHeight/2)+"px");
                 horizontalPanelForButton.getElement().getStyle().setRight(0, Unit.PX);
@@ -101,32 +99,14 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                 tabList.add(tabLIstBox);
                 tabLIstBox.setVisibleItemCount(5);
                 tabList.setSize("100px", "100px");
-              //  tabList.setPopupPosition(down.getAbsoluteLeft(), down.getAbsoluteTop());
-                
-            animate(100000);
-               
-              //  h2.add(tabBar);
-                //left.setIcon(leftArrowImage);
-                //right.setIcon(rightArrowImage);
+             
                 
                 this.leftArrowImage = leftArrowImage;
                 this.rightArrowImage = rightArrowImage;
                 
                 // The main widget wrapped by this composite, which is a LayoutPanel with the tab bar & the tab content
                 panel = (LayoutPanel) getWidget();
-                
-                
-               // panel1.add(panel);
-                //panel1.add(new Label("test"));
-              //  panel1.add(panel);
-               // panel1.add(panel);
-                //panel1 = (LayoutPanel) getWidget();
-                 
-               
-
-             //   panel.setStyleName("ScrolledTabLayoutPanelMainPanel");
-               
-                // Find the tab bar, which is the first flow panel in the LayoutPanel
+                          // Find the tab bar, which is the first flow panel in the LayoutPanel
                 for (int i = 0; i < panel.getWidgetCount(); ++i) {
                         Widget widget = panel.getWidget(i);
                         if (widget instanceof FlowPanel) {
@@ -145,20 +125,22 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                             scrollPanel.setStyleName("tabpanel_tabbar_no_scroll");
                             scrollPanel.add(tabBar);
                            // scrollPanel.addStyleName("autoHeight");
-                           
+                           hh.setWidth(scrollPanel.getOffsetWidth()+"px");
                         
                             
-                            focusForMouseWheelPanel.add(scrollPanel);
-                            
+                            //focusForMouseWheelPanel.add(scrollPanel);
+                            hh.add(focusForMouseWheelPanel);
                             //focusForMouseWheelPanel.setWidth("3000px");
                             tabBarFlowPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
                             tabBarFlowPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.BOTTOM);
-                            tabBarFlowPanel.add(horizontalPanelForButton);
-                            tabBarFlowPanel.add(focusForMouseWheelPanel);
-                           // tabBarFlowPanel.setHeight("41px");
-                            //tabBarFlowPanel.getElement().getStyle().setHeight(41, Unit.PX);
-                           // h2.setWidth("100px");
-                            //tabBarFlowPanel.add(tabBar);                                
+                            //tabBarFlowPanel.add(focusForMouseWheelPanel);
+                           
+                           tabBarFlowPanel.add(horizontalPanelForButton);
+                           Log.info("flow panel width--"+this.getElement().getStyle().getWidth());
+                          // scrollPanel.setWidth(tabBarFlowPanel.getElement().getStyle().getWidth());
+                           
+                            tabBarFlowPanel.add(scrollPanel);
+                                                      
                             panel.insert(tabBarFlowPanel,i);
                             panel.setHeight("41px");
                             panel.getElement().getStyle().setHeight(41, Unit.PX);
@@ -173,6 +155,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 					public void onClick(ClickEvent event) {
 						// TODO Auto-generated method stub
 						Log.info("left click");
+						onresizecall();
 						scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition()- mouseWheelScrollPositionStep);
 					}
 				});
@@ -189,7 +172,9 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 							*/
 						/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset))
 				    	{*/
-						//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+						
+						//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-320))
+						onresizecall();
 						if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 				    	{
 				    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
@@ -210,10 +195,12 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						if (event.isNorth()) {
 							scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition()- mouseWheelScrollPositionStep);
 						    } else if (event.isSouth()) {
+						    	onresizecall();
 						    	System.out.println("Left--"+ left.getAbsoluteLeft());
 						    	/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset+50))
 						    	{*/
-						    	//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+						    	//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-320))
+						    	Log.info(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()+">"+(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()));
 						    	if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 						    	{
 						    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
@@ -257,7 +244,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						// TODO Auto-generated method stub
 						Log.info("selected index--"+tabLIstBox.getSelectedIndex());
 						tabList.hide();
-						
+						onresizecall();
 						if(tabLIstBox.getSelectedIndex()==-1)
 						{
 						return;	
@@ -275,7 +262,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						{
 							/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset))
 					    	{*/
-							//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-150))
+							//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-320))
 							if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 					    	{
 					    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
@@ -296,29 +283,6 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						// TODO Auto-generated method stub
 					
 					
-					
-					
-					//tabList.hide();
-					
-					//selectTab(tabLIstBox.getSelectedIndex());
-					
-					//scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition() + mouseWheelScrollPositionStep);
-					
-					//scrollPanel.setHorizontalScrollPosition(0);
-					
-					//scrollPanel.setHorizontalScrollPosition(tabBar.getWidget(getSelectedIndex()).getElement().getOffsetLeft());
-					/*				
-					for(int i=0;i<=tabBar.getWidget(getSelectedIndex()).getElement().getOffsetLeft();i=i+20)
-					{
-						if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset+50))
-				    	{
-				    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
-							System.out.println("in loop position--"+i);
-							scrollPanel.setHorizontalScrollPosition(i);
-				    	}
-		         		 
-					}
-					*/
 					}
 				});
                 
@@ -334,7 +298,11 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         		   
         }
         
-        
+      /*  public void setscrollwidth(int width1)
+        {
+        	scrollPanel.setWidth(width1+"px");
+        }
+        */
         @Override
         
         public boolean remove(int index) {
@@ -364,26 +332,20 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         @Override
         public void insert(Widget child, String text, int beforeIndex) {
         	super.insert(child, text, beforeIndex);
-        	Log.info("insert call");
+        	Log.info("insert call----"+text);
             tabLIstBox.addItem(text);
+           
             
         };
         
-        @Override
+       /* @Override
         public void add(Widget child, String text) {
         // TODO Auto-generated method stub
         super.add(child, text);
-        Log.info("add call");
-        tabLIstBox.addItem(text);        
-        }
+         
+        }*/
 
-       /* @Override
-        public void add(Widget child, Widget tab) {
-                super.add(child, tab);
-        
-                checkIfScrollButtonsNecessary();
-        }
-*/
+    
         @Override
         public boolean remove(Widget w) {
                 boolean b = super.remove(w);
@@ -391,6 +353,11 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                 return b;
         }
 
+        public void onresizecall()
+        {
+        	Log.info("resize---"+this.getOffsetWidth());
+        	scrollPanel.setWidth((this.getOffsetWidth()-40)+"px");
+        }
         @Override
         protected void onLoad() {
                 super.onLoad();
@@ -400,14 +367,12 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                                 @Override
                                 public void onResize(ResizeEvent event) {
                                         checkIfScrollButtonsNecessary();
+                                        onresizecall();
                                 }
                         });
                 }
-               // HPwidth=getTabbarWidth();
-            /*    HPwidth = this.getOffsetWidth() - 50;
-                h2.setWidth((HPwidth)+"px");
-                focusForMouseWheelPanel.setWidth("100%");*/ 
-                horizontalPanelForButton.getParent().setWidth("50px");
+           
+                horizontalPanelForButton.setWidth("50px");
                 //panel.setWidgetRightWidth(focusForMouseWheelPanel, -(HPwidth-20), Unit.PX, HPwidth, Unit.PX);
                
                 
@@ -423,80 +388,28 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
          		  
          		  if(maxWidth<tabBar.getWidget(i).getOffsetWidth())
          			  maxWidth=tabBar.getWidget(i).getOffsetWidth();
+         	 HPwidth=HPwidth+tabBar.getWidget(i).getOffsetWidth()-28;
          		
-         		 // System.out.println("Tab left : " + tabBar.getWidget(i).getAbsoluteLeft());        
-         		//System.out.println("Tab element html : " + tabBar.getWidget(i).getElement().getOffsetWidth());
-         		//  System.out.println("Tab parent element html : " + tabBar.getWidget(i).getElement().getParentElement().getInnerHTML());
-         		
-         		//  System.out.println("Tab parent element offsetwidth : " + tabBar.getWidget(i).getElement().getParentElement().getOffsetWidth());
-         		  HPwidth=HPwidth+tabBar.getWidget(i).getOffsetWidth()-28;
-         		
-         		 // HPwidth=HPwidth+tabBar.getWidget(i).getElement().getParentElement().getOffsetWidth()-14;
-         		 // HPwidth=HPwidth+(tabBar.getWidget(i).getElement().getParentElement().getClientWidth()-14);
-         	//	HPwidth=HPwidth+tabBar.getWidget(i).getOffsetWidth();
                }  
          	  HPwidth=HPwidth-50;
-         	  //HPwidth=(maxWidth*tabBar.getWidgetCount())-(14*tabBar.getWidgetCount());
-         
-         	  //HPwidth= HPwidth - ((widgetCount-1)*6) - (this.getOffsetWidth()+50) ;
-         
+         	
          	  tabBar.setWidth(10000 + "px");
-         	  //h2.setWidth((HPwidth)+"px");
-         	//HPwidth=this.getOffsetWidth()-50;
-         	 //scrollPanel.setWidth((this.getOffsetWidth()-50)+"px");
-         	 scrollPanel.setWidth((this.getOffsetWidth())+"px");
+         
          	 scrollPanel.setAlwaysShowScrollBars(true);
-         	  focusForMouseWheelPanel.setWidth("100%");
+         	 // focusForMouseWheelPanel.setWidth("100%");
          	  
          	 offset=this.getOffsetWidth();
+         	// Window.alert("value--"+this.getOffsetWidth());
+         	Log.info("resize---"+this.getOffsetWidth());
+         	//onresizecall();
         }
         
        
-        /*
-        @Override
-        protected void onAttach() {
-        	super.onAttach();
-        	HPwidth=0;
-        	 tabBar.setStyleName("ScrolledTabLayoutPanel");
-        	//System.out.println("ON attach call--"+isAttachcall);
-        	int maxWidth=0;
-      	  System.out.println("Number of tab : " + tabBar.getWidgetCount());
-      	  System.out.println("Tabbar widht before calculate : " + tabBar.getOffsetWidth());
-      	   int widgetCount = tabBar.getWidgetCount();
-      	  for(int i=0;i< tabBar.getWidgetCount();i++)
-            {
-      		  
-      		  if(maxWidth<tabBar.getWidget(i).getOffsetWidth())
-      			  maxWidth=tabBar.getWidget(i).getOffsetWidth();
-      		  System.out.println("Tab width : " + tabBar.getWidget(i).getOffsetWidth()+"--"+i);
-      		  System.out.println("Tab left : " + tabBar.getWidget(i).getAbsoluteLeft());        
-      		System.out.println("Tab element html : " + tabBar.getWidget(i).getElement().getOffsetWidth());
-      		  System.out.println("Tab parent element html : " + tabBar.getWidget(i).getElement().getParentElement().getInnerHTML());
-      		  System.out.println("Tab parent element clientwidth : " + tabBar.getWidget(i).getElement().getParentElement().getClientWidth());
-      		  System.out.println("Tab parent element offsetwidth : " + tabBar.getWidget(i).getElement().getParentElement().getOffsetWidth());
-      		  HPwidth=HPwidth+tabBar.getWidget(i).getOffsetWidth();
-      		 // HPwidth=HPwidth+tabBar.getWidget(i).getElement().getParentElement().getOffsetWidth()-14;
-      		 // HPwidth=HPwidth+(tabBar.getWidget(i).getElement().getParentElement().getClientWidth()-14);
-      	//	HPwidth=HPwidth+tabBar.getWidget(i).getOffsetWidth();
-            }  
-      	  //HPwidth=(maxWidth*tabBar.getWidgetCount())-(14*tabBar.getWidgetCount());
-      	System.out.println("Tabbar width : " + HPwidth);
-      	 // HPwidth= HPwidth - ((widgetCount-1)*6) - (this.getOffsetWidth()+50) ;
-      	  System.out.println("Tabbar width : " + HPwidth);
-      	System.out.println("this.getOffsetWidth() : " + this.getOffsetWidth());
-      	  tabBar.setWidth(3000 + "px");
-      	  //h2.setWidth((HPwidth)+"px");
-      	//HPwidth=this.getOffsetWidth()-50;
-      	  h2.setWidth((this.getOffsetWidth()-50)+"px");
-      	 
-      	  focusForMouseWheelPanel.setWidth("100%");
-      	  StudentsViewImpl.hpwidth=HPwidth;
-      	  
-        }
-        */
+        
         @Override
         protected void onDetach() {
-        	super.onDetach();        	
+        	super.onDetach();    
+        	
         }
         /*
         

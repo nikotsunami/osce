@@ -1,8 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -19,6 +21,11 @@ public interface OscePostSubView extends IsWidget{
 		public void saveSpecialisation(OscePostSubViewImpl oscePostSubViewImpl);
 
 		public void saveRoleTopic(OscePostSubViewImpl oscePostSubViewImpl);
+		
+		public void roomEditClicked(OscePostSubView view,int left,int top);
+		public void saveOscePostRoom(OscePostSubViewImpl oscePostSubViewImpl,ListBoxPopupView view);
+			
+		
 	}
 	
 	 void setDelegate(Delegate delegate);
@@ -42,6 +49,11 @@ public interface OscePostSubView extends IsWidget{
 	 public Label getStandardizedRoleLbl() ;
 	 public OscePostProxy getOscePostProxy();
 	 public void setOscePostProxy(OscePostProxy oscePostProxy);
+	 
+
+	 public CourseProxy getCourseProxy();
+	 public void setCourseProxy(CourseProxy courseProxy);
+
 	 
 	 
 }

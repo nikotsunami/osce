@@ -116,8 +116,8 @@ public class StandardizedRole {
 		   newStandardizedRole.setLongName(oldStandardizedRole.getLongName());
 		   newStandardizedRole.setStudyYear(oldStandardizedRole.getStudyYear());
 		   newStandardizedRole.setRoleType(oldStandardizedRole.getRoleType());
-		   newStandardizedRole.setMainVersion(1);
-		   newStandardizedRole.setSubVersion(1);
+		   newStandardizedRole.setMainVersion(oldStandardizedRole.mainVersion + 1);
+		   newStandardizedRole.setSubVersion(0);
 		   newStandardizedRole.setActive(true);
 		   newStandardizedRole.setPreviousVersion(oldStandardizedRole);
 		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());

@@ -3,11 +3,11 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
  <ui:style src="../../styles.css" />
 	
-	<g:VerticalPanel ui:field="osceMainVP" addStyleNames="{style.tabStyle} {style.patientTopContainer}" spacing="10" >
+	<g:VerticalPanel ui:field="osceMainVP" addStyleNames="{style.tabStyle} {style.patientTopContainer} {style.setParcourPanelBackgroundColor}" spacing="5" >
 		<g:HorizontalPanel ui:field="osceMainHP" verticalAlignment="top">
 			<!-- Module 5 Bug Report Solution -->			
 			  <g:VerticalPanel ui:field="OsceDayVerticalPanel" spacing="28">
-						<e:OsceDayViewImpl ui:field="osceDayViewImpl"></e:OsceDayViewImpl>
+						<e:OsceDayViewImpl ui:field="osceDayViewImpl" addStyleNames="{style.setOsceDayStyle}"></e:OsceDayViewImpl>
 			</g:VerticalPanel>
 			<!-- E Module 5 Bug Report Solution -->
 			<g:VerticalPanel ui:field="accordianVP">
