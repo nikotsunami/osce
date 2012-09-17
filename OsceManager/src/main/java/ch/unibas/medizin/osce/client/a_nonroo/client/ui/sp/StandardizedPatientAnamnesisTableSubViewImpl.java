@@ -121,7 +121,7 @@ public class StandardizedPatientAnamnesisTableSubViewImpl extends Composite
 		@Override
 		public String getValue(AnamnesisChecksValueProxy proxy) {
 			AnamnesisCheckProxy check = proxy.getAnamnesischeck();
-			Log.debug("question data received: " + ((check.getText() == null) ? check.getText() : "null"));
+			Log.debug("question data received: " + ((check.getText() == null) ? "null" : check.getText()));
 			return (check.getText() == null) ? "" : String.valueOf(check.getText());
 		}
 	}

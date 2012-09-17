@@ -24,9 +24,11 @@ import ch.unibas.medizin.osce.client.managed.request.DoctorRequest;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -65,6 +67,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 	//private RequestFactoryEditorDriver<OfficeProxy, OfficeEditViewImpl> officeEditorDriver;
 	private boolean save;
 	private UserPlaceSettings userSettings;
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public DoctorEditActivity(DoctorDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -90,7 +93,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 	@Override
 	public String mayStop() {
 		if (!save && changed())
-			return "Changes will be discarded!";
+			return constants.changesDiscarded();
 		else
 			return null;
 	}

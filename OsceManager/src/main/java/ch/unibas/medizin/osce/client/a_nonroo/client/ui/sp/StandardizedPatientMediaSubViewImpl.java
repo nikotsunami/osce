@@ -225,6 +225,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 			return;
 	
 		uploadMessage.setUrl(description + "?date=" + new Date().getTime());
+		uploadMessage.addStyleName("videoBorder");
 		int height = uploadMessage.getHeight();
 		int width = uploadMessage.getWidth();
 		double ratio = (double) width/height;
@@ -259,15 +260,17 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 			return;
 		 if(videoPlayer == null)
 		 videoPlayer = new VideoWidget(true, true, "");
+		 
+		 description=description + "?date=" + new Date().getTime();
+		 videoPlayer.addStyleName("videoBorder");
 	        List<VideoSource> sources = new ArrayList<VideoSource>();
 	      
 	        Log.info("setVideoMediaContent Video Source path" +description);
 	        
-	        
-	        
+	      
 	        sources.add(new VideoSource(description));
 	        videoPlayer.setSources(sources);
-	        videoPlayer.setPixelSize(100, 120);
+	        videoPlayer.setPixelSize(110, 100);
 	       
 	        videoPanel.add(videoPlayer);
 		

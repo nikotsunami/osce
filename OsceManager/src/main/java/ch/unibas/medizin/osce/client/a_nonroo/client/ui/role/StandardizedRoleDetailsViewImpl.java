@@ -416,7 +416,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		rolePanel.getTabBar().setTabText(3, constants.learning());
 		
 		roleSubPanel.getTabBar().setTabText(0, constants.checkList());
-		roleSubPanel.getTabBar().setTabText(1, constants.roleParticipants());
+		roleSubPanel.getTabBar().setTabText(1, constants.searchCriteria());
 		roleSubPanel.getTabBar().setTabText(2, constants.roomMaterials());
 		roleSubPanel.getTabBar().setTabText(3, constants.roleFile());
 		roleSubPanel.getTabBar().setTabText(4, constants.roleScript());

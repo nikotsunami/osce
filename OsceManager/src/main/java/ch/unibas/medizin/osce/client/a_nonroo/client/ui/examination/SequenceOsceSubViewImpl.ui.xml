@@ -61,7 +61,7 @@
 	</ui:style>
 	
 	<!-- Module 5 Bug Report Solution Change Height 235 to 256-->
-	<g:HorizontalPanel addStyleNames="{style.patientTopContainer} {style.padTop3}"  width="20px"  height="256px">
+	<g:HorizontalPanel addStyleNames="{style.patientTopContainer} {style.padTop3} {style.setWhiteColor}"  width="20px"  height="270px">
 	<!-- E Module 5 Bug Report Solution -->
 	
 	<g:VerticalPanel width="20px"  height="220px" verticalAlignment="middle" horizontalAlignment="center" >

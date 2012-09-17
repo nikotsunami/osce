@@ -521,8 +521,8 @@ public class OsMaMainNav extends Composite {
 		roleAssignment.setText(constants.roleAssignments());
 		//By Spec]
 		
-	//	labelSemester.setText(constants.semester() + ":");
-	//	osces.setText(constants.manageOsces());
+		labelSemester.setText(constants.semester() + ":");
+		osces.setText(constants.manageOsces());
 		circuit.setText(constants.circuit());
 		students.setText(constants.students());
 		examinationSchedule.setText(constants.examinationSchedule());

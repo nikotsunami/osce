@@ -12,25 +12,16 @@
 		border-width:1px;		
 		-moz-border-radius: 16px;
 		margin-top: 5px;
-	 }
+	 }	
 	 </ui:style>
-	<g:VerticalPanel width="900px"  height="300px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" verticalAlignment="middle">
+	<g:VerticalPanel width="900px"  height="380px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" verticalAlignment="top">
 	<g:AbsolutePanel ui:field="oscePostBluePrintSubViewImplAP">
-		<g:ScrollPanel width="900px">					
-			<g:HorizontalPanel verticalAlignment="middle">
-			
-				
-				
+			<g:HorizontalPanel verticalAlignment="top">
 				<g:HorizontalPanel ui:field="oscePostBluePrintSubViewImplHP"   spacing="10" >
-						
 				</g:HorizontalPanel>	
 				<g:HorizontalPanel ui:field="newPostHP" spacing="10">
-				
 				</g:HorizontalPanel>	
-				
-				
 			</g:HorizontalPanel>
-		</g:ScrollPanel>
-	</g:AbsolutePanel>
+		</g:AbsolutePanel>
 	</g:VerticalPanel>
 </ui:UiBinder> 

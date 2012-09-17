@@ -60,8 +60,10 @@
 		<i:DefaultSuggestBox ui:field="listBox"></i:DefaultSuggestBox>
 		
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
-		<g:Button ui:field="okBtn"></g:Button>
-		
+	
+		<g:Button ui:field="okBtn" width="60px"></g:Button>		 		
+		<g:Button ui:field="cancelBtn" width="60px"></g:Button>
+	
 		</g:HorizontalPanel>
 	</g:VerticalPanel>
 

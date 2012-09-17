@@ -633,3 +633,47 @@ body {
 	font-size: 8px;
 	text-align: center;
 }
+/*  Change in ParcourView */
+.setParcourPanelBackgroundColor
+{
+	background-color: #FEF5D8;
+}
+.setOscePostViewBackGroundColor
+{
+	background-color: #DFECFF;
+}
+.setOscePostViewHeaderPanelColor
+{
+	background-color: #A8CCFF;
+	border-radius: 19px 19px 19px 19px;
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	margin-bottom: 8px;
+}
+.setOsceCreatePostViewHeaderPanelColor
+{
+	background-color: #DFECFF;
+	border-radius: 19px 19px 19px 19px;
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	margin-bottom: 8px;
+}
+.setWhiteColor
+{
+	background-color: white;
+}
+.setOsceDayStyle
+{
+	border-radius: 19px 19px 19px 19px;
+	background-color: white;
+}
+
+/*  E Change in ParcourView */

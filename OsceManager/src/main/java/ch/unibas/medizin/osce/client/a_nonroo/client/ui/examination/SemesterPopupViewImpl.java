@@ -19,6 +19,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DoubleBox;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -70,7 +71,22 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 		
 	@UiField 
 	public Button btnClose;
-
+	
+	@UiField
+	public Label labelYear;
+	
+	@UiField
+	public Label labelSemester;
+	
+	@UiField
+	public Label labelMaxYearEarning;
+	
+	@UiField
+	public Label labelPriceSimpat;
+	
+	@UiField
+	public Label labelPriceStatist;
+	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	// Highlight onViolation
@@ -86,7 +102,7 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 		setAnimationEnabled(true);
 		setAutoHideEnabled(false);
 		center();
-		setText("Semester");
+		setText(constants.semester());
 		
 		this.getElement().getStyle().setZIndex(1);
 		
@@ -102,6 +118,14 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 		semesterMap.put("priceStandardizedPartient", txtPriceSP);
 		// E Highlight onViolation
 		
+		labelYear.setText(constants.year());
+		labelYear.setText(constants.semester());
+		labelYear.setText(constants.maxYearlySalary());
+		labelYear.setText(constants.salarySimpat());
+		labelYear.setText(constants.salaryExtra());
+		
+		btnSave.setText(constants.save());
+		btnClose.setText(constants.close());
 	}
 	
 	public void setDelegate(Delegate delegate) {

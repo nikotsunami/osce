@@ -155,9 +155,9 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		btnSave.addStyleName("marginTop15");
 		btnCancel.addStyleName("marginTop15");
 		
-		lblRoleTopic.setText("Role Topic: ");
-		lblMaxStudent.setText("Max. Student: ");
-		lblStudyYear.setText("Study year: ");
+		lblRoleTopic.setText(constants.roleTopic() + ":");
+		lblMaxStudent.setText(constants.osceMaxStudents() + ":");
+		lblStudyYear.setText(constants.studyYears() + ":");
 		
 		btnSave.setText(constants.save());
 		btnCancel.setText(constants.cancel());

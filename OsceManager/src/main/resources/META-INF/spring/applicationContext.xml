@@ -73,26 +73,27 @@
     
     <bean id="sender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
     	<property name="host" value="${smtp.host}" ></property>
-    	<property name="port" value="${smtp.port}" ></property>
+    	<!-- Feature: 154 <property name="port" value="${smtp.port}" ></property> -->
     	<property name="username" value="${smtp.username}" ></property>
     	<property name="password" value="${smtp.password}"></property>
     	<property name="javaMailProperties">
     		<props>
     			<prop key="mail.transport.protocol">smtp</prop>
+    			<prop key="mail.smtp.port">587</prop>
     			<prop key="mail.smtp.auth">true</prop>
-<!--     			<prop key="mail.smtp.starttls.enable">true</prop> -->
+    			<prop key="mail.smtp.starttls.enable">true</prop>
     			<prop key="mail.debug">true</prop>
     		</props>
     	</property>
     </bean>
-    
+    <!--  Feature: 154 
     <bean id="emailServiceImpl" class="ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl" >
     	<property name="sender" ref="sender"></property>
     </bean>
     
     <bean id="summoningsServiceImpl" class="ch.unibas.medizin.osce.server.SummoningsServiceImpl" >
     	<property name="emailService" ref="emailServiceImpl"></property>
-    </bean>
+    </bean>  Feature: 154  -->
     
 <!--     Mail Configuration -->
     

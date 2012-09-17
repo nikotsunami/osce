@@ -4,29 +4,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
-import com.allen_sauer.gwt.log.client.Log;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import ch.unibas.medizin.osce.domain.RoleTopic;
-
 import javax.persistence.CascadeType;
-
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.springframework.roo.addon.entity.RooEntity;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.tostring.RooToString;
+
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
-import javax.persistence.Enumerated;
+
+import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
@@ -120,8 +116,8 @@ public class StandardizedRole {
 		   newStandardizedRole.setLongName(oldStandardizedRole.getLongName());
 		   newStandardizedRole.setStudyYear(oldStandardizedRole.getStudyYear());
 		   newStandardizedRole.setRoleType(oldStandardizedRole.getRoleType());
-		   newStandardizedRole.setMainVersion(1);
-		   newStandardizedRole.setSubVersion(1);
+		   newStandardizedRole.setMainVersion(oldStandardizedRole.mainVersion + 1);
+		   newStandardizedRole.setSubVersion(0);
 		   newStandardizedRole.setActive(true);
 		   newStandardizedRole.setPreviousVersion(oldStandardizedRole);
 		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());
@@ -263,27 +259,22 @@ public class StandardizedRole {
 	   }
 
 	// Issue : 120
-	public static String getRolesPrintPdfBySearch(Long standardizedRoleId,
-			List<String> itemsList, Long roleItemAccessId) {
-		String fileName = OsMaConstant.ROLE_FILE_NAME_PDF_FORMAT;
+			//Feature : 154
+	public static String getRolesPrintPdfBySearch(Long standardizedRoleId, List<String> itemsList, Long roleItemAccessId) {
+		String fileName = OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
 		try {
-			StandardizedRole standardizedRole = StandardizedRole
-					.findStandardizedRole(standardizedRoleId);
+			StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
 			RolePrintPdfUtil rolePrintPdfUtil = new RolePrintPdfUtil();
-			Log.info("Message received in Pdf role print by : "
-					+ standardizedRole.longName);
-			fileName = standardizedRole.longName + "_"
-					+ standardizedRole.studyYear + "_ "
-					+ OsMaConstant.ROLE_FILE_NAME_PDF_FORMAT;
-			rolePrintPdfUtil.writeFile(fileName, standardizedRole, itemsList,
-					roleItemAccessId);
+			Log.info("Message received in Pdf role print by : " + standardizedRole.longName);
+			fileName = standardizedRole.longName + "_" + standardizedRole.studyYear + "_ " + OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
+			rolePrintPdfUtil.writeFile(StandardizedPatient.fetchRealPath() + fileName, standardizedRole, itemsList, roleItemAccessId);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.error("Error in Std. Role getRolesPrintPdfBySearch: "
-					+ e.getMessage());
+			Log.error("Error in Std. Role getRolesPrintPdfBySearch: " + e.getMessage());
 		}
 
-		return fileName;
+		return StandardizedPatient.fetchContextPath() + fileName;
+			//Feature : 154
 	}
 	// Issue : 120
 	   

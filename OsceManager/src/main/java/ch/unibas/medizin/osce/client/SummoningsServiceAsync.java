@@ -14,15 +14,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface SummoningsServiceAsync  {
 
-	void sendMailUsingTemplate(String templateName, Map templateVariables,AsyncCallback<Boolean> asyncCallback);
+	void sendMailUsingTemplate(String semesterId, Boolean isExaminer, Map templateVariables,AsyncCallback<Boolean> asyncCallback);
 	
-	void saveTemplate(String templateName, String templateContent, AsyncCallback<Boolean> asyncCallback);
+	void saveTemplate(String semesterId, Boolean isExaminer,Boolean isEmail, String templateContent, AsyncCallback<Boolean> asyncCallback);
 
-	void getTemplateContent(String templateName, AsyncCallback<String[]> asyncCallback);
+	void getTemplateContent(String semesterId, Boolean isExaminer,Boolean isEmail, AsyncCallback<String[]> asyncCallback);
 	
-	void deleteTemplate(String templateName,AsyncCallback<Boolean> asyncCallback);
+	void deleteTemplate(String semesterId, Boolean isExaminer,Boolean isEmail,AsyncCallback<Boolean> asyncCallback);
 	
-	void generateMailPDFUsingTemplate(String templateName,Map templateVariables, AsyncCallback<String> asyncCallback);
+	void generateMailPDFUsingTemplate(String semesterId,Boolean isExaminer,Map templateVariables, AsyncCallback<String> asyncCallback);
 	
 	void generateSPMailPDF(Long semesterId, List<Long> spIds, AsyncCallback<String> asyncCallback);
 	

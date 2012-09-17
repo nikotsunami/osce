@@ -229,6 +229,7 @@
 	</servlet-mapping>
  <!-- E Module10 Create plans -->  
  
+<!-- Feature : 154
  <servlet>
 		<servlet-name>dispatcher</servlet-name>
         <servlet-class>org.gwtrpcspring.RemoteServiceDispatcher</servlet-class>
@@ -242,5 +243,18 @@
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/osMaEntry/summonings</url-pattern>
 	</servlet-mapping>
+ Feature : 154 -->
+ 
+ 
+	<servlet>
+		<servlet-name>summonings</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.SummoningsServiceImpl</servlet-class>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>summonings</servlet-name>
+		<url-pattern>/osMaEntry/summonings</url-pattern>
+	</servlet-mapping>
+	
  
 </web-app>

@@ -2,20 +2,17 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
  <ui:style src="../../styles.css" />
-	<g:VerticalPanel  addStyleNames="{style.tabStyle} {style.patientTopContainer}" width="120px" height="180px" horizontalAlignment="center" spacing="0">
+	<g:VerticalPanel  addStyleNames="{style.tabStyle} {style.patientTopContainer} {style.setOscePostViewBackGroundColor}" width="145px" height="180px" horizontalAlignment="center" spacing="0">
 		
-		<g:HorizontalPanel addStyleNames="{style.patientControls}" spacing="3" width="120px">
+		<g:HorizontalPanel width="100%" addStyleNames="{style.setOscePostViewHeaderPanelColor}" spacing="3">
 			<g:Label ui:field="postTypeLbl">Post Type</g:Label>
 			<s:IconButton ui:field="deletePost"  icon="close"></s:IconButton>
 		</g:HorizontalPanel>
-		<g:HorizontalPanel ui:field="oscePostSubViewHP" spacing="5" horizontalAlignment="center">
+		<g:HorizontalPanel ui:field="oscePostSubViewHP" spacing="5" horizontalAlignment="left">
 			<!-- Insert OscePostSubView Here -->
 		<!--  	<e:OscePostSubViewImpl></e:OscePostSubViewImpl>
 			<e:OscePostSubViewImpl></e:OscePostSubViewImpl>
 			-->
 		</g:HorizontalPanel>
-			
 	</g:VerticalPanel>
-	
-  
 </ui:UiBinder> 

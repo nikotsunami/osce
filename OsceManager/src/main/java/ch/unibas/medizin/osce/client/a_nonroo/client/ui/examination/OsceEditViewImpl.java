@@ -116,6 +116,33 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 			super.setValue(value == null ? Boolean.FALSE : value);
 		}
 	};
+	
+	@UiField
+	DivElement labelOsce;
+	@UiField
+	DivElement labelMaxParcours;
+	@UiField
+	DivElement labelMaxStudents;
+	@UiField
+	DivElement labelStudyYear;
+	@UiField
+	DivElement labelMaxRooms;
+	@UiField
+	DivElement labelIsRepe;
+	@UiField
+	DivElement labelOsceRepe;
+	@UiField
+	DivElement labelShortBreak;
+	@UiField
+	DivElement labelLongBreak;
+	@UiField
+	DivElement labelLunchBreak;
+	@UiField
+	DivElement labelStationLength;
+	@UiField
+	DivElement labelMiddleBreak;
+	@UiField
+	DivElement labelOsceForTask;
 
 	/*
 	@UiField
@@ -210,48 +237,62 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		save.setText(constants.save());
 		copiedOsce.setEnabled(false);
 		
+		labelOsce.setInnerText(constants.osce() + ":");
+		labelMaxParcours.setInnerText(constants.osceMaxCircuits() + ":");
+		labelMaxStudents.setInnerText(constants.osceMaxStudents() + ":");
+		labelStudyYear.setInnerText(constants.studyYear() + ":");
+		labelMaxRooms.setInnerText(constants.osceMaxRooms() + ":");
+		labelIsRepe.setInnerText(constants.osceIsRepe() + ":");
+		labelOsceRepe.setInnerText(constants.osceRepe() + ":");
+		labelShortBreak.setInnerText(constants.osceShortBreak() + ":");
+		labelLongBreak.setInnerText(constants.osceLongBreak() + ":");
+		labelLunchBreak.setInnerText(constants.osceLunchBreak() + ":");
+		labelStationLength.setInnerText(constants.osceStationLength() + ":");
+		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
+		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
+		
 		// Highlight onViolation
-				osceMap=new HashMap<String, Widget>();
-				osceMap.put("name", name);
-				osceMap.put("shortBreak", shortBreak);
-				osceMap.put("numberCourses", numberCourses);
-				osceMap.put("LongBreak", LongBreak);
-				osceMap.put("maxNumberStudents", maxNumberStudents);
-				osceMap.put("lunchBreak", lunchBreak);
-				osceMap.put("studyYear", studyYear);
-				osceMap.put("postLength", postLength);
-				osceMap.put("isRepeOsce", isRepeOsce);
-				//Issue # 122 : Replace pull down with autocomplete.
-				//osceMap.put("osceValue", osceValue);
-				osceMap.put("osceValue", osceValue.getTextField().advancedTextBox);
-				//Issue # 122 : Replace pull down with autocomplete.
-				//Issue # 122 : Replace pull down with autocomplete.
-				//osceMap.put("copiedOsce", copiedOsce);
-				osceMap.put("copiedOsce", copiedOsce.getTextField().advancedTextBox);
-				//Issue # 122 : Replace pull down with autocomplete.
-				osceMap.put("middleBreak", middleBreak);
-				// E Highlight onViolation
-				
-				if(isRepeOsce.isChecked()==true)
+		osceMap=new HashMap<String, Widget>();
+		osceMap.put("name", name);
+		osceMap.put("shortBreak", shortBreak);
+		osceMap.put("numberCourses", numberCourses);
+		osceMap.put("LongBreak", LongBreak);
+		osceMap.put("maxNumberStudents", maxNumberStudents);
+		osceMap.put("lunchBreak", lunchBreak);
+		osceMap.put("studyYear", studyYear);
+		osceMap.put("postLength", postLength);
+		osceMap.put("isRepeOsce", isRepeOsce);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//osceMap.put("osceValue", osceValue);
+		osceMap.put("osceValue", osceValue.getTextField().advancedTextBox);
+		//Issue # 122 : Replace pull down with autocomplete.
+		//Issue # 122 : Replace pull down with autocomplete.
+		//osceMap.put("copiedOsce", copiedOsce);
+		osceMap.put("copiedOsce", copiedOsce.getTextField().advancedTextBox);
+		//Issue # 122 : Replace pull down with autocomplete.
+		osceMap.put("middleBreak", middleBreak);
+		// E Highlight onViolation
+		
+		if(isRepeOsce.isChecked()==true)
+		{
+			copiedOsce.setEnabled(true);
+		}
+		
+		isRepeOsce.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				// TODO Auto-generated method stub
+				if(event.getValue()==true)
 				{
 					copiedOsce.setEnabled(true);
 				}
-				
-				isRepeOsce.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-					
-					@Override
-					public void onValueChange(ValueChangeEvent<Boolean> event) {
-						// TODO Auto-generated method stub
-						if(event.getValue()==true)
-						{
-							copiedOsce.setEnabled(true);
-						}
-						else
-						{
-							copiedOsce.setEnabled(false);
-						}
-					}
-				});
+				else
+				{
+					copiedOsce.setEnabled(false);
+				}
+			}
+		});
 	}
 
 

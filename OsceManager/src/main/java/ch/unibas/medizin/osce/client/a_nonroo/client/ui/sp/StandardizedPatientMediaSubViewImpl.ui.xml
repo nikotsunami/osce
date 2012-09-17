@@ -17,10 +17,10 @@
 	        </g:HorizontalPanel>
 		</g:FormPanel>
 		-->
-		 <g:HorizontalPanel>			
+		 <g:HorizontalPanel spacing="10">			
 	
 	 <g:Image ui:field="uploadMessage" width="60" height="80"></g:Image>
-	 </g:HorizontalPanel>
+	
 	    <!--spec video upload -->
 	    <!--  
 	    <g:FormPanel ui:field="videoUploadFormPanel">
@@ -40,6 +40,8 @@
 	    <div ui:field="videoUploadMessage" />-->	
 	    <g:HorizontalPanel ui:field="videoPanel">
 	    </g:HorizontalPanel>
+	    
+	     </g:HorizontalPanel>
 	    <!--spec video upload -->
 	</g:HTMLPanel>
 </ui:UiBinder>

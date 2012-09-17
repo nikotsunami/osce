@@ -166,22 +166,12 @@
   margin: 10px auto 0;
 }
 
-.cellTableCell input{
-	    width: 20px;
+.cellTableCell input {
+	width: 20px;
 }
 
-.cellTableCell button {
-	outline: none !important;
-	margin: 0 0 0 -5px;
-	padding: 3px 2px 0;
-	border: 0;
-	background: none;
-	cursor: pointer;
-	cursor: hand;
-}
-
-.cellTableCell input{
-	    width: 20px;
+.cellTableCell input[type="text"] {
+	width: 100%;
 }
 
 .cellTableCell button {

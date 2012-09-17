@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.server.upload;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,13 +15,7 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartRequest;
-import org.springframework.web.multipart.MultipartResolver;
 
-
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.domain.StudentOsces;
@@ -39,7 +32,14 @@ import com.csvreader.CsvReader;
 @SuppressWarnings("serial")
 public class CsvFileUploadServlet extends HttpServlet {
 
-	 private static String appUploadDirectory=OsMaFilePathConstant.CSV_FILEPATH;
+	//	 private static String appUploadDirectory=OsMaFilePathConstant.DOWNLOAD_DIR_PATH;//OsMaFilePathConstant.CSV_FILEPATH;
+
+	public String fetchRealPath(HttpServletRequest request) {
+
+		String fileSeparator = System.getProperty("file.separator");
+		return request.getSession().getServletContext().getRealPath(fileSeparator) + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + fileSeparator;
+
+	}
 			
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,9 +55,9 @@ public class CsvFileUploadServlet extends HttpServlet {
 	                    "Unsupported content");
 	        }
 		  
-		  String  cntxtpath=request.getSession().getServletContext().getRealPath(".");
-		  String uploadDir=cntxtpath+appUploadDirectory;
-		  
+		//		  String  cntxtpath=fetchRealPath(request);
+		//String  cntxtpath=request.getSession().getServletContext().getRealPath(".");
+		String uploadDir = fetchRealPath(request);//cntxtpath;+appUploadDirectory;
 		 
 	        // Create a factory for disk-based file items
 	        FileItemFactory factory = new DiskFileItemFactory();

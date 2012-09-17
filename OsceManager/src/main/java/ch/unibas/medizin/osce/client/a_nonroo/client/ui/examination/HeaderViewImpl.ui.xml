@@ -1,9 +1,15 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:shared="urn:import:ch.unibas.medizin.osce.shared">
- <ui:style src="../../styles.css" />
-<g:HorizontalPanel>
-		
+ <ui:style src="../../styles.css" >
+ .paddingTop20
+ {
+	padding-top: 20px;
+ }
+ </ui:style>	
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons"
+		field="uiIcons"></ui:with>
+<g:HorizontalPanel>	
 	<g:VerticalPanel ui:field="headerPanel" width="50px"  height="230px" verticalAlignment="bottom" horizontalAlignment="center" >	
 		<!-- Module 5 Bug Report Solution -->
 		<g:VerticalPanel ui:field="headerSimplePanel" height="100%" width="100%" horizontalAlignment="center" >
@@ -12,13 +18,15 @@
 				<s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton>
 			</g:VerticalPanel> -->
 			<g:VerticalPanel ui:field="labelVP" width="50px" height="100%" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
-				<g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  >Parcour</g:Label>
+				<g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  ></g:Label>
 			</g:VerticalPanel>
 		<!--  Module 5 Bug Report Solution -->
 		</g:VerticalPanel>
 		<!-- E Module 5 Bug Report Solution -->
-		
-		<g:ValueListBox ui:field="colorPicker" height="20px"></g:ValueListBox>		
+		 <!-- Change in ParcourView --> 	
+			<!-- <g:ValueListBox ui:field="colorPicker" height="20px"></g:ValueListBox>	 -->	
+			 <s:IconButton ui:field="btnColorPicker"/>							
+		 <!-- E Change in ParcourView -->
 		
 	</g:VerticalPanel>
 </g:HorizontalPanel>

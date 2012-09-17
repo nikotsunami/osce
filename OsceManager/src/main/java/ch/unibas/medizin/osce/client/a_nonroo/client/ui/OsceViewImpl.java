@@ -144,7 +144,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getMaxNumberStudents());
 			}
-		}, constants.maxStudents());
+		}, constants.osceMaxStudents());
 		paths.add("email");
 		table.addColumn(new TextColumn<OsceProxy>() {
 
@@ -159,7 +159,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getNumberCourses());
 			}
-		}, constants.maxCircuits());
+		}, constants.osceMaxCircuits());
 		//	        paths.add("responsibilities");
 		//	        table.addColumn(new TextColumn<OsceProxy>() {
 		//

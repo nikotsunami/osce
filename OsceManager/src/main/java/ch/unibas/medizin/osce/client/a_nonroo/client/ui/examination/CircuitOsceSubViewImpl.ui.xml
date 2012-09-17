@@ -5,64 +5,17 @@
 	xmlns:s="urn:import:ch.unibas.medizin.osce.client.scaffold.ui">
 
 	<ui:style src="../../styles.css">
-		.padleft25 {
-			padding-left: 25px;
+		.label {
+			text-align: right;
 		}
 		
-		.padleft33 {
-			padding-left: 33px;
+		.buttonStyle {
+			width: 100px;
 		}
 		
-		.padleft30 {
-			padding-left: 30px;
-		}
-		
-		.padleft8 {
-			padding-left: 8px;
-		}
-		
-		.marginRight20 {
-			margin-right: 20px;
-		}
-		.marginLeft20
-		{
-			margin-Left: 20px;
-		}
-		.padLeft0
-		{
-			padding-left: 0px;
-		}
-		.padLeft10
-		{
-			padding-left: 10px;
-		}
-		.padLeft5
-		{
-			padding-left: 5px;
-		}
-		.padLeft43
-		{
-			padding-left: 43px;
-		}
-		.padLeft15
-		{
-			padding-left: 15px;
-		}
-		.marginRight5
-		{
-			margin-right: 5px;
-		}
-		.marginLeft30
-		{
-			margin-left: 30px;
-		}
-		.buttonStyle
-		{
-			width:80px;
-		}
-		.textBoxFieldStyle
-		{
-			width: 50px;
+		.textBoxFieldStyle {
+			text-align: center;
+    		width: 22px;
 		}
 		
 	</ui:style>
@@ -70,42 +23,42 @@
 		<!-- h1>CircuitOsceSubView</h1 -->
 		<Table>
 			<tr>
-				<td><g:Label ui:field="shortBreakLabel" styleName="{style.padLeft0}">Short Break :</g:Label></td>
+				<td><g:Label ui:field="shortBreakLabel" styleName="{style.label}"></g:Label></td>
 				<td><s:ShortBox ui:field="shortBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
-				<td><g:Label ui:field="longBreakLabel" styleName="{style.padLeft5}">Long Break :</g:Label></td>
+				<td><g:Label ui:field="longBreakLabel" styleName="{style.label}"></g:Label></td>
 				<td><s:ShortBox ui:field="longBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
-				<td><g:Label ui:field="launchBreakLabel" styleName="{style.padLeft15}">Launch Break:</g:Label></td>
+				<td><g:Label ui:field="launchBreakLabel" styleName="{style.label}"></g:Label></td>
 				<td><s:ShortBox ui:field="launchBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>				
 				
 				<!--  Module 5 bug Report Change -->
-				<td><g:Label ui:field="middleBreakLabel" styleName="{style.padLeft43}">Middle Break:</g:Label></td>
+				<td><g:Label ui:field="middleBreakLabel" styleName="{style.label}"></g:Label></td>
 				<td><s:ShortBox ui:field="middleBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
 				<!--  E Module 5 bug Report Change -->
 				
 				<td>
 				<g:HorizontalPanel spacing="4">
-				<my:IconButton ui:field="saveOsce" icon="plusthick"></my:IconButton>
+				<my:IconButton ui:field="saveOsce" addStyleNames="{style.buttonStyle}" icon="disk"></my:IconButton>
 				</g:HorizontalPanel>								
 				</td>
 			</tr>
 			<tr>
-				<td><g:Label ui:field="maxStudentLabel"  styleName="{style.padLeft0}">Max Students :</g:Label></td>
+				<td><g:Label ui:field="maxStudentLabel"  styleName="{style.label}"></g:Label></td>
 				<td><g:IntegerBox ui:field="maxStudentTextBox" styleName="{style.textBoxFieldStyle}"></g:IntegerBox></td>
-				<td><g:Label ui:field="maxParcourLabel" styleName="{style.padLeft5}">Max Parcour :</g:Label></td>
+				<td><g:Label ui:field="maxParcourLabel" styleName="{style.label}"></g:Label></td>
 				<td><g:IntegerBox ui:field="maxParcourTextBox" styleName="{style.textBoxFieldStyle}"></g:IntegerBox></td>
-				<td><g:Label ui:field="maxRoomsLabel" styleName="{style.padLeft5}">Max No Rooms :</g:Label></td>
+				<td><g:Label ui:field="maxRoomsLabel" styleName="{style.label}"></g:Label></td>
 				<td><g:IntegerBox ui:field="maxRoomsTextBox" styleName="{style.textBoxFieldStyle}"></g:IntegerBox></td>
 					
 				<!--  Module 5 bug Report Change -->
-				<td><g:Label ui:field="shortBreakSimpatLabel" styleName="{style.padLeft5}">Short Break Simpat:</g:Label></td>
+				<td><g:Label ui:field="shortBreakSimpatLabel" styleName="{style.label}"></g:Label></td>
 				<td><s:ShortBox ui:field="shortBreakSimpatTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
 				<!--  E Module 5 bug Report Change -->
 				<td>
 					<g:HorizontalPanel spacing="4">
-					<g:Button ui:field="generateBtn" width="80px"></g:Button>
-					<g:Button ui:field="fixedBtn"  width="80px"></g:Button>
-					<g:Button ui:field="clearAllBtn"  width="80px"></g:Button>
-					<g:Button ui:field="closedBtn"  width="80px"></g:Button>
+						<my:IconButton ui:field="generateBtn" addStyleNames="{style.buttonStyle}" icon="refresh"></my:IconButton>
+						<my:IconButton ui:field="fixedBtn" addStyleNames="{style.buttonStyle}" icon="pin-s"></my:IconButton>				
+						<my:IconButton ui:field="clearAllBtn" addStyleNames="{style.buttonStyle}" icon="cancel"></my:IconButton>
+						<my:IconButton ui:field="closedBtn" addStyleNames="{style.buttonStyle}" icon="close"></my:IconButton>
 					</g:HorizontalPanel>
 				</td>			
 			</tr>									

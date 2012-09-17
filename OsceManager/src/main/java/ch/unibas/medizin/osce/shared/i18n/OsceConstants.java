@@ -84,6 +84,8 @@ public interface OsceConstants extends Constants {
 
 	public String age();
 
+	public String ageUnit();
+
 	public String all();
 
 	public String anamnesisCheckTitle();
@@ -110,6 +112,8 @@ public interface OsceConstants extends Constants {
 
 	public String autoAssign();
 
+	public String autoAssignmentFailure();
+
 	public String autoAssignmentSuccess();
 
 	public String autoSPFailure();
@@ -134,6 +138,12 @@ public interface OsceConstants extends Constants {
 
 	public String basicFilter();
 
+	public String bellSchedule();
+
+	public String bellScheduleExport();
+
+	public String bellScheduleUpload();
+
 	public String bic();
 
 	public String bindType();
@@ -142,9 +152,13 @@ public interface OsceConstants extends Constants {
 
 	public String bmi();
 
+	public String breakPost();
+
 	public String calculation();
 
 	public String cancel();
+
+	public String changesDiscarded();
 
 	public String checkList();
 
@@ -176,6 +190,8 @@ public interface OsceConstants extends Constants {
 
 	public String complexity();
 
+	public String confirmation();
+
 	public String confirmationWhenStatusIsChangingFormClosedToFix();
 
 	public String contactInfo();
@@ -186,6 +202,10 @@ public interface OsceConstants extends Constants {
 
 	public String createDoctor();
 
+	public String criteriadelete();
+
+	public String criterialbl();
+
 	public String criterion();
 
 	public String date();
@@ -194,11 +214,15 @@ public interface OsceConstants extends Constants {
 
 	public String dateEdited();
 
+	public String dateHeader();
+
 	public String dateTime();
 
 	public String dateTimeFormat();
 
 	public String day();
+
+	public String delerror();
 
 	public String delete();
 
@@ -209,6 +233,8 @@ public interface OsceConstants extends Constants {
 	public String deletePatientInSemester();
 
 	public String deleteTask();
+
+	public String delsuccess();
 
 	public String description();
 
@@ -248,6 +274,8 @@ public interface OsceConstants extends Constants {
 
 	public String enterSortOrderWarn();
 
+	public String eosceerrormsg();
+
 	public String error();
 
 	public String examinationSchedule();
@@ -264,9 +292,31 @@ public interface OsceConstants extends Constants {
 
 	public String exportBellSchedule();
 
+	public String exporterror();
+
+	public String exportosce();
+
+	public String exportprocessed();
+
+	public String exportprocessederror();
+
+	public String exportprocessedlabel();
+
+	public String exportprocessedmsg();
+
+	public String exportsuccess();
+
+	public String exportunprocessed();
+
+	public String exportunprocessederror();
+
+	public String exportwarning();
+
 	public String failure();
 
 	public String female();
+
+	public String fetcherrormsg();
 
 	public String field();
 
@@ -275,6 +325,8 @@ public interface OsceConstants extends Constants {
 	public String fileDetail();
 
 	public String filePath();
+
+	public String fileUploadError();
 
 	public String filterTitle();
 
@@ -296,23 +348,39 @@ public interface OsceConstants extends Constants {
 
 	public String height();
 
+	public String heightUnit();
+
 	public String homeRole();
 
 	public String iban();
 
 	public String imageUpload();
 
+	public String importBtn();
+
+	public String importeosce();
+
+	public String importerror();
+
 	public String importObjective();
+
+	public String importprocessmsg();
 
 	public String importQuestion();
 
 	public String importstudent();
+
+	public String importsuccess();
 
 	public String importTopic();
 
 	public String inActive();
 
 	public String insideTitle();
+
+	public String invalidImageFileType();
+
+	public String invalidVideoFileType();
 
 	public String itemName();
 
@@ -366,19 +434,25 @@ public interface OsceConstants extends Constants {
 
 	public String masterData();
 
-	public String maxCircuits();
-
-	public String maxStudents();
+	public String maxYearlySalary();
 
 	public String messages();
 
 	public String middleBreak();
 
+	public String min();
+
 	public String minorBtnLbl();
 
 	public String minorLbl();
 
+	public String minusTime();
+
+	public String minute();
+
 	public String mobile();
+
+	public String moveTime();
 
 	public String name();
 
@@ -386,9 +460,13 @@ public interface OsceConstants extends Constants {
 
 	public String nationality();
 
+	public String nationaltiywarning();
+
 	public String newRole();
 
 	public String no();
+
+	public String noDataFound();
 
 	public String noMatter();
 
@@ -404,7 +482,11 @@ public interface OsceConstants extends Constants {
 
 	public String onDeleteRoleAssignedToPatient();
 
+	public String optiondelete();
+
 	public String optionDetail();
+
+	public String optionlbl();
 
 	public String optionName();
 
@@ -412,15 +494,55 @@ public interface OsceConstants extends Constants {
 
 	public String order();
 
+	public String osce();
+
+	public String osceAddTask();
+
 	public String osceBreak();
 
 	public String osceDaySuccess();
 
 	public String oscedoc();
 
+	public String osceForTask();
+
+	public String osceIsRepe();
+
+	public String osceLongBreak();
+
+	public String osceLunchBreak();
+
+	public String osceMaxCircuits();
+
+	public String osceMaxRooms();
+
+	public String osceMaxStudents();
+
+	public String osceMediumBreak();
+
+	public String osceRepe();
+
 	public String OSCESecurityChange();
 
 	public String osceSequence();
+
+	public String osceShortBreak();
+
+	public String osceSimpatsInShortBreak();
+
+	public String osceStationLength();
+
+	public String osceTaskDeadline();
+
+	public String osceTaskDone();
+
+	public String osceTaskName();
+
+	public String osceVersion();
+
+	public String osceWarningFuture();
+
+	public String osceWarningPast();
 
 	public String ownerName();
 
@@ -443,6 +565,8 @@ public interface OsceConstants extends Constants {
 	public String persons();
 
 	public String pleaseSelectRole();
+
+	public String plusTime();
 
 	public String plz();
 
@@ -469,6 +593,12 @@ public interface OsceConstants extends Constants {
 	public String printFor();
 
 	public String printIndividualSchedules();
+
+	public String processed();
+
+	public String processedfiles();
+
+	public String processedmsg();
 
 	public String profession();
 
@@ -518,6 +648,8 @@ public interface OsceConstants extends Constants {
 
 	public String roleParticipants();
 
+	public String roleQuestions();
+
 	public String roles();
 
 	public String roleScript();
@@ -550,6 +682,10 @@ public interface OsceConstants extends Constants {
 
 	public String roomWidth();
 
+	public String salaryExtra();
+
+	public String salarySimpat();
+
 	public String save();
 
 	public String saveOrder();
@@ -557,6 +693,10 @@ public interface OsceConstants extends Constants {
 	public String saveOsceBlueprint();
 
 	public String scars();
+
+	public String scheduleEarlier();
+
+	public String schedulePostpone();
 
 	public String searchCriteria();
 
@@ -606,6 +746,8 @@ public interface OsceConstants extends Constants {
 
 	public String specification();
 
+	public String splitSequence();
+
 	public String spName();
 
 	public String standardizedPatient();
@@ -615,8 +757,6 @@ public interface OsceConstants extends Constants {
 	public String starttime();
 
 	public String starttimedoc();
-
-	public String stationLength();
 
 	public String street();
 
@@ -646,9 +786,13 @@ public interface OsceConstants extends Constants {
 
 	public String thisIsTheFirstQuestion();
 
+	public String timeHeader();
+
 	public String title();
 
 	public String to();
+
+	public String toneHeader();
 
 	public String topicDescription();
 
@@ -668,15 +812,29 @@ public interface OsceConstants extends Constants {
 
 	public String type();
 
+	public String unprocessed();
+
+	public String unprocessedfiles();
+
+	public String unprocessedmsg();
+
 	public String unSaveOrderWarn();
 
 	public String updateOsce();
 
 	public String user();
 
+	public String validateMinute();
+
+	public String validatePlusMinus();
+
 	public String value();
 
 	public String version();
+
+	public String videoUpload();
+
+	public String violationMessage();
 
 	public String warning();
 
@@ -684,112 +842,17 @@ public interface OsceConstants extends Constants {
 
 	public String weight();
 
+	public String weightUnit();
+
 	public String widthMin();
 
 	public String widthSize();
 
 	public String workPermission();
 
+	public String year();
+
 	public String yes();
 
-	// eosce
-	public String importeosce();
-	public String autoAssignmentFailure();
-
-	public String importBtn();
-
-	public String processed();
-
-	public String unprocessed();
-
-	public String processedfiles();
-
-	public String unprocessedfiles();
-
-	public String importprocessmsg();
-
-	public String eosceerrormsg();
-
-	public String confirmation();
-
-	public String unprocessedmsg();
-
-	public String fetcherrormsg();
-
-	public String importerror();
-
-	public String importsuccess();
-
-	public String processedmsg();
-
-	public String delerror();
-
-	public String delsuccess();
-
-	// eosce
-
-	// Module : 15[
-	public String bellScheduleUpload();
-
-	public String bellScheduleExport();
-
-	public String plusTime();
-
-	public String minusTime();
-
-	public String bellSchedule();
-
-	public String moveTime();
-
-	public String minute();
-
-	public String dateHeader();
-
-	public String timeHeader();
-
-	public String toneHeader();
-
-	public String validateMinute();
-
-	public String validatePlusMinus();
-	// ]Module : 15
-	
-	//export osce
-	public String exportosce();
-	
-	public String exportprocessed();
-		
-	public String exportunprocessed();
-	
-	public String exporterror();
-	
-	public String exportprocessederror();
-	
-	public String exportunprocessederror();
-	
-	public String exportsuccess();
-	
-	public String exportprocessedlabel();
-	
-	public String exportprocessedmsg();
-	
-	public String exportwarning();
-	
-	//nationality issue
-	public String nationaltiywarning();
-	
-	public String videoUpload();
-	
-	//Module 5 Bug Report Solution
-	public String schedulePostpone();
-	public String scheduleEarlier();
-	//E Module 5 Bug Report Solution
-	
-	//role issue
-	public String optionlbl();
-	public String criterialbl();
-	public String criteriadelete();
-	public String optiondelete();
-	
-	public String breakPost();
 }
+

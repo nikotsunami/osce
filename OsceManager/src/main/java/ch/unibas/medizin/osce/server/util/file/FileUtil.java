@@ -80,11 +80,18 @@ public class FileUtil {
 		return s[s.length-1];
 	}
 	
-	  private static boolean copyFile(String srFile, String dtFile,String fileName){
+	  private static boolean copyFile(String srFile, String dstDir,String fileName){
 		  try{
 		
+			  File dstdir=new File(dstDir);
+              if (!dstdir.exists() && !dstdir.mkdirs()) {
+                  throw new IOException("Unable to create " + dstdir.getAbsolutePath());
+              }		  
+			  
+             
+              
 		  File f1 = new File(srFile);
-		  File f2 = new File(dtFile,fileName);
+		  File f2 = new File(dstDir,fileName);
 		  
 		  if(!f2.createNewFile())
 		  {

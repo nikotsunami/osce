@@ -21,13 +21,12 @@ import ch.unibas.medizin.osce.domain.RoleTableItem;
 import ch.unibas.medizin.osce.domain.RoleTableItemValue;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.UsedMaterial;
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -40,7 +39,7 @@ import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mattbertolini.hermes.Hermes;
+//import com.mattbertolini.hermes.Hermes;
 
 public class RolePrintPdfUtil {
 	private static final float titleTableSpacing = 0.0f;
@@ -75,12 +74,14 @@ public class RolePrintPdfUtil {
 
 	public RolePrintPdfUtil(Locale locale) {
 		try {
-			constants = Hermes.get(OsceConstants.class, locale.toString());
-			enumConstants = Hermes.get(OsceConstantsWithLookup.class,
-					locale.toString());
+			// Feature : 154
+			constants = GWTI18N.create(OsceConstants.class, locale.toString());
+			enumConstants = GWTI18N.create(OsceConstantsWithLookup.class, locale.toString());
+			// Feature : 154
 		} catch (IOException e) {
-			Log.error("PdfUtil() -- Error loading translations: "
-					+ e.getMessage());
+			Log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
+		} catch (Exception e) {
+			Log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
 		}
 
 	}

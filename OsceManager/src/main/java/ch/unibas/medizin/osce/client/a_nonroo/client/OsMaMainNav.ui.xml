@@ -94,7 +94,7 @@
 			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 			<!-- G: SPEC START = -->						
-			<g:Label ui:field="labelSemester">Semester:</g:Label>				
+			<g:Label ui:field="labelSemester"></g:Label>				
 			<g:HorizontalPanel>
 				<g:ValueListBox ui:field="lstSemester" />				
 				 <s:IconButton ui:field="btnEditSem" icon="pencil"></s:IconButton>

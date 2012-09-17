@@ -3,22 +3,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 	xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination" xmlns:r="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role" xmlns:a="urn:import:java.awt">
-	<ui:style src="../../styles.css" >
-	
+	<ui:style src="../../styles.css" >	
 	</ui:style>
 		
 	<g:SimplePanel>
 		<g:ScrollPanel>
-		<g:HorizontalPanel ui:field="OSCENewSubViewImplHP" width="1200px" height="300px" spacing="10" addStyleNames="{style.tabStyle} {style.patientTopContainer}" verticalAlignment="middle">		
-			<e:OscePostBluePrintSubViewImpl ui:field="oscePostBluePrintSubViewImpl"></e:OscePostBluePrintSubViewImpl>
-					
-			
-			
-					<g:VerticalPanel ui:field="OsceDayVerticalPanel" >
-						<e:OsceDayViewImpl ui:field="osceDayViewImpl"></e:OsceDayViewImpl>
-					</g:VerticalPanel>
-			
-				
+		<g:HorizontalPanel ui:field="OSCENewSubViewImplHP" width="1200px" height="300px" spacing="10" addStyleNames="{style.tabStyle} {style.patientTopContainer} {style.setParcourPanelBackgroundColor}" verticalAlignment="middle">
+		<g:VerticalPanel ui:field="OsceDayVerticalPanel">
+					<e:OsceDayViewImpl ui:field="osceDayViewImpl" addStyleNames="{style.setOsceDayStyle}"></e:OsceDayViewImpl>
+		</g:VerticalPanel>		
+					<e:OscePostBluePrintSubViewImpl ui:field="oscePostBluePrintSubViewImpl" addStyleNames="{style.setWhiteColor}"></e:OscePostBluePrintSubViewImpl>					
 		</g:HorizontalPanel>
 		
 		

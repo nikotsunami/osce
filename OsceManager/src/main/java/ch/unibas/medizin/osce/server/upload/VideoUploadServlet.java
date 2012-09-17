@@ -141,6 +141,11 @@ public class VideoUploadServlet extends HttpServlet{
                       
                       //upload file to local directory
                       
+                	 File localdir=new File(localUploadDirectory);
+                     if (!localdir.exists() && !localdir.mkdirs()) {
+                         throw new IOException("Unable to create " + localdir.getAbsolutePath());
+                     }
+                	
                       File localUploadedFile = new File( localUploadDirectory, fileName);
                      localUploadedFile.createNewFile();
                       	//save
@@ -157,6 +162,11 @@ public class VideoUploadServlet extends HttpServlet{
         } catch (Exception e) {
             //resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while creating the file : " + e.getMessage());
         	Log.error("An error occurred while creating the file : " + e.getMessage());
+       	 resp.setContentType("text/html");
+       	  resp.getWriter().println("error");
+       	  resp.getWriter().flush();
+             resp.getWriter().close();
+             return;
         }
         //service info
      /*   Log.info("Attribtue names: ");

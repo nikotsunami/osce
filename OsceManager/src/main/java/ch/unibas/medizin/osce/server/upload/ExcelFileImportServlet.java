@@ -39,7 +39,13 @@ public class ExcelFileImportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
 
-	 private static String appUploadDirectory=OsMaFilePathConstant.EXCEL_FILEPATH;
+//	 private static String appUploadDirectory=OsMaFilePathConstant.EXCEL_FILEPATH;
+	public String fetchRealPath(HttpServletRequest request) {
+
+		String fileSeparator = System.getProperty("file.separator");
+		return request.getSession().getServletContext().getRealPath(fileSeparator) + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + fileSeparator;
+
+	}
 			
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
@@ -53,9 +59,10 @@ public class ExcelFileImportServlet extends HttpServlet {
 	                    "Unsupported content");
 	        }
 		  
-		  String  cntxtpath=request.getSession().getServletContext().getRealPath(".");
-		  String uploadDir=cntxtpath+appUploadDirectory;
+//		  String  cntxtpath=request.getSession().getServletContext().getRealPath(".");
+//		  String uploadDir=cntxtpath+appUploadDirectory;
 		  
+		  String uploadDir=fetchRealPath(request);
 		 
 	        // Create a factory for disk-based file items
 	        FileItemFactory factory = new DiskFileItemFactory();

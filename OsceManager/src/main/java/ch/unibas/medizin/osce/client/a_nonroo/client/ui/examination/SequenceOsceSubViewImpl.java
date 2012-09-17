@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -155,7 +156,8 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		initWidget(uiBinder.createAndBindUi(this));
 		sequenceOsceSubViewImpl=this;
 		init();
-		spliteSequence.setText("Splite");
+		OsceConstants constants = GWT.create(OsceConstants.class);
+		spliteSequence.setText(constants.splitSequence());
 		
 		// Module 5 bug Report Change
 		/*chaneNameOfSequence.setVisible(false);
@@ -178,7 +180,8 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		initWidget(uiBinder.createAndBindUi(this));
 		sequenceOsceSubViewImpl=this;
 		init();
-		spliteSequence.setText("Splite");
+		OsceConstants constants = GWT.create(OsceConstants.class);
+		spliteSequence.setText(constants.splitSequence());
 		// Module 5 bug Report Change
 		/*chaneNameOfSequence.setVisible(false);
 		ok.setVisible(false);

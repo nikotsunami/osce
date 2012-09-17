@@ -59,7 +59,7 @@
 					<table>
 		    			<tr id="name">
 								<td>
-									<span class="{style.label}">Name:</span>
+									<span class="{style.label}" ui:field="labelTaskName">Name:</span>
 								</td>
 								<td>
 									<g:TextBox ui:field='taskName'/>
@@ -68,7 +68,7 @@
 		     
 					    <tr id="deadline">
 									<td>
-										<span class="{style.label}">DeadLine:</span>
+										<span class="{style.label}" ui:field="labelDeadline">DeadLine:</span>
 									</td>
 									<td>
 										 <d:DateBox ui:field='deadline'/>
@@ -77,7 +77,7 @@
 					    
     					<tr id="administrator">
 								<td>
-									<span class="{style.label}">Administrator:</span>
+									<span class="{style.label}" ui:field="labelAdministrator">Administrator:</span>
 								</td>
 								<td>
 								<!-- //Issue # 122 : Replace pull down with autocomplete. -->
@@ -88,8 +88,10 @@
 						</tr>
 			
 						<tr>
-								<td><g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button></td>
-								<td></td>
+							<td>
+								<my:IconButton addStyleNames='{style.button}' icon="closethick" ui:field='cancel'>Cancel</my:IconButton>
+								<my:IconButton addStyleNames='{style.button}' icon="disk" ui:field='save'>Save</my:IconButton></td>
+							<td></td>
 						</tr>
     				 </table>
 <!-- 				</g:VerticalPanel> -->				

@@ -42,7 +42,7 @@
 
 			<tr >
 				<td id="name">
-					<div class="{style.label}">OSCE :</div>
+					<div class="{style.label}" ui:field="labelOsce"></div>
 				</td>
 				
 				<td>
@@ -50,7 +50,7 @@
 				</td>
 				
 				<td id="shortBreak">
-					<div class="{style.label} {style.leftpadding10}"> Short Break :</div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelShortBreak"> Short Break :</div>
 				</td>
 				
 				<td>
@@ -60,7 +60,7 @@
 			
 			<tr >
 				<td id="numberCourses">
-					<div class="{style.label}">max. Parcour :</div>
+					<div class="{style.label}" ui:field="labelMaxParcours">max. Parcour :</div>
 				</td>
 				
 				<td>
@@ -68,18 +68,18 @@
 				</td>
 				
 				<td id="LongBreak">
-					<div class="{style.label} {style.leftpadding10}">Long Break :</div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelLongBreak">Long Break :</div>
 				</td>
 				
 				<td>
-					<r:ShortBox ui:field="LongBreak" />
+					<r:ShortBox ui:field="LongBreak"/>
 					
 				</td>
 			</tr>
 			
 			<tr >
 				<td id="maxNumberStudents">
-					<div class="{style.label}">Max Students :</div>
+					<div class="{style.label}" ui:field="labelMaxStudents">Max Students :</div>
 				</td>
 				
 				<td>
@@ -87,7 +87,7 @@
 				</td>
 				
 				<td id="lunchBreak">
-					<div class="{style.label} {style.leftpadding10}">Lunch Break :</div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreak">Lunch Break :</div>
 				</td>
 				
 				<td>
@@ -96,7 +96,7 @@
 			</tr>
 			<tr >
 				<td id="studyYear">
-					<div class="{style.label}">Study Year :</div>
+					<div class="{style.label}" ui:field="labelStudyYear">Study Year :</div>
 				</td>
 				
 				<td>
@@ -106,7 +106,7 @@
 				</td>
 				
 				<td id="postLength">
-					<div class="{style.label} {style.leftpadding10}">Post Length :</div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelStationLength">Post Length :</div>
 				</td>
 				
 				<td>
@@ -117,7 +117,7 @@
 			<tr >
 							
 				<td id="maxNoRoom">
-					<div class="{style.label}">Maximum Rooms :</div>
+					<div class="{style.label}" ui:field="labelMaxRooms">Maximum Rooms :</div>
 				</td>
 				 
 				<td>
@@ -125,7 +125,7 @@
 			</td>
 			
 			<td id="shortBreak">
-					<div class="{style.label} {style.leftpadding10}">Middle Break :</div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
 				</td>
 				 
 				<td>
@@ -136,13 +136,13 @@
 			<tr >
 			
 			 <td  id="isRepeOsce">
-					<div class="{style.label}">Is Repe Osce :</div>
+					<div class="{style.label}" ui:field="labelIsRepe">Is Repe Osce :</div>
 				</td>
 				<td>
 					<g:CheckBox ui:field="isRepeOsce" /> 
 				</td>
 				
-			<td><div class="{style.label} {style.leftpadding10}">OSCE for Task :</div></td>
+			<td><div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div></td>
 			<td>
 				
 				  	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
@@ -153,7 +153,7 @@
 			</tr>
 			<tr>
 				<td  id="osceRepe">
-					<div class="{style.label}">OSCE Repe </div>
+					<div class="{style.label}" ui:field="labelOsceRepe">OSCE Repe </div>
 				</td>
 				<td>
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->

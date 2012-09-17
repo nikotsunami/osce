@@ -10,14 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -27,7 +19,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -39,6 +37,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
 import ch.unibas.medizin.osce.server.util.file.FileUtil;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
@@ -48,7 +47,6 @@ import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
@@ -56,6 +54,7 @@ import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
 
 @RooJavaBean
@@ -486,32 +485,63 @@ public class StandardizedPatient {
         try {
             CsvUtil csvUtil = new CsvUtil();
             csvUtil.setSeparater(",");
-            csvUtil.open(OsMaConstant.FILENAME, false);
+			//Feature : 154
+			csvUtil.open(fetchRealPath() + OsMaFilePathConstant.FILENAME, false);
             csvUtil.writeCsv(standardizedPatients, true, true);
             csvUtil.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return OsMaConstant.FILENAME;
+			//Feature : 154
+		return fetchContextPath() + OsMaFilePathConstant.FILENAME;
 
     }
 
+	//	public static String getContextPath() {
+	//Feature : 154 Used in Assignment and StandardizedRole
+	public static String fetchContextPath() {
+		String contextFileSeparator = "/";
+		return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getContextPath() + contextFileSeparator + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + contextFileSeparator;
+
+	}
+
+	//Feature : 154 Used in Assignment and StandardizedRole
+	public static String fetchRealPath() {
+
+		String fileSeparator = System.getProperty("file.separator");
+		return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + OsMaFilePathConstant.DOWNLOAD_DIR_PATH + fileSeparator;
+
+    }
+
+			//Feature : 154
 	public static String getPdfPatientsBySearch(Long standardizedPatientId) {
-		String fileName = OsMaConstant.FILE_NAME_PDF_FORMAT;
+//		Log.info("Before FileName");
+		String fileName = OsMaFilePathConstant.FILE_NAME_PDF_FORMAT;
+//		Log.info("Afetr FileName");
 		try {
 			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
 			PdfUtil pdfUtil = new PdfUtil();
 			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
-			fileName = standardizedPatient.name + "_"
-					+ standardizedPatient.preName + "_"
-					+ OsMaConstant.FILE_NAME_PDF_FORMAT;
-			pdfUtil.writeFile(fileName, standardizedPatient);
+
+			fileName = standardizedPatient.name + "_" + standardizedPatient.preName + "_" + fileName;
+			//	realFilePath = realPath + fileName;
+			//	contextFilePath = path + contextFileSeparator + fileName;
+
+			String realFilePath = fetchRealPath() + fileName;
+			String contextFilePath = fetchContextPath() + fileName;
+
+			Log.info("realFilePath: " + realFilePath);
+			Log.info("contextFilePath: " + contextFilePath);
+
+			pdfUtil.writeFile(realFilePath, standardizedPatient);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.error("Error in Std. Patient getPdfPatientsBySearch: " + e.getMessage());
 		}
 
-		return fileName;
+		return fetchContextPath() + fileName;
+			//Feature : 154
 	}
 
         //By Spec]End
@@ -666,16 +696,32 @@ public class StandardizedPatient {
     			
     			for (int i=0; i<searchThrough.size(); i++)
         		{
-        			field = from.get(searchThrough.get(i));
+        			
         			predicate = criteriaBuilder.disjunction();
         			
-        			if (searchThrough.get(i).equals("descriptions"))
+        			if (searchThrough.get(i).equals("comment"))
         			{
-        				field = from.get(searchThrough.get(i)).get("description");
+        				field = from.get("descriptions").get("description");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else if (searchThrough.get(i).equals("bankName"))
+        			{        				
+        				field = from.get("bankAccount").get("bankName");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else if (searchThrough.get(i).equals("BIC"))
+        			{
+        				field = from.get("bankAccount").get("BIC");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else if (searchThrough.get(i).equals("IBAN"))
+        			{
+        				field = from.get("bankAccount").get("IBAN");
         				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
         			}
         			else
         			{
+        				field = from.get(searchThrough.get(i));
         				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
         			}
         			
@@ -1021,6 +1067,8 @@ public class StandardizedPatient {
     //SPEC[
     public static Boolean copyImageAndVideo(String imagePath,String videoPath)
     {
+    	OsMaFilePathConstant.realImagePath=RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.appImageUploadDirectory);
+    	OsMaFilePathConstant.realVideoPath=RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.appVideoUploadDirectory);
     	if(imagePath!=null || imagePath!="")
     		FileUtil.copyImageFile(imagePath);
     	if(videoPath!=null || videoPath !="")

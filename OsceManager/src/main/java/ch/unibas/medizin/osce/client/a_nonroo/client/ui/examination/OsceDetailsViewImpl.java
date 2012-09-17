@@ -46,6 +46,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -67,7 +68,8 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	UiBinder<Widget, OsceDetailsViewImpl> {
 	}
 
-	
+	@UiField
+	Label labelLongNameHeader;
 
 	int left=0,top=0;
 
@@ -86,9 +88,6 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	 * implement HasHTML instead of HasText.
 	 */
 	public OsceDetailsViewImpl() {
-		
-	
-		
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<TaskProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 
@@ -113,6 +112,17 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 			}
 			
 		});
+		labelLongNameHeader.setText(constants.manageOsces() + ":" + "should a date be displayed here?");
+		labelOsce.setInnerText(constants.osce());
+		labelVersion.setInnerText(constants.osceVersion());
+		labelMaxStudents.setInnerText(constants.osceMaxStudents());
+		labelMaxCircuits.setInnerText(constants.osceMaxCircuits());
+		labelStationLength.setInnerText(constants.osceStationLength());
+		labelShortBreak.setInnerText(constants.osceShortBreak());
+		labelMediumBreak.setInnerText(constants.osceMediumBreak());
+		labelLongBreak.setInnerText(constants.osceLongBreak());
+		labelLunchBreak.setInnerText(constants.osceLunchBreak());
+		newButton.setText(constants.osceAddTask());
 		
 		init();
 		
@@ -196,6 +206,25 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField (provided = true)
 	CellTable<TaskProxy> table;
 	
+	@UiField
+	SpanElement labelOsce;
+	@UiField
+	SpanElement labelVersion;
+	@UiField
+	SpanElement labelMaxStudents;
+	@UiField
+	SpanElement labelMaxCircuits;
+	@UiField
+	SpanElement labelStationLength;
+	@UiField
+	SpanElement labelShortBreak;
+	@UiField
+	SpanElement labelLunchBreak;
+	@UiField
+	SpanElement labelLongBreak;
+	@UiField
+	SpanElement labelMediumBreak;
+	
 	/* @UiField
 	    DateBox deadline;
 
@@ -269,7 +298,6 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		filterPanel.deadline.setValue(null);
 		filterPanel.taskName.setValue(null);
 		//Log.info(filterPanel.getSpecialisationBox().getValue());
-		
 	}
 	
 	public void init()
@@ -314,128 +342,120 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 				        
 				    }
 				});
-*/
+	*/
+		
+		paths.add("name");
+		table.addColumn(new TextColumn<TaskProxy>() {
+			{ this.setSortable(true); }
 	
-	paths.add("name");
-	table.addColumn(new TextColumn<TaskProxy>() {
-		{ this.setSortable(true); }
-
-		Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-			public String render(java.lang.String obj) {
-				return obj == null ? "" : String.valueOf(obj);
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+	
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+	
+			@Override
+			public String getValue(TaskProxy object) {
+				String s=""+object.getName();
+				return renderer.render(s);
 			}
-		};
-
-		@Override
-		public String getValue(TaskProxy object) {
-			String s=""+object.getName();
-			return renderer.render(s);
-		}
-	}, "name");
+		}, constants.osceTaskName());
+		
+		paths.add("deadliine");
+		table.addColumn(new TextColumn<TaskProxy>() {
+			{ this.setSortable(true); }
 	
-	paths.add("deadliine");
-	table.addColumn(new TextColumn<TaskProxy>() {
-		{ this.setSortable(true); }
-
-		Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-			public String render(java.lang.String obj) {
-				return obj == null ? "" : String.valueOf(obj);
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+	
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+	
+			@Override
+			public String getValue(TaskProxy object) {
+				String s=""+object.getDeadline();
+				return renderer.render(s);
 			}
+		}, constants.osceTaskDeadline());
+		
+		Column<TaskProxy, Boolean> checkColumn = new Column<TaskProxy, Boolean>(new IsDoneCell()) {
+			@Override
+		    public Boolean getValue(TaskProxy object) {
+		    	// Get the value from the selection model.
+		    	return object.getIsDone(); 
+		    }
 		};
-
-		@Override
-		public String getValue(TaskProxy object) {
-			String s=""+object.getDeadline();
-			return renderer.render(s);
-		}
-	}, "deadline");
-	
-	
-	addColumn(new ActionCell<TaskProxy>(
-			OsMaConstant.DELETE_ICON, new ActionCell.Delegate<TaskProxy>() {
-				public void execute(TaskProxy task) {
-					//Window.alert("You clicked " + institution.getInstitutionName());
-					if(Window.confirm("wirklich löschen?"))
-					{
+		table.addColumn(checkColumn,constants.osceTaskDone());
+		
+		
+		addColumn(new ActionCell<TaskProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<TaskProxy>() {
+					public void execute(TaskProxy task) {
+						//Window.alert("You clicked " + institution.getInstitutionName());
 						
+							editClicked(task);
 					}
-						delegate.deleteClicked(task);
-				}
-
-				
-			}), "", new GetValue<TaskProxy>() {
-		public TaskProxy getValue(TaskProxy scar) {
-			return scar;
-		}
-
-		
-	}, null);
 	
-	
-	addColumn(new ActionCell<TaskProxy>(
-			OsMaConstant.EDIT_ICON, new ActionCell.Delegate<TaskProxy>() {
-				public void execute(TaskProxy task) {
-					//Window.alert("You clicked " + institution.getInstitutionName());
 					
-						editClicked(task);
-				}
-
-				
-			}), "", new GetValue<TaskProxy>() {
-		public TaskProxy getValue(TaskProxy scar) {
-			return scar;
-		}
-
+				}), "", new GetValue<TaskProxy>() {
+			public TaskProxy getValue(TaskProxy scar) {
+				return scar;
+			}		
+		}, null);
 		
-	}, null);
-	
-	
-	
-	
-	
-	table.addColumnStyleName(2, "iconCol");
+		addColumn(new ActionCell<TaskProxy>(
+				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<TaskProxy>() {
+					public void execute(TaskProxy task) {
+						//Window.alert("You clicked " + institution.getInstitutionName());
+						if(Window.confirm("wirklich löschen?")) {
+							delegate.deleteClicked(task);
+						}
+					}	
+				}), "", new GetValue<TaskProxy>() {
+			public TaskProxy getValue(TaskProxy scar) {
+				return scar;
+			}
+		}, null);
 		
-	//table.addColumn(new StatusColumn(), constants.answered());
-	
-	
-    
-  // Checkbox column. This table will uses a checkbox column for selection.
-  // Alternatively, you can call cellTable.setSelectionEnabled(true) to enable
-  // mouse selection.
-	
-	//ProvidesKey<TaskProxy> keyProvider = ((AbstractHasData<TaskProxy>) table).getKeyProvider();
-	
-//	final SelectionModel<TaskProxy> selectionModel=new MultiSelectionModel<TaskProxy>(keyProvider);
-	
-	//table.setSelectionModel(selectionModel, DefaultSelectionEventManager.<TaskProxy> createCheckboxManager());
-	
-	
-	
-	
-	CheckboxCell checkBoxcell=new CheckboxCell(true,false){
-		 @Override
-		  public void onBrowserEvent(Context context, Element parent, Boolean value, 
-		      NativeEvent event, ValueUpdater<Boolean> valueUpdater) {
-			 
-			 
+		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
 			
-			 if(((TaskProxy)context.getKey()).getIsDone()==true)
-			 {
-			  
+		//table.addColumn(new StatusColumn(), constants.answered());
+		
+		
+	    
+	  // Checkbox column. This table will uses a checkbox column for selection.
+	  // Alternatively, you can call cellTable.setSelectionEnabled(true) to enable
+	  // mouse selection.
+		
+		//ProvidesKey<TaskProxy> keyProvider = ((AbstractHasData<TaskProxy>) table).getKeyProvider();
+		
+	//	final SelectionModel<TaskProxy> selectionModel=new MultiSelectionModel<TaskProxy>(keyProvider);
+		
+		//table.setSelectionModel(selectionModel, DefaultSelectionEventManager.<TaskProxy> createCheckboxManager());
+	}
+	
+	private class IsDoneCell extends CheckboxCell {
+		public IsDoneCell() {
+			super(true, false);
+		}
+		
+		@Override
+		public void onBrowserEvent(Context context, Element parent, Boolean value, 
+		      NativeEvent event, ValueUpdater<Boolean> valueUpdater) {
+			if(((TaskProxy)context.getKey()).getIsDone()==true) {
 				 super.onBrowserEvent(context, parent, true, event, valueUpdater);
 				 this.setValue(context, parent, true);
-				
-			 
+				 
 		  //  Log.info("checkBox Clicked "+((TaskProxy)context.getKey()).getIsDone());
 		   // SafeHtmlBuilder sb=new SafeHtmlBuilder();
 		   // sb.append(SafeHtmlUtils.fromSafeConstant("<input type=\"checkbox\" tabindex=\"-1\" checked/>"));
 		//    this.render(context, value, sb);
 		    
-			 }
-			 else
-			 {
+			} else {
 				 super.onBrowserEvent(context, parent, value, event, valueUpdater);
 				 delegate.editForDone((TaskProxy)context.getKey());
 				 Log.info("checkBox Clicked "+((TaskProxy)context.getKey()).getIsDone());
@@ -450,46 +470,15 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 				Boolean value, SafeHtmlBuilder sb) {
 			// TODO Auto-generated method stub
 			//super.render(context, value, sb);
-			 if(((TaskProxy)context.getKey()).getIsDone()==true)
-			 {
+			if(((TaskProxy)context.getKey()).getIsDone()==true) {
 				// ((TaskProxy)context.getKey()).setIsDone(true);
-				 super.render(context, true, sb);
-
-			 }
-			 else
-			 {
-				 super.render(context, value, sb);
-			 }
-		 }
-		
-
-		 
-
+				super.render(context, true, sb);
+			}
+			else {
+				super.render(context, value, sb);
+			}
+		}
 	};
-	
-	
-  Column<TaskProxy, Boolean> checkColumn = new Column<TaskProxy, Boolean>(
-		  checkBoxcell) {
-    @Override
-    public Boolean getValue(TaskProxy object) {
-      // Get the value from the selection model.
-      return object.getIsDone();
-      
-      
-    }
-    
-    
-  
-    
-   
-  };
-  
-
-	
-  table.addColumn(checkColumn,"IsDone");
-	
-	
-}
 	
 	public void editClicked(TaskProxy task)
 	{

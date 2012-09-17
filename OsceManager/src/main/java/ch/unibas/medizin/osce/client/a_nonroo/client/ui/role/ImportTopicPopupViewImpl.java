@@ -223,7 +223,7 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			okBtn.setText(constants.okBtn());
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.roleTopic());
-			questionLbl.setText("Questions");
+			questionLbl.setText(constants.roleQuestions());
 			// Issue Role 
 			cancelBtn.setText(constants.cancel());
 			// E: Issue Role 
@@ -238,7 +238,7 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			okBtn.setText(constants.okBtn());
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.roleTopic());
-			questionLbl.setText("Questions");
+			questionLbl.setText(constants.roleQuestions());
 			// Issue Role 
 			cancelBtn.setText(constants.cancel());
 			

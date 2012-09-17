@@ -4,10 +4,6 @@
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../../styles.css">
-	.standardTable input {
-		width: 100%;
-		opacity: 0.8;
-	}
 	</ui:style>
 	<g:HTMLPanel>
 		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>

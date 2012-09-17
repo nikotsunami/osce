@@ -3,9 +3,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
@@ -51,6 +54,10 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 	// 5C: SPEC END =
 	
 	public OscePostProxy oscePostProxy;
+	
+	// Module 5 and TTG Bug Changes
+	CourseProxy courseProxy;
+	// E Module 5 and TTG Bug Changes
 	
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
@@ -156,15 +163,16 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 		oscePostBluePrintMap.put("roleTopic", roleTopicLbl);
 		oscePostBluePrintMap.put("specialisation", specializationLbl);				
 		// E Highlight onViolation
-
+		
 	}
 	
 	public void enableDisableforGeneratedStatus()
 	{
 		specializationedit.setVisible(false);
-		roleTopicedit.setVisible(false);
-		roomedit.setVisible(false);
-		roomLbl.setVisible(false);
+		roleTopicedit.setVisible(false);			
+		// Module 5 and TTG Bug Changes
+		//roomedit.setVisible(false);		
+		// E Module 5 and TTG Bug Changes
 	}
 	
 	public ListBoxPopupView popupView;
@@ -174,14 +182,14 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 	{
 		//delegate.findStandradizedRole
 		delegate.findStandardizedRoles(this);
-		
-		
-		
 	}
 	
 	public void showPopUpView()
 	{
-		((ListBoxPopupViewImpl)popupView).setPopupPosition(standardizedRoleHP.getAbsoluteLeft()-40, standardizedRoleHP.getAbsoluteTop()-80);
+		// Change in ParcourView
+		//((ListBoxPopupViewImpl)popupView).setPopupPosition(standardizedRoleHP.getAbsoluteLeft()-40, standardizedRoleHP.getAbsoluteTop()-80);
+		((ListBoxPopupViewImpl)popupView).setPopupPosition(standardizedRoleHP.getAbsoluteLeft()-209, standardizedRoleHP.getAbsoluteTop()-48);
+		// E Change in ParcourView
 		((ListBoxPopupViewImpl)popupView).show();
 	}
 	public void createOptionPopup()
@@ -220,7 +228,13 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 						Log.info("Role Topic Proxy");
 						delegate.saveRoleTopic(oscePostSubViewImpl);
 					}
-					
+					// Module 5 and TTG Bug Changes
+					else if(object instanceof RoomProxy)
+					{
+						Log.info("OscePostRoomProxy");
+						delegate.saveOscePostRoom(oscePostSubViewImpl,((ListBoxPopupViewImpl)popupView));
+					}
+					// E Module 5 and TTG Bug Changes					
 				}
 			});
 		}
@@ -259,6 +273,14 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 			//Log.info("Proxy:" + this.oscePostBlueprintProxy.getId());
 			delegate.roleEditClicked(this);
 		}
+		// Module 5 and TTG Bug Changes
+		@UiHandler("roomedit")
+		public void roomEditClicked(ClickEvent event)
+		{
+			Log.info("~Room Edit Clicked.");			
+			delegate.roomEditClicked(this,event.getClientX(),event.getClientY());
+		}
+		// E Module 5 and TTG Bug Changes
 		
 		public ListBoxPopupViewImpl getListBoxPopupViewImpl()
 		{
@@ -275,6 +297,24 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 		{
 			return this.roleTopicHP;
 		}
+		
+		// Module 5 and TTG Bug Changes
+		public CourseProxy getCourseProxy()
+		{
+			return this.courseProxy;
+		}
+		public void setCourseProxy(CourseProxy courseProxy)
+		{
+			this.courseProxy=courseProxy;
+		}
+		
+		public void showPopUpViewForRoom(int left,int top)
+		{
+			((ListBoxPopupViewImpl)popupView).setPopupPosition(left-340, top-60);				
+			((ListBoxPopupViewImpl)popupView).show();
+		}
+		// E Module 5 and TTG Bug Changes
+		
 		// 5C: SPEC END
 	
 }

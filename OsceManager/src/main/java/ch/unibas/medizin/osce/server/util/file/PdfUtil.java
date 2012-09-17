@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.domain.LangSkill;
 import ch.unibas.medizin.osce.domain.Scar;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.StandardizedPatientDetailsConstants;
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
@@ -41,7 +42,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.RadioCheckField;
 import com.itextpdf.text.pdf.TextField;
-import com.mattbertolini.hermes.Hermes;
+//import com.mattbertolini.hermes.Hermes;
 
 public class PdfUtil {
 	private static final float titleTableSpacing = 0.0f;
@@ -73,12 +74,20 @@ public class PdfUtil {
 
 	public PdfUtil(Locale locale) {
 		try {
-			constants = Hermes.get(OsceConstants.class, locale.toString());
-			enumConstants = Hermes.get(OsceConstantsWithLookup.class, locale.toString());
+			// Feature : 154
+			log.info("Before constants");
+			constants = GWTI18N.create(OsceConstants.class, locale.toString());
+			log.info("After constants");
+			log.info("Before enumConstants");
+			enumConstants = GWTI18N.create(OsceConstantsWithLookup.class, locale.toString());
+			log.info("After enumConstants");
+			// Feature : 154
 		} catch (IOException e) {
 			log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
+		} catch (Exception e) {
+			log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
 		}
-		
+
 	}
 
 	public void writeFile(String fileName,
@@ -182,6 +191,7 @@ public class PdfUtil {
 		Paragraph contactDetails = new Paragraph();
 		PdfPTable table = createContactDetailsTable();
 		table.setSpacingBefore(titleTableSpacing);
+		log.info(constants.contactInfo());
 		Chunk bla = new Chunk(constants.contactInfo(), paragraphTitleFont);
 		contactDetails.add(bla);
 		contactDetails.add(table);
@@ -315,7 +325,10 @@ public class PdfUtil {
 		AnamnesisCheckTypes type = check.getType();
 
 		if (type == AnamnesisCheckTypes.QUESTION_YES_NO) {
-			possibleAnswers = new String[] { constants.yes(), constants.no() };
+			String yes = (constants.yes() != null) ? constants.yes() : "NULL";
+
+			String no = (constants.no() != null) ? constants.no() : "NULL";
+			possibleAnswers = new String[] { yes, no };
 			if (questionAnswered && value.getTruth() == true) {
 				return getRadioCell(question, possibleAnswers, 0);
 			} else if (questionAnswered) {
