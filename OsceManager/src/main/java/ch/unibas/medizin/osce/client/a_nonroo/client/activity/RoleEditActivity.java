@@ -478,7 +478,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					{
 					proxy.setMainVersion(standardizedRole.getMainVersion()+1);
 					}
-					proxy.setSubVersion(1);
+					proxy.setSubVersion(0);
 					
 					proxy.setCheckList(checkListProxy);//spec
 					//Issue # 122 : Replace pull down with autocomplete.

@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public interface HeaderView extends IsWidget{
 
 interface Delegate {
-		public void colorChanged(HeaderView view);
+		public void colorChanged(HeaderView view,String color);
 		
 		public void deleteCourse(HeaderView view);
 	}
@@ -27,11 +27,13 @@ interface Delegate {
 	 
 	 public void setProxy(CourseProxy proxy) ;
 	 
-	 public ValueListBox<ColorPicker> getColorPicker();
+	 public IconButton getColorPicker();
 	 
 	 public void setColorPicker(ValueListBox<ColorPicker> colorPicker);
 	 
 	 public void changeHeaderColor(ColorPicker value);
+	 
+	 public void changeParcourHeaderColor(String value);
 	 
 	// Module 5 Bug Report Solution
 	 /*public IconButton getDeleteBtn();*/
@@ -39,4 +41,9 @@ interface Delegate {
 	//E Module 5 Bug Report Solution
 	 
 	 public VerticalPanel getHeaderPanel() ;
+	 
+	// Change in ParcourView
+	 public void setContentView(ContentView view); 
+	 public ContentView getContentView();
+	// E Change in ParcourView
 }

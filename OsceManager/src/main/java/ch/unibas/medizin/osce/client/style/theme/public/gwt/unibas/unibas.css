@@ -2396,7 +2396,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
         background-color: 	#CCE0FF;
 }
 .Osce-Status-BluePrint-Save{
-        background-color: 	rgb(168,203,255);
+        /* background-color: 	rgb(168,203,255); */
+        background-color: 	rgb(223,236,255); 
 }
 .Osce-Status-BluePrint-Create{
 		 background-color: 	rgb(193,218,255);
@@ -2438,6 +2439,9 @@ background: rgb(218,224,241) ;
 
 .accordion-title-selectedyellow {
 background: rgb(255,255,204)  ;
+}
+.accordion-title-selectedpurple {
+background: rgb(201,201,253)  ;
 }
 
 
@@ -3214,7 +3218,10 @@ color: #f1b532;
 
 .tabpanel_tabbar_no_scroll {
 	overflow: hidden !important;
-	 width: 6.0% !important;
+	/*  width: 100% !important; */
+	visibility: visible;
+	  display: block !important;
+    overflow: hidden !important;
 }
 .gwt-TabLayoutPanelContentContainer{
 	z-index: 1;
@@ -3363,4 +3370,26 @@ background: url("images/downArrow.png") ;
 }
 .videoBorder{
 	border: 1px solid gray;
+}
+.colorPickerPopupLabelStyle
+{
+	width: 25px;
+	height: 25px;
+	margin: 5px;	
+	border: thin solid black;
+	border-radius: 4px;
+}
+.ui-icon-colorPickerIcon 
+{		
+	background-image: url("images/colorpicker.png");
+	background-repeat:no-repeat;
+	width: 14px;
+	height: 23px;
+}
+.ui-icon-colorPickerIcon:HOVER 
+{
+	background-image: url("images/colorpicker.png");
+	background-repeat:no-repeat;
+	width: 14px;
+	height: 23px;
 }

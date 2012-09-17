@@ -696,16 +696,32 @@ public class StandardizedPatient {
     			
     			for (int i=0; i<searchThrough.size(); i++)
         		{
-        			field = from.get(searchThrough.get(i));
+        			
         			predicate = criteriaBuilder.disjunction();
         			
-        			if (searchThrough.get(i).equals("descriptions"))
+        			if (searchThrough.get(i).equals("comment"))
         			{
-        				field = from.get(searchThrough.get(i)).get("description");
+        				field = from.get("descriptions").get("description");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else if (searchThrough.get(i).equals("bankName"))
+        			{        				
+        				field = from.get("bankAccount").get("bankName");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else if (searchThrough.get(i).equals("BIC"))
+        			{
+        				field = from.get("bankAccount").get("BIC");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        			}
+        			else if (searchThrough.get(i).equals("IBAN"))
+        			{
+        				field = from.get("bankAccount").get("IBAN");
         				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
         			}
         			else
         			{
+        				field = from.get(searchThrough.get(i));
         				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
         			}
         			
@@ -1051,6 +1067,8 @@ public class StandardizedPatient {
     //SPEC[
     public static Boolean copyImageAndVideo(String imagePath,String videoPath)
     {
+    	OsMaFilePathConstant.realImagePath=RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.appImageUploadDirectory);
+    	OsMaFilePathConstant.realVideoPath=RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.appVideoUploadDirectory);
     	if(imagePath!=null || imagePath!="")
     		FileUtil.copyImageFile(imagePath);
     	if(videoPath!=null || videoPath !="")

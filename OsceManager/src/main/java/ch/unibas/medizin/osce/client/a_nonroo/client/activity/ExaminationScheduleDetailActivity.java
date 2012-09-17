@@ -234,7 +234,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								//headerView.getDeleteBtn().setVisible(false);
 								headerView.getColorPicker().setVisible(false);
 								headerView.getHeaderPanel().setHeight("360px");
-								
+								headerView.getHeaderSimplePanel().setHeight("330px");
 								
 								ContentView contentView=new ContentViewImpl();
 								contentView.setDelegate(activity);
@@ -242,6 +242,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								contentView.getOscePostHP().setHeight("350px");
 								contentView.getScrollPanel().setHeight("350px");
 								
+								// Change in ParcourView
+								headerView.setContentView(contentView);
+								// E Change in ParcourView
 								//accordianView.setContentView(contentView);
 								//OscePostView oscePostView=new OscePostViewImpl();
 								

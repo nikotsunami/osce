@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitDetai
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitOsceSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitOsceSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.ContentView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.ContentViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderViewImpl;
@@ -46,17 +47,21 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintRequest;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRequest;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceSequences;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
@@ -196,9 +201,12 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 						
 						OsceStatus status = ((OsceProxy) response).getOsceStatus();
 						
-						String style = status.getOsceStatus(status);
 						
-						setOsceStatusStyle(style);
+						
+						// Module 5 Bug Solution
+						//String style = status.getOsceStatus(status);
+						//setOsceStatusStyle(style);
+						// E Module 5 Bug Solution
 						
 						//circuitOsceSubViewImpl.setStyleName(style);
 						circuitOsceSubViewImpl.shortBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getShortBreak())));
@@ -229,7 +237,7 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 
 						//Assignment E:Module 5[
 						//5C:SPEC START		
-						view.getScrollPanel().setStylePrimaryName("Osce-Status");
+						//view.getScrollPanel().setStylePrimaryName("Osce-Status");
 						//view.getScrollPanel().setStyleName("Osce-Status");
 						osceProxy=(OsceProxy)response;
 						if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT) || (osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
@@ -247,7 +255,8 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 							circuitOsceSubViewImpl.saveOsce.setEnabled(true);
 							// E Module 5 bug Report Change
 							
-						if((osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
+						// Module 5 Bug Solution
+						/*if((osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
 						{
 							view.getScrollPanel().addStyleDependentName("NEW");
 						}
@@ -255,10 +264,13 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 						if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT))
 						{
 							view.getScrollPanel().addStyleDependentName("BluePrint");
-						}
+						}*/
+						// E Module 5 Bug Solution
+						
 						List<OscePostBlueprintProxy>listOscePostBlueprintProxy = osceProxy.getOscePostBlueprints();
 						
 						 oSCENewSubViewImpl=new OSCENewSubViewImpl();//.getOSCENewSubViewImpl();
+						 view.getGenerateVP().add(new Label(osceProxy.getOsceStatus().toString()));
 						view.getGenerateVP().insert(oSCENewSubViewImpl, view.getGenerateVP().getWidgetCount());
 						//oSCENewSubViewImpl.
 						((CircuitDetailsViewImpl)view).oSCENewSubViewImpl=oSCENewSubViewImpl;
@@ -322,7 +334,7 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 							}
 						}
 						
-						setDayStatusStyle(style);
+						//setDayStatusStyle(style);
 						osceDayViewImpl.init();
 						addTimeHendlers();
 						
@@ -477,18 +489,18 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 									
 							// E Module 5 bug Report Change
 							
-							view.getScrollPanel().removeStyleDependentName("BluePrint");
-							view.getScrollPanel().addStyleDependentName("Genrated");
+							/*view.getScrollPanel().removeStyleDependentName("BluePrint");
+							view.getScrollPanel().addStyleDependentName("Genrated");*/
 							
 							//Module 5 Bug Report Solution
-							if((osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED))
+							/*if((osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED))
 							{
 								view.getScrollPanel().getElement().getStyle().setBackgroundColor("#FAF0E6");
 							}
 							if((osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED))
 							{
 								view.getScrollPanel().getElement().getStyle().setBackgroundColor("#FFCCCC");
-							}
+							}*/
 							//E Module 5 Bug Report Solution
 							
 							Iterator<OsceDayProxy> osceDayIterator=((OsceProxy)response).getOsce_days().iterator();
@@ -655,14 +667,14 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								if(osceDayProxy.getOsceSequences().size()>1)
 								{
 									Log.info("setSize");
-									osceDayViewImpl.getMainDayHP().setHeight("568px");									
+									osceDayViewImpl.getMainDayHP().setHeight("594px");									
 									osceDayViewImpl.getCalculationVerticalPanel().getElement().getStyle().setMarginTop(30,Unit.PX);
 									osceDayViewImpl.getScheduleHP().getElement().getStyle().setMarginTop(30,Unit.PX);
 									osceDayViewImpl.getSaveVerticlePanel().getElement().getStyle().setMarginTop(50,Unit.PX);
 								}
 								//E Module 5 Bug Report Solution
 								
-								setDayStatusStyle(style);
+								//setDayStatusStyle(style);
 								 //Module 5 Bug Report Solution
 								osceDayViewImpl.getOsceDayLabel().setText("Day " + osceDayProxy.getId());								
 								 //E Module 5 Bug Report Solution
@@ -913,25 +925,99 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			*/
 		}
 		
-		public void colorChanged(final HeaderView view)
+		// Change in ParcourView
+		public void colorChanged(final HeaderView view,final String color)
+		// E Change in ParcourView
 		{
-			view.getColorPicker().getValue();
+			// Change in ParcourView
+			Log.info("Color Change: " + color);
+						// E Change in ParcourView			
 			CourseProxy proxy=view.getProxy();
+			Log.info("Proxy: " + proxy.getId());
 			
 			CourseRequest courseRequest=requests.courseRequest();
 			proxy=courseRequest.edit(proxy);
-			proxy.setColor(view.getColorPicker().getValue().toString());
+			// Change in ParcourView
+			proxy.setColor(color.toString());
+			// E Change in ParcourView
 			
 			courseRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("colorChanged success");
-					view.changeHeaderColor(view.getColorPicker().getValue());
+					// Change in ParcourView
+					//view.changeParcourHeaderColor(color);
+					view.changeHeaderColor(ColorPicker.valueOf(color));
+					Log.info("Change Detail Panel Color: accordion-title-selected"+color); 
+					//((ContentViewImpl)(view.getContentView())).addStyleDependentName("selected"+color);
+					//((ContentViewImpl)(view.getContentView())).addStyleName("accordion-title-selected"+color);	
+					changeContentViewColor(((view.getContentView())),color);
+					/*((ContentViewImpl)(view.getContentView())).getContentPanel().removeStyleName("accordion-title-selected"+color);
+					((ContentViewImpl)(view.getContentView())).getContentPanel().addStyleName("accordion-title-selected"+color);*/
+					// E Change in ParcourView
 					
 				}
 			});
 		}
+		
+		public void changeContentViewColor(ContentView contentViewImpl,String color)
+		{
+			Log.info("Call changeContentViewColor: with Color" + color);
+			
+			ColorPicker cp[]=ColorPicker.values();
+			for(int i=0;i<ColorPicker.values().length;i++)
+			{
+				if(!cp[i].equals(color) && color!=null)
+				{
+					Log.info("Remove Color: " + cp[i]);
+					contentViewImpl.getContentPanel().removeStyleDependentName("selected" +cp[i].toString());
+				}
+			}
+			
+			if(color==null)	
+			{
+				Log.info("Color Null");
+				contentViewImpl.getContentPanel().addStyleDependentName("selectedwhite");
+			}				
+			else
+			{
+				String c="accordion-title-selected"+color;
+				
+				Log.info("Color Not Null" + color+"---"+c);
+				if(color.compareToIgnoreCase("blue")==0)
+				{
+					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#DAE0F1");
+				}
+				else if(color.compareToIgnoreCase("red")==0)
+				{
+					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#F3D8DC");
+				}
+				else if(color.compareToIgnoreCase("yellow")==0)
+				{
+					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#FFFFCC");
+				}
+				else if(color.compareToIgnoreCase("green")==0)
+				{
+					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#D6F0D5");
+				}
+				else if(color.compareToIgnoreCase("purple")==0)
+				{
+					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#C9C9FD");
+				}
+				else
+				{
+					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#FFFFFF");
+				}
+				//contentViewImpl.getContentPanel().addStyleDependentName("selected" +color.toString());
+				//contentViewImpl.getContentPanel().getElement().getStyle().clearBackgroundColor();
+				/*contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor(color);*/				
+				//contentViewImpl.getContentPanel().setStyleName(c, true);
+			}
+				
+		}
+		
+		
 		
 		public void deleteOscePost(final OscePostView view)
 		{
@@ -1042,6 +1128,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				OsceSequenceProxy osceSequenceProxy=(OsceSequenceProxy)proxy;
 				ContentViewImpl contentView=new ContentViewImpl();
 				
+				// Change in ParcourView					
+					Log.info("Set Initial Color: accordion-title-selected"+courseProxy.getColor());
+					contentView.addStyleName("accordion-title-selected"+courseProxy.getColor());
+					contentView.setHeight("268px");
+					contentView.getContentPanel().getElement().getStyle().setWidth(100, Unit.PCT);
+					contentView.getScrollPanel().getElement().getStyle().setWidth(100, Unit.PCT);
+				// E Change in ParcourView
+				
 				// Module 5 bug Report Change
 					//contentView.getDragController().addDragHandler(this);
 				// E Module 5 bug Report Change
@@ -1059,16 +1153,22 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				//createPost
 					if(oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.ANAMNESIS_THERAPY) || oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.PREPARATION))
 					{
-						createAnamnesisTherapyPost(contentView,oscePostProxy,oscePostIterator.next());
+						//createAnamnesisTherapyPost(contentView,oscePostProxy,oscePostIterator.next());
+                                                  createAnamnesisTherapyPost(contentView,oscePostProxy,oscePostIterator.next(),courseProxy);
 					}
 					else
 					if(osceSequenceProxy.getOscePosts().size()==1)
-						createUndraggablePost(contentView,oscePostProxy);
+						// Module 5 and TTG Bug Changes
+					{					
+							createUndraggablePost(contentView,oscePostProxy,courseProxy);
+					}
+					// E Module 5 and TTG Bug Changes
 					else
-						createOscePost(contentView,oscePostProxy);
-					
-				
-				
+					// Module 5 and TTG Bug Changes
+					{
+							createOscePost(contentView,oscePostProxy,courseProxy);
+					}
+					// E Module 5 and TTG Bug Changes
 				
 				}
 				//create Header View
@@ -1077,6 +1177,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// Module 5 bug Report Change
 				//((HeaderViewImpl)headerView).setHeight("235px");
 				headerView.getHeaderPanel().setHeight("248px");
+                                 headerView.getColorPicker().setIcon("colorPickerIcon");
 				// Module 5 Bug Report Solution
 				//headerView.getDeleteBtn().setVisible(false);
 				//E Module 5 Bug Report Solution
@@ -1093,6 +1194,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				}
 				//E Module 5 Bug Report Solution
 				
+				headerView.setDelegate(this);
+				headerView.setProxy(courseProxy);
+			
+				// Change in ParcourView
+				headerView.setContentView(contentView);
+				// E Change in ParcourView
+				
 				accordianView.add(headerView.asWidget(), contentView);
 				
 				// Module 5 bug Report Change
@@ -1101,11 +1209,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// E Module 5 bug Report Change
 				//CourseProxy courseProxy=osceSequenceProxy.getCourses().iterator().next();
 				
-				headerView.setDelegate(this);
-				headerView.setProxy(courseProxy);
+				
 				if(courseProxy.getColor()!=null)
 				{
-					headerView.getColorPicker().setValue(ColorPicker.valueOf(courseProxy.getColor()));
+					//headerView.getColorPicker().setValue(ColorPicker.valueOf(courseProxy.getColor()));
 					headerView.changeHeaderColor(ColorPicker.valueOf(courseProxy.getColor()));
 					
 				}
@@ -1116,7 +1223,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		}
 		
 		//create Post Inside Content
-		public void createAnamnesisTherapyPost(ContentViewImpl contentView,OscePostProxy oscePostProxy,OscePostProxy oscePostProxyNext)
+		// Module 5 and TTG Bug Changes
+		public void createAnamnesisTherapyPost(ContentViewImpl contentView,OscePostProxy oscePostProxy,OscePostProxy oscePostProxyNext,CourseProxy courseProxy)
+		// E Module 5 and TTG Bug Changes
 		{
 			OscePostView oscePostView=new OscePostViewImpl();
 			oscePostView.getPostTypeLbl().setText(oscePostProxy.getOscePostBlueprint().getPostType().toString());
@@ -1125,36 +1234,100 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			oscePostView.setAnemanis(true);
 			oscePostView.setNextOscePostProxy(oscePostProxyNext);
 			//first Post
-			OscePostSubView oscePostSubView=new OscePostSubViewImpl();
+			final OscePostSubView oscePostSubView=new OscePostSubViewImpl();
+			
+			// Change in ParcourView
+			oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
+			oscePostSubView.getRoomLbl().setText(constants.select());
+			// E Change in ParcourView
 			
 			oscePostSubView.getPostNameLbl().setText("Post " +oscePostProxy.getSequenceNumber());
 			oscePostSubView.getSpecializationLbl().setText(oscePostProxy.getOscePostBlueprint().getSpecialisation().getName());
 			oscePostSubView.getRoleTopicLbl().setText(oscePostProxy.getOscePostBlueprint().getRoleTopic().getName());
+			
+			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+			{
+
+				@Override
+				public void onSuccess(OscePostRoomProxy response) 
+				{
+					Log.info("OscePostProxy: " + response.getId());
+					if(response.getRoom()!=null)
+					{
+						oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+					}
+				}
+			});
+			
 			if(oscePostProxy.getStandardizedRole()!=null)
 				oscePostSubView.getStandardizedRoleLbl().setText(oscePostProxy.getStandardizedRole().getLongName());
 			
 			oscePostSubView.setDelegate(this);
 			oscePostSubView.setOscePostProxy(oscePostProxy);
-			
+			// Module 5 and TTG Bug Changes
+			oscePostSubView.setCourseProxy(courseProxy);
+			// E Module 5 and TTG Bug Changes
 			
 			oscePostSubView.enableDisableforGeneratedStatus();
+			
+			// Change in ParcourView
+			if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED)
+			{
+				Log.info("Osce is in Closed Status, Role Edit Disabled.");			
+				oscePostSubView.getStandardizedRoleEdit().setVisible(false);
+				oscePostSubView.getRoomedit().setVisible(false);
+			}
+			// E Change in ParcourView
+					
 			
 			oscePostView.getOscePostSubViewHP().insert(oscePostSubView, oscePostView.getOscePostSubViewHP().getWidgetCount());
 			
 			//Second Post
-			OscePostSubView oscePostSubViewNext=new OscePostSubViewImpl();
+			final OscePostSubView oscePostSubViewNext=new OscePostSubViewImpl();
+			
+			// Change in ParcourView
+			oscePostSubViewNext.getStandardizedRoleLbl().setText(constants.select());
+			oscePostSubViewNext.getRoomLbl().setText(constants.select());
+			// E Change in ParcourView
 			
 			oscePostSubViewNext.getPostNameLbl().setText("Post " +oscePostProxyNext.getSequenceNumber());
 			oscePostSubViewNext.getSpecializationLbl().setText(oscePostProxyNext.getOscePostBlueprint().getSpecialisation().getName());
 			oscePostSubViewNext.getRoleTopicLbl().setText(oscePostProxyNext.getOscePostBlueprint().getRoleTopic().getName());
+			
+			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxyNext).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+					{
+						@Override
+						public void onSuccess(OscePostRoomProxy response) 
+						{
+							Log.info("OscePostProxy: " + response.getId());
+							if(response.getRoom()!=null)
+							{
+								oscePostSubViewNext.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+							}
+						}
+					});
+
+			
 			if(oscePostProxyNext.getStandardizedRole()!=null)
 				oscePostSubView.getStandardizedRoleLbl().setText(oscePostProxyNext.getStandardizedRole().getLongName());
 			
 			oscePostSubViewNext.setDelegate(this);
 			oscePostSubViewNext.setOscePostProxy(oscePostProxyNext);
-			
+				// Module 5 and TTG Bug Changes
+			oscePostSubViewNext.setCourseProxy(courseProxy);
+		// E Module 5 and TTG Bug Changes
 			
 			oscePostSubViewNext.enableDisableforGeneratedStatus();
+			
+			// Change in ParcourView
+			if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED)
+			{
+				Log.info("Osce is in Closed Status, Role Edit Disabled.");			
+				oscePostSubViewNext.getStandardizedRoleEdit().setVisible(false);
+				oscePostSubViewNext.getRoomedit().setVisible(false);
+			}
+			// E Change in ParcourView
+								
 			
 			oscePostView.getOscePostSubViewHP().insert(oscePostSubViewNext, oscePostView.getOscePostSubViewHP().getWidgetCount());
 			
@@ -1171,18 +1344,42 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 		}
 		
-		public void createUndraggablePost(ContentViewImpl contentView,OscePostProxy oscePostProxy)
+		// Module 5 and TTG Bug Changes
+		public void createUndraggablePost(ContentViewImpl contentView,OscePostProxy oscePostProxy,CourseProxy courseProxy)
+		// E Module 5 and TTG Bug Changes
 		{
 			OscePostView oscePostView=new OscePostViewImpl();
 			oscePostView.getPostTypeLbl().setText(oscePostProxy.getOscePostBlueprint().getPostType().toString());
 			oscePostView.setDelegate(this);
 			oscePostView.setProxy(oscePostProxy);
-			OscePostSubView oscePostSubView=new OscePostSubViewImpl();
+			final OscePostSubView oscePostSubView=new OscePostSubViewImpl();
+			
+			// Change in ParcourView
+			oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
+			oscePostSubView.getRoomLbl().setText(constants.select());
+			// E Change in ParcourView
+			
 			
 			oscePostSubView.getPostNameLbl().setText("Post " +oscePostProxy.getSequenceNumber());
 			// Module 5 bug Report Change
 			oscePostSubView.getSpecializationLbl().setText(util.getEmptyIfNull(oscePostProxy.getOscePostBlueprint().getSpecialisation().getName()));			
 			oscePostSubView.getRoleTopicLbl().setText(oscePostProxy.getOscePostBlueprint().getRoleTopic().getName());
+			
+			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+					{
+
+						@Override
+						public void onSuccess(OscePostRoomProxy response) 
+						{
+							Log.info("OscePostProxy: " + response.getId());
+							if(response.getRoom()!=null)
+							{
+								oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));	
+							}
+						}
+					});
+
+			
 			// E Module 5 bug Report Change
 			if(oscePostProxy.getStandardizedRole()!=null)
 			// Module 5 bug Report Change
@@ -1193,7 +1390,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			
 			oscePostSubView.setDelegate(this);
 			oscePostSubView.setOscePostProxy(oscePostProxy);
-			
+			// Module 5 and TTG Bug Changes
+			oscePostSubView.setCourseProxy(courseProxy);
+			// E Module 5 and TTG Bug Changes
 			
 			oscePostSubView.enableDisableforGeneratedStatus();
 			
@@ -1202,6 +1401,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			{
 				Log.info("Osce is in Closed Status, Role Edit Disabled.");			
 				oscePostSubView.getStandardizedRoleEdit().setVisible(false);
+
+				// Change in ParcourView
+				oscePostSubView.getRoomedit().setVisible(false);
+				// E Change in ParcourView
 			}
 			//E Module 5 Bug Report Solution
 			
@@ -1214,23 +1417,54 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			// E Module 5 bug Report Change
 			contentView.getPostHP().insert(oscePostView, contentView.getPostHP().getWidgetCount());
 		}
-		public void createOscePost(ContentViewImpl contentView,OscePostProxy oscePostProxy)
+		// Module 5 and TTG Bug Changes
+		public void createOscePost(ContentViewImpl contentView,OscePostProxy oscePostProxy,CourseProxy courseProxy)
+		// E Module 5 and TTG Bug Changes
 		{
 			OscePostView oscePostView=new OscePostViewImpl();
 			oscePostView.getPostTypeLbl().setText(oscePostProxy.getOscePostBlueprint().getPostType().toString());
 			oscePostView.setDelegate(this);
 			oscePostView.setProxy(oscePostProxy);
-			OscePostSubView oscePostSubView=new OscePostSubViewImpl();
+			final OscePostSubView oscePostSubView=new OscePostSubViewImpl();
+			
+			// Change in ParcourView
+			oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
+			oscePostSubView.getRoomLbl().setText(constants.select());
+			// E Change in ParcourView
 			
 			oscePostSubView.getPostNameLbl().setText("Post " +oscePostProxy.getSequenceNumber());
 			oscePostSubView.getSpecializationLbl().setText(oscePostProxy.getOscePostBlueprint().getSpecialisation().getName());
 			oscePostSubView.getRoleTopicLbl().setText(oscePostProxy.getOscePostBlueprint().getRoleTopic().getName());
+			
+			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+			{
+				@Override
+				public void onSuccess(OscePostRoomProxy response) 
+				{
+					Log.info("OscePostProxy: " + response.getId());
+					/*requests.oscePostRoomRequest().findOscePostRoom(response.getId()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+					{
+						@Override
+						public void onSuccess(OscePostRoomProxy response) 
+						{*/
+							if(response.getRoom()!=null)
+							{
+								oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+							}							
+						/*}
+					});*/
+					
+				}
+			});
+			
 			if(oscePostProxy.getStandardizedRole()!=null)
 				oscePostSubView.getStandardizedRoleLbl().setText(oscePostProxy.getStandardizedRole().getLongName());
 			
 			oscePostSubView.setDelegate(this);
 			oscePostSubView.setOscePostProxy(oscePostProxy);
-			
+			// Module 5 and TTG Bug Changes
+			oscePostSubView.setCourseProxy(courseProxy);
+			// E Module 5 and TTG Bug Changes			
 			
 			oscePostSubView.enableDisableforGeneratedStatus();
 			
@@ -1238,6 +1472,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED)
 			{			
 				oscePostSubView.getStandardizedRoleEdit().setVisible(false);
+				// Change in ParcourView
+				oscePostSubView.getRoomedit().setVisible(false);
+				// E Change in ParcourView
 			}
 			//E Module 5 Bug Report Solution
 			oscePostView.getOscePostSubViewHP().insert(oscePostSubView, oscePostView.getOscePostSubViewHP().getWidgetCount());
@@ -1637,8 +1874,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												@Override
 												public void onSuccess(Void response) {
 													Log.info("Osce status change to blueprint");													
-													view.getScrollPanel().removeStyleDependentName("NEW");
-													view.getScrollPanel().addStyleDependentName("BluePrint");	
+													/*view.getScrollPanel().removeStyleDependentName("NEW");
+													view.getScrollPanel().addStyleDependentName("BluePrint");*/	
 													goTo(new CircuitDetailsPlace(osceProxy.stableId(),Operation.DETAILS));												
 													setOsceFixedButtonStyle(circuitOsceSubViewImpl, osceProxy);
 									}																		
@@ -1866,8 +2103,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								}
 							});
 							
+							if(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation()==null)
+							{
 							
+							}
+							else
+							{
 							((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getNewListBox().setSelected(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
+							}						
+														
 							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).setPopupPosition(spHorizontalPanel.getAbsoluteLeft()-40, rtHorizontalPanel.getAbsoluteTop()-80);
 							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).show();										
 							
@@ -3210,6 +3454,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						public void onClick(ClickEvent event) {
 							
 							Log.info("Yes Button Clicked - user wants to go ahead and close the osce");
+							// Module 5 and TTG Bug Changes
+								message.hide();
+							// E Module 5 and TTG Bug Changes
+							
 							//message.showConfirmationDialog("You Can Moov Ahead");
                                                         // Module 5 bug Report Change
 							//circuitOsceSubViewImpl.setFixBtnStyle(true);
@@ -3242,7 +3490,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											circuitOsceSubViewImpl.setFixBtnStyle(true);
 											circuitOsceSubViewImpl.fixedBtn.setText(constants.reopenButtonString());											
 											Log.info("Fixed Button Clicked Event At CircuitDetails Acticity");
-											message.hide();
+											//message.hide();
 											goTo(new CircuitDetailsPlace(osceProxy.stableId(),Operation.DETAILS));									
 										}
 										@Override
@@ -3537,6 +3785,108 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				}
 				//E Module 5 Bug Report Solution
 
-				// 5C: SPEC END
+				// Module 5 and TTG Bug Changes
+				@Override
+				public void roomEditClicked(final OscePostSubView view,final int left,final int top) 
+				{
+					Log.info("Room Edit");
+					requests.roomRequest().findAllRooms().fire(new OSCEReceiver<List<RoomProxy>>() 
+					{
+							@Override
+							public void onSuccess(List<RoomProxy> response) 
+							{
+								Log.info("Total Rooms: "+response.size());
+								ArrayList list=new ArrayList();
+								//list.add( (EntityProxy)response.getStandardizedRoles().get(0));
+								list.addAll(response);
+								
+								((OscePostSubViewImpl)view).createOptionPopup();
+								((OscePostSubViewImpl)view).popupView.setDelegate(activity);
+								((OscePostSubViewImpl)view).popupView.setOscePostSubView(view);
+								((OscePostSubViewImpl)view).popupView.setProxy(view.getOscePostProxy());								
+								((OscePostSubViewImpl)view).showPopUpViewForRoom(left,top);
+					
+								//Issue # 122 : Replace pull down with autocomplete.
+								DefaultSuggestOracle<Object> suggestOracle1 = ((DefaultSuggestOracle<Object>) (((OscePostSubViewImpl)view).popupView.getNewListBox().getSuggestOracle()));
+								suggestOracle1.setPossiblilities(list);
+								((OscePostSubViewImpl)view).popupView.getNewListBox().setSuggestOracle(suggestOracle1);
+								
+								//((OscePostSubViewImpl)view).popupView.getNewListBox().setRenderer(new StandardizedRoleProxyRenderer());
+								((OscePostSubViewImpl)view).popupView.getNewListBox().setRenderer(new Renderer<Object>() 
+								{
+
+									@Override
+									public String render(Object object) {
+										// TODO Auto-generated method stub										
+										return ((RoomProxy)object).getRoomNumber();
+									}
+									@Override
+									public void render(Object object,Appendable appendable) throws IOException 
+									{
+											// TODO Auto-generated method stub
+									}
+								});																
+							}
+					});
+				}
+
+				@Override
+				public void saveOscePostRoom(final OscePostSubViewImpl oscePostSubViewImpl,final ListBoxPopupView view) 
+				{
+					Log.info("Save Osce Post Room Clicked");
+					Log.info("Osce Post Proxy: " + oscePostSubViewImpl.getOscePostProxy().getId());
+					Log.info("Course Proxy: " + oscePostSubViewImpl.getCourseProxy().getId());			
+					
+					final RoomProxy roomProxy=(RoomProxy)view.getNewListBox().getSelected();
+					Log.info("Room Proxy: " + roomProxy.getId());
+					view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+					((ListBoxPopupViewImpl)view).hide();
+					
+					requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+
+						@Override
+						public void onSuccess(OscePostRoomProxy response) 
+						{
+							Log.info("Osce Post Room Proxy: " + response.getId());
+							OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
+							response=oscePostRoomRequest.edit(response);
+							response.setRoom(roomProxy);
+							oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
+
+								@Override
+								public void onSuccess(Void response) 
+								{
+									Log.info("Success saveOscePostRoom ");
+									MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
+									dialog.showConfirmationDialog("Room Assign To Post Successfully.");
+								}
+							});
+							
+						}
+					});
+					
+		/*			OscePostProxy oscePostProxy=(OscePostProxy)view.getProxy();
+				//	final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getListBox().getValue();
+					
+					//Issue # 122 : Replace pull down with autocomplete.
+					//final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getListBox().getValue();
+					final StandardizedRoleProxy standardizedRoleProxy=(StandardizedRoleProxy)view.getNewListBox().getSelected();
+					//Issue # 122 : Replace pull down with autocomplete.
+					OscePostRequest oscePostRequest=requests.oscePostRequest();
+					oscePostProxy=oscePostRequest.edit(oscePostProxy);
+					oscePostProxy.setStandardizedRole(standardizedRoleProxy);
+					oscePostRequest.persist().using(oscePostProxy).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							Log.info("Success saveStandardizedRole ");
+
+							
+							((ListBoxPopupViewImpl)view).hide();
+						}
+					});*/
+					
+				}
+				// E Module 5 and TTG Bug Changes
 
 }

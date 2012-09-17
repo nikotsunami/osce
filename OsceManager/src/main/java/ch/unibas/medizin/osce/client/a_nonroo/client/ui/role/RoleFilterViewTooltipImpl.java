@@ -127,7 +127,7 @@ public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 	@UiField
 	Label Reviewer;
 	
-	
+	int suggestWidth=140;
 
 
 	@UiField
@@ -345,14 +345,22 @@ public List<String> getWhereFilters() {
 		}
 		if(ItemName.isChecked())
 		{
-			tableFilters.add(", role_table_item rti ");
-			
-			whereFilters.add(" rtiv.standardizedRole = sr.id and rti.id = rtiv.roleTableItem");
+			tableFilters.add(" ,RoleTableItem rti ");
+			//	whereFilters.add(" rtiv.standardizedRole = sr.id and rti.id = rtiv.roleTableItem");
+			whereFilters.add(" rtiv.standardizedRole.id = sr.id and rti.id = rtiv.roleTableItem.id");
 		}
 		if(ItemValue.isChecked())
 		{
-			tableFilters.add(",role_table_item_value rtiv");
-			whereFilters.add(" rtiv.standardizedRole = sr.id ");
+//			tableFilters.add(",role_table_item_value rtiv");
+			whereFilters.add(" rtiv.standardizedRole.id = sr.id ");
+		}		
+		if(ItemValue.isChecked() || ItemName.isChecked() ){
+			tableFilters.add(", RoleTableItemValue rtiv");
+		}
+		if(CheckListItem.isChecked())
+		{
+			tableFilters.add(", CheckList chi");
+			whereFilters.add(" sr.checkList.id = chi.id ");
 		}
 		if(RoleName.isChecked())
 		{
@@ -404,8 +412,11 @@ public List<String> getWhereFilters() {
 		{
 			whereFilters.add("rt.studyYear="+ (StudyYearListBox.getValue()).ordinal());
 		}
+		if(ComplexityText.getValue()!="" && !isNumeric(ComplexityText.getValue()))
+		{
 		if(ComplexityListBox.getValue()!=null){
 			whereFilters.add("rt.slotsUntilChange "+ComplexityListBox.getValue().getStringValue() +" "+Integer.parseInt(ComplexityText.getValue()));
+		}
 		}
 		
 		
@@ -463,7 +474,23 @@ public List<String> getWhereFilters() {
 	}
 	
 	
-	
+	public  boolean isNumeric(String str)  
+	{  
+	  try  
+	  {  
+	    int d = Integer.parseInt(str);  
+	  }  
+	  catch(NumberFormatException nfe)  
+	  {  
+	    return false;  
+	  }  
+	  catch (Exception e) {
+		// TODO: handle exception
+		  return false;
+	}
+	  return true;  
+	}
+
 	
 	
 
@@ -478,6 +505,7 @@ public List<String> getWhereFilters() {
 		add(uiBinder.createAndBindUi(this));
 	
 		StudyYearListBox.setAcceptableValues(Arrays.asList(StudyYears.values()));
+		StudyYearListBox.setWidth(Integer.toString(suggestWidth));
 		
 	
 		ComplexityListBox.setAcceptableValues(Arrays.asList(Comparison.values()));
@@ -522,6 +550,8 @@ public List<String> getWhereFilters() {
 		
 		maxApplicableFilters = fields.size();
 		Iterator<CheckBoxItem> fieldIter = fields.iterator();
+		fields.get(0).checkbox.setValue(true);
+		
 		while (fieldIter.hasNext()) {
 			CheckBox box = fieldIter.next().checkbox;
 			box.addValueChangeHandler(new CheckBoxChangeHandler());
@@ -830,7 +860,7 @@ public List<String> getWhereFilters() {
 		DefaultSuggestOracle<KeywordProxy> suggestOracle1 = (DefaultSuggestOracle<KeywordProxy>) KeywordSugestionBox.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
 		KeywordSugestionBox.setSuggestOracle(suggestOracle1);
-		
+		KeywordSugestionBox.setWidth(suggestWidth);
 
 		KeywordSugestionBox.setRenderer(new AbstractRenderer<KeywordProxy>() {
 		
@@ -887,6 +917,7 @@ public List<String> getWhereFilters() {
 				}
 			});
 
+		autherSugestionBox.setWidth(suggestWidth);
 		
 		//Issue # 122 : Replace pull down with autocomplete.
 		
@@ -911,7 +942,7 @@ public List<String> getWhereFilters() {
 		suggestOracle1.setPossiblilities(values);
 		reviewerSugestionBox.setSuggestOracle(suggestOracle1);
 		
-		
+		reviewerSugestionBox.setWidth(suggestWidth);
 		reviewerSugestionBox.setRenderer(new AbstractRenderer<DoctorProxy>() {
 		
 				@Override
@@ -949,6 +980,7 @@ public List<String> getWhereFilters() {
 		DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) SpecificationSugestionBox.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
 		SpecificationSugestionBox.setSuggestOracle(suggestOracle1);
+		SpecificationSugestionBox.setWidth(suggestWidth);
 		
 		
 		SpecificationSugestionBox.setRenderer(new AbstractRenderer<SpecialisationProxy>() {

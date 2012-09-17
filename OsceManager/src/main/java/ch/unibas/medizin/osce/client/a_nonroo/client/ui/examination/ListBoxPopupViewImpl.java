@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.io.IOException;
 
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
@@ -141,6 +142,9 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 	@UiField
 	Button okBtn;
 	
+	@UiField
+	Button cancelBtn;
+	
 	public Button getOkBtn() {
 		return okBtn;
 	}
@@ -149,6 +153,7 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 		super(true);
 		add(BINDER.createAndBindUi(this));
 		okBtn.setText(constants.okBtn());
+		cancelBtn.setText(constants.cancel());
 	}
 	
 	
@@ -174,6 +179,13 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 			delegate.saveStandardizedRole(this);
 		}
 		
+	}
+	
+	@UiHandler("cancelBtn")
+	public void cancelBtnClicked(ClickEvent event)
+	{
+		Log.info("Hide Popup;");
+		this.hide();
 		
 	}
 	

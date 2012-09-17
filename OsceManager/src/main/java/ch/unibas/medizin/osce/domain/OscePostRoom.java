@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.allen_sauer.gwt.log.client.Log;
+
 import ch.unibas.medizin.osce.domain.Room;
 import javax.persistence.ManyToOne;
 import ch.unibas.medizin.osce.domain.OscePost;
@@ -88,4 +91,26 @@ public class OscePostRoom {
     	return q.getResultList();
     }
     
+    
+    public static OscePostRoom findOscePostRoomByOscePostAndCourse(Course course, OscePost oscePost)
+    {
+    		Log.info("findOscePostRoomByOscePostAndCourse call");    		
+        	List<OscePostRoom> results = findOscePostRoomsByCourseAndOscePost(course, oscePost).getResultList();
+        	Log.info("Result Size: " + results.size());
+        	if(results.size() == 1) 
+        	{
+        		return results.get(0);
+        	} 
+        	else 
+        	{        	
+        		Iterator<OscePostRoom> it = results.iterator();        		
+        		while (it.hasNext()) 
+        		{
+        			OscePostRoom oscePostRoom= (OscePostRoom) it.next();
+        			return oscePostRoom;
+    			}            		
+        	}
+        	return null;
+        		        	
+        }
 }
