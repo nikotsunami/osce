@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 public class IconButton extends Button {
 	private static final String ICON_HTML_OPEN = "<span class=\"ui-icon ui-icon-";
 	private static final String ICON_HTML_ICONONLY = " ui-icononly";
+	private static final String ICON_DISABLED = " ui-icon-disabled";
 	private static final String ICON_HTML_CLOSE = "\"></span>";
 	private String icon = "bullet";
 	private String text = "";
@@ -30,6 +31,12 @@ public class IconButton extends Button {
 	}
 	
 	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		construct();
+	}
+	
+	@Override
 	public void setHTML(SafeHtml html) {
 		this.text = html.asString();
 		construct();
@@ -48,11 +55,16 @@ public class IconButton extends Button {
 	}
 	
 	private void construct() {
-		String html;
-		if (text.length() == 0)
-			html = ICON_HTML_OPEN + icon + ICON_HTML_ICONONLY + ICON_HTML_CLOSE;
-		else
-			html = ICON_HTML_OPEN + icon + ICON_HTML_CLOSE + text;
+		String html = ICON_HTML_OPEN + icon;
+		if (!isEnabled()) {
+			html += ICON_DISABLED;
+		}
+		
+		if (text.length() == 0) {
+			html += ICON_HTML_ICONONLY + ICON_HTML_CLOSE;
+		} else {
+			html += ICON_HTML_CLOSE + text;
+		}
 		SafeHtmlBuilder builder = new SafeHtmlBuilder();
 		builder.appendHtmlConstant(html);
 		super.setHTML(builder.toSafeHtml());

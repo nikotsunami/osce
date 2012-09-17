@@ -84,10 +84,14 @@ a:hover, .gwt-Anchor:hover {
 
 .gwt-Button[disabled] {
 	cursor: default;
-	color: #888;
+	color: #bbb;
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	border-color: #bbb;
 }
 
 .gwt-Button[disabled]:hover {
+	color: #888;
+	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
 .gwt-CheckBox {
@@ -1831,6 +1835,10 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     display: block;
     overflow: hidden;
     text-indent: -99999px;
+}
+
+.ui-icon-disabled {
+	background-image: url('images/ui-icons_aaaaaa.png');
 }
 
 .ui-icon:hover {

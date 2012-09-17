@@ -5,6 +5,7 @@ import java.util.Arrays;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.ColorPicker;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -101,8 +102,11 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 	public HeaderViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		//createCourseLabel();
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		colorPicker.setAcceptableValues(Arrays.asList(ColorPicker.values()));
 		headerLabel.setStyleName("verticalText");
+		// FIXME: correct labelling?
+		headerLabel.setText(constants.circuit());
 		//this.setStylePrimaryName("course-color-red");
 	}
 

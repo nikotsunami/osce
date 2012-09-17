@@ -59,11 +59,11 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		Log.info("Satting Fixed Button Visability To : " + enabled);
 		if(!enabled){
 			fixedBtn.setEnabled(false);
-			fixedBtn.setStyleName("flexTable-Button-Disabled");
+//			fixedBtn.setStyleName("flexTable-Button-Disabled");
 		}
 		else{
 			fixedBtn.setEnabled(true);
-			fixedBtn.removeStyleName("flexTable-Button-Disabled");
+//			fixedBtn.removeStyleName("flexTable-Button-Disabled");
 		}	
 		
 	}
@@ -72,11 +72,11 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		Log.info("Satting Genrated Button Visability To : " + enabled);
 		if(!enabled){
 			generateBtn.setEnabled(false);
-			generateBtn.setStyleName("flexTable-Button-Disabled");
+//			generateBtn.setStyleName("flexTable-Button-Disabled");
 		}
 		else{
 			generateBtn.setEnabled(true);
-			generateBtn.removeStyleName("flexTable-Button-Disabled");
+//			generateBtn.removeStyleName("flexTable-Button-Disabled");
 		}	
 		
 	}
@@ -85,11 +85,11 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		Log.info("Satting Closed Button Visability To : " + enabled);
 		if(!enabled){
 			closedBtn.setEnabled(false);
-			closedBtn.setStyleName("flexTable-Button-Disabled");
+//			closedBtn.setStyleName("flexTable-Button-Disabled");
 		}
 		else{
 			closedBtn.setEnabled(true);
-			closedBtn.removeStyleName("flexTable-Button-Disabled");
+//			closedBtn.removeStyleName("flexTable-Button-Disabled");
 		}	
 		
 	}
@@ -253,14 +253,14 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		// change {
 		// change {
 		
-		shortBreakLabel.setText(constants.osceShortBreak());
-		middleBreakLabel.setText(constants.osceMediumBreak());
-		longBreakLabel.setText(constants.osceLongBreak());
-		launchBreakLabel.setText(constants.osceLunchBreak());
-		maxParcourLabel.setText(constants.osceMaxCircuits());
-		maxStudentLabel.setText(constants.osceMaxStudents());
-		maxRoomsLabel.setText(constants.osceMaxRooms());
-		shortBreakSimpatLabel.setText(constants.osceSimpatsInShortBreak());
+		shortBreakLabel.setText(constants.osceShortBreak() + ":");
+		middleBreakLabel.setText(constants.osceMediumBreak() + ":");
+		longBreakLabel.setText(constants.osceLongBreak() + ":");
+		launchBreakLabel.setText(constants.osceLunchBreak() + ":");
+		maxParcourLabel.setText(constants.osceMaxCircuits() + ":");
+		maxStudentLabel.setText(constants.osceMaxStudents() + ":");
+		maxRoomsLabel.setText(constants.osceMaxRooms() + ":");
+		shortBreakSimpatLabel.setText(constants.osceSimpatsInShortBreak() + ":");
 	}
 
 	public String[] getPaths() {

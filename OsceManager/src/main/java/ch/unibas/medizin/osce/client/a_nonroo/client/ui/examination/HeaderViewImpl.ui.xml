@@ -12,7 +12,7 @@
 				<s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton>
 			</g:VerticalPanel> -->
 			<g:VerticalPanel ui:field="labelVP" width="50px" height="100%" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
-				<g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  >Parcour</g:Label>
+				<g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  ></g:Label>
 			</g:VerticalPanel>
 		<!--  Module 5 Bug Report Solution -->
 		</g:VerticalPanel>

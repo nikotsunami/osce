@@ -191,6 +191,7 @@ public class PdfUtil {
 		Paragraph contactDetails = new Paragraph();
 		PdfPTable table = createContactDetailsTable();
 		table.setSpacingBefore(titleTableSpacing);
+		log.info(constants.contactInfo());
 		Chunk bla = new Chunk(constants.contactInfo(), paragraphTitleFont);
 		contactDetails.add(bla);
 		contactDetails.add(table);
@@ -324,7 +325,10 @@ public class PdfUtil {
 		AnamnesisCheckTypes type = check.getType();
 
 		if (type == AnamnesisCheckTypes.QUESTION_YES_NO) {
-			possibleAnswers = new String[] { constants.yes(), constants.no() };
+			String yes = (constants.yes() != null) ? constants.yes() : "NULL";
+
+			String no = (constants.no() != null) ? constants.no() : "NULL";
+			possibleAnswers = new String[] { yes, no };
 			if (questionAnswered && value.getTruth() == true) {
 				return getRadioCell(question, possibleAnswers, 0);
 			} else if (questionAnswered) {
