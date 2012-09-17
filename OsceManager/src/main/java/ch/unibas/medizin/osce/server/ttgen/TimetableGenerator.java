@@ -97,7 +97,8 @@ public class TimetableGenerator {
 		
 		log.info("optimal timetable");
 		log.info("===============================");
-		optGen.calcTimeNeeded();
+//		optGen.calcTimeNeeded();
+		log.info(optGen.toString());
 		
 		return optGen;
 	}
@@ -135,6 +136,8 @@ public class TimetableGenerator {
 		int nPosts = numberPosts + numberBreakPosts;
 		
 		int maxRotations = numberStudents / (nPosts * numberParcours);
+		
+		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) / (numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak());
 		
 		// init all rotations of parcours with number of break posts
 		for(int i = 0; i < numberParcours; i++) {
@@ -178,8 +181,6 @@ public class TimetableGenerator {
 				parcourIndex++;
 			}
 		}
-		
-		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) / (numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak());
 	}
 	
 	/**
@@ -856,10 +857,10 @@ public class TimetableGenerator {
 								// NOTE: student indices for first part of PREPARATION are the same as for second part, but with early start
 								int studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 1)) % numberSlotsTotal;
 								if(postBP != null) {
-									if(postType.equals(PostType.PREPARATION) && postBP.getIsFirstPart()) {
+									if(postType.equals(PostType.PREPARATION) && postBP.isFirstPart()) {
 										studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
 									} else if(postType.equals(PostType.ANAMNESIS_THERAPY) && earlyStartFirst) {
-										if(postBP.getIsFirstPart()) {
+										if(postBP.isFirstPart()) {
 											studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - j) % numberSlotsTotal;
 										} else {
 											studentIndex = studentIndexLowerBound + (numberSlotsTotal + studentIndexOffset - (j + 2)) % numberSlotsTotal;
@@ -872,9 +873,9 @@ public class TimetableGenerator {
 								if(postBP != null) {
 									// early start
 									boolean isAnamnesisTherapy = postType.equals(PostType.ANAMNESIS_THERAPY) &&
-											((!earlyStartFirst && !postBP.getIsFirstPart()) ||
-											(earlyStartFirst && postBP.getIsFirstPart()));
-									boolean isPreparation = postType.equals(PostType.PREPARATION) && postBP.getIsFirstPart();
+											((!earlyStartFirst && !postBP.isFirstPart()) ||
+											(earlyStartFirst && postBP.isFirstPart()));
+									boolean isPreparation = postType.equals(PostType.PREPARATION) && postBP.isFirstPart();
 									if(firstTimeSlot && (isAnamnesisTherapy || isPreparation)) {
 										startTime = dateSubtractMin(startTime, osce.getPostLength());
 										
@@ -911,7 +912,7 @@ public class TimetableGenerator {
 
 								if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY) ) {
 									if(numberSlotsTotal % 2 == 1) {
-										if((!earlyStartFirst && !postBP.getIsFirstPart()) || (earlyStartFirst && postBP.getIsFirstPart())) {
+										if((!earlyStartFirst && !postBP.isFirstPart()) || (earlyStartFirst && postBP.isFirstPart())) {
 											lastTimeSlot = j == numberSlotsTotal - 1;
 										} else {
 											lastTimeSlot = j == numberSlotsTotal - 3;
@@ -975,14 +976,14 @@ public class TimetableGenerator {
 											
 											Date startTimeNew = endTimeOld;
 											
-											if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber)
+											if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber)
 												startTimeNew = dateAddMin(endTimeOld, osce.getLunchBreak());
 											else
 												startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
 											
 											// fix new start time for SP (next rotation) when lastTimeSlot and switch of assignments will occur
 											if(postBP != null && postType.equals(PostType.ANAMNESIS_THERAPY) && numberSlotsTotal % 2 == 1 &&
-													(!earlyStartFirst && postBP.getIsFirstPart() || earlyStartFirst && !postBP.getIsFirstPart())) {
+													(!earlyStartFirst && postBP.isFirstPart() || earlyStartFirst && !postBP.isFirstPart())) {
 												startTimeNew = dateAddMin(startTimeNew, osce.getShortBreakSimpatChange() - osce.getShortBreak());
 											}
 											
@@ -1029,7 +1030,7 @@ public class TimetableGenerator {
 //								if(osceDay.getOsceSequences().size() == 1 && (((osceDay.getLunchBreakAfterRotation() == null || osceDay.getLunchBreakAfterRotation() == 0) && halfRotations) ||
 //										(osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber))) {
 								log.warn(osceDay.getLunchBreakAfterRotation() + " " + currRotationNumber);
-								if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber) {
+								if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber) {
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
 									// trick to make sure postsSinceSimpatChange is 0 after outer loop (is incremented by numberSlotsTotal in outer-loop)
 									postsSinceSimpatChange = -1 * numberSlotsTotal;

@@ -37,4 +37,11 @@ public class OscePostBlueprint {
     private Specialisation specialisation;
 
     private Integer sequenceNumber;
+    
+    public boolean  isFirstPart() {
+    	if(getIsFirstPart() == null)
+    		return false;
+    	
+    	return getIsFirstPart();
+    }
 }
