@@ -18,6 +18,8 @@ public class MainClassification {
 	@Size(max = 2)
 	private String shortcut;
 	
+	private String description;
+	
 	public static List<MainClassification> findMainClassificationByShortCut(String val)
 	{
 		EntityManager em = entityManager();

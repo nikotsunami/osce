@@ -2,7 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
@@ -74,6 +74,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 		MenuClickEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
 		
+		setInserted(false);
 		init();
 
 //		activityManger.setDisplay(view.getDetailsPanel());
@@ -115,6 +116,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 					return;
 				}
 				Log.debug("Geholte Nationalitäten aus der Datenbank: " + response);
+				
+				totalRecords = response.intValue();
 				view.getTable().setRowCount(response.intValue(), true);
 
 				onRangeChanged(q);
@@ -151,6 +154,12 @@ NationalityView.Presenter, NationalityView.Delegate {
 				}
 				table.setRowData(range.getStart(), values);
 
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+					setInserted(false);
+				}
 				// finishPendingSelection();
 				if (widget != null) {
 					widget.setWidget(view.asWidget());
@@ -182,6 +191,16 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 	}
 
+	private int totalRecords;
+	private boolean isInserted;
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
+	}
+	
 	@Override
 	public void newClicked(String name) {
 		Log.debug("Add nationality");
@@ -194,6 +213,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
+				setInserted(true);
 				init();
 			}
 		});
@@ -206,6 +226,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		// Highlight onViolation
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
+				setInserted(false);
 				init();
 			}
 		});
@@ -214,6 +235,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
+		setInserted(false);
 		init2(q);
 	}
 
@@ -238,6 +260,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 			@Override
 			public void onSuccess(Void response) {
 				((EditPopViewImpl)view.getEditPopupView()).hide();
+				setInserted(false);
 				init();
 				
 			}

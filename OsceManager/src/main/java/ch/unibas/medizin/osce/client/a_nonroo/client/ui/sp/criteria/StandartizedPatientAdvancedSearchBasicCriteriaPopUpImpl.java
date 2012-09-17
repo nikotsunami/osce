@@ -15,6 +15,9 @@ import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -124,6 +127,17 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		addAdvSeaBasicButton.setText(constants.add());
 		addBasicData.setText(constants.basicFilter());
 		unit.setText("[" + constants.heightUnit() + "]");
+		
+		value.addKeyDownHandler(new KeyDownHandler() {
+			
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				
+				if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					addAdvSeaBasicButton.click();
+			}
+		});
+		
 		valueNotAvail.setText("");		
 		field.addValueChangeHandler(new ValueChangeHandler<PossibleFields>() {
 			@Override

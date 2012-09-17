@@ -647,4 +647,18 @@ public class Osce {
 			return result;   
 	 }
 	//E Module10 Create plans
+
+// TestCase Purpose Method {
+ public static Osce findLastOsceCreatedForTestPurpose(){
+		 Log.info("Inside findLastOsceCreatedForTestPurpose() ");	
+			EntityManager em = entityManager();		
+			String queryString = "select o from Osce as o order by o.id desc";
+			Log.info("Query String: " + queryString);
+			TypedQuery<Osce> q = em.createQuery(queryString,Osce.class);		
+			List<Osce> result  = q.getResultList();        
+			Log.info("Required OSce is : "+result.get(0).getId());
+			return result.get(0);
+	 }
+// TestCase Purpose Method }
+
 }

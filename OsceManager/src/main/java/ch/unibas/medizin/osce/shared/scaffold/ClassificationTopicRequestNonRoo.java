@@ -15,5 +15,5 @@ import com.google.gwt.requestfactory.shared.Service;
 @SuppressWarnings("deprecation")
 @Service(ClassificationTopic.class)
 public interface ClassificationTopicRequestNonRoo extends RequestContext {
-	abstract Request<List<ClassificationTopicProxy>> findClassiTopicByMainClassi(MainClassificationProxy proxy);
+	abstract Request<List<ClassificationTopicProxy>> findClassiTopicByMainClassi(Long value);
 }

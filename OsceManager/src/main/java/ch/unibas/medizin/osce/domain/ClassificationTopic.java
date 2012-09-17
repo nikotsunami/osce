@@ -19,6 +19,8 @@ public class ClassificationTopic {
 	@Size(max = 8)
 	private String shortcut;
 	
+	private String description;
+	
 	@ManyToOne
 	private MainClassification mainClassification;
 	
@@ -31,11 +33,18 @@ public class ClassificationTopic {
      	return q.getResultList();
 	}
 	
-	public static List<ClassificationTopic> findClassiTopicByMainClassi(MainClassification proxy)
+	public static List<ClassificationTopic> findClassiTopicByMainClassi(Long value)
 	{
 		EntityManager em = entityManager();
-		TypedQuery<ClassificationTopic> q = em.createQuery("SELECT c FROM ClassificationTopic c WHERE c.mainClassification LIKE :value", ClassificationTopic.class);
-		q.setParameter("value", proxy);
+		
+		String sql = "";
+		
+		if (value != null)
+			sql = "SELECT c FROM ClassificationTopic c WHERE c.mainClassification.id = " + value;
+		else
+			sql = "SELECT c FROM ClassificationTopic c";
+			
+		TypedQuery<ClassificationTopic> q = em.createQuery(sql, ClassificationTopic.class);
 		return q.getResultList();
 	}
 }

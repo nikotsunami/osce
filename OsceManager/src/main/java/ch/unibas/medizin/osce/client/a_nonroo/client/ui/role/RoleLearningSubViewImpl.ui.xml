@@ -6,12 +6,14 @@
 	<ui:style src="../../styles.css"></ui:style>
 
 
-	<g:HTMLPanel addStyleNames="{style.patientDetails}">				
+	<g:HTMLPanel addStyleNames="{style.patientDetails}">
+	
+		<my:IconButton ui:field="btnAdd" icon="plusthick" ></my:IconButton>
+					
 		<b:CellTable ui:field="majorTable" width="100%" addStyleNames="{style.standardTable}"/>					
 		<b:SimplePager display="{majorTable}" ui:field="pagerMajor" />
-		<my:IconButton ui:field="btnAddMajor" icon="plusthick" ></my:IconButton>		
+				
 		<b:CellTable  ui:field="minorTable" width="100%" addStyleNames="{style.standardTable}"/>
 		<b:SimplePager display="{minorTable}" ui:field="pagerMinor" />
-		<my:IconButton ui:field="btnAddMinor" icon="plusthick"></my:IconButton>			
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -3393,3 +3393,35 @@ background: url("images/downArrow.png") ;
 	width: 14px;
 	height: 23px;
 }
+
+/* learning obj */
+.learningObjPopupStyle {
+	width: 1210px;
+	height: 700px;
+	border-width: 2px;
+	border-color: #676767;
+	border-style: solid;
+	border-radius:10px;
+}
+
+.learningObjPopupCloseButton{	
+	border-color: #676767;
+    border-radius: 7px 7px 7px 7px;
+    border-width: 2px;
+    float: right;    
+    margin-right: -12px;
+}
+
+.learningObjPopupLabel{
+	margin-left: 8px;
+}
+
+.learningObjScroll{
+	margin-left: 8px;
+	height: 565px;	
+}
+
+.learningObjTable
+{
+	height: 625px;
+}

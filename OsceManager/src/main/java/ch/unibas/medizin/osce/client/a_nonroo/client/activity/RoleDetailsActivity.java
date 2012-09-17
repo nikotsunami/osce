@@ -12,6 +12,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LearningObjectiveView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OscePostViewImpl;
@@ -72,9 +73,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standartized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.ApplianceProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaRequest;
@@ -115,6 +119,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaRequest;
+import ch.unibas.medizin.osce.client.managed.request.SkillHasApplianceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
 import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
@@ -129,6 +134,7 @@ import ch.unibas.medizin.osce.client.managed.ui.ChecklistTopicProxyRenderer;
 import ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer;
 import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
 import ch.unibas.medizin.osce.client.managed.ui.StandardizedRoleProxyRenderer;
+import ch.unibas.medizin.osce.client.style.resources.LearningObjectiveData;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
@@ -225,7 +231,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		RoleLearningPopUpView.Delegate,
 		StandardizedPatientAdvancedSearchProfessionPopup.Delegate, 
 		StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,
-		StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate
+		StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate,
+		LearningObjectiveView.Delegate		
 
 {
 
@@ -345,6 +352,20 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 	RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl checklistQuestionItemViewImpl;
 	// ]Assignment F
+	
+	//learning
+		 private Long mainClassificationId = null;
+		 private Long classificaitonTopicId = null;
+		 private Long topicId = null;
+		 private Long skillLevelId = null;
+		 private Long applianceId = null;
+		 
+		 private LearningObjectiveView learningObjectiveView;
+		 
+		 private List<LearningObjectiveData> learningObjectiveData = new ArrayList<LearningObjectiveData>();
+		 private LearningObjectiveData learningObjective;
+		 
+		 String temp = "";
 
 	public static int getSelecTab() {
 		return selecTab;
@@ -387,6 +408,18 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		this.widget = panel;
 		this.view = roleDetailsView;
 		this.roleDetailActivity = this;
+		
+		//learning
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+			@Override
+			public void onEventReceived(
+					ApplicationLoadingScreenEvent event) {
+				//Log.info("~~~~~~~~ApplicationLoadingScreenEvent onEventReceived Called");
+				event.display();
+				
+			}
+		});
 
 		
 		checklistTopicItemView = new RoleDetailsChecklistSubViewChecklistTopicItemViewImpl();
@@ -1722,6 +1755,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 							if (widget == null) {
 								return;
 							}
+							RoleEditActivity.roleActivity.setInserted(false);
 							RoleEditActivity.roleActivity.initSearch();
 							goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic
 									.stableId(), Operation.DETAILS));
@@ -5399,7 +5433,7 @@ final int index2 = index;
 	@Override
 	public void mainClassiListBoxClicked(MainClassificationProxy proxy,
 		final RoleLearningPopUpView popupView) {	
-		requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(proxy).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
+		requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(proxy.getId()).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
 
 			@Override
 			public void onSuccess(List<ClassificationTopicProxy> response) {
@@ -5412,7 +5446,7 @@ final int index2 = index;
 	@Override
 	public void classiTopicListBoxClicked(ClassificationTopicProxy proxy,
 			final RoleLearningPopUpView popupView) {
-		requests.topicRequestNonRoo().findTopicByClassiTopic(proxy).fire(new OSCEReceiver<List<TopicProxy>>() {
+		requests.topicRequestNonRoo().findTopicByClassiTopic(proxy.getId()).fire(new OSCEReceiver<List<TopicProxy>>() {
 
 			@Override
 			public void onSuccess(List<TopicProxy> response) {
@@ -5422,7 +5456,7 @@ final int index2 = index;
 		
 	}
 
-	@Override
+	/*@Override
 	public void addMainSkillClicked(TopicProxy topicProxy, SkillLevelProxy skillLevelProxy) {
 		
 		Long skillLevelId;
@@ -5513,7 +5547,7 @@ final int index2 = index;
 				}
 			}
 		});		
-	}
+	}*/
 
 	@Override
 	public void setSkillLevelPopupListBox(final RoleLearningPopUpView popupView) {
@@ -5689,6 +5723,420 @@ final int index2 = index;
 		});
 		criteriaView.setProxy(proxy);
 	}
+	
+	//learning
+
+		@Override
+		public void loadLearningObjectiveData() {
+			
+			learningObjectiveView = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().getLearningObjectiveViewImpl();
+			
+			//RecordChangeEvent.register(requests.getEventBus(), (LearningObjectiveViewImpl) learningObjectiveView);
+			
+			learningObjectiveView.setDelegate(this);		
+			
+			final int start =0; //learningObjectiveView.getTable().getVisibleRange().getStart();
+			final int length =15; //learningObjectiveView.getTable().getVisibleRange().getLength();
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			
+			requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
+				@Override
+				public void onSuccess(Integer response) {
+					loadRange();
+					learningObjectiveView.getTable().setRowCount(response);
+				}
+			});
+			
+			requests.skillRequestNonRoo().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+
+				@Override
+				public void onSuccess(List<SkillProxy> response) {
+					
+					fillMainClassificationSuggestBox();
+					
+					fillClassificationTopicSuggestBox(mainClassificationId);
+					
+					fillTopicSuggestBox(classificaitonTopicId);
+					
+					fillSkillLevelSuggestBox();
+					
+					fillApplianceSuggestBox();				
+				
+					for (int i=0; i<response.size(); i++)
+					{
+						learningObjective = new LearningObjectiveData();
+						SkillProxy skill = response.get(i);
+						
+						temp = skill.getTopic().getClassificationTopic().getMainClassification().getShortcut() + " " + skill.getTopic().getClassificationTopic().getShortcut() + " " + skill.getShortcut();
+						learningObjective.setCode(temp);
+						learningObjective.setSkill(skill);
+						learningObjective.setText(skill.getDescription());
+						learningObjective.setTopic(skill.getTopic().getTopicDesc());	
+						
+						if (skill.getSkillLevel() != null)
+							learningObjective.setSkillLevel(String.valueOf(skill.getSkillLevel().getLevelNumber()));
+						else
+							learningObjective.setSkillLevel("");
+						
+						Iterator<SkillHasApplianceProxy> iter = skill.getSkillHasAppliances().iterator();
+						
+						while (iter.hasNext())
+						{
+							SkillHasApplianceProxy skillHasApplianceProxy = iter.next();
+							
+							if (skillHasApplianceProxy.getAppliance().getShortcut().equals("D"))
+								learningObjective.setD("D");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("T"))
+								learningObjective.setT("T");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("E"))
+								learningObjective.setE("E");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("P"))
+								learningObjective.setP("P");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("G"))
+								learningObjective.setG("G");
+						}
+						
+						learningObjectiveData.add(learningObjective);
+						learningObjective = null;
+					}
+				
+					learningObjectiveView.getTable().setRowData(learningObjectiveData);
+					learningObjectiveView.getTable().setVisibleRange(start, length);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+			});
+		}
+		
+		public void loadRange()
+		{
+			learningObjectiveView.getTable().addRangeChangeHandler(new RangeChangeEvent.Handler(){
+
+				@Override
+				public void onRangeChange(RangeChangeEvent event) {
+					System.out.println("**IN RANGE**");
+					onLearningObjectiveRangeChanged();
+				}
+				
+			});	
+		}
+		
+		public void fillMainClassificationSuggestBox()
+		{
+			requests.mainClassificationRequest().findAllMainClassifications().fire(new OSCEReceiver<List<MainClassificationProxy>>() {
+
+				@Override
+				public void onSuccess(List<MainClassificationProxy> response) {
+					DefaultSuggestOracle<MainClassificationProxy> suggestOracle1 = (DefaultSuggestOracle<MainClassificationProxy>) learningObjectiveView.getMainClassificationSuggestBox().getSuggestOracle();
+					suggestOracle1.setPossiblilities(response);
+					learningObjectiveView.getMainClassificationSuggestBox().setSuggestOracle(suggestOracle1);
+					
+					learningObjectiveView.getMainClassificationSuggestBox().setRenderer(new AbstractRenderer<MainClassificationProxy>() {
+
+						@Override
+						public String render(MainClassificationProxy object) {
+							// TODO Auto-generated method stub
+							if (object != null)
+								return (object.getDescription() +  "[" + object.getShortcut() + "]");
+							else
+								return "";
+						}
+					});
+					
+					
+				}
+			});
+		}
+		
+		public void fillClassificationTopicSuggestBox(Long mainClassiId)
+		{
+			
+			requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(mainClassiId).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
+
+				@Override
+				public void onSuccess(List<ClassificationTopicProxy> response) {
+					DefaultSuggestOracle<ClassificationTopicProxy> suggestOracle = (DefaultSuggestOracle<ClassificationTopicProxy>) learningObjectiveView.getClassificationTopicSuggestBox().getSuggestOracle();
+					suggestOracle.setPossiblilities(response);
+					learningObjectiveView.getClassificationTopicSuggestBox().setSuggestOracle(suggestOracle);
+					
+					learningObjectiveView.getClassificationTopicSuggestBox().setRenderer(new AbstractRenderer<ClassificationTopicProxy>() {
+
+						@Override
+						public String render(ClassificationTopicProxy object) {
+							if (object != null)
+								return (object.getDescription() + "[" + object.getShortcut() + "]");
+							else
+								return "";
+						}
+					});
+					
+				}
+			});
+		}
+		
+		public void fillTopicSuggestBox(Long classiTopicId)
+		{
+			requests.topicRequestNonRoo().findTopicByClassiTopic(classiTopicId).fire(new OSCEReceiver<List<TopicProxy>>() {
+
+				@Override
+				public void onSuccess(List<TopicProxy> response) {
+									
+					DefaultSuggestOracle<TopicProxy> suggestOracle = (DefaultSuggestOracle<TopicProxy>) learningObjectiveView.getTopicSuggestBox().getSuggestOracle();
+					suggestOracle.setPossiblilities(response);
+					learningObjectiveView.getTopicSuggestBox().setSuggestOracle(suggestOracle);
+					
+					learningObjectiveView.getTopicSuggestBox().setRenderer(new AbstractRenderer<TopicProxy>() {
+
+						@Override
+						public String render(TopicProxy object) {
+							if (object != null)
+								return object.getTopicDesc();
+							else
+								return "";
+						}
+					});
+				}
+			});
+		}
+		
+		public void fillSkillLevelSuggestBox()
+		{
+			requests.skillLevelRequest().findAllSkillLevels().fire(new OSCEReceiver<List<SkillLevelProxy>>() {
+
+				@Override
+				public void onSuccess(List<SkillLevelProxy> response) {
+					DefaultSuggestOracle<SkillLevelProxy> suggestOracle = (DefaultSuggestOracle<SkillLevelProxy>) learningObjectiveView.getSkillLevelSuggestBox().getSuggestOracle();
+					suggestOracle.setPossiblilities(response);
+					learningObjectiveView.getSkillLevelSuggestBox().setSuggestOracle(suggestOracle);
+					
+					learningObjectiveView.getSkillLevelSuggestBox().setRenderer(new AbstractRenderer<SkillLevelProxy>() {
+
+						@Override
+						public String render(SkillLevelProxy object) {
+							if (object != null)
+								return String.valueOf(object.getLevelNumber());
+							else
+								return "";
+						}
+					});
+				}
+			});
+		}
+
+		public void fillApplianceSuggestBox()
+		{
+			requests.applianceRequest().findAllAppliances().fire(new OSCEReceiver<List<ApplianceProxy>>() {
+
+				@Override
+				public void onSuccess(List<ApplianceProxy> response) {
+					DefaultSuggestOracle<ApplianceProxy> suggestOracle = (DefaultSuggestOracle<ApplianceProxy>) learningObjectiveView.getApplianceSuggestBox().getSuggestOracle();
+					suggestOracle.setPossiblilities(response);
+					learningObjectiveView.getApplianceSuggestBox().setSuggestOracle(suggestOracle);
+					
+					learningObjectiveView.getApplianceSuggestBox().setRenderer(new AbstractRenderer<ApplianceProxy>() {
+
+						@Override
+						public String render(ApplianceProxy object) {
+							if (object != null)
+								return object.getShortcut();
+							else
+								return "";
+						}
+					});			
+				}
+			});
+		}
+		
+		protected void onLearningObjectiveRangeChanged() {
+			learningObjectiveData.clear();		
+			final Range range = learningObjectiveView.getTable().getVisibleRange();
+			
+			System.out.println("Start : " + range.getStart());
+			System.out.println("Length : " + range.getLength());
+			
+			requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
+				@Override
+				public void onSuccess(Integer response) {
+					learningObjectiveView.getTable().setRowCount(response);
+				}
+			});
+			
+			requests.skillRequestNonRoo().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+
+				@Override
+				public void onSuccess(List<SkillProxy> response) {
+				
+					for (int i=0; i<response.size(); i++)
+					{
+						learningObjective = new LearningObjectiveData();
+						SkillProxy skill = response.get(i);
+						
+						temp = skill.getTopic().getClassificationTopic().getMainClassification().getShortcut() + " " + skill.getTopic().getClassificationTopic().getShortcut() + " " + skill.getShortcut();
+						learningObjective.setCode(temp);
+						learningObjective.setSkill(skill);
+						learningObjective.setText(skill.getDescription());
+						learningObjective.setTopic(skill.getTopic().getTopicDesc());	
+						
+						if (skill.getSkillLevel() != null)
+							learningObjective.setSkillLevel(String.valueOf(skill.getSkillLevel().getLevelNumber()));
+						else
+							learningObjective.setSkillLevel("");
+						
+						Iterator<SkillHasApplianceProxy> iter = skill.getSkillHasAppliances().iterator();
+						
+						while (iter.hasNext())
+						{
+							SkillHasApplianceProxy skillHasApplianceProxy = iter.next();
+							
+							if (skillHasApplianceProxy.getAppliance().getShortcut().equals("D"))
+								learningObjective.setD("D");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("T"))
+								learningObjective.setT("T");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("E"))
+								learningObjective.setE("E");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("P"))
+								learningObjective.setP("P");
+							else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("G"))
+								learningObjective.setG("G");
+						}
+						
+						learningObjectiveData.add(learningObjective);
+					}
+					
+					learningObjectiveView.getTable().setRowData(range.getStart(), learningObjectiveData);
+				}
+			});
+				
+		}
+
+		@Override
+		public void mainClassificationSuggestboxChanged(Long value) {
+			mainClassificationId = value;
+			
+			learningObjectiveView.getClassificationTopicSuggestBox().setSelected(null);
+			classificaitonTopicId = null;
+			
+			fillClassificationTopicSuggestBox(mainClassificationId);
+			onLearningObjectiveRangeChanged();
+		}
+
+		@Override
+		public void classificationTopicSuggestboxChanged(Long value) {
+			classificaitonTopicId = value;		
+			
+			learningObjectiveView.getTopicSuggestBox().setSelected(null);
+			topicId = null;
+			
+			fillTopicSuggestBox(classificaitonTopicId);
+			onLearningObjectiveRangeChanged();
+		}
+
+		@Override
+		public void topicSuggestboxChanged(Long value) {
+			topicId = value;
+			onLearningObjectiveRangeChanged();
+		}
+
+		@Override
+		public void skillLevelSuggestboxChanged(Long value) {
+			skillLevelId = value;
+			onLearningObjectiveRangeChanged();
+		}
+
+		@Override
+		public void applianceSuggestboxChanged(Long value) {
+			applianceId = value;
+			onLearningObjectiveRangeChanged();
+		}
+
+		@Override
+		public void addLearningObjectiveTableRangeHandler() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void addMainClicked() {
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			
+			Iterator<LearningObjectiveData> itr = learningObjectiveView.getMultiselectionModel().getSelectedSet().iterator();
+			
+			while (itr.hasNext())
+			{
+				LearningObjectiveData learningObjectiveData = itr.next();
+				
+				MainSkillRequest mainSkillRequest = requests.mainSkillRequest();
+				MainSkillProxy mainSkillProxy = mainSkillRequest.create(MainSkillProxy.class);
+				
+				mainSkillProxy.setRole(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue());
+				mainSkillProxy.setSkill(learningObjectiveData.getSkill());
+				
+				mainSkillRequest.persist().using(mainSkillProxy).fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void response) 
+					{				
+						Log.info("Record Inserted Successfully");
+					}
+					
+				});
+			}
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+			
+			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
+			dialogBox.showConfirmationDialog("Main skill added successfully");		
+		}
+
+		@Override
+		public void addMinorClicked() {
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			
+			Iterator<LearningObjectiveData> itr = learningObjectiveView.getMultiselectionModel().getSelectedSet().iterator();
+			
+			while (itr.hasNext())
+			{
+				LearningObjectiveData learningObjectiveData = itr.next();
+				
+				MinorSkillRequest minorSkillRequest = requests.minorSkillRequest();
+				MinorSkillProxy mainSkillProxy = minorSkillRequest.create(MinorSkillProxy.class);
+			
+				mainSkillProxy.setRole(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue());
+				mainSkillProxy.setSkill(learningObjectiveData.getSkill());
+			
+				minorSkillRequest.persist().using(mainSkillProxy).fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void response) 
+					{
+						
+						Log.info("Record Inserted Successfully");
+					}
+				
+				});
+			}
+		
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+			
+			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
+			dialogBox.showConfirmationDialog(constants.minorSuccess());	
+			
+		}
+
+		@Override
+		public void closeButtonClicked() {
+			refreshMainSkillData();
+			refreshMinorSkillData();
+			
+			mainClassificationId = null;
+			classificaitonTopicId = null;
+			topicId = null;
+			skillLevelId = null;
+			applianceId = null;
+			learningObjectiveView = null;
+		}
+	
 	
 }
 
