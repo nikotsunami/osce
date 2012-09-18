@@ -17,11 +17,11 @@
 }
 
 .cellTableFirstColumn {
-	border-left: 1px solid #AAAAAA;
+	 border-left: 1px solid #AAAAAA; 
 }
 
 .cellTableLastColumn {
-	border-right: 1px solid #AAAAAA;
+	 border-right: 1px solid #AAAAAA; 
 }
 
 @sprite .cellTableFooter {
@@ -43,7 +43,7 @@
   background-color: #dadada;
   
   border-bottom: 1px solid #AAAAAA;
-   /* border-right: 1px solid #AAAAAA; */ 
+ /*  border-right: 1px solid #AAAAAA; */
   
   padding: 0px 10px;
   text-align: left;
@@ -53,7 +53,7 @@
 
 .cellTableCell {
 	border: 0;
-	height: 20px;
+	height: 10px;
 	padding: 4px 10px;
 	overflow: hidden;
 	vertical-align: top;
@@ -95,19 +95,22 @@
 
 }
 
+
+
 .cellTableSortedHeaderDescending {
 
 }
+
 
 .cellTableEvenRow {
   background: #ffffff;
 }
 .cellTableEvenRowCell {
-  /* background: #ffffff; */
+   background: #ffffff; 
 }
 
 .cellTableOddRow {
-  background: #eee;
+  background: #ffffff;
 }
 .cellTableOddRowCell {
   /* background: #eee; */
@@ -138,30 +141,38 @@
 }
 
 .cellTableKeyboardSelectedRow {
-  background: #d3ae50;
+  /* background: #d3ae50; */
   color: #000;
 }
 
 .cellTableKeyboardSelectedRowCell {
-  
+  color: #000000;
 }
+
 
 @sprite .cellTableSelectedRow {
-  gwt-image: 'cellTableSelectedBackground';
-  background-color: #d3ae50;
+   gwt-image: 'cellTableHeaderBackground';
+   
+  /*background-color: #d3ae50;
   color: #000000;
   height: auto;
-  overflow: auto;
+  overflow: auto; 
+  images/ui-bg_highlight-soft_0_e0e0e0_1x400.png
+images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+  */
+  color: #000000;
 }
 
+
+ 
 .cellTableSelectedRowCell {
-  background: #d3ae50;
+  /* background: #d3ae50; */
 }
 
 .cellTableKeyboardSelectedCell {
-  background: #d3ae50;
+  /* background: #d3ae50; */
 }
-
+ 
 .cellTableLoading {
   margin: 10px auto 0;
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -12,6 +13,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
@@ -40,9 +43,12 @@ import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.BindType;
@@ -60,8 +66,15 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -71,13 +84,17 @@ import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -106,7 +123,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	/** Holds the main view managed by this activity */
 	private StandardizedPatientView view;
 	/** Holds the table with the standardized patients */
-	private CellTable<StandardizedPatientProxy> table;
+	
 	/** holds the selection model of the standardized patient table */
 	private SingleSelectionModel<StandardizedPatientProxy> selectionModel;
 	
@@ -147,6 +164,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientAdvancedSearchWorkPermissionPopup workPermissionPopup;
 	private StandardizedPatientAdvancedSearchMaritialStatusPopupView maritialStausPopup;
 	
+	private StandardizedPatientPlace place;
 	// BY SPEC v(Start)
 
 	/** Holds a reference to the IconButton of StandardizedPatientViewImpl */
@@ -157,12 +175,34 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 	// BY SPEC v(End)
 
+	/*custom celltable start code*/
+	
+	
+	public String columnHeader;
+	public String cellValue;
+	public boolean rightClick = false;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+
+	public int x;
+	public int y;
+	private AdvanceCellTable<StandardizedPatientProxy> table;
+	public List<String> path = new ArrayList<String>();
+	Map<String, String> columnName;
+	/*private CellTable<StandardizedPatientProxy> table;*/
+	/*custom celltable end code*/
+
+	
 	/**
 	 * Sets the dependencies of this activity and initializes the corresponding activity manager 
 	 * @param requests The request factory to use
 	 * @param placeController the place controller to use
 	 */
+	
+	
 	public StandardizedPatientActivity(OsMaRequestFactory requests, PlaceController placeController) {
+		
+		this.place = place;
+
 		this.requests = requests;
 		this.placeController = placeController;
 		StandardizedPatientDetailsActivityMapper = new StandardizedPatientDetailsActivityMapper(requests, placeController);
@@ -176,9 +216,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		if (advancedSearchPopup != null) {
 			advancedSearchPopup.hide();
 		}
-		if (placeChangeHandlerRegistration != null) {
+		/*if (placeChangeHandlerRegistration != null) {
 			placeChangeHandlerRegistration.removeHandler();
-		}
+		}*/
 		activityManger.setDisplay(null);
 	}
 	
@@ -220,37 +260,230 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	 * Initializes the corresponding views and initializes the tables as well as their
 	 * corresponding handlers.
 	 */
+	
+	/*custom celltable start code*/
+	
+	public void customFilter() {
+	}
+	public void addColumnOnMouseout()
+	{
+		table.getPopup().hide();
+		
+		Set<String> selectedItems = table.getPopup().getMultiSelectionModel().getSelectedSet();
+
+		int j = table.getColumnCount();
+		while (j > 0) {
+			
+			table.removeColumn(0);
+			j--;
+		}
+
+		path.clear();
+
+		Iterator<String> i;
+		if (selectedItems.size() == 0) {
+
+			i = table.getPopup().getDefaultValue().iterator();
+
+		} else {
+			i = selectedItems.iterator();
+		}
+
+		while (i.hasNext()) {
+
+			columnHeader = i.next();
+			String colName=(String)columnName.get(columnHeader);
+				path.add(colName.toString());
+				path.add(" ");
+				
+				
+			
+
+			table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+				{
+					this.setSortable(true);
+				}
+
+				Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+					public String render(java.lang.String obj) {
+						return obj == null ? "" : String.valueOf(obj);
+					}
+				};
+
+				String tempColumnHeader = columnHeader;
+
+				@Override
+				public String getValue(StandardizedPatientProxy object) {
+
+					
+
+					if (tempColumnHeader == constants.name()) {
+						
+						return renderer.render(object.getName());
+					} else if (tempColumnHeader == constants.preName()) {
+						
+						return renderer.render(object.getPreName());
+					} else if (tempColumnHeader == constants.email()) {
+						
+						return renderer.render(object.getEmail().toString());
+					} else if (tempColumnHeader == constants.street()) {
+						
+						return renderer.render(object.getStreet().toString());
+					} else if (tempColumnHeader == constants.city()) {
+						
+						return renderer.render(object.getCity());
+						
+					} else if (tempColumnHeader == constants.telephone()) {
+						
+						return renderer.render(object.getTelephone());
+
+					} else if (tempColumnHeader == constants.height()) {
+						
+						return renderer.render(object.getHeight().toString());
+
+					}
+					else if (tempColumnHeader == constants.weight()) {
+						
+						return renderer.render(object.getWeight().toString());
+
+					}
+
+
+					else {
+						return "";
+					}
+
+					// return renderer.render(cellValue);
+				}
+			}, columnHeader, false);
+			//path.add(" ");
+		}
+
+	}
+	
+	
+/*	custom celltable end code*/
+
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		
+		
 		Log.info("SystemStartActivity.start()");
-		
-//		requests.osceRequestNonRoo().generateAssignments(1l).fire(new Receiver<Boolean>() {
-//
-//			@Override
-//			public void onSuccess(Boolean response) {
-//				// TODO Auto-generated method stub
-////				requests.osceRequestNonRoo().generateAssignments(1l).fire();
-//			}
-//			
-//		});
-		
-		//By SPEC[Start 
-		//StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
-		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
-		//By SPEC] End
-		systemStartView.setPresenter(this);
-
+		StandardizedPatientView standardizedPatientView = new StandardizedPatientViewImpl();
+		standardizedPatientView.setPresenter(this);
 		this.widget = panel;
-		this.view = systemStartView;
-		widget.setWidget(systemStartView.asWidget());
+		this.view = standardizedPatientView;
+		widget.setWidget(standardizedPatientView.asWidget());
+		
+		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
+		
+		RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
+
+				@Override
+				public void onContextMenu(ContextMenuEvent event) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+			}, ContextMenuEvent.getType());
+		
+		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
+		this.table = (AdvanceCellTable<StandardizedPatientProxy>)view.getTable();
+		 columnName=view.getSortMap();
+		addColumnOnMouseout();
+		customFilter();
+		path = systemStartView.getPaths();
+		
 		
 		//by spec
-		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
+		
 		//by spec
+		 
+		
 		
 		MenuClickEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl) view);
 		
-		this.table = view.getTable();
+
+		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				StandardizedPatientActivity.this.onRangeChanged();
+			}
+		});
+		
+		/*custom celltable start code*/
+		
+		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				// By SPEC[Start
+
+				Column<StandardizedPatientProxy, String> col = (Column<StandardizedPatientProxy, String>) event.getColumn();
+				
+				
+				int index = table.getColumnIndex(col);
+				
+				/*String[] path =	systemStartView.getPaths();	            			
+				sortname = path[index];
+				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+				Log.info("call for sort " + path.size() + "--index--" + index+ "cc=" + table.getColumnCount());
+				if (index % 2 == 1 || rightClick == true|| (index == (table.getColumnCount() - 1))) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+				} else {
+					
+					
+					// path = systemStartView.getPaths();
+					Log.info("call for sort " + path.size() + "--index--"+ index);
+					sortname = path.get(index);
+
+					sortorder = (event.isSortAscending()) ? Sorting.ASC: Sorting.DESC;
+					// By SPEC]end
+					// RoleActivity.this.init2("");
+					Log.info("Call Init Search from addColumnSortHandler");
+					// filter.hide();
+					initSearch();
+				}
+			}
+		});
+		
+		/*custom celltable start code*/
+		table.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+					Log.info("right event");
+				}
+
+			}
+		}, MouseDownEvent.getType());
+		
+		table.getPopup().addDomHandler(new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				// TODO Auto-generated method stub
+				addColumnOnMouseout();
+				
+			}
+		}, MouseOutEvent.getType());
+		/*custom celltable end code*/
 
 		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
 		standartizedPatientAdvancedSearchSubView.setDelegate(this);
@@ -277,13 +510,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		// BY SPEC v(Stop)
 		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 		
-		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
-			public void onRangeChange(RangeChangeEvent event) {
-				StandardizedPatientActivity.this.onRangeChanged();
-			}
-		});
 		
-		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+
+		/*table.addColumnSortHandler(new ColumnSortEvent.Handler() {
 			@Override
 			public void onColumnSort(ColumnSortEvent event) {
 				//By SPEC[Start
@@ -296,6 +526,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				StandardizedPatientActivity.this.onRangeChanged();
 			}
 		});
+		*/
+		/*		custom celltable end code*/
 		
 		PlaceChangeEvent.Handler placeChangeHandler = new PlaceChangeEvent.Handler() {
 			@Override
@@ -340,8 +572,15 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			public void onSelectionChange(SelectionChangeEvent event) {
 				StandardizedPatientProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject != null) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					Log.debug(selectedObject.getName() + " selected!");
 					showDetails(selectedObject);
+				}
+				else {
+					view.setDetailPanel(false);
+					System.out.println("==============No Role Found===============");
 				}
 			}
 		});
@@ -853,7 +1092,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		addAdvSeaBasicButtonClicked(anamnesisCheck.getId(), answer, displayValue, bindType, PossibleFields.ANAMNESIS, comparison);
 	}
 	
-	private OsceConstants constants = GWT.create(OsceConstants.class);
+	/*private OsceConstants constants = GWT.create(OsceConstants.class);*/
 	
 	private String humanReadableAnamnesisAnswer(AnamnesisCheckProxy proxy, String answer) {
 		switch(proxy.getType()) {
