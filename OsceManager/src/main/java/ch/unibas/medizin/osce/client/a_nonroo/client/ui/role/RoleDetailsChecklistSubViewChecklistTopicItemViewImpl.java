@@ -476,7 +476,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	
 	public void showImportquestionView()
 	{
-//		if(importQuestionPopup==null)
+		if(importQuestionPopup==null)
 		{
 			importQuestionPopup=new ImportTopicPopupViewImpl(true,this.topicView);
 			
@@ -492,7 +492,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 			RootPanel.get().add(((ImportTopicPopupViewImpl)importQuestionPopup));
 			
-			importQuestionPopup.getOkBtn().addClickHandler(new ClickHandler() {
+			/*importQuestionPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
 				public void onClick(ClickEvent event) {
@@ -511,10 +511,10 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					}
 				
 			}
-		});
+		});*/
 			
 	}
-		((ImportTopicPopupViewImpl)importQuestionPopup).setPopupPosition(addQuestionHP.getAbsoluteLeft(), addQuestionHP.getAbsoluteTop()-180);
+		((ImportTopicPopupViewImpl)importQuestionPopup).setPopupPosition(addQuestionHP.getAbsoluteLeft()+140, addQuestionHP.getAbsoluteTop()-245);
 		((ImportTopicPopupViewImpl)importQuestionPopup).show();
 	}
 	// Highlight onViolation

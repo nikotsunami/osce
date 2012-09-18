@@ -7,8 +7,10 @@ import java.util.Map;
 import javax.management.relation.RoleList;
 
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
@@ -19,6 +21,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -135,10 +138,33 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	@UiField
 	Label questionLbl;
 	
+	@UiField
+	Label specializationLbl;
+	
+	@UiField
+	DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> specializationLstBox;
+	
 	
 	//Issue # 122 : Replace pull down with autocomplete.
 	
 	  
+	public Label getSpecializationLbl() {
+		return specializationLbl;
+	}
+
+	public void setSpecializationLbl(Label specializationLbl) {
+		this.specializationLbl = specializationLbl;
+	}
+
+	public DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> getSpecializationLstBox() {
+		return specializationLstBox;
+	}
+
+	public void setSpecializationLstBox(
+			DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> specializationLstBox) {
+		this.specializationLstBox = specializationLstBox;
+	}
+
 	@UiField
 	public DefaultSuggestBox<ChecklistQuestionProxy, EventHandlingValueHolderItem<ChecklistQuestionProxy>> queListBox;//=new DefaultSuggestBox<StandardizedRoleProxy, EventHandlingValueHolderItem<StandardizedRoleProxy>>();
 
@@ -214,6 +240,9 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	public ImportTopicPopupViewImpl(boolean isImportQuestion,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl TopicView) {
 		super(true);
 		Log.info("after super");
+		
+		
+		
 		if(isImportQuestion)
 		{
 			Log.info("inside if");
@@ -223,22 +252,28 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			okBtn.setText(constants.okBtn());
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.roleTopic());
-			questionLbl.setText(constants.roleQuestions());
+			questionLbl.setText("Questions");
+			queListBox.setVisible(true);
 			// Issue Role 
 			cancelBtn.setText(constants.cancel());
+			specializationLbl.removeFromParent();;
+			specializationLstBox.removeFromParent();
 			// E: Issue Role 
 			Log.info(" if completed");
 		}
 		else
 		{
 			Log.info("inside else");
+			
 			add(BINDER.createAndBindUi(this));
+			specializationLbl.setText(constants.specialisation());
 			queListBox.setVisible(false);
-			questionLbl.setVisible(false);
+			queListBox.removeFromParent();
+			questionLbl.removeFromParent();
 			okBtn.setText(constants.okBtn());
 			roleLbl.setText(constants.role());
 			topicLbl.setText(constants.roleTopic());
-			questionLbl.setText(constants.roleQuestions());
+			questionLbl.setText("Questions");
 			// Issue Role 
 			cancelBtn.setText(constants.cancel());
 			
@@ -246,6 +281,39 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			// E: Issue Role 
 			
 		}
+		
+		this.roleLstBox.setRenderer(new AbstractRenderer<StandardizedRoleProxy>() {
+
+			@Override
+			public String render(StandardizedRoleProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getShortName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		
+		this.getSpecializationLstBox().setRenderer(new AbstractRenderer<SpecialisationProxy>() {
+
+				@Override
+				public String render(SpecialisationProxy object) {
+					// TODO Auto-generated method stub
+					if(object!=null)
+					{
+					return object.getName();
+					}
+					else
+					{
+						return "";
+					}
+				}
+			});
+		
 		// Highlight onViolation
 		importTopicPopupView=this;
 		checklistTopicMap=new HashMap<String, Widget>();
@@ -282,6 +350,16 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			
 		});
 		
+		specializationLstBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				Log.info("specializationLstBox value changed");
+				
+				valueChangeEventSpecialisationLstBox();
+			}
+		});
+		
 		topicLstBox.addHandler(new ChangeHandler() {
 			
 			@Override
@@ -295,6 +373,22 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			
 			
 		});
+		
+		queListBox.setRenderer(new AbstractRenderer<ChecklistQuestionProxy>() {
+
+			@Override
+			public String render(ChecklistQuestionProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getQuestion();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 	}
 	
 	public void setDelegate(Delegate delegate) {
@@ -303,6 +397,21 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	
 	interface Binder extends UiBinder<Widget, ImportTopicPopupViewImpl> {
 	}
+	
+	public void valueChangeEventSpecialisationLstBox()
+	{
+		Log.info("valueChangeEvent call method");
+		if(this.specializationLstBox.getSelected()==null)
+		{
+			//Issue # 122 : Replace pull down with autocomplete.
+			//this.topicLstBox.setAcceptableValues(null);
+			//topicLstBox.setSuggestOracle(null);
+			//Issue # 122 : Replace pull down with autocomplete.
+		}
+		else
+			delegate.specialisationListBoxValueSelected(this.specializationLstBox.getSelected(),this);
+	}
+	
 	
 	//Issue # 122 : Replace pull down with autocomplete.
 	
@@ -399,6 +508,11 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			{
 				delegate.importTopic(topicLstBox.getSelected(),importTopicPopupView);	
 			}
+			else
+			{
+				MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+				dialogBox.showConfirmationDialog(constants.checklistTopicNotNull());
+			}
 			//Issue # 122 : Replace pull down with autocomplete.
 			
 			
@@ -412,7 +526,12 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			}*/
 			if(queListBox.getSelected()!=null)
 			{
-			delegate.importQuestion(queListBox.getSelected(),this.topicView,importTopicPopupView);
+				delegate.importQuestion(queListBox.getSelected(),this.topicView,importTopicPopupView);
+			}
+			else
+			{
+				MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+				dialogBox.showConfirmationDialog(constants.questionNotNull());
 			}
 			//Issue # 122 : Replace pull down with autocomplete.
 		}

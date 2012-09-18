@@ -43,6 +43,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 
 		void printRoleClicked(StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl);
 			//spec
+		
+		public void setSpecialisationListBox(final ImportTopicPopupView popupView);
 	}
 
 	/*

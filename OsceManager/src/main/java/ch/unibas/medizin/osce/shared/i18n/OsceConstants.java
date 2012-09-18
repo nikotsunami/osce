@@ -862,6 +862,12 @@ public interface OsceConstants extends Constants {
 	public String minorSuccess();
 	
 	public String addSkill();
+	
+	public String specialisation();
+	
+	public String questionNotNull();
+	
+	public String checklistTopicNotNull();
 
 }
 

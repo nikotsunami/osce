@@ -156,8 +156,8 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		shortBreakSimPatChangeTxt.setText(constants.simpatChangeBreak());
 		longBreakTxt.setText(constants.longBreak());
 		
-		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-		 scrollPanel.setWidth(panelWidth);
+		 //String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+		 //scrollPanel.setWidth(panelWidth);
 	}
 	
 	@Override

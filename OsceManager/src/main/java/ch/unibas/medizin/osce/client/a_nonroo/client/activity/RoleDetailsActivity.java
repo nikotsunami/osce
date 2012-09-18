@@ -122,6 +122,7 @@ import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaRequest
 import ch.unibas.medizin.osce.client.managed.request.SkillHasApplianceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
 import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
@@ -2107,6 +2108,47 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			});
 		}
 		
+		public void setSpecialisationListBox(final ImportTopicPopupView popupView)
+		{
+			
+			Log.info("setSpecialisationListBox");
+			popupView.setDelegate(this);
+			
+			requests.specialisationRequest().findAllSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+
+				@Override
+				public void onSuccess(List<SpecialisationProxy> response) {
+					Log.info("setSpecialisationListBox success");
+					 DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) popupView.getView().getSpecializationLstBox().getSuggestOracle();
+					 suggestOracle1.setPossiblilities(response);
+					 popupView.getView().getSpecializationLstBox().setSuggestOracle(suggestOracle1);
+					
+					 DefaultSuggestOracle<StandardizedRoleProxy> rolesuggestOracle=(DefaultSuggestOracle<StandardizedRoleProxy>)popupView.getView().roleLstBox.getSuggestOracle();
+					 rolesuggestOracle.clear();
+					 popupView.getView().roleLstBox.setSuggestOracle(rolesuggestOracle);
+					 
+					 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)popupView.getView().topicLstBox.getSuggestOracle();
+					 topicsuggestOracle.clear();
+					 popupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
+					 /*popupView.getView().getSpecializationLstBox().setRenderer(new AbstractRenderer<SpecialisationProxy>() {
+
+							@Override
+							public String render(SpecialisationProxy object) {
+								// TODO Auto-generated method stub
+								if(object!=null)
+								{
+								return object.getName();
+								}
+								else
+								{
+									return "";
+								}
+							}
+						});*/
+				}
+			});
+		}
+		
 		public void setRoleListBoxValue(ImportTopicPopupView popupView)
 		{
 			popupView.setDelegate(this);			
@@ -2136,9 +2178,17 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			 DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>) popupView.getView().roleLstBox.getSuggestOracle();
 			 suggestOracle1.setPossiblilities(roles);
 			 popupView.getView().roleLstBox.setSuggestOracle(suggestOracle1);
+			
+			 
+			
+			 
+			 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)popupView.getView().topicLstBox.getSuggestOracle();
+			 topicsuggestOracle.clear();
+			 popupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
+			 popupView.getView().topicLstBox.setText("");
 			Log.info("before value set 1");
 			 //popupView.getView().roleLstBox.setRenderer(new StandardizedRoleProxyRenderer());
-			popupView.getView().roleLstBox.setRenderer(new AbstractRenderer<StandardizedRoleProxy>() {
+			/*popupView.getView().roleLstBox.setRenderer(new AbstractRenderer<StandardizedRoleProxy>() {
 
 				@Override
 				public String render(StandardizedRoleProxy object) {
@@ -2152,14 +2202,60 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 						return "";
 					}
 				}
-			});
+			});*/
 
 			Log.info("after value set");
 			//popupView.getRoleLstBox().setAcceptableValues(roles);
 			
 			//Issue # 122 : Replace pull down with autocomplete.
 		}
+		public void specialisationListBoxValueSelected(SpecialisationProxy specialisationProxy,final ImportTopicPopupViewImpl importPopupview)
+		{
+			Log.info("specialisationListBoxValueSelected");
+			
+			
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			requests.specialisationRequest().findSpecialisation(specialisationProxy.getId()).with("roleTopics","roleTopics.standardizedRoles","roleTopics.standardizedRoles","roleTopics.standardizedRoles.checkList").fire(new OSCEReceiver<SpecialisationProxy>() {
+
+				@Override
+				public void onSuccess(SpecialisationProxy response) {
+					Log.info("specialisationListBoxValueSelected success");
+					Iterator<RoleTopicProxy> roleTopicIterator=response.getRoleTopics().iterator();
+					List<StandardizedRoleProxy> roles=new ArrayList<StandardizedRoleProxy>();
+					while(roleTopicIterator.hasNext())
+					{
+						RoleTopicProxy roleTopicProxy=roleTopicIterator.next();
+						
+						Iterator<StandardizedRoleProxy> roleIterator=roleTopicProxy.getStandardizedRoles().iterator();
 		
+						while(roleIterator.hasNext())
+						{
+							StandardizedRoleProxy roleProxy=roleIterator.next();
+							if(standardizedRoleProxy.getId()!=roleProxy.getId() && roleProxy.getActive()==true)
+								roles.add(roleProxy);
+						}
+						
+						
+					}
+					
+					 DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>) importPopupview.roleLstBox.getSuggestOracle();
+					 suggestOracle1.setPossiblilities(roles);
+					 importPopupview.roleLstBox.setSuggestOracle(suggestOracle1);
+					 importPopupview.roleLstBox.setText("");
+					
+					 
+					 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)importPopupview.getView().topicLstBox.getSuggestOracle();
+					 topicsuggestOracle.clear();
+					 importPopupview.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
+					 importPopupview.topicLstBox.setText("");
+					
+				}
+			});
+			
+			
+			
+		}
 		public void roleListBoxValueSelected(StandardizedRoleProxy proxy,final ImportTopicPopupViewImpl importPopupView)
 		{
 			Log.info("roleListBoxValueSelected");
@@ -2178,7 +2274,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					 importPopupView.getView().topicLstBox.setSuggestOracle(suggestOracle1);
 					Log.info("before value set 1");
 					//importPopupView.getView().topicLstBox.setRenderer(new ChecklistTopicProxyRenderer());
-					importPopupView.getView().topicLstBox.setRenderer(new AbstractRenderer<ChecklistTopicProxy>() {
+					/*importPopupView.getView().topicLstBox.setRenderer(new AbstractRenderer<ChecklistTopicProxy>() {
 
 						@Override
 						public String render(ChecklistTopicProxy object) {
@@ -2192,7 +2288,11 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 								return "";
 							}
 						}
-					});
+					});*/
+					 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)importPopupView.getView().topicLstBox.getSuggestOracle();
+					 topicsuggestOracle.clear();
+					 importPopupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
+					 importPopupView.topicLstBox.setText("");
 
 					}
 					//importPopupView.getView().topicLstBox.setRenderer(new CheckListProxyRenderer());
@@ -2221,7 +2321,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					 importPopupView.getView().queListBox.setSuggestOracle(suggestOracle1);
 					Log.info("before value set 1");
 					//importPopupView.getView().queListBox.setRenderer(new ChecklistQuestionProxyRenderer());
-					importPopupView.getView().queListBox.setRenderer(new AbstractRenderer<ChecklistQuestionProxy>() {
+					/*importPopupView.getView().queListBox.setRenderer(new AbstractRenderer<ChecklistQuestionProxy>() {
 
 						@Override
 						public String render(ChecklistQuestionProxy object) {
@@ -2235,7 +2335,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 								return "";
 							}
 						}
-					});
+					});*/
 					}
 				//	importPopupView.getQueListBox().setAcceptableValues(response.getCheckListQuestions());
 					//Issue # 122 : Replace pull down with autocomplete.
@@ -2245,7 +2345,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		}
 		
 		
-		public void importTopic(final ChecklistTopicProxy proxy,ImportTopicPopupViewImpl viewTopicPopup)
+		public void importTopic(final ChecklistTopicProxy proxy,final ImportTopicPopupViewImpl viewTopicPopup)
 		{
 			
 			Log.info("importTopic");
@@ -2364,6 +2464,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 								
 															
 							}
+							viewTopicPopup.hide();		
 						}
 					});
 				}

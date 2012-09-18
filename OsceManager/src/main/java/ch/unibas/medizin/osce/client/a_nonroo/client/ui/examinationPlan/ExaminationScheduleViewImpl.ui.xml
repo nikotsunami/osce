@@ -12,7 +12,7 @@
 	
 	<g:HTMLPanel>
 		<!-- h1>Postenlauf - MainView</h1-->
-		<g:TabPanel ui:field="osceTabPanel" width="100%" addStyleNames="{style.tabPanel}" >
+		<g:TabPanel ui:field="osceTabPanel" width="100%">
 			<!-- g:Tab>
 				<g:TabHTML ></g:TabHTML>
 				<g:Label>Hello</g:Label>

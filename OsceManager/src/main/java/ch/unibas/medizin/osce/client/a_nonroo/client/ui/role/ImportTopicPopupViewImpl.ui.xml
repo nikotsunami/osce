@@ -43,10 +43,23 @@
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
 
-<g:VerticalPanel spacing="10">
+<g:VerticalPanel spacing="10" >
+<g:HTML>
+	<div class="arrow-popup-border"></div>
+	<div class="arrow-popup"></div>
+</g:HTML>
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="roleLbl" width="55px"></g:Label>
+		<g:Label ui:field="specializationLbl" width="80px"></g:Label>
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+		<!-- <g:ValueListBox ui:field="roleLstBox"></g:ValueListBox>-->
+		<i:DefaultSuggestBox ui:field="specializationLstBox"> </i:DefaultSuggestBox> 
+		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="10">
+	
+		<g:Label ui:field="roleLbl" width="80px"></g:Label>
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<!-- <g:ValueListBox ui:field="roleLstBox"></g:ValueListBox>-->
 		<i:DefaultSuggestBox ui:field="roleLstBox"> </i:DefaultSuggestBox> 
@@ -55,7 +68,7 @@
 	
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="topicLbl" width="55px"></g:Label>
+		<g:Label ui:field="topicLbl" width="80px"></g:Label>
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<!-- <g:ValueListBox ui:field="topicLstBox"></g:ValueListBox> -->
 		<i:DefaultSuggestBox ui:field="topicLstBox" ></i:DefaultSuggestBox>
@@ -72,7 +85,7 @@
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 	</g:HorizontalPanel>
 	
-	<g:HorizontalPanel  spacing="10" horizontalAlignment="center">
+	<g:HorizontalPanel  spacing="10" horizontalAlignment="center" width="100%">
 		<g:Button ui:field="okBtn"></g:Button>
 		<!-- Issue Role -->
 		<g:Button ui:field="cancelBtn"></g:Button>
