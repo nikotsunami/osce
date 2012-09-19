@@ -64,7 +64,7 @@
 	<g:HorizontalPanel addStyleNames="{style.patientTopContainer} {style.padTop3} {style.setWhiteColor}"  width="20px"  height="270px">
 	<!-- E Module 5 Bug Report Solution -->
 	
-	<g:VerticalPanel width="20px"  height="220px" verticalAlignment="middle" horizontalAlignment="center" >
+	<g:VerticalPanel width="20px"  height="270px" verticalAlignment="middle" horizontalAlignment="center" >
 		
 		<g:VerticalPanel   horizontalAlignment="center"  width="20px" verticalAlignment="middle">
 		<g:HorizontalPanel spacing="10">
@@ -82,7 +82,7 @@
 		</g:VerticalPanel>
 		
 		<g:VerticalPanel  width="20px" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
-			<g:Button ui:field="spliteSequence"   width="40px"></g:Button>
+			<g:Button ui:field="spliteSequence" width="70px" height="35px"></g:Button>
 			<!-- <g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  >Parcour</g:Label>-->
 		</g:VerticalPanel>
 		<g:VerticalPanel width="20px">

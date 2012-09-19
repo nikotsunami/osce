@@ -64,7 +64,8 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 		VerticalPanel vpColor=new VerticalPanel();
 		HorizontalPanel hpColor=new HorizontalPanel();
 		
-		colorPickerPopup.setPopupPosition(left-55, top-95);
+		//colorPickerPopup.setPopupPosition(left-55, top-95);
+		colorPickerPopup.setPopupPosition(left-75, top-165);
 		colorPickerPopup.setAnimationEnabled(true);	
 		colorPickerPopup.setSize("113px", "40px");
 		colorPickerPopup.getElement().getStyle().setBackgroundColor("gray");
@@ -81,9 +82,11 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 			Log.info("accordion-title-selected"+ColorPicker.getConstByIndex(i).name());
 			colorLabel.addStyleName("accordion-title-selected"+ColorPicker.getConstByIndex(i).name());
 			hpColor.add(colorLabel);
+			// module 5 color picker changes {
 			
-			if((i+1)%3==0)
+			if((i+1)%4==0)
 			{
+				// module 5 color picker changes }
 				vpColor.add(hpColor);
 				hpColor=new HorizontalPanel();
 			}

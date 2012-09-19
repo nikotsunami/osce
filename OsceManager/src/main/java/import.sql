@@ -9941,14 +9941,14 @@ INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, o
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 4, 1, 0);
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('B', 4, 1, 0);
 
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('yellow', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 2, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 2, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 2, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('yellow', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_1', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_2', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_3', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_4', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_5', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_6', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_7', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_8', 2, 0);
 --INSERT INTO `course` (color, osce_sequence, version) VALUES ('purple', 1, 0);
 --INSERT INTO `course` (color, osce_sequence, version) VALUES ('purple', 2, 0);
 
