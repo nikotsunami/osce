@@ -29,14 +29,19 @@
 					  </div>
 				 
 			          <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
+			          
+			          <div class="{style.controls} {style.controlsleft}">
+						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
+						<b:SimplePager ui:field="pager" display="{table}" />
+				      </div>
 				
-					<div class="{style.controls} {style.divStyle}">
-						 <b:SimplePager ui:field="pager" display="{table}" />
-					</div>
+<!-- 					<div class="{style.controls} {style.divStyle}"> -->
+<!-- 						 <b:SimplePager ui:field="pager" display="{table}" /> -->
+<!-- 					</div> -->
 	
-				 	<div class="{style.addBtn}">
-						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>					
-					</div> 
+<!-- 				 	<div class="{style.addBtn}"> -->
+<!-- 						<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>					 -->
+<!-- 					</div>  -->
 				
 				</g:HTMLPanel>
 			<!--g:ScrollPanel -->
