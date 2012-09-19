@@ -24,6 +24,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -55,25 +57,66 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	@UiField
 	Label valueNotAvail;
 	
+	/*Advance search popup changes start*/
 	@UiHandler ("addAdvSeaBasicButton")
 	public void addAdvSeaBasicButtonClicked(ClickEvent e) {
 	// Highlight onViolation
 		Log.info("Call addAdvSeaBasicButtonClicked");
+		addAdvSearchSaveMethod();
 /*	if (value.getValue().trim().compareToIgnoreCase("") == 0) {
 		valueNotAvail.setText("Please enter a Value");
 		return;
 	}
 	else{*/
 	// E Highlight onViolation		
-		valueNotAvail.setText("");
+		/*valueNotAvail.setText("");
 		
 		// Highlight onViolation		
-		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());
+		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());*/
 		//this.hide();	
 	//}
 	// E Highlight onViolation
 
 	}
+	
+	/*Advance search popup changes start*/
+	@Override
+	public void onBrowserEvent(Event event) {
+		// TODO Auto-generated method stub
+		super.onBrowserEvent(event);
+		int type = DOM.eventGetType(event);
+		// Log.info("event type--"+event.getType());
+
+		
+		switch (type) {
+		case Event.ONKEYUP:
+			// onKeyDownEvent(event);
+			
+				if (event.getKeyCode() == 13) 
+				{
+					Log.info("Enter press");
+					addAdvSearchSaveMethod();
+				}
+			break;
+		default:
+			return;
+
+		}
+	}
+	
+	/*Advance search popup changes end*/
+	
+	public void addAdvSearchSaveMethod()
+	{
+		Log.info("Call addAdvSearchSaveMethod");
+		/*valueNotAvail.setText("");*/
+		valueNotAvail.setText("");
+		// Highlight onViolation		
+		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());
+		this.hide();
+	}
+
+	/*Advance search popup changes end*/
 	
 	@UiField
 	IconButton addBasicData;
@@ -176,6 +219,11 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		advanceSearchCriteriaMap.put("shownValue", value);
 				
 		// E Highlight onViolation
+		
+		 /*Advance search popup changes start*/
+			this.sinkEvents(Event.KEYEVENTS);
+			this.sinkEvents(Event.ONFOCUS);
+			/*Advance search popup changes end*/
 	}
 	
     public void setBindTypePickerValues(Collection<BindType> values) {

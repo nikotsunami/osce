@@ -19,6 +19,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -78,16 +80,62 @@ public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
 								
 				// E Highlight onViolation
 				
+		 /*Advance search popup changes start*/
+		this.sinkEvents(Event.KEYEVENTS);
+		this.sinkEvents(Event.ONFOCUS);
+		/*Advance search popup changes end*/
+				
+	}
+
+	/*Advance search popup changes start*/
+	@Override
+	public void onBrowserEvent(Event event) {
+		// TODO Auto-generated method stub
+		super.onBrowserEvent(event);
+		int type = DOM.eventGetType(event);
+		// Log.info("event type--"+event.getType());
+
+		
+		switch (type) {
+		case Event.ONKEYUP:
+			// onKeyDownEvent(event);
+			
+				if (event.getKeyCode() == 13) 
+				{
+					Log.info("Enter press");
+					addAdvSearchSaveMethod();
+	}
+			break;
+		default:
+			return;
+	
+		}
 	}
 	
+	/*Advance search popup changes end*/
+
+	
+	/*Advance search popup changes start*/
 	@UiHandler("addMaritialStatusButton")
 	public void addMaritialStatusButtonClicked(ClickEvent event) {
 		Log.info("Call Add addMaritialStatusButton Button Clicked");
+		/*delegate.addMaritialStatusButtonClicked(maritialStatusBox.getValue(), bindType.getValue(), comparison.getValue());
+		//delegate.addProfessionButtonClicked(professionBox.getValue(), bindType.getValue(), comparison.getValue());
+		this.hide();*/
+		addAdvSearchSaveMethod();
+	}
+
+
+	public void addAdvSearchSaveMethod()
+	{
+		Log.info("Call addAdvSearchSaveMethod");
 		delegate.addMaritialStatusButtonClicked(maritialStatusBox.getValue(), bindType.getValue(), comparison.getValue());
 		//delegate.addProfessionButtonClicked(professionBox.getValue(), bindType.getValue(), comparison.getValue());
 		this.hide();
 	}
 
+	/*Advance search popup changes end*/
+	
 	@UiHandler("closeBoxButton")
 	public void closeBoxButtonClicked(ClickEvent event) {
 		this.hide();
