@@ -1033,6 +1033,7 @@ public class StandardizedPatient {
         	{
         		//Predicate r = criteriaBuilder.disjunction();
     			//r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
+        		if(simplePredicate != null)
         		criteriaQuery.where(simplePredicate);
         		//criteriaQuery.select(from);
         	}

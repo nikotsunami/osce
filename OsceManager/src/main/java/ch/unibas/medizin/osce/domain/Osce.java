@@ -461,10 +461,18 @@ public class Osce {
 	Log.info("Size of PatientIn Sem at getPatientAccptedInOsceDayByRoleCountAscAndValueASC()" + osceDay.getPatientInSemesters().size());
 	Log.info("OSce Day At getPatientAccptedInOsceDayByRoleCountAscAndValueASC():" +osceDay.getId());
 	
-	String queryString = "select pis from PatientInSemester as pis, PatientInRole as pir "
+	/*String queryString = "select pis from PatientInSemester as pis left join PatientInRole as pir "
 			+ "where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
-			+ "and pir.patientInSemester=pis.id  GROUP BY pir.patientInSemester ORDER BY pis.value,count(pir.patientInSemester)";
-			Log.info(queryString);
+			+ "and pir.patientInSemester=pis.id  GROUP BY pir.patientInSemester ORDER BY pis.value,count(pir.patientInSemester)";*/
+	/*String queryString = " Select pis from PatientInSemester pis left join PatientInRole pir  " +
+			"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
+			" GROUP BY pis.id " + 
+			" ORDER BY pis.value,count(pir.patientInSemester.id) ";	*/	
+	String queryString = " Select pis from PatientInSemester pis left join pis.patientInRole pir " +
+			"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
+			" GROUP BY pis.id " + 
+			" ORDER BY pis.value , count(pir.patientInSemester) ";
+	Log.info(queryString);
 		TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
 		 
 		return q.getResultList();
@@ -479,9 +487,17 @@ public class Osce {
 		String idList="";
 		
 		
-			String queryString = "select pis from PatientInSemester as pis, PatientInRole as pir "
+			/*String queryString = "select pis from PatientInSemester as pis, PatientInRole as pir "
 					+ "where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") "
-					+ "and pir.patientInSemester=pis.id  GROUP BY pir.patientInSemester ORDER BY pis.value DESC,count(pir.patientInSemester)";
+					+ "and pir.patientInSemester=pis.id  GROUP BY pir.patientInSemester ORDER BY pis.value DESC,count(pir.patientInSemester)";*/
+		/*String queryString = " Select pis from PatientInSemester pis left join PatientInRole pir  " +
+				"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
+				" GROUP BY pis.id " + 
+				" ORDER BY pis.value DESC, count(pir.patientInSemester.id) ";*/
+		String queryString = " Select pis from PatientInSemester pis left join pis.patientInRole pir " +
+				"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
+				" GROUP BY pis.id " + 
+				" ORDER BY pis.value DESC , count(pir.patientInSemester) ";
 					Log.info(queryString);
 				TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
 				 

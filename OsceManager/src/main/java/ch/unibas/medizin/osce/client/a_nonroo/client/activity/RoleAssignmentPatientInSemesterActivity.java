@@ -53,6 +53,7 @@ import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterListener;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.RoleTypes;
@@ -826,14 +827,16 @@ public boolean patientInRoleIsFirstAssigned(OsceSequenceProxy sequenceProxy,fina
 				if(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getId()==proxy.getPatientInSemester().getStandardizedPatient().getId() && !proxy.getIs_backup())
 					count++;
 				
-				if(count>=2)
+				
+			
+
+		}
+                                if(count>=2)
 				{
 					Log.info("Count patientInRoleIsFirstAssigned  :" + count);
 							isAssignedFirst=false;
 							break;
 				}
-			
-		}
 	}
 	Log.info("Count patientInRoleIsFirstAssigned  :" + count);
 			if(count==1)
@@ -2007,6 +2010,12 @@ public void initPatientInSemesterData(
 		OsceProxy tempOsceProxy = osceRequest.edit(osceProxy);
 		if (isSecurityChange) {
 			tempOsceProxy.setSecurity(osceSecurityStatus);
+			if(osceSecurityStatus==OSCESecurityStatus.FEDERAL_EXAM){
+				tempOsceProxy.setOsceSecurityTypes(OsceSecurityType.federal);
+			}
+			else{
+				tempOsceProxy.setOsceSecurityTypes(OsceSecurityType.simple);
+			}
 		} else {
 			tempOsceProxy.setPatientAveragePerPost(patientAveragePerPost);
 		}
