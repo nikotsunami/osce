@@ -44,4 +44,12 @@ public class Nationality {
         
         return q.getResultList();
     }
+    
+    public static Integer checkNationnality(String name)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT n FROM Nationality n WHERE n.nationality = '" + name + "'";
+    	TypedQuery<Nationality> q = em.createQuery(sql, Nationality.class);
+    	return q.getResultList().size();
+    }
 }

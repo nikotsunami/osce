@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleAddPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleAddPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
@@ -133,7 +135,7 @@ public class RoleActivity extends AbstractActivity implements
 		public void onSuccess(List<SpecialisationProxy> response) {
 		//	filterView.setSpecialisationBoxValues(response);
 			filterView.setSpecialisationAutocompleteValue(response);
-			view.setSpecialisationBoxValues(response);
+			view.setSpecialisationBoxValues(response);		
 		}
 	}
 
@@ -583,4 +585,20 @@ protected void showDetails(RoleTopicProxy RoleTopic)
 	RoleEditActivity.roleTopic = RoleTopic;//angiv
 	goTo(new RoleDetailsPlace(RoleTopic.stableId(), Operation.DETAILS));
 }
+
+	//role issue
+	public void getAllSpecialisation(final RoleAddPopupView popupView, final int clientX, final int clientY)
+	{
+		requests.specialisationRequest().findAllSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+
+			@Override
+			public void onSuccess(List<SpecialisationProxy> response) {
+				System.out.println("LIST SIZE : " + response.size());
+				
+				((RoleAddPopupViewImpl)popupView).setSpecialisationBoxValues(response);
+				((RoleAddPopupViewImpl)popupView).setPopupPosition(clientX - 100, clientY);
+				((RoleAddPopupViewImpl)popupView).show();
+			}
+		});
+	}
 }

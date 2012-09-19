@@ -262,7 +262,7 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 		}, "Text");
 		
 		paths.add("topic");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		TextColumn<LearningObjectiveData> topicCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -275,10 +275,12 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return object.getTopic();
 			}
-		}, "Topic");
+		}; 
+		table.addColumn(topicCol, "Topic");
+		table.setColumnWidth(topicCol, "300px");
 		
 		paths.add("level");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		TextColumn<LearningObjectiveData> levelCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -291,10 +293,12 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return String.valueOf(object.getSkillLevel());
 			}
-		}, "Level");
+		}; 
+		table.addColumn(levelCol, "Level");
+		table.setColumnWidth(levelCol, "25px");
 		
 		paths.add("d");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		TextColumn<LearningObjectiveData> dCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -307,10 +311,12 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return object.getD();
 			}
-		}, "D");
+		}; 
+		table.addColumn(dCol, "D");
+		table.setColumnWidth(dCol, "10px");
 		
 		paths.add("t");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		TextColumn<LearningObjectiveData> tCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -323,10 +329,12 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return object.getT();
 			}
-		}, "T");		
+		}; 
+		table.addColumn(tCol, "T");
+		table.setColumnWidth(tCol, "10px");
 		
 		paths.add("e");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		TextColumn<LearningObjectiveData> eCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -339,10 +347,12 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return object.getE();
 			}
-		}, "E");
+		}; 
+		table.addColumn(eCol, "E");
+		table.setColumnWidth(eCol, "10px");
 		
 		paths.add("p");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		TextColumn<LearningObjectiveData> pCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -355,10 +365,12 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return object.getP();
 			}
-		}, "P");
+		}; 
+		table.addColumn(pCol, "P");
+		table.setColumnWidth(pCol, "10px");
 		
-		paths.add("g");
-		table.addColumn(new TextColumn<LearningObjectiveData>() {
+		paths.add("g");		
+		TextColumn<LearningObjectiveData> gCol = new TextColumn<LearningObjectiveData>() {
 			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -371,7 +383,9 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 			public String getValue(LearningObjectiveData object) {
 				return object.getG();
 			}
-		}, "G");
+		}; 
+	    table.addColumn(gCol, "G");
+	    table.setColumnWidth(gCol, "10px");
 	}	
 	
 	
