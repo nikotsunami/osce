@@ -1192,7 +1192,8 @@ public class TimetableGenerator {
 	 * @return
 	 */
 	private boolean lunchBreakNeeded(int rotationNr) {
-		return rotationNr == rotationsPerDay / 2 - 1;
+		int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
+		return rotationNr == rotationsMax / 2 - 1;
 	}
 	
 	/**
