@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -97,10 +98,13 @@ public class CircuitViewImpl extends Composite implements CircuitView, MenuClick
 
 	public void init() {
 		
-		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";
-		String width = (OsMaMainNav.getMenuStatus() == 0) ? "1390" : "1210";
-		
-		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : 900px;");
+		int marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? 20 : 0;
+		int navWidth = (OsMaMainNav.getMenuStatus() == 0) ? (225 - 180) : 225;
+		int width = Window.getClientWidth() - navWidth - 20;
+		int height = Window.getClientHeight() - 40;
+		circuitTabPanel.setWidth("" + width + "px");
+//		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : 900px;");
+		mainHTMLPanel.getElement().setAttribute("style", "height: " + height + "position: absolute; left: " + navWidth + "px; top: 30px; right: 5px; bottom: 0px");
 		
 	}
 

@@ -212,20 +212,22 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	
 	public void setLabels()
 	{
-		dayLabel.setText(constants.day());
-		presentsLabel.setText(constants.presents());
-		dateLabel.setText(constants.date());
-		startTimeLable.setText(constants.starttime());
-		endTimeLable.setText(constants.endtime());
-		calculationsLabel.setText(constants.calculation());
-		lunchBreakLabel.setText(constants.lunchbreak());
+		dayLabel.setText(constants.circuitDay());
+		presentsLabel.setText(constants.circuitTimes());
+		
+		dateLabel.setText(constants.circuitDate() + ":");
+		startTimeLable.setText(constants.circuitStart() + ":");
+		endTimeLable.setText(constants.circuitEnd() + ":");
+		
+		calculationsLabel.setText(constants.circuitCalculations());
+		lunchBreakLabel.setText(constants.circuitLunchBreak());
 		
 		// Module 5 bug Report Change
-		lunchBreakStartLabel.setText(constants.lunchBreakStart());
+		lunchBreakStartLabel.setText(constants.circuitLunchBreakStart());
 		// E Module 5 bug Report Change
 		
-		lbEndTimeLabel.setText(constants.lbendtime());
-		studentsLabel.setText(constants.student());
+		lbEndTimeLabel.setText(constants.circuitEndTime());
+		studentsLabel.setText(constants.students());
 		saveOsceDayValue.setText(constants.save());
 
 		// Highlight onViolation

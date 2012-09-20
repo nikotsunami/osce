@@ -18,8 +18,6 @@ public interface OsceConstants extends Constants {
 
 	public String addAllActive();
 
-	public String addAnamnesisValue();
-
 	public String addAnswer();
 
 	public String addAuthor();
@@ -85,6 +83,8 @@ public interface OsceConstants extends Constants {
 	public String age();
 
 	public String ageUnit();
+
+	public String alert();
 
 	public String all();
 
@@ -154,8 +154,6 @@ public interface OsceConstants extends Constants {
 
 	public String breakPost();
 
-	public String calculation();
-
 	public String cancel();
 
 	public String changesDiscarded();
@@ -167,6 +165,28 @@ public interface OsceConstants extends Constants {
 	public String checklistTopic();
 
 	public String circuit();
+
+	public String circuitCalculations();
+
+	public String circuitDate();
+
+	public String circuitDay();
+
+	public String circuitEnd();
+
+	public String circuitEndTime();
+
+	public String circuitLunchBreak();
+
+	public String circuitLunchBreakStart();
+
+	public String circuitStart();
+
+	public String circuitStation();
+
+	public String circuitTimes();
+
+	public String circuitUnnamedSequence();
 
 	public String city();
 
@@ -192,6 +212,18 @@ public interface OsceConstants extends Constants {
 
 	public String confirmation();
 
+	public String confirmationAssigned();
+
+	public String confirmationAssignedPrevious();
+
+	public String confirmationClosed();
+
+	public String confirmationDayCreated();
+
+	public String confirmationGoAhead();
+
+	public String confirmationRoomAssigned();
+
 	public String confirmationWhenStatusIsChangingFormClosedToFix();
 
 	public String contactInfo();
@@ -208,8 +240,6 @@ public interface OsceConstants extends Constants {
 
 	public String criterion();
 
-	public String date();
-
 	public String dateCreated();
 
 	public String dateEdited();
@@ -219,8 +249,6 @@ public interface OsceConstants extends Constants {
 	public String dateTime();
 
 	public String dateTimeFormat();
-
-	public String day();
 
 	public String delerror();
 
@@ -256,11 +284,11 @@ public interface OsceConstants extends Constants {
 
 	public String editPatient();
 
+	public String editQuestion();
+
 	public String editRole();
 
 	public String email();
-
-	public String endtime();
 
 	public String endtimedoc();
 
@@ -396,8 +424,6 @@ public interface OsceConstants extends Constants {
 
 	public String languageSkills();
 
-	public String lbendtime();
-
 	public String learning();
 
 	public String learningObjectives();
@@ -415,10 +441,6 @@ public interface OsceConstants extends Constants {
 	public String logout();
 
 	public String longBreak();
-
-	public String lunchbreak();
-
-	public String lunchBreakStart();
 
 	public String mainClassi();
 
@@ -574,13 +596,9 @@ public interface OsceConstants extends Constants {
 
 	public String possibleAnswers();
 
-	public String post();
-
 	public String postType();
 
 	public String preName();
-
-	public String presents();
 
 	public String previousQuestion();
 
@@ -712,6 +730,8 @@ public interface OsceConstants extends Constants {
 
 	public String selectRoleTemplate();
 
+	public String selectSpecialisation();
+
 	public String semester();
 
 	public String send();
@@ -754,13 +774,9 @@ public interface OsceConstants extends Constants {
 
 	public String standardizedRole();
 
-	public String starttime();
-
 	public String starttimedoc();
 
 	public String street();
-
-	public String student();
 
 	public String studentAssignment();
 
@@ -839,6 +855,48 @@ public interface OsceConstants extends Constants {
 	public String warning();
 
 	public String warningBreakIsAtEnd();
+
+	public String warningDateEmpty();
+
+	public String warningEndTime();
+
+	public String warningNoAssignment();
+
+	public String warningNoOsceDay();
+
+	public String warningNoPreviousDay();
+
+	public String warningNotClosed();
+
+	public String warningNotFixed();
+
+	public String warningNotGenerated();
+
+	public String warningPostType();
+
+	public String warningRotationUnassigned();
+
+	public String warningRotationUnassignedPrevious();
+
+	public String warningScaffoldNotGenerated();
+
+	public String warningScheduleNotGenerated();
+
+	public String warningScheduleNotPostponed();
+
+	public String warningSelectSequence();
+
+	public String warningSplitting();
+
+	public String warningStartTime();
+
+	public String warningStatusNotChanged();
+
+	public String warningTimeFormat();
+
+	public String warningTimeHour();
+
+	public String warningTimeMinute();
 
 	public String weight();
 

@@ -66,10 +66,11 @@ a:hover, .gwt-Anchor:hover {
 	border: 1px solid #999;
 	
 	height: 23px;
-	
+	/*align:center;*/
 	font-size: 90%;
 	
 	border-radius: 4px;
+	white-space: nowrap;
 }
 
 .gwt-Button:active {
@@ -90,7 +91,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-Button[disabled]:hover {
-	color: #888;
+	color: #bbb;
 	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
 }
 
@@ -1690,7 +1691,8 @@ td.datePickerMonth {
 
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
 	top: 1px;
-	 background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+	/*background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;*/
+	background-color: #FFFEFA;
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
     border-color: #AAAAAA;
@@ -2490,23 +2492,6 @@ background: rgb(201,201,253)  ;
     border-bottom-right-radius: 16px;
 	border-radius: 10px;
 }
-.gwt-Button {
-	outline-style: none !important;
-	margin: 0;
-	padding: 3px 6px 3px 0;
-	text-decoration: none !important;
-	cursor: pointer;
-	cursor: hand;
-	background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
-	border: 1px solid #999;
-	
-	height: 23px;
-	
-	font-size: 90%;
-	align:center;
-	border-radius: 4px;
-	
-}
 
 /* Assignment E:Module 5] */
 
@@ -3048,7 +3033,8 @@ color: #f1b532;
     border-top: 8px solid #AAAAAA;
 }
 .gwt-PopupPanel {
-    background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    /* background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF; */
+    backgound: #FFFEFA;
     border: 1px solid #AAAAAA;
     border-radius: 4px 4px 4px 4px;
     opacity: 0.9;
@@ -3146,7 +3132,8 @@ color: #f1b532;
 	
 	overflow: hidden;
 	padding: 6px;
-	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
+	background-color: #FFFEFA;
+	/* background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff; */
 }
 .gwt-TabLayoutPanelTabs .gwt-TabLayoutPanelTab {
 	 background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
@@ -3180,40 +3167,23 @@ color: #f1b532;
 }
 
 
-.horizontalPanelStyle{
-	 
-   /* border: 1px solid #AAAAAA;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
-  width: 25%;
-  height: 100%;
-  */
-    /*  background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") ; */ 
-     background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC; 
-    border: 1px solid #AAAAAA;
-     border-bottom-colors: none;
+.horizontalPanelStyle{ 
+    background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 0 -25px #CCCCCC; 
+    /*border: 1px solid #AAAAAA;*/
+    border-bottom-colors: none;
     border-image: none;
     border-left-colors: none;
     border-right-colors: none;
     border-top-colors: none;
 
-    border-left: 1px solid #AAAAAA;
+    /* border-left: 1px solid #AAAAAA;
     border-right: 1px solid #AAAAAA;
-    border-top: 1px solid #AAAAAA;
+    border-top: 1px solid #AAAAAA; */
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-     border-bottom-left-radius: 16px;
+    border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
     width: 100%;
-    /*height: 100%;*/
-   /*  height: auto;
-    width: auto;
-    */ 
-    
-   
- 
 }
 
 .tabpanel_tabbar_no_scroll {

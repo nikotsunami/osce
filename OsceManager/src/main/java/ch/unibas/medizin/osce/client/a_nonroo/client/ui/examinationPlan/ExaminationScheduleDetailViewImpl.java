@@ -148,7 +148,7 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	public ExaminationScheduleDetailViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		shortBreakTxt.setText(constants.shortBreak());
-		lunchTimeTxt.setText(constants.lunchbreak());
+		lunchTimeTxt.setText(constants.circuitLunchBreak());
 		middleBreakTxt.setText(constants.middleBreak());
 		numOfRoomsTxt.setText(constants.numOfRooms());
 		studentAssignmentButton.setText(constants.studentAssignment());

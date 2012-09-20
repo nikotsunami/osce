@@ -83,7 +83,8 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                 left.setIcon("triangle-1-w");
         		right.setIcon("triangle-1-e");
         		down.setIcon("triangle-1-s");
-        	
+        		
+        		horizontalPanelForButton.setSpacing(2);
                 horizontalPanelForButton.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
                 horizontalPanelForButton.setHeight((barHeight/2)+"px");
                 horizontalPanelForButton.getElement().getStyle().setRight(0, Unit.PX);

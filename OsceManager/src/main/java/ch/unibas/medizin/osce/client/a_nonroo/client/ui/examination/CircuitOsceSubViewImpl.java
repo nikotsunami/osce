@@ -49,7 +49,7 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 	// Module 5 changes {
 
 	@UiField
-	public Button fixedBtn;
+	public IconButton fixedBtn;
 
 	// change {
 	@UiField
@@ -227,7 +227,7 @@ public class CircuitOsceSubViewImpl extends Composite implements CircuitOsceSubV
 		clearAllBtn.setText(constants.clearAll());	
 		generateBtn.setText(constants.generate());
 		fixedBtn.setText(constants.fixedButtonString());
-		closedBtn.setText(constants.closedButtonString());
+		closedBtn.setText(constants.close());
 		
 		// Module 5 bug Report Change
 		osceMap=new HashMap<String, Widget>();

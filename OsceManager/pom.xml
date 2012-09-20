@@ -619,10 +619,6 @@
         </dependency>
     </dependencies>
     <build>
-<<<<<<< Updated upstream
-    	
-=======
->>>>>>> Stashed changes
          <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

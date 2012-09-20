@@ -6,7 +6,7 @@
 
 	<ui:style src="../../styles.css">
 		.label {
-			text-align: right;
+			/* text-align: right; */
 		}
 		
 		.buttonStyle {
@@ -18,10 +18,14 @@
     		width: 22px;
 		}
 		
+		.tableclass td {
+			padding-right: 20px;
+		}
+		
 	</ui:style>
 	<g:HTMLPanel>
 		<!-- h1>CircuitOsceSubView</h1 -->
-		<Table>
+		<table class="tableclass">
 			<tr>
 				<td><g:Label ui:field="shortBreakLabel" styleName="{style.label}"></g:Label></td>
 				<td><s:ShortBox ui:field="shortBreakTextBox" styleName="{style.textBoxFieldStyle}"></s:ShortBox></td>
@@ -62,6 +66,6 @@
 					</g:HorizontalPanel>
 				</td>			
 			</tr>									
-		</Table>
+		</table>
 	</g:HTMLPanel>
 </ui:UiBinder> 

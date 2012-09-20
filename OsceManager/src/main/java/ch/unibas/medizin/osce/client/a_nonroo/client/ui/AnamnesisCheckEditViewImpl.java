@@ -384,9 +384,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	@Override
 	public void setEditTitle(boolean edit) {
 		if (edit) {
-			header.setInnerText(constants.editAnamnesisValue());
+			header.setInnerText(constants.editQuestion());
 		} else {
-			header.setInnerText(constants.addAnamnesisValue());
+			header.setInnerText(constants.addQuestion());
 			type.setValue(AnamnesisCheckTypes.values()[0]);
 		}
 

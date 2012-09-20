@@ -82,7 +82,7 @@
 		</g:VerticalPanel>
 		
 		<g:VerticalPanel  width="20px" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
-			<g:Button ui:field="spliteSequence"   width="40px"></g:Button>
+			<my:IconButton ui:field="spliteSequence" icon="scissors"  width="40px" />
 			<!-- <g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  >Parcour</g:Label>-->
 		</g:VerticalPanel>
 		<g:VerticalPanel width="20px">

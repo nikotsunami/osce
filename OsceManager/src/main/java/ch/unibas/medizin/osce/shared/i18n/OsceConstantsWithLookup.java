@@ -164,6 +164,16 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 
 	public String OR();
 
+	public String OSCE_BLUEPRINT();
+
+	public String OSCE_CLOSED();
+
+	public String OSCE_FIXED();
+
+	public String OSCE_GENRATED();
+
+	public String OSCE_NEW();
+
 	public String OSCE_SEQUENCES_A();
 
 	public String OSCE_SEQUENCES_B();

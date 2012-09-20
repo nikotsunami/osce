@@ -163,7 +163,7 @@ IndividualSchedulesDetailsView.Delegate
 			view.getStudRb().setChecked(true);
 			
 			view.getDisclosureSPPanel().getHeaderTextAccessor().setText(constants.standardizedPatient());
-			view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.student());
+			view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.students());
 			view.getDisclosureExaminerPanel().getHeaderTextAccessor().setText(constants.examiner());
 		
 			
@@ -394,7 +394,7 @@ IndividualSchedulesDetailsView.Delegate
 					{
 						chkAllStud=new CheckBox(constants.all());							
 						view.getDataVPStud().addStyleName("schedulePanelStyle");
-						view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.student());
+						view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.students());
 						
 						view.getVpStudent().insert(chkAllStud, view.getVpStudent().getWidgetCount());
 						chkAllStud.addClickHandler(new ClickHandler() 

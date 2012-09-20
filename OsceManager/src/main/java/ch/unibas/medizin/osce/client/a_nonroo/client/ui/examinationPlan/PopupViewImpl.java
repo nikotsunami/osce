@@ -166,11 +166,11 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		startTimeLbl.setVisible(true);		
 		startTimeValue.setVisible(true);
-		startTimeLbl.setText(constants.starttime());
+		startTimeLbl.setText(constants.circuitStart());
 		
 		endTimeLbl.setVisible(true);
 		endTimeValue.setVisible(true);
-		endTimeLbl.setText(constants.endtime());
+		endTimeLbl.setText(constants.circuitEndTime());
 		//endTimeValue.removeFromParent();
 		endTimeListBox.removeFromParent();
 		
@@ -219,7 +219,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		startTimeLbl.setVisible(true);		
 		startTimeValue.setVisible(true);
-		startTimeLbl.setText(constants.starttime());
+		startTimeLbl.setText(constants.circuitStart());
 		
 		okButton.setVisible(true);
 		okButton.setText(constants.close());
@@ -228,7 +228,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeLbl.setVisible(true);
 		endTimeListBox.removeFromParent();
 		endTimeValue.setVisible(true);
-		endTimeLbl.setText(constants.endtime());
+		endTimeLbl.setText(constants.circuitEndTime());
 		
 		
 	}
@@ -246,9 +246,9 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		okButton.setVisible(true);
 		cancelButton.setVisible(true);
 		
-		startTimeLbl.setText(constants.starttime());
+		startTimeLbl.setText(constants.circuitStart());
 		examinerNameLbl.setText(constants.examinerName());
-		endTimeLbl.setText(constants.endtime());
+		endTimeLbl.setText(constants.circuitEndTime());
 		
 		okButton.setText(constants.okBtn());
 		cancelButton.setText(constants.cancel());

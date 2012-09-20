@@ -79,7 +79,7 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 	public IconButton edit;
 	
 	@UiField
-	public Button spliteSequence;
+	public IconButton spliteSequence;
 	
 	//Module 5 Bug Report Solution
 	/*@UiField
@@ -153,26 +153,7 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 	public Map<String, Widget> osceSequenceMap;
 			// E Highlight onViolation
 	public SequenceOsceSubViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
-		sequenceOsceSubViewImpl=this;
-		init();
-		OsceConstants constants = GWT.create(OsceConstants.class);
-		spliteSequence.setText(constants.splitSequence());
-		
-		// Module 5 bug Report Change
-		/*chaneNameOfSequence.setVisible(false);
-		ok.setVisible(false);
-		ok.setText("ok");*/
-		// E Module 5 bug Report Change
-		
-		// Highlight onViolation
-		osceSequenceMap=new HashMap<String, Widget>();
-		osceSequenceMap.put("label", nameOfSequence);
-		osceSequenceMap.put("numberRotation", nameOfSequence);
-		osceSequenceMap.put("osceDay", nameOfSequence);
-		
-		
-				// E Highlight onViolation
+		this(null);
 	}
 
 	
@@ -181,13 +162,24 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		sequenceOsceSubViewImpl=this;
 		init();
 		OsceConstants constants = GWT.create(OsceConstants.class);
-		spliteSequence.setText(constants.splitSequence());
+//		spliteSequence.setText(constants.splitSequence());
+		spliteSequence.setTitle(constants.splitSequence());
 		// Module 5 bug Report Change
 		/*chaneNameOfSequence.setVisible(false);
 		ok.setVisible(false);
 		ok.setText("ok");*/
 		// E Module 5 bug Report Change
-		osceSequenceProxy=sequence;
+		
+		if (sequence == null) {
+			// Highlight onViolation
+			osceSequenceMap=new HashMap<String, Widget>();
+			osceSequenceMap.put("label", nameOfSequence);
+			osceSequenceMap.put("numberRotation", nameOfSequence);
+			osceSequenceMap.put("osceDay", nameOfSequence);
+			// E Highlight onViolation
+		} else {
+			osceSequenceProxy=sequence;
+		}
 	}
 
 	

@@ -103,11 +103,11 @@ public class OsMaApp {
 			private static final int LOADING_TIMEOUT = 250;
 
 			public void onRequestEvent(RequestEvent requestEvent) {
-				if (requestEvent.getState() == RequestEvent.State.SENT) {
-					shell.getMole().showDelayed(LOADING_TIMEOUT);
-				} else {
-					shell.getMole().hide();
-				}
+//				if (requestEvent.getState() == RequestEvent.State.SENT) {
+////					shell.getMole().showDelayed(LOADING_TIMEOUT);
+//				} else {
+////					shell.getMole().hide();
+//				}
 			}
 		});
 
