@@ -321,7 +321,7 @@ public class OsceDay {
 		List<OsceDay> osceDays=OsceDay.findOsceDayByOsce(osceId);
 		Log.info("~~Total "+ osceDays.size()+" OsceDay for Osce " + osceId);
 		Iterator<OsceDay> osceDayIterator=osceDays.iterator();
-		
+		OsceDay nextOsceDay = null;
 		boolean flagUpdateExistingNumberOfRotation=false;
 		while(osceDayIterator.hasNext())
 		{
@@ -359,8 +359,16 @@ public class OsceDay {
 			{
 				osceDay.getOsceSequences().get(0).setNumberRotation((osceDay.getOsceSequences().get(0).getNumberRotation()+1));
 				osceDay.getOsceSequences().get(0).persist();
+				nextOsceDay = osceDay;
 				break;
 			}
+		}
+		try{			
+			if(nextOsceDay !=null )
+				updateTimesAfterRotationShift(osceDayProxy.getId(),nextOsceDay.getId());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		return "UpdateSuccessful";
 	}
@@ -440,7 +448,16 @@ public class OsceDay {
 								newCourse.persist();								
 							}
 						}					
+				
+						try{					
+							updateTimesAfterRotationShift(osceDayProxy.getId(),newOsceday.getId());
+						}catch(Exception e)
+						{
+							e.printStackTrace();
 				}					
+				}
+				
+				
 			//}
 		//}
 		return "CreateSuccessful";
