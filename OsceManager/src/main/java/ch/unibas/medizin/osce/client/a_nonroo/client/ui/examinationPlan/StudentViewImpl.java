@@ -70,7 +70,7 @@ public class StudentViewImpl extends Composite implements StudentView{
 	public void studentPanelClicked(ClickEvent event)
 	{
 		Log.info("studentPanel Clicked");
-		if(assignmentProxy.getOsceStudent()==null)
+		if(assignmentProxy.getStudent()==null)
 		{
 			MessageConfirmationDialogBox dialgoBox=new MessageConfirmationDialogBox(constants.warning());
 			dialgoBox.showConfirmationDialog(constants.studentNotAssigned());
@@ -114,7 +114,7 @@ public class StudentViewImpl extends Composite implements StudentView{
 			
 			
 			//setDAta
-			popupView.getNameValue().setText(assignmentProxy.getOsceStudent().getStudent().getName());
+			popupView.getNameValue().setText(assignmentProxy.getStudent().getName());
 			popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
 			Log.info("student end time " + assignmentProxy.getTimeEnd());
 			popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));

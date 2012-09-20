@@ -726,12 +726,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								 
 								 	//calculate duration
 								 	Long examinerSlotLength=0l;
-								 	 if(j==0)
+								 	/* if(j==0)
 									 {
 								 		examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), accordianPanelViewImpl.getOsceDayProxy().getTimeStart());
 									 }
-									 else							
-										 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), accordianPanelViewImpl.getOsceDayProxy().getTimeStart());
+									 else	*/						
+										 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), assignmentProxy.getTimeStart());
 								 	 
 									//examinerSlotLength=examinerSlotLength/60000;
 									examinerSlotLength--;
@@ -1434,14 +1434,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					 
 					 	//calculate duration
 					 	Long examinerSlotLength=0l;
-					 	 if(j==0)
+					/* 	 if(j==0)
 						 {
 					 		examinerSlotLength=assignmentProxy.getTimeEnd().getTime()- osceDayProxy.getTimeStart().getTime();
 						 }
-						 else							
-							 examinerSlotLength=assignmentProxy.getTimeEnd().getTime()-assignmentProxy.getTimeStart().getTime();
+						 else*/							
+							 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
 					 	 
-						examinerSlotLength=examinerSlotLength/60000;
+						//examinerSlotLength=examinerSlotLength/60000;
 						examinerSlotLength--;
 						//examinerSlotLength=assignmentProxy.getTimeEnd().getMinutes()-assignmentProxy.getTimeStart().getMinutes();
 						//examinerSlotLength++;
