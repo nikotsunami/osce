@@ -131,6 +131,15 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	Label lunchBreakStartValueLabel;
 	//E Module 5 Bug Report Solution
 	
+	@UiField
+	IconButton btnShiftLunchBreakPrev;
+	
+	@UiField
+	IconButton btnShiftLunchBreakNext;
+	
+	@UiField
+	HorizontalPanel lunchBreakHP;
+	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
 		Log.info("OsceDay Save Button Clicked");
@@ -227,6 +236,10 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		lbEndTimeLabel.setText(constants.lbendtime());
 		studentsLabel.setText(constants.student());
 		saveOsceDayValue.setText(constants.save());
+		
+		btnShiftLunchBreakNext.setText(constants.shiftLunchBreakNext());
+		btnShiftLunchBreakPrev.setText(constants.ShiftLunchBreakPrev());
+
 
 		// Highlight onViolation
 			osceDayMap=new HashMap<String, Widget>();
@@ -290,4 +303,32 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	}
 	//E Module 5 Bug Report Solution
 	
+	@UiHandler("btnShiftLunchBreakPrev")
+	public void btnShiftLucnkBreakPrevClicked(ClickEvent event)
+	{
+		delegate.shiftLucnkBreakPrevClicked(this.osceDayProxy, this);
+	}
+	
+	@UiHandler("btnShiftLunchBreakNext")
+	public void btnShiftLucnkBreakNextClicked(ClickEvent event)
+	{
+		System.out.println("SPEC FROM PREVIOUS : " + osceDayProxy.getId());
+		delegate.shiftLucnkBreakNextClicked(this.osceDayProxy, this);
+	}
+
+	public IconButton getBtnShiftLunchBreakPrev() {
+		return btnShiftLunchBreakPrev;
+	}
+
+	public void setBtnShiftLunchBreakPrev(IconButton btnShiftLunchBreakPrev) {
+		this.btnShiftLunchBreakPrev = btnShiftLunchBreakPrev;
+	}
+
+	public IconButton getBtnShiftLunchBreakNext() {
+		return btnShiftLunchBreakNext;
+	}
+
+	public void setBtnShiftLunchBreakNext(IconButton btnShiftLunchBreakNext) {
+		this.btnShiftLunchBreakNext = btnShiftLunchBreakNext;
+	}
 }

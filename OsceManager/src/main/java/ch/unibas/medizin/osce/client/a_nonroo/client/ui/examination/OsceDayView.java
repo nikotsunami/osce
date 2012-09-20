@@ -24,7 +24,8 @@ public interface OsceDayView extends IsWidget{
 		 void scheduleEarlier(OsceDayProxy osceDayProxy);		 
 		//E Module 5 Bug Report Solution
 		
-			// TODO define methods to be delegated!
+		 public void shiftLucnkBreakPrevClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl);
+		 public void shiftLucnkBreakNextClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl);
 		}
 	 
 	 void setDelegate(Delegate delegate);

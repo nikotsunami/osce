@@ -868,6 +868,9 @@ public interface OsceConstants extends Constants {
 	public String questionNotNull();
 	
 	public String checklistTopicNotNull();
+	
+	public String shiftLunchBreakNext();
+	public String ShiftLunchBreakPrev();
 
 }
 
