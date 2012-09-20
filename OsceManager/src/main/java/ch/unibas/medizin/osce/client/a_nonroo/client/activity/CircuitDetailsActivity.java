@@ -3836,30 +3836,57 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					final RoomProxy roomProxy=(RoomProxy)view.getNewListBox().getSelected();
 					Log.info("Room Proxy: " + roomProxy.getId());
-					view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+					
 					((ListBoxPopupViewImpl)view).hide();
 					
-					requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+					System.out.println("SEQUENCE : " + oscePostSubViewImpl.getOscePostProxy().getOsceSequence());
+					
+					//spec
+					
+					requests.oscePostRequest().findOscePost(oscePostSubViewImpl.getOscePostProxy().getId()).with("osceSequence").fire(new OSCEReceiver<OscePostProxy>() {
 
 						@Override
-						public void onSuccess(OscePostRoomProxy response) 
-						{
-							Log.info("Osce Post Room Proxy: " + response.getId());
-							OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
-							response=oscePostRoomRequest.edit(response);
-							response.setRoom(roomProxy);
-							oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
-
-								@Override
-								public void onSuccess(Void response) 
-								{
-									Log.info("Success saveOscePostRoom ");
-									MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
-									dialog.showConfirmationDialog("Room Assign To Post Successfully.");
-								}
-							});
+						public void onSuccess(OscePostProxy oscePostResult) {
 							
-						}
+									requests.oscePostRoomRequestNonRoo().findOscePostRoomByRoom(oscePostResult.getOsceSequence().getId(),roomProxy.getId()).fire(new OSCEReceiver<Integer>() {
+
+										@Override
+										public void onSuccess(Integer roomCount) {
+											if (roomCount.equals(0))
+											{
+												requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+
+													@Override
+													public void onSuccess(OscePostRoomProxy response) 
+													{
+														Log.info("Osce Post Room Proxy: " + response.getId());
+														OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
+														response=oscePostRoomRequest.edit(response);
+														response.setRoom(roomProxy);
+														oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
+
+															@Override
+															public void onSuccess(Void response) 
+															{
+																view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+																Log.info("Success saveOscePostRoom ");
+																MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
+																dialog.showConfirmationDialog("Room Assign To Post Successfully.");
+															}
+														});
+														
+													}
+												});
+											}
+											else
+											{
+												Log.info("Room Already Exist");
+												MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
+												dialog.showConfirmationDialog("Room already assigned to another post");
+											}
+										}
+									});
+							}
 					});
 					
 		/*			OscePostProxy oscePostProxy=(OscePostProxy)view.getProxy();
@@ -3909,6 +3936,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 											
 												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+												
+												requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+													@Override
+													public void onSuccess(
+															Boolean response) {
+														
+														Log.info("Done Successfully");															
+													}
+												});
 										}
 									});
 								}
@@ -3938,6 +3975,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 													
 														osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+														
+														requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+															@Override
+															public void onSuccess(
+																	Boolean response) {
+																
+																Log.info("Done Successfully");															
+															}
+														});
 												}
 											});
 										}
@@ -3985,6 +4032,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 													
 														osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+														
+														requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+
+															@Override
+															public void onSuccess(
+																	Boolean response) {
+																
+																Log.info("Done Successfully");															
+															}
+														});
 												}
 											});
 										}
@@ -4009,6 +4066,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 											
 												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+												
+												requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+
+													@Override
+													public void onSuccess(
+															Boolean response) {
+														
+														Log.info("Done Successfully");															
+													}
+												});
 										}
 									});
 								}

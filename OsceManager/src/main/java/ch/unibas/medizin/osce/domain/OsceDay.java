@@ -694,4 +694,24 @@ public static List<OsceDay> findOSceDaysForAnOsce(Long osceId){
 	}
 	// TestCasePurpose Method start }
 
+public static Boolean updateRotation(Long osceDayId, Integer rotation) {
+	try {
+		
+		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+		List<OsceSequence> listOsceSequence = osceDay.getOsceSequences();
+		if(listOsceSequence!=null && listOsceSequence.size()==2)
+		{
+			OsceSequence firstOsceSequence = listOsceSequence.get(0);
+			OsceSequence secondOsceSequence = listOsceSequence.get(1);
+			firstOsceSequence.setNumberRotation(firstOsceSequence.getNumberRotation() - rotation);
+			secondOsceSequence.setNumberRotation(secondOsceSequence.getNumberRotation() + rotation);
+		}
+		
+	} catch(Exception e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+}
+
 }

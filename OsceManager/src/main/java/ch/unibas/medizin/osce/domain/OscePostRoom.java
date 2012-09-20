@@ -113,4 +113,13 @@ public class OscePostRoom {
         	return null;
         		        	
         }
+    
+    public static Integer findOscePostRoomByRoom(Long osceSequenceId, Long roomId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT o FROM OscePostRoom o WHERE o.room.id = " + roomId + " AND o.oscePost IN(SELECT os FROM OscePost AS os WHERE os.osceSequence.id = " + osceSequenceId +")";
+    	System.out.println("~~ROOM QUERY : " + sql.toString());
+    	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
+    	return q.getResultList().size();
+    }
 }
