@@ -51,7 +51,7 @@ public class OscePost {
 	    	switch(this.getOscePostBlueprint().getPostType()) {
 	    		case NORMAL: return true;
 	    		case BREAK: return false;
-	    		case PREPARATION: return !this.getOscePostBlueprint().getIsFirstPart();
+	    		case PREPARATION: return !this.getOscePostBlueprint().isFirstPart();
 	    		case ANAMNESIS_THERAPY: return true;
 	    	}
 	    }

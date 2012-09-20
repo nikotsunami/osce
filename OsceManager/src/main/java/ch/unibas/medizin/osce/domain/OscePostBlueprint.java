@@ -38,7 +38,7 @@ public class OscePostBlueprint {
 
     private Integer sequenceNumber;
     
-    public boolean  isFirstPart() {
+    public boolean isFirstPart() {
     	if(getIsFirstPart() == null)
     		return false;
     	

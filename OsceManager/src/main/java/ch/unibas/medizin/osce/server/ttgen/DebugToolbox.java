@@ -85,7 +85,7 @@ public class DebugToolbox {
 			postBP = ass.getOscePostRoom().getOscePost().getOscePostBlueprint();
 		}
 		
-		return "\t student "+ass.getSequenceNumber()+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted..." + (postBP != null && postBP.equals(PostType.ANAMNESIS_THERAPY) ? "first: " + postBP.getIsFirstPart() : "");
+		return "\t student "+ass.getSequenceNumber()+" (room: "+room+", "+debugTimeStartEnd(ass)+") inserted..." + (postBP != null && postBP.equals(PostType.ANAMNESIS_THERAPY) ? "first: " + postBP.isFirstPart() : "");
 	}
 	
 	/**
