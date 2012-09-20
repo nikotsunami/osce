@@ -4,7 +4,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
@@ -12,7 +14,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -21,6 +25,7 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.Editor.Path;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -87,8 +92,21 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	public SimplePanel detailsPanel;
 	@UiField(provided = true)
 	public SimplePager pager;
-	@UiField(provided = true)
+	
+	
+	Map<String, String> columnName=new HashMap<String, String>();
+	/*custom celltable start code*/
+	
+
+	/*@UiField(provided = true)
 	public CellTable<StandardizedPatientProxy> table;
+	*/
+	@UiField(provided = true)
+	public AdvanceCellTable<StandardizedPatientProxy> table;
+	
+	
+	
+	/*custom celltable end code*/
 	
 	@UiField
 	public StandartizedPatientAdvancedSearchSubViewImpl standartizedPatientAdvancedSearchSubViewImpl;
@@ -99,7 +117,11 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 
 	//By SPEC[Start
 	//protected Set<String> paths = new HashSet<String>();
-	protected ArrayList<String> paths = new ArrayList<String>();
+	/*custom celltable start code*/
+	
+	/*protected ArrayList<String> paths = new ArrayList<String>();*/
+	public List<String> paths =new ArrayList<String>();
+	/*custom celltable end code*/
 	//By SPEC]End
 	private StandardizedPatientFilterViewImpl filterPanel;
 	private Presenter presenter;
@@ -152,8 +174,19 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	 * implement HasHTML instead of HasText.
 	 */
 	public StandardizedPatientViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		
+/*		custom celltable start code*/
+		
+
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<StandardizedPatientProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		*/
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new AdvanceCellTable<StandardizedPatientProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new AdvanceCellTable<StandardizedPatientProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		/*custom celltable end code*/
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -185,10 +218,18 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		exportButton.setText(constants.export());
 	}
 
-	public String[] getPaths() {
+/*		custom celltable start code*/
+		
+	/*public String[] getPaths() {
 		return paths.toArray(new String[paths.size()]);
 	}
+	*/
+	public List<String> getPaths() {
+		
 
+		return paths;
+	}
+	/*custom celltable end code*/
 	public void init() {
 		
 		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
@@ -247,7 +288,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //                return renderer.render(object.getGender().toString());
 //            }
 //        }, "Gender");
+		
 		paths.add("name");
+		paths.add(" ");
+		columnName.put(constants.name(), "name");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			{ this.setSortable(true); }
 
@@ -263,7 +307,11 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 				return renderer.render(object.getName());
 			}
 		}, constants.name());
+		
+		
 		paths.add("preName");
+		paths.add(" ");
+		columnName.put(constants.preName(), "preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			
 			{ this.setSortable(true); }	//By SPEC
@@ -367,7 +415,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //            }
 //        }, "Birthday");
 */
+		
 		paths.add("email");
+		paths.add(" ");
+		columnName.put(constants.email(), "email");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -384,6 +435,116 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 				return renderer.render(object.getEmail());
 			}
 		}, constants.email());
+		
+		/*custom celltable start code*/
+		
+		
+		paths.add("street");
+		paths.add(" ");
+		columnName.put(constants.street(), "street");
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+			
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				return renderer.render(object.getEmail());
+			}
+		}, constants.street(),false);
+		
+		
+		paths.add("city");
+		paths.add(" ");
+		columnName.put(constants.city(), "city");
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+			
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				return renderer.render(object.getEmail());
+			}
+		}, constants.city(),false);
+		
+		
+		
+		paths.add("telephone");
+		paths.add(" ");
+		columnName.put(constants.telephone(), "telephone");
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+			
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				return renderer.render(object.getEmail());
+			}
+		}, constants.telephone(),false);
+		
+		
+		paths.add("height");
+		paths.add(" ");
+		columnName.put(constants.height(), "height");
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+			
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				return renderer.render(object.getEmail());
+			}
+		}, constants.height(),false);
+		
+		
+		paths.add("weight");
+		paths.add(" ");
+		columnName.put(constants.weight(), "weight");
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+			
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				return renderer.render(object.getEmail());
+			}
+		}, constants.weight(),false);
+/*		custom celltable end code*/
+
 //        paths.add("nationality");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 //
@@ -568,4 +729,12 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		}
 	}
+
+	@Override
+	public Map getSortMap() {
+		// TODO Auto-generated method stub
+		return columnName;
+	}
+	
+	
 }

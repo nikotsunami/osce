@@ -106,16 +106,9 @@ public class NationalityViewImpl extends Composite implements  NationalityView, 
     	nationalityNewMap.put("nationality",newNationality);	
     	nationalityNewMap.put("standardizedpatients",newNationality);		
 		 // E Highlight onViolation
-    	if (delegate.checkNationality(newNationality.getValue()))
-    	{
-    		delegate.newClicked(newNationality.getValue());
-    		 newNationality.setValue("");
-    	}
-    	else
-    	{
-    		MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-    		messageConfirmationDialogBox.showConfirmationDialog(constants.nationaltiywarning());
-    	}
+    	delegate.newClicked(newNationality.getValue());
+    	newNationality.setValue("");
+    	
     }
 
 	/**

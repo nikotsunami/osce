@@ -11,12 +11,15 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -74,14 +77,57 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 		advanceSearchCriteriaMap.put("bindType", bindType);
 		advanceSearchCriteriaMap.put("comparation", comparison);									
 // E Highlight onViolation
+		 /*Advance search popup changes start*/
+		this.sinkEvents(Event.KEYEVENTS);
+		this.sinkEvents(Event.ONFOCUS);
+		/*Advance search popup changes end*/
 	}
+	
+	/*Advance search popup changes start*/
+	@Override
+	public void onBrowserEvent(Event event) {
+		// TODO Auto-generated method stub
+		super.onBrowserEvent(event);
+		int type = DOM.eventGetType(event);
+		// Log.info("event type--"+event.getType());
+
+		
+		switch (type) {
+		case Event.ONKEYUP:
+			// onKeyDownEvent(event);
+			
+				if (event.getKeyCode() == 13) 
+				{
+					Log.info("Enter press");
+					addAdvSearchSaveMethod();
+				}
+			break;
+		default:
+			return;
+
+		}
+	}
+	
+	/*Advance search popup changes end*/
+	
+	/*Advance search popup changes start*/
 	
 	@UiHandler("addNationalityButton")
 	public void addLanguageButtonClicked(ClickEvent event) {
+	/*	delegate.addNationalityButtonClicked(nationality.getValue(), bindType.getValue(), comparison.getValue());
+		this.hide();*/
+		Log.info("Call addAdvSearchSaveMethod");
+		addAdvSearchSaveMethod();
+	}
+
+	public void addAdvSearchSaveMethod()
+	{
+		Log.info("Call addAdvSearchSaveMethod");
 		delegate.addNationalityButtonClicked(nationality.getValue(), bindType.getValue(), comparison.getValue());
 		this.hide();
 	}
 
+	/*Advance search popup changes end*/
 	@UiHandler("closeBoxButton")
 	public void closeBoxButtonClicked(ClickEvent event) {
 		this.hide();

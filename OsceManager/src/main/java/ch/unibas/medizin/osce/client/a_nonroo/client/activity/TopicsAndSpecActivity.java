@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -176,10 +177,12 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 				sortname = path[index];
 				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;				
 				//By SPEC]end
+				setInserted(false);
 				TopicsAndSpecActivity.this.onRangeChanged();
 			}
 		});
 		
+		setInserted(false);
 		init();
 		activityManager.setDisplay(view.getDetailsPanel());
 		
@@ -255,6 +258,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			@Override
 			public void onSuccess(Void arg0) {
 				Log.info("specification data saved");
+				setInserted(true);
 				init();
 			}
 		});
@@ -278,6 +282,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 				}
 				Log.debug("Geholte Nationalitäten aus der Datenbank: " + response);
 				Log.info("set specialisation table size according to count");
+				totalRecords = response.intValue();
 				view.getTable().setRowCount(response.intValue(), true);
 
 				onRangeChanged();
@@ -317,6 +322,11 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 				// E Violation Changes Highlight
 				table.setRowData(range.getStart(), response);
 
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+				}
 				// finishPendingSelection();
 				if (widget != null) {
 					widget.setWidget(view.asWidget());
@@ -326,8 +336,31 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			
 		};
 
+		if(isInserted){
+
+			sortname = "id";
+			sortorder = Sorting.ASC;
+			
+			Log.info("sortname == "+sortname);
+			Log.info("sortorder == "+sortorder);
+			
+			setInserted(false);
+		}
+
 			fireRangeRequest(range, callback);
 	}
+	
+	private int totalRecords;
+	private boolean isInserted;
+	
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
+	}
+	
 	
 	private void fireRangeRequest(final Range range, final Receiver<List<SpecialisationProxy>> callback) {
 		Log.info("Inside fireRangeRequest()");
@@ -373,6 +406,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 					public void onSuccess(Void ignore) 
 					{
 						Log.debug("Sucessfully deleted");
+						setInserted(false);
 						init();
 					}
 					});
@@ -489,6 +523,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 																		Log.info("Save RoleTopic values value Succesfully according to ToolTip value");
 																		toolTip.clear();
 																		toolTip.hide();				
+																		setInserted(false);
 																		init();
 																	
 																	}
@@ -508,6 +543,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	public void performSearch(String value) {
 		searchFilter=value;
 		Log.info("Searching specialisation");
+		setInserted(false);
 		init2();
 		
 	}

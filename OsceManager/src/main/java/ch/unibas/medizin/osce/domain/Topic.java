@@ -22,19 +22,25 @@ public class Topic {
 	@ManyToOne
 	private ClassificationTopic classificationTopic;
 	
-	public static List<Topic> findTopic(String val)
+	public static List<Topic> findTopicByTopicDescAndClassificationTopic(String val, Long id)
 	{
 		EntityManager em = entityManager();
-    	TypedQuery<Topic> q = em.createQuery("SELECT o FROM Topic o WHERE o.topicDesc LIKE :val", Topic.class);
-     	q.setParameter("val", "%" + val + "%");
-     	return q.getResultList();
+		String sql = "SELECT o FROM Topic o WHERE o.topicDesc = '" + val + "' AND o.classificationTopic = " + id;
+    	TypedQuery<Topic> q = em.createQuery(sql, Topic.class);
+    	return q.getResultList();
 	}
 	
-	public static List<Topic> findTopicByClassiTopic(ClassificationTopic proxy)
+	public static List<Topic> findTopicByClassiTopic(Long value)
 	{
 		EntityManager em = entityManager();
-		TypedQuery<Topic> q = em.createQuery("SELECT t FROM Topic t WHERE t.classificationTopic LIKE :value", Topic.class);
-		q.setParameter("value", proxy);
+		String sql = "";
+		
+		if (value != null)
+			sql = "SELECT t FROM Topic t WHERE t.classificationTopic.id = " + value;
+		else
+			sql = "SELECT t FROM Topic t";
+		
+		TypedQuery<Topic> q = em.createQuery(sql, Topic.class);
 		return q.getResultList();
 	}
 }

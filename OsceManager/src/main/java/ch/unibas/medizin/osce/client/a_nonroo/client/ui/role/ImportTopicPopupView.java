@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
@@ -18,6 +19,8 @@ public interface ImportTopicPopupView extends IsWidget{
 		
 		
 		public void roleListBoxValueSelected(StandardizedRoleProxy proxy,ImportTopicPopupViewImpl view);
+		
+		public void specialisationListBoxValueSelected(SpecialisationProxy proxy,ImportTopicPopupViewImpl view);
 		
 		public void topicListBoxValueSelected(ChecklistTopicProxy proxy,ImportTopicPopupViewImpl view);
 		

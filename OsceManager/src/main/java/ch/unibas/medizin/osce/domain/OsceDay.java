@@ -665,4 +665,16 @@ public class OsceDay {
 	}
 	//E Module 5 Bug Report Solution
 
+// TestCasePurpose Method start {
+public static List<OsceDay> findOSceDaysForAnOsce(Long osceId){
+	
+			Log.info("Inside findOSceDaysForAnOsce with Osce Is : " + osceId);
+			EntityManager em = entityManager();
+			String query="select o from OsceDay as o where o.osce="+osceId;
+			TypedQuery<OsceDay> q = em.createQuery(query, OsceDay.class);
+			Log.info("Query String: " + query);
+			return q.getResultList();
+	}
+	// TestCasePurpose Method start }
+
 }

@@ -949,13 +949,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		{
 			Log.info("Call changeContentViewColor: with Color" + color);
 			
+			ContentViewImpl tempView = (ContentViewImpl) contentViewImpl;
+			
 			ColorPicker cp[]=ColorPicker.values();
 			for(int i=0;i<ColorPicker.values().length;i++)
 			{
 				if(!cp[i].equals(color) && color!=null)
 				{
-					Log.info("Remove Color: " + cp[i]);
-					contentViewImpl.getContentPanel().removeStyleDependentName("selected" +cp[i].toString());
+					Log.info("Remove Color: " + cp[i]);					
+					tempView.removeStyleName("accordion-title-selected" +cp[i].toString());					
 				}
 			}
 			
@@ -966,37 +968,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			}				
 			else
 			{
-				String c="accordion-title-selected"+color;
+				String c="accordion-title-selected"+color.toString();
 				
-				Log.info("Color Not Null" + color+"---"+c);
-				if(color.compareToIgnoreCase("blue")==0)
-				{
-					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#DAE0F1");
-				}
-				else if(color.compareToIgnoreCase("red")==0)
-				{
-					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#F3D8DC");
-				}
-				else if(color.compareToIgnoreCase("yellow")==0)
-				{
-					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#FFFFCC");
-				}
-				else if(color.compareToIgnoreCase("green")==0)
-				{
-					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#D6F0D5");
-				}
-				else if(color.compareToIgnoreCase("purple")==0)
-				{
-					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#C9C9FD");
-				}
-				else
-				{
-					contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor("#FFFFFF");
-				}
-				//contentViewImpl.getContentPanel().addStyleDependentName("selected" +color.toString());
-				//contentViewImpl.getContentPanel().getElement().getStyle().clearBackgroundColor();
-				/*contentViewImpl.getContentPanel().getElement().getStyle().setBackgroundColor(color);*/				
-				//contentViewImpl.getContentPanel().setStyleName(c, true);
+				Log.info("~~~~Color Not Null : " + color +" --- : "+c);
+				
+				tempView.addStyleName(c);
+			
 			}
 				
 		}

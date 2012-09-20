@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarView;
@@ -69,6 +70,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		
 		MenuClickEvent.register(requests.getEventBus(), (ScarViewImpl) view);
 		
+		setInserted(false);
 		init();
 
 		// Inherit the view's key provider
@@ -91,6 +93,17 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		view.setDelegate(this);
 	}
 	
+	private int totalRecords;
+	private boolean isInserted;
+	
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
+	}
+	
 	private void init() {
 		init2("");
 	}
@@ -110,6 +123,8 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 					return;
 				}
 				Log.debug("Geholte Narben aus der Datenbank: " + response);
+
+				totalRecords = response.intValue();
 				view.getTable().setRowCount(response.intValue(), true);
 
 				onRangeChanged(q);
@@ -136,6 +151,13 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 					return;
 				}
 				table.setRowData(range.getStart(), values);
+
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+					setInserted(false);
+				}
 
 				// finishPendingSelection();
 				if (widget != null) {
@@ -181,6 +203,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
+				setInserted(true);
 				init();
 			}
 		});
@@ -191,6 +214,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		requests.scarRequest().remove().using(scar).fire(new Receiver<Void>() {
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
+				setInserted(false);
 				init();
 			}
 		});
@@ -199,6 +223,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
+		setInserted(false);
 		init2(q);
 	}
 
@@ -217,6 +242,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		scarReq.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getScarMap()){
 			@Override
 				public void onSuccess(Void arg0) {
+				setInserted(false);
 					init();
 				}
 		});	

@@ -227,6 +227,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									neededSp = (parcourList.size()*2) + 1;
 							  }
 															
+								Log.info("Needed SP is : " + neededSp);
 								int allReadyPatientInRole =sortedOscePost.getPatientInRole().size();
 								
 								 for (Iterator sortedPatientInSemesterIt = patientInSemesterList1.iterator(); sortedPatientInSemesterIt.hasNext();) {
@@ -256,8 +257,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)){
 								 					
 								 						 Log.info("Search Criteria Found For Role1 List : "+sortedPatientInSemester1.getId());
-								 						 
+								 						Log.info("For Role1 List security type : "+sortedOsceDay.getOsce().getOsceSecurityTypes());
 								 						if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal && (Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
+								 							Log.info("Check Osce.getTotalRolesFroOscePost : " + Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId()));								 							
 									 							if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(),sortedPatientInSemester1.getId())==0){
 									 								
 									 							// Assign Patient In Role With One Post Null and One Post As Given.

@@ -663,19 +663,19 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		
 		public void showImportTopicView()
 		{
-//			if(importTopicView==null)
+			if(importTopicView==null)
 			{
 				importTopicView=new ImportTopicPopupViewImpl(false,null);
 				((ImportTopicPopupViewImpl)importTopicView).setAnimationEnabled(true);
 				
-				delegate.setRoleListBoxValue(importTopicView);
-				
-				((ImportTopicPopupViewImpl)importTopicView).setWidth("150px");			
+			//	delegate.setRoleListBoxValue(importTopicView);
+				delegate.setSpecialisationListBox(importTopicView);
+				((ImportTopicPopupViewImpl)importTopicView).setWidth("250px");			
 				RootPanel.get().add(((ImportTopicPopupViewImpl)importTopicView));
 				
 				
 				
-				importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
+			/*	importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
 					
 					@Override
 					public void onClick(ClickEvent event) 
@@ -684,7 +684,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 							((ImportTopicPopupViewImpl)importTopicView).hide(true);
 						}
 					}
-				});
+				});*/
 				// Issue Role
 					importTopicView.getCancelBtn().addClickHandler(new ClickHandler() 
 					{
@@ -697,7 +697,10 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 				// E: Issue Role
 				
 		}
-			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
+			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft()+200, addTopicHP.getAbsoluteTop()-250);
+			((ImportTopicPopupViewImpl)importTopicView).roleLstBox.setText("");
+			((ImportTopicPopupViewImpl)importTopicView).specializationLstBox.setText("");
+			((ImportTopicPopupViewImpl)importTopicView).queListBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).show();
 		}
 	//Assignment E]

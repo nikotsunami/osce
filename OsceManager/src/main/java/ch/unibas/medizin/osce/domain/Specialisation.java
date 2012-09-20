@@ -65,5 +65,15 @@ public class Specialisation {
         
         return q.getResultList();
     }
+ // TestCasePurpose Method start {
+    public static Specialisation getSpecialisationForId(Long id){
+    	Log.info("Inside getSpecialisationForId() With Id " + id);
+    	EntityManager em = entityManager();
+        String sqlQuery = "SELECT o FROM Specialisation AS o WHERE o.id="+id;
+        TypedQuery<Specialisation> q = em.createQuery(sqlQuery, Specialisation.class);
+    	return q.getSingleResult();
+    }
+    
+ // TestCasePurpose Method End }
     
 }

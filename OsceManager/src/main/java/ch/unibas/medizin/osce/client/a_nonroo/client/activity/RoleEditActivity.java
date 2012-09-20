@@ -590,6 +590,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				
 			
 				RoleDetailsActivity.setSelecTab(findTabIndex());
+				roleActivity.setInserted(false);
 				roleActivity.initSearch();
 				goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));				
 				

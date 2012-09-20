@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -26,8 +27,11 @@ public interface StandardizedPatientView  extends IsWidget{
     	public void performSearch(String q, List<String> list);
 	}
 
-    public CellTable<StandardizedPatientProxy> getTable();
-    public String[] getPaths();
+     CellTable<StandardizedPatientProxy> getTable();
+    /*custom celltable start code*/
+    /*public String[] getPaths();*/
+    List<String> getPaths();
+    /*custom celltable end code*/
     public List<String> getSearchFilters();
     
     public String getQuery();
@@ -43,4 +47,5 @@ public interface StandardizedPatientView  extends IsWidget{
     public IconButton getExportButton();
     //By Spec]End
 	QuickSearchBox getSearchBox();
+	Map getSortMap();
 }

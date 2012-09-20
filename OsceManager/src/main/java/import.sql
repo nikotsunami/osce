@@ -9929,7 +9929,7 @@ INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert4', 'alter Wert4', '543210', 0);
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert5', 'alter Wert5', '012345', 0);
 
-INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`max_number_students`,`middle_break`,`name`,`number_courses`,`number_posts`,`number_rooms`,`osce_status`,`post_length`,`short_break`,`short_break_simpat_change`,`study_year`,`version`,`copied_osce`,`semester`) VALUES (1,15,0,1,45,130,5,'Test 1',0,NULL,16,2,13,1,3,3,0,NULL,1);
+INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`max_number_students`,`middle_break`,`name`,`number_courses`,`number_posts`,`number_rooms`,`osce_status`,`post_length`,`short_break`,`short_break_simpat_change`,`study_year`,`version`,`copied_osce`,`semester`,`osce_security_types`,`patient_average_per_post`,`security`) VALUES (1,15,0,1,45,130,5,'Test 1',0,NULL,16,2,13,1,3,3,0,NULL,1,1,NULL,1);
 
 INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (1,'2012-06-18 19:00:00','2012-06-18 09:00:00',0,1,'2012-06-18 00:00:00');
 
@@ -9941,14 +9941,14 @@ INSERT INTO `osce_post_blueprint` (is_first_part, sequence_number, role_topic, o
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('A', 4, 1, 0);
 INSERT INTO `osce_sequence` (label, number_rotation, osce_day, version) VALUES ('B', 4, 1, 0);
 
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('yellow', 1, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('blue', 2, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('red', 2, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('green', 2, 0);
-INSERT INTO `course` (color, osce_sequence, version) VALUES ('yellow', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_1', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_2', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_3', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_4', 1, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_5', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_6', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_7', 2, 0);
+INSERT INTO `course` (color, osce_sequence, version) VALUES ('color_8', 2, 0);
 --INSERT INTO `course` (color, osce_sequence, version) VALUES ('purple', 1, 0);
 --INSERT INTO `course` (color, osce_sequence, version) VALUES ('purple', 2, 0);
 

@@ -43,7 +43,7 @@
   background-color: #dadada;
   
   border-bottom: 1px solid #AAAAAA;
-  border-right: 1px solid #AAAAAA;
+   /* border-right: 1px solid #AAAAAA; */ 
   
   padding: 0px 10px;
   text-align: left;

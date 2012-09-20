@@ -1,0 +1,81 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	
+	<ui:style src="../styles.css">
+	.topLbl
+	{
+		margin-top: 5px;
+	}
+	
+	.bottomLbl
+	{
+		margin-top: 5px;
+		margin-right: 47px;
+		margin-bottom: 25px;
+	}
+	
+	.bottomLbl2
+	{
+		margin-top: 5px;
+		margin-right: 61px;
+	}
+	
+	.btnStyle
+	{
+		width: 150px;
+	}
+	
+	.divStyle
+	{
+		width: 300px;
+		margin-left: 875px;	
+	}
+	</ui:style>
+	
+	
+	<g:HTMLPanel>	
+		<g:VerticalPanel>
+			<g:HorizontalPanel>
+				<g:Label styleName="{style.topLbl}" ui:field="mainClassiLbl"></g:Label>
+				<i:DefaultSuggestBox ui:field="mainClassificationSuggestBox"></i:DefaultSuggestBox>
+			
+				<g:Label styleName="{style.topLbl}" ui:field="classiTopicLbl"></g:Label>
+				<i:DefaultSuggestBox ui:field="classificationTopicSuggestBox"></i:DefaultSuggestBox>
+			
+				<g:Label styleName="{style.topLbl}" ui:field="topicLbl"></g:Label>
+				<i:DefaultSuggestBox ui:field="TopicSuggestBox"></i:DefaultSuggestBox>
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel>
+				<g:Label styleName="{style.bottomLbl}" ui:field="skillLevelLbl"></g:Label>
+				<i:DefaultSuggestBox ui:field="skillLevelSuggestBox"></i:DefaultSuggestBox>
+			
+				<g:Label styleName="{style.bottomLbl2}" ui:field="applianceLbl"></g:Label>
+				<i:DefaultSuggestBox ui:field="applianceSuggestBox"></i:DefaultSuggestBox>
+			</g:HorizontalPanel>
+		
+		</g:VerticalPanel>
+		
+		<g:HorizontalPanel>
+			
+				<g:HTMLPanel>
+						<div>
+							<div style="float:left;">
+								<g:HorizontalPanel addStyleNames="{style.btnStyle}" ui:field="hpBtnPanel">
+									
+								</g:HorizontalPanel>
+							</div>
+							<div class="{style.divStyle} {style.controls} {style.controlsleft}" >
+								<c:SimplePager display="{table}" ui:field="pager" />
+							</div>
+						</div>
+					<g:ScrollPanel ui:field="learningScrollPanel">
+						<c:CellTable ui:field="table" addStyleNames="{style.standardTable}" />		
+					</g:ScrollPanel>			
+				</g:HTMLPanel>
+			
+		</g:HorizontalPanel>
+	</g:HTMLPanel>
+		
+</ui:UiBinder> 

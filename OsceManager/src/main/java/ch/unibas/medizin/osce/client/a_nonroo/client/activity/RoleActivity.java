@@ -8,10 +8,13 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleAddPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleAddPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
@@ -132,7 +135,7 @@ public class RoleActivity extends AbstractActivity implements
 		public void onSuccess(List<SpecialisationProxy> response) {
 		//	filterView.setSpecialisationBoxValues(response);
 			filterView.setSpecialisationAutocompleteValue(response);
-			view.setSpecialisationBoxValues(response);
+			view.setSpecialisationBoxValues(response);		
 		}
 	}
 
@@ -290,6 +293,7 @@ public class RoleActivity extends AbstractActivity implements
 				Log.info("new topic added successfully");
 			//	init2();
 				Log.info("Call Init Search from onSuccess");
+				setInserted(true);
 				initSearch();
 			}
 		});
@@ -352,12 +356,14 @@ public class RoleActivity extends AbstractActivity implements
 					//By SPEC]end
 					//RoleActivity.this.init2("");
 					Log.info("Call Init Search from addColumnSortHandler");
+					setInserted(false);
 					initSearch();
 				}
 			});
 		 
 	 //	init2();	
 		 Log.info("Call Init Search from addColumnSortHandler1");
+		 setInserted(false);
 		initSearch();
 		this.SpecialisationListBox = view.getListBox();
 		requestAllTopic = requests.roleTopicRequestNonRoo();
@@ -455,6 +461,8 @@ public class RoleActivity extends AbstractActivity implements
 
 		Log.info("range change for role topic ");
 		Log.info("Call Init Search from onRangeChange");
+		
+		setInserted(false);
 		initSearch();
 	}
 	
@@ -477,6 +485,7 @@ public void performSearch(String q, List<String> list,List<String> tableList,Lis
 //	this.searchThroughListBox=listBoxFilter;
 //	Log.debug("Search for " + q);
 	Log.info("Call Init Search from performSearch");
+	setInserted(false);
 	initSearch();
 //	System.out.println("search--"+q+"---"+list);
 	
@@ -485,6 +494,19 @@ public void performSearch(String q, List<String> list,List<String> tableList,Lis
 public Sorting sortorder = Sorting.ASC;
 public String sortname = "name";
   
+private int totalRecords;
+private boolean isInserted;
+
+
+
+public boolean isInserted() {
+	return isInserted;
+}
+
+public void setInserted(boolean isInserted) {
+	this.isInserted = isInserted;
+}
+
 public void initSearch() {
 	// TODO Auto-generated method stub
 	
@@ -505,12 +527,29 @@ public void initSearch() {
 			}
 			table.setRowData(range.getStart(), values);
 
+			if(isInserted){
+					
+				int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+				table.setPageStart(start);
+			}
+			
 			// finishPendingSelection();
 			if (widget != null) {
 				widget.setWidget(view.asWidget());
 			}
 		}
 	};
+
+	
+	if(isInserted){
+
+		sortname = "id";
+		sortorder = Sorting.ASC;
+		setInserted(false);
+		
+		Log.info("sortname == "+sortname);
+		Log.info("sortorder == "+sortorder);
+	}
 
 /*
 	requestAllTopic.findRoleTopicsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
@@ -532,7 +571,7 @@ private class TotalRecordCount extends  Receiver<Long> {
 	@Override
 	public void onSuccess(Long response) {
 		
-		
+		totalRecords = response.intValue();
 		view.getTable().setRowCount(response.intValue(), true);
 	 
 		
@@ -546,4 +585,20 @@ protected void showDetails(RoleTopicProxy RoleTopic)
 	RoleEditActivity.roleTopic = RoleTopic;//angiv
 	goTo(new RoleDetailsPlace(RoleTopic.stableId(), Operation.DETAILS));
 }
+
+	//role issue
+	public void getAllSpecialisation(final RoleAddPopupView popupView, final int clientX, final int clientY)
+	{
+		requests.specialisationRequest().findAllSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+
+			@Override
+			public void onSuccess(List<SpecialisationProxy> response) {
+				System.out.println("LIST SIZE : " + response.size());
+				
+				((RoleAddPopupViewImpl)popupView).setSpecialisationBoxValues(response);
+				((RoleAddPopupViewImpl)popupView).setPopupPosition(clientX - 100, clientY);
+				((RoleAddPopupViewImpl)popupView).show();
+			}
+		});
+	}
 }

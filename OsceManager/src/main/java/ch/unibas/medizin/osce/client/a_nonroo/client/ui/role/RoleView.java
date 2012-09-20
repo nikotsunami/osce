@@ -38,6 +38,9 @@ public interface RoleView extends IsWidget{
 				StudyYears value4);
 
 		//spec end
+		
+		//role issue
+		public void getAllSpecialisation(RoleAddPopupView popupView, int clientX, int clientY);
 	}
 
     String[] getPaths();

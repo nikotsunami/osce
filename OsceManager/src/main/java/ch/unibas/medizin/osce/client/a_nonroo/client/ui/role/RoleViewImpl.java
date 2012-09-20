@@ -29,6 +29,7 @@ import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -36,6 +37,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
@@ -53,6 +55,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -106,9 +109,9 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	public CellTable<RoleTopicProxy> table;
 //	
 	
-	@UiField
+	/*@UiField
 	 TextBox topicName;
-
+*/
 	/*@UiField
 	 MySuggestionBoxDemo suggestdemo;
 	
@@ -126,23 +129,23 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 //    ValueListBox<StudyYears> traitTypeBox1 = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
 //	
 //	
-	@UiField(provided = true)
-	ListBox slots_till_change=new ListBox();
+	/*@UiField(provided = true)
+	ListBox slots_till_change=new ListBox();*/
 	
 //	@UiField(provided = true)
 //	ListBox SpecialisationId=new ListBox();
 //	
 //	
-	@UiField(provided = true)
-    ValueListBox<StudyYears> studyYearBox = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
+	/*@UiField(provided = true)
+    ValueListBox<StudyYears> studyYearBox = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());*/
 
 	
 //	ValueListBox<Specialisation> c=new ValueListBox<Specialisation>(new SpecialisationProxyRenderer());
 	
 	//Issue # 122 : Replace pull down with autocomplete.
 
-	@UiField
-	public DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> SpecialisationBox;
+	/*@UiField
+	public DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> SpecialisationBox;*/
 /*	@UiField(provided = true)
 	ValueListBox<SpecialisationProxy> SpecialisationBox = new ValueListBox<SpecialisationProxy>(new SpecialisationProxyRenderer());
 */
@@ -184,7 +187,10 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	
 	private RoleFilterViewTooltipImpl  filterPanel;
 	
-	//private StandardizedPatientFilterViewImpl filterPanel; 
+	//private StandardizedPatientFilterViewImpl filterPanel;
+	
+	//issue
+	RoleAddPopupView popupView;
 	
 
 	/**
@@ -290,7 +296,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		//	studyYearBox.setValue(StudyYears.valueOf(""+0));
 		
 		
-		for(int i=1;i<=12;i++)
+		/*for(int i=1;i<=12;i++)
 		{
 			slots_till_change.addItem(i+"");
 		}
@@ -298,7 +304,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		
 		
 		studyYearBox.setValue(StudyYears.values()[0]);
-		studyYearBox.setAcceptableValues(Arrays.asList(StudyYears.values()));
+		studyYearBox.setAcceptableValues(Arrays.asList(StudyYears.values()));*/
 		
 		
 		//spec  end
@@ -315,13 +321,13 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		// Highlight onViolation
 		
 		roleTopicMap=new HashMap<String, Widget>();
-		roleTopicMap.put("name", topicName);
-		roleTopicMap.put("description", topicName);
-		roleTopicMap.put("studyYear", studyYearBox);
+		/*roleTopicMap.put("name", topicName);
+		roleTopicMap.put("description", topicName);*/
+		/*roleTopicMap.put("studyYear", studyYearBox);
 		roleTopicMap.put("slotsUntilChange", slots_till_change);
 		//Issue # 122 : Replace pull down with autocomplete.
 		//roleTopicMap.put("specialisation",SpecialisationBox);
-		roleTopicMap.put("specialisation",SpecialisationBox.getTextField().advancedTextBox);
+		roleTopicMap.put("specialisation",SpecialisationBox.getTextField().advancedTextBox);*/
 		//Issue # 122 : Replace pull down with autocomplete.
 
 
@@ -334,14 +340,31 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
 		
-		
+		popupView = new RoleAddPopupViewImpl();
+			
+		((RoleAddPopupViewImpl)popupView).setGlassEnabled(false);
 	
+		((RoleAddPopupViewImpl)popupView).setWidth("480px");
+	
+		((RoleAddPopupViewImpl)popupView).getNewButton().addClickHandler(new ClickHandler() {
+				
+			@Override
+			public void onClick(ClickEvent event) {
+				delegate.newClicked(((RoleAddPopupViewImpl)popupView).getTopicName().getValue(), ((RoleAddPopupViewImpl)popupView).getSlots_till_change().getValue(((RoleAddPopupViewImpl)popupView).getSlots_till_change().getSelectedIndex()), ((RoleAddPopupViewImpl)popupView).getSpecialisationBox().getSelected(), ((RoleAddPopupViewImpl)popupView).getStudyYearBox().getValue());
+				((RoleAddPopupViewImpl)popupView).getTopicName().setValue("");
+				((RoleAddPopupViewImpl)popupView).hide();
+			}
+		});
 		
+		
+		
+		delegate.getAllSpecialisation(popupView, event.getClientX(), event.getClientY());
+	
 		//Issue # 122 : Replace pull down with autocomplete.
 		//delegate.newClicked(topicName.getValue(), slots_till_change.getValue(slots_till_change.getSelectedIndex()),SpecialisationBox.getValue() ,studyYearBox.getValue());
-		delegate.newClicked(topicName.getValue(), slots_till_change.getValue(slots_till_change.getSelectedIndex()),SpecialisationBox.getSelected() ,studyYearBox.getValue());
+		//delegate.newClicked(topicName.getValue(), slots_till_change.getValue(slots_till_change.getSelectedIndex()),SpecialisationBox.getSelected() ,studyYearBox.getValue());
 		//Issue # 122 : Replace pull down with autocomplete.
-		topicName.setValue("");
+		//topicName.setValue("");
 	}
 	//spec end
 	
@@ -494,7 +517,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	
 	@Override
 	public void setSpecialisationBoxValues(List<SpecialisationProxy> values) {
-		boolean areValuesValid = (values != null) && (values.size() > 0);
+		/*boolean areValuesValid = (values != null) && (values.size() > 0);
 		
 		if (!areValuesValid) {
 			//hideAddBoxes();
@@ -531,7 +554,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	
 		//Issue # 122 : Replace pull down with autocomplete.
 	
-		/*DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) defaultsuggest.getSuggestOracle();
+		DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) defaultsuggest.getSuggestOracle();
 		suggestOracle1.setPossiblilities(values);
 
 
@@ -549,22 +572,22 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 
 		//second way to set renderer
 		defaultsuggest.setRenderer(new SpecialisationProxyRenderer());
+		
+		
 		*/
-		
-		
 		
 	}
 	
 	
 	
 	private void setAddBoxesShown(boolean show) {
-		if (addBoxesShown  == show) {
+		/*if (addBoxesShown  == show) {
 			return;
 		}
 		
 		SpecialisationBox.setVisible(show);
 	//	scarAddButton.setVisible(show);
-		addBoxesShown = show;
+		addBoxesShown = show;*/
 		
 	}
 	private void showAddBoxes() {

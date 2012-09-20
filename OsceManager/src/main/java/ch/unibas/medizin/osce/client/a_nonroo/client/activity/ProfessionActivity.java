@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -72,6 +73,8 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		//by spec
 		MenuClickEvent.register(requests.getEventBus(), (ProfessionViewImpl)view);
 
+		
+		setInserted(false);
 		init();
 
 //		activityManger.setDisplay(view.getDetailsPanel());
@@ -99,6 +102,17 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		
 	}
 	
+	private int totalRecords;
+	private boolean isInserted;
+	
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
+	}
+	
 	private void init() {
 		init2("");
 	}
@@ -119,7 +133,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 				}
 				Log.debug("Geholte Berufe aus der Datenbank: " + response);
 				view.getTable().setRowCount(response.intValue(), true);
-
+				totalRecords = response.intValue();
 				onRangeChanged(q);
 			}
 
@@ -154,6 +168,12 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 				}
 				table.setRowData(range.getStart(), values);
 
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+					setInserted(false);
+				}
 				// finishPendingSelection();
 				if (widget != null) {
 					widget.setWidget(view.asWidget());
@@ -199,6 +219,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
+				setInserted(true);
 				init();
 			}
 		});
@@ -209,6 +230,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		requests.professionRequest().remove().using(prof).fire(new Receiver<Void>() {
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
+				setInserted(false);
 				init();
 			}
 		});
@@ -217,6 +239,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
+		setInserted(false);
 		init2(q);
 	}
 
@@ -240,6 +263,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 				// Highlight onViolation	
 				((EditPopViewImpl)view.getEditPopView()).hide();
 				// E Highlight onViolation
+				setInserted(false);
 				init();			
 			}
 		});

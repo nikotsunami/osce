@@ -2,21 +2,24 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -47,7 +50,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 	
 	Boolean flag = false;
 	
-
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	public NationalityActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
     	this.placeControler = placeController;
@@ -74,6 +78,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 		MenuClickEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
 		
+		setInserted(false);
 		init();
 
 //		activityManger.setDisplay(view.getDetailsPanel());
@@ -115,6 +120,8 @@ NationalityView.Presenter, NationalityView.Delegate {
 					return;
 				}
 				Log.debug("Geholte Nationalitäten aus der Datenbank: " + response);
+				
+				totalRecords = response.intValue();
 				view.getTable().setRowCount(response.intValue(), true);
 
 				onRangeChanged(q);
@@ -151,6 +158,12 @@ NationalityView.Presenter, NationalityView.Delegate {
 				}
 				table.setRowData(range.getStart(), values);
 
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+					setInserted(false);
+				}
 				// finishPendingSelection();
 				if (widget != null) {
 					widget.setWidget(view.asWidget());
@@ -182,19 +195,43 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 	}
 
+	private int totalRecords;
+	private boolean isInserted;
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
+	}
+	
 	@Override
-	public void newClicked(String name) {
+	public void newClicked(final String name) {
 		Log.debug("Add nationality");
-		NationalityRequest nationReq = requests.nationalityRequest();
-		NationalityProxy nation = nationReq.create(NationalityProxy.class);
-		nation.setNationality(name);
-		// Highlight onViolation
-		Log.info("Map Size: " + view.getNationalityNewMap().size());
-		nationReq.persist().using(nation).fire(new OSCEReceiver<Void>(view.getNationalityNewMap()){
-		// E Highlight onViolation
+		requests.nationalityRequestNonRoo().checkNationnality(name).fire(new OSCEReceiver<Integer>() {
 			@Override
-			public void onSuccess(Void arg0) {
-				init();
+			public void onSuccess(Integer response) {
+				if (response == 0)
+				{
+					NationalityRequest nationReq = requests.nationalityRequest();
+					NationalityProxy nation = nationReq.create(NationalityProxy.class);
+					nation.setNationality(name);
+					// Highlight onViolation
+					Log.info("Map Size: " + view.getNationalityNewMap().size());
+					nationReq.persist().using(nation).fire(new OSCEReceiver<Void>(view.getNationalityNewMap()){
+					// E Highlight onViolation
+						@Override
+						public void onSuccess(Void arg0) {
+							setInserted(true);
+							init();
+						}
+					});
+				}
+				else
+				{
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+		    		messageConfirmationDialogBox.showConfirmationDialog(constants.nationaltiywarning());
+				}
 			}
 		});
 	}
@@ -206,6 +243,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		// Highlight onViolation
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
+				setInserted(false);
 				init();
 			}
 		});
@@ -214,6 +252,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
+		setInserted(false);
 		init2(q);
 	}
 
@@ -238,6 +277,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 			@Override
 			public void onSuccess(Void response) {
 				((EditPopViewImpl)view.getEditPopupView()).hide();
+				setInserted(false);
 				init();
 				
 			}
@@ -245,22 +285,4 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 		
 	}
-	
-	@Override
-	public boolean checkNationality(String name) {
-		
-		
-		requests.nationalityRequestNonRoo().findNationalitiesByName(name, 0, 10).fire(new OSCEReceiver<List<NationalityProxy>>() {
-
-			@Override
-			public void onSuccess(List<NationalityProxy> response) {
-				if (response.size() == 0)
-					flag = true;
-				else 
-					flag = false;				
-			}
-		});
-		return flag;
-	}
-
 }

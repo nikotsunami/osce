@@ -17,4 +17,6 @@ public interface NationalityRequestNonRoo extends RequestContext {
 	abstract Request<Long> countNationalitiesByName(String name);
 	
 	abstract Request<List<NationalityProxy>> findNationalitiesByName(String name, int firstResult, int maxResults);
+	
+	abstract Request<Integer> checkNationnality(String name);
 }

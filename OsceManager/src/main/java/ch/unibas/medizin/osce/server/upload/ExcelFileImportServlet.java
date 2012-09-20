@@ -3,7 +3,9 @@ package ch.unibas.medizin.osce.server.upload;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +31,8 @@ import ch.unibas.medizin.osce.domain.SkillHasAppliance;
 import ch.unibas.medizin.osce.domain.SkillLevel;
 import ch.unibas.medizin.osce.domain.Topic;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.shared.i18n.LearningObjective;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -49,6 +53,8 @@ public class ExcelFileImportServlet extends HttpServlet {
 			
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
+		
+		LearningObjective constants = GWTI18N.create(LearningObjective.class, new Locale("de").toString());
 		
 		String path="";
 		
@@ -141,7 +147,8 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        Topic topic = null;
 	        SkillLevel skillLevel = null;
 	        Skill skill = null;
-	        
+	        Long skillId = null;
+	       	        
 	        for (int i=0; i<sheet.getLastRowNum(); i++)
 	        {
 	          	row = sheet.getRow(i);        	
@@ -166,7 +173,7 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        		
 	        		if (!col1.equals(""))
 	        		{
-	        			
+	        			String topicShortcut = "";
 	        			String mainStr = col1.substring(0,1);
 	        			
 	        			List<MainClassification> mainList = MainClassification.findMainClassificationByShortCut(mainStr);
@@ -175,6 +182,7 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        			{
 	        				mainClassification = new MainClassification();
 	        				mainClassification.setShortcut(mainStr);
+	        				mainClassification.setDescription(constants.getString(mainStr));
 	        				mainClassification.persist();	        				
 	        			}
 	        			else 
@@ -190,18 +198,32 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        			
 	        			if (othrStr.matches("[A-Za-z]+"))
 	        			{	
-	        				
+	        				topicShortcut = col1.substring(5, col1.length());	
 	        			}
 	        			else
 	        			{
 	        				othrStr = "";
+	        				
+	        				topicShortcut = col1.substring(2, col1.length());        				
 	        			}
+	        			
 	        			
 	        			List<ClassificationTopic> topicList = ClassificationTopic.findClassificationTopicByShortCutAndMainClassi(othrStr, mainClassification);
         				if (topicList.size() == 0)
         				{
         					classificationTopic = new ClassificationTopic();
         					classificationTopic.setShortcut(othrStr);
+        					
+        					if (othrStr.equals(""))
+        					{
+        						if (mainStr.equals("P"))
+        							classificationTopic.setDescription(constants.getString("CLASSIFICATION_TOPIC_P"));
+        						else if (mainStr.equals("S"))
+        							classificationTopic.setDescription(constants.getString("CLASSIFICATION_TOPIC_S"));
+        					}        					       						
+        					else
+        						classificationTopic.setDescription(constants.getString(othrStr));
+        					
         					classificationTopic.setMainClassification(mainClassification);
         					classificationTopic.persist();
         				}
@@ -209,11 +231,33 @@ public class ExcelFileImportServlet extends HttpServlet {
         				{
         					classificationTopic = topicList.get(0);
         				}
+        				
+        				//insert col2 data into skill table;
+        			
+        				List<Skill> skillList = Skill.findSkillByTopicAndShortcut(classificationTopic.getId(), topicShortcut);
+        				
+        				if (skillList.size() == 0)
+        				{
+        					skill = new Skill();        				
+            				skill.setShortcut(topicShortcut);
+            				skill.setDescription(col2);
+            				skill.persist();
+        				}
+        				else
+        				{
+        					skill = skillList.get(0);
+        					skill.setDescription(col2);
+        					skill.persist();
+        				}
+        				
+        				
+        				skillId = skill.getId();
+	        			
 	        		}
 	        		
 	        		if (!col3.equals(""))
 	        		{
-	        			List<Topic> topicList = Topic.findTopic(col3);
+	        			List<Topic> topicList = Topic.findTopicByTopicDescAndClassificationTopic(col3, classificationTopic.getId());
 	        			
 	        			if (topicList.size() == 0)
 	        			{
@@ -224,7 +268,7 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        			}
 	        			else
 	        			{
-	        				topic = topicList.get(0);
+	        				topic = topicList.get(0);	        				
 	        			}
 	        		}
 	        		
@@ -243,7 +287,12 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        				skillLevel = levelList.get(0);
 	        			}
 	        			
-	        			List<Skill> skillList = Skill.findSkillByTopicAndSkillLevel(topic, skillLevel);
+	        			skill = Skill.findSkill(skillId);
+	        			skill.setTopic(topic);
+	        			skill.setSkillLevel(skillLevel);
+	        			skill.persist();
+	        			
+	        			/*List<Skill> skillList = Skill.findSkillByTopicAndSkillLevel(topic, skillLevel);
 	        			if (skillList.size() == 0)
 	        			{
 	        				skill = new Skill();
@@ -254,11 +303,14 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        			else
 	        			{
 	        				skill = skillList.get(0);
-	        			}
+	        			}*/
 	        		}
 	        		else if (col4.equals(""))
 	        		{
-	        			List<Skill> skillList = Skill.findSkillByTopic(topic);
+	        			skill = Skill.findSkill(skillId);
+	        			skill.setTopic(topic);
+	        			skill.persist();
+	        			/*List<Skill> skillList = Skill.findSkillByTopic(topic);
 	        			if (skillList.size() == 0)
 	        			{
 	        				skill = new Skill();
@@ -268,7 +320,7 @@ public class ExcelFileImportServlet extends HttpServlet {
 	        			else
 	        			{
 	        				skill = skillList.get(0);
-	        			}
+	        			}*/
 	        		}
 	        		
 	        		if (!col5.equals(""))

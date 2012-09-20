@@ -16,7 +16,9 @@ import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -305,6 +307,8 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
 			osceProxy.setNumberRooms(((OsceEditViewImpl)view).numberRooms.getValue());
 			osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);
+			osceProxy.setSecurity(OSCESecurityStatus.FEDERAL_EXAM);
+			osceProxy.setOsceSecurityTypes(OsceSecurityType.federal);
 			//Set<TaskProxy> setTaskProxy = new HashSet<TaskProxy>();
 			//setTaskProxy=((OsceEditViewImpl)view).osceValue.getValue().getTasks();
 			//osceProxy.setTasks(setTaskProxy);

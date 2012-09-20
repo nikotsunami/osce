@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -70,6 +71,8 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		//by spec
 		MenuClickEvent.register(requests.getEventBus(), (SpokenLanguageViewImpl)view);
 		
+		
+		setInserted(false);
 		init();
 
 //		activityManger.setDisplay(view.getDetailsPanel());
@@ -97,6 +100,17 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		
 	}
 	
+	private int totalRecords;
+	private boolean isInserted;
+	
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
+	}
+	
 	private void init() {
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
@@ -117,6 +131,8 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 					return;
 				}
 				Log.debug("Geholte Sprachen aus der Datenbank: " + response);
+
+				totalRecords = response.intValue();
 				view.getTable().setRowCount(response.intValue(), true);
 
 				onRangeChanged();
@@ -146,6 +162,12 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 				}
 				table.setRowData(range.getStart(), values);
 
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+					setInserted(false);
+				}
 				// finishPendingSelection();
 				if (widget != null) {
 					widget.setWidget(view.asWidget());
@@ -191,6 +213,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
+				setInserted(true);
 				init();
 			}
 		});
@@ -201,6 +224,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 		requests.spokenLanguageRequest().remove().using(lang).fire(new Receiver<Void>() {
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
+				setInserted(false);
 				init();
 			}
 		});
@@ -208,6 +232,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	
 	@Override
 	public void performSearch() {
+		setInserted(false);
 		startRequestChain();
 	}
 
@@ -233,6 +258,7 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 				// Highlight onViolation
 				((EditPopViewImpl)view.getEditPopView()).hide();
 				// E: Highlight onViolation
+				setInserted(false);
 				init();				
 			}
 		});

@@ -1,14 +1,43 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.DockMenuSettings;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
+import ch.unibas.medizin.osce.client.managed.request.ApplianceProxy;
+import ch.unibas.medizin.osce.client.managed.request.ClassificationTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.MainClassificationProxy;
+import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
+import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.TopicProxy;
+import ch.unibas.medizin.osce.client.style.resources.LearningObjectiveData;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -16,9 +45,10 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ImportObjectiveViewImpl extends Composite implements ImportObjectiveView {
+public class ImportObjectiveViewImpl extends Composite implements ImportObjectiveView, MenuClickHandler {
 
 	private static final Binder BINDER = GWT.create(Binder.class);
 
@@ -42,9 +72,19 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 	@UiField 
 	Label importLabel;
 	
-	public ImportObjectiveViewImpl() {
+	@UiField
+	LearningObjectiveViewImpl learningObjectiveViewImpl;
 	
+	@UiField
+	VerticalPanel mainVerticalPanel;
+
+	
+	public ImportObjectiveViewImpl() {
+		
 		 initWidget(BINDER.createAndBindUi(this));
+		 
+		 int panelMarginLeft = DockMenuSettings.getRightWidgetMarginLeft();
+		 mainVerticalPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px;");
 		
 		 uploadFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
 		 uploadFormPanel.setMethod(FormPanel.METHOD_POST);
@@ -58,10 +98,11 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 		        @Override
 		        public void onSubmit(SubmitEvent event)
 		        {
-		            String fileName = fileUpload.getFilename();
+		        	String fileName = fileUpload.getFilename();
 
 		            if(fileName.length() == 0)
 		            {
+		            	
 		            	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 		            	dialogBox.showConfirmationDialog("Error: no file is selected. Please select a file to be uploaded.");	            	
 		                //Window.alert("Error: no file is selected. Please select a file to be uploaded.");
@@ -69,12 +110,16 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 		            }
 		            else if(!fileName.endsWith("xls"))
 		            {
+		            	
 		            	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 		            	dialogBox.showConfirmationDialog("Error: file format not supported. Only supports XLS");
 		              //  Window.alert("Error: file format not supported. Only supports XML and XLSX");
 		            	event.cancel();
 		            }
-		       
+		            else
+		            {
+		            	delegate.displayLoadingScreen(true);
+		            }
 		        }
 		    });
 
@@ -82,13 +127,25 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 		        @Override
 		        public void onSubmitComplete(SubmitCompleteEvent event)
 		        {
+		        	delegate.displayLoadingScreen(false);
 		        	MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
 		        	dialogBox.showConfirmationDialog("Record Inserted Successfully");
 		        	Log.info("~~~Completed Successfully");
+		        	
+		        	delegate.refreshLearningObjData();
 		        }
 		    });
 	}
 	
+	 	
+	public LearningObjectiveViewImpl getLearningObjectiveViewImpl() {
+		return learningObjectiveViewImpl;
+	}
+
+	public void setLearningObjectiveViewImpl(
+			LearningObjectiveViewImpl learningObjectiveViewImpl) {
+		this.learningObjectiveViewImpl = learningObjectiveViewImpl;
+	}
 	
 	
 	@UiHandler("importfile")
@@ -106,4 +163,14 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 	public void setPresenter(Presenter systemStartActivity) {
 		this.presenter = systemStartActivity;
 	}
+
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		int panelMarginLeft = DockMenuSettings.getRightWidgetMarginLeft();
+		mainVerticalPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px;");
+	}
 }
+	

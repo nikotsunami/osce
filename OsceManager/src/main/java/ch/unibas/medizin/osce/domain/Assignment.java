@@ -240,7 +240,7 @@ public class Assignment {
   //Testing task {
 
     // Test Case 2
-    public static List<Assignment> findAssignmentForTestBasedOnCriteria(Long osceDayId,List<AssignmentTypes> type,Long postRoomId){
+    public static List<Assignment> findAssignmentForTestBasedOnCriteria(Long osceDayId,List<AssignmentTypes> type){
     	Log.info("Inside findAssignmentForTestBasedOnCriteria() ");
     /*	EntityManager em = entityManager();
     	String query="select a from Assignment a where a.osceDay = " + osceDayId+" and a.type In(:osceType) and a.oscePostRoom = "+ postRoomId+" order by a.type, a.oscePostRoom, a.timeStart";
@@ -260,12 +260,12 @@ public class Assignment {
 		Predicate pre1 = criteriaBuilder.disjunction();
 		pre1 = criteriaBuilder.equal(from.get("osceDay"), osceDayId);
 		
-		if (postRoomId > 0)
+		/*if (postRoomId > 0)
 		{
 			Predicate pre2 = criteriaBuilder.disjunction();
 			pre2 = criteriaBuilder.equal(from.get("oscePostRoom"), postRoomId);
 			pre1 = criteriaBuilder.and(pre1,pre2);
-		}
+		}*/
 		
 		if (!type.equals(null) && type.size() > 0)
 		{
@@ -359,6 +359,17 @@ public class Assignment {
     	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
     	Log.info("Query is :" +query);
     	return q.getSingleResult();
+    }
+    
+    public static List<Integer> findAllSequenceNumberForAssignment(Long osceDayId){
+    	Log.info(" In side findAllSequenceNumberForAssignment() with OsceDay id" + osceDayId);	
+		EntityManager em = entityManager();		
+		String queryString = "select distinct sequenceNumber from Assignment where osceDay= "+osceDayId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Integer> q = em.createQuery(queryString,Integer.class);		
+		List<Integer> result  = q.getResultList();        
+		Log.info("findAllSequenceNumberForAssignment List Size is :"+result.size());
+        return result;
     }
     
     // Test Case 7

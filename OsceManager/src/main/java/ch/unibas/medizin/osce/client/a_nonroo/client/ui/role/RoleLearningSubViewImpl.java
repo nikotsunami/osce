@@ -1,10 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LearningObjectiveViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
@@ -21,7 +21,6 @@ import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -31,8 +30,10 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RoleLearningSubViewImpl extends Composite implements RoleLearningSubView {
@@ -68,12 +69,21 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 	public SimplePager pagerMinor;
 		
 	@UiField
-	public IconButton btnAddMajor;
-	
-	@UiField
-	public IconButton btnAddMinor;
+	public IconButton btnAdd;	
 	
 	public RoleLearningPopUpView popUpView;
+	
+	public LearningObjectiveViewImpl learningObjectiveViewImpl;
+	
+	public PopupPanel popup;
+	
+	public Button addMajor;
+	
+	public Button addMinor;
+	
+	public IconButton closeButton;
+	
+	public boolean loadingFlag = false;
 			
 	public RoleLearningSubViewImpl() 
 	{
@@ -85,11 +95,47 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		majorTable = new CellTable<MainSkillProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		minorTable = new CellTable<MinorSkillProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
-		initWidget(uiBinder.createAndBindUi(this));
+		initWidget(uiBinder.createAndBindUi(this));	
 	
-		btnAddMajor.setText(constants.majorBtnLbl());
-		btnAddMinor.setText(constants.minorBtnLbl());
+		btnAdd.setText(constants.addSkill());
 		
+		addMajor = new Button();
+		addMinor = new Button();
+		closeButton = new IconButton();
+		
+		addMajor.setText(constants.majorBtnLbl());
+		addMinor.setText(constants.minorBtnLbl());
+		closeButton.setIcon("close");
+		closeButton.addStyleName("learningObjPopupCloseButton");
+		
+		closeButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				learningObjectiveViewImpl = null;
+				popup.clear();			
+				popup.hide();				
+				
+				delegate.closeButtonClicked();
+			}
+		});
+		
+		addMajor.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				delegate.addMainClicked();
+			}
+		});
+		
+		addMinor.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				delegate.addMinorClicked();
+			}
+		});
+				
 		majorTable.addStyleName("skillTable");
 		minorTable.addStyleName("skillTable");
 		
@@ -422,98 +468,44 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		C getValue(MinorSkillProxy proxyvalue);
 	}
 			
-	@UiHandler("btnAddMajor")
-	public void btnAddAuthorClicked(ClickEvent event)
+	@UiHandler("btnAdd")
+	public void btnAddClicked(ClickEvent event)
 	{		
-		popUpView = new RoleLearningPopUpViewImpl();
+		System.out.println("button clicked");
 		
-		((RoleLearningPopUpViewImpl)popUpView).setAnimationEnabled(true);
-		delegate.setMainClassiPopUpListBox(popUpView);
-		delegate.setSkillLevelPopupListBox(popUpView);
-		((RoleLearningPopUpViewImpl)popUpView).setWidth("150px");		
+		VerticalPanel vp = new VerticalPanel();
 		
-		mainSkillMap=new HashMap<String, Widget>();
-		mainSkillMap.put("role", popUpView.getTopicListBox());
-		mainSkillMap.put("skill", popUpView.getTopicListBox());
-		mainSkillMap.put("role",  popUpView.getLevelListBox());
-		mainSkillMap.put("skill",  popUpView.getLevelListBox());
+		popup = new PopupPanel();
 		
+		popup.clear();
 		
-		popUpView.getOkBtn().addClickHandler(new ClickHandler() {			
-			@Override
-			public void onClick(ClickEvent event) {
-				
-				if (popUpView.getTopicListBox().getValue() == null)
-				{
-					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-					dialogBox.showConfirmationDialog("Topic is Not Selected");
-				}	
-				else
-				{
-					delegate.addMainSkillClicked(popUpView.getTopicListBox().getValue(), popUpView.getLevelListBox().getValue());
-					((RoleLearningPopUpViewImpl)popUpView).hide();
-				}
-			}
-		});
+		popup.setGlassEnabled(true);
 		
-		popUpView.getCancelBtn().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				((RoleLearningPopUpViewImpl)popUpView).hide();
-			}
-		});
+		learningObjectiveViewImpl = new LearningObjectiveViewImpl(true);	
 		
-		((RoleLearningPopUpViewImpl)popUpView).setPopupPosition(event.getClientX(), event.getClientY() - 175);
-		((RoleLearningPopUpViewImpl)popUpView).show();		
+		popup.addStyleName("learningObjPopupStyle");
+		
+		vp.add(closeButton);
+		
+		addMajor.addStyleName("learningObjPopupLabel");
+		
+		learningObjectiveViewImpl.getMainClassiLbl().addStyleName("learningObjPopupLabel");
+		learningObjectiveViewImpl.getSkillLevelLbl().addStyleName("learningObjPopupLabel");
+		
+		learningObjectiveViewImpl.getTable().setWidth("1190px");
+		learningObjectiveViewImpl.getLearningScrollPanel().addStyleName("learningObjScroll");
+		
+		learningObjectiveViewImpl.getHpBtnPanel().add(addMajor);		
+		learningObjectiveViewImpl.getHpBtnPanel().add(addMinor);
+		
+		vp.add(learningObjectiveViewImpl);
+		
+		popup.add(vp);
+		
+		delegate.loadLearningObjectiveData();
+		
+		popup.center();
 	}
-	
-	@UiHandler("btnAddMinor")
-	public void btnAddReviewerClicked(ClickEvent event)
-	{
-		popUpView = new RoleLearningPopUpViewImpl();
-		
-		((RoleLearningPopUpViewImpl)popUpView).setAnimationEnabled(true);
-		delegate.setMainClassiPopUpListBox(popUpView);
-		delegate.setSkillLevelPopupListBox(popUpView);
-		((RoleLearningPopUpViewImpl)popUpView).setWidth("150px");		
-		
-		mainSkillMap=new HashMap<String, Widget>();
-		mainSkillMap.put("role", popUpView.getTopicListBox());
-		mainSkillMap.put("skill", popUpView.getTopicListBox());
-		mainSkillMap.put("role",  popUpView.getLevelListBox());
-		mainSkillMap.put("skill",  popUpView.getLevelListBox());
-		
-		
-		popUpView.getOkBtn().addClickHandler(new ClickHandler() {			
-			@Override
-			public void onClick(ClickEvent event) {
-				if (popUpView.getTopicListBox().getValue() == null)
-				{
-					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-					dialogBox.showConfirmationDialog("Topic is Not Selected");
-				}	
-				else
-				{
-					delegate.addMinorSkillClicked(popUpView.getTopicListBox().getValue(), popUpView.getLevelListBox().getValue());
-					((RoleLearningPopUpViewImpl)popUpView).hide();
-				}
-			}
-		});
-		
-		popUpView.getCancelBtn().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				((RoleLearningPopUpViewImpl)popUpView).hide();
-			}
-		});
-		
-		((RoleLearningPopUpViewImpl)popUpView).setPopupPosition(event.getClientX(), event.getClientY() - 175);
-		((RoleLearningPopUpViewImpl)popUpView).show();		
-
-	}
-
 
 	@Override
 	public void setDelegate(Delegate delegate) 
@@ -530,4 +522,15 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 	{
 		return this.mainSkillMap;
 	}
+
+	public LearningObjectiveViewImpl getLearningObjectiveViewImpl() {
+		return learningObjectiveViewImpl;
+	}
+
+	public void setLearningObjectiveViewImpl(
+			LearningObjectiveViewImpl learningObjectiveViewImpl) {
+		this.learningObjectiveViewImpl = learningObjectiveViewImpl;
+	}
+	
+	
 }

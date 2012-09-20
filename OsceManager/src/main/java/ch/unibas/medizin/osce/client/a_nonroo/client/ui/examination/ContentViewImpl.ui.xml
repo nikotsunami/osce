@@ -4,12 +4,12 @@
  <ui:style src="../../styles.css" />
 	
 	
-	<g:VerticalPanel ui:field="contentPanel" width="550px"  height="235px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" spacing="10">
-		<g:ScrollPanel ui:field="scrollPanel" width="550px"  height="235px">
+	<g:VerticalPanel ui:field="contentPanel" width="550px"  height="235px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" verticalAlignment="middle" spacing="10">
+		<g:ScrollPanel ui:field="scrollPanel" width="550px"  height="248px" >
 			<g:HTMLPanel>
 			<g:AbsolutePanel ui:field="postAP">
 			<!--  <g:ScrollPanel width="550px" >-->
-			<g:HorizontalPanel ui:field="postHP" spacing="5">
+			<g:HorizontalPanel ui:field="postHP"  verticalAlignment="middle">
 				<!-- Add Post Which are all draggable -->
 		
 			</g:HorizontalPanel>

@@ -28,6 +28,8 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -174,7 +176,40 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 				advanceSearchCriteriaMap.put("bindType", bindType);
 				advanceSearchCriteriaMap.put("comparation", comparison);					
 				// E Highlight onViolation
+				
+				/*Advance search popup changes start*/
+				this.sinkEvents(Event.KEYEVENTS);
+				this.sinkEvents(Event.ONFOCUS);
+				/*Advance search popup changes end*/
+				
 	}
+	
+	/*Advance search popup changes start*/
+	@Override
+	public void onBrowserEvent(Event event) {
+		// TODO Auto-generated method stub
+		super.onBrowserEvent(event);
+		int type = DOM.eventGetType(event);
+		// Log.info("event type--"+event.getType());
+
+		
+		switch (type) {
+		case Event.ONKEYUP:
+			// onKeyDownEvent(event);
+			
+				if (event.getKeyCode() == 13) 
+				{
+					Log.info("Enter press");
+					addAdvSearchSaveMethod();
+				}
+			break;
+		default:
+			return;
+
+		}
+	}
+	
+	/*Advance search popup changes end*/
 	
 	private void displayAnswerFieldForProxy(AnamnesisCheckProxy proxy) {
 		this.selectedProxy = proxy;
@@ -226,11 +261,32 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		parentPanel.remove(dummyLabel);
 	}
 	
+	/*Advance search popup changes start*/
+
+	
 	@UiHandler("addAnamnesisValueButton")
 	public void addAnamnesisValueButtonClicked(ClickEvent e) {
 		// Highlight onViolation
 		Log.info("Call addAnamnesisValueButton");
 		// E Highlight onViolation
+	/*	String answer = "";
+		if (currentAnswerWidget == anamnesisAnswerMCSelector) {
+			answer = createMultipleChoiceString(anamnesisAnswerMCSelector.getValue().intValue(), possibleAnswers.size());
+		} else if (currentAnswerWidget == anamnesisAnswerYesNoSelector) {
+			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? "1" : "0";
+		} else if (currentAnswerWidget == anamnesisAnswerText) {
+			answer = anamnesisAnswerText.getValue();
+		}
+		if (currentAnswerWidget != null) {
+			delegate.addAnamnesisValueButtonClicked(selectedProxy, answer, bindType.getValue(), comparison.getValue());
+		}
+		hide();*/
+		addAdvSearchSaveMethod();
+	}
+	
+	public void addAdvSearchSaveMethod()
+	{
+		Log.info("Call addAdvSearchSaveMethod");
 		String answer = "";
 		if (currentAnswerWidget == anamnesisAnswerMCSelector) {
 			answer = createMultipleChoiceString(anamnesisAnswerMCSelector.getValue().intValue(), possibleAnswers.size());
@@ -244,6 +300,8 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		}
 		hide();
 	}
+	
+	/*Advance search popup changes end*/
 	
 	@UiHandler("addAnamnesisValues")
 	public void addAnamnesisValuesClicked(ClickEvent e) {

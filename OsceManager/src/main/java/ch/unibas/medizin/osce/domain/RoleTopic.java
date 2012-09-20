@@ -430,5 +430,16 @@ public static java.util.List<RoleTopic> findRoleTopicBySpecialisation(Long speci
 	return result;
 
 }
+//TestCasePurpose Method start {
+public static RoleTopic getRoleTopicForId(Long id){
+	Log.info("Inside getRoleTopicForId() With Id " + id);
+	EntityManager em = entityManager();
+  String sqlQuery = "SELECT o FROM RoleTopic AS o WHERE o.id="+id;
+  TypedQuery<RoleTopic> q = em.createQuery(sqlQuery, RoleTopic.class);
+	return q.getSingleResult();
+}
+
+//TestCasePurpose Method End }
+
     
 }

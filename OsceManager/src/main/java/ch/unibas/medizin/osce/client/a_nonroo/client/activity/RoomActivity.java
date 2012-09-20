@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomEditPopupViewImpl;
@@ -68,6 +69,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		//by spec
 		MenuClickEvent.register(requests.getEventBus(), (RoomViewImpl)view);
 
+		setInserted(false);
 		init();
 
 		// Inherit the view's key provider
@@ -109,6 +111,8 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 					return;
 				}
 				Log.debug("Geholte Räume aus der Datenbank: " + response);
+				
+				totalRecords = response.intValue();
 				view.getTable().setRowCount(response.intValue(), true);
 
 				onRangeChanged(q);
@@ -136,6 +140,13 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 					return;
 				}
 				table.setRowData(range.getStart(), values);
+
+				if(isInserted){
+					
+					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
+					table.setPageStart(start);
+					setInserted(false);
+				}
 
 				// finishPendingSelection();
 				if (widget != null) {
@@ -180,9 +191,23 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
+				setInserted(true);
 				init();
 			}
 		});
+	}
+
+	private int totalRecords;
+	private boolean isInserted;
+	
+	
+	
+	public boolean isInserted() {
+		return isInserted;
+	}
+
+	public void setInserted(boolean isInserted) {
+		this.isInserted = isInserted;
 	}
 
 	@Override
@@ -190,6 +215,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 		requests.roomRequest().remove().using(room).fire(new Receiver<Void>() {
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
+				setInserted(false);
 				init();
 			}
 		});
@@ -198,6 +224,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 	@Override
 	public void performSearch(String q) {
 		Log.debug("Search for " + q);
+		setInserted(false);
 		init2(q);
 	}
 
@@ -224,6 +251,7 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 			@Override
 			public void onSuccess(Void arg0) {
 				// TODO Auto-generated method stub
+				setInserted(false);
 				init();
 				// Highlight onViolation
 				((RoomEditPopupViewImpl)view.getRoomEditPopView()).hide();				
