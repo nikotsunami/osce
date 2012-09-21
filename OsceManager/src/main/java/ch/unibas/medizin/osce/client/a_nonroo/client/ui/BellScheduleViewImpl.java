@@ -9,6 +9,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
@@ -161,17 +162,18 @@ public class BellScheduleViewImpl extends Composite implements
 	public void init(String semesterName) {
 
 		initView(semesterName);
-		
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
-				"position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-		
-		if(OsMaMainNav.getMenuStatus() == 0)
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-		else
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
-		
+		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,true);
+//		
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style",
+//				"position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		
+//		if(OsMaMainNav.getMenuStatus() == 0)
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//		else
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//		
 		
 
 		paths.add(constants.oscedoc());
@@ -343,17 +345,18 @@ public class BellScheduleViewImpl extends Composite implements
 	public void onMenuClicked(MenuClickEvent event) {
 		
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-		
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-		
-		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
-			
-			if(OsMaMainNav.getMenuStatus() == 0)
-				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-			else
-				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
-		}
+		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,false);
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//		
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		
+//		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+//			
+//			if(OsMaMainNav.getMenuStatus() == 0)
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//			else
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//		}
 			
 	}
 

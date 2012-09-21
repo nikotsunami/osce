@@ -694,6 +694,18 @@ public static List<OsceDay> findOSceDaysForAnOsce(Long osceId){
 	}
 	// TestCasePurpose Method start }
 
+
+public static List<OsceDay> findOSceDaysForAnOsceId(Long osceId){
+	
+	Log.info("Inside findOSceDaysForAnOsce with Osce Is : " + osceId);
+	EntityManager em = entityManager();
+	String query="select o from OsceDay as o where o.osce="+osceId;
+	TypedQuery<OsceDay> q = em.createQuery(query, OsceDay.class);
+	Log.info("Query String: " + query);
+	return q.getResultList();
+}
+
+
 public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 	try {
 		

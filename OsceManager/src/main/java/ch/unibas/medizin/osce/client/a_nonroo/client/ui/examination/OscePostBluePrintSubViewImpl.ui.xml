@@ -14,7 +14,7 @@
 		margin-top: 5px;
 	 }	
 	 </ui:style>
-	<g:VerticalPanel width="900px"  height="380px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" verticalAlignment="top">
+	<g:VerticalPanel width="880px"  height="270px" addStyleNames="{style.tabStyle} {style.patientTopContainer}" horizontalAlignment="left" verticalAlignment="top">
 	<g:AbsolutePanel ui:field="oscePostBluePrintSubViewImplAP">
 			<g:HorizontalPanel verticalAlignment="top">
 				<g:HorizontalPanel ui:field="oscePostBluePrintSubViewImplHP"   spacing="10" >

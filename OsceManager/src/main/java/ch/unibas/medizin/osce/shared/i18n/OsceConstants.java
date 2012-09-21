@@ -872,5 +872,9 @@ public interface OsceConstants extends Constants {
 	public String shiftLunchBreakNext();
 	public String ShiftLunchBreakPrev();
 
+public String headerValueMessage();
+	public String startEndTimeMessage();
+	public String generateClickTimeMessage();
+
 }
 

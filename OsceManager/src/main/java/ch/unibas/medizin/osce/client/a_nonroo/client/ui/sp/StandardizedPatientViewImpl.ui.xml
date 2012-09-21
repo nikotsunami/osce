@@ -4,11 +4,15 @@
 	 xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
 	 xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria" 
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.resources">
-<ui:style src="../../styles.css" />
-
-<g:SplitLayoutPanel ui:field="splitLayoutPanel">
-	<g:west size="1225">
-		<g:ScrollPanel ui:field="mainScrollPanel">
+<ui:style src="../../styles.css" >
+.styleSplit{
+	width: 100%;
+}
+</ui:style>
+<g:VerticalPanel>
+<g:SplitLayoutPanel ui:field="splitLayoutPanel" addStyleNames="{style.styleSplit}" width="100%" >
+	<g:west size="100">
+		<g:ScrollPanel ui:field="mainScrollPanel" width="100%" >
 			<g:HTMLPanel ui:field="westPanel">
 				<div class="{style.controls}  {style.controlsleft}">
 					<my:QuickSearchBox ui:field="searchBox" />
@@ -21,6 +25,7 @@
 		
 			<!-- custom celltable start code -->
 			<!-- <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" /> -->
+			
 			<r:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}" />
 			<!-- custom celltable end code -->
 		
@@ -42,4 +47,5 @@
 		</g:ScrollPanel>
 	</g:center>
 </g:SplitLayoutPanel>
+</g:VerticalPanel>
 </ui:UiBinder> 

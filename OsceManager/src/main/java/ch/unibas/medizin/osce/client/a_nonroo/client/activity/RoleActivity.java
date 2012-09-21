@@ -507,6 +507,22 @@ public void setInserted(boolean isInserted) {
 	this.isInserted = isInserted;
 }
 
+public Sorting getSortorder() {
+	return sortorder;
+}
+
+public void setSortorder(Sorting sortorder) {
+	this.sortorder = sortorder;
+}
+
+public String getSortname() {
+	return sortname;
+}
+
+public void setSortname(String sortname) {
+	this.sortname = sortname;
+}
+
 public void initSearch() {
 	// TODO Auto-generated method stub
 	
@@ -529,8 +545,15 @@ public void initSearch() {
 
 			if(isInserted){
 					
+				setSortname("id");
+				setSortorder(Sorting.ASC);
+				
 				int start = Paging.getLastPageStart(range.getLength(), totalRecords);
 				table.setPageStart(start);
+
+				setInserted(false);				
+				Log.info("sortname == "+sortname);
+				Log.info("sortorder == "+sortorder);
 			}
 			
 			// finishPendingSelection();
@@ -541,15 +564,6 @@ public void initSearch() {
 	};
 
 	
-	if(isInserted){
-
-		sortname = "id";
-		sortorder = Sorting.ASC;
-		setInserted(false);
-		
-		Log.info("sortname == "+sortname);
-		Log.info("sortorder == "+sortorder);
-	}
 
 /*
 	requestAllTopic.findRoleTopicsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 

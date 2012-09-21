@@ -4,13 +4,9 @@
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	 
-<ui:style src="../../styles.css" >
-.tabPanel{
-	margin-left: 20px;
-}
-</ui:style>
+<ui:style src="../../styles.css" />
 	
-	<g:HTMLPanel>
+	<g:HTMLPanel ui:field="containerHTMLPanel" >
 		<!-- h1>Postenlauf - MainView</h1-->
 		<g:TabPanel ui:field="osceTabPanel" width="100%">
 			<!-- g:Tab>

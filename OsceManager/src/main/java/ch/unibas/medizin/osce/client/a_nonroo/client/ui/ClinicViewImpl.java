@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
@@ -125,15 +126,16 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 
 	public void init() {
 		
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-		
-		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-		
-		if(OsMaMainNav.getMenuStatus() == 0)
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-		else
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,true);
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//		
+//		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		
+//		if(OsMaMainNav.getMenuStatus() == 0)
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//		else
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 
 //        paths.add("id");
 //        table.addColumn(new TextColumn<ClinicProxy>() {
@@ -260,7 +262,8 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
 		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
 //		widthSize = 1200;
 //		decreaseSize = 0;
@@ -316,17 +319,18 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 		public void onMenuClicked(MenuClickEvent event) {
 			
 			OsMaMainNav.setMenuStatus(event.getMenuStatus());		
-			int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-			
-			DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-			
-			if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
-				
-				if(OsMaMainNav.getMenuStatus() == 0)
-					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-				else
-					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
-			}
+			ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,false);
+//			int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//			
+//			DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//			
+//			if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+//				
+//				if(OsMaMainNav.getMenuStatus() == 0)
+//					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//				else
+//					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//			}
 				
 		}
 }

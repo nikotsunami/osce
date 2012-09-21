@@ -7,7 +7,7 @@
 
 <g:SplitLayoutPanel ui:field="splitLayoutPanel">
 	<g:west size="1225">
-		<!-- <g:ScrollPanel> -->
+		<g:ScrollPanel>
 			<g:HTMLPanel ui:field="westPanel">
 				<div class="{style.controls}  {style.controlsleft}">
 					<b:SimplePager display="{table}" ui:field="pager" />
@@ -19,7 +19,7 @@
 					<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
 				</div>
 			</g:HTMLPanel>
-		<!-- </g:ScrollPanel> -->
+		</g:ScrollPanel>
 	</g:west>
 	<g:center>
 		<g:ScrollPanel ui:field="scrollPanel">

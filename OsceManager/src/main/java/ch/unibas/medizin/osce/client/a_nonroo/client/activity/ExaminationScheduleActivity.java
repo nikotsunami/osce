@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.ExaminationScheduleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.ExaminationScheduleViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -106,6 +107,9 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 		systemStartView.setPresenter(this);
 		widget.setWidget(systemStartView.asWidget());
 		this.view = systemStartView;
+		
+		MenuClickEvent.register(requests.getEventBus(), (ExaminationScheduleViewImpl)view);
+		
 		view.getOsceTabPanel().addSelectionHandler(new SelectionHandler<Integer>() {
 			
 			@Override

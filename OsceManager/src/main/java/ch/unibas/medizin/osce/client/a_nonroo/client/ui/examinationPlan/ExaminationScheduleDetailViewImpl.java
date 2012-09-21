@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
@@ -156,8 +157,9 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		shortBreakSimPatChangeTxt.setText(constants.simpatChangeBreak());
 		longBreakTxt.setText(constants.longBreak());
 		
-		 //String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-		 //scrollPanel.setWidth(panelWidth);
+		int height = ResolutionSettings.getRightWidgetHeight() - 55;
+		scrollPanel.setHeight(height+"px");
+		
 	}
 	
 	@Override
@@ -182,15 +184,14 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		delegate.autoAssignSP(osceProxy.getId());
 	}
 	
-
 	@Override
 	public void onMenuClicked(MenuClickEvent event) {
 		
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());
 		
-		String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-		scrollPanel.setWidth(panelWidth);
-		
+		int height = ResolutionSettings.getRightWidgetHeight() - 55;
+		scrollPanel.setHeight(height+"px");
 	}
+	
 
 }

@@ -42,7 +42,7 @@
 
 
 	<g:HTMLPanel>	
-	<g:ScrollPanel  height='650px'  ui:field="scrollPanel"><!-- Assignment E:Module 5 -->
+	<g:ScrollPanel  ui:field="scrollPanel" ><!-- Assignment E:Module 5 -->
 	 <g:HorizontalPanel> 	
 		<!-- <g:SplitLayoutPanel ui:field="splitLayoutPanel">		  
 			<g:west size="400">			 -->							

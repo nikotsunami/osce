@@ -69,6 +69,8 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	@UiField
 	VerticalPanel dayContentVerticalPanel;
 
+	
+	
 	@UiField
 	Label dayLabel;
 	
@@ -96,20 +98,50 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	@UiField
 	Label calculationsLabel;
 	
-	@UiField
-	Label lunchBreakLabel;
+	
+	// E Module 5 bug Report Change
+	
+	/*bug solve start*/
+	
+	/*@UiField
+	Label dateContentLabel;
 	
 	// Module 5 bug Report Change
 	@UiField
 	Label lunchBreakStartLabel;
-	// E Module 5 bug Report Change
+	*/
+	
+	@UiField
+	Label dateContentLabel;
+	@UiField
+	Label lunchBreakStartLabel;
+	@UiField
+	Label lunchBreakEndTimeLabel;
+	@UiField
+	Label lunchBreakLabel;
 	
 	
 	@UiField
+	Label dateContentValueLabel;
+	@UiField
+	Label lunchBreakStartValueLabel;
+	@UiField
+	Label lunchBreakEndTimeValueLabel;
+	@UiField
+	Label lunchBreakValueLabel;
+	
+	/*@UiField
+	Label lunchBreakStartValueLabel;*/
+	
+	/*@UiField
 	Label lbEndTimeLabel;
 	
 	@UiField
 	Label studentsLabel;
+	*/
+	
+	/*bug solve end*/
+	
 	
 	@UiField
 	IconButton saveOsceDayValue;
@@ -125,12 +157,16 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	HorizontalPanel scheduleHP;	
 	@UiField
 	VerticalPanel calculationVPanel;
+	
+	@UiField
+	VerticalPanel innerCalculationVPanel;
+	
+	@UiField
+	VerticalPanel presentsVerticlePanel;
+	
 	@UiField
 	VerticalPanel saveVPanel;
-	@UiField
-	Label lunchBreakStartValueLabel;
-	//E Module 5 Bug Report Solution
-	
+
 	@UiField
 	IconButton btnShiftLunchBreakPrev;
 	
@@ -139,6 +175,9 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	
 	@UiField
 	HorizontalPanel lunchBreakHP;
+	
+	
+	//E Module 5 Bug Report Solution
 	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
@@ -227,20 +266,25 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		startTimeLable.setText(constants.starttime());
 		endTimeLable.setText(constants.endtime());
 		calculationsLabel.setText(constants.calculation());
-		lunchBreakLabel.setText(constants.lunchbreak());
+		
 		
 		// Module 5 bug Report Change
-		lunchBreakStartLabel.setText(constants.lunchBreakStart());
+		
 		// E Module 5 bug Report Change
 		
-		lbEndTimeLabel.setText(constants.lbendtime());
-		studentsLabel.setText(constants.student());
+		/*bug report start*/
+		dateContentLabel.setText(constants.date());
+		lunchBreakStartLabel.setText(constants.starttime());
+		lunchBreakEndTimeLabel.setText(constants.lbendtime());
+		lunchBreakLabel.setText(constants.lunchbreak());
 		saveOsceDayValue.setText(constants.save());
-		
-		btnShiftLunchBreakNext.setText(constants.shiftLunchBreakNext());
+			btnShiftLunchBreakNext.setText(constants.shiftLunchBreakNext());
 		btnShiftLunchBreakPrev.setText(constants.ShiftLunchBreakPrev());
 
 
+		 ;
+		/*bug report end*/
+		
 		// Highlight onViolation
 			osceDayMap=new HashMap<String, Widget>();
 			osceDayMap.put("osceDate", dateTextBox);
@@ -292,17 +336,53 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	public VerticalPanel getCalculationVerticalPanel()
 	{
 		return this.calculationVPanel;
-}
+	}
+	
+	//bus solve start
+	public VerticalPanel getInnerCalculationVerticalPanel()
+	{
+		return this.innerCalculationVPanel;
+	}
+	
+	public VerticalPanel getPresentsVerticlePanel()
+	{
+		return this.presentsVerticlePanel;
+	}
+	
+	//bug solve end
+	
 	public VerticalPanel getSaveVerticlePanel()
 	{
 		return this.saveVPanel;
 	}
+	
+	//bug report start
 	public Label getLunchBreakStartValueLabel()
 	{
 		return this.lunchBreakStartValueLabel;
 	}
-	//E Module 5 Bug Report Solution
 	
+	public Label getDateContentValueLabel()
+	{
+		return this.dateContentValueLabel;
+	}
+	
+	public Label getLunchBreakValueLabel()
+	{
+		return this.lunchBreakValueLabel;
+	}
+	
+	public Label getLunchBreakEndTimeValueLabel()
+	{
+		return this.lunchBreakEndTimeValueLabel;
+	}
+	
+	
+	
+	
+	//bug report end
+	//E Module 5 Bug Report Solution
+
 	@UiHandler("btnShiftLunchBreakPrev")
 	public void btnShiftLucnkBreakPrevClicked(ClickEvent event)
 	{
@@ -331,4 +411,5 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	public void setBtnShiftLunchBreakNext(IconButton btnShiftLunchBreakNext) {
 		this.btnShiftLunchBreakNext = btnShiftLunchBreakNext;
 	}
+	
 }
