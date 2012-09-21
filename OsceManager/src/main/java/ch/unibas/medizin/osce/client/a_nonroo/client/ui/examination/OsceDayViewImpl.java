@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -178,6 +180,9 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	
 	
 	//E Module 5 Bug Report Solution
+	
+	//spec issue sol
+	List<SequenceOsceSubViewImpl> sequenceOsceSubViewImplList = new ArrayList<SequenceOsceSubViewImpl>();
 	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
@@ -410,6 +415,17 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 
 	public void setBtnShiftLunchBreakNext(IconButton btnShiftLunchBreakNext) {
 		this.btnShiftLunchBreakNext = btnShiftLunchBreakNext;
+	}
+	
+	//spec issue sol
+	
+	public List<SequenceOsceSubViewImpl> getSequenceOsceSubViewImplList() {
+		return sequenceOsceSubViewImplList;
+	}
+	
+	public void setSequenceOsceSubViewImplList(
+			List<SequenceOsceSubViewImpl> sequenceOsceSubViewImplList) {
+			this.sequenceOsceSubViewImplList = sequenceOsceSubViewImplList;
 	}
 	
 }
