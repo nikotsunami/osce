@@ -100,6 +100,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 
 @SuppressWarnings("deprecation")
@@ -113,7 +114,9 @@ OscePostView.Delegate
 OSCENewSubView.Delegate,
 OsceCreatePostBluePrintSubView.Delegate,
 OsceDayView.Delegate ,
-SequenceOsceSubView.Delegate {//Assignment E:Module 5
+SequenceOsceSubView.Delegate,
+AccordianPanelView.ParcourDelegate
+{//Assignment E:Module 5
 
 		private OsMaRequestFactory requests;
 		private PlaceController placeController;
@@ -1320,7 +1323,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			
 				// Change in ParcourView
 				headerView.setContentView(contentView);
-				// E Change in ParcourView
+				// E Change in ParcourView			
+				
+				accordianView.setOsceSequenceProxy(osceSequenceProxy);
+				accordianView.setParcourDelegate(this);
 				
 				accordianView.add(headerView.asWidget(), contentView);
 				
@@ -4418,5 +4424,65 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					}
 				}
 
+	@Override
+	public void refreshParcourContent(AccordianPanelViewImpl view,
+			Widget header, OsceSequenceProxy osceSequenceProxy) {
 
+		final HeaderView parHeaderView = (HeaderView) header;
+
+		final CourseProxy courseProxy = parHeaderView.getProxy();
+
+		final ContentViewImpl contentView = (ContentViewImpl) parHeaderView
+				.getContentView();
+		contentView.getPostHP().clear();
+		contentView.getOscePostHP().clear();
+		contentView.addStyleName("accordion-title-selected"
+				+ courseProxy.getColor());
+		contentView.setHeight("268px");
+		contentView.getContentPanel().getElement().getStyle()
+				.setWidth(100, Unit.PCT);
+		contentView.getScrollPanel().getElement().getStyle()
+				.setWidth(100, Unit.PCT);
+
+		requests.osceSequenceRequest()
+				.findOsceSequence(osceSequenceProxy.getId())
+				.with("oscePosts", "oscePosts.oscePostBlueprint",
+						"oscePosts.standardizedRole",
+						"oscePosts.oscePostBlueprint.postType",
+						"oscePosts.oscePostBlueprint.specialisation",
+						"oscePosts.oscePostBlueprint.roleTopic")
+				.fire(new OSCEReceiver<OsceSequenceProxy>() {
+
+					@Override
+					public void onSuccess(OsceSequenceProxy response) {
+
+						Iterator<OscePostProxy> oscePostIterator = response
+								.getOscePosts().iterator();
+
+						while (oscePostIterator.hasNext()) {
+
+							OscePostProxy oscePostProxy = oscePostIterator
+									.next();
+
+							if (oscePostProxy.getOscePostBlueprint()
+									.getPostType()
+									.equals(PostType.ANAMNESIS_THERAPY)
+									|| oscePostProxy.getOscePostBlueprint()
+											.getPostType()
+											.equals(PostType.PREPARATION)) {
+								createAnamnesisTherapyPost(contentView,
+										oscePostProxy, oscePostIterator.next(),
+										courseProxy);
+							} else if (response.getOscePosts().size() == 1) {
+								createUndraggablePost(contentView,
+										oscePostProxy, courseProxy);
+							} else {
+								createOscePost(contentView, oscePostProxy,
+										courseProxy);
+							}
+						}
+					}
+				});
+
+	}                
 }

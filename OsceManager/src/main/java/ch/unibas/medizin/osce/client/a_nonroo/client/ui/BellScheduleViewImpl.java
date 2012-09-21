@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.TimeBell;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -107,8 +108,9 @@ public class BellScheduleViewImpl extends Composite implements
 	@UiHandler("okBtn")
 	public void okButtonClicked(ClickEvent event) {
 		if ((timeBox != null && timeBox.getValue() != null)
-				&& (timeBox.getValue() > 0)) {
-
+		// Module 15 Bug Report Change include o to reset table.
+				&& (timeBox.getValue() >= 0)) {
+			// Module 15 Bug Report Change include o to reset table.
 			if ((plusTime != null && plusTime.getValue())
 					|| (minusTime != null && minusTime.getValue())) {
 				lblValidator.setText("");
@@ -306,6 +308,7 @@ public class BellScheduleViewImpl extends Composite implements
 		}
 
 		table.setPageSize(pagesize);
+//		table.setVisibleRange(0,OsMaConstant.TABLE_PAGE_SIZE);
 	}
 
 	@Override

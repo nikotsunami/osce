@@ -16,6 +16,10 @@ public interface AccordianPanelView extends IsWidget{
 		public void retrieveContent(AccordianPanelViewImpl view,Widget header,Widget sp);
 	}
 	
+	interface ParcourDelegate {
+		public void refreshParcourContent(AccordianPanelViewImpl view, Widget header, OsceSequenceProxy osceSequenceProxy);
+	}
+	
 	 void setDelegate(Delegate delegate);
 	 
 	 public void add(final Widget header, final Widget content) ;
@@ -32,4 +36,9 @@ public interface AccordianPanelView extends IsWidget{
 	 public ContentView getContentView();
 	 
 	 public void setContentView(ContentView contentView);
+	 
+	 //issue sol
+	 public ParcourDelegate getParcourDelegate();
+	 
+	 public void setParcourDelegate(ParcourDelegate parcourDelegate);
 }

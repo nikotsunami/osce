@@ -42,7 +42,7 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 	
 	private ContentView contentView;
 	
-	
+	private ParcourDelegate parcourDelegate;
 	
 	public ContentView getContentView() {
 		return contentView;
@@ -147,7 +147,10 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 					expand(header, contentSP);
 				}
 				else
+				{
+					retrieveParcourContent(header, osceSequenceProxy);
 					expand(header, contentSP);
+				}
 			}
 		}, ClickEvent.getType());
 	
@@ -176,6 +179,12 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 		DOM.setStyleAttribute(contentSP.getElement(), "overflow", "hidden");
 		aPanel.add(contentSP);
 	}
+	
+	public void retrieveParcourContent(Widget header,OsceSequenceProxy osceSequenceProxy)
+	{
+		parcourDelegate.refreshParcourContent(this, header, osceSequenceProxy);
+	}
+	
 	public void retrieveContent(Widget header,Widget sp)
 	{
 		delegate.retrieveContent(this,header,sp);
@@ -245,5 +254,12 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 		t.schedule(10);
 	}
 	
+	public ParcourDelegate getParcourDelegate() {
+		return parcourDelegate;
+	}
+
+	public void setParcourDelegate(ParcourDelegate parcourDelegate) {
+		this.parcourDelegate = parcourDelegate;
+	}
 	
 }
