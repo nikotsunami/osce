@@ -134,13 +134,21 @@
 			</tr>
 			
 			<tr >
+				
 			
-			 <td  id="isRepeOsce">
+			 <!-- <td  id="isRepeOsce">
 					<div class="{style.label}" ui:field="labelIsRepe">Is Repe Osce :</div>
 				</td>
 				<td>
 					<g:CheckBox ui:field="isRepeOsce" /> 
+				</td> -->
+				<td  id="isRepeOsce">
+					<div class="{style.label}" ui:field="labeShortBreakSimpatChange">Short Break Simpat Change :</div>
 				</td>
+				<td>
+					<r:ShortBox ui:field="shortBreakSimpatChange" />
+				</td>
+			
 				
 			<td><div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div></td>
 			<td>
@@ -152,14 +160,42 @@
 			</td>
 			</tr>
 			<tr>
+			  <td  id="isRepeOsce">
+					<div class="{style.label}" ui:field="labelIsRepe">Is Repe Osce :</div>
+				</td>
+				<td>
+					<g:CheckBox ui:field="isRepeOsce" /> 
+				</td> 
+				<!-- <td id="shortBreak">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
+				</td> -->
 				<td  id="osceRepe">
-					<div class="{style.label}" ui:field="labelOsceRepe">OSCE Repe </div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceRepe">OSCE Repe </div>
 				</td>
 				<td>
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					 <!-- <g:ValueListBox ui:field="copiedOsce" /> -->
 				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
 				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					
+				</td>
+			
+			</tr>
+			<tr>
+			  <td  id="numberPost">
+					<div class="{style.label}" ui:field="numberPost">Number Post :</div>
+				</td>
+				<td>
+					<g:IntegerBox ui:field="numberPosts"></g:IntegerBox> 
+				</td> 
+				<!-- <td id="shortBreak">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
+				</td> -->
+				<td  id="osceRepe">
+					
+				</td>
+				<td>
+					
 					
 				</td>
 			

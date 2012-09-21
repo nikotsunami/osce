@@ -99,7 +99,16 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	// change {
 	
 	@UiField
+	public IntegerBox numberPosts;
+	
+	@UiField
 	public IntegerBox numberRooms;
+	
+	
+
+	@UiField
+	public ShortBox shortBreakSimpatChange;
+	
 	
 	// change }
 	/*@UiField
@@ -143,7 +152,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	DivElement labelMiddleBreak;
 	@UiField
 	DivElement labelOsceForTask;
+	
+	@UiField
+	DivElement labeShortBreakSimpatChange;
 
+	@UiField
+	DivElement numberPost;
 	/*
 	@UiField
 	IntegerBox numberRooms;
@@ -250,7 +264,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelStationLength.setInnerText(constants.osceStationLength() + ":");
 		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
 		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
-		
+		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
+		numberPost.setInnerText(constants.post() + ":");
 		// Highlight onViolation
 		osceMap=new HashMap<String, Widget>();
 		osceMap.put("name", name);
@@ -271,6 +286,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		osceMap.put("copiedOsce", copiedOsce.getTextField().advancedTextBox);
 		//Issue # 122 : Replace pull down with autocomplete.
 		osceMap.put("middleBreak", middleBreak);
+		osceMap.put("shortBreak", shortBreakSimpatChange);
 		// E Highlight onViolation
 		
 		if(isRepeOsce.isChecked()==true)
