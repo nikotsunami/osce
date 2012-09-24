@@ -110,6 +110,8 @@ public interface OsceConstants extends Constants {
 
 	public String assignedRole();
 
+	public String assignmentWarning();
+
 	public String assignTo();
 
 	public String author();
@@ -246,6 +248,12 @@ public interface OsceConstants extends Constants {
 
 	public String criterion();
 
+	public String dataEmptyWarning();
+
+	public String dataPastDateWarning();
+
+	public String dataWarning();
+
 	public String dateCreated();
 
 	public String dateEdited();
@@ -295,6 +303,8 @@ public interface OsceConstants extends Constants {
 	public String editRole();
 
 	public String email();
+
+	public String endDateWarning();
 
 	public String endtimedoc();
 
@@ -387,6 +397,8 @@ public interface OsceConstants extends Constants {
 	public String heightUnit();
 
 	public String homeRole();
+
+	public String hourFormatWarning();
 
 	public String iban();
 
@@ -484,6 +496,8 @@ public interface OsceConstants extends Constants {
 
 	public String minute();
 
+	public String minuteFormatWarning();
+
 	public String mobile();
 
 	public String moveTime();
@@ -495,6 +509,8 @@ public interface OsceConstants extends Constants {
 	public String nationality();
 
 	public String nationaltiywarning();
+
+	public String newDayRotationSuccess();
 
 	public String newRole();
 
@@ -536,6 +552,8 @@ public interface OsceConstants extends Constants {
 
 	public String osceDaySuccess();
 
+	public String osceDayWarning();
+
 	public String oscedoc();
 
 	public String osceForTask();
@@ -556,6 +574,8 @@ public interface OsceConstants extends Constants {
 
 	public String osceRepe();
 
+	public String osceScaffoldWarning();
+
 	public String OSCESecurityChange();
 
 	public String osceSequence();
@@ -565,6 +585,14 @@ public interface OsceConstants extends Constants {
 	public String osceSimpatsInShortBreak();
 
 	public String osceStationLength();
+
+	public String osceStatusClosedWarning();
+
+	public String osceStatusFixedWarning();
+
+	public String osceStatusGeneratedWarning();
+
+	public String osceStatusWarning();
 
 	public String osceTaskDeadline();
 
@@ -598,6 +626,8 @@ public interface OsceConstants extends Constants {
 
 	public String persons();
 
+	public String pleaseEnterWarning();
+
 	public String pleaseSelectRole();
 
 	public String plusTime();
@@ -609,6 +639,8 @@ public interface OsceConstants extends Constants {
 	public String possibleAnswers();
 
 	public String postType();
+
+	public String postTypeWarning();
 
 	public String preName();
 
@@ -633,6 +665,8 @@ public interface OsceConstants extends Constants {
 	public String profession();
 
 	public String professions();
+
+	public String prviousDayWarning();
 
 	public String pull();
 
@@ -692,6 +726,8 @@ public interface OsceConstants extends Constants {
 
 	public String roleType();
 
+	public String roomAssignedWarning();
+
 	public String roomLength();
 
 	public String roomMaterialName();
@@ -714,6 +750,14 @@ public interface OsceConstants extends Constants {
 
 	public String roomWidth();
 
+	public String rotationPreviousSuccess();
+
+	public String rotationPrevioustWarning();
+
+	public String rotationSuccess();
+
+	public String rotationWarning();
+
 	public String salaryExtra();
 
 	public String salarySimpat();
@@ -729,6 +773,12 @@ public interface OsceConstants extends Constants {
 	public String scheduleEarlier();
 
 	public String schedulePostpone();
+
+	public String schedulePostponeWarning();
+
+	public String schedulePrepondWarning();
+
+	public String scheduleWarning();
 
 	public String searchCriteria();
 
@@ -751,6 +801,8 @@ public interface OsceConstants extends Constants {
 	public String send();
 
 	public String sendSummonings();
+
+	public String sequenceWarning();
 
 	public String shiftLunchBreakNext();
 
@@ -784,9 +836,15 @@ public interface OsceConstants extends Constants {
 
 	public String specialisation();
 
+	public String specializationWarning();
+
 	public String specification();
 
 	public String splitSequence();
+
+	public String splittingNotAllowWarning();
+
+	public String splittingWarning();
 
 	public String spName();
 
@@ -797,6 +855,8 @@ public interface OsceConstants extends Constants {
 	public String startEndTimeMessage();
 
 	public String starttimedoc();
+
+	public String startTimeWarning();
 
 	public String street();
 
@@ -823,6 +883,8 @@ public interface OsceConstants extends Constants {
 	public String text();
 
 	public String thisIsTheFirstQuestion();
+
+	public String timeFormatWarning();
 
 	public String timeHeader();
 
