@@ -25,6 +25,7 @@ public interface StandardizedPatientView  extends IsWidget{
     public interface Delegate {
     	public void newClicked();
     	public void performSearch(String q, List<String> list);
+    	public void doAnimation(boolean flag);
 	}
 
      CellTable<StandardizedPatientProxy> getTable();

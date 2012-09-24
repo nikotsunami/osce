@@ -1221,4 +1221,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		addAdvSeaBasicButtonClicked(null, maritialStatus.toString(), displayValue, bindType, PossibleFields.MARITIALSTATUS, comparison);
 	}
 
+	@Override
+	public void doAnimation(boolean flag) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(flag));
+	}
+
 }

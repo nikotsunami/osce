@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -85,7 +86,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 					@Override
 					public void onEventReceived(
 							ApplicationLoadingScreenEvent event) {
-						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
+//						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
 						event.display();
 					}
 				});
@@ -183,6 +184,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 		onRangeChanged();
 
+		table.setVisibleRange(0,OsMaConstant.TABLE_PAGE_SIZE); 
 		rangeChangeHandler = table
 				.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 					public void onRangeChange(RangeChangeEvent event) {						
@@ -216,7 +218,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 				if (view == null) {
 					return;
 				}
-				System.out.println("Successfully result set in table");
+				Log.info("On range Changed event : ");
 
 				bellAssignmentTypes = BellAssignmentType
 						.getBellAssignmentProxyType(response,
@@ -225,8 +227,18 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 				assignmentProxies = response;
 
-				table.setRowData(range.getStart(), bellAssignmentTypes);
-
+				// Module 15 Bug Report Change
+				// Log.info("Range Start from : "+ range.getStart() );
+				// Log.info("Range Length is : "+ range.getLength() );
+				// Log.info("OsMaConstant.TABLE_PAGE_SIZE is : "+OsMaConstant.TABLE_PAGE_SIZE );
+				// Log.info("bellAssignmentTypes.size()"+bellAssignmentTypes.size());
+				
+//				table.setVisibleRange(range.getStart(),OsMaConstant.TABLE_PAGE_SIZE);
+//				table.setRowCount(bellAssignmentTypes.size());
+				
+				table.setRowData(range.getStart(), bellAssignmentTypes.subList(range.getStart(), bellAssignmentTypes.size()));
+				// Module 15 Bug Report Change
+				
 				if (widget != null) {
 					widget.setWidget(view.asWidget());
 				}
@@ -234,21 +246,18 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 		};
 
-		fireRangeRequest(range, callback);
+		fireRangeRequest(callback);
 	}
 
-	private void fireRangeRequest(final Range range,
-			final OSCEReceiver<List<AssignmentProxy>> callback) {
-		createRangeRequest(range).with(view.getPaths()).fire(callback);
+	private void fireRangeRequest(final OSCEReceiver<List<AssignmentProxy>> callback) {
+		createRangeRequest().with(view.getPaths()).fire(callback);
 	}
 
-	protected Request<List<AssignmentProxy>> createRangeRequest(Range range) {
+	protected Request<List<AssignmentProxy>> createRangeRequest() {
 
 		// return null;
 
-		return requests.assignmentRequestNonRoo()
-				.getAssignmentsBySemester(this.semesterProxy.getId())
-				.with("osceDay", "osceDay.osce", "osceDay.osce.semester");
+		return requests.assignmentRequestNonRoo().getAssignmentsBySemester(this.semesterProxy.getId()).with("osceDay", "osceDay.osce", "osceDay.osce.semester");
 	}
 
 	@Override

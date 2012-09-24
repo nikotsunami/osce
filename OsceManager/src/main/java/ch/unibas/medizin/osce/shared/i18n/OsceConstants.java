@@ -70,6 +70,8 @@ public interface OsceConstants extends Constants {
 
 	public String addSimpleSearchCriteria();
 
+	public String addSkill();
+
 	public String addTitle();
 
 	public String addTrait();
@@ -103,6 +105,8 @@ public interface OsceConstants extends Constants {
 	public String answerGiven();
 
 	public String answerPending();
+
+	public String appliance();
 
 	public String assignedRole();
 
@@ -163,6 +167,8 @@ public interface OsceConstants extends Constants {
 	public String checkListItem();
 
 	public String checklistTopic();
+
+	public String checklistTopicNotNull();
 
 	public String circuit();
 
@@ -374,6 +380,8 @@ public interface OsceConstants extends Constants {
 
 	public String handledConfidentially();
 
+	public String headerValueMessage();
+
 	public String height();
 
 	public String heightUnit();
@@ -448,6 +456,8 @@ public interface OsceConstants extends Constants {
 
 	public String majorLbl();
 
+	public String majorSuccess();
+
 	public String male();
 
 	public String manageOsces();
@@ -467,6 +477,8 @@ public interface OsceConstants extends Constants {
 	public String minorBtnLbl();
 
 	public String minorLbl();
+
+	public String minorSuccess();
 
 	public String minusTime();
 
@@ -630,6 +642,8 @@ public interface OsceConstants extends Constants {
 
 	public String questionName();
 
+	public String questionNotNull();
+
 	public String reallyDelete();
 
 	public String reopenButtonString();
@@ -738,6 +752,10 @@ public interface OsceConstants extends Constants {
 
 	public String sendSummonings();
 
+	public String shiftLunchBreakNext();
+
+	public String ShiftLunchBreakPrev();
+
 	public String shortBreak();
 
 	public String showAnswered();
@@ -764,6 +782,8 @@ public interface OsceConstants extends Constants {
 
 	public String spAssignment();
 
+	public String specialisation();
+
 	public String specification();
 
 	public String splitSequence();
@@ -773,6 +793,8 @@ public interface OsceConstants extends Constants {
 	public String standardizedPatient();
 
 	public String standardizedRole();
+
+	public String startEndTimeMessage();
 
 	public String starttimedoc();
 
@@ -860,6 +882,10 @@ public interface OsceConstants extends Constants {
 
 	public String warningEndTime();
 
+	public String warningGenerate();
+
+	public String warningHeaderValue();
+
 	public String warningNoAssignment();
 
 	public String warningNoOsceDay();
@@ -888,6 +914,8 @@ public interface OsceConstants extends Constants {
 
 	public String warningSplitting();
 
+	public String warningStartEndTime();
+
 	public String warningStartTime();
 
 	public String warningStatusNotChanged();
@@ -911,21 +939,6 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
-	
-	//learning
-	public String appliance();
-	
-	public String majorSuccess();
-	
-	public String minorSuccess();
-	
-	public String addSkill();
-	
-	public String specialisation();
-	
-	public String questionNotNull();
-	
-	public String checklistTopicNotNull();
 
 }
 

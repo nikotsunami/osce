@@ -5,31 +5,24 @@ import java.util.Date;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
-import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
-import ch.unibas.medizin.osce.client.style.widgets.IconButton;
-import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ExaminationViewImpl extends Composite implements  ExaminationView{
@@ -217,7 +210,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 			RootPanel.get().add(((PopupViewImpl)examInfoPopupView));
 			
 			
-			((PopupViewImpl)examInfoPopupView).setPopupPosition(this.getAbsoluteLeft()-50, this.getAbsoluteTop()-140);
+			//((PopupViewImpl)examInfoPopupView).setPopupPosition(this.getAbsoluteLeft()-50, this.getAbsoluteTop()-140);
 			
 			examInfoPopupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -307,7 +300,9 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 			examInfoPopupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
 			examInfoPopupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
 		}
+		
 		examInfoPopupView.createExaminerInfoPopupView();
+		((PopupViewImpl)examInfoPopupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-200);
 		((PopupViewImpl)examInfoPopupView).show();
 	}
 	public void showExaminerPopupView()
@@ -330,7 +325,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 			RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-50, this.getAbsoluteTop()-180);
+		//	((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-50, this.getAbsoluteTop()-180);
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -357,7 +352,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 				}
 			});
 		}
-		
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-180);
 		((PopupViewImpl)popupView).show();
 		
 	}

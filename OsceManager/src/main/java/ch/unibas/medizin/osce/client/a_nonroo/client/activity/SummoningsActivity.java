@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
@@ -130,6 +131,9 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		systemStartView.setPresenter(this);
 		this.widget = panel;
 		this.view = systemStartView;
+		
+		MenuClickEvent.register(requests.getEventBus(), (SummoningsViewImpl)view);
+		
 		widget.setWidget(systemStartView.asWidget());
 		
 		init();

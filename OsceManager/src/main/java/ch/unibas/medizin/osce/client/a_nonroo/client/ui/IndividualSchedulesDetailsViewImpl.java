@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
@@ -144,6 +145,10 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	{
 		Log.info("Call IndividualSchedulesDetailsViewImpl");
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		int height = ResolutionSettings.getRightWidgetHeight() - 55;
+		scrollPanel.setHeight(height+"px");
+		
 		init();
 	}
 
@@ -154,8 +159,8 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 
 	public void init() 
 	{
-		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-		 scrollPanel.setWidth(panelWidth);
+//		 String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
+//		 scrollPanel.setWidth(panelWidth);
 		
 		//DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 50px; right: 5px; bottom: 0px;");
 		/*disclosureDataPanelStud.addOpenHandler<DisclosurePanel>(new OpenHandler<DisclosurePanel>() 
@@ -379,8 +384,7 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 		
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());
 		
-		String panelWidth = (OsMaMainNav.getMenuStatus() == 0) ? "1350px" : "1130px";
-		scrollPanel.setWidth(panelWidth);
-		
+		int height = ResolutionSettings.getRightWidgetHeight() - 55;
+		scrollPanel.setHeight(height+"px");
 	}
 }

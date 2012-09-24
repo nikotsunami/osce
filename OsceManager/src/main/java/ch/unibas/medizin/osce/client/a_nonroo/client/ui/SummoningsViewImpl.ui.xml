@@ -13,7 +13,7 @@
 			border-style: solid;
 			padding: 0px;
 			margin-top: 0px;
-			margin-left:30px;
+			margin-left:10px;
 			margin-bottom: 5px;
 			-moz-border-radius: 4px;
 		}
@@ -43,7 +43,7 @@
 		}
 	</ui:style>
 	
-	<g:HTMLPanel>
+	<g:HTMLPanel ui:field="containerHTMLPanel">
 			<g:HorizontalPanel>
 <!-- 			<g:SplitLayoutPanel ui:field="splitLayoutPanel"> -->
 <!-- 				<g:west size="200"> -->

@@ -69,10 +69,8 @@ public class TimetableGenerator {
 			e.printStackTrace();
 		}
 		
-		int numberPostsWithRoom = osce.numberPostsWithRooms();
-		
 		// max number of courses (decrease while looking for optimum)
-		int numberParcoursMax = osce.getNumberRooms() / numberPostsWithRoom;
+		int numberParcoursMax = (osce.getNumberCourses() > 0 ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
 		
 		TimetableGenerator ttGen;
 		TimetableGenerator optGen = null;
@@ -680,8 +678,10 @@ public class TimetableGenerator {
 			}
 		}
 		
+		if(lunchBreakByDay.size() > 0)
+			day0.setLunchBreakStart(lunchBreakByDay.get(0));
+		
 		day0.setTimeEnd(dateAddMin(day0.getTimeStart(), (long) timeNeededByDay.get(0)));
-		day0.setLunchBreakStart(lunchBreakByDay.get(0));
 		day0.flush();
 		
 		return days;

@@ -28,4 +28,7 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 		public abstract Request<String> scheduleEarlier(OsceDayProxy osceDayProxy);
 		public abstract Request<Long> findOsceIdByOsceDayId(Long osceDayId);
 		//E Module 5 Bug Report Solution
+		
+	public abstract Request<Boolean> updateRotation(Long osceDayId, Integer rotation);
+	public abstract Request<java.util.List<OsceDayProxy>> findOSceDaysForAnOsceId(Long osceId);
 }

@@ -21,4 +21,6 @@ import com.google.gwt.requestfactory.shared.Service;
 public interface OsceSequenceRequestNonRoo extends RequestContext{
 
 public abstract Request<OsceSequenceProxy> splitSequence(Long sequenceId);
+
+public abstract Request<List<OsceSequenceProxy>> findOsceSequenceByOsceDayId(Long osceDayId);
 }

@@ -150,4 +150,12 @@ public class OsceSequence {
 			return result;
 		}
 		//E Module 5 Bug Report Solution
+		
+		public static List<OsceSequence> findOsceSequenceByOsceDayId(Long osceDayId)
+		{
+			EntityManager em = entityManager();
+			String sql = "SELECT s FROM OsceSequence AS s WHERE s.osceDay = " + osceDayId;
+			TypedQuery<OsceSequence> q = em.createQuery(sql, OsceSequence.class);
+			return q.getResultList();
+		}
 }

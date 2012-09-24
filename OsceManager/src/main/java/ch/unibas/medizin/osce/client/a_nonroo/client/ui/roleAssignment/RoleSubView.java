@@ -7,6 +7,8 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -19,6 +21,7 @@ public interface RoleSubView extends IsWidget{
 		
 		public void editBackUpFlag(RoleSubView view,PatientInRoleSubView patientInRoleSubView,PatientInRoleProxy proxy,boolean isBackUp);
 		
+		public void updatePostOfPatient(OscePostProxy newProxy,OscePostProxy oldProxy,PatientInRoleSubViewImpl newPatientView,PatientInRoleProxy proxy);
 		//public boolean patientInRoleIsFirstAssigned(OsceSequenceProxy seqProxy,PatientInRoleProxy patientInRoleProxy);
 	}
 	
@@ -35,6 +38,10 @@ public interface RoleSubView extends IsWidget{
 	 public StandardizedRoleProxy getRoleProxy();
 	 
 	 public void setRoleProxy(StandardizedRoleProxy roleProxy);
+	 
+	 public void setBoundaryPanel(AbsolutePanel boundaryPanel);
+		
+		public AbsolutePanel getBoundaryPanel();
 	 
 	 public Label getRoleLbl();
 	 
@@ -68,6 +75,8 @@ public interface RoleSubView extends IsWidget{
 	 
 	 public RoleSubView getBackUpRoleView() ;
 	 public void setBackUpRoleView(RoleSubView backUpRoleView) ;
+	 public HorizontalPanel getRoleParent();
+	 public void setRoleParent(HorizontalPanel parent);
 	 
 	//modul 3 changes }
 }

@@ -9,7 +9,7 @@
 	margin-left: 20px;
 }
 </ui:style>
-	
+	<g:HTMLPanel ui:field="containerHTMLPanel" >
 	<g:HTMLPanel>
 		<g:TabPanel  ui:field="osceTab" width="100%" addStyleNames="{style.tabPanel}" >
 			 <!-- <g:Tab>
@@ -17,5 +17,6 @@
 				<g:Label>Hello</g:Label>
 			</g:Tab> -->
 		</g:TabPanel>
+	</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

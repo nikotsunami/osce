@@ -10,30 +10,31 @@
 	<g:VerticalPanel addStyleNames="{style.roleContainer}" width="120px" horizontalAlignment="center">
 		
 		<g:AbsolutePanel ui:field="roleAP">
-		<g:FocusPanel ui:field="roleHeader">
-		<g:HorizontalPanel  horizontalAlignment="center" addStyleNames="{style.roleLlb} {style.label}" width="100%">
-			<g:Label ui:field="roleLbl" >Role</g:Label>
-			<g:Label ui:field="countLbl" addStyleNames="{style.countLbl}">+12</g:Label>
-		
-		</g:HorizontalPanel>
-		</g:FocusPanel>
+			<g:FocusPanel ui:field="roleHeader">
+				<g:HorizontalPanel  horizontalAlignment="center" addStyleNames="{style.roleLlb} {style.label}" width="100%">
+					<g:Label ui:field="roleLbl" >Role</g:Label>
+					<g:Label ui:field="countLbl" addStyleNames="{style.countLbl}">+12</g:Label>
+				
+				</g:HorizontalPanel>
+			</g:FocusPanel>
+			
 		<g:AbsolutePanel>
-		<g:VerticalPanel ui:field="patientInRoleVP" addStyleNames="{style.padTop5}">
-			<!--  <r:PatientInRoleSubViewImpl ></r:PatientInRoleSubViewImpl>
-			<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-			<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-			<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
-		</g:VerticalPanel>
+			<g:VerticalPanel ui:field="patientInRoleVP" addStyleNames="{style.padTop5}">
+				<!--  <r:PatientInRoleSubViewImpl ></r:PatientInRoleSubViewImpl>
+				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
+			</g:VerticalPanel>
 		</g:AbsolutePanel>
 		<g:Label ui:field="backUpLabel" addStyleNames="{style.patientInRoleLbl} {style.label}">Back Up</g:Label>
 		
 		<g:SimplePanel>
-		<g:VerticalPanel ui:field="backUpVP" addStyleNames="{style.padTop5}">
-			<!--  <r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-			<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-			<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-			<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
-		</g:VerticalPanel>
+			<g:VerticalPanel ui:field="backUpVP" addStyleNames="{style.padTop5}">
+				<!--  <r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
+			</g:VerticalPanel>
 		</g:SimplePanel>
 		</g:AbsolutePanel>
 	</g:VerticalPanel>	

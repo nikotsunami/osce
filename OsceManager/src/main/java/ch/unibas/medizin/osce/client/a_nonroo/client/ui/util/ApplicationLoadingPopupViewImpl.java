@@ -35,6 +35,7 @@ public class ApplicationLoadingPopupViewImpl extends DialogBox implements
 		setAutoHideEnabled(false);
 		center();
 //		setText(constants.loading());
+		 this.getElement().removeClassName("gwt-DialogBox");
 		this.getElement().getStyle().setZIndex(1); 
 
 	}

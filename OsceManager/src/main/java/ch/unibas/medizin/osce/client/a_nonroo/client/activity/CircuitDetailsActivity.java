@@ -59,6 +59,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.server.ttgen.OsceVerifier;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -91,6 +92,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.Renderer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -99,6 +101,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 
 @SuppressWarnings("deprecation")
@@ -112,7 +115,9 @@ OscePostView.Delegate
 OSCENewSubView.Delegate,
 OsceCreatePostBluePrintSubView.Delegate,
 OsceDayView.Delegate ,
-SequenceOsceSubView.Delegate {//Assignment E:Module 5
+SequenceOsceSubView.Delegate,
+AccordianPanelView.ParcourDelegate
+{//Assignment E:Module 5
 
 		private OsMaRequestFactory requests;
 		private PlaceController placeController;
@@ -142,14 +147,16 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 		int maxSeq=0;
 		OSCENewSubViewImpl oSCENewSubViewImpl;	
 		//5C:SPEC END
-		
+		public boolean findspecialisation=false;
 		// Module 5 bug Report Change
 		OsceProxy osceProxyforFixedStatus;		
 		// E Module 5 bug Report Change
-		
+		 public boolean successValue=false;
 		//Module 5 Bug Report Solution
 		OsceProxy osceToRefreshPlace;
 		//E Module 5 Bug Report Solution
+		
+		public List<OsceDayProxy> days=new ArrayList<OsceDayProxy>();
 		
 		private CircuitDetailsPlace place;
 		private CircuitDetailsActivity activity;
@@ -286,10 +293,18 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 						osceDayViewImpl.getScheduleEarlierButton().setVisible(false);
 						//E Module 5 Bug Report Solution
 						
+						//spec issue sol
+						osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
+						osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
+						
 						osceDayViewImpl.setDelegate(activity);
 						// Day Assignment 
 						
 						
+						//bug solve start
+						
+						osceDayViewImpl.getInnerCalculationVerticalPanel().setVisible(false);
+						//bug solve end
 						Log.info("Before Iterator");
 						
 					
@@ -312,17 +327,78 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								OsceDayProxy osceDays=osceDaysIterator.next();
 								osceDayViewImpl.setOsceDayProxy(osceDays);
 
+								/*
+								if(osceDays.getOsceDate()==null)
+								{
+									osceDayViewImpl.getDateContentValueLabel().setText("");
+								}
+								else
+								{
+									osceDayViewImpl.getDateContentValueLabel().setText(osceDays.getOsceDate().getYear()+"-"+osceDays.getOsceDate().getMonth()+"-"+osceDays.getOsceDate().getDate());	
+								}
 								
-								if(osceDays.getLunchBreakStart()==null)
+								if(osceDays.getTimeStart()==null)
 								{
 									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
 								}
 								else
 								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeStart()).substring(0,5));	
 								}
 								
+								if(osceDays.getLunchBreakStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
+								}
+								if(osceDays.getTimeEnd()==null)
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
+								}
 								
+								*/
+								if(osceDays.getOsceDate()==null)
+								{
+									osceDayViewImpl.getDateContentValueLabel().setText("  ");
+								}
+								else
+								{
+									//osceDayViewImpl.getDateContentValueLabel().setText(osceDayProxy.getOsceDate().getYear()+"-"+osceDayProxy.getOsceDate().getMonth()+"-"+osceDayProxy.getOsceDate().getDate());
+									osceDayViewImpl.getDateContentValueLabel().setText(DateTimeFormat.getFormat("yyyy-MM-dd").format(osceDays.getOsceDate()));
+								}
+																
+								if(osceDays.getTimeStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeStart()).substring(0,5));	
+								}
+								
+								if(osceDays.getLunchBreakStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakValueLabel().setText("  ");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
+								}
+								if(osceDays.getTimeEnd()==null)
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("  ");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
+								}
 								/*if(osceDays.getOsceSequences().size()>1)
 								{
 									Log.info("setSize");
@@ -507,6 +583,9 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 							
 							Iterator<OsceDayProxy> osceDayIterator=((OsceProxy)response).getOsce_days().iterator();
 							Log.info("number of Osce Day :" + ((OsceProxy)response).getOsce_days().size());
+							//changes for osce day Label
+							int dayvalue=1;
+							//changes for osce day Label
 							while(osceDayIterator.hasNext()) {
 								OsceDayProxy osceDayProxy=osceDayIterator.next();
 								OsceGenerateSubView generateView=createGenerateView((OsceDayProxy)osceDayProxy);
@@ -560,19 +639,24 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 									sequenceOsceSubViewImpl.setDelegate(activity);
 									sequenceOsceSubViewImpl.nameOfSequence.setText(((osceSeqProxy.getLabel()==null) 
 											? constants.circuitUnnamedSequence() : osceSeqProxy.getLabel()));
-										
+									
 									//Module 5 Bug Report Solution
 									//sequenceOsceSubViewImpl.sequenceRotation.setText(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
 									sequenceOsceSubViewImpl.getSequenceRotationLable().setText(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
 									//E Module 5 Bug Report Solution
 
 									// Module 5 bug Report Change
-                                    //sequenceOsceSubViewImpl.sequenceRotation.setAcceptableValues(Arrays.asList(OsceSequences.values()));
+                                                                        //sequenceOsceSubViewImpl.sequenceRotation.setAcceptableValues(Arrays.asList(OsceSequences.values()));
 									//sequenceOsceSubViewImpl.sequenceRotation.setValue(OsceSequences.OSCE_SEQUENCES_A);
 									// E Module 5 bug Report Change
-									
+								
 									sequenceOsceSubViewImpl.osceSequenceProxy=osceSeqProxy;
 									sequenceOsceSubViewImpl.osceDayProxy=osceDayProxy;
+									
+									//spec issue sol
+									sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
+									
+									
 									//	addClickHandler(sequenceOsceSubViewImpl);
 									//sequenceOsceSubViewImpl.setStyleName(status.getOsceStatus(OsceStatus.OSCE_GENRATED));
 									accordingHp.add(sequenceOsceSubViewImpl);
@@ -596,12 +680,15 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 									/*ScrollPanel mainSP=new ScrollPanel(generateView.getAccordianVP());
 									mainSP.setWidth("720px");*/
 									//E Module 5 Bug Report Solution
-									
 								}
 								
 									//create Day view
 								//Osce Days[
 								osceDayViewImpl = generateView.getOsceDayViewImpl();
+								
+								//spec issue sol
+								osceDayViewImpl.setSequenceOsceSubViewImplList(sequenceOsceSubViewImpl1);
+								
 								osceDayViewImpl.setDelegate(activity);
 								
 								//Module 5 Bug Report Solution
@@ -621,12 +708,19 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 									osceDayViewImpl.getScheduleEarlierButton().setText(constants.scheduleEarlier());
 									osceDayViewImpl.getSchedulePostponenButton().setVisible(true);
 									osceDayViewImpl.getScheduleEarlierButton().setVisible(true);								
+									
+									//spec issue sol
+									osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(true);
+									osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(true);
 								}
 								if(osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
 								{
 									Log.info("Button Schedule Postpone/Earlier visible");									
 									osceDayViewImpl.getSchedulePostponenButton().setVisible(false);
 									osceDayViewImpl.getScheduleEarlierButton().setVisible(false);								
+									
+									osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
+									osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
 								}
 								//E Module 5 Bug Report Solution
 								
@@ -635,7 +729,10 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								
 								Log.info("Before Iterator");
 								
-							
+								//bug solve start
+								osceDayViewImpl.getSaveVerticlePanel().setVisible(false);
+								osceDayViewImpl.getPresentsVerticlePanel().setVisible(false);
+								//bug solve end
 								
 								/*Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
 								if(setOsceDays.size()==0){
@@ -652,15 +749,65 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								
 								osceDayViewImpl.setOsceDayProxy(osceDayProxy);
 								
+								//bug solve start
+								if(osceDayProxy.getOsceDate()==null)
+								{
+									osceDayViewImpl.getDateContentValueLabel().setText("  ");
+								}
+								else
+								{
+									//osceDayViewImpl.getDateContentValueLabel().setText(osceDayProxy.getOsceDate().getYear()+"-"+osceDayProxy.getOsceDate().getMonth()+"-"+osceDayProxy.getOsceDate().getDate());
+									osceDayViewImpl.getDateContentValueLabel().setText(DateTimeFormat.getFormat("yyyy-MM-dd").format(osceDayProxy.getOsceDate()));
+								}
+								
+								if(osceDayProxy.getTimeStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText("  ");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()).substring(0,5));	
+								}
+								
+								
 								if(osceDayProxy.getLunchBreakStart()==null)
+								{
+									osceDayViewImpl.getLunchBreakValueLabel().setText("  ");
+								}
+								else
+								{
+									int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getLunchBreakStart()));
+									int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getLunchBreakStart()));
+									//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+									int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+									
+									//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
+									int newhr=(totalMinute/60);
+									int newmin=(totalMinute%60);
+									osceProxy.getLunchBreak();
+									osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5)+"-"+newhr+":"+newmin);	
+								}
+								
+								
+								if(osceDayProxy.getTimeEnd()==null)
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("  ");
+								}
+								else
+								{
+									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeEnd()).substring(0,5));	
+								}
+								
+								/*if(osceDayProxy.getLunchBreakStart()==null)
 								{
 									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
 								}
 								else
 								{
 									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5));	
-								}
+								}*/
 								
+								//bug solve end
 								//Module 5 Bug Report Solution
 								if(osceDayProxy.getOsceSequences().size()>1)
 								{
@@ -674,12 +821,17 @@ SequenceOsceSubView.Delegate {//Assignment E:Module 5
 								
 								//setDayStatusStyle(style);
 								 //Module 5 Bug Report Solution
-								osceDayViewImpl.getOsceDayLabel().setText("Day " + osceDayProxy.getId());								
+								//osceDayViewImpl.getOsceDayLabel().setText("Day " + osceDayProxy.getId());
+								//changes for osce day Label
+								osceDayViewImpl.getOsceDayLabel().setText("Day " + dayvalue);
+								//changes for osce day Label
 								 //E Module 5 Bug Report Solution
 								osceDayViewImpl.init();
 								
 								addTimeHendlers();
-								
+								//changes for osce day Label
+								dayvalue++;
+								//changes for osce day Label
 								//Osce Days]
 							}
 							
@@ -1092,7 +1244,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// Change in ParcourView					
 					Log.info("Set Initial Color: accordion-title-selected"+courseProxy.getColor());
 					contentView.addStyleName("accordion-title-selected"+courseProxy.getColor());
-					contentView.setHeight("268px");
+					//bug report solve start
+					contentView.setHeight("248px");
+                                         //contentView.setHeight("268px");
+					//bug report solve end
 					contentView.getContentPanel().getElement().getStyle().setWidth(100, Unit.PCT);
 					contentView.getScrollPanel().getElement().getStyle().setWidth(100, Unit.PCT);
 				// E Change in ParcourView
@@ -1160,7 +1315,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			
 				// Change in ParcourView
 				headerView.setContentView(contentView);
-				// E Change in ParcourView
+				// E Change in ParcourView			
+				
+				accordianView.setOsceSequenceProxy(osceSequenceProxy);
+				accordianView.setParcourDelegate(this);
 				
 				accordianView.add(headerView.asWidget(), contentView);
 				
@@ -1198,7 +1356,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			final OscePostSubView oscePostSubView=new OscePostSubViewImpl();
 			
 			// Change in ParcourView
-			oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
+			//spec issue sol
+			if(oscePostProxy.getStandardizedRole() != null)
+				oscePostSubView.getStandardizedRoleLbl().setText(oscePostProxy.getStandardizedRole().getLongName());
+			else
+		 	        oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
+
 			oscePostSubView.getRoomLbl().setText(constants.select());
 			// E Change in ParcourView
 			
@@ -1247,7 +1410,11 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			final OscePostSubView oscePostSubViewNext=new OscePostSubViewImpl();
 			
 			// Change in ParcourView
-			oscePostSubViewNext.getStandardizedRoleLbl().setText(constants.select());
+			//spec issue sol
+			if(oscePostProxy.getStandardizedRole() != null)
+				oscePostSubViewNext.getStandardizedRoleLbl().setText(oscePostProxyNext.getStandardizedRole().getLongName());
+			else
+		         	oscePostSubViewNext.getStandardizedRoleLbl().setText(constants.select());
 			oscePostSubViewNext.getRoomLbl().setText(constants.select());
 			// E Change in ParcourView
 			
@@ -1269,8 +1436,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					});
 
 			
-			if(oscePostProxyNext.getStandardizedRole()!=null)
-				oscePostSubView.getStandardizedRoleLbl().setText(oscePostProxyNext.getStandardizedRole().getLongName());
+			//if(oscePostProxyNext.getStandardizedRole()!=null)
+			//	oscePostSubView.getStandardizedRoleLbl().setText(oscePostProxyNext.getStandardizedRole().getLongName());
 			
 			oscePostSubViewNext.setDelegate(this);
 			oscePostSubViewNext.setOscePostProxy(oscePostProxyNext);
@@ -1486,12 +1653,31 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			// E Module 5 bug Report Change
 			// Highlight onViolation
 			Log.info("Map Size: " + circuitOsceSubViewImp.osceMap.size());
+			
+			
+			/*
+			MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+			dialog.showConfirmationDialog(constants.warningHeaderValue());
+			return;*/
+			try
+			{
+				OsceProxyVerifier.verifyOsce(osceProxy);	
+			}
+			catch(Exception e)
+			{
+				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+				dialog.showConfirmationDialog("Please Enter "+ e.getMessage()+" For OSCE");
+				//Log.info(e.toString());
+				return;
+			}
+			
+			
 			osceReq.persist().using(osceProxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
 			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("Osce Value Updated");
-					
+					successValue=true;
 					final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.success());
 					valueUpdateDialogBox.showConfirmationDialog(constants.updateOsce());
 					valueUpdateDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
@@ -1514,7 +1700,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					//Window.alert("Osce Data Updated sucessfully");
 					
 				}
+				
+			
 			});
+			
+			if(successValue==true)
+			{
+				this.osceProxy=osceProxy;
+			}
 		}
 		@Override
 		public void clearAll(OsceProxy proxy) {
@@ -2666,12 +2859,23 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						if(osceDayViewImpl.dateTextBox.getValue()==null){
 							// Module 5 bug Report Change
 							//Window.alert("Data must not empty");
-							MessageConfirmationDialogBox dateDialog=new MessageConfirmationDialogBox(constants.warning());
-							dateDialog.showConfirmationDialog(constants.warningDateEmpty());
+							//MessageConfirmationDialogBox dateDialog=new MessageConfirmationDialogBox(constants.warning());
+							//dateDialog.showConfirmationDialog(constants.warningDateEmpty());
 							// Module 5 bug Report Change		
 							
 							return;
 						}
+						
+						Date today = new Date();
+						Date selecteddate=osceDayViewImpl.dateTextBox.getValue();
+						
+						if(selecteddate.before(today))
+							{
+							MessageConfirmationDialogBox dateDialog=new MessageConfirmationDialogBox(constants.warning());
+								dateDialog.showConfirmationDialog("Data past date");
+							return;
+						}
+						
 						if(osceDayViewImpl.startTimeTextBox.getValue()==null){
 							// Module 5 bug Report Change
 							//Window.alert("Start Time must not Empty");
@@ -2699,6 +2903,11 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							if(! checkEndTimeValidation())
 								return;
 						}
+						
+						
+						
+						
+						//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
 						
 						
 						OsceDayRequest osceDayReq = requests.osceDayRequest();
@@ -2730,7 +2939,25 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							mts=osceDayViewImpl.endTimeTextBox.getValue().substring(3, 5);
 							newDateWitnEndTime.setMinutes(new Integer(mts));
 							
+							//bug solve start
 							
+							int startHour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(newDateWithStartTime));
+							int startminute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(newDateWithStartTime));
+							//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+							int totalStartMinute=(startHour*60)+startminute;
+							
+							int endHour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(newDateWitnEndTime));
+							int endminute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(newDateWitnEndTime));
+							//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+							int totalendMinute=(endHour*60)+endminute;
+							if(totalStartMinute>totalendMinute)
+							{
+								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+								dialog.showConfirmationDialog(constants.warningStartEndTime());
+								return;
+							}
+							
+							//bug solve end
 							//Date newDateWithStartTime =updatetdNewStartTimeDateFormat.parse(osceDayViewImpl.startTimeTextBox.getValue());
 							//Date newDateWitnEndTime = updatetdNewEndTimeDateFormat.parse(osceDayViewImpl.endTimeTextBox.getValue());
 							
@@ -2793,6 +3020,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							// Module 5 bug Report Change		
 							return;
 						}
+						
+						Date today = new Date();
+						//Date selecteddate=osceDayViewImpl.dateTextBox.getValue();
+						
+						if(osceDayViewImpl.dateTextBox.getValue().before(today))
+							{
+								MessageConfirmationDialogBox dateDialog=new MessageConfirmationDialogBox(constants.warning());
+								dateDialog.showConfirmationDialog("Data must not be past date");
+									return;
+							}
 						if(osceDayViewImpl.startTimeTextBox.getValue()==null){
 							// Module 5 bug Report Change
 							//Window.alert("Start Time must not Empty");
@@ -2863,7 +3100,24 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 							//oldDate.setTime(osceDayViewImpl.startTimeTextBox.getValue());
 							//Date updatedstartTime = updatestartTimeDateFormat.parse(osceDayViewImpl.startTimeTextBox.getValue());
+							//bug report start
+							int startHour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(newStartTimeDate));
+							int startminute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(newStartTimeDate));
+							//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+							int totalStartMinute=(startHour*60)+startminute;
 							
+							int endHour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(newEndTimeDate));
+							int endminute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(newEndTimeDate));
+							//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+							int totalendMinute=(endHour*60)+endminute;
+							if(totalStartMinute>totalendMinute)
+							{
+								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+								dialog.showConfirmationDialog(constants.warningStartEndTime());
+								return;
+							}
+							
+							//bug report end
 							Log.info("Value of newDate" + newStartTimeDate);
 							Log.info("Value getSuccessfully");
 							
@@ -3130,6 +3384,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		
 	// Module 5 changes {
 				
+				
+				
 				@Override
 				public void osceGenratedButtonClicked() {
 					
@@ -3142,6 +3398,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					circuitOsceSubViewImpl.setClosedBtnStyle(false);*/
 					
 					
+					
 					if(osceProxy.getOsce_days().size()<=0)
 					{
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
@@ -3152,6 +3409,59 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					Log.info("Genrated Button Clicked Event at Circuit Details Activity");
 					Log.info("OSceProxy is :" + osceProxy.getId());
+					
+					try
+					{
+						OsceProxyVerifier.verifyOsce(osceProxy);
+					}
+					catch(Exception e)
+					{
+						Log.info("message string--"+e.getMessage());
+						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+						//dialog.showConfirmationDialog(constants.warningHeaderValue());
+						dialog.showConfirmationDialog("Please Enter " + e.getMessage()+"For Osce");
+						return;
+					}
+				/*	
+					if(osceProxy.getShortBreak()<=0 || osceProxy.getLongBreak()<=0|| osceProxy.getLunchBreak()<=0|| osceProxy.getMiddleBreak()<=0 ||osceProxy.getMaxNumberStudents()<=0 || osceProxy.getNumberRooms()<=0 || osceProxy.getShortBreakSimpatChange()<=0)
+					{
+						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+						dialog.showConfirmationDialog(constants.warningHeaderValue());
+						return;
+					}
+					findspecialisation=false;*/
+					
+					requests.oscePostBluePrintRequestNonRoo().countOscebluePrintValue(osceProxy.getId()).fire(new OSCEReceiver<Long>() {
+
+						@Override
+						public void onSuccess(Long response) {
+							// TODO Auto-generated method stub
+							Log.info("response size--"+response);
+							if(response<=0)
+							{
+								
+						
+				/*		
+									int startHour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(tempDay.getTimeStart()));
+									int startminute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(tempDay.getTimeStart()));
+									//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+									int totalStartMinute=(startHour*60)+startminute;
+									
+									int endHour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(tempDay.getTimeEnd()));
+									int endminute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(tempDay.getTimeEnd()));
+									//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+									int totalendMinute=(endHour*60)+endminute;
+									if(totalStartMinute>totalendMinute)
+									{
+										MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+										dialog.showConfirmationDialog(constants.warningStartEndTime());
+										return;
+									}
+									
+									//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
+				*/		
+				
+						
 					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_BLUEPRINT)
                                         {
 					//requests.oscePostBluePrintRequestNonRoo().isBluePrintHasBreakAsLast(osceProxy.getId());
@@ -3245,14 +3555,32 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 					}
 				}
+							}
+							else
+							{
+									MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+									dialog.showConfirmationDialog(constants.warningGenerate());
+									return;
+
+							}	
+						}
+				});
+					
+
+										
 
 				}
+				
+				
+				
+				
 				// Module 5 bug Report Change			
 				public void setStatusGenerated(OsceProxy osceProxy)
 				{
 							
 					OsceRequest oscerequest=requests.osceRequest();
 					osceProxy=oscerequest.edit(osceProxy);
+					//Window.alert("new status--"+osceProxy.getShortBreak());
 					final OsceProxy tempOsceProxy=osceProxy;
 					osceProxy.setOsceStatus(OsceStatus.OSCE_GENRATED);
 					oscerequest.persist().using(osceProxy).fire(new OSCEReceiver<Void>() 
@@ -3797,30 +4125,57 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					final RoomProxy roomProxy=(RoomProxy)view.getNewListBox().getSelected();
 					Log.info("Room Proxy: " + roomProxy.getId());
-					view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+					
 					((ListBoxPopupViewImpl)view).hide();
 					
-					requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+					System.out.println("SEQUENCE : " + oscePostSubViewImpl.getOscePostProxy().getOsceSequence());
+					
+					//spec
+					
+					requests.oscePostRequest().findOscePost(oscePostSubViewImpl.getOscePostProxy().getId()).with("osceSequence").fire(new OSCEReceiver<OscePostProxy>() {
 
 						@Override
-						public void onSuccess(OscePostRoomProxy response) 
-						{
-							Log.info("Osce Post Room Proxy: " + response.getId());
-							OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
-							response=oscePostRoomRequest.edit(response);
-							response.setRoom(roomProxy);
-							oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
-
-								@Override
-								public void onSuccess(Void response) 
-								{
-									Log.info("Success saveOscePostRoom ");
-									MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
-									dialog.showConfirmationDialog(constants.confirmationRoomAssigned());
-								}
-							});
+						public void onSuccess(OscePostProxy oscePostResult) {
 							
-						}
+									requests.oscePostRoomRequestNonRoo().findOscePostRoomByRoom(oscePostResult.getOsceSequence().getId(),roomProxy.getId()).fire(new OSCEReceiver<Integer>() {
+
+										@Override
+										public void onSuccess(Integer roomCount) {
+											if (roomCount.equals(0))
+											{
+												requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+
+													@Override
+													public void onSuccess(OscePostRoomProxy response) 
+													{
+														Log.info("Osce Post Room Proxy: " + response.getId());
+														OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
+														response=oscePostRoomRequest.edit(response);
+														response.setRoom(roomProxy);
+														oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
+
+															@Override
+															public void onSuccess(Void response) 
+															{
+																view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+																Log.info("Success saveOscePostRoom ");
+																MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
+																dialog.showConfirmationDialog("Room Assign To Post Successfully.");
+															}
+														});
+														
+													}
+												});
+											}
+											else
+											{
+												Log.info("Room Already Exist");
+												MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
+												dialog.showConfirmationDialog("Room already assigned to another post");
+											}
+										}
+									});
+							}
 					});
 					
 		/*			OscePostProxy oscePostProxy=(OscePostProxy)view.getProxy();
@@ -3847,4 +4202,320 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				}
 				// E Module 5 and TTG Bug Changes
 
+				//spec issue sol
+
+				@Override
+				public void shiftLucnkBreakPrevClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImplTemp) {
+					
+					try
+					{
+						if (osceDayProxy.getLunchBreakAfterRotation() != null || osceDayProxy.getLunchBreakAfterRotation() != 0)
+						{
+							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()-1)).fire(new OSCEReceiver<Boolean>() {
+
+								@Override
+								public void onSuccess(Boolean response1) {
+									
+									requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+
+										@Override
+										public void onSuccess(
+												OsceDayProxy osceDayProxyTemp) {
+												osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+											
+												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+												
+												requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+													@Override
+													public void onSuccess(
+															Boolean response) {																
+														Log.info("Done Successfully");			
+														
+														if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() > 0)
+														{
+															SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+															SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															
+															int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
+															int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
+															firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+															secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+														}
+													}
+												});
+										}
+									});
+								}
+							});
+						}
+						else
+						{					
+							requests.osceSequenceRequestNonRoo().findOsceSequenceByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
+								
+								@Override
+								public void onSuccess(List<OsceSequenceProxy> response) {
+									
+									if (response.size() > 0)
+									{
+										OsceSequenceProxy osceSequenceProxy = response.get(0);
+										
+										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1)).fire(new OSCEReceiver<Boolean>() {
+
+											@Override
+											public void onSuccess(Boolean response1) {
+												Log.info("shiftLucnkBreakPrevClicked Response : " + response1);
+												
+												requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+
+													@Override
+													public void onSuccess(
+															OsceDayProxy osceDayProxyTemp) {
+															osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+														
+															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+															
+															requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+																@Override
+																public void onSuccess(
+																		Boolean response) {																
+																	Log.info("Done Successfully");
+																	
+																	if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() > 0)
+																	{
+																		SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																		SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																		
+																		int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																		int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																		firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																		secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																	}
+																}
+															});
+													}
+												});
+											}
+										});
+									}				
+								}
+							});
+						}
+						
+
+					}
+					catch(Exception e)
+					{
+						System.out.println(e.getMessage());
+					}
+										
+				}
+
+				@Override
+				public void shiftLucnkBreakNextClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImplTemp) {
+					
+					try
+					{
+						if (osceDayProxy.getLunchBreakAfterRotation() == null || osceDayProxy.getLunchBreakAfterRotation() == 0)
+						{	
+							requests.osceSequenceRequestNonRoo().findOsceSequenceByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
+								
+								@Override
+								public void onSuccess(List<OsceSequenceProxy> response) {
+									
+									if (response.size() > 0)
+									{
+										OsceSequenceProxy osceSequenceProxy = response.get(0);
+										
+										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1)).fire(new OSCEReceiver<Boolean>() {
+
+											@Override
+											public void onSuccess(Boolean response1) {
+												
+												requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+
+													@Override
+													public void onSuccess(
+															OsceDayProxy osceDayProxyTemp) {
+															osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+														
+															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+															
+															requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+
+																@Override
+																public void onSuccess(
+																		Boolean response) {
+																	
+																	Log.info("Done Successfully");
+																	
+																	if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() > 0)
+																	{
+																		SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																		SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																		
+																		int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																		int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																		firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																		secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																	}
+																}
+															});
+													}
+												});
+											}
+										});
+
+									}								
+								}
+							});
+						}
+						else
+						{					
+							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()+1)).fire(new OSCEReceiver<Boolean>() {
+
+								@Override
+								public void onSuccess(Boolean response1) {
+								
+									requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+
+										@Override
+										public void onSuccess(
+												OsceDayProxy osceDayProxyTemp) {
+												osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+											
+												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+												
+												requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+
+													@Override
+													public void onSuccess(
+															Boolean response) {
+														
+														Log.info("Done Successfully");
+														if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() > 0)
+														{
+															SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+															SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															
+															int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
+															int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
+															firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+															secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+														}
+													}
+												});
+										}
+									});
+								}
+							});
+						}
+
+					}
+					catch(Exception e)
+					{
+						System.out.println(e.getMessage());
+					}
+										
+					
+				}
+
+          static class OsceProxyVerifier {
+
+					public static void verifyOsce(OsceProxy osce ) throws Exception {
+						if(osce.getMaxNumberStudents() == null || osce.getMaxNumberStudents() <= 0)
+							throw new Exception("maximum number of students");
+						
+						if(osce.getNumberRooms() == null || osce.getNumberRooms() <= 0)
+							throw new Exception("number of rooms available");
+						
+						if(osce.getPostLength() == null || osce.getPostLength() <= 0)
+							throw new Exception("post length");
+						
+						if(osce.getShortBreak() == null || osce.getShortBreak() <= 0)
+							throw new Exception("duration of short break (after a post)");
+						
+						if(osce.getShortBreakSimpatChange() == null || osce.getShortBreakSimpatChange() <= 0)
+							throw new Exception("duration of simpat change break (when a change of simpat is needed WITHIN rotation)");
+						
+						if(osce.getMiddleBreak() == null || osce.getMiddleBreak() <= 0)
+							throw new Exception("duration of middle break (after a rotation)");
+						
+						if(osce.getLongBreak() == null || osce.getLongBreak() <= 0)
+							throw new Exception("duration of long break (when a change of simpat is needed AFTER rotation)");
+						
+						if(osce.getLunchBreak() == null || osce.getLunchBreak() <= 0)
+							throw new Exception("duration of lunch break");
+						
+						if(osce.getNumberCourses() == null || osce.getNumberCourses() <= 0)
+							throw new Exception("Number of Courses");
+						
+						if(osce.getNumberPosts() == null || osce.getNumberPosts() <= 0)
+							throw new Exception("Number of posts");
+						
+					}
+				}
+
+	@Override
+	public void refreshParcourContent(AccordianPanelViewImpl view,
+			Widget header, OsceSequenceProxy osceSequenceProxy) {
+
+		final HeaderView parHeaderView = (HeaderView) header;
+
+		final CourseProxy courseProxy = parHeaderView.getProxy();
+
+		final ContentViewImpl contentView = (ContentViewImpl) parHeaderView
+				.getContentView();
+		contentView.getPostHP().clear();
+		contentView.getOscePostHP().clear();
+		contentView.addStyleName("accordion-title-selected"
+				+ courseProxy.getColor());
+		contentView.setHeight("268px");
+		contentView.getContentPanel().getElement().getStyle()
+				.setWidth(100, Unit.PCT);
+		contentView.getScrollPanel().getElement().getStyle()
+				.setWidth(100, Unit.PCT);
+
+		requests.osceSequenceRequest()
+				.findOsceSequence(osceSequenceProxy.getId())
+				.with("oscePosts", "oscePosts.oscePostBlueprint",
+						"oscePosts.standardizedRole",
+						"oscePosts.oscePostBlueprint.postType",
+						"oscePosts.oscePostBlueprint.specialisation",
+						"oscePosts.oscePostBlueprint.roleTopic")
+				.fire(new OSCEReceiver<OsceSequenceProxy>() {
+
+					@Override
+					public void onSuccess(OsceSequenceProxy response) {
+
+						Iterator<OscePostProxy> oscePostIterator = response
+								.getOscePosts().iterator();
+
+						while (oscePostIterator.hasNext()) {
+
+							OscePostProxy oscePostProxy = oscePostIterator
+									.next();
+
+							if (oscePostProxy.getOscePostBlueprint()
+									.getPostType()
+									.equals(PostType.ANAMNESIS_THERAPY)
+									|| oscePostProxy.getOscePostBlueprint()
+											.getPostType()
+											.equals(PostType.PREPARATION)) {
+								createAnamnesisTherapyPost(contentView,
+										oscePostProxy, oscePostIterator.next(),
+										courseProxy);
+							} else if (response.getOscePosts().size() == 1) {
+								createUndraggablePost(contentView,
+										oscePostProxy, courseProxy);
+							} else {
+								createOscePost(contentView, oscePostProxy,
+										courseProxy);
+							}
+						}
+					}
+				});
+
+	}                
 }

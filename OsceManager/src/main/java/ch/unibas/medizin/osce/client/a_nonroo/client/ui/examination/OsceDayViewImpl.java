@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,6 +71,8 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	@UiField
 	VerticalPanel dayContentVerticalPanel;
 
+	
+	
 	@UiField
 	Label dayLabel;
 	
@@ -96,20 +100,50 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	@UiField
 	Label calculationsLabel;
 	
-	@UiField
-	Label lunchBreakLabel;
+	
+	// E Module 5 bug Report Change
+	
+	/*bug solve start*/
+	
+	/*@UiField
+	Label dateContentLabel;
 	
 	// Module 5 bug Report Change
 	@UiField
 	Label lunchBreakStartLabel;
-	// E Module 5 bug Report Change
+	*/
+	
+	@UiField
+	Label dateContentLabel;
+	@UiField
+	Label lunchBreakStartLabel;
+	@UiField
+	Label lunchBreakEndTimeLabel;
+	@UiField
+	Label lunchBreakLabel;
 	
 	
 	@UiField
+	Label dateContentValueLabel;
+	@UiField
+	Label lunchBreakStartValueLabel;
+	@UiField
+	Label lunchBreakEndTimeValueLabel;
+	@UiField
+	Label lunchBreakValueLabel;
+	
+	/*@UiField
+	Label lunchBreakStartValueLabel;*/
+	
+	/*@UiField
 	Label lbEndTimeLabel;
 	
 	@UiField
 	Label studentsLabel;
+	*/
+	
+	/*bug solve end*/
+	
 	
 	@UiField
 	IconButton saveOsceDayValue;
@@ -125,11 +159,30 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	HorizontalPanel scheduleHP;	
 	@UiField
 	VerticalPanel calculationVPanel;
+	
+	@UiField
+	VerticalPanel innerCalculationVPanel;
+	
+	@UiField
+	VerticalPanel presentsVerticlePanel;
+	
 	@UiField
 	VerticalPanel saveVPanel;
+
 	@UiField
-	Label lunchBreakStartValueLabel;
+	IconButton btnShiftLunchBreakPrev;
+	
+	@UiField
+	IconButton btnShiftLunchBreakNext;
+	
+	@UiField
+	HorizontalPanel lunchBreakHP;
+	
+	
 	//E Module 5 Bug Report Solution
+	
+	//spec issue sol
+	List<SequenceOsceSubViewImpl> sequenceOsceSubViewImplList = new ArrayList<SequenceOsceSubViewImpl>();
 	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
@@ -226,10 +279,18 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		lunchBreakStartLabel.setText(constants.circuitLunchBreakStart());
 		// E Module 5 bug Report Change
 		
-		lbEndTimeLabel.setText(constants.circuitEndTime());
-		studentsLabel.setText(constants.students());
+		//lbEndTimeLabel.setText(constants.circuitEndTime());
+		//studentsLabel.setText(constants.students());
+		
+		dateContentLabel.setText(constants.circuitDate());
 		saveOsceDayValue.setText(constants.save());
+			btnShiftLunchBreakNext.setText(constants.shiftLunchBreakNext());
+		btnShiftLunchBreakPrev.setText(constants.ShiftLunchBreakPrev());
 
+
+		 ;
+		/*bug report end*/
+		
 		// Highlight onViolation
 			osceDayMap=new HashMap<String, Widget>();
 			osceDayMap.put("osceDate", dateTextBox);
@@ -281,15 +342,91 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 	public VerticalPanel getCalculationVerticalPanel()
 	{
 		return this.calculationVPanel;
-}
+	}
+	
+	//bus solve start
+	public VerticalPanel getInnerCalculationVerticalPanel()
+	{
+		return this.innerCalculationVPanel;
+	}
+	
+	public VerticalPanel getPresentsVerticlePanel()
+	{
+		return this.presentsVerticlePanel;
+	}
+	
+	//bug solve end
+	
 	public VerticalPanel getSaveVerticlePanel()
 	{
 		return this.saveVPanel;
 	}
+	
+	//bug report start
 	public Label getLunchBreakStartValueLabel()
 	{
 		return this.lunchBreakStartValueLabel;
 	}
+	
+	public Label getDateContentValueLabel()
+	{
+		return this.dateContentValueLabel;
+	}
+	
+	public Label getLunchBreakValueLabel()
+	{
+		return this.lunchBreakValueLabel;
+	}
+	
+	public Label getLunchBreakEndTimeValueLabel()
+	{
+		return this.lunchBreakEndTimeValueLabel;
+	}
+	
+	
+	
+	
+	//bug report end
 	//E Module 5 Bug Report Solution
+
+	@UiHandler("btnShiftLunchBreakPrev")
+	public void btnShiftLucnkBreakPrevClicked(ClickEvent event)
+	{
+		delegate.shiftLucnkBreakPrevClicked(this.osceDayProxy, this);
+	}
+	
+	@UiHandler("btnShiftLunchBreakNext")
+	public void btnShiftLucnkBreakNextClicked(ClickEvent event)
+	{
+		System.out.println("SPEC FROM PREVIOUS : " + osceDayProxy.getId());
+		delegate.shiftLucnkBreakNextClicked(this.osceDayProxy, this);
+	}
+
+	public IconButton getBtnShiftLunchBreakPrev() {
+		return btnShiftLunchBreakPrev;
+	}
+
+	public void setBtnShiftLunchBreakPrev(IconButton btnShiftLunchBreakPrev) {
+		this.btnShiftLunchBreakPrev = btnShiftLunchBreakPrev;
+	}
+
+	public IconButton getBtnShiftLunchBreakNext() {
+		return btnShiftLunchBreakNext;
+	}
+
+	public void setBtnShiftLunchBreakNext(IconButton btnShiftLunchBreakNext) {
+		this.btnShiftLunchBreakNext = btnShiftLunchBreakNext;
+	}
+	
+	//spec issue sol
+	
+	public List<SequenceOsceSubViewImpl> getSequenceOsceSubViewImplList() {
+		return sequenceOsceSubViewImplList;
+	}
+	
+	public void setSequenceOsceSubViewImplList(
+			List<SequenceOsceSubViewImpl> sequenceOsceSubViewImplList) {
+			this.sequenceOsceSubViewImplList = sequenceOsceSubViewImplList;
+	}
 	
 }

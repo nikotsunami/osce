@@ -11,8 +11,8 @@ import com.google.gwt.requestfactory.shared.RequestFactory;
 public class RoleAssignmentPlace extends OsMaPlace {
 
 	private String token;
-	public SemesterProxy semesterProxy;
-	public HandlerManager handler;
+	public static SemesterProxy semesterProxy;
+	public static HandlerManager handler;
 
 	public RoleAssignmentPlace() {
 		Log.debug("SPRoleAssignmentPlace.SPRoleAssignmentPlace");

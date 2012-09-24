@@ -321,7 +321,7 @@ public class OsceDay {
 		List<OsceDay> osceDays=OsceDay.findOsceDayByOsce(osceId);
 		Log.info("~~Total "+ osceDays.size()+" OsceDay for Osce " + osceId);
 		Iterator<OsceDay> osceDayIterator=osceDays.iterator();
-		
+		OsceDay nextOsceDay = null;
 		boolean flagUpdateExistingNumberOfRotation=false;
 		while(osceDayIterator.hasNext())
 		{
@@ -359,8 +359,16 @@ public class OsceDay {
 			{
 				osceDay.getOsceSequences().get(0).setNumberRotation((osceDay.getOsceSequences().get(0).getNumberRotation()+1));
 				osceDay.getOsceSequences().get(0).persist();
+				nextOsceDay = osceDay;
 				break;
 			}
+		}
+		try{			
+			if(nextOsceDay !=null )
+				updateTimesAfterRotationShift(osceDayProxy.getId(),nextOsceDay.getId());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		return "UpdateSuccessful";
 	}
@@ -440,7 +448,16 @@ public class OsceDay {
 								newCourse.persist();								
 							}
 						}					
+				
+						try{					
+							updateTimesAfterRotationShift(osceDayProxy.getId(),newOsceday.getId());
+						}catch(Exception e)
+						{
+							e.printStackTrace();
 				}					
+				}
+				
+				
 			//}
 		//}
 		return "CreateSuccessful";
@@ -676,5 +693,37 @@ public static List<OsceDay> findOSceDaysForAnOsce(Long osceId){
 			return q.getResultList();
 	}
 	// TestCasePurpose Method start }
+
+
+public static List<OsceDay> findOSceDaysForAnOsceId(Long osceId){
+	
+	Log.info("Inside findOSceDaysForAnOsce with Osce Is : " + osceId);
+	EntityManager em = entityManager();
+	String query="select o from OsceDay as o where o.osce="+osceId;
+	TypedQuery<OsceDay> q = em.createQuery(query, OsceDay.class);
+	Log.info("Query String: " + query);
+	return q.getResultList();
+}
+
+
+public static Boolean updateRotation(Long osceDayId, Integer rotation) {
+	try {
+		
+		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+		List<OsceSequence> listOsceSequence = osceDay.getOsceSequences();
+		if(listOsceSequence!=null && listOsceSequence.size()==2)
+		{
+			OsceSequence firstOsceSequence = listOsceSequence.get(0);
+			OsceSequence secondOsceSequence = listOsceSequence.get(1);
+			firstOsceSequence.setNumberRotation(firstOsceSequence.getNumberRotation() - rotation);
+			secondOsceSequence.setNumberRotation(secondOsceSequence.getNumberRotation() + rotation);
+		}
+		
+	} catch(Exception e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+}
 
 }

@@ -6,6 +6,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
@@ -152,8 +153,8 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 	public void init() {
 		
 		
-		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";		
-		containerPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : 600px;");
+		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();		
+		containerPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width : 600px;");
 
 	}
 
@@ -198,8 +199,8 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 		
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());
 		
-		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";		
-		containerPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : 600px;");
+		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		containerPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width : 600px;");
 	}
 
 }

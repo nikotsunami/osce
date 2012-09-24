@@ -6,6 +6,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +20,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -24,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class SummoningsViewImpl extends Composite implements SummoningsView {
+public class SummoningsViewImpl extends Composite implements SummoningsView, MenuClickHandler {
 
 	private static SummoningsViewUiBinder uiBinder = GWT
 			.create(SummoningsViewUiBinder.class);
@@ -39,8 +45,8 @@ public class SummoningsViewImpl extends Composite implements SummoningsView {
 	private Presenter presenter;
 	
 	
-//	@UiField
-//	SplitLayoutPanel splitLayoutPanel;
+	@UiField
+	HTMLPanel containerHTMLPanel;
 	
 	@UiField
 	Label lblSP;
@@ -120,7 +126,9 @@ public class SummoningsViewImpl extends Composite implements SummoningsView {
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
-//		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		
+		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		containerHTMLPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px;");
 	}
 
 	public String[] getPaths() {
@@ -240,6 +248,15 @@ public class SummoningsViewImpl extends Composite implements SummoningsView {
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		containerHTMLPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px;");
 	}
 
 

@@ -35,7 +35,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.StudentV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan.StudentViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
-import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentRequest;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
@@ -78,9 +77,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	ExaminationScheduleDetailView view;
 	private OsceProxy osceProxy;
 	
-	private Map<OscePostProxy, List<Date>> postLunchStartTimeMap=new HashMap();
-	private Map<OscePostProxy, List<Date>> postLongStartTimeMap=new HashMap();
-	private Map<OscePostProxy, List<Date>> postEndTimeMap=new HashMap();
+	private Map<OscePostProxy, List<Date>> postLunchStartTimeMap=new HashMap<OscePostProxy, List<Date>>();
+	private Map<OscePostProxy, List<Date>> postLongStartTimeMap=new HashMap<OscePostProxy, List<Date>>();
+	private Map<OscePostProxy, List<Date>> postAnyStartTimeMap=new HashMap<OscePostProxy, List<Date>>();
+	private Map<OscePostProxy,Map<Date,Long>> postAnyEndTimeBreakMap=new HashMap<OscePostProxy, Map<Date,Long>>();
+	private Map<OscePostProxy, List<Date>> postEndTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	
 	private List<DoctorProxy> doctorList;
 	public void setOsceProxy(OsceProxy osceProxy) {
@@ -133,8 +134,6 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		examinationScheduleDetailView.setDelegate(this);
 		widget.setWidget(examinationScheduleDetailView.asWidget());
 		this.view=examinationScheduleDetailView;
-		
-		MenuClickEvent.register(requests.getEventBus(), (ExaminationScheduleDetailViewImpl)view);
 		
 		requests.find(place.getProxyId()).with("osce_days","osce_days.osceSequences","osce_days.osceSequences.courses","osce_days.osceSequences.oscePosts","osce_days.osceSequences.oscePosts.oscePostBlueprint","osce_days.osceSequences.oscePosts.standardizedRole","osce_days.osceSequences.oscePosts.standardizedRole.roleTopic").fire(new OSCEReceiver<Object>() {
 
@@ -386,7 +385,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					//calculate duration					
 					List<Date> lunchstartTimeList=new ArrayList<Date>();
 					List<Date> longstartTimeList=new ArrayList<Date>();
-					
+					Map<Date, Long> dateBreakTimeMap=new HashMap<Date, Long>();
+					List<Date> anyendTimeList=new ArrayList<Date>();
 					for(int j=0;j<response.size();j++)
 					{
 						 AssignmentProxy assignmentProxy=response.get(j);
@@ -455,8 +455,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								oscePostView.getStudentSlotsVP().insert(simpatBreak, oscePostView.getStudentSlotsVP().getWidgetCount());*/
 							}
 							//insert long break
-							else if((long)osceProxy.getLongBreak()==breakTime || (long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
-									|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime)
+							else if((long)osceProxy.getLongBreak()==breakTime )
 							{
 								
 								longstartTimeList.add(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())));
@@ -506,6 +505,20 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								
 								oscePostView.getStudentSlotsVP().insert(simpatBreak, oscePostView.getStudentSlotsVP().getWidgetCount());*/
 							}
+							
+							//any break
+							else if((long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
+									|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime)
+							{
+								anyendTimeList.add(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())));
+								dateBreakTimeMap.put(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())), breakTime);
+								studentSlotLength--;
+								
+								//insert lunch break
+								insertStudentBreak(breakTime, oscePostView,studentView);
+								
+							}
+							
 						/*	else if(j!=response.size()-1 && (long)osceProxy.getMiddleBreak()==breakTime)
 							{
 								//endTimeList.add(assignmentProxy.getTimeEnd());
@@ -669,8 +682,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					}
 					//startTimeList.add(response.get(response.size()-1).getTimeEnd());
 					postLunchStartTimeMap.put(oscePostProxy, lunchstartTimeList);
+					postAnyStartTimeMap.put(oscePostProxy, anyendTimeList);
 					postLongStartTimeMap.put(oscePostProxy, longstartTimeList);
-					
+					postAnyEndTimeBreakMap.put(oscePostProxy, dateBreakTimeMap);
 					postEndTimeMap.put(oscePostProxy, endTimeList);
 					
 					//create Examiners Slots/ Create Examiner view inside oscePostView
@@ -726,12 +740,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								 
 								 	//calculate duration
 								 	Long examinerSlotLength=0l;
-								 	 if(j==0)
+								 	/* if(j==0)
 									 {
 								 		examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), accordianPanelViewImpl.getOsceDayProxy().getTimeStart());
 									 }
-									 else							
-										 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), accordianPanelViewImpl.getOsceDayProxy().getTimeStart());
+									 else	*/						
+										 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), assignmentProxy.getTimeStart());
 								 	 
 									//examinerSlotLength=examinerSlotLength/60000;
 									examinerSlotLength--;
@@ -775,9 +789,29 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									
 									Log.info("Examiner Break :" + breakTime);
 									
+									int continousShortBreak=osceProxy.getPostLength()+osceProxy.getShortBreak();
+									int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
+									
 									
 									//insert long or lunch break
 									if((long)osceProxy.getLongBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime)
+									{
+										//insert simpat change break
+										breakTime--;
+										
+										Short simpatchangeLength=osceProxy.getLongBreak();
+										SPView simpatBreak=new SPViewImpl();
+										simpatBreak.getSpPanel().addStyleName("empty-bg");
+										simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+										simpatBreak.setDelegate(activity);
+										simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
+										simpatBreak.getSpPanel().setWidth("30px");
+										
+										oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
+									}
+									//any break
+									else if((long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
+											|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime)
 									{
 										//insert simpat change break
 										breakTime--;
@@ -1297,7 +1331,25 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				boolean isLongbreak=false;
 				boolean isLunctBreak=false;
 				boolean isEndTime=false;
+				boolean isAnyBreak=false;
 				List<Date> dateList=postEndTimeMap.get(view.getOscePostProxy());
+				for(Date d:dateList)
+				{
+					if(d.equals(view.getPopupView().getEndTimeListBox().getValue()))
+					{
+						isEndTime=true;
+					}
+				}
+				
+				 Map<Date,Long> dateBreakMap=postAnyEndTimeBreakMap.get(view.getOscePostProxy());
+				 
+				 
+				if(dateBreakMap != null && dateBreakMap.containsKey(view.getPopupView().getEndTimeListBox().getValue()))
+				{
+					
+					isAnyBreak=true;
+					Log.info("isAnyBreak  :" +isAnyBreak);
+				}
 				for(Date d:dateList)
 				{
 					if(d.equals(view.getPopupView().getEndTimeListBox().getValue()))
@@ -1324,7 +1376,43 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						break;
 					}
 				}
-				
+				if(isAnyBreak)
+				{
+					AssignmentRequest assignmentRequest1=requests.assignmentRequest();
+					AssignmentProxy assignmentProxy1=assignmentRequest1.create(AssignmentProxy.class);
+					
+					Short lunchBreak=dateBreakMap.get(view.getPopupView().getEndTimeListBox().getValue()).shortValue();
+					Log.info("Any Break :" + lunchBreak);
+					String endDateString=DateTimeFormat.getFullDateTimeFormat().format(view.getPopupView().getEndTimeListBox().getValue());
+					Date endDate=DateTimeFormat.getFullDateTimeFormat().parse(endDateString);
+					int mt=endDate.getMinutes();
+					int hr=endDate.getHours();
+					mt=mt+lunchBreak;
+					if(mt>59)
+					{
+						hr++;
+						mt=mt-60;
+					}
+					endDate.setMinutes(mt);
+					endDate.setHours(hr);
+					
+					assignmentProxy1.setTimeStart(endDate);
+					assignmentProxy1.setTimeEnd(postEndTimeMap.get(view.getOscePostProxy()).get(0));
+					assignmentProxy1.setType(AssignmentTypes.EXAMINER);
+					//assignmentProxy1.setSequenceNumber(view.getPreviousAssignmentProxy().getSequenceNumber()+2);
+					assignmentProxy1.setOsceDay(view.getOsceDayProxy());
+					assignmentProxy1.setOscePostRoom(view.getOscePostRoomProxy());
+					assignmentRequest1.persist().using(assignmentProxy1).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							Log.info("createExaminerAssignmnet Success Splited Row ");
+							((PopupViewImpl)view.getPopupView()).hide();
+							//refresh ExaminerView;
+							refreshExaminerView(view);
+						}
+					});
+				}
 				if(isLunctBreak)
 				{
 					AssignmentRequest assignmentRequest1=requests.assignmentRequest();
@@ -1409,13 +1497,13 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 	}
 	
-	public void refreshExaminerView(final ExaminationViewImpl examinationView)
+	public void refreshExaminerView(final ExaminationViewImpl examinationViewOld)
 	{
-		final OscePostProxy oscePostProxy=examinationView.getOscePostProxy();
-		final OsceDayProxy osceDayProxy=examinationView.getOsceDayProxy();
-		final OscePostView oscePostView=examinationView.getOscePostView();
+		final OscePostProxy oscePostProxy=examinationViewOld.getOscePostProxy();
+		final OsceDayProxy osceDayProxy=examinationViewOld.getOsceDayProxy();
+		final OscePostView oscePostView=examinationViewOld.getOscePostView();
 		oscePostView.getExaminerVP().clear();
-		requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeExaminer(osceDayProxy.getId(), examinationView.getOsceSequenceProxy().getId(), examinationView.getCourseProxy().getId(),oscePostProxy.getId())
+		requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeExaminer(osceDayProxy.getId(), examinationViewOld.getOsceSequenceProxy().getId(), examinationViewOld.getCourseProxy().getId(),oscePostProxy.getId())
 		.with("examiner").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
@@ -1434,14 +1522,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					 
 					 	//calculate duration
 					 	Long examinerSlotLength=0l;
-					 	 if(j==0)
+					/* 	 if(j==0)
 						 {
 					 		examinerSlotLength=assignmentProxy.getTimeEnd().getTime()- osceDayProxy.getTimeStart().getTime();
 						 }
-						 else							
-							 examinerSlotLength=assignmentProxy.getTimeEnd().getTime()-assignmentProxy.getTimeStart().getTime();
+						 else*/							
+							 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
 					 	 
-						examinerSlotLength=examinerSlotLength/60000;
+						//examinerSlotLength=examinerSlotLength/60000;
 						examinerSlotLength--;
 						//examinerSlotLength=assignmentProxy.getTimeEnd().getMinutes()-assignmentProxy.getTimeStart().getMinutes();
 						//examinerSlotLength++;
@@ -1456,6 +1544,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						examinationView.setDelegate(activity);
 						examinationView.setOscePostProxy(oscePostProxy);
 						examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
+						examinationView.setOscePostView(oscePostView);
+						examinationView.setOsceDayProxy(osceDayProxy);
+						
+						examinationView.setCourseProxy(examinationViewOld.getCourseProxy());
+					 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
+					 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
+					 	examinationView.setOscePostRoomProxy(examinationViewOld.getOscePostRoomProxy());
+				
+						
 						
 						if(j>0)
 					 		examinationView.setPreviousAssignmentProxy(response.get(j-1));
@@ -1475,9 +1572,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						
 						Log.info("Break :" + breakTime);
 						
+						int continousShortBreak=osceProxy.getPostLength()+osceProxy.getShortBreak();
+						int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
 						
 						//insert long break
-						if(j!=response.size()-1 && (long)osceProxy.getLongBreak()==breakTime)
+						if( (long)osceProxy.getLongBreak()==breakTime)
 						{
 							//insert simpat change break
 							breakTime--;
@@ -1493,7 +1592,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
 						}
 						//insert lunchBreak
-						else if(j!=response.size()-1 && (long)osceProxy.getLunchBreak()==breakTime)
+						else if( (long)osceProxy.getLunchBreak()==breakTime)
 						{
 							//insert simpat change break
 							breakTime--;
@@ -1508,7 +1607,23 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							
 							oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
 						}
-						
+						//any break
+						else if((long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
+								|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime)
+						{
+							//insert simpat change break
+							breakTime--;
+							
+							Short simpatchangeLength=osceProxy.getLongBreak();
+							SPView simpatBreak=new SPViewImpl();
+							simpatBreak.getSpPanel().addStyleName("empty-bg");
+							simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+							simpatBreak.setDelegate(activity);
+							simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
+							simpatBreak.getSpPanel().setWidth("30px");
+							
+							oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
+						}
 				
 						
 						
@@ -1565,14 +1680,22 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			endTimeList.addAll(postLongStartTimeMap.get(view.getOscePostProxy()));
 			endTimeList.addAll(postLunchStartTimeMap.get(view.getOscePostProxy()));
 			endTimeList.addAll(postEndTimeMap.get(view.getOscePostProxy()));
+			endTimeList.addAll(postAnyStartTimeMap.get(view.getOscePostProxy()));
 			Collections.sort(endTimeList);
-			
-			for(int i=0;i<endTimeList.size();i++)
+			int i=0;
+			while(i<endTimeList.size())
 			{
+				
 				Date d=endTimeList.get(i);
 				if(d.before(timeStart))
+				{
 					endTimeList.remove(i);
+					i=0;
+				}
+				else
+					i++;
 			}
+			
 			popup.getEndTimeListBox().setAcceptableValues(endTimeList);
 			
 		//	popup.getEndTimeListBox().setAcceptableValues(postLongStartTimeMap.get(view.getOscePostProxy()));

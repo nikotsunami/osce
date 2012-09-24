@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
@@ -30,6 +31,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.layout.client.Layout.AnimationCallback;
+import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -231,17 +234,18 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	}
 	/*custom celltable end code*/
 	public void init() {
-		
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-		
-		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-		
-		
-		if(OsMaMainNav.getMenuStatus() == 0)
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-		else
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+
+		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,true);
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//		
+//		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		
+//		
+//		if(OsMaMainNav.getMenuStatus() == 0)
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//		else
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		
 //    	paths.add("id");
 //        table.addColumn(new TextColumn<StandardizedPatientProxy>() {
@@ -643,14 +647,36 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	public void setDetailPanel(boolean isDetailPlace) {
 
 		if (isDetailPlace) {
-			splitLayoutPanel.setWidgetSize(
-					mainScrollPanel,
-					Integer.parseInt(constants.widthSize())
-							- Integer.parseInt(constants.widthMin()));
-			splitLayoutPanel
-					.animate(Integer.parseInt(constants.animationTime()));
+			
+//			int width = splitLayoutPanel.getWidget(0).getOffsetWidth();
+//			int minWidth = width/2;
+//			
+//			Log.info("(splitLayoutPanel.getOffsetWidth()/2) == ="+(splitLayoutPanel.getOffsetWidth()/2));
+//			Log.info("minWidth == ="+minWidth);
+//			Log.info("width == ="+width);
+//			if((width - (splitLayoutPanel.getOffsetWidth()/2)) > 100)
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0),width - minWidth);
+			
+			ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
+			
+			delegate.doAnimation(true);
+			splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()),
+					new AnimationCallback() {
+						
+						@Override
+						public void onLayout(Layer layer, double progress) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onAnimationComplete() {
+							
+						}
+					});
+			delegate.doAnimation(false);
 		} else {
-			splitLayoutPanel.setWidgetSize(mainScrollPanel,
+			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0),
 					Integer.parseInt(constants.widthSize()));
 //			splitLayoutPanel
 //			.animate(Integer.parseInt(constants.animationTime()));
@@ -716,18 +742,32 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	@Override
 	public void onMenuClicked(MenuClickEvent event) {
 		
-		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+			OsMaMainNav.setMenuStatus(event.getMenuStatus());
 		
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;		
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//		int right = Window.getClientWidth();
+//		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		
+//		Log.info("Width For Split === = =="+splitLayoutPanel.getElement().getParentElement().getOffsetWidth());
+//		splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0),right - left);
 		
-		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
-			
-			if(OsMaMainNav.getMenuStatus() == 0)
-				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-			else
-				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
-		}
+		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,false);
+		
+//		splitLayoutPanel.getWidget(0).getElement().setAttribute("style", "position:relative;width: 100%");
+//		splitLayoutPanel.getElement().getFirstChildElement().getNextSiblingElement().setAttribute("style", "position:relative;width: 100%");
+//		splitLayoutPanel.getElement().getFirstChildElement().getNextSiblingElement().getFirstChildElement().setAttribute("style", "position:relative;width: 100%");
+		
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;		
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		int openSplitSize = Window.getClientWidth() - (Window.getClientWidth()/6);
+//		if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= openSplitSize){
+//			Log.info("Window.getClientWidth() == "+Window.getClientWidth());
+//			if(OsMaMainNav.getMenuStatus() == 0)
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), Window.getClientWidth()- (Window.getClientWidth()/50));
+//			else
+//				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), Window.getClientWidth() - (Window.getClientWidth()/6));
+//		}
 	}
 
 	@Override

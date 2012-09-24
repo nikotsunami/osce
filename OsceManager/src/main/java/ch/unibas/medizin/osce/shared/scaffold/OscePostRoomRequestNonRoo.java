@@ -19,6 +19,8 @@ import com.google.gwt.requestfactory.shared.RequestContext;
 public interface OscePostRoomRequestNonRoo extends RequestContext 
 {	 
 	abstract Request<OscePostRoomProxy> findOscePostRoomByOscePostAndCourse(CourseProxy course, OscePostProxy oscePost);
+	
+	abstract Request<Integer> findOscePostRoomByRoom(Long osceSequenceId, Long roomId);
 }
 
 

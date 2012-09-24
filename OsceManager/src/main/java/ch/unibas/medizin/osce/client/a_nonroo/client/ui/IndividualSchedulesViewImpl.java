@@ -6,6 +6,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -13,6 +18,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -20,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class IndividualSchedulesViewImpl extends Composite implements IndividualSchedulesView {
+public class IndividualSchedulesViewImpl extends Composite implements IndividualSchedulesView,MenuClickHandler {
 
 	private static IndividualSchedulesViewUiBinder uiBinder = GWT
 			.create(IndividualSchedulesViewUiBinder.class);
@@ -33,6 +39,9 @@ public class IndividualSchedulesViewImpl extends Composite implements Individual
 	protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
+
+	@UiField
+	HTMLPanel containerHTMLPanel;
 
 	// Module10 Create plans
 	@UiField
@@ -64,6 +73,11 @@ public class IndividualSchedulesViewImpl extends Composite implements Individual
 
 	public void init() 
 	{
+		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		int panelWidth = ResolutionSettings.getRightWidgetWidth();
+		int height = ResolutionSettings.getRightWidgetHeight();
+		containerHTMLPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width: "+panelWidth+"px; height: "+height+"px;");
+		
 		Log.info("Call init()");
 	
 		
@@ -86,4 +100,20 @@ public class IndividualSchedulesViewImpl extends Composite implements Individual
 		return this.osceTab;
 	}
 	// E Module10 Create plans
+
+	@Override
+	public void onMenuClicked(MenuClickEvent event) {
+		
+		OsMaMainNav.setMenuStatus(event.getMenuStatus());
+		
+		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		int panelWidth = ResolutionSettings.getRightWidgetWidth();
+		int height = ResolutionSettings.getRightWidgetHeight();
+		containerHTMLPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width: "+panelWidth+"px; height: "+height+"px;");
+		Log.info(" STYLE =========== "+containerHTMLPanel.getElement().getAttribute("style"));
+		Log.info("panelMarginLeft = "+panelMarginLeft);
+		Log.info("panelwidth = "+panelWidth);
+		Log.info("menuclicked");
+		
+	}
 }

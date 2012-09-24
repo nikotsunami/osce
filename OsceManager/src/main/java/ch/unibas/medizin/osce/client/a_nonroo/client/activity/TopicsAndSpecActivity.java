@@ -135,6 +135,22 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	public String sortname = "name";
 	public String searchFilter="";
 	
+	public Sorting getSortorder() {
+		return sortorder;
+	}
+
+	public void setSortorder(Sorting sortorder) {
+		this.sortorder = sortorder;
+	}
+
+	public String getSortname() {
+		return sortname;
+	}
+
+	public void setSortname(String sortname) {
+		this.sortname = sortname;
+	}
+	
 	// Violation Changes Highlight
 		TopicsAndSpecView topicsAndSpecView;
 		// E Violation Changes Highlight
@@ -324,8 +340,15 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 
 				if(isInserted){
 					
+					setSortname("id");
+					setSortorder(Sorting.ASC);
+					
 					int start = Paging.getLastPageStart(range.getLength(), totalRecords);
 					table.setPageStart(start);
+					
+					setInserted(false);
+					Log.info("sortname == "+sortname);
+					Log.info("sortorder == "+sortorder);
 				}
 				// finishPendingSelection();
 				if (widget != null) {
@@ -336,16 +359,16 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			
 		};
 
-		if(isInserted){
-
-			sortname = "id";
-			sortorder = Sorting.ASC;
-			
-			Log.info("sortname == "+sortname);
-			Log.info("sortorder == "+sortorder);
-			
-			setInserted(false);
-		}
+//		if(isInserted){
+//
+//			sortname = "id";
+//			sortorder = Sorting.ASC;
+//			
+//			setInserted(false);
+//			
+//			Log.info("sortname == "+sortname);
+//			Log.info("sortorder == "+sortorder);
+//		}
 
 			fireRangeRequest(range, callback);
 	}

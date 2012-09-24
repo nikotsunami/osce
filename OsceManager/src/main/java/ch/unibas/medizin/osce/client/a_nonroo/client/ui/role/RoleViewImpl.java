@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
@@ -374,15 +375,16 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 
 	public void init() {
 
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-
-		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
-		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-		
-		if(OsMaMainNav.getMenuStatus() == 0)
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-		else
-			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,true);
+//		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//
+//		// bugfix to avoid hiding of all panels (maybe there is a better solution...?!)
+//		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//		
+//		if(OsMaMainNav.getMenuStatus() == 0)
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//		else
+//			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 		
 		//spec start
 		Log.info("set data in column for cell tabel");
@@ -466,7 +468,8 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		return detailsPanel;
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
-		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
 		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));		
 		
 //		widthSize = 1200;
@@ -680,17 +683,18 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		public void onMenuClicked(MenuClickEvent event) {
 			
 			OsMaMainNav.setMenuStatus(event.getMenuStatus());		
-			int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
-			
-			DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
-			
-			if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
-				
-				if(OsMaMainNav.getMenuStatus() == 0)
-					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
-				else
-					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
-			}
+			ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,false);
+//			int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+//			
+//			DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
+//			
+//			if(splitLayoutPanel.getWidget(0).getOffsetWidth() >= 1220){
+//				
+//				if(OsMaMainNav.getMenuStatus() == 0)
+//					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
+//				else
+//					splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+//			}
 				
 		}
 

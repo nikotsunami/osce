@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -139,7 +140,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 	public void init() {
 
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		int left = ResolutionSettings.getSplitLayoutPanelLeft();
 		
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style","position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
 		
@@ -301,7 +302,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	public void onMenuClicked(MenuClickEvent event) {
 		
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());		
-		int left = (OsMaMainNav.getMenuStatus() == 0) ? 40 : 225;
+		int left = ResolutionSettings.getSplitLayoutPanelLeft();
 		
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
 		

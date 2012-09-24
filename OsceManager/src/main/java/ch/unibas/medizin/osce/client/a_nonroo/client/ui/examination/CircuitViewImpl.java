@@ -6,12 +6,14 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ImageResource;
@@ -87,7 +89,7 @@ public class CircuitViewImpl extends Composite implements CircuitView, MenuClick
 	
 		horizontalCircuitTabPanel.add(circuitTabPanel);
 		
-		circuitTabPanel.setHeight("720px");
+//		circuitTabPanel.setHeight("720px");
 		//circuitTabPanel.setWidth("1240px");
 		horizontalCircuitTabPanel.addStyleName("horizontalPanelStyle");
 	}
@@ -98,14 +100,22 @@ public class CircuitViewImpl extends Composite implements CircuitView, MenuClick
 
 	public void init() {
 		
-		int marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? 20 : 0;
-		int navWidth = (OsMaMainNav.getMenuStatus() == 0) ? (225 - 180) : 225;
-		int width = Window.getClientWidth() - navWidth - 20;
-		int height = Window.getClientHeight() - 40;
-		circuitTabPanel.setWidth("" + width + "px");
+//		int marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? 20 : 0;
+//		int navWidth = (OsMaMainNav.getMenuStatus() == 0) ? (225 - 180) : 225;
+//		int width = Window.getClientWidth() - navWidth - 20;
+//		int height = Window.getClientHeight() - 40;
+//		circuitTabPanel.setWidth("" + width + "px");
 //		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : 900px;");
-		mainHTMLPanel.getElement().setAttribute("style", "height: " + height + "position: absolute; left: " + navWidth + "px; top: 30px; right: 5px; bottom: 0px");
+//		mainHTMLPanel.getElement().setAttribute("style", "height: " + height + "position: absolute; left: " + navWidth + "px; top: 30px; right: 5px; bottom: 0px");
+		int marginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		int width = ResolutionSettings.getRightWidgetWidth();
+		int height = ResolutionSettings.getRightWidgetHeight();
+		Log.info("height =============\\\\\\"+height);
+		Log.info("width =============\\\\\\"+width);
+		Log.info("DockMenuSettings.getRightWidgetWidth()  == = = =" + ResolutionSettings.getRightWidgetWidth());
+		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : "+height+"px;");
 		
+		circuitTabPanel.setHeight(height+"px");
 	}
 
 	@Override
@@ -143,9 +153,12 @@ public class CircuitViewImpl extends Composite implements CircuitView, MenuClick
 		
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());
 		
-		String marginLeft = (OsMaMainNav.getMenuStatus() == 0) ? "20" : "0";
-		String width = (OsMaMainNav.getMenuStatus() == 0) ? "1390" : "1210";
+		int marginLeft = ResolutionSettings.getRightWidgetMarginLeft();
+		int width = ResolutionSettings.getRightWidgetWidth();
+		int height = ResolutionSettings.getRightWidgetHeight();
 		
-		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : 900px;");
+		Log.info("width =============\\\\\\"+width);
+		
+		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : "+height+"px;");
 	}
 }

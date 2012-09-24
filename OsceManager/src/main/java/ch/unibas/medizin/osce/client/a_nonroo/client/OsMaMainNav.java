@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
@@ -50,6 +51,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.PlaceController;
@@ -207,6 +210,11 @@ public class OsMaMainNav extends Composite {
 				destinationPanel.add(panel);
 		}
 		
+		private void setOpenDisclosure(){
+			if(((DisclosurePanel)dataWidget).isOpen())
+				((DisclosurePanel)dataWidget).setOpen(false);
+		}
+		
 		private void setButtonHandler(final Button maxButton) {
 			
 			if(constants.administration().equals(maxButton.getText())){
@@ -222,6 +230,8 @@ public class OsMaMainNav extends Composite {
 						
 						Log.info("new administration click");
 						sourcePanel.add(dataWidget);
+						
+						setOpenDisclosure();
 						
 						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.administration());
 						clickHandler.setHandlerRegistration(administrationClose.addClickHandler(clickHandler));
@@ -255,6 +265,8 @@ public class OsMaMainNav extends Composite {
 						Log.info("new doctors click");
 						sourcePanel.add(dataWidget);
 						
+						setOpenDisclosure();
+						
 						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.doctors());
 						clickHandler.setHandlerRegistration(doctorClose.addClickHandler(clickHandler));
 						
@@ -287,6 +299,8 @@ public class OsMaMainNav extends Composite {
 						Log.info("new exams click");
 						sourcePanel.add(dataWidget);
 						
+						setOpenDisclosure();
+						
 						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.exams());
 						clickHandler.setHandlerRegistration(examinationsClose.addClickHandler(clickHandler));
 						
@@ -317,6 +331,8 @@ public class OsMaMainNav extends Composite {
 						
 						Log.info("new roleAssignments click");
 						sourcePanel.add(dataWidget);
+						
+						setOpenDisclosure();
 						
 						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.roleAssignments());
 						clickHandler.setHandlerRegistration(roleAssignmentClose.addClickHandler(clickHandler));
@@ -350,6 +366,8 @@ public class OsMaMainNav extends Composite {
 						Log.info("new role click");
 						sourcePanel.add(dataWidget);
 						
+						setOpenDisclosure();
+						
 						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.role());
 						clickHandler.setHandlerRegistration(roleClose.addClickHandler(clickHandler));
 						
@@ -381,6 +399,8 @@ public class OsMaMainNav extends Composite {
 						
 						Log.info("new simPat click");
 						sourcePanel.add(dataWidget);
+						
+						setOpenDisclosure();
 						
 						CloseClickHandler clickHandler = new CloseClickHandler(sourcePanel, destinationPanel, dataWidget, popupPanel, constants.simPat());
 						clickHandler.setHandlerRegistration(simPatClose.addClickHandler(clickHandler));
@@ -560,6 +580,7 @@ public class OsMaMainNav extends Composite {
 						
 						ExaminationSchedulePlace.semesterProxy=lstSemester.getValue();
 						CircuitPlace.semesterProxy=lstSemester.getValue();
+						RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
 						placeHistoryHandler.handleCurrentHistory();
 				}
 		});
@@ -593,7 +614,7 @@ public class OsMaMainNav extends Composite {
 		
 		ExaminationSchedulePlace.handler=handlerManager;
 		CircuitPlace.handler=handlerManager;
-		
+		RoleAssignmentPlace.handler=handlerManager;
 		
 		// G: SPEC END =		
 	}
@@ -895,9 +916,17 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("roleAssignment")
 	void roleAssignmentClicked(ClickEvent event) {
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-		placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		RoleAssignmentPlace.handler=handlerManager;
+		RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
+		
+		if(placeController.getWhere() instanceof RoleAssignmentsDetailsPlace)
+			return;
+		else
+		{
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		}
 	}
 
 	//By Spec]
