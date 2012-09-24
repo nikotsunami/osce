@@ -117,9 +117,6 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 		//studentTabPanel1.setWidth("800px");
 		horizontalStudentTabPanel1.addStyleName("horizontalPanelStyle");
 		
-		
-		
-		
 		IconButton b=new IconButton();
 		b.setText("test");
 		b.addClickHandler(new ClickHandler() {

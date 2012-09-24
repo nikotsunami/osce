@@ -416,7 +416,7 @@ public interface OsceConstants extends Constants {
 
 	public String importQuestion();
 
-	public String importstudent();
+	public String importStudents();
 
 	public String importsuccess();
 

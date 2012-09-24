@@ -7,7 +7,7 @@
 	<ui:style src="../styles.css" />
 	
 	
-<g:VerticalPanel width="100%" height="100%">
+<g:ScrollPanel width="100%" height="100%">
 
 
 	<g:HTMLPanel>
@@ -31,7 +31,7 @@
 			<g:HorizontalPanel spacing="8">
 				<!-- <g:Label styleName="{style.label}"> Csv Upload: </g:Label> -->
 				<g:FileUpload ui:field="fileUpload" name="fileUpload1" />
-				<g:Button ui:field="importfile" />
+				<my:IconButton ui:field="importfile" icon="arrowthickstop-1-s"/>
 				<g:Hidden ui:field="hidden" name="hidden" />
 
 			</g:HorizontalPanel>
@@ -39,5 +39,5 @@
 
 	</g:HTMLPanel>
 	
-</g:VerticalPanel>
+</g:ScrollPanel>
 </ui:UiBinder> 
