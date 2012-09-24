@@ -872,9 +872,41 @@ public interface OsceConstants extends Constants {
 	public String shiftLunchBreakNext();
 	public String ShiftLunchBreakPrev();
 
-public String headerValueMessage();
+	public String headerValueMessage();
 	public String startEndTimeMessage();
 	public String generateClickTimeMessage();
 
+	//Module 5 Bug issue constants
+	public String postTypeWarning();
+	public String specializationWarning();
+	public String osceStatusWarning();
+	public String timeFormatWarning();
+	public String hourFormatWarning();
+	public String minuteFormatWarning();
+	public String dataWarning();
+	public String startTimeWarning();
+	public String endDateWarning();
+	public String dataEmptyWarning();
+	public String dataPastDateWarning();
+	public String splittingWarning();
+	public String splittingNotAllowWarning();
+	public String osceDayWarning();
+	public String scheduleWarning();
+	public String osceScaffoldWarning();
+	public String osceStatusGeneratedWarning();
+	public String osceStatusFixedWarning();
+	public String osceStatusClosedWarning();
+	public String assignmentWarning();
+	public String sequenceWarning();
+	public String rotationWarning();
+	public String rotationSuccess();
+	public String newDayRotationSuccess();
+	public String schedulePostponeWarning();
+	public String prviousDayWarning();
+	public String rotationPrevioustWarning();
+	public String rotationPreviousSuccess();
+	public String schedulePrepondWarning();
+	public String roomAssignedWarning();
+	public String pleaseEnterWarning();
 }
 

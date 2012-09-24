@@ -59,10 +59,8 @@ import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
-import ch.unibas.medizin.osce.server.ttgen.OsceVerifier;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceSequences;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
@@ -77,7 +75,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -91,14 +88,12 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxy;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.Renderer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -195,7 +190,7 @@ AccordianPanelView.ParcourDelegate
 							specialisationList.addAll(response);	
 					
 					//5C:SPEC START
-			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").with("osce_days.assignments").fire(new OSCEReceiver<Object>() {
+			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<Object>() {
 
 				@Override
 				public void onSuccess(Object response) {
@@ -525,7 +520,6 @@ AccordianPanelView.ParcourDelegate
 												oscePostSubViewImpl.get(index).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
 												oscePostSubViewImpl.get(index).oscePostBlueprintProxy=oscePostBlueprintProxy;	
 												oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxy;
-												
 												maxSeq=oscePostBlueprintProxy.getSequenceNumber();
 											}
 											else
@@ -536,7 +530,7 @@ AccordianPanelView.ParcourDelegate
 										}										
 										newPostAddHP.add(oscePostViewImpl);												
 										index++;
-										}										
+									}										
 								
 							}
 							else
@@ -1395,11 +1389,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				@Override
 				public void onSuccess(OscePostRoomProxy response) 
 				{
-					Log.info("OscePostProxy: " + response.getId());
-					if(response.getRoom()!=null)
+					if (response != null)
 					{
-						oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+						Log.info("OscePostProxy: " + response.getId());
+						if(response.getRoom()!=null)
+						{
+							oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+						}
 					}
+					
 				}
 			});
 			
@@ -1447,11 +1445,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						@Override
 						public void onSuccess(OscePostRoomProxy response) 
 						{
-							Log.info("OscePostProxy: " + response.getId());
-							if(response.getRoom()!=null)
+							if(response!=null)
 							{
-								oscePostSubViewNext.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+								if(response.getRoom()!=null)
+								{
+									oscePostSubViewNext.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+								}	
 							}
+							
 						}
 					});
 
@@ -1519,11 +1520,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						@Override
 						public void onSuccess(OscePostRoomProxy response) 
 						{
-							Log.info("OscePostProxy: " + response.getId());
-							if(response.getRoom()!=null)
+							if (response != null)
 							{
-								oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));	
-							}
+								Log.info("OscePostProxy: " + response.getId());
+								if(response.getRoom()!=null)
+								{
+									oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));	
+								}
+							}							
 						}
 					});
 
@@ -1589,19 +1593,24 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				@Override
 				public void onSuccess(OscePostRoomProxy response) 
 				{
-					Log.info("OscePostProxy: " + response.getId());
-					/*requests.oscePostRoomRequest().findOscePostRoom(response.getId()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+					if(response!=null)
 					{
-						@Override
-						public void onSuccess(OscePostRoomProxy response) 
-						{*/
-							if(response.getRoom()!=null)
-							{
-								oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
-							}							
-						/*}
-					});*/
-					
+						//Log.info("OscePostProxy: " + response.getId());
+						
+						/*requests.oscePostRoomRequest().findOscePostRoom(response.getId()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+						{
+							@Override
+							public void onSuccess(OscePostRoomProxy response) 
+							{*/
+								if(response.getRoom()!=null)
+								{
+									oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+								}							
+							/*}
+						});*/
+	
+					}
+										
 				}
 			});
 			
@@ -1686,7 +1695,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			catch(Exception e)
 			{
 				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-				dialog.showConfirmationDialog("Please Enter "+ e.getMessage()+" For OSCE");
+				dialog.showConfirmationDialog(constants.pleaseEnterWarning() + e.getMessage());
 				//Log.info(e.toString());
 				return;
 			}
@@ -1893,7 +1902,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("Please Select Post Type.");
 						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-						dialog.showConfirmationDialog("Please Select Post Type.");
+						dialog.showConfirmationDialog(constants.postTypeWarning());
 						// Module 5 bug Report Change		
 						return;
 					}
@@ -1913,7 +1922,6 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 						Log.info("~In PERSIST OTHER");
 						
-						
 							OscePostBlueprintRequest oscePostRequest= requests.oscePostBlueprintRequest();
 							final OscePostBlueprintProxy oscePostBlueprintProxy1 = oscePostRequest.create(OscePostBlueprintProxy.class);
 							
@@ -1923,7 +1931,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							oscePostBlueprintProxy1.setPostType((PostType)osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue());
 							oscePostBlueprintProxy1.setSpecialisation((osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue())==null? null:(SpecialisationProxy)osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue());
 //							oscePostBlueprintProxy1.setIsPossibleStart(null);
-
+							
+							if(osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()==PostType.ANAMNESIS_THERAPY || osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()==PostType.PREPARATION)
+							{
+								oscePostBlueprintProxy1.setIsFirstPart(true);
+							}
+							else
+							{
+								oscePostBlueprintProxy1.setIsFirstPart(false);
+							}
+												
 							oscePostBlueprintProxy1.setSequenceNumber(++maxSeq);
 							
 							oscePostRequest.persist().using(oscePostBlueprintProxy1).fire(new OSCEReceiver<Void>() 
@@ -1959,6 +1976,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 													oscePostBlueprintProxyNew.setPostType((PostType)osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue());
 													oscePostBlueprintProxyNew.setSpecialisation((osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue())==null? null:(SpecialisationProxy)osceCreatePostBluePrintSubViewImpl.getSpecializationListBox().getValue());
 													
+													oscePostBlueprintProxyNew.setIsFirstPart(false);
+
 //													oscePostBlueprintProxyNew.setIsPossibleStart(null);
 													oscePostBlueprintProxyNew.setSequenceNumber(++maxSeq);
 													Log.info(""+oscePostBlueprintProxyNew.getPostType().name());
@@ -2236,7 +2255,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							//((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getNewListBox().setSelected(null);
 							//Issue # 122 : Replace pull down with autocomplete.
 							ArrayList proxy=new ArrayList();
-							proxy.addAll(response);
+							
+							//spec issue sol
+							if (response != null)
+								proxy.addAll(response);
 							
 							
 							
@@ -2278,17 +2300,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								}
 							});
 							
-							Log.info("1--"+oscePostSubViewImpledit.oscePostBlueprintProxy );
-							Log.info("2--"+oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
-							
-							if(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation()==null)
+							if(oscePostSubViewImpledit.oscePostBlueprintProxy != null)
 							{
-								
-							}
-							else
-							{
-							((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getNewListBox().setSelected(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
-							}						
+								((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getNewListBox().setSelected(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
+							}												
 														
 							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).setPopupPosition(spHorizontalPanel.getAbsoluteLeft()-40, rtHorizontalPanel.getAbsoluteTop()-80);
 							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).show();										
@@ -2311,7 +2326,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("Select Specialisation.");
 						MessageConfirmationDialogBox SpecialisationDialog=new MessageConfirmationDialogBox(constants.warning());
-						SpecialisationDialog.showConfirmationDialog("Select Specialisation.");
+						SpecialisationDialog.showConfirmationDialog(constants.specializationWarning());
 						return;
 						// E Module 5 bug Report Change
 					}
@@ -2596,7 +2611,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														{
 															Log.info("Failure");
 															MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-															dialog.showConfirmationDialog("Osce Status Not Changed to New");
+															dialog.showConfirmationDialog(constants.osceStatusWarning());
 														}
 														
 														
@@ -2644,7 +2659,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										{
 											Log.info("Failure");
 											MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-											dialog.showConfirmationDialog("Osce Status Not Changed to New");
+											dialog.showConfirmationDialog(constants.osceStatusWarning());
 						}
 					});	
 												
@@ -2795,7 +2810,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 							//Window.alert("please Enter valid formatted Time Valid format is HH:MM");
 						MessageConfirmationDialogBox sTimeValueDialog=new MessageConfirmationDialogBox(constants.warning());
-						sTimeValueDialog.showConfirmationDialog("Please Enter valid formatted Time Valid format is HH:MM");
+						sTimeValueDialog.showConfirmationDialog(constants.timeFormatWarning());
 						osceDayViewImpl.startTimeTextBox.setValue("");
 						// E Module 5 bug Report Change
 						
@@ -2809,7 +2824,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("Please Enter Valid Hour (Allowed Till 24)");
 						MessageConfirmationDialogBox dialog1=new MessageConfirmationDialogBox(constants.warning());
-						dialog1.showConfirmationDialog("Please Enter Valid Hour (Allowed Till 24)");
+						dialog1.showConfirmationDialog(constants.hourFormatWarning());
 						osceDayViewImpl.startTimeTextBox.setValue("");
 						// Module 5 bug Report Change
 						
@@ -2821,7 +2836,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("Please Enter Valid Minutes (Allowed Till 59)");
 						MessageConfirmationDialogBox dialog2=new MessageConfirmationDialogBox(constants.warning());
-						dialog2.showConfirmationDialog("Please Enter Valid Minutes (Allowed Till 59)");
+						dialog2.showConfirmationDialog(constants.minuteFormatWarning());
 						osceDayViewImpl.startTimeTextBox.setValue("");
 						// E Module 5 bug Report Change
 						dayStartTimeValidflag=false;
@@ -2836,7 +2851,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("please Enter valid formatted Time Valid format is HH:MM");
 						MessageConfirmationDialogBox startTimedialog=new MessageConfirmationDialogBox(constants.warning());
-						startTimedialog.showConfirmationDialog("Please Enter valid formatted Time Valid format is HH:MM)");	
+						startTimedialog.showConfirmationDialog(constants.timeFormatWarning());	
 						osceDayViewImpl.endTimeTextBox.setValue("");
 						// Module 5 bug Report Change						
 
@@ -2849,7 +2864,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("Please Enter Valid Hour (Allowed Till 24)");
 						MessageConfirmationDialogBox startTimedialog1=new MessageConfirmationDialogBox(constants.warning());
-						startTimedialog1.showConfirmationDialog("Please Enter Valid Hour (Allowed Till 24)");
+						startTimedialog1.showConfirmationDialog(constants.hourFormatWarning());
 						osceDayViewImpl.endTimeTextBox.setValue("");
 						// Module 5 bug Report Change						
 						
@@ -2862,7 +2877,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						// Module 5 bug Report Change
 						//Window.alert("Please Enter Valid Minutes (Allowed Till 59)");
 						MessageConfirmationDialogBox startTimedialog2=new MessageConfirmationDialogBox(constants.warning());
-						startTimedialog2.showConfirmationDialog("Please Enter Valid Minutes (Allowed Till 59)");
+						startTimedialog2.showConfirmationDialog(constants.minuteFormatWarning());
 						osceDayViewImpl.endTimeTextBox.setValue("");
 						// Module 5 bug Report Change		
 						
@@ -2894,7 +2909,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						if(selecteddate.before(today))
 							{
 							MessageConfirmationDialogBox dateDialog=new MessageConfirmationDialogBox(constants.warning());
-								dateDialog.showConfirmationDialog("Data past date");
+								dateDialog.showConfirmationDialog(constants.dataWarning());
 							return;
 						}
 						
@@ -2902,7 +2917,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							// Module 5 bug Report Change
 							//Window.alert("Start Time must not Empty");
 							MessageConfirmationDialogBox startTimeMessageDialog=new MessageConfirmationDialogBox(constants.warning());
-							startTimeMessageDialog.showConfirmationDialog("Start Time must not Empty");
+							startTimeMessageDialog.showConfirmationDialog(constants.startTimeWarning());
 							// Module 5 bug Report Change		
 
 							return;
@@ -2917,7 +2932,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							// Module 5 bug Report Change
 							//Window.alert("EndDate Mus Not Empty");
 							MessageConfirmationDialogBox endTimeMessageDialog=new MessageConfirmationDialogBox(constants.warning());
-							endTimeMessageDialog.showConfirmationDialog("EndDate Mus Not Empty");
+							endTimeMessageDialog.showConfirmationDialog(constants.endDateWarning());
 							// Module 5 bug Report Change		
 							return;
 						}
@@ -3038,7 +3053,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							// Module 5 bug Report Change
 							//Window.alert("Data must not empty");
 							MessageConfirmationDialogBox dateTextDialog=new MessageConfirmationDialogBox(constants.warning());
-							dateTextDialog.showConfirmationDialog("Data must not empty");
+							dateTextDialog.showConfirmationDialog(constants.dataEmptyWarning());
 							// Module 5 bug Report Change		
 							return;
 						}
@@ -3049,14 +3064,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						if(osceDayViewImpl.dateTextBox.getValue().before(today))
 							{
 								MessageConfirmationDialogBox dateDialog=new MessageConfirmationDialogBox(constants.warning());
-								dateDialog.showConfirmationDialog("Data must not be past date");
+								dateDialog.showConfirmationDialog(constants.dataPastDateWarning());
 									return;
 							}
 						if(osceDayViewImpl.startTimeTextBox.getValue()==null){
 							// Module 5 bug Report Change
 							//Window.alert("Start Time must not Empty");
 							MessageConfirmationDialogBox startTimeTextDialog=new MessageConfirmationDialogBox(constants.warning());
-							startTimeTextDialog.showConfirmationDialog("Start Time must not Empty");							
+							startTimeTextDialog.showConfirmationDialog(constants.startTimeWarning());							
 							// Module 5 bug Report Change		
 							
 							return;
@@ -3070,7 +3085,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							// Module 5 bug Report Change
 							//Window.alert("EndDate Mus Not Empty");
 							MessageConfirmationDialogBox endTimeTextDialog=new MessageConfirmationDialogBox(constants.warning());
-							endTimeTextDialog.showConfirmationDialog("EndDate Mus Not Empty");
+							endTimeTextDialog.showConfirmationDialog(constants.endDateWarning());
 							// Module 5 bug Report Change		
 							
 							return;
@@ -3262,7 +3277,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					if(sequenceOsceSubViewImpl.osceDayProxy.getOsceSequences().size()>=2)
 					{
 						MessageConfirmationDialogBox splittingDialog=new MessageConfirmationDialogBox(constants.warning());
-						splittingDialog.showConfirmationDialog("No further Splitting is allowed ");
+						splittingDialog.showConfirmationDialog(constants.splittingWarning());
 						return;
 					}
 					// E Module 5 bug Report Change
@@ -3272,7 +3287,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					{
 						Log.info("Osce Sequence Has Only One Number Of Rotation.");
 						MessageConfirmationDialogBox splittingDialog=new MessageConfirmationDialogBox(constants.warning());
-						splittingDialog.showConfirmationDialog("No further Splitting is allowed ");
+						splittingDialog.showConfirmationDialog(constants.splittingWarning());
 						return;
 					}
 					//E Module 5 Bug Report Solution
@@ -3294,6 +3309,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					else
 					{
 						Log.info("Spliting not allowed");
+						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(constants.splittingNotAllowWarning());
 					}
 						
 /*						
@@ -3424,7 +3441,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					if(osceProxy.getOsce_days().size()<=0)
 					{
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
-						dialogBox.showConfirmationDialog("No Osce Day for this Osce defined.");
+						dialogBox.showConfirmationDialog(constants.osceDayWarning());
 						return;
 					}
 					// E Module 5 bug Report Change
@@ -3441,7 +3458,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						Log.info("message string--"+e.getMessage());
 						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
 						//dialog.showConfirmationDialog(constants.headerValueMessage());
-						dialog.showConfirmationDialog("Please Enter " + e.getMessage()+"For Osce");
+						dialog.showConfirmationDialog(constants.pleaseEnterWarning() + e.getMessage());
 						return;
 					}
 				/*	
@@ -3493,7 +3510,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					Log.info(lastview.getPostTypeLbl().getText());
 					if(lastview.getPostTypeLbl().getText().equalsIgnoreCase(PostType.BREAK.name())){
 						Log.info("Break Is at Last In BluePrint");
-						final MessageConfirmationDialogBox messageDialog = new MessageConfirmationDialogBox("Warning");
+						final MessageConfirmationDialogBox messageDialog = new MessageConfirmationDialogBox(constants.warning());
 						messageDialog.showYesNoDialog(constants.warningBreakIsAtEnd());
 						
 						messageDialog.getYesBtn().addClickHandler(new ClickHandler() {
@@ -3527,7 +3544,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									public void onFailure(ServerFailure error)
 									{
 										final MessageConfirmationDialogBox messageDialog = new MessageConfirmationDialogBox(constants.warning());
-										messageDialog.showConfirmationDialog("Schedule Not Generated and Osce Status Not Changed to Generated.");
+										messageDialog.showConfirmationDialog(constants.scheduleWarning());
 									}
 									// E Module 5 bug Report Change
 								});
@@ -3570,7 +3587,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							public void onFailure(ServerFailure error)
 							{
 								final MessageConfirmationDialogBox messageDialog = new MessageConfirmationDialogBox(constants.warning());
-								messageDialog.showConfirmationDialog("Osce Scaffold Not Generated and Osce Status Not Changed to Generated..");								
+								messageDialog.showConfirmationDialog(constants.osceScaffoldWarning());								
 							}
 							// E Module 5 bug Report Change
 						});
@@ -3624,7 +3641,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							public void onFailure(ServerFailure error)
 							{
 								final MessageConfirmationDialogBox messageDialog = new MessageConfirmationDialogBox(constants.warning());
-								messageDialog.showConfirmationDialog("Osce Status Not Changed to Generated..");
+								messageDialog.showConfirmationDialog(constants.osceStatusGeneratedWarning());
 							}
 							// E Module 5 bug Report Change
 					});
@@ -3642,7 +3659,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					
 					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
-						final MessageConfirmationDialogBox message = new MessageConfirmationDialogBox("Alert");
+						final MessageConfirmationDialogBox message = new MessageConfirmationDialogBox(constants.warning());
 						message.showYesNoDialog(constants.confirmationWhenStatusIsChangingFormClosedToFix());
 						message.getYesBtn().addClickHandler(new ClickHandler() {
 							
@@ -3650,8 +3667,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							public void onClick(ClickEvent event) {
 								
 								Log.info("Yes Button Clicked So user wants to go Ahead remove all role of osce");
-								message.showConfirmationDialog("You Can Moov Ahead");
+								//message.showConfirmationDialog("You Can Moov Ahead");
 								
+								
+								// Module 5 bug Report Change
 								requests.osceRequestNonRoo().removeassignment(osceProxy).fire(new OSCEReceiver<Boolean>() {
 
 									@Override
@@ -3660,9 +3679,6 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										Log.info("Assignment Remove Successfully");
 									}
 								});
-								
-								
-								// Module 5 bug Report Change
 								
 								
 								OsceRequest osceRequest=requests.osceRequest();
@@ -3695,7 +3711,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									public void onFailure(ServerFailure error)
 									{
 										MessageConfirmationDialogBox statusUpdateDialog=new MessageConfirmationDialogBox(constants.warning());
-										statusUpdateDialog.showConfirmationDialog("Osce Status Not Changed to Fixed..");
+										statusUpdateDialog.showConfirmationDialog(constants.osceStatusFixedWarning());
 									}
 								});
 								// 	E Module 5 bug Report Change
@@ -3737,7 +3753,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							public void onFailure(ServerFailure error)
 							{
 								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("Osce Status Not Changed to Fixed..");
+								dialog.showConfirmationDialog(constants.osceStatusFixedWarning());
 							}
 						});
 						
@@ -3765,7 +3781,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					// E Module 5 bug Report Change
 					
 					// dk invoke SPAllocator [
-					final MessageConfirmationDialogBox message = new MessageConfirmationDialogBox("Alert");
+					final MessageConfirmationDialogBox message = new MessageConfirmationDialogBox(constants.warning());
 					message.showYesNoDialog(constants.confirmationWhenStatusIsChangingFormClosedToFix());
 					message.getYesBtn().addClickHandler(new ClickHandler() {
 						
@@ -3816,7 +3832,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										public void onFailure(ServerFailure error)
 										{
 											MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-											dialog.showConfirmationDialog("Osce Status Not Changed to Closed..");
+											dialog.showConfirmationDialog(constants.osceStatusClosedWarning());
 											message.hide();
 										}
 									});
@@ -3829,8 +3845,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								@Override
 								public void onFailure(ServerFailure error)
 								{
-									MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
-									dialog.showConfirmationDialog("Assignment Not Generated for Osce and Osce Status Not Changed to Close..");
+									MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+									dialog.showConfirmationDialog(constants.assignmentWarning());
 									message.hide();
 								}
 							});
@@ -3911,8 +3927,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						{
 							if((((chaneNameOfSequence.getListBox().getItemText(chaneNameOfSequence.getListBox().getSelectedIndex())).trim()).compareToIgnoreCase(""))==0)
 							{
-								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
-								dialog.showConfirmationDialog("Please Select atleast one Sequence");
+								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+								dialog.showConfirmationDialog(constants.sequenceWarning());
 								return;
 							}
 							else
@@ -3947,13 +3963,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							if(response.compareToIgnoreCase("Rotation1")==0)
 							{
 								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("Rotation not assign to Next Day Sequence");
+								dialog.showConfirmationDialog(constants.rotationWarning());
 								return;
 							}
 							else if(response.compareToIgnoreCase("UpdateSuccessful")==0)
 							{
 								final MessageConfirmationDialogBox updateDialog=new MessageConfirmationDialogBox(constants.success());
-								updateDialog.showConfirmationDialog("Rotation Successfully Assign to Next Sequence");
+								updateDialog.showConfirmationDialog(constants.rotationSuccess());
 								updateDialog.getNoBtnl().addClickHandler(new ClickHandler() {
 									
 									@Override
@@ -3968,7 +3984,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							else if(response.compareToIgnoreCase("CreateSuccessful")==0)
 							{
 								final MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("New Day Created and Rotation assign to Sequence Successfully");
+								dialog.showConfirmationDialog(constants.newDayRotationSuccess());
 								dialog.getNoBtnl().addClickHandler(new ClickHandler() {
 									
 									@Override
@@ -3985,7 +4001,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						public void onFailure(ServerFailure error)
 						{
 							MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-							dialog.showConfirmationDialog("Schedule is not Postpone");
+							dialog.showConfirmationDialog(constants.schedulePostponeWarning());
 						}
 					});										
 				}
@@ -4024,19 +4040,19 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							if(response.compareToIgnoreCase("FirstDay")==0)
 							{
 								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("No Previous Day.");
+								dialog.showConfirmationDialog(constants.prviousDayWarning());
 								return;
 							}
 							else if(response.compareToIgnoreCase("Rotation1")==0)
 							{
 								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("Rotation is not Assign to Previous Sequence");
+								dialog.showConfirmationDialog(constants.rotationPrevioustWarning());
 								return;
 							}
 							else if(response.compareToIgnoreCase("SuccessfullyPreponeWithDelete")==0)
 							{
 								final MessageConfirmationDialogBox previousAssignDialog=new MessageConfirmationDialogBox(constants.warning());
-								previousAssignDialog.showConfirmationDialog("Rotation is Assign to Previous Sequence Successfully");
+								previousAssignDialog.showConfirmationDialog(constants.rotationPreviousSuccess());
 								previousAssignDialog.getNoBtnl().addClickHandler(new ClickHandler() {
 									
 									@Override
@@ -4055,7 +4071,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							else if(response.compareToIgnoreCase("SuccessfulPrepond")==0)
 							{
 								final MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("Rotation is Assign to Previous Sequence Successfully");
+								dialog.showConfirmationDialog(constants.rotationPreviousSuccess());
 								dialog.getNoBtnl().addClickHandler(new ClickHandler() {
 									
 									@Override
@@ -4075,7 +4091,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						public void onFailure(ServerFailure error)
 						{
 							MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-							dialog.showConfirmationDialog("Schedule is not Prepond");
+							dialog.showConfirmationDialog(constants.schedulePrepondWarning());
 						}
 					});
 				}
@@ -4181,22 +4197,24 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 													@Override
 													public void onSuccess(OscePostRoomProxy response) 
 													{
-														Log.info("Osce Post Room Proxy: " + response.getId());
-														OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
-														response=oscePostRoomRequest.edit(response);
-														response.setRoom(roomProxy);
-														oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
+														if (response != null)
+														{
+															Log.info("Osce Post Room Proxy: " + response.getId());
+															OscePostRoomRequest oscePostRoomRequest=requests.oscePostRoomRequest();
+															response=oscePostRoomRequest.edit(response);
+															response.setRoom(roomProxy);
+															oscePostRoomRequest.persist().using(response).fire(new OSCEReceiver<Void>() {
 
-															@Override
-															public void onSuccess(Void response) 
-															{
-																view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
-																Log.info("Success saveOscePostRoom ");
-																MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
-																dialog.showConfirmationDialog("Room Assign To Post Successfully.");
-															}
-														});
-														
+																@Override
+																public void onSuccess(Void response) 
+																{
+																	view.getOscePostSubView().getRoomLbl().setText(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+																	Log.info("Success saveOscePostRoom ");
+																	/*MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
+																	dialog.showConfirmationDialog("Room Assign To Post Successfully.");*/
+																}
+															});
+														}																											
 													}
 												});
 											}
@@ -4204,7 +4222,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											{
 												Log.info("Room Already Exist");
 												MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
-												dialog.showConfirmationDialog("Room already assigned to another post");
+												dialog.showConfirmationDialog(constants.roomAssignedWarning());
 											}
 										}
 									});
