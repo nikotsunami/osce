@@ -31,36 +31,36 @@
 		<g:HTMLPanel ui:field="mainDayHP" styleName="{style.patientTopContainer}" height="380px" width="250px">
 			<!-- Module 5 Bug Report Solution -->
 			<g:HorizontalPanel horizontalAlignment="center" width="250px">
-				 <g:Label ui:field="dayLabel" />				 
+				 <g:Label ui:field="dayLabel" styleName="{style.spacing10} {style.label}"/>				 
 			 </g:HorizontalPanel>
 			 
-			<g:Label ui:field="presentsLabel"/>
+			<g:Label ui:field="presentsLabel"  styleName="{style.spacing10} {style.label}"/>
 			<g:VerticalPanel ui:field="dayContentVerticalPanel" width="250px" spacing="2">
-				<g:HorizontalPanel spacing="2">
+				<g:HorizontalPanel styleName="{style.spacing10}">
 					<g:Label ui:field="dateLabel" styleName="{style.spacing10}"></g:Label>
 					<d:DateBox ui:field="dateTextBox" styleName="{style.margin50}"></d:DateBox>
 				</g:HorizontalPanel>
 				
-				<g:HorizontalPanel spacing="2">
+				<g:HorizontalPanel styleName="{style.spacing10}">
 					<g:Label ui:field="startTimeLable" styleName="{style.spacing10}"></g:Label>
 					<g:TextBox ui:field="startTimeTextBox" styleName="{style.margin19}"></g:TextBox>
 				</g:HorizontalPanel>
 				
-				<g:HorizontalPanel spacing="2">
-					<g:Label ui:field="endTimeLable" />
+				<g:HorizontalPanel styleName="{style.spacing10}">
+					<g:Label ui:field="endTimeLable" styleName="{style.spacing10}"/>
 					<g:TextBox ui:field="endTimeTextBox"></g:TextBox>
 				</g:HorizontalPanel>
 				
 				<g:VerticalPanel ui:field="calculationVPanel">	
-					<g:Label ui:field="calculationsLabel" />
-					<g:Label ui:field="lunchBreakLabel" />
+					<g:Label ui:field="calculationsLabel" styleName="{style.spacing10} {style.label}"/>
+					<g:Label ui:field="lunchBreakLabel" styleName="{style.spacing10}"/>
 					<g:HorizontalPanel>
-						<g:Label ui:field="lunchBreakStartLabel" />
-						<g:Label ui:field="lunchBreakStartValueLabel" />
+						<g:Label ui:field="lunchBreakStartLabel" styleName="{style.spacing10}"/>
+						<g:Label ui:field="lunchBreakStartValueLabel" styleName="{style.spacing10}"/>
 					</g:HorizontalPanel>
-					<g:Label ui:field="lbEndTimeLabel" />
-					<g:Label ui:field="studentsLabel" />											
-					<g:VerticalPanel horizontalAlignment="center" ui:field="saveVPanel">
+					<g:Label ui:field="lbEndTimeLabel" styleName="{style.spacing10}" />
+					<g:Label ui:field="studentsLabel" styleName="{style.spacing10}" />											
+					<g:VerticalPanel styleName="{style.margin79}" horizontalAlignment="center" ui:field="saveVPanel">
 						<my:IconButton ui:field="saveOsceDayValue" icon="disk" />
 					</g:VerticalPanel>
 				</g:VerticalPanel>
