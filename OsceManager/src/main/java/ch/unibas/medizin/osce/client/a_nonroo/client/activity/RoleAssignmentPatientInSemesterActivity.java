@@ -197,8 +197,8 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		this.requests = requests;		
 		this.placeController = placeController;
 		this.place = place;
-		this.handlerManager = place.handler;
-		this.semesterProxy = place.semesterProxy;
+		this.handlerManager = RoleAssignmentPlace.handler;
+		this.semesterProxy = RoleAssignmentPlace.semesterProxy;
 
 		activityMapper = new RoleAssignmentPatientInSemesterActivityMapper(
 				requests, placeController);

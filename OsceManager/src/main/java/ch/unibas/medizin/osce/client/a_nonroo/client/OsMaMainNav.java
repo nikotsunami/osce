@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
@@ -579,6 +580,7 @@ public class OsMaMainNav extends Composite {
 						
 						ExaminationSchedulePlace.semesterProxy=lstSemester.getValue();
 						CircuitPlace.semesterProxy=lstSemester.getValue();
+						RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
 						placeHistoryHandler.handleCurrentHistory();
 				}
 		});
@@ -612,7 +614,7 @@ public class OsMaMainNav extends Composite {
 		
 		ExaminationSchedulePlace.handler=handlerManager;
 		CircuitPlace.handler=handlerManager;
-		
+		RoleAssignmentPlace.handler=handlerManager;
 		
 		// G: SPEC END =		
 	}
@@ -914,9 +916,17 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("roleAssignment")
 	void roleAssignmentClicked(ClickEvent event) {
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-		placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		RoleAssignmentPlace.handler=handlerManager;
+		RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
+		
+		if(placeController.getWhere() instanceof RoleAssignmentsDetailsPlace)
+			return;
+		else
+		{
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		}
 	}
 
 	//By Spec]
