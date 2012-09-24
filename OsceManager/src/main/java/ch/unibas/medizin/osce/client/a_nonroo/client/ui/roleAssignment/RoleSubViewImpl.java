@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.Iterator;
-import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleFulfilCriteriaEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleFulfilCriteriaHandler;
@@ -27,12 +26,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandler,RoleFulfilCriteriaHandler,RoleSelectedHandler{
+public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfilCriteriaHandler,RoleSelectedHandler,RoleSubView{
 
 	private Delegate delegate;
 	
@@ -46,6 +46,24 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 		return dragController1;
 	}
 	
+	private AbsolutePanel boundaryPanel;
+	
+	public AbsolutePanel getBoundaryPanel() {
+		return boundaryPanel;
+	}
+	
+	private HorizontalPanel roleParent;
+	public HorizontalPanel getRoleParent() {
+		return roleParent;
+	}
+
+	public void setRoleParent(HorizontalPanel roleParent) {
+		this.roleParent = roleParent;
+	}
+
+	public void setBoundaryPanel(AbsolutePanel boundaryPanel) {
+		this.boundaryPanel = boundaryPanel;
+	}
 	boolean isBackUpOnDragStart=false;
 	
 	StandardizedRoleProxy roleProxy;
@@ -71,12 +89,12 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 	}
 	public boolean isBackUpPanel=false;
 	
-	@Override
+	
 	public boolean getIsBackupPanel(){
 		return this.isBackUpPanel;
 	}
 	
-	@Override
+	
 	public void setIsBackupPanel(boolean isBeckupPanel){
 		this.isBackUpPanel=isBeckupPanel;
 	}
@@ -214,6 +232,27 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 		
 		
 	}
+	public RoleSubViewImpl(AbsolutePanel boundaryPanel) {
+		initWidget(uiBinder.createAndBindUi(this));
+		
+		setBoundaryPanel(boundaryPanel);
+		
+		dragController1=new PickupDragController(boundaryPanel, false);
+		dragController2=new PickupDragController(boundaryPanel, false);
+		
+		dragController2.addDragHandler(this);
+		dragController1.addDragHandler(this);
+		
+		dropController1=new VerticalPanelDropController(patientInRoleVP);
+		dropController2=new VerticalPanelDropController(backUpVP);
+		
+		dragController1.registerDropController(dropController2);
+		dragController2.registerDropController(dropController1);
+		
+		
+		
+		
+	}
 
 	@Override
 	public void onDragEnd(DragEndEvent event) {
@@ -239,8 +278,8 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 			Log.info("Not Back On End");
 		}
 		
-		//Back Up On End
-		if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof SimplePanel && !isBackUpOnDragStart)
+		// drag to backup / drag to any other role view
+		else if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof SimplePanel && !isBackUpOnDragStart)
 		{
 			this.getDragController1().makeNotDraggable(((PatientInRoleSubView)event.getSource()).asWidget());
 			this.getDragController2().makeDraggable(((PatientInRoleSubView)event.getSource()).asWidget(), ((PatientInRoleSubView)event.getSource()).getPatientInRoleLbl());
@@ -249,13 +288,29 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 			
 			Log.info("Back On End");
 		}
+		else if((event.getContext().dragController).equals(dragController1) && event.getContext().finalDropController != null)
+		{
+			Log.info("Patient Drop Target Widget"+(VerticalPanel)event.getContext().finalDropController.getDropTarget());
+			VerticalPanel patientVp=(VerticalPanel)event.getContext().finalDropController.getDropTarget();
+			
+			Log.info("Patient Drop Target Widget Count"+((VerticalPanel)event.getContext().finalDropController.getDropTarget()).getWidgetCount());
+			PatientInRoleSubViewImpl patientDroped=(PatientInRoleSubViewImpl)event.getSource();
+			RoleSubViewImpl patientDropedIn=(RoleSubViewImpl)((VerticalPanel)((AbsolutePanel)((AbsolutePanel)((VerticalPanel)patientDroped.getParent()).getParent()).getParent()).getParent()).getParent();
+			patientDroped.setRoleSubView(patientDropedIn);
+			this.refreshCountLabel();
+			OscePostProxy newPost=patientDropedIn.getPostProxy();
+			delegate.updatePostOfPatient(newPost, this.getPostProxy(), patientDroped,patientDroped.getPatientInRoleProxy());
+			patientDropedIn.refreshCountLabel();
+			//update post of patient dropped
+		
+		}
 	}
-
+	
 	public void refreshCountLabel()
 	{
 		int requiredPatient=0;
 		if(osceSequenceProxy.getCourses() !=null)
-			requiredPatient=(2*osceSequenceProxy.getCourses().size())-this.getPatientInRoleVP().getWidgetCount();
+			requiredPatient=-((2*osceSequenceProxy.getCourses().size())-this.getPatientInRoleVP().getWidgetCount());
 		
 		
 		//refresh count
@@ -286,6 +341,8 @@ public class RoleSubViewImpl extends Composite implements RoleSubView,DragHandle
 	
 	@Override
 	public void onDragStart(DragStartEvent event) {
+		
+		
 		
 		//Log.info("Parent Widget Count on Start :" +((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getWidgetCount());
 		if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof AbsolutePanel)
