@@ -676,5 +676,82 @@ public class Osce {
 			return result.get(0);
 	 }
 // TestCase Purpose Method }
+ 
+	
+	/*
+	List<OsceDayProxy> osceDayProxyList = osceProxyforFixedStatus.getOsce_days();
+	if(osceDayProxyList.size()>0)
+	{
+		Iterator<OsceDayProxy> osceDayproxyIterator=osceDayProxyList.iterator();
+		while(osceDayproxyIterator.hasNext())
+		{
+			
+			OsceDayProxy osceDayProxy=osceDayproxyIterator.next();
+			Set<AssignmentProxy> assignmentProxiesList=osceDayProxy.getAssignments();
+			if(assignmentProxiesList.size()>0)
+			{
+				Iterator<AssignmentProxy> assignmentIterator=assignmentProxiesList.iterator();
+				while(assignmentIterator.hasNext())
+				{
+					final AssignmentProxy assignmentProxy=assignmentIterator.next();
+					Log.info("Assignment " + assignmentProxy.getId() + "is going to remove");
+					requests.assignmentRequest().remove().using(assignmentProxy).fire(new OSCEReceiver<Void>() 
+					{
+						@Override
+						public void onSuccess(Void response) 
+						{
+							Log.info("Assignment is removed");														
+						}
+					});
+				}
+				
+			}
+		}
+*/
+ 		public  static boolean removeassignment(Osce osce) {	
+ 			//Assignment assignmentProxynew;
+			
+			for(OsceDay osceDay: osce.getOsce_days()) {
+				Set<Assignment> assignmentProxiesList=osceDay.getAssignments();
+				ArrayList<Assignment> listRemoveAssignment = new ArrayList<Assignment>();
+				Iterator<Assignment> assignmentIterator=assignmentProxiesList.iterator();
+				while(assignmentIterator.hasNext()) 
+				{				
+					Assignment assignmentProxy=assignmentIterator.next();
+					listRemoveAssignment.add(assignmentProxy);
+				}
+				
+				osceDay.getAssignments().remove(listRemoveAssignment);
+				for(Assignment assignment: listRemoveAssignment)
+				{
+					Log.info("Assignment " + assignment.getId() + "is going to remove");
+					osceDay.getAssignments().remove(assignment);
+					assignment.remove();
+					log.info("assignment removed");
+				}
+				
+				
+				/*Log.info("osceday id-- " + osceDay.getId() + "is going to remove");
+				Set<Assignment> assignmentProxiesList=osceDay.getAssignments();*/
+				/*if(assignmentProxiesList.size()>0)
+				{
+					Iterator<Assignment> assignmentIterator=assignmentProxiesList.iterator();
+					
+					while(assignmentIterator.hasNext())
+					{
+						Assignment assignmentProxy=assignmentIterator.next();
+						Log.info("Assignment " + assignmentProxy.getId() + "is going to remove");
+						assignmentProxynew=assignmentProxy;
+						assignmentProxynew.remove();
+						//assignmentIterator.next();
+					}
+					
+				}*/
+				
+			}
+		
+		return true;
+ 		}
+
 
 }

@@ -32,6 +32,7 @@ public interface OsceRequestNonRoo extends RequestContext{
 	// module 3 f {
 		public abstract Request<Void> autoAssignPatientInsemester(Long semesterId);
 
+		
 		// module 3 f }
 		
 		// Module 5 changes {
@@ -42,4 +43,8 @@ public interface OsceRequestNonRoo extends RequestContext{
 		// Module10 Create plans
 		abstract Request<Long> findOsceIdByOsceName(String osceName);
 		// E Module10 Create plans
+		
+		public abstract Request<Boolean> removeassignment(OsceProxy osceName);
+		
+		/*abstract Request<Boolean> removeassignment(OsceProxy osceName);*/
 }

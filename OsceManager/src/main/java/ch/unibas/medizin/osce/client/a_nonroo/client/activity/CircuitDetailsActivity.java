@@ -195,7 +195,7 @@ AccordianPanelView.ParcourDelegate
 							specialisationList.addAll(response);	
 					
 					//5C:SPEC START
-			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<Object>() {
+			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").with("osce_days.assignments").fire(new OSCEReceiver<Object>() {
 
 				@Override
 				public void onSuccess(Object response) {
@@ -525,6 +525,7 @@ AccordianPanelView.ParcourDelegate
 												oscePostSubViewImpl.get(index).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
 												oscePostSubViewImpl.get(index).oscePostBlueprintProxy=oscePostBlueprintProxy;	
 												oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxy;
+												
 												maxSeq=oscePostBlueprintProxy.getSequenceNumber();
 											}
 											else
@@ -1912,6 +1913,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 						Log.info("~In PERSIST OTHER");
 						
+						
 							OscePostBlueprintRequest oscePostRequest= requests.oscePostBlueprintRequest();
 							final OscePostBlueprintProxy oscePostBlueprintProxy1 = oscePostRequest.create(OscePostBlueprintProxy.class);
 							
@@ -2276,9 +2278,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								}
 							});
 							
+							Log.info("1--"+oscePostSubViewImpledit.oscePostBlueprintProxy );
+							Log.info("2--"+oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
+							
 							if(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation()==null)
 							{
-							
+								
 							}
 							else
 							{
@@ -3646,6 +3651,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								
 								Log.info("Yes Button Clicked So user wants to go Ahead remove all role of osce");
 								message.showConfirmationDialog("You Can Moov Ahead");
+								
+								requests.osceRequestNonRoo().removeassignment(osceProxy).fire(new OSCEReceiver<Boolean>() {
+
+									@Override
+									public void onSuccess(Boolean response) {
+										// TODO Auto-generated method stub
+										Log.info("Assignment Remove Successfully");
+									}
+								});
 								
 								
 								// Module 5 bug Report Change

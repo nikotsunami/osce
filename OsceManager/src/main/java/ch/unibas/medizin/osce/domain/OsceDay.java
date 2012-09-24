@@ -60,9 +60,9 @@ public class OsceDay {
 	
 	private Integer value=0;
 
-	/*
+	
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
-   private Set<Assignment> assignments = new HashSet<Assignment>();*/
+   private Set<Assignment> assignments = new HashSet<Assignment>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
 	@OrderBy("label")
@@ -172,6 +172,7 @@ public class OsceDay {
 		if(setOsceSequence != null || setOsceSequence.size() > 0){
 
 
+			
 			Iterator<OsceSequence> itOsceSequence = setOsceSequence.iterator();
 
 			while(itOsceSequence.hasNext()){
