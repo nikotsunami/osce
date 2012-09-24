@@ -7,6 +7,7 @@ import java.util.Map;
 
 //import org.codehaus.groovy.tools.shell.commands.EditCommand;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
@@ -62,6 +63,10 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	
 	@UiField
 	public Label questionInstruction;
+	
+	//SPEC Change
+	
+	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 	//spec
 	
@@ -273,7 +278,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		if(criteriaPopup==null)
 		{
 			criteriaPopup=new CriteriaPopupViewImpl();
-		
+		}    //SPEC Change
 		
 			((CriteriaPopupViewImpl)criteriaPopup).setAnimationEnabled(true);
 		
@@ -294,10 +299,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				@Override
 				public void onClick(ClickEvent event) {
 					
-					if(criteriaPopup.getCriteriaTxtBox().getValue()=="")
-					{
-					}	
-					else
+					//SPEC Change
+					
+					if(Validator.isNotNull(criteriaPopup.getCriteriaTxtBox().getValue()))
 					{
 						delegate.saveCriteria(criteriaPopup.getCriteriaTxtBox().getValue(),questionView);
 					
@@ -305,10 +309,15 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				
 						((CriteriaPopupViewImpl)criteriaPopup).criteriaTxtBox.setValue("");
 					}
+					else
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+					}
 				}
 			});
-		}
-		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(addBtnPanel.getAbsoluteLeft(), addBtnPanel.getAbsoluteTop()+60);
+		
+		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(addCriteriaButton.getAbsoluteLeft()-50, addCriteriaButton.getAbsoluteTop()-85); // SPEC Change
 		((CriteriaPopupViewImpl)criteriaPopup).show();
 	}
 	
@@ -326,7 +335,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		{
 			optionPopup=new CheckListTopicPopupViewImpl();
 			
-			
+		}	//SPEC Change
 			((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
 		
 			optionPopup.getDescriptionLbl().setText(constants.optionValue());
@@ -351,10 +360,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				@Override
 				public void onClick(ClickEvent event) {
 					
-					if(optionPopup.getTopicTxtBox().getValue()=="" || optionPopup.getDescriptionTxtBox().getValue()=="")
-					{
-					}	
-					else
+					//SPEC Change
+					
+					if(Validator.isNotNull(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue()))
 					{
 						//delegate.saveCheckListTopic(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue());
 						delegate.saveOption(optionPopup.getTopicTxtBox().getValue(), optionPopup.getDescriptionTxtBox().getValue(),questionView);
@@ -362,6 +370,11 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				
 						optionPopup.getTopicTxtBox().setValue("");
 						optionPopup.getDescriptionTxtBox().setValue("");
+					}
+					else
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
 					}
 				}
 		});
@@ -378,9 +391,10 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				}
 		});
 		// E: Issue Role V1
-		}
 		
-		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionVerticalPanel.getAbsoluteLeft(), addOptionVerticalPanel.getAbsoluteTop()-180);
+		
+		
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionVerticalPanel.getAbsoluteLeft()-60, addOptionVerticalPanel.getAbsoluteTop()-190); //SPEC Change
 		((CheckListTopicPopupViewImpl)optionPopup).show();
 		
 	}
@@ -471,7 +485,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		if(editquestionpopup==null)
 		{
 			editquestionpopup=new CheckListTopicPopupViewImpl();
-			
+		}	//SPEC Change
 			
 			((CheckListTopicPopupViewImpl)editquestionpopup).setAnimationEnabled(true);
 		
@@ -499,10 +513,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				@Override
 				public void onClick(ClickEvent event) {
 					
-					if(editquestionpopup.getTopicTxtBox().getValue()=="" || editquestionpopup.getDescriptionTxtBox().getValue()=="")
-					{
-					}	
-					else
+					// SPEC Change
+					
+					if(Validator.isNotNull(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue()))
 					{	
 						delegate.editOption(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue(),questionView);						
 						//delegate.e
@@ -511,6 +524,11 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				
 						//editquestionpopup.getTopicTxtBox().setValue("");
 						//editquestionpopup.getDescriptionTxtBox().setValue("");
+					}
+					else
+					{	
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
 					}
 				}
 		});
@@ -524,9 +542,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				}
 				});
 			// E: Issue Role
-		}
 		
-		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(editQuestionVP.getAbsoluteLeft(), editQuestionVP.getAbsoluteTop()-180);
+		
+		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(editQuestionVP.getAbsoluteLeft()-150, editQuestionVP.getAbsoluteTop()-195); // SPEC Change
 		((CheckListTopicPopupViewImpl)editquestionpopup).show();
 		
 	}

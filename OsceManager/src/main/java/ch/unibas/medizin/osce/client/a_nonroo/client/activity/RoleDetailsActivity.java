@@ -6162,6 +6162,9 @@ final int index2 = index;
 			
 			Iterator<LearningObjectiveData> itr = learningObjectiveView.getMultiselectionModel().getSelectedSet().iterator();
 			
+			// SPEC Change
+			
+			if(itr.hasNext()){
 			while (itr.hasNext())
 			{
 				LearningObjectiveData learningObjectiveData = itr.next();
@@ -6189,6 +6192,11 @@ final int index2 = index;
 			dialogBox.showConfirmationDialog("Main skill added successfully");		
 		}
 
+			// SPEC Change
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));		
+		}
+
 		@Override
 		public void addMinorClicked() {
 			
@@ -6196,6 +6204,10 @@ final int index2 = index;
 			
 			Iterator<LearningObjectiveData> itr = learningObjectiveView.getMultiselectionModel().getSelectedSet().iterator();
 			
+			//SPEC Change
+			
+			if(itr.hasNext()){
+				
 			while (itr.hasNext())
 			{
 				LearningObjectiveData learningObjectiveData = itr.next();
@@ -6222,6 +6234,11 @@ final int index2 = index;
 			
 			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
 			dialogBox.showConfirmationDialog(constants.minorSuccess());	
+			}
+
+			//SPEC Change
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			
 		}
 

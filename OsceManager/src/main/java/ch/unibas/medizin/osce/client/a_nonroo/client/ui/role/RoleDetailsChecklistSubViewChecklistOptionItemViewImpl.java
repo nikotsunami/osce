@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
@@ -34,6 +35,9 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 	private RoleDetailsChecklistSubViewChecklistOptionItemViewImpl roleDetailsChecklistSubViewChecklistOptionItemViewImpl;
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	// SPEC Change
+	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 	@UiField
 	Label optionLbl;
@@ -130,10 +134,9 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 			@Override
 			public void onClick(ClickEvent event) {
 					
-				if(optionPopup.getTopicTxtBox().getValue()=="" || optionPopup.getDescriptionTxtBox().getValue()=="")
-				{
-				}	
-				else
+				// SPEC Change
+				
+				if(Validator.isNotNull(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue()))
 				{
 					//delegate.saveCheckListTopic(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue());
 					delegate.updateOption(optionPopup.getTopicTxtBox().getValue(), optionPopup.getDescriptionTxtBox().getValue(),roleDetailsChecklistSubViewChecklistOptionItemViewImpl);
@@ -141,6 +144,11 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 					
 					optionPopup.getTopicTxtBox().setValue("");
 					optionPopup.getDescriptionTxtBox().setValue("");
+				}
+				else
+				{
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
 				}
 			}
 		});
@@ -158,7 +166,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 		});	
 		// E: Issue Role V1
 		
-		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(event.getScreenX()-100, event.getScreenY()-250);
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(this.getAbsoluteLeft()-55, this.getAbsoluteTop()-185); // SPEC Change
 		((CheckListTopicPopupViewImpl)optionPopup).show();
 	}
 	

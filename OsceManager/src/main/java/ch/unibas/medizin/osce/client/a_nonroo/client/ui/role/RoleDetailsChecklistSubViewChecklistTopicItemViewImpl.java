@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
@@ -43,6 +44,9 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView;
 	
 	private Delegate delegate;
+	
+	// SPEC Change
+	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 
 	AbsolutePanel discloserAP;
@@ -271,7 +275,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		{
 			questionPopup=new CheckListTopicPopupViewImpl();
 			
-			
+		} // SPEC Change	
 			((CheckListTopicPopupViewImpl)questionPopup).setAnimationEnabled(true);
 		
 			questionPopup.getDescriptionLbl().setText(constants.questionInstruction());
@@ -302,11 +306,18 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					else
 					{	*/
 					
+					// SPEC Change
+					if(Validator.isNotNull(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue())){
 						delegate.saveCheckListQuestion(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue(),topicView);
 						// E Highlight onViolation
 						//((CheckListTopicPopupViewImpl)questionPopup).hide(true);				
 						questionPopup.getTopicTxtBox().setValue("");
 						questionPopup.getDescriptionTxtBox().setValue("");
+					}else{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+					}
+					
 					// Highlight onViolation
 					//}
 					// E Highlight onViolation
@@ -326,7 +337,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		}
 		});
 		// E: Issue Role
-	}
+	
 			
 		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(questionButtonVP.getAbsoluteLeft(), questionButtonVP.getAbsoluteTop()-180);
 		((CheckListTopicPopupViewImpl)questionPopup).show();
@@ -374,7 +385,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		Log.info("edit Topic");
 		
 		//Window.alert("Edit Clicked");
-		showTopicPopupPanel(this.proxy, event.getScreenX(), event.getScreenY());
+		showTopicPopupPanel(this.proxy, edit.getAbsoluteLeft(), edit.getAbsoluteTop()); //SPEC Change
 		
 		
 		//if(Window.confirm("are you sure you want to delete this Topic?"))
@@ -387,7 +398,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		{
 			topicPopup=new CheckListTopicPopupViewImpl();
 			
-			
+		}	
 			((CheckListTopicPopupViewImpl)topicPopup).setAnimationEnabled(true);
 		
 			topicPopup.getDescriptionLbl().setText(constants.topicDescription());
@@ -420,7 +431,14 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					else
 					{*/
 											
+					//SPEC Change
+					if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue())){
+					
 					delegate.updateCheckListTopic(proxy,topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue(),topicView);
+					}else{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+					}
 					// E Highlight onViolation
 					
 						//((CheckListTopicPopupViewImpl)topicPopup).hide(true);
@@ -444,10 +462,10 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 				}
 			});
 			// E: Issue Role
-		}
 		
 		
-		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-200, y - 265);
+		
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-150, y - 195); //SPEC Change
 		((CheckListTopicPopupViewImpl)topicPopup).show();
 		
 	}

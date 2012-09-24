@@ -174,8 +174,8 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 	{
 	
 		roomMaterialsPopupViewImpl.setAnimationEnabled(true);
-		roomMaterialsPopupViewImpl.setWidth("300px");
-		roomMaterialsPopupViewImpl.setHeight("140px");
+		roomMaterialsPopupViewImpl.setWidth("350px");    //SPEC Change
+		roomMaterialsPopupViewImpl.setHeight("150px");   //SPEC Change
 		roomMaterialsPopupViewImpl.setPopupPosition(event.getClientX(),event.getClientY());
 		roomMaterialsPopupViewImpl.saveRoomMaterial.setText(constants.save());
 		roomMaterialsPopupViewImpl.cancel.setText(constants.cancel());

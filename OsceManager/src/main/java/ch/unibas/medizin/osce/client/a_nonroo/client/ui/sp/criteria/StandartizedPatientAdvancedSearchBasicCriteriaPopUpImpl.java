@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -45,6 +47,11 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 			extends
 			UiBinder<Widget, StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl> {
 	}
+	
+	// SPEC Change
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 	@UiField
 	TextBox value;
@@ -112,8 +119,13 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		/*valueNotAvail.setText("");*/
 		valueNotAvail.setText("");
 		// Highlight onViolation		
+		if(Validator.isNotNull(value.getValue())){
 		delegate.addAdvSeaBasicButtonClicked(null, value.getValue(), "", bindType.getValue(), field.getValue(), comparison.getValue());
 		this.hide();
+		}else{
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+		}
 	}
 
 	/*Advance search popup changes end*/

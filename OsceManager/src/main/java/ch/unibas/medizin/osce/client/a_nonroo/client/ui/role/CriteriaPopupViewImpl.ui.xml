@@ -42,12 +42,17 @@
 	}
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
-
+<!--   SPCE Change -->
+ <g:VerticalPanel spacing="10" >	
+<g:HTML>
+	<div class="arrow-popup-border" ></div>
+	<div class="arrow-popup"></div>
+</g:HTML>
 	<g:HorizontalPanel  spacing="10">
 		<g:TextBox ui:field="criteriaTxtBox"></g:TextBox>
 		<g:Button ui:field="okBtn"></g:Button>
 	</g:HorizontalPanel>
 
 	
-
+</g:VerticalPanel>
 </ui:UiBinder>

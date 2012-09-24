@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -31,6 +32,9 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	private Delegate delegate;
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	// SPEC Change
+	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 	@UiField
 	Label criteriaLbl;
@@ -134,10 +138,9 @@ private static final Binder BINDER = GWT.create(Binder.class);
 			@Override
 			public void onClick(ClickEvent event) {
 				
-				if(criteriaPopup.getCriteriaTxtBox().getValue()=="")
-				{
-				}	
-				else
+				// SPEC Change
+				
+				if(Validator.isNotNull(criteriaPopup.getCriteriaTxtBox().getValue()))
 				{
 					delegate.updateCriteria(criteriaPopup.getCriteriaTxtBox().getValue(),roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl);
 				
@@ -145,10 +148,15 @@ private static final Binder BINDER = GWT.create(Binder.class);
 			
 					((CriteriaPopupViewImpl)criteriaPopup).criteriaTxtBox.setValue("");
 				}
+				else
+				{
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+				}
 			}
 		});
 	
-		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(event.getScreenX()-100, event.getScreenY()-125);
+		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(this.edit.getAbsoluteLeft()-50, this.edit.getAbsoluteTop()-85);
 		((CriteriaPopupViewImpl)criteriaPopup).show();
 	}
 	
