@@ -98,7 +98,7 @@ public class PatientInSemester {
         String stanardizedPatientString = getStanardizedPatientIDList(searchCriteria);
         if (stanardizedPatientString == null) {
             Log.info("Return as null");
-            return null;
+            return new ArrayList<PatientInSemester>();
         }
         TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
         query.setParameter("semesterId", semesterId);
@@ -124,7 +124,7 @@ public class PatientInSemester {
         String stanardizedPatientString = getStanardizedPatientIDList(searchCriteria);
         if (stanardizedPatientString == null) {
             Log.info("Return as null");
-            return null;
+            return new ArrayList<PatientInSemester>();
         }
 		TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
         query.setParameter("semesterId", semesterId);
@@ -152,10 +152,11 @@ public class PatientInSemester {
         String stanardizedPatientString = getStanardizedPatientIDList(searchCriteria);
         if (stanardizedPatientString == null) {
             Log.info("Return as null");
-            return null;
+            return 0L;
         }
         EntityManager em = entityManager();
-        TypedQuery<Long> query = em.createQuery(selectCountBase + queryBase + stanardizedPatientString + semesterCriteriaQuery, Long.class);
+        Log.info("!!!!! Query is : " +selectCountBase + queryBase + whereBase+ patientBase+ stanardizedPatientString + semesterCriteriaQuery + semesterId);
+        TypedQuery<Long> query = em.createQuery(selectCountBase + queryBase + whereBase+ patientBase+ stanardizedPatientString + semesterCriteriaQuery, Long.class);
         query.setParameter("semesterId", semesterId);
         return query.getSingleResult();
     }
