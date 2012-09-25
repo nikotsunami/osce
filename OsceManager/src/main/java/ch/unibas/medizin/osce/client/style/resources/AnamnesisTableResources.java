@@ -1,8 +1,6 @@
 package ch.unibas.medizin.osce.client.style.resources;
-import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources.Style;
 
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.user.cellview.client.CellTable;

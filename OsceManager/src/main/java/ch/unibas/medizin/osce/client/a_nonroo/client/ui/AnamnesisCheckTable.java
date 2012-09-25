@@ -56,8 +56,8 @@ public class AnamnesisCheckTable {
 		CellTable.Resources tableResources = GWT
 		.create(AnamnesisTableResources.class);
 		cellTable = new CellTable<AnamnesisCheckProxy>(15, tableResources);
-		cellTable.setStyleName("standardTable");
-		
+		cellTable.addStyleName("standardTable");
+		cellTable.addStyleName("narrowInput");
 		cellTable.setSelectionModel(selectionModel);
 
 		// Add colum

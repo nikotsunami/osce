@@ -357,7 +357,11 @@ body {
 	width: 98%;
 }
 .standardTable input{
-    width: 20px;
+    /*width: 20px;*/
+}
+
+.narrowInput input {
+	width: 20px;
 }
 
 /* Style for Buttons in CellTables (like delete Buttons) */
