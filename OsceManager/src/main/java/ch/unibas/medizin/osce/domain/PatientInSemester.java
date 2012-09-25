@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -74,13 +75,23 @@ public class PatientInSemester {
  	}
  	// E Module10 Create plans
 
+// private static String queryBase = "FROM PatientInSemester AS o WHERE o.standardizedPatient.id In ( ";
+
     private static String selectBase = "SELECT o ";
 
     private static String selectCountBase = "SELECT COUNT(o) ";
 
-    private static String queryBase = "FROM PatientInSemester AS o WHERE o.standardizedPatient.id In ( ";
+    private static String queryBase = "FROM PatientInSemester AS o ";
+   
+    private static String joinBase = " JOIN o.osceDays oD ";
 
-    private static String semesterCriteriaQuery = " ) and semester.id = :semesterId";
+    private static String whereBase = "WHERE";
+    
+    private static String joinQueryBase = " oD.id = :oDayId and ";
+    
+    private static String patientBase = " o.standardizedPatient.id In ( ";
+
+    private static String semesterCriteriaQuery = " ) and o.semester.id = :semesterId";
 
     public static List<PatientInSemester> findPatientInSemesterByAdvancedCriteria(Long semesterId, List<AdvancedSearchCriteria> searchCriteria) {
         EntityManager em = entityManager();
@@ -89,13 +100,52 @@ public class PatientInSemester {
             Log.info("Return as null");
             return null;
         }
-        TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
+        TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
         query.setParameter("semesterId", semesterId);
-        Log.info("!!!!! Query is : " + selectBase + queryBase + stanardizedPatientString + semesterCriteriaQuery + semesterCriteriaQuery);
-        List<PatientInSemester> resultList = query.getResultList();
-        if (resultList == null || resultList.size() == 0) return null;
+        Log.info("!!!!! Query is : " + selectBase + queryBase + whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery + semesterId);
+		
+        List<PatientInSemester> resultList = new ArrayList<PatientInSemester>();
+		
+		resultList = query.getResultList();
+		
+//		if (resultList == null || resultList.size() == 0) {
+//			Log.info("Size of PatientInSemester , for advanced search is : " + resultList.size());
+//			//			return new ArrayList<PatientInSemester>();
+//		}
+		
         Log.info("Size of PatientInSemester , for advanced search is : " + resultList.size());
         return resultList;
+    }
+    
+    
+    public static List<PatientInSemester> findPatientInSemesterByOsceDayAdvancedCriteria(Long semesterId,Long osceDayId,Boolean useOsceDay, List<AdvancedSearchCriteria> searchCriteria) {
+//        if(useOsceDay){
+    	EntityManager em = entityManager();
+        String stanardizedPatientString = getStanardizedPatientIDList(searchCriteria);
+        if (stanardizedPatientString == null) {
+            Log.info("Return as null");
+            return null;
+        }
+		TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
+        query.setParameter("semesterId", semesterId);
+        query.setParameter("oDayId", osceDayId);
+        
+        Log.info("!!!!! Query is : " +selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery + semesterId);
+		
+        List<PatientInSemester> resultList = new ArrayList<PatientInSemester>();
+		
+		resultList = query.getResultList();
+		
+//		if (resultList == null || resultList.size() == 0) {
+//			Log.info("Size of PatientInSemester , for advanced search is : " + resultList.size());
+//			//			return new ArrayList<PatientInSemester>();
+//		}
+		
+        Log.info("Size of PatientInSemester , for advanced search is : " + resultList.size());
+        return resultList;
+//        }        else{
+//        	return findPatientInSemesterByAdvancedCriteria(semesterId, searchCriteria);
+//        }
     }
 
     public static Long countPatientinSemesterByAdvancedCriteria(Long semesterId, List<AdvancedSearchCriteria> searchCriteria) {

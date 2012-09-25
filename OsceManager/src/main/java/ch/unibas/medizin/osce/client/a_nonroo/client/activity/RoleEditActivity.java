@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditView;
@@ -24,6 +25,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -71,6 +74,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	private CheckListProxy  checkListProxy1;//spec
 	
 	private CheckListProxy checkList;//spec
+	
+	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 	private StandardizedRoleRequest majorRequest;
 	private CheckListRequest majorCheckListRequest;//spec
@@ -383,13 +388,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	public void cancelClicked() 
 	{
 		
+		// SPEC Change
 		
-		
-		if (this.place.getOperation() == Operation.EDIT)
+		if (this.place.getOperation() == Operation.EDIT){
 			goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));	
 			//placeController.goTo(new RoleDetailsPlace(standardizedRole.stableId(), Operation.DETAILS));
-		else
-			placeController.goTo(new RolePlace("RolePlace!CANCEL"));
+		}else{
+//			placeController.goTo(new RolePlace("RolePlace!CANCEL"));
+			goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));
+		}
+		
+		// SPEC Change			
 	}
 
 	@Override

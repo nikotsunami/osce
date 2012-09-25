@@ -199,8 +199,8 @@ public class OsceDay {
 
 
 							if(setAdvanceSearchCriteria == null || setAdvanceSearchCriteria.size() == 0 ){
-
-								continue;
+								listStandardizedRole.add(standardizedRole);
+//								continue;
 							}
 							else{
 								ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
@@ -215,17 +215,21 @@ public class OsceDay {
 								if(listOfPatientInSemester != null || listOfPatientInSemester.size() > 0 ){
 
 									Iterator<PatientInSemester> itPatientInSemester = listOfPatientInSemester.iterator(); 
+									PatientInSemester patientInSemester2;
 
 									while(itPatientInSemester.hasNext()){
 
-										if(standardizedPatient.getId().equals(itPatientInSemester.next().getStandardizedPatient().getId())){
+										 patientInSemester2 = itPatientInSemester.next();
+										
+										Log.info("sp  "+patientInSemester2.getStandardizedPatient().getId());
+										if(standardizedPatient.getId().longValue() == patientInSemester2.getStandardizedPatient().getId().longValue()){
 
 											Log.info("St Role Satisfies Advance Search Criteria is :" + standardizedRole.getId());
 											Log.info("St Role Satisfies Advance Search Criteria is :" + standardizedRole.getShortName());
 											listStandardizedRole.add(standardizedRole);
 										}
 										else
-											Log.info("SP " + standardizedPatient.getId() + " not satisfies Criteria ");
+											Log.info("ROLE " + standardizedRole.getId() + " not satisfies Criteria ");
 									}
 								}  
 							}
@@ -235,6 +239,8 @@ public class OsceDay {
 			}
 		}
 
+		Log.info("listStandardizedRole Size is :" +listStandardizedRole.size());
+		
 		return listStandardizedRole;
 	}
 

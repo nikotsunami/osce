@@ -57,6 +57,8 @@ public class RoleAssignmentPopupViewImpl extends DialogBox implements
 		this.setAutoHideEnabled(true);
 		this.setText(constants.patientInformation());
 		this.center();
+		
+		this.getElement().getStyle().setZIndex(1); 
 	}
 
 	@UiHandler("okButton")

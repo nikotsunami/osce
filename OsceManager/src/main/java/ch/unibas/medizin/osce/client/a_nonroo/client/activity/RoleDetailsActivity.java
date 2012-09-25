@@ -2968,23 +2968,32 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		// E Highlight onViolation		
 		Log.info("Call addAdvSeaBasicButtonClicked");		
 		switch (possibleFields) {
-		case BMI:
+		case BMI:{
 			shownValue = constants.bmi()
 					+ " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
 							.render(comparison) + " " + value;
-			break;
-		case HEIGHT:
+			break;}
+		case HEIGHT:{
 			shownValue = constants.height()
 					+ " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
 							.render(comparison) + " " + value + "cm";
-			break;
-		case WEIGHT:
+			break;}
+		case WEIGHT:{
 			shownValue = constants.weight()
 					+ " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
 							.render(comparison) + " " + value + "kg";
+			break;}
+		case AGE:{
+			shownValue = constants.age() + " " + new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "years";
+			break;}
+		case GENDER:{
+			shownValue = constants.gender() + " " + new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value;
+			break;}
 		}
 		AdvancedSearchCriteriaRequest searchCriteriaRequest = requests
 				.advancedSearchCriteriaRequest();
@@ -6162,6 +6171,9 @@ final int index2 = index;
 			
 			Iterator<LearningObjectiveData> itr = learningObjectiveView.getMultiselectionModel().getSelectedSet().iterator();
 			
+			// SPEC Change
+			
+			if(itr.hasNext()){
 			while (itr.hasNext())
 			{
 				LearningObjectiveData learningObjectiveData = itr.next();
@@ -6189,6 +6201,11 @@ final int index2 = index;
 			dialogBox.showConfirmationDialog("Main skill added successfully");		
 		}
 
+			// SPEC Change
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));		
+		}
+
 		@Override
 		public void addMinorClicked() {
 			
@@ -6196,6 +6213,10 @@ final int index2 = index;
 			
 			Iterator<LearningObjectiveData> itr = learningObjectiveView.getMultiselectionModel().getSelectedSet().iterator();
 			
+			//SPEC Change
+			
+			if(itr.hasNext()){
+				
 			while (itr.hasNext())
 			{
 				LearningObjectiveData learningObjectiveData = itr.next();
@@ -6222,6 +6243,11 @@ final int index2 = index;
 			
 			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
 			dialogBox.showConfirmationDialog(constants.minorSuccess());	
+			}
+
+			//SPEC Change
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			
 		}
 

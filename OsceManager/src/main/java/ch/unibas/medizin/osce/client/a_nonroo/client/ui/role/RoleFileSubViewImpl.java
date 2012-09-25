@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.VisibleRange;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
@@ -86,6 +87,9 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 	@UiField
 	FormPanel uploadFormPanel;
 	
+	//SPEC Change
+	private MessageConfirmationDialogBox confirmationDialogBox;
+	
 	// Highlight onViolation
 	Map<String, Widget> fileMap;
 	// E Highlight onViolation
@@ -158,8 +162,20 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		}*/
 		// E Highlight onViolation
 
+		// SPEC Change
+		
+		Log.info("fileUpload.getFilename() = ="+fileUpload.getFilename());
+		Log.info("fileDescription.getValue() = ="+fileDescription.getValue());
+		Log.info("this.getValue() = ="+this.getValue());
+		
+		if(Validator.isNotNull(fileUpload.getFilename(),fileDescription.getValue())){
+			
 		delegate.newFileClicked(fileUpload.getFilename(),fileDescription.getValue(), this.getValue());		
 		fileDescription.setValue("");
+		}else{
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+		}
 
 	}
 
@@ -223,7 +239,7 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 						Log.info("PS Submit is Complete " + event.getResults());
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
-						 dialogBox.showConfirmationDialog(constants.imageUpload());
+						 dialogBox.showConfirmationDialog(constants.fileUploadSuccess());
 						 
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 							

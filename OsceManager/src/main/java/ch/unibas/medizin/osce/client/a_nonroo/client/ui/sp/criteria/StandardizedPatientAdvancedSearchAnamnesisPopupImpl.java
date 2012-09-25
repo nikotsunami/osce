@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
@@ -50,6 +52,10 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	interface StandardizedPatientAdvancedSearchAnamnesisPopupImplUiBinder extends
 			UiBinder<Widget, StandardizedPatientAdvancedSearchAnamnesisPopupImpl> {
 	}
+	
+	// SPEC Change
+	private MessageConfirmationDialogBox confirmationDialogBox;
+	
 	@UiField
 	HorizontalPanel parentPanel;
 	
@@ -293,12 +299,24 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		} else if (currentAnswerWidget == anamnesisAnswerYesNoSelector) {
 			answer = (anamnesisAnswerYesNoSelector.getValue().booleanValue()) ? "1" : "0";
 		} else if (currentAnswerWidget == anamnesisAnswerText) {
-			answer = anamnesisAnswerText.getValue();
+			answer = (constants.enterAnswer().equals(anamnesisAnswerText.getValue()))? "" : anamnesisAnswerText.getValue(); //SPEC Change
 		}
 		if (currentAnswerWidget != null) {
+			
+			// SPEC Change
+			Log.info("Answer = "+answer);
+			
+			if(Validator.isNotNull(answer)){
 			delegate.addAnamnesisValueButtonClicked(selectedProxy, answer, bindType.getValue(), comparison.getValue());
+				hide();
+			}else{
+				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+			}
+		}else{
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
 		}
-		hide();
 	}
 	
 	/*Advance search popup changes end*/

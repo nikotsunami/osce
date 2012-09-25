@@ -50,6 +50,10 @@
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
 
 <g:VerticalPanel spacing="10">
+<g:HTML>
+	<div class="arrow-popup-border" style="left:150px;"></div>
+	<div class="arrow-popup" style="left:150px;"></div>
+</g:HTML>
 	<g:HorizontalPanel  spacing="10">
 	
 		<g:Label ui:field="topicLbl" styleName="{style.right} " width="63px"></g:Label>

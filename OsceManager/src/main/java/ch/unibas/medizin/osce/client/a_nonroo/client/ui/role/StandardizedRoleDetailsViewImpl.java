@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -60,6 +62,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 
 	StandardizedRoleProxy proxy;
 	StandardizedRoleProxy baseProxy;
+
+	// SPEC Change
+	MessageConfirmationDialogBox confirmationDialogBox;
 
 
 	@UiField
@@ -314,7 +319,19 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		// E Highlight onViolation
 		//Issue # 122 : Replace pull down with autocomplete.
 		//delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getValue());
+		
+		//SPEC Change
+		
+		Log.info("roleTemplateListBox.getSelected() == = ="+roleTemplateListBox.getSelected());
+		
+		if(Validator.isNotNull(roleTemplateListBox.getSelected())){
+			
 		delegate.roleTemplateValueButtonClicked(roleTemplateListBox.getSelected());
+		}else{
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			confirmationDialogBox.showConfirmationDialog(constants.selectRoleTemplate());
+		}
+		
 		//Issue # 122 : Replace pull down with autocomplete.
 		// Highlight onViolation
 		//}
@@ -620,10 +637,18 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 					else
 					{*/
 					// E Highlight onViolation
+					
+					// SPEC Change
+					
+					if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue())){
 						delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());					
 						//((CheckListTopicPopupViewImpl)topicPopup).hide(true);				
 						topicPopup.getTopicTxtBox().setValue("");
 						topicPopup.getDescriptionTxtBox().setValue("");
+					}else{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+					}
 				// Highlight onViolation
 					//}
 				// E Highlight onViolation
@@ -648,7 +673,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			
 		
 		
-		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addTopicHP.getAbsoluteLeft(), addTopicHP.getAbsoluteTop()-180);
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addTopicHP.getAbsoluteLeft()-100, addTopicHP.getAbsoluteTop()-180); //SPEC Change
 		((CheckListTopicPopupViewImpl)topicPopup).show();
 		
 	}
@@ -697,7 +722,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 				// E: Issue Role
 				
 		}
-			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft()+200, addTopicHP.getAbsoluteTop()-250);
+			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft()+180, addTopicHP.getAbsoluteTop()-250);  // SPEC Change
 			((ImportTopicPopupViewImpl)importTopicView).roleLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).specializationLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).queListBox.setText("");

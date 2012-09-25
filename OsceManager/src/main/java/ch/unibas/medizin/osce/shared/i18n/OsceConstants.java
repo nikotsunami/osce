@@ -370,6 +370,10 @@ public interface OsceConstants extends Constants {
 
 	public String filePath();
 
+	public String fileUploadSuccess();
+	
+	public String requiredFields();
+
 	public String fileUploadError();
 
 	public String filterTitle();
