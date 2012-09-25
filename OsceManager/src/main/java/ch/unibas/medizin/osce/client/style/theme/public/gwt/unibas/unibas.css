@@ -1272,7 +1272,8 @@ a:hover, .gwt-Anchor:hover {
  	/*overflow-x: scroll;
     overflow-y: hidden;*/
 	padding: 6px;
-	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
+	/*background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;*/
+	background-color: #FFFEFA;
 }
 
 .gwt-InvertedTabPanel .gwt-TabPanelBottom {
@@ -2917,7 +2918,8 @@ color: #f1b532;
     border-radius: 4px;
  	
     /*padding: 6px;*/
-    background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    /*background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;*/
+    background-color: #FFFEFA;
     opacity: 0.9;
     /* /////  width: 145px; */ 
     /* /////  height: 130px; */

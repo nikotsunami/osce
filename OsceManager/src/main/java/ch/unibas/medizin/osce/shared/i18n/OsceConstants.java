@@ -770,6 +770,8 @@ public interface OsceConstants extends Constants {
 
 	public String schedulePostpone();
 
+	public String schedulesPrintStud();
+
 	public String searchCriteria();
 
 	public String searchField();
@@ -995,6 +997,8 @@ public interface OsceConstants extends Constants {
 	public String warningSelectSequence();
 
 	public String warningSelectSp();
+
+	public String warningSelectStudent();
 
 	public String warningSplitting();
 

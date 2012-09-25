@@ -657,15 +657,15 @@ IndividualSchedulesDetailsView.Delegate
 				else
 				{
 					MessageConfirmationDialogBox dialogStud=new MessageConfirmationDialogBox(constants.warning());
-					dialogStud.showConfirmationDialog("Please Select atleast one Student");
+					dialogStud.showConfirmationDialog(constants.warningSelectStudent());
 				}
 				
 			}
 			
 			else
 			{
-				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
-				dialog.showConfirmationDialog("Please Select Student..");
+				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+				dialog.showConfirmationDialog(constants.warningSelectStudent());
 			}
 			
 		}
@@ -712,8 +712,8 @@ IndividualSchedulesDetailsView.Delegate
 						}
 						else
 						{
-							MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-							dialog.showConfirmationDialog("Template Not Found");
+							MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
+							dialog.showConfirmationDialog(constants.errorTplNotFound());
 							
 						}
 						
@@ -758,7 +758,7 @@ IndividualSchedulesDetailsView.Delegate
 														else
 														{
 															MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-															dialog.showConfirmationDialog("Template Not Found");
+															dialog.showConfirmationDialog(constants.errorTplNotFound());
 															
 														}														
 													}
@@ -836,7 +836,7 @@ IndividualSchedulesDetailsView.Delegate
 													{
 														Log.info("Go to Success.Save Template");														
 														MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
-														dialog.showConfirmationDialog("Template Saved Successfully");
+														dialog.showConfirmationDialog(constants.confirmationTplSaved());
 													}
 													
 												});			
@@ -932,7 +932,7 @@ IndividualSchedulesDetailsView.Delegate
 													else
 													{
 														MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-														dialog.showConfirmationDialog("Template Not Found");
+														dialog.showConfirmationDialog(constants.errorTplNotFound());
 														
 													}
 													
@@ -1036,15 +1036,15 @@ IndividualSchedulesDetailsView.Delegate
 					else
 					{
 						MessageConfirmationDialogBox dialogsp=new MessageConfirmationDialogBox(constants.warning());
-						dialogsp.showConfirmationDialog("Please Select atleast one Standardized Patient");
+						dialogsp.showConfirmationDialog(constants.warningSelectSp());
 					}
 					
 															
 				}
 				else
 				{
-					MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
-					dialog.showConfirmationDialog("Please Select Standardized Patient..");
+					MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+					dialog.showConfirmationDialog(constants.warningSelectSp());
 				}
 		}
 
@@ -1094,7 +1094,7 @@ IndividualSchedulesDetailsView.Delegate
 					else
 					{
 						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-						dialog.showConfirmationDialog("Template Not Found");
+						dialog.showConfirmationDialog(constants.errorTplNotFound());
 						
 					}
 					
@@ -1137,7 +1137,7 @@ IndividualSchedulesDetailsView.Delegate
 													else
 													{
 														MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-														dialog.showConfirmationDialog("Template Not Found");
+														dialog.showConfirmationDialog(constants.errorTplNotFound());
 														
 													}													
 												}
@@ -1185,7 +1185,7 @@ IndividualSchedulesDetailsView.Delegate
 													{
 														Log.info("Go to Success.Save Template");														
 														MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
-														dialog.showConfirmationDialog("Template Saved Successfully");
+														dialog.showConfirmationDialog(constants.confirmationTplSaved());
 																	
 													}
 													
@@ -1277,7 +1277,7 @@ IndividualSchedulesDetailsView.Delegate
 													else
 													{
 														MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-														dialog.showConfirmationDialog("Template Not Found");
+														dialog.showConfirmationDialog(constants.errorTplNotFound());
 														
 													}
 												}
@@ -1328,14 +1328,14 @@ IndividualSchedulesDetailsView.Delegate
 				else
 				{
 					MessageConfirmationDialogBox dialogExaminer=new MessageConfirmationDialogBox(constants.warning());
-					dialogExaminer.showConfirmationDialog("Please Select atleast one Examiner");
+					dialogExaminer.showConfirmationDialog(constants.warningSelectExaminer());
 				}
 			}
 			
 			else
 			{
-				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
-				dialog.showConfirmationDialog("Please Select Examiner..");
+				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+				dialog.showConfirmationDialog(constants.warningSelectExaminer());
 			}
 			
 		}
@@ -1380,7 +1380,7 @@ IndividualSchedulesDetailsView.Delegate
 							else
 							{
 								MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-								dialog.showConfirmationDialog("Template Not Found");
+								dialog.showConfirmationDialog(constants.errorTplNotFound());
 								
 							}
 						}
@@ -1421,7 +1421,7 @@ IndividualSchedulesDetailsView.Delegate
 															else
 															{
 																MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-																dialog.showConfirmationDialog("Template Not Found");
+																dialog.showConfirmationDialog(constants.errorTplNotFound());
 																
 															}
 														}
@@ -1471,7 +1471,7 @@ IndividualSchedulesDetailsView.Delegate
 													//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables, new AsyncCallback<String>() {
 													//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables,spId,1L,new AsyncCallback<String>() {													
 													MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.success());
-													dialog.showConfirmationDialog("Template Saved Successfully");
+													dialog.showConfirmationDialog(constants.confirmationTplSaved());
 												}
 												
 											});				
@@ -1563,7 +1563,7 @@ IndividualSchedulesDetailsView.Delegate
 													else
 													{
 														MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
-														dialog.showConfirmationDialog("Template Not Found");
+														dialog.showConfirmationDialog(constants.errorTplNotFound());
 														
 													}
 												}

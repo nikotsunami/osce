@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -172,6 +173,19 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 			    checkbox.setValue(true);
 			  }
 		});*/
+		OsceConstants constants = GWT.create(OsceConstants.class);
+		
+		rbSelectedStud.setText(constants.selected());
+		rbSelectedExaminor.setText(constants.selected());
+		rbSelectedSP.setText(constants.selected());
+		rbAllExaminor.setText(constants.all());
+		rbAllSP.setText(constants.all());
+		rbAllStud.setText(constants.all());
+		
+		btnPrintCopyExaminor.setText(constants.summoningsPrintExa());
+		btnPrintCopySP.setText(constants.summoningsPrintSp());
+		btnPrintCopyStudent.setText(constants.schedulesPrintStud());
+		
 		disclosureDataPanelExaminer.addCloseHandler(new CloseHandler<DisclosurePanel>() 
 		{
 			@Override
