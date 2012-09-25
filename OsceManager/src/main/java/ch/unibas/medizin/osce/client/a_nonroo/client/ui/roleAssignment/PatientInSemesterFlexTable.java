@@ -195,11 +195,13 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		PatientInSemesterData patientInSemesterData = null;
 		//		Cell selectedCell = this.getCellForEvent(event);		
 		if (selectedRow > 0) {
+			if(patientInSemesterDatas.size() >= this.lastSelectedRowIndex ){
 			patientInSemesterData = patientInSemesterDatas.get(this.lastSelectedRowIndex - 1);
 			Log.info("lastSelectedRowIndex is : " + lastSelectedRowIndex);
 
 			this.getRowFormatter().removeStyleName(this.lastSelectedRowIndex, "flexTableSelectedRow");
 			this.getRowFormatter().addStyleName(this.lastSelectedRowIndex, patientInSemesterData.getRowSetColor());
+			}
 
 			this.lastSelectedRowIndex = selectedRow;
 			patientInSemesterData = patientInSemesterDatas.get(this.lastSelectedRowIndex - 1);

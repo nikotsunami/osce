@@ -404,12 +404,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 							
 					//change
 					
-					//Collection<String> cookie =Cookies.getCookieNames();
-					
-					
-					
-					
-					
+								
 					for(String cook : cookie){
 						//Window.alert(Cookies.getCookie(cook));
 						Log.info(" initOsceDaySubView : Cookie Osce Day Id :"+Cookies.getCookie(cook));
@@ -442,19 +437,24 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				
 				
 				}
-				if(isopen){
+				/*if(isopen){
 					
 					osceDaySubViewImplList.get(0).simpleDiscloserPanel.setOpen(true);
-				}
+				}*/
 				
 			}
 		 }
+			if(isopen){
+				
+				osceDaySubViewImplList.get(0).simpleDiscloserPanel.setOpen(true);
+			}
 		}
 			
 	}
 });
 	
-		}});
+		}
+});
 	
 	requests.getEventBus().fireEvent(
 			new ApplicationLoadingScreenEvent(false));
@@ -850,7 +850,7 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 					}
 				}
 			
-			if(!patientInRoleProxy.getFit_criteria() || isOsceDayPatientInSemester)
+			if((!patientInRoleProxy.getFit_criteria()) || isOsceDayPatientInSemester)
 			//if(!patientInRoleProxy.getFit_criteria())
 			{
 				((PatientInRoleSubViewImpl)patientInRoleView).addStyleName("count-red");
@@ -2443,20 +2443,30 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 							theEventService.removeListeners();
 							Log.info("@@Algoritham Implemented Successfully Patient Assign In Role Automatically");
 							
-							Iterator<OsceDaySubViewImpl> osceDaySubViewImplIterator =osceDaySubViewImplList.iterator();
-							OsceDaySubViewImpl osceDaySubViewImpl;
+							
+							final Iterator<OsceDaySubViewImpl> osceDaySubViewImplIterator =osceDaySubViewImplList.iterator();
+
+							
+							//OsceDaySubViewImpl osceDaySubViewImpl;
+							
+							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+							dialogBox.showConfirmationDialog(constants.autoAssignmentSuccess());
+							
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									
 							while(osceDaySubViewImplIterator.hasNext()){
-								osceDaySubViewImpl=osceDaySubViewImplIterator.next();
+										OsceDaySubViewImpl	osceDaySubViewImpl=osceDaySubViewImplIterator.next();
 								refreshOsceSequences(osceDaySubViewImpl.getOsceDayProxy(),osceDaySubViewImpl );
 							}
 							
 							
 							initPatientInSemester(true,false);
 							
-							
-							
-							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
-							dialogBox.showConfirmationDialog(constants.autoAssignmentSuccess());
+								}
+							});
 							
 							// module 3 bug {
 							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);

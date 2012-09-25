@@ -298,7 +298,9 @@ delegate.showApplicationLoading(true);
 	
 	@Override
 	public void onClick(ClickEvent event) {
+		delegate.showApplicationLoading(true);
 		delegate.firePatientInSemesterRowSelectedEvent(table.onRowClick(table.getCellForEvent(event).getRowIndex()));
+		delegate.showApplicationLoading(false);
 
 	}
 
