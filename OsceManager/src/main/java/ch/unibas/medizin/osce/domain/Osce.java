@@ -540,16 +540,22 @@ public class Osce {
 			setAdvanceSearchCriteria.clear();
 			listOfPatientInSemesterSatisfyCriteria.clear();
 			listAdvanceSearchCriteria.clear();
+			
 			oscePost=oscePostIterator.next();
+			
 			Log.info("Osce Post At findPersentageOfRoleFitsForDay()  is " +oscePost.getId() + " :: " + oscePost.getStandardizedRole().getRoleTopic().getOscePostBlueprints().size());
 			standardizedRole=oscePost.getStandardizedRole();
+			
 			Log.info("StandarDized Role At findPersentageOfRoleFitsForDay() is " + standardizedRole.getId() + " : " + oscePost.getStandardizedRole().getAdvancedSearchCriteria().size());
 			setAdvanceSearchCriteria=standardizedRole.getAdvancedSearchCriteria();
 			
 			Log.info("Search Criteria size :" + setAdvanceSearchCriteria.size());
+			
 			if(setAdvanceSearchCriteria==null || setAdvanceSearchCriteria.size() <=0 ){
-				continue;
+				//continue;
+				accePtedRoleInCriteriaList.add(oscePost);
 			}
+			else{
 			listAdvanceSearchCriteria.addAll(setAdvanceSearchCriteria);
 			
 			listOfPatientInSemesterSatisfyCriteria= sortedPatientInSemester2.findPatientInSemesterByAdvancedCriteria(semesterId,listAdvanceSearchCriteria);
@@ -563,6 +569,7 @@ public class Osce {
 					unAccptedRoleInCriteriaList.add(oscePost);
 				}
 			}
+		}
 		}
 		Log.info("Criteria Setisfy For Roles Is :"+accePtedRoleInCriteriaList.size()+" For Patient :" +sortedPatientInSemester2.getId());
 		Log.info("Criteria NOT Setisfy For Roles Is :"+unAccptedRoleInCriteriaList.size()+" For Patient :" +sortedPatientInSemester2.getId());

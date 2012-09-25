@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.ui.FlexTable;
 
@@ -9,6 +11,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 	// private String headerStyle;
 	// private String selectedStyle;
 	private List<PatientInSemesterData> patientInSemesterDatas;
+	private int lastSelectedRowIndex = 1;
 
 	// private RoleAssignmentView.Delegate delegate;
 
@@ -37,8 +40,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 
 	}
 
-	public void setSource(List<PatientInSemesterData> patientInSemesterDatas,
-			String[] headers) {
+	public void setSource(List<PatientInSemesterData> patientInSemesterDatas, String[] headers) {
 
 		// this.delegate = delegate;
 		for (int i = this.getRowCount(); i > 0; i--) {
@@ -70,11 +72,9 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		int rows = patientInSemesterDatas.size();
 		PatientInSemesterData patientInSemesterData;
 
-		for (int i = 0; i < rows; i++) {
+		for (int i = 0; i < rows; i++,row++) {
 			patientInSemesterData = patientInSemesterDatas.get(i);
-			patientInSemesterData
-					.setRowSetColor((i % 2 == 0) ? "flexTableEvenRow"
-							: "flexTableOddRow");
+			patientInSemesterData.setRowSetColor((i % 2 == 0) ? "flexTableEvenRow" : "flexTableOddRow");
 			this.setText(row, 0, patientInSemesterData.name);
 			// this.setWidget(row, 1, patientInSemesterData.acceptedImage);
 			this.setWidget(row, 1, patientInSemesterData.acceptedIconBtn);
@@ -84,15 +84,21 @@ public class PatientInSemesterFlexTable extends FlexTable {
 			
 			// Module 3 Task B
 			this.setWidget(row, 4, patientInSemesterData.deleteButton);
-			this.getRowFormatter().addStyleName(row, "flexTableRow");		
+			//			this.getRowFormatter().addStyleName(row, "flexTableRow");
+			//			this.getCellFormatter().addStyleName(row, 0, patientInSemesterData.getRowSetColor());
 
-			for (int j = 0; j < headers.length; j++) {
-			this.getCellFormatter().addStyleName(row, j,
-					patientInSemesterData.getRowSetColor());
-			}
+//			for (int j = 0; j < headers.length; j++) {
+				//				RowFormatter rowFormatter = new RowFormatter();
+				this.getRowFormatter().addStyleName(row, patientInSemesterData.getRowSetColor());
+
+				//				this.setRowFormatter(rowFormatter);
+				//				this.getCellFormatter().addStyleName(row, j, patientInSemesterData.getRowSetColor());
+
+				//				this.getCellFormatter().addStyleName(row,j, "flexTableRow");
+//			}
 			// Module 3 Task B
 
-			row++;
+		//	row++;
 		}
 
 		applyTableStyle();
@@ -106,8 +112,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		this.getRowFormatter().addStyleName(0, "flexTableHeader");
 		// this.getColumnFormatter().addStyleName(0, "flexTableFirstColumn");
 		// this.getColumnFormatter().addStyleName(3, "flexTableLastColumn");
-		this.getCellFormatter()
-				.addStyleName(0, 0, "flexTableFirstColumnHeader");
+		this.getCellFormatter().addStyleName(0, 0, "flexTableFirstColumnHeader");
 		this.getCellFormatter().addStyleName(0, 1, "flexTableColumnHeader");
 		this.getCellFormatter().addStyleName(0, 2, "flexTableColumnHeader");		
 		// Module 3 Task B
@@ -168,15 +173,13 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		return patientInSemesterDatas;
 	}
 
-	public void setPatientInSemesterDatas(
-			List<PatientInSemesterData> patientInSemesterDatas) {
+	public void setPatientInSemesterDatas(List<PatientInSemesterData> patientInSemesterDatas) {
 		this.patientInSemesterDatas = patientInSemesterDatas;
 	}
 
 	public void setNavigationButtonEnable(boolean enabled) {
 		Log.info("Check for Button");
-		if (this.patientInSemesterDatas != null
-				&& this.patientInSemesterDatas.size() > 0) {
+		if (this.patientInSemesterDatas != null && this.patientInSemesterDatas.size() > 0) {
 			int rows = this.patientInSemesterDatas.size();
 			PatientInSemesterData patientInSemesterData;
 
@@ -187,4 +190,24 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		}
 	}
 
+	public PatientInSemesterProxy onRowClick(int selectedRow) {
+
+		PatientInSemesterData patientInSemesterData = null;
+		//		Cell selectedCell = this.getCellForEvent(event);		
+		if (selectedRow > 0) {
+			patientInSemesterData = patientInSemesterDatas.get(this.lastSelectedRowIndex - 1);
+			Log.info("lastSelectedRowIndex is : " + lastSelectedRowIndex);
+
+			this.getRowFormatter().removeStyleName(this.lastSelectedRowIndex, "flexTableSelectedRow");
+			this.getRowFormatter().addStyleName(this.lastSelectedRowIndex, patientInSemesterData.getRowSetColor());
+
+			this.lastSelectedRowIndex = selectedRow;
+			patientInSemesterData = patientInSemesterDatas.get(this.lastSelectedRowIndex - 1);
+			Log.info("lastSelectedRowIndex is : " + lastSelectedRowIndex);
+			this.getRowFormatter().addStyleName(this.lastSelectedRowIndex, "flexTableSelectedRow");
+		}
+
+		return patientInSemesterData.getPatientInSemesterProxy();
+
+	}
 }

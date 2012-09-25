@@ -2968,23 +2968,32 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		// E Highlight onViolation		
 		Log.info("Call addAdvSeaBasicButtonClicked");		
 		switch (possibleFields) {
-		case BMI:
+		case BMI:{
 			shownValue = constants.bmi()
 					+ " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
 							.render(comparison) + " " + value;
-			break;
-		case HEIGHT:
+			break;}
+		case HEIGHT:{
 			shownValue = constants.height()
 					+ " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
 							.render(comparison) + " " + value + "cm";
-			break;
-		case WEIGHT:
+			break;}
+		case WEIGHT:{
 			shownValue = constants.weight()
 					+ " "
 					+ new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC)
 							.render(comparison) + " " + value + "kg";
+			break;}
+		case AGE:{
+			shownValue = constants.age() + " " + new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value + "years";
+			break;}
+		case GENDER:{
+			shownValue = constants.gender() + " " + new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC).render(comparison) + " " 
+					+ value;
+			break;}
 		}
 		AdvancedSearchCriteriaRequest searchCriteriaRequest = requests
 				.advancedSearchCriteriaRequest();

@@ -2638,6 +2638,10 @@ background: rgb(201,201,253)  ;
 	vertical-align: top;
 }
 
+.flexTableEvenRow:hover {
+	background: #f1b532;
+}
+
 .flexTableOddRow {
 	background: #eee;
 	border: 0;
@@ -2645,6 +2649,20 @@ background: rgb(201,201,253)  ;
 	padding: 4px 10px;
 	overflow: hidden;
 	vertical-align: top;
+}
+
+.flexTableOddRow:hover {
+	background: #f1b532;
+}
+
+.flexTableSelectedRow {
+  background: #d3ae50;
+  color: #000;
+}
+
+.flexTableLabel{
+	overflow: hidden;
+	height: 20px !important;
 }
 
 .flexTableRow{

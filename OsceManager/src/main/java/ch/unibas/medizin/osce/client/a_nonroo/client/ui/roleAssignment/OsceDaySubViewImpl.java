@@ -262,6 +262,8 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		headerPanel.setWidth("500px");
 		
 		final HorizontalPanel iconImagePanel = new HorizontalPanel();
+		iconImagePanel.addStyleName("rightIcon");
+		
 		Label label = new Label(title);
 		
 		headerPanel.sinkEvents(Event.ONCLICK);
@@ -346,7 +348,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		simpleDiscloserPanel.addOpenHandler(openHandler);
 		simpleDiscloserPanel.addCloseHandler(closeHandler);
 				
-		closeHandler.onClose(null);
+//		closeHandler.onClose(null);
 		simpleDiscloserPanel.setHeader(panel);	
 
 //		return panel;

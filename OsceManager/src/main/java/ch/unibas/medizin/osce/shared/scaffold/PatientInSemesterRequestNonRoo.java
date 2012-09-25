@@ -18,7 +18,8 @@ public interface PatientInSemesterRequestNonRoo extends RequestContext {
 	abstract Request<Long> countPatientinSemesterByAdvancedCriteria(
 			Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
 
-	abstract Request<List<PatientInSemesterProxy>> findPatientInSemesterByAdvancedCriteria(
-			Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
+	abstract Request<List<PatientInSemesterProxy>> findPatientInSemesterByAdvancedCriteria(Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
+
+	abstract Request<List<PatientInSemesterProxy>> findPatientInSemesterByOsceDayAdvancedCriteria(Long semesterId,Long osceDayId,Boolean useOsceDay, List<AdvancedSearchCriteriaProxy> searchCriteria);
 
 }

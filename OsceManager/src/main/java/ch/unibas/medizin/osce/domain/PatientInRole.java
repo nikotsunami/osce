@@ -42,18 +42,60 @@ public class PatientInRole {
  	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInRole")
      private Set<Assignment> assignments = new HashSet<Assignment>();
  	// E Module10 Create plans
-
+ 	
+ // module 3 bug {
+ 	 public static Integer getTotalCountPatientAssignInRole(Long osceId,Long patientInSemesterId){
+     	Log.info("Inside getTotalTimePatientAssignInRole with OsceDay Id" + osceId + " and Semester Id :" + patientInSemesterId);
+     	EntityManager em = entityManager();
+     	/*String query="select count(pir) from PatientInRole as pir,OsceSequence as os,OscePost as op,Osce as osc where pir.oscePost=op.id and op.osceSequence=os.id and os.osceDay.osce=osc.id" +
+     		" and pir.patientInSemester="+patientInSemesterId +" and osc.id="+osceId;*/
+     	String query="select count(pir) from PatientInRole as pir where pir.patientInSemester="+patientInSemesterId;
+         TypedQuery<Long> q = em.createQuery(query, Long.class);
+         Log.info("Query Is " + query);
+         Integer result = q.getSingleResult() != null && q.getSingleResult() != 0 ? q.getSingleResult().intValue() : 0 ;
+     	return result;
+     }
+ 	 
+ // module 3 bug }
+// module 3 bug {
     private static List<PatientInRole> getPatientIRoleList(Long osceId) {
-        List<PatientInRole> patientInRoleList = findAllPatientInRoles();
-        for (Iterator<PatientInRole> iterator = patientInRoleList.iterator(); iterator.hasNext(); ) {
+//        List<PatientInRole> patientInRoleList = findAllPatientInRoles();
+//        for (Iterator<PatientInRole> iterator = patientInRoleList.iterator(); iterator.hasNext(); ) {
+//            PatientInRole patientInRole = (PatientInRole) iterator.next();
+//            if (patientInRole.getOscePost() !=null && patientInRole.getOscePost().getOsceSequence().getOsceDay().getOsce().getId().longValue() == osceId.longValue() ) {                
+//            	PatientInSemester patientInSemester = patientInRole.getPatientInSemester();
+//            	patientInRole.remove();
+//            }
+//        }
+
+
+    	String query="select pir from PatientInRole as pir where pir.oscePost.osceSequence.osceDay.osce.id="+osceId;
+    	    	
+    	        TypedQuery<PatientInRole> q = PatientInRole.entityManager().createQuery(query, PatientInRole.class);
+    	        Log.info("Query Is " + query);
+    	        List<PatientInRole> patientInRoles=  q.getResultList();
+    	        for (Iterator<PatientInRole> iterator = patientInRoles.iterator(); iterator	.hasNext();) {
             PatientInRole patientInRole = (PatientInRole) iterator.next();
-            if (patientInRole.getOscePost().getOsceSequence().getOsceDay().getOsce().getId().longValue() == osceId.longValue()) {
-                patientInRole.remove();
+					
+					Log.info("pir Is " + patientInRole.getId());
+					Log.info("pis Is " + patientInRole.patientInSemester.getId());
+					
+					Integer count=getTotalCountPatientAssignInRole(osceId,patientInRole.getPatientInSemester().getId());
+			    	Log.info("Number of PatientIn Role Is " +count);
+			    	Boolean flag =false;
+			    	if(count==2){
+			    		flag=deletPatientInRoleAlongWithPostNull(patientInRole);
+			    	}
+			    	else{
+			    		flag=deletPatientInRoleNormally(patientInRole);
             }
+			    	
+					
         }
+    	
         return null;
     }
-
+ // module 3 bug }
     public static Integer removePatientInRoleByOSCE(Long osceId) {
         getPatientIRoleList(osceId);
         return 0;
