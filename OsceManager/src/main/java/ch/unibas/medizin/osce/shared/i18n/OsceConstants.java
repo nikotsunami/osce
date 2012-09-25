@@ -830,6 +830,48 @@ public interface OsceConstants extends Constants {
 
 	public String success();
 
+	public String summoningsAll();
+
+	public String summoningsAssignment();
+
+	public String summoningsAssignmentFormat();
+
+	public String summoningsAssignmentFormatHead();
+
+	public String summoningsFromName();
+
+	public String summoningsLoadTpl();
+
+	public String summoningsMailExa();
+
+	public String summoningsMailSp();
+
+	public String summoningsOnlyIfExaminer();
+
+	public String summoningsPlease();
+
+	public String summoningsPrintExa();
+
+	public String summoningsPrintSp();
+
+	public String summoningsRestoreTpl();
+
+	public String summoningsSaveTpl();
+
+	public String summoningsSelected();
+
+	public String summoningsSend();
+
+	public String summoningsToName();
+
+	public String summoningsTpl();
+
+	public String summoningsVarAssignment();
+
+	public String summoningsVarFrom();
+
+	public String summoningsVarTo();
+
 	public String surveyImport();
 
 	public String table_item();

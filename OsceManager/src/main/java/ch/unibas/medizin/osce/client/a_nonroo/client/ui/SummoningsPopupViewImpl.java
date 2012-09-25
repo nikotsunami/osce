@@ -8,8 +8,12 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.HeadElement;
+import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -51,6 +55,39 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
+	
+	@UiField
+	HeadingElement please;
+	
+	@UiField
+	SpanElement mailTemplate;
+	
+	@UiField
+	SpanElement summoningsToName;
+	
+	@UiField
+	SpanElement summoningsFromName;
+	
+	@UiField
+	SpanElement summoningsAssignment;
+	
+	@UiField
+	SpanElement varFrom;
+	
+	@UiField
+	SpanElement varTo;
+	
+	@UiField
+	SpanElement varAssignment;
+	
+	@UiField
+	HeadingElement onlyIfExaminer;
+	
+	@UiField
+	SpanElement assignmentFormatHead;
+	
+	@UiField
+	SpanElement assignmentFormat;
 	
 	@UiField(provided = true)
 	RichTextArea message;
@@ -111,8 +148,25 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 		this.addStyleName("printPopupPanel");
 		init();
 		add(BINDER.createAndBindUi(this));
+		OsceConstants constants = GWT.create(OsceConstants.class);
 		
+		mailTemplate.setInnerText(constants.summoningsTpl());
+		sendMailButton.setText(constants.summoningsSend());
+		saveTemplateButton.setText(constants.summoningsSaveTpl());
+		loadTemplateButton.setText(constants.summoningsLoadTpl());
+		restoreTemplateButton.setText(constants.summoningsRestoreTpl());
+		please.setInnerText(constants.summoningsPlease());
 		
+		varAssignment.setInnerText(constants.summoningsVarAssignment());
+		varTo.setInnerText(constants.summoningsVarTo());
+		varFrom.setInnerText(constants.summoningsVarFrom());
+		
+		summoningsAssignment.setInnerText(constants.summoningsAssignment());
+		summoningsToName.setInnerText(constants.summoningsToName());
+		summoningsFromName.setInnerText(constants.summoningsFromName());
+		onlyIfExaminer.setInnerText(constants.summoningsOnlyIfExaminer());
+		assignmentFormatHead.setInnerText(constants.summoningsAssignmentFormatHead());
+		assignmentFormat.setInnerText(constants.summoningsAssignmentFormat());
 	}
 
 	public String[] getPaths() {

@@ -109,7 +109,7 @@
 					font-family: sans-serif;
 					vertical-align: middle; 
 					color: black;">
-			Mail Template 
+			<span ui:field="mailTemplate"></span>
 			
 				<my:IconButton ui:field="closeButton" icon="close" addStyleNames="{style.closeButton}"></my:IconButton>
 			
@@ -122,7 +122,7 @@
 <!-- 			<div style="margin-bottom: 7px;"> -->
 								
 					<g:ListBox ui:field="semesterList"  addStyleNames="{style.buttonStyle}{style.right}" ></g:ListBox>
-					<g:Button ui:field="loadTemplateButton"  addStyleNames="{style.buttonStyle}{style.right}" >Load Template</g:Button>
+					<my:IconButton ui:field="loadTemplateButton" icon="open" addStyleNames="{style.buttonStyle}{style.right}" />
 				
 <!-- 			</div> -->
 			</g:HorizontalPanel>
@@ -135,25 +135,31 @@
 				<g:RichTextArea height="250px" ui:field="message" />
 			</div>
 			<div >
-				<g:Button ui:field="sendMailButton" addStyleNames="{style.buttonStyle}" >Mail</g:Button>
-				<g:Button ui:field="saveTemplateButton" addStyleNames="{style.buttonStyle}" >Save Template</g:Button>
-				<g:Button ui:field="restoreTemplateButton" addStyleNames="{style.buttonStyle}" >Restore Template</g:Button>
+				<my:IconButton ui:field="sendMailButton" icon="arrowreturnthick-1-e" addStyleNames="{style.buttonStyle}" />
+				<my:IconButton ui:field="saveTemplateButton" icon="disk" addStyleNames="{style.buttonStyle}" />
+				<my:IconButton ui:field="restoreTemplateButton" icon="arrowreturnthick-1-w" addStyleNames="{style.buttonStyle}" />
 			</div>
 			<div>
-				<h4 style="color: orange;">Please do not change or remove following
-					variables.</h4>
-				[toName] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Full name of receiepent
-				<br />
-				[assignment] = Assignment for Standardized Patient or Examiner
-				<br />
-				[fromName] &nbsp;= Name of the mail sender
-				<br />
-				<br />
+				<h4 style="color: orange;" ui:field="please"></h4>
+				<table>
+					<tr>
+						<td><span ui:field="varTo"></span></td>
+						<td><span ui:field="summoningsToName"></span></td>
+					</tr>
+					<tr>
+						<td><span ui:field="varFrom"></span></td>
+						<td><span ui:field="summoningsFromName"></span></td>
+					</tr>
+					<tr>
+						<td><span ui:field="varAssignment"></span></td>
+						<td><span ui:field="summoningsAssignment"></span></td>
+					</tr>
+				</table>
 				
-				<b>Assignment Display Format :-</b><br/>
-				[Date]    [Start Time]     [End Time]      [Role]     [Room Number]
+				<b><span ui:field="assignmentFormatHead"></span></b><br/>
+				<span ui:field="assignmentFormat"></span>
 				<br/>
-				<h4 style="color: orange;">* Room Number will appear only in Examiner case.</h4>
+				<h4 style="color: orange;" ui:field="onlyIfExaminer"></h4>
 
 			</div>
 		</g:HTMLPanel>
