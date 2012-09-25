@@ -10279,3 +10279,84 @@ INSERT INTO student SET email = '129@osce.ch', gender = 1, name = 'Name 129', pr
 INSERT INTO student_osces SET is_enrolled = 1, version = 0, osce = 1, student = 129;
 INSERT INTO student SET email = '130@osce.ch', gender = 0, name = 'Name 130', pre_name = 'Vorname 130', version = 0;
 INSERT INTO student_osces SET is_enrolled = 1, version = 0, osce = 1, student = 130;
+
+
+INSERT INTO `checklist_topic` (`id`,`description`,`sort_order`,`title`,`version`,`check_list`) VALUES (1,'',1,'Kurzanamnese',1,15);
+INSERT INTO `checklist_topic` (`id`,`description`,`sort_order`,`title`,`version`,`check_list`) VALUES (2,'',1,'Gesamteindruck Anamanese',0,15);
+INSERT INTO `checklist_topic` (`id`,`description`,`sort_order`,`title`,`version`,`check_list`) VALUES (3,'',2,'Zusammenfassung',0,15);
+INSERT INTO `checklist_topic` (`id`,`description`,`sort_order`,`title`,`version`,`check_list`) VALUES (4,'',3,'Kommunikation',0,15);
+INSERT INTO `checklist_topic` (`id`,`description`,`sort_order`,`title`,`version`,`check_list`) VALUES (5,'',4,'Urteil Schauspielpatient',0,15);
+INSERT INTO `checklist_topic` (`id`,`description`,`sort_order`,`title`,`version`,`check_list`) VALUES (6,'',5,'Gesamteindruck zum Berechnen der Bestehensgrenze',0,15);
+
+
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (1,'','Erfragt der Müdigkeit (beides = ja)',1,1,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (4,'','Erfragt Auswirkungen der Müdigkeit im Alltag',1,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (5,'','Erfragt weitere Beschwerden (mind. 1 = ja)',2,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (6,'','Erfragt frühere Erkrankung(en)',3,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (7,'','Erfragt Sucht-Anamnese (beides = ja)',4,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (10,'','Erfragt NSAID''s Medikamente',5,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (12,'','Zusammenfassung der erhobenen Anamnese genügend',0,0,3);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (13,'','Gesamteindruck Anamnese',0,0,2);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (14,'','Anamnese gibt Hinweise auf Anämie',1,0,3);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (15,'','Gesamteindruck zum Berechnen der Bestehensgrenze',0,0,6);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (16,'','Erfragt Appetit- und Gewichtsveränderung (beides = ja)',0,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (17,'','Erfragt Fieber, Nachtschweiss, Infektion (mind. 2 = ja; 1 = teils)',0,0,1);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (18,'','Gesamteindruck: Drückt sich verständlich aus, zeigt Respekt und Einfühlungsvermögen',0,0,4);
+INSERT INTO `checklist_question` (`id`,`instruction`,`question`,`sequence_number`,`version`,`check_list_topic`) VALUES (19,'','SP empfand das Verhalten des/der KandidatIn mir gegenüber als...',0,0,5);
+
+
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (1,NULL,'Nein','0',0,1);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (3,NULL,'Ja','2',0,1);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (8,NULL,'Ja','0',0,5);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (9,NULL,'Nein','1',0,5);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (10,NULL,'Ja','0',0,6);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (14,NULL,'Nein','1',0,6);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (15,NULL,'Ja','0',0,7);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (16,NULL,'Nein','1',0,7);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (17,NULL,'Ja','0',0,10);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (18,NULL,'Nein','1',0,10);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (19,NULL,'Ja','0',0,12);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (21,NULL,'Schlecht','0',0,13);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (22,NULL,'Ungenügend','1',0,13);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (23,NULL,'Genügend','2',0,13);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (24,NULL,'Gut','3',0,13);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (25,NULL,'Sehr Gut','4',0,13);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (26,NULL,'Ja','0',0,14);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (28,NULL,'Sehr Schlecht','0',0,15);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (29,NULL,'Schlecht','1',0,15);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (31,NULL,'Knapp Ungenügend','2',0,15);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (32,NULL,'Knapp Genügend','3',0,15);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (33,NULL,'Gut','4',0,15);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (34,NULL,'Sehr Gut','5',0,15);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (35,NULL,'Ja','0',0,4);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (36,NULL,'Nein','1',0,4);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (37,NULL,'Nein','1',0,12);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (38,NULL,'Nein','1',0,14);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (39,NULL,'Nein','1',0,16);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (40,NULL,'Ja','0',0,16);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (41,NULL,'Ja','0',0,17);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (42,NULL,'Nein','1',0,17);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (43,NULL,'Schlecht','0',0,18);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (44,NULL,'Ungenügend','1',0,18);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (45,NULL,'Genügend','2',0,18);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (46,NULL,'Gut','3',0,18);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (47,NULL,'Unangemessen','0',0,19);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (48,NULL,'Eher Unangemessen','1',0,19);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (49,NULL,'Neutral','2',0,19);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (50,NULL,'Eher Angemessen','3',0,19);
+INSERT INTO `checklist_option` (`id`,`name`,`option_name`,`value`,`version`,`checklist_question`) VALUES (51,NULL,'Angemessen','4',0,19);
+
+
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (1,'Dauer',0,1);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (2,'Entwicklung',0,1);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (3,'Thoraxschmerz',0,5);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (4,'Dyspnoe',0,5);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (5,'Nikotin',0,7);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (6,'Alkohol',0,7);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (7,'Körpergewicht (kg)',0,16);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (8,'Zeitraum',0,16);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (9,'Fieber',0,17);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (10,'Nachtschweiss',0,17);
+INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (11,'Infektion',0,17);
+
+
