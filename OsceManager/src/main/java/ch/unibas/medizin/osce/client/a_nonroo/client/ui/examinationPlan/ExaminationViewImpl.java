@@ -226,7 +226,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 					if(examInfoPopupView.getExaminerSuggestionBox().getValue()==null || examInfoPopupView.getExaminerSuggestionBox().getValue()=="")
 					{
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
-						dialogBox.showConfirmationDialog(constants.examinerNotNull());
+						dialogBox.showConfirmationDialog(constants.warningExaminer());
 					}
 					else
 						delegate.saveExaminer(examInfoPopupView.getExaminerSuggestionBox().getValue(),examinationViewImpl);
@@ -334,8 +334,8 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 					//validate Entered Data
 					if(popupView.getExaminerSuggestionBox().getValue()=="" || popupView.getExaminerSuggestionBox().getValue()==null || popupView.getEndTimeListBox().getValue()==null || popupView.getEndTimeListBox().getValue().toString()=="")
 					{
-						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
-						dialogBox.showConfirmationDialog("Examiner name and End Time Cannot be null");
+						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(constants.warningExaminerTime());
 						return;
 					}
 					

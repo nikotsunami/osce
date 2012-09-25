@@ -23,7 +23,7 @@
 		<g:SuggestBox ui:field="examinerSuggestionBox" visible="false"></g:SuggestBox>
 		<g:Label ui:field="examinerNameValue" visible="false" addStyleNames="{style.label}"></g:Label>
 		<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>
-		<g:Button ui:field="saveBtn" visible="false"></g:Button>
+		<my:IconButton ui:field="saveBtn" icon="disk" visible="false" />
 	</g:HorizontalPanel>
 
 	<g:HorizontalPanel spacing="10" width="100%">
@@ -43,8 +43,8 @@
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel spacing="10" horizontalAlignment="center" width="100%">
-		<g:Button ui:field="okButton" visible="false"></g:Button>
-		<g:Button ui:field="cancelButton" visible="false"></g:Button>
+		<my:IconButton ui:field="okButton" icon="closethick" visible="false" />
+		<my:IconButton ui:field="cancelButton" icon="closethick" visible="false" />
 	</g:HorizontalPanel>
 	</g:HTMLPanel>
 </g:VerticalPanel>

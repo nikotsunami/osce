@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -124,12 +125,11 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 					
 				}
 			});
-			
+			OsceConstantsWithLookup enumConstants = GWT.create(OsceConstantsWithLookup.class);
 			
 			//setDAta
-			popupView.getNameValue().setText(oscePostProxy.getOscePostBlueprint().getPostType().toString());
+			popupView.getNameValue().setText(enumConstants.getString(oscePostProxy.getOscePostBlueprint().getPostType().name()));
 			popupView.getStartTimeValue().setText(oscePostProxy.getStandardizedRole().getRoleTopic().getName());
-			
 		}
 		
 		((PopupViewImpl)popupView).show();

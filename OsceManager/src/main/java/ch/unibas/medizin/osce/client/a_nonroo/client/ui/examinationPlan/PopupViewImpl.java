@@ -83,7 +83,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	});
 	
 	@UiField
-	Button okButton;
+	IconButton okButton;
 	
 	@UiField
 	Button cancelButton;
@@ -229,11 +229,9 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeListBox.removeFromParent();
 		endTimeValue.setVisible(true);
 		endTimeLbl.setText(constants.circuitEndTime());
-		
-		
 	}
-	public void createExaminerAssignPopupView()
-	{
+	
+	public void createExaminerAssignPopupView() {
 		
 		//enable
 		examinerNameLbl.setVisible(true);
@@ -251,6 +249,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeLbl.setText(constants.circuitEndTime());
 		
 		okButton.setText(constants.okBtn());
+		okButton.setIcon("check");
 		cancelButton.setText(constants.cancel());
 		
 		//set visible false

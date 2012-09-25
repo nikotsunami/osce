@@ -346,7 +346,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			//create post which contains student,sp and examiners slot.
 			final OscePostView oscePostView=new OscePostViewImpl();
-			oscePostView.getOscePostLbl().setText("Post " +oscePostProxy.getSequenceNumber());
+			oscePostView.getOscePostLbl().setText(constants.circuitStation() + " " +oscePostProxy.getSequenceNumber());
 			oscePostView.setOscePostProxy(oscePostProxy);
 			oscePostView.getOscePostPanel().addStyleName("oscePost-bg");
 			if(i==0)
@@ -414,7 +414,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							
 							
 							if(assignmentProxy.getSequenceNumber() !=null)
-								studentView.getStudentLbl().setText("S"+NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber()));
+								studentView.getStudentLbl().setText(constants.exaPlanStudShort()+NumberFormat.getFormat("000").format(assignmentProxy.getSequenceNumber()));
 							
 							
 							if(j==response.size()-1 && oscePostProxy.getId()==1)
@@ -775,7 +775,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									if(assignmentProxy.getSequenceNumber() != null)
 									{
 										
-										examinationView.getExaminerLbl().setText("E"+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
+										examinationView.getExaminerLbl().setText(constants.exaPlanExaShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
 									}
 									
 									oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
@@ -910,7 +910,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									spView.getSpPanel().setWidth("45px");
 									if(assignmentProxy.getSequenceNumber() != null)
 									{
-										spView.getSpLbl().setText("SP"+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
+										spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
 										
 									}
 									
@@ -930,7 +930,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									spView.getSpPanel().setWidth("45px");
 									if(assignmentProxy.getSequenceNumber() != null)
 									{
-										spView.getSpLbl().setText("SP"+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
+										spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
 										
 									}
 									
@@ -950,7 +950,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								spView.getSpPanel().setHeight(spSlotLength+"px");
 								if(assignmentProxy.getSequenceNumber() != null)
 								{
-									spView.getSpLbl().setText("SP"+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
+									spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
 								}
 								
 								oscePostView.getSpSlotsVP().insert(spView, oscePostView.getSpSlotsVP().getWidgetCount());
@@ -1084,7 +1084,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 				//create osce post view				
 				final OscePostView oscePostView=new OscePostViewImpl();
-				oscePostView.getOscePostLbl().setText(constants.breakPost());
+				oscePostView.getOscePostLbl().setText(constants.exaPlanBreakPost());
 				
 				oscePostView.getOscePostPanel().addStyleName("oscePost-bg");
 				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
@@ -1121,7 +1121,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							
 							if(response.get(k).getSequenceNumber() != null)
 							{
-								spView.getSpLbl().setText("SP"+NumberFormat.getFormat("00").format(response.get(k).getSequenceNumber()));
+								spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(response.get(k).getSequenceNumber()));
 								
 							}
 							
@@ -1298,7 +1298,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		else
 		{	
 			sequenceNumber=view.getPreviousAssignmentProxy().getSequenceNumber()+1;
-			view.getExaminerLbl().setText("E"+sequenceNumber);
+			view.getExaminerLbl().setText(constants.exaPlanExaShort()+sequenceNumber);
 			assignmentProxy=assignmentRequest.edit(view.getAssignmentProxy());
 		}
 		
@@ -1559,7 +1559,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						if(assignmentProxy.getSequenceNumber() != null)
 						{
 							
-							examinationView.getExaminerLbl().setText("E"+assignmentProxy.getSequenceNumber().toString());
+							examinationView.getExaminerLbl().setText(constants.exaPlanExaShort()+assignmentProxy.getSequenceNumber().toString());
 						}
 						
 						oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
@@ -1716,12 +1716,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				if(response)
 				{
 				dialogBox =new MessageConfirmationDialogBox(constants.success());
-				dialogBox.showConfirmationDialog(constants.autoSPSuccess());
+				dialogBox.showConfirmationDialog(constants.exaPlanSpSuccess());
 				}
 				else
 				{
 					dialogBox =new MessageConfirmationDialogBox(constants.failure());
-					dialogBox.showConfirmationDialog(constants.autoSPFailure());
+					dialogBox.showConfirmationDialog(constants.exaPlanSpFailure());
 				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
 					
@@ -1753,12 +1753,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				if(response)
 				{
 				dialogBox =new MessageConfirmationDialogBox(constants.success());
-				dialogBox.showConfirmationDialog(constants.autoStudentSuccess());
+				dialogBox.showConfirmationDialog(constants.exaPlanStudentSuccess());
 				}
 				else
 				{
 					dialogBox =new MessageConfirmationDialogBox(constants.failure());
-					dialogBox.showConfirmationDialog(constants.autoStudentFailure());
+					dialogBox.showConfirmationDialog(constants.exaPlanStudentFailure());
 				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
 					
