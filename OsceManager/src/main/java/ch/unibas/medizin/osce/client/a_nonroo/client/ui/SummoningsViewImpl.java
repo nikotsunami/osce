@@ -146,10 +146,10 @@ public class SummoningsViewImpl extends Composite implements SummoningsView, Men
 		
 		lblExaminor.setText(constants.examiner());
 		lblSP.setText(constants.standardizedPatient());
-		rbAllExaminor.setText(constants.summoningsAll());
-		rbAllSP.setText(constants.summoningsAll());
-		rbSelectedExaminor.setText(constants.summoningsSelected());
-		rbSelectedSP.setText(constants.summoningsSelected());
+		rbAllExaminor.setText(constants.all());
+		rbAllSP.setText(constants.all());
+		rbSelectedExaminor.setText(constants.selected());
+		rbSelectedSP.setText(constants.selected());
 		btnSendMailSP.setText(constants.summoningsMailSp());
 		btnPrintCopySP.setText(constants.summoningsPrintSp());
 		btnSendMailExaminor.setText(constants.summoningsMailExa());

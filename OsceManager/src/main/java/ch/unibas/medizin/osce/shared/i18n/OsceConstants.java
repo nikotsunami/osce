@@ -216,7 +216,13 @@ public interface OsceConstants extends Constants {
 
 	public String confirmationGoAhead();
 
+	public String confirmationMailSent();
+
 	public String confirmationRoomAssigned();
+
+	public String confirmationTplRestore();
+
+	public String confirmationTplSaved();
 
 	public String confirmationWhenStatusIsChangingFormClosedToFix();
 
@@ -303,6 +309,16 @@ public interface OsceConstants extends Constants {
 	public String eosceerrormsg();
 
 	public String error();
+
+	public String errorInvalidTplPath();
+
+	public String errorMailSend();
+
+	public String errorTplNotFound();
+
+	public String errorTplRestore();
+
+	public String errorTplSave();
 
 	public String examinationSchedule();
 
@@ -764,6 +780,8 @@ public interface OsceConstants extends Constants {
 
 	public String select();
 
+	public String selected();
+
 	public String selectLanguage();
 
 	public String selectRoleTemplate();
@@ -830,8 +848,6 @@ public interface OsceConstants extends Constants {
 
 	public String success();
 
-	public String summoningsAll();
-
 	public String summoningsAssignment();
 
 	public String summoningsAssignmentFormat();
@@ -839,6 +855,8 @@ public interface OsceConstants extends Constants {
 	public String summoningsAssignmentFormatHead();
 
 	public String summoningsFromName();
+
+	public String summoningsGeneratePdf();
 
 	public String summoningsLoadTpl();
 
@@ -857,8 +875,6 @@ public interface OsceConstants extends Constants {
 	public String summoningsRestoreTpl();
 
 	public String summoningsSaveTpl();
-
-	public String summoningsSelected();
 
 	public String summoningsSend();
 
@@ -974,7 +990,11 @@ public interface OsceConstants extends Constants {
 
 	public String warningScheduleNotPostponed();
 
+	public String warningSelectExaminer();
+
 	public String warningSelectSequence();
+
+	public String warningSelectSp();
 
 	public String warningSplitting();
 
@@ -983,6 +1003,8 @@ public interface OsceConstants extends Constants {
 	public String warningStartTime();
 
 	public String warningStatusNotChanged();
+
+	public String warningTemplateNotFound();
 
 	public String warningTimeFormat();
 
