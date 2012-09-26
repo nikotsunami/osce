@@ -322,7 +322,8 @@ public class RoomMaterialsViewImpl extends Composite implements
 	}
 
 	public void setDetailPanel(boolean isDetailPlace) {
-		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
 		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
 	
 		/*splitLayoutPanel.animate(150000);
