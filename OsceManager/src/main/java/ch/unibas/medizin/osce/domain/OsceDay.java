@@ -392,7 +392,9 @@ public class OsceDay {
 				//OsceDay osceDay=osceDayIterator.next();
 				List<OsceSequence> osceSequences=OsceSequence.findOsceSequenceByOsceDay(osceDayProxy.getId());
 				Log.info("~~Total "+ osceSequences.size() + " Osce Sequence for Osce Day" + osceDayProxy.getId());
-				
+				OsceSequence newOsceSequence;
+				OscePost newOscePost;
+				Course newCourse;
 				if(osceSequences.size()>0)
 				{				
 						Log.info("New Osce Day Add");						
@@ -419,7 +421,7 @@ public class OsceDay {
 						newOsceday.lunchBreakAfterRotation=osceDayProxy.getLunchBreakAfterRotation();
 						newOsceday.persist();
 						
-						OsceSequence newOsceSequence=new OsceSequence();
+						newOsceSequence=new OsceSequence();
 						newOsceSequence.setLabel(osceSequence.getLabel());
 						newOsceSequence.setNumberRotation(1);
 						newOsceSequence.setOsceDay(newOsceday);
@@ -432,7 +434,7 @@ public class OsceDay {
 							while(oscePostIterator.hasNext())
 							{
 								OscePost oscePost=oscePostIterator.next();
-								OscePost newOscePost=new OscePost();
+								newOscePost=new OscePost();
 								newOscePost.setSequenceNumber(oscePost.getSequenceNumber());
 								newOscePost.setOscePostBlueprint(oscePost.getOscePostBlueprint());
 								newOscePost.setOsceSequence(newOsceSequence);
@@ -448,14 +450,38 @@ public class OsceDay {
 							while(courseIterator.hasNext())
 							{
 								Course course=courseIterator.next();
-								Course newCourse=new Course();
+								newCourse=new Course();
 								newCourse.setColor(course.getColor());
 								newCourse.setOsce(course.getOsce());
 								newCourse.setOsceSequence(newOsceSequence);
 								newCourse.persist();								
 							}
-						}					
-				
+						}		
+						
+						// Add OscePostRoom
+						List<OscePost> oscePostsListforOscePostRoom=OscePost.findOscePostByOsceSequence(newOsceSequence.getId());
+						List<Course> coursesforOscePostRoom=Course.findCourseByOsceSequence(newOsceSequence.getId());
+						
+						if(oscePostsListforOscePostRoom.size()>0 && coursesforOscePostRoom.size()>0)							
+						{
+							Iterator<Course> courseIterator=coursesforOscePostRoom.iterator();
+							while(courseIterator.hasNext())
+							{
+								Iterator<OscePost> oscePostIterator=oscePostsListforOscePostRoom.iterator();
+								
+								Course course=courseIterator.next();
+								while(oscePostIterator.hasNext())
+								{
+									OscePost oscePost=oscePostIterator.next();
+									System.out.println("Course: " + course + "Post: " + oscePost);
+									OscePostRoom newOscePostRoom=new OscePostRoom();
+									newOscePostRoom.setCourse(course);
+									newOscePostRoom.setOscePost(oscePost);
+									newOscePostRoom.persist();
+								}
+							}
+						}
+						
 						try{					
 							updateTimesAfterRotationShift(osceDayProxy.getId(),newOsceday.getId());
 						}catch(Exception e)
