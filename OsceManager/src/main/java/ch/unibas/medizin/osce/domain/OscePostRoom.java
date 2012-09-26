@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import ch.unibas.medizin.osce.domain.Assignment;
+import ch.unibas.medizin.osce.shared.PostType;
+
 import java.util.HashSet;
 
 import javax.persistence.EntityManager;
@@ -177,11 +179,146 @@ public class OscePostRoom {
     public static List<OscePostRoom> findListOfOscePostRoomByOsce(Long osceId)
     {
     	EntityManager em = entityManager();
-    	String sql = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course IN " +"(SELECT id FROM Course AS c WHERE c.osceSequence.osceDay.osce = "+ osceId +" ) AND " +"opr.oscePost IN (SELECT id FROM OscePost AS op WHERE op.osceSequence.osceDay.osce = "+ osceId +") and opr.room is null";
+    	//String sql = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course IN " +"(SELECT id FROM Course AS c WHERE c.osceSequence.osceDay.osce = "+ osceId +" ) AND " +"opr.oscePost IN (SELECT id FROM OscePost AS op WHERE op.osceSequence.osceDay.osce = "+ osceId +") and opr.room is null";
+    	String sql = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course IN " +"(SELECT id FROM Course AS c WHERE c.osceSequence.osceDay.osce = "+ osceId +" ) AND " +"opr.oscePost IN (SELECT id FROM OscePost AS op WHERE op.osceSequence.osceDay.osce = "+ osceId +")  and opr.oscePost.oscePostBlueprint.postType <> 1 and opr.room is null";
     	//String sql = "select opr from OscePostRoom as opr join OscePost as op join OsceSequence as os join OsceDay as od join Course as c where opr.course=c.id and opr.oscePost=op.id and op.osceSequence=os.id and os.osceDay = od.id and od.osce= "+osceId;    	
     	//String sql = "SELECT o FROM OscePostRoom o WHERE o.room.id = " + roomId + " AND o.oscePost IN(SELECT os FROM OscePost AS os WHERE os.osceSequence.id = " + osceSequenceId +")";
     	System.out.println("~~QUERY String: " + sql.toString());
     	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);    	
     	return q.getResultList();
     }
+    
+ //spec bug sol
+    
+    public static Boolean insertRecordForDoublePost(Long osceid)
+    {
+    	try
+    	{
+    		Osce osce = Osce.findOsce(osceid);
+        	
+        	Iterator<OsceDay> osceDayItr = osce.getOsce_days().iterator();
+        	
+        	while (osceDayItr.hasNext())
+        	{
+        		OsceDay osceDay = osceDayItr.next();
+        		
+        		Iterator<OsceSequence> osceSeqItr = osceDay.getOsceSequences().iterator();
+        		
+        		while (osceSeqItr.hasNext())
+        		{
+        			OsceSequence osceSequence = osceSeqItr.next();
+        			
+        			Iterator<Course> courseItr = osceSequence.getCourses().iterator();
+        			
+        			while (courseItr.hasNext())
+        			{
+        				Course course = courseItr.next();
+        				
+        				OscePostRoom oscePostRoomFirst = new OscePostRoom();
+            			OscePostRoom oscePostRoomNext = new OscePostRoom();
+            			
+            			Iterator<OscePostRoom> itr = findOscePostRoomIterByCourse(course.getId());
+            			
+            			while (itr.hasNext())
+            			{
+            				OscePostRoom oscePostRoom = itr.next();
+            				
+            				if (oscePostRoom.getOscePost().getOscePostBlueprint().getPostType() == PostType.ANAMNESIS_THERAPY)
+            				{	
+            					oscePostRoomFirst = oscePostRoom;
+            					oscePostRoomNext = itr.next();
+            					
+            					System.out.println("OSCEPOSTROOM ID : " + oscePostRoomFirst.getId());
+            					System.out.println("OSCEPOSTROOM NEXT ID : " + oscePostRoomNext.getId());
+            					
+            					OscePostRoom oprFirst = new OscePostRoom();
+            					oprFirst.setCourse(oscePostRoomFirst.getCourse());
+            					oprFirst.setOscePost(oscePostRoomFirst.getOscePost());
+            					oprFirst.setRoom(oscePostRoomNext.getRoom());
+            					oprFirst.setVersion(999);
+            					oprFirst.persist();
+            					
+            					OscePostRoom oprSecond = new OscePostRoom();
+            					oprSecond.setCourse(oscePostRoomNext.getCourse());
+            					oprSecond.setOscePost(oscePostRoomNext.getOscePost());
+            					oprSecond.setRoom(oscePostRoomFirst.getRoom());
+            					oprSecond.setVersion(999);
+            					oprSecond.persist();
+            				}
+            			}
+        			}
+        		}
+        	}
+        	
+        	return true;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    		return false;
+    	}
+    	
+    }
+    
+    public static Iterator<OscePostRoom> findOscePostRoomIterByCourse(Long id)
+    {
+    	EntityManager em = entityManager();
+    	
+    	String oprSql = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course = " + id + " ORDER BY opr.id";
+		
+		TypedQuery<OscePostRoom> oprQuery = em.createQuery(oprSql, OscePostRoom.class);
+		
+		return oprQuery.getResultList().iterator();
+    }
+    
+    public static Boolean removeOscePostRoomForDoublePost(Long osceid)
+    {
+    	try
+    	{
+    		Osce osce = Osce.findOsce(osceid);
+        	
+        	Iterator<OsceDay> osceDayItr = osce.getOsce_days().iterator();
+        	
+        	while (osceDayItr.hasNext())
+        	{
+        		OsceDay osceDay = osceDayItr.next();
+        		
+        		Iterator<OsceSequence> osceSeqItr = osceDay.getOsceSequences().iterator();
+        		
+        		while (osceSeqItr.hasNext())
+        		{
+        			OsceSequence osceSequence = osceSeqItr.next();
+        			
+        			Iterator<Course> courseItr = osceSequence.getCourses().iterator();
+        			
+        			while (courseItr.hasNext())
+        			{
+        				Course course = courseItr.next();
+        				
+            			Iterator<OscePostRoom> itr = findOscePostRoomIterByCourse(course.getId());
+            			
+            			while (itr.hasNext())
+            			{
+            				OscePostRoom oscePostRoom = itr.next();
+            				
+            				if (oscePostRoom.getVersion() >= 999)
+            				{
+            					oscePostRoom.remove();
+            				}
+            			}
+        			}
+        		}
+        	}
+        	
+    		return true;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    		return false;
+    	}
+    	
+    }
+    
+  //spec bug sol
 }

@@ -117,12 +117,19 @@ public class Osce {
 	 * 
 	 * @return number of slots until SP change for most difficult role topic
 	 */
-	public int slotsOfMostDifficultRole() {
+	public int slotsOfMostDifficultRole() 
+	{
 		int slotsUntilChange = Integer.MAX_VALUE;
 		 
+	
 		Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
-		while (it.hasNext()) {
+		while (it.hasNext()) 
+		{
 			OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
+			if(oscePostBlueprint.getPostType()==PostType.BREAK)
+			{
+				continue;	
+			}			
 			int slots = oscePostBlueprint.getRoleTopic().getSlotsUntilChange();
 			if(slots > 0 && slots < slotsUntilChange) {
 				slotsUntilChange = slots;
@@ -216,13 +223,21 @@ public class Osce {
     
     public static Boolean generateAssignments(Long osceId) {
     	try {
-	    	TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
-	    	System.out.println(optGen.toString());
+    		//spec bug sol
+    		boolean test = OscePostRoom.insertRecordForDoublePost(osceId);
+    		//spec bug sol
+    		
+    		if(test)
+    		{
+    			TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
+    	    	System.out.println(optGen.toString());
+    	    	
+    	    	log.info("calling createAssignments()...");
+    	    	
+    	    	Set<Assignment> assignments = optGen.createAssignments();
+    	    	log.info("number of assignments created: " + assignments.size());
+    		}
 	    	
-	    	log.info("calling createAssignments()...");
-	    	
-	    	Set<Assignment> assignments = optGen.createAssignments();
-	    	log.info("number of assignments created: " + assignments.size());
     	} catch(Exception e) {
     		e.printStackTrace();
     		return false;
@@ -756,9 +771,20 @@ public class Osce {
 				}*/
 				
 			}
-		
-		return true;
- 		}
+			
+			//spec bug sol
+ 			boolean flag = OscePostRoom.removeOscePostRoomForDoublePost(osce.getId());
+ 			//spec bug sol
+ 			
+ 			if (flag)
+ 			{
+ 				return true;
+ 			}
+ 			else
+ 			{
+ 				return false;
+ 			}
+		}
 
 
 }

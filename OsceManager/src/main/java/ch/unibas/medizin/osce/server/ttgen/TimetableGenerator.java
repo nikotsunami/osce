@@ -499,7 +499,7 @@ public class TimetableGenerator {
 			osceDay.setOsceSequences(osceSequences);
 		} else { // multiple days --> one sequence for each day
 			Iterator<OsceDay> it = days.iterator();
-			int i = 0;
+			int i = 0,j=0;
 			while (it.hasNext()) {
 				OsceDay osceDay = (OsceDay) it.next();
 				
@@ -507,12 +507,12 @@ public class TimetableGenerator {
 				OsceSequence seq = new OsceSequence();				
 				//seq.setLabel(OsceSequences.getConstByIndex(i).toString());
 				
-				if(i>4)
+				if(j>4)
 				{
-					i=0;
+					j=0;
 				}
 				
-				seq.setLabel(OsceSequences.getOsceSequenceValue(OsceSequences.getConstByIndex(i)));
+				seq.setLabel(OsceSequences.getOsceSequenceValue(OsceSequences.getConstByIndex(j)));
 				seq.setNumberRotation(rotationsByDay.get(i));
 				seq.setOsceDay(osceDay);
 				
@@ -533,6 +533,7 @@ public class TimetableGenerator {
 				osceSequences.add(seq);
 				
 				i++;
+				j++;
 				
 				osceDay.setOsceSequences(osceSequences);
 			}
