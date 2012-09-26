@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -21,6 +22,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @RooJavaBean
 @RooToString
@@ -121,5 +128,60 @@ public class OscePostRoom {
     	System.out.println("~~ROOM QUERY : " + sql.toString());
     	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
     	return q.getResultList().size();
+    }
+    
+    public static Integer countOscePostRoomByCriteria(Long osceid)
+    {
+    	/*CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
+		CriteriaQuery<OscePostRoom> criteriaQuery = criteriaBuilder.createQuery(OscePostRoom.class);
+		Root<OscePostRoom> from = criteriaQuery.from(OscePostRoom.class);
+		
+		Join<OscePostRoom, Course> courseJoin = from.join("course", JoinType.LEFT);
+		
+		Join<OscePostRoom, OscePost> oscePostJoin = from.join("oscePost", JoinType.LEFT);
+		Join<OscePost, OsceSequence> osceSeqJoin = oscePostJoin.join("osceSequence", JoinType.LEFT);
+		Join<OsceSequence, OsceDay> osceDayJoin = osceSeqJoin.join("osceDay", JoinType.LEFT);
+		
+		Predicate pre1 = criteriaBuilder.equal(osceDayJoin.get("osce").get("id"), osceid);
+		
+		criteriaQuery.where(pre1);
+		
+		TypedQuery<OscePostRoom> q = entityManager().createQuery(criteriaQuery);
+		System.out.println("~~QUERY : " + q.unwrap(Query.class).getQueryString());
+		return q.getResultList().size();*/
+				
+    	
+    	EntityManager em = entityManager();
+    	
+    	
+    	String sql1 = "SELECT opr FROM Course AS c, OscePostRoom AS opr " +
+						"JOIN OscePost AS op " +
+						"JOIN OsceSequence AS os " +
+						"JOIN OsceDay AS od WHERE c.osceSequence = os.id AND opr.course = c.id AND opr.oscePost=op.id " +
+						"AND op.osceSequence=os.id AND os.osceDay  = od.id AND od.osce= "+osceid;
+    	
+    	String sql = "SELECT opr FROM OscePostRoom AS opr JOIN Course AS c ON opr.course=c.id " +
+    						"JOIN OscePost AS op ON opr.oscePost=op.id " +
+    						"JOIN OsceSequence AS os ON op.osceSequence=os.id" +
+    						"JOIN OsceDay AS od ON os.osceDay = od.id WHERE od.osce= "+osceid;    
+    	
+    	String query = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course IN " +
+    					"(SELECT id FROM Course AS c WHERE c.osceSequence.osceDay.osce = "+ osceid +" ) AND " +
+    					"opr.oscePost IN (SELECT id FROM OscePost AS op WHERE op.osceSequence.osceDay.osce = "+ osceid +")";    
+ 
+    	
+    	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+    	return q.getResultList().size();
+    }
+    
+    public static List<OscePostRoom> findListOfOscePostRoomByOsce(Long osceId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course IN " +"(SELECT id FROM Course AS c WHERE c.osceSequence.osceDay.osce = "+ osceId +" ) AND " +"opr.oscePost IN (SELECT id FROM OscePost AS op WHERE op.osceSequence.osceDay.osce = "+ osceId +") and opr.room is null";
+    	//String sql = "select opr from OscePostRoom as opr join OscePost as op join OsceSequence as os join OsceDay as od join Course as c where opr.course=c.id and opr.oscePost=op.id and op.osceSequence=os.id and os.osceDay = od.id and od.osce= "+osceId;    	
+    	//String sql = "SELECT o FROM OscePostRoom o WHERE o.room.id = " + roomId + " AND o.oscePost IN(SELECT os FROM OscePost AS os WHERE os.osceSequence.id = " + osceSequenceId +")";
+    	System.out.println("~~QUERY String: " + sql.toString());
+    	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);    	
+    	return q.getResultList();
     }
 }

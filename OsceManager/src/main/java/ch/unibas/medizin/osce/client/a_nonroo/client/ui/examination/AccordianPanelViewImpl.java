@@ -146,9 +146,12 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 					
 					expand(header, contentSP);
 				}
-				else
+				else 
 				{
-					retrieveParcourContent(header, osceSequenceProxy);
+					if (currentlyExpanded!=contentSP)
+					{
+						retrieveParcourContent(header, osceSequenceProxy);
+					}
 					expand(header, contentSP);
 				}
 			}
@@ -190,14 +193,11 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 		delegate.retrieveContent(this,header,sp);
 	}
 	public void expand(final Widget header, final Widget content) {
-
+	
 		if(currentlyExpanded != null)
 		{
 			DOM.setStyleAttribute(currentlyExpanded.getElement(),
 					"overflow", "hidden");
-			
-			
-			
 			//Element elem = content.getElement();
 			//DOM.setStyleAttribute(elem, "overflow", "scroll");
 			//DOM.setStyleAttribute(elem, animField, "auto");

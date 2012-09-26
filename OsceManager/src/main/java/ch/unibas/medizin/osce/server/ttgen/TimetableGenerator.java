@@ -111,7 +111,7 @@ public class TimetableGenerator {
 		this.osce = osce;
 		numberStudents = osce.getMaxNumberStudents();
 		numberPosts = osce.getOscePostBlueprints().size();
-		postLength = osce.getPostLength();
+		postLength = osce.getPostLength();	
 		numberSlotsUntilSPChange = osce.slotsOfMostDifficultRole();
 		numberBreakPosts = nBreakPosts;
 		numberParcours = nParcours;
@@ -506,6 +506,12 @@ public class TimetableGenerator {
 				// insert sequence
 				OsceSequence seq = new OsceSequence();				
 				//seq.setLabel(OsceSequences.getConstByIndex(i).toString());
+				
+				if(i>4)
+				{
+					i=0;
+				}
+				
 				seq.setLabel(OsceSequences.getOsceSequenceValue(OsceSequences.getConstByIndex(i)));
 				seq.setNumberRotation(rotationsByDay.get(i));
 				seq.setOsceDay(osceDay);
@@ -544,6 +550,10 @@ public class TimetableGenerator {
 		Iterator<OsceDay> itDay = osce.getOsce_days().iterator();		
 		OsceDay firstDay = itDay.next();							
 		OsceDay removeDay = null;
+		// Array List for Osce Days which are going to remove
+        ArrayList<OsceDay> listRemoveOsceDay = new ArrayList<OsceDay>();
+        // Array List for Osce Sequences which are going to remove
+		ArrayList<OsceSequence> listRemoveOsceSequence = new ArrayList<OsceSequence>();
 		log.info("First Day : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());
 		while(itDay.hasNext()) {			
 			OsceDay nextDay = itDay.next();
@@ -565,24 +575,54 @@ public class TimetableGenerator {
 			}
 			
 			log.info("remove Day going to be deleted");
-			osce.getOsce_days().remove(removeDay);
+			/*osce.getOsce_days().remove(removeDay);
 			removeDay.remove();			
-			log.info("Next Day is deleted");
-		}
-		
-		
+			log.info("Next Day is deleted");*/
+	        listRemoveOsceDay.add(removeDay);
+			
+		}		
+		    // Removing Osce Days from List
+            log.info("removing day from osceDay list");
+			osce.getOsce_days().remove(listRemoveOsceDay);
+			for(OsceDay rmOsceDay: listRemoveOsceDay)
+			{
+				log.info("remove Day going to be deleted");
+				osce.getOsce_days().remove(rmOsceDay);
+				rmOsceDay.remove();
+				log.info("OSCEday removed");
+			}
+			
+			log.info("For First Day OSCE Sequences");
+
 		if(firstDay != null) {
 			log.info("First Day not null : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());						
 			List<OsceSequence> setOsceSeq = firstDay.getOsceSequences();
 			Iterator<OsceSequence> itOsceSeq = setOsceSeq.iterator();
 			//firstDay.getOsceSequences().removeAll(setOsceSeq);			
-			while(itOsceSeq.hasNext()) {				
+			/*while(itOsceSeq.hasNext()) {				
 				OsceSequence osceSequence = itOsceSeq.next();
 				log.info("Removing osce sequence : " + osceSequence.getId() );
 				firstDay.getOsceSequences().remove(osceSequence);
 				osceSequence.remove();
+			}*/
+			while(itOsceSeq.hasNext()) 
+			{				
+				OsceSequence osceSequence = itOsceSeq.next();
+				log.info("Removing osce sequence : " + osceSequence.getId() );
+				/*firstDay.getOsceSequences().remove(osceSequence);
+				osceSequence.remove();*/
+				listRemoveOsceSequence.add(osceSequence);
 			}
-			
+                        // Removing Osce Sequence from List
+			log.info("removing sequence from osceSequence list");
+			osce.getOsce_days().remove(listRemoveOsceSequence);
+			for(OsceSequence rmOsceSequence: listRemoveOsceSequence)
+			{
+				log.info("remove Day going to be deleted");
+				firstDay.getOsceSequences().remove(rmOsceSequence);
+				rmOsceSequence.remove();
+				log.info("OSCEday removed");
+			}
 			osceDayRef = firstDay;
 		}
 		

@@ -6,13 +6,13 @@
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
 	 <ui:style src="../../styles.css" >
 	
-	.margin50
+	.margin60
 	{
-		margin-left: 50px;
+		margin-left: 60px;
 	}
-	.margin19
+	.margin30
 	{
-		margin-left: 19px;
+		margin-left: 30px;
 	}
 	.margin79{
 		margin-left: 99px;
@@ -31,6 +31,7 @@
 
 	.btnStyle
 	{
+		white-space: normal;
 		height: 30px;
 		width: 115px;
 	}	
@@ -52,12 +53,12 @@
 					<g:Label ui:field="presentsLabel" styleName="{style.spacing10} {style.label}" > </g:Label>
 					<g:HorizontalPanel styleName="{style.spacing10}">
 						<g:Label ui:field="dateLabel" styleName="{style.spacing10}"></g:Label>
-						<d:DateBox ui:field="dateTextBox" styleName="{style.margin50}"></d:DateBox>
+						<d:DateBox ui:field="dateTextBox" styleName="{style.margin60}"></d:DateBox>
 					</g:HorizontalPanel>
 				
 					<g:HorizontalPanel styleName="{style.spacing10}">
 						<g:Label ui:field="startTimeLable" styleName="{style.spacing10}"></g:Label>
-						<g:TextBox ui:field="startTimeTextBox" styleName="{style.margin19}"></g:TextBox>
+						<g:TextBox ui:field="startTimeTextBox" styleName="{style.margin30}"></g:TextBox>
 					</g:HorizontalPanel>
 				
 					<g:HorizontalPanel styleName="{style.spacing10}">
