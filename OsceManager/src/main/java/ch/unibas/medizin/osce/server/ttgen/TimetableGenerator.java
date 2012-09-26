@@ -701,7 +701,7 @@ public class TimetableGenerator {
 			// create new days and corresponding sequences and parcours
 			for(int i = 1; i < numberDays; i++) {
 				rotationsByDay.set(i, rotationsLeft);
-				dayCal.add(Calendar.DATE, i);
+				dayCal.add(Calendar.DATE, 1);
 				
 				OsceDay day = new OsceDay();
 				day.setOsce(osce);
