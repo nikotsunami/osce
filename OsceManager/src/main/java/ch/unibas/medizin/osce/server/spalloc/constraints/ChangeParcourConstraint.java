@@ -21,13 +21,14 @@ public class ChangeParcourConstraint extends AssignmentConstraint {
 		VarAssignment varAssignment = patient.variable();
 		Assignment assignment = varAssignment.getOsceAssignment();
 		OsceModel model = (OsceModel) varAssignment.getModel();
+		Boolean spStayInPost = assignment.getOsceDay().getOsce().getSpStayInPost();
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
 			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself and assignments that are further away than +/- 1
-			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || p.getPatientInRole().getStayInPost().equals(true))
+			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || spStayInPost.equals(true))
 				continue;
 			
 			// calculate time difference between two assignments (later compared with length of break) 

@@ -22,13 +22,14 @@ public class ChangeRoleConstraint extends AssignmentConstraint {
 		VarAssignment varAssignment = patient.variable();
 		Assignment assignment = patient.variable().getOsceAssignment();
 		OsceModel model = (OsceModel) patient.variable().getModel();
+		Boolean spStayInPost = assignment.getOsceDay().getOsce().getSpStayInPost();
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
 			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself and assignments that are further away than +/- 1
-			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || p.getPatientInRole().getStayInPost().equals(true))
+			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || spStayInPost.equals(true))
 				continue;
 			
 			RoleTopic roleTopic = a.getOscePostRoom().getOscePost().getStandardizedRole().getRoleTopic();

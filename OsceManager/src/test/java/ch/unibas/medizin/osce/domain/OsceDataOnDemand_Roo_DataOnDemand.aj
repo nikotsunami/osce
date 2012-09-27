@@ -47,7 +47,6 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         setMiddleBreak(obj, index);
         setName(obj, index);
         setNumberCourses(obj, index);
-        setNumberPosts(obj, index);
         setNumberRooms(obj, index);
         setOsceSecurityTypes(obj, index);
         setOsceStatus(obj, index);
@@ -57,6 +56,7 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         setSemester(obj, index);
         setShortBreak(obj, index);
         setShortBreakSimpatChange(obj, index);
+        setSpStayInPost(obj, index);
         setStudyYear(obj, index);
         return obj;
     }
@@ -106,11 +106,6 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
         obj.setNumberCourses(numberCourses);
     }
     
-    public void OsceDataOnDemand.setNumberPosts(Osce obj, int index) {
-        Integer numberPosts = new Integer(index);
-        obj.setNumberPosts(numberPosts);
-    }
-    
     public void OsceDataOnDemand.setNumberRooms(Osce obj, int index) {
         Integer numberRooms = new Integer(index);
         obj.setNumberRooms(numberRooms);
@@ -154,6 +149,11 @@ privileged aspect OsceDataOnDemand_Roo_DataOnDemand {
     public void OsceDataOnDemand.setShortBreakSimpatChange(Osce obj, int index) {
         Short shortBreakSimpatChange = new Integer(index).shortValue();
         obj.setShortBreakSimpatChange(shortBreakSimpatChange);
+    }
+    
+    public void OsceDataOnDemand.setSpStayInPost(Osce obj, int index) {
+        Boolean spStayInPost = Boolean.TRUE;
+        obj.setSpStayInPost(spStayInPost);
     }
     
     public void OsceDataOnDemand.setStudyYear(Osce obj, int index) {

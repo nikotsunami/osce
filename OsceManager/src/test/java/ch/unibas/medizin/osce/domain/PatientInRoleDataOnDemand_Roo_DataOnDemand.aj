@@ -39,7 +39,6 @@ privileged aspect PatientInRoleDataOnDemand_Roo_DataOnDemand {
         setIs_backup(obj, index);
         setOscePost(obj, index);
         setPatientInSemester(obj, index);
-        setStayInPost(obj, index);
         return obj;
     }
     
@@ -61,11 +60,6 @@ privileged aspect PatientInRoleDataOnDemand_Roo_DataOnDemand {
     public void PatientInRoleDataOnDemand.setPatientInSemester(PatientInRole obj, int index) {
         PatientInSemester patientInSemester = patientInSemesterDataOnDemand.getRandomPatientInSemester();
         obj.setPatientInSemester(patientInSemester);
-    }
-    
-    public void PatientInRoleDataOnDemand.setStayInPost(PatientInRole obj, int index) {
-        Boolean stayInPost = Boolean.TRUE;
-        obj.setStayInPost(stayInPost);
     }
     
     public PatientInRole PatientInRoleDataOnDemand.getSpecificPatientInRole(int index) {

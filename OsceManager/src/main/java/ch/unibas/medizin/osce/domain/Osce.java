@@ -84,6 +84,8 @@ public class Osce {
     @Enumerated
     private PatientAveragePerPost patientAveragePerPost;
     
+    private Boolean spStayInPost;
+    
     @NotNull
     @ManyToOne
     private Semester semester;
