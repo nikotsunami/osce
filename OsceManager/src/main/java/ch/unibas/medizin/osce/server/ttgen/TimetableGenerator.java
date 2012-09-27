@@ -70,7 +70,7 @@ public class TimetableGenerator {
 		}
 		
 		// max number of courses (decrease while looking for optimum)
-		int numberParcoursMax = (osce.getNumberCourses() > 0 ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
+		int numberParcoursMax = (osce.getNumberCourses() > 0 && osce.getNumberCourses() < osce.getNumberRooms() / osce.numberPostsWithRooms() ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
 		
 		TimetableGenerator ttGen;
 		TimetableGenerator optGen = null;
