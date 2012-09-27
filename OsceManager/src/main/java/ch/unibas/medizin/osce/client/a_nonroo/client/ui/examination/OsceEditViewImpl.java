@@ -98,8 +98,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	
 	// change {
 	
-	@UiField
+	
+	//remove number post
+	/*@UiField
 	public IntegerBox numberPosts;
+	*/
+	//remove number post
 	
 	@UiField
 	public IntegerBox numberRooms;
@@ -156,8 +160,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	DivElement labeShortBreakSimpatChange;
 
-	@UiField
-	DivElement numberPost;
+	//remove number post
+//	@UiField
+//	DivElement numberPost;
+//	
+	//remove number post
 	/*
 	@UiField
 	IntegerBox numberRooms;
@@ -265,7 +272,10 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
 		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
 		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
-		numberPost.setInnerText(constants.circuitStation() + ":");
+		//remove number post
+		//numberPost.setInnerText(constants.circuitStation() + ":");
+		
+		//remove number post
 		// Highlight onViolation
 		osceMap=new HashMap<String, Widget>();
 		osceMap.put("name", name);

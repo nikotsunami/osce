@@ -1262,6 +1262,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					// Module 5 Bug Test Change
 					view.getOscePostSubView().getStandardizedRoleLbl().setText(getLabelString(standardizedRoleProxy.getLongName()));
 					view.getOscePostSubView().getStandardizedRoleLbl().setTitle(standardizedRoleProxy.getLongName());
+					((OscePostSubViewImpl)view.getOscePostSubView()).setStandardizedRoleProxy(standardizedRoleProxy);
 					// E Module 5 Bug Test Change
 					
 					((ListBoxPopupViewImpl)view).hide();
@@ -1299,7 +1300,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						public String render(Object object) {
 							// TODO Auto-generated method stub
 							//return object.getShortName();
+							if(object==null)
+							{
+								return null;
+							}
+							else
+							{
 							return ((StandardizedRoleProxy)object).getLongName();
+						}
 						}
 
 						@Override
@@ -1309,7 +1317,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 						}
 					});
-
+					((OscePostSubViewImpl)view).popupView.getNewListBox().setSelected(((OscePostSubViewImpl)view).getStandardizedRoleProxy());
 
 					//((OscePostSubViewImpl)view).popupView.getListBox().setAcceptableValues(list);
 					
@@ -1454,6 +1462,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// Module 5 Bug Test Change
 				oscePostSubView.getStandardizedRoleLbl().setText(getLabelString(oscePostProxy.getStandardizedRole().getLongName()));
 				oscePostSubView.getStandardizedRoleLbl().setTitle(oscePostProxy.getStandardizedRole().getLongName());				
+				((OscePostSubViewImpl)oscePostSubView).setStandardizedRoleProxy(oscePostProxy.getStandardizedRole());
 				// E Module 5 Bug Test Change
 				
 			}
@@ -1493,6 +1502,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						{
 							oscePostSubView.getRoomLbl().setText(getLabelString(util.getEmptyIfNull(response.getRoom().getRoomNumber())));
 							oscePostSubView.getRoomLbl().setTitle(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+							((OscePostSubViewImpl)oscePostSubView).setRoomProxy(response.getRoom());
 						}
 					}
 					
@@ -1505,6 +1515,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// Module 5 Bug Test Change
 				oscePostSubView.getStandardizedRoleLbl().setText(getLabelString(oscePostProxy.getStandardizedRole().getLongName()));
 				oscePostSubView.getStandardizedRoleLbl().setTitle(oscePostProxy.getStandardizedRole().getLongName());
+				((OscePostSubViewImpl)oscePostSubView).setStandardizedRoleProxy(oscePostProxy.getStandardizedRole());
 				// E Module 5 Bug Test Change
 			}
 			
@@ -1534,11 +1545,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			RoomRefreshEvent.register(requests.getEventBus(), (OscePostSubViewImpl)oscePostSubViewNext);
 			// Change in ParcourView
 			//spec issue sol
-			if(oscePostProxy.getStandardizedRole() != null)
+			if(oscePostProxyNext.getStandardizedRole() != null)
 			{
 				// Module 5 Bug Test Change
-				oscePostSubViewNext.getStandardizedRoleLbl().setText(getLabelString(oscePostProxyNext.getStandardizedRole().getLongName()));
-				oscePostSubViewNext.getStandardizedRoleLbl().setTitle(oscePostProxyNext.getStandardizedRole().getLongName());
+				oscePostSubViewNext.getStandardizedRoleLbl().setText(getLabelString(util.getEmptyIfNull(oscePostProxyNext.getStandardizedRole().getLongName())));
+				oscePostSubViewNext.getStandardizedRoleLbl().setTitle(util.getEmptyIfNull(oscePostProxyNext.getStandardizedRole().getLongName()));
+				((OscePostSubViewImpl)oscePostSubViewNext).setStandardizedRoleProxy(oscePostProxyNext.getStandardizedRole());
 				// E Module 5 Bug Test Change
 			}
 			else
@@ -1570,6 +1582,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								{
 									oscePostSubViewNext.getRoomLbl().setText(getLabelString(util.getEmptyIfNull(response.getRoom().getRoomNumber())));
 									oscePostSubViewNext.getRoomLbl().setTitle(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+									((OscePostSubViewImpl)oscePostSubViewNext).setRoomProxy(response.getRoom());
 								}	
 							}
 							
@@ -1682,6 +1695,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								{
 									oscePostSubView.getRoomLbl().setText(util.getEmptyIfNull(response.getRoom().getRoomNumber()));	
 									oscePostSubView.getRoomLbl().setTitle(getLabelString(util.getEmptyIfNull(response.getRoom().getRoomNumber())));
+									((OscePostSubViewImpl)oscePostSubView).setRoomProxy(response.getRoom());
+									
 								}
 							}							
 						}
@@ -1694,6 +1709,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			{
 				oscePostSubView.getStandardizedRoleLbl().setText(getLabelString(util.getEmptyIfNull(oscePostProxy.getStandardizedRole().getLongName())));
 				oscePostSubView.getStandardizedRoleLbl().setTitle(util.getEmptyIfNull(oscePostProxy.getStandardizedRole().getLongName()));
+				((OscePostSubViewImpl)oscePostSubView).setStandardizedRoleProxy(oscePostProxy.getStandardizedRole());
 			}
 			// E Module 5 bug Report Change
 			
@@ -1782,6 +1798,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								{
 									oscePostSubView.getRoomLbl().setText(getLabelString(util.getEmptyIfNull(response.getRoom().getRoomNumber())));
 									oscePostSubView.getRoomLbl().setTitle(util.getEmptyIfNull(response.getRoom().getRoomNumber()));
+									((OscePostSubViewImpl)oscePostSubView).setRoomProxy(response.getRoom());
 								}							
 							/*}
 						});*/
@@ -1796,6 +1813,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// Module 5 Bug Test Change
 				oscePostSubView.getStandardizedRoleLbl().setText(getLabelString(oscePostProxy.getStandardizedRole().getLongName()));
 				oscePostSubView.getStandardizedRoleLbl().setTitle(oscePostProxy.getStandardizedRole().getLongName());
+				((OscePostSubViewImpl)oscePostSubView).setStandardizedRoleProxy(oscePostProxy.getStandardizedRole());
 				// E Module 5 Bug Test Change
 			}
 			
@@ -4718,7 +4736,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									{
 											// TODO Auto-generated method stub
 									}
-								});	
+								});
+	                                                        opsv.popupView.getNewListBox().setSelected(((OscePostSubViewImpl)opsv).getRoomProxy());	
 							}
 					});											
 				}
@@ -4766,6 +4785,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																{
 																	view.getOscePostSubView().getRoomLbl().setText(getLabelString(util.getEmptyIfNull(roomProxy.getRoomNumber())));
 																	view.getOscePostSubView().getRoomLbl().setTitle(util.getEmptyIfNull(roomProxy.getRoomNumber()));
+																	oscePostSubViewImpl.setRoomProxy(roomProxy);
+																	
+																	((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(roomProxy);
 																	Log.info("Success saveOscePostRoom ");
 																	
 																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).fire(new OSCEReceiver<Boolean>() {
@@ -5358,8 +5380,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						if(osce.getNumberCourses() == null || osce.getNumberCourses() <= 0)
 							throw new Exception("Number of Courses");
 						
-						if(osce.getNumberPosts() == null || osce.getNumberPosts() <= 0)
-							throw new Exception("Number of posts");
+						/*if(osce.getNumberPosts() == null || osce.getNumberPosts() <= 0)
+							throw new Exception("Number of posts");*/
 												
 						
 					}

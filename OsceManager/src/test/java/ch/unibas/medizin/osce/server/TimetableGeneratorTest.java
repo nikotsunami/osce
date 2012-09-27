@@ -158,7 +158,7 @@ public class TimetableGeneratorTest {
 			osce.setMiddleBreak(middleBreak);
 			osce.setName(name);
 			osce.setNumberCourses(numberCourses);
-			osce.setNumberPosts(null);
+			//osce.setNumberPosts(null);
 			osce.setNumberRooms(totalRooms);
 			osce.setOsceStatus(osceStatus);
 			osce.setPostLength(postLenth);

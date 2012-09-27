@@ -58,7 +58,7 @@ public class Osce {
     private Short middleBreak;
     
     
-    private Integer numberPosts;
+   //s private Integer numberPosts;
 
     private Integer numberCourses;
 
@@ -427,8 +427,9 @@ public class Osce {
 	  public static List<OscePost> findAllOscePostInSemester(Long semesterId){
 		  
 		  EntityManager em = entityManager();
-		  String queryString="select op from Osce as o,OsceDay as od,OsceSequence as os,OscePost as op,StandardizedRole as sr where o.semester="+semesterId +
-		  " and od.osce=o.id and os.osceDay=od.id and op.osceSequence=os.id and sr.id=op.standardizedRole and sr.roleType NOT IN(2)";
+		  String queryString="select op from Osce as o,OsceDay as od,OsceSequence as os,OscePost as op,StandardizedRole as sr,OscePostBlueprint as opb where o.semester="+semesterId +
+		  " and o.osceStatus = " + OsceStatus.OSCE_CLOSED.ordinal() + " and od.osce=o.id and os.osceDay=od.id and op.osceSequence=os.id and opb.id=op.oscePostBlueprint and opb.postType NOT IN(1)" +
+		  		" and sr.id=op.standardizedRole and sr.roleType NOT IN(2)";
 		  Log.info(queryString);
 		  TypedQuery<OscePost> q = em.createQuery(queryString,OscePost.class);
 			return q.getResultList();
@@ -437,7 +438,7 @@ public class Osce {
 	  public static List<OsceDay> findAllOsceDaysInSemster(Long semesterId){
 		  
 		  EntityManager em = entityManager();
-		  String queryString="select od from Osce as o,OsceDay od where o.semester="+semesterId +" and od.osce=o.id";
+		  String queryString="select od from Osce as o,OsceDay od where o.semester="+semesterId +" and o.osceStatus = " + OsceStatus.OSCE_CLOSED.ordinal() + " and od.osce=o.id";
 		  TypedQuery<OsceDay> q = em.createQuery(queryString,OsceDay.class);
 			return q.getResultList();
 	  }
@@ -445,7 +446,7 @@ public class Osce {
 	public static List<OsceDay> getAllOsceDaysSortByValueAsc(Long semesterId){
 		
 		  EntityManager em = entityManager();
-		  String queryString="select od from Osce as o,OsceDay od where o.semester="+semesterId +" and od.osce=o.id ORDER BY od.value";
+		  String queryString="select od from Osce as o,OsceDay od where o.semester="+semesterId + " and o.osceStatus = " + OsceStatus.OSCE_CLOSED.ordinal() + " and od.osce=o.id ORDER BY od.value";
 		  TypedQuery<OsceDay> q = em.createQuery(queryString,OsceDay.class);
 		  return q.getResultList();
 	  }
@@ -454,8 +455,9 @@ public class Osce {
 		EntityManager em = entityManager();
 		Log.info("OsceDay id AT getSortedOscePost():" + osceDayId);
 		//String queryString="select distinct sr from OsceDay as od, OsceSequence as os, OscePost as op, StandardizedRole sr where od.id = "+ osceDay.getId() +" and os.osceDay= od.id and op.osceSequence=os.id and op.standardizedRole=sr.id ORDER BY sr.value ASC";
-		String queryString="select op from OsceSequence as os, OscePost as op,StandardizedRole as sr where" +
-		" os.osceDay= "+ osceDayId+" and op.osceSequence=os.id and sr.id=op.standardizedRole and sr.roleType NOT IN (2) ORDER BY op.value";
+		String queryString="select op from OsceSequence as os, OscePost as op,StandardizedRole as sr,OscePostBlueprint as opb where" +
+		" os.osceDay= "+ osceDayId+" and op.osceSequence=os.id and sr.id=op.standardizedRole and opb.id=op.oscePostBlueprint and opb.postType NOT IN(1)" +
+				" and sr.roleType NOT IN (2) ORDER BY op.value";
 		TypedQuery<OscePost> q = em.createQuery(queryString,OscePost.class);
 		return q.getResultList();
 	}
@@ -463,8 +465,9 @@ public class Osce {
 	public static List<OscePost> getSortedOscePostByTypeAndComlexity(Long osceDayId){
 		EntityManager em = entityManager();
 		//IF(rt.slotsUntilChange IS NULL OR rt.slotsUntilChange='0',1,0) as slotdes
-		String queryString="select op from OsceSequence as os, OscePost as op,RoleTopic as rt,StandardizedRole as sr where" +
-		" os.osceDay= "+ osceDayId+" and op.osceSequence=os.id and sr.id=op.standardizedRole and rt.id=sr.roleTopic and sr.roleType NOT IN (2)"+
+		String queryString="select op from OsceSequence as os, OscePost as op,RoleTopic as rt,StandardizedRole as sr,OscePostBlueprint as opb where" +
+		" os.osceDay= "+ osceDayId+" and op.osceSequence=os.id and op.standardizedRole=sr.id and opb.id=op.oscePostBlueprint and opb.postType NOT IN(1)" +
+				" and rt.id=sr.roleTopic and sr.roleType NOT IN (2)"+
 		" ORDER BY sr.roleType DESC,rt.slotsUntilChange DESC NULLS FIRST";
 		TypedQuery<OscePost> q = em.createQuery(queryString,OscePost.class);
 		return q.getResultList();
@@ -530,8 +533,8 @@ public class Osce {
 	public static List<OscePost>findAllOscePostOfDay(Long osceDayId){
 		EntityManager em = entityManager();
 		Log.info("OsceDay id AT findAllOscePostOfDay():" + osceDayId);
-		String queryString="select op from OsceSequence as os, OscePost as op,StandardizedRole as sr where"+
-		" os.osceDay= "+osceDayId+" and op.osceSequence=os.id and sr.id=op.standardizedRole and sr.roleType NOT IN (2)";
+		String queryString="select op from OsceSequence as os, OscePost as op,StandardizedRole as sr,OscePostBlueprint as opb where"+
+		" os.osceDay= "+osceDayId+" and op.osceSequence=os.id and opb.id=op.oscePostBlueprint and opb.postType NOT IN(1) and sr.id=op.standardizedRole and sr.roleType NOT IN (2)";
 		TypedQuery<OscePost> q = em.createQuery(queryString,OscePost.class);
 		return q.getResultList();
 	}
@@ -598,11 +601,18 @@ public class Osce {
 		EntityManager em = entityManager();
 		Log.info("Size of PatientIn Sem at getCountOfSPAssigndAsBackup()" + osceDay.getPatientInSemesters().size());
 		
+		/*String queryString ="select count(*) from OsceSequence as os,OscePost as op,PatientInRole as pir where os.osceDay="+osceDay.getId() +" and op.osceSequence=os.id and pir.oscePost=op.id"+
+		" and pir.is_backup=1 GROUP BY pir.oscePost";*/
 		String queryString ="select count(*) from OsceSequence as os,OscePost as op,PatientInRole as pir where os.osceDay="+osceDay.getId() +" and op.osceSequence=os.id and pir.oscePost=op.id"+
-		" and pir.is_backup=true GROUP BY pir.oscePost";
+				" and pir.is_backup=1 GROUP BY pir.oscePost";
 		Log.info(queryString);
 		TypedQuery<Long> q = em.createQuery(queryString,Long.class);
+		if(q.getResultList().size()==0)
+			return 0l;
+		else{
+		Log.info("Result is :"+q.getSingleResult());
 		return q.getSingleResult();
+		}
 		
 	}
 	public static List<PatientInSemester> findPatientInSemByCountOfAssignAsBackup(OsceDay osceDay){
@@ -667,6 +677,34 @@ public class Osce {
 			}
 		}
 		return oscePostRoomId.toString();
+	}
+
+	public static List<PatientInSemester> findAllPatientInSemesterBySemesterAndAcceptedDay(
+			Long semesterId) {
+
+		Log.info("In side With Semester Id Is :" + semesterId);
+
+		// String
+		// query="select pis from PatientInSemester as pis where pis.semester="+semesterId
+		// + " and pis.id in (select psod from pis.osceDays psod)";
+		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId);
+
+		Set<OsceDay> osceDays;
+		
+		List<PatientInSemester> patientInSemesters = new ArrayList<PatientInSemester>();
+
+		for (Iterator iterator = tempPatientInSemesters.iterator(); iterator.hasNext();){
+			
+			PatientInSemester patientInSemester = (PatientInSemester) iterator.next();
+
+			osceDays = patientInSemester.getOsceDays();
+			if ((osceDays != null && osceDays.size() > 0) && (patientInSemester.getAccepted()) ) {
+				patientInSemesters.add(patientInSemester);
+			}
+			
+		}
+		
+		return patientInSemesters;
 	}
 
 	//module 3 f }

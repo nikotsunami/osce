@@ -302,7 +302,9 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
 			
 			osceProxy.setShortBreakSimpatChange(((OsceEditViewImpl)view).shortBreakSimpatChange.getValue());
-			osceProxy.setNumberPosts(((OsceEditViewImpl)view).numberPosts.getValue());
+			//remove number post
+			//osceProxy.setNumberPosts(((OsceEditViewImpl)view).numberPosts.getValue());
+			//remove number post
 			//osceProxy.setSemester(((OsceEditViewImpl)view).semester.getValue());
 			osceProxy.setSemester(semester);
 			osceProxy.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
