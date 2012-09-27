@@ -65,8 +65,10 @@ background-color:#B8A9A2;
 	
 	.maxWidth {
 		margin-bottom: 8px;
-		width: 90%;
+		width: 100%;
 	}
+	
+	
 	
 	.marginQue{
 	margin-left:9px;
@@ -105,14 +107,14 @@ background-color:#B8A9A2;
 		</g:HorizontalPanel>
 
 		<g:AbsolutePanel ui:field="topicAP">
-	<g:DisclosurePanel  animationEnabled="true" open="true" styleName="{style.borderDP} " ui:field="checkListTopicDisclosurePanel"  width="90%" >
+	<g:DisclosurePanel  animationEnabled="true" open="true" styleName="{style.borderDP} {style.maxWidth} " ui:field="checkListTopicDisclosurePanel"   >
 	
 
-	<g:AbsolutePanel ui:field="queAP">
+	<g:AbsolutePanel ui:field="queAP" >
 
 	<g:HorizontalPanel  spacing="4" styleName="{style.marginQue}">
 
-	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel"  width="100%">
+	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel" spacing="5">
 	</g:VerticalPanel>
 
 

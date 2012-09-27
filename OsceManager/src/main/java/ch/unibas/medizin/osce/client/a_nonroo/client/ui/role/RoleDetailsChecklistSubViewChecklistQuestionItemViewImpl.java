@@ -204,7 +204,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 //	public VerticalPanel optionVerticalPanel;
 
 	@UiField
-	public HorizontalPanel optionVerticalPanel;
+	public FlowPanel optionVerticalPanel;
 	
 	@UiField
 	public IconButton addOptionButton;
@@ -278,7 +278,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		if(criteriaPopup==null)
 		{
 			criteriaPopup=new CriteriaPopupViewImpl();
-		}    //SPEC Change
+		    //SPEC Change
 		
 			((CriteriaPopupViewImpl)criteriaPopup).setAnimationEnabled(true);
 		
@@ -288,11 +288,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 			RootPanel.get().add(((CriteriaPopupViewImpl)criteriaPopup));
 
-			// Highlight onViolation			
-			checklistCriteriaMap=new HashMap<String, Widget>();
-			checklistCriteriaMap.put("criteria",criteriaPopup.getCriteriaTxtBox());
-			checklistCriteriaMap.put("checklistQuestion",criteriaPopup.getCriteriaTxtBox());
-			// E Highlight onViolation
+
 			
 			criteriaPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
@@ -318,6 +314,14 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			});
 		
 		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(addCriteriaButton.getAbsoluteLeft()-50, addCriteriaButton.getAbsoluteTop()-85); // SPEC Change
+		}
+		
+		// Highlight onViolation			
+		checklistCriteriaMap=new HashMap<String, Widget>();
+		checklistCriteriaMap.put("criteria",criteriaPopup.getCriteriaTxtBox());
+		checklistCriteriaMap.put("checklistQuestion",criteriaPopup.getCriteriaTxtBox());
+		// E Highlight onViolation
+		
 		((CriteriaPopupViewImpl)criteriaPopup).show();
 	}
 	
@@ -335,7 +339,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		{
 			optionPopup=new CheckListTopicPopupViewImpl();
 			
-		}	//SPEC Change
+			//SPEC Change
 			((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
 		
 			optionPopup.getDescriptionLbl().setText(constants.optionValue());
@@ -347,12 +351,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)optionPopup));
 
-			// Highlight onViolation
-			checklistOptionMap=new HashMap<String, Widget>();
-			checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
-			checklistOptionMap.put("name", optionPopup.getTopicTxtBox());
-			checklistOptionMap.put("value", optionPopup.getDescriptionTxtBox());
-			// E Highlight onViolation
+			
 			
 			
 			optionPopup.getOkBtn().addClickHandler(new ClickHandler() {
@@ -395,6 +394,15 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 		
 		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionVerticalPanel.getAbsoluteLeft()-60, addOptionVerticalPanel.getAbsoluteTop()-190); //SPEC Change
+		
+		}
+		// Highlight onViolation
+					checklistOptionMap=new HashMap<String, Widget>();
+					checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
+					checklistOptionMap.put("name", optionPopup.getTopicTxtBox());
+					checklistOptionMap.put("value", optionPopup.getDescriptionTxtBox());
+					// E Highlight onViolation
+		
 		((CheckListTopicPopupViewImpl)optionPopup).show();
 		
 	}
@@ -485,7 +493,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		if(editquestionpopup==null)
 		{
 			editquestionpopup=new CheckListTopicPopupViewImpl();
-		}	//SPEC Change
+			//SPEC Change
 			
 			((CheckListTopicPopupViewImpl)editquestionpopup).setAnimationEnabled(true);
 		
@@ -493,20 +501,14 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			
 			editquestionpopup.getTopicLbl().setText(constants.questionName());
 			
-			editquestionpopup.getTopicTxtBox().setText(proxy.getQuestion());
-			
-			editquestionpopup.getDescriptionTxtBox().setText(proxy.getInstruction());
+		
 			
 			((CheckListTopicPopupViewImpl)editquestionpopup).setWidth("150px");
 
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)editquestionpopup));
 			
-			// Highlight onViolation
-			checklistQuestionMap=new HashMap<String, Widget>();
-			checklistQuestionMap.put("question", editquestionpopup.getTopicTxtBox());
-			checklistQuestionMap.put("instruction", editquestionpopup.getDescriptionTxtBox());
-			// E Highlight onViolation
+			
 			
 			editquestionpopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
@@ -545,6 +547,18 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 		
 		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(editQuestionVP.getAbsoluteLeft()-150, editQuestionVP.getAbsoluteTop()-195); // SPEC Change
+		
+		}
+		
+		editquestionpopup.getTopicTxtBox().setText(proxy.getQuestion());
+		
+		// Highlight onViolation
+			checklistQuestionMap=new HashMap<String, Widget>();
+			checklistQuestionMap.put("question", editquestionpopup.getTopicTxtBox());
+			checklistQuestionMap.put("instruction", editquestionpopup.getDescriptionTxtBox());
+		// E Highlight onViolation
+		
+		editquestionpopup.getDescriptionTxtBox().setText(proxy.getInstruction());
 		((CheckListTopicPopupViewImpl)editquestionpopup).show();
 		
 	}
