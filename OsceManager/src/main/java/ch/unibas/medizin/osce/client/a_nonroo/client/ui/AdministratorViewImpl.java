@@ -13,7 +13,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -65,8 +67,12 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	@UiField (provided = true)
 	SimplePager pager;
 	
+	//cell table changes
+	/*@UiField (provided = true)
+	CellTable<AdministratorProxy> table;*/
 	@UiField (provided = true)
-	CellTable<AdministratorProxy> table;
+	AdvanceCellTable<AdministratorProxy> table;
+	//cell table changes
 
 	protected Set<String> paths = new HashSet<String>();
 
@@ -99,8 +105,12 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	 * implement HasHTML instead of HasText.
 	 */
 	public AdministratorViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<AdministratorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table changes
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<AdministratorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<AdministratorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table changes
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);

@@ -11,10 +11,18 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
+import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -23,6 +31,8 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -40,11 +50,16 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	private PlaceController placeControler;
 	private AcceptsOneWidget widget;
 	private ScarView view;
-	private CellTable<ScarProxy> table;
+	
+	/*celltable changes start*/
+	//private CellTable<ScarProxy> table;
+	private AdvanceCellTable<ScarProxy> table;
+	/*celltable changes end*/
 	private SingleSelectionModel<ScarProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
 	
-
+	public int x;
+	public int y;
 	public ScarActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
     	this.placeControler = placeController;
@@ -91,6 +106,73 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 				});
 
 		view.setDelegate(this);
+		
+		//celltable changes start
+		
+		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				// By SPEC[Start
+
+				Column<ScarProxy, String> col = (Column<ScarProxy, String>) event.getColumn();
+				
+				
+				int index = table.getColumnIndex(col);
+				
+				/*String[] path =	systemStartView.getPaths();	            			
+				sortname = path[index];
+				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+				Log.info("call for sort " );
+				if (index % 2 == 1 ) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+				} 
+			}
+		});
+		
+		
+
+		table.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+				
+				if(table.getRowCount()>0)
+				{
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+					Log.info("right event");
+				}
+				}
+			}
+		}, MouseDownEvent.getType());
+		
+		
+		table.getPopup().addDomHandler(new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				// TODO Auto-generated method stub
+				//addColumnOnMouseout();
+				table.getPopup().hide();
+				
+			}
+		}, MouseOutEvent.getType());
+
+		// celltable changes end
 	}
 	
 	private int totalRecords;
@@ -185,7 +267,10 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	}
 
 	private void setTable(CellTable<ScarProxy> table) {
-		this.table = table;
+		//this.table = table;
+		// celltable changes start
+		this.table=(AdvanceCellTable<ScarProxy>)table;
+		//celltable changes end
 	}
 
 	@Override

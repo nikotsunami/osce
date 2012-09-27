@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
+import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
@@ -32,8 +33,9 @@ public interface RoleScriptTemplateView extends IsWidget{
 		}
 
 		CellTable<RoleTemplateProxy> getTable();
-	    String[] getPaths();
-	    
+	    //String[] getPaths();
+		List<String> getPaths();
+		String[] getPathsString();
 	    void setDelegate(Delegate delegate);
 	    
 		SimplePanel getDetailsPanel();

@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
@@ -81,10 +84,15 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	@UiField (provided = true)
 	SimplePager pager;
 	
+	//cell table
+	/*
 	@UiField (provided = true)
 	CellTable<RoleTemplateProxy> table;
-	
-	protected ArrayList<String> paths = new ArrayList<String>();
+	*/
+	@UiField (provided = true)
+	AdvanceCellTable<RoleTemplateProxy> table;
+	//cell table
+	List<String> paths=new ArrayList<String>();
 	
 	@UiField
 	TextBox newBodypart;
@@ -129,10 +137,14 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 	
 	public RoleScriptTemplateViewImpl() {
 		// TODO Auto-generated constructor stub
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		//cell table chages
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<RoleTemplateProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<RoleTemplateProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
-
+		//cell table changes 
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -158,8 +170,12 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 				// E Violation Changes Highlight
 	}
 	
-	public String[] getPaths() {
+	public String[] getPathsString() {
 		return paths.toArray(new String[paths.size()]);
+	}
+	
+	public List<String> getPaths() {
+		return paths;
 	}
 	
 	public void init()
@@ -199,6 +215,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		paths.add("templateName");
+		paths.add("");
 		table.addColumn(new TextColumn<RoleTemplateProxy>() {
 			{
 				this.setSortable(true);
@@ -216,7 +233,9 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 				return renderer.render(object.getTemplateName());
 			}
 		}, "Role Template");
+		
 		paths.add("date_created");
+		paths.add("");
 		table.addColumn(new TextColumn<RoleTemplateProxy>() {
 			{
 				this.setSortable(true);
@@ -235,6 +254,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 			}
 		}, constants.dateCreated());
 		paths.add("date_edited");
+		paths.add("");
 		table.addColumn(new TextColumn<RoleTemplateProxy>() {
 
 			{
@@ -364,7 +384,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 	// Violation Changes Highlight
 	@Override

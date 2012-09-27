@@ -17,7 +17,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -85,8 +87,14 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView, Re
 	@UiField (provided = true)
 	SimplePager pager;
 	
-	@UiField (provided = true)
+	//cell table changes
+	/*@UiField (provided = true)
 	CellTable<ProfessionProxy> table;
+	*/
+	@UiField (provided = true)
+	AdvanceCellTable<ProfessionProxy> table;
+	
+	//cell table changes
 
 	protected Set<String> paths = new HashSet<String>();
 
@@ -121,9 +129,13 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView, Re
 			// E Highlight onViolation
 				
 	public ProfessionViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		//cell table changes
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ProfessionProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
-		
+		*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<ProfessionProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table chagnes end
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
@@ -304,7 +316,7 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView, Re
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 	
 	/**

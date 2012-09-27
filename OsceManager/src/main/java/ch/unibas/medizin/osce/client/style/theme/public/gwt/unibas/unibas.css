@@ -3430,12 +3430,13 @@ color: #f1b532;
 }
 
 .ui-icon-triangle-1-s1 {
-background: url("images/downArrow.png") ;
-	
+	/* background: url("images/downArrow.png") ; */
+	background: transparent url(images/down.png) no-repeat right 4px;	
 	height: 25px;
 	width: 25px;
 	background-repeat: no-repeat;
     display: block;
+ background-position: center 4px;
     overflow: hidden;
   	height:22px;
     margin: auto;

@@ -22,11 +22,14 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicRequest;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -35,6 +38,11 @@ import ch.unibas.medizin.osce.shared.scaffold.RoleTopicRequestNonRoo;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -85,7 +93,12 @@ public class RoleActivity extends AbstractActivity implements
 
 	SpecialisationProxy specialisationProxy;
 
-	private CellTable<RoleTopicProxy> table;
+	//cell table changes start
+	//private CellTable<RoleTopicProxy> table;
+	private AdvanceCellTable<RoleTopicProxy> table;
+	int x;
+	int y;
+	//cell table changes end
 	/** holds the selection model of the standardized patient table */
 	private SingleSelectionModel<RoleTopicProxy> selectionModel;
 	
@@ -333,7 +346,11 @@ public class RoleActivity extends AbstractActivity implements
 	//	final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		final RoleView systemStartView = new RoleViewImpl();
 		// spec start
-		 this.table = view.getTable();
+		
+		//cell table changes start
+		 //this.table = view.getTable();
+		this.table = (AdvanceCellTable<RoleTopicProxy>)view.getTable();
+		 //cell table chanes end
 		 this.scarBox = view.getSpecialisationBoxValues();
 		
 		 table
@@ -343,7 +360,83 @@ public class RoleActivity extends AbstractActivity implements
 				}
 			});
 		 
+		 
+		//celltable changes start
+			table.addHandler(new MouseDownHandler() {
+
+				@Override
+				public void onMouseDown(MouseDownEvent event) {
+					// TODO Auto-generated method stub
+					Log.info("mouse down");
+					
+					if(table.getRowCount()>0)
+					{
+					Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+					x = event.getClientX();
+					y = event.getClientY();
+
+					if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+						
+						table.getPopup().setPopupPosition(x, y);
+						table.getPopup().show();
+
+						Log.info("right event");
+					}
+					}
+				}
+			}, MouseDownEvent.getType());
+			
+			
+			table.getPopup().addDomHandler(new MouseOutHandler() {
+
+				@Override
+				public void onMouseOut(MouseOutEvent event) {
+					// TODO Auto-generated method stub
+					//addColumnOnMouseout();
+					table.getPopup().hide();
+					
+				}
+			}, MouseOutEvent.getType());
+			
 		 table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+				@Override
+				public void onColumnSort(ColumnSortEvent event) {
+					// By SPEC[Start
+
+					Column<RoleTopicProxy, String> col = (Column<RoleTopicProxy, String>) event.getColumn();
+					
+					
+					int index = table.getColumnIndex(col);
+					
+					/*String[] path =	systemStartView.getPaths();	            			
+					sortname = path[index];
+					sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+					
+					if (index % 2 == 1 ) {
+						
+						table.getPopup().setPopupPosition(x, y);
+						table.getPopup().show();
+
+					} else {
+						// path = systemStartView.getPaths();
+						//String[] path =	systemStartView.getPaths();	
+						Log.info("index value--"+index +systemStartView.getPaths().get(index)+"--"+systemStartView.getPaths().get(index));
+						sortname = systemStartView.getPaths().get(index);
+						sortorder = (event.isSortAscending()) ? Sorting.ASC: Sorting.DESC;
+						// By SPEC]end
+						// RoleActivity.this.init2("");
+						Log.info("Call Init Search from addColumnSortHandler");
+						// filter.hide();
+						setInserted(false);
+						initSearch();
+						
+					}
+				}
+			});
+			
+			/*table.addColumnSortHandler(new ColumnSortEvent.Handler() {
 				@Override
 				public void onColumnSort(ColumnSortEvent event) {
 					//By SPEC[Start
@@ -359,8 +452,26 @@ public class RoleActivity extends AbstractActivity implements
 					setInserted(false);
 					initSearch();
 				}
-			});
+			});*/
 		 
+		/* table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+				@Override
+				public void onColumnSort(ColumnSortEvent event) {
+					//By SPEC[Start
+					Log.info("call for sort ");
+					Column<RoleTopicProxy,String> col = (Column<RoleTopicProxy,String>) event.getColumn();
+					int index = table.getColumnIndex(col); 
+					String[] path =	systemStartView.getPaths();	            			
+					sortname = path[index];
+					sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;				
+					//By SPEC]end
+					//RoleActivity.this.init2("");
+					Log.info("Call Init Search from addColumnSortHandler");
+					setInserted(false);
+					initSearch();
+				}
+			});*/
+		 /*celltable changes end*/
 	 //	init2();	
 		 Log.info("Call Init Search from addColumnSortHandler1");
 		 setInserted(false);

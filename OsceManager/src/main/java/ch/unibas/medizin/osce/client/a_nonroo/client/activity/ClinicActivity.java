@@ -12,12 +12,21 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.Sorting;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -27,6 +36,8 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -41,7 +52,11 @@ ClinicView.Presenter, ClinicView.Delegate {
 	private PlaceController placeController;
 	private AcceptsOneWidget widget;
 	private ClinicView view;
-	private CellTable<ClinicProxy> table;
+	
+	//cell atble changes start
+	//private CellTable<ClinicProxy> table;
+	private AdvanceCellTable<ClinicProxy> table;
+	//celltable changes end
 	private SingleSelectionModel<ClinicProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
@@ -49,7 +64,8 @@ ClinicView.Presenter, ClinicView.Delegate {
 	private String quickSearchTerm = "";
 	private HandlerRegistration placeChangeHandlerRegistration;
 	
-
+	int x;
+	int y;
 	public ClinicActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
     	this.placeController = placeController;
@@ -85,6 +101,70 @@ ClinicView.Presenter, ClinicView.Delegate {
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
 		
+		
+		//celltable changes start
+		table.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+				
+				if(table.getRowCount()>0)
+				{
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+					Log.info("right event");
+				}
+				}
+			}
+		}, MouseDownEvent.getType());
+		
+		
+		table.getPopup().addDomHandler(new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				// TODO Auto-generated method stub
+				//addColumnOnMouseout();
+				table.getPopup().hide();
+				
+			}
+		}, MouseOutEvent.getType());
+		
+		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				// By SPEC[Start
+
+				Column<ClinicProxy, String> col = (Column<ClinicProxy, String>) event.getColumn();
+				
+				
+				int index = table.getColumnIndex(col);
+				
+				Log.info("column sort--"+index);
+				if (index % 2 == 1 ) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+				} 
+			}
+		});
+		/*celltable changes end*/
+		
+		
+
+		//celltable changes end
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (ClinicViewImpl)view);
 		//by spec
@@ -224,8 +304,10 @@ ClinicView.Presenter, ClinicView.Delegate {
 	}
 
 	private void setTable(CellTable<ClinicProxy> table) {
-		this.table = table;
-		
+		//celltable changes start
+		//this.table = table;
+		this.table = (AdvanceCellTable<ClinicProxy>)table;
+		//cell table changes end
 	}
 
 	@Override

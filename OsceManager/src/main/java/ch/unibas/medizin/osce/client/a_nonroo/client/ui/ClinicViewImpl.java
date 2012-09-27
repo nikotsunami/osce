@@ -13,7 +13,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -69,8 +71,13 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 	@UiField (provided = true)
 	SimplePager pager;
 
-	@UiField (provided = true)
+	/*celltable changes start*/
+	/*@UiField (provided = true)
 	CellTable<ClinicProxy> table;
+	*/
+	@UiField (provided = true)
+	AdvanceCellTable<ClinicProxy> table;
+	/*celltable changes end*/
 
 	@UiField
 	HTMLPanel westPanel;
@@ -101,9 +108,15 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 	 * implement HasHTML instead of HasText.
 	 */
 	public ClinicViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<ClinicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+	//	CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+	//	table = new CellTable<ClinicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
+		//celltable start
+		//table = new CellTable<ClinicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<ClinicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table end
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, 30, true);
 		

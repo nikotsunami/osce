@@ -11,8 +11,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityRequest;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -20,6 +22,11 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -28,6 +35,8 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -42,7 +51,13 @@ NationalityView.Presenter, NationalityView.Delegate {
 	private PlaceController placeControler;
 	private AcceptsOneWidget widget;
 	private NationalityView view;
-	private CellTable<NationalityProxy> table;
+	
+	//cell table changes
+	/*private CellTable<NationalityProxy> table;*/
+	private AdvanceCellTable<NationalityProxy> table;
+	int x;
+	int y;
+	//cell table changes
 	private SingleSelectionModel<NationalityProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManger;
@@ -71,6 +86,71 @@ NationalityView.Presenter, NationalityView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+
+		//celltable changes start
+				table.addHandler(new MouseDownHandler() {
+
+					@Override
+					public void onMouseDown(MouseDownEvent event) {
+						// TODO Auto-generated method stub
+						Log.info("mouse down");
+						
+						if(table.getRowCount()>0)
+						{
+						Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+						x = event.getClientX();
+						y = event.getClientY();
+
+						if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+							
+							table.getPopup().setPopupPosition(x, y);
+							table.getPopup().show();
+
+							Log.info("right event");
+						}
+						}
+					}
+				}, MouseDownEvent.getType());
+				
+				
+				table.getPopup().addDomHandler(new MouseOutHandler() {
+
+					@Override
+					public void onMouseOut(MouseOutEvent event) {
+						// TODO Auto-generated method stub
+						//addColumnOnMouseout();
+						table.getPopup().hide();
+						
+					}
+				}, MouseOutEvent.getType());
+				
+				table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+					@Override
+					public void onColumnSort(ColumnSortEvent event) {
+						// By SPEC[Start
+
+						Column<NationalityProxy, String> col = (Column<NationalityProxy, String>) event.getColumn();
+						
+						
+						int index = table.getColumnIndex(col);
+						
+						/*String[] path =	systemStartView.getPaths();	            			
+						sortname = path[index];
+						sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+						
+						if (index % 2 == 1 ) {
+							
+							table.getPopup().setPopupPosition(x, y);
+							table.getPopup().show();
+
+						} 
+					}
+				});
+				
+				
+				//cell table changes end
 
 		//by spec
 		RecordChangeEvent.register(requests.getEventBus(), (NationalityViewImpl) view);
@@ -191,7 +271,9 @@ NationalityView.Presenter, NationalityView.Delegate {
 	}
 
 	private void setTable(CellTable<NationalityProxy> table) {
-		this.table = table;
+		//this.table = table;
+		//cell table changes
+		this.table = (AdvanceCellTable<NationalityProxy>)table;
 		
 	}
 
