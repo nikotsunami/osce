@@ -528,14 +528,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			public void onMouseDown(MouseDownEvent event) {
 				// TODO Auto-generated method stub
 				Log.info("mouse down");
-				
+				x = event.getClientX();
+				y = event.getClientY();
+
 				if(criteriaTable.getRowCount()>0)
 				{
 				Log.info(criteriaTable.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
 
-				x = event.getClientX();
-				y = event.getClientY();
-
+				
 				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < criteriaTable.getRowElement(0).getAbsoluteTop()) {
 					
 					criteriaTable.getPopup().setPopupPosition(x, y);
@@ -544,8 +544,17 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 					Log.info("right event");
 				}
 				}
+				else
+				{
+					if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+					{
+						criteriaTable.getPopup().setPopupPosition(x, y);
+						criteriaTable.getPopup().show();
+					}
+				}
 			}
 		}, MouseDownEvent.getType());
+		
 		
 		
 		criteriaTable.getPopup().addDomHandler(new MouseOutHandler() {

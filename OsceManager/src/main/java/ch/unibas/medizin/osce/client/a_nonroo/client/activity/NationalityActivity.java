@@ -88,30 +88,38 @@ NationalityView.Presenter, NationalityView.Delegate {
 		setTable(view.getTable());
 
 		//celltable changes start
-				table.addHandler(new MouseDownHandler() {
+		table.addHandler(new MouseDownHandler() {
 
-					@Override
-					public void onMouseDown(MouseDownEvent event) {
-						// TODO Auto-generated method stub
-						Log.info("mouse down");
-						
-						if(table.getRowCount()>0)
-						{
-						Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+				x = event.getClientX();
+				y = event.getClientY();
 
-						x = event.getClientX();
-						y = event.getClientY();
+				if(table.getRowCount()>0)
+				{
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
 
-						if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
-							
-							table.getPopup().setPopupPosition(x, y);
-							table.getPopup().show();
+				
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
 
-							Log.info("right event");
-						}
-						}
+					Log.info("right event");
+				}
+				}
+				else
+				{
+					if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+					{
+						table.getPopup().setPopupPosition(x, y);
+						table.getPopup().show();
 					}
-				}, MouseDownEvent.getType());
+				}
+			}
+		}, MouseDownEvent.getType());
 				
 				
 				table.getPopup().addDomHandler(new MouseOutHandler() {

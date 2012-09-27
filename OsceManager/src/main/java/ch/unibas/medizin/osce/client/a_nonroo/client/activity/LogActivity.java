@@ -81,14 +81,14 @@ public class LogActivity extends AbstractActivity implements LogView.Presenter, 
 			public void onMouseDown(MouseDownEvent event) {
 				// TODO Auto-generated method stub
 				Log.info("mouse down");
-				
+				x = event.getClientX();
+				y = event.getClientY();
+
 				if(table.getRowCount()>0)
 				{
 				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
 
-				x = event.getClientX();
-				y = event.getClientY();
-
+				
 				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
 					
 					table.getPopup().setPopupPosition(x, y);
@@ -97,8 +97,17 @@ public class LogActivity extends AbstractActivity implements LogView.Presenter, 
 					Log.info("right event");
 				}
 				}
+				else
+				{
+					if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+					{
+						table.getPopup().setPopupPosition(x, y);
+						table.getPopup().show();
+					}
+				}
 			}
 		}, MouseDownEvent.getType());
+		
 		
 		
 		table.getPopup().addDomHandler(new MouseOutHandler() {
