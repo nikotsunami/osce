@@ -776,14 +776,18 @@ public class Osce {
  			boolean flag = OscePostRoom.removeOscePostRoomForDoublePost(osce.getId());
  			//spec bug sol
  			
- 			if (flag)
- 			{
+ 			boolean test = PatientInRole.removePatientInRoleByOsceID(osce.getId());
+ 			
+ 			if (flag && test)
+ 			{	
  				return true;
  			}
  			else
  			{
  				return false;
  			}
+ 			
+ 			
 		}
 
 

@@ -459,24 +459,40 @@ public class OsceDay {
 						}		
 						
 						// Add OscePostRoom
+						List<OscePost> oldOscePosts=OscePost.findOscePostByOsceSequence(osceSequence.getId());
+						List<Course> oldCourses=Course.findCourseByOsceSequence(osceSequence.getId());
+						
 						List<OscePost> oscePostsListforOscePostRoom=OscePost.findOscePostByOsceSequence(newOsceSequence.getId());
 						List<Course> coursesforOscePostRoom=Course.findCourseByOsceSequence(newOsceSequence.getId());
 						
 						if(oscePostsListforOscePostRoom.size()>0 && coursesforOscePostRoom.size()>0)							
 						{
 							Iterator<Course> courseIterator=coursesforOscePostRoom.iterator();
-							while(courseIterator.hasNext())
+							Iterator<Course> oldCourseIterator=oldCourses.iterator();
+							
+							while(courseIterator.hasNext() && oldCourseIterator.hasNext())
 							{
 								Iterator<OscePost> oscePostIterator=oscePostsListforOscePostRoom.iterator();
+								Iterator<OscePost> oldOscePostIterator=oldOscePosts.iterator();
 								
 								Course course=courseIterator.next();
-								while(oscePostIterator.hasNext())
+								Course oldCourse=oldCourseIterator.next();
+								
+								while(oscePostIterator.hasNext() && oldOscePostIterator.hasNext())
 								{
 									OscePost oscePost=oscePostIterator.next();
+									OscePost oldOscePost=oldOscePostIterator.next();
+									
+									OscePostRoom opr=OscePostRoom.findOscePostRoomByOscePostAndCourse(oldCourse, oldOscePost);
+																		
 									System.out.println("Course: " + course + "Post: " + oscePost);
 									OscePostRoom newOscePostRoom=new OscePostRoom();
 									newOscePostRoom.setCourse(course);
 									newOscePostRoom.setOscePost(oscePost);
+									if(opr!=null)
+									{
+										newOscePostRoom.setRoom(opr.getRoom());
+									}
 									newOscePostRoom.persist();
 								}
 							}

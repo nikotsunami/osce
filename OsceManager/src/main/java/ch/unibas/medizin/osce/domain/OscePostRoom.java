@@ -103,9 +103,9 @@ public class OscePostRoom {
     
     public static OscePostRoom findOscePostRoomByOscePostAndCourse(Course course, OscePost oscePost)
     {
-    		Log.info("findOscePostRoomByOscePostAndCourse call");    		
+    		//Log.info("findOscePostRoomByOscePostAndCourse call");    		
         	List<OscePostRoom> results = findOscePostRoomsByCourseAndOscePost(course, oscePost).getResultList();
-        	Log.info("Result Size: " + results.size());
+        	//Log.info("Result Size: " + results.size());
         	if(results.size() == 1) 
         	{
         		return results.get(0);
@@ -321,4 +321,86 @@ public class OscePostRoom {
     }
     
   //spec bug sol
+    
+    public static Boolean insertRoomVertically(Long osceid, Course course, Long oscePostid, Room room)
+    {
+    	try
+    	{
+    		Osce osce = Osce.findOsce(osceid);
+    		
+    		OscePost oscePost = OscePost.findOscePost(oscePostid);
+    		
+    		OscePostBlueprint oscePostBlueprint = oscePost.getOscePostBlueprint();
+    		
+    		OsceSequence osceSeq = course.getOsceSequence();
+    		
+    		List<Course> courseList = Course.findCourseByOsceSequence(osceSeq.getId());
+    		
+    		int courseCount = 0;
+    		
+    		for (int i=0; i<courseList.size(); i++)
+    		{
+    			if (courseList.get(i).getId() == course.getId())
+    			{
+    				courseCount = i;
+    				break;
+    			}
+    		}
+    		
+    		//System.out.println("COURSE COUNT : " + courseCount);
+    		
+        	Iterator<OsceDay> osceDayItr = osce.getOsce_days().iterator();
+        	
+        	while (osceDayItr.hasNext())
+        	{
+        		OsceDay osceDay = osceDayItr.next();
+        		
+        		Iterator<OsceSequence> osceSeqItr = osceDay.getOsceSequences().iterator();
+        		
+        		while (osceSeqItr.hasNext())
+        		{
+        			OsceSequence osceSequence = osceSeqItr.next();
+        			
+        		//	System.out.println("SEQUENCE ID : " + osceSequence.getId());
+        			
+        			List<Course> couList = Course.findCourseByOsceSequence(osceSequence.getId());
+        			
+        			Course courseVal = couList.get(courseCount);
+        			        			
+        			Iterator<OscePostRoom> itr = findOscePostRoomByOsceSeqCourseOscePost(osceSequence.getId(), oscePostBlueprint.getId(), courseVal.getId());
+        			
+        			while (itr.hasNext())
+        			{
+        				OscePostRoom opr = itr.next();
+        				
+        				opr.setRoom(room);
+        				
+        				opr.persist();
+        				
+        				System.out.println("OSCE POST ROOM ID : " + opr.getId());
+        			}
+        		}
+        	}
+        	
+        	return true;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    		return false;
+    	}
+    	
+    }
+    
+    public static Iterator<OscePostRoom> findOscePostRoomByOsceSeqCourseOscePost(Long id, Long oscePostBlueprintId, Long courseid)
+    {
+    	EntityManager em = entityManager();
+    	
+    	String oprSql = "SELECT opr FROM OscePostRoom AS opr WHERE opr.course = " + courseid + " AND opr.oscePost.oscePostBlueprint = " + oscePostBlueprintId + " AND opr.course.osceSequence = " + id + " AND opr.oscePost.osceSequence = " + id +" ORDER BY opr.id";
+		
+		TypedQuery<OscePostRoom> oprQuery = em.createQuery(oprSql, OscePostRoom.class);
+		
+		return oprQuery.getResultList().iterator();
+    }
+    
 }

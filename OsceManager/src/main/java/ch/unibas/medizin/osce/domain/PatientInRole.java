@@ -231,5 +231,24 @@ public class PatientInRole {
 		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
         return result;    	    
     }
-    // E Module10 Create plans    
+    // E Module10 Create plans
+    
+    //spec bug sol
+    public static Boolean removePatientInRoleByOsceID(Long id)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT pir FROM PatientInRole AS pir WHERE pir.oscePost.osceSequence.osceDay.osce = " + id;
+    	TypedQuery<PatientInRole> q = em.createQuery(sql, PatientInRole.class);
+    	Iterator<PatientInRole> itr = q.getResultList().iterator();
+    	
+    	while(itr.hasNext())
+    	{
+    		PatientInRole patientInRole = itr.next();
+    		
+    		patientInRole.remove();
+    	}
+    	
+    	return true;
+    }
+    //spec bug sol
 }

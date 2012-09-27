@@ -24,8 +24,8 @@ public interface OscePostSubView extends IsWidget{
 		
 		public void roomEditClicked(OscePostSubView view,int left,int top);
 		public void saveOscePostRoom(OscePostSubViewImpl oscePostSubViewImpl,ListBoxPopupView view);
-			
 		
+		public void refreshRoomValue(OscePostSubViewImpl oscePostSubViewImpl, OscePostProxy oscePostProxy, CourseProxy courseProxy);
 	}
 	
 	 void setDelegate(Delegate delegate);

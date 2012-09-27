@@ -3,6 +3,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoomRefreshEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoomRefreshHandler;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
@@ -25,7 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OscePostSubViewImpl extends Composite implements OscePostSubView {
+public class OscePostSubViewImpl extends Composite implements OscePostSubView, RoomRefreshHandler {
 	
 	private Delegate delegate;
 	
@@ -200,11 +202,8 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 			listBoxPopupViewImpl=(ListBoxPopupViewImpl)popupView;
 			((ListBoxPopupViewImpl)popupView).setAnimationEnabled(true);
 			
-			
-			
 			((ListBoxPopupViewImpl)popupView).setWidth("160px");
-
-		
+			
 			RootPanel.get().add(((ListBoxPopupViewImpl)popupView));
 			
 			popupView.getOkBtn().addClickHandler(new ClickHandler() {
@@ -220,7 +219,7 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 					
 					if(object instanceof SpecialisationProxy)
 					{
-						Log.info("Specialisation Proxy");						
+						Log.info("Specialisation Proxy id : " + ((SpecialisationProxy)object).getId());						
 						delegate.saveSpecialisation(oscePostSubViewImpl);
 					}
 					else if(object instanceof RoleTopicProxy)
@@ -314,6 +313,11 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 			((ListBoxPopupViewImpl)popupView).show();
 		}
 		// E Module 5 and TTG Bug Changes
+
+		@Override
+		public void onRoomChanged(RoomRefreshEvent event) {
+			delegate.refreshRoomValue(this, oscePostProxy, courseProxy);
+		}
 		
 		// 5C: SPEC END
 	
