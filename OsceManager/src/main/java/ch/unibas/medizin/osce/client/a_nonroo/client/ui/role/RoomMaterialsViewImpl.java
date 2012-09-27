@@ -12,7 +12,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
@@ -70,8 +72,12 @@ public class RoomMaterialsViewImpl extends Composite implements
 	// @UiField
 	// public IconButton filterButton;
 
+	//cell table changes
+	/*@UiField(provided = true)
+	CellTable<MaterialListProxy> table;*/
 	@UiField(provided = true)
-	CellTable<MaterialListProxy> table;
+	AdvanceCellTable<MaterialListProxy> table;
+	//cell table changes end
 
 	protected ArrayList<String> paths = new ArrayList<String>();
 
@@ -101,11 +107,14 @@ public class RoomMaterialsViewImpl extends Composite implements
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public RoomMaterialsViewImpl() {
+		/*CellTable.Resources tableResources = GWT
+				.create(MyCellTableResources.class);*/
+		//cell tbale changes 
 		CellTable.Resources tableResources = GWT
-				.create(MyCellTableResources.class);
-		table = new CellTable<MaterialListProxy>(OsMaConstant.TABLE_PAGE_SIZE,
+				.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<MaterialListProxy>(OsMaConstant.TABLE_PAGE_SIZE,
 				tableResources);
-
+//cell table chages
 		SimplePager.Resources pagerResources = GWT
 				.create(MySimplePagerResources.class);
 		Pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources,
@@ -151,6 +160,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 		// @SPEC
 
 		paths.add("name");
+		paths.add("");
 		table.addColumn(new TextColumn<MaterialListProxy>() {
 			{
 				this.setSortable(true);
@@ -172,6 +182,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 		}, constants.roomMaterialName());
 
 		paths.add("type");
+		paths.add("");
 		table.addColumn(new TextColumn<MaterialListProxy>() {
 			{
 				this.setSortable(true);
@@ -187,6 +198,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 		}, constants.roomMaterialType());
 
 		paths.add("price");
+		paths.add("");
 		table.addColumn(new TextColumn<MaterialListProxy>() {
 			{
 				this.setSortable(true);
@@ -208,6 +220,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 		}, constants.roomMaterialPrice());
 
 		paths.add("priceType");
+		paths.add("");
 		table.addColumn(new TextColumn<MaterialListProxy>() {
 			{
 				this.setSortable(true);
@@ -297,7 +310,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 
 	private List<AbstractEditableCell<?, ?>> editableCells;
