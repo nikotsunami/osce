@@ -70,7 +70,7 @@ public class TimetableGenerator {
 		}
 		
 		// max number of courses (decrease while looking for optimum)
-		int numberParcoursMax = (osce.getNumberCourses() > 0 ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
+		int numberParcoursMax = (osce.getNumberCourses() > 0 && osce.getNumberCourses() < osce.getNumberRooms() / osce.numberPostsWithRooms() ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
 		
 		TimetableGenerator ttGen;
 		TimetableGenerator optGen = null;
@@ -353,7 +353,7 @@ public class TimetableGenerator {
 		Iterator<OsceDay> allDays = osceDay.getOsce().getOsce_days().iterator();
 		while (allDays.hasNext()) {
 			OsceDay currDay = (OsceDay) allDays.next();
-			if(!currDay.equals(currDay))
+			if(!currDay.equals(osceDay))
 				index++;
 			else
 				return index;
@@ -381,9 +381,17 @@ public class TimetableGenerator {
 		while (it.hasNext()) {
 			Integer osceDayIndex = (Integer) it.next();
 			OsceDay thisDay = osce.getOsce_days().get(osceDayIndex);
+			log.warn(osceDayIndex);
 			
 			rotationsByDay.add(osceDayIndex, thisDay.totalNumberRotations());
-			calcDayTimeByDayIndex(osceDayIndex, thisDay.getLunchBreakAfterRotation());
+			
+			int lunchBreakAfterRotation = 0;
+			if(thisDay.getLunchBreakAfterRotation() == null)
+				lunchBreakAfterRotation = thisDay.getOsceSequences().get(0).getNumberRotation();
+			else
+				lunchBreakAfterRotation = thisDay.getLunchBreakAfterRotation();
+			
+			calcDayTimeByDayIndex(osceDayIndex, lunchBreakAfterRotation);
 			
 			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(osceDayIndex)));
 			thisDay.flush();
