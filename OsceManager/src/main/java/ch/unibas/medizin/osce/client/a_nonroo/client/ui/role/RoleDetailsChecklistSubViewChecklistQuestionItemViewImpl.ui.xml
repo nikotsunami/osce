@@ -59,19 +59,17 @@
 	
 	.maxWidth {
 		margin-bottom: 3px;
-		width: 90%;
-				-moz-border-radius-bottomleft: 16px;
-	-moz-border-radius-bottomright: 16px;
-	-moz-border-radius-topleft: 16px;
-	-moz-border-radius-topright: 16px;
+		
+		border-radius: 16px;
+		
 		}
 		
 		.exp{
 	
 background-color: #DFDAD6;
 border-bottom-color:#808080;
-	-moz-border-radius-topleft: 16px;
-	-moz-border-radius-topright: 16px;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
 
 }
 	.borderDP{
@@ -102,18 +100,21 @@ border-bottom-color:#808080;
 	
 	margin-top: 5px;
 }
+.questionMaxWidth{
+		max-width: 645px;
+	}
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
-<g:HTMLPanel  width="100%">
-	<g:VerticalPanel ui:field="checkListQuestionItemVerticalPanel"  styleName="{style.maxWidth} {style.roleQuetion}" addStyleNames="{style.tabStyle} {style.roleQuetion}" >
+<g:HTMLPanel  addStyleNames="{style.questionMaxWidth}">
+	<g:VerticalPanel ui:field="checkListQuestionItemVerticalPanel"   addStyleNames="{style.maxWidth}{style.questionMaxWidth}{style.tabStyle} {style.roleQuetion}" >
 		
 		
 		
 		<g:VerticalPanel styleName="{style.exp}" verticalAlignment="middle">
 	
-		<g:HorizontalPanel>
-		<g:AbsolutePanel ui:field="roleQueAP">
-		<g:HorizontalPanel ui:field="roleQueHP">
+				<g:HorizontalPanel>
+				<g:AbsolutePanel ui:field="roleQueAP">
+				<g:HorizontalPanel ui:field="roleQueHP">
 	
 		
 			<g:VerticalPanel width="100%" verticalAlignment="middle">
@@ -184,8 +185,8 @@ border-bottom-color:#808080;
 				<my:IconButton ui:field="addOptionButton" icon="plusthick" addStyleNames="{style.addBtn}" height="18px"></my:IconButton>
 			</g:HorizontalPanel>
 
-			<g:HorizontalPanel ui:field="optionVerticalPanel" spacing="4">
-			</g:HorizontalPanel>
+			<g:FlowPanel ui:field="optionVerticalPanel" addStyleNames="{style.criteria}" width="640px">
+			</g:FlowPanel>
 		</g:VerticalPanel>
 	
 		<g:VerticalPanel spacing="2">
@@ -196,7 +197,7 @@ border-bottom-color:#808080;
 			</g:HorizontalPanel>
 
 			<g:FlowPanel ui:field="criteriaHorizontalPanel" styleName="style.criteria"
-				width="100%">
+				width="640px">
 			</g:FlowPanel>
 		</g:VerticalPanel>
 		

@@ -49,6 +49,13 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	public static RoleTopicProxy roleTopic;
 	public static RoleTopicProxy oldRoleTopic;
 	
+	private static int selectedTab;
+	
+	public static void setSelectedTab(int selectedTab) {
+		RoleEditActivity.selectedTab = selectedTab;
+	}
+
+
 	//vigna
 	public static RoleActivity roleActivity;
 
@@ -597,8 +604,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 
 				save = true;
 				
-			
-				RoleDetailsActivity.setSelecTab(findTabIndex());
+				RoleDetailsActivity.setSelecTab(selectedTab);
+				//RoleDetailsActivity.setSelecTab(findTabIndex());
 				roleActivity.setInserted(false);
 				roleActivity.initSearch();
 				goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));				
@@ -754,10 +761,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				
 				((RoleEditViewImpl)view).active.setValue(false);
 				
-				/*((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
+				((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
 				((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
 				((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
-				((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());*/
+				((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+				((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
 				//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
 				
 				save();

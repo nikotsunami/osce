@@ -18,13 +18,14 @@ public class OneBreakConstraint extends AssignmentConstraint {
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
 		VarAssignment varAssignment = patient.variable();
 		Assignment assignment = patient.variable().getOsceAssignment();
+		Boolean spStayInPost = assignment.getOsceDay().getOsce().getSpStayInPost();
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
 			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself and assignments that are further away than +/- 1
-			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || p.getPatientInRole().getStayInPost().equals(true))
+			if(assignment.equals(a) || !isNeighborAssignment(varAssignment, a) || spStayInPost.equals(true))
 				continue;
 			
 			if(p.hasAssignments() && p.getNumberBreaks() < 1) {

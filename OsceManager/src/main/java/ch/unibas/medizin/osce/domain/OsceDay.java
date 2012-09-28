@@ -766,6 +766,9 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 			OsceSequence secondOsceSequence = listOsceSequence.get(1);
 			firstOsceSequence.setNumberRotation(firstOsceSequence.getNumberRotation() - rotation);
 			secondOsceSequence.setNumberRotation(secondOsceSequence.getNumberRotation() + rotation);
+			
+			firstOsceSequence.persist();
+			secondOsceSequence.persist();
 		}
 		
 	} catch(Exception e) {

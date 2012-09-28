@@ -35,8 +35,6 @@ public class PatientInRole {
     Boolean fit_criteria;
 
     Boolean is_backup;
-
-    Boolean stayInPost;
     
  // Module10 Create plans
  	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInRole")

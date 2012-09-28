@@ -208,6 +208,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 
 		this.setPopupPosition(parentButton.getAbsoluteLeft(),
 				parentButton.getAbsoluteTop() - getOffsetHeight() / 2 - 6);
+		delegate.showApplicationLoading(false);
 		this.show();
 
 	}

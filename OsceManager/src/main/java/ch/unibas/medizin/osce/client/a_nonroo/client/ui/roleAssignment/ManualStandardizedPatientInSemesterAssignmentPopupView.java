@@ -16,6 +16,8 @@ public interface ManualStandardizedPatientInSemesterAssignmentPopupView extends
 
 		public void onAddAllActive(
 				List<StandardizedPatientProxy> standardizedPatientProxies);
+		
+		public void showApplicationLoading(Boolean show);
 	}
 
 	public void setDelegate(Delegate delegate);

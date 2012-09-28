@@ -71,7 +71,10 @@ public void onFailure(ServerFailure error)
 {
 	
 	// module 3 bug {
+	
+	if(RoleAssignmentPatientInSemesterActivity.osceDayTimer !=null)
 	RoleAssignmentPatientInSemesterActivity.osceDayTimer.scheduleRepeating(OsMaConstant.OSCEDAYTIMESCHEDULE);
+	
 	// module 3 bug }
 	Log.error(error.getMessage());	
 	showMessage(error.getMessage());

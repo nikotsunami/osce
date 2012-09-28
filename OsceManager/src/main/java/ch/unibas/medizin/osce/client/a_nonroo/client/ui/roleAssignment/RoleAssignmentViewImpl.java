@@ -134,6 +134,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiHandler("addManuallyBtn")
 	public void onAddManuallyBtnClicked(ClickEvent event) {
 
+		delegate.showApplicationLoading(true);
 		delegate.onAddManuallyClicked();
 	}
 

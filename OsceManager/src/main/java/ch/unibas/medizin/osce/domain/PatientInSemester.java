@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 @RooJavaBean
 @RooToString
@@ -54,6 +55,69 @@ public class PatientInSemester {
         if (resultList == null || resultList.size() == 0) return null;
         return resultList.get(0);
     }
+    
+	public static List<PatientInSemester> findPatientInSemesterBySemester(Long semesterId) {
+		if (semesterId == null)
+			return new ArrayList<PatientInSemester>();
+
+		EntityManager em = entityManager();
+		TypedQuery<PatientInSemester> query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId", PatientInSemester.class);
+		query.setParameter("semesterId", semesterId);
+
+		List<PatientInSemester> resultList = query.getResultList();
+		if (resultList == null || resultList.size() == 0)
+			return new ArrayList<PatientInSemester>();
+
+		return resultList;
+	}
+	
+	public static List<StandardizedPatient> findAvailableSPBySemester(Long semesterId) {
+		if (semesterId == null)
+			return new ArrayList<StandardizedPatient>();
+
+		EntityManager em = entityManager();
+		String strQuery = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id not in ( SELECT tempPIS.standardizedPatient.id FROM PatientInSemester AS tempPIS where tempPIS.semester.id = " + semesterId +")";
+		Log.info("Query is : "+ strQuery);
+		TypedQuery<StandardizedPatient> query = em.createQuery(strQuery, StandardizedPatient.class);
+
+		List<StandardizedPatient> resultList = query.getResultList();
+		if (resultList == null || resultList.size() == 0)
+			return new ArrayList<StandardizedPatient>();
+
+		return resultList;
+	}
+	
+	public static Boolean findAvailableSPActiveBySemester(Long semesterId) {
+		if (semesterId == null){
+			return false;
+		}
+
+		EntityManager em = entityManager();
+		String strQuery = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.status="+ StandardizedPatientStatus.ACTIVE.ordinal() +" and sp.id not in ( SELECT tempPIS.standardizedPatient.id FROM PatientInSemester AS tempPIS where tempPIS.semester.id = " + semesterId +")";
+		Log.info("Query is : "+ strQuery);
+		TypedQuery<StandardizedPatient> query = em.createQuery(strQuery, StandardizedPatient.class);
+
+		List<StandardizedPatient> resultList = query.getResultList();
+		if (resultList == null || resultList.size() == 0){
+			return false;}
+		
+		else{
+			
+			PatientInSemester patientInSemester;
+			Semester semester = Semester.findSemester(semesterId);
+			
+			for (StandardizedPatient standardizedPatient : resultList) {
+				patientInSemester = new PatientInSemester();
+				
+				patientInSemester.setSemester(semester);
+				patientInSemester.setStandardizedPatient(standardizedPatient);
+				patientInSemester.setAccepted(false);
+				patientInSemester.persist();
+			}
+			return true;
+		}		
+	}
+	
     
  // Module10 Create plans	
  	public static List<PatientInSemester> findPatientInSemesterBySemesterPatient(

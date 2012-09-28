@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -61,6 +62,47 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView, R
 	CourseProxy courseProxy;
 	// E Module 5 and TTG Bug Changes
 	
+	RoomProxy roomProxy;
+	
+	SpecialisationProxy specialisationProxy;
+	
+	RoleTopicProxy roleTopicProxy;
+	
+	public RoleTopicProxy getRoleTopicProxy() {
+		return roleTopicProxy;
+	}
+
+	public void setRoleTopicProxy(RoleTopicProxy roleTopicProxy) {
+		this.roleTopicProxy = roleTopicProxy;
+	}
+
+	public SpecialisationProxy getSpecialisationProxy() {
+		return specialisationProxy;
+	}
+
+	public void setSpecialisationProxy(SpecialisationProxy specialisationProxy) {
+		this.specialisationProxy = specialisationProxy;
+	}
+	
+
+	StandardizedRoleProxy standardizedRoleProxy;
+	
+	public StandardizedRoleProxy getStandardizedRoleProxy() {
+		return standardizedRoleProxy;
+	}
+
+	public void setStandardizedRoleProxy(StandardizedRoleProxy standardizedRoleProxy) {
+		this.standardizedRoleProxy = standardizedRoleProxy;
+	}
+
+	public RoomProxy getRoomProxy() {
+		return roomProxy;
+	}
+
+	public void setRoomProxy(RoomProxy roomProxy) {
+		this.roomProxy = roomProxy;
+	}
+
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
 	}
