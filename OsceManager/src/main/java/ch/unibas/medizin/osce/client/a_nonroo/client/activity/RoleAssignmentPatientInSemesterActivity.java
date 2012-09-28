@@ -9,7 +9,6 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterServiceAsync;
-//import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
@@ -57,7 +56,6 @@ import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.RoleTypes;
-import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
@@ -186,6 +184,10 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				requests, placeController);
 		this.activityManager = new ActivityManager(activityMapper,
 				requests.getEventBus());
+		initLoading();
+	}
+	
+	private void initLoading(){
 		ApplicationLoadingScreenEvent.initialCounter();
 		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
 				new ApplicationLoadingScreenHandler() {
@@ -212,16 +214,8 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				requests, placeController);
 		this.activityManager = new ActivityManager(activityMapper,
 				requests.getEventBus());
-		ApplicationLoadingScreenEvent.initialCounter();
-		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
-				new ApplicationLoadingScreenHandler() {
-					@Override
-					public void onEventReceived(
-							ApplicationLoadingScreenEvent event) {
-//						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
-						event.display();
-					}
-				});
+		
+		initLoading();
 
 		this.addSelectChangeHandler(new SelectChangeHandler() {
 			@Override
@@ -308,7 +302,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 			}
 		};
 		
-		osceDayTimer.schedule(osMaConstant.OSCEDAYTIMESCHEDULE);
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	}
 	// Module 3 {
 	public void initOsceDaySubView(){

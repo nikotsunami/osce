@@ -24,6 +24,9 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
+import com.google.gwt.i18n.client.Constants.DefaultIntValue;
+import com.google.gwt.user.client.AsyncProxy.DefaultValue;
 
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
@@ -84,7 +87,9 @@ public class Osce {
     @Enumerated
     private PatientAveragePerPost patientAveragePerPost;
     
-    private Boolean spStayInPost;
+    
+   @NotNull
+    private Boolean spStayInPost=false;
     
     @NotNull
     @ManyToOne

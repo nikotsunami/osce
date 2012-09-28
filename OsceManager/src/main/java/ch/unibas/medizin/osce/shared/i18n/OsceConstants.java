@@ -1033,6 +1033,8 @@ public interface OsceConstants extends Constants {
 	public String roomNotNullWarning();
 	
 	public String deleteRole();
+	
+	public String OsceSpStayInPost();
 
 }
 

@@ -314,6 +314,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);
 			osceProxy.setSecurity(OSCESecurityStatus.FEDERAL_EXAM);
 			osceProxy.setOsceSecurityTypes(OsceSecurityType.federal);
+			osceProxy.setSpStayInPost(((OsceEditViewImpl)view).spStayInPost.isChecked());
 			//Set<TaskProxy> setTaskProxy = new HashSet<TaskProxy>();
 			//setTaskProxy=((OsceEditViewImpl)view).osceValue.getValue().getTasks();
 			//osceProxy.setTasks(setTaskProxy);

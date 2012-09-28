@@ -130,6 +130,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		}
 	};
 	
+	@UiField(provided = true)
+	public CheckBox spStayInPost = new CheckBox() {
+
+		public void setValue(Boolean value) {
+			super.setValue(value == null ? Boolean.FALSE : value);
+		}
+	};
+	
 	@UiField
 	DivElement labelOsce;
 	@UiField
@@ -160,6 +168,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	DivElement labeShortBreakSimpatChange;
 
+	@UiField
+	DivElement labelSpStayInPost;
+	
 	//remove number post
 //	@UiField
 //	DivElement numberPost;
@@ -272,6 +283,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
 		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
 		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
+		labelSpStayInPost.setInnerText(constants.OsceSpStayInPost());
 		//remove number post
 		//numberPost.setInnerText(constants.circuitStation() + ":");
 		
