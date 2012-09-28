@@ -205,10 +205,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 			List<OscePost> sortedOscePostByTypeAndComplexyList = Osce.getSortedOscePostByTypeAndComlexity(sortedOsceDay.getId());
 			 			Log.info("sortedOscePostsByRoleTypesAndComplexity for osceDay "+ sortedOsceDay.getId()+ " is :" + sortedOscePostByTypeAndComplexyList.size());
 			 			
-			 			List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay);
+			 			List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay,semester.getId());
 			 			Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
 			 			
-						List<PatientInSemester> patientInSemesterList2 =  Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueDESC(sortedOsceDay);
+						List<PatientInSemester> patientInSemesterList2 =  Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueDESC(sortedOsceDay,semester.getId());
 			 			Log.info("SortedPatientInSemester Based on RoleCount Asc And Value DESC for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList2.size());
 			 			
 			 			for (Iterator sortedOscePostListIterator = sortedOscePostList.iterator(); sortedOscePostListIterator.hasNext();) {

@@ -475,7 +475,7 @@ public class Osce {
 		return q.getResultList();
 	}
 
-	public static List<PatientInSemester> getPatientAccptedInOsceDayByRoleCountAscAndValueASC(OsceDay osceDay){
+	public static List<PatientInSemester> getPatientAccptedInOsceDayByRoleCountAscAndValueASC(OsceDay osceDay,Long semesterId){
 		EntityManager em = entityManager();
 		
 	Log.info("Size of PatientIn Sem at getPatientAccptedInOsceDayByRoleCountAscAndValueASC()" + osceDay.getPatientInSemesters().size());
@@ -490,7 +490,7 @@ public class Osce {
 			" ORDER BY pis.value,count(pir.patientInSemester.id) ";	*/	
 	String queryString = " Select pis from PatientInSemester pis left join pis.patientInRole pir " +
 			"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
-			" GROUP BY pis.id " + 
+			" and pis.semester="+semesterId +" and pis.accepted=1 GROUP BY pis.id " + 
 			" ORDER BY pis.value , count(pir.patientInSemester) ";
 	Log.info(queryString);
 		TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
@@ -499,7 +499,7 @@ public class Osce {
 	}
 
 
-	public static List<PatientInSemester> getPatientAccptedInOsceDayByRoleCountAscAndValueDESC(OsceDay osceDay){
+	public static List<PatientInSemester> getPatientAccptedInOsceDayByRoleCountAscAndValueDESC(OsceDay osceDay,Long semesterId){
 		EntityManager em = entityManager();
 			
 		Log.info("Size of PatientIn Sem at getPatientAccptedInOsceDayByRoleCountAscAndValueDESC()" + osceDay.getPatientInSemesters().size());
@@ -516,7 +516,7 @@ public class Osce {
 				" ORDER BY pis.value DESC, count(pir.patientInSemester.id) ";*/
 		String queryString = " Select pis from PatientInSemester pis left join pis.patientInRole pir " +
 				"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
-				" GROUP BY pis.id " + 
+				" and pis.semester="+semesterId +" and pis.accepted=1 GROUP BY pis.id " + 
 				" ORDER BY pis.value DESC , count(pir.patientInSemester) ";
 					Log.info(queryString);
 				TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
