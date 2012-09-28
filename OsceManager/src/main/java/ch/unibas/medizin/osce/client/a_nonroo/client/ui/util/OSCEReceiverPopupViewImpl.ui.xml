@@ -34,6 +34,6 @@
 	<g:HTMLPanel styleName="{style.pnlborder}">			 	
 		<g:Label ui:field="lblTitle" horizontalAlignment="center" styleName="{style.padBottom25}"></g:Label>
 		<g:Label ui:field="lblErrMessage" horizontalAlignment="center"></g:Label>
-		<g:Button ui:field="btnOk" text="OK" styleName="{style.padTop}"></g:Button>		
+		<my:IconButton icon="check" ui:field="btnOk" text="OK" styleName="{style.padTop}"></my:IconButton>		
 	</g:HTMLPanel>	
 </ui:UiBinder>

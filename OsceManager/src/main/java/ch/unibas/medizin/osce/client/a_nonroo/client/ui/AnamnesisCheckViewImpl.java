@@ -118,7 +118,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	@UiField
 	ScrollPanel scrollPanel;
 	
-	int widthSize=Integer.parseInt(constants.widthSize()),decreaseSize=0;
+	int widthSize=OsMaConstant.WIDTH_SIZE,decreaseSize=0;
 	Timer timer;
 	
 	
@@ -249,7 +249,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
@@ -271,7 +271,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 			timer.scheduleRepeating(1);
 
 		} else {
-			widthSize = Integer.parseInt(constants.widthSize());
+			widthSize = OsMaConstant.WIDTH_SIZE;
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
 		}

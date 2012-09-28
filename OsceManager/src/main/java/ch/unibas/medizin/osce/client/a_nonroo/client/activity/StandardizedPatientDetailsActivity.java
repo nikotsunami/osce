@@ -778,8 +778,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 							
 							SimpleShowErrorDialogBox dialogBox = null;
 							if(dialogBox == null){
-								String dialogTitle = messageLookup.getString("err_DialogBoxTitle");
-								String dialogCloseButton = messageLookup.getString("err_DialogBoxCloseButton");
+								String dialogTitle = constants.error();
+								String dialogCloseButton = constants.close();
 								dialogBox = new SimpleShowErrorDialogBox(dialogTitle,result,dialogCloseButton);
 							}
 							dialogBox.show();

@@ -20,6 +20,13 @@ public class OsMaConstant {
 	public static final int TABLE_JUMP_SIZE = 30;
 	public static final int SPLIT_PANEL_MINWIDTH = 520;
 	public static final int ENTRY_TIMEOUT_MS = 700;
+	
+	
+	// Constants moved from I18N-properties files.
+	public static final int WIDTH_SIZE = 1225;
+	public static final int WIDTH_MIN = 705;
+	public static final int ANIMATION_TIME = 3000;
+	
 	//By Spec[start
 //Feature : 154
 //	public static String FILENAME = "StandardizedPatientList.csv";

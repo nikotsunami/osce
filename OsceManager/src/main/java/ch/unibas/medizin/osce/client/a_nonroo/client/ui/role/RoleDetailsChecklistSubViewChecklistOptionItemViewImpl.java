@@ -110,9 +110,9 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 			
 		((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
 		
-		optionPopup.getDescriptionLbl().setText(constants.optionValue());
+		optionPopup.getDescriptionLbl().setText(constants.roleOptionValue());
 				
-		optionPopup.getTopicLbl().setText(constants.optionName());			
+		optionPopup.getTopicLbl().setText(constants.roleOptionName());
 			
 		optionPopup.getTopicTxtBox().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getOptionName());
 			

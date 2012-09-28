@@ -140,7 +140,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+						messageConfirmationDialogBox.showConfirmationDialog(constants.warningValidValue());
 						
 						//Window.alert("Enter Correct Value");
 					}
@@ -277,7 +277,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+						messageConfirmationDialogBox.showConfirmationDialog(constants.warningValidValue());
 					}
 					else
 					{

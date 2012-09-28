@@ -507,7 +507,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 					//Window.alert("Specialisation can not be deleted if role topic is asigned");
 					// Issue Role
 					 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
-					 dialogBox.showConfirmationDialog("Specialisation can not be deleted if role topic is asigned");
+					 dialogBox.showConfirmationDialog(constants.warningAssignedRoleTopic());
 					 
 					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						

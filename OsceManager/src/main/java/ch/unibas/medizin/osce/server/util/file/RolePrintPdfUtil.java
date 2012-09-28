@@ -453,7 +453,7 @@ public class RolePrintPdfUtil {
 		if (checklistQuestions.size() > 0) {
 			Paragraph details = new Paragraph();
 
-			details.add(new Chunk(constants.questionName() + " "
+			details.add(new Chunk(constants.roleQuestionName() + " "
 					+ constants.details(), subTitleFont));
 			// addEmptyLine(details, 1);
 
@@ -477,10 +477,10 @@ public class RolePrintPdfUtil {
 				PdfPTable chkListQuesTable = new PdfPTable(4);
 
 				chkListQuesTable.addCell(getPdfCellBold(constants
-						.questionName()));
+						.roleQuestionName()));
 				chkListQuesTable.addCell(getPdfCell(question));
 				chkListQuesTable.addCell(getPdfCellBold(constants
-						.questionInstruction()));
+						.roleQuestionInstruction()));
 				chkListQuesTable.addCell(getPdfCell(instruction, italicFont, 0,
 						0));
 
@@ -554,9 +554,9 @@ public class RolePrintPdfUtil {
 				Log.info("getCheckListOptions size : "
 						+ checklistQuestion.getCheckListOptions().size());
 
-				optionTable.addCell(getPdfCellBold(constants.optionName()));
+				optionTable.addCell(getPdfCellBold(constants.roleOptionName()));
 				// optionTable.addCell(getPdfCellBold(constants.name()));
-				optionTable.addCell(getPdfCellBold(constants.optionValue()));
+				optionTable.addCell(getPdfCellBold(constants.roleOptionValue()));
 
 				Set<ChecklistOption> checklistOptions = checklistQuestion
 						.getCheckListOptions();

@@ -3,7 +3,8 @@
   xmlns:g='urn:import:com.google.gwt.user.client.ui'
   xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
   xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
-  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'>
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'>
 
 <ui:style src="../styles.css" />
 
@@ -25,8 +26,8 @@
  -->    </table>
 
     <div class='{style.bar}'>
-      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
-      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
+      <my:IconButton icon="disk" addStyleNames='{style.button}' ui:field='save'>Save</my:IconButton>
+      <my:IconButton icon="closethick" addStyleNames='{style.button}' ui:field='cancel'>Cancel</my:IconButton>
     </div>
   </g:HTMLPanel>
 </ui:UiBinder>

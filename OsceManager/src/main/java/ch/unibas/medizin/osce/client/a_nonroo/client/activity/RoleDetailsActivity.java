@@ -6220,7 +6220,7 @@ final int index2 = index;
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			
 			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
-			dialogBox.showConfirmationDialog("Main skill added successfully");		
+			dialogBox.showConfirmationDialog(constants.confirmationMajorSkillAdded());		
 		}
 
 			// SPEC Change

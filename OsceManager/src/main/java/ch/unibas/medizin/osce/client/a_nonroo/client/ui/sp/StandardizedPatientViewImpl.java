@@ -660,7 +660,7 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
 			
 			delegate.doAnimation(true);
-			splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()),
+			splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME,
 					new AnimationCallback() {
 						
 						@Override
@@ -677,9 +677,9 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			delegate.doAnimation(false);
 		} else {
 			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0),
-					Integer.parseInt(constants.widthSize()));
+					OsMaConstant.WIDTH_SIZE);
 //			splitLayoutPanel
-//			.animate(Integer.parseInt(constants.animationTime()));
+//			.animate(OsMaConstant.ANIMATION_TIME);
 		}
 //		widthSize = 1200;
 //		decreaseSize = 0;

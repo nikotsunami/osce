@@ -109,7 +109,7 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 			//Window.confirm("Search Name cant not be left blank.");
 			
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 			 dialogBox.showConfirmationDialog("Search Name cant not be left blank.");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
@@ -134,7 +134,7 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 			return;*/
 			
 			// Issue Role
-			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Success");
+			 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 			 dialogBox.showConfirmationDialog("Search Value cant not be left blank.");
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {

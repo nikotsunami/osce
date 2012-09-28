@@ -130,8 +130,8 @@ background-color:#B8A9A2;
 			</g:VerticalPanel>
 		<g:VerticalPanel spacing="5" ui:field="addQuestionHP">
 		<g:HorizontalPanel spacing="8">
-			<g:Button ui:field="addCheckListQuestionButton" styleName="{style.expbtn}"></g:Button>
-			<g:Button ui:field="importQuestionButton" styleName="{style.expbtn}"></g:Button>
+			<my:IconButton icon="plusthick" ui:field="addCheckListQuestionButton" styleName="{style.expbtn}"></my:IconButton>
+			<my:IconButton icon="arrowthickstop-1-s" ui:field="importQuestionButton" styleName="{style.expbtn}"></my:IconButton>
 		</g:HorizontalPanel>
 		
 		</g:VerticalPanel>

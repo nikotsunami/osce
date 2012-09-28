@@ -250,8 +250,8 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
                 
                 if(event.getResults().trim().equals("error"))
                 {
-                	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Error");
-                	dialogBox.showConfirmationDialog("Error in File Upload");
+                	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.error());
+                	dialogBox.showConfirmationDialog(constants.errorFileUpload());
                 	return;
                 }
                 

@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.tools.ant.types.CommandlineJava.SysProperties;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -65,8 +63,6 @@ import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
-import ch.unibas.medizin.osce.domain.OsceDataOnDemand;
-import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsceSequences;

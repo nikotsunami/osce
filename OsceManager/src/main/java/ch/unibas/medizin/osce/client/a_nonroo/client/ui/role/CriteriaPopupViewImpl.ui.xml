@@ -50,7 +50,7 @@
 </g:HTML>
 	<g:HorizontalPanel  spacing="10">
 		<g:TextBox ui:field="criteriaTxtBox"></g:TextBox>
-		<g:Button ui:field="okBtn"></g:Button>
+		<my:IconButton icon="check" ui:field="okBtn"></my:IconButton>
 	</g:HorizontalPanel>
 
 	

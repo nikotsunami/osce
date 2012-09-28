@@ -84,7 +84,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 	@UiField
 	ScrollPanel scrollPanel;
 	
-	int widthSize=Integer.parseInt(constants.widthSize());
+	int widthSize=OsMaConstant.WIDTH_SIZE;
 	int decreaseSize=0;
 	Timer timer;
 	
@@ -243,11 +243,11 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 
 	public void setDetailPanel(boolean isDetailPlace) {
 		
-//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, OsMaConstant.WIDTH_SIZE - OsMaConstant.WIDTH_MIN );
 		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
+		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);	
 
-		/*splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));
+		/*splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);
 		//splitLayoutPanel.animate(150000);
 //		widthSize = 1200;
 //		decreaseSize = 0;
@@ -271,7 +271,7 @@ public class AdministratorViewImpl extends Composite implements  AdministratorVi
 			timer.scheduleRepeating(1);
 
 		} else {
-			widthSize = Integer.parseInt(constants.widthSize());
+			widthSize = OsMaConstant.WIDTH_SIZE;
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
 		}*/

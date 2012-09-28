@@ -342,9 +342,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			//SPEC Change
 			((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
 		
-			optionPopup.getDescriptionLbl().setText(constants.optionValue());
+			optionPopup.getDescriptionLbl().setText(constants.roleOptionValue());
 			
-			optionPopup.getTopicLbl().setText(constants.optionName());
+			optionPopup.getTopicLbl().setText(constants.roleOptionName());
 			
 			((CheckListTopicPopupViewImpl)optionPopup).setWidth("160px");
 		
@@ -497,9 +497,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			
 			((CheckListTopicPopupViewImpl)editquestionpopup).setAnimationEnabled(true);
 		
-			editquestionpopup.getDescriptionLbl().setText(constants.questionInstruction());
+			editquestionpopup.getDescriptionLbl().setText(constants.roleQuestionInstruction());
 			
-			editquestionpopup.getTopicLbl().setText(constants.questionName());
+			editquestionpopup.getTopicLbl().setText(constants.roleQuestionName());
 			
 		
 			

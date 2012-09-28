@@ -80,13 +80,7 @@ public interface OsceConstants extends Constants {
 
 	public String all();
 
-	public String anamnesisCheckTitle();
-
-	public String anamnesisForm();
-
 	public String anamnesisValues();
-
-	public String animationTime();
 
 	public String answer();
 
@@ -196,9 +190,15 @@ public interface OsceConstants extends Constants {
 
 	public String confirmationDeleteAssignment();
 
+	public String confirmationDeleteOsceBluePrintPost();
+
 	public String confirmationGoAhead();
 
 	public String confirmationMailSent();
+
+	public String confirmationMajorSkillAdded();
+
+	public String confirmationRecordInserted();
 
 	public String confirmationRoomAssigned();
 
@@ -242,7 +242,7 @@ public interface OsceConstants extends Constants {
 
 	public String deletedItemName();
 
-	public String deleteOsceBluePrintPost();
+	public String deleteRole();
 
 	public String deleteTask();
 
@@ -282,17 +282,15 @@ public interface OsceConstants extends Constants {
 
 	public String enterKeyword();
 
-	public String enterPatient();
-
 	public String enterQuestion();
-
-	public String enterSortOrderWarn();
 
 	public String eosceerrormsg();
 
 	public String error();
 
 	public String errorAutoAssignmentFailure();
+
+	public String errorFileUpload();
 
 	public String errorInvalidTplPath();
 
@@ -424,8 +422,6 @@ public interface OsceConstants extends Constants {
 
 	public String importprocessmsg();
 
-	public String importQuestion();
-
 	public String importStudents();
 
 	public String importsuccess();
@@ -456,10 +452,6 @@ public interface OsceConstants extends Constants {
 
 	public String learning();
 
-	public String leavePageWarn();
-
-	public String loading();
-
 	public String location();
 
 	public String log();
@@ -473,8 +465,6 @@ public interface OsceConstants extends Constants {
 	public String majorBtnLbl();
 
 	public String majorLbl();
-
-	public String majorSuccess();
 
 	public String male();
 
@@ -533,10 +523,6 @@ public interface OsceConstants extends Constants {
 	public String optionDetail();
 
 	public String optionlbl();
-
-	public String optionName();
-
-	public String optionValue();
 
 	public String order();
 
@@ -640,10 +626,6 @@ public interface OsceConstants extends Constants {
 
 	public String question();
 
-	public String questionInstruction();
-
-	public String questionName();
-
 	public String questionNotNull();
 
 	public String reallyDelete();
@@ -690,17 +672,29 @@ public interface OsceConstants extends Constants {
 
 	public String roleDetail();
 
+	public String roleEnterPatientName();
+
 	public String roleFile();
+
+	public String roleImportQuestion();
 
 	public String roleItemName();
 
 	public String roleName();
+
+	public String roleOptionName();
+
+	public String roleOptionValue();
 
 	public String roleOSCESecurityChange();
 
 	public String roleParticipants();
 
 	public String rolePatientInformation();
+
+	public String roleQuestionInstruction();
+
+	public String roleQuestionName();
 
 	public String roleQuestions();
 
@@ -908,6 +902,74 @@ public interface OsceConstants extends Constants {
 
 	public String TopicsAndSpecViewPopupYPosition();
 
+	public String tplDescDate();
+
+	public String tplDescEndTime();
+
+	public String tplDescLongBreak();
+
+	public String tplDescLunchBreak();
+
+	public String tplDescName();
+
+	public String tplDescOsce();
+
+	public String tplDescPost();
+
+	public String tplDescPreName();
+
+	public String tplDescRole();
+
+	public String tplDescRoom();
+
+	public String tplDescStartTime();
+
+	public String tplDescTitle();
+
+	public String tplLoadTemplate();
+
+	public String tplPrintTemplate();
+
+	public String tplRestoreTemplate();
+
+	public String tplSaveTemplate();
+
+	public String tplTemplate();
+
+	public String tplVarBreakSep();
+
+	public String tplVarDate();
+
+	public String tplVarEndTime();
+
+	public String tplVarLongBreak();
+
+	public String tplVarLunchBreak();
+
+	public String tplVarName();
+
+	public String tplVarOsce();
+
+	public String tplVarOsceDaySep();
+
+	public String tplVarPost();
+
+	public String tplVarPreName();
+
+	public String tplVarRole();
+
+	public String tplVarRoom();
+
+	public String tplVarScheduleSep();
+
+	public String tplVarScriptSep();
+
+	public String tplVarStartTime();
+
+	public String tplVarTitle();
+
+	public String tplVarTitleSep();
+
 	public String traits();
 
 	public String type();
@@ -917,8 +979,6 @@ public interface OsceConstants extends Constants {
 	public String unprocessedfiles();
 
 	public String unprocessedmsg();
-
-	public String unSaveOrderWarn();
 
 	public String updateOsce();
 
@@ -938,11 +998,17 @@ public interface OsceConstants extends Constants {
 
 	public String warning();
 
+	public String warningAssignedRoleTopic();
+
 	public String warningBreakIsAtEnd();
 
 	public String warningDateEmpty();
 
 	public String warningEndTime();
+
+	public String warningEnterSemester();
+
+	public String warningEnterYear();
 
 	public String warningExaminer();
 
@@ -1010,22 +1076,17 @@ public interface OsceConstants extends Constants {
 
 	public String warningTimeMinute();
 
+	public String warningValidValue();
+
 	public String weight();
 
 	public String weightUnit();
-
-	public String widthMin();
-
-	public String widthSize();
 
 	public String workPermission();
 
 	public String year();
 
 	public String yes();
-	
-	public String roomNotNullWarning();
-	
-	public String deleteRole();
+
 }
 

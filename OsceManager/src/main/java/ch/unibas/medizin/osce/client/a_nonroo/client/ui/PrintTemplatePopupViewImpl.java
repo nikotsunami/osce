@@ -8,8 +8,11 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -33,6 +36,8 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 	
 	interface Binder extends UiBinder<Widget, PrintTemplatePopupViewImpl> {
 	}
+	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private Delegate delegate;
 
@@ -62,13 +67,13 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 	public Button sendMailButton;*/
 	
 	@UiField
-	public Button saveTemplateButton;
+	public IconButton saveTemplateButton;
 	
 	@UiField
-	public Button printTemplateButton;
+	public IconButton printTemplateButton;
 	
 	@UiField
-	public Button restoreTemplateButton;
+	public IconButton restoreTemplateButton;
 	
 	@UiField
 	public IconButton closeButton;
@@ -77,7 +82,70 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 	public ListBox osceList;
 	
 	@UiField
-	public Button loadTemplateButton;
+	public IconButton loadTemplateButton;
+	
+	@UiField
+	SpanElement title;
+	@UiField
+	SpanElement varTitle;
+	@UiField
+	SpanElement varName;
+	@UiField
+	SpanElement varPreName;
+	@UiField
+	SpanElement varDate;
+	@UiField
+	SpanElement varStartTime;
+	@UiField
+	SpanElement varEndTime;
+	@UiField
+	SpanElement varOsce;
+	@UiField
+	SpanElement varRole;
+	@UiField
+	SpanElement varPost;
+	@UiField
+	SpanElement varRoom;
+	@UiField
+	SpanElement varLongBreak;
+	@UiField
+	SpanElement varLunchBreak;
+	@UiField
+	SpanElement varTitleSep;
+	@UiField
+	SpanElement varDaySep;
+	@UiField
+	SpanElement varScheduleSep;
+	@UiField
+	SpanElement varBreakSep;
+	@UiField
+	SpanElement varScriptSep;
+	@UiField
+	SpanElement descTitle;
+	@UiField
+	SpanElement descName;
+	@UiField
+	SpanElement descPreName;
+	@UiField
+	SpanElement descDate;
+	@UiField
+	SpanElement descStartTime;
+	@UiField
+	SpanElement descEndTime;
+	@UiField
+	SpanElement descOsce;
+	@UiField
+	SpanElement descRole;
+	@UiField
+	SpanElement descPost;
+	@UiField
+	SpanElement descRoom;
+	@UiField
+	SpanElement descLongBreak;
+	@UiField
+	SpanElement descLunchBreak;
+	@UiField
+	HeadingElement please;
 	
 	/*@UiHandler("sendMailButton")
 	public void sendMailButtonClicked(ClickEvent event) {
@@ -124,7 +192,45 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 		this.addStyleName("printPopupPanel");
 		add(BINDER.createAndBindUi(this));
 		
+		title.setInnerText(constants.tplTemplate());
+		please.setInnerText(constants.summoningsPlease());
+		varTitle.setInnerText(constants.tplVarTitle());
+		varName.setInnerText(constants.tplVarName());
+		varPreName.setInnerText(constants.tplVarPreName());
+		varDate.setInnerText(constants.tplVarDate());
+		varStartTime.setInnerText(constants.tplVarStartTime());
+		varEndTime.setInnerText(constants.tplVarEndTime());
+		varOsce.setInnerText(constants.tplVarOsce());
+		varRole.setInnerText(constants.tplVarRole());
+		varPost.setInnerText(constants.tplVarPost());
+		varRoom.setInnerText(constants.tplVarRoom());
+		varLongBreak.setInnerText(constants.tplVarLongBreak());
+		varLunchBreak.setInnerText(constants.tplVarLunchBreak());
 		
+		varTitleSep.setInnerText(constants.tplVarTitleSep());
+		varDaySep.setInnerText(constants.tplVarOsceDaySep());
+		varScheduleSep.setInnerText(constants.tplVarScheduleSep());
+		varBreakSep.setInnerText(constants.tplVarBreakSep());
+		varScriptSep.setInnerText(constants.tplVarScriptSep());
+		
+		descTitle.setInnerText(constants.tplDescTitle());
+		descName.setInnerText(constants.tplDescName());
+		descPreName.setInnerText(constants.tplDescPreName());
+		descDate.setInnerText(constants.tplDescDate());
+		descStartTime.setInnerText(constants.tplDescStartTime());
+		descEndTime.setInnerText(constants.tplDescEndTime());
+		descOsce.setInnerText(constants.tplDescOsce());
+		descRole.setInnerText(constants.tplDescRole());
+		descPost.setInnerText(constants.tplDescPost());
+		descRoom.setInnerText(constants.tplDescRoom());
+		descLongBreak.setInnerText(constants.tplDescLongBreak());
+		descLunchBreak.setInnerText(constants.tplDescLunchBreak());
+		
+		loadTemplateButton.setText(constants.tplLoadTemplate());
+		saveTemplateButton.setText(constants.tplSaveTemplate());
+		printTemplateButton.setText(constants.tplPrintTemplate());
+		closeButton.setText(constants.close());
+		restoreTemplateButton.setText(constants.tplRestoreTemplate());
 	}
 
 	public String[] getPaths() {

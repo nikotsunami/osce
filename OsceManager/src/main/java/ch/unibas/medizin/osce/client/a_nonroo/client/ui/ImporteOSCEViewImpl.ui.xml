@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 <ui:style src="../styles.css">
 		.panelStyle {
 			width: 320px;
@@ -37,7 +38,7 @@
 			</g:ScrollPanel>
 		</g:DisclosurePanel>		
 		
-		<g:Button ui:field="importButton"></g:Button>
-		<g:Button ui:field="delButton"></g:Button>
+		<my:IconButton icon="arrowthick-1-s" ui:field="importButton"></my:IconButton>
+		<my:IconButton icon="trash" ui:field="delButton"></my:IconButton>
 	</g:HTMLPanel>
 </ui:UiBinder> 

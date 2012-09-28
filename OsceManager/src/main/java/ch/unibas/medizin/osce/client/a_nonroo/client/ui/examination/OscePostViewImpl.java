@@ -169,7 +169,7 @@ public class OscePostViewImpl  extends Composite implements  OscePostView{
 		//delegate.deleteOscePost(this);
 		
 		
-		dialogBox.showYesNoDialog(constants.deleteOsceBluePrintPost());
+		dialogBox.showYesNoDialog(constants.confirmationDeleteOsceBluePrintPost());
 		//delegate.deleteOscePost(oscePostViewImpl);
 		Log.info("milan");
 	}

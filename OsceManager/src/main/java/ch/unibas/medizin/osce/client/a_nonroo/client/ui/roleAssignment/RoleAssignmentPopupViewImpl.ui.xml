@@ -15,6 +15,6 @@
 		<g:Label ui:field="OsceTextLabel"></g:Label>
 		<g:Label ui:field="roleAssignHeaderLabel"></g:Label>
 		<g:Label ui:field="roleAssignTextLabel"></g:Label>
-		<g:Button ui:field="okButton"></g:Button>
+		<my:IconButton icon="check" ui:field="okButton"></my:IconButton>
 	</g:VerticalPanel>
 </ui:UiBinder>

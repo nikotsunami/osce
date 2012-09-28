@@ -74,10 +74,6 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 
 	public String EQUIPMENT();
 
-	public String err_DialogBoxCloseButton();
-
-	public String err_DialogBoxTitle();
-
 	public String EXAMINER();
 
 	public String exportSuccessful();

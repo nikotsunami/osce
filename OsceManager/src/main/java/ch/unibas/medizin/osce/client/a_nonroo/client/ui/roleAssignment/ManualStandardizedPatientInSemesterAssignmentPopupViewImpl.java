@@ -178,10 +178,10 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 				/*} 
 				else 
 				{*/
-					/*suggestionBoxLbl.setText(constants.enterPatient());*/
+					/*suggestionBoxLbl.setText(constants.roleEnterPatientName());*/
 					//Issue # 122 : Replace pull down with autocomplete.
-					//standardizedPatientSugestionBox.setText(constants.enterPatient());
-					//standardizedPatientSugestionBox.getTextField().advancedTextBox.setText(constants.enterPatient());
+					//standardizedPatientSugestionBox.setText(constants.roleEnterPatientName());
+					//standardizedPatientSugestionBox.getTextField().advancedTextBox.setText(constants.roleEnterPatientName());
 					//Issue # 122 : Replace pull down with autocomplete.
 
 				/*}*/
@@ -217,7 +217,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 	// if (show) {
 	// if (!this.isShowing()) {
 	// this.standardizedPatientSugestionBox.getTextBox().setText(
-	// constants.enterPatient());
+	// constants.roleEnterPatientName());
 	// this.show();
 	// }
 	// } else if (this != null) {
@@ -230,13 +230,13 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		// standardizedPatientSugestionBox
 
 		//Issue # 122 : Replace pull down with autocomplete.
-/*		standardizedPatientSugestionBox.setText(constants.enterPatient());
+/*		standardizedPatientSugestionBox.setText(constants.roleEnterPatientName());
 		standardizedPatientSugestionBox.getTextBox().addFocusHandler(
 				new FocusHandler() {
 					@Override
 					public void onFocus(FocusEvent event) {
 						if (standardizedPatientSugestionBox.getText().equals(
-								constants.enterPatient())) {
+								constants.roleEnterPatientName())) {
 							standardizedPatientSugestionBox.setText("");
 							suggestionBoxLbl.setText("");
 						}
@@ -249,7 +249,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 						if (standardizedPatientSugestionBox.getText()
 								.equals("")) {
 							standardizedPatientSugestionBox.setText(constants
-									.enterPatient());
+									.roleEnterPatientName());
 							suggestionBoxLbl.setText("");
 						}
 					}

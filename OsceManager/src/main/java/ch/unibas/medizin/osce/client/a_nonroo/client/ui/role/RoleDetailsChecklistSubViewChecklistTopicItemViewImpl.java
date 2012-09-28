@@ -237,7 +237,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		addCheckListQuestionButton.setTitle(constants.addCheckListQuestion());
 		addCheckListQuestionButton.setText(constants.addCheckListQuestion());
-		importQuestionButton.setText(constants.importQuestion());
+		importQuestionButton.setText(constants.roleImportQuestion());
 		
 		topicView=this;
 		
@@ -278,9 +278,9 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		 // SPEC Change	
 			((CheckListTopicPopupViewImpl)questionPopup).setAnimationEnabled(true);
 		
-			questionPopup.getDescriptionLbl().setText(constants.questionInstruction());
+			questionPopup.getDescriptionLbl().setText(constants.roleQuestionInstruction());
 			
-			questionPopup.getTopicLbl().setText(constants.questionName());
+			questionPopup.getTopicLbl().setText(constants.roleQuestionName());
 			
 			((CheckListTopicPopupViewImpl)questionPopup).setWidth("150px");
 

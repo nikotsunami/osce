@@ -31,13 +31,13 @@
 							<g:IntegerBox ui:field="timeBox" />
 							<g:Label ui:field="lblMin" addStyleNames="{style.label}"></g:Label>
 
-							<g:Button ui:field="okBtn" />
+							<my:IconButton icon="check" ui:field="okBtn" />
 							<g:Label ui:field="lblValidator" />
 						</g:HorizontalPanel>
 
 						<g:HorizontalPanel spacing="4">
-							<g:Button ui:field="bellScheduleUpload" />
-							<g:Button ui:field="bellScheduleExport" />
+							<my:IconButton icon="arrowthickstop-1-n" ui:field="bellScheduleUpload" />
+							<my:IconButton icon="extlink" ui:field="bellScheduleExport" />
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:HTMLPanel>
