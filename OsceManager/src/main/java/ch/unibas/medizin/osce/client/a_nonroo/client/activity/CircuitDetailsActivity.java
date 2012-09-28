@@ -65,6 +65,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.domain.OsceDataOnDemand;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -5229,7 +5230,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														
 															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 															
-															SequenceOsceSubViewImpl secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															SequenceOsceSubViewImpl secondSequenceOsce1 = new SequenceOsceSubViewImpl();
+															
+															if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)															
+																secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															else 
+																secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
 															
 															if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
 															{
@@ -5343,7 +5349,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											
 												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 												
-												SequenceOsceSubViewImpl secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+												SequenceOsceSubViewImpl secondSequenceOsce1 = new SequenceOsceSubViewImpl();
+												
+												if(osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)												
+													secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+												else
+													secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
 												
 												if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
 												{
