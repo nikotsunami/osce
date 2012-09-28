@@ -403,7 +403,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	public void deleteQuestion(ClickEvent event)
 	{
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 				 dialogBox.showYesNoDialog("are you sure you want to delete this Question?");
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						

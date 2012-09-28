@@ -59,7 +59,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		vp.add(hp);
 		super.getCaption().asWidget().addStyleName("confirmbox");
 		
-		//super.setText("Warning");
+		//super.setText(constants.warning());
 		super.setText(caption);
 		this.add(vp);
 		setAnimationEnabled(true);

@@ -725,10 +725,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 						public void onSuccess(Void arg0) {
 							// init();
 
-							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
-									"Warning");
-							dialogBox.showConfirmationDialog(constants
-									.onDeleteRoleAssignedToPatient());
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+							dialogBox.showConfirmationDialog(constants.warningPatientHasRole());
 							view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
 						}
 

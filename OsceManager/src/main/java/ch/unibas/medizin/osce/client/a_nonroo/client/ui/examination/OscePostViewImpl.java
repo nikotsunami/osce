@@ -23,7 +23,7 @@ public class OscePostViewImpl  extends Composite implements  OscePostView{
 	
 	private  final OsceConstants constants = GWT.create(OsceConstants.class);
 	
-	  MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+	  MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 	  
 	
 	private final OscePostViewImpl oscePostViewImpl;

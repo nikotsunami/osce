@@ -73,7 +73,7 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
 	{
 		super(true);
 		add(BINDER.createAndBindUi(this));
-		uploadLbl.setText(constants.imageUpload());
+		uploadLbl.setText(constants.spImageUpload());
 		uploadPopupViewImpl=this;
 		
 		id.setVisible(false);

@@ -19,7 +19,7 @@
 		<g:west size="400">
 			<g:ScrollPanel>
 				<g:VerticalPanel spacing="5">
-					<g:Button ui:field="surveyImpBtn"></g:Button>
+					<my:IconButton icon="arrowthickstop-1-s" ui:field="surveyImpBtn"></my:IconButton>
 					<g:HTMLPanel>
 						<div class="{style.cellTableEvenYesRow}">
 							<n:PatientInSemesterFlexTable
@@ -28,8 +28,8 @@
 					</g:HTMLPanel>
 					<g:HorizontalPanel spacing="4">
 
-						<g:Button ui:field="autoAssignmentBtn"></g:Button>
-						<g:Button ui:field="addManuallyBtn"></g:Button>
+						<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
+						<my:IconButton icon="plusthick" ui:field="addManuallyBtn"></my:IconButton>
 
 					</g:HorizontalPanel>
 					<!-- Module 3 Start -->

@@ -286,7 +286,7 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 					public void execute(final KeywordProxy keywordProxy) {
 						
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								

@@ -49,6 +49,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterListener;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
@@ -1616,15 +1617,14 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			//As per discussion with client : accepted_osce_day information will be given completely by the DMZ as on 16/July/2012
 			
             {
-			System.out
-			.println("patientInRoleProxy saved successfully" + patientInSemesterData
+			Log.info("patientInRoleProxy saved successfully" + patientInSemesterData
 					.getPatientInSemesterProxy().getOsceDays().size());
 			firePatientInSemesterSelectedEvent(patientInSemesterData
 					.getPatientInSemesterProxy());
 		}
 	} else {
-			MessageConfirmationDialogBox msg=new MessageConfirmationDialogBox("Warning");
-			msg.showConfirmationDialog(constants.patientIsNotAccepted());
+			MessageConfirmationDialogBox msg=new MessageConfirmationDialogBox(constants.warning());
+			msg.showConfirmationDialog(constants.warningPatientIsNotAccepted());
 			
 		}
 		requests.getEventBus().fireEvent(
@@ -1683,7 +1683,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 							@Override
 							public void onSuccess(Void arg0) {
-								System.out.println("patientInRoleProxy saved successfully with Given Post and sem :" + patientInSemesterProxy);
+								Log.info("patientInRoleProxy saved successfully with Given Post and sem :" + patientInSemesterProxy);
 								
 								PatientInRoleRequest patientInRoleRequest2 = requests.patientInRoleRequest();
 								PatientInRoleProxy patientInRoleProxy2 = patientInRoleRequest2.create(PatientInRoleProxy.class);
@@ -1835,16 +1835,14 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 				//  
 			} else {
 				view.getDataTable().setNavigationButtonEnable(false);
-				MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(
-						"Warning");
-				msg.showConfirmationDialog(constants.patientAlreadyAssigned());
+				MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(constants.warning());
+				msg.showConfirmationDialog(constants.warningPatientAlreadyAssigned());
 			}
 			// Module 3 :   Change
 		} else {
 			view.getDataTable().setNavigationButtonEnable(false);
-			MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(
-					"Warning");
-			msg.showConfirmationDialog(constants.pleaseSelectRole());
+			MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(constants.warning());
+			msg.showConfirmationDialog(constants.warningPleaseSelectRole());
 		}
 		// Module 3 :   Change
 		// init();
@@ -2062,7 +2060,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
   private DialogBox createDialogBox(String[] messages) {
 		// Create a dialog box and set the caption text
 		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Show the return messages from DMZ");
+		dialogBox.setText(constants.dmzShowReply());
 
 		// Create a table to layout the content
 		VerticalPanel dialogContents = new VerticalPanel();
@@ -2077,12 +2075,12 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 		}
 		
 		// Add a close button at the bottom of the dialog
-		Button closeButton = new Button(
-			"close", new ClickHandler() {
+		IconButton closeButton = new IconButton(constants.close(), new ClickHandler() {
 			  public void onClick(ClickEvent event) {
 				dialogBox.hide();
 			  }
 			});
+		closeButton.setIcon("closethick");
 		
 		dialogContents.add(closeButton);
 		if (LocaleInfo.getCurrentLocale().isRTL()) {
@@ -2302,7 +2300,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 		//
 		// MessageConfirmationDialogBox dialogBox = new
 		// MessageConfirmationDialogBox(
-		// "Warning");
+		// constants.warning());
 		// dialogBox.showConfirmationDialog(constants.onDeleteRoleAssignedToPatient());
 		//
 		// } else
@@ -2450,7 +2448,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 							//OsceDaySubViewImpl osceDaySubViewImpl;
 							
 							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
-							dialogBox.showConfirmationDialog(constants.autoAssignmentSuccess());
+							dialogBox.showConfirmationDialog(constants.confirmationAutoAssignmentSuccess());
 							
 							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
 								
@@ -2478,7 +2476,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 							theEventService.removeListeners();
 							
 							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.failure());
-							dialogBox.showConfirmationDialog(constants.autoAssignmentFailure());
+							dialogBox.showConfirmationDialog(constants.errorAutoAssignmentFailure());
 							
 							// module 3 bug {
 							
@@ -2508,7 +2506,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 						caught.printStackTrace();
 						
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.failure());
-						dialogBox.showConfirmationDialog(constants.autoAssignmentFailure());
+						dialogBox.showConfirmationDialog(constants.errorAutoAssignmentFailure());
 						
 						// module 3 bug {
 						

@@ -106,11 +106,11 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		surveyImpBtn.setText(constants.surveyImport());
-		autoAssignmentBtn.setText(constants.autoAssign());
-		addManuallyBtn.setText(constants.addManually());
-		headers = new String[] { constants.name(), constants.accepted(),
-				constants.assignTo(), "", "" };
+		surveyImpBtn.setText(constants.roleSurveyImport());
+		autoAssignmentBtn.setText(constants.roleAutoAssign());
+		addManuallyBtn.setText(constants.roleAddManually());
+		headers = new String[] { constants.name(), constants.roleAccepted(),
+				constants.roleAssignTo(), "", "" };
 
 		init();
 

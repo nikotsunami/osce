@@ -174,7 +174,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 				if (osceProxy.getSecurity().ordinal() != osceSecurityStatus
 						.ordinal()) {
 					final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
-							"Warning");
+							constants.warning());
 
 					dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
@@ -192,7 +192,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 						}
 					});
 
-					dialogBox.showYesNoDialog(constants.OSCESecurityChange());
+					dialogBox.showYesNoDialog(constants.roleOSCESecurityChange());
 				}
 			} else {
 				final PatientAveragePerPost patientAveragePerPost = patientAvgPerPost

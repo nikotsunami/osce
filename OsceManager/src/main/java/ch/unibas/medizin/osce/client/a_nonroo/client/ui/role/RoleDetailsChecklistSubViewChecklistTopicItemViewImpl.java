@@ -352,7 +352,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			delegate.deleteCheckListTopic(this.proxy,topicView);*/
 		
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 				 dialogBox.showYesNoDialog("are you sure you want to delete this Topic?");
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						

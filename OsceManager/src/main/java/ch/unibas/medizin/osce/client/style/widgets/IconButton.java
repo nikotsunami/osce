@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.style.widgets;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -24,6 +25,10 @@ public class IconButton extends Button {
 	
 	public IconButton(String html, ClickListener listener) {
 		super(html, listener);
+	}
+	
+	public IconButton(String html, ClickHandler handler) {
+		super(html, handler);
 	}
 	
 	public void setIcon(ImageResource image) {

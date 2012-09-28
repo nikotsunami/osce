@@ -216,7 +216,7 @@ RoleBaseTableItemView {
 		/*if(Window.confirm("wirklich löschen?"))
 		delegate.deleteButtonClickEvent(roleBasedItemProxy);*/
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 				 dialogBox.showYesNoDialog(constants.reallyDelete());
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
@@ -385,7 +385,7 @@ RoleBaseTableItemView {
 						/*if(Window.confirm("wirklich löschen?"))
 							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);*/
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								

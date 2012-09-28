@@ -114,8 +114,8 @@ public class PatientInSemesterData {
 				
 				if (patientInSemesterProxy.getPatientInRole() != null && patientInSemesterProxy.getPatientInRole().size() > 0) {
 
-					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox("Warning");
-					dialogBox.showConfirmationDialog(constants.onDeleteRoleAssignedToPatient());
+					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showConfirmationDialog(constants.warningPatientHasRole());
 
 				} else {
 
@@ -130,7 +130,7 @@ public class PatientInSemesterData {
 						}
 					});
 				
-					dialogBox.showYesNoDialog(constants.deletePatientInSemester());
+					dialogBox.showYesNoDialog(constants.confirmationDeleteAssignment());
 				}
 
 			}

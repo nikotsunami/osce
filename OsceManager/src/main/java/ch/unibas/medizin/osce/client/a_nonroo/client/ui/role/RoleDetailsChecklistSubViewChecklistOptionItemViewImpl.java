@@ -175,7 +175,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 	{
 	/*	if(Window.confirm("are you sure you want to delete this option?"))*/
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 				 dialogBox.showYesNoDialog("are you sure you want to delete this option?");
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						

@@ -120,7 +120,7 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		Log.info("Ok Clicked");
 		if((((chaneNameOfSequence.getListBox().getItemText(chaneNameOfSequence.getListBox().getSelectedIndex())).trim()).compareToIgnoreCase(""))==0)
 		{
-			MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox("Warning");
+			MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
 			dialog.showConfirmationDialog("Please Select atleast one Sequence");
 			return;
 		}

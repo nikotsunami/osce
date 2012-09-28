@@ -11,9 +11,11 @@ import ch.unibas.medizin.osce.client.managed.request.MaterialListRequest;
 import ch.unibas.medizin.osce.shared.MaterialType;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PriceType;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -36,6 +38,7 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 	private RoomMaterialsDetailsView view;
 	private RoomMaterialsDetailsPlace place;
 	private MaterialListProxy materialListProxy;
+	private OsceConstants constants;
 
 	private HandlerRegistration rangeChangeHandler;
 
@@ -59,7 +62,8 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 		roomMaterialsDetailsView.setPresenter(this);
 		this.widget = panel;
 		this.view = roomMaterialsDetailsView;
-
+		this.constants = GWT.create(OsceConstants.class);
+		
 		widget.setWidget(roomMaterialsDetailsView.asWidget());
 
 		view.setDelegate(this);
@@ -202,8 +206,8 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 			return;
 		}*/
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
-				 dialogBox.showYesNoDialog("Really delete this entry? You cannot undo this change.");
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+				 dialogBox.showYesNoDialog(constants.reallyDelete());
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
 						@Override

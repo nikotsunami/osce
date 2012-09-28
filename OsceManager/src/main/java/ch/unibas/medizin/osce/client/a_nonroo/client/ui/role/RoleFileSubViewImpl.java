@@ -342,7 +342,7 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 							delegate.fileDeleteClicked(file, getValue());*/
 						
 						// Issue Role
-						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								

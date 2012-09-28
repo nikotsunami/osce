@@ -100,7 +100,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		} 
 		else 
 		{
-			suggestionBoxLbl.setText(constants.patientIsNotAvailable());
+			suggestionBoxLbl.setText(constants.warningNoActiveSimPat());
 		}
 	}
 
@@ -129,9 +129,9 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
-		this.setText(constants.addManually());
+		this.setText(constants.roleAddManually());
 		this.closeBoxButton.setText(constants.close());
-		this.addAllButton.setText(constants.addAllActive());
+		this.addAllButton.setText(constants.roleAddAllActive());
 
 		initSuggestBox();
 
