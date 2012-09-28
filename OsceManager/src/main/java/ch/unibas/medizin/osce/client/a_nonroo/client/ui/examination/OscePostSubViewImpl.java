@@ -64,6 +64,27 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView, R
 	
 	RoomProxy roomProxy;
 	
+	SpecialisationProxy specialisationProxy;
+	
+	RoleTopicProxy roleTopicProxy;
+	
+	public RoleTopicProxy getRoleTopicProxy() {
+		return roleTopicProxy;
+	}
+
+	public void setRoleTopicProxy(RoleTopicProxy roleTopicProxy) {
+		this.roleTopicProxy = roleTopicProxy;
+	}
+
+	public SpecialisationProxy getSpecialisationProxy() {
+		return specialisationProxy;
+	}
+
+	public void setSpecialisationProxy(SpecialisationProxy specialisationProxy) {
+		this.specialisationProxy = specialisationProxy;
+	}
+	
+
 	StandardizedRoleProxy standardizedRoleProxy;
 	
 	public StandardizedRoleProxy getStandardizedRoleProxy() {

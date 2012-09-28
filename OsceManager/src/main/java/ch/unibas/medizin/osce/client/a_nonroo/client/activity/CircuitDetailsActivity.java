@@ -476,6 +476,10 @@ AccordianPanelView.ParcourDelegate
 										tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());								
 										tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
 										tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+										
+										setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getSpecialisation());
+										setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getRoleTopic());
+																																							
                                                                                 // Module 5 bug Report Change									
                                         tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
 									        // E Module 5 bug Report Change	
@@ -555,6 +559,10 @@ AccordianPanelView.ParcourDelegate
 												tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
 												tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber()));
 												tempOscePostSubViewImpl.getPostNameLbl().setTitle(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber());
+												
+												setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
+												setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());																								
+												
 												Log.info("OsceBluerint Next Id: " + oscePostBlueprintProxy.getId());												
 												oscePostSubViewImpl.add(tempOscePostSubViewImpl);												
 												index++;																							
@@ -936,6 +944,27 @@ AccordianPanelView.ParcourDelegate
 			
 	
 	}
+		
+	public void setProxy(OscePostSubViewImpl oscePostSubViewImpl,Object object)
+	{
+		//System.out.println("Set Proxy.");
+		if(object instanceof SpecialisationProxy)
+		{
+			//System.out.println("Set Specialization Proxy");
+			oscePostSubViewImpl.setSpecialisationProxy((SpecialisationProxy)object);
+		}
+		else if(object instanceof RoleTopicProxy)
+		{
+			//System.out.println("Set Role Topic Proxy");
+			oscePostSubViewImpl.setRoleTopicProxy((RoleTopicProxy)object);
+		}
+		else if(object == null)
+		{
+			//System.out.println("Set Null Proxy");
+			oscePostSubViewImpl.setRoleTopicProxy(null);
+		}
+	}
+		
 public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSubViewImpl, OsceProxy osceProxy){
 
 	/*if(osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED || osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED){
@@ -2305,6 +2334,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
 						tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));			
 						tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+						
+						setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
+						setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());
+						
 						oscePostViewImpl=new OscePostViewImpl();	
 						oscePostViewImpl.setStyleName("Osce-Status-BluePrint-Save", true);
 						oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getDragController().makeDraggable(oscePostViewImpl,oscePostViewImpl.getPostTypeLbl());
@@ -2366,6 +2399,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
 					tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));			
 					tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+					
+					setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
+					setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());
+					
 					oscePostViewImpl=new OscePostViewImpl();
 					//oscePostViewImpl.setStylePrimaryName("Osce-Status-BluePrint");
 					oscePostViewImpl.setStyleName("Osce-Status-BluePrint-Save", true);
@@ -2399,6 +2436,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							tempOscePostSubViewImplNext.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName()));
 							tempOscePostSubViewImplNext.getRoleTopicLbl().setTitle(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName());
 							oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
+							
+							setProxy(tempOscePostSubViewImplNext, oscePostBlueprintProxyNext.getSpecialisation());
+							setProxy(tempOscePostSubViewImplNext, oscePostBlueprintProxyNext.getRoleTopic());
+							
 							tempOscePostSubViewImplNext.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostBlueprintProxyNext.getSequenceNumber()));
 							tempOscePostSubViewImplNext.getPostNameLbl().setTitle(constants.circuitStation() + " " + oscePostBlueprintProxyNext.getSequenceNumber());
 							tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
@@ -2514,6 +2555,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								}
 							});
 							
+							((ListBoxPopupViewImpl)((OscePostSubViewImpl)oscePostSubViewImpledit).popupView).getNewListBox().setSelected(((OscePostSubViewImpl)oscePostSubViewImpledit).getSpecialisationProxy());
+							
+							
 							if(oscePostSubViewImpledit.oscePostBlueprintProxy != null)
 							{
 								((OscePostSubViewImpl)oscePostSubViewImpledit).popupView.getNewListBox().setSelected(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation());
@@ -2596,6 +2640,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								public String render(Object object) {
 									// TODO Auto-generated method stub
 									//return object.getShortName();
+									if(object==null)
+										return null;
+									else									
 									return ((RoleTopicProxy)object).getName();
 								}
 
@@ -2606,6 +2653,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									
 								}
 							});
+							
+							((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getNewListBox().setSelected(((OscePostSubViewImpl)oscePostSubViewImpledit).getRoleTopicProxy());
 							
 							//((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.getListBox().setAcceptableValues(proxy);
 							
@@ -2680,6 +2729,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							Log.info("Success saveSpecialisation ");
 							oscePostSubViewImplok.getSpecializationLbl().setText(getLabelString(specialisationProxy.getName()));
 							oscePostSubViewImplok.getSpecializationLbl().setTitle(specialisationProxy.getName());
+							
+							setProxy(oscePostSubViewImplok, specialisationProxy);
+							setProxy(oscePostSubViewImplok, null);
+							
 							oscePostSubViewImplok.listBoxPopupViewImpl.hide();					
 							//Window.alert("The Role Topic for Specialisation " + specialisationProxy.getName()+" is deleted, You need to Select thr Role.");
 							oscePostSubViewImplok.getRoleTopicLbl().setText(constants.select()+":");
@@ -2717,6 +2770,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							Log.info("Success saveSpecialisation ");
 							oscePostSubViewImplok.getRoleTopicLbl().setText(getLabelString(roleTopicProxy.getName()));
 							oscePostSubViewImplok.getRoleTopicLbl().setTitle(roleTopicProxy.getName());
+							
+							setProxy(oscePostSubViewImplok, roleTopicProxy);
+							
 							oscePostSubViewImplok.listBoxPopupViewImpl.hide();
 						}
 					
@@ -4790,14 +4846,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																	((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(roomProxy);
 																	Log.info("Success saveOscePostRoom ");
 																	
+																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+																	
 																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).fire(new OSCEReceiver<Boolean>() {
 
 																		@Override
 																		public void onSuccess(Boolean response) {
 																				System.out.println("RESPONSE : " + response);
-																				
-																				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-																				
 																				requests.getEventBus().fireEvent(new RoomRefreshEvent("abc"));
 																				
 																			}
@@ -4885,50 +4940,62 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											
 												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 												
-												requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+												SequenceOsceSubViewImpl firstSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+												
+												if (Integer.parseInt(firstSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+												{
+													requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
 
-													@Override
-													public void onSuccess(
-															Boolean response) {																
-														Log.info("Done Successfully");			
-														
-														if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-														{
-															SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-															SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+														@Override
+														public void onSuccess(
+																Boolean response) {																
+															Log.info("Done Successfully");			
 															
-															int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
-															int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
-															firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-															secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-															
-															
+															if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
+															{
+																SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																
+																if (Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																{
+																	int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																	int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																	firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																	secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																}
+																
+															}
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
 														}
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													
-													@Override
-													public void onFailure(
-															ServerFailure error) {
-														// TODO Auto-generated method stub
-														super.onFailure(error);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													
-													@Override
-													public void onViolation(
-															Set<Violation> errors) {
-														// TODO Auto-generated method stub
-														super.onViolation(errors);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-												});
+														
+														@Override
+														public void onFailure(
+																ServerFailure error) {
+															// TODO Auto-generated method stub
+															super.onFailure(error);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+														
+														@Override
+														public void onViolation(
+																Set<Violation> errors) {
+															// TODO Auto-generated method stub
+															super.onViolation(errors);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+													});
+
+												}
+												else
+												{
+													requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												}
 										}
 										
 										@Override
@@ -5015,44 +5082,56 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														
 															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 															
-															requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+															SequenceOsceSubViewImpl firstSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+															
+															if (Integer.parseInt(firstSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+															{
+																requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
 
-																@Override
-																public void onSuccess(
-																		Boolean response) {																
-																	Log.info("Done Successfully");
-																	
-																	if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-																	{
-																		SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-																		SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																	@Override
+																	public void onSuccess(
+																			Boolean response) {																
+																		Log.info("Done Successfully");
 																		
-																		int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
-																		int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
-																		firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																		secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																		if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
+																		{
+																			SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																			SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																			
+																			if (Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																			{
+																				int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																				int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																				firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																				secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																			}
+																		}
+																		// Module 5 Bug Test Change
+																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																		// E Module 5 Bug Test Change
 																	}
-																	// Module 5 Bug Test Change
-																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																	// E Module 5 Bug Test Change
-																}
-																
-																public void onFailure(ServerFailure error) {
-																	// Module 5 Bug Test Change
-																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																	// E Module 5 Bug Test Change
-																};
-																
-																@Override
-																public void onViolation(
-																		Set<Violation> errors) {
-																	// TODO Auto-generated method stub
-																	super.onViolation(errors);
-																	// Module 5 Bug Test Change
-																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																	// E Module 5 Bug Test Change
-																}
-															});
+																	
+																	public void onFailure(ServerFailure error) {
+																		// Module 5 Bug Test Change
+																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																		// E Module 5 Bug Test Change
+																	};
+																	
+																	@Override
+																	public void onViolation(
+																			Set<Violation> errors) {
+																		// TODO Auto-generated method stub
+																		super.onViolation(errors);
+																		// Module 5 Bug Test Change
+																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																		// E Module 5 Bug Test Change
+																	}
+																});
+															}
+															else
+															{
+																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															}
 													}
 													
 													public void onFailure(ServerFailure error) {
@@ -5150,51 +5229,62 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														
 															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 															
-															requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+															SequenceOsceSubViewImpl secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															
+															if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+															{
+																requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
 
-																@Override
-																public void onSuccess(
-																		Boolean response) {
-																	
-																	Log.info("Done Successfully");
-																	
-																	if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-																	{
-																		SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-																		SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																	@Override
+																	public void onSuccess(
+																			Boolean response) {
 																		
-																		int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
-																		int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
-																		firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																		secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																		Log.info("Done Successfully");
+																		
+																		if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
+																		{
+																			SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																			SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																			
+																			if (Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																			{
+																				int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																				int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																				firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																				secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																			}
+																		}
+																		// Module 5 Bug Test Change
+																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																		// E Module 5 Bug Test Change
 																	}
-																	// Module 5 Bug Test Change
-																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																	// E Module 5 Bug Test Change
-																}
-																
-																@Override
-																public void onFailure(
-																		ServerFailure error) {
-																	// TODO Auto-generated method stub
-																	super.onFailure(error);
-																	// Module 5 Bug Test Change
-																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																	// E Module 5 Bug Test Change
-																}
-																
-																@Override
-																public void onViolation(
-																		Set<Violation> errors) {
-																	// TODO Auto-generated method stub
-																	super.onViolation(errors);
-																	// Module 5 Bug Test Change
-																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																	// E Module 5 Bug Test Change
-																}
-															});
+																	
+																	@Override
+																	public void onFailure(
+																			ServerFailure error) {
+																		// TODO Auto-generated method stub
+																		super.onFailure(error);
+																		// Module 5 Bug Test Change
+																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																		// E Module 5 Bug Test Change
+																	}
+																	
+																	@Override
+																	public void onViolation(
+																			Set<Violation> errors) {
+																		// TODO Auto-generated method stub
+																		super.onViolation(errors);
+																		// Module 5 Bug Test Change
+																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																		// E Module 5 Bug Test Change
+																	}
+																});
+															}
+															else
+															{
+																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															}
 													}
-													
 													@Override
 													public void onFailure(
 															ServerFailure error) {
@@ -5253,52 +5343,59 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											
 												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 												
-												requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
-
-													@Override
-													public void onSuccess(
-															Boolean response) {
-														
-														Log.info("Done Successfully");
-														if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-														{
-															SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-															SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
-															
-															int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
-															int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
-															firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-															secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-															
-														}
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													
-													@Override
-													public void onFailure(
-															ServerFailure error) {
-														// TODO Auto-generated method stub
-														super.onFailure(error);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													
-													@Override
-													public void onViolation(
-															Set<Violation> errors) {
-														// TODO Auto-generated method stub
-														super.onViolation(errors);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													
-												});
+												SequenceOsceSubViewImpl secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
 												
-										}
+												if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+												{
+													requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+														@Override
+														public void onSuccess(
+																Boolean response) {
+															
+															Log.info("Done Successfully");
+															if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
+															{
+																SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+															}
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+														
+														@Override
+														public void onFailure(
+																ServerFailure error) {
+															// TODO Auto-generated method stub
+															super.onFailure(error);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+														
+														@Override
+														public void onViolation(
+																Set<Violation> errors) {
+															// TODO Auto-generated method stub
+															super.onViolation(errors);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+														
+													});
+													
+												}
+												else
+												{
+													requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												}
+										}	
 										@Override
 										public void onFailure(
 												ServerFailure error) {

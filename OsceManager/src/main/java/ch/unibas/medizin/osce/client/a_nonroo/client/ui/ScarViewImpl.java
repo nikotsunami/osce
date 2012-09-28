@@ -13,6 +13,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
@@ -187,6 +188,17 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 //			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
 //		else
 //			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left1 = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
 
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
@@ -218,7 +230,6 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(ScarProxy scar) {
-						System.out.println("Edit Button Clicked From IMPL");
 						showEditScarPopup(scar);
 					}
 				}), "", new GetValue<ScarProxy>() {
@@ -229,10 +240,28 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 		
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
-					public void execute(ScarProxy scar) {
+					public void execute(final ScarProxy scar) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(scar);
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(scar);*/
+						
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich löschen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(scar);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<ScarProxy>() {
 			public ScarProxy getValue(ScarProxy scar) {
@@ -353,7 +382,7 @@ public Map getScarMap()
 		((ScarEditPopupViewImpl)scarPopupView).setWidth("160px");	
 			
 		RootPanel.get().add(((ScarEditPopupViewImpl)scarPopupView));
-
+		
 		/*	// Highlight onViolation
 		checklistOptionMap=new HashMap<String, Widget>();
 		checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
@@ -394,7 +423,8 @@ public Map getScarMap()
 		});	
 		// E: Issue Role V1
 		
-		(((ScarEditPopupViewImpl)scarPopupView)).setPopupPosition(left1-210, top);
+		(((ScarEditPopupViewImpl)scarPopupView)).setPopupPosition(left1, top);
+		//(((ScarEditPopupViewImpl)scarPopupView)).getElement().getStyle().setZIndex(2);
 		(((ScarEditPopupViewImpl)scarPopupView)).show();
 	}
 }
