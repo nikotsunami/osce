@@ -5,8 +5,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
@@ -98,6 +100,9 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	
 	
 	Map<String, String> columnName=new HashMap<String, String>();
+	List<String> columnNameorder = new ArrayList<String>();
+
+	
 	/*custom celltable start code*/
 	
 
@@ -293,9 +298,11 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //            }
 //        }, "Gender");
 		
-		paths.add("name");
-		paths.add(" ");
+		
+		//paths.add("name");
+		//paths.add(" ");
 		columnName.put(constants.name(), "name");
+		columnNameorder.add(constants.name());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			{ this.setSortable(true); }
 
@@ -313,9 +320,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		}, constants.name());
 		
 		
-		paths.add("preName");
-		paths.add(" ");
+	//	paths.add("preName");
+	//	paths.add(" ");
 		columnName.put(constants.preName(), "preName");
+		columnNameorder.add(constants.preName());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 			
 			{ this.setSortable(true); }	//By SPEC
@@ -420,9 +428,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 //        }, "Birthday");
 */
 		
-		paths.add("email");
-		paths.add(" ");
+		//paths.add("email");
+		//paths.add(" ");
 		columnName.put(constants.email(), "email");
+		columnNameorder.add(constants.email());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -438,14 +447,15 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			public String getValue(StandardizedPatientProxy object) {
 				return renderer.render(object.getEmail());
 			}
-		}, constants.email());
+		}, constants.email(),false,true);
 		
 		/*custom celltable start code*/
 		
 		
-		paths.add("street");
-		paths.add(" ");
+		//paths.add("street");
+		//paths.add(" ");
 		columnName.put(constants.street(), "street");
+		columnNameorder.add(constants.street());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -464,9 +474,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		}, constants.street(),false);
 		
 		
-		paths.add("city");
-		paths.add(" ");
+		//paths.add("city");
+		//paths.add(" ");
 		columnName.put(constants.city(), "city");
+		columnNameorder.add(constants.city());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -486,9 +497,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		
 		
 		
-		paths.add("telephone");
-		paths.add(" ");
+		//paths.add("telephone");
+		//paths.add(" ");
 		columnName.put(constants.telephone(), "telephone");
+		columnNameorder.add(constants.telephone());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -507,9 +519,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		}, constants.telephone(),false);
 		
 		
-		paths.add("height");
-		paths.add(" ");
+		//paths.add("height");
+		//paths.add(" ");
 		columnName.put(constants.height(), "height");
+		columnNameorder.add(constants.height());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -528,9 +541,10 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 		}, constants.height(),false);
 		
 		
-		paths.add("weight");
-		paths.add(" ");
+		//paths.add("weight");
+		//paths.add(" ");
 		columnName.put(constants.weight(), "weight");
+		columnNameorder.add(constants.weight());
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
 
 			{ this.setSortable(true); }	//By SPEC
@@ -774,6 +788,12 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	public Map getSortMap() {
 		// TODO Auto-generated method stub
 		return columnName;
+	}
+	
+	@Override
+	public List<String> getColumnSortSet()
+	{
+		return columnNameorder;
 	}
 	
 	

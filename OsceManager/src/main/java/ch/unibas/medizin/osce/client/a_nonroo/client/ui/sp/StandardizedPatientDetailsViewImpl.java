@@ -6,7 +6,6 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
-import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
@@ -33,7 +32,6 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -461,12 +459,14 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	// Module 3 Task B
 	@UiHandler("status")
 	public void onStatusClicked(ClickEvent e) {
+		delegate.showApplicationLoading(true);
 		Log.info("onStatusClicked");
 		if (proxy.getStatus() == StandardizedPatientStatus.ANONYMIZED) {
 			status.setVisible(false);
 		} else {
 			delegate.statusClicked();
 		}
+		delegate.showApplicationLoading(false);
 	}
 	
 	@Override
@@ -482,7 +482,15 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 					: "check");
 			status.setVisible(true);
 		}
+		setDmzEditOnStatus(standardizedPatientStatus);
 	}
+	
+	private void setDmzEditOnStatus(StandardizedPatientStatus standardizedPatientStatus) {
+		boolean isEnable= (standardizedPatientStatus != null &&  standardizedPatientStatus == StandardizedPatientStatus.ACTIVE);			
+			edit.setEnabled(isEnable);
+			send.setEnabled(isEnable);	
+	}
+	
 	// Module 3 Task B
 
 	@Override

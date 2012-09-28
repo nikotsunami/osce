@@ -22,6 +22,7 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void sendClicked();
 		void pullClicked();
 		void statusClicked();
+		void showApplicationLoading(Boolean show);
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();

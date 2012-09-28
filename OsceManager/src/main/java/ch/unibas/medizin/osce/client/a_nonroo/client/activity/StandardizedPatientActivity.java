@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -271,10 +272,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 	public void addColumnOnMouseout()
 	{
-		table.getPopup().hide();
-		
 		Set<String> selectedItems = table.getPopup().getMultiSelectionModel().getSelectedSet();
 
+		
 		int j = table.getColumnCount();
 		while (j > 0) {
 			
@@ -293,9 +293,25 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			i = selectedItems.iterator();
 		}
 
-		while (i.hasNext()) {
-
-			columnHeader = i.next();
+		Set mySet = new HashSet(view.getSortMap().keySet());
+		//Iterator<String> i1=mySet.iterator();
+		Iterator<String> i1=view.getColumnSortSet().iterator();
+		System.out.println("key set is--"+view.getColumnSortSet());
+		System.out.println("key set is--"+selectedItems);
+		
+		while (i1.hasNext()) {
+		
+			
+			String colValue=i1.next();
+			System.out.println("Initlist--"+table.getInitList());
+			if(selectedItems.contains(colValue) || table.getInitList().contains(colValue))
+			{
+				
+				if(table.getInitList().contains(colValue))
+				{
+					table.getInitList().remove(colValue);
+				}
+			columnHeader = colValue;
 			String colName=(String)columnName.get(columnHeader);
 				path.add(colName.toString());
 				path.add(" ");
@@ -363,6 +379,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				}
 			}, columnHeader, false);
 			//path.add(" ");
+		}
 		}
 
 	}
