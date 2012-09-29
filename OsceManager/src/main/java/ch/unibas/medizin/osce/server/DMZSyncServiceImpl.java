@@ -1,41 +1,30 @@
 package ch.unibas.medizin.osce.server;
 
 import java.io.IOException;
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
-import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
-
-import com.google.gwt.core.client.GWT;
-import org.json.JSONObject;
-import org.json.JSONArray;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
-import ch.unibas.medizin.osce.domain.*;
-import flexjson.JSONSerializer;
-import flexjson.JSONDeserializer;
-import flexjson.transformer.DateTransformer;
-
-import flexjson.ObjectFactory;
-import flexjson.ObjectBinder;
-import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
-import ch.unibas.medizin.osce.shared.DMZSyncExceptionType;
-import ch.unibas.medizin.osce.shared.Gender;
-import ch.unibas.medizin.osce.shared.Locale;
-import ch.unibas.medizin.osce.shared.MaritalStatus;
-import ch.unibas.medizin.osce.shared.TraitTypes;
-import ch.unibas.medizin.osce.shared.WorkPermission;
-
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -43,16 +32,54 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import java.lang.String;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import com.google.gwt.i18n.client.LocaleInfo;
+import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
-import ch.unibas.medizin.osce.shared.Locale;
+import org.json.JSONObject;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
+import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
+import ch.unibas.medizin.osce.domain.AnamnesisCheck;
+import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
+import ch.unibas.medizin.osce.domain.AnamnesisForm;
+import ch.unibas.medizin.osce.domain.Assignment;
+import ch.unibas.medizin.osce.domain.Bankaccount;
+import ch.unibas.medizin.osce.domain.Description;
+import ch.unibas.medizin.osce.domain.Nationality;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceDay;
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
+import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.PatientInRole;
+import ch.unibas.medizin.osce.domain.PatientInSemester;
+import ch.unibas.medizin.osce.domain.Profession;
+import ch.unibas.medizin.osce.domain.Semester;
+import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.domain.StudentOsces;
+import ch.unibas.medizin.osce.domain.Task;
+import ch.unibas.medizin.osce.domain.Training;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
+import ch.unibas.medizin.osce.shared.DMZSyncExceptionType;
+import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.OsceSecurityType;
+import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
+import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.TraitTypes;
+import ch.unibas.medizin.osce.shared.WorkPermission;
+
 import com.allen_sauer.gwt.log.client.Log;
-import java.text.ParseException;
-import java.util.ArrayList;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import flexjson.ObjectBinder;
+import flexjson.ObjectFactory;
+import flexjson.transformer.DateTransformer;
+import ch.unibas.medizin.osce.shared.Semesters;
 
 
 public class DMZSyncServiceImpl extends RemoteServiceServlet implements
@@ -199,6 +226,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		String url = getHostAddress() + "/sp_portal/OsceSync/syncJson";
 		//Send OSCE data to DMZ and return DMZ data
 		String returnJson = sendData(json,url);
+		//System.out.println(">>>>>>>> return json: "+returnJson);
 		String message = "";
 		if(!json.equals("")){	
 			try{
@@ -305,12 +333,60 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}
 	    	if(osceDate!=null){
 		    	OsceDay osceDay = OsceDay.findOsceDayByOsceDate(osceDate);
-		    	
+		    	System.out.println("############osceDay: "+osceDay);
 		    	if(osceDay == null){
 		    		osceDay = new OsceDay();
-		    		osceDay.setOsceDate(osceDate);
-		    		osceDay.merge();
 		    	}
+
+				osceDay.setOsceDate(osceDate);
+				
+				Date timeStart = null;
+				if(jsonObject.get("timeStart")!=JSONObject.NULL){
+					try {
+						timeStart = convertToDate(jsonObject.get("timeStart").toString());
+					} catch (DMZSyncException e){
+					Log.error(e.getMessage());
+					}
+				}					
+				osceDay.setTimeStart(timeStart);
+				
+				Date lunchBreakStart = null;
+				if(jsonObject.get("lunchBreakStart")!=JSONObject.NULL){
+					try {
+						lunchBreakStart = convertToDate(jsonObject.get("lunchBreakStart").toString());
+					} catch (DMZSyncException e){
+					Log.error(e.getMessage());
+					}
+				}					
+				osceDay.setLunchBreakStart(lunchBreakStart);
+				
+				Date timeEnd = null;
+				if(jsonObject.get("timeEnd")!=JSONObject.NULL){
+					try {
+						timeEnd = convertToDate(jsonObject.get("timeEnd").toString());
+					} catch (DMZSyncException e){
+					Log.error(e.getMessage());
+					}
+				}					
+				osceDay.setTimeEnd(timeEnd);
+				
+				if(jsonObject.get("value")!=JSONObject.NULL){
+					osceDay.setValue(jsonObject.getInt("value"));
+				}
+				
+				if(jsonObject.get("lunchBreakAfterRotation")!=JSONObject.NULL){
+					osceDay.setLunchBreakAfterRotation(jsonObject.getInt("lunchBreakAfterRotation"));
+				
+				}
+				
+				System.out.println(">>>>>jsonObject.get(\"osce\"): "+jsonObject.get("osce"));
+				if(jsonObject.get("osce")!=JSONObject.NULL){
+					Osce osce = Osce.findOsce(jsonObject.getLong("osce"));
+					osceDay.setOsce(osce);
+				}
+				
+				osceDay.merge();
+		    	
 	    	}
 	    	
 	    }
@@ -335,24 +411,53 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}
 			if(patient != null){
 				PatientInSemester semester =PatientInSemester.findPatientInSemesterByStandardizedPatient(patient);
-			 
-				if(semester!=null){
-					semester.setStandardizedPatient(patient);
-					semester.setAccepted(accepted);
-					setOsceDays(jsonObject,semester);
-					setTrainings(jsonObject,semester);						 
-					semester.merge();
-					semester.flush();
-				 
-				}else {
-					semester = new PatientInSemester();	
-					semester.setStandardizedPatient(patient);
-					semester.setAccepted(accepted);
-					setOsceDays(jsonObject,semester);
-					setTrainings(jsonObject,semester);
-					semester.merge();
-					semester.flush();
+				
+				Semester inSemester=null;
+				if(jsonObject.get("semester") != JSONObject.NULL){
+					inSemester = Semester.findSemester(jsonObject.getLong("semester"));	
 				}
+				
+				if(semester == null){
+					semester = new PatientInSemester();	
+				}
+				
+				semester.setStandardizedPatient(patient);
+				semester.setAccepted(accepted);
+				setOsceDays(jsonObject,semester);
+				setTrainings(jsonObject,semester);	
+									 
+				if(inSemester != null){
+					semester.setSemester(inSemester);	
+				}
+				semester.merge();
+				semester.flush();
+				
+				//if(semester!=null){
+				//	semester.setStandardizedPatient(patient);
+				//	semester.setAccepted(accepted);
+				//	setOsceDays(jsonObject,semester);
+				//	setTrainings(jsonObject,semester);	
+				//						 
+				//	if(inSemester != null){
+				//		semester.setSemester(inSemester);	
+				//	}
+				//	semester.merge();
+				//	semester.flush();
+				// 
+				//}else {
+				//	semester = new PatientInSemester();	
+				//	semester.setStandardizedPatient(patient);
+				//	semester.setAccepted(accepted);
+				//	setOsceDays(jsonObject,semester);
+				//	setTrainings(jsonObject,semester);
+				//	
+				//	if(inSemester != null){
+				//		semester.setSemester(inSemester);	
+				//	}
+				//	
+				//	semester.merge();
+				//	semester.flush();
+				//}
 		 
 			}
     	
@@ -464,6 +569,14 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 					} catch (DMZSyncException e){
 						Log.error(e.getMessage());
 					}
+					
+					if(jsonObject.get("semester") != JSONObject.NULL){
+						Semester semester = Semester.findSemester(jsonObject.getLong("semester"));
+						if(semester != null){
+							training.setSemester(semester);	
+						}
+						
+					}
 		    		training.merge();
 		    	}else {
 		    		training.setName(jsonObject.get("name").toString());
@@ -480,18 +593,50 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	    }
 	}
 	
+
+	
 	/**
 	 *get the json data which the sync method needed. 
 	 **/
 	protected String getSyncJsonData(String locale){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		
+				
+		List<Semester> semesters = Semester.findAllSemesters();
+		sb.append("\"semesters\":[");
+		
+		int semesterCount = 0;
+		for(Semester semester:semesters){
+			semesterCount ++;
+			sb.append(getSemesterJsonStr(semester));
+			
+			if(semesterCount != semesters.size()){
+				sb.append(",");
+			}
+		}
+		sb.append("],");
+		
+		List<Osce> osces = Osce.findAllOscesGroupByCopiedOsce();
+		sb.append("\"osces\":[");
+		int osceCount = 0;
+		for(Osce osce : osces){
+			osceCount ++;
+			sb.append(getOscesJsonStr(osce));
+			if(osceCount != osces.size()){
+				sb.append(",");
+			}
+		}
+		sb.append("],");
+
 		
 		List<OsceDay> osceDays = OsceDay.findAllOsceDays();
-		StringBuilder sb = new StringBuilder();
-		sb.append("{").append("\"osceDay\":[");
+		
+		sb.append("\"osceDay\":[");
 		int i = 0; 
 		for(OsceDay osceDay : osceDays){
 			i++;
-			sb.append("{\"osceDate\": \""+convertToString(osceDay.getOsceDate())+"\"}");
+			sb.append(getOsceDayJsonStr(osceDay));
 			if(i != osceDays.size()){
 				sb.append(",");
 			}
@@ -503,40 +648,243 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		int j = 0; 
 		for(Training training : trainings){
 			j++;
-			sb.append("{");
-			String name = "";
-			if(training.getName() !=null ){
-				name = training.getName();
-			}
-			sb.append("\"name\" : "+"\""+name+"\",");
-			sb.append("\"trainingDate\" : \""+convertToString(training.getTrainingDate())+"\",");
-			sb.append("\"timeStart\" : \""+convertToString(training.getTimeStart())+"\",");
-			sb.append("\"timeEnd\": \""+convertToString(training.getTimeEnd())+"\"");
-			sb.append("}");
+			sb.append(getTrainingJsonStr(training));
 			if(j != trainings.size()){
 				sb.append(",");
 			}
 		}
 		sb.append("],");
 		
-		List<StandardizedPatient> standardizedPatients = StandardizedPatient.findAllStandardizedPatients();
-		sb.append("\"standardizedPatient\":[");
-		int l = 0; 
-		for(StandardizedPatient patient : standardizedPatients){
-			l++;
-			sb.append("{");
-			sb.append("\"id\": "+patient.getId()+",");
-			sb.append("\"preName\": "+"\""+patient.getPreName()+"\",");
-			sb.append("\"name\": "+"\""+patient.getName()+"\"");
-			sb.append("}");
-			if(l != standardizedPatients.size()){
-				sb.append(",");
-			}
-		}
-		sb.append("],");
 		sb.append("\"language\":");
 		sb.append("\""+locale+"\"");
 		sb.append("}");
+
+		return sb.toString();
+	}
+	
+
+
+	
+	/***
+	 * get the json data of osceDay
+	 * @param osceDay
+	 * @return
+	 */
+	private String getOsceDayJsonStr(OsceDay osceDay){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		
+		sb.append("\"osceDate\":");
+		if(osceDay.getOsceDate() != null){
+			sb.append("\""+convertToString(osceDay.getOsceDate())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"timeStart\":");
+		if(osceDay.getTimeStart() != null){
+			sb.append("\""+convertToString(osceDay.getTimeStart())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		
+		sb.append("\"timeEnd\":");
+		if(osceDay.getTimeEnd() != null){
+			sb.append("\""+convertToString(osceDay.getTimeEnd())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"lunchBreakStart\":");
+		if(osceDay.getLunchBreakStart() != null){
+			sb.append("\""+convertToString(osceDay.getLunchBreakStart())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"lunchBreakAfterRotation\":"+osceDay.getLunchBreakAfterRotation());
+		sb.append(",");
+		sb.append("\"osce\":");
+		if(osceDay.getOsce() != null){
+			sb.append(osceDay.getOsce().getId().toString());
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"value\": "+osceDay.getValue());
+		
+		sb.append("}");
+		return sb.toString();
+	}
+	
+	
+	/***
+	 * get the one json string of semester
+	 */
+	private String getSemesterJsonStr(Semester semester){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("\"id\":"+semester.getId());
+		sb.append(",");
+		sb.append("\"semester\":\""+semester.getSemester()+"\"");
+		sb.append(",");
+		sb.append("\"calYear\": "+semester.getCalYear());
+		sb.append(",");
+		sb.append("\"maximalYearEarnings\": "+semester.getMaximalYearEarnings());
+		sb.append(",");
+		sb.append("\"pricestatist\": "+semester.getPricestatist());
+		sb.append(",");
+		sb.append("\"priceStandardizedPartient\": "+semester.getPriceStandardizedPartient());
+		sb.append(",");
+		sb.append("\"preparationRing\": "+semester.getPreparationRing());
+//		sb.append(",");
+//		sb.append("\"osces\": [");
+//		Set<Osce> osces = semester.getOsces();
+//		int osceCount = 0;
+//		for(Osce osce : osces){
+//			osceCount++;
+//			sb.append(getOscesJsonStr(osce));
+//			if(osceCount != osces.size()){
+//				sb.append(",");
+//			}
+//		}
+//		sb.append("]");
+		sb.append("}");
+		return sb.toString();
+	}
+	
+	
+	/***
+	 * get the one json string of training
+	 * @param training
+	 * @return
+	 */
+	private String getTrainingJsonStr(Training training){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		String name = "";
+		if(training.getName() !=null ){
+			name = training.getName();
+		}
+		sb.append("\"name\" : "+"\""+name+"\",");
+		sb.append("\"trainingDate\" :");
+		if(training.getTrainingDate() != null){
+			sb.append("\""+convertToString(training.getTrainingDate())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		
+		sb.append("\"timeStart\":");
+		if(training.getTimeStart() != null){
+			sb.append("\""+convertToString(training.getTimeStart())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		
+		sb.append("\"timeEnd\":");
+		if(training.getTimeEnd() != null){
+			sb.append("\""+convertToString(training.getTimeEnd())+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"semester\":");
+		if(training.getSemester() !=null){
+			sb.append(training.getSemester().getId().toString());
+		}else{
+			sb.append("null");
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+	
+	/***
+	 * get one json string of osce
+	 * @param osce
+	 * @return
+	 */
+	private String getOscesJsonStr(Osce osce){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("\"id\":"+osce.getId());
+		sb.append(",");
+		sb.append("\"studyYear\":");
+		if(osce.getStudyYear()!=null){
+			sb.append("\""+osce.getStudyYear()+"\"");
+		}else{
+			sb.append("null");
+		}
+		
+		sb.append(",");
+		sb.append("\"maxNumberStudents\":"+osce.getMaxNumberStudents());
+		sb.append(",");
+		sb.append("\"name\":\""+osce.getName()+"\"");
+		sb.append(",");
+		sb.append("\"shortBreak\":"+osce.getShortBreak());
+		sb.append(",");
+		sb.append("\"LongBreak\":"+osce.getLongBreak());
+		sb.append(",");
+		sb.append("\"lunchBreak\":"+osce.getLunchBreak());
+		sb.append(",");
+		sb.append("\"middleBreak\":"+osce.getMiddleBreak());
+		sb.append(",");
+		sb.append("\"numberPosts\":"+osce.getNumberPosts());
+		sb.append(",");
+		sb.append("\"numberCourses\":"+osce.getNumberCourses());
+		sb.append(",");
+		sb.append("\"postLength\":"+osce.getPostLength());
+		sb.append(",");
+		sb.append("\"isRepeOsce\":"+osce.getIsRepeOsce());
+		sb.append(",");
+		sb.append("\"numberRooms\":"+osce.getNumberRooms());
+		sb.append(",");
+		sb.append("\"isValid\":"+osce.getIsValid());
+		sb.append(",");
+		sb.append("\"osceStatus\":");
+		if(osce.getOsceStatus()!=null){
+			sb.append("\""+osce.getOsceStatus()+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"security\":");
+		if(osce.getSecurity()!=null){
+			sb.append("\""+osce.getSecurity()+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"osceSecurityTypes\":");
+		if(osce.getOsceSecurityTypes()!=null){
+			sb.append("\""+osce.getOsceSecurityTypes()+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"patientAveragePerPost\":");
+		if(osce.getPatientAveragePerPost()!=null){
+			sb.append("\""+osce.getPatientAveragePerPost()+"\"");
+		}else{
+			sb.append("null");
+		}
+		sb.append(",");
+		sb.append("\"semester\":"+osce.getSemester().getId());
+		sb.append(",");
+		sb.append("\"shortBreakSimpatChange\":"+osce.getShortBreakSimpatChange());
+		sb.append(",");
+		
+		sb.append("\"copiedOsce\":");
+		if(osce.getCopiedOsce() !=null){
+			sb.append(osce.getCopiedOsce().getId());
+		}else{
+			sb.append("null");
+		}
+		sb.append("}");
+		
+		
 		return sb.toString();
 	}
 

@@ -326,6 +326,10 @@ public class Osce {
 		return q.getResultList();
 				
 	}
+	
+	public static List<Osce> findAllOscesGroupByCopiedOsce() {
+        return entityManager().createQuery("SELECT o FROM Osce o GROUP BY o.copiedOsce", Osce.class).getResultList();
+    }
     
 	public static Integer initOsceBySecurity() {
 
