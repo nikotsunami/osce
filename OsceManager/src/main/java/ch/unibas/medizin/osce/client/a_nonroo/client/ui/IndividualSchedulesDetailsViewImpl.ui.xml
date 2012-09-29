@@ -8,19 +8,13 @@
 		.panelStyle {
 			width: 320px;
 			height: 400px;
-			border-width: thin;
-			border-style: solid;
 			padding: 0px;
-			margin-top: 68px;
-			margin-bottom: 5px;
-			margin-left: 48px;
+			margin: 10px 10px 0;
 		}
 				
 		.commonStyle {
-			margin-top: 15px;
-			margin-bottom: 5px;
-			margin-left: 160px;
-			width: 140px;
+			margin: 5px 10px 5px 20px;
+			width: 190px;
 		}
 		
 		.topAlign {
@@ -36,6 +30,7 @@
 		.verticlePanelStyle
 		{
 			-moz-border-radius: 4px;
+			border-radius: 4px;
 				
 		}
 	</ui:style>
@@ -54,8 +49,8 @@
 								<!-- <g:VerticalPanel addStyleNames="{style.panelStyle}" ui:field="dataPanelVPStud" > -->
 								<g:VerticalPanel ui:field="dataPanelVPStud" >
 									<g:HorizontalPanel>
-										<g:RadioButton name="RBstudent" ui:field="rbSelectedStud">Selected</g:RadioButton>
-										<g:RadioButton name="RBstudent" ui:field="rbAllStud">All</g:RadioButton>
+										<g:RadioButton name="RBstudent" ui:field="rbSelectedStud" />
+										<g:RadioButton name="RBstudent" ui:field="rbAllStud" />
 									</g:HorizontalPanel>
 									<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">															
 										<g:VerticalPanel ui:field="vpStudent">																							
@@ -64,8 +59,8 @@
 								</g:VerticalPanel>
 							</g:DisclosurePanel>
 								<g:HorizontalPanel>
-									<!-- <g:Button ui:field="btnSendMailStudent" addStyleNames="{style.commonStyle}">Send Email to Student</g:Button> -->
-									<g:Button ui:field="btnPrintCopyStudent" addStyleNames="{style.commonStyle}">Print copy for Student</g:Button>
+									<!-- <my:IconButton ui:field="btnSendMailStudent" addStyleNames="{style.commonStyle}">Send Email to Student</my:IconButton> -->
+									<my:IconButton icon="print" ui:field="btnPrintCopyStudent" addStyleNames="{style.commonStyle}" />
 								</g:HorizontalPanel>										
 						</g:VerticalPanel> 												
 		 	<!-- </g:west>
@@ -76,8 +71,8 @@
 							<g:header></g:header>
 							<g:VerticalPanel ui:field="dataPanelVPSP">
 								<g:HorizontalPanel>
-									<g:RadioButton name="RBSP" ui:field="rbSelectedSP">Selected</g:RadioButton>
-									<g:RadioButton name="RBSP" ui:field="rbAllSP">All</g:RadioButton>
+									<g:RadioButton name="RBSP" ui:field="rbSelectedSP" />
+									<g:RadioButton name="RBSP" ui:field="rbAllSP" />
 								</g:HorizontalPanel>
 								<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">
 									<g:VerticalPanel ui:field="vpSP">
@@ -86,9 +81,9 @@
 							</g:VerticalPanel>
 						</g:DisclosurePanel>
 						<g:HorizontalPanel>
-							<!-- <g:Button ui:field="btnSendMailSP" addStyleNames="{style.commonStyle}">Send
-								Email to SP</g:Button> -->
-							<g:Button ui:field="btnPrintCopySP" addStyleNames="{style.commonStyle}">Print copy for SP</g:Button>
+							<!-- <my:IconButton ui:field="btnSendMailSP" addStyleNames="{style.commonStyle}">Send
+								Email to SP</my:IconButton> -->
+							<my:IconButton icon="print" ui:field="btnPrintCopySP" addStyleNames="{style.commonStyle}" />
 						</g:HorizontalPanel>
 					</g:VerticalPanel>						
 		<!-- 	 </g:center>
@@ -99,8 +94,8 @@
 							<g:header></g:header>
 							<g:VerticalPanel ui:field="dataPanelVPExaminer">
 								<g:HorizontalPanel>
-									<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor">Selected</g:RadioButton>
-									<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor">All</g:RadioButton>
+									<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor" />
+									<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor" />
 								</g:HorizontalPanel>
 								<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">
 									<g:VerticalPanel ui:field="vpExaminor">
@@ -109,10 +104,9 @@
 							</g:VerticalPanel>
 						</g:DisclosurePanel>
 						<g:HorizontalPanel>
-							<!-- <g:Button ui:field="btnSendMailExaminor" addStyleNames="{style.commonStyle}">Send
-								Email to Examinor</g:Button> -->
-							<g:Button ui:field="btnPrintCopyExaminor" addStyleNames="{style.commonStyle}">Print
-								copy for Examinor</g:Button>
+							<!-- <my:IconButton ui:field="btnSendMailExaminor" addStyleNames="{style.commonStyle}">Send
+								Email to Examinor</my:IconButton> -->
+							<my:IconButton icon="print" ui:field="btnPrintCopyExaminor" addStyleNames="{style.commonStyle}" />
 						</g:HorizontalPanel>
 					</g:VerticalPanel>		
 		<!-- 	</g:east>

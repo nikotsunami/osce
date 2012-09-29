@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	 xmlns:b="urn:import:com.google.gwt.user.cellview.client" 
 	 xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria" 
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.resources">
 <ui:style src="../../styles.css" />
 
 <g:SplitLayoutPanel ui:field="splitLayoutPanel">
@@ -16,9 +16,10 @@
 					<my:QuickSearchBox ui:field="searchBox" /> 
 					<!-- <g:Button  ui:field="FilterButton"/> -->
 					</div>
-				  	
-				  	<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
-				  						  
+				  	<!-- cell table changes -->
+				  	<!-- <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" /> -->
+				  	<r:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}" />
+				  	<!-- cell table changes -->
 					<div class="{style.controls} {style.controlsleft}">
 						<g:TextBox ui:field="AddTextBox"></g:TextBox>
 						 <my:IconButton ui:field="AddButton" icon="plusthick"></my:IconButton>

@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standartized
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -49,4 +50,5 @@ public interface StandardizedPatientView  extends IsWidget{
     //By Spec]End
 	QuickSearchBox getSearchBox();
 	Map getSortMap();
+	List<String> getColumnSortSet();
 }

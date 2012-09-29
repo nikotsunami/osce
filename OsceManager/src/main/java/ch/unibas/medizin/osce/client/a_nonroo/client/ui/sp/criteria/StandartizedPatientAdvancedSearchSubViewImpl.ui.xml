@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
  xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.resources">
 	 
 	<ui:style src="../../../styles.css" >
 		.advSearchBtn
@@ -23,7 +23,10 @@
 	    <my:IconButton ui:field="addWorkPermission" icon="search" addStyleNames="{style.advSearchBtn}" />
 	    <my:IconButton ui:field="addMaritialStatus" icon="search" addStyleNames="{style.advSearchBtn}" />
   	</g:FlowPanel>
-    <b:CellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
+  	<!-- celltable changes. start-->
+    <!-- <b:CellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/> -->
+    <r:AdvanceCellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/>
+    <!-- celltable changes. end -->
     <div class="{style.controls}">      
       <b:SimplePager ui:field="pager" display="{table}"/>
     </div>

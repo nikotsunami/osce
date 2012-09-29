@@ -18,17 +18,18 @@ public class StayInPostConstraint extends AssignmentConstraint {
 	@Override
 	public void computeConflicts(ValPatient patient, Set<ValPatient> conflicts) {
 		Assignment assignment = patient.variable().getOsceAssignment();
+		Boolean spStayInPost = assignment.getOsceDay().getOsce().getSpStayInPost();
 		
 		for(VarAssignment va : assignedVariables()) {
 			Assignment a = va.getOsceAssignment();
 			ValPatient p = va.getAssignment();
 			
 			// skip check of assignment with itself patients that should not stay in post
-			if(assignment.equals(a) || p.getPatientInRole().getStayInPost().equals(false))
+			if(assignment.equals(a) || spStayInPost.equals(false))
 				continue;
 			
 			if(!p.getPatient().equals(patient.getPatient()) &&
-					p.getPatientInRole().getStayInPost() &&
+					spStayInPost.equals(true) &&
 					assignment.getOscePostRoom().equals(a.getOscePostRoom()))
 				conflicts.add(p);
 		}

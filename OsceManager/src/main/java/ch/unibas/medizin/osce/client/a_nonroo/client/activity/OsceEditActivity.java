@@ -302,7 +302,9 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
 			
 			osceProxy.setShortBreakSimpatChange(((OsceEditViewImpl)view).shortBreakSimpatChange.getValue());
-			osceProxy.setNumberPosts(((OsceEditViewImpl)view).numberPosts.getValue());
+			//remove number post
+			//osceProxy.setNumberPosts(((OsceEditViewImpl)view).numberPosts.getValue());
+			//remove number post
 			//osceProxy.setSemester(((OsceEditViewImpl)view).semester.getValue());
 			osceProxy.setSemester(semester);
 			osceProxy.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
@@ -312,6 +314,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);
 			osceProxy.setSecurity(OSCESecurityStatus.FEDERAL_EXAM);
 			osceProxy.setOsceSecurityTypes(OsceSecurityType.federal);
+			osceProxy.setSpStayInPost(((OsceEditViewImpl)view).spStayInPost.isChecked());
 			//Set<TaskProxy> setTaskProxy = new HashSet<TaskProxy>();
 			//setTaskProxy=((OsceEditViewImpl)view).osceValue.getValue().getTasks();
 			//osceProxy.setTasks(setTaskProxy);

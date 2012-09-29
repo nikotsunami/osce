@@ -388,6 +388,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	public void onRoleFulfilCriteriaEventReceived(RoleFulfilCriteriaEvent event) {
 		
 		Log.info("onRoleFulfilCriteriaEventReceived");
+		this.roleHeader.getWidget().removeStyleName("highlight-role");
 		if(osceDayProxy.getId()==event.getOsceDayProxy().getId())
 		{
 			Iterator<StandardizedRoleProxy> roles=event.getStandardizedroleProxies().iterator();
@@ -400,6 +401,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 					break;
 					//this.addStyleName("");
 				}
+				
 			}
 			
 		}

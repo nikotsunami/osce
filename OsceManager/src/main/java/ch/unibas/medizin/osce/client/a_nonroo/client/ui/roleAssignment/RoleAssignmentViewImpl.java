@@ -23,6 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -42,13 +43,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.RowCountChangeEvent;
 
-public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentView, RoleSelectedHandler, MenuClickHandler {
+public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentView, RoleSelectedHandler, MenuClickHandler, ClickHandler {
 
-	private static RoleAssignmentViewImplUiBinder uiBinder = GWT
-			.create(RoleAssignmentViewImplUiBinder.class);
+	private static RoleAssignmentViewImplUiBinder uiBinder = GWT.create(RoleAssignmentViewImplUiBinder.class);
 
-	interface RoleAssignmentViewImplUiBinder extends
-			UiBinder<Widget, RoleAssignmentViewImpl> {
+	interface RoleAssignmentViewImplUiBinder extends UiBinder<Widget, RoleAssignmentViewImpl> {
 	}
 
 	// private final OsceConstants constants = GWT.create(OsceConstants.class);
@@ -107,11 +106,11 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		surveyImpBtn.setText(constants.surveyImport());
-		autoAssignmentBtn.setText(constants.autoAssign());
-		addManuallyBtn.setText(constants.addManually());
-		headers = new String[] { constants.name(), constants.accepted(),
-				constants.assignTo(), "", "" };
+		surveyImpBtn.setText(constants.roleSurveyImport());
+		autoAssignmentBtn.setText(constants.roleAutoAssign());
+		addManuallyBtn.setText(constants.roleAddManually());
+		headers = new String[] { constants.name(), constants.roleAccepted(),
+				constants.roleAssignTo(), "", "" };
 
 		init();
 
@@ -135,6 +134,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiHandler("addManuallyBtn")
 	public void onAddManuallyBtnClicked(ClickEvent event) {
 
+		delegate.showApplicationLoading(true);
 		delegate.onAddManuallyClicked();
 	}
 
@@ -144,6 +144,8 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		
 		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style","position: absolute; left: "+left+"px; top: 30px; right: 5px; bottom: 0px;");
 		
+		table.addClickHandler(this);
+
 //		if(OsMaMainNav.getMenuStatus() == 0)
 //			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
 //		else
@@ -153,12 +155,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	}
 
 	public void initAdvancedCriteria() {
-		advancedSearchCriteriaTable
-				.addColumn(new Column<AdvancedSearchCriteriaProxy, SafeHtml>(
-						new SafeHtmlCell()) {
+		advancedSearchCriteriaTable.addColumn(new Column<AdvancedSearchCriteriaProxy, SafeHtml>(new SafeHtmlCell()) {
 					@Override
-					public SafeHtml getValue(
-							AdvancedSearchCriteriaProxy criterion) {
+			public SafeHtml getValue(AdvancedSearchCriteriaProxy criterion) {
 						switch (criterion.getField()) {
 						case NATIONALITY:
 							return OsMaConstant.FLAG_ICON;
@@ -174,8 +173,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 					}
 				});
 
-		advancedSearchCriteriaTable.addColumn(
-				new TextColumn<AdvancedSearchCriteriaProxy>() {
+		advancedSearchCriteriaTable.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 					Renderer<BindType> renderer = new EnumRenderer<BindType>();
 
 					@Override
@@ -184,48 +182,32 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 					}
 				}, constants.bindType());
 
-		advancedSearchCriteriaTable.addColumn(
-				new TextColumn<AdvancedSearchCriteriaProxy>() {
+		advancedSearchCriteriaTable.addColumn(new TextColumn<AdvancedSearchCriteriaProxy>() {
 
 					public String getValue(AdvancedSearchCriteriaProxy criterion) {
 						return criterion.getShownValue();
 					}
 				}, constants.criterion());
 
-		advancedSearchCriteriaTable
-				.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(
-						new ActionCell<AdvancedSearchCriteriaProxy>(
-								OsMaConstant.UNCHECK_ICON,
-								new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
+		advancedSearchCriteriaTable.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(new ActionCell<AdvancedSearchCriteriaProxy>(OsMaConstant.CHECK_ICON, new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
 									@Override
-									public void execute(
-											AdvancedSearchCriteriaProxy object) {
+			public void execute(AdvancedSearchCriteriaProxy object) {
 										// delegate.deleteAdvancedSearchCriteria(object);
 									}
 
 								}) {
 							@Override
-							public void onBrowserEvent(
-									com.google.gwt.cell.client.Cell.Context context,
-									Element elem,
-									AdvancedSearchCriteriaProxy advancedSearchCriteriaProxy,
-									NativeEvent nativeEvent,
-									ValueUpdater<AdvancedSearchCriteriaProxy> valueUpdater) {
+			public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element elem, AdvancedSearchCriteriaProxy advancedSearchCriteriaProxy, NativeEvent nativeEvent, ValueUpdater<AdvancedSearchCriteriaProxy> valueUpdater) {
 								if (nativeEvent.getButton() == NativeEvent.BUTTON_LEFT) {
-									elem.setInnerHTML(delegate
-											.onAdvancedSearchCriteriaClicked(advancedSearchCriteriaProxy));
+					elem.setInnerHTML(delegate.onAdvancedSearchCriteriaClicked(advancedSearchCriteriaProxy));
 								}
-								super.onBrowserEvent(context, elem,
-										advancedSearchCriteriaProxy,
-										nativeEvent, valueUpdater);
+				super.onBrowserEvent(context, elem, advancedSearchCriteriaProxy, nativeEvent, valueUpdater);
 
 							}
 						}));
-		advancedSearchCriteriaTable.addColumnStyleName(
-				advancedSearchCriteriaTable.getColumnCount() - 1, "iconCol");
+		advancedSearchCriteriaTable.addColumnStyleName(advancedSearchCriteriaTable.getColumnCount() - 1, "iconCol");
 
-		advancedSearchCriteriaTable
-				.addRowCountChangeHandler(new RowCountChangeEvent.Handler() {
+		advancedSearchCriteriaTable.addRowCountChangeHandler(new RowCountChangeEvent.Handler() {
 
 					@Override
 					public void onRowCountChange(RowCountChangeEvent event) {
@@ -279,16 +261,15 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	}
 
 	@Override
-	public void setAdvancedSearchCriteriaTable(
-			CellTable<AdvancedSearchCriteriaProxy> advancedSearchCriteriaTable) {
+	public void setAdvancedSearchCriteriaTable(CellTable<AdvancedSearchCriteriaProxy> advancedSearchCriteriaTable) {
 		this.advancedSearchCriteriaTable = advancedSearchCriteriaTable;
 	}
 
 	@Override
 	public void onRoleSelectedEventReceived(RoleSelectedEvent event) {
-		delegate.initAdvancedSearchByStandardizedRole(event
-				.getStandardizedRoleProxy().getId());
-
+delegate.showApplicationLoading(true);
+		delegate.setSelectedRoleOsceDay(event.getOsceDayProxy());
+		delegate.initAdvancedSearchByStandardizedRole(event.getStandardizedRoleProxy().getId());
 	}
 	
 	@Override
@@ -316,4 +297,12 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 			
 	}
 	
+	@Override
+	public void onClick(ClickEvent event) {
+		delegate.showApplicationLoading(true);
+		delegate.firePatientInSemesterRowSelectedEvent(table.onRowClick(table.getCellForEvent(event).getRowIndex()));
+		delegate.showApplicationLoading(false);
+
+	}
+
 }

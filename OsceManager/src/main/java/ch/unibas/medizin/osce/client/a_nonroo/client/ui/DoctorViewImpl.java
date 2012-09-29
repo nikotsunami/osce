@@ -17,7 +17,9 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
@@ -78,8 +80,14 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	@UiField (provided = true)
 	SimplePager pager;
 	
-	@UiField (provided = true)
+	//cell table changes start
+	/*@UiField (provided = true)
 	CellTable<DoctorProxy> table;
+	*/
+	@UiField (provided = true)
+	AdvanceCellTable<DoctorProxy> table;
+	
+	//cell table changes end
 
 	protected Set<String> paths = new HashSet<String>();
 
@@ -91,7 +99,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	@UiField
 	ScrollPanel scrollPanel;
 	
-	int widthSize=Integer.parseInt(constants.widthSize()),decreaseSize=0;
+	int widthSize=OsMaConstant.WIDTH_SIZE,decreaseSize=0;
 	Timer timer;
 	
 
@@ -138,10 +146,15 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	 * implement HasHTML instead of HasText.
 	 */
 	public DoctorViewImpl() {
-		CellTable.Resources tableResources = GWT
-				.create(MyCellTableResources.class);
+		
+		//cell table changes start
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<DoctorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<DoctorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 
+		// cell table changes end
 		SimplePager.Resources pagerResources = GWT
 				.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources,
@@ -360,9 +373,9 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
 
-//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, OsMaConstant.WIDTH_SIZE - OsMaConstant.WIDTH_MIN );
 		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
+		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);	
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
@@ -384,7 +397,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 			timer.scheduleRepeating(1);
 
 		} else {
-			widthSize = Integer.parseInt(constants.widthSize());
+			widthSize = OsMaConstant.WIDTH_SIZE;
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
 		}*/

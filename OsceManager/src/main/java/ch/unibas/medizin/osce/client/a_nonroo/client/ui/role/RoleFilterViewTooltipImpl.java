@@ -688,7 +688,7 @@ public List<String> getWhereFilters() {
 
 	
 @Override
-	public String[] getPaths() {
+	public List<String> getPaths() {
 		// TODO Auto-generated method stub
 		return null;
 	}

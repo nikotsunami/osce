@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -37,6 +38,8 @@ public class SummoningsViewImpl extends Composite implements SummoningsView, Men
 
 	interface SummoningsViewUiBinder extends UiBinder<Widget, SummoningsViewImpl> {
 	}
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	private Delegate delegate;
 
@@ -140,6 +143,17 @@ public class SummoningsViewImpl extends Composite implements SummoningsView, Men
 		Log.info("Call init()");
 		
 //		DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
+		
+		lblExaminor.setText(constants.examiner());
+		lblSP.setText(constants.standardizedPatient());
+		rbAllExaminor.setText(constants.all());
+		rbAllSP.setText(constants.all());
+		rbSelectedExaminor.setText(constants.selected());
+		rbSelectedSP.setText(constants.selected());
+		btnSendMailSP.setText(constants.summoningsMailSp());
+		btnPrintCopySP.setText(constants.summoningsPrintSp());
+		btnSendMailExaminor.setText(constants.summoningsMailExa());
+		btnPrintCopyExaminor.setText(constants.summoningsPrintExa());
 		
 		rbSelectedSP.addClickHandler(new ClickHandler() {
 			

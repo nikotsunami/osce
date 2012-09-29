@@ -22,8 +22,8 @@
    	</div>
 <!-- 
     <div class='{style.bar}'>
-      <g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
-      <g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
+      <my:IconButton addStyleNames='{style.button}' ui:field='save'>Save</my:IconButton>
+      <my:IconButton addStyleNames='{style.button}' ui:field='cancel'>Cancel</my:IconButton>
     </div>
     -->
   </g:HTMLPanel>

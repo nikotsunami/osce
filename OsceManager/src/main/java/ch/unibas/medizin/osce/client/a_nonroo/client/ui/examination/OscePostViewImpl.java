@@ -23,7 +23,7 @@ public class OscePostViewImpl  extends Composite implements  OscePostView{
 	
 	private  final OsceConstants constants = GWT.create(OsceConstants.class);
 	
-	  MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+	  MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 	  
 	
 	private final OscePostViewImpl oscePostViewImpl;
@@ -169,7 +169,7 @@ public class OscePostViewImpl  extends Composite implements  OscePostView{
 		//delegate.deleteOscePost(this);
 		
 		
-		dialogBox.showYesNoDialog(constants.deleteOsceBluePrintPost());
+		dialogBox.showYesNoDialog(constants.confirmationDeleteOsceBluePrintPost());
 		//delegate.deleteOscePost(oscePostViewImpl);
 		Log.info("milan");
 	}

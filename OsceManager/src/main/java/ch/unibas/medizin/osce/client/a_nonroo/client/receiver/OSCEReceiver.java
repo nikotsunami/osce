@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.RoleAssignmentPatientInSemesterActivity;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupViewImpl;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.requestfactory.shared.Receiver;
@@ -67,6 +69,13 @@ public abstract class OSCEReceiver<T> extends Receiver<T>
 @Override
 public void onFailure(ServerFailure error) 
 {
+	
+	// module 3 bug {
+	
+	if(RoleAssignmentPatientInSemesterActivity.osceDayTimer !=null)
+	RoleAssignmentPatientInSemesterActivity.osceDayTimer.scheduleRepeating(OsMaConstant.OSCEDAYTIMESCHEDULE);
+	
+	// module 3 bug }
 	Log.error(error.getMessage());	
 	showMessage(error.getMessage());
 }

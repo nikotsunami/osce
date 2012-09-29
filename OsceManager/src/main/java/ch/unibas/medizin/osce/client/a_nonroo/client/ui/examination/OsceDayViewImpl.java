@@ -275,9 +275,10 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 		calculationsLabel.setText(constants.circuitCalculations());
 		lunchBreakLabel.setText(constants.circuitLunchBreak());
 		
-		// Module 5 bug Report Change
-		lunchBreakStartLabel.setText(constants.circuitLunchBreakStart());
-		// E Module 5 bug Report Change
+			
+		//lunchBreakStartLabel.setText(constants.circuitLunchBreakStart());
+		lunchBreakStartLabel.setText(constants.circuitStart());
+		lunchBreakEndTimeLabel.setText(constants.circuitEndTime());
 		
 		//lbEndTimeLabel.setText(constants.circuitEndTime());
 		//studentsLabel.setText(constants.students());

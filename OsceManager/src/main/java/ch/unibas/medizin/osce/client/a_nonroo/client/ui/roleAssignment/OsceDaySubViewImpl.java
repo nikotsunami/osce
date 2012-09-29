@@ -174,7 +174,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 				if (osceProxy.getSecurity().ordinal() != osceSecurityStatus
 						.ordinal()) {
 					final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
-							"Warning");
+							constants.warning());
 
 					dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
@@ -192,7 +192,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 						}
 					});
 
-					dialogBox.showYesNoDialog(constants.OSCESecurityChange());
+					dialogBox.showYesNoDialog(constants.roleOSCESecurityChange());
 				}
 			} else {
 				final PatientAveragePerPost patientAveragePerPost = patientAvgPerPost
@@ -262,6 +262,8 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		headerPanel.setWidth("500px");
 		
 		final HorizontalPanel iconImagePanel = new HorizontalPanel();
+		iconImagePanel.addStyleName("rightIcon");
+		
 		Label label = new Label(title);
 		
 		headerPanel.sinkEvents(Event.ONCLICK);
@@ -346,7 +348,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		simpleDiscloserPanel.addOpenHandler(openHandler);
 		simpleDiscloserPanel.addCloseHandler(closeHandler);
 				
-		closeHandler.onClose(null);
+//		closeHandler.onClose(null);
 		simpleDiscloserPanel.setHeader(panel);	
 
 //		return panel;

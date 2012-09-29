@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	<ui:style src="../../styles.css" >
 .noOutline {
 		outline-style: none;
@@ -72,8 +73,8 @@
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel  spacing="3" horizontalAlignment="center">
-		<g:Button ui:field="okBtn"></g:Button>
-		<g:Button ui:field="cancelBtn"></g:Button>
+		<my:IconButton icon="check" ui:field="okBtn"></my:IconButton>
+		<my:IconButton icon="closethick" ui:field="cancelBtn"></my:IconButton>
 	</g:HorizontalPanel>
 </g:VerticalPanel>
 

@@ -14,13 +14,21 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
+import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.Sorting;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -28,6 +36,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -40,8 +50,14 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	private PlaceController placeController;	
 	private AcceptsOneWidget widget;
 	private OsceView view;
-	private OsceView systemStartView; 
-	private CellTable<OsceProxy> table;
+	private OsceView systemStartView;
+	
+	//cell table changes
+	private AdvanceCellTable<OsceProxy> table;
+	int x;
+	int y;
+	/*private CellTable<OsceProxy> table;*/
+	//cell table changes
 	private SingleSelectionModel<OsceProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManager;
@@ -134,6 +150,89 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 		
 		setTable(view.getTable());
 		
+		
+		//celltable changes start
+		table.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if(table.getRowCount()>0)
+				{
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+					Log.info("right event");
+				}
+				}
+				else
+				{
+					if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+					{
+						table.getPopup().setPopupPosition(x, y);
+						table.getPopup().show();
+					}
+				}
+			}
+		}, MouseDownEvent.getType());
+				
+				
+				table.getPopup().addDomHandler(new MouseOutHandler() {
+
+					@Override
+					public void onMouseOut(MouseOutEvent event) {
+						// TODO Auto-generated method stub
+						//addColumnOnMouseout();
+						table.getPopup().hide();
+						
+					}
+				}, MouseOutEvent.getType());
+				
+			 table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+					@Override
+					public void onColumnSort(ColumnSortEvent event) {
+						// By SPEC[Start
+
+						Column<OsceProxy, String> col = (Column<OsceProxy, String>) event.getColumn();
+						
+						
+						int index = table.getColumnIndex(col);
+						
+						
+						/*String[] path =	systemStartView.getPaths();	            			
+						sortname = path[index];
+						sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+						
+						if (index % 2 == 1 ) {
+							
+							table.getPopup().setPopupPosition(x, y);
+							table.getPopup().show();
+
+						} /*else {
+							// path = systemStartView.getPaths();
+							//String[] path =	systemStartView.getPaths();	
+							//int index = table.getColumnIndex(col);
+							String[] path = systemStartView.getPaths();
+							sortname = path[index];
+							sortorder = (event.isSortAscending()) ? Sorting.ASC
+									: Sorting.DESC;
+							// By SPEC]end
+							systemStartView.this.onRangeChanged();
+							
+							
+						}*/
+					}
+				});
 		/*requests.semesterRequest().findSemester(1L).fire(new OSCEReceiver<SemesterProxy>() {
 
 			@Override
@@ -310,7 +409,9 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	//spec end
 
 	public void setTable(CellTable<OsceProxy> table) {
-		this.table = table;
+		//this.table = table;
+		//cell table changes
+		this.table = (AdvanceCellTable<OsceProxy>)table;
 	}
 
 	@Override

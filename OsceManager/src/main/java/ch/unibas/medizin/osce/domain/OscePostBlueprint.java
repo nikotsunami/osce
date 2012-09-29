@@ -55,7 +55,7 @@ public class OscePostBlueprint {
     public static Long countOscebluePrintValue(Long osceid)
 	{
 		EntityManager em = entityManager();	
-		String queryString="select count(o) from OscePostBlueprint o where  o.osce="+osceid+" and (o.specialisation= "+null+" or o.roleTopic="+null +")";
+		String queryString="select count(o) from OscePostBlueprint o where  o.osce="+osceid+" and (o.specialisation= "+null+" or o.roleTopic="+null +") and o.postType<>1";
 		Log.info("~QUERY String: " + queryString);
 		TypedQuery<Long> q = em.createQuery(queryString, Long.class);
 		Long result = q.getSingleResult();

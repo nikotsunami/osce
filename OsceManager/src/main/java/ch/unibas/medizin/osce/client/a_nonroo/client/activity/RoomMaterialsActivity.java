@@ -18,6 +18,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListRequest;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.scaffold.MaterialListRequestNonRoo;
@@ -25,6 +27,11 @@ import ch.unibas.medizin.osce.shared.scaffold.MaterialListRequestNonRoo;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -66,7 +73,12 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 
 	private HandlerRegistration rangeChangeHandler;
 	// @SPEC table to add data and remove
-	private CellTable<MaterialListProxy> table;
+	//cell table changes
+	/*private CellTable<MaterialListProxy> table;*/
+	private AdvanceCellTable<MaterialListProxy> table;
+	int x;
+	int y;
+	//cell table chnages
 
 	/* @SPEC holds the selection model of the specialisation table */
 	private SingleSelectionModel<MaterialListProxy> selectionModel;
@@ -151,6 +163,90 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 				keyProvider);
 		table.setSelectionModel(selectionModel);
 
+		//celltable changes start
+		table.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if(table.getRowCount()>0)
+				{
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+					Log.info("right event");
+				}
+				}
+				else
+				{
+					if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+					{
+						table.getPopup().setPopupPosition(x, y);
+						table.getPopup().show();
+					}
+				}
+			}
+		}, MouseDownEvent.getType());
+		
+		
+		table.getPopup().addDomHandler(new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				// TODO Auto-generated method stub
+				//addColumnOnMouseout();
+				table.getPopup().hide();
+				
+			}
+		}, MouseOutEvent.getType());
+		
+	 table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				// By SPEC[Start
+
+				Column<MaterialListProxy, String> col = (Column<MaterialListProxy, String>) event.getColumn();
+				
+				
+				int index = table.getColumnIndex(col);
+				
+				
+				/*String[] path =	systemStartView.getPaths();	            			
+				sortname = path[index];
+				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+				
+				if (index % 2 == 1 ) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+				} else {
+					// path = systemStartView.getPaths();
+					//String[] path =	systemStartView.getPaths();	
+					//int index = table.getColumnIndex(col);
+					String[] path = roomMaterialsView.getPaths();
+					sortname = path[index];
+					sortorder = (event.isSortAscending()) ? Sorting.ASC
+							: Sorting.DESC;
+					// By SPEC]end
+					RoomMaterialsActivity.this.onRangeChanged();
+					
+					
+				}
+			}
+		});
+		
+//cell table chanes
 		selectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 					public void onSelectionChange(SelectionChangeEvent event) {
@@ -175,7 +271,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 			}
 		});
 
-		table.addColumnSortHandler(new ColumnSortEvent.Handler() {
+		/*table.addColumnSortHandler(new ColumnSortEvent.Handler() {
 			@Override
 			public void onColumnSort(ColumnSortEvent event) {
 				// By SPEC[Start
@@ -191,7 +287,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 
 			}
 		});
-
+*/
 		view.setDelegate(this);
 
 	}
@@ -203,7 +299,9 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 	}
 
 	private void setTable(CellTable<MaterialListProxy> table) {
-		this.table = table;
+		//cell table changes
+		/*this.table = table;*/
+		this.table = (AdvanceCellTable<MaterialListProxy>)table;
 
 	}
 

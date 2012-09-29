@@ -47,16 +47,18 @@ public class RoleAssignmentPopupViewImpl extends DialogBox implements
 	public RoleAssignmentPopupViewImpl() {
 		setWidget(BINDER.createAndBindUi(this));
 
-		this.setTrainingHeaderText(constants.acceptedTraining());
-		this.setOsceHeaderText(constants.acceptedOSCE());
-		this.setRoleAssignHeaderText(constants.assignedRole());
+		this.setTrainingHeaderText(constants.roleAcceptedTrainings());
+		this.setOsceHeaderText(constants.roleAcceptedOsces());
+		this.setRoleAssignHeaderText(constants.roleAssignedRoles());
 		this.okButton.setText(constants.okBtn());
 
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
-		this.setText(constants.patientInformation());
+		this.setText(constants.rolePatientInformation());
 		this.center();
+		
+		this.getElement().getStyle().setZIndex(1); 
 	}
 
 	@UiHandler("okButton")

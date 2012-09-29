@@ -17,11 +17,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAn
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
@@ -33,18 +34,21 @@ import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.client.style.widgets.SimpleShowErrorDialogBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
@@ -57,9 +61,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
-
-import com.google.gwt.i18n.client.LocaleInfo;
-import ch.unibas.medizin.osce.client.style.widgets.SimpleShowErrorDialogBox;
 
 @SuppressWarnings("deprecation")
 public class StandardizedPatientDetailsActivity extends AbstractActivity implements
@@ -111,6 +112,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
     	this.requests = requests;
     	this.placeController = placeController;
     	userSettings = new UserPlaceSettings(place);
+    	initLoading();
     }
 
 	public void onStop() {
@@ -656,6 +658,26 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	}
 
 	
+	@Override
+	public void showApplicationLoading(Boolean show) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(show));
+
+	}
+	
+	private void initLoading(){
+		ApplicationLoadingScreenEvent.initialCounter();
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+//						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
+						event.display();
+					}
+				});
+
+	}
+
 	//By SPEc [Start
 	@Override
 	public void printPatientClicked(){
@@ -725,10 +747,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 						public void onSuccess(Void arg0) {
 							// init();
 
-							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
-									"Warning");
-							dialogBox.showConfirmationDialog(constants
-									.onDeleteRoleAssignedToPatient());
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+							dialogBox.showConfirmationDialog(constants.warningPatientHasRole());
 							view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
 						}
 
@@ -780,8 +800,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 							
 							SimpleShowErrorDialogBox dialogBox = null;
 							if(dialogBox == null){
-								String dialogTitle = messageLookup.getString("err_DialogBoxTitle");
-								String dialogCloseButton = messageLookup.getString("err_DialogBoxCloseButton");
+								String dialogTitle = constants.error();
+								String dialogCloseButton = constants.close();
 								dialogBox = new SimpleShowErrorDialogBox(dialogTitle,result,dialogCloseButton);
 							}
 							dialogBox.show();

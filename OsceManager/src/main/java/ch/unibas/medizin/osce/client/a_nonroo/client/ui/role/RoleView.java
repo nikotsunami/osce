@@ -43,7 +43,10 @@ public interface RoleView extends IsWidget{
 		public void getAllSpecialisation(RoleAddPopupView popupView, int clientX, int clientY);
 	}
 
-    String[] getPaths();
+	//cell table changes
+    //String[] getPaths();
+	List<String> getPaths();
+    //cell table chages
     
     void setDelegate(Delegate delegate);
     

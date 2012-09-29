@@ -98,8 +98,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	
 	// change {
 	
-	@UiField
+	
+	//remove number post
+	/*@UiField
 	public IntegerBox numberPosts;
+	*/
+	//remove number post
 	
 	@UiField
 	public IntegerBox numberRooms;
@@ -120,6 +124,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 	@UiField(provided = true)
 	public CheckBox isRepeOsce = new CheckBox() {
+
+		public void setValue(Boolean value) {
+			super.setValue(value == null ? Boolean.FALSE : value);
+		}
+	};
+	
+	@UiField(provided = true)
+	public CheckBox spStayInPost = new CheckBox() {
 
 		public void setValue(Boolean value) {
 			super.setValue(value == null ? Boolean.FALSE : value);
@@ -157,7 +169,13 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	DivElement labeShortBreakSimpatChange;
 
 	@UiField
-	DivElement numberPost;
+	DivElement labelSpStayInPost;
+	
+	//remove number post
+//	@UiField
+//	DivElement numberPost;
+//	
+	//remove number post
 	/*
 	@UiField
 	IntegerBox numberRooms;
@@ -265,7 +283,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
 		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
 		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
-		numberPost.setInnerText(constants.circuitStation() + ":");
+		labelSpStayInPost.setInnerText(constants.OsceSpStayInPost());
+		//remove number post
+		//numberPost.setInnerText(constants.circuitStation() + ":");
+		
+		//remove number post
 		// Highlight onViolation
 		osceMap=new HashMap<String, Widget>();
 		osceMap.put("name", name);

@@ -3,6 +3,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -20,6 +22,8 @@ public interface RoleAssignmentView extends IsWidget {
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
+
+		public void showApplicationLoading(Boolean show);
 
 		public void onAcceptedClick(PatientInSemesterData patientInSemesterData);
 
@@ -41,6 +45,10 @@ public interface RoleAssignmentView extends IsWidget {
 		public void autoAssignmentBtnClicked();
 		
 		// module 3 f }
+		
+		public void firePatientInSemesterRowSelectedEvent(PatientInSemesterProxy patientInSemesterProxy);
+		
+		public void setSelectedRoleOsceDay(OsceDayProxy osceDayProxy);
 		
 	}
 

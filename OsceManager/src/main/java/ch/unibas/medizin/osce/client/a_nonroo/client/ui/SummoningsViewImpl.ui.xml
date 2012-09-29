@@ -18,12 +18,9 @@
 			-moz-border-radius: 4px;
 		}
 		
-		.commonStyle {
-			margin-top: 5px;
-			margin-bottom: 10px;
-			margin-left: 23px;
-			margin-right: 23px;
-			width: 140px;
+		.commonStyle {    
+			margin: 5px;
+    		width: 190px;
 		}
 		
 		.topAlign {
@@ -49,7 +46,7 @@
 <!-- 				<g:west size="200"> -->
 					<g:VerticalPanel>
 						<g:HTMLPanel addStyleNames="{style.headerLabelPanel}">
-							<g:Label ui:field="lblSP">Standardized Patient</g:Label>
+							<g:Label ui:field="lblSP" />
 						</g:HTMLPanel>
 						
 					<g:VerticalPanel addStyleNames="{style.panelStyle}">
@@ -57,8 +54,8 @@
 						<g:VerticalPanel >
 							<g:HorizontalPanel addStyleNames="listHeaderPanelStyle">
 								<g:HorizontalPanel >
-									<g:RadioButton name="RBSP" ui:field="rbSelectedSP">Selected</g:RadioButton>
-									<g:RadioButton name="RBSP" ui:field="rbAllSP">All</g:RadioButton>
+									<g:RadioButton name="RBSP" ui:field="rbSelectedSP" />
+									<g:RadioButton name="RBSP" ui:field="rbAllSP" />
 								</g:HorizontalPanel>
 							</g:HorizontalPanel>
 							<g:ScrollPanel addStyleNames="listPanelStyle">
@@ -66,10 +63,8 @@
 								</g:VerticalPanel>
 							</g:ScrollPanel>
 							<g:HorizontalPanel>
-								<g:Button ui:field="btnSendMailSP" addStyleNames="{style.commonStyle}">Send
-									Email to SP</g:Button>
-								<g:Button ui:field="btnPrintCopySP" addStyleNames="{style.commonStyle}">Print
-									copy for SP</g:Button>
+								<my:IconButton ui:field="btnSendMailSP" icon="mail-closed" addStyleNames="{style.commonStyle}" />
+								<my:IconButton ui:field="btnPrintCopySP" icon="print" addStyleNames="{style.commonStyle}" />
 							</g:HorizontalPanel>
 						</g:VerticalPanel>
 						
@@ -82,15 +77,15 @@
 					<g:VerticalPanel>
 					
 						<g:HTMLPanel addStyleNames="{style.headerLabelPanel}">
-							<g:Label ui:field="lblExaminor" >Examiner</g:Label>
+							<g:Label ui:field="lblExaminor" />
 						</g:HTMLPanel>
 						
 						<g:VerticalPanel addStyleNames="{style.panelStyle}">
 							<g:VerticalPanel>
 								<g:HorizontalPanel addStyleNames="listHeaderPanelStyle">
 									<g:HorizontalPanel>
-										<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor">Selected</g:RadioButton>
-										<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor">All</g:RadioButton>
+										<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor" />
+										<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor" />
 										</g:HorizontalPanel>
 									</g:HorizontalPanel>
 							<g:ScrollPanel addStyleNames="listPanelStyle">
@@ -98,10 +93,8 @@
 								</g:VerticalPanel>
 							</g:ScrollPanel>
 							<g:HorizontalPanel>
-								<g:Button ui:field="btnSendMailExaminor" addStyleNames="{style.commonStyle}">Send
-									Email to Examinor</g:Button>
-								<g:Button ui:field="btnPrintCopyExaminor" addStyleNames="{style.commonStyle}">Print
-									copy for Examinor</g:Button>
+								<my:IconButton ui:field="btnSendMailExaminor" icon="mail-closed" addStyleNames="{style.commonStyle}" />
+								<my:IconButton ui:field="btnPrintCopyExaminor" icon="print" addStyleNames="{style.commonStyle}" />
 							</g:HorizontalPanel>
 						</g:VerticalPanel>
 						

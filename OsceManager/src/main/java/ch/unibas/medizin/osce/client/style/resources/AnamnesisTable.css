@@ -170,10 +170,6 @@
 	width: 20px;
 }
 
-.cellTableCell input[type="text"] {
-	width: 100%;
-}
-
 .cellTableCell button {
 	outline: none !important;
 	margin: 0 0 0 -5px;

@@ -463,7 +463,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 									Log.info("Error loading template");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Template not found");
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplNotFound());
 								}
 								
 							}
@@ -479,7 +479,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		});
 		
 		sendMailButton = popupView.getSendMailButton();
-		sendMailButton.setText("Send Mail");
+		sendMailButton.setText(constants.summoningsSend());
 		sendMailButton.addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -497,12 +497,12 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							Log.info("Mail Sent Successfully");
 							
 							confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-							confirmationDialogBox.showConfirmationDialog("Mail Sent Successfully");
+							confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
 						}else{
 							Log.info("Error sending email");
 							
 							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-							confirmationDialogBox.showConfirmationDialog("Error sending email");
+							confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
 						}
 					}
 					
@@ -534,18 +534,18 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 									Log.info("Template saved successfully.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-									confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+									confirmationDialogBox.showConfirmationDialog(constants.confirmationTplSaved());
 								}else if(!result){
 									
 									Log.info("Error saving template : Default template path is not set.");
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+									confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
 									
 								}else{
 									Log.info("Error saving template");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Error saving template");
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
 								}
 									
 								
@@ -581,7 +581,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 									Log.info("Template restored successfully.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-									confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
+									confirmationDialogBox.showConfirmationDialog(constants.confirmationTplRestore());
 									
 			//Feature : 154
 									summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,true,  
@@ -604,7 +604,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 									Log.info("Error restoring template");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Error restoring template");
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplRestore());
 								}
 								
 								
@@ -626,14 +626,14 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			Log.info("No checkbox selected.");
 
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
-			confirmationDialogBox.showConfirmationDialog("Please select any Standardized Patient");
+			confirmationDialogBox.showConfirmationDialog(constants.warningSelectSp());
 		}
 	}
 
 	@SuppressWarnings("deprecation")
 	private void loadSemesterList() {
 		popupView.getSemesterList().clear();
-		popupView.getSemesterList().addItem("Select", "0");
+		popupView.getSemesterList().addItem(constants.select(), "0");
 		
 		requests.semesterRequest().findAllSemesters().fire(new OSCEReceiver<List<SemesterProxy>>() {
 
@@ -725,7 +725,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 									Log.info("Error loading template");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Template not found");
+									confirmationDialogBox.showConfirmationDialog(constants.warningTemplateNotFound());
 								}
 							}
 							
@@ -739,7 +739,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 		});
 		
 		sendMailButton = popupView.getSendMailButton();
-		sendMailButton.setText("Send Mail");
+		sendMailButton.setText(constants.summoningsSend());
 		sendMailButton.addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -758,12 +758,12 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 							Log.info("Mail sent successfully.");
 							
 							confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-							confirmationDialogBox.showConfirmationDialog("Mail sent successfully.");
+							confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
 						}else{
 							Log.error("Error sending mail.");
 							
 							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-							confirmationDialogBox.showConfirmationDialog("Error sending mail.");
+							confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
 						}
 					}
 					
@@ -796,18 +796,18 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 									Log.error("Template saved successfully.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-									confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+									confirmationDialogBox.showConfirmationDialog(constants.confirmationTplSaved());
 								}else if(!result){
 									
 									Log.info("Error saving template : Default template path is not set.");
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+									confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
 									
 								}else{
 									Log.error("Error saving template.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Error saving template.");
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
 								}
 									
 							}
@@ -842,7 +842,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 									Log.info("Template restored successfully.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-									confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
+									confirmationDialogBox.showConfirmationDialog(constants.confirmationTplRestore());
 												//Feature : 154
 									summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,true, 
 											new AsyncCallback<String[]>() {
@@ -862,7 +862,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 									Log.info("Error restoring template.");
 									
 									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-									confirmationDialogBox.showConfirmationDialog("Error restoring template.");
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplRestore());
 								}
 								
 								
@@ -884,7 +884,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 			Log.info("No checkbox selected.");
 			
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
-			confirmationDialogBox.showConfirmationDialog("Please select any Examiner");
+			confirmationDialogBox.showConfirmationDialog(constants.warningSelectExaminer());
 		}
 	}
 
@@ -958,7 +958,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Error loading template");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Template not found");
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplNotFound());
 									}
 								}
 								
@@ -974,7 +974,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 			
 			// THIS BUTTON ACT AS PDF GENERATOR BUTTON
 			sendMailButton = popupView.getSendMailButton();
-			sendMailButton.setText("Generate PDF");
+			sendMailButton.setText(constants.summoningsGeneratePdf());
 			sendMailButton.addClickHandler(new ClickHandler() {
 				
 				@Override
@@ -1019,18 +1019,18 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Template saved successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-										confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+										confirmationDialogBox.showConfirmationDialog(constants.confirmationTplSaved());
 									}else if(!result){
 										
 										Log.info("Error saving template : Default template path is not set.");
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+										confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
 										
 									}else{
 										Log.info("Error saving template.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Error saving template.");
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
 									}
 										
 								}
@@ -1065,7 +1065,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Template restored successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-										confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
+										confirmationDialogBox.showConfirmationDialog(constants.confirmationTplRestore());
 													//Feature : 154
 										summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,false, 
 												new AsyncCallback<String[]>() {
@@ -1086,7 +1086,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Error restoring template.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Error restoring template.");
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplRestore());
 									}
 									
 									
@@ -1110,7 +1110,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 			Log.info("No checkbox selected.");
 			
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
-			confirmationDialogBox.showConfirmationDialog("Please select any Standardized Patient");
+			confirmationDialogBox.showConfirmationDialog(constants.warningSelectSp());
 		}
 		
 	}
@@ -1186,7 +1186,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Error loading template");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Template not found");
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplNotFound());
 									}
 								}
 								
@@ -1201,7 +1201,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 			
 			// THIS BUTTON ACT AS PDF GENERATOR BUTTON
 			sendMailButton = popupView.getSendMailButton();
-			sendMailButton.setText("Generate PDF");
+			sendMailButton.setText(constants.summoningsGeneratePdf());
 			sendMailButton.addClickHandler(new ClickHandler() {
 				
 				@Override
@@ -1246,18 +1246,18 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Template saved successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-										confirmationDialogBox.showConfirmationDialog("Template saved successfully.");
+										confirmationDialogBox.showConfirmationDialog(constants.confirmationTplSaved());
 									}else if(!result){
 										
 										Log.info("Error saving template : Default template path is not set.");
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Invalid Path for Saving Template. Please contact Administrator.");
+										confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
 										
 									}else{
 										Log.info("Error saving template.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Error saving template.");
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
 									}
 										
 								}
@@ -1291,7 +1291,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Template restored successfully.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-										confirmationDialogBox.showConfirmationDialog("Template restored successfully.");
+										confirmationDialogBox.showConfirmationDialog(constants.confirmationTplRestore());
 													//Feature : 154
 										summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,false, 
 												new AsyncCallback<String[]>() {
@@ -1311,7 +1311,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 										Log.info("Error restoring template.");
 										
 										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-										confirmationDialogBox.showConfirmationDialog("Error restoring template.");
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplRestore());
 									}
 									
 								}
@@ -1333,7 +1333,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 			Log.info("No checkbox selected.");
 			
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
-			confirmationDialogBox.showConfirmationDialog("Please select any Examiner");
+			confirmationDialogBox.showConfirmationDialog(constants.warningSelectExaminer());
 		}
 		
 	}

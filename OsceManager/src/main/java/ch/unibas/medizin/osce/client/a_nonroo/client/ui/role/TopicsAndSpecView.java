@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -39,7 +40,9 @@ public interface TopicsAndSpecView extends IsWidget{
     void setPresenter(Presenter topicsAndSpecActivity);
 
 	CellTable<SpecialisationProxy> getTable();
-	String[] getPaths();
+	String[] getPathsArray();
+	//cell table 
+	List<String> getPaths();
 	public void setDetailPanel(boolean isDetailPlace);
 	// Violation Changes Highlight
 	public Map getMap();

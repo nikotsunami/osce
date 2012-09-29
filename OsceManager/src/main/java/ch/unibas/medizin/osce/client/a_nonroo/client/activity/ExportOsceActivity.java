@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
@@ -83,7 +82,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					}
 		});
 		
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
 		generateXMLFile(semesterProxy.getId());
 		
@@ -103,12 +102,13 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		eOsceServiceAsync.exportOsceFile(semesterID, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
 				if (view.checkRadio())
 					processedFileList();
 				else
 					init();
-				
-				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			}
 			
 			@Override

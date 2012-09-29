@@ -18,7 +18,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -89,9 +91,12 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 	@UiField (provided = true)
 	SimplePager pager;
 
+	//cell table changes
+	/*@UiField (provided = true)
+	CellTable<RoomProxy> table;*/
 	@UiField (provided = true)
-	CellTable<RoomProxy> table;
-
+	AdvanceCellTable<RoomProxy> table;
+	//cell table changes
 	protected Set<String> paths = new HashSet<String>();
 
 	public RoomEditPopupView roomEditPopup;
@@ -135,7 +140,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+						messageConfirmationDialogBox.showConfirmationDialog(constants.warningValidValue());
 						
 						//Window.alert("Enter Correct Value");
 					}
@@ -203,9 +208,13 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 // E Highlight onViolation
 	
 	public RoomViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<RoomProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table changes
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<RoomProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<RoomProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 
+		//cell table changes
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
@@ -268,7 +277,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					if ((((RoomEditPopupViewImpl)roomEditPopup).getNewRoomNumber().getValue()).equals(constants.roomNumber()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomLength().getValue()).equals(constants.roomLength()) || (((RoomEditPopupViewImpl)roomEditPopup).getNewRoomWidth().getValue()).equals(constants.roomWidth()))
 					{
 						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showConfirmationDialog("Enter Correct Value");
+						messageConfirmationDialogBox.showConfirmationDialog(constants.warningValidValue());
 					}
 					else
 					{
@@ -463,7 +472,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 
 	/**

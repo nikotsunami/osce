@@ -70,7 +70,7 @@ public class TimetableGenerator {
 		}
 		
 		// max number of courses (decrease while looking for optimum)
-		int numberParcoursMax = (osce.getNumberCourses() > 0 ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
+		int numberParcoursMax = (osce.getNumberCourses() > 0 && osce.getNumberCourses() < osce.getNumberRooms() / osce.numberPostsWithRooms() ? osce.getNumberCourses() : osce.getNumberRooms() / osce.numberPostsWithRooms());
 		
 		TimetableGenerator ttGen;
 		TimetableGenerator optGen = null;
@@ -111,7 +111,7 @@ public class TimetableGenerator {
 		this.osce = osce;
 		numberStudents = osce.getMaxNumberStudents();
 		numberPosts = osce.getOscePostBlueprints().size();
-		postLength = osce.getPostLength();
+		postLength = osce.getPostLength();	
 		numberSlotsUntilSPChange = osce.slotsOfMostDifficultRole();
 		numberBreakPosts = nBreakPosts;
 		numberParcours = nParcours;
@@ -353,7 +353,7 @@ public class TimetableGenerator {
 		Iterator<OsceDay> allDays = osceDay.getOsce().getOsce_days().iterator();
 		while (allDays.hasNext()) {
 			OsceDay currDay = (OsceDay) allDays.next();
-			if(!currDay.equals(currDay))
+			if(!currDay.equals(osceDay))
 				index++;
 			else
 				return index;
@@ -381,9 +381,17 @@ public class TimetableGenerator {
 		while (it.hasNext()) {
 			Integer osceDayIndex = (Integer) it.next();
 			OsceDay thisDay = osce.getOsce_days().get(osceDayIndex);
+			log.warn(osceDayIndex);
 			
 			rotationsByDay.add(osceDayIndex, thisDay.totalNumberRotations());
-			calcDayTimeByDayIndex(osceDayIndex, thisDay.getLunchBreakAfterRotation());
+			
+			int lunchBreakAfterRotation = 0;
+			if(thisDay.getLunchBreakAfterRotation() == null)
+				lunchBreakAfterRotation = thisDay.getOsceSequences().get(0).getNumberRotation();
+			else
+				lunchBreakAfterRotation = thisDay.getLunchBreakAfterRotation();
+			
+			calcDayTimeByDayIndex(osceDayIndex, lunchBreakAfterRotation);
 			
 			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(osceDayIndex)));
 			thisDay.flush();
@@ -499,14 +507,20 @@ public class TimetableGenerator {
 			osceDay.setOsceSequences(osceSequences);
 		} else { // multiple days --> one sequence for each day
 			Iterator<OsceDay> it = days.iterator();
-			int i = 0;
+			int i = 0,j=0;
 			while (it.hasNext()) {
 				OsceDay osceDay = (OsceDay) it.next();
 				
 				// insert sequence
 				OsceSequence seq = new OsceSequence();				
 				//seq.setLabel(OsceSequences.getConstByIndex(i).toString());
-				seq.setLabel(OsceSequences.getOsceSequenceValue(OsceSequences.getConstByIndex(i)));
+				
+				if(j>4)
+				{
+					j=0;
+				}
+				
+				seq.setLabel(OsceSequences.getOsceSequenceValue(OsceSequences.getConstByIndex(j)));
 				seq.setNumberRotation(rotationsByDay.get(i));
 				seq.setOsceDay(osceDay);
 				
@@ -527,6 +541,7 @@ public class TimetableGenerator {
 				osceSequences.add(seq);
 				
 				i++;
+				j++;
 				
 				osceDay.setOsceSequences(osceSequences);
 			}
@@ -544,6 +559,10 @@ public class TimetableGenerator {
 		Iterator<OsceDay> itDay = osce.getOsce_days().iterator();		
 		OsceDay firstDay = itDay.next();							
 		OsceDay removeDay = null;
+		// Array List for Osce Days which are going to remove
+        ArrayList<OsceDay> listRemoveOsceDay = new ArrayList<OsceDay>();
+        // Array List for Osce Sequences which are going to remove
+		ArrayList<OsceSequence> listRemoveOsceSequence = new ArrayList<OsceSequence>();
 		log.info("First Day : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());
 		while(itDay.hasNext()) {			
 			OsceDay nextDay = itDay.next();
@@ -565,24 +584,54 @@ public class TimetableGenerator {
 			}
 			
 			log.info("remove Day going to be deleted");
-			osce.getOsce_days().remove(removeDay);
+			/*osce.getOsce_days().remove(removeDay);
 			removeDay.remove();			
-			log.info("Next Day is deleted");
-		}
-		
-		
+			log.info("Next Day is deleted");*/
+	        listRemoveOsceDay.add(removeDay);
+			
+		}		
+		    // Removing Osce Days from List
+            log.info("removing day from osceDay list");
+			osce.getOsce_days().remove(listRemoveOsceDay);
+			for(OsceDay rmOsceDay: listRemoveOsceDay)
+			{
+				log.info("remove Day going to be deleted");
+				osce.getOsce_days().remove(rmOsceDay);
+				rmOsceDay.remove();
+				log.info("OSCEday removed");
+			}
+			
+			log.info("For First Day OSCE Sequences");
+
 		if(firstDay != null) {
 			log.info("First Day not null : " + firstDay.getId() + " : " + firstDay.getOsceDate().toLocaleString());						
 			List<OsceSequence> setOsceSeq = firstDay.getOsceSequences();
 			Iterator<OsceSequence> itOsceSeq = setOsceSeq.iterator();
 			//firstDay.getOsceSequences().removeAll(setOsceSeq);			
-			while(itOsceSeq.hasNext()) {				
+			/*while(itOsceSeq.hasNext()) {				
 				OsceSequence osceSequence = itOsceSeq.next();
 				log.info("Removing osce sequence : " + osceSequence.getId() );
 				firstDay.getOsceSequences().remove(osceSequence);
 				osceSequence.remove();
+			}*/
+			while(itOsceSeq.hasNext()) 
+			{				
+				OsceSequence osceSequence = itOsceSeq.next();
+				log.info("Removing osce sequence : " + osceSequence.getId() );
+				/*firstDay.getOsceSequences().remove(osceSequence);
+				osceSequence.remove();*/
+				listRemoveOsceSequence.add(osceSequence);
 			}
-			
+                        // Removing Osce Sequence from List
+			log.info("removing sequence from osceSequence list");
+			osce.getOsce_days().remove(listRemoveOsceSequence);
+			for(OsceSequence rmOsceSequence: listRemoveOsceSequence)
+			{
+				log.info("remove Day going to be deleted");
+				firstDay.getOsceSequences().remove(rmOsceSequence);
+				rmOsceSequence.remove();
+				log.info("OSCEday removed");
+			}
 			osceDayRef = firstDay;
 		}
 		
@@ -661,7 +710,7 @@ public class TimetableGenerator {
 			// create new days and corresponding sequences and parcours
 			for(int i = 1; i < numberDays; i++) {
 				rotationsByDay.set(i, rotationsLeft);
-				dayCal.add(Calendar.DATE, i);
+				dayCal.add(Calendar.DATE, 1);
 				
 				OsceDay day = new OsceDay();
 				day.setOsce(osce);

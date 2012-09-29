@@ -1272,7 +1272,8 @@ a:hover, .gwt-Anchor:hover {
  	/*overflow-x: scroll;
     overflow-y: hidden;*/
 	padding: 6px;
-	background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;
+	/*background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #ffffff;*/
+	background-color: #FFFEFA;
 }
 
 .gwt-InvertedTabPanel .gwt-TabPanelBottom {
@@ -2638,6 +2639,10 @@ background: rgb(201,201,253)  ;
 	vertical-align: top;
 }
 
+.flexTableEvenRow:hover {
+	background: #f1b532;
+}
+
 .flexTableOddRow {
 	background: #eee;
 	border: 0;
@@ -2645,6 +2650,20 @@ background: rgb(201,201,253)  ;
 	padding: 4px 10px;
 	overflow: hidden;
 	vertical-align: top;
+}
+
+.flexTableOddRow:hover {
+	background: #f1b532;
+}
+
+.flexTableSelectedRow {
+  background: #d3ae50;
+  color: #000;
+}
+
+.flexTableLabel{
+	overflow: hidden;
+	height: 20px !important;
 }
 
 .flexTableRow{
@@ -2899,7 +2918,8 @@ color: #f1b532;
     border-radius: 4px;
  	
     /*padding: 6px;*/
-    background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    /*background: url("images/ui-bg_highlight-soft_0_e0e0e0_1x400.png") repeat-x scroll 50% 50% #FFFFFF;*/
+    background-color: #FFFEFA;
     opacity: 0.9;
     /* /////  width: 145px; */ 
     /* /////  height: 130px; */
@@ -3410,12 +3430,13 @@ color: #f1b532;
 }
 
 .ui-icon-triangle-1-s1 {
-background: url("images/downArrow.png") ;
-	
+	/* background: url("images/downArrow.png") ; */
+	background: transparent url(images/down.png) no-repeat right 4px;	
 	height: 25px;
 	width: 25px;
 	background-repeat: no-repeat;
     display: block;
+ background-position: center 4px;
     overflow: hidden;
   	height:22px;
     margin: auto;

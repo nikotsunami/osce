@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +15,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
@@ -82,11 +85,15 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 //	Button FilterButton;
 	
 
-
+//cell table chages
+	/*@UiField(provided=true)
+	CellTable<SpecialisationProxy> table;*/
 	@UiField(provided=true)
-	CellTable<SpecialisationProxy> table;
+	AdvanceCellTable<SpecialisationProxy> table;
+	//cell table changes end
+	protected List<String> paths = new ArrayList<String>();
 	
-	protected Set<String> paths = new HashSet<String>();
+//	protected Set<String> paths = new HashSet<String>();
 	@UiField
 	TextBox	AddTextBox;
 	
@@ -115,10 +122,16 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	
 	public TopicsAndSpecViewImpl() {
 		// TODO Auto-generated constructor stub
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<SpecialisationProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+	//	CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+	//	table = new CellTable<SpecialisationProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 				
+		//cell table changes start
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<SpecialisationProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<SpecialisationProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+				//cell table chnages end
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		Pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
@@ -150,10 +163,13 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 		return searchBox.getValue();
 	}
 	// @Manish
-	public String[] getPaths() {
-		return paths.toArray(new String[paths.size()]);
+	public List<String> getPaths() {
+		return paths;
 	}
 	
+	
+	
+
 	public void init()
 	{
 		ResolutionSettings.setSplitLayoutPanelPosition(splitLayoutPanel,true);
@@ -288,7 +304,7 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 	
 	private List<AbstractEditableCell<?, ?>> editableCells;
@@ -314,8 +330,9 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
 
-		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
+//		splitLayoutPanel.setWidgetSize(westPanel, OsMaConstant.WIDTH_SIZE - OsMaConstant.WIDTH_MIN );
+		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
+		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);	
 		/*splitLayoutPanel.animate(150000);
 //		widthSize = 1200;
 //		decreaseSize = 0;
@@ -397,6 +414,19 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 //				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 //		}
 			
+	}
+
+
+
+	@Override
+	public String[] getPathsArray() {
+		// TODO Auto-generated method stub
+		Set<String> pa = new HashSet<String>();
+		pa.addAll(paths);
+		
+		return pa.toArray(new String[paths.size()]);
+		//return null;
+		
 	}
 
 

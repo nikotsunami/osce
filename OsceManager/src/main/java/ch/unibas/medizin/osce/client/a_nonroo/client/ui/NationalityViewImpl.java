@@ -18,7 +18,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -89,9 +91,15 @@ public class NationalityViewImpl extends Composite implements  NationalityView, 
     @UiField (provided = true)
     SimplePager pager;
     
-    @UiField (provided = true)
+    //cell table changes
+    
+/*    @UiField (provided = true)
     CellTable<NationalityProxy> table;
+*/
+    @UiField (provided = true)
+    AdvanceCellTable<NationalityProxy> table;
 
+    //cell table changes
     protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
@@ -130,9 +138,15 @@ public class NationalityViewImpl extends Composite implements  NationalityView, 
    
     
 	public NationalityViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<NationalityProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		//table = new CellTable<NationalityProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
+		//cell table changes
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<NationalityProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<NationalityProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table changes
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
@@ -304,7 +318,7 @@ public class NationalityViewImpl extends Composite implements  NationalityView, 
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 	
 	/**

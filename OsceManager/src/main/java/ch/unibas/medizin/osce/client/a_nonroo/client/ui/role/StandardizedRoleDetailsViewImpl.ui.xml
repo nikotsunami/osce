@@ -159,8 +159,8 @@
 									<g:HorizontalPanel spacing="10" ui:field="addTopicHP">		
 											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
 											
-											<g:Button ui:field="addCheckListTopicButton" styleName="{style.exp}"> </g:Button>
-											<g:Button ui:field="importTopicButton" styleName="{style.exp}"></g:Button>
+											<my:IconButton icon="plusthick" ui:field="addCheckListTopicButton" styleName="{style.exp}"> </my:IconButton>
+											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" styleName="{style.exp}"></my:IconButton>
 										
 										</g:HorizontalPanel>
 								</g:VerticalPanel>

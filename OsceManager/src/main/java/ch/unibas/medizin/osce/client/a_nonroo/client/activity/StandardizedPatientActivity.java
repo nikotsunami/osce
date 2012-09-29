@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -137,7 +138,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
 	
 	/** Holds the table with the advanced search criteria */ 
-	private CellTable<AdvancedSearchCriteriaProxy> criteriaTable;
+	/*celltable changes start*/
+	
+	//private CellTable<AdvancedSearchCriteriaProxy> criteriaTable;
+	private AdvanceCellTable<AdvancedSearchCriteriaProxy> criteriaTable;
+	/*celltable changes end*/
 	/** Holds the currently active advancedSearchCriteria */
 	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 	
@@ -267,10 +272,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	}
 	public void addColumnOnMouseout()
 	{
-		table.getPopup().hide();
-		
 		Set<String> selectedItems = table.getPopup().getMultiSelectionModel().getSelectedSet();
 
+		
 		int j = table.getColumnCount();
 		while (j > 0) {
 			
@@ -289,9 +293,25 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			i = selectedItems.iterator();
 		}
 
-		while (i.hasNext()) {
-
-			columnHeader = i.next();
+		Set mySet = new HashSet(view.getSortMap().keySet());
+		//Iterator<String> i1=mySet.iterator();
+		Iterator<String> i1=view.getColumnSortSet().iterator();
+		System.out.println("key set is--"+view.getColumnSortSet());
+		System.out.println("key set is--"+selectedItems);
+		
+		while (i1.hasNext()) {
+		
+			
+			String colValue=i1.next();
+			System.out.println("Initlist--"+table.getInitList());
+			if(selectedItems.contains(colValue) || table.getInitList().contains(colValue))
+			{
+				
+				if(table.getInitList().contains(colValue))
+				{
+					table.getInitList().remove(colValue);
+				}
+			columnHeader = colValue;
 			String colName=(String)columnName.get(columnHeader);
 				path.add(colName.toString());
 				path.add(" ");
@@ -360,6 +380,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}, columnHeader, false);
 			//path.add(" ");
 		}
+		}
 
 	}
 	
@@ -390,6 +411,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		this.table = (AdvanceCellTable<StandardizedPatientProxy>)view.getTable();
+		//celltable changes start
+				//criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
+		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
+		standartizedPatientAdvancedSearchSubView.setDelegate(this);
+				criteriaTable = (AdvanceCellTable<AdvancedSearchCriteriaProxy>)standartizedPatientAdvancedSearchSubView.getTable();
+				//celltable changes end
+				
 		 columnName=view.getSortMap();
 		addColumnOnMouseout();
 		customFilter();
@@ -428,7 +456,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				sortname = path[index];
 				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
 				Log.info("call for sort " + path.size() + "--index--" + index+ "cc=" + table.getColumnCount());
-				if (index % 2 == 1 || rightClick == true|| (index == (table.getColumnCount() - 1))) {
+				if (index % 2 == 1 || (index == (table.getColumnCount() - 1))) {
 					
 					table.getPopup().setPopupPosition(x, y);
 					table.getPopup().show();
@@ -450,8 +478,44 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}
 		});
 		
-		/*custom celltable start code*/
-		table.addHandler(new MouseDownHandler() {
+		/* celltable start code*/
+		criteriaTable.addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				// By SPEC[Start
+
+				Column<AdvancedSearchCriteriaProxy, String> col = (Column<AdvancedSearchCriteriaProxy, String>) event.getColumn();
+				
+				
+				int index = criteriaTable.getColumnIndex(col);
+				
+				/*String[] path =	systemStartView.getPaths();	            			
+				sortname = path[index];
+				sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+				Log.info("column sort--"+index);
+				if (index % 2 == 0 ) {
+					
+					criteriaTable.getPopup().setPopupPosition(x, y);
+					criteriaTable.getPopup().show();
+
+				} /*else {
+					
+					
+					// path = systemStartView.getPaths();
+					Log.info("call for sort " + path.size() + "--index--"+ index);
+					sortname = path.get(index);
+
+					sortorder = (event.isSortAscending()) ? Sorting.ASC: Sorting.DESC;
+					// By SPEC]end
+					// RoleActivity.this.init2("");
+					Log.info("Call Init Search from addColumnSortHandler");
+					// filter.hide();
+					initSearch();
+				}*/
+			}
+		});
+		/*table.addHandler(new MouseDownHandler() {
 
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
@@ -472,7 +536,88 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				}
 
 			}
+		}, MouseDownEvent.getType());*/
+		/*celltable  start */
+		
+		criteriaTable.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if(criteriaTable.getRowCount()>0)
+				{
+				Log.info(criteriaTable.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < criteriaTable.getRowElement(0).getAbsoluteTop()) {
+					
+					criteriaTable.getPopup().setPopupPosition(x, y);
+					criteriaTable.getPopup().show();
+
+					Log.info("right event");
+				}
+				}
+				else
+				{
+					if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+					{
+						criteriaTable.getPopup().setPopupPosition(x, y);
+						criteriaTable.getPopup().show();
+					}
+				}
+			}
 		}, MouseDownEvent.getType());
+		
+		
+		
+		criteriaTable.getPopup().addDomHandler(new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				// TODO Auto-generated method stub
+				//addColumnOnMouseout();
+				criteriaTable.getPopup().hide();
+				
+			}
+		}, MouseOutEvent.getType());
+		/*celltable changes end*/
+		table.addHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				// TODO Auto-generated method stub
+				Log.info("mouse down");
+
+				x = event.getClientX();
+				y = event.getClientY();
+
+				if(table.getRowCount()>0)
+				{
+				Log.info(table.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+				
+				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < table.getRowElement(0).getAbsoluteTop()) {
+					
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+
+					Log.info("right event");
+				}
+				}
+				else
+				{
+					table.getPopup().setPopupPosition(x, y);
+					table.getPopup().show();
+					
+				}
+
+			}
+		}, MouseDownEvent.getType());
+		
 		
 		table.getPopup().addDomHandler(new MouseOutHandler() {
 
@@ -485,8 +630,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}, MouseOutEvent.getType());
 		/*custom celltable end code*/
 
-		standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
-		standartizedPatientAdvancedSearchSubView.setDelegate(this);
+		//standartizedPatientAdvancedSearchSubView = view.getStandartizedPatientAdvancedSearchSubViewImpl();
+		//standartizedPatientAdvancedSearchSubView.setDelegate(this);
 
 		// BY SPEC v(Start)
 		this.iconButton = this.view.getExportButton();
@@ -508,7 +653,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		});
 
 		// BY SPEC v(Stop)
-		criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
+		//criteriaTable = standartizedPatientAdvancedSearchSubView.getTable();
 		
 		
 

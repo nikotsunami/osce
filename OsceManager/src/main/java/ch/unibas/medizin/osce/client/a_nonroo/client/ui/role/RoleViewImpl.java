@@ -23,7 +23,9 @@ import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
@@ -106,8 +108,12 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	@UiField(provided = true)
 	public SimplePager pager;
 	
+	//cell table changes start
+	/*@UiField(provided = true)
+	public CellTable<RoleTopicProxy> table;*/
 	@UiField(provided = true)
-	public CellTable<RoleTopicProxy> table;
+	public AdvanceCellTable<RoleTopicProxy> table;
+	/*cell table changes end*/
 //	
 	
 	/*@UiField
@@ -178,12 +184,14 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	@UiField
 	ScrollPanel scrollPanel;
 	
-	int widthSize=Integer.parseInt(constants.widthSize()),decreaseSize=0;
+	int widthSize=OsMaConstant.WIDTH_SIZE,decreaseSize=0;
 	Timer timer;
 	
 	
-	protected Set<String> paths = new HashSet<String>();
-
+	/*protected Set<String> paths = new HashSet<String>();*/
+	//cell table changes
+	List<String> paths=new ArrayList<String>();
+	//cell table changes
 	private Presenter presenter;
 	
 	private RoleFilterViewTooltipImpl  filterPanel;
@@ -257,9 +265,12 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		
 		//spec  start
 		
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<RoleTopicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
-		
+		//cell table changes start
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<RoleTopicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<RoleTopicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table changes end
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
@@ -369,8 +380,8 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	}
 	//spec end
 	
-	public String[] getPaths() {
-		return paths.toArray(new String[paths.size()]);
+	public List<String> getPaths() {
+		return paths;
 	}
 
 	public void init() {
@@ -389,6 +400,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		//spec start
 		Log.info("set data in column for cell tabel");
 		paths.add("name");
+		paths.add("");
 		table.addColumn(new TextColumn<RoleTopicProxy>() {
 			{ this.setSortable(true); }
 
@@ -408,6 +420,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		
 		
 		paths.add("specialisation");
+		paths.add("");
 		table.addColumn(new TextColumn<RoleTopicProxy>() {
 			{ this.setSortable(true); }
 
@@ -468,9 +481,9 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		return detailsPanel;
 	}
 	public void setDetailPanel(boolean isDetailPlace) {
-//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, OsMaConstant.WIDTH_SIZE - OsMaConstant.WIDTH_MIN );
 		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));		
+		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);		
 		
 //		widthSize = 1200;
 //		decreaseSize = 0;
@@ -493,7 +506,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 			timer.scheduleRepeating(1);
 
 		} else {
-			widthSize = Integer.parseInt(constants.widthSize());
+			widthSize = OsMaConstant.WIDTH_SIZE;
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
 		}*/

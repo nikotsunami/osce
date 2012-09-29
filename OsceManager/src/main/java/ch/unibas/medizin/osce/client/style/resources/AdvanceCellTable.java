@@ -22,6 +22,8 @@ public class AdvanceCellTable<T> extends CellTable<T>{
 	public CellTablePopup filter=new CellTablePopup();
 	List<String> totalColumnList =new ArrayList<String>();
 	List<String> defaultColumn =new ArrayList<String>();
+	public List<String> InitailColumn =new ArrayList<String>();
+	
 	 
 	//public CellTable<T> table;
 	
@@ -142,12 +144,26 @@ public class AdvanceCellTable<T> extends CellTable<T>{
 		
 	  }
 	
+	  public void addColumn(Column<T, ?> col, String headerString,  boolean defaultSelected)
+	  {
+		  addColumn(col, headerString,defaultSelected,false);
+	  }
 	  
-	  
-	  public void addColumn(Column<T, ?> col, String headerString,  boolean defaultSelected) {
+	  public void addColumn(Column<T, ?> col, String headerString,  boolean defaultSelected,boolean initalSlected) {
 		 
 		  //super.insertColumn(getColumnCount(), col, headerString);
-	   super.addColumn(col, headerString);
+		  if(initalSlected==true)
+		  {
+			  if(!InitailColumn.contains(headerString))
+			  {
+				  InitailColumn.add(headerString);
+				  
+			  }
+		  }
+	   
+		  super.addColumn(col, headerString);
+	   
+	   
 		  
 	    //insert second column of popup	   
 		 
@@ -155,6 +171,7 @@ public class AdvanceCellTable<T> extends CellTable<T>{
 				  {
           		this.setSortable(true);
           		this.setHorizontalAlignment(ALIGN_LEFT);
+          		
           		
           	}
         	
@@ -170,7 +187,7 @@ public class AdvanceCellTable<T> extends CellTable<T>{
 			
 			  
 		 
-		  this.setColumnWidth(this.getColumn(this.getColumnCount()-1), 5, Unit.PX);
+		 this.setColumnWidth(this.getColumn(this.getColumnCount()-1), 5, Unit.PX);
 		  
 		  if(defaultSelected==true)
 		  {
@@ -190,7 +207,10 @@ public class AdvanceCellTable<T> extends CellTable<T>{
 	   
 	  }
 	  
-	  
+	  public List<String> getInitList()
+	  {
+		  return InitailColumn;
+	  }
 	
 	  public CellTablePopup getPopup()
 	  {

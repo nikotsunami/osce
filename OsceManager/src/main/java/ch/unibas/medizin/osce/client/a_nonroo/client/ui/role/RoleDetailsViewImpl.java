@@ -191,11 +191,20 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 		horizontalRoleDetailPanel.addStyleName("horizontalPanelStyle");
 		//horizontalRoleDetailPanel.getElement().getStyle().setHeight(Integer.parseInt(this.getElement().getStyle().getHeight()), Unit.PX);
 		//horizontalRoleDetailPanel.add(roleDetailPanel);
-		roleDetailPanel.setHeight("690px");
+		roleDetailPanel.setHeight("714px");
 		//roleDetailPanel.addStyleName("autoHeight");
 		//roleDetailPanel.setWidth("700px");
 		//roleDetailPanel.addStyleName("autoHeight");
 		
+		roleDetailPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				// TODO Auto-generated method stub
+				if(roleDetailPanel.getSelectedIndex()!=(roleDetailPanel.getWidgetCount()-1) )
+					delegate.refreshSelectedTab();
+			}
+		});
 		
 		
 		roleDetailPanel.addDomHandler(new ClickHandler() {

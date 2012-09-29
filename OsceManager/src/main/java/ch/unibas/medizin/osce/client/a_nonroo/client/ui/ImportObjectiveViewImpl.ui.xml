@@ -1,6 +1,10 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl" xmlns:a="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
+	xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl" 
+	xmlns:a="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 	
 	<ui:style src="../styles.css">
 	.topLbl
@@ -26,7 +30,7 @@
 			<g:HorizontalPanel spacing="8">
 				<g:Label styleName="{style.label}" ui:field="importLabel"></g:Label>
 				<g:FileUpload ui:field="fileUpload" name="fileUpload1" />
-				<g:Button ui:field="importfile" />
+				<my:IconButton icon="arrowthickstop-1-s" ui:field="importfile" />
 				</g:HorizontalPanel>
 		</g:FormPanel>
 		

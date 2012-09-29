@@ -34,6 +34,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -222,8 +223,10 @@ StandardizedPatientEditView.Delegate {
 
 		if(standardizedPatient == null) {
 			standardizedPatient = request.create(StandardizedPatientProxy.class);
+			standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+			
 			//editorDriver.edit(standardizedPatient, request);
-			description = request.create(DescriptionProxy.class);
+			description = request.create(DescriptionProxy.class);			
 			standardizedPatient.setDescriptions(description);
 			
 			bankAccount = request.create(BankaccountProxy.class);

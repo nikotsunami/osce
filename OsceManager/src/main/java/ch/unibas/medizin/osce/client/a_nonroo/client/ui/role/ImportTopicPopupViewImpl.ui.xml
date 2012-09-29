@@ -86,9 +86,9 @@
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel  spacing="10" horizontalAlignment="center" width="100%">
-		<g:Button ui:field="okBtn"></g:Button>
+		<my:IconButton icon="check" ui:field="okBtn"></my:IconButton>
 		<!-- Issue Role -->
-		<g:Button ui:field="cancelBtn"></g:Button>
+		<my:IconButton icon="closethick" ui:field="cancelBtn"></my:IconButton>
 		<!-- E: Issue Role -->
 	</g:HorizontalPanel>
 	

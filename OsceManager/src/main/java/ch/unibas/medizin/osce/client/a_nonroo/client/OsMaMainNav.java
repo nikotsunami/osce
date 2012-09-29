@@ -1095,7 +1095,7 @@ public class OsMaMainNav extends Composite {
 					//Window.alert("Please Enter Semester" );					
 					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 					
-					 dialogBox.showConfirmationDialog("Please Enter Semester");
+					 dialogBox.showConfirmationDialog(constants.warningEnterSemester());
 					 
 					 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
@@ -1116,7 +1116,7 @@ public class OsMaMainNav extends Composite {
 						//Window.alert("Please Enter Year");
 						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 						
-						 dialogBox.showConfirmationDialog("Please Enter Year");
+						 dialogBox.showConfirmationDialog(constants.warningEnterYear());
 						 
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 							
@@ -1209,7 +1209,7 @@ public class OsMaMainNav extends Composite {
 							//Window.alert("Please Enter Valid Data");
 							final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 							
-							 dialogBox.showConfirmationDialog("Please Enter Valid Data");
+							 dialogBox.showConfirmationDialog(constants.warningValidValue());
 							 
 							 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								

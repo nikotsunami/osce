@@ -181,17 +181,18 @@
 				</td>
 			
 			</tr>
-			<tr>
-			  <td  id="numberPost">
-					<div class="{style.label}" ui:field="numberPost">Number Post :</div>
+			 
+			 <tr>
+			  <td  id="spStayInPost">
+					<div class="{style.label}" ui:field="labelSpStayInPost">SP_Stay_In_Post :</div>
 				</td>
 				<td>
-					<g:IntegerBox ui:field="numberPosts"></g:IntegerBox> 
+					<g:CheckBox ui:field="spStayInPost" /> 
 				</td> 
-				<!-- <td id="shortBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
-				</td> -->
-				<td  id="osceRepe">
+				<td >
+					
+				</td>
+				<td >
 					
 				</td>
 				<td>
@@ -199,7 +200,8 @@
 					
 				</td>
 			
-			</tr>
+			</tr> 
+			 
 			
 		<!--	<tr>
 				

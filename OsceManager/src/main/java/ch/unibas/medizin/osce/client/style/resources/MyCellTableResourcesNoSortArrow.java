@@ -1,18 +1,17 @@
 package ch.unibas.medizin.osce.client.style.resources;
-
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.user.cellview.client.CellTable;
 
-public interface AnamnesisTableResources extends CellTable.Resources {
+public interface MyCellTableResourcesNoSortArrow extends CellTable.Resources {
 	public interface Style extends CellTable.Style {
 		String cellTableEvenYesRow();
 		String cellTableOddYesRow();
 		String cellTableEvenNoRow();
 		String cellTableOddNoRow();
 	}
-	@Source({CellTable.Style.DEFAULT_CSS, "AnamnesisTable.css"})
+	@Source({CellTable.Style.DEFAULT_CSS, "MyCellTable.css"})
 	Style cellTableStyle();
 	
 	@Source("images/ui-bg_glass_75_dadada_1x400.png")
@@ -29,4 +28,12 @@ public interface AnamnesisTableResources extends CellTable.Resources {
 	
 	@Source("images/loading.gif")
 	ImageResource cellTableLoading();
+	
+	 @Source("images/ui-bg_glass_75_dadada_1x400.png")
+	 ImageResource cellTableSortAscending();
+
+	 @Source("images/ui-bg_glass_75_dadada_1x400.png")
+	 ImageResource cellTableSortDescending();
+
+	    
 }

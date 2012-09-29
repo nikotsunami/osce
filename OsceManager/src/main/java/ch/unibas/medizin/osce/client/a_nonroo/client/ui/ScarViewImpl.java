@@ -13,13 +13,16 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -90,9 +93,15 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 	@UiField (provided = true)
 	SimplePager pager;
 
-	@UiField (provided = true)
+	
+	//celltable changes start
+	/*@UiField (provided = true)
 	CellTable<ScarProxy> table;
+*/
+	@UiField (provided = true)
+	AdvanceCellTable<ScarProxy> table;
 
+	//celltable changes end
 	protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
@@ -126,9 +135,11 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 	// E Highlight onViolation
 	
 	public ScarViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
-		
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		//celltable changes start
+		//table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		table = new AdvanceCellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell atble changes end
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
@@ -177,6 +188,17 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 //			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1412);
 //		else
 //			splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
+		
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left1 = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
 
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
@@ -218,10 +240,28 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 		
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
-					public void execute(ScarProxy scar) {
+					public void execute(final ScarProxy scar) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteClicked(scar);
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.deleteClicked(scar);*/
+						
+						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						messageConfirmationDialogBox.showYesNoDialog("wirklich löschen?");
+						
+						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+								messageConfirmationDialogBox.hide();
+								delegate.deleteClicked(scar);				
+							}
+						});
+						
+						messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+							@Override
+							public void onClick(ClickEvent event) {
+												
+							}
+						});
 					}
 				}), "", new GetValue<ScarProxy>() {
 			public ScarProxy getValue(ScarProxy scar) {
@@ -252,7 +292,7 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column, headerText);
+		table.addColumn(column);
 	}
 	
 	/**
@@ -342,7 +382,7 @@ public Map getScarMap()
 		((ScarEditPopupViewImpl)scarPopupView).setWidth("160px");	
 			
 		RootPanel.get().add(((ScarEditPopupViewImpl)scarPopupView));
-
+		
 		/*	// Highlight onViolation
 		checklistOptionMap=new HashMap<String, Widget>();
 		checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
@@ -383,7 +423,8 @@ public Map getScarMap()
 		});	
 		// E: Issue Role V1
 		
-		(((ScarEditPopupViewImpl)scarPopupView)).setPopupPosition(left1-210, top);
+		(((ScarEditPopupViewImpl)scarPopupView)).setPopupPosition(left1, top);
+		//(((ScarEditPopupViewImpl)scarPopupView)).getElement().getStyle().setZIndex(2);
 		(((ScarEditPopupViewImpl)scarPopupView)).show();
 	}
 }

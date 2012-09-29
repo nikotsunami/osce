@@ -131,7 +131,7 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		 uploadFormPanel.setAction(GWT.getHostPageBaseURL()+"CsvFileUploadServlet");
 		 
 		 hidden.setName("hidden");
-		 importfile.setText(constants.importstudent());	 
+		 importfile.setText(constants.importStudents());	 
 		
 		 
 		 uploadFormPanel.addSubmitHandler(new FormPanel.SubmitHandler()
@@ -206,7 +206,7 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		 
 		 hidden.setName("hidden");
 		 hidden.setValue(String.valueOf(osceProxy.getId()));
-		 importfile.setText(constants.importstudent());	 
+		 importfile.setText(constants.importStudents());	 
 		
 		 
 		 uploadFormPanel.addSubmitHandler(new FormPanel.SubmitHandler()

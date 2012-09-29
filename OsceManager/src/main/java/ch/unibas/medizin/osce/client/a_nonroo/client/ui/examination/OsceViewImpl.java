@@ -14,7 +14,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -58,7 +60,9 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 	@UiField
 	Button newButton;
 	
-	
+
+	@UiField
+	ScrollPanel mainScrollPanel;
 
 	@UiField
 	SimplePanel detailsPanel;
@@ -66,9 +70,14 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 	/*@UiField (provided = true)
 	SimplePager pager;
 */
-	@UiField (provided = true)
+	//cell table changes
+/*	@UiField (provided = true)
 	CellTable<OsceProxy> table;
+*/
+	@UiField (provided = true)
+	AdvanceCellTable<OsceProxy> table;
 
+//	cell table changes
 	protected Set<String> paths = new HashSet<String>();
 
 	private Presenter presenter;
@@ -99,9 +108,13 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 	 * implement HasHTML instead of HasText.
 	 */
 	public OsceViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
-
+		
+		//cell tbale changes
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell tbale changes
 	/*	SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 */
@@ -130,6 +143,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 		//spec start add tabel data
 		
 		paths.add("OSCE");
+		paths.add("");
 		table.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
@@ -160,6 +174,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 		}, constants.osce());
 		
 		paths.add("maxNumberStudents");
+		paths.add("");
 		table.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
@@ -184,6 +199,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 		}, constants.osceMaxStudents());
 		
 		paths.add("numberCourses");
+		paths.add("");
 		table.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
@@ -208,6 +224,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 		}, constants.osceMaxCircuits());
 		
 		paths.add("postLength");
+		paths.add("");
 		table.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
@@ -233,6 +250,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 		
 		
 		paths.add("osceBreak");
+		paths.add("");
 		table.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
@@ -274,7 +292,6 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 				//return renderer.render(object.getShortBreak().toString()+"/"+object.getLongBreak().toString()+"/"+object.getLunchBreak().toString()+" min");
 			}
 		}, constants.osceBreak());
-		
 		
 		
 		
@@ -394,9 +411,9 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 			decreaseSize = 0;
 			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
 		}*/
-//		splitLayoutPanel.setWidgetSize(westPanel, Integer.parseInt(constants.widthSize()) - Integer.parseInt(constants.widthMin()) );
+//		splitLayoutPanel.setWidgetSize(westPanel, OsMaConstant.WIDTH_SIZE - OsMaConstant.WIDTH_MIN );
 		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
-		splitLayoutPanel.animate(Integer.parseInt(constants.animationTime()));	
+		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);	
 	}
 	@Override
 	public void setPresenter(Presenter presenter) {

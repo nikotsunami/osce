@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
@@ -52,7 +55,10 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public StandartizedPatientAdvancedSearchSubViewImpl() {
-		table = new CellTable<AdvancedSearchCriteriaProxy>(OsMaConstant.TABLE_PAGE_SIZE, (CellTable.Resources) GWT.create(MyCellTableResources.class));
+		/*celltable changes start*/
+		table = new AdvanceCellTable<AdvancedSearchCriteriaProxy>(OsMaConstant.TABLE_PAGE_SIZE, (CellTable.Resources) GWT.create(MyCellTableResourcesNoSortArrow.class));
+		//table = new CellTable<AdvancedSearchCriteriaProxy>(OsMaConstant.TABLE_PAGE_SIZE, (CellTable.Resources) GWT.create(MyCellTableResources.class));
+		/*celltable changes end*/
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, (SimplePager.Resources) GWT.create(MySimplePagerResources.class), true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
 		initWidget(uiBinder.createAndBindUi(this));
@@ -125,8 +131,16 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		delegate.addMaritialStatusClicked(addMaritialStatus);
 	}
 	
+	
+	/*celltable changes start*/
 	@UiField (provided = true)
-	CellTable<AdvancedSearchCriteriaProxy> table;
+	public AdvanceCellTable<AdvancedSearchCriteriaProxy> table;
+	
+	
+	/*@UiField (provided = true)
+	CellTable<AdvancedSearchCriteriaProxy> table;*/
+	
+	/*celltable changes end*/
 	
 	@UiField (provided = true)
 	SimplePager pager;

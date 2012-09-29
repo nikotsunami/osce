@@ -38,7 +38,7 @@
 }
 
 @sprite .cellTableHeader {
-  gwt-image: 'cellTableHeaderBackground';
+  gwt-image: 'cellTableHeaderBackground'  ;
   
   background-color: #dadada;
   
@@ -49,6 +49,10 @@
   text-align: left;
   color: #212121;
   overflow: hidden;
+  max-height: 28px !important;
+  white-space: nowrap;
+
+ 
 }
 
 .cellTableCell {

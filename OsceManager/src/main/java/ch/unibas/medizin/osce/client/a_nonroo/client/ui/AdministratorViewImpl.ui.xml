@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	 xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.resources">
 <ui:style src="../styles.css" />
 
 <g:SplitLayoutPanel ui:field="splitLayoutPanel">
@@ -12,9 +12,10 @@
 				<div class="{style.controls}  {style.controlsleft}">
 					<b:SimplePager display="{table}" ui:field="pager" />
 				</div>
-				
-				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
-				
+				<!-- cell table changes -->
+				<!-- <b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/> -->
+				<r:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}"/>
+				<!-- CELL TABLE CHANGES -->
 				<div class="{style.controls}  {style.controlsleft}">
 					<my:IconButton ui:field="newButton" icon="plusthick"></my:IconButton>
 				</div>

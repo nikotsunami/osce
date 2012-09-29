@@ -237,7 +237,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		addCheckListQuestionButton.setTitle(constants.addCheckListQuestion());
 		addCheckListQuestionButton.setText(constants.addCheckListQuestion());
-		importQuestionButton.setText(constants.importQuestion());
+		importQuestionButton.setText(constants.roleImportQuestion());
 		
 		topicView=this;
 		
@@ -275,23 +275,19 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		{
 			questionPopup=new CheckListTopicPopupViewImpl();
 			
-		} // SPEC Change	
+		 // SPEC Change	
 			((CheckListTopicPopupViewImpl)questionPopup).setAnimationEnabled(true);
 		
-			questionPopup.getDescriptionLbl().setText(constants.questionInstruction());
+			questionPopup.getDescriptionLbl().setText(constants.roleQuestionInstruction());
 			
-			questionPopup.getTopicLbl().setText(constants.questionName());
+			questionPopup.getTopicLbl().setText(constants.roleQuestionName());
 			
 			((CheckListTopicPopupViewImpl)questionPopup).setWidth("150px");
 
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)questionPopup));
 			
-				// Highlight onViolation
-						checklistQuestionMap=new HashMap<String, Widget>();
-						checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
-						checklistQuestionMap.put("instruction", questionPopup.getDescriptionTxtBox());
-				// E Highlight onViolation
+			
 			
 			questionPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
@@ -311,8 +307,8 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 						delegate.saveCheckListQuestion(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue(),topicView);
 						// E Highlight onViolation
 						//((CheckListTopicPopupViewImpl)questionPopup).hide(true);				
-						questionPopup.getTopicTxtBox().setValue("");
-						questionPopup.getDescriptionTxtBox().setValue("");
+						//questionPopup.getTopicTxtBox().setValue("");
+						//questionPopup.getDescriptionTxtBox().setValue("");
 					}else{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
@@ -340,6 +336,14 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	
 			
 		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(questionButtonVP.getAbsoluteLeft(), questionButtonVP.getAbsoluteTop()-180);
+		}
+		
+		// Highlight onViolation
+		checklistQuestionMap=new HashMap<String, Widget>();
+		checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
+		checklistQuestionMap.put("instruction", questionPopup.getDescriptionTxtBox());
+		// E Highlight onViolation
+		
 		((CheckListTopicPopupViewImpl)questionPopup).show();
 	}
 	@UiHandler("delete")
@@ -352,7 +356,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			delegate.deleteCheckListTopic(this.proxy,topicView);*/
 		
 		// Issue Role
-				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox("Warning");
+				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 				 dialogBox.showYesNoDialog("are you sure you want to delete this Topic?");
 				 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 						
@@ -402,21 +406,18 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			((CheckListTopicPopupViewImpl)topicPopup).setAnimationEnabled(true);
 		
 			topicPopup.getDescriptionLbl().setText(constants.topicDescription());
-			topicPopup.getDescriptionTxtBox().setValue(proxy.getDescription());
+			
 			
 			topicPopup.getTopicLbl().setText(constants.checklistTopic());
-			topicPopup.getTopicTxtBox().setValue(proxy.getTitle());
+			
+			
 			
 			((CheckListTopicPopupViewImpl)topicPopup).setWidth("150px");
 
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)topicPopup));
 			
-			// Highlight onViolation
-			checklistTopicMap=new HashMap<String, Widget>();
-			checklistTopicMap.put("title", topicPopup.getTopicTxtBox());
-			checklistTopicMap.put("description", topicPopup.getDescriptionTxtBox());			
-			// E Highlight onViolation
+			
 			
 			topicPopup.getOkBtn().addClickHandler(new ClickHandler() {
 				
@@ -466,6 +467,17 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		
 		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-150, y - 195); //SPEC Change
+		
+		
+		// Highlight onViolation
+					checklistTopicMap=new HashMap<String, Widget>();
+					checklistTopicMap.put("title", topicPopup.getTopicTxtBox());
+					checklistTopicMap.put("description", topicPopup.getDescriptionTxtBox());			
+		// E Highlight onViolation
+		
+		topicPopup.getDescriptionTxtBox().setValue(proxy.getDescription());
+		topicPopup.getTopicTxtBox().setValue(proxy.getTitle());
+					
 		((CheckListTopicPopupViewImpl)topicPopup).show();
 		
 	}

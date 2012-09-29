@@ -22,7 +22,7 @@ import com.allen_sauer.gwt.log.client.Log;
 @RooEntity
 public class ChecklistQuestion {
 	
-	@Size(max=50)
+	@Size(max=255)
 	private String question;
 	
 	@ManyToOne

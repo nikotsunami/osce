@@ -148,18 +148,17 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 
 	public ExaminationScheduleDetailViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-		shortBreakTxt.setText(constants.shortBreak());
-		lunchTimeTxt.setText(constants.circuitLunchBreak());
-		middleBreakTxt.setText(constants.middleBreak());
-		numOfRoomsTxt.setText(constants.numOfRooms());
-		studentAssignmentButton.setText(constants.studentAssignment());
-		spAssignmentButton.setText(constants.spAssignment());
-		shortBreakSimPatChangeTxt.setText(constants.simpatChangeBreak());
-		longBreakTxt.setText(constants.longBreak());
+		shortBreakTxt.setText(constants.exaPlanShortBreak());
+		lunchTimeTxt.setText(constants.exaPlanLunchBreak());
+		middleBreakTxt.setText(constants.exaPlanMiddleBreak());
+		numOfRoomsTxt.setText(constants.exaPlanNumRooms());
+		studentAssignmentButton.setText(constants.exaPlanAssignStudents());
+		spAssignmentButton.setText(constants.exaPlanAssignSp());
+		shortBreakSimPatChangeTxt.setText(constants.exaPlanChangeBreak());
+		longBreakTxt.setText(constants.exaPlanLongBreak());
 		
 		int height = ResolutionSettings.getRightWidgetHeight() - 55;
-		scrollPanel.setHeight(height+"px");
-		
+		scrollPanel.setHeight(height+"px");		
 	}
 	
 	@Override

@@ -104,9 +104,9 @@
 					font-family: sans-serif;
 					vertical-align: middle; 
 					color: black;">
-			Print Template
+			<span ui:field="title"></span>
 
-			<my:IconButton ui:field="closeButton" icon="close"
+			<my:IconButton ui:field="closeButton" icon="closethick"
 				addStyleNames="{style.closeButton}"></my:IconButton>
 
 
@@ -118,8 +118,7 @@
 				addStyleNames="{style.toolbar}" />
 			<div style="margin-bottom: 7px;">
 				<g:ListBox ui:field="osceList" addStyleNames="{style.buttonStyle}"></g:ListBox>
-				<g:Button ui:field="loadTemplateButton" addStyleNames="{style.buttonStyle}">Load
-					Template</g:Button>
+				<my:IconButton icon="open" ui:field="loadTemplateButton" addStyleNames="{style.buttonStyle}" />
 			</div>
 
 			<div
@@ -130,59 +129,56 @@
 				<g:RichTextArea height="280px" ui:field="message" />
 			</div>
 			<div>
-				<!-- <g:Button ui:field="sendMailButton" addStyleNames="{style.buttonStyle}" 
-					>Mail</g:Button> -->
-				<g:Button ui:field="saveTemplateButton" addStyleNames="{style.buttonStyle}">Save
-					Template</g:Button>		
-				<g:Button ui:field="printTemplateButton" addStyleNames="{style.buttonStyle}">Print
-					Template</g:Button>		
-				<g:Button ui:field="restoreTemplateButton" addStyleNames="{style.buttonStyle}">Restore
-					Template</g:Button>
+				<!-- <my:IconButton ui:field="sendMailButton" addStyleNames="{style.buttonStyle}" 
+					>Mail</my:IconButton> -->
+				<my:IconButton icon="disk" ui:field="saveTemplateButton" addStyleNames="{style.buttonStyle}" />
+				<my:IconButton icon="print" ui:field="printTemplateButton" addStyleNames="{style.buttonStyle}" />
+				<my:IconButton icon="arrowrefresh-1-w" ui:field="restoreTemplateButton" addStyleNames="{style.buttonStyle}" />
 			</div>
 			<div>
 
-				<h4 style="color: orange;">Please do not change or remove following parameters.</h4>
+				<h4 style="color: orange;" ui:field="please"></h4>
 
 				<table>
 					<tr>
-						<td>[TITLE]</td>
-						<td>= Title Name</td>
-						<td>[NAME]</td>
-						<td>= Full Name</td>
-						<td>[PRENAME]</td>
-						<td>= Surname</td>
-						<td>[DATE]</td>
-						<td>= Date of Exam</td>
+						<td><span ui:field="varTitle"></span></td>
+						<td><span ui:field="descTitle"></span></td>
+						<td><span ui:field="varName"></span></td>
+						<td><span ui:field="descName"></span></td>
+						<td><span ui:field="varPreName"></span></td>
+						<td><span ui:field="descPreName"></span></td>
+						<td><span ui:field="varDate"></span></td>
+						<td><span ui:field="descDate"></span></td>
 					</tr>
 					<tr>
-						<td>[START TIME]</td>
-						<td>= Assignment Start Time</td>
-						<td>[END TIME]</td>
-						<td>= Assignment End Time</td>
-						<td>[OSCE]</td>
-						<td>= OSCE Assigned</td>
-						<td>[ROLE]</td>
-						<td>= Role Assigned</td>
+						<td><span ui:field="varStartTime"></span></td>
+						<td><span ui:field="descStartTime"></span></td>
+						<td><span ui:field="varEndTime"></span></td>
+						<td><span ui:field="descEndTime"></span></td>
+						<td><span ui:field="varOsce"></span></td>
+						<td><span ui:field="descOsce"></span></td>
+						<td><span ui:field="varRole"></span></td>
+						<td><span ui:field="descRole"></span></td>
 					</tr>
 					<tr>
-						<td>[POST]</td>
-						<td>= Post Name</td>
-						<td>[ROOM]</td>
-						<td>= Room Number</td>
-						<td>[LONG BREAK]</td>
-						<td>= Long Break</td>
-						<td>[LUNCH BREAK]</td>
-						<td>= Lunch Number</td>
+						<td><span ui:field="varPost"></span></td>
+						<td><span ui:field="descPost"></span></td>
+						<td><span ui:field="varRoom"></span></td>
+						<td><span ui:field="descRoom"></span></td>
+						<td><span ui:field="varLongBreak"></span></td>
+						<td><span ui:field="descLongBreak"></span></td>
+						<td><span ui:field="varLunchBreak"></span></td>
+						<td><span ui:field="descLunchBreak"></span></td>
 					</tr>
 					<tr>
 					<td></td>
 					</tr>
 					<tr>
-						<td>[TITLE SEPARATOR]</td>
-						<td>[OSCE_DAY SEPARATOR]</td>
-						<td>[SCHEDULE SEPARATOR]</td>
-						<td>[BREAK SEPARATOR]</td>
-						<td>[SCRIPT SEPARATOR]</td>
+						<td><span ui:field="varTitleSep"></span></td>
+						<td><span ui:field="varDaySep"></span></td>
+						<td><span ui:field="varScheduleSep"></span></td>
+						<td><span ui:field="varBreakSep"></span></td>
+						<td><span ui:field="varScriptSep"></span></td>
 					</tr>
 				</table>
 			</div>

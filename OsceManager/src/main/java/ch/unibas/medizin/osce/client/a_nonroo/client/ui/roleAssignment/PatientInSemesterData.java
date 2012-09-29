@@ -36,9 +36,9 @@ public class PatientInSemesterData {
 	private PatientInSemesterProxy patientInSemesterProxy;
 	private PatientInSemesterData patientInSemesterData;
 	private String rowSetColor;
+	private int rowNumber;
 
-	private static final OsceConstants constants = GWT
-			.create(OsceConstants.class);
+	private static final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	// private final UiIcons uiIcons = GWT.create(UiIcons.class);
 
@@ -46,26 +46,21 @@ public class PatientInSemesterData {
 	public PatientInSemesterData() {
 	}
 
-	public PatientInSemesterData(
-			PatientInSemesterProxy tempPatientInSemesterProxy,// int index,
-			RoleAssignmentView.Delegate tempdelegate) {
+	public PatientInSemesterData(PatientInSemesterProxy tempPatientInSemesterProxy, int rowNumber, RoleAssignmentView.Delegate tempdelegate) {
 
 		// setIndex(index);
 		this.delegate = tempdelegate;
 		patientInSemesterData = this;
 		this.patientInSemesterProxy = tempPatientInSemesterProxy;
 
-		this.name = ((tempPatientInSemesterProxy.getStandardizedPatient()
-				.getPreName() != null) ? tempPatientInSemesterProxy
-				.getStandardizedPatient().getPreName() : "")
-				+ ", "
-				+ tempPatientInSemesterProxy.getStandardizedPatient().getName();
+		this.name = ((tempPatientInSemesterProxy.getStandardizedPatient().getPreName() != null) ? tempPatientInSemesterProxy.getStandardizedPatient().getPreName() : "") + ", " + tempPatientInSemesterProxy.getStandardizedPatient().getName();
 
 		// this.acceptedImage = new Image();
 		// this.acceptedImage.setStyleName("ui-icon-squaresmall-close");
 
 		this.acceptedIconBtn = new Button();
 		this.setAcceptedImage();
+		this.rowNumber = rowNumber;
 		this.acceptedIconBtn.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -81,23 +76,20 @@ public class PatientInSemesterData {
 		});
 
 		StringBuffer tempAssignedRole = new StringBuffer();
-		for (Iterator<PatientInRoleProxy> iterator = tempPatientInSemesterProxy
-				.getPatientInRole().iterator(); iterator.hasNext();) {
-			PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator
-					.next();
-			Log.info("patientInRoleProxy.getOscePost()"
-					+ patientInRoleProxy.getOscePost());
+		for (Iterator<PatientInRoleProxy> iterator = tempPatientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
+			PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
+			Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
 			if (patientInRoleProxy.getOscePost() != null) {
 				if (tempAssignedRole.toString().compareTo("") != 0) {
 					tempAssignedRole.append(" ,");
 				}
-				tempAssignedRole.append(patientInRoleProxy.getOscePost()
-						.getStandardizedRole().getShortName());
+				tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
 			}
 
 		}
 
 		this.assignedTo = new PatientAssignLabel(tempAssignedRole.toString());
+		this.assignedTo.addStyleName("flexTableLabel");
 		// ,getIndex());
 
 		this.setPatientInSemesterProxy(tempPatientInSemesterProxy);
@@ -120,18 +112,14 @@ public class PatientInSemesterData {
 			@Override
 			public void onClick(ClickEvent arg0) {
 				
-				if (patientInSemesterProxy.getPatientInRole() != null
-						&& patientInSemesterProxy.getPatientInRole().size() > 0) {
+				if (patientInSemesterProxy.getPatientInRole() != null && patientInSemesterProxy.getPatientInRole().size() > 0) {
 
-					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
-							"Warning");
-					dialogBox.showConfirmationDialog(constants
-							.onDeleteRoleAssignedToPatient());
+					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showConfirmationDialog(constants.warningPatientHasRole());
 
 				} else {
 
-					final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
-							constants.reallyDelete());
+					final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.reallyDelete());
 
 					dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 
@@ -142,8 +130,7 @@ public class PatientInSemesterData {
 						}
 					});
 				
-				dialogBox.showYesNoDialog(constants
-						.deletePatientInSemester());
+					dialogBox.showYesNoDialog(constants.confirmationDeleteAssignment());
 				}
 
 			}
@@ -165,8 +152,7 @@ public class PatientInSemesterData {
 		return patientInSemesterProxy;
 	}
 
-	public void setPatientInSemesterProxy(
-			PatientInSemesterProxy patientInSemesterProxy) {
+	public void setPatientInSemesterProxy(PatientInSemesterProxy patientInSemesterProxy) {
 		this.patientInSemesterProxy = patientInSemesterProxy;
 	}
 
@@ -208,8 +194,7 @@ public class PatientInSemesterData {
 				// Window.alert("right click from mouse down handler"
 				// + ((PatientAssignLabel) event.getSource()).getText());
 
-				Log.info("Index of Patient in semester : "
-						+ ((PatientAssignLabel) event.getSource()));
+				Log.info("Index of Patient in semester : " + ((PatientAssignLabel) event.getSource()));
 
 				StringBuffer tempTraining = new StringBuffer();
 				StringBuffer tempOsceDay = new StringBuffer();
@@ -217,12 +202,9 @@ public class PatientInSemesterData {
 
 				if (patientInSemesterProxy.getTrainings() != null) {
 
-					for (Iterator<TrainingProxy> iterator = patientInSemesterProxy
-							.getTrainings().iterator(); iterator.hasNext();) {
-						TrainingProxy trainingProxy = (TrainingProxy) iterator
-								.next();
-						Log.info("TrainingProxy.getName()"
-								+ trainingProxy.getName());
+					for (Iterator<TrainingProxy> iterator = patientInSemesterProxy.getTrainings().iterator(); iterator.hasNext();) {
+						TrainingProxy trainingProxy = (TrainingProxy) iterator.next();
+						Log.info("TrainingProxy.getName()" + trainingProxy.getName());
 						if (trainingProxy != null) {
 							if (tempTraining.toString().compareTo("") != 0) {
 								tempTraining.append(" ,");
@@ -235,61 +217,40 @@ public class PatientInSemesterData {
 
 				// DateFormat dateFormat = new SimpleDateFormat("DD-MM-YYYY");
 				if (patientInSemesterProxy.getOsceDays() != null) {
-					for (Iterator<OsceDayProxy> iterator = patientInSemesterProxy
-							.getOsceDays().iterator(); iterator.hasNext();) {
-						OsceDayProxy osceDayProxy = (OsceDayProxy) iterator
-								.next();
-						Log.info("OsceDayProxy.getName()"
-								+ osceDayProxy.getOsce().getName());
+					for (Iterator<OsceDayProxy> iterator = patientInSemesterProxy.getOsceDays().iterator(); iterator.hasNext();) {
+						OsceDayProxy osceDayProxy = (OsceDayProxy) iterator.next();
+						Log.info("OsceDayProxy.getName()" + osceDayProxy.getOsce().getName());
 						if (osceDayProxy != null) {
 							if (tempOsceDay.toString().compareTo("") != 0) {
 								tempOsceDay.append(" ,");
 							}
-							tempOsceDay
-									.append((osceDayProxy.getOsceDate() != null) ? // dateFormat.format
-									(DateTimeFormat.getShortDateFormat()
-											.format(osceDayProxy.getOsceDate()))
-											: ""
-													+ " - "
-													+ ((osceDayProxy.getOsce() != null && osceDayProxy
-															.getOsce()
-															.getName() != null) ? osceDayProxy
-															.getOsce()
-															.getName() : ""));
+							tempOsceDay.append((osceDayProxy.getOsceDate() != null) ? // dateFormat.format
+							(DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()))
+									: "" + " - " + ((osceDayProxy.getOsce() != null && osceDayProxy.getOsce().getName() != null) ? osceDayProxy.getOsce().getName() : ""));
 						}
 
 					}
 				}
 				if (patientInSemesterProxy.getPatientInRole() != null) {
 
-					for (Iterator<PatientInRoleProxy> iterator = patientInSemesterProxy
-							.getPatientInRole().iterator(); iterator.hasNext();) {
-						PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator
-								.next();
-						Log.info("patientInRoleProxy.getOscePost()"
-								+ patientInRoleProxy.getOscePost());
+					for (Iterator<PatientInRoleProxy> iterator = patientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
+						PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
+						Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
 						if (patientInRoleProxy.getOscePost() != null) {
 							if (tempAssignedRole.toString().compareTo("") != 0) {
 								tempAssignedRole.append(" ,");
 							}
-							tempAssignedRole.append(patientInRoleProxy
-									.getOscePost().getStandardizedRole()
-									.getShortName());
+							tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
 						}
 
 					}
 				}
 
-				if ((tempTraining.toString().compareTo("") == 0)
-						&& (tempOsceDay.toString().compareTo("") == 0)
-						&& (tempAssignedRole.toString().compareTo("") == 0)) {
+				if ((tempTraining.toString().compareTo("") == 0) && (tempOsceDay.toString().compareTo("") == 0) && (tempAssignedRole.toString().compareTo("") == 0)) {
 					return;
 				}
 
-				RoleAssignmentPopupViewImpl.setPopUpText(
-						tempTraining.toString(), tempOsceDay.toString(),
-						tempAssignedRole.toString(), event.getClientX(),
-						event.getClientY());
+				RoleAssignmentPopupViewImpl.setPopUpText(tempTraining.toString(), tempOsceDay.toString(), tempAssignedRole.toString(), event.getClientX(), event.getClientY());
 
 			}
 
@@ -319,10 +280,7 @@ public class PatientInSemesterData {
 		// .getAccepted().booleanValue() : false) ? uiIcons
 		// .acceptedYesIcon() : uiIcons.acceptedNoIcon());
 
-		acceptedIconBtn
-				.setHTML(((patientInSemesterProxy.getAccepted() != null) ? patientInSemesterProxy
-						.getAccepted().booleanValue() : false) ? OsMaConstant.CHECK_ICON
-						: OsMaConstant.UNCHECK_ICON);
+		acceptedIconBtn.setHTML(((patientInSemesterProxy.getAccepted() != null) ? patientInSemesterProxy.getAccepted().booleanValue() : false) ? OsMaConstant.CHECK_ICON : OsMaConstant.UNCHECK_ICON);
 
 	}
 
@@ -332,5 +290,13 @@ public class PatientInSemesterData {
 
 	public void setRowSetColor(String rowSetColor) {
 		this.rowSetColor = rowSetColor;
+	}
+
+	public int getRowNumber() {
+		return rowNumber;
+	}
+
+	public void setRowNumber(int rowNumber) {
+		this.rowNumber = rowNumber;
 	}
 }

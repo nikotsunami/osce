@@ -3,6 +3,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoomRefreshEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoomRefreshHandler;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
@@ -10,6 +12,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -25,7 +28,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OscePostSubViewImpl extends Composite implements OscePostSubView {
+public class OscePostSubViewImpl extends Composite implements OscePostSubView, RoomRefreshHandler {
 	
 	private Delegate delegate;
 	
@@ -59,6 +62,47 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 	CourseProxy courseProxy;
 	// E Module 5 and TTG Bug Changes
 	
+	RoomProxy roomProxy;
+	
+	SpecialisationProxy specialisationProxy;
+	
+	RoleTopicProxy roleTopicProxy;
+	
+	public RoleTopicProxy getRoleTopicProxy() {
+		return roleTopicProxy;
+	}
+
+	public void setRoleTopicProxy(RoleTopicProxy roleTopicProxy) {
+		this.roleTopicProxy = roleTopicProxy;
+	}
+
+	public SpecialisationProxy getSpecialisationProxy() {
+		return specialisationProxy;
+	}
+
+	public void setSpecialisationProxy(SpecialisationProxy specialisationProxy) {
+		this.specialisationProxy = specialisationProxy;
+	}
+	
+
+	StandardizedRoleProxy standardizedRoleProxy;
+	
+	public StandardizedRoleProxy getStandardizedRoleProxy() {
+		return standardizedRoleProxy;
+	}
+
+	public void setStandardizedRoleProxy(StandardizedRoleProxy standardizedRoleProxy) {
+		this.standardizedRoleProxy = standardizedRoleProxy;
+	}
+
+	public RoomProxy getRoomProxy() {
+		return roomProxy;
+	}
+
+	public void setRoomProxy(RoomProxy roomProxy) {
+		this.roomProxy = roomProxy;
+	}
+
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
 	}
@@ -200,11 +244,8 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 			listBoxPopupViewImpl=(ListBoxPopupViewImpl)popupView;
 			((ListBoxPopupViewImpl)popupView).setAnimationEnabled(true);
 			
-			
-			
 			((ListBoxPopupViewImpl)popupView).setWidth("160px");
-
-		
+			
 			RootPanel.get().add(((ListBoxPopupViewImpl)popupView));
 			
 			popupView.getOkBtn().addClickHandler(new ClickHandler() {
@@ -220,7 +261,7 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 					
 					if(object instanceof SpecialisationProxy)
 					{
-						Log.info("Specialisation Proxy");						
+						Log.info("Specialisation Proxy id : " + ((SpecialisationProxy)object).getId());						
 						delegate.saveSpecialisation(oscePostSubViewImpl);
 					}
 					else if(object instanceof RoleTopicProxy)
@@ -314,6 +355,11 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView {
 			((ListBoxPopupViewImpl)popupView).show();
 		}
 		// E Module 5 and TTG Bug Changes
+
+		@Override
+		public void onRoomChanged(RoomRefreshEvent event) {
+			delegate.refreshRoomValue(this, oscePostProxy, courseProxy);
+		}
 		
 		// 5C: SPEC END
 	

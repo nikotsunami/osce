@@ -16,7 +16,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.LogEntryProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -62,8 +64,14 @@ public class LogViewImpl extends Composite implements LogView, RecordChangeHandl
 	@UiField (provided = true)
 	SimplePager pager;
 
-	@UiField (provided = true)
+	//cell table changes
+	/*@UiField (provided = true)
 	CellTable<LogEntryProxy> table;
+	*/
+	@UiField (provided = true)
+	AdvanceCellTable<LogEntryProxy> table;
+	
+	//cell table changes end
 
 	protected Set<String> paths = new HashSet<String>();
 
@@ -81,9 +89,15 @@ public class LogViewImpl extends Composite implements LogView, RecordChangeHandl
 	 * implement HasHTML instead of HasText.
 	 */
 	public LogViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<LogEntryProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+	//	CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+	//	table = new CellTable<LogEntryProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 
+		//cell table changes start
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<LogEntryProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<LogEntryProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		//cell table changes end
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		

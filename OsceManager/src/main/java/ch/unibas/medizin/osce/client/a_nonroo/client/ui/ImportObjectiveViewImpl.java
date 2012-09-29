@@ -129,7 +129,7 @@ public class ImportObjectiveViewImpl extends Composite implements ImportObjectiv
 		        {
 		        	delegate.displayLoadingScreen(false);
 		        	MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
-		        	dialogBox.showConfirmationDialog("Record Inserted Successfully");
+		        	dialogBox.showConfirmationDialog(constants.confirmationRecordInserted());
 		        	Log.info("~~~Completed Successfully");
 		        	
 		        	delegate.refreshLearningObjData();

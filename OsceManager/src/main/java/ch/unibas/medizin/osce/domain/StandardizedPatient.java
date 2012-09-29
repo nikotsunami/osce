@@ -680,9 +680,9 @@ public class StandardizedPatient {
 		Root<StandardizedPatient> from = criteriaQuery.from(StandardizedPatient.class);
 		CriteriaQuery<StandardizedPatient> select = criteriaQuery.select(from);
 		
-		select.distinct(true);  	
-    	
-    	if (searchWord != "" && searchThrough.size() != 0 && sortColumn != "" && order != null)
+		select.distinct(true);
+		
+    	if ((!searchWord.equals("")) && searchThrough.size() != 0 && sortColumn != "" && order != null)
     	{
     		if (searchWord == "")
         		searchWord = "*";       
@@ -692,8 +692,6 @@ public class StandardizedPatient {
     		
     		for (int j=0; j<str.length; j++)
     		{
-    			System.out.println("SEARCH WORD : " + str[j]);
-    			
     			for (int i=0; i<searchThrough.size(); i++)
         		{
         			
@@ -719,6 +717,19 @@ public class StandardizedPatient {
         				field = from.get("bankAccount").get("IBAN");
         				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
         			}
+        			else if (searchThrough.get(i).equals("postalCode"))
+        			{
+        				try
+        				{
+        					field = from.get("postalCode");
+        					int postalCodeVal = Integer.parseInt(searchWord);
+            				predicate = criteriaBuilder.equal(field, postalCodeVal);
+        				}
+        				catch(NumberFormatException e)
+        				{
+        					
+        				}
+        			}        				
         			else
         			{
         				field = from.get(searchThrough.get(i));
@@ -742,8 +753,7 @@ public class StandardizedPatient {
     			select.orderBy(criteriaBuilder.asc(from.get(sortColumn)));
     		else if (order == Sorting.DESC)
     			select.orderBy(criteriaBuilder.desc(from.get(sortColumn)));
-    		
-    		Log.info("~~Inside IF OF SIMPLE SEARCH");
+    	
     	}
     	
     		Predicate advPredicate = null;    		
@@ -755,8 +765,6 @@ public class StandardizedPatient {
         		searchCr = searchCriteria.get(0);
         		
         		bindtype = String.valueOf(searchCr.getBindType());       		   		
-        		
-        		Log.info("~~SEARCH WORD : " + searchWord);
         		
         		if (!searchWord.equals(""))
         		{
@@ -1031,18 +1039,14 @@ public class StandardizedPatient {
         	}
         	else if (searchCriteria.size() == 0)
         	{
-        		//Predicate r = criteriaBuilder.disjunction();
-    			//r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
         		if(simplePredicate != null)
-        		criteriaQuery.where(simplePredicate);
-        		//criteriaQuery.select(from);
+        			criteriaQuery.where(simplePredicate);
         	}
         	//Advance Search
         	else
         	{
-        		//Predicate r = criteriaBuilder.disjunction();
-    			//r = criteriaBuilder.or(simSearchPredicates.toArray(new Predicate[simSearchPredicates.size()]));
-        		criteriaQuery.where(simplePredicate);
+        		if (simplePredicate != null)
+        			criteriaQuery.where(simplePredicate);
         	}
     		
     	
