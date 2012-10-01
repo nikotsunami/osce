@@ -831,8 +831,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		sb.append(",");
 		sb.append("\"middleBreak\":"+osce.getMiddleBreak());
 		sb.append(",");
-		sb.append("\"numberPosts\":"+osce.getNumberPosts());
-		sb.append(",");
+		//sb.append("\"numberPosts\":"+osce.getNumberPosts());
+		//sb.append(",");
 		sb.append("\"numberCourses\":"+osce.getNumberCourses());
 		sb.append(",");
 		sb.append("\"postLength\":"+osce.getPostLength());
