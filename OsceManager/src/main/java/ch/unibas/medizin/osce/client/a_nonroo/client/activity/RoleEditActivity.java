@@ -13,12 +13,33 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSu
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditViewImpl;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListRequest;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaRequest;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionRequest;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionRequest;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicRequest;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleParticipantRequest;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
+import ch.unibas.medizin.osce.domain.ChecklistTopic;
+import ch.unibas.medizin.osce.domain.RoleParticipant;
+import ch.unibas.medizin.osce.domain.RoleTemplate;
+import ch.unibas.medizin.osce.domain.SimpleSearchCriteria;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -175,7 +196,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("edit");
 			//spec start
 			Log.info("Proxy ID : " + place.getProxyId());
-			requests.find(place.getProxyId()).with("standardizedRoles" , "checkList" ,"keywords", "advancedSearchCriteria", "simpleSearchCriteria","oscePosts","roleTemplate","roleTopic")
+			requests.find(place.getProxyId()).with("roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -441,17 +462,12 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		if(this.place.getOperation() == Operation.EDIT)
 		{
-			 checkListProxy= standardizedRole.getCheckList();//spec
-
-			 if(checkListProxy==null)
-			 {
-
-				CheckListRequest checklistRequest=requests.checkListRequest();
-				 checkListProxy=checklistRequest.create(CheckListProxy.class);
-			 }
-				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
-				standardizedRole.setCheckList(checkListProxy);//spec
-				System.out.println("Checklist----1: "+checkListProxy.getTitle());
+			 //checkListProxy= standardizedRole.getCheckList();//spec
+			
+			 
+			
+				//standardizedRole.setCheckList(checkListProxy);//spec
+			//	System.out.println("Checklist----1: "+checkListProxy.getTitle());
 				
 				 majorRequest = requests.standardizedRoleRequest();
 				 proxy= majorRequest.create(StandardizedRoleProxy.class);
@@ -466,7 +482,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				// checkListProxy.setTitle("ccc");//spec
 				//	checkListProxy.setVersion(0);//spec
 				 //spec
-				 checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
+			//	 checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 				 proxy.setRoleTopic(roleTopic);
 				 //copy(standardizedRole);
 				// proxy.setActive(((RoleEditViewImpl)view).active.getValue());
@@ -478,13 +494,13 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					
 					proxy.setPreviousVersion(standardizedRole);
 					
-					proxy.setAdvancedSearchCriteria(standardizedRole.getAdvancedSearchCriteria());
+				//	proxy.setAdvancedSearchCriteria(standardizedRole.getAdvancedSearchCriteria());
 					proxy.setKeywords(standardizedRole.getKeywords());
-					proxy.setOscePosts(standardizedRole.getOscePosts());
-					proxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+				//	proxy.setOscePosts(standardizedRole.getOscePosts());
+				//	proxy.setRoleParticipants(standardizedRole.getRoleParticipants());
 					proxy.setRoleTemplate(standardizedRole.getRoleTemplate());
-					proxy.setRoleParticipants(standardizedRole.getRoleParticipants());
-					proxy.setSimpleSearchCriteria(standardizedRole.getSimpleSearchCriteria());
+				//	proxy.setRoleParticipants(standardizedRole.getRoleParticipants());
+				//	proxy.setSimpleSearchCriteria(standardizedRole.getSimpleSearchCriteria());
 					
 					if(standardizedRole.getMainVersion()==null)
 					{
@@ -496,7 +512,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					}
 					proxy.setSubVersion(0);
 					
-					proxy.setCheckList(checkListProxy);//spec
+					//proxy.setCheckList(checkListProxy);//spec
 					//Issue # 122 : Replace pull down with autocomplete.
 					//proxy.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
 					proxy.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getSelected());
@@ -725,57 +741,296 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 		// Highlight onViolation
 		Log.info("Map Size: "  + view.getStandardizedRoleMap().size());
-		 majorRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
+		
+		 CheckListProxy checkListProxy=null;
+		
 
+				CheckListRequest checklistRequest=requests.checkListRequest();
+				 checkListProxy=checklistRequest.create(CheckListProxy.class);
 	
+				 checkListProxy.setCheckListTopics(standardizedRole.getCheckList().getCheckListTopics());
+				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
+				final CheckListProxy newCheckList=checkListProxy;
+				
+				
+				
+				
+				
+				
+				checklistRequest.persist().using(checkListProxy).fire(new OSCEReceiver<Void>() {
 
-		/*	public void onFailure(ServerFailure error) {
-				Log.info("error in persist");
-				Log.error(error.getMessage());
+					@Override
+					public void onSuccess(Void response) {
+						Iterator<ChecklistTopicProxy> topicIterator=standardizedRole.getCheckList().getCheckListTopics().iterator();
+						//create new create new topic 
+						while(topicIterator.hasNext())
+						{
+							final ChecklistTopicProxy oldTopc=topicIterator.next();
+							
+							ChecklistTopicRequest topicRequest=requests.checklistTopicRequest();
+							ChecklistTopicProxy topic=topicRequest.create(ChecklistTopicProxy.class);
+							
+							final ChecklistTopicProxy topic1=topic;
+							
+							topic.setCheckList(newCheckList);
+							topic.setDescription(oldTopc.getDescription());
+							topic.setSort_order(oldTopc.getSort_order());
+							topic.setTitle(oldTopc.getTitle());
+							
+							topicRequest.persist().using(topic).fire(new OSCEReceiver<Void>() {
 
-			}
+								@SuppressWarnings("deprecation")
+								@Override
+								public void onSuccess(Void response) {
+									Iterator<ChecklistQuestionProxy> questionIterator=oldTopc.getCheckListQuestions().iterator();
+									while(questionIterator.hasNext())
+									{
+										final ChecklistQuestionProxy oldQuestion=questionIterator.next();
+										
+										ChecklistQuestionRequest questionRequest=requests.checklistQuestionRequest();
+										
+										ChecklistQuestionProxy question=questionRequest.create(ChecklistQuestionProxy.class);
+										
+										final ChecklistQuestionProxy question1=question;
+										
+										question.setCheckListTopic(topic1);
+										question.setInstruction(oldQuestion.getInstruction());
+										question.setQuestion(oldQuestion.getQuestion());
+										question.setSequenceNumber(oldQuestion.getSequenceNumber());
+										
+										questionRequest.persist().using(question).fire(new OSCEReceiver<Void>() {
 
-			@Override
-			public void onViolation(Set<Violation> errors) {
-				Iterator<Violation> iter = errors.iterator();
-				String message = "";
-				while (iter.hasNext()) {
-					message += iter.next().getMessage() + "<br>";
-				}
-				Log.warn(" in Role -" + message);
-			}
-		 */
-			// E Highlight onViolation		 
+											@SuppressWarnings("deprecation")
+											@Override
+											public void onSuccess(Void response) {
+												Iterator<ChecklistOptionProxy> optionIterator=oldQuestion.getCheckListOptions().iterator();
+												
+												while(optionIterator.hasNext())
+												{
+													final ChecklistOptionProxy oldOption=optionIterator.next();
+													
+													ChecklistOptionRequest optionRequest=requests.checklistOptionRequest();
+													
+													ChecklistOptionProxy option=optionRequest.create(ChecklistOptionProxy.class);
+													
+													final ChecklistOptionProxy option1 = option;
+													
+													option.setChecklistQuestion(question1);
+													option.setName(oldOption.getName());
+													option.setOptionName(oldOption.getOptionName());
+													option.setValue(oldOption.getValue());
+													
+													optionRequest.persist().using(option).fire(new OSCEReceiver<Void>() {
 
-			@Override
-			public void onSuccess(Void response) {
-				Log.info("Role successfully saved.");
-				
-				//previous version Inactve
-				
-				save = true;
-				
-				
-				
-			
-				
-				((RoleEditViewImpl)view).active.setValue(false);
-				
-				((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
-				((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
-				((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
-				((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
-				((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
-				//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
-				
-				save();
-				
-				
-				
-			
-			}
-			
-		});
+														@Override
+														public void onSuccess(
+																Void response) {
+															// TODO Auto-generated method stub
+															
+														}
+													});
+													
+												
+													
+													
+													final Iterator<ChecklistCriteriaProxy> criteriaIterator=oldQuestion.getCheckListCriterias().iterator();
+													
+													while(criteriaIterator.hasNext())
+													{
+														final ChecklistCriteriaProxy oldCriteria=criteriaIterator.next();
+														
+														ChecklistCriteriaRequest criteriaRequest=requests.checklistCriteriaRequest();
+														
+														
+														ChecklistCriteriaProxy criteria=criteriaRequest.create(ChecklistCriteriaProxy.class);
+														
+														final ChecklistCriteriaProxy criteria1 = criteria;
+														
+														criteria.setChecklistQuestion(question1);
+														criteria.setCriteria(oldCriteria.getCriteria());
+														
+														
+														
+														optionRequest.persist().using(option).fire(new OSCEReceiver<Void>() {
+
+															@Override
+															public void onSuccess(
+																	Void response) {
+																
+															}
+														});
+													
+													}
+												}
+												
+											}
+										});
+									}
+									
+								}
+							});
+						}
+						
+						
+						//save new role
+						
+						
+						
+						
+						
+						//create Role template
+					/*	RoleTemplateRequest roleTemplateRequest=requests.roleTemplateRequest();
+						RoleTemplateProxy roleTemplateProxy=roleTemplateRequest.create(RoleTemplateProxy.class);
+						roleTemplateProxy.setDate_cretaed(standardizedRole.getRoleTemplate().getDate_cretaed());
+						roleTemplateProxy.setDate_edited(standardizedRole.getRoleTemplate().getDate_edited());
+						roleTemplateProxy.setRoleBaseItem(standardizedRole.getRoleTemplate().getRoleBaseItem());
+						roleTemplateProxy.setTemplateName(standardizedRole.getRoleTemplate().getTemplateName());
+					*/	
+						
+						proxy.setCheckList(newCheckList);
+						proxy.setRoleTemplate(standardizedRole.getRoleTemplate());
+						final StandardizedRoleProxy proxy1=proxy;
+						 majorRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
+
+								
+
+								/*	public void onFailure(ServerFailure error) {
+										Log.info("error in persist");
+										Log.error(error.getMessage());
+
+									}
+
+									@Override
+									public void onViolation(Set<Violation> errors) {
+										Iterator<Violation> iter = errors.iterator();
+										String message = "";
+										while (iter.hasNext()) {
+											message += iter.next().getMessage() + "<br>";
+										}
+										Log.warn(" in Role -" + message);
+									}
+								 */
+									// E Highlight onViolation		 
+
+									@Override
+									public void onSuccess(Void response) {
+										Log.info("Role successfully saved.");
+										
+										//previous version Inactve
+										
+										save = true;
+										
+										//create simple search criteria
+											
+										 	Iterator<SimpleSearchCriteriaProxy> simpleSearchIterator=standardizedRole.getSimpleSearchCriteria().iterator();
+											while(simpleSearchIterator.hasNext())
+											{
+												SimpleSearchCriteriaProxy oldSimpleSearchProxy=simpleSearchIterator.next();
+												SimpleSearchCriteriaRequest simpleSearchCriteriaRequest=requests.simpleSearchCriteriaRequest();
+												
+												SimpleSearchCriteriaProxy simpleSearchCriteriaProxy=simpleSearchCriteriaRequest.create(SimpleSearchCriteriaProxy.class);
+												
+												simpleSearchCriteriaProxy.setName(oldSimpleSearchProxy.getName());
+												simpleSearchCriteriaProxy.setSortOrder(oldSimpleSearchProxy.getSortOrder());
+												simpleSearchCriteriaProxy.setStandardizedRole(proxy1);
+												simpleSearchCriteriaProxy.setValue(oldSimpleSearchProxy.getValue());
+												
+												simpleSearchCriteriaRequest.persist().using(simpleSearchCriteriaProxy).fire();
+												
+												
+											}
+											
+											
+											Iterator<RoleParticipantProxy> roleParticipantProxyIterator=standardizedRole.getRoleParticipants().iterator();
+											while(roleParticipantProxyIterator.hasNext())
+											{
+												RoleParticipantProxy oldRoleParticipantProxy=roleParticipantProxyIterator.next();
+												RoleParticipantRequest roleParticipantRequest=requests.roleParticipantRequest();
+												
+												RoleParticipantProxy roleParticipantProxy=roleParticipantRequest.create(RoleParticipantProxy.class);
+												
+												roleParticipantProxy.setDoctor(oldRoleParticipantProxy.getDoctor());
+												roleParticipantProxy.setStandardizedRole(proxy1);
+												roleParticipantProxy.setType(oldRoleParticipantProxy.getType());
+												
+												
+												roleParticipantRequest.persist().using(roleParticipantProxy).fire();
+												
+												
+											}
+											
+											final Iterator<AdvancedSearchCriteriaProxy> advancedSearchCriteriaProxyIterator=standardizedRole.getAdvancedSearchCriteria().iterator();
+											
+											if(!advancedSearchCriteriaProxyIterator.hasNext())
+											{
+												((RoleEditViewImpl)view).active.setValue(false);
+												
+												((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
+												((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
+												((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
+												((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+												((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
+												//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
+												
+												save();
+												return;
+											}
+											
+											while(advancedSearchCriteriaProxyIterator.hasNext())
+											{
+												AdvancedSearchCriteriaProxy oldAdvancedSearchCriteriaProxy=advancedSearchCriteriaProxyIterator.next();
+												AdvancedSearchCriteriaRequest advancedSearchCriteriaRequest=requests.advancedSearchCriteriaRequest();
+												
+												AdvancedSearchCriteriaProxy advancedSearchCriteriaProxy=advancedSearchCriteriaRequest.create(AdvancedSearchCriteriaProxy.class);
+												
+												
+												advancedSearchCriteriaProxy.setBindType(oldAdvancedSearchCriteriaProxy.getBindType());
+												advancedSearchCriteriaProxy.setComparation(oldAdvancedSearchCriteriaProxy.getComparation());
+												advancedSearchCriteriaProxy.setField(oldAdvancedSearchCriteriaProxy.getField());
+												advancedSearchCriteriaProxy.setObjectId(oldAdvancedSearchCriteriaProxy.getObjectId());
+												advancedSearchCriteriaProxy.setShownValue(oldAdvancedSearchCriteriaProxy.getShownValue());
+												advancedSearchCriteriaProxy.setStandardizedRole(proxy1);
+												advancedSearchCriteriaProxy.setValue(oldAdvancedSearchCriteriaProxy.getValue());
+												
+												
+												advancedSearchCriteriaRequest.persist().using(advancedSearchCriteriaProxy).fire(new OSCEReceiver<Void>() {
+
+													@Override
+													public void onSuccess(
+															Void response) {
+														if(!advancedSearchCriteriaProxyIterator.hasNext())
+														{
+															
+															((RoleEditViewImpl)view).active.setValue(false);
+															
+															((RoleEditViewImpl)view).shortName.setValue(standardizedRole.getShortName());
+															((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
+															((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
+															((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+															((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
+															//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
+															
+															save();
+														}
+														
+													}
+												});
+												
+												
+											}
+									
+									
+										
+										
+										
+									
+									}
+									
+								});
+
+					}
+				});
+		
 		 
 		 
 	
