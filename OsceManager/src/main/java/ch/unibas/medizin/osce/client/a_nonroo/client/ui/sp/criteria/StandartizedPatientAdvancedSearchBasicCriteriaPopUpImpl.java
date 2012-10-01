@@ -124,7 +124,7 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		this.hide();
 		}else{
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-			confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+			confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 		}
 	}
 

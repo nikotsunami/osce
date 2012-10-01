@@ -102,7 +102,7 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
 	        	 if(!validateImage())
 	                {
 	                	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.error());
-	                	dialogBox.showConfirmationDialog(constants.invalidImageFileType());
+	                	dialogBox.showConfirmationDialog(constants.spErrorInvalidImageFileType());
 	                	event.cancel(); // cancel the event  
 	                	return;
 	                }
@@ -128,7 +128,7 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
                 if(event.getResults().trim().equals("error"))
                 {
                 	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.error());
-                	dialogBox.showConfirmationDialog(constants.fileUploadError());
+                	dialogBox.showConfirmationDialog(constants.spFileUploadError());
                 	return;
                 }
                 	
@@ -198,7 +198,7 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
 		super(true);
 		add(BINDER.createAndBindUi(this));
 		
-		uploadLbl.setText(constants.videoUpload());
+		uploadLbl.setText(constants.spVideoUpload());
 		
 		uploadPopupViewImpl=this;
 		this.isVideo=isVideo;
@@ -226,7 +226,7 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
 	        	if(!validateVideo())
                 {
                 	MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.error());
-                	dialogBox.showConfirmationDialog(constants.invalidVideoFileType());
+                	dialogBox.showConfirmationDialog(constants.spErrorInvalidVideoFileType());
                 	event.cancel(); // cancel the event  
                 	return;
                 }

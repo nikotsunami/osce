@@ -625,7 +625,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		}else{
 			Log.info("No checkbox selected.");
 
-			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 			confirmationDialogBox.showConfirmationDialog(constants.warningSelectSp());
 		}
 	}
@@ -883,7 +883,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 		}else{
 			Log.info("No checkbox selected.");
 			
-			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 			confirmationDialogBox.showConfirmationDialog(constants.warningSelectExaminer());
 		}
 	}
@@ -1109,7 +1109,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 		}else{
 			Log.info("No checkbox selected.");
 			
-			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 			confirmationDialogBox.showConfirmationDialog(constants.warningSelectSp());
 		}
 		
@@ -1332,7 +1332,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 		}else{
 			Log.info("No checkbox selected.");
 			
-			confirmationDialogBox = new MessageConfirmationDialogBox(constants.noSelection());
+			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
 			confirmationDialogBox.showConfirmationDialog(constants.warningSelectExaminer());
 		}
 		

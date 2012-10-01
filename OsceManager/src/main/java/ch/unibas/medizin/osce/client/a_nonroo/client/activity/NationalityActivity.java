@@ -320,7 +320,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 				else
 				{
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-		    		messageConfirmationDialogBox.showConfirmationDialog(constants.nationaltiywarning());
+		    		messageConfirmationDialogBox.showConfirmationDialog(constants.nationaltiyWarning());
 				}
 			}
 		});

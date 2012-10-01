@@ -311,11 +311,11 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 				hide();
 			}else{
 				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-				confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+				confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 			}
 		}else{
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-			confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+			confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 		}
 	}
 	

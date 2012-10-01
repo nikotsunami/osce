@@ -647,7 +647,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 						topicPopup.getDescriptionTxtBox().setValue("");
 					}else{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 					}
 				// Highlight onViolation
 					//}

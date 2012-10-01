@@ -1765,7 +1765,7 @@ final int index2 = index;
 		
 		// Issue Role
 		 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
-		 dialogBox.showYesNoDialog(constants.deleteRole());
+		 dialogBox.showYesNoDialog(constants.confirmationDeleteRole());
 		 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
 				@Override
@@ -6264,7 +6264,7 @@ final int index2 = index;
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			
 			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
-			dialogBox.showConfirmationDialog(constants.minorSuccess());	
+			dialogBox.showConfirmationDialog(constants.confirmationMinorSkillAdded());	
 			}
 
 			//SPEC Change

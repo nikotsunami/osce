@@ -246,8 +246,8 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
 		
-		optionLbl.setText(constants.optionlbl());
-		criteriaLbl.setText(constants.criterialbl());
+		optionLbl.setText(constants.roleOptionLabel());
+		criteriaLbl.setText(constants.roleCriteriaLabel());
 		
 		questionView=this;
 		
@@ -308,7 +308,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					else
 					{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 					}
 				}
 			});
@@ -373,7 +373,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					else
 					{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 					}
 				}
 		});
@@ -530,7 +530,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					else
 					{	
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 					}
 				}
 		});

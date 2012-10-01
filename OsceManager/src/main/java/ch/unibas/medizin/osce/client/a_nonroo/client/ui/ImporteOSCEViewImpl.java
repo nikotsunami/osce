@@ -56,13 +56,13 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	public ImporteOSCEViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		disclouserPanelFlie.addStyleName("schedulePanelStyle");
-		processed.setText(constants.processed());
-		unprocessed.setText(constants.unprocessed());
+		processed.setText(constants.importProcessed());
+		unprocessed.setText(constants.importUnprocessed());
 		importButton.setText(constants.importBtn());
 		delButton.setText(constants.delete());
 		delButton.setEnabled(true);
 		importButton.setEnabled(false);
-		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.processed());
+		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importProcessed());
 		disclouserPanelFlie.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 			@Override
 			public void onClose(CloseEvent<DisclosurePanel> event) {
@@ -74,7 +74,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	@UiHandler("unprocessed")
 	public void unprocessedSelected(ClickEvent event)
 	{
-		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.unprocessed());
+		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importUnprocessed());
 		delButton.setEnabled(false);
 		importButton.setEnabled(true);
 		delegate.unprocessedClicked();
@@ -83,7 +83,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	@UiHandler("processed")
 	public void processedSelected(ClickEvent event)
 	{
-		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.processed());
+		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importProcessed());
 		delButton.setEnabled(true);
 		importButton.setEnabled(false);
 		delegate.processedClicked();
@@ -97,7 +97,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		if (test)
 		{
 			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.confirmation());
-			messageConfirmationDialogBox.showYesNoDialog(constants.importprocessmsg());
+			messageConfirmationDialogBox.showYesNoDialog(constants.confirmationDeleteAfterImport());
 			messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {			
 				@Override
 				public void onClick(ClickEvent event) {
@@ -115,8 +115,8 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		}
 		else
 		{
-			MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-			messageConfirmationDialogBox.showConfirmationDialog(constants.eosceerrormsg());
+			MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			messageConfirmationDialogBox.showConfirmationDialog(constants.warningImportNoFileSelected());
 		}
 	}
 	
@@ -132,8 +132,8 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		}
 		else
 		{
-			MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-			messageConfirmationDialogBox.showConfirmationDialog(constants.eosceerrormsg());
+			MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			messageConfirmationDialogBox.showConfirmationDialog(constants.warningImportNoFileSelected());
 		}
 	}
 	

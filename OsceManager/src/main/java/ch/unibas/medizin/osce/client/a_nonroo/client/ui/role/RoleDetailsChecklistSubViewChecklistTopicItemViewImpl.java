@@ -311,7 +311,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 						//questionPopup.getDescriptionTxtBox().setValue("");
 					}else{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 					}
 					
 					// Highlight onViolation
@@ -438,7 +438,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					delegate.updateCheckListTopic(proxy,topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue(),topicView);
 					}else{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 					}
 					// E Highlight onViolation
 					

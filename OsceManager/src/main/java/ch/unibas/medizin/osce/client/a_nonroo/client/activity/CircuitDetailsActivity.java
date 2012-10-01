@@ -4226,7 +4226,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								// E Module 5 Bug Test Change
 								MessageConfirmationDialogBox roomNullWarning=new MessageConfirmationDialogBox(constants.warning());
-								roomNullWarning.showConfirmationDialog(constants.roomNotNullWarning());								
+								roomNullWarning.showConfirmationDialog(constants.warningRoomUnassigned());								
 							}
 							else
 							{

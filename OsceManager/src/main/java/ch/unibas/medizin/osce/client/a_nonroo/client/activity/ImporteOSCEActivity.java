@@ -69,7 +69,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					if (result.size() == 0)
 					{
 						Label label = new Label();
-						label.setText(constants.unprocessedmsg());
+						label.setText(constants.importProcessedFilesDeleted());
 						label.addStyleName("eOSCElable");
 						HorizontalPanel horizontalPanel = new HorizontalPanel();
 						horizontalPanel.add(label);
@@ -100,7 +100,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				@Override
 				public void onFailure(Throwable caught) {
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.fetcherrormsg());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
 				}
 			});			
 		}
@@ -134,13 +134,13 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			@Override
 			public void onFailure(Throwable caught) {
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.importerror());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
 			}
 
 			@Override
 			public void onSuccess(Void result) {
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.importsuccess());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
 				unprocessedClicked();
 			//	init();
 			}
@@ -162,7 +162,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					if (result.size() == 0)
 					{
 						Label label = new Label();
-						label.setText(constants.processedmsg());
+						label.setText(constants.importProcessedMsg());
 						label.addStyleName("eOSCElable");
 						HorizontalPanel horizontalPanel = new HorizontalPanel();
 						horizontalPanel.add(label);
@@ -192,7 +192,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				@Override
 				public void onFailure(Throwable caught) {
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.fetcherrormsg());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
 				}
 			});			
 		}
@@ -226,13 +226,13 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			@Override
 			public void onFailure(Throwable caught) {				
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.delerror());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportDelete());
 			}
 
 			@Override
 			public void onSuccess(Void result) {
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.delsuccess());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.confirmationImportDelete());
 				processedClicked();
 			//	init();
 			}

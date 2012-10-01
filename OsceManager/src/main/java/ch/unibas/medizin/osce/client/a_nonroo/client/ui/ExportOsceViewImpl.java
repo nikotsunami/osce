@@ -52,10 +52,10 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		disclouserPanelFlie.addStyleName("schedulePanelStyle");
-		processed.setText(constants.processed());
-		unprocessed.setText(constants.unprocessed());
+		processed.setText(constants.exportProcessed());
+		unprocessed.setText(constants.exportUnprocessed());
 		exportButton.setText(constants.export());
-		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportprocessed());
+		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportProcessed());
 		disclouserPanelFlie.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 			@Override
 			public void onClose(CloseEvent<DisclosurePanel> event) {
@@ -67,14 +67,14 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	@UiHandler("unprocessed")
 	public void unprocessedSelected(ClickEvent event)
 	{
-		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportunprocessed());
+		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportUnprocessed());
 		delegate.unprocessedClicked();
 	}
 	
 	@UiHandler("processed")
 	public void processedSelected(ClickEvent event)
 	{
-		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportprocessed());
+		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportProcessed());
 		delegate.processedClicked();
 	}
 	
@@ -97,7 +97,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			if (unprocessed.getValue() == false)
 			{
 				final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-				messageConfirmationDialogBox.showYesNoDialog(constants.exportwarning());
+				messageConfirmationDialogBox.showYesNoDialog(constants.exportWarningAlreadyExported());
 				
 				messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
 					@Override
@@ -122,7 +122,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		else 
 		{
 			MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-			messageConfirmationDialogBox.showConfirmationDialog(constants.eosceerrormsg());
+			messageConfirmationDialogBox.showConfirmationDialog(constants.exportError());
 		}
 	}
 

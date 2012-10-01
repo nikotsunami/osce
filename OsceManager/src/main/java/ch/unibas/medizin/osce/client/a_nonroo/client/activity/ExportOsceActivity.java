@@ -116,7 +116,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.exporterror());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.exportError());
 			}
 		});
 		
@@ -134,7 +134,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				@Override
 				public void onFailure(Throwable caught) {
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.exportunprocessederror());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.exportFetchUnprocessedError());
 				}
 
 				@Override
@@ -142,7 +142,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					if (result.size() == 0)
 					{
 						Label label = new Label();
-						label.setText(constants.exportprocessedmsg());
+						label.setText(constants.exportAllFilesProcessed());
 						label.addStyleName("eOSCElable");
 						HorizontalPanel horizontalPanel = new HorizontalPanel();
 						horizontalPanel.add(label);
@@ -187,7 +187,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				@Override
 				public void onFailure(Throwable caught) {
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.exportprocessederror());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.exportFetchProcessedError());
 				}
 
 				@Override
@@ -195,7 +195,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					if (result.size() == 0)
 					{
 						Label label = new Label();
-						label.setText(constants.exportprocessedlabel());
+						label.setText(constants.exportProcessedExported());
 						label.addStyleName("eOSCElable");
 						HorizontalPanel horizontalPanel = new HorizontalPanel();
 						horizontalPanel.add(label);
@@ -269,7 +269,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			public void onFailure(Throwable caught) {
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.exportunprocessederror());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.exportFetchUnprocessedError());
 			}
 
 			@Override
@@ -277,7 +277,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.exportsuccess());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.exportSuccess());
 				
 				System.out.println("FLAG : " + flag);
 				

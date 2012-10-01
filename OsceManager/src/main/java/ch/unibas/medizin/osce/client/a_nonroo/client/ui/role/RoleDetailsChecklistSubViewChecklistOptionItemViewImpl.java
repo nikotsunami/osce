@@ -148,7 +148,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 				else
 				{
 					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-					confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+					confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 				}
 			}
 		});

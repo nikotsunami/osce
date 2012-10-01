@@ -477,7 +477,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		} else {
 			Log.info("proxy.getStatus() : " + proxy.getStatus());
 			status.setText((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? constants
-					.inActive() : constants.active());
+					.spInactive() : constants.spActive());
 			status.setIcon((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? "close"
 					: "check");
 			status.setVisible(true);

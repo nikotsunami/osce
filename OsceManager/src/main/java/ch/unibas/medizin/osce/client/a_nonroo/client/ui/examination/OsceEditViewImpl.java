@@ -283,7 +283,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
 		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
 		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
-		labelSpStayInPost.setInnerText(constants.OsceSpStayInPost());
+		labelSpStayInPost.setInnerText(constants.osceSpStayInPost());
 		//remove number post
 		//numberPost.setInnerText(constants.circuitStation() + ":");
 		

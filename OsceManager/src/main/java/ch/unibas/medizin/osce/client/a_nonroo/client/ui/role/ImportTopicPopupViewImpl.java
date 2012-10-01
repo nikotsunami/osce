@@ -266,7 +266,7 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 			Log.info("inside else");
 			
 			add(BINDER.createAndBindUi(this));
-			specializationLbl.setText(constants.specialisation());
+			specializationLbl.setText(constants.clinicalSpecialisation());
 			queListBox.setVisible(false);
 			queListBox.removeFromParent();
 			questionLbl.removeFromParent();

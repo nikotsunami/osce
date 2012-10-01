@@ -1720,7 +1720,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				}
 				else
 				{
-					dialogBox =new MessageConfirmationDialogBox(constants.failure());
+					dialogBox =new MessageConfirmationDialogBox(constants.error());
 					dialogBox.showConfirmationDialog(constants.exaPlanSpFailure());
 				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
@@ -1757,7 +1757,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				}
 				else
 				{
-					dialogBox =new MessageConfirmationDialogBox(constants.failure());
+					dialogBox =new MessageConfirmationDialogBox(constants.error());
 					dialogBox.showConfirmationDialog(constants.exaPlanStudentFailure());
 				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {

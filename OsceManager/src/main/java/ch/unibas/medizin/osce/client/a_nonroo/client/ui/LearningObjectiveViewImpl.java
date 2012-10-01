@@ -137,7 +137,7 @@ public class LearningObjectiveViewImpl extends Composite implements LearningObje
 		 classiTopicLbl.setText(constants.classiTopic());
 		 topicLbl.setText(constants.topicLbl());
 		 skillLevelLbl.setText(constants.skillLevel());
-		 applianceLbl.setText(constants.appliance());
+		 applianceLbl.setText(constants.lrnObjAppliance());
 		
 		 	 
 		 init2();

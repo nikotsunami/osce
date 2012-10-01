@@ -151,7 +151,7 @@ private static final Binder BINDER = GWT.create(Binder.class);
 				else
 				{
 					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-					confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+					confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 				}
 			}
 		});
@@ -166,7 +166,7 @@ private static final Binder BINDER = GWT.create(Binder.class);
 		/*if(Window.confirm("are you sure you want to delete this criteria?"))*/
 		final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(
 				constants.warning());
-		dialogBox.showYesNoDialog(constants.criteriadelete());
+		dialogBox.showYesNoDialog(constants.roleConfirmCriterionDelete());
 
 		dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 

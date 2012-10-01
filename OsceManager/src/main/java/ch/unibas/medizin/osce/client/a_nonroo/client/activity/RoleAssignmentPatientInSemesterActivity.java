@@ -581,7 +581,7 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 			backUpView.setOsceDaySubViewImpl(osceDaySubViewImpl);
 
 		
-			backUpView.getRoleLbl().setText(constants.backupViewHeading());
+			backUpView.getRoleLbl().setText(constants.roleBackupViewHeading());
 			backUpView.getCountLbl().removeFromParent();
 			backUpView.getbackupLabel().removeFromParent();
 			backUpView.getBackUpVP().removeFromParent();
@@ -2500,7 +2500,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							showApplicationLoading(false);
 							theEventService.removeListeners();
 							
-							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.failure());
+							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog(constants.errorAutoAssignmentFailure());
 							
 							// module 3 bug {
@@ -2530,7 +2530,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						Log.info("AutoAssignment PatientIn semester Request Failed Due to" + caught.getMessage());
 						caught.printStackTrace();
 						
-						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.failure());
+						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.error());
 						dialogBox.showConfirmationDialog(constants.errorAutoAssignmentFailure());
 						
 						// module 3 bug {

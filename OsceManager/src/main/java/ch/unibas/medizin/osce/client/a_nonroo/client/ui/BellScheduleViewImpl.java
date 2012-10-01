@@ -116,10 +116,10 @@ public class BellScheduleViewImpl extends Composite implements
 				lblValidator.setText("");
 				delegate.getNewSchedule();
 			} else {
-				lblValidator.setText(constants.validatePlusMinus());
+				lblValidator.setText(constants.bellSchedValidatePlusMinus());
 			}
 		} else {
-			lblValidator.setText(constants.validateMinute());
+			lblValidator.setText(constants.bellSchedValidateMinute());
 		}
 	}
 
@@ -194,7 +194,7 @@ public class BellScheduleViewImpl extends Composite implements
 			}
 		}, constants.oscedoc());
 
-		paths.add(constants.dateHeader());
+		paths.add(constants.bellSchedDateHeader());
 		table.addColumn(new TextColumn<BellAssignmentType>() {
 
 			Renderer<Date> renderer = new AbstractRenderer<Date>() {
@@ -209,9 +209,9 @@ public class BellScheduleViewImpl extends Composite implements
 			public String getValue(BellAssignmentType object) {
 				return renderer.render(object.getOsceDate());
 			}
-		}, constants.dateHeader());
+		}, constants.bellSchedDateHeader());
 
-		paths.add(constants.timeHeader());
+		paths.add(constants.bellSchedTimeHeader());
 		table.addColumn(new TextColumn<BellAssignmentType>() {
 
 			Renderer<Date> renderer = new AbstractRenderer<Date>() {
@@ -226,9 +226,9 @@ public class BellScheduleViewImpl extends Composite implements
 			public String getValue(BellAssignmentType object) {
 				return renderer.render(object.getOsceTime());
 			}
-		}, constants.timeHeader());
+		}, constants.bellSchedTimeHeader());
 
-		paths.add(constants.toneHeader());
+		paths.add(constants.bellSchedToneHeader());
 		table.addColumn(new TextColumn<BellAssignmentType>() {
 
 			Renderer<Integer> renderer = new AbstractRenderer<Integer>() {
@@ -242,18 +242,18 @@ public class BellScheduleViewImpl extends Composite implements
 			public String getValue(BellAssignmentType object) {
 				return renderer.render(object.getBellTone().getTone());
 			}
-		}, constants.toneHeader());
+		}, constants.bellSchedToneHeader());
 
 	}
 
 	private void initView(String semesterName) {
 
 		lblTitle.setText(constants.bellSchedule() + " " + semesterName);
-		lblMoveTime.setText(constants.moveTime());
-		lblMin.setText(constants.minute());
+		lblMoveTime.setText(constants.bellSchedAdjustTime());
+		lblMin.setText(constants.bellSchedMinute());
 
-		plusTime.setText(constants.plusTime());
-		minusTime.setText(constants.minusTime());
+		plusTime.setText(constants.bellSchedPlusTime());
+		minusTime.setText(constants.bellSchedMinusTime());
 		okBtn.setText(constants.okBtn());
 
 		bellScheduleUpload.setText(constants.bellScheduleUpload());

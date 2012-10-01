@@ -174,7 +174,7 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		fileDescription.setValue("");
 		}else{
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-			confirmationDialogBox.showConfirmationDialog(constants.requiredFields());
+			confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 		}
 
 	}
