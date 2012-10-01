@@ -3510,3 +3510,8 @@ color: #f1b532;
 {
 	height: 625px;
 }
+.bottomBorder{
+	border-bottom-left-radius: 16px;
+	border-bottom-right-radius: 16px;
+	
+}

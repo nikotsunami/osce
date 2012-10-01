@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -31,9 +32,11 @@ public class ChecklistQuestion {
 	private Integer sequenceNumber;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistQuestion")
+	@OrderBy("sequenceNumber")
     private Set<ChecklistOption> checkListOptions = new HashSet<ChecklistOption>();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistQuestion")
+	@OrderBy("sequenceNumber")
     private Set<ChecklistCriteria> checkListCriterias = new HashSet<ChecklistCriteria>();
 	
 	@Size(max=50)

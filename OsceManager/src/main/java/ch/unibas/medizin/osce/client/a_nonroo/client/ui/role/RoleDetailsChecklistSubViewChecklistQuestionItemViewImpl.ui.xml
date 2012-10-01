@@ -72,6 +72,7 @@ border-bottom-color:#808080;
 	border-top-right-radius: 16px;
 
 }
+
 	.borderDP{
 	
 	border: 10;
@@ -110,7 +111,7 @@ border-bottom-color:#808080;
 		
 		
 		
-		<g:VerticalPanel styleName="{style.exp}" verticalAlignment="middle">
+		<g:VerticalPanel ui:field="headerPanel" styleName="{style.exp}" verticalAlignment="middle">
 	
 				<g:HorizontalPanel>
 				<g:AbsolutePanel ui:field="roleQueAP">
@@ -185,8 +186,11 @@ border-bottom-color:#808080;
 				<my:IconButton ui:field="addOptionButton" icon="plusthick" addStyleNames="{style.addBtn}" height="18px"></my:IconButton>
 			</g:HorizontalPanel>
 
+			<g:AbsolutePanel ui:field="optionBoundryPanel">
 			<g:FlowPanel ui:field="optionVerticalPanel" addStyleNames="{style.criteria}" width="640px">
+			
 			</g:FlowPanel>
+			</g:AbsolutePanel>
 		</g:VerticalPanel>
 	
 		<g:VerticalPanel spacing="2">
@@ -196,9 +200,11 @@ border-bottom-color:#808080;
 				<my:IconButton addStyleNames="{style.addBtn}" ui:field="addCriteriaButton" height="18px" icon="plusthick"></my:IconButton>
 			</g:HorizontalPanel>
 
+		<g:AbsolutePanel ui:field="criteriaBoundryPanel">
 			<g:FlowPanel ui:field="criteriaHorizontalPanel" styleName="style.criteria"
 				width="640px">
 			</g:FlowPanel>
+		</g:AbsolutePanel>
 		</g:VerticalPanel>
 		
 	</g:VerticalPanel>

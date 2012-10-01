@@ -17,4 +17,6 @@ public class ChecklistCriteria {
 	
 	@ManyToOne
 	private ChecklistQuestion checklistQuestion;
+	
+	private Integer sequenceNumber;
 }

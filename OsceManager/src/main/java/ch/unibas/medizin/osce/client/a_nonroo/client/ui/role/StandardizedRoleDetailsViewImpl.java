@@ -79,6 +79,15 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	
 	public ArrayList<RoleDetailsChecklistSubViewChecklistTopicItemView> checkListTopicView = new ArrayList<RoleDetailsChecklistSubViewChecklistTopicItemView>();
 	
+	private StandardizedRoleProxy homeRole;
+	
+	public StandardizedRoleProxy getHomeRole() {
+		return homeRole;
+	}
+
+	public void setHomeRole(StandardizedRoleProxy homeRole) {
+		this.homeRole = homeRole;
+	}
 	
 	// to drag
 	@UiField
@@ -467,7 +476,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		System.out.println("============================Call delegate.actualClicked=========================");
 		
 			
-		delegate.actualRoleClicked(this.getBaseValue());
+		delegate.actualRoleClicked(this.getHomeRole());
 		
 	}
 	

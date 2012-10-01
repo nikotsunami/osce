@@ -38,19 +38,13 @@ background-color:#B8A9A2;
 
 }
 			.expbtn{
-	background-color:#DFDAD6;
-	border-style: solid;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px; 
-	border-radius: 10px 10px 10px 10px;
-	height: 25px;
-	cursor: pointer;
+	background:#DFDAD6 !important;
+	cursor: pointer !important;
+	
 	}
 	
 	.expbtn:hover{
-		background-color: #A09286;
+		background-color: #A09286 !important;
 	}
 
 	.icon
@@ -130,8 +124,8 @@ background-color:#B8A9A2;
 			</g:VerticalPanel>
 		<g:VerticalPanel spacing="5" ui:field="addQuestionHP">
 		<g:HorizontalPanel spacing="8">
-			<my:IconButton icon="plusthick" ui:field="addCheckListQuestionButton" styleName="{style.expbtn}"></my:IconButton>
-			<my:IconButton icon="arrowthickstop-1-s" ui:field="importQuestionButton" styleName="{style.expbtn}"></my:IconButton>
+			<my:IconButton icon="plusthick" ui:field="addCheckListQuestionButton" addStyleNames="{style.expbtn}"></my:IconButton>
+			<my:IconButton icon="arrowthickstop-1-s" ui:field="importQuestionButton" addStyleNames="{style.expbtn}"></my:IconButton>
 		</g:HorizontalPanel>
 		
 		</g:VerticalPanel>
