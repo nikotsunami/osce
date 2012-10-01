@@ -29,6 +29,8 @@ public interface RoleLearningSubView {
 		public void addLearningObjectiveTableRangeHandler();
 		
 		public void closeButtonClicked();
+		
+		public void clearAllButtonClicked();
 	}
 	public void setDelegate(Delegate delegate);
 	Map getMainSkillMap();

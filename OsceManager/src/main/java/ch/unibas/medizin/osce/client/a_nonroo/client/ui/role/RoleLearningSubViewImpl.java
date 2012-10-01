@@ -81,6 +81,8 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 	
 	public Button addMinor;
 	
+	public Button clearAll;
+	
 	public IconButton closeButton;
 	
 	public boolean loadingFlag = false;
@@ -101,10 +103,12 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		
 		addMajor = new Button();
 		addMinor = new Button();
+		clearAll = new Button();
 		closeButton = new IconButton();
 		
 		addMajor.setText(constants.majorBtnLbl());
 		addMinor.setText(constants.minorBtnLbl());
+		clearAll.setText(constants.clearAll());
 		closeButton.setIcon("close");
 		closeButton.addStyleName("learningObjPopupCloseButton");
 		
@@ -133,6 +137,14 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 			@Override
 			public void onClick(ClickEvent event) {
 				delegate.addMinorClicked();
+			}
+		});
+		
+		clearAll.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				delegate.clearAllButtonClicked();
 			}
 		});
 				
@@ -488,6 +500,7 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		vp.add(closeButton);
 		
 		addMajor.addStyleName("learningObjPopupLabel");
+		addMinor.addStyleName("learningObjPopupButton");
 		
 		learningObjectiveViewImpl.getMainClassiLbl().addStyleName("learningObjPopupLabel");
 		learningObjectiveViewImpl.getSkillLevelLbl().addStyleName("learningObjPopupLabel");
@@ -497,6 +510,7 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		
 		learningObjectiveViewImpl.getHpBtnPanel().add(addMajor);		
 		learningObjectiveViewImpl.getHpBtnPanel().add(addMinor);
+		learningObjectiveViewImpl.getHpBtnPanel().add(clearAll);
 		
 		vp.add(learningObjectiveViewImpl);
 		
