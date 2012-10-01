@@ -10360,3 +10360,7 @@ INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`
 INSERT INTO `checklist_criteria` (`id`,`criteria`,`version`,`checklist_question`) VALUES (11,'Infektion',0,17);
 
 
+INSERT INTO `osce`.`role_item_access` (`id`, `name`, `version`) VALUES (1, 'admin', 0);
+INSERT INTO `osce`.`role_item_access` (`id`, `name`, `version`) VALUES (2, 'simpat', 0);
+INSERT INTO `osce`.`role_item_access` (`id`, `name`, `version`) VALUES (3, 'dozent', 0);
+

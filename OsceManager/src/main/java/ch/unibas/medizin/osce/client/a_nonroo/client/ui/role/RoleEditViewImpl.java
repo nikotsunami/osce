@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
-import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
@@ -20,6 +18,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -384,6 +383,11 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 			
 			//major.add(majorLbl);
 			popupPanel.major.add(majorBtn);
+			if(standardizedRoleProxy.getOscePosts().size() > 0)
+				majorBtn.setEnabled(false);
+			else
+				majorBtn.setEnabled(true);
+			
 			popupPanel.minor.setSpacing(20);
 			popupPanel.major.setSpacing(20);
 			

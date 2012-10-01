@@ -544,7 +544,12 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		});*/
 			
 	}
+		
 		((ImportTopicPopupViewImpl)importQuestionPopup).setPopupPosition(addQuestionHP.getAbsoluteLeft()+140, addQuestionHP.getAbsoluteTop()-245);
+		
+		((ImportTopicPopupViewImpl)importQuestionPopup).roleLstBox.setText("");
+		((ImportTopicPopupViewImpl)importQuestionPopup).topicLstBox.setText("");
+		((ImportTopicPopupViewImpl)importQuestionPopup).queListBox.setText("");
 		((ImportTopicPopupViewImpl)importQuestionPopup).show();
 	}
 	// Highlight onViolation

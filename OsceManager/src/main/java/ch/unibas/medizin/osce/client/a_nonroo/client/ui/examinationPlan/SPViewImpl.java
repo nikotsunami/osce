@@ -70,7 +70,11 @@ public class SPViewImpl extends Composite implements SPView{
 	public void spPanelClicked(ClickEvent event)
 	{
 		Log.info("spPanel Clicked");
-		if(assignmentProxy.getPatientInRole()==null)
+		
+		if(assignmentProxy == null)
+			return;
+		
+		if( assignmentProxy.getPatientInRole()==null)
 		{
 			MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 			dialogBox.showConfirmationDialog(constants.patientNotAssigned());

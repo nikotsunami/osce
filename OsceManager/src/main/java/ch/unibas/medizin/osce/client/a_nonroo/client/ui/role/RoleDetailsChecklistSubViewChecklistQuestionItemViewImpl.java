@@ -21,6 +21,8 @@ import com.allen_sauer.gwt.dnd.client.drop.HorizontalPanelDropController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -63,6 +65,29 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	
 	@UiField
 	public Label questionInstruction;
+	
+	
+	@UiField
+	public AbsolutePanel optionBoundryPanel;
+	
+	@UiField
+	public AbsolutePanel criteriaBoundryPanel;
+	
+	private PickupDragController criteriaDragController;
+	
+	public PickupDragController getCriteriaDragController() {
+		return criteriaDragController;
+	}
+
+	private FlowPanelDropController criteriaDropController;
+	
+	private PickupDragController optionDragController;
+	
+	public PickupDragController getOptionDragController() {
+		return optionDragController;
+	}
+
+	private FlowPanelDropController optionDropController;
 	
 	//SPEC Change
 	
@@ -186,6 +211,11 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		delegate.questionMoveUp(this.questionView,this.getChecklistTopicProxy(),this.getRoleDetailsChecklistSubViewChecklistTopicItemView());
 	}
 	
+	@UiField
+	VerticalPanel headerPanel;
+	
+	
+	
 	@UiHandler("arrow")
 	public void minmaxTopic(ClickEvent event)
 	{
@@ -193,11 +223,14 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		{
 			checkListQuestionDisclosurePanel.setOpen(false);
 			arrow.setResource(uiIcons.triangle1East());
+			headerPanel.addStyleName("bottomBorder");
 		}
 		else
 		{
 			checkListQuestionDisclosurePanel.setOpen(true);
 			arrow.setResource(uiIcons.triangle1South());
+			headerPanel.removeStyleName("bottomBorder");
+			
 		}
 	}
 //	@UiField
@@ -250,6 +283,17 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		criteriaLbl.setText(constants.roleCriteriaLabel());
 		
 		questionView=this;
+		
+		optionDragController=new PickupDragController(optionBoundryPanel, false);
+		optionDropController = new FlowPanelDropController(optionVerticalPanel);
+		optionDragController.registerDropController(optionDropController);
+		optionDragController.setBehaviorScrollIntoView(true);
+		
+		
+		criteriaDragController = new PickupDragController(criteriaBoundryPanel, false);
+		criteriaDropController = new FlowPanelDropController(criteriaHorizontalPanel);
+		criteriaDragController.registerDropController(criteriaDropController);
+		criteriaDragController.setBehaviorBoundaryPanelDrop(false);
 		
 		Log.info("View IMPL callled");
 		
@@ -550,7 +594,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 		}
 		
-		editquestionpopup.getTopicTxtBox().setText(proxy.getQuestion());
+		
 		
 		// Highlight onViolation
 			checklistQuestionMap=new HashMap<String, Widget>();
@@ -558,6 +602,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			checklistQuestionMap.put("instruction", editquestionpopup.getDescriptionTxtBox());
 		// E Highlight onViolation
 		
+		editquestionpopup.getTopicTxtBox().setText(proxy.getQuestion());	
 		editquestionpopup.getDescriptionTxtBox().setText(proxy.getInstruction());
 		((CheckListTopicPopupViewImpl)editquestionpopup).show();
 		

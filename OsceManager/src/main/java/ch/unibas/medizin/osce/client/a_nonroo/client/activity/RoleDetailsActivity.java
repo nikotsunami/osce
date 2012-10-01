@@ -167,6 +167,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -421,7 +422,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		
 		// SPEC START
 		//requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new InitializeActivityReceiver());
-		requests.find(place.getProxyId()).with("standardizedRoles").fire(new InitializeActivityReceiver());
+		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.checkList").fire(new InitializeActivityReceiver());
 		
 		// SPEC END
 
@@ -839,7 +840,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	{
 		
 		
-		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new OSCEReceiver<StandardizedRoleProxy>() {
+		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new OSCEReceiver<StandardizedRoleProxy>() {
 
 			@Override
 			public void onSuccess(StandardizedRoleProxy proxy) {
@@ -860,8 +861,15 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		{
 			standardizedRoleDetailsView[index].previous.setEnabled(false);
 		}
+		else
+			standardizedRoleDetailsView[index].previous.setEnabled(true);
 		
+		if(proxy.getOscePosts().size()>0)
+			standardizedRoleDetailsView[index].delete.setEnabled(false);
+		else
+			standardizedRoleDetailsView[index].delete.setEnabled(true);
 		
+		standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].setHomeRole(proxy);
 		standardizedRoleDetailsView[index].setBaseProxy(proxy);
 		standardizedRoleDetailsView[index].home.setVisible(false);
 		standardizedRoleDetailsView[index].setValue(proxy);
@@ -1943,6 +1951,8 @@ final int index2 = index;
 			questionView.getQuestionInstruction().setText(proxy.getInstruction());
 			questionView.setProxy(proxy);
 			
+			
+			
 			questionView.setDelegate(this);
 			topicView.checkListQuestionVerticalPanel.insert(questionView, topicView.checkListQuestionVerticalPanel.getWidgetCount());
 			topicView.getDragController().makeDraggable(questionView.asWidget(), questionView.getQuestionItemLbl());
@@ -1988,6 +1998,7 @@ final int index2 = index;
 			view.getCriteriaLbl().setText(proxy.getCriteria());
 			view.setProxy(proxy);
 			view.setDelegate(this);
+			questionView.getCriteriaDragController().makeDraggable(view.asWidget(),view.getCriteriaLbl());
 			questionView.criteriaHorizontalPanel.insert(view, questionView.criteriaHorizontalPanel.getWidgetCount());
 //			questionView.criteriaHorizontalPanel.insert(new Label(),questionView.criteriaHorizontalPanel.getWidgetCount());
 		}
@@ -2030,6 +2041,7 @@ final int index2 = index;
 			view.getOptionValueLbl().setText(optionProxy.getValue());
 			view.setProxy(optionProxy);
 			view.setDelegate(this);
+			questionView.getOptionDragController().makeDraggable(view.asWidget(), view.getOptionLbl());
 			questionView.optionVerticalPanel.insert(view, questionView.optionVerticalPanel.getWidgetCount());
 			
 		}
@@ -2239,7 +2251,7 @@ final int index2 = index;
 			
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
-			requests.specialisationRequest().findSpecialisation(specialisationProxy.getId()).with("roleTopics","roleTopics.standardizedRoles","roleTopics.standardizedRoles","roleTopics.standardizedRoles.checkList").fire(new OSCEReceiver<SpecialisationProxy>() {
+			requests.specialisationRequest().findSpecialisation(specialisationProxy.getId()).with("roleTopics","roleTopics.standardizedRoles","roleTopics.standardizedRoles.checkList").fire(new OSCEReceiver<SpecialisationProxy>() {
 
 				@Override
 				public void onSuccess(SpecialisationProxy response) {
@@ -2312,9 +2324,9 @@ final int index2 = index;
 							}
 						}
 					});*/
-					 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)importPopupView.getView().topicLstBox.getSuggestOracle();
-					 topicsuggestOracle.clear();
-					 importPopupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
+					/* DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)importPopupView.getView().topicLstBox.getSuggestOracle();
+					// topicsuggestOracle.clear();
+					 importPopupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);*/
 					 importPopupView.topicLstBox.setText("");
 
 					}
@@ -2498,7 +2510,7 @@ final int index2 = index;
 			
 		}
 		// Highlight onViolation
-		public void importQuestion(final ChecklistQuestionProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,ImportTopicPopupViewImpl viewforMap)
+		public void importQuestion(final ChecklistQuestionProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,final ImportTopicPopupViewImpl viewforMap)
 		// E Highlight onViolation
 		{
 			Log.info("import Question");
@@ -2604,6 +2616,7 @@ final int index2 = index;
 								}
 							}
 							
+							viewforMap.hide();
 						}
 					});
 					
@@ -3468,7 +3481,7 @@ final int index2 = index;
 	
 	
 	@Override
-	public void previousRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
+	public void previousRoleClicked(final StandardizedRoleProxy standardizedRoleProxy) {
 		Log.info("previous clicked");
 		System.out.println("============================Jump to StandardizedPatientDetailActivity previousClick() =========================");
 	//	System.out.println("==>"+roleDetailTabPanel.getTabBar().getSelectedTab());
@@ -3501,6 +3514,7 @@ final int index2 = index;
 					//ScrolledTab Changes start
 					//previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getTabBar().getSelectedTab()];
 					previousRole=standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()];
+					
 					previousRole.setValue(roleProxy);
 					refreshPreviousStandardizedRoleDetailView(previousRole);
 					//ScrolledTab Changes end
@@ -5389,7 +5403,12 @@ final int index2 = index;
 	public void actualRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
 		// TODO Auto-generated method stub
 	//refresh all tabs
-		goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(), Operation.DETAILS));
+		
+	
+		//goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(), Operation.DETAILS));
+		
+		
+		refreshSelectedTab(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()], standardizedRoleProxy);
 /*requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).fire(new Receiver<StandardizedRoleProxy>() {
 			
 			@Override
@@ -5498,6 +5517,38 @@ final int index2 = index;
 		
 		}
 		}
+		
+		else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
+		{
+			Log.info("else if called ~~~~");
+			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
+		
+		
+		for(int i=0;i<flowPanel.getWidgetCount();i++)
+		{
+			
+			Log.info("value~~~~"+ i);
+			updateOptionSequence(((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
+		
+		
+		}
+		}
+		
+		else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)
+		{
+			Log.info("else if called ~~~~");
+			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource()).getParent());
+		
+		
+		for(int i=0;i<flowPanel.getWidgetCount();i++)
+		{
+			
+			Log.info("value~~~~"+ i);
+			updateCriteriaSequence(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
+		
+		
+		}
+		}
 		else{
 			Log.info("no selected event");
 		}
@@ -5515,7 +5566,28 @@ final int index2 = index;
 	
 		Log.info("que seque no saved successfully~~~~~"+ i);
 	}
-
+	
+	
+	private void updateOptionSequence(ChecklistOptionProxy proxy,int i)
+	{
+		ChecklistOptionRequest request=requests.checklistOptionRequest();
+		
+		proxy=request.edit(proxy);
+		proxy.setSequenceNumber(i);
+		request.persist().using(proxy).fire();
+		Log.info("updateOptionSequence");
+	}
+	
+	private void updateCriteriaSequence(ChecklistCriteriaProxy proxy,int i)
+	{
+		ChecklistCriteriaRequest request=requests.checklistCriteriaRequest();
+		
+		proxy=request.edit(proxy);
+		proxy.setSequenceNumber(i);
+		request.persist().using(proxy).fire();
+		Log.info("updateCriteriaSequence");
+	}
+	
 	private void updateSequence(ChecklistTopicProxy proxy, int i) {
 		// TODO Auto-generated method stub
 		ChecklistTopicRequest request = requests.checklistTopicRequest();
@@ -6290,7 +6362,7 @@ final int index2 = index;
 		{
 			refreshSelectedTab(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()], standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue());
 		}
-		
+	
 		@Override
 		public void clearAllButtonClicked() {
 			loadLearningObjectiveData();

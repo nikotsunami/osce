@@ -23,4 +23,6 @@ public class ChecklistOption {
 	@Size(max=50)
 	private String value;
 	
+	private Integer sequenceNumber;
+	
 }

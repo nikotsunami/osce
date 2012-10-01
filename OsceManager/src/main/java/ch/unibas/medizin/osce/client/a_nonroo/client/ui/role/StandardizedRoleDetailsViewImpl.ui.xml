@@ -21,19 +21,13 @@
 		}
 		
 		.exp{
-			background-color: #B8A9A2;
-			border-style: solid;
-			border-top-width: 1px;
-			border-right-width: 1px;
-			border-bottom-width: 1px;
-			border-left-width: 1px;
-			border-radius: 10px 10px 10px 10px;
-			height: 25px;
-			cursor: pointer;
+			background: #B8A9A2 !important;
+
+			cursor: pointer !important;
 		}
 		
 		.exp:hover{
-			background-color: #8E7676;
+			background: #8E7676 !important;
 		}
 	</ui:style>
 
@@ -159,8 +153,8 @@
 									<g:HorizontalPanel spacing="10" ui:field="addTopicHP">		
 											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
 											
-											<my:IconButton icon="plusthick" ui:field="addCheckListTopicButton" styleName="{style.exp}"> </my:IconButton>
-											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" styleName="{style.exp}"></my:IconButton>
+											<my:IconButton icon="plusthick" ui:field="addCheckListTopicButton" addStyleNames="{style.exp}"> </my:IconButton>
+											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" addStyleNames="{style.exp}"></my:IconButton>
 										
 										</g:HorizontalPanel>
 								</g:VerticalPanel>

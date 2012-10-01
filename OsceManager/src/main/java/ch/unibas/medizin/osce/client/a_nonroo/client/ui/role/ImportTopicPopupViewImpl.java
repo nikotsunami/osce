@@ -389,6 +389,22 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 				}
 			}
 		});
+		
+		topicLstBox.setRenderer(new AbstractRenderer<ChecklistTopicProxy>() {
+
+			@Override
+			public String render(ChecklistTopicProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getTitle();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
 	}
 	
 	public void setDelegate(Delegate delegate) {
