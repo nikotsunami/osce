@@ -6290,6 +6290,11 @@ final int index2 = index;
 		{
 			refreshSelectedTab(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()], standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue());
 		}
+		
+		@Override
+		public void clearAllButtonClicked() {
+			loadLearningObjectiveData();
+		}
 	
 }
 

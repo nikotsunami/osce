@@ -388,7 +388,9 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	public void onRoleFulfilCriteriaEventReceived(RoleFulfilCriteriaEvent event) {
 		
 		Log.info("onRoleFulfilCriteriaEventReceived");
-		this.roleHeader.getWidget().removeStyleName("highlight-role");
+		if(event.getListOsceDayProxy() !=null && event.getListOsceDayProxy().contains(osceDayProxy))
+		{
+		
 		if(osceDayProxy.getId()==event.getOsceDayProxy().getId())
 		{
 			Iterator<StandardizedRoleProxy> roles=event.getStandardizedroleProxies().iterator();
@@ -397,6 +399,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 			{
 				if(roles.next().getId()==roleProxy.getId())
 				{
+						Log.info("roProxy Highlited is  :" +roleProxy.getId());
 					this.roleHeader.getWidget().addStyleName("highlight-role");
 					break;
 					//this.addStyleName("");
@@ -406,12 +409,21 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 			
 		}
 	}
+		else
+		{
+			this.roleHeader.getWidget().removeStyleName("highlight-role");
+		}
+	}
 
 	@Override
 	public void onRoleSelectedEventReceived(RoleSelectedEvent event) {
 		
 		Log.info("onRoleSelectedEventReceived");
-		if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId()!=roleProxy.getId())
+		if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId()!=roleProxy.getId() ) //&& (event.getOsceDayProxy().getId() != this.getOsceDayProxy().getId()))
+		{
+			this.roleHeader.getWidget().removeStyleName("highlight-role");
+		}
+		else if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId()==roleProxy.getId()  && (event.getOsceDayProxy().getId() != this.getOsceDayProxy().getId()))
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
 		}
