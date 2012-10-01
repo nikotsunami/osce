@@ -9929,7 +9929,7 @@ INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert4', 'alter Wert4', '543210', 0);
 INSERT INTO `log_entry` (logtime, new_value, old_value, shib_id, version) VALUES (NOW(), 'neuer Wert5', 'alter Wert5', '012345', 0);
 
-INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`max_number_students`,`middle_break`,`name`,`number_courses`,`number_posts`,`number_rooms`,`osce_status`,`post_length`,`short_break`,`short_break_simpat_change`,`study_year`,`version`,`copied_osce`,`semester`,`osce_security_types`,`patient_average_per_post`,`security`) VALUES (1,15,0,1,45,130,5,'Test 1',0,NULL,16,2,13,1,3,3,0,NULL,1,1,NULL,1);
+INSERT INTO `osce` (`id`,`long_break`,`is_repe_osce`,`is_valid`,`lunch_break`,`max_number_students`,`middle_break`,`name`,`number_courses`,`number_rooms`,`osce_status`,`post_length`,`short_break`,`short_break_simpat_change`,`study_year`,`version`,`copied_osce`,`semester`,`osce_security_types`,`patient_average_per_post`,`security`, `sp_stay_in_post` ) VALUES (1,15,0,1,45,130,5,'Test 1',0,16,2,13,1,3,3,0,NULL,1,1,NULL,1, 0);
 
 INSERT INTO `osce_day` (`id`,`time_end`,`time_start`,`version`,`osce`,`osce_date`) VALUES (1,'2012-06-18 19:00:00','2012-06-18 09:00:00',0,1,'2012-06-18 00:00:00');
 
