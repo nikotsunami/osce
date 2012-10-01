@@ -57,6 +57,7 @@ import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.RoleTypes;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
@@ -157,6 +158,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	private RoleSubViewImpl roleSubViewSelected;
 	private boolean isPatientInSemesterProxiesAvail;
 
+	private boolean isAutogenratedButtonEnabled=false;
 	// Module 3 }
 
 	//ServerPush event {
@@ -228,8 +230,35 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				init();
 			}
 		});
+		
 	}
 
+	public void setAutoAssignmentBtnProperty(){
+		
+		isAutogenratedButtonEnabled = false;
+		requests.semesterRequest().findSemester(semesterProxy.getId())
+				.with("osces").fire(new OSCEReceiver<SemesterProxy>() {
+
+					@Override
+					public void onSuccess(SemesterProxy response) {
+
+						Set<OsceProxy> setOsceProxy = response.getOsces();
+
+						for (Iterator iterator = setOsceProxy.iterator(); iterator
+								.hasNext();) {
+							OsceProxy osceProxy = (OsceProxy) iterator.next();
+							if (osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED) {
+								isAutogenratedButtonEnabled = true;
+								break;
+							}
+
+						}
+
+						view.autoAssignmentBtn
+								.setEnabled(isAutogenratedButtonEnabled);
+					}
+				});
+	}
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
 	}
@@ -1044,9 +1073,8 @@ public void checkFitCriteria(RoleSubView view)
 		if(listAdvanceSearchCirteria.size()!=0)
 		Log.info("Advance Search : " + listAdvanceSearchCirteria.get(0).getId());
 		
-		requests.patientInSemesterRequestNonRoo().findPatientInSemesterByAdvancedCriteria(semesterProxy.getId(),listAdvanceSearchCirteria).with("standardizedPatient", "semester", "trainings",
-				"osceDays.osce",
-				"patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+		requests.patientInSemesterRequestNonRoo().findPatientInSemesterByAdvancedCriteria(semesterProxy.getId(),listAdvanceSearchCirteria).with("standardizedPatient", "semester", "trainings","osceDays",
+				"osceDays.osce","patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 
 			@Override
 			public void onSuccess(List<PatientInSemesterProxy> response) {
@@ -1318,8 +1346,11 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	private void init() {
 
 		this.showApplicationLoading(true);
-		initPatientInSemester(true,false);	
-                  initOsceDaySubView();	
+
+		initPatientInSemester(true, false);
+		initOsceDaySubView();
+		setAutoAssignmentBtnProperty();
+
 		this.showApplicationLoading(false);
 		
 	}
@@ -1333,7 +1364,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		// module 3 bug }
 	if (isFirstData) {
 		showApplicationLoading(true);
-			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId()).with("standardizedPatient", "semester", "trainings", "osceDays.osce", "patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId()).with("standardizedPatient", "semester", "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 					@Override
 				public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
@@ -1926,7 +1957,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 			requests.patientInSemesterRequestNonRoo()
 					.findPatientInSemesterByOsceDayAdvancedCriteria(
 							semesterProxy.getId(),selectedRolsOsceDayProxy.getId(),isCriteriaAvailable, searchCriteria)
-					.with("standardizedPatient", "semester", "trainings",
+					.with("standardizedPatient", "semester", "trainings","osceDays",
 							"osceDays.osce",
 							"patientInRole.oscePost.standardizedRole")
 					.fire(callback);
@@ -2124,13 +2155,14 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 	
 	// Module 3 d {
 	
-		public void patientInSemesterSelected(PatientInSemesterProxy patientInSemesterProxy,Set<OsceDayProxy> setOsceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl)
+		public void patientInSemesterSelected(PatientInSemesterProxy patientInSemesterProxy,final Set<OsceDayProxy> setOsceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl)
 		{
 			
 			// module 3 bug {
 			osceDayTimer.cancel();
 			// module 3 bug }
 
+			osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
 			 /*
 				Registration of RoleFulfill Criteria Event
 				
@@ -2176,20 +2208,20 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 							//listStandardizedRole.addAll(response);
 							Log.info("@Succssfully Arrived Standardizes Patient List   "+response.size());
 							
-							for(StandardizedRoleProxy  role: listStandardizedRole){
+							/*for(StandardizedRoleProxy  role: response){
 								Log.info("Role is " + role.getShortName());
-							}	
+							}*/	
 								/*Event Fire Code */
 								
-								requests.getEventBus().fireEvent(new RoleFulfilCriteriaEvent(oDProxy,response));
+								requests.getEventBus().fireEvent(new RoleFulfilCriteriaEvent(setOsceDayProxy,oDProxy,response));
 						}
 					});
 					
 				}
-				else{
+				/*else{
 
 						osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
-				 }
+				 }*/
 		}
 				
 			// module 3 bug {

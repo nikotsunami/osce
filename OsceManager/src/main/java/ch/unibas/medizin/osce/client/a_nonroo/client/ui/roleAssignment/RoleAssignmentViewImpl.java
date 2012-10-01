@@ -83,7 +83,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField
 	Button surveyImpBtn;
 	@UiField
-	Button autoAssignmentBtn;
+	public Button autoAssignmentBtn;
 	@UiField
 	Button addManuallyBtn;
 

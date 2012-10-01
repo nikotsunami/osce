@@ -23,7 +23,16 @@ public class RoleFulfilCriteriaEvent extends
 
 	private PatientInSemesterProxy patientInSemesterProxy;
 	
+	private Set<OsceDayProxy> listOsceDayProxy;	
 	
+	public Set<OsceDayProxy> getListOsceDayProxy() {
+		return listOsceDayProxy;
+	}
+
+	public void setListOsceDayProxy(Set<OsceDayProxy> listOsceDayProxy) {
+		this.listOsceDayProxy = listOsceDayProxy;
+	}
+
 	//Modlue 3:Assignment D[
 	private OsceDayProxy osceDayProxy;
 	
@@ -79,6 +88,16 @@ public class RoleFulfilCriteriaEvent extends
 		
 		this.osceDayProxy=osceDayProxy;
 		this.standardizedroleProxies=standardizedRoleProxy;
+	}
+
+	public RoleFulfilCriteriaEvent(
+			Set<OsceDayProxy> listOsceDayProxy,
+			OsceDayProxy osceDayProxy,
+			List<StandardizedRoleProxy> standardizedRoleProxy) {
+		
+		this.osceDayProxy=osceDayProxy;
+		this.standardizedroleProxies=standardizedRoleProxy;
+		this.listOsceDayProxy = listOsceDayProxy;
 	}
 
 	public RoleFulfilCriteriaEvent() {

@@ -1889,22 +1889,22 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		}
 
 		@Override
-		public void saveOsceData(OsceProxy osceProxy) {
+		public void saveOsceData(OsceProxy osceProxyToSaveOsce) {
 			Log.info("Call saveOsceData");
 			
-			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();
+			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();			
 			OsceRequest osceReq = requests.osceRequest();
-			osceProxy = osceReq.edit(osceProxy);
+			osceProxyToSaveOsce = osceReq.edit(osceProxyToSaveOsce);
 			
-			osceProxy.setShortBreak(circuitOsceSubViewImp.shortBreakTextBox.getValue());
-			osceProxy.setLongBreak(circuitOsceSubViewImp.longBreakTextBox.getValue());
-			osceProxy.setLunchBreak(circuitOsceSubViewImp.launchBreakTextBox.getValue());
-			osceProxy.setMaxNumberStudents(circuitOsceSubViewImp.maxStudentTextBox.getValue());
-			osceProxy.setNumberCourses(circuitOsceSubViewImp.maxParcourTextBox.getValue());
-			osceProxy.setNumberRooms(circuitOsceSubViewImp.maxRoomsTextBox.getValue());
+			osceProxyToSaveOsce.setShortBreak(circuitOsceSubViewImp.shortBreakTextBox.getValue());
+			osceProxyToSaveOsce.setLongBreak(circuitOsceSubViewImp.longBreakTextBox.getValue());
+			osceProxyToSaveOsce.setLunchBreak(circuitOsceSubViewImp.launchBreakTextBox.getValue());
+			osceProxyToSaveOsce.setMaxNumberStudents(circuitOsceSubViewImp.maxStudentTextBox.getValue());
+			osceProxyToSaveOsce.setNumberCourses(circuitOsceSubViewImp.maxParcourTextBox.getValue());
+			osceProxyToSaveOsce.setNumberRooms(circuitOsceSubViewImp.maxRoomsTextBox.getValue());
 			// Module 5 bug Report Change
-			osceProxy.setMiddleBreak(circuitOsceSubViewImp.middleBreakTextBox.getValue());
-			osceProxy.setShortBreakSimpatChange(circuitOsceSubViewImp.shortBreakSimpatTextBox.getValue());
+			osceProxyToSaveOsce.setMiddleBreak(circuitOsceSubViewImp.middleBreakTextBox.getValue());
+			osceProxyToSaveOsce.setShortBreakSimpatChange(circuitOsceSubViewImp.shortBreakSimpatTextBox.getValue());
 			// E Module 5 bug Report Change
 			// Highlight onViolation
 			Log.info("Map Size: " + circuitOsceSubViewImp.osceMap.size());
@@ -1916,7 +1916,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			return;*/
 			try
 			{
-				OsceProxyVerifier.verifyOsce(osceProxy);	
+				Log.info("Verify");
+				OsceProxyVerifier.verifyOsce(osceProxyToSaveOsce);	
 			}
 			catch(Exception e)
 			{
@@ -1926,13 +1927,20 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				return;
 			}
 			
-			
-			osceReq.persist().using(osceProxy).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
+			final OsceProxy tempOsceProxy=osceProxyToSaveOsce;
+			osceReq.persist().using(osceProxyToSaveOsce).fire(new OSCEReceiver<Void>(circuitOsceSubViewImp.osceMap) {
 			// E Highlight onViolation
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("Osce Value Updated");
 					successValue=true;
+					Log.info("Flag True.");
+					
+					Log.info("Old Osce Proxy Id: " + osceProxy.getLunchBreak());
+					Log.info("After Update Osce Proxy Id: " + tempOsceProxy.getLunchBreak());
+					osceProxy=tempOsceProxy;				
+					Log.info("Old Osce Proxy Id: " + osceProxy.getLunchBreak());
+					
 					final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.success());
 					valueUpdateDialogBox.showConfirmationDialog(constants.updateOsce());
 					valueUpdateDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
@@ -1950,19 +1958,22 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						public void onClick(ClickEvent event) {
 							valueUpdateDialogBox.hide();
 							
+							
 						}
 					});
 					//Window.alert("Osce Data Updated sucessfully");
-					
 				}
 				
+			/*	if(successValue==true)
+				{
+					Log.info("Old Osce Proxy Id: " + osceProxy.getLunchBreak());
+					osceProxy=osceProxyToSaveOsce;				
+					Log.info("After Update Osce Proxy Id: " + osceProxyToSaveOsce.getLunchBreak());
+				}*/
 			
 			});
 			
-			if(successValue==true)
-			{
-				this.osceProxy=osceProxy;
-			}
+			
 		}
 		@Override
 		public void clearAll(OsceProxy proxy) {
@@ -3748,8 +3759,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					circuitOsceSubViewImpl.fixedBtn.setText(constants.fixedButtonString());
 					circuitOsceSubViewImpl.setClosedBtnStyle(false);*/
 					
-					
-					
+							
 					if(osceProxy.getOsce_days().size()<=0)
 					{
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
@@ -3760,7 +3770,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					Log.info("Genrated Button Clicked Event at Circuit Details Activity");
 					Log.info("OSceProxy is :" + osceProxy.getId());
-					
+					Log.info("Osce Value: Course: " + osceProxy.getNumberCourses());
+					Log.info("Osce Value: Lunch Break: " + osceProxy.getLunchBreak());
 					try
 					{
 						OsceProxyVerifier.verifyOsce(osceProxy);

@@ -147,7 +147,7 @@ public class OsceDay {
 
 		Log.info("In dise findRoleForSPInSemester to Retrieve Data in OsceDay.java");
 		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
-		Log.info("OsceDay is " + osceDay.getId());
+//		Log.info("OsceDay is " + osceDay.getId());
 		Semester semester;
 		StandardizedPatient standardizedPatient;
 		PatientInSemester patientInSemester;
@@ -157,18 +157,16 @@ public class OsceDay {
 
 		patientInSemester = PatientInSemester.findPatientInSemester(patientInSemesterId);
 		standardizedPatient=patientInSemester.getStandardizedPatient();
-		Log.info("Standardized Patient is :" + standardizedPatient.getId());
+//		Log.info("Standardized Patient is :" + standardizedPatient.getId());
 		semester=patientInSemester.getSemester();
 
-		Log.info("Semester is :" + semester.getId());
+//		Log.info("Semester is :" + semester.getId());
 
 		List<PatientInSemester> listOfPatientInSemester = new ArrayList<PatientInSemester>();
 		List<StandardizedRole> listStandardizedRole = new ArrayList<StandardizedRole>();
-
-
-
 		List<OsceSequence> setOsceSequence = osceDay.getOsceSequences();
 
+		try{
 		if(setOsceSequence != null || setOsceSequence.size() > 0){
 
 
@@ -181,16 +179,16 @@ public class OsceDay {
 
 				List<OscePost> listOscePost = osceSequence.getOscePosts();
 
-				if(listOscePost != null || listOscePost.size() > 0){
+				if(listOscePost != null && listOscePost.size() > 0){
 
 					Iterator<OscePost> itOscePost = listOscePost.iterator();
 
 					while(itOscePost.hasNext()){
 						oscePost= itOscePost.next();
-						Log.info("Osce Post is : " + oscePost.getId());
+//						Log.info("Osce Post is : " + oscePost.getId());
 
 						standardizedRole=oscePost.getStandardizedRole();
-						Log.info("Satandardized Role is :" +standardizedRole.getId());
+//						Log.info("Satandardized Role is :" +standardizedRole.getId());
 
 						if(standardizedRole != null){
 
@@ -237,6 +235,9 @@ public class OsceDay {
 					}
 				}
 			}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 
 		Log.info("listStandardizedRole Size is :" +listStandardizedRole.size());

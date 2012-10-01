@@ -682,6 +682,11 @@ public class StandardizedPatient {
 		
 		select.distinct(true);
 		
+		if (order == Sorting.ASC)
+			select.orderBy(criteriaBuilder.asc(from.get(sortColumn)));
+		else if (order == Sorting.DESC)
+			select.orderBy(criteriaBuilder.desc(from.get(sortColumn)));
+		
     	if ((!searchWord.equals("")) && searchThrough.size() != 0 && sortColumn != "" && order != null)
     	{
     		if (searchWord == "")
@@ -749,10 +754,10 @@ public class StandardizedPatient {
     		
     		
     		
-    		if (order == Sorting.ASC)
+    		/*if (order == Sorting.ASC)
     			select.orderBy(criteriaBuilder.asc(from.get(sortColumn)));
     		else if (order == Sorting.DESC)
-    			select.orderBy(criteriaBuilder.desc(from.get(sortColumn)));
+    			select.orderBy(criteriaBuilder.desc(from.get(sortColumn)));*/
     	
     	}
     	
@@ -1039,12 +1044,14 @@ public class StandardizedPatient {
         	}
         	else if (searchCriteria.size() == 0)
         	{
+        		
         		if(simplePredicate != null)
         			criteriaQuery.where(simplePredicate);
         	}
         	//Advance Search
         	else
         	{
+        		
         		if (simplePredicate != null)
         			criteriaQuery.where(simplePredicate);
         	}
