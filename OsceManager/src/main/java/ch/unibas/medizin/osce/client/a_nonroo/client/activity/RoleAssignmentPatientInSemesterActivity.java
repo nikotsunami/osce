@@ -9,6 +9,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterServiceAsync;
+//import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaConstant;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
@@ -227,6 +228,15 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				Log.info("onSelectionChange Get Semester: "
 						+ event.getSemesterProxy().getCalYear());
 				semesterProxy = event.getSemesterProxy();
+				if(osceDayTimer!=null){
+					osceDayTimer.cancel();					
+					//initOsceDayTimer();
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);					
+				}
+				/*else{
+					initOsceDayTimer();
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				}*/
 				init();
 			}
 		});
@@ -269,6 +279,8 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	 */
 	public void onStop() {
 		// module 3 bug {
+		Log.info("Stop RoleAssignmentPatiuentInSemesterActivity");
+		Log.info("==================================== Timer Stop ==========================================");
 		osceDayTimer.cancel();
 		osceDayTimer=null;
 		// module 3 bug }
@@ -301,7 +313,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		
 	}
 	public void initOsceDayTimer(){
-		
+		Log.info("==================================== Timer Start ==========================================");
 		osceDayTimer = new Timer() {
 			
 			@Override
@@ -339,6 +351,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 
 		// module 3 bug {
 		this.showApplicationLoading(true);
+		if(osceDayTimer!=null)
 		osceDayTimer.cancel();
 		
 		// module 3 bug }
@@ -487,6 +500,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		this.showApplicationLoading(false);
 	
 	// module 3 bug {
+	if(osceDayTimer!=null)
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	showApplicationLoading(false);
 	// module 3 bug }
@@ -527,6 +541,7 @@ public void discloserPanelOpened(final OsceDayProxy osceDayProxy,final OsceDaySu
 			refreshOsceSequences(osceDayProxy, osceDaySubViewImpl);
 			
 		}
+		if(osceDayTimer!=null)
 		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		//Module 3:Assignment D]
 		
@@ -536,6 +551,7 @@ public void discloserPanelOpened(final OsceDayProxy osceDayProxy,final OsceDaySu
 public void refreshOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewImpl osceDaySubViewImpl) 
 {
 	// module 3 bug {
+	if(osceDayTimer!=null)
 	 osceDayTimer.cancel();
 	// module 3 bug }
 	
@@ -551,7 +567,7 @@ public void refreshOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewI
 		}
 	});
 	// module 3 bug {
-	
+	if(osceDayTimer!=null)
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			
 	// module 3 bug }
@@ -1042,7 +1058,7 @@ public boolean patientInRoleIsFirstAssigned(OsceSequenceProxy sequenceProxy,fina
 public void roleSelected(RoleSubView roleSubView)
 {
 	// module 3 bug {
-	
+	if(osceDayTimer!=null)
 	osceDayTimer.cancel();
 	
 	// module 3 bug }
@@ -1358,7 +1374,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	private void initPatientInSemester(final boolean isFirstData,final boolean resetTable) {
 		
 		// module 3 bug {
-		
+		if(osceDayTimer!=null)
 		osceDayTimer.cancel();
 		
 		// module 3 bug }
@@ -1392,7 +1408,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		}
 
 		// module 3 bug {
-		
+		if(osceDayTimer!=null)
 		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		
 		// module 3 bug }
