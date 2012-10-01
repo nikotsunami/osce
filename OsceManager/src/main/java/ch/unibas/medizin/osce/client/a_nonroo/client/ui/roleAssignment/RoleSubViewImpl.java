@@ -46,6 +46,10 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		return dragController1;
 	}
 	
+	private long onDragPatientID;
+	
+	private RoleSubViewImpl sourceRoleView;
+	
 	private AbsolutePanel boundaryPanel;
 	
 	public AbsolutePanel getBoundaryPanel() {
@@ -293,9 +297,29 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 			Log.info("Patient Drop Target Widget"+(VerticalPanel)event.getContext().finalDropController.getDropTarget());
 			VerticalPanel patientVp=(VerticalPanel)event.getContext().finalDropController.getDropTarget();
 			
+		
 			Log.info("Patient Drop Target Widget Count"+((VerticalPanel)event.getContext().finalDropController.getDropTarget()).getWidgetCount());
 			PatientInRoleSubViewImpl patientDroped=(PatientInRoleSubViewImpl)event.getSource();
 			RoleSubViewImpl patientDropedIn=(RoleSubViewImpl)((VerticalPanel)((AbsolutePanel)((AbsolutePanel)((VerticalPanel)patientDroped.getParent()).getParent()).getParent()).getParent()).getParent();
+			int count=0;
+			for(int i=0;i<patientDropedIn.getPatientInRoleVP().getWidgetCount();i++)
+			{
+				PatientInRoleSubViewImpl patientView=(PatientInRoleSubViewImpl)((patientDropedIn.getPatientInRoleVP()).getWidget(i));
+				if(patientView.getPatientInRoleProxy().getPatientInSemester().getStandardizedPatient().getId()==onDragPatientID)
+				{
+					count++;
+					
+				}
+				if(count==2)
+				{
+					patientView.removeFromParent();
+					sourceRoleView.getPatientInRoleVP().insert(patientView,sourceRoleView.getPatientInRoleVP().getWidgetCount());
+					
+					return;
+				}
+			}
+			
+			
 			patientDroped.setRoleSubView(patientDropedIn);
 			this.refreshCountLabel();
 			OscePostProxy newPost=patientDropedIn.getPostProxy();
@@ -342,7 +366,11 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	@Override
 	public void onDragStart(DragStartEvent event) {
 		
-		
+		if((PatientInRoleSubViewImpl)event.getSource() instanceof PatientInRoleSubViewImpl)
+		{
+			onDragPatientID=((PatientInRoleSubViewImpl)event.getSource()).getPatientInRoleProxy().getPatientInSemester().getStandardizedPatient().getId();
+			sourceRoleView=(RoleSubViewImpl)((PatientInRoleSubViewImpl)event.getSource()).getRoleSubView();
+		}
 		
 		//Log.info("Parent Widget Count on Start :" +((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getWidgetCount());
 		if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof AbsolutePanel)
