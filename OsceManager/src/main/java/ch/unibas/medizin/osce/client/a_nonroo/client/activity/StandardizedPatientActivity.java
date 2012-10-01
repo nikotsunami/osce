@@ -296,14 +296,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		Set mySet = new HashSet(view.getSortMap().keySet());
 		//Iterator<String> i1=mySet.iterator();
 		Iterator<String> i1=view.getColumnSortSet().iterator();
-		System.out.println("key set is--"+view.getColumnSortSet());
+		/*System.out.println("key set is--"+view.getColumnSortSet());
 		System.out.println("key set is--"+selectedItems);
-		
+		*/
 		while (i1.hasNext()) {
 		
 			
 			String colValue=i1.next();
-			System.out.println("Initlist--"+table.getInitList());
+			/*System.out.println("Initlist--"+table.getInitList());*/
 			if(selectedItems.contains(colValue) || table.getInitList().contains(colValue))
 			{
 				
@@ -419,11 +419,11 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				//celltable changes end
 				
 		 columnName=view.getSortMap();
-		addColumnOnMouseout();
-		customFilter();
+		
 		path = systemStartView.getPaths();
 		
-		
+		addColumnOnMouseout();
+		customFilter();
 		//by spec
 		
 		//by spec
@@ -624,6 +624,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				// TODO Auto-generated method stub
+				//table.getPopup().hide();
 				addColumnOnMouseout();
 				
 			}
