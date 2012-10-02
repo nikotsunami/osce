@@ -385,7 +385,21 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		}
 
 	}
+	
+	private void initLoading(){
+		ApplicationLoadingScreenEvent.initialCounter();
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+//						Log.info("ApplicationLoadingScreenEvent onEventReceived Called");
+						event.display();
+					}
+				});
 
+	}
+	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Log.info("RoleDetailsActivity.start()");
@@ -395,17 +409,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		this.view = roleDetailsView;
 		this.roleDetailActivity = this;
 		
-		//learning
-		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
-				new ApplicationLoadingScreenHandler() {
-			@Override
-			public void onEventReceived(
-					ApplicationLoadingScreenEvent event) {
-				//Log.info("~~~~~~~~ApplicationLoadingScreenEvent onEventReceived Called");
-				event.display();
-				
-			}
-		});
+		initLoading();
 
 		
 		checklistTopicItemView = new RoleDetailsChecklistSubViewChecklistTopicItemViewImpl();
@@ -422,8 +426,9 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		
 		// SPEC START
 		//requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.keywords").fire(new InitializeActivityReceiver());
+		showApplicationLoading(true);
 		requests.find(place.getProxyId()).with("standardizedRoles","standardizedRoles.checkList").fire(new InitializeActivityReceiver());
-		
+		showApplicationLoading(false);
 		// SPEC END
 
 		/*requests.find(place.getProxyId()).with("standardizedRoles")
@@ -839,14 +844,14 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void refreshSelectedTab(final StandardizedRoleDetailsViewImpl view,StandardizedRoleProxy standardizedRoleProxy)
 	{
 		
-		
+		showApplicationLoading(true);
 		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new OSCEReceiver<StandardizedRoleProxy>() {
 
 			@Override
 			public void onSuccess(StandardizedRoleProxy proxy) {
 				// TODO Auto-generated method stub
 				
-			
+				showApplicationLoading(true);
 		
 		
 		int index=roleDetailTabPanel.getSelectedIndex();
@@ -1361,8 +1366,11 @@ final int index2 = index;
 		
 
 	}
+		showApplicationLoading(false);
 			}
 		});
+		
+		showApplicationLoading(false);
 	}
 	
 	// ]Assignment G
@@ -1375,6 +1383,7 @@ final int index2 = index;
 
 		@Override
 		public void onSuccess(Object response) {
+			showApplicationLoading(true);
 			System.out
 					.println("==================================Call onSuccess Method==================================");
 
@@ -1475,6 +1484,8 @@ final int index2 = index;
 
 				init(((RoleTopicProxy) response));
 			}
+			
+			showApplicationLoading(false);
 		}
 	}
 	
@@ -3543,10 +3554,12 @@ final int index2 = index;
 		
 		if(standardizedRoleProxy!=null)
 		{
+			showApplicationLoading(true);
 		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("previousVersion","previousVersion.oscePosts","previousVersion.roleTopic","previousVersion.simpleSearchCriteria","previousVersion.roleParticipants","previousVersion.advancedSearchCriteria","previousVersion.roleTemplate","previousVersion.keywords","previousVersion.previousVersion","previousVersion.checkList","previousVersion.checkList.checkListTopics","previousVersion.checkList.checkListTopics.checkListQuestions","previousVersion.checkList.checkListTopics.checkListQuestions.checkListCriterias","previousVersion.checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new Receiver<StandardizedRoleProxy>() {
 			
 			@Override
 			public void onSuccess(StandardizedRoleProxy response) {
+				showApplicationLoading(true);
 				// TODO Auto-generated method stub
 			 	
 				StandardizedRoleDetailsViewImpl previousRole;	
@@ -3593,9 +3606,11 @@ final int index2 = index;
 					previousRole.previous.setEnabled(false);
 					//Window.alert("No More Record");
 				}
-				
+				showApplicationLoading(false);
 			}
 		});
+		
+		showApplicationLoading(false);
 		}
 	}
 	
@@ -6420,6 +6435,13 @@ final int index2 = index;
 		@Override
 		public void clearAllButtonClicked() {
 			loadLearningObjectiveData();
+		}
+		
+		
+		
+		public void showApplicationLoading(Boolean show) {
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(show));
+
 		}
 	
 }

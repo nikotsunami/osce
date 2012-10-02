@@ -649,7 +649,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 					
 					// SPEC Change
 					
-					if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue())){
+					if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue())){
 						delegate.saveCheckListTopic(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue());					
 						//((CheckListTopicPopupViewImpl)topicPopup).hide(true);				
 						topicPopup.getTopicTxtBox().setValue("");

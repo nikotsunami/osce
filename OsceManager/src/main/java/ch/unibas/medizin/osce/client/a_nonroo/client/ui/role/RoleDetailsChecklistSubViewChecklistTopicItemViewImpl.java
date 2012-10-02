@@ -303,7 +303,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					{	*/
 					
 					// SPEC Change
-					if(Validator.isNotNull(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue())){
+					if(Validator.isNotNull(questionPopup.getTopicTxtBox().getValue())){
 						delegate.saveCheckListQuestion(questionPopup.getTopicTxtBox().getValue(),questionPopup.getDescriptionTxtBox().getValue(),topicView);
 						// E Highlight onViolation
 						//((CheckListTopicPopupViewImpl)questionPopup).hide(true);				
