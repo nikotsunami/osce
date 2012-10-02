@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -77,6 +78,8 @@ public interface RoleSubView extends IsWidget{
 	 public void setBackUpRoleView(RoleSubView backUpRoleView) ;
 	 public HorizontalPanel getRoleParent();
 	 public void setRoleParent(HorizontalPanel parent);
+	 
+	 public VerticalPanelDropController getDropController2();
 	 
 	//modul 3 changes }
 }

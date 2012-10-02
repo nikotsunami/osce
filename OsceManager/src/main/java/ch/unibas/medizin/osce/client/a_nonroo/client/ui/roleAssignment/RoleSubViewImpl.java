@@ -162,6 +162,9 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	VerticalPanelDropController dropController1;
 	VerticalPanelDropController dropController2;
 	
+	public VerticalPanelDropController getDropController2() {
+		return dropController2;
+	}
 	@UiField
 	AbsolutePanel roleAP;
 	

@@ -829,8 +829,9 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 		// module 3 bug {
 		
 		if(isSecurityFederal){
+			roleSubView.getDragController1().unregisterDropController(roleSubView.getDropController2());
 			roleSubView.getbackupLabel().removeFromParent();
-			roleSubView.getBackUpVP().removeFromParent();
+			roleSubView.getBackUpVP().removeFromParent();			
 		}
 		
 		// module 3 bug }

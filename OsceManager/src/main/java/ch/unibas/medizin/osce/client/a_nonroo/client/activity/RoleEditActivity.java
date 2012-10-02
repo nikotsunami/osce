@@ -27,6 +27,10 @@ import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantRequest;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueRequest;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -38,6 +42,7 @@ import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import ch.unibas.medizin.osce.domain.RoleParticipant;
+import ch.unibas.medizin.osce.domain.RoleTableItemValue;
 import ch.unibas.medizin.osce.domain.RoleTemplate;
 import ch.unibas.medizin.osce.domain.SimpleSearchCriteria;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -196,7 +201,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("edit");
 			//spec start
 			Log.info("Proxy ID : " + place.getProxyId());
-			requests.find(place.getProxyId()).with("oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
+			requests.find(place.getProxyId()).with("roleSubItemValue","roleTableItemValue","oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -881,6 +886,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 						
 						
 						//create Role template
+						
 					/*	RoleTemplateRequest roleTemplateRequest=requests.roleTemplateRequest();
 						RoleTemplateProxy roleTemplateProxy=roleTemplateRequest.create(RoleTemplateProxy.class);
 						roleTemplateProxy.setDate_cretaed(standardizedRole.getRoleTemplate().getDate_cretaed());
@@ -938,6 +944,45 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												simpleSearchCriteriaProxy.setValue(oldSimpleSearchProxy.getValue());
 												
 												simpleSearchCriteriaRequest.persist().using(simpleSearchCriteriaProxy).fire();
+												
+												
+											}
+											
+											//create role table item value
+											Iterator<RoleTableItemValueProxy> roleTableItemValueIterator=standardizedRole.getRoleTableItemValue().iterator();
+											while(roleTableItemValueIterator.hasNext())
+											{
+												RoleTableItemValueProxy oldRoleTableItemValueProxy=roleTableItemValueIterator.next();
+												RoleTableItemValueRequest roleTableItemValueRequest=requests.roleTableItemValueRequest();
+												
+												RoleTableItemValueProxy roleTableItemValueProxy=roleTableItemValueRequest.create(RoleTableItemValueProxy.class);
+												
+												roleTableItemValueProxy.setRoleTableItem(oldRoleTableItemValueProxy.getRoleTableItem());
+												roleTableItemValueProxy.setStandardizedRole(proxy);
+												roleTableItemValueProxy.setValue(oldRoleTableItemValueProxy.getValue());
+												
+												
+												roleTableItemValueRequest.persist().using(roleTableItemValueProxy).fire();
+												
+												
+											}
+											
+											//create role sub item value
+											Iterator<RoleSubItemValueProxy> roleSubItemValueIterator=standardizedRole.getRoleSubItemValue().iterator();
+											while(roleSubItemValueIterator.hasNext())
+											{
+												RoleSubItemValueProxy oldRoleSubItemValueProxy=roleSubItemValueIterator.next();
+												RoleSubItemValueRequest roleSubItemValueRequest=requests.roleSubItemValueRequest();
+												
+												RoleSubItemValueProxy roleSubItemValueProxy=roleSubItemValueRequest.create(RoleSubItemValueProxy.class);
+												
+												roleSubItemValueProxy.setRoleBaseItem(oldRoleSubItemValueProxy.getRoleBaseItem());
+												roleSubItemValueProxy.setStandardizedRole(proxy);
+												roleSubItemValueProxy.setItemText(oldRoleSubItemValueProxy.getItemText());
+												
+												
+												
+												roleSubItemValueRequest.persist().using(roleSubItemValueProxy).fire();
 												
 												
 											}

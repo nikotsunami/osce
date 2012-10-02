@@ -63,12 +63,7 @@ public class StandardizedRole {
 	 * @ManyToOne private Doctor reviewer;
 	 */
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-	private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
-
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	private StandardizedRole previousVersion;
+	
 
 	@Enumerated
 	private StudyYears studyYear;
@@ -76,7 +71,16 @@ public class StandardizedRole {
 	private Integer mainVersion;
 
 	private Integer subVersion;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<File> files = new HashSet<File>();
+		
+	@OneToOne(cascade = CascadeType.ALL)
+	private StandardizedRole previousVersion;
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Keyword> keywords = new HashSet<Keyword>();
 
@@ -85,21 +89,36 @@ public class StandardizedRole {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
 	private Set<SimpleSearchCriteria> simpleSearchCriteria = new HashSet<SimpleSearchCriteria>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<RoleTableItemValue> roleTableItemValue = new HashSet<RoleTableItemValue>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private CheckList checkList;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
 	private Set<OscePost> oscePosts = new HashSet<OscePost>();
-
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+	private Set<MinorSkill> minorSkills = new HashSet<MinorSkill>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+	private Set<MainSkill> mainSkills = new HashSet<MainSkill>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<UsedMaterial> usedMaterials = new HashSet<UsedMaterial>();
+	
+	
+	
+	
+	
 	@OneToOne
 	private RoleTemplate roleTemplate;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-	private Set<RoleTableItemValue> roleTableItemValue = new HashSet<RoleTableItemValue>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
-	private Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
 	   
 	   
 	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId) {
