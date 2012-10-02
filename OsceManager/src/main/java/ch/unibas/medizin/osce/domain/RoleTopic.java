@@ -423,7 +423,7 @@ public static java.util.List<RoleTopic> findRoleTopicBySpecialisation(Long speci
 
 	Log.info("fetch data from role topic");
 	EntityManager em = entityManager();
-	String queryString="select r from RoleTopic r where r.specialisation="+specialisationId;
+	String queryString="select r from RoleTopic r where r.specialisation="+specialisationId + "order by r.name";
 	TypedQuery<RoleTopic> q = em.createQuery(queryString, RoleTopic.class);
 	java.util.List<RoleTopic> result = q.getResultList();		
 	Log.info("Query String: " + queryString.toString());

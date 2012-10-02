@@ -201,7 +201,8 @@ AccordianPanelView.ParcourDelegate
 			
 			// E Module 5 Bug Test Change			
 			
-			requests.specialisationRequest().findAllSpecialisations().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>() 
+			//requests.specialisationRequest().findAllSpecialisations().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+			requests.specialisationRequestNonRoo().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
 					{
 
 						public void onSuccess(List<SpecialisationProxy> response) 
@@ -2255,33 +2256,31 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												}
 												// E Module 5 bug Report Change
 												
-												final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+												Log.info("Save OscePost Bluprint");
+												
+												/*final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 												dialogBox.showConfirmationDialog(constants.saveOsceBlueprint());
 												
 												// Module 5 bug Report Change
-												/*dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-													
+												dialogBox.getYesBtn().addClickHandler(new ClickHandler() 
+												{
 													@Override
-													public void onClick(ClickEvent event) {
+													public void onClick(ClickEvent event) 
+													{
 														dialogBox.hide();
-													
-														
-														
 													}
 												});
-												*/
+											
 												 // E Module 5 bug Report Change
 												
-													dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-													
+												dialogBox.getNoBtnl().addClickHandler(new ClickHandler() 
+												{
 													@Override
-													public void onClick(ClickEvent event) {
+													public void onClick(ClickEvent event) 
+													{
 														dialogBox.hide();
-														
-													
-														
 													}
-												});
+												});*/
 													
 												//Window.alert("Osce Post Blueprint Saved Successfully.");
 												osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().setValue(null);
@@ -2495,11 +2494,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//oscePostSubViewImpledit.oscePostBlueprintProxy=this.oscePostBlueprintProxy;
 					// E Module 5 bug Report Change
 					
-					requests.specialisationRequest().findAllSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() 
+					requests.specialisationRequestNonRoo().findSpecialisationSortByName().fire(new OSCEReceiver<List<SpecialisationProxy>>() 
 					{
 						public void onSuccess(List<SpecialisationProxy> response) 
-						{				
-							
+						{											
 							//Log.info("oscePostSubViewImpledit: " + oscePostSubViewImpledit.oscePostBlueprintProxy.getId());
 							if(response==null)
 							{
@@ -4210,7 +4208,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// Module 5 changes }
 
 				@Override
-				public void closeButtonClicked(OsceProxy proxy) {
+				public void closeButtonClicked(final OsceProxy proxy) {
 					Log.info("Closed Button Clicked");
 					
 					// Module 5 bug Report Change
@@ -4225,6 +4223,22 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					// Module 5 Bug Test Change
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					// E Module 5 Bug Test Change
+					
+					requests.oscePostRequestNonRoo().findOscePostByOsce(proxy.getId()).fire(new OSCEReceiver<List<OscePostProxy>>() 
+					{
+						@Override
+						public void onSuccess(List<OscePostProxy> response) 
+						{
+							if(response.size()>0)
+							{																	
+								// Module 5 Bug Test Change
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								// E Module 5 Bug Test Change
+								MessageConfirmationDialogBox roleNullWarning=new MessageConfirmationDialogBox(constants.warning());
+								roleNullWarning.showConfirmationDialog(constants.warningStandardizedRoleUnassigned());								
+							}
+							else
+							{
 					
 					requests.oscePostRoomRequestNonRoo().findListOfOscePostRoomByOsce(proxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() 
 					{
@@ -4351,7 +4365,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							}
 						}
 					});
-					
+				}
+				}
+						
+				});
 					
 				}
 				//  OSCE Day Assignment END
@@ -4856,12 +4873,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																	
 																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 																	
-																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).fire(new OSCEReceiver<Boolean>() {
+																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).fire(new OSCEReceiver<List<OscePostProxy>>() {
 
 																		@Override
-																		public void onSuccess(Boolean response) {
+																		public void onSuccess(List<OscePostProxy> response) {
 																				System.out.println("RESPONSE : " + response);
-																				requests.getEventBus().fireEvent(new RoomRefreshEvent("abc"));
+																				requests.getEventBus().fireEvent(new RoomRefreshEvent(response));
 																				
 																			}
 																		});

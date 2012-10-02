@@ -19,18 +19,11 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 
 @SuppressWarnings("deprecation")
-@Service(OscePostRoom.class)
-public interface OscePostRoomRequestNonRoo extends RequestContext 
-{	 
-	abstract Request<OscePostRoomProxy> findOscePostRoomByOscePostAndCourse(CourseProxy course, OscePostProxy oscePost);
+@Service(OscePost.class)
+public interface OscePostRequestNonRoo extends RequestContext 
+{	 		
+	abstract Request<List<OscePostProxy>> findOscePostByOsce(Long osceId);
 	
-	abstract Request<Integer> findOscePostRoomByRoom(Long osceSequenceId, Long roomId);
-	
-	abstract Request<Integer> countOscePostRoomByCriteria(Long osceid);
-	
-	abstract Request<List<OscePostRoomProxy>> findListOfOscePostRoomByOsce(Long osceId);
-	
-	abstract Request<List<OscePostProxy>> insertRoomVertically(Long osceid, CourseProxy course, Long oscePostid, RoomProxy room);
 }
 
 

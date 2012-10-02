@@ -74,6 +74,17 @@ public class Specialisation {
     	return q.getSingleResult();
     }
     
+    public static java.util.List<Specialisation> findSpecialisationSortByName()
+	{
+		Log.info("~~Inside findSpecialisationSortByName Method");
+		EntityManager em = entityManager();				
+		String queryString="select sp from Specialisation as sp order by sp.name";			
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<Specialisation> q = em.createQuery(queryString, Specialisation.class);
+		java.util.List<Specialisation> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);
+		return result;
+	}
  // TestCasePurpose Method End }
     
 }

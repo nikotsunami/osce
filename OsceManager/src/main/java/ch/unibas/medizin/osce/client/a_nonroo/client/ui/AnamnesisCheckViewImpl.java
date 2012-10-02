@@ -249,32 +249,33 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 
 	public void setDetailPanel(boolean isDetailPlace) {
 
+		ResolutionSettings.setSplitLayoutPanelAnimation(splitLayoutPanel);
 		splitLayoutPanel.animate(OsMaConstant.ANIMATION_TIME);
 //		widthSize = 1200;
 //		decreaseSize = 0;
 //		splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		if (isDetailPlace) {
-
-			timer = new Timer() {
-				@Override
-				public void run() {
-					if (decreaseSize <= 705) {
-						splitLayoutPanel.setWidgetSize(westPanel, 1225
-								- decreaseSize);
-						decreaseSize += 5;
-					} else {
-						timer.cancel();
-					}
-				}
-			};
-			timer.schedule(1);
-			timer.scheduleRepeating(1);
-
-		} else {
-			widthSize = OsMaConstant.WIDTH_SIZE;
-			decreaseSize = 0;
-			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
-		}
+//		if (isDetailPlace) {
+//
+//			timer = new Timer() {
+//				@Override
+//				public void run() {
+//					if (decreaseSize <= 705) {
+//						splitLayoutPanel.setWidgetSize(westPanel, 1225
+//								- decreaseSize);
+//						decreaseSize += 5;
+//					} else {
+//						timer.cancel();
+//					}
+//				}
+//			};
+//			timer.schedule(1);
+//			timer.scheduleRepeating(1);
+//
+//		} else {
+//			widthSize = OsMaConstant.WIDTH_SIZE;
+//			decreaseSize = 0;
+//			splitLayoutPanel.setWidgetSize(westPanel, widthSize);
+//		}
 	}
 	
 

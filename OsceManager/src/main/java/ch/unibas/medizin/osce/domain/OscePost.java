@@ -70,5 +70,17 @@ public class OscePost {
 		Log.info("~QUERY Result : " + result);
 		return result;
 	}
+	
+	public static java.util.List<OscePost> findOscePostByOsce(Long osceId)
+	{
+		Log.info("~~Inside findOscePostByOsce Method");
+		EntityManager em = entityManager();				
+		String queryString="select op from OscePost op,OsceSequence os,OsceDay od where os.osceDay=od.id and op.osceSequence=os.id and op.standardizedRole is null and od.osce= "+osceId;			
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<OscePost> q = em.createQuery(queryString, OscePost.class);
+		java.util.List<OscePost> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);
+		return result;
+	}
 	  //E Module 5 Bug Report Solution
 }

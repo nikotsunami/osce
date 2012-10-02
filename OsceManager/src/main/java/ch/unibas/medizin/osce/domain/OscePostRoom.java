@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.domain;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.mapping.Array;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -12,6 +13,8 @@ import ch.unibas.medizin.osce.domain.Room;
 import javax.persistence.ManyToOne;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.Course;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +49,7 @@ public class OscePostRoom {
     @ManyToOne
     private Course course;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "oscePostRoom")
     private Set<Assignment> assignments = new HashSet<Assignment>();
 
     /**
@@ -322,8 +325,9 @@ public class OscePostRoom {
     
   //spec bug sol
     
-    public static Boolean insertRoomVertically(Long osceid, Course course, Long oscePostid, Room room)
+    public static List<OscePost> insertRoomVertically(Long osceid, Course course, Long oscePostid, Room room)
     {
+    	List<OscePost> oscePostList = new ArrayList<OscePost>();
     	try
     	{
     		Osce osce = Osce.findOsce(osceid);
@@ -377,17 +381,19 @@ public class OscePostRoom {
         				
         				opr.persist();
         				
+        				oscePostList.add(opr.getOscePost());
+        				
         				System.out.println("OSCE POST ROOM ID : " + opr.getId());
         			}
         		}
         	}
         	
-        	return true;
+        	return oscePostList;
     	}
     	catch(Exception e)
     	{
     		System.out.println(e.getMessage());
-    		return false;
+    		return oscePostList;
     	}
     	
     }

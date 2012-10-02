@@ -50,22 +50,37 @@
 			<g:VerticalPanel ui:field="dayContentVerticalPanel">
 			<!-- bug solve start -->
 				<g:VerticalPanel ui:field="presentsVerticlePanel">
+				<g:HTMLPanel>
 					<g:Label ui:field="presentsLabel" styleName="{style.spacing10} {style.label}" > </g:Label>
-					<g:HorizontalPanel styleName="{style.spacing10}">
-						<g:Label ui:field="dateLabel" styleName="{style.spacing10}"></g:Label>
-						<d:DateBox ui:field="dateTextBox" styleName="{style.margin60}"></d:DateBox>
-					</g:HorizontalPanel>
-				
-					<g:HorizontalPanel styleName="{style.spacing10}">
-						<g:Label ui:field="startTimeLable" styleName="{style.spacing10}"></g:Label>
-						<g:TextBox ui:field="startTimeTextBox" styleName="{style.margin30}"></g:TextBox>
-					</g:HorizontalPanel>
-				
-					<g:HorizontalPanel styleName="{style.spacing10}">
-						<g:Label ui:field="endTimeLable" styleName="{style.spacing10}"/>
-						<g:TextBox ui:field="endTimeTextBox"></g:TextBox>
-					</g:HorizontalPanel>
+					<table>
+					<!-- <g:HorizontalPanel styleName="{style.spacing10}"> -->
+					<tr>
+						<!-- <td><g:Label ui:field="dateLabel" styleName="{style.spacing10}"></g:Label></td>
+						<td><d:DateBox ui:field="dateTextBox" styleName="{style.margin60}"></d:DateBox></td> -->
+						
+						 <td><g:Label ui:field="dateLabel" ></g:Label></td>
+						<td><d:DateBox ui:field="dateTextBox" ></d:DateBox></td> 
+					<!-- </g:HorizontalPanel> -->
+				</tr>
+				<tr>
+					<!-- <g:HorizontalPanel styleName="{style.spacing10}"> -->
+						<!-- <td><g:Label ui:field="startTimeLable" styleName="{style.spacing10}"></g:Label></td>
+						<td><g:TextBox ui:field="startTimeTextBox" styleName="{style.margin30}"></g:TextBox></td> -->
+						<td><g:Label ui:field="startTimeLable" ></g:Label></td>
+						<td><g:TextBox ui:field="startTimeTextBox" ></g:TextBox></td>
+					<!-- </g:HorizontalPanel> -->
+				</tr>
+					<!-- <g:HorizontalPanel styleName="{style.spacing10}"> -->
+					<tr>
+						<!-- <td><g:Label ui:field="endTimeLable" styleName="{style.spacing10}"/></td>
+						<td><g:TextBox ui:field="endTimeTextBox"></g:TextBox></td> -->
+						<td><g:Label ui:field="endTimeLable" /></td>
+						<td><g:TextBox ui:field="endTimeTextBox"></g:TextBox></td>
+					<!-- </g:HorizontalPanel> -->
+					</tr>
+					</table>
 				<!-- bug solve end -->
+				</g:HTMLPanel>
 				</g:VerticalPanel>
 				<g:VerticalPanel ui:field="calculationVPanel">
 				<!-- bug solve start -->

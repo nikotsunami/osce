@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoomRefreshEvent;
@@ -358,7 +359,10 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView, R
 
 		@Override
 		public void onRoomChanged(RoomRefreshEvent event) {
-			delegate.refreshRoomValue(this, oscePostProxy, courseProxy);
+			List<OscePostProxy> oscePostList = event.getOscePostList();
+			
+			if (oscePostList.contains(oscePostProxy))
+				delegate.refreshRoomValue(this, oscePostProxy, courseProxy);
 		}
 		
 		// 5C: SPEC END

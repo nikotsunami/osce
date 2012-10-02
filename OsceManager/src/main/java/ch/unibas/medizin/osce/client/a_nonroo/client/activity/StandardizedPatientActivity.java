@@ -341,32 +341,32 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 					if (tempColumnHeader == constants.name()) {
 						
-						return renderer.render(object.getName());
+						return renderer.render(object.getName()!=null?object.getName():"");
 					} else if (tempColumnHeader == constants.preName()) {
 						
-						return renderer.render(object.getPreName());
+						return renderer.render(object.getPreName()!=null?object.getPreName():"");
 					} else if (tempColumnHeader == constants.email()) {
 						
-						return renderer.render(object.getEmail().toString());
+						return renderer.render(object.getEmail()!=null?object.getEmail():"");
 					} else if (tempColumnHeader == constants.street()) {
 						
-						return renderer.render(object.getStreet().toString());
+						return renderer.render(object.getStreet()!=null?object.getStreet():"");
 					} else if (tempColumnHeader == constants.city()) {
 						
-						return renderer.render(object.getCity());
+						return renderer.render(object.getCity()!=null?object.getCity():"");
 						
 					} else if (tempColumnHeader == constants.telephone()) {
 						
-						return renderer.render(object.getTelephone());
+						return renderer.render(object.getTelephone()!=null?object.getTelephone():"");
 
 					} else if (tempColumnHeader == constants.height()) {
 						
-						return renderer.render(object.getHeight().toString());
+						return renderer.render(object.getHeight()!=null?object.getHeight().toString():"");
 
 					}
 					else if (tempColumnHeader == constants.weight()) {
 						
-						return renderer.render(object.getWeight().toString());
+						return renderer.render(object.getWeight()!=null?object.getWeight().toString():"");
 
 					}
 
@@ -624,7 +624,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				// TODO Auto-generated method stub
-				//table.getPopup().hide();
+				table.getPopup().hide();
 				addColumnOnMouseout();
 				
 			}

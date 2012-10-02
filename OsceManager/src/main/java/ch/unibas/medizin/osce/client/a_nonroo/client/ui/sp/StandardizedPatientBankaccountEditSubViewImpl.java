@@ -145,6 +145,7 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	@Override
 	public Map getBankAccountMap() {
 		// TODO Auto-generated method stub
-		return null;
+		//return null;
+		return bankAccountMap;
 	}
 }

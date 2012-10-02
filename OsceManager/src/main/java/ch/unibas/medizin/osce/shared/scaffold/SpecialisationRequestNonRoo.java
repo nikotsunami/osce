@@ -20,4 +20,6 @@ public interface SpecialisationRequestNonRoo extends RequestContext {
 	abstract Request<Long> countSpecializations(String name);
 	
 	abstract Request<List<SpecialisationProxy>> findAllSpecialisation(String sortname,Sorting sortorder,String name, int firstResult, int maxResults);
+	
+	abstract Request<List<SpecialisationProxy>> findSpecialisationSortByName();
 }
