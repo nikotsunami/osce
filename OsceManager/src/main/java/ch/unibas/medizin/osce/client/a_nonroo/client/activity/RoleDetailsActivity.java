@@ -1845,6 +1845,7 @@ final int index2 = index;
 	@Override
 	public void createRole() {
 		System.out.println("Call createRole() of RoleDetailActivity");
+		RoleEditActivity.setSelectedTab(roleDetailTabPanel.getSelectedIndex());
 		goTo(new RoleDetailsPlace(this.roleTopicProxy.stableId() ,Operation.CREATE));
 	}
 	

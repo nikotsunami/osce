@@ -315,7 +315,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			standardizedRole = request.create(StandardizedRoleProxy.class);
 			checkListProxy=request.create(CheckListProxy.class);//spec
 			standardizedRole.setCheckList(checkListProxy);//spec
-			standardizedRole.setSubVersion(1);
+			standardizedRole.setSubVersion(0);
 			standardizedRole.setMainVersion(1);
 			standardizedRole.setActive(true);
 			checkListProxy.setVersion(0);//spec
@@ -819,6 +819,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 													option.setName(oldOption.getName());
 													option.setOptionName(oldOption.getOptionName());
 													option.setValue(oldOption.getValue());
+													option.setSequenceNumber(oldOption.getSequenceNumber());
+													
 													
 													optionRequest.persist().using(option).fire(new OSCEReceiver<Void>() {
 
@@ -830,7 +832,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 														}
 													});
 													
-												
+												}
 													
 													
 													final Iterator<ChecklistCriteriaProxy> criteriaIterator=oldQuestion.getCheckListCriterias().iterator();
@@ -848,10 +850,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 														
 														criteria.setChecklistQuestion(question1);
 														criteria.setCriteria(oldCriteria.getCriteria());
+														criteria.setSequenceNumber(oldCriteria.getSequenceNumber());
 														
 														
-														
-														optionRequest.persist().using(option).fire(new OSCEReceiver<Void>() {
+														criteriaRequest.persist().using(criteria).fire(new OSCEReceiver<Void>() {
 
 															@Override
 															public void onSuccess(
@@ -861,7 +863,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 														});
 													
 													}
-												}
+												
 												
 											}
 										});
