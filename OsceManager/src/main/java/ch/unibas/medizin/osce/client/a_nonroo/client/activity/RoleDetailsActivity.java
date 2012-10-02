@@ -2163,7 +2163,7 @@ final int index2 = index;
 					 rolesuggestOracle.clear();
 					 popupView.getView().roleLstBox.setSuggestOracle(rolesuggestOracle);
 					 
-					 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)popupView.getView().topicLstBox.getSuggestOracle();
+					 DefaultSuggestOracle<Object> topicsuggestOracle=(DefaultSuggestOracle<Object>)popupView.getView().topicLstBox.getSuggestOracle();
 					 topicsuggestOracle.clear();
 					 popupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
 					 /*popupView.getView().getSpecializationLstBox().setRenderer(new AbstractRenderer<SpecialisationProxy>() {
@@ -2218,7 +2218,7 @@ final int index2 = index;
 			 
 			
 			 
-			 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)popupView.getView().topicLstBox.getSuggestOracle();
+			 DefaultSuggestOracle<Object> topicsuggestOracle=(DefaultSuggestOracle<Object>)popupView.getView().topicLstBox.getSuggestOracle();
 			 topicsuggestOracle.clear();
 			 popupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
 			 popupView.getView().topicLstBox.setText("");
@@ -2281,7 +2281,7 @@ final int index2 = index;
 					 importPopupview.roleLstBox.setText("");
 					
 					 
-					 DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)importPopupview.getView().topicLstBox.getSuggestOracle();
+					 DefaultSuggestOracle<Object> topicsuggestOracle=(DefaultSuggestOracle<Object>)importPopupview.getView().topicLstBox.getSuggestOracle();
 					 topicsuggestOracle.clear();
 					 importPopupview.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);
 					 importPopupview.topicLstBox.setText("");
@@ -2305,10 +2305,25 @@ final int index2 = index;
 					
 					if(response!=null)
 					{
-					 DefaultSuggestOracle<ChecklistTopicProxy> suggestOracle1 = (DefaultSuggestOracle<ChecklistTopicProxy>) importPopupView.getView().topicLstBox.getSuggestOracle();
-					 suggestOracle1.setPossiblilities(response.getCheckListTopics());
+					 DefaultSuggestOracle<Object> suggestOracle1 = (DefaultSuggestOracle<Object>) importPopupView.getView().topicLstBox.getSuggestOracle();
+					 
+					
+					 List<Object> possiblities=new ArrayList<Object>();
+					 if(response.getCheckListTopics().size()>0 && !importPopupView.queListBox.isVisible())
+						 possiblities.add("All");
+					 
+					 possiblities.addAll(response.getCheckListTopics());
+					 
+					 suggestOracle1.setPossiblilities(possiblities);
+					 
+					 
+							 
 					 importPopupView.getView().topicLstBox.setSuggestOracle(suggestOracle1);
-					Log.info("before value set 1");
+					 if(response.getCheckListTopics().size()>0 && !importPopupView.queListBox.isVisible())
+						 importPopupView.getView().topicLstBox.getTextField().setText("All");
+					 else
+						 importPopupView.getView().topicLstBox.getTextField().setText("");
+					 Log.info("before value set 1");
 					//importPopupView.getView().topicLstBox.setRenderer(new ChecklistTopicProxyRenderer());
 					/*importPopupView.getView().topicLstBox.setRenderer(new AbstractRenderer<ChecklistTopicProxy>() {
 
@@ -2328,7 +2343,7 @@ final int index2 = index;
 					/* DefaultSuggestOracle<ChecklistTopicProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistTopicProxy>)importPopupView.getView().topicLstBox.getSuggestOracle();
 					// topicsuggestOracle.clear();
 					 importPopupView.getView().topicLstBox.setSuggestOracle(topicsuggestOracle);*/
-					 importPopupView.topicLstBox.setText("");
+				//	 importPopupView.topicLstBox.setText("");
 
 					}
 					//importPopupView.getView().topicLstBox.setRenderer(new CheckListProxyRenderer());
@@ -2344,6 +2359,9 @@ final int index2 = index;
 		{
 			Log.info("topicListBox Selected");
 		//	Log.info("topic Id "+proxy.getId());
+			
+		
+			
 			if(proxy==null)
 				return;
 			requests.checklistTopicRequest().findChecklistTopic(proxy.getId()).with("checkListQuestions").with("checkListQuestions.checkListCriterias").with("checkListQuestions.checkListOptions").fire(new Receiver<ChecklistTopicProxy>() {
@@ -2380,31 +2398,31 @@ final int index2 = index;
 			});
 		}
 		
-		
-		public void importTopic(final ChecklistTopicProxy proxy,final ImportTopicPopupViewImpl viewTopicPopup)
+		public void importAllTopic(final ImportTopicPopupViewImpl viewTopicPopup)
 		{
-			
-			Log.info("importTopic");
-			// Highlight onViolation			
-			/*if(proxy==null)
-			{
-				Log.info("Proxy is Null");
-				proxy.setTitle(null);
-				proxy.setDescription(null);
-			}*/
-			// E Highlight onViolation
-			
-			//ScrolledTab Changes start
-			//final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
 			final int selectedTab=view.getRoleDetailTabPanel().getSelectedIndex();
 			//ScrolledTab Changes start
-			CheckListProxy checklsitProxy=standardizedRoleDetailsView[selectedTab].getValue().getCheckList();
+			CheckListProxy checklistProxy=standardizedRoleDetailsView[selectedTab].getValue().getCheckList();
+			DefaultSuggestOracle<Object> suggestOracle = (DefaultSuggestOracle<Object>) viewTopicPopup.getView().topicLstBox.getSuggestOracle();
+			List<Object> topics=suggestOracle.getPossiblilities();
+			
+			for(int i=1;i<topics.size();i++)
+			{
+				ChecklistTopicProxy topicProxy=(ChecklistTopicProxy)topics.get(i);
+				copyTopic(topicProxy,checklistProxy,viewTopicPopup);
+			}
+			
+		}
+		
+		private void copyTopic(final ChecklistTopicProxy proxy,CheckListProxy checklistProxy,final ImportTopicPopupViewImpl viewTopicPopup)
+		{
+			final int selectedTab=view.getRoleDetailTabPanel().getSelectedIndex();
 			
 			ChecklistTopicRequest request=requests.checklistTopicRequest();
 			
 			final ChecklistTopicProxy addTopicProxy=request.create(ChecklistTopicProxy.class);
 			
-			addTopicProxy.setCheckList(checklsitProxy);
+			addTopicProxy.setCheckList(checklistProxy);
 			addTopicProxy.setDescription(proxy.getDescription());
 			addTopicProxy.setSort_order(proxy.getSort_order());
 			addTopicProxy.setTitle(proxy.getTitle());
@@ -2464,6 +2482,7 @@ final int index2 = index;
 														addOptionProxy.setChecklistQuestion(queProxy);
 														addOptionProxy.setOptionName(optionProxy.getOptionName());
 														addOptionProxy.setValue(optionProxy.getValue());
+														addOptionProxy.setSequenceNumber(optionProxy.getSequenceNumber());
 														
 														optionRequest.persist().using(addOptionProxy).fire();
 														
@@ -2482,7 +2501,7 @@ final int index2 = index;
 														ChecklistCriteriaProxy addCriteriaProxy=criteriaRequest.create(ChecklistCriteriaProxy.class);
 														addCriteriaProxy.setChecklistQuestion(queProxy);
 														addCriteriaProxy.setCriteria(criteriaProxy.getCriteria());
-														
+														addCriteriaProxy.setSequenceNumber(criteriaProxy.getSequenceNumber());
 														criteriaRequest.persist().using(addCriteriaProxy).fire();
 														
 														createCriteriaView(selectedTab, addCriteriaProxy, questionView);
@@ -2505,6 +2524,40 @@ final int index2 = index;
 					});
 				}
 			});
+		}
+		
+		public void importTopic(final ChecklistTopicProxy proxy,final ImportTopicPopupViewImpl viewTopicPopup)
+		{
+			
+			Log.info("importTopic");
+			// Highlight onViolation			
+			/*if(proxy==null)
+			{
+				Log.info("Proxy is Null");
+				proxy.setTitle(null);
+				proxy.setDescription(null);
+			}*/
+			// E Highlight onViolation
+			
+			//ScrolledTab Changes start
+			//final int selectedTab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
+			
+			if(viewTopicPopup.topicLstBox.getTextField().getText().equalsIgnoreCase("All"))
+			{
+				Log.info("All Selected");
+				importAllTopic(viewTopicPopup);
+				return;
+			}
+			else if(proxy != null)
+			{
+				final int selectedTab=view.getRoleDetailTabPanel().getSelectedIndex();
+				//ScrolledTab Changes start
+				CheckListProxy checklistProxy=standardizedRoleDetailsView[selectedTab].getValue().getCheckList();
+				
+				
+				copyTopic(proxy,checklistProxy,viewTopicPopup);
+			}
+			
 			
 			
 			

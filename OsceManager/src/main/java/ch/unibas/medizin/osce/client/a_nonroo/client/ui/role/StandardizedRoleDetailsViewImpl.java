@@ -735,6 +735,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			((ImportTopicPopupViewImpl)importTopicView).roleLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).specializationLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).queListBox.setText("");
+			((ImportTopicPopupViewImpl)importTopicView).topicLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).show();
 		}
 	//Assignment E]

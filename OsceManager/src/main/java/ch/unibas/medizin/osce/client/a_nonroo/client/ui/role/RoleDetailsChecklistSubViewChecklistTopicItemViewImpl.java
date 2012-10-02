@@ -335,9 +335,10 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		// E: Issue Role
 	
 			
-		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(questionButtonVP.getAbsoluteLeft(), questionButtonVP.getAbsoluteTop()-180);
+		
 		}
 		
+		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(questionButtonVP.getAbsoluteLeft(), questionButtonVP.getAbsoluteTop()-180);
 		// Highlight onViolation
 		checklistQuestionMap=new HashMap<String, Widget>();
 		checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
@@ -400,9 +401,10 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	{
 		if(topicPopup==null)
 		{
+			
 			topicPopup=new CheckListTopicPopupViewImpl();
 			
-		}	
+			
 			((CheckListTopicPopupViewImpl)topicPopup).setAnimationEnabled(true);
 		
 			topicPopup.getDescriptionLbl().setText(constants.topicDescription());
@@ -464,7 +466,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			});
 			// E: Issue Role
 		
-		
+		}
 		
 		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-150, y - 195); //SPEC Change
 		

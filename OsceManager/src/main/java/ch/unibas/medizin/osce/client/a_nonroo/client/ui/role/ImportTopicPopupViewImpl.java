@@ -109,7 +109,7 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 	//Issue # 122 : Replace pull down with autocomplete.
 	
 	@UiField
-	public DefaultSuggestBox<ChecklistTopicProxy, EventHandlingValueHolderItem<ChecklistTopicProxy>> topicLstBox;//=new DefaultSuggestBox<StandardizedRoleProxy, EventHandlingValueHolderItem<StandardizedRoleProxy>>();
+	public DefaultSuggestBox<Object, EventHandlingValueHolderItem<Object>> topicLstBox;//=new DefaultSuggestBox<StandardizedRoleProxy, EventHandlingValueHolderItem<StandardizedRoleProxy>>();
 
 	
 	/*
@@ -389,22 +389,44 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 				}
 			}
 		});
+		ListRenderer listRenderer=new ListRenderer();
 		
-		topicLstBox.setRenderer(new AbstractRenderer<ChecklistTopicProxy>() {
+		topicLstBox.setRenderer(listRenderer);
+		
+		
+	}
+	
+	class ListRenderer<T> extends AbstractRenderer<Object> 
+	{
 
-			@Override
-			public String render(ChecklistTopicProxy object) {
-				// TODO Auto-generated method stub
+		
+		@Override
+		public String render(Object object) {
+			if(object instanceof ChecklistTopicProxy)
+			{
 				if(object!=null)
 				{
-				return object.getTitle();
+					return ((ChecklistTopicProxy)object).getTitle();
 				}
 				else
 				{
 					return "";
 				}
 			}
-		});
+			else if(object instanceof String)
+			{
+				if(((String) object).equalsIgnoreCase("All"))
+				{
+					return object.toString();
+				}
+				else
+				{
+					return "";
+				}
+			}
+			return "";
+		}
+		
 	}
 	
 	public void setDelegate(Delegate delegate) {
@@ -466,8 +488,10 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 				//	topicLstBox.setSuggestOracle(null);
 					//Issue # 122 : Replace pull down with autocomplete.
 				}
+				else if(this.topicLstBox.getText().equalsIgnoreCase("All"))
+					delegate.topicListBoxValueSelected(null, this);
 				else
-					delegate.topicListBoxValueSelected(this.topicLstBox.getSelected(), this);
+					delegate.topicListBoxValueSelected((ChecklistTopicProxy)this.topicLstBox.getSelected(), this);
 					//delegate.roleListBoxValueSelected(this.roleLstBox.getValue(),this);
 				//Issue # 122 : Replace pull down with autocomplete.
 	}
@@ -520,9 +544,13 @@ public class ImportTopicPopupViewImpl  extends PopupPanel implements ImportTopic
 				delegate.importTopic(this.getTopicLstBox().getValue(),importTopicPopupView);	
 			}*/
 			
-			if(topicLstBox.getSelected()!=null)
+			if(topicLstBox.getTextField().getText().equalsIgnoreCase("All"))
 			{
-				delegate.importTopic(topicLstBox.getSelected(),importTopicPopupView);	
+				delegate.importTopic(null,importTopicPopupView);	
+			}
+			else if(topicLstBox.getSelected()!=null)
+			{
+				delegate.importTopic((ChecklistTopicProxy)topicLstBox.getSelected(),importTopicPopupView);	
 			}
 			else
 			{
