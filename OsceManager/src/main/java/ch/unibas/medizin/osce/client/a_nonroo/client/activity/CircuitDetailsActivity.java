@@ -2351,7 +2351,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						
 						oscePostViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR MAIN POST VIEW	
 						
-						oscePostViewImpl.getPostTypeLbl().setText(oscePostBlueprintProxy.getPostType().name());	
+						oscePostViewImpl.getPostTypeLbl().setText(enumConstants.getString(oscePostBlueprintProxy.getPostType().name()));	
 						if(oscePostSubViewImpl == null){
 							oscePostSubViewImpl = new ArrayList<OscePostSubViewImpl>();
 						}
@@ -2419,7 +2419,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					oscePostViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR MAIN POST VIEW	
 					
-					oscePostViewImpl.getPostTypeLbl().setText(oscePostBlueprintProxy.getPostType().name());	
+					oscePostViewImpl.getPostTypeLbl().setText(enumConstants.getString(oscePostBlueprintProxy.getPostType().name()));	
 					if(oscePostSubViewImpl == null){
 						oscePostSubViewImpl = new ArrayList<OscePostSubViewImpl>();
 					}

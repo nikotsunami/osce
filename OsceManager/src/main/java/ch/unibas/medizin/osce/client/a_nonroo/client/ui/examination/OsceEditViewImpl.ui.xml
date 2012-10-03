@@ -6,9 +6,10 @@
 
 	<ui:style src="../../styles.css" >
 	.leftpadding10{
-	padding-left: 50px;
+	margin-left: 10px;
 
 	}
+	
 	</ui:style>
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
 	<g:HTMLPanel styleName="{style.patientControls}">
@@ -27,82 +28,89 @@
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 	<g:HTMLPanel>
-		<div>
+		<!-- <div>
 			<h3 class='{style.header}' ui:field="editTitle">
 				<ui:msg>Edit OSCE</ui:msg>
 			</h3>
-			<!-- h3 class='{style.header}' ui:field='createTitle'>
+			h3 class='{style.header}' ui:field='createTitle'>
 				<ui:msg>New OSCE</ui:msg>
-			</h3 -->
-		</div>
+			</h3
+		</div> -->
 		<div ui:field='errors' class='{style.errors}'></div>
 		<br></br>
 		<!-- <table class="{style.fields}" id="boundElementHolder"> -->
-		<table>
-
+		<table >
+		
+		
+		  <tr height="10px"><td><h3><u><b>General :</b></u></h3></td> <td></td> <td></td> <td></td></tr>  
 			<tr >
 				<td id="name">
-					<div class="{style.label}" ui:field="labelOsce"></div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsce"></div>
 				</td>
 				
 				<td>
 					<g:TextBox ui:field='name'/>
 				</td>
 				
-				<td id="shortBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelShortBreak"> Short Break :</div>
+				<td id="studyYear">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelStudyYear">Study Year :</div>
 				</td>
 				
 				<td>
-					<r:ShortBox ui:field="shortBreak" />
-				</td>
+					<g:ValueListBox ui:field="studyYear" />			
+				</td>	
+				
 			</tr>
 			
 			<tr >
+				<td  id="isRepeOsce">
+						<div class="{style.label} {style.leftpadding10}" ui:field="labelIsRepe">Is Repe Osce :</div>
+				</td>
+				
+				<td>
+					<g:CheckBox ui:field="isRepeOsce" /> 
+				</td> 
+					
+				<td  id="osceRepe">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceRepe">OSCE Repe </div>
+				</td>
+				<td>
+						<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+						 <!-- <g:ValueListBox ui:field="copiedOsce" /> -->
+				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
+					  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					
+				</td>
+			</tr>
+			
+			<tr height="10px"><td><h3><u><b>Attributes :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+		 	<!-- <tr><td><b>Attributes :</b></td><td></td><td></td><td></td></tr>  -->
+				
+				 <tr>
+				
 				<td id="numberCourses">
-					<div class="{style.label}" ui:field="labelMaxParcours">max. Parcour :</div>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxParcours">max. Parcour :</div>
 				</td>
 				
 				<td>
 					<g:IntegerBox ui:field="numberCourses" />
 				</td>
 				
-				<td id="LongBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelLongBreak">Long Break :</div>
-				</td>
-				
-				<td>
-					<r:ShortBox ui:field="LongBreak"/>
-					
-				</td>
-			</tr>
-			
-			<tr >
-				<td id="maxNumberStudents">
-					<div class="{style.label}" ui:field="labelMaxStudents">Max Students :</div>
+				 <td id="maxNumberStudents">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxStudents">Max Students :</div>
 				</td>
 				
 				<td>
 					<g:IntegerBox ui:field="maxNumberStudents" />
 				</td>
-				
-				<td id="lunchBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreak">Lunch Break :</div>
-				</td>
-				
-				<td>
-				<r:ShortBox ui:field="lunchBreak" />
-				</td>
 			</tr>
-			<tr >
-				<td id="studyYear">
-					<div class="{style.label}" ui:field="labelStudyYear">Study Year :</div>
+			<tr>
+				<td id="maxNoRoom">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxRooms">Maximum Rooms :</div>
 				</td>
-				
+				 
 				<td>
-					<g:ValueListBox ui:field="studyYear" />
-				
-					
+					<g:IntegerBox ui:field="numberRooms"></g:IntegerBox>
 				</td>
 				
 				<td id="postLength">
@@ -112,96 +120,103 @@
 				<td>
 					<g:IntegerBox ui:field="postLength" />
 				</td>
-			</tr>
-			
-			<tr >
-							
-				<td id="maxNoRoom">
-					<div class="{style.label}" ui:field="labelMaxRooms">Maximum Rooms :</div>
-				</td>
-				 
-				<td>
-					<g:IntegerBox ui:field="numberRooms"></g:IntegerBox>
-			</td>
-			
-			<td id="shortBreak">
+				
+				</tr>
+				
+				<tr height="10px"><td><h3><u><b>Breaks :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+				 <!-- <tr><td><b>Breaks : </b></td><td></td><td></td><td></td></tr>  -->
+				
+				
+				<tr>
+				
+					<td id="shortBreak">
+						<div class="{style.label} {style.leftpadding10}" ui:field="labelShortBreak"> Short Break :</div>
+					</td>
+					
+					<td>
+						<r:ShortBox ui:field="shortBreak" />
+					</td>
+					<td  id="isRepeOsce">
+						<div class="{style.label} {style.leftpadding10}" ui:field="labeShortBreakSimpatChange">Short Break Simpat Change :</div>
+					</td>
+					<td>
+						<r:ShortBox ui:field="shortBreakSimpatChange" />
+					</td>
+				</tr>
+				
+			<tr>
+				
+				<td id="middleBreak">
 					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
 				</td>
 				 
 				<td>
-			<r:ShortBox ui:field="middleBreak" /> 
-			</td>
-			</tr>
-			
-			<tr >
-				
-			
-			 <!-- <td  id="isRepeOsce">
-					<div class="{style.label}" ui:field="labelIsRepe">Is Repe Osce :</div>
+					<r:ShortBox ui:field="middleBreak" /> 
 				</td>
+				<td id="longBreak">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelLongBreak">Long Break :</div>
+				</td>
+				 
 				<td>
-					<g:CheckBox ui:field="isRepeOsce" /> 
-				</td> -->
-				<td  id="isRepeOsce">
-					<div class="{style.label}" ui:field="labeShortBreakSimpatChange">Short Break Simpat Change :</div>
+					<r:ShortBox ui:field="LongBreak" /> 
 				</td>
-				<td>
-					<r:ShortBox ui:field="shortBreakSimpatChange" />
-				</td>
-			
-				
-			<td><div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div></td>
-			<td>
-				
-				  	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
-				  	<!--  <g:ValueListBox ui:field="osceValue" /> -->
-				  	<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
-				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
-			</td>
 			</tr>
+				
 			<tr>
-			  <td  id="isRepeOsce">
+			
+				<td id="lunchBreak">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreak">Lunch Break :</div>
+				</td>
+				
+				<td>
+				<r:ShortBox ui:field="lunchBreak" />
+				</td>
+				<td></td>
+				<td></td>
+			</tr>	
+			<tr>
+			 <td  id="spStayInPost">
+						<div class="{style.label} {style.leftpadding10}" ui:field="labelSpStayInPost">SP_Stay_In_Post :</div>
+				</td>
+				<td>
+						<g:CheckBox ui:field="spStayInPost" /> 
+				</td> 
+				
+				<td>
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
+				</td>
+				<td>
+					
+					  	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+					  	<!--  <g:ValueListBox ui:field="osceValue" /> -->
+					  	<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+					  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+				</td>
+				 
+				
+			
+			</tr>
+			
+			  <!-- <td  id="isRepeOsce">
 					<div class="{style.label}" ui:field="labelIsRepe">Is Repe Osce :</div>
 				</td>
 				<td>
 					<g:CheckBox ui:field="isRepeOsce" /> 
-				</td> 
+				</td>  -->
 				<!-- <td id="shortBreak">
 					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
 				</td> -->
-				<td  id="osceRepe">
+				<!-- <td  id="osceRepe">
 					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceRepe">OSCE Repe </div>
 				</td>
 				<td>
-					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
-					 <!-- <g:ValueListBox ui:field="copiedOsce" /> -->
+					//Issue # 122 : Replace pull down with autocomplete.
+					 <g:ValueListBox ui:field="copiedOsce" />
 				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
-				  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
+				  	 //Issue # 122 : Replace pull down with autocomplete.
 					
-				</td>
+				</td> -->
 			
-			</tr>
-			 
-			 <tr>
-			  <td  id="spStayInPost">
-					<div class="{style.label}" ui:field="labelSpStayInPost">SP_Stay_In_Post :</div>
-				</td>
-				<td>
-					<g:CheckBox ui:field="spStayInPost" /> 
-				</td> 
-				<td >
-					
-				</td>
-				<td >
-					
-				</td>
-				<td>
-					
-					
-				</td>
-			
-			</tr> 
-			 
 			
 		<!--	<tr>
 				

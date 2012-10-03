@@ -52,8 +52,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<OsceProxy> {
 	private static final Binder BINDER = GWT.create(Binder.class);
 
-	@UiField
-	Element editTitle;
+	/*@UiField
+	Element editTitle;*/
 
 // change{
 	/*@UiField
@@ -163,7 +163,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	DivElement labelMiddleBreak;
 	@UiField
-	DivElement labelOsceForTask;
+	public DivElement labelOsceForTask;
 	
 	@UiField
 	DivElement labeShortBreakSimpatChange;
@@ -267,7 +267,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		TabPanelHelper.moveTabBarToBottom(oscePanel);
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
-		copiedOsce.setEnabled(false);
+		//copiedOsce.setEnabled(false);
 		
 		labelOsce.setInnerText(constants.osce() + ":");
 		labelMaxParcours.setInnerText(constants.osceMaxCircuits() + ":");
@@ -344,12 +344,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	public void setCreating(boolean creating) {
 		if (creating) {
 			title.setInnerText(constants.addOsce());
-			editTitle.getStyle().setDisplay(Display.NONE);
+			//editTitle.getStyle().setDisplay(Display.NONE);
 			// change{	//	createTitle.getStyle().clearDisplay();
 			oscePanel.getTabBar().setTabText(0, "New OSCE");
 		} else {
 			title.setInnerText(constants.editOsce());
-			editTitle.getStyle().clearDisplay();
+			//editTitle.getStyle().clearDisplay();
 			// change{	createTitle.getStyle().setDisplay(Display.NONE);
 			oscePanel.getTabBar().setTabText(0, "Edit OSCE");
 		}
@@ -397,11 +397,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	public void setEditTitle(boolean edit) {
 
 		if (edit) {
-			editTitle.getStyle().clearDisplay();
+			//editTitle.getStyle().clearDisplay();
 			// change{	createTitle.getStyle().setDisplay(Display.NONE);
 			title.setInnerText(constants.editOsce());
 		} else {
-			editTitle.getStyle().setDisplay(Display.NONE);
+			//editTitle.getStyle().setDisplay(Display.NONE);
 			// change{createTitle.getStyle().clearDisplay();
 			title.setInnerText(constants.addOsce());
 		}

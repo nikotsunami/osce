@@ -136,7 +136,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("osce")
+			requests.find(place.getProxyId()).with("osce","copiedOsce")
 			.fire(new OSCEReceiver<Object>() {
 
 				
@@ -151,6 +151,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 						// init((OsceProxy) response);
 						osce = (OsceProxy) response;
 						((OsceEditViewImpl)view).osceValue.setVisible(false);
+						((OsceEditViewImpl)view).labelOsceForTask.setInnerText("");
 						
 						
 						
@@ -216,9 +217,10 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 		Log.info("edit");
 
 		Log.info("persist");
+		//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
 		request.persist().using(osce);
 		editorDriver.edit(osce, request);
-
+		
 		Log.info("flush");
 		editorDriver.flush();
 		Log.debug("Create für: " + osce.getId());
@@ -240,16 +242,121 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 
 	}
 
+/*	TaskRequest taskRequest=requests.taskRequest();
+	task = taskRequest.edit(task);
+	
+	taskRequest.persist().using(task).fire(new OSCEReceiver<Void>(view.getPopView().getTaskMap()) {
+		// E Highlight onViolation
+		@Override
+		public void onViolation(Set<Violation> errors) {
+			Iterator<Violation> iter = errors.iterator();
+			String message = "";
+			while (iter.hasNext()) {
+				message += iter.next().getMessage() + "<br>";
+			}
+			Log.warn(" in task -" + message);
+		}
+		@Override
+		public void onSuccess(Void response) {
+			// TODO Auto-generated method stub
+	//		System.out.println("INside success");
+			Log.info(" task edited successfully");
+		//	init2();
+			Log.info("Call Init Search from onSuccess");
+			view.getPopView().hide();
+			init();
+		
+			
+		}
+	});*/
+	
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
 		// Highlight onViolation
 			Log.info("Map Size: " + view.getOsceMap().size());
 		// E Highlight onViolations
+			Log.info("value of osce--"+osce.getCopiedOsce());
 		if(this.place.getOperation() == Operation.EDIT)
 		{
-	
-			// Highlight onViolation			
+			OsceRequest osceRequest=requests.osceRequest();
+			osce = osceRequest.edit(osce);
+			
+			osce.setName(((OsceEditViewImpl)view).name.getValue());
+			osce.setMaxNumberStudents(((OsceEditViewImpl)view).maxNumberStudents.getValue());
+			osce.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
+			osce.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
+			osce.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
+			osce.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
+			osce.setMiddleBreak(((OsceEditViewImpl)view).middleBreak.getValue());
+			osce.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
+			
+			osce.setShortBreakSimpatChange(((OsceEditViewImpl)view).shortBreakSimpatChange.getValue());
+			
+			osce.setSemester(semester);
+			osce.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
+			if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
+			{
+				Log.info("osce not null");
+				osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+			}
+			else
+			{
+				Log.info("osce null");
+				((OsceEditViewImpl)view).copiedOsce.setSelected(null);
+				osce.setCopiedOsce(null);
+			}
+			Log.info("osce value--"+((OsceEditViewImpl)view).copiedOsce.getSelected());
+			osce.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
+			osce.setNumberRooms(((OsceEditViewImpl)view).numberRooms.getValue());
+			//osce.setOsceStatus(OsceStatus.OSCE_NEW);
+			//osce.setSecurity(OSCESecurityStatus.FEDERAL_EXAM);
+			//osce.setOsceSecurityTypes(OsceSecurityType.federal);
+			osce.setSpStayInPost(((OsceEditViewImpl)view).spStayInPost.isChecked());
+			
+			osceRequest.persist().using(osce).fire(new OSCEReceiver<Void>(view.getOsceMap()) {
+				// E Highlight onViolation
+				@Override
+				public void onFailure(ServerFailure error) {
+					Log.error(error.getMessage());
+
+				}
+				
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					Iterator<Violation> iter = errors.iterator();
+					String message = "";
+					while (iter.hasNext()) {
+						message += iter.next().getMessage() + "<br>";
+					}
+					Log.warn(" in osce edit -" + message);
+				}
+				@Override
+				public void onSuccess(Void response) {
+
+					save = true;
+					
+					placeController.goTo(new OsceDetailsPlace(osce.stableId(),
+							Operation.DETAILS));
+					osceActivity.init();
+					Log.info("osce edit successfull");
+				
+					
+				}
+			});
+			//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+			// Highlight onViolation	
+			/*if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
+			{
+				Log.info("osce not null");
+				//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+			}
+			else
+			{
+				Log.info("osce null");
+				((OsceEditViewImpl)view).copiedOsce.setSelected(null);
+				//osce.setCopiedOsce(null);
+			}
 			editorDriver.flush().fire(new OSCEReceiver<Void>(view.getOsceMap()) {
 				// E Highlight onViolation
 
@@ -284,7 +391,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 				}
 
 			});
-
+*/
 	}
 		else
 		{
@@ -300,7 +407,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
 			osceProxy.setMiddleBreak(((OsceEditViewImpl)view).middleBreak.getValue());
 			osceProxy.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
-			
+			osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
 			osceProxy.setShortBreakSimpatChange(((OsceEditViewImpl)view).shortBreakSimpatChange.getValue());
 			//remove number post
 			//osceProxy.setNumberPosts(((OsceEditViewImpl)view).numberPosts.getValue());
@@ -308,7 +415,15 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			//osceProxy.setSemester(((OsceEditViewImpl)view).semester.getValue());
 			osceProxy.setSemester(semester);
 			osceProxy.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
-			//osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getValue());
+			/*if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
+			{
+				osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+			}
+			else
+			{
+				osce.setCopiedOsce(null);
+			}*/
+			//osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
 			osceProxy.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
 			osceProxy.setNumberRooms(((OsceEditViewImpl)view).numberRooms.getValue());
 			osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);

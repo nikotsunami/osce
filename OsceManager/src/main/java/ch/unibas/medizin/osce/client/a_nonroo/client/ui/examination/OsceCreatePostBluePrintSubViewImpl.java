@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -48,6 +49,7 @@ public class OsceCreatePostBluePrintSubViewImpl extends Composite implements Osc
 
 	private Presenter presenter;
 	
+	private static final OsceConstants constants = GWT.create(OsceConstants.class);
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -136,6 +138,7 @@ public class OsceCreatePostBluePrintSubViewImpl extends Composite implements Osc
 	}
 
 	public void init() {
+		postTypeLbl.setText(constants.postType());
 		// TODO implement this!
 	}
 

@@ -51,7 +51,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 						
 					</div>
 				</g:HTMLPanel>
-			</g:HorizontalPanel>
+	</g:HorizontalPanel>
 			
 			
 		 <g:DisclosurePanel animationEnabled="true" open="true"
@@ -63,23 +63,62 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			<g:HorizontalPanel >
 			<g:HTMLPanel addStyleNames="{style.patientDetails}">
 		<table  class="{style.fields}" >
-			<tr id="name">
+		
+		<tr height="10px"><td><h3><u><b>General :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+			<!-- <tr id="name"> -->
+			<tr>
 				<td>
 					<span class="{style.label}" ui:field="labelOsce">Name:</span>
 				</td>
 				<td>
 					<span ui:field="name" />
 				</td>
-			</tr>
-			<tr id="version">
+			<!-- </tr> -->
+			
+			<!-- <tr id="studyYear"> -->
+			
 				<td>
-					<span class="{style.label}" ui:field="labelVersion">Version:</span>
+					<span class="{style.label}" ui:field="labelStudyYear">Study Year:</span>
 				</td>
 				<td>
-					<span ui:field="version" />
+					<span ui:field="studyYear" />
 				</td>
 			</tr>
-			<tr id="maxStud">
+			
+			<tr>
+			<!-- <tr id="isRepetion"> -->
+				<td>
+					<span class="{style.label}" ui:field="labelIsRepetion">Is Repetion:</span>
+				</td>
+				<td>
+					<span ui:field="isRepetion" />
+				</td>
+				<!-- <td></td><td></td> -->
+			<!-- </tr> -->
+			
+			
+			 <!-- <tr id="repetitionForOsce"> -->
+				<td>
+					<span class="{style.label}" ui:field="labelRepetitionForOsce">RepetitionForOsce:</span>
+				</td>
+				<td>
+					<span ui:field="repetitionForOsce" />
+				</td>
+			</tr> 
+			
+			<tr height="10px"><td><h3><u><b>Attributes :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+			
+			<tr>
+			<!-- <tr id="maxNumberStudents"> -->
+				<td>
+					<span class="{style.label}" ui:field="labelMaxCircuits">max. Parcours:</span>
+				</td>
+				<td>
+					<span ui:field="maxNumberStudents" />
+				</td>
+		<!-- 	</tr> -->
+			
+			<!-- <tr id="maxStud"> -->
 				<td>
 					<span class="{style.label}" ui:field="labelMaxStudents">max. Studenten:</span>
 				</td>
@@ -87,15 +126,18 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 					<span ui:field="maxStud" />
 				</td>
 			</tr>
-			<tr id="maxNumberStudents">
+			
+			<tr>
+			<!-- <tr id="maxRooms"> -->
 				<td>
-					<span class="{style.label}" ui:field="labelMaxCircuits">max. Parcours:</span>
+					<span class="{style.label}" ui:field="labelMaxRooms">MaxRooms:</span>
 				</td>
 				<td>
-					<span ui:field="maxNumberStudents" />
+					<span ui:field="maxRooms" />
 				</td>
-			</tr>
-			<tr id="numberCourses">
+			<!-- </tr> -->
+			
+			<!-- <tr id="numberCourses"> -->
 				<td>
 					<span class="{style.label}" ui:field="labelStationLength">Postenlänge:</span>
 				</td>
@@ -103,15 +145,39 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 					<span ui:field="postLength" />
 				</td>
 			</tr>
-			<tr id="shortBreak">
+			
+			<tr height="10px"><td><h3><u><b>Breaks :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+			<tr>
+			<!-- <tr id="shortBreak"> -->
 				<td>
 					<span class="{style.label}" ui:field="labelShortBreak">Short Break:</span>
 				</td>
 				<td>
 					<span ui:field="shortBreak" />
 				</td>
-			</tr>
-			<tr id="LongBreak">
+		<!-- 	</tr> -->
+			
+			<!-- <tr id="shortBreakSPChange"> -->
+				<td>
+					<span class="{style.label}" ui:field="labelShortBreakSPChange">ShortBreakSPChange:</span>
+				</td>
+				<td>
+					<span ui:field="shortBreakSPChange" />
+				</td>
+			 </tr> 
+			
+			
+			<tr>
+			<!-- <tr id="MiddleBreak"> -->
+				<td>
+					<span class="{style.label}" ui:field="labelMediumBreak">Middle Break:</span>
+				</td>
+				<td>
+					<span ui:field="MiddleBreak" />
+				</td>
+		<!-- 	</tr> -->
+			
+		<!-- 	<tr id="LongBreak"> -->
 				<td>
 					<span class="{style.label}" ui:field="labelLongBreak">Long Break:</span>
 				</td>
@@ -119,22 +185,22 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 					<span ui:field="LongBreak" />
 				</td>
 			</tr>
-			<tr id="MiddleBreak">
-				<td>
-					<span class="{style.label}" ui:field="labelMediumBreak">Middle Break:</span>
-				</td>
-				<td>
-					<span ui:field="MiddleBreak" />
-				</td>
-			</tr>
-			<tr id="lunchBreak">
+			
+			<tr>
+			<!-- <tr id="lunchBreak"> -->
 				<td>
 					<span class="{style.label}" ui:field="labelLunchBreak">lunch Break:</span>
 				</td>
 				<td>
 					<span ui:field="lunchBreak" />
 				</td>
+				<td></td>
+				<td></td>
 			</tr>
+			
+			
+			
+			
 		</table>
 		</g:HTMLPanel>
 		

@@ -4,6 +4,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 
+
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.HashSet;
@@ -50,6 +54,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.cell.client.ValueUpdater;
@@ -112,16 +117,28 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 			}
 			
 		});
+		
 		labelLongNameHeader.setText(constants.manageOsces() + ":" + "should a date be displayed here?");
+		
+		/*labelOsce labelStudyYear labelIsRepetion labelRepetitionForOsce labelMaxStudents 
+		labelMaxCircuits  labelMaxRooms labelStationLength labelShortBreak labelShortBreakSPChange labelLunchBreak
+		labelLongBreak labelMediumBreak*/
+		
 		labelOsce.setInnerText(constants.osce());
-		labelVersion.setInnerText(constants.osceVersion());
+		labelStudyYear.setInnerText(constants.studyYear());
+		labelIsRepetion.setInnerText(constants.osceIsRepe());
+		labelRepetitionForOsce.setInnerText(constants.osceRepe());
 		labelMaxStudents.setInnerText(constants.osceMaxStudents());
 		labelMaxCircuits.setInnerText(constants.osceMaxCircuits());
+		labelMaxRooms.setInnerText(constants.osceMaxRooms());
 		labelStationLength.setInnerText(constants.osceStationLength());
 		labelShortBreak.setInnerText(constants.osceShortBreak());
-		labelMediumBreak.setInnerText(constants.osceMediumBreak());
-		labelLongBreak.setInnerText(constants.osceLongBreak());
+		labelShortBreakSPChange.setInnerText(constants.osceSimpatsInShortBreak());
 		labelLunchBreak.setInnerText(constants.osceLunchBreak());
+		labelLongBreak.setInnerText(constants.osceLongBreak());
+		labelMediumBreak.setInnerText(constants.osceMediumBreak());
+		
+		
 		newButton.setText(constants.osceAddTask());
 		
 		init();
@@ -173,17 +190,28 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField
 	DisclosurePanel osceDisclosurePanel;
 	
+	
 	@UiField
 	SpanElement name;
 
 	@UiField
-	SpanElement version;
-
+	SpanElement studyYear;
+	
+	@UiField
+	SpanElement isRepetion;
+	
+	@UiField
+	SpanElement repetitionForOsce;
+	
 	@UiField
 	SpanElement maxStud;
 
 	@UiField
 	SpanElement maxNumberStudents;
+	
+	@UiField
+	SpanElement maxRooms;
+	
 
 	@UiField
 	SpanElement postLength;
@@ -201,23 +229,48 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	SpanElement MiddleBreak;
 	
 	@UiField
+	SpanElement shortBreakSPChange;
+	
+	
+	
+	@UiField
 	TabPanel osceDetailPanel;
 	
 	@UiField (provided = true)
 	CellTable<TaskProxy> table;
 	
-	@UiField
+	
+	@UiField 
 	SpanElement labelOsce;
 	@UiField
-	SpanElement labelVersion;
+	SpanElement labelStudyYear;
+	
+	@UiField
+	SpanElement labelIsRepetion;
+	
+	@UiField
+	SpanElement labelRepetitionForOsce;
+	
 	@UiField
 	SpanElement labelMaxStudents;
 	@UiField
 	SpanElement labelMaxCircuits;
+	
+	@UiField
+	SpanElement labelMaxRooms;
+	
+	
 	@UiField
 	SpanElement labelStationLength;
+	
+	
 	@UiField
 	SpanElement labelShortBreak;
+	
+	@UiField
+	SpanElement labelShortBreakSPChange;
+	
+	
 	@UiField
 	SpanElement labelLunchBreak;
 	@UiField
@@ -357,8 +410,15 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 			@Override
 			public String getValue(TaskProxy object) {
-				String s=""+object.getName();
-				return renderer.render(s);
+				if(object==null || object.getName()==null)
+				{
+					return renderer.render("");
+				}
+				else
+				{
+					String s=""+object.getName();
+					return renderer.render(s);
+				}
 			}
 		}, constants.osceTaskName());
 		
@@ -375,8 +435,19 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 			@Override
 			public String getValue(TaskProxy object) {
-				String s=""+object.getDeadline();
-				return renderer.render(s);
+				
+				if(object==null || object.getDeadline()==null)
+				{
+					return renderer.render("");
+				}
+				else
+				{
+
+		           
+		             String s =""+object.getDeadline().getDate()+"."+object.getDeadline().getMonth()+"."+(object.getDeadline().getYear()+1900);
+					  System.out.println("date--"+s);
+					return renderer.render(s);
+				}
 			}
 		}, constants.osceTaskDeadline());
 		
@@ -407,11 +478,33 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		
 		addColumn(new ActionCell<TaskProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<TaskProxy>() {
-					public void execute(TaskProxy task) {
+					public void execute(final TaskProxy task) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?")) {
+						final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+						valueUpdateDialogBox.showYesNoDialog("wirklich löschen?");
+						valueUpdateDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								delegate.deleteClicked(task);
+								valueUpdateDialogBox.hide();
+								
+							}
+						});
+						
+						valueUpdateDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								valueUpdateDialogBox.hide();
+								
+								
+							}
+						});
+
+						/*if(Window.confirm("wirklich löschen?")) {
 							delegate.deleteClicked(task);
-						}
+						}*/
 					}	
 				}), "", new GetValue<TaskProxy>() {
 			public TaskProxy getValue(TaskProxy scar) {
@@ -444,20 +537,46 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		}
 		
 		@Override
-		public void onBrowserEvent(Context context, Element parent, Boolean value, 
+		public void onBrowserEvent(final Context context, Element parent, Boolean value, 
 		      NativeEvent event, ValueUpdater<Boolean> valueUpdater) {
 			if(((TaskProxy)context.getKey()).getIsDone()==true) {
 				 super.onBrowserEvent(context, parent, true, event, valueUpdater);
 				 this.setValue(context, parent, true);
-				 
+				
 		  //  Log.info("checkBox Clicked "+((TaskProxy)context.getKey()).getIsDone());
 		   // SafeHtmlBuilder sb=new SafeHtmlBuilder();
 		   // sb.append(SafeHtmlUtils.fromSafeConstant("<input type=\"checkbox\" tabindex=\"-1\" checked/>"));
 		//    this.render(context, value, sb);
 		    
 			} else {
+				this.setValue(context, parent, false);
 				 super.onBrowserEvent(context, parent, value, event, valueUpdater);
-				 delegate.editForDone((TaskProxy)context.getKey());
+				 final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+					valueUpdateDialogBox.showYesNoDialog("Do you really want to change it active?");
+					valueUpdateDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							 delegate.editForDone((TaskProxy)context.getKey());
+							valueUpdateDialogBox.hide();
+							
+						}
+					});
+					
+					valueUpdateDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							valueUpdateDialogBox.hide();
+							
+							
+						}
+					});
+
+
+				 
+				
+				
 				 Log.info("checkBox Clicked "+((TaskProxy)context.getKey()).getIsDone());
 				   // SafeHtmlBuilder sb=new SafeHtmlBuilder();
 				   // sb.append(SafeHtmlUtils.fromSafeConstant("<input type=\"checkbox\" tabindex=\"-1\" checked/>"));
@@ -566,6 +685,17 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 	public void setValue(OsceProxy proxy) {
 		this.proxy = proxy;
 		
+		if(proxy==null)
+		{
+			Log.info("No osce value");
+			return;
+		}
+
+		/*name studyYear isRepetion repetitionForOsce maxStud
+		maxNumberStudents maxRooms postLength shortBreak
+		LongBreak lunchBreak MiddleBreak shortBreakSPChange*/
+		
+		
 		if(proxy.getName()=="")
 		{
 			name.setInnerText("");
@@ -575,7 +705,32 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 			name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
 		}
 		
-		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
+		
+		studyYear.setInnerText(proxy.getStudyYear() == null ? "" : String.valueOf(proxy.getStudyYear()));
+		
+		if(proxy.getIsRepeOsce()==null)
+		{
+			isRepetion.setInnerText("");
+			
+		}
+		else
+		{
+			isRepetion.setInnerText(proxy.getIsRepeOsce() == true ? "True" : "Flase");
+		}
+		
+		if(proxy.getCopiedOsce()==null)
+		{
+			Log.info("osce null--");
+			repetitionForOsce.setInnerText("");
+			
+		}
+		else
+		{
+			Log.info("osce null else--"+proxy.getCopiedOsce().getName());
+			repetitionForOsce.setInnerText(proxy.getCopiedOsce().getName() == null ? "" : proxy.getCopiedOsce().getName());
+		}
+		
+		
 		if(proxy.getMaxNumberStudents()==null)
 		{
 			maxStud.setInnerText("");
@@ -585,6 +740,8 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		{
 			maxStud.setInnerText(proxy.getMaxNumberStudents() == 0 ? "" : String.valueOf(proxy.getMaxNumberStudents()));
 		}
+		
+		
 		if(proxy.getNumberCourses()==null)
 		{
 			maxNumberStudents.setInnerText("");
@@ -594,6 +751,19 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		{
 		maxNumberStudents.setInnerText(proxy.getNumberCourses() == 0 ? "" : String.valueOf(proxy.getNumberCourses()));
 		}
+		
+		
+		if(proxy.getNumberRooms()==null)
+		{
+			maxRooms.setInnerText("");
+			
+		}
+		else
+		{
+			maxRooms.setInnerText(proxy.getNumberRooms() == 0 ? "" : String.valueOf(proxy.getNumberRooms()));
+		}
+		
+		
 		if(proxy.getPostLength()==null)
 		{
 			postLength.setInnerText("");
@@ -601,8 +771,9 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		}
 		else
 		{
-		postLength.setInnerText(proxy.getPostLength() == 0 ? "" : String.valueOf(proxy.getPostLength()));
+			postLength.setInnerText(proxy.getPostLength() == 0 ? "" : String.valueOf(proxy.getPostLength()));
 		}
+	
 		
 		if(proxy.getShortBreak()==null)
 		{
@@ -614,6 +785,15 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		shortBreak.setInnerText(proxy.getShortBreak() == 0 ? "" : String.valueOf(proxy.getShortBreak()));
 		}
 		
+		if(proxy.getShortBreakSimpatChange()==null)
+		{
+			shortBreakSPChange.setInnerText("");
+			
+		}
+		else
+		{
+			shortBreakSPChange.setInnerText(proxy.getShortBreakSimpatChange() == 0 ? "" : String.valueOf(proxy.getShortBreakSimpatChange()));
+		}
 		
 		if(proxy.getMiddleBreak()==null)
 		{
@@ -643,6 +823,8 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		{
 		lunchBreak.setInnerText(proxy.getLunchBreak() == 0 ? "" : String.valueOf(proxy.getLunchBreak()));
 		}
+		
+		
 		System.out.println("total task"+ proxy.getTasks().size());
 		
 		table.setRowCount(proxy.getTasks().size());

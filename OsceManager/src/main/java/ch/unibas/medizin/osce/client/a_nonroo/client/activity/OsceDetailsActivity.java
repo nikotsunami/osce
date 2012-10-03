@@ -121,7 +121,7 @@ public void init()
 	view.setDelegate(this);
 	
 	//requests.find(place.getProxyId()).with("tasks").fire(new OSCEReceiver<Object>() {
-	requests.find(place.getProxyId()).with("tasks","tasks.administrator").fire(new OSCEReceiver<Object>() {
+	requests.find(place.getProxyId()).with("tasks","tasks.administrator","copiedOsce").fire(new OSCEReceiver<Object>() {
 		public void onFailure(ServerFailure error) {
 			Log.error(error.getMessage());
 		}
