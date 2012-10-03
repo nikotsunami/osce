@@ -30,7 +30,7 @@ public interface OscePostRoomRequestNonRoo extends RequestContext
 	
 	abstract Request<List<OscePostRoomProxy>> findListOfOscePostRoomByOsce(Long osceId);
 	
-	abstract Request<List<OscePostProxy>> insertRoomVertically(Long osceid, CourseProxy course, Long oscePostid, RoomProxy room);
+	abstract Request<List<OscePostRoomProxy>> insertRoomVertically(Long osceid, CourseProxy course, Long oscePostid, RoomProxy room);
 }
 
 

@@ -30,17 +30,17 @@
 	}
 
 	.btnStyle
-	{
-		white-space: normal;
-		height: 30px;
-		width: 115px;
-	}	
+	{		
+		width: 128px;
+	}
+	
+	
 	</ui:style>
 	<g:HTMLPanel>
 	<!--h1>Osce Day</h1-->
 		<!-- Module 5 Bug Report Solution -->
 		<!-- <g:HTMLPanel styleName="{style.patientTopContainer}" height="350px" width="250px"> -->
-		<g:HTMLPanel ui:field="mainDayHP" styleName="{style.patientTopContainer}" height="270px" width="250px">
+		<g:HTMLPanel ui:field="mainDayHP" styleName="{style.patientTopContainer}" height="270px" width="275px">
 			<!-- Module 5 Bug Report Solution -->
 			<g:HorizontalPanel horizontalAlignment="center" width="250px">
 				 <g:Label ui:field="dayLabel" styleName="{style.spacing10} {style.label}"/>				 
@@ -124,8 +124,8 @@
 					</g:HorizontalPanel>
 					<!-- Module 5 Bug Report Solution -->
 					<g:HorizontalPanel spacing="7" ui:field="scheduleHP">
-					<my:IconButton ui:field="btnScheduleEarlier" icon=" triangle-1-n"></my:IconButton>
-					<my:IconButton ui:field="btnSchedulePostpone" icon="triangle-1-s"></my:IconButton>			
+					<my:IconButton ui:field="btnScheduleEarlier" addStyleNames="{style.btnStyle}" icon=" triangle-1-n"></my:IconButton>
+					<my:IconButton ui:field="btnSchedulePostpone" addStyleNames="{style.btnStyle}" icon="triangle-1-s"></my:IconButton>			
 				</g:HorizontalPanel>
 				<!-- E Module 5 Bug Report Solution -->						
 			</g:VerticalPanel>

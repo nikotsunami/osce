@@ -62,7 +62,7 @@
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 	
 		<my:IconButton icon="check" ui:field="okBtn" width="60px"></my:IconButton>		 		
-		<my:IconButton icon="closethick" ui:field="cancelBtn" width="60px"></my:IconButton>
+		<my:IconButton icon="closethick" ui:field="cancelBtn" width="80px"></my:IconButton>
 	
 		</g:HorizontalPanel>
 	</g:VerticalPanel>

@@ -325,9 +325,9 @@ public class OscePostRoom {
     
   //spec bug sol
     
-    public static List<OscePost> insertRoomVertically(Long osceid, Course course, Long oscePostid, Room room)
+    public static List<OscePostRoom> insertRoomVertically(Long osceid, Course course, Long oscePostid, Room room)
     {
-    	List<OscePost> oscePostList = new ArrayList<OscePost>();
+    	List<OscePostRoom> oscePostRoomList = new ArrayList<OscePostRoom>();
     	try
     	{
     		Osce osce = Osce.findOsce(osceid);
@@ -381,19 +381,19 @@ public class OscePostRoom {
         				
         				opr.persist();
         				
-        				oscePostList.add(opr.getOscePost());
+        				oscePostRoomList.add(opr);
         				
-        				System.out.println("OSCE POST ROOM ID : " + opr.getId());
+        				//System.out.println("OSCE POST ROOM ID : " + opr.getId());
         			}
         		}
         	}
         	
-        	return oscePostList;
+        	return oscePostRoomList;
     	}
     	catch(Exception e)
     	{
     		System.out.println(e.getMessage());
-    		return oscePostList;
+    		return oscePostRoomList;
     	}
     	
     }

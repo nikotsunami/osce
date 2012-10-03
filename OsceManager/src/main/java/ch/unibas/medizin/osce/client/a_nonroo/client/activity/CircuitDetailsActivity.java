@@ -832,7 +832,7 @@ AccordianPanelView.ParcourDelegate
 									int newhr=(totalMinute/60);
 									int newmin=(totalMinute%60);
 									osceProxy.getLunchBreak();
-									osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5)+"-"+newhr+":"+newmin);	
+									osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));	
 								}
 								
 								
@@ -1656,12 +1656,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		// Module 5 Bug Test Change
 		public String getLabelString(String text)
 		{
-			Log.info("Text String Size: " + text.length());
+			//Log.info("Text String Size: " + text.length());
 			if(text.length()>11)
 			{
-				Log.info("Text Length is greater than 8 Before Text is: " + text);
+			//	Log.info("Text Length is greater than 8 Before Text is: " + text);
 				text=text.substring(0, 11).concat("..");	
-				Log.info("Text Length is greater than 8 So Text is: " + text);
+			//	Log.info("Text Length is greater than 8 So Text is: " + text);
 			}			
 			return text;
 			
@@ -4873,13 +4873,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																	
 																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 																	
-																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).fire(new OSCEReceiver<List<OscePostProxy>>() {
+																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() 
+																	{
 
 																		@Override
-																		public void onSuccess(List<OscePostProxy> response) {
-																				System.out.println("RESPONSE : " + response);
-																				requests.getEventBus().fireEvent(new RoomRefreshEvent(response));
-																				
+																		public void onSuccess(List<OscePostRoomProxy> response) {
+																				requests.getEventBus().fireEvent(new RoomRefreshEvent(response, roomProxy.getRoomNumber()));
 																			}
 																		});
 																	
@@ -4959,7 +4958,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												int newhr=(totalMinute/60);
 												int newmin=(totalMinute%60);
 										
-												osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+newhr+":"+newmin);
+												osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
 											
 												//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 											
@@ -5100,7 +5099,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														int newhr=(totalMinute/60);
 														int newmin=(totalMinute%60);
 												
-														osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+newhr+":"+newmin);
+														osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
 
 														
 															//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
@@ -5209,6 +5208,17 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										
 				}
 
+				public String getTimeInTwoDigit(int time)
+				{
+					Log.info("Gettiime in Two Digit.");
+					String newTimeTwoDigit=""+time;
+					
+					if(newTimeTwoDigit.length()==1)
+						newTimeTwoDigit="0"+newTimeTwoDigit;					
+					
+					return newTimeTwoDigit;
+				}
+
 				@Override
 				public void shiftLucnkBreakNextClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImplTemp) {
 					
@@ -5248,7 +5258,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 														int newhr=(totalMinute/60);
 														int newmin=(totalMinute%60);
 												
-														osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+newhr+":"+newmin);
+														osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
 
 														//	osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 														
@@ -5367,7 +5377,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											int newhr=(totalMinute/60);
 											int newmin=(totalMinute%60);
 									
-											osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+newhr+":"+newmin);
+											osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
 
 												//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
 											
@@ -5582,12 +5592,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 	}
 
 	@Override
-	public void refreshRoomValue(final OscePostSubViewImpl oscePostSubViewImpl,
-			OscePostProxy oscePostProxy, CourseProxy courseProxy) {
+	public void refreshRoomValue(final OscePostSubViewImpl oscePostSubViewImpl, String roomValue) {
+		
+		oscePostSubViewImpl.getRoomLbl().setText(util.getEmptyIfNull(roomValue));
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 		
 		//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+		/*requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
 			@Override
 			public void onSuccess(OscePostRoomProxy response) {
 				if (response.getRoom() != null)
@@ -5610,6 +5623,6 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				super.onViolation(errors);
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			}
-		});
+		});*/
 	}                
 }

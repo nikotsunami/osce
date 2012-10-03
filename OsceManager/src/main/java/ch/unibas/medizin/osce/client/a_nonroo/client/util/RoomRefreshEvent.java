@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.google.gwt.event.shared.EventBus;
@@ -14,26 +15,31 @@ public class RoomRefreshEvent extends GwtEvent<RoomRefreshHandler> {
 	
 	private static final Type TYPE = new Type<RoomRefreshEvent>();
 	
-	private List<OscePostProxy> oscePostList;
+	private List<OscePostRoomProxy> oscePostRoomList;
 	
-	public RoomRefreshEvent(List<OscePostProxy> val)
+	private String roomValue;
+	
+	public RoomRefreshEvent(List<OscePostRoomProxy> val, String roomVal)
 	{
-		oscePostList = val;
+		oscePostRoomList = val;
+		roomValue = roomVal;
 	}
 	
-	
-	
-	public List<OscePostProxy> getOscePostList() {
-		return oscePostList;
+	public List<OscePostRoomProxy> getOscePostRoomList() {
+		return oscePostRoomList;
 	}
 
-
-
-	public void setOscePostList(List<OscePostProxy> oscePostList) {
-		this.oscePostList = oscePostList;
+	public void setOscePostRoomList(List<OscePostRoomProxy> oscePostRoomList) {
+		this.oscePostRoomList = oscePostRoomList;
+	}
+	
+	public String getRoomValue() {
+		return roomValue;
 	}
 
-
+	public void setRoomValue(String roomValue) {
+		this.roomValue = roomValue;
+	}
 
 	public static Type getType() {
 		return TYPE;

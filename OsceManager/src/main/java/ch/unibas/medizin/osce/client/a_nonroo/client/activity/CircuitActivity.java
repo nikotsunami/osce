@@ -52,6 +52,7 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 	
 	
 	public static HandlerManager handlerManager;// = new HandlerManager(this);
+	private SelectChangeHandler removeHandler;
 
 	
 	// G: SPEC START =
@@ -84,6 +85,7 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 			}
 			public void addSelectChangeHandler(SelectChangeHandler handler) {
 				handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+				removeHandler=handler;
 			}
 			// G: SPEC END =
 	
@@ -99,6 +101,7 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 
 	public void onStop(){
 		activityManager.setDisplay(null);
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 	}
 	
 	@Override

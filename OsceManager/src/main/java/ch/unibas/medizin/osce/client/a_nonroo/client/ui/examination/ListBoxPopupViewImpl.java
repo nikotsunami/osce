@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -154,6 +155,7 @@ public class ListBoxPopupViewImpl extends PopupPanel implements ListBoxPopupView
 		add(BINDER.createAndBindUi(this));
 		okBtn.setText(constants.okBtn());
 		cancelBtn.setText(constants.cancel());
+		cancelBtn.getElement().getStyle().setMarginLeft(5, Unit.PX);
 	}
 	
 	
