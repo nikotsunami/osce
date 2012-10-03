@@ -1080,6 +1080,13 @@ public interface OsceConstants extends Constants {
 	
 	public String warningStandardizedRoleUnassigned();
 
+       public String information();
+	
+	public String roleTemplateDeleteWarning();
+	
+	public String roleTemplateDeleteMessage();
+	public String accessNotification();
+
 	
 }
 

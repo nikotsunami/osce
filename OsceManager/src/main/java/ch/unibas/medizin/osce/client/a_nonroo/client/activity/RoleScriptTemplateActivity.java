@@ -10,14 +10,18 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplateDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleScriptTemplateViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -58,6 +62,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.CellPreviewEvent;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -299,7 +305,37 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 				keyProvider);
 		table.setSelectionModel(selectionModel);
 
-		selectionModel
+		
+		// RoleTemplate Bug {
+		table.addCellPreviewHandler(new Handler<RoleTemplateProxy>() {
+
+			@Override
+			public void onCellPreview(CellPreviewEvent<RoleTemplateProxy> event) {
+				
+				boolean isClicked="click".equals(event.getNativeEvent().getType());
+				if(isClicked){
+				//Window.alert("Column Clicked :"+ event.getColumn());
+				if(event.getColumn()!=6 && event.getColumn() !=7 ){
+				RoleTemplateProxy selectedObject = selectionModel
+						.getSelectedObject();
+				
+				if (selectedObject != null) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					Log.debug(selectedObject.getTemplateName()
+							+ " selected!");
+					showDetails(selectedObject);
+				}
+				else{
+					view.setDetailPanel(false);
+				 }
+				}
+				}	
+			}
+		});
+		
+		/*selectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						RoleTemplateProxy selectedObject = selectionModel
@@ -316,7 +352,9 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 							view.setDetailPanel(false);
 						}
 					}
-				});
+				});*/
+
+		// RoleTemplate Bug }
 
 		view.setDelegate(this);
 
@@ -572,16 +610,57 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void deleteClicked(RoleTemplateProxy roleTemplate) {
-		requests.roleTemplateRequest().remove().using(roleTemplate)
-				.fire(new Receiver<Void>() {
-					public void onSuccess(Void ignore) {
-						Log.debug("Sucessfully deleted");
+	public void deleteClicked(final RoleTemplateProxy roleTemplate) {
+		// Role Template Bug {
+		Log.info("Role Template proxy at delete is :" + roleTemplate.getId());
+		
+		requests.roleTemplateRequestNonRoo().findCountOfStandardizedRoleAssignForTemplate(roleTemplate.getId()).fire(new OSCEReceiver<Long>() {
+			
+			@Override
+			public void onSuccess(Long response) {
+				
+			if(response !=null){
+				
+				Log.info("Total Time Template is assign in SP : " + response);
+				
+				if(response > 0){
+					
+					MessageConfirmationDialogBox dialogMessage = new MessageConfirmationDialogBox(constants.warning());
+					dialogMessage.showConfirmationDialog(constants.roleTemplateDeleteWarning());
+				}
+				else if(response==0){
+					
+					requests.roleTemplateRequestNonRoo().deleteRoleTemplate(roleTemplate.getId()).fire(new OSCEReceiver<Boolean>() {
+
+						@Override
+						public void onSuccess(Boolean response) {
+							if(response==true){
+								MessageConfirmationDialogBox dialog =new MessageConfirmationDialogBox(constants.information());
+								dialog.showConfirmationDialog(constants.roleTemplateDeleteMessage());
+								//init();
+								dialog.getNoBtnl().addClickHandler(new ClickHandler() {
+									
+									@Override
+									public void onClick(ClickEvent event) {
 						init();
+										requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+										placeController.goTo(new RoleScriptTemplatePlace("RoleScriptTemplatePlace"));
+										requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+										
+									}
+								});
+								
+							}
+							
 					}
 				});
 	}
+			}
 
+			}
+		});
+	}
+	// Role Template Bug }
 // Issue Role Module
 	@Override
 	public void editClicked(final RoleTemplateProxy roleTemplate,int left,int top) {
@@ -594,13 +673,13 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		Log.info("ToolTip opened");
 		toolTip = new PopupPanel(true);
 
-		toolTip.setWidth("180px");
+		toolTip.setWidth("210px");
 		toolTip.setHeight("40px");
 		toolTip.setAnimationEnabled(true);
 
 		toolTipContentPanel = new HorizontalPanel();
 
-		toolTipContentPanel.setWidth("160px");
+		toolTipContentPanel.setWidth("200px");
 		toolTipContentPanel.setHeight("22px");
 		toolTipContentPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -614,7 +693,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		toolTipChange = new IconButton(constants.save());
 		toolTipChange.setIcon("disk");
 
-		toolTipChange.setWidth("40px");
+		toolTipChange.setWidth("70px");
 		toolTipChange.setHeight("25px");
 
 		toolTipContentPanel.add(toolTipLabel);

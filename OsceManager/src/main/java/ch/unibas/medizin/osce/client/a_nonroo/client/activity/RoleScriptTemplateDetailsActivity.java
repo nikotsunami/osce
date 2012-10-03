@@ -213,6 +213,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 							roleBaseTableItemViewImpl.roleBaseItemDisclosurePanel.setStyleName("border=0");
 							roleBaseTableItemViewImpl.table.removeFromParent();
 							roleBaseTableItemViewImpl.AddSubItem.removeFromParent();
+							roleBaseTableItemViewImpl.txtSubItem.removeFromParent();
 							view.getTableItem().add(roleBaseTableItemViewImpl);
 						}
 						
@@ -324,6 +325,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 									roleText_AreaTableItemViewImpl.table.removeFromParent();
 									roleText_AreaTableItemViewImpl.AddSubItem.removeFromParent();
 									roleText_AreaTableItemViewImpl.txtSubItem.removeFromParent();
+									
 								}
 							}
 							
@@ -462,13 +464,13 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 				Log.info("RoleBase Proxy Item name :" + roleBaseItemProxy.getItem_name());
 				toolTip= new PopupPanel(true);
 				
-				toolTip.setWidth("180px");
+				toolTip.setWidth("210px");
 				toolTip.setHeight("40px");
 			    toolTip.setAnimationEnabled(true);
 			    
 				toolTipContentPanel=new HorizontalPanel();
 				
-				toolTipContentPanel.setWidth("160px");
+				toolTipContentPanel.setWidth("200px");
 				toolTipContentPanel.setHeight("22px");
 				toolTipContentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				toolTipContentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -481,7 +483,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 				toolTipChange = new IconButton(constants.save());
 				toolTipChange.setIcon("disk");
 			 
-				toolTipChange.setWidth("40px");
+				toolTipChange.setWidth("70px");
 				toolTipChange.setHeight("25px");       
 				
 				
@@ -630,13 +632,13 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		Log.info("RoleBase Proxy Item id to add title of roletable:" + roleTableItem.getRoleBaseItem());
 		toolTip= new PopupPanel(true);
 		
-		toolTip.setWidth("180px");
+		toolTip.setWidth("210px");
 		toolTip.setHeight("40px");
 	    toolTip.setAnimationEnabled(true);
 	    
 		toolTipContentPanel=new HorizontalPanel();
 		
-		toolTipContentPanel.setWidth("160px");
+		toolTipContentPanel.setWidth("200px");
 		toolTipContentPanel.setHeight("22px");
 		toolTipContentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		toolTipContentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -649,7 +651,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		toolTipChange = new IconButton(constants.save());
 		toolTipChange.setIcon("disk");
 	 
-		toolTipChange.setWidth("40px");
+		toolTipChange.setWidth("70px");
 		toolTipChange.setHeight("25px");       
 		
 		
@@ -871,13 +873,20 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 	}
 
 	@Override
-	public void baseItemAccessButtonClicked(ClickEvent event,
+	public void baseItemAccessButtonClicked(final ClickEvent event,
 			final RoleBaseItemProxy roleBasedItemProxy,final HorizontalPanel accessDataPanel) {
 				
+		Log.info("roleBasedItemProxy Is :" + roleBasedItemProxy.getId());
+		
+		
+		//Log.info("roleBasedItemProxy Is :" + response.getId());
+		
+		//final RoleBaseItemProxy roleBasedItemProxynew =response;
+		
 		IconButton accessButton =(IconButton) event.getSource();
 		
-		int xPosition = accessButton.getAbsoluteLeft();
-		int yPosition = accessButton.getAbsoluteTop();
+		final int xPosition = accessButton.getAbsoluteLeft();
+		final int yPosition = accessButton.getAbsoluteTop();
 		
 		toolTip= new PopupPanel(true);
 		
@@ -904,8 +913,13 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		*/
 		//Issue # 122 : Replace pull down with autocomplete.
 		
+		requests.roleBaseItemRequest().findRoleBaseItem(roleBasedItemProxy.getId()).with("roleItemAccess").fire(new OSCEReceiver<RoleBaseItemProxy>() {
+
+			@Override
+			public void onSuccess(RoleBaseItemProxy response) {
 		
 					
+			final RoleBaseItemProxy roleBasedItemProxynew=response;		
 		
 		requests.roleItemAccessRequest().findAllRoleItemAccesses().fire(new Receiver <List<RoleItemAccessProxy>>() {
 
@@ -946,8 +960,8 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 					
 						
 
-				}
-		});
+			
+		
 		//Issue # 122 : Replace pull down with autocomplete.
 		toolTipContentPanel.add(accessList);
 		//toolTipContentPanel.add(accessList);
@@ -959,7 +973,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 	     toolTip.add(toolTipContentPanel);   // you can add any widget here
 	        
 	   
-		toolTip.setPopupPosition(xPosition - 100,yPosition-50);
+		toolTip.setPopupPosition(xPosition - 155,yPosition-50);
 	    
 	      toolTip.show();
 	      
@@ -983,32 +997,38 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 						roleBaseTableAccssViewImpl.setDelegate(roleScriptTemplateDetailsActivity);
 					
 						//roleBaseTableAccssViewImpl.setRoleItemAccessProxy(event.getValue());
-						if(roleBasedItemProxy.getRoleItemAccess() != null)
+						if(roleBasedItemProxynew.getRoleItemAccess() != null)
 						{
 							
-							 Iterator<RoleItemAccessProxy> roleBaseProxy = roleBasedItemProxy.getRoleItemAccess().iterator(); 
+							 Iterator<RoleItemAccessProxy> roleBaseProxy = roleBasedItemProxynew.getRoleItemAccess().iterator(); 
 							 while(roleBaseProxy.hasNext())
 							 {
 								 if(roleBaseProxy.next().getId().longValue()==accessList.getSelected().getId().longValue()){
 									 flag=true;
+									 break;
 								 }
 							 }
 						}
 						if(flag){
-							Window.alert("Same Role Access Is not assign twice");
+							//Window.alert("Same Role Access Is not assign twice");
+							MessageConfirmationDialogBox dialog =new MessageConfirmationDialogBox(constants.information());
+							dialog.showConfirmationDialog(constants.accessNotification());
 							return ;
 						}
 						
 						roleBaseTableAccssViewImpl.accessDataLabel.setText(accessList.getSelected().getName());
 						accessDataPanel.add(roleBaseTableAccssViewImpl);
 										
-						RoleBaseItemProxy editRoleBasedItemProxy = roleBasedItemProxy;
+						RoleBaseItemProxy editRoleBasedItemProxy = roleBasedItemProxynew;
 						
 						RoleBaseItemRequest roleBaseItemReq = requests.roleBaseItemRequest();										
 						editRoleBasedItemProxy = roleBaseItemReq.edit(editRoleBasedItemProxy);
 						
 						Set<RoleItemAccessProxy> setRoleItemAccessProxy = editRoleBasedItemProxy.getRoleItemAccess();
 				
+						Log.info("setRoleItemAccessProxy is " + setRoleItemAccessProxy.size());
+						
+						Log.info("accessList.getSelected() Is " + accessList.getSelected());
 				
 						setRoleItemAccessProxy.add(accessList.getSelected());
 						
@@ -1109,6 +1129,15 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		});
 		*/
 	 //Issue # 122 : Replace pull down with autocomplete.
+		
+
+			}
+		});
+	   
+	   
+			}
+		});
+
 	}
 	
 	

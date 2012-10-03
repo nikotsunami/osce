@@ -130,6 +130,7 @@ RoleBaseTableItemView {
 	
 	@UiHandler("AccessButton")
 	public void baseItemAccessButtonClicked(ClickEvent event){
+		Log.info("Add access Butoon is Clicked with proxy:" + roleBasedItemProxy.getId());
 		delegate.baseItemAccessButtonClicked(event,roleBasedItemProxy,accessDataPanel);
 	}
 	
@@ -296,7 +297,7 @@ RoleBaseTableItemView {
 			@Override
 			public void onClick(ClickEvent event) {
 				top = event.getClientY()-50;
-				left = event.getClientX();
+				left = event.getClientX()-145;
 				
 				Log.info("top : "+top);
 				Log.info("left : "+left);

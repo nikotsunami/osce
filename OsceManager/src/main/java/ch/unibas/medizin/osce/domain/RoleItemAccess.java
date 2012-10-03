@@ -22,6 +22,6 @@ public class RoleItemAccess {
 //	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "roleItemAccess")
 //    private Set<RoleTableItem> roleTableItem = new HashSet<RoleTableItem>();
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "roleItemAccess")
+	@ManyToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "roleItemAccess")
     private Set<RoleBaseItem> roleBaseItem = new HashSet<RoleBaseItem>();
 }

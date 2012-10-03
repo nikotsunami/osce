@@ -55,7 +55,7 @@ public class RoleBaseItem {
 	@OrderBy ("sort_order")
 	private List<RoleTableItem> roleTableItem = new ArrayList<RoleTableItem>();
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany/*(cascade = CascadeType.ALL)*/
     private Set<RoleItemAccess> roleItemAccess = new HashSet<RoleItemAccess>();
 	
 	public static List<RoleBaseItem> findAllDeletedRoleBaseItems(Integer templateId){

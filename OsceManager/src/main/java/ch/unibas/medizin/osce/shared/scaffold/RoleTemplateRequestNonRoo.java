@@ -31,4 +31,8 @@ public interface RoleTemplateRequestNonRoo extends RequestContext{
 			List<String> searchThrough);
 	
 	abstract Request<List<RoleTemplateProxy>> findAllTemplateName(String sortColumn,Sorting order,String searchWord, int firstResult,int maxResult);
+	
+	abstract Request<Long>findCountOfStandardizedRoleAssignForTemplate(Integer id);
+	
+	abstract Request<Boolean> deleteRoleTemplate(Integer roleTemplateId);
 }
