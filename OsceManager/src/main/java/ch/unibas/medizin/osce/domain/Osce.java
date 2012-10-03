@@ -274,16 +274,18 @@ public class Osce {
     	
     	
     	//retrieve distinct sequence number of student
-    	String seqQuery="select distinct sequenceNumber from Assignment where type=0 and osceDay in (select id from OsceDay where osce="+osceId+")";
+    	String seqQuery="select distinct sequenceNumber from Assignment where type=0 and osceDay in (select id from OsceDay where osce="+osceId+") order by sequenceNumber";
     	
     	//retrieve studentOsces    	
-    	String studentWuery="SELECT student FROM StudentOsces s where  s.isEnrolled=true and osce="+osceId +" order by student";
+    	String studentQuery="SELECT student FROM StudentOsces s where s.isEnrolled=true and osce="+osceId +" order by s.student.name,s.student.preName";
     	
     	
     	TypedQuery<Integer> seqTypedQuery = em.createQuery(seqQuery, Integer.class);
     	List<Integer> seqList=seqTypedQuery.getResultList();
     	
-    	TypedQuery<Student> studentTypedQuery = em.createQuery(studentWuery,Student.class);
+    	TypedQuery<Student> studentTypedQuery = em.createQuery(studentQuery,Student.class);
+    	
+    	Log.info("Student Query : " + studentTypedQuery.toString());
     	
     	List<Student> studentList=studentTypedQuery.getResultList();
     	

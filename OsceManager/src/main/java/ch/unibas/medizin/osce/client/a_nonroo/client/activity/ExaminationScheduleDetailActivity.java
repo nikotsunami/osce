@@ -84,10 +84,23 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	private Map<OscePostProxy, List<Date>> postEndTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	
 	private List<DoctorProxy> doctorList;
+
+
 	public void setOsceProxy(OsceProxy osceProxy) {
 		this.osceProxy = osceProxy;
 	}
+	private long earlyStart=0;
+	
+	private List<OscePostProxy> earlyStartPost=new ArrayList<OscePostProxy>();
+	
+	public long getEarlyStart() {
+		return earlyStart;
+	}
 
+	public void setEarlyStart(long earlyStart) {
+		this.earlyStart =  earlyStart;
+	}
+	
 	public ExaminationScheduleDetailActivity(ExaminationScheduleDetailPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
     	this.requests = requests;
@@ -327,6 +340,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		Log.info("retrieveContent :");
 		if(doctorList!=null)
 		doctorList.clear();
+		earlyStartPost.clear();
+		setEarlyStart(0);
 		//Iterator<OscePostProxy> oscePostProxyIterator=accordianPanelViewImpl.getOsceSequenceProxy().getOscePosts().iterator();
 		final List<OscePostProxy> oscePostProxies=accordianPanelViewImpl.getOsceSequenceProxy().getOscePosts();
 		
@@ -336,14 +351,18 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		contentView.getOscePostHP().clear();
 		
 		
-		
 		for(int i=0;i<oscePostProxies.size();i++)
 		{	
 			final OscePostProxy oscePostProxy=oscePostProxies.get(i);
 			Log.info("Osce Post ID :" + oscePostProxy.getId());
 			
+			 boolean isLastPost=false;
 			
 			
+			if(i==oscePostProxies.size()-1)
+				isLastPost=true;
+			
+			final boolean  isLastPost1=isLastPost;
 			//create post which contains student,sp and examiners slot.
 			final OscePostView oscePostView=new OscePostViewImpl();
 			oscePostView.getOscePostLbl().setText(constants.circuitStation() + " " +oscePostProxy.getSequenceNumber());
@@ -353,6 +372,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			{
 				oscePostView.getOscePostPanel().addStyleName("oscePost-leftTop-radius");
 			}
+			
+			
+			
 			
 			//retrieve student data of particular post and course from assignment table.
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
@@ -364,6 +386,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							new ApplicationLoadingScreenEvent(true));
 					Log.info("onSuccess retrieveContent : response size type Student :" + response.size());
 					Log.info("onSuccess retrieveContent : response size :" + response.size());
+					
+					
+					
+					
 					if(response.size()==0)
 					{
 						requests.getEventBus().fireEvent(
@@ -396,9 +422,23 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						 	
 							
 						 	//if dual post than first slot length is half
-							if(assignmentProxy.getTimeStart().getHours() != accordianPanelViewImpl.getOsceDayProxy().getTimeStart().getHours() && (oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION) && j==0)
+							/*if(assignmentProxy.getTimeStart().getHours() != accordianPanelViewImpl.getOsceDayProxy().getTimeStart().getHours() && (oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION) && j==0)
 							{
 								studentSlotLength=studentSlotLength/2;
+							}*/
+							
+							
+							
+						 	
+						 	//1. calculate early start time duration
+							if(assignmentProxy.getTimeStart().before(accordianPanelViewImpl.getOsceDayProxy().getTimeStart()))
+							{
+								long earlyStart=calculateTimeInMinute(accordianPanelViewImpl.getOsceDayProxy().getTimeStart(), assignmentProxy.getTimeStart());
+								if(getEarlyStart() < earlyStart)
+									setEarlyStart(earlyStart);
+								
+								if(getEarlyStart() != 0)
+								earlyStartPost.add(oscePostProxy);
 							}
 							
 							
@@ -706,9 +746,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								Long examinerSlotLength=0l;
 								//if(examinerTimeEnd.before(examinerTimeStart))
 								
-								if(oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION)
-									examinerSlotLength=calculateTimeInMinute(examinerTimeEnd,examinerStartTime);
-								else
+							//	if(oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION)
+							//		examinerSlotLength=calculateTimeInMinute(examinerTimeEnd,examinerStartTime);
+							//	else
 									 examinerSlotLength=calculateTimeInMinute(examinerTimeEnd,examinerStartTime);
 					
 								//examinerSlotLength=examinerSlotLength/60000;
@@ -883,11 +923,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						 	//calculate sp slot length
 						
 						 Long spSlotLength=0l;
-						 if((oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION)&& j==0)
-						 {
-							 spSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), accordianPanelViewImpl.getOsceDayProxy().getTimeStart());
-						 }
-						 else							
+						// if((oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION)&& j==0)
+						// {
+						//	 spSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), accordianPanelViewImpl.getOsceDayProxy().getTimeStart());
+						// }
+						 //else							
 						 	 spSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
 						 
 						//	spSlotLength=spSlotLength/60000;
@@ -1035,7 +1075,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							}*/
 							
 							
-						 
+							
+							
+							if(j==response.size()-1)
+								insertEarlyStartSlot(contentView,isLastPost1);
 					}
 				
 					requests.getEventBus().fireEvent(
@@ -1050,8 +1093,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			contentView.getOscePostHP().insert(oscePostView, contentView.getOscePostHP().getWidgetCount());
 			
 			
-		   	
-			
+
 		}
 		
 		
@@ -1065,6 +1107,68 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	}
 	
 	
+	public void insertEarlyStartSlot(ContentView contentView,boolean isLastPost)
+	{
+		//insert earlyStart empty slot
+		if(isLastPost && getEarlyStart() != 0)
+		{	
+			
+			
+			earlyStart--;
+			for(int k=0;k<contentView.getOscePostHP().getWidgetCount();k++)
+			{
+				OscePostView postView=(OscePostView)contentView.getOscePostHP().getWidget(k);
+				
+				if(postView.getOscePostProxy()!= null && !checkIfPostIsEarly(postView.getOscePostProxy()))
+				{
+					
+					SPView simpatBreak=new SPViewImpl();
+					simpatBreak.getSpPanel().addStyleName("empty-bg");
+					simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+
+					//simpatBreak.setDelegate(activity);
+					simpatBreak.getSpPanel().setHeight(getEarlyStart()+"px");
+					simpatBreak.getSpPanel().setWidth("30px");
+					
+					postView.getStudentSlotsVP().insert(simpatBreak, 0);
+					
+					SPView simpatBreak1=new SPViewImpl();
+					simpatBreak1.getSpPanel().addStyleName("empty-bg");
+					simpatBreak1.getSpPanel().addStyleName("border-bottom-red");
+
+					//simpatBreak.setDelegate(activity);
+					simpatBreak1.getSpPanel().setHeight(getEarlyStart()+"px");
+					simpatBreak1.getSpPanel().setWidth("30px");
+					
+					postView.getSpSlotsVP().insert(simpatBreak1, 0);
+					
+					SPView simpatBreak2=new SPViewImpl();
+					simpatBreak2.getSpPanel().addStyleName("empty-bg");
+					simpatBreak2.getSpPanel().addStyleName("border-bottom-red");
+
+					//simpatBreak.setDelegate(activity);
+					simpatBreak2.getSpPanel().setHeight(getEarlyStart()+"px");
+					simpatBreak2.getSpPanel().setWidth("30px");
+					postView.getExaminerVP().insert(simpatBreak2, 0);
+				}
+			}
+			
+			
+			setEarlyStart(0);
+			earlyStartPost.clear();
+			
+		}
+	}
+	public boolean checkIfPostIsEarly(OscePostProxy postProxy)
+	{
+		for(OscePostProxy earlyPost: earlyStartPost)
+		{
+			if(earlyPost.getId() == postProxy.getId())
+				return true;
+		}
+		
+		return false;
+	}
 	//create Logical break for each parcor
 	public void createLogicalBreakOfSP(final AccordianPanelViewImpl accordianPanelViewImpl,final ContentView contentView)
 	{
@@ -1706,10 +1810,16 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	}
 	
 	public void autoAssignSP(long id){
+	
+		requests.getEventBus().fireEvent(
+				new ApplicationLoadingScreenEvent(true));
+		
 		requests.osceRequestNonRoo().autoAssignPatientInRole(id).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
+				
+				
 				
 				Log.info("autoAssignSP :" + response);
 				MessageConfirmationDialogBox dialogBox=null;
@@ -1720,7 +1830,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				}
 				else
 				{
-					dialogBox =new MessageConfirmationDialogBox(constants.error());
+					dialogBox =new MessageConfirmationDialogBox(constants.warning());
 					dialogBox.showConfirmationDialog(constants.exaPlanSpFailure());
 				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
@@ -1736,18 +1846,30 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						
 					}
 				});
+			
 				
+				requests.getEventBus().fireEvent(
+						new ApplicationLoadingScreenEvent(false));	
 			}
 		});
+		
+		
 	}
 	
 	public void autoAssignStudent(long id)
 	{
 		Log.info("autoAssignStudent Clicked :");
+		
+		requests.getEventBus().fireEvent(
+				new ApplicationLoadingScreenEvent(true));
+		
 		requests.osceRequestNonRoo().autoAssignStudent(id).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
+				
+				
+				
 				Log.info("autoAssignStudent :" + response);
 				MessageConfirmationDialogBox dialogBox=null;
 				if(response)
@@ -1757,7 +1879,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				}
 				else
 				{
-					dialogBox =new MessageConfirmationDialogBox(constants.error());
+					dialogBox =new MessageConfirmationDialogBox(constants.warning());
 					dialogBox.showConfirmationDialog(constants.exaPlanStudentFailure());
 				}
 				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
@@ -1774,8 +1896,13 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					}
 				
 			});
+				
+				requests.getEventBus().fireEvent(
+						new ApplicationLoadingScreenEvent(false));
 			}
 		});
+		
+		
 	}
 	
     		
