@@ -166,7 +166,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 		});	
 		// E: Issue Role V1
 		
-		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(this.getAbsoluteLeft()-55, this.getAbsoluteTop()-185); // SPEC Change
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(editBtn.getAbsoluteLeft()-205, editBtn.getAbsoluteTop()-192); // SPEC Change+
 		((CheckListTopicPopupViewImpl)optionPopup).show();
 	}
 	

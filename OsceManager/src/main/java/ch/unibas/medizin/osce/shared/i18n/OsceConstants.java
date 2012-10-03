@@ -446,6 +446,8 @@ public interface OsceConstants extends Constants {
 
 	public String keyword();
 
+	public String keywordExists();
+
 	public String keywords();
 
 	public String language();

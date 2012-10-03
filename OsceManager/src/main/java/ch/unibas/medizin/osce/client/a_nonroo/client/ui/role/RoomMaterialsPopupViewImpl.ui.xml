@@ -25,6 +25,11 @@
 }
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with> 	
+ <g:VerticalPanel>
+ <g:HTML>
+	<div class="arrow-popup-border" ></div>
+	<div class="arrow-popup"></div>
+</g:HTML>
 	<g:HTMLPanel>		
 		<g:HorizontalPanel>
 			<g:VerticalPanel>
@@ -43,7 +48,8 @@
 				<my:FocusableValueListBox ui:field="used_from" styleName="{style.marginTop7}"></my:FocusableValueListBox>	
 			</g:VerticalPanel>				
 		</g:HorizontalPanel>	
-		<my:IconButton icon="disk" ui:field="saveRoomMaterial" styleName="{style.marginTop15}"></my:IconButton>
-		<my:IconButton icon="closethick" ui:field="cancel" styleName="{style.marginTop15}"></my:IconButton>			
+		<my:IconButton icon="disk" ui:field="saveRoomMaterial" addStyleNames="{style.marginTop15}"></my:IconButton>
+		<my:IconButton icon="closethick" ui:field="cancel" addStyleNames="{style.marginTop15}"></my:IconButton>			
 	</g:HTMLPanel>	
+</g:VerticalPanel>	
 </ui:UiBinder>

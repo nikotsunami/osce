@@ -50,7 +50,7 @@
 </g:HTML>
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="specializationLbl" width="80px"></g:Label>
+		<g:Label ui:field="specializationLbl" width="100px"></g:Label>
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<!-- <g:ValueListBox ui:field="roleLstBox"></g:ValueListBox>-->
 		<i:DefaultSuggestBox ui:field="specializationLstBox"> </i:DefaultSuggestBox> 
@@ -59,7 +59,7 @@
 	
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="roleLbl" width="80px"></g:Label>
+		<g:Label ui:field="roleLbl" width="100px"></g:Label>
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<!-- <g:ValueListBox ui:field="roleLstBox"></g:ValueListBox>-->
 		<i:DefaultSuggestBox ui:field="roleLstBox"> </i:DefaultSuggestBox> 
@@ -68,7 +68,7 @@
 	
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="topicLbl" width="80px"></g:Label>
+		<g:Label ui:field="topicLbl" width="100px"></g:Label>
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<!-- <g:ValueListBox ui:field="topicLstBox"></g:ValueListBox> -->
 		<i:DefaultSuggestBox ui:field="topicLstBox" ></i:DefaultSuggestBox>
@@ -78,7 +78,7 @@
 	
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="questionLbl"></g:Label>
+		<g:Label ui:field="questionLbl" width="100px" ></g:Label>
 		<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 		<!-- <g:ValueListBox ui:field="queListBox"></g:ValueListBox> -->
 		<i:DefaultSuggestBox ui:field="queListBox"></i:DefaultSuggestBox>

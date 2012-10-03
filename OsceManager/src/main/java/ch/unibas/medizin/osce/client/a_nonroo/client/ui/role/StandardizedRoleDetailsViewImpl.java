@@ -682,7 +682,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			
 		
 		
-		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addTopicHP.getAbsoluteLeft()-100, addTopicHP.getAbsoluteTop()-180); //SPEC Change
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addCheckListTopicButton.getAbsoluteLeft()-170, addCheckListTopicButton.getAbsoluteTop()-192); //SPEC Change+
 		((CheckListTopicPopupViewImpl)topicPopup).show();
 		
 	}
@@ -731,7 +731,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 				// E: Issue Role
 				
 		}
-			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(addTopicHP.getAbsoluteLeft()+180, addTopicHP.getAbsoluteTop()-250);  // SPEC Change
+			((ImportTopicPopupViewImpl)importTopicView).setPopupPosition(importTopicButton.getAbsoluteLeft(), importTopicButton.getAbsoluteTop()-260);  // SPEC Change+
 			((ImportTopicPopupViewImpl)importTopicView).roleLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).specializationLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).queListBox.setText("");

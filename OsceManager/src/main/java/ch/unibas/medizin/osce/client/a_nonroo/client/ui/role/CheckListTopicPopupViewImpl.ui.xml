@@ -51,19 +51,19 @@
 
 <g:VerticalPanel spacing="10">
 <g:HTML>
-	<div class="arrow-popup-border" style="left:150px;"></div>
-	<div class="arrow-popup" style="left:150px;"></div>
+	<div class="arrow-popup-border" style="left:210px;"></div>
+	<div class="arrow-popup" style="left:210px;"></div>
 </g:HTML>
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="topicLbl" styleName="{style.right} " width="63px"></g:Label>
+		<g:Label ui:field="topicLbl" styleName="{style.right} " width="100px"></g:Label>
 		<g:TextBox ui:field="topicTxtBox" styleName="{style.left}" ></g:TextBox>
 		
 	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel  spacing="10">
 	
-		<g:Label ui:field="descriptionLbl" styleName="{style.right}"></g:Label>
+		<g:Label ui:field="descriptionLbl" styleName="{style.right}" width="100px" ></g:Label>
 		<g:TextBox ui:field="descriptionTxtBox" styleName="{style.left}" ></g:TextBox>
 		
 	</g:HorizontalPanel>

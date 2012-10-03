@@ -338,7 +338,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		}
 		
-		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(questionButtonVP.getAbsoluteLeft(), questionButtonVP.getAbsoluteTop()-180);
+		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(addCheckListQuestionButton.getAbsoluteLeft()-165, addCheckListQuestionButton.getAbsoluteTop()-192); //SPEC Change
 		// Highlight onViolation
 		checklistQuestionMap=new HashMap<String, Widget>();
 		checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
@@ -468,7 +468,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		}
 		
-		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-150, y - 195); //SPEC Change
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-210, y - 195); //SPEC Change+
 		
 		
 		// Highlight onViolation
@@ -547,7 +547,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			
 	}
 		
-		((ImportTopicPopupViewImpl)importQuestionPopup).setPopupPosition(addQuestionHP.getAbsoluteLeft()+140, addQuestionHP.getAbsoluteTop()-245);
+		((ImportTopicPopupViewImpl)importQuestionPopup).setPopupPosition(importQuestionButton.getAbsoluteLeft(), importQuestionButton.getAbsoluteTop()-260); // SPEC Change
 		
 		((ImportTopicPopupViewImpl)importQuestionPopup).roleLstBox.setText("");
 		((ImportTopicPopupViewImpl)importQuestionPopup).topicLstBox.setText("");

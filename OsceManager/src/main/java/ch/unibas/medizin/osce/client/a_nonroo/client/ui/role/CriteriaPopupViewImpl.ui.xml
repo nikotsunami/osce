@@ -40,6 +40,9 @@
 		
 		float:right
 	}
+	.buttonWidth{
+		width: 40px;
+	}
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
 <!--   SPCE Change -->
@@ -50,7 +53,7 @@
 </g:HTML>
 	<g:HorizontalPanel  spacing="10">
 		<g:TextBox ui:field="criteriaTxtBox"></g:TextBox>
-		<my:IconButton icon="check" ui:field="okBtn"></my:IconButton>
+		<my:IconButton icon="check" ui:field="okBtn" addStyleNames="{style.buttonWidth}" ></my:IconButton>
 	</g:HorizontalPanel>
 
 	

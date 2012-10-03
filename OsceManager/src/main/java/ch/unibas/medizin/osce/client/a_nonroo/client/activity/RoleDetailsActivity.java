@@ -3918,6 +3918,30 @@ final int index2 = index;
 							Log.info("~Not Null part for Keyword: " + selectedKeyword);	
 						}
 						
+						// SPEC Change
+						
+						boolean isExists = false;
+						
+						for(KeywordProxy proxy:setKeyworkdProxy){
+							
+							if(proxy.getName().equals(keywordProxy.getName())){
+								isExists = true;
+								break;
+							}
+							
+						}
+						
+						if(isExists){
+							
+							
+							
+							MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.addKeyword());
+							confirmationDialogBox.showConfirmationDialog(constants.keywordExists());
+							
+							// SPEC Change
+							
+						}else{
+						
 						setKeyworkdProxy.add(keywordProxy);
 						stRoleProxy.setKeywords(setKeyworkdProxy);
 						
@@ -3996,7 +4020,7 @@ final int index2 = index;
 								//Issue # 122 : Replace pull down with autocomplete.
 							}
 						});
-						
+						}
 					}				
 				});					
 	}

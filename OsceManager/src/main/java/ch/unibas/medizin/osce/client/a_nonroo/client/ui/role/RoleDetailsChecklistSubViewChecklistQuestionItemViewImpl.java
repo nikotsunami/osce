@@ -356,9 +356,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					}
 				}
 			});
-		
+		} // SPEC Change
 		((CriteriaPopupViewImpl)criteriaPopup).setPopupPosition(addCriteriaButton.getAbsoluteLeft()-50, addCriteriaButton.getAbsoluteTop()-85); // SPEC Change
-		}
+		
 		
 		// Highlight onViolation			
 		checklistCriteriaMap=new HashMap<String, Widget>();
@@ -436,10 +436,10 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		// E: Issue Role V1
 		
 		
+		} //SPEC Change
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionButton.getAbsoluteLeft()-205, addOptionButton.getAbsoluteTop()-195); //SPEC Change+
 		
-		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionVerticalPanel.getAbsoluteLeft()-60, addOptionVerticalPanel.getAbsoluteTop()-190); //SPEC Change
 		
-		}
 		// Highlight onViolation
 					checklistOptionMap=new HashMap<String, Widget>();
 					checklistOptionMap.put("optionName", optionPopup.getTopicTxtBox());
@@ -589,10 +589,10 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 				});
 			// E: Issue Role
 		
+		} // SPEC Change
+		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(edit.getAbsoluteLeft()-205, edit.getAbsoluteTop()-195); // SPEC Change+
 		
-		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(editQuestionVP.getAbsoluteLeft()-150, editQuestionVP.getAbsoluteTop()-195); // SPEC Change
 		
-		}
 		
 		
 		
