@@ -72,6 +72,9 @@ public class PdfUtil {
 		this(new Locale("de"));
 	}
 
+	public PdfUtil(String locale){
+		this(new Locale(locale));
+	} 
 	public PdfUtil(Locale locale) {
 		try {
 			// Feature : 154

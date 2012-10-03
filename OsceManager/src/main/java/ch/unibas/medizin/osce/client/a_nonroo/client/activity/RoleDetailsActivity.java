@@ -155,6 +155,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
@@ -1695,12 +1696,13 @@ final int index2 = index;
 					: standardizedRolePrintFilterViewImpl
 							.getSelectedRoleItemAccess().getId();
 		}
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		requests.standardizedRoleRequestNonRoo()
 				.getRolesPrintPdfBySearch(
 						standardizedRolePrintFilterViewImpl
 								.getStandardizedRoleProxy().getId(),
 						standardizedRolePrintFilterViewImpl.getFilters(),
-						selectedRoleItemAccess)
+						selectedRoleItemAccess,locale)
 				.fire(new StandardizedRolePdfFileReceiver());
 	}
 

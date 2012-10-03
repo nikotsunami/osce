@@ -682,8 +682,9 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	@Override
 	public void printPatientClicked(){
 		Log.info("Print clicked");
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		requests.standardizedPatientRequestNonRoo()
-				.getPdfPatientsBySearch(standardizedPatientProxy.getId())
+				.getPdfPatientsBySearch(standardizedPatientProxy.getId(),locale)
 				.fire(new StandardizedPatientPdfFileReceiver());
 
 	}
@@ -705,13 +706,16 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				: StandardizedPatientStatus.ACTIVE;
 
 		Log.info("Status is to : " + standardizedPatientProxy.getStatus());
-		StandardizedPatientRequest standardizedPatientRequest = requests
-				.standardizedPatientRequest();
-		standardizedPatientProxy = standardizedPatientRequest
-				.edit(standardizedPatientProxy);
+		setStandardizedPatientStatus(newStatus);
+
+	}
+	
+	private void setStandardizedPatientStatus(final StandardizedPatientStatus newStatus) {
+		
+		StandardizedPatientRequest standardizedPatientRequest = requests.standardizedPatientRequest();
+		standardizedPatientProxy = standardizedPatientRequest.edit(standardizedPatientProxy);
 		standardizedPatientProxy.setStatus(newStatus);
-		standardizedPatientRequest.persist().using(standardizedPatientProxy)
-				.fire(new OSCEReceiver<Void>() {
+		standardizedPatientRequest.persist().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
 
 					@Override
 					public void onSuccess(Void arg0) {
@@ -794,6 +798,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 						public void onSuccess(List<String> result) {
 						
 							if(result.size()<=0){
+								setStandardizedPatientStatus(StandardizedPatientStatus.EXPORTED);
 								Window.alert(messageLookup.exportSuccessful());
 								return;
 							}
@@ -839,6 +844,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 
 			@Override
 			public void onSuccess(Void result) {
+				setStandardizedPatientStatus(StandardizedPatientStatus.ACTIVE);
 				Window.alert(messageLookup.importSussessful());
 			}
 			

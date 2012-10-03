@@ -72,6 +72,10 @@ public class RolePrintPdfUtil {
 		this(new Locale("de"));
 	}
 
+	public RolePrintPdfUtil(String locale) {
+		this(new Locale(locale));
+	}
+	
 	public RolePrintPdfUtil(Locale locale) {
 		try {
 			// Feature : 154

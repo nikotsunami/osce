@@ -18,6 +18,9 @@ public interface RoleSubView extends IsWidget{
 
 
 	interface Delegate {
+		
+		public void showApplicationLoading(Boolean show);
+		
 		public void roleSelected(RoleSubView view);
 		
 		public void editBackUpFlag(RoleSubView view,PatientInRoleSubView patientInRoleSubView,PatientInRoleProxy proxy,boolean isBackUp);

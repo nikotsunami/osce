@@ -50,6 +50,7 @@ public class PatientInSemesterData {
 
 		// setIndex(index);
 		this.delegate = tempdelegate;
+		delegate.showApplicationLoading(true);
 		patientInSemesterData = this;
 		this.patientInSemesterProxy = tempPatientInSemesterProxy;
 
@@ -135,6 +136,8 @@ public class PatientInSemesterData {
 
 			}
 		});
+		
+		delegate.showApplicationLoading(false);
 		// Module 3 Task B
 	}
 

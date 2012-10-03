@@ -472,9 +472,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@Override
 	public void setStatusIcon(
 			StandardizedPatientStatus standardizedPatientStatus) {
+		status.setEnabled(true);
 		if (standardizedPatientStatus == StandardizedPatientStatus.ANONYMIZED) {
 			status.setVisible(false);
 		} else {
+			if (standardizedPatientStatus == StandardizedPatientStatus.EXPORTED) {
+				status.setEnabled(false);
+			}
 			Log.info("proxy.getStatus() : " + proxy.getStatus());
 			status.setText((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? constants
 					.spInactive() : constants.spActive());

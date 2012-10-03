@@ -418,6 +418,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	@Override
 	public void onRoleFulfilCriteriaEventReceived(RoleFulfilCriteriaEvent event) {
 		
+		delegate.showApplicationLoading(true);
 		Log.info("onRoleFulfilCriteriaEventReceived");
 		if(event.getListOsceDayProxy() !=null && event.getListOsceDayProxy().contains(osceDayProxy))
 		{
@@ -444,6 +445,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
 		}
+		delegate.showApplicationLoading(false);
 	}
 
 	@Override

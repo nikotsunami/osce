@@ -279,11 +279,11 @@ public class StandardizedRole {
 
 	// Issue : 120
 			//Feature : 154
-	public static String getRolesPrintPdfBySearch(Long standardizedRoleId, List<String> itemsList, Long roleItemAccessId) {
+	public static String getRolesPrintPdfBySearch(Long standardizedRoleId, List<String> itemsList, Long roleItemAccessId,String locale) {
 		String fileName = OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
 		try {
 			StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
-			RolePrintPdfUtil rolePrintPdfUtil = new RolePrintPdfUtil();
+			RolePrintPdfUtil rolePrintPdfUtil = new RolePrintPdfUtil(locale);
 			Log.info("Message received in Pdf role print by : " + standardizedRole.longName);
 			fileName = standardizedRole.longName + "_" + standardizedRole.studyYear + "_ " + OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
 			rolePrintPdfUtil.writeFile(StandardizedPatient.fetchRealPath() + fileName, standardizedRole, itemsList, roleItemAccessId);

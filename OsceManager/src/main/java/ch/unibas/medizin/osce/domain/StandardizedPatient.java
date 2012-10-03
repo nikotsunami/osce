@@ -514,13 +514,13 @@ public class StandardizedPatient {
     }
 
 			//Feature : 154
-	public static String getPdfPatientsBySearch(Long standardizedPatientId) {
+	public static String getPdfPatientsBySearch(Long standardizedPatientId,String locale) {
 //		Log.info("Before FileName");
 		String fileName = OsMaFilePathConstant.FILE_NAME_PDF_FORMAT;
 //		Log.info("Afetr FileName");
 		try {
 			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
-			PdfUtil pdfUtil = new PdfUtil();
+			PdfUtil pdfUtil = new PdfUtil(locale);
 			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
 
 			fileName = standardizedPatient.name + "_" + standardizedPatient.preName + "_" + fileName;

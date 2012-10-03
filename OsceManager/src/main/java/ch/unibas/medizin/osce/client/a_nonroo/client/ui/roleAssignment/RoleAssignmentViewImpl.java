@@ -126,7 +126,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	public void onAutoAssignmentBtnClicked(ClickEvent event) {
 		// TODO : Auto assignment detail logic
 		// Module 3 f {
+		delegate.showApplicationLoading(true);
 				delegate.autoAssignmentBtnClicked();
+		delegate.showApplicationLoading(false);
 				// Module 3 f }
 
 	}
@@ -237,9 +239,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 	@Override
 	public void setData(List<PatientInSemesterData> patientInSemesterDataList) {
-
+		delegate.showApplicationLoading(true);
 		table.setSource(patientInSemesterDataList, getHeaderRow());
-
+		delegate.showApplicationLoading(false);
 	}
 
 	public List<PatientInSemesterData> getPatientInSemesterData() {
