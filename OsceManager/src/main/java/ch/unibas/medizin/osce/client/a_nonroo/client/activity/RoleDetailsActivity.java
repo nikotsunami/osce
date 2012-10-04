@@ -875,6 +875,8 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		else
 			standardizedRoleDetailsView[index].delete.setEnabled(true);
 		
+		standardizedRoleDetailsView[index].edit.setEnabled(true);
+
 		standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].setHomeRole(proxy);
 		standardizedRoleDetailsView[index].setBaseProxy(proxy);
 		standardizedRoleDetailsView[index].home.setVisible(false);
@@ -1953,7 +1955,7 @@ final int index2 = index;
 					Log.info("Call Success...");	
 					((CheckListTopicPopupViewImpl)(topicView.questionPopup)).hide();
 					createQuestionView(selectedtab,proxy,topicView);
-				roleTopicInit(topicView.getProxy(), topicView);	
+			//	roleTopicInit(topicView.getProxy(), topicView);	
 				}
 			});
 		}

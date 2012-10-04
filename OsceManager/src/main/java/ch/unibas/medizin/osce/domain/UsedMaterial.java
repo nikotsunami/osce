@@ -31,6 +31,7 @@ public class UsedMaterial {
 	private StandardizedRole standardizedRole;
 
 	@ManyToOne
+	@NotNull
 	private MaterialList materialList;
 
 	private Integer sort_order;
