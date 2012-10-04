@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceTaskPopView;
@@ -17,9 +18,13 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -47,7 +52,7 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate, OsceTaskPopView.Delegate {
 	private CellTable<OsceProxy> table;
 	private SingleSelectionModel<OsceProxy> selectionModel;
 	private HandlerRegistration rangeChangeHandler;
-
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	public static OsceActivity osceActivity;
 	private OsceProxy osceProxy;
 	private OsceDetailsPlace place;
@@ -162,33 +167,130 @@ public void init()
 
 	}
 	
+	public void deleteosce()
+	{
+		try{
+			
+			
+			requests.osceRequest().remove().using(osceProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					/*Iterator<Violation> iter = errors.iterator();
+					String message = "";
+					while (iter.hasNext()) {
+						message += iter.next().getMessage() + "<br>";
+					}
+					Log.warn(" in task -" + message);*/
+					final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+					valueUpdateDialogBox.showConfirmationDialog("osce could not be deleted becaused it may assign to other osce or task.");
+					
+					//Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
+				}
+				
+				public void onFailure(ServerFailure error) {
+			/*	Log.warn("you not able to delete record used by other ");
+					Log.error(error.getMessage());
+	*/
+					final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+					valueUpdateDialogBox.showConfirmationDialog("osce could not be deleted becaused it may assign to other osce or task.");
+					//Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
+				}
+				
+				public void onSuccess(Void ignore) {
+					if (widget == null) {
+						return;
+					}
+					System.out.println("Deleted record");
+					//osceActivity.init();
+					
+				//	placeController.goTo(new OscePlace("OscePlace!DELETED"));
+					
+					Log.info("return");
+					osceActivity.init();
+					placeController.goTo(new OscePlace("OscePlace!DELETED"));
+					/*final OsceView systemStartView = new OsceViewImpl();
+					 requests.osceRequestNonRoo().findAllOsce().fire(new Receiver<List<OsceProxy>>() {
+
+							@Override
+							public void onSuccess(List<OsceProxy> response) {
+								// TODO Auto-generated method stub
+								System.out.println("Osce size--"+response.size());
+								
+							//	systemStartView.getTable().setRowData(response);
+								systemStartView.getTable().setRowCount(response.size(), true);
+								systemStartView.getTable().setRowData(0, response);
+							}
+						});		*/	 
+						
+						
+					 
+					
+				
+				}
+			});
+			}
+			catch(Exception e)
+			{
+				
+			}
+	}
 	@Override
 	public void osceDeleteClicked() {
-		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
-			return;
-		}
 		
-		try{
+		final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+		valueUpdateDialogBox.showYesNoDialog("Really delete this entry? You cannot undo this change.");
+		valueUpdateDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+			
+				valueUpdateDialogBox.hide();
+				deleteosce();
+			}
+		});
+		
+		valueUpdateDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				valueUpdateDialogBox.hide();
+				return;
+				
+			}
+		});
+
+
+		/*if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
+			return;
+		}*/
+		
+		/*try{
 			
 		
 		requests.osceRequest().remove().using(osceProxy).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onViolation(Set<Violation> errors) {
-				/*Iterator<Violation> iter = errors.iterator();
+				Iterator<Violation> iter = errors.iterator();
 				String message = "";
 				while (iter.hasNext()) {
 					message += iter.next().getMessage() + "<br>";
 				}
-				Log.warn(" in task -" + message);*/
-				Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
+				Log.warn(" in task -" + message);
+				final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+				valueUpdateDialogBox.showConfirmationDialog("osce could not be deleted becaused it may assign to other osce or task.");
+				
+				//Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
 			}
 			
 			public void onFailure(ServerFailure error) {
-		/*	Log.warn("you not able to delete record used by other ");
+			Log.warn("you not able to delete record used by other ");
 				Log.error(error.getMessage());
-*/
-				Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
+
+				final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
+				valueUpdateDialogBox.showConfirmationDialog("osce could not be deleted becaused it may assign to other osce or task.");
+				//Window.alert("osce could not be deleted becaused it may assign to other osce or task.");
 			}
 			
 			public void onSuccess(Void ignore) {
@@ -203,7 +305,7 @@ public void init()
 				Log.info("return");
 				osceActivity.init();
 				placeController.goTo(new OscePlace("OscePlace!DELETED"));
-				/*final OsceView systemStartView = new OsceViewImpl();
+				final OsceView systemStartView = new OsceViewImpl();
 				 requests.osceRequestNonRoo().findAllOsce().fire(new Receiver<List<OsceProxy>>() {
 
 						@Override
@@ -215,7 +317,7 @@ public void init()
 							systemStartView.getTable().setRowCount(response.size(), true);
 							systemStartView.getTable().setRowData(0, response);
 						}
-					});		*/	 
+					});			 
 					
 					
 				 
@@ -227,7 +329,7 @@ public void init()
 		catch(Exception e)
 		{
 			
-		}
+		}*/
 	}
 
 	@Override

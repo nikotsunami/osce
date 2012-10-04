@@ -42,7 +42,7 @@
 		<table >
 		
 		
-		  <tr height="10px"><td><h3><u><b>General :</b></u></h3></td> <td></td> <td></td> <td></td></tr>  
+		  <tr height="10px"><td><u><b>General :</b></u></td> <td></td> <td></td> <td></td></tr>  
 			<tr >
 				<td id="name">
 					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsce"></div>
@@ -83,7 +83,7 @@
 				</td>
 			</tr>
 			
-			<tr height="10px"><td><h3><u><b>Attributes :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+			<tr height="10px"><td><u><b>Attributes :</b></u></td> <td></td> <td></td> <td></td></tr>
 		 	<!-- <tr><td><b>Attributes :</b></td><td></td><td></td><td></td></tr>  -->
 				
 				 <tr>
@@ -123,7 +123,7 @@
 				
 				</tr>
 				
-				<tr height="10px"><td><h3><u><b>Breaks :</b></u></h3></td> <td></td> <td></td> <td></td></tr>
+				<tr height="10px"><td><u><b>Breaks :</b></u></td> <td></td> <td></td> <td></td></tr>
 				 <!-- <tr><td><b>Breaks : </b></td><td></td><td></td><td></td></tr>  -->
 				
 				
