@@ -31,22 +31,18 @@ public class StudentOsces {
     
     public static List<StudentOsces> findStudentOsceByOsce(Long id) {
     	EntityManager em = entityManager();
-    	System.out.println("BEFORE CALL------->");
-    	String queryString="SELECT o FROM StudentOsces as o  where o.osce="+id;
-    	System.out.println("query--"+ queryString);
-    	TypedQuery<StudentOsces> q = em.createQuery(queryString, StudentOsces.class);
-    
-    	System.out.println("success done with size");
     	
-    	return q.getResultList();
+    	String queryString="SELECT o FROM StudentOsces as o  where o.osce="+id;
+    	TypedQuery<StudentOsces> q = em.createQuery(queryString, StudentOsces.class);
+      	return q.getResultList();
     }
     
-    public static Long findStudentByStudIdAndOsceId(Long studid, Long osceid)
+    public static int findStudentByStudIdAndOsceId(Long studid, Long osceid)
     {
     	EntityManager em = entityManager();
-    	String s = "SELECT COUNT(o) FROM StudentOsces o WHERE o.student =" + studid +" AND o.osce ="+ osceid;
-    	TypedQuery<Long> q = em.createQuery(s, Long.class);
-       	return q.getSingleResult();
+    	String s = "SELECT o FROM StudentOsces o WHERE o.student =" + studid +" AND o.osce ="+ osceid;
+    	TypedQuery<StudentOsces> q = em.createQuery(s, StudentOsces.class);
+       	return q.getResultList().size();
     }
     
     public static Long countStudentByName(String name1,Long id) {
@@ -67,5 +63,43 @@ public class StudentOsces {
         q.setMaxResults(maxResults);
         
         return q.getResultList();
+    }
+    
+    public static List<StudentOsces> findStudentEntriesByNameTest(String name,Long id) {
+        if (name == null) throw new IllegalArgumentException("The name argument is required");
+        
+        EntityManager em = entityManager();
+        TypedQuery<StudentOsces> q = em.createQuery("SELECT o FROM StudentOsces o WHERE  o.student.name LIKE :name and o.osce.id = " + id, StudentOsces.class);
+        q.setParameter("name", "%" + name + "%");
+        return q.getResultList();
+    }
+    
+    public static List<StudentOsces> findStudentByRange(int start, int max, Long id, String name)
+    {
+    	EntityManager em = entityManager();
+    	
+    	String queryString = "";
+    	if (name.equals(""))
+    		queryString="SELECT o FROM StudentOsces as o where o.osce = " + id;
+    	else
+    		queryString="SELECT o FROM StudentOsces as o where o.student.name LIKE '%" + name + "%' AND o.osce = " + id;
+    	
+    	TypedQuery<StudentOsces> q = em.createQuery(queryString, StudentOsces.class);
+    	q.setFirstResult(start);
+    	q.setMaxResults(max);
+    	return q.getResultList();
+    }
+    
+    public static Integer countStudentByRange(Long id, String name)
+    {
+    	EntityManager em = entityManager();
+    	String queryString = "";
+    	if (name.equals(""))
+    		queryString="SELECT o FROM StudentOsces as o where o.osce = " + id;
+    	else
+    		queryString="SELECT o FROM StudentOsces as o where o.student.name LIKE '%" + name + "%' AND o.osce = " + id;
+    	
+    	TypedQuery<StudentOsces> q = em.createQuery(queryString, StudentOsces.class);
+    	return q.getResultList().size();
     }
 }

@@ -11,31 +11,40 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesRequest;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
+import com.google.gwt.view.client.RangeChangeEvent;
 /**
  * @author dk
  *
@@ -58,22 +67,25 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	//Label l1;
 	private List<OsceProxy> osceProxyList = new ArrayList<OsceProxy>();
 	List<OsceProxy> response;
-	private CellTable<StudentOscesProxy> table;
+	//private CellTable<StudentOscesProxy> table;
+	
+	private AdvanceCellTable<StudentOscesProxy> table;
+	int x;
+	int y;
+	
 	private StudentOscesProxy studentOscesProxy;
 	public HandlerManager handlerManager;// = new HandlerManager(this);
-	private HandlerRegistration rangeChangeHandler;
-	private SelectChangeHandler removeHandler;
+//	private HandlerRegistration rangeChangeHandler;
 	
 	public int currenttab= 0;	
 	public StudentSubDetailsViewImpl[] subDetailsView;
 	
 	public int arrarycount = 0;
 	
-	String q = "";
+	public String searchWord = "";
 	
 	public StudentsActivity(OsMaRequestFactory requests, PlaceController placeController,StudentsPlace studentsPlace) 
 	{
-    	
 		Log.info("Call Activity Student");
     	this.requests = requests;
     	this.placeController = placeController;
@@ -81,24 +93,15 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
     	this.handlerManager = studentsPlace.handler;
 		this.semesterProxy=studentsPlace.semesterProxy;
 		
-		Log.info("~~In Activity : " + semesterProxy.getId());
-		
 		studentsActivity = this;
 
-		Log.info("Semester Proxy : " + semesterProxy.getCalYear() + " :in Student Constructor.");
-		
-		
 		this.addSelectChangeHandler(new SelectChangeHandler() 
 		{			
 			@Override
 			public void onSelectionChange(SelectChangeEvent event) 
 			{			
-				Log.info("Call Role Activity");					
-				Log.info("onSelectionChange Get Semester: " + event.getSemesterProxy().getCalYear());		
 				semesterProxy= event.getSemesterProxy();
-				
-			
-				
+				currenttab = 0;
 				init();
 			}
 		});
@@ -107,7 +110,6 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
-		removeHandler=handler;
 		
 	}
 	
@@ -119,7 +121,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 
 	
 	public void onStop(){
-		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
+		
 	}
 	
 	@Override
@@ -129,23 +131,18 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 		this.widget = panel;
 		init();
 		
-		view.getStudentTabPanel1().addSelectionHandler(new SelectionHandler<Integer>() {
+		/*view.getStudentTabPanel1().addSelectionHandler(new SelectionHandler<Integer>() {
 			
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-			
-				Log.info("~~ Selected Item : " + event.getSelectedItem());
+				
 				Widget w = view.getStudentTabPanel1().getWidget(event.getSelectedItem());
 				
-				Log.info("~~ Selected Item : " + (w instanceof StudentSubDetailsViewImpl));
-			
 				currenttab = event.getSelectedItem();
 				
-				Log.info("~~Current Tab : " + currenttab);
+				System.out.println("CURRENT TAB : " + currenttab);
 				
 				osceProxy = osceProxyList.get(currenttab);
-				
-				Log.info("~~OSCEPROXY ID : " + osceProxy.getId());
 				
 				subDetailsView[currenttab].getHidden().setValue(String.valueOf(osceProxy.getId()));
 				
@@ -153,48 +150,63 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				{
 					view_s = subDetailsView[event.getSelectedItem()];
 					
-					init2("");
+					//init2("");
+					onRangeChanged("");
 				}
-				System.out.println("view--"+view_s);
 				view_s.getHidden().setValue(String.valueOf(osceProxy.getId()));
 			
-				Log.info("After TabIndex");
+			}
+		});*/
+
+	}
+	
+	private void tabSelectChangeHandler()
+	{
+		view.getStudentTabPanel1().addSelectionHandler(new SelectionHandler<Integer>() {
+			
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				
+				Widget w = view.getStudentTabPanel1().getWidget(event.getSelectedItem());
+				
+				currenttab = event.getSelectedItem();
+				
+				System.out.println("CURRENT TAB : " + currenttab);
+				
+				osceProxy = osceProxyList.get(currenttab);
+				
+				subDetailsView[currenttab].getHidden().setValue(String.valueOf(osceProxy.getId()));
+				
+				onRangeChanged("");
+				
+				if(tabIndex == event.getSelectedItem())
+				{
+					view_s = subDetailsView[event.getSelectedItem()];
+					
+					view_s.getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
+					//init2("");
+					onRangeChanged("");
+				}
+				view_s.getHidden().setValue(String.valueOf(osceProxy.getId()));
+			
 			}
 		});
-
-}
-	
-
-	
+	}
 
 	private void init(){
-		Log.info("aa");
-	
-	//	init2("");
-		
 		StudentsView systemStartView = new StudentsViewImpl();
 		systemStartView.setPresenter(this);
 		this.view = systemStartView;
 		
-		MenuClickEvent.register(requests.getEventBus(), (StudentsViewImpl)view);
 		
-		Log.info("aa111");
+		MenuClickEvent.register(requests.getEventBus(), (StudentsViewImpl)view);
 		widget.setWidget(systemStartView.asWidget());
 		view.setDelegate(this);
-		Log.info("aa222");
-	
-		Log.info("~~Semester Proxy : " + semesterProxy.getId());
-		
-		
-		
-		
 		
 		requests.osceRequestNonRoo().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester","osceStudents.student").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
-				
-				Log.info("~~Inside OSCEREQUSTNONROO");
 				
 				subDetailsView = new StudentSubDetailsViewImpl[response.size()];
 				
@@ -204,24 +216,20 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				osceProxyList=response;
 		
 				Iterator<OsceProxy> osceList = response.iterator();
-				
-				
-				
 				osceProxy = response.get(0);
 				while(osceList.hasNext()){
 					
+					final OsceProxy tempOsceProxy = osceList.next();
+					String osceLable = tempOsceProxy.getStudyYear()==null?"":tempOsceProxy.getStudyYear() + "." + tempOsceProxy.getSemester().getSemester().name();
 				
-				Log.info("OSce Proxy index : " + tabIndex);
-		
-				OsceProxy osceProxy = osceList.next();
-				String osceLable = osceProxy.getStudyYear()==null?"":osceProxy.getStudyYear() + "." + osceProxy.getSemester().getSemester().name();
-				
-				final StudentSubDetailsViewImpl studentSubDetailsView = new StudentSubDetailsViewImpl(osceProxy);
-				subDetailsView[tabIndex]=studentSubDetailsView;
-			//	final StudentSubDetailsViewImpl studentSubDetailsView1 = new StudentSubDetailsViewImpl(osceProxy);
-				studentSubDetailsView.setDelegate(studentsActivity);
-		System.out.println("insert before--"+studentSubDetailsView);
-				view.getStudentTabPanel1().insert(studentSubDetailsView, osceLable,tabIndex);
+					final StudentSubDetailsViewImpl studentSubDetailsViewImpl = new StudentSubDetailsViewImpl(tempOsceProxy);
+					subDetailsView[tabIndex]=studentSubDetailsViewImpl;
+					//	final StudentSubDetailsViewImpl studentSubDetailsView1 = new StudentSubDetailsViewImpl(osceProxy);
+					studentSubDetailsViewImpl.setDelegate(studentsActivity);
+					
+					RecordChangeEvent.register(requests.getEventBus(), studentSubDetailsViewImpl);
+					
+					view.getStudentTabPanel1().insert(studentSubDetailsViewImpl, osceLable,tabIndex);
 				//view.getStudentTabPanel1().selectTab(0);
 			//	view.getStudentTabPanel1().insert(studentSubDetailsView1, "test", 0);
 //				StudentTabByTabSelection(1,response);
@@ -230,132 +238,194 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 //					view_s = studentSubDetailsView;
 //					init2("");
 //				}
-		System.out.println("ARRAY COUNT--"+arrarycount);
-		requests.studentOsceRequestNonRoo().findStudentOsceByOsce(osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+					studentSubDetailsViewImpl.getTable().addRangeChangeHandler(new RangeChangeEvent.Handler() {
+						
+						@Override
+						public void onRangeChange(RangeChangeEvent event) {
+							StudentsActivity.this.onRangeChanged(searchWord);
+						}
+					});
+					
+					table=(AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable();
+					
+					((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).addHandler(new MouseDownHandler() {
 
-					@Override
-					public void onSuccess(List<StudentOscesProxy> response) {
-						// TODO Auto-generated method stub
-						studentSubDetailsView.getTable().setRowData(response);
-						Log.info("~~STATUS : " + studentSubDetailsView.getTable().getRowCount());
-						subDetailsView[arrarycount] = studentSubDetailsView;
-						arrarycount++;
-					}
-									});
-		
-				
-		
-				
-		
+							@Override
+							public void onMouseDown(MouseDownEvent event) {
+								// TODO Auto-generated method stub
+								Log.info("mouse down");
+								x = event.getClientX();
+								y = event.getClientY();
+
+								if(((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getRowCount()>0)
+								{
+								Log.info(((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
+
+								
+								if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT&& event.getClientY() < ((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getRowElement(0).getAbsoluteTop()) {
+									
+									((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().setPopupPosition(x, y);
+									((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().show();
+
+									Log.info("right event");
+								}
+								}
+								else
+								{
+									if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
+									{
+										((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().setPopupPosition(x, y);
+										((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().show();
+									}
+								}
+							}
+						}, MouseDownEvent.getType());
+						
+					((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().addDomHandler(new MouseOutHandler() {
+
+							@Override
+							public void onMouseOut(MouseOutEvent event) {
+								// TODO Auto-generated method stub
+								//addColumnOnMouseout();
+								((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().hide();
+								
+							}
+						}, MouseOutEvent.getType());
+						
+					((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).addColumnSortHandler(new ColumnSortEvent.Handler() {
+
+							@Override
+							public void onColumnSort(ColumnSortEvent event) {
+								// By SPEC[Start
+
+								Column<StudentOscesProxy, String> col = (Column<StudentOscesProxy, String>) event.getColumn();
+								
+								
+								int index = ((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getColumnIndex(col);
+								
+								/*String[] path =	systemStartView.getPaths();	            			
+								sortname = path[index];
+								sortorder=(event.isSortAscending())?Sorting.ASC:Sorting.DESC;	*/
+								
+								if (index % 2 == 1 ) {
+									
+									((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().setPopupPosition(x, y);
+									((AdvanceCellTable<StudentOscesProxy>)studentSubDetailsViewImpl.getTable()).getPopup().show();
+
+								} 
+							}
+						});
+					requests.studentOsceRequestNonRoo().countStudentByRange(tempOsceProxy.getId(), "").fire(new OSCEReceiver<Integer>() {
+
+						@Override
+						public void onSuccess(final Integer data) {
+							studentSubDetailsViewImpl.getTable().setRowCount(data);
+							
+							final Range range = studentSubDetailsViewImpl.getTable().getVisibleRange();
+							requests.studentOsceRequestNonRoo().findStudentByRange(range.getStart(), range.getLength(), tempOsceProxy.getId(), "").with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+								@Override
+								public void onSuccess(List<StudentOscesProxy> value) {
+									//table.setRowCount(value.size());
+									studentSubDetailsViewImpl.getTable().setRowData(range.getStart(), value);
+									//table.setRowCount(data);
+								}
+							});
+						}
+					});
+					
 				tabIndex++;
-		
-
 				}
-			
-				
 				}
 			}
 		});
-		
-		
-		
-				
+			
+		tabSelectChangeHandler();
 	}
 
 	
 	@Override
 	public void goTo(Place place) {
-		// TODO Auto-generated method stub
 		
 	}
-
-
 	
-
-
 	@Override
 	public void performSearch(String q) {
 		
-		Log.debug("Search for " + q);
-		init2(q);
+		//init2(q);
+		StudentSubDetailsView tempdetlview = subDetailsView[currenttab];		
+		view_s = tempdetlview;
+		//table = view_s.getTable();
+		this.table = (AdvanceCellTable<StudentOscesProxy>)view_s.getTable();
+		
+		searchWord = q;
+		
+		onRangeChanged(searchWord);
+	}
+	
+	public void searchTest(String q)
+	{
+		final Range range = table.getVisibleRange();
+		
+		requests.studentOsceRequestNonRoo().findStudentEntriesByNameTest(q, osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+
+			@Override
+			public void onSuccess(List<StudentOscesProxy> response) {
+				table.setRowCount(response.size());
+				table.setRowData(response);
+			}
+		});
 	}
 
 	private void init2(final String q) {
-		System.out.println("Size--"+subDetailsView.length + "current tab--"+currenttab);
-		StudentSubDetailsView tempdetlview = subDetailsView[currenttab];
-		
+	
+		StudentSubDetailsView tempdetlview = subDetailsView[currenttab];		
 		view_s = tempdetlview;
-		System.out.println("View-s--"+view_s);
-		
-		table = view_s.getTable();
-		/*
-		// fix to avoid having multiple rangeChangeHandlers attached
-		if (rangeChangeHandler!=null){
-			rangeChangeHandler.removeHandler();
-		}
+		//table = view_s.getTable();
+		this.table = (AdvanceCellTable<StudentOscesProxy>)view_s.getTable();
+		/*fireCountRequest(q, new Receiver<Long>() {
 
-		fireCountRequest(q, new Receiver<Long>() {
 			@Override
-			public void onSuccess(Long responses) {
-				if (view_s == null) {
-					// This activity is dead
-					return;
-				}
-				Log.debug("Response size " + responses.intValue());				
-				view_s.getTable().setRowCount(responses.intValue(), true);
-				//table = view_s.getTable();
-				Log.info("value of " + q);
-				
+			public void onSuccess(Long response) {
+				table.setRowCount(response.intValue(), true);
 				onRangeChanged(q);
 			}
 		});*/
+		
 	}
-	protected void onRangeChanged(String q) {
-		
-		
-		
-		final Range range = table.getVisibleRange();
-		
-		//Log.info("~~Table Range : " + range.getLength());
+	protected void onRangeChanged(final String name) {
+		//table = subDetailsView[currenttab].getTable();
+		this.table = (AdvanceCellTable<StudentOscesProxy>)subDetailsView[currenttab].getTable();
+		requests.studentOsceRequestNonRoo().countStudentByRange(osceProxy.getId(), name).fire(new OSCEReceiver<Integer>() {
 
-		final Receiver<List<StudentOscesProxy>> callback = new Receiver<List<StudentOscesProxy>>() {
 			@Override
-			public void onSuccess(List<StudentOscesProxy> values) {
-				if (view_s == null) {
-					// This activity is dead
-					return;
-				}
+			public void onSuccess(final Integer data) {
+				table.setRowCount(data);
 				
-				Log.info("~~Inside OnSuccess : " + values.size());				
-				table.setRowData(range.getStart(),values);
+				final Range range = subDetailsView[currenttab].getTable().getVisibleRange();
 				
-				// finishPendingSelection();
-				if (widget != null) {
-					
-					widget.setWidget(view.asWidget());
-				}
+				requests.studentOsceRequestNonRoo().findStudentByRange(range.getStart(), range.getLength(), osceProxy.getId(), name).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+					@Override
+					public void onSuccess(List<StudentOscesProxy> value) {
+						//table.setRowCount(value.size());
+						table.setRowData(range.getStart(), value);
+						//table.setRowCount(data);
+					}
+				});
 			}
-		};
+		});
 		
-		Log.info("call back"+ callback);
-		fireRangeRequest(q, range, callback);
+		
 	}
+	
 	private void fireRangeRequest(String name, final Range range, final Receiver<List<StudentOscesProxy>> callback) {
-		Log.info("~~Inside FireRangeReaquest");
 		createRangeRequest(name, range).with(view_s.getPaths()).fire(callback);
-		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
 	protected Request<List<StudentOscesProxy>> createRangeRequest(String name, Range range) {
-		//return requests.scarRequest().findScarEntries(range.getStart(), range.getLength());
-		Log.info("~~Inside CreateRangeRequest");
-		Log.info("OSCEPROXY ID : " + osceProxy.getId());
 		return requests.studentOsceRequestNonRoo().findStudentEntriesByName(name,osceProxy.getId(), range.getStart(), range.getLength()).with("student");
 	}
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
-		//requests.scarRequest().countScars().fire(callback);
-		Log.info("~~Inside FireCountRequest");
 		requests.studentOsceRequestNonRoo().countStudentByName(name,osceProxy.getId()).fire(callback);
 	}
 		
@@ -365,8 +435,9 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	@Override
 	public Boolean onRender(StudentOscesProxy studentOscesProxy) {
 		
-			temp = studentOscesProxy.getIsEnrolled();
-			
+		displayLoadingScreen(true);
+		
+			temp = studentOscesProxy.getIsEnrolled();			
 		
 			StudentOscesRequest request = requests.studentOscesRequest();
 			
@@ -378,10 +449,11 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 
 						@Override
 						public void onSuccess(Void response) {
-							Log.info("~~Records Updated Successfully");
 							temp = !temp;
 							
 							refreshdata();
+							
+							displayLoadingScreen(false);
 						}
 					});
 			
@@ -393,29 +465,52 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	
 	public void refreshdata()
 	{
-		requests.studentOsceRequestNonRoo().findStudentOsceByOsce(osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+		/*requests.studentOsceRequestNonRoo().findStudentOsceByOsce(osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 
 			@Override
 			public void onSuccess(List<StudentOscesProxy> response) {
-				// TODO Auto-generated method stub
-				//studentSubDetailsView.getTable().setRowData(response);
-				
 				subDetailsView[currenttab].getTable().setRowData(response);
-			}});
+				subDetailsView[currenttab].getTable().setRowCount(response.size());
+				subDetailsView[currenttab].getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
+			}});*/
+		
+		displayLoadingScreen(true);
+		
+		requests.studentOsceRequestNonRoo().countStudentByRange(osceProxy.getId(), "").fire(new OSCEReceiver<Integer>() {
+
+			@Override
+			public void onSuccess(final Integer data) {
+				subDetailsView[currenttab].getTable().setRowCount(data);
+				
+				final Range range = subDetailsView[currenttab].getTable().getVisibleRange();
+				requests.studentOsceRequestNonRoo().findStudentByRange(range.getStart(), range.getLength(), osceProxy.getId(), "").with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+					@Override
+					public void onSuccess(List<StudentOscesProxy> value) {
+						//table.setRowCount(value.size());
+						subDetailsView[currenttab].getTable().setRowData(range.getStart(), value);
+						//table.setRowCount(data);
+						
+						displayLoadingScreen(false);
+					}
+				});
+			}
+		});
 	}
 
 	@Override
 	public void deleteClicked(StudentOscesProxy scar) {
-		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
 	public void importClicked() {
-		
 		arrarycount = 0;
-		init();
-		
+		onRangeChanged("");
+	}
+	
+	@Override
+	public void displayLoadingScreen(boolean value) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(value));
 	}
 }

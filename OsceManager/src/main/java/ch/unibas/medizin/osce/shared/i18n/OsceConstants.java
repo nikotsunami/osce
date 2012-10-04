@@ -1046,6 +1046,7 @@ public interface OsceConstants extends Constants {
 
 	public String warningSelectSequence();
 
+	
 	public String warningSelectSp();
 
 	public String warningSelectStudent();
@@ -1087,6 +1088,6 @@ public interface OsceConstants extends Constants {
 	public String roleTemplateDeleteMessage();
 	public String accessNotification();
 
-	
+	public String csvFileError();
 }
 

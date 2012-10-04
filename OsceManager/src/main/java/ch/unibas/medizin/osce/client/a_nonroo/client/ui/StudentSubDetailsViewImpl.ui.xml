@@ -2,12 +2,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.resources">
 
 	<ui:style src="../styles.css" />
 	
 	
-<g:ScrollPanel width="95%" height="94%">
+<g:ScrollPanel >
 
 
 	<g:HTMLPanel>
@@ -17,8 +17,8 @@
 
 		</div>
 
-		<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
-
+		<!-- <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" /> -->
+		<r:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}" />
 
 		<div>
 			<b:SimplePager display="{table}" ui:field="pager" />

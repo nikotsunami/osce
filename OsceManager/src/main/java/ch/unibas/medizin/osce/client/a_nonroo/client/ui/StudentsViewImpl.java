@@ -113,9 +113,10 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 	
 		
 		//test1.add(scrollpanel);
-		studentTabPanel1.setHeight("500px");
+		//studentTabPanel1.setHeight("500px");
 		//studentTabPanel1.setWidth("800px");
 		horizontalStudentTabPanel1.addStyleName("horizontalPanelStyle");
+		Log.info("height--"+horizontalStudentTabPanel1.getOffsetHeight());
 		
 		IconButton b=new IconButton();
 		b.setText("test");
@@ -128,19 +129,6 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 			}
 		});
 		
-		
-		
-		
-		
-		Log.info("image resources1--"+icon1);
-		Log.info("image resources2--"+icon2);
-		
-		
-	
-		
-		
-		
-		
 	}
 
 	public String[] getPaths() {
@@ -148,11 +136,10 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 	}
 
 	public void init() {
-		
-		
 		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();		
-		containerPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width : 600px;");
-
+		containerPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width : " + ResolutionSettings.getRightWidgetWidth() + "px; height : " + ResolutionSettings.getRightWidgetHeight() + "px;");
+		int height = ResolutionSettings.getRightWidgetHeight();
+		studentTabPanel1.setHeight(height+"px");
 	}
 
 	@Override
@@ -197,7 +184,8 @@ public class StudentsViewImpl extends Composite implements StudentsView, MenuCli
 		OsMaMainNav.setMenuStatus(event.getMenuStatus());
 		
 		int panelMarginLeft = ResolutionSettings.getRightWidgetMarginLeft();
-		containerPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width : 600px;");
+		
+		containerPanel.getElement().setAttribute("style", "margin-left: "+panelMarginLeft+"px; width : " + ResolutionSettings.getRightWidgetWidth() + "px; height : " + ResolutionSettings.getRightWidgetHeight() + "px;");
 	}
 
 }

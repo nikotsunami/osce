@@ -27,41 +27,43 @@ public class Student {
 
     @Enumerated
     private Gender gender;
-
-    @NotNull
-    @Size(max = 40)
+    
     private String name;
 
-    @NotNull
-    @Size(max = 40)
     private String preName;
 
-    @Size(max = 40)
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
     private String email;
+    
+    private String studentId;
+    
+    private String street;
+    
+    private String city;
     
     // Module10 Create plans
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private Set<Assignment> assignments = new HashSet<Assignment>();
     // E Module10 Create plans
     
-
-    // dk, 2012-02-10: split up m to n relationship since students
-    // need flag whether they are enrolled or not
-    //
-    // @ManyToMany(cascade = CascadeType.ALL)
-    // private Set<Osce> osces = new HashSet<Osce>();
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private Set<StudentOsces> studentOsces = new HashSet<StudentOsces>();
     
-    public static Long findStudentByIDOrByEmail(String id, String email)
+    public static List<Student> findStudentByStudentIdAndByEmail(String studid, String email)
     {
     	EntityManager em = entityManager();
-    	TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Student o WHERE o.id LIKE :studid OR o.email LIKE :studemail", Long.class);
-     	q.setParameter("studid", Long.parseLong(id));
-     	q.setParameter("studemail", "%" + email + "%");
-     	return q.getSingleResult();
+ 
+    	String sql = "";
+    	
+    	if (email.equals(""))
+    		sql = "SELECT s FROM Student s WHERE s.studentId = '" + studid + "'";
+    	else if (studid.equals(""))
+    		sql = "SELECT s FROM Student s WHERE s.email = '" + email + "'";
+    	else
+    		sql = "SELECT s FROM Student s WHERE s.studentId = " + studid + " AND s.email = '" + email + "'";
+    	
+    	TypedQuery<Student> q = em.createQuery(sql, Student.class);
+    	return q.getResultList();
     }
     
     public static List<Student> findStudentByEmail(String email)

@@ -13,20 +13,17 @@ public interface StudentSubDetailsView extends IsWidget {
 	 public interface Presenter {
 	        void goTo(Place place);
 	    }
-	 
-	 
-		/**
-		 * Implemented by the owner of the view.
-		 */
-		interface Delegate {
-		
 
+	 	interface Delegate {
 			void deleteClicked(StudentOscesProxy studentOscesProxy);
+			
 			void performSearch(String q);
 
 			Boolean onRender(StudentOscesProxy studentOscesProxy);
 			
 			void importClicked();
+			
+			void displayLoadingScreen(boolean value);
 		}
 
 	    CellTable<StudentOscesProxy> getTable();

@@ -6,9 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.StudentsActivity;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -35,6 +41,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -46,7 +53,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 
-public class StudentSubDetailsViewImpl extends Composite implements StudentSubDetailsView {
+public class StudentSubDetailsViewImpl extends Composite implements StudentSubDetailsView, RecordChangeHandler {
 
 	
 	private static final Binder BINDER = GWT.create(Binder.class);
@@ -69,8 +76,10 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 	@UiField (provided = true)
 	SimplePager pager;
 
+	/*@UiField (provided = true)
+	CellTable<StudentOscesProxy> table;*/
 	@UiField (provided = true)
-	CellTable<StudentOscesProxy> table;
+	AdvanceCellTable<StudentOscesProxy> table;
 	
 	@UiField
 	public Hidden hidden;
@@ -111,8 +120,10 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 	}
 
 	public StudentSubDetailsViewImpl() {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<StudentOscesProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<StudentOscesProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<StudentOscesProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -139,54 +150,53 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		        @Override
 		        public void onSubmit(SubmitEvent event)
 		        {
-		            // TODO Auto-generated method stub
-		            String fileName = fileUpload.getFilename();
+		        	String fileName = fileUpload.getFilename();
 
 		            if(fileName.length() == 0)
 		            {
-		                /*Window.alert("Error: no file is selected. Please select a file to be uploaded.");*/
-		            	// Highlight onViolation
-		            	fileUpload.addStyleName("higlight_onViolation");
-		            	// E Highlight onViolation
-		                event.cancel();
+		               fileUpload.addStyleName("higlight_onViolation");		            	
+		               event.cancel();
 		            }
-		            else if(!fileName.endsWith("xml") && !fileName.endsWith("json") && !fileName.endsWith("csv"))
+		            else if(!fileName.endsWith("csv"))
 		            {
-		                /*Window.alert("Error: file format not supported. Only supports XML, CSV and JSON");*/
-		            	// Highlight onViolation
 		            	fileUpload.addStyleName("higlight_onViolation");
-		            	// E Highlight onViolation
-		                event.cancel();
+		            	event.cancel();
 		            }
-		            //else
-		                //loadBox.hide();
+		            else
+		            {
+		            	delegate.displayLoadingScreen(true);
+		            }
 		        }
 		    });
 
 		 uploadFormPanel.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-				
-			
-		        @Override
+			 	@Override
 		        public void onSubmitComplete(SubmitCompleteEvent event)
 		        {
-		            // TODO Auto-generated method stub
-		           // Window.alert(event.getResults());
+			 		if (event.getResults().contains("false"))
+		        	{
+		        		delegate.displayLoadingScreen(false);
+		        		MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+		        		dialogBox.showConfirmationDialog(constants.csvFileError());
+		        	}
+		        	else if (event.getResults().contains("true"))
+		        	{
+		        		delegate.importClicked();
+		        		delegate.displayLoadingScreen(false);		        		
+		        	}
 		        }
 		    });
-		
-
-		
-		
-		
-
-		init();
+		 
+		 init();
 //		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 //		newButton.setText(constants.addTrait());
 	}
 	
 	public StudentSubDetailsViewImpl(OsceProxy osceProxy) {
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new CellTable<StudentOscesProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		table = new CellTable<StudentOscesProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);*/
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<StudentOscesProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
@@ -214,18 +224,17 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		        @Override
 		        public void onSubmit(SubmitEvent event)
 		        {
-		            // TODO Auto-generated method stub
 		            String fileName = fileUpload.getFilename();
 
 		           if(fileName.length() == 0)
 		            {
-		                /*Window.alert("Error1: no file is selected. Please select a file to be uploaded.");*/
+		              
 		             // Highlight onViolation
 		            	fileUpload.addStyleName("higlight_onViolation");
 		            	// E Highlight onViolation
 		                event.cancel();
 		            }
-		            else if(!fileName.endsWith("xml") && !fileName.endsWith("json") && !fileName.endsWith("csv"))
+		            else if(!fileName.endsWith("csv"))
 		            {
 		                //Window.alert("Error1: file format not supported. Only supports XML, CSV and JSON");
 		            	// Highlight onViolation
@@ -233,8 +242,10 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		            	// E Highlight onViolation
 		                event.cancel();
 		            }
-		            //else
-		                //loadBox.hide();
+		            else
+		            {
+		            	delegate.displayLoadingScreen(true);
+		            }
 		        }
 		    });
 
@@ -243,18 +254,22 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 			
 		        @Override
 		        public void onSubmitComplete(SubmitCompleteEvent event)
-		        {
-		            // TODO Auto-generated method stub
-		           // Window.alert(event.getResults());
-		        	delegate.importClicked();
-		        }
+		        {   
+		        	
+		        	if (event.getResults().contains("false"))
+		        	{
+		        		delegate.displayLoadingScreen(false);
+		        		MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+		        		dialogBox.showConfirmationDialog(constants.csvFileError());
+		        	}
+		        	else if (event.getResults().contains("true"))
+		        	{
+		        		delegate.importClicked();
+		        		delegate.displayLoadingScreen(false);		        		
+		        	}
+		       }
 		    });
-		
-
-		
-		
-		
-
+		 
 		init();
 //		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 //		newButton.setText(constants.addTrait());
@@ -263,10 +278,7 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 	@UiHandler("importfile")
 	public void importfileClicked(ClickEvent event)
 	{
-		Log.info("~~OSCE ID FOR SERVLET : " + hidden.getValue());
 		uploadFormPanel.submit();
-		
-		
 	}
 
 	
@@ -275,12 +287,7 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 	}
 
 	public void init() {
-		
-		// bugfix to avoid hiding of all panels (maybe there is a better lution...?!)
-		//DOM.setElementAttribute(splitLayoutPanel.getElement(), "style", "position: absolute; left: 0px; top: 0px; right: 5px; bottom: 0px;");
-		
-//		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
-//		
+
 		paths.add("name");
 		table.addColumn(new TextColumn<StudentOscesProxy>() {
 
@@ -317,19 +324,6 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 			}
 		}, constants.preName());
 		
-//		addColumn(new ActionCell<StudentOscesProxy>(
-//				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<StudentOscesProxy>() {
-//					public void execute(StudentOscesProxy studentOscesProxy) {
-//						//Window.alert("You clicked " + institution.getInstitutionName());
-//						if(Window.confirm("wirklich löschen?"))
-//							delegate.deleteClicked(studentOscesProxy);
-//					}
-//				}), "", new GetValue<StudentOscesProxy>() {
-//			public StudentOscesProxy getValue(StudentOscesProxy studentOscesProxy) {
-//				return studentOscesProxy;
-//			}
-//		}, null);
-//	
 
 	table.addColumn(new IdentityColumn<StudentOscesProxy>(
 			  
@@ -339,10 +333,7 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 							@Override
 							public void execute(
 									StudentOscesProxy object) {
-								Log.info("~~INSIDE EXECUTE OF ONRENDER");
-							  
 								
-							 
 							}
 
 						}) {
@@ -351,12 +342,7 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 							public void render(
 									com.google.gwt.cell.client.Cell.Context context,
 									StudentOscesProxy value, SafeHtmlBuilder sb) {
-						
-						Log.info("~~INSIDE RENDER OF ONRENDER");
-							Log.info("appnend called");
-							
-		 
-							sb.append((value.getIsEnrolled())?OsMaConstant.CHECK_ICON
+						sb.append((value.getIsEnrolled())?OsMaConstant.CHECK_ICON
 									: OsMaConstant.UNCHECK_ICON);
 						super.render(context, value, sb);
 							}
@@ -369,51 +355,26 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 							NativeEvent nativeEvent,
 							ValueUpdater<StudentOscesProxy> valueUpdater) {
 						
-						Log.info("~~Inside OnBrowse Event");
-					
-						
 						Boolean test = delegate.onRender(studentOscesProxy);
-						
-						Log.info("Test : " + test);
 						
 						if (test == true)
 						{
-							
 							elem.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
 						}
-						else if (test == false)
+						else
 						{
 							elem.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
 						}
-						
-					//	init();
-					
-					/*	int test = delegate.onRender(studentOscesProxy);
-						
-						Log.info("~~TEST : " + test);
-						
-						if (test == 1)
-							elem.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
-						else if (test == 2)
-						*/	
-						
 						super.onBrowserEvent(context, elem, studentOscesProxy, nativeEvent, valueUpdater);
 					} 
 					
 				}) ) ;
 				
 
-	//	table.addColumnStyleName(2, "iconCol");
+		//table.addColumnStyleName(2, "iconCol");
 	}
 	
-	/**
-	 * Add a column with a header.
-	 *
-	 * @param <C> the cell type
-	 * @param cell the cell used to render the column
-	 * @param headerText the header string
-	 * @param getter the value getter for the cell
-	 */
+	
 	private <C> void addColumn(Cell<C> cell, String headerText,
 			final GetValue<C> getter, FieldUpdater<StudentOscesProxy, C> fieldUpdater) {
 		Column<StudentOscesProxy, C> column = new Column<StudentOscesProxy, C>(cell) {
@@ -454,6 +415,20 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void onRecordChange(RecordChangeEvent event) {
+		int pagesize = 0;
+
+		if (event.getRecordValue() == "ALL") {
+			pagesize = table.getRowCount();
+			OsMaConstant.TABLE_PAGE_SIZE = pagesize;
+		} else {
+			pagesize = Integer.parseInt(event.getRecordValue());
+		}
+
+		table.setPageSize(pagesize);
 	}
 	
 }
