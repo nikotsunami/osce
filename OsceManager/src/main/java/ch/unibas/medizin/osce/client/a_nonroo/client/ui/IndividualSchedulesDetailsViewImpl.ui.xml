@@ -24,15 +24,9 @@
 		.scrollpanelStyle
 		{
 			height:400px; 
-			width:320px;			
+			width:320px;				
 		}
 		
-		.verticlePanelStyle
-		{
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-				
-		}
 	</ui:style>
 
 
@@ -47,7 +41,7 @@
 							<g:DisclosurePanel ui:field="disclosureDataPanelStud" open="true" addStyleNames="{style.panelStyle}">
 							<g:header></g:header>
 								<!-- <g:VerticalPanel addStyleNames="{style.panelStyle}" ui:field="dataPanelVPStud" > -->
-								<g:VerticalPanel ui:field="dataPanelVPStud" >
+								<g:VerticalPanel ui:field="dataPanelVPStud" addStyleNames="schedulePanelStyle">
 									<g:HorizontalPanel>
 										<g:RadioButton name="RBstudent" ui:field="rbSelectedStud" />
 										<g:RadioButton name="RBstudent" ui:field="rbAllStud" />
@@ -69,7 +63,7 @@
 					<g:VerticalPanel>						
 						<g:DisclosurePanel ui:field="disclosureDataPanelSP" open="true" addStyleNames="{style.panelStyle}">
 							<g:header></g:header>
-							<g:VerticalPanel ui:field="dataPanelVPSP">
+							<g:VerticalPanel ui:field="dataPanelVPSP" addStyleNames="schedulePanelStyle">
 								<g:HorizontalPanel>
 									<g:RadioButton name="RBSP" ui:field="rbSelectedSP" />
 									<g:RadioButton name="RBSP" ui:field="rbAllSP" />
@@ -92,7 +86,7 @@
 					<g:VerticalPanel>						
 						<g:DisclosurePanel ui:field="disclosureDataPanelExaminer" open="true" addStyleNames="{style.panelStyle}">
 							<g:header></g:header>
-							<g:VerticalPanel ui:field="dataPanelVPExaminer">
+							<g:VerticalPanel ui:field="dataPanelVPExaminer" addStyleNames="schedulePanelStyle">
 								<g:HorizontalPanel>
 									<g:RadioButton name="RBExaminor" ui:field="rbSelectedExaminor" />
 									<g:RadioButton name="RBExaminor" ui:field="rbAllExaminor" />

@@ -47,6 +47,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 	private OsceProxy osceProxy;
 	private List<OsceProxy> osceProxyList = new ArrayList<OsceProxy>();
 	private int tabIndex=0; 
+	SelectChangeHandler removeHandler;
 	
 	public ExaminationScheduleActivity(OsMaRequestFactory requests,PlaceController placeController, ExaminationSchedulePlace examinationSchedulePlace) 
 	{			
@@ -56,6 +57,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 		this.place=examinationSchedulePlace;
 		this.handlerManager = ExaminationSchedulePlace.handler;
 		this.semesterProxy=ExaminationSchedulePlace.semesterProxy;
+		
 		//Log.info("Semester Proxy : " + semesterProxy.getCalYear() + " :in CircuitActivity Constructor.");
 		//System.out.println("Proxy: " + place.semesterProxy.getCalYear());
 		
@@ -78,6 +80,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 	}
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 	}
 	public ExaminationScheduleActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
@@ -87,7 +90,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
     }
 
 	public void onStop(){
-		
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 	}
 	
 	@Override

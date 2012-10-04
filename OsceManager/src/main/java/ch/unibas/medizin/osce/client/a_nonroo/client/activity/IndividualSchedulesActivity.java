@@ -49,7 +49,8 @@ public class IndividualSchedulesActivity extends AbstractActivity implements Ind
 		private List<OsceProxy> osceProxyList = new ArrayList<OsceProxy>();
 		private OsceProxy osceProxy;
 		private ActivityManager activityManager;
-		private IndividualSchedulesDetailsActivityMapper individualSchedulesDetailsActivityMapper;
+		private SelectChangeHandler removeHandler;
+		private IndividualSchedulesDetailsActivityMapper individualSchedulesDetailsActivityMapper;		
 		// E Module10 Create plans
 
 	public IndividualSchedulesActivity(OsMaRequestFactory requests, PlaceController placeController) {
@@ -91,7 +92,9 @@ public class IndividualSchedulesActivity extends AbstractActivity implements Ind
 			
 	}
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
+		Log.info("======================================== Register ISA===================================");
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 		
 	}
 	// E Module10 Create plans
@@ -99,6 +102,8 @@ public class IndividualSchedulesActivity extends AbstractActivity implements Ind
 	public void onStop(){
 		// Module10 Create plans
 		activityManager.setDisplay(null);
+		Log.info("======================================== on Stop ISA===================================");
+		handlerManager.removeHandler(SelectChangeEvent.getType(),removeHandler);
 		// E Module10 Create plans
 	}
 	

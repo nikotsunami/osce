@@ -38,7 +38,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	private List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
 	private SemesterProxy semesterProxy;
 	private HandlerManager handlerManager;
-	
+	private SelectChangeHandler removeHandler;
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	private eOSCESyncServiceAsync eOsceServiceAsync = null;
@@ -89,9 +89,16 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		view.setDelegate(this);		
 	}
 	
+	@Override
+	public void onStop() {	
+		super.onStop();
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);	
+	}
+	
 	public void addSelectChangeHandler(SelectChangeHandler handler) 
 	{
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);	
+		removeHandler=handler;
 	}
 	
 	public void generateXMLFile(Long semesterID)

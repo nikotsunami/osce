@@ -62,6 +62,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	private StudentOscesProxy studentOscesProxy;
 	public HandlerManager handlerManager;// = new HandlerManager(this);
 	private HandlerRegistration rangeChangeHandler;
+	private SelectChangeHandler removeHandler;
 	
 	public int currenttab= 0;	
 	public StudentSubDetailsViewImpl[] subDetailsView;
@@ -106,6 +107,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 		
 	}
 	
@@ -117,7 +119,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 
 	
 	public void onStop(){
-		
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 	}
 	
 	@Override

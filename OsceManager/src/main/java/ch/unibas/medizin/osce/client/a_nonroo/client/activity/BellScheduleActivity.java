@@ -58,6 +58,8 @@ public class BellScheduleActivity extends AbstractActivity implements
 	// @SPEC table to add data and remove
 	private CellTable<BellAssignmentType> table;
 	private List<AssignmentProxy> assignmentProxies;
+	
+	private SelectChangeHandler removeHandler;
 	List<BellAssignmentType> bellAssignmentTypes;
 
 	public BellScheduleActivity(OsMaRequestFactory requests,
@@ -103,10 +105,12 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 	}
 
-	public void onStop() {
-
+	public void onStop() 
+	{
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 	}
 
 	@Override

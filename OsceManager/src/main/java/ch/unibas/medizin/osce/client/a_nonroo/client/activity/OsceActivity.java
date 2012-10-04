@@ -62,6 +62,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	private HandlerRegistration rangeChangeHandler;
 	private ActivityManager activityManager;
 	private OsceDetailsActivityMapper osceDetailsActivityMapper;
+	private SelectChangeHandler removeHandler;
 	//public SemesterProxy semesterProxy;
 
 	// G: SPEC START =
@@ -112,6 +113,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	public void addSelectChangeHandler(SelectChangeHandler handler) 
 	{
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 	
 	}
 	// G: SPEC END =
@@ -119,6 +121,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 	
 	public void onStop(){
 		activityManager.setDisplay(null);
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 	}
 
 	public void registerLoading() {

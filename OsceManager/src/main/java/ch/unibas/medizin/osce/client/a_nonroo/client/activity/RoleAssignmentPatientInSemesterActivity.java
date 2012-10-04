@@ -139,6 +139,8 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	private OsceDayProxy osceDayProxy;
 	private OsceDaySubViewImpl osceDaySubViewImpl;
 	
+	private SelectChangeHandler removeHandler;
+	
 	//change
 	private List<OsceDaySubViewImpl> osceDaySubViewImplList=new ArrayList<OsceDaySubViewImpl>();
 //	private DisclosurePanel disCloserPanel;
@@ -271,6 +273,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	}
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 	}
 
 	/**
@@ -283,6 +286,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		Log.info("==================================== Timer Stop ==========================================");
 		osceDayTimer.cancel();
 		osceDayTimer=null;
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 		// module 3 bug }
 	}
 

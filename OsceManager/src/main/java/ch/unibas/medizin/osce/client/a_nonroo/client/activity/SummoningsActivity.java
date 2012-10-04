@@ -67,7 +67,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 	private SummoningsPlace place;
 	private SummoningsActivity activity;
 	
-	
+	private SelectChangeHandler removeHandler;
 	public HandlerManager handlerManager;
 	private SemesterProxy semesterProxy;
 	
@@ -117,11 +117,12 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 	public void addSelectChangeHandler(SelectChangeHandler handler) {
 		Log.info("SelectChangeEvent.getType = ="+SelectChangeEvent.getType());
 		handlerManager.addHandler(SelectChangeEvent.getType(), handler);
+		removeHandler=handler;
 		
 	}
 	
 	public void onStop(){
-		
+		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
 	}
 	
 	@Override
