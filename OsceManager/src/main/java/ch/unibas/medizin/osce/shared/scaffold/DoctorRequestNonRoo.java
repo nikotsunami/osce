@@ -33,4 +33,6 @@ public interface DoctorRequestNonRoo extends RequestContext {
 		
 	abstract Request<List<SpecialisationProxy>> findSpecialisationByClinicId(Long clinicId);
 	
+	abstract Request<List<DoctorProxy>> findDoctorByAssignment(Long specialisationId,Long clinicId);
+	
 }

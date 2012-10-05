@@ -142,6 +142,13 @@ public class Doctor {
     	TypedQuery<Specialisation> q = em.createQuery(sql, Specialisation.class);
     	return q.getResultList();
     }
-   	
+
+    public static List<Doctor> findDoctorByAssignment(Long specialisationId,Long clinicId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT d FROM Doctor AS d, Assignment As a WHERE d.specialisation = " + specialisationId + " AND d.clinic = " + clinicId + " AND d.id = a.examiner GROUP BY d.id";
+    	TypedQuery<Doctor> q = em.createQuery(sql, Doctor.class);
+    	return q.getResultList();
+    }
     
 }

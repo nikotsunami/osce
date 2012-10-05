@@ -141,17 +141,13 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 					{
 						final String specialisationLbl = response.get(i).getName();
 						
-						requests.assignmentRequestNonRoo().findAssignedDoctorBySpecialisation(response.get(i).getId(), clinicProxy.getId()).with("examiner","examiner.specialisation","examiner.specialisation.oscePostBlueprint","examiner.specialisation.oscePostBlueprint.osce").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+						requests.doctorRequestNonRoo().findDoctorByAssignment(response.get(i).getId(), clinicProxy.getId()).with("assignments", "assignments.osceDay", "assignments.osceDay.osce").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 							@Override
-							public void onSuccess(List<AssignmentProxy> response) {
-								List<DoctorProxy> doctorList = new ArrayList<DoctorProxy>();
-								for (AssignmentProxy assignment : response)
-								{
-									doctorList.add(assignment.getExaminer());
-								}
+							public void onSuccess(List<DoctorProxy> response) {
+								
 								ClinicSubView clinicSubView = new ClinicSubViewImpl();
-								clinicSubView.getTable().setRowData(doctorList);
+								clinicSubView.getTable().setRowData(response);
 								clinicSubView.getHeaderLabel().setText(specialisationLbl);
 								
 								view.getSpecialTabPanel().add(clinicSubView);

@@ -8,6 +8,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
@@ -167,7 +168,7 @@ public class ClinicSubViewImpl extends Composite implements ClinicSubView {
 		//table.addStyleName("");
 		
 		paths.add("name");
-		table.addColumn(new TextColumn<DoctorProxy>() {
+		TextColumn<DoctorProxy> nameCol = new TextColumn<DoctorProxy>() {
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
@@ -182,7 +183,10 @@ public class ClinicSubViewImpl extends Composite implements ClinicSubView {
 				return renderer.render(object.getName());
 
 			}
-		}, constants.doctors());
+		};
+		
+		table.addColumn(nameCol, constants.doctors());
+		table.setColumnWidth(nameCol, "100px");
 
 
 		paths.add("Prename");
@@ -199,26 +203,32 @@ public class ClinicSubViewImpl extends Composite implements ClinicSubView {
 			@Override
 			public String getValue(DoctorProxy object) {
 				String oscelist="";
-				Iterator<OscePostBlueprintProxy> iteratorOscePostBlueprint = null;
-				if(object.getSpecialisation()!=null && object.getSpecialisation().getOscePostBlueprint()!= null){
-
-					iteratorOscePostBlueprint=object.getSpecialisation().getOscePostBlueprint().iterator();
-
-					while(iteratorOscePostBlueprint.hasNext())
+				String value = "";
+				
+				if (object.getAssignments() != null)
+				{
+					Iterator<AssignmentProxy> itr = object.getAssignments().iterator();
+					
+					while (itr.hasNext())
 					{
-						OscePostBlueprintProxy proxy=iteratorOscePostBlueprint.next();
-						if(object.getSpecialisation().getOscePostBlueprint().size()==1)
+						AssignmentProxy assignment = itr.next();
+						
+						value = assignment.getOsceDay().getOsce().getName();
+						
+						if (!oscelist.equals(""))
 						{
-							oscelist=proxy.getOsce().getName();
-						}
-						else if(!iteratorOscePostBlueprint.hasNext())
-						{
-							oscelist=proxy.getOsce().getName();
+							if (!oscelist.contains(value))
+							{
+								oscelist = oscelist + ", " + value;
+							}
 						}
 						else
-							oscelist=proxy.getOsce().getName()+",";
+						{
+							oscelist = value;
+						}
 					}
 				}
+				
 				return renderer.render(oscelist);
 			}
 		}, constants.osce());
