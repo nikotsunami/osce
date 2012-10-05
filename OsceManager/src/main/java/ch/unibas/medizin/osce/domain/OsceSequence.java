@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -86,6 +87,26 @@ public class OsceSequence {
 			newOsceSequence.setOscePosts(posts);
 			
 			newOsceSequence.persist();
+			
+			Iterator<Course> courseItr = parcours.iterator();
+			
+			while (courseItr.hasNext())
+			{
+				Course course = courseItr.next();
+				
+				Iterator<OscePost> oscePostItr = posts.iterator();				
+				
+				while (oscePostItr.hasNext())
+				{
+					OscePost oscePost = oscePostItr.next();
+					
+					OscePostRoom oscePostRoom = new OscePostRoom();
+					oscePostRoom.setCourse(course);
+					oscePostRoom.setOscePost(oscePost);
+					oscePostRoom.persist();
+					
+				}
+			}
 			
 			return newOsceSequence;
 					

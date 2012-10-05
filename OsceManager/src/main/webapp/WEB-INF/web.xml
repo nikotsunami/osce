@@ -227,6 +227,16 @@
 		<servlet-name>individualScheduleServiceImpl</servlet-name>
 		<url-pattern>/osMaEntry/schedule</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>RotationRefreshServiceImpl</servlet-name>
+		<servlet-class>ch.unibas.medizin.osce.server.RotationRefreshServiceImpl</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>RotationRefreshServiceImpl</servlet-name>
+		<url-pattern>/osMaEntry/rotationrefresh</url-pattern>
+	</servlet-mapping>
  <!-- E Module10 Create plans -->  
  
 <!-- Feature : 154

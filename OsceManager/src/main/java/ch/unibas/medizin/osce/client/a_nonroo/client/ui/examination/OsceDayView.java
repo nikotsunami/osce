@@ -26,6 +26,8 @@ public interface OsceDayView extends IsWidget{
 		
 		 public void shiftLucnkBreakPrevClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl);
 		 public void shiftLucnkBreakNextClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl);
+		 
+		 void setOsceDayTime(OsceDayViewImpl osceDayViewImpl,Long dayId);
 		}
 	 
 	 void setDelegate(Delegate delegate);

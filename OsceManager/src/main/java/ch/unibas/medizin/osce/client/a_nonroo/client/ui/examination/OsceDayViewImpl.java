@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -33,7 +36,7 @@ import com.google.gwt.user.datepicker.client.DateBox;
  * @author dk
  *
  */
-public class OsceDayViewImpl extends Composite implements OsceDayView {
+public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRefreshHandler {
 
 	private static OsceDayViewUiBinder uiBinder = GWT
 			.create(OsceDayViewUiBinder.class);
@@ -430,4 +433,28 @@ public class OsceDayViewImpl extends Composite implements OsceDayView {
 			this.sequenceOsceSubViewImplList = sequenceOsceSubViewImplList;
 	}
 	
+	@Override
+	public void onRotationChanged(RotationRefreshEvent event) 
+	{
+		Log.info("Osce Day onRotationChanged call");
+		/*Log.info("## OsceDayViewImpl current Day: " + event.getCurrentDayId());
+		Log.info("## OsceDayViewImpl current Day Proxy:" + this.osceDayProxy.getId());
+		Log.info("## OsceDayViewImpl previous Day: " + event.getPreviousDayId());
+		Log.info("## OsceDayViewImpl previous Day Proxy:" + this.osceDayProxy.getId());*/
+		if(event.getCurrentDayId()!=null && event.getPreviousDayId()!=null)
+		{
+			if(this.osceDayProxy.getId().equals(Long.valueOf(event.getCurrentDayId())))
+			{
+				Log.info("$$ Current Day Found");
+				Log.info("Current Day Proxy: " + event.getCurrentDayId());
+				delegate.setOsceDayTime(this, Long.valueOf(event.getCurrentDayId()));
+			}
+			else if(this.osceDayProxy.getId().equals(Long.valueOf(event.getPreviousDayId())))
+			{
+				Log.info("$$ Previous Day Found");			
+				Log.info("Previous Day Proxy: " + event.getPreviousDayId());
+				delegate.setOsceDayTime(this, Long.valueOf(event.getPreviousDayId()));
+			}
+		}
+	}
 }

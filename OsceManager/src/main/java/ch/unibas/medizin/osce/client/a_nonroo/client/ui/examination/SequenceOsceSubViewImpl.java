@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
@@ -30,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author dk
  *
  */
-public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSubView {
+public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSubView,RotationRefreshHandler {
 
 	private static SequenceOsceSubViewUiBinder uiBinder = GWT
 			.create(SequenceOsceSubViewUiBinder.class);
@@ -208,6 +210,40 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 		return this.sequenceRotation;
 	}
 	//E Module 5 Bug Report Solution
+	
+	@Override
+	public void onRotationChanged(RotationRefreshEvent event) 
+	{
+		Log.info("Rotation Change");
+		
+		/*Log.info("Current Sequence Rotaions: " + event.getPreviousSequenceRotation());
+		Log.info("Next Sequence Rotaions: " + event.getNextSequenceRotation());
+		
+		Log.info("~Osce Sequence Proxy: " + osceSequenceProxy.getId());
+		Log.info("~Current Sequence Id: " + event.getCurrentSequenceId());
+		Log.info("=Next Sequence Id: " + event.getNextSequenceId());		
+		Log.info("=Osce Sequence Proxy: " + osceSequenceProxy.getId());*/
+		
+		if(event.getCurrentSequenceId()!=null && event.getNextSequenceId()!=null)
+		{
+			if(osceSequenceProxy.getId().equals(Long.valueOf(event.getCurrentSequenceId())))
+			{
+				Log.info("Current Sequence Found");
+				Log.info("Current Sequence Id: "+ event.getCurrentSequenceId());
+				this.sequenceRotation.setText(event.getPreviousSequenceRotation());		
+				this.sequenceRotation.setTitle(event.getPreviousSequenceRotation());
+			}
+			else if(osceSequenceProxy.getId().equals(Long.valueOf(event.getNextSequenceId())))
+			{
+				Log.info("Next Sequence Found");
+				Log.info("Next Sequence Id: "+ event.getNextSequenceId());
+				this.sequenceRotation.setText(event.getNextSequenceRotation());
+				this.sequenceRotation.setTitle(event.getNextSequenceRotation());
+			}	
+		}
+		
+		
+	}
 	
 	
 }
