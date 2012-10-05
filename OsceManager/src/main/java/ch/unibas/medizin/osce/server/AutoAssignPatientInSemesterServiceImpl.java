@@ -46,6 +46,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 
 	Long semesterId;
 	private static final Domain DOMAIN = DomainFactory.getDomain("localhost");
+	private int neededSp = 0;
+	private long allReadyPatientInRole = 0;
+	
 	
 	@Override
 	
@@ -83,11 +86,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 		
 		try{
 		
-			//Set<AdvancedSearchCriteria> setAdvanceSearchCriteria1 = new HashSet<AdvancedSearchCriteria>(); 
-			//ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>();
+			
 			Semester semester;
 
-		//	boolean spFitInCriteria=false;
 		  
 			  List<PatientInSemester> allPatientInSemester;
 			  
@@ -102,7 +103,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			  
 			  Log.info("Semester At autoAssignPatientInsemester() is : " + semester.getId() );
 			  
-			  //allPatientInSemester=semester.getPatientsInSemester();
 			  
 			  allPatientInSemester=Osce.findAllPatientInSemesterBySemesterAndAcceptedDay(semester.getId());
 			  
@@ -132,7 +132,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 				 
 				 		while(osceDayInSemesterIterator.hasNext()){
 					 			OsceDay osceDay = osceDayInSemesterIterator.next();
-					 			Log.info("Does SP :  accepted OSCE Day : " + patientInSemsterHasOsceDay.contains(osceDay));
+					 			
 					 			if (patientInSemsterHasOsceDay.contains(osceDay))
 					 			{
 					 	
@@ -150,12 +150,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					 			StandardizedRole standardizedRole =oscePost.getStandardizedRole();
 					 			
 					 			Log.info("Standardized Role IS :" + standardizedRole.getId());
-					 			
-					 			//setAdvanceSearchCriteria.clear();
+					 		
 					 			
 					 			Set<AdvancedSearchCriteria> setAdvanceSearchCriteria = standardizedRole.getAdvancedSearchCriteria();
-					 			
-					 			Log.info("standardizedRole.getAdvancedSearchCriteria() Size :" + standardizedRole.getAdvancedSearchCriteria().size());
 					 			
 					 			Log.info("setAdvanceSearchCriteria Size :" + setAdvanceSearchCriteria.size());
 					 			
@@ -167,7 +164,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					 				continue;
 					 			}
 					 			else{			 			
-					 			//listAdvanceSearchCirteria.clear();
+					 			
 					 				ArrayList<AdvancedSearchCriteria>  listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 								  
 							    Log.info("Search Criteria Size : " +listAdvanceSearchCirteria.size());
@@ -220,10 +217,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								
 								Log.info("Parcour list size IS :" + parcourList.size());
 								
-								//int neededSpForSecurity_Simple=parcourList.size()*2;
-								//int neededSpForSecutity_Federal=parcourList.size()+1;
-								
-								int neededSp = 0;
 								if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.simple){
 									neededSp=parcourList.size()*2;
 								}
@@ -239,11 +232,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								
 								int middleBreak = sortedOsceDay.getOsce().getMiddleBreak();
 								
-								Log.info("Middle Break is :" + middleBreak +"For Osce "+ sortedOsceDay.getOsce());
+								Log.info("Middle Break is :" + middleBreak);
 	
 								int longBreak =sortedOsceDay.getOsce().getLongBreak();
 								
-								Log.info("Long Break is :" + longBreak +"For Osce "+ sortedOsceDay.getOsce());
+								Log.info("Long Break is :" + longBreak);
 								
 								List<Assignment> assignmentList = new ArrayList<Assignment>();
 								
@@ -264,17 +257,24 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 															
 								
 								Log.info("Needed SP is : " + neededSp);
-								int allReadyPatientInRole =sortedOscePost.getPatientInRole().size();
 								
-								 for (Iterator sortedPatientInSemesterIt = patientInSemesterList1.iterator(); sortedPatientInSemesterIt.hasNext();) {
+								//int allReadyPatientInRole =sortedOscePost.getPatientInRole().size();
+								
+								allReadyPatientInRole=Osce.getTotalRoleAssignInPost(sortedOscePost.getId());
+								
+								for (Iterator sortedPatientInSemesterIt = patientInSemesterList1.iterator(); sortedPatientInSemesterIt.hasNext();) {
 									PatientInSemester sortedPatientInSemester1 = (PatientInSemester) sortedPatientInSemesterIt.next();
 										Log.info("SP1 iterator with SP :" +sortedPatientInSemester1.getId());
 										
-											if(allReadyPatientInRole >= neededSp){
+										//int allReadyPatientInRole =sortedOscePost.getPatientInRole().size();
+										
+										//allReadyPatientInRole=Osce.getTotalRoleAssignInPost(sortedOscePost.getId());
+										Log.info("Number of SP already assigned : " + allReadyPatientInRole);
+										if(allReadyPatientInRole >= neededSp){
 											break;
 										}
 										else{
-											//setAdvanceSearchCriteria.clear();
+											
 											Set<AdvancedSearchCriteria> setAdvanceSearchCriteria=sortedOscePost.getStandardizedRole().getAdvancedSearchCriteria();
 											
 											if(setAdvanceSearchCriteria== null || setAdvanceSearchCriteria.size() <= 0){
@@ -295,6 +295,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								 					
 								 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)){
 								 					
+								 						Log.info("listOfPatientInSemesterSatisfyCriteria is inside  sortedPatientInSemester1");
 								 						SPfitForRole(sortedOsceDay,sortedPatientInSemester1,sortedOscePost,sortedOscePostByTypeAndComplexyList,semester);
 	
 								 					}
@@ -302,7 +303,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 										}	
 								 }
 								 }
-								 boolean first_SP=true;
+						/*		 boolean first_SP=true;
 								 int firstEvenSps=0;
 								 
 								 PatientInSemester previousPatientInSemester=null;
@@ -336,7 +337,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											 }
 											 Log.info("Previous Element: " + previos_element);
 											 previos_element++;
-											 Log.info("Previous Element1: " + previos_element);
+											 
+											 //Log.info("Previous Element1: " + previos_element);
 											 
 											 Log.info("Before method Calls findPersentageOfRoleFitsForDay()");
 											List<List<OscePost>>persentageRoleFitsForThisDayLsit = Osce.findPersentageOfRoleFitsForDay(semester.getId(),allOscePostOfThisDay,sortedPatientInSemester2);
@@ -366,8 +368,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 												
 											if((1/basicValue) < (currentAccptedListSize/allOscePostOfThisDay.size())){
 											
-												
-												Log.info("@@Query result is :" +Osce.getCountOfSPAssigndAsBackup(sortedOsceDay));
 												
 												if((first_SP) || (Osce.getCountOfSPAssigndAsBackup(sortedOsceDay))==basicValue){
 													
@@ -417,7 +417,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 														patientInRole.setIs_backup(true);
 														patientInRole.setOscePost(post);
 														patientInRole.setPatientInSemester(sortedPatientInSemester2);
-														patientInRole.persist();*/
+														patientInRole.persist();
 															
 																persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 														
@@ -475,7 +475,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																			patientInRole2.setIs_backup(true);
 																			patientInRole2.setOscePost(post);
 																			patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																			patientInRole2.persist();*/
+																			patientInRole2.persist();
 																			
 																			persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																			
@@ -485,7 +485,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																			patientInRole3.setIs_backup(true);
 																			patientInRole3.setOscePost(null);
 																			patientInRole3.setPatientInSemester(sortedPatientInSemester2);
-																			patientInRole3.persist();*/
+																			patientInRole3.persist();
 
 																			persisitPatientInRole(true,true,null,sortedPatientInSemester2);
 																			ifFits=true;
@@ -499,7 +499,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																			patientInRole2.setIs_backup(true);
 																			patientInRole2.setOscePost(post);
 																			patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																			patientInRole2.persist();*/
+																			patientInRole2.persist();
 																			
 																			persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																			
@@ -539,7 +539,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																	patientInRole2.setIs_backup(true);
 																	patientInRole2.setOscePost(post);
 																	patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																	patientInRole2.persist();*/
+																	patientInRole2.persist();
 																	
 																	persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																	
@@ -549,21 +549,21 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																	patientInRole3.setIs_backup(true);
 																	patientInRole3.setOscePost(null);
 																	patientInRole3.setPatientInSemester(sortedPatientInSemester2);
-																	patientInRole3.persist();*/
+																	patientInRole3.persist();
 																	
 																	persisitPatientInRole(true,true,null,sortedPatientInSemester2);
 																	
 																	ifFits=true;
 																	
 																	}
-else{
+																	else{
 																	Log.info("%%Assigning SP To All Breaks and To Role In Which Satisfied");
 																	/*PatientInRole patientInRole2 = new PatientInRole();
 																	patientInRole2.setFit_criteria(true);
 																	patientInRole2.setIs_backup(true);
 																	patientInRole2.setOscePost(post);
 																	patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																	patientInRole2.persist();*/
+																	patientInRole2.persist();
 																	
 																	persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																	ifFits=true;
@@ -610,7 +610,7 @@ else{
 								 }
 									 
 									 Log.info("Out Side Basic Value in Not With Value Also Basic Value Incremented Is now : "+ basicValue);
-								} 
+								} */
 			 				}
 			 		}
 	
@@ -626,23 +626,30 @@ else{
 
 	public void SPfitForRole(OsceDay sortedOsceDay,PatientInSemester sortedPatientInSemester1,OscePost sortedOscePost,List<OscePost> sortedOscePostByTypeAndComplexyList,Semester semester){
 
-		//Set<AdvancedSearchCriteria> setAdvanceSearchCriteria = new HashSet<AdvancedSearchCriteria>();
-		//ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>();
+		
 		List<PatientInSemester> listOfPatientInSemesterSatisfyCriteria = new ArrayList<PatientInSemester>();
 		boolean spFitInCriteria=false;
-				
+		
+		int getTotalRolesFroOscePost=Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId());		
+		
+		int getTotalTimePatientAssignInRole=PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(),sortedPatientInSemester1.getId());
+		
+		//int getToltalTimePatientAssignInRole
 		Log.info("In side SPfitForRole() ");
 		Log.info("Search Criteria Fits for Patientin sem : "+ sortedPatientInSemester1.getId());
-		Log.info("For Role1 List security type : "+ sortedOsceDay.getOsce().getOsceSecurityTypes());
 	
-		if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal && (Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
+	
+		if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal && (getTotalRolesFroOscePost==0)){
 			
-			Log.info("Check Osce.getTotalRolesFroOscePost : " + Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId()));
+		//if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal ){
 			
-				if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(),sortedPatientInSemester1.getId())==0){
+			if(allReadyPatientInRole>=neededSp)
+				return;
+			
+				if(getTotalTimePatientAssignInRole==0){
 					
 					// Assign Patient In Role With One Post Null and One Post As Given.
-					Log.info("Patient Assign is role Is : "+PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(),sortedPatientInSemester1.getId()));	
+
 					/*PatientInRole newPatientAssignToRole = new PatientInRole();
 					newPatientAssignToRole.setFit_criteria(true);
 					newPatientAssignToRole.setIs_backup(false);
@@ -662,6 +669,8 @@ else{
 					newPatientAssignToRole2.persist();*/
 					
 					persisitPatientInRole(true,false,null,sortedPatientInSemester1);
+					
+					allReadyPatientInRole+=1;
 
 				}
 					// Patient In Role Is All ready assign with one Post as NULL so assign normally.
@@ -675,10 +684,12 @@ else{
 						newPatientAssignToRole.persist();*/
 						
 						persisitPatientInRole(true,false,sortedOscePost,sortedPatientInSemester1);
+						allReadyPatientInRole+=1;
 			    } 
 		}
 		
 		else if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.simple){
+			
 			
 			int total_Count =sortedOscePostByTypeAndComplexyList.size();
 			
@@ -699,6 +710,9 @@ else{
 			
 			for(int index=start_index;index >= 0;index--){
 				
+				if(allReadyPatientInRole>=neededSp)
+					return;
+				
 				OscePost sortedOscePost2=sortedOscePostByTypeAndComplexyList.get(index);
 			
 				Log.info("@@@Getted OscePost is :" + sortedOscePost2.getId());
@@ -709,15 +723,16 @@ else{
 				if(setAdvanceSearchCriteria== null || setAdvanceSearchCriteria.size() <= 0){
 					
 					//continue;
-					if((Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
+					if(getTotalRolesFroOscePost==0){
 						
-					if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(),sortedPatientInSemester1.getId())==0){
+					if(getTotalTimePatientAssignInRole==0){
 						
 						Log.info("Search Criteria Found For Role2 List"+sortedPatientInSemester1.getId());
 					
 							
 	 						spFitInCriteria=true;
 	 						assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+	 						allReadyPatientInRole+=2;
 	 						/*// Assign SP To Role 1 
 	 						
 	 						PatientInRole newPatientAssignInRole1 = new PatientInRole();
@@ -752,6 +767,7 @@ else{
 					
  								spFitInCriteria=true;
  								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+ 								allReadyPatientInRole+=2;
 		 						/*// Assign SP To Role 1 
 		 						
 		 						PatientInRole newPatientAssignInRole1 = new PatientInRole();
@@ -772,7 +788,7 @@ else{
 		 						
 		 						break;
 						}
-				  }
+				 }
 			 }
 				else{
 					//listAdvanceSearchCirteria=null;
@@ -786,15 +802,18 @@ else{
 		 			
 		 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
 		 				
-						if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1) && (Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
+						if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1) && (getTotalRolesFroOscePost==0)){
 				
-								if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(),sortedPatientInSemester1.getId())==0){
+						//	if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)){
+							
+								if(getTotalTimePatientAssignInRole==0){
 										
 								Log.info("Search Criteria Found For Role2 List"+sortedPatientInSemester1.getId());
 							
 									
 			 						spFitInCriteria=true;
 			 						assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+			 						allReadyPatientInRole+=2;
 			 						/*// Assign SP To Role 1 
 			 						
 			 						PatientInRole newPatientAssignInRole1 = new PatientInRole();
@@ -829,6 +848,7 @@ else{
 							
 		 								spFitInCriteria=true;
 		 								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+		 								allReadyPatientInRole+=2;
 				 						/*// Assign SP To Role 1 
 				 						
 				 						PatientInRole newPatientAssignInRole1 = new PatientInRole();
@@ -859,6 +879,9 @@ else{
 				Log.info("No Search Cietria Found For Role Two So Checking fro start To Middle");
 				for(int index=start_index+1;index < mid_position;index++){
 					
+					if(allReadyPatientInRole>=neededSp)
+						return;
+					
 					OscePost sortedOscePost3=sortedOscePostByTypeAndComplexyList.get(index);
 					
 					//setAdvanceSearchCriteria.clear();
@@ -867,12 +890,13 @@ else{
 					
 					if(setAdvanceSearchCriteria== null || setAdvanceSearchCriteria.size() <= 0){
 						//continue;
-						if(Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0){
+						if(getTotalRolesFroOscePost==0){
 							
-							if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), sortedPatientInSemester1.getId())==0){
+							if(getTotalTimePatientAssignInRole==0){
 	 							Log.info("Assign Patient In Role With One Post As NULL");
 	 							
 	 							assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+	 							allReadyPatientInRole+=2;
 			 					/*// Assign SP To Role 1 
 			 						
 			 						PatientInRole newPatientAssignInRole1 = new PatientInRole();
@@ -922,6 +946,7 @@ else{
 			 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 			 						newPatientAssignInRole2.persist();*/
 								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+								allReadyPatientInRole+=2;
 			 						break;
 			 					}
 						}
@@ -938,12 +963,16 @@ else{
 		 			
 		 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
 		 				
-	 					if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)&& (Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
+	 					//if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)&& (Osce.getTotalRolesFroOscePost(sortedOscePost.getId(),sortedPatientInSemester1.getId())==0)){
 	 			
-	 						if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), sortedPatientInSemester1.getId())==0){
+	 						if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)&& (getTotalRolesFroOscePost==0)){
+	 						
+	 							if(getTotalTimePatientAssignInRole==0){
+	 								
 	 							Log.info("Assign Patient In Role With One Post As NULL");
 	 							
 	 							assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+	 							allReadyPatientInRole+=2;
 			 					/*// Assign SP To Role 1 
 			 						
 			 						PatientInRole newPatientAssignInRole1 = new PatientInRole();
@@ -992,6 +1021,7 @@ else{
 	 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 	 						newPatientAssignInRole2.persist();*/
 	 						assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+	 						allReadyPatientInRole+=2;
 	 						break;
 	 					}
 		 			}
@@ -1006,22 +1036,23 @@ else{
 	public void assignSpInToRole1AndRole2IsRoleAssigningFirstTime(OscePost sortedOscePost,OscePost sortedOscePost2,PatientInSemester sortedPatientInSemester1){
 		
 		// Assign SP To Role 1 
-			
+		
 			PatientInRole newPatientAssignInRole1 = new PatientInRole();
 			newPatientAssignInRole1.setFit_criteria(true);
 			newPatientAssignInRole1.setIs_backup(false);
 			newPatientAssignInRole1.setOscePost(sortedOscePost);
 			newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
 			newPatientAssignInRole1.persist();
-			
+		
 			// Assign SP To Role 2
-			
+			if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
 			PatientInRole newPatientAssignInRole2 = new PatientInRole();
 			newPatientAssignInRole2.setFit_criteria(true);
 			newPatientAssignInRole2.setIs_backup(false);
 			newPatientAssignInRole2.setOscePost(sortedOscePost2);
 			newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 			newPatientAssignInRole2.persist();
+			}
 			
 				// Assign with Post NULL
 			Log.info("Assign Role With One Post As Null");
@@ -1035,22 +1066,23 @@ else{
 	public void assignSpInToRole1AndRole2IsRoleAssigningSecondTime(OscePost sortedOscePost,OscePost sortedOscePost2,PatientInSemester sortedPatientInSemester1){
 		
 		// Assign SP To Role 1 
-			
+		
 			PatientInRole newPatientAssignInRole1 = new PatientInRole();
 			newPatientAssignInRole1.setFit_criteria(true);
 			newPatientAssignInRole1.setIs_backup(false);
 			newPatientAssignInRole1.setOscePost(sortedOscePost);
 			newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
 			newPatientAssignInRole1.persist();
-			
+		
 			// Assign SP To Role 2
-			
+		if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
 			PatientInRole newPatientAssignInRole2 = new PatientInRole();
 			newPatientAssignInRole2.setFit_criteria(true);
 			newPatientAssignInRole2.setIs_backup(false);
 			newPatientAssignInRole2.setOscePost(sortedOscePost2);
 			newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 			newPatientAssignInRole2.persist();
+		}
 	}
 
 }

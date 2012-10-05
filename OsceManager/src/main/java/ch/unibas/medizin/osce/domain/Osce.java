@@ -719,6 +719,18 @@ public class Osce {
 		
 		return patientInSemesters;
 	}
+	
+	public static Long getTotalRoleAssignInPost(Long postId){
+		
+		Log.info("Call getTotalRoleAssignInPost With post id :" + postId);	
+		EntityManager em = entityManager();		
+		String queryString = "select count(*) from PatientInRole as pir where pir.oscePost="+postId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		Long result  = q.getSingleResult();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+		return result; 
+	}
 
 	//module 3 f }
 	

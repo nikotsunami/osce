@@ -204,7 +204,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			writer.close();
 			reader.close();
 			
-			//importEOSCE(filename);
+			importEOSCE(filename);
 		}
 		catch(Exception e)
 		{
