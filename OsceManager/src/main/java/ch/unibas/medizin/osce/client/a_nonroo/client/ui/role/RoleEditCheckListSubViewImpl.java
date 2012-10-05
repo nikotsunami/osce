@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 //file by spec
 //Editor<StandardizedRoleProxy>
-public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditCheckListSubView ,Editor<CheckListProxy> {
+public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditCheckListSubView  {
 	private static final Binder BINDER = GWT.create(Binder.class);
 	private Delegate delegate;
 	private OsceConstants constants = GWT.create(OsceConstants.class);
@@ -41,6 +41,8 @@ public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditC
 	
 	@UiField
 	public TextBox title;
+	
+	
 	@UiField
 	public SpanElement labelName;
 	
@@ -51,7 +53,7 @@ public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditC
 	}*/
 
 	interface Binder extends UiBinder<Widget, RoleEditCheckListSubViewImpl> {}
-	interface Driver extends RequestFactoryEditorDriver<CheckListProxy, RoleEditCheckListSubViewImpl> {}
+	
 
 	
 	public RoleEditCheckListSubViewImpl() {		
@@ -76,12 +78,7 @@ public class RoleEditCheckListSubViewImpl extends Composite implements RoleEditC
 //spec start
 	
 	
-	@Override
-	public RequestFactoryEditorDriver<CheckListProxy, RoleEditCheckListSubViewImpl> createCheckListEditorDriver() {
-		RequestFactoryEditorDriver<CheckListProxy, RoleEditCheckListSubViewImpl> driver = GWT.create(Driver.class);
-		driver.initialize(this);
-		return driver;
-	}
+	
 		
 	//spec end
 	

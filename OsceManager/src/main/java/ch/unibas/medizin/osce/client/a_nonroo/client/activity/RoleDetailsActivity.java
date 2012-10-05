@@ -244,7 +244,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	
 	public StandardizedRoleDetailsViewImpl[] standardizedRoleDetailsView;
 	public RoleEditCheckListSubViewImpl[] roleEditCheckListSubView;
-	private ViewType role_script_Scerrn= ViewType.role_script;
+	
 	private static int selecTab = 0;
 
 	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl reViewImpl;
@@ -280,7 +280,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	
 	private CellTable<RoleParticipantProxy> authorTable;
 	private CellTable<RoleParticipantProxy> reviewerTable;
-	private CellTable<KeywordProxy> keywordTable;
+
 
 	KeywordProxy selKeywordProxy;
 	
@@ -331,7 +331,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	/** Holds the table with the advanced search criteria */
 	private CellTable<AdvancedSearchCriteriaProxy> advancedSearchPatientTable[];
 	private StandartizedPatientAdvancedSearchSubView advancedSearchSubViews[];
-	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
+
 
 	private HandlerRegistration rangeAdvanceSearchTableChangeHandler;
 
@@ -1226,7 +1226,7 @@ final int index2 = index;
 		Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
 //		RoleDetailsChecklistSubViewChecklistQuestionItemView queView[]=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl[proxy.getCheckList().getCheckListTopics().size()];
 		//create Topic View
-		int i=0;
+		
 		while(topicIterator.hasNext())
 		{
 			ChecklistTopicProxy topicProxy=topicIterator.next();
@@ -2729,7 +2729,34 @@ final int index2 = index;
 			
 			//ScrolledTab Changes start
 			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
-			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			
+			Log.info("else if called ~~~~");
+			VerticalPanel vp=((VerticalPanel)(topicView).getParent());
+			Log.info("Widget Index" + vp.getWidgetIndex(topicView));
+			int index=vp.getWidgetIndex(topicView);
+			
+			if(index==vp.getWidgetCount()-1)
+				return;
+			index++;
+			
+			topicView.removeFromParent();
+			
+			vp.insert(topicView, index);
+		
+		for(int i=0;i<vp.getWidgetCount();i++)
+		{
+			
+			Log.info("value~~~~"+ i);
+			if(i==vp.getWidgetCount()-1)
+				updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,true,topicView,proxy);
+			else
+				updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
+		
+		
+		}
+			
+			
+		/*	final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
 			//ScrolledTab Changes end
 			requests.checklistTopicRequestNonRoo()
 			.topicMoveDown(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy)
@@ -2741,29 +2768,61 @@ final int index2 = index;
 
 				}
 			});
-			
+			*/
 		}
 
 		@Override
 		public void topicMoveUp(final ChecklistTopicProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
+			
+			Log.info("else if called ~~~~");
+			VerticalPanel vp=((VerticalPanel)(topicView).getParent());
+			Log.info("Widget Index" + vp.getWidgetIndex(topicView));
+			int index=vp.getWidgetIndex(topicView);
+			
+			if(index==0)
+				return;
+			
+			index--;
+			
+			topicView.removeFromParent();
+			
+			vp.insert(topicView, index);
+		
+			for(int i=0;i<vp.getWidgetCount();i++)
+			{
+				
+				Log.info("value~~~~"+ i);
+				if(i==vp.getWidgetCount()-1)
+					updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,true,topicView,proxy);
+				else
+					updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
+			
+			
+			}
+			
+			
+			
+			
 			//ScrolledTab Changes start
 			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
-			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			
+			/*final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
 			//ScrolledTab Changes end
 			requests.checklistTopicRequestNonRoo().topicMoveUp(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy).fire(new Receiver<Void>() {
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("moved");
 					roleTopicInit(proxy,topicView);
-
 				}
-			});
+			});*/
 			
 		}
 
 		@Override
 		public void questionMoveUp(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView,final ChecklistTopicProxy topicProxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView) {
 			
+			
+			/*
 			//ScrolledTab Changes start
 			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
 			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
@@ -2779,7 +2838,30 @@ final int index2 = index;
 					roleTopicInit(topicProxy, topicView);
 				}
 			});
+			*/
 			
+			
+			VerticalPanel vpQ=((VerticalPanel)(questionView.getParent()));
+			Log.info("Widget Index" + vpQ.getWidgetIndex(questionView));
+			int index=vpQ.getWidgetIndex(questionView);
+			if(index==0)
+				return;
+			index--;
+			
+			questionView.removeFromParent();
+			
+			vpQ.insert(questionView, index);
+			for(int i=0;i<vpQ.getWidgetCount();i++)
+			{
+				Log.info("value~~~~"+ i);
+				if(i==(vpQ.getWidgetCount()-1))
+					updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,true,topicView,topicProxy);
+				else
+					updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,false,topicView,topicProxy);
+			
+			
+				
+			}
 		}
 
 		@Override
@@ -2787,7 +2869,31 @@ final int index2 = index;
 			
 			//ScrolledTab Changes start
 			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
-			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
+			
+			VerticalPanel vpQ=((VerticalPanel)(questionView.getParent()));
+			Log.info("Widget Index" + vpQ.getWidgetIndex(questionView));
+			int index=vpQ.getWidgetIndex(questionView);
+			
+			if(index==vpQ.getWidgetCount()-1)
+				return;
+			
+			index++;
+			questionView.removeFromParent();			
+			vpQ.insert(questionView, index);
+			
+			for(int i=0;i<vpQ.getWidgetCount();i++)
+			{
+				Log.info("value~~~~"+ i);
+				if(i==(vpQ.getWidgetCount()-1))
+					updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,true,topicView,topicProxy);
+				else
+					updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,false,topicView,topicProxy);
+			
+			
+				
+			}
+			
+			/*final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
 			//ScrolledTab Changes end
 			CheckListProxy checkListProxy=standardizedRoleDetailsView[selectedtab].getValue().getCheckList();
 //			System.out.println("Topic Id is "+topicProxy.getId());System.out.println("Topic titlke is "+topicProxy.getTitle());
@@ -2800,7 +2906,7 @@ final int index2 = index;
 					Log.info("question moved Down");
 					roleTopicInit(topicProxy, topicView);
 				}
-			});
+			});*/
 		}
 		
 		//Assignment E]
@@ -5591,7 +5697,7 @@ final int index2 = index;
 			{
 				Log.info("value~~~~"+ i);
 				
-				updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i);
+				updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,false,null,null);
 			
 			
 				
@@ -5609,8 +5715,7 @@ final int index2 = index;
 		{
 			
 			Log.info("value~~~~"+ i);
-			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i);
-		
+			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
 		
 		}
 		}
@@ -5654,12 +5759,23 @@ final int index2 = index;
 
 
 
-	private void updateQueSequence(ChecklistQuestionProxy proxy, int i) {
+	private void updateQueSequence(ChecklistQuestionProxy proxy, int i,final boolean isLast,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,final ChecklistTopicProxy topicProxy) {
 		// TODO Auto-generated method stub
 		ChecklistQuestionRequest request = requests.checklistQuestionRequest();
 		proxy = request.edit(proxy);
 		proxy.setSequenceNumber(i);
-		request.persist().using(proxy).fire();
+		request.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				if(isLast)
+				{
+					//lets check in future if require
+					//	roleTopicInit(topicProxy, topicView);
+				}
+				
+			}
+		});
 	
 		Log.info("que seque no saved successfully~~~~~"+ i);
 	}
@@ -5685,12 +5801,23 @@ final int index2 = index;
 		Log.info("updateCriteriaSequence");
 	}
 	
-	private void updateSequence(ChecklistTopicProxy proxy, int i) {
+	private void updateSequence(ChecklistTopicProxy proxy, int i,final boolean isLast,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,final ChecklistTopicProxy topicProxy) {
 		// TODO Auto-generated method stub
 		ChecklistTopicRequest request = requests.checklistTopicRequest();
 		proxy= request.edit(proxy);
 		proxy.setSort_order(i);
-		request.persist().using(proxy).fire();
+		request.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				if(isLast)
+				{
+					//lets check in future if require
+				//	roleTopicInit(topicProxy, topicView);
+				}
+				
+			}
+		});
 		
 		Log.info("at update method::::");
 	}
