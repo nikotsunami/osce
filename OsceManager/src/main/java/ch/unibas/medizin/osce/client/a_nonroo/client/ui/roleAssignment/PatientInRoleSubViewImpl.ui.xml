@@ -6,9 +6,20 @@
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination">
 	 <ui:style src="../../styles.css" />
 
-	<g:HorizontalPanel  addStyleNames="{style.rect}" width="120px" spacing="3">
+	<!--g:HorizontalPanel  addStyleNames="{style.rect}" width="120px" spacing="3">
 		<g:Label ui:field="patientInRoleLbl" wordWrap="false">Patient In Role</g:Label>
 		<my:IconButton ui:field="deletePatientInRole"  icon="close"></my:IconButton>
+	</g:HorizontalPanel-->
+	
+	<g:HorizontalPanel  addStyleNames="{style.rect}" width="120px" spacing="1">
+	<g:HTMLPanel>
+	<table>
+	<tr>
+		<td><g:Label ui:field="patientInRoleLbl" wordWrap="false">Patient In Role</g:Label></td>
+		<td align="right"> <my:IconButton ui:field="deletePatientInRole"  icon="close"></my:IconButton></td>
+		</tr>
+		</table>
+		</g:HTMLPanel>
 	</g:HorizontalPanel>
 	
 	

@@ -432,10 +432,12 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		@Override
 		public void onPatientInSemesterSelectedEventReceived(
 				PatientInSemesterSelectedEvent event) {		
+			
+			delegate.showApplicationLoading(true);
 			patientInSemesterProxy=event.getPatientInSemesterProxy();
 			setOsceDayProxy=event.getOsceDayProxies();
 			delegate.patientInSemesterSelected(patientInSemesterProxy,setOsceDayProxy,osceDaySubViewImpl);
-			
+			delegate.showApplicationLoading(false);
 		}
 
 		@Override

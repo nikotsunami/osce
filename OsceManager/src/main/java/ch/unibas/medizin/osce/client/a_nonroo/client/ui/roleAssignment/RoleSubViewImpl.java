@@ -263,6 +263,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 
 	@Override
 	public void onDragEnd(DragEndEvent event) {
+		delegate.showApplicationLoading(true);
 		Log.info("Drag End");
 		Log.info("Patient In Role ID :" + ((PatientInRoleSubView)event.getSource()).getPatientInRoleProxy().getId());
 		Log.info("Draggable Widget :" + event.getContext().dropController);
@@ -315,6 +316,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 				}
 				if(count==2)
 				{
+					//reverse change
 					patientView.removeFromParent();
 					sourceRoleView.getPatientInRoleVP().insert(patientView,sourceRoleView.getPatientInRoleVP().getWidgetCount());
 					
@@ -328,13 +330,16 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 			OscePostProxy newPost=patientDropedIn.getPostProxy();
 			delegate.updatePostOfPatient(newPost, this.getPostProxy(), patientDroped,patientDroped.getPatientInRoleProxy());
 			patientDropedIn.refreshCountLabel();
+			sourceRoleView.refreshCountLabel();
 			//update post of patient dropped
 		
 		}
+		delegate.showApplicationLoading(false);
 	}
 	
 	public void refreshCountLabel()
 	{
+		delegate.showApplicationLoading(true);
 		int requiredPatient=0;
 		if(osceSequenceProxy.getCourses() !=null)
 			requiredPatient=-((2*osceSequenceProxy.getCourses().size())-this.getPatientInRoleVP().getWidgetCount());
@@ -364,6 +369,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 			this.getCountLbl().addStyleDependentName("green");
 			this.getCountLbl().setText("0");
 		}
+		delegate.showApplicationLoading(false);
 	}
 	
 	@Override

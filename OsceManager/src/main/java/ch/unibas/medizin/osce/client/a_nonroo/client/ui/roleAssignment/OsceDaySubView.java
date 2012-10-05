@@ -27,6 +27,8 @@ public interface OsceDaySubView extends IsWidget{
 	 */
 	interface Delegate {
 
+		public void showApplicationLoading(Boolean show);
+
 		void discloserPanelOpened(OsceDayProxy osceDayProxy,
 				OsceDaySubViewImpl osceDaySubViewImpl);
 

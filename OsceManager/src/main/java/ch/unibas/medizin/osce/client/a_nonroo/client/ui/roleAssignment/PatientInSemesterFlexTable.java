@@ -42,10 +42,11 @@ public class PatientInSemesterFlexTable extends FlexTable {
 
 	public void setSource(List<PatientInSemesterData> patientInSemesterDatas, String[] headers) {
 
+		removeAllRows();
 		// this.delegate = delegate;
-		for (int i = this.getRowCount(); i > 0; i--) {
-			this.removeRow(0);
-		}
+//		for (int i = this.getRowCount(); i > 0; i--) {
+//			this.removeRow(0);
+//		}
 		if (patientInSemesterDatas == null) {
 			return;
 		}
@@ -178,7 +179,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 	}
 
 	public void setNavigationButtonEnable(boolean enabled) {
-		Log.info("Check for Button");
+//		Log.info("Check for Button");
 		if (this.patientInSemesterDatas != null && this.patientInSemesterDatas.size() > 0) {
 			int rows = this.patientInSemesterDatas.size();
 			PatientInSemesterData patientInSemesterData;

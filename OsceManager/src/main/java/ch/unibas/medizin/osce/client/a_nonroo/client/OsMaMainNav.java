@@ -916,6 +916,7 @@ public class OsMaMainNav extends Composite {
 
 	@UiHandler("roleAssignment")
 	void roleAssignmentClicked(ClickEvent event) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		RoleAssignmentPlace.handler=handlerManager;
 		RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
 		
@@ -927,6 +928,7 @@ public class OsMaMainNav extends Composite {
 			placeController.goTo(new RoleAssignmentPlace("SPRoleAssignmentPlace",handlerManager, lstSemester.getValue()));
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 		}
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 	}
 
 	//By Spec]
