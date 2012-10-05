@@ -89,7 +89,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 
 	private RequestFactoryEditorDriver<StandardizedRoleProxy, RoleEditViewImpl> editorDriver;
 	
-	private RequestFactoryEditorDriver<CheckListProxy, RoleEditCheckListSubViewImpl> checkListEditorDriver;//spec
+	
 	
 	
 	
@@ -183,9 +183,12 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 	
 		//spec start
 		this.checkListView=new RoleEditCheckListSubViewImpl();
+		
+		
+		
 		editorDriver = view.createEditorDriver();
 		this.view.getRoleEditCheckListPanel().add(this.checkListView);		
-			checkListEditorDriver=checkListView.createCheckListEditorDriver();//spec
+			
 			checkListView.setDelegate(this);//spec
 				
 	//spec end
@@ -216,6 +219,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 								// init((StandardizedPatientProxy) response);
 								standardizedRole = (StandardizedRoleProxy) response;
 								checkListProxy=((StandardizedRoleProxy) response).getCheckList();//spec
+								
+								if(checkListProxy != null)
+									((RoleEditCheckListSubViewImpl)checkListView).title.setText(checkListProxy.getTitle());
+								
 								//checkListProxy=standardizedRole.getCheckList();
 								view.setStandardizedRoleProxy(standardizedRole);
 								
@@ -397,7 +404,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		Log.info("edit");
 		editorDriver.edit(standardizedRole, request);
 //spec start
-		checkListEditorDriver.edit(checkListProxy, request);//spec
+		
 //spec end
 		
 	
@@ -623,6 +630,18 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			public void onSuccess(Void response) {
 				Log.info("Role successfully saved.");
 
+				
+				CheckListProxy checklistProxy=standardizedRole.getCheckList();
+				CheckListRequest checklsitRequest=requests.checkListRequest();
+				checklistProxy=checklsitRequest.edit(checklistProxy);
+				checklistProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getText());
+				
+				checklsitRequest.persist().using(checklistProxy).fire(new OSCEReceiver<Void>() {
+					
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("Role successfully saved.");
+
 				save = true;
 				
 				RoleDetailsActivity.setSelecTab(selectedTab);
@@ -630,6 +649,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				roleActivity.setInserted(false);
 				roleActivity.initSearch();
 				goTo(new RoleDetailsPlace(roleTopic.stableId(),	Operation.DETAILS));				
+				
+		}
+				});		
+				
 				
 		}
 			
@@ -650,56 +673,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		{
 			//Issue # 122 : Replace pull down with autocomplete.	 
 		 System.out.println("not Same");
-			
-		 //
-		 
-		 majorRequest1 = this.requests.standardizedRoleRequest();
-			oldProxy= majorRequest1.create(StandardizedRoleProxy.class);
-		//	oldProxy.setActive(((RoleEditViewImpl)view).active.getValue());
-			oldProxy.setActive(true);
-			oldProxy.setShortName(((RoleEditViewImpl)view).shortName.getValue());
-			oldProxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
-			oldProxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
-			oldProxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
-				
-				//proxy1.setPreviousVersion(standardizedRole);
-				//proxy1.setMainVersion(standardizedRole.getMainVersion()+1);
-			oldProxy.setMainVersion(1);
-			oldProxy.setSubVersion(1);
-				
-			oldProxy.setCheckList(checkListProxy);//spec
-			oldProxy.setRoleTopic(roleTopic);
-		 
-			oldProxy.setAdvancedSearchCriteria(standardizedRole.getAdvancedSearchCriteria());
-			oldProxy.setKeywords(standardizedRole.getKeywords());
-			oldProxy.setOscePosts(standardizedRole.getOscePosts());
-			oldProxy.setRoleParticipants(standardizedRole.getRoleParticipants());
-			oldProxy.setRoleTemplate(standardizedRole.getRoleTemplate());
-			oldProxy.setRoleParticipants(standardizedRole.getRoleParticipants());
-			oldProxy.setSimpleSearchCriteria(standardizedRole.getSimpleSearchCriteria());
-			oldProxy.setCaseDescription(standardizedRole.getCaseDescription());
-			oldProxy.setRoleScript(standardizedRole.getRoleScript());
-			
-		 //
-			
+	
 			Log.info(" save role---check"+oldProxy.getShortName());
 			// Highlight onViolation
 			Log.info("Map Size: " + view.getStandardizedRoleMap().size());
-			majorRequest1.persist().using(oldProxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
-				// E Highlight onViolation
-			@Override
-			public void onSuccess(Void response) {
-				// TODO Auto-generated method stub
+		
 				
-				Log.info("new Role successfully saved.");
-				
-				finalSave();
+								finalSave();
 				
 				
 				
-			}
-			
-			// Highlight onViolation
+					// Highlight onViolation
 /*			public void onFailure(ServerFailure error) {
 				System.out.println("Error");
 				Log.error(error.getMessage());
@@ -718,7 +702,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 				Log.warn(" in Role -" + message);
 			}
 */			// E Highlight onViolation
-		});
+		
 		
 		//save();
 		
