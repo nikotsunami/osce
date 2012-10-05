@@ -46,6 +46,15 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		return dragController1;
 	}
 	
+	private boolean isLastRole=false;
+	
+	public boolean isLastRole() {
+		return isLastRole;
+	}
+
+	public void setLastRole(boolean isLastRole) {
+		this.isLastRole = isLastRole;
+	}
 	private long onDragPatientID;
 	
 	private RoleSubViewImpl sourceRoleView;

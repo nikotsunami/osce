@@ -1027,6 +1027,8 @@ public void refreshRoleSubView(final RoleSubView roleSubView,final boolean isLas
 		
 		this.showApplicationLoading(true);
 
+		roleSubView.setLastRole(isLast);
+
 	OscePostProxy postProxy=roleSubView.getPostProxy();
 		requests.oscePostRequest().findOscePost(postProxy.getId()).with("patientInRole","standardizedRole","standardizedRole.advancedSearchCriteria","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<OscePostProxy>() {
 
@@ -2825,6 +2827,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 
 			@Override
 			public void onSuccess(Void response) {
+				refreshRoleSubView(patientViewDragged.getRoleSubView(), patientViewDragged.getRoleSubView().isLastRole());
 		//		patientViewDragged.setPatientInRoleProxy(patientInRoleProxy);			
 				initPatientInSemester(true,false);
 				showApplicationLoading(false);

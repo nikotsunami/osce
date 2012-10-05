@@ -84,5 +84,9 @@ public interface RoleSubView extends IsWidget{
 	 
 	 public VerticalPanelDropController getDropController2();
 	 
+	 public boolean isLastRole() ;
+	 
+	 public void setLastRole(boolean isLastRole);
+	 
 	//modul 3 changes }
 }
