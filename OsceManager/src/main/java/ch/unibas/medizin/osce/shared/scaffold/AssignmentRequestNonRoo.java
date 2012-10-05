@@ -59,5 +59,7 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 			Long semesterId, Integer time, TimeBell isPlusTime);
 
 	// Module : 15
+	
+	public abstract Request<List<AssignmentProxy>> findAssignedDoctorBySpecialisation(Long specialisationId, Long clinicId);
 
 }

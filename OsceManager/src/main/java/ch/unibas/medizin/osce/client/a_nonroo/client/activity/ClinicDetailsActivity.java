@@ -13,9 +13,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicSubViewImpl;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -86,6 +90,17 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 		this.widget = panel;
 		this.view = ClinicDetailsView;
 		widget.setWidget(ClinicDetailsView.asWidget());
+		
+		ApplicationLoadingScreenEvent.register(requests.getEventBus(),
+				new ApplicationLoadingScreenHandler() {
+					@Override
+					public void onEventReceived(
+							ApplicationLoadingScreenEvent event) {
+						//Log.info("~~~~~~~~ApplicationLoadingScreenEvent onEventReceived Called");
+						event.display();
+						
+					}
+		});
 
 		view.setDelegate(this);
 		loadDisplaySettings();
@@ -109,15 +124,48 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 	}
 
 	
-		@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private void init(ClinicProxy ClinicProxy) {
 			
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			Log.info("response size ");			
-		this.clinicProxy = ClinicProxy;
+			this.clinicProxy = ClinicProxy;
 			Log.info("Clinic ID ::: "+ clinicProxy.getId());
+			
+			requests.doctorRequestNonRoo().findSpecialisationByClinicId(clinicProxy.getId()).with("specialisation").fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+
+				@Override
+				public void onSuccess(List<SpecialisationProxy> response) {
+					
+					for (int i=0; i<response.size(); i++)
+					{
+						final String specialisationLbl = response.get(i).getName();
+						
+						requests.assignmentRequestNonRoo().findAssignedDoctorBySpecialisation(response.get(i).getId(), clinicProxy.getId()).with("examiner","examiner.specialisation","examiner.specialisation.oscePostBlueprint","examiner.specialisation.oscePostBlueprint.osce").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+
+							@Override
+							public void onSuccess(List<AssignmentProxy> response) {
+								List<DoctorProxy> doctorList = new ArrayList<DoctorProxy>();
+								for (AssignmentProxy assignment : response)
+								{
+									doctorList.add(assignment.getExaminer());
+								}
+								ClinicSubView clinicSubView = new ClinicSubViewImpl();
+								clinicSubView.getTable().setRowData(doctorList);
+								clinicSubView.getHeaderLabel().setText(specialisationLbl);
+								
+								view.getSpecialTabPanel().add(clinicSubView);
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							}
+						});
+					}
+					
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+			});
 		
 	
-	requests.clinicRequestNonRoo().findAllDoctorsId(clinicProxy.getId()).with("doctars","doctors.specialisation").fire(new OSCEReceiver<List<ClinicProxy>>() {
+	/*requests.clinicRequestNonRoo().findAllDoctorsId(clinicProxy.getId()).with("doctars","doctors.specialisation").fire(new OSCEReceiver<List<ClinicProxy>>() {
 			
 			@Override
 			public void onSuccess(List<ClinicProxy> response) {
@@ -187,9 +235,9 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 }
 	}
 });
-	
-	view.setValue(clinicProxy);
-		view.setDelegate(this);
+	*/
+			view.setValue(clinicProxy);
+			view.setDelegate(this);
 	}
 
 	@Override
@@ -233,7 +281,7 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 			detailsTab = userSettings.getIntValue("detailsTab");
 		}
 		
-		view.setSelectedDetailsTab(detailsTab);
+		view.setSelectedDetailsTab(0);
 	}
 }
 	

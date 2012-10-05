@@ -135,6 +135,13 @@ public class Doctor {
     }
  // E Module10 Create plans
   
+    public static List<Specialisation> findSpecialisationByClinicId(Long clinicId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT d.specialisation FROM Doctor AS d WHERE d.clinic = " + clinicId + " GROUP BY d.specialisation";
+    	TypedQuery<Specialisation> q = em.createQuery(sql, Specialisation.class);
+    	return q.getResultList();
+    }
    	
     
 }

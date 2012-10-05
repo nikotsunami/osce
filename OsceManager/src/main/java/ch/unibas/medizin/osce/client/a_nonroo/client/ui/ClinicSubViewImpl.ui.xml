@@ -1,11 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:b="urn:import:com.google.gwt.user.cellview.client">
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 <ui:style src="../styles.css" />
 	
 	<g:HTMLPanel>
-	<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" width="100%" />
+	<!-- <b:CellTable ui:field="table" addStyleNames="{style.standardTable}" width="100%" /> -->
+		<s:DisclosurePanel ui:field="mainDisclosurePanel"></s:DisclosurePanel>
 	</g:HTMLPanel>
 	
 </ui:UiBinder> 

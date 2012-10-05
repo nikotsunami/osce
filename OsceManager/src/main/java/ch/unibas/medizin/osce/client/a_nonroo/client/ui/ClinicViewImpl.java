@@ -223,7 +223,19 @@ public class ClinicViewImpl extends Composite implements  ClinicView, RecordChan
 
 			@Override
 			public String getValue(ClinicProxy object) {
-				return renderer.render(object.getPostalCode() + " " + object.getCity());
+				String val = "";
+				if (object.getPostalCode().equals(null))
+					val = object.getCity();
+				else if (object.getCity().equals(null))
+					val = String.valueOf(object.getPostalCode());
+				else if (object.getCity().equals(null) && object.getPostalCode().equals(null))
+					val = "";
+				else
+					val = object.getPostalCode() + " " + object.getCity();
+				
+				return val;
+					
+				//return renderer.render(object.getPostalCode() + " " + object.getCity());
 			}
 		}, constants.city());
 //	    paths.add("postalCode");

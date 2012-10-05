@@ -19,6 +19,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -57,8 +58,9 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	SpanElement street;
 	@UiField
 	SpanElement city;
+	
 	@UiField
-	StackPanel specialTabPanel;
+	VerticalPanel specialTabPanel;
 
 	ClinicProxy proxy;
 
@@ -127,6 +129,14 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 		if (proxy.getCity() != null && proxy.getPostalCode() != null) {
 			city.setInnerText(String.valueOf(proxy.getPostalCode()) + " " + String.valueOf(proxy.getCity()));
 		}
+		else if (proxy.getCity() != null && proxy.getPostalCode() == null)
+		{
+			city.setInnerText(String.valueOf(proxy.getCity()));
+		}
+		else if (proxy.getCity() == null && proxy.getPostalCode() != null)
+		{
+			city.setInnerText(String.valueOf(proxy.getPostalCode()));
+		}
 //		doctors.setInnerText(proxy.getDoctors() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(
 //				ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance()).render(proxy.getDoctors()));
 		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance().render(proxy));
@@ -166,11 +176,11 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 		delegate.editClicked();
 	}
 
-	public StackPanel getSpecialTabPanel() {
+	public VerticalPanel getSpecialTabPanel() {
 		return this.specialTabPanel;
 	}
 
-	public void setSpecialTabPanel(StackPanel specialTabPanel) {
+	public void setSpecialTabPanel(HorizontalPanel VerticalPanel) {
 		this.specialTabPanel = specialTabPanel;
 	}
 

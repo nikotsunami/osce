@@ -3515,3 +3515,11 @@ color: #f1b532;
 	border-bottom-right-radius: 16px;
 	
 }
+.clinicDetailTable
+{
+	padding: 8px;
+}
+
+.clinicDtlHeaderLabel{
+	margin-right: 220px;
+}

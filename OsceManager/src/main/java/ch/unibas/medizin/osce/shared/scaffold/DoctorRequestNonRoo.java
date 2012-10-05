@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.domain.Doctor;
 
 import com.google.gwt.requestfactory.shared.InstanceRequest;
@@ -27,7 +28,9 @@ public interface DoctorRequestNonRoo extends RequestContext {
 	//Module 6 End
 	
 	// Module10 Create plans
-		abstract Request<List<DoctorProxy>> findDoctorByOsceId(Long doctorid);
-		// E Module10 Create plans
+	abstract Request<List<DoctorProxy>> findDoctorByOsceId(Long doctorid);
+	// E Module10 Create plans
+		
+	abstract Request<List<SpecialisationProxy>> findSpecialisationByClinicId(Long clinicId);
 	
 }

@@ -696,7 +696,7 @@ public class Assignment {
 	public static List<Assignment> findAssignmentByOscePostRoom(Long id, int rotationoffset, int timeslot)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT a FROM Assignment a WHERE oscePostRoom.id = " + id + " AND type = 0 ORDER BY timeStart";
+    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 0 ORDER BY timeStart";
     	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
     	q.setFirstResult(rotationoffset);
     	q.setMaxResults(timeslot);
@@ -706,8 +706,16 @@ public class Assignment {
     public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Date time_start, Date time_end)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT a FROM Assignment a WHERE oscePostRoom.id = " + id + " AND type = 2 AND timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
+    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
     	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
     	return q.getResultList();
     }
-}
+    
+    public static List<Assignment> findAssignedDoctorBySpecialisation(Long specialisationId, Long clinicId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT a FROM Assignment AS a WHERE a.examiner.specialisation = " + specialisationId + " AND a.examiner.clinic = " + clinicId + " GROUP BY a.examiner";
+    	TypedQuery<Assignment> q = em.createQuery(sql, Assignment.class);
+    	return q.getResultList();
+    }
+} 

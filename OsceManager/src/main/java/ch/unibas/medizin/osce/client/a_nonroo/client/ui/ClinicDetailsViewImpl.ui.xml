@@ -18,7 +18,8 @@
 		<g:TabPanel ui:field="clinicPanel" addStyleNames="gwt-InvertedTabPanel" width="100%">
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
-				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+				<!-- addStyleNames="{style.patientDetails}" -->
+				<g:HTMLPanel>
 					<table class="{style.fields}" id="boundElementHolder">
 					<colgroup>
 						<col></col>
@@ -44,9 +45,11 @@
 
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
-				<g:StackPanel addStyleNames="{style.patientTopContainer}" ui:field="specialTabPanel" width="100%">
-					<!--  <b:CellTable ui:field="tables" addStyleNames="{style.standardTable}" />-->
-				</g:StackPanel>
+			<!-- 	<g:StackPanel ui:field="specialTabPanel" width="100%">
+					addStyleNames="{style.patientTopContainer}"  <b:CellTable ui:field="tables" addStyleNames="{style.standardTable}" />
+				</g:StackPanel> -->
+				
+				<g:VerticalPanel ui:field="specialTabPanel" width="100%"></g:VerticalPanel> 
 				
 			</g:Tab>
 		</g:TabPanel>

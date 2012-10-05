@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 public interface ClinicSubView  extends IsWidget{
 	
@@ -22,5 +23,6 @@ public interface ClinicSubView  extends IsWidget{
 	    
 
 	    void setPresenter(Presenter systemStartActivity);
-
+	    
+	    public Label getHeaderLabel();
 }
