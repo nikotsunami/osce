@@ -48,6 +48,13 @@
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
         <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
     </filter>
+    
+    <!-- For Authorization -->
+    <filter>
+		<filter-name>AuthenticationFilter</filter-name>		
+		<filter-class>ch.unibas.medizin.osce.server.util.AuthenticationFilter</filter-class>
+	</filter>
+	
     <filter-mapping>
         <filter-name>CharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -62,6 +69,17 @@
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    
+    <filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/*.html</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/gwtRequest</url-pattern>
+	</filter-mapping>
+	
     
     <!-- Creates the Spring Container shared by all Servlets and Filters -->
     <listener>
