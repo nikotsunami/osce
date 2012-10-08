@@ -92,6 +92,37 @@ public class util {
 				
 			
 		}
+		
+		public static String getLabelString(String text,int length,String afterTrimSymbol)
+		{
+			//Log.info("Text String Size: " + text.length());
+			if(text.length()>length)
+			{
+			//	Log.info("Text Length is greater than 8 Before Text is: " + text);
+				text=text.substring(0, length).concat(afterTrimSymbol);	
+			//	Log.info("Text Length is greater than 8 So Text is: " + text);
+			}			
+			return text;
+			
+		}
+		
+		/*
+		 * text : The text to be printed.
+		 * length : Len of the text to be shown after that  ... will be concatenated. 
+		 */
+		
+		 public static String getFormatedString(String text,int length)
+		{
+			//Log.info("Text String Size: " + text.length());
+			if(text.length()>length)
+			{
+			//	Log.info("Text Length is greater than 8 Before Text is: " + text);
+				text=text.substring(0, length).concat("...");	
+			//	Log.info("Text Length is greater than 8 So Text is: " + text);
+			}			
+			return text;
+			
+		}
 
 
 }

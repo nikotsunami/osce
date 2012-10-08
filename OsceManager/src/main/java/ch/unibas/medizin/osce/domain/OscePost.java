@@ -71,11 +71,12 @@ public class OscePost {
 		return result;
 	}
 	
+	// Find OscePost Which Standardized Role is Null and BreakType not equal to Break
 	public static java.util.List<OscePost> findOscePostByOsce(Long osceId)
 	{
 		Log.info("~~Inside findOscePostByOsce Method");
 		EntityManager em = entityManager();				
-		String queryString="select op from OscePost op,OsceSequence os,OsceDay od where os.osceDay=od.id and op.osceSequence=os.id and op.standardizedRole is null and od.osce= "+osceId;			
+		String queryString="select op from OscePost op,OsceSequence os,OsceDay od,OscePostBlueprint opb where os.osceDay=od.id and op.osceSequence=os.id and op.oscePostBlueprint=opb.id and opb.postType<>1 and op.standardizedRole is null and od.osce= "+osceId;			
 		Log.info("~QUERY String: " + queryString);
 		TypedQuery<OscePost> q = em.createQuery(queryString, OscePost.class);
 		java.util.List<OscePost> result = q.getResultList();
@@ -83,4 +84,5 @@ public class OscePost {
 		return result;
 	}
 	  //E Module 5 Bug Report Solution
+	
 }

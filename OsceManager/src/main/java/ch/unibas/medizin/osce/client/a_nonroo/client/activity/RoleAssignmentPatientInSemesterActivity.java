@@ -60,6 +60,7 @@ import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
@@ -663,6 +664,7 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 		 RoleSubView backUpView=null;
                	HorizontalPanel backUpHp=null;
 		 //module 3 changes[
+
                 if(!isSecurityFederal){
 		 backUpView=new RoleSubViewImpl();
 		 backUpView.setPostProxy(postProxy);
@@ -679,7 +681,12 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 			backUpView.setIsBackupPanel(true);
 			
 			backUpHp=new HorizontalPanel();
+            	 // backUpHp.setStyleName("clinicDetailTable");
+            	  //backUpHp.setStyleName("eOSCElable");
+            	  backUpHp.setStyleName("backupPanelPadding");
 			backUpHp.add(backUpView);
+				
+				
 			backUpHp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		}
 			
@@ -783,11 +790,15 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 		
 		
 		HorizontalPanel mainHP=new HorizontalPanel();
-		mainHP.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		
+		//Changes Manish Commented To show pause on top rateher then in middle
+		//mainHP.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		
 		mainHP.setSpacing(10);
 
 		roleAp.add(roleHP);
 		mainHP.add(roleAp);
+        
                 if(!isSecurityFederal)
 		mainHP.add(backUpHp);
 		
@@ -821,7 +832,9 @@ public void assignAllBackUpRolesToBackupPanel(OscePostProxy oscePostPrtoxy,RoleS
 			patientInRoleView.setPatientInRoleProxy(patientInRoleProxy);
 			patientInRoleView.getDeleteButton().removeFromParent();
 			patientInRoleView.setDelegate(this);
-			patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			//patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			patientInRoleView.getPatientInRoleLbl().setText(util.getFormatedString(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName(),8));
+			patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 			patientInRoleView.setRoleSubView(roleSubView);
 			roleSubView.getPatientInRoleVP().add(patientInRoleView);
 		}
@@ -865,6 +878,8 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 		
 		if(roleProxy !=null && (roleProxy.getShortName() != null && roleProxy.getRoleType() != null))
 		roleSubView.getRoleLbl().setText(roleProxy.getShortName() + " " + roleProxy.getRoleType());
+		/*roleSubView.getRoleLbl().setText(util.getFormatedString((roleProxy.getShortName() + " " + roleProxy.getRoleType()),8));
+		roleSubView.getRoleLbl().setTitle(roleProxy.getShortName() + " " + roleProxy.getRoleType());*/
 		
 		
 		
@@ -910,7 +925,10 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 			
 			patientInRoleView.setPatientInRoleProxy(patientInRoleProxy);
 			patientInRoleView.setDelegate(this);
-			patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			//patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			patientInRoleView.getPatientInRoleLbl().setText(util.getFormatedString(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName(),8));
+			patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			
 			patientInRoleView.setRoleSubView(roleSubView);
 			
 			//As per discussion with client : as on 16/July/2012
@@ -1275,7 +1293,9 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				patientInRoleView.setPatientInRoleProxy(patientInRoleProxy);
 				patientInRoleView.getDeleteButton().removeFromParent();
 				patientInRoleView.setDelegate(spRoleAssignmentActivity);
-				patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+				//patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+				patientInRoleView.getPatientInRoleLbl().setText(util.getFormatedString(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName(),8));
+				patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 				patientInRoleView.setRoleSubView(view);
 				view.getBackUpRoleView().getPatientInRoleVP().add(patientInRoleView);
 				
@@ -1498,6 +1518,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		// module 3 bug }
 	if (isFirstData) {
 		showApplicationLoading(true);
+		showApplicationLoading(true);
 			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId()).with("standardizedPatient", "semester", "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 					@Override
 				public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
@@ -1514,6 +1535,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						}
 						// Module 3 : Assignment E : Stop
 						//  
+						showApplicationLoading(false);
 					}
 					@Override
 					public void onFailure(ServerFailure error) {
@@ -1954,7 +1976,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				patientInRoleProxy.setFit_criteria(isPatientInSemesterFulfill);
 				patientInRoleProxy.setIs_backup(false);
 
-				
+				showApplicationLoading(true);
 				patientInRoleRequest.persist().using(patientInRoleProxy).fire(new OSCEReceiver<Void>() {
 
 							@Override
@@ -1970,7 +1992,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 								initPatientInSemester(true,false);
 								
 								view.getDataTable().setNavigationButtonEnable(false);
-								showApplicationLoading(false);
+								showApplicationLoading(true);
 							}
 							@Override
 							public void onFailure(ServerFailure error) {
@@ -2578,9 +2600,8 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		osceDayTimer.cancel();
 		
 		// module 3 bug }
-		
-		PatientInSemesterProxy patientInSemesterProxy = patientInSemesterData
-				.getPatientInSemesterProxy();
+		Log.info("PatientIn Semester proxy to be deleted :" + patientInSemesterData.getPatientInSemesterProxy().getStandardizedPatient().getName());
+		PatientInSemesterProxy patientInSemesterProxy = patientInSemesterData.getPatientInSemesterProxy();
 
 		Log.info("patientInSemesterProxy.getPatientInRole().size: "
 				+ patientInSemesterProxy.getPatientInRole().size());
@@ -2594,6 +2615,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		//
 		// } else
 		{
+			this.showApplicationLoading(true);
 			requests.patientInSemesterRequest().remove()
 					.using(patientInSemesterProxy)
 					.fire(new OSCEReceiver<Void>() {
@@ -2604,9 +2626,21 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						// module 3 bug {
 							
 						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+						showApplicationLoading(false);
 							
 						// module 3 bug }
 						}
+	@Override
+				public void onFailure(ServerFailure error) {
+					// TODO Auto-generated method stub
+					super.onFailure(error);
+					showApplicationLoading(false);
+				}
+
+				public void onViolation(java.util.Set<Violation> errors) {
+					showApplicationLoading(false);
+				}
+
 					});
 		}
 		this.showApplicationLoading(false);

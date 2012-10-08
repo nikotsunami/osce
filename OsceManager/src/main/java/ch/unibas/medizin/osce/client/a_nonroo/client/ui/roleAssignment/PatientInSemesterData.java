@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -89,7 +90,7 @@ public class PatientInSemesterData {
 
 		}
 
-		this.assignedTo = new PatientAssignLabel(tempAssignedRole.toString());
+		this.assignedTo = new PatientAssignLabel(util.getFormatedString(tempAssignedRole.toString(),30));
 		this.assignedTo.addStyleName("flexTableLabel");
 		// ,getIndex());
 

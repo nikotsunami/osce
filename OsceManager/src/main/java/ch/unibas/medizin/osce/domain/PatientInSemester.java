@@ -33,14 +33,14 @@ public class PatientInSemester {
 
     private Boolean accepted;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "accepted_osce_days")
     private Set<OsceDay> osceDays = new HashSet<OsceDay>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInSemester")
     private Set<PatientInRole> patientInRole = new HashSet<PatientInRole>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "accepted_trainings")
     private Set<Training> trainings = new HashSet<Training>();
 
