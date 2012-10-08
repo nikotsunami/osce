@@ -25,7 +25,7 @@ public interface RoleSubView extends IsWidget{
 		
 		public void editBackUpFlag(RoleSubView view,PatientInRoleSubView patientInRoleSubView,PatientInRoleProxy proxy,boolean isBackUp);
 		
-		public void updatePostOfPatient(OscePostProxy newProxy,OscePostProxy oldProxy,PatientInRoleSubViewImpl newPatientView,PatientInRoleProxy proxy);
+		public void updatePostOfPatient(OscePostProxy newProxy,OscePostProxy oldProxy,PatientInRoleSubViewImpl newPatientView,PatientInRoleProxy proxy,RoleSubView sourceRoleSubVie);
 		//public boolean patientInRoleIsFirstAssigned(OsceSequenceProxy seqProxy,PatientInRoleProxy patientInRoleProxy);
 	}
 	

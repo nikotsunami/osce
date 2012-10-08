@@ -1842,8 +1842,10 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		showApplicationLoading(true);
 		osceDayTimer.cancel();
 		
+		Log.info("onPersistPatientInRole Osce Day :" + osceDayProxy.getId());
+		
 		// module 3 bug }
-				requests.patientInRoleRequestNonRoo().getTotalTimePatientAssignInRole(roleSelectedInOsceDay.getId(), patientInSemesterProxy.getId()).fire( new OSCEReceiver<Integer>() {
+				requests.patientInRoleRequestNonRoo().getTotalTimePatientAssignInRole(osceDayProxy.getId(), patientInSemesterProxy.getId()).fire( new OSCEReceiver<Integer>() {
 
 					@Override
 					public void onSuccess(Integer response) {
@@ -1952,7 +1954,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				patientInRoleProxy.setFit_criteria(isPatientInSemesterFulfill);
 				patientInRoleProxy.setIs_backup(false);
 
-				showApplicationLoading(true);
+				
 				patientInRoleRequest.persist().using(patientInRoleProxy).fire(new OSCEReceiver<Void>() {
 
 							@Override
@@ -1968,7 +1970,7 @@ firePatientInSemesterRowSelectedEvent(patientInSemesterProxy);
 								initPatientInSemester(true,false);
 								
 								view.getDataTable().setNavigationButtonEnable(false);
-								showApplicationLoading(true);
+								showApplicationLoading(false);
 							}
 							@Override
 							public void onFailure(ServerFailure error) {
@@ -2814,7 +2816,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			//ServerPush event }
 			// module 3 f }
 			
-	public void updatePostOfPatient(OscePostProxy newProxy,OscePostProxy oldProxy,final PatientInRoleSubViewImpl patientViewDragged, PatientInRoleProxy patientInRoleProxy)
+	public void updatePostOfPatient(OscePostProxy newProxy,OscePostProxy oldProxy,final PatientInRoleSubViewImpl patientViewDragged, PatientInRoleProxy patientInRoleProxy,final RoleSubView sourceRoleSubView)
 	{
 		showApplicationLoading(true);
 		PatientInRoleRequest patientInRoleRequest=requests.patientInRoleRequest();
@@ -2828,6 +2830,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			@Override
 			public void onSuccess(Void response) {
 				refreshRoleSubView(patientViewDragged.getRoleSubView(), patientViewDragged.getRoleSubView().isLastRole());
+				refreshRoleSubView(sourceRoleSubView,sourceRoleSubView.isLastRole());
 		//		patientViewDragged.setPatientInRoleProxy(patientInRoleProxy);			
 				initPatientInSemester(true,false);
 				showApplicationLoading(false);

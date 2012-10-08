@@ -308,7 +308,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		else if((event.getContext().dragController).equals(dragController1) && event.getContext().finalDropController != null)
 		{
 			Log.info("Patient Drop Target Widget"+(VerticalPanel)event.getContext().finalDropController.getDropTarget());
-			VerticalPanel patientVp=(VerticalPanel)event.getContext().finalDropController.getDropTarget();
+			//VerticalPanel patientVp=(VerticalPanel)event.getContext().finalDropController.getDropTarget();
 			
 		
 			Log.info("Patient Drop Target Widget Count"+((VerticalPanel)event.getContext().finalDropController.getDropTarget()).getWidgetCount());
@@ -326,20 +326,20 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 				if(count==2)
 				{
 					//reverse change
-					patientView.removeFromParent();
-					sourceRoleView.getPatientInRoleVP().insert(patientView,sourceRoleView.getPatientInRoleVP().getWidgetCount());
-					
+					patientDroped.removeFromParent();
+					sourceRoleView.getPatientInRoleVP().insert(patientDroped,sourceRoleView.getPatientInRoleVP().getWidgetCount());
+					delegate.showApplicationLoading(false);
 					return;
 				}
 			}
 			
 			
 			patientDroped.setRoleSubView(patientDropedIn);
-			this.refreshCountLabel();
+			//this.refreshCountLabel();
 			OscePostProxy newPost=patientDropedIn.getPostProxy();
-			delegate.updatePostOfPatient(newPost, this.getPostProxy(), patientDroped,patientDroped.getPatientInRoleProxy());
-			patientDropedIn.refreshCountLabel();
-			sourceRoleView.refreshCountLabel();
+			delegate.updatePostOfPatient(newPost, this.getPostProxy(), patientDroped,patientDroped.getPatientInRoleProxy(),sourceRoleView);
+			//patientDropedIn.refreshCountLabel();
+			//sourceRoleView.refreshCountLabel();
 			//update post of patient dropped
 		
 		}
