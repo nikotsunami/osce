@@ -70,6 +70,9 @@ import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
+
+
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -181,6 +184,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 						new DateTransformer("yyyy-MM-dd"))
 				.use("gender", new GenderTransformer())
 				.use("maritalStatus", new MaritalStatusTransformer())
+				.use("status",new SPStatusTransformer())
 				.use("workPermission", new WorkPermissionTransformer())
 				.use("anamnesisForm.anamnesischecksvalues.values.anamnesischeck.title.type", new AnamnesisChecksTypeTransformet())
 				.use("anamnesisForm.scars.values.traitType", new TraitTypeTransformet())
@@ -1169,6 +1173,26 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			} else if(valueI == 5){
 				return MaritalStatus.WIDOWED;
 			}else {
+				return null;
+			}
+			
+		}
+	}
+	
+	private class SPStatusTransformer implements ObjectFactory {
+
+		public Object instantiate(ObjectBinder context, Object value,
+				Type targetType, Class targetClass) {
+			Integer valueI = (Integer) value;
+			if (valueI == 0) {
+				return StandardizedPatientStatus.INACTIVE;
+			} else if(valueI == 1){
+				return StandardizedPatientStatus.ACTIVE;
+			} else if(valueI == 2){
+				return StandardizedPatientStatus.EXPORTED;
+			} else if(valueI == 3){
+				return StandardizedPatientStatus.ANONYMIZED;
+			} else {
 				return null;
 			}
 			
