@@ -27,7 +27,7 @@ import javax.persistence.ManyToOne;
 @RooEntity
 public class AnamnesisCheck {
 
-    @Size(max = 255)
+    @Size(max = 999)
     private String text;
 
     @Size(max = 255)

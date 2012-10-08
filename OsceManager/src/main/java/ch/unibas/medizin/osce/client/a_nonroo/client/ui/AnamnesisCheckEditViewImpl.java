@@ -46,6 +46,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -73,8 +74,12 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
         }
     });
 	
-	@UiField
+	
+/*	@UiField
 	TextBox text;
+*/
+	@UiField
+	TextArea text;
 	@UiField
 	VerticalPanel valuePanel;
 	
@@ -154,7 +159,9 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		addButton.setIcon("plusthick");
 		addButton.setText(constants.addAnswer());
 		addButton.setVisible(false);
-
+		text.setWidth("320px");
+		type.setWidth("325px");
+		insideTitleListBox.setWidth(300);
 		labelType.setInnerText(constants.type() + ":");
 		labelText.setInnerText(constants.question() + ":");
 //		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
@@ -363,6 +370,7 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 				value += "|" + ((TextBox)((IndexedPanel) valuePanel.getWidget(i)).getWidget(0)).getText().replace('|', '/');
 			}
 		}
+		Log.info("text sizer--"+text.getValue().length());
 		delegate.saveClicked();
 	}
 

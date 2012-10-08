@@ -209,7 +209,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 		
 		});
 		//Issue # 122 : Replace pull down with autocomplete.
-		
+		newTitleText.setWidth("400px");
 		anamnesisCheckTitleMap = new HashMap<String, Widget>();
 		anamnesisCheckTitleMap.put("text", newTitleText);
 		anamnesisCheckTitleMap.put("sort_order", newTitleText);
