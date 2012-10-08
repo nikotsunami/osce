@@ -130,7 +130,7 @@ public class StandardizedPatient {
     private StandardizedPatientStatus status;
 
     @Size(max = 13)
-    @Pattern(regexp = "^[0-9.]{13,13}$")
+    @Pattern(regexp = "^[0-9.]{12,13}$")
     private String socialInsuranceNo;
 
     @OneToOne(cascade = CascadeType.ALL)
