@@ -88,25 +88,7 @@ public class OsceSequence {
 			
 			newOsceSequence.persist();
 			
-			Iterator<Course> courseItr = parcours.iterator();
-			
-			while (courseItr.hasNext())
-			{
-				Course course = courseItr.next();
-				
-				Iterator<OscePost> oscePostItr = posts.iterator();				
-				
-				while (oscePostItr.hasNext())
-				{
-					OscePost oscePost = oscePostItr.next();
-					
-					OscePostRoom oscePostRoom = new OscePostRoom();
-					oscePostRoom.setCourse(course);
-					oscePostRoom.setOscePost(oscePost);
-					oscePostRoom.persist();
-					
-				}
-			}
+			insertOscePostRoom(parcours,posts,osceSequence.getCourses(),osceSequence.getOscePosts());
 			
 			return newOsceSequence;
 					
@@ -179,4 +161,37 @@ public class OsceSequence {
 			TypedQuery<OsceSequence> q = em.createQuery(sql, OsceSequence.class);
 			return q.getResultList();
 		}
+		
+		 private static void insertOscePostRoom(List<Course> courseList,List<OscePost> postList,List<Course> oldCourseList,List<OscePost> oldPostList) 
+		 {				 
+			 
+			 Iterator<Course> oldCourseItr = oldCourseList.iterator();
+			 Iterator<Course> courseItr = courseList.iterator();
+				
+			while (courseItr.hasNext() && oldCourseItr.hasNext())
+			{
+				Course course = courseItr.next();			
+				Course oldCourse=oldCourseItr.next();
+				
+				Iterator<OscePost> oscePostItr = postList.iterator();				
+				Iterator<OscePost> oldOscePostItr = oldPostList.iterator();
+				
+				while (oscePostItr.hasNext() && oldOscePostItr.hasNext())
+				{
+					OscePost oscePost = oscePostItr.next();
+					OscePost oldOscePost = oldOscePostItr.next();
+					
+					OscePostRoom oldOscePostRoom=OscePostRoom.findOscePostRoomByOscePostAndCourse(oldCourse, oldOscePost);
+					
+					OscePostRoom oscePostRoom = new OscePostRoom();				
+					oscePostRoom.setCourse(course);				
+					oscePostRoom.setOscePost(oscePost);
+					
+					if(oldOscePostRoom.getRoom()!=null)
+						oscePostRoom.setRoom(oldOscePostRoom.getRoom());					
+								
+					oscePostRoom.persist();	
+				}
+			}
+		 }
 }
