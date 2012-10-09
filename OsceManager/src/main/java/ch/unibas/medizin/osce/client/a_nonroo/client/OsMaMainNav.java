@@ -322,7 +322,7 @@ public class OsMaMainNav extends Composite {
 				Log.info("roleAssignments found");
 				
 				handlerRegistration.removeHandler();
-				roleAssignmentClose.setIcon("arrowreturnthick-1-e");
+				/*roleAssignmentClose.setIcon("arrowreturnthick-1-e");
 				roleAssignmentClose.addStyleName("verticalFlip");
 				handlerRegistration = roleAssignmentClose.addClickHandler(new ClickHandler() {
 					
@@ -349,7 +349,7 @@ public class OsMaMainNav extends Composite {
 						menuStatus = 1;
 						requests.getEventBus().fireEvent(new MenuClickEvent(menuStatus));
 					}
-				});
+				});*/
 				
 			}else if(constants.role().equals(maxButton.getText())){
 				
@@ -482,7 +482,7 @@ public class OsMaMainNav extends Composite {
 		CloseClickHandler adminHandler = new CloseClickHandler(menuContainer, dockPanel, administrationPanel, new PopupPanel(true), constants.administration());
 		CloseClickHandler doctorHandler = new CloseClickHandler(menuContainer, dockPanel, doctorDataPanel,new PopupPanel(true) , constants.doctors());
 		CloseClickHandler examsHandler = new CloseClickHandler(menuContainer, dockPanel, examinationsPanel,new PopupPanel(true) , constants.exams());
-		CloseClickHandler roleAssignmentHandler = new CloseClickHandler(menuContainer, dockPanel, roleAssignmentPanel,new PopupPanel(true) , constants.roleAssignments());
+		/*CloseClickHandler roleAssignmentHandler = new CloseClickHandler(menuContainer, dockPanel, roleAssignmentPanel,new PopupPanel(true) , constants.roleAssignments());*/
 		CloseClickHandler roleHandler = new CloseClickHandler(menuContainer, dockPanel, rolePanel,new PopupPanel(true) , constants.role());
 		CloseClickHandler simPatHandler = new CloseClickHandler(menuContainer, dockPanel, simPatDataPanel,new PopupPanel(true) , constants.simPat());
 		
@@ -497,14 +497,19 @@ public class OsMaMainNav extends Composite {
 		examsHandler.setHandlerRegistration(examinationsClose.addClickHandler(examsHandler));
 		adminHandler.setHandlerRegistration(administrationClose.addClickHandler(adminHandler));
 		roleHandler.setHandlerRegistration(roleClose.addClickHandler(roleHandler));
-		roleAssignmentHandler.setHandlerRegistration(roleAssignmentClose.addClickHandler(roleAssignmentHandler));
+		/*roleAssignmentHandler.setHandlerRegistration(roleAssignmentClose.addClickHandler(roleAssignmentHandler));*/
+		
+		createOsceHeader.setText(constants.createOsce());
+		osceAssignmentsHeader.setText(constants.osceAssignments());
+		assignmentsOutputHeader.setText(constants.assignmentsOutput());
+		afterTheOsceHeader.setText(constants.afterTheOsce());
 		
 		simPatDataPanelHeaderText.setText(constants.simPat());
 		doctorDataPanelHeaderText.setText(constants.doctors());
 		examinationsPanelHeaderText.setText(constants.exams());
 		administrationPanelHeaderText.setText(constants.administration());
 		rolePanelHeaderText.setText(constants.role());
-		roleAssignmentPanelHeaderText.setText(constants.roleAssignments());
+		/*roleAssignmentPanelHeaderText.setText(constants.roleAssignments());*/
 		
 //		simPatDataPanel.getHeaderTextAccessor().setText(constants.simPat());
 //		doctorDataPanel.getHeaderTextAccessor().setText(constants.doctors());
@@ -534,7 +539,7 @@ public class OsMaMainNav extends Composite {
 		roleScriptTemplate.setText(constants.roleScriptTemplate());
 		roomMaterials.setText(constants.roomMaterials());
 
-		roleAssignmentPanel.setAnimationEnabled(true);
+		/*roleAssignmentPanel.setAnimationEnabled(true);*/
 		//roleAssignmentPanel.getHeaderTextAccessor().setText(
 			//	constants.simulationPatients());
 
@@ -677,11 +682,11 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Label examinationsPanelHeaderText;
 	
-	@UiField
+	/*@UiField
 	IconButton roleAssignmentClose;
 	
 	@UiField
-	Label roleAssignmentPanelHeaderText;
+	Label roleAssignmentPanelHeaderText;*/
 	
 	@UiField
 	IconButton administrationClose;
@@ -743,8 +748,9 @@ public class OsMaMainNav extends Composite {
 
 	// Assignment : 3 By SPEC[
 
-	@UiField
-	DisclosurePanel roleAssignmentPanel;
+	/*@UiField
+	DisclosurePanel roleAssignmentPanel;*/
+	
 	@UiField
 	Anchor roleAssignment; 
 
@@ -777,6 +783,18 @@ public class OsMaMainNav extends Composite {
 	//eosce
 	@UiField
 	Anchor importeOSCE;
+	
+	@UiField
+	Label createOsceHeader;
+	
+	@UiField
+	Label osceAssignmentsHeader;
+	
+	@UiField
+	Label assignmentsOutputHeader;
+	
+	@UiField
+	Label afterTheOsceHeader;
 	
 	/* commented by spec
 	@UiField
