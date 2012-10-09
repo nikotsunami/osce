@@ -3526,3 +3526,26 @@ color: #f1b532;
 .backupPanelPadding{
 	padding-top: 10px;
 }
+
+/* SPEC Change */
+
+.disableButton{
+	background:url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+	cursor: default !important;
+}
+.expbtn{
+	background:#DFDAD6 !important;
+	cursor: pointer !important;
+	
+}
+.expbtn:hover{
+	background-color: #A09286 !important;
+}
+.expTopicButton{
+	background: #B8A9A2 !important;
+	cursor: pointer !important;
+}
+.expTopicButton:hover{
+	background: #8E7676 !important;
+}
+/* SPEC Change */

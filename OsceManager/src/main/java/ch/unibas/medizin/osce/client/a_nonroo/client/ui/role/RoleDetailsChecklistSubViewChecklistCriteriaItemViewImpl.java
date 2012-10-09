@@ -100,8 +100,21 @@ private static final Binder BINDER = GWT.create(Binder.class);
 	@UiField
 	IconButton edit;
 	
+	// SPEC Change
+	@Override
+	public IconButton getDelete() {
+		return delete;
+	}
+	@Override
+	public IconButton getEdit() {
+		return edit;
+	}
+	
+	// SPEC Change
+
 	public RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		criteriaLbl.getElement().getStyle().setProperty("wordWrap", "break-word");
 		this.roleDetailsChecklistSubViewChecklistCriteriaItemViewImpl = this;
 	}
 	

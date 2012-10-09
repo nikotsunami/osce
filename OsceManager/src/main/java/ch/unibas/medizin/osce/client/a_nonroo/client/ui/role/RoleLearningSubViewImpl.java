@@ -261,6 +261,21 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		//majorTable.addColumnStyleName(2, "topicCol");
 		
 		
+		addMajorTableLastColumn();
+			
+	}
+
+	//SPEC Change
+	public void removeMajorTableLastColumn() {
+		if(majorTable != null){
+			if(majorTable.getColumnCount() > 4){
+				majorTable.removeColumn(majorTable.getColumnCount()-1);
+			}
+		}
+	}
+	
+	//SPEC Change
+	public void addMajorTableLastColumn() {
 		addColumnMajor(new ActionCell<MainSkillProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<MainSkillProxy>() {
 					public void execute(final MainSkillProxy mainSkill) {
@@ -400,6 +415,19 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 		minorTable.addColumn(skillLevelCol, constants.skillLevel());
 		minorTable.setColumnWidth(skillLevelCol, "75px");
 		
+		addMinorTableLastColumn();
+	}
+
+	//SPEC Change
+	public void removeMinorTableLastColumn() {
+		if(minorTable != null){
+			if(minorTable.getColumnCount() > 4){
+				minorTable.removeColumn(minorTable.getColumnCount()-1);
+			}
+		}
+	}
+	//SPEC Change
+	public void addMinorTableLastColumn() {
 		addColumnMinor(new ActionCell<MinorSkillProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<MinorSkillProxy>() {
 					public void execute(final MinorSkillProxy minorSkill) {

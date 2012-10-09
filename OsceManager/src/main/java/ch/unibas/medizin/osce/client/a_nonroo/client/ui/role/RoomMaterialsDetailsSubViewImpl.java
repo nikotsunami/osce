@@ -90,6 +90,13 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 	@UiField
 	IconButton newButton;
 
+	//SPEC Change
+	@Override
+	public IconButton getNewButton() {
+		return newButton;
+	}
+	// SPEC Change
+
 	StandardizedRoleProxy standardizedRoleProxy;
 
 	public RoomMaterialsDetailsSubViewImpl() {
@@ -259,6 +266,24 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 			}
 		}, constants.roomMaterialUser());
 
+		addLastThreeColumns();
+		roomMaterialsPopupViewImpl = new RoomMaterialsPopupViewImpl(standardizedRoleProxy);
+
+	}
+	// SPEC Change
+	public void removeLastThreeColumns() {
+		if(table != null){
+			if(table.getColumnCount() > 5){
+				table.removeColumn(table.getColumnCount()-1);
+				table.removeColumn(table.getColumnCount()-1);
+				table.removeColumn(table.getColumnCount()-1);
+			}
+		}
+	}
+
+	// SPEC Change
+	
+	public void addLastThreeColumns() {
 		addColumn(new ActionCell<UsedMaterialProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<UsedMaterialProxy>() {
 					public void execute(UsedMaterialProxy proxy) {

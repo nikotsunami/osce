@@ -44,6 +44,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubViewI
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleLearningPopUpView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleLearningSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOtherSearchCriteriaView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOtherSearchCriteriaViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoomMaterialsDetailsSubView;
@@ -1285,7 +1286,7 @@ final int index2 = index;
 			});
 		
 		//temp[
-		initRoleScript(standarDizedViewIndex,proxy.getRoleTemplate(),false);
+		initRoleScript(standarDizedViewIndex,proxy.getRoleTemplate(),false,false);
 		/* 
 		requests.roleBaseItemRequestNoonRoo().findRoleBaseItemByStandardizedRole(standardizedRoleDetailsView[index].getValue().getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
 
@@ -1492,7 +1493,7 @@ final int index2 = index;
 		}
 	}
 	
-	public void initRoleScript(final int index, final RoleTemplateProxy roleTemplate, final boolean create)
+	public void initRoleScript(final int index, final RoleTemplateProxy roleTemplate, final boolean create,final boolean isPrevious)
 	{		
 		//final int index = view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
 	//	requests.roleBaseItemRequestNoonRoo().findRoleBaseItemByStandardizedRole(standardizedRoleDetailsView[index].getValue().getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
@@ -1578,6 +1579,17 @@ final int index2 = index;
 								// To Add Access Values	
 									addAccessValue(roleBaseItemProxy,roleBaseTableItemViewImpl);
 							}
+							
+							//SPEC Change
+							
+							if(isPrevious){
+//								roleBaseTableItemViewImpl.toolbar.setVisible(false);
+//								roleBaseTableItemViewImpl.description.setEnabled(false);
+								roleBaseTableItemViewImpl.addRichTextAreaValue.setEnabled(false);
+								roleBaseTableItemViewImpl.saveRichTextArea.setEnabled(false);
+							}
+							
+							//SPEC Change
 						}
 	
 					}
@@ -4458,7 +4470,7 @@ final int index2 = index;
 			public void onSuccess(Boolean response) {
 				// TODO Auto-generated method stub
 				Log.info("Successfully created");
-				initRoleScript(selectedtab, roleTemplateProxy,false);
+				initRoleScript(selectedtab, roleTemplateProxy,false,false);
 				
 			}
 		});
@@ -5260,6 +5272,22 @@ final int index2 = index;
 			ChecklistTopicProxy topicProxy=topicIterator.next();
 			RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView=createCheckListTopic(index,topicProxy);
 			
+			// SPEC Change
+			topicView.addCheckListQuestionButton.setEnabled(false);
+			topicView.importQuestionButton.setEnabled(false);
+			
+			topicView.addCheckListQuestionButton.removeStyleName("expbtn");
+			topicView.importQuestionButton.removeStyleName("expbtn");
+			topicView.addCheckListQuestionButton.addStyleName("disableButton");
+			topicView.importQuestionButton.addStyleName("disableButton");
+			
+			topicView.getEdit().setEnabled(false);
+			topicView.getDelete().setEnabled(false);
+			topicView.getUp().setVisible(false);
+			topicView.getDown().setVisible(false);
+			standardizedRoleDetailsView[index].getDragController().makeNotDraggable(topicView);
+			// SPEC Change
+			
 			//create Question View
 			Iterator<ChecklistQuestionProxy> questionIterator=topicProxy.getCheckListQuestions().iterator();
 			
@@ -5269,12 +5297,33 @@ final int index2 = index;
 				ChecklistQuestionProxy questionProxy=questionIterator.next();
 				RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(index, questionProxy, topicView);
 				
+				// SPEC Change
+				questionView.addCriteriaButton.setEnabled(false);
+				questionView.addOptionButton.setEnabled(false);
+				questionView.edit.setEnabled(false);
+				questionView.delete.setEnabled(false);
+				questionView.up.setVisible(false);
+				questionView.down.setVisible(false);
+				questionView.questionItemLbl.setWidth("538px");
+				topicView.getDragController().makeNotDraggable(questionView);
+				// SPEC Change
+				
 				//create Criteria View
 				Iterator<ChecklistCriteriaProxy> criteriaIterator=questionProxy.getCheckListCriterias().iterator();
 				while(criteriaIterator.hasNext())
 				{
 					ChecklistCriteriaProxy criteriaProxy=criteriaIterator.next();
 					createCriteriaView(index, criteriaProxy, questionView);
+					// SPEC Change
+					
+					RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl criteriaItemView = (RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)questionView.criteriaHorizontalPanel.getWidget(questionView.criteriaHorizontalPanel.getWidgetCount()-1);
+					
+					criteriaItemView.getEdit().setEnabled(false);
+					criteriaItemView.getDelete().setEnabled(false);
+					
+					questionView.getCriteriaDragController().makeNotDraggable(criteriaItemView.asWidget());
+					// SPEC Change
+					
 				}
 				
 				//create Option View
@@ -5284,6 +5333,15 @@ final int index2 = index;
 				{
 					ChecklistOptionProxy optionProxy=optionIterator.next();
 					createOptionView(index, optionProxy, questionView);
+					
+					//SPEC Change
+					
+					RoleDetailsChecklistSubViewChecklistOptionItemViewImpl optionItemViewImpl = (RoleDetailsChecklistSubViewChecklistOptionItemViewImpl) questionView.optionVerticalPanel.getWidget(questionView.optionVerticalPanel.getWidgetCount()-1);
+					optionItemViewImpl.getEditBtn().setEnabled(false);
+					optionItemViewImpl.getDeleteBtn().setEnabled(false);
+					questionView.getOptionDragController().makeNotDraggable(optionItemViewImpl.asWidget());
+					//SPEC Change
+					
 				}
 				
 				
@@ -5313,17 +5371,173 @@ final int index2 = index;
 			});
 		
 		//temp[
-		initRoleScript(standarDizedViewIndex,proxy.getRoleTemplate(),false);
+		initRoleScript(standarDizedViewIndex,proxy.getRoleTemplate(),false,true);
 
+		//SPEC Change
+		
+		setEnableAllViews(standardizedRoleDetailsView[index], false);
+		
+		//SPEC Change
 		
 		// End I
 		//index++;
 		//}
 	}
 		
+	//SPEC Change
+	private void setEnableAllViews(StandardizedRoleDetailsViewImpl standardizedRoleDetailsView, boolean enable){
 		
+		int index =roleDetailTabPanel.getSelectedIndex();
 		
+		RoleFileSubViewImpl fileView = standardizedRoleDetailsView.getRoleFileSubViewImpl();
+		RoomMaterialsDetailsSubViewImpl roomMaterialsDetailsSubView = standardizedRoleDetailsView.getRoomMaterialsDetailsSubViewImpl();
+		RoleOtherSearchCriteriaViewImpl simpleSearchCriteriaView = standardizedRoleDetailsView.getRoleOtherSearchCriteriaViewImpl();
+		
+		fileView.getFileDescription().setEnabled(enable);
+		fileView.getFileUpload().setEnabled(enable);
+		fileView.getNewButton().setEnabled(enable);
+		
+		roomMaterialsDetailsSubView.getNewButton().setEnabled(enable);
+		
+		simpleSearchCriteriaView.getAddSimpleSearch().setEnabled(enable);
+		simpleSearchCriteriaView.getSearchName().setEnabled(enable);
+		simpleSearchCriteriaView.getSearchValue().setEnabled(enable);
+		
+		standardizedRoleDetailsView.edit.setEnabled(enable);
+		standardizedRoleDetailsView.delete.setEnabled(enable);
+		standardizedRoleDetailsView.getImportTopicButton().setEnabled(enable);
+		standardizedRoleDetailsView.addCheckListTopicButton.setEnabled(enable);
+		
+		standardizedRoleDetailsView.roleTemplateListBox.setEnabled(enable);
+		standardizedRoleDetailsView.roleTemplateValueButon.setEnabled(enable);
+		
+		standardizedRoleDetailsView.getRoleKeywordSubViewImpl().KeywordAddButton.setEnabled(enable);
+		standardizedRoleDetailsView.getRoleKeywordSubViewImpl().keywordSugestionBox.setEnabled(enable);
+		standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().btnAddAuthor.setEnabled(enable);
+		standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().btnAddReviewer.setEnabled(enable);
+		standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().lstDoctor.setEnabled(enable);
+		standardizedRoleDetailsView.getRoleLearningSubViewImpl().btnAdd.setEnabled(enable);
+		
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddAnamnesis().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddBasicData().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddLanguage().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddMaritialStatus().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddNationality().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddProfession().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddScar().setEnabled(enable);
+		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddWorkPermission().setEnabled(enable);
+
+		
+		if(enable){
+			
+			standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("disableButton");
+			standardizedRoleDetailsView.addCheckListTopicButton.addStyleName("expTopicButton");
+			standardizedRoleDetailsView.getImportTopicButton().removeStyleName("disableButton");
+			standardizedRoleDetailsView.getImportTopicButton().addStyleName("expTopicButton");
+			
+			standardizedRoleDetailsView.getRoleFileSubViewImpl().addLastThreColumns();
+			standardizedRoleDetailsView.getRoomMaterialsDetailsSubViewImpl().addLastThreeColumns();
+			standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().addAuthorLastColumn();
+			standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().addReviewerLastColumn();
+			standardizedRoleDetailsView.getRoleKeywordSubViewImpl().addLastColumn();
+			standardizedRoleDetailsView.getRoleLearningSubViewImpl().addMinorTableLastColumn();
+			standardizedRoleDetailsView.getRoleLearningSubViewImpl().addMajorTableLastColumn();
+			
+			standardizedRoleDetailsView.getRoleOtherSearchCriteriaViewImpl().addLastThreeColumn();
+			standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().addLastColumn();
+		}else{
+			
+			standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("expTopicButton");
+			standardizedRoleDetailsView.addCheckListTopicButton.addStyleName("disableButton");
+			standardizedRoleDetailsView.getImportTopicButton().removeStyleName("expTopicButton");
+			standardizedRoleDetailsView.getImportTopicButton().addStyleName("disableButton");
+			
+
+//			fileView[index].getTable().setColumnWidth(fileView[index].getTable().getColumn(1), 0, Unit.PX);
+			
+			// Remove column from file Table
+			
+//			if(fileView.getTable() != null){
+//				if(fileView.getTable().getColumnCount() > 4){
+//					fileView.getTable().removeColumn( fileView.getTable().getColumnCount()-1);
+//					fileView.getTable().removeColumn( fileView.getTable().getColumnCount()-1);
+//					fileView.getTable().removeColumn( fileView.getTable().getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoleFileSubViewImpl().removeLastThreeColumns();
+
+//			// Remove column from room Table
+//			CellTable<UsedMaterialProxy> roomTable = standardizedRoleDetailsView.getRoomMaterialsDetailsSubViewImpl().getUsedMaterialTable();
+//			if(roomTable != null){
+//				if(roomTable.getColumnCount() > 5){
+//					roomTable.removeColumn(roomTable.getColumnCount()-1);
+//					roomTable.removeColumn(roomTable.getColumnCount()-1);
+//					roomTable.removeColumn(roomTable.getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoomMaterialsDetailsSubViewImpl().removeLastThreeColumns();
+//			
+//			// Remove column from author Table
+//			
+//			CellTable<RoleParticipantProxy> authorTable = standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().authorTable;
+//			
+//			if(authorTable != null){
+//				if(authorTable.getColumnCount() > 1){
+//					authorTable.removeColumn(authorTable.getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().removeAuthorLastColumn();
+//			
+//			// Remove column from reviewer Table
+//			
+//			CellTable<RoleParticipantProxy> reviewerTable = standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().reviewerTable;
+//			
+//			if(reviewerTable != null){
+//				if(reviewerTable.getColumnCount() > 1){
+//					reviewerTable.removeColumn(reviewerTable.getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoleRoleParticipantSubViewImpl().removeReviewerLastColumn();
+//
+//			// Remove column from keyword Table
+//			CellTable<KeywordProxy> keywordTable = standardizedRoleDetailsView.getRoleKeywordSubViewImpl().getKeywordTable();
+//			
+//			if(keywordTable != null){
+//				if(keywordTable.getColumnCount() > 1){
+//					keywordTable.removeColumn(keywordTable.getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoleKeywordSubViewImpl().removeLastColumn();
+//			
+//			// Remove column from minor skill Table
+//			CellTable<MinorSkillProxy> minorTable = standardizedRoleDetailsView.getRoleLearningSubViewImpl().minorTable;
+//			
+//			if(minorTable != null){
+//				if(minorTable.getColumnCount() > 4){
+//					minorTable.removeColumn(minorTable.getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoleLearningSubViewImpl().removeMinorTableLastColumn();
+//			
+//			// Remove column from major skill Table
+//			CellTable<MainSkillProxy> majorTable = standardizedRoleDetailsView.getRoleLearningSubViewImpl().majorTable;
+//			
+//			if(majorTable != null){
+//				if(majorTable.getColumnCount() > 4){
+//					majorTable.removeColumn(majorTable.getColumnCount()-1);
+//				}
+//			}
+			standardizedRoleDetailsView.getRoleLearningSubViewImpl().removeMajorTableLastColumn();
+			
+			standardizedRoleDetailsView.getRoleOtherSearchCriteriaViewImpl().removeLastThreeColumns();
+			standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().removeLastColumn();
 	
+	
+			
+		}
+		
+	}	
+	//SPEC Change
 	
 	
 	// Highlight onViolation
@@ -5612,6 +5826,7 @@ final int index2 = index;
 		
 		
 		refreshSelectedTab(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()], standardizedRoleProxy);
+		setEnableAllViews(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()], true);
 /*requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).fire(new Receiver<StandardizedRoleProxy>() {
 			
 			@Override

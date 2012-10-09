@@ -91,6 +91,41 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
     @UiField
     IconButton addMaritialStatus;
 
+    //SPEC Change
+
+	public IconButton getAddBasicData() {
+		return addBasicData;
+	}
+
+	public IconButton getAddScar() {
+		return addScar;
+	}
+
+	public IconButton getAddAnamnesis() {
+		return addAnamnesis;
+	}
+
+	public IconButton getAddLanguage() {
+		return addLanguage;
+	}
+
+	public IconButton getAddNationality() {
+		return addNationality;
+	}
+
+	public IconButton getAddProfession() {
+		return addProfession;
+	}
+
+	public IconButton getAddWorkPermission() {
+		return addWorkPermission;
+	}
+
+	public IconButton getAddMaritialStatus() {
+		return addMaritialStatus;
+	}
+    //SPEC Change
+	
 	@UiHandler("addBasicData")
 	void onAddBasicDataClick(ClickEvent e) {
 		delegate.addBasicCriteriaClicked(addBasicData);
@@ -187,15 +222,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 			 }
 		 }, constants.criterion());
 	        
-	        ActionCell.Delegate<AdvancedSearchCriteriaProxy> deleteDelegate = new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
-				@Override
-				public void execute(AdvancedSearchCriteriaProxy object) {
-					delegate.deleteAdvancedSearchCriteria(object);
-				}
-			};
-	        
-	        table.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(new ActionCell<AdvancedSearchCriteriaProxy>(OsMaConstant.DELETE_ICON, deleteDelegate)));
-			table.addColumnStyleName(table.getColumnCount() - 1, "iconCol");
+	        addLastColumn();
 			
 			table.addRowCountChangeHandler(new RowCountChangeEvent.Handler() {
 				
@@ -214,6 +241,29 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 			table.setVisible(false);
 			pager.setVisible(false);
 	    }
+
+	 //SPEC Change
+	public void removeLastColumn() {
+		if(table != null){
+			if(table.getColumnCount() > 2){
+				table.removeColumn(table.getColumnCount()-1);
+			}
+		}
+	}
+
+	 //SPEC Change
+	public void addLastColumn() {
+		ActionCell.Delegate<AdvancedSearchCriteriaProxy> deleteDelegate = new ActionCell.Delegate<AdvancedSearchCriteriaProxy>() {
+			@Override
+			public void execute(AdvancedSearchCriteriaProxy object) {
+				delegate.deleteAdvancedSearchCriteria(object);
+			}
+		};
+		
+		table.addColumn(new IdentityColumn<AdvancedSearchCriteriaProxy>(new ActionCell<AdvancedSearchCriteriaProxy>(OsMaConstant.DELETE_ICON, deleteDelegate)));
+		table.addColumnStyleName(table.getColumnCount() - 1, "iconCol");
+	}
+	//SPEC Change
 
 	@Override
 	public CellTable<AdvancedSearchCriteriaProxy> getTable() {

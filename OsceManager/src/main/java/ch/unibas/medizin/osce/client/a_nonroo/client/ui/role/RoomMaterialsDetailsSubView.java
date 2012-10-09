@@ -6,6 +6,7 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 
 import com.google.gwt.place.shared.Place;
@@ -55,5 +56,8 @@ public interface RoomMaterialsDetailsSubView {
 	// Highlight onViolation
 	Map getUsedMaterialMap();
 	// E Highlight onViolation
+	
+	//SPEC Change
+	IconButton getNewButton();
 	
 }

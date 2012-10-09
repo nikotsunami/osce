@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -31,4 +32,8 @@ public interface RoleDetailsChecklistSubViewChecklistCriteriaItemView extends Is
 	  public AbsolutePanel getRoleCriteriaAP();
 
 	public PickupDragController getDragController();
+
+	IconButton getDelete();
+
+	IconButton getEdit();
 }

@@ -67,6 +67,18 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 	@UiField
 	IconButton editBtn;	
 	
+	//SPEC Change
+	@Override
+	public IconButton getDeleteBtn() {
+		return deleteBtn;
+	}
+
+	@Override
+	public IconButton getEditBtn() {
+		return editBtn;
+	}
+	//SPEC Change
+
 	ChecklistOptionProxy proxy;
 	
 	public CriteriaPopupView criteriaPopup;
@@ -93,6 +105,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 
 	public RoleDetailsChecklistSubViewChecklistOptionItemViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		optionLbl.getElement().getStyle().setProperty("wordWrap", "break-word");
 		this.roleDetailsChecklistSubViewChecklistOptionItemViewImpl=this;
 	}
 	

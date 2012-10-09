@@ -281,6 +281,21 @@ public class RoleKeywordSubViewImpl extends Composite implements RoleKeywordSubV
 			
 		}, constants.keywords());
 		
+		addLastColumn();
+		
+	}
+
+	//SPEC Change
+	public void removeLastColumn() {
+		if(keywordTable != null){
+			if(keywordTable.getColumnCount() > 1){
+				keywordTable.removeColumn(keywordTable.getColumnCount()-1);
+			}
+		}
+	}
+	
+	//SPEC Change
+	public void addLastColumn() {
 		addColumn(new ActionCell<KeywordProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<KeywordProxy>() {
 					public void execute(final KeywordProxy keywordProxy) {

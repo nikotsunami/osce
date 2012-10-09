@@ -89,6 +89,23 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 	@UiField
 	TextBox SearchValue;
 
+	//SPEC Change
+	@Override
+	public Button getAddSimpleSearch() {
+		return addSimpleSearch;
+	}
+
+	@Override
+	public TextBox getSearchName() {
+		return searchName;
+	}
+
+	@Override
+	public TextBox getSearchValue() {
+		return SearchValue;
+	}
+	//SPEC Change
+
 	/*public void initList() {
 
 		for (VisibleRange range : VisibleRange.values()) {
@@ -225,6 +242,24 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 				return renderer.render(object.getValue());
 			}
 		}, constants.simpleSearchCriteriaValue());
+		addLastThreeColumn();
+
+		// initList();
+	}
+	
+	// SPEC Change
+	public void removeLastThreeColumns() {
+		if(table != null){
+			if(table.getColumnCount() > 4){
+				table.removeColumn(table.getColumnCount()-1);
+				table.removeColumn(table.getColumnCount()-1);
+				table.removeColumn(table.getColumnCount()-1);
+			}
+		}
+	}
+
+	//SPEC Change
+	public void addLastThreeColumn() {
 		addColumn(new ActionCell<SimpleSearchCriteriaProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<SimpleSearchCriteriaProxy>() {
 					public void execute(SimpleSearchCriteriaProxy proxy) {
