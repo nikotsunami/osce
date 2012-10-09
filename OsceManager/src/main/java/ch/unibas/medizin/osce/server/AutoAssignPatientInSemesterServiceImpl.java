@@ -271,6 +271,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 										
 										//int allReadyPatientInRole =sortedOscePost.getPatientInRole().size();
 										
+										
+										//David: With this line the count of sp is correct calculated
+										allReadyPatientInRole=Osce.getTotalRoleAssignInPost(sortedOscePost.getId());
+										
+										
 										//allReadyPatientInRole=Osce.getTotalRoleAssignInPost(sortedOscePost.getId());
 										Log.info("Number of SP already assigned : " + allReadyPatientInRole);
 										if(allReadyPatientInRole >= neededSp){
