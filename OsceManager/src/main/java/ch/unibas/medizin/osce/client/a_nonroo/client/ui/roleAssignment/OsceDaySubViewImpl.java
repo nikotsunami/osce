@@ -398,9 +398,11 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 			
 			@Override
 			public void onValueChange(ValueChangeEvent<PatientAveragePerPost> arg0) {
+				delegate.showApplicationLoading(true);
 				Log.info("OsceProxy Id: " + osceDayProxy.getId());				
 				Log.info("osceProxy"+ osceProxy);
 				onValueChangeSecurity(false);
+				delegate.showApplicationLoading(false);
 				
 			}
 		});
@@ -409,9 +411,11 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 			
 			@Override
 			public void onValueChange(ValueChangeEvent<OSCESecurityStatus> arg0) {
+				delegate.showApplicationLoading(true);
 				Log.info("OsceProxy Id: " + osceDayProxy.getId());
 				Log.info("osceProxy"+ osceProxy);
 				onValueChangeSecurity(true);
+				delegate.showApplicationLoading(false);
 				
 			}
 		});

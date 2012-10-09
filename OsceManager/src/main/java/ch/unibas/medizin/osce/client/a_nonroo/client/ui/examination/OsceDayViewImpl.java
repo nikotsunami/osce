@@ -189,7 +189,12 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
-		Log.info("OsceDay Save Button Clicked");
+		Log.info("OsceDay Save Button Clicked");		
+		if(osceDayProxy != null)
+		{
+			insertflag=false;
+			Log.info("Osce Day Proxy Id to Save: " + osceDayProxy.getId());
+		}
 		delegate.saveOsceDayValue(osceDayProxy,insertflag);
 	}
 	

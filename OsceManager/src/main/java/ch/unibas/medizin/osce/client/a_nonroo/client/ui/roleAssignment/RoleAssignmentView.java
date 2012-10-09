@@ -5,6 +5,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -49,6 +50,8 @@ public interface RoleAssignmentView extends IsWidget {
 		public void firePatientInSemesterRowSelectedEvent(PatientInSemesterProxy patientInSemesterProxy);
 		
 		public void setSelectedRoleOsceDay(OsceDayProxy osceDayProxy);
+		
+		public void setSelectedRole(StandardizedRoleProxy standardizedRoleProxy);
 		
 	}
 

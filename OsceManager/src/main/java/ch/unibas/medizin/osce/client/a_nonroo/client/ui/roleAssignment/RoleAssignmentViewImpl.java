@@ -271,6 +271,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	public void onRoleSelectedEventReceived(RoleSelectedEvent event) {
 delegate.showApplicationLoading(true);
 		delegate.setSelectedRoleOsceDay(event.getOsceDayProxy());
+		delegate.setSelectedRole(event.getStandardizedRoleProxy());
 		delegate.initAdvancedSearchByStandardizedRole(event.getStandardizedRoleProxy().getId());
 	}
 	
@@ -302,7 +303,12 @@ delegate.showApplicationLoading(true);
 	@Override
 	public void onClick(ClickEvent event) {
 		int rowIndex = table.getCellForEvent(event).getRowIndex();
-		if(rowIndex > 0){
+		//Log.info("getCellIndex is: "+table.getCellForEvent(event).getCellIndex());
+		
+		int columnIndex = table.getCellForEvent(event).getCellIndex();
+		boolean isSelectedEventFired =  (columnIndex == 0 || columnIndex == 2);
+		
+		if((rowIndex > 0) && (isSelectedEventFired)){
 			delegate.showApplicationLoading(true);
 			delegate.firePatientInSemesterRowSelectedEvent(table.onRowClick(rowIndex));
 			delegate.showApplicationLoading(false);

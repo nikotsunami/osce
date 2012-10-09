@@ -5,14 +5,11 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.IndividualScheduleService;
-import ch.unibas.medizin.osce.client.IndividualScheduleServiceAsync;
 import ch.unibas.medizin.osce.client.RotationRefreshService;
 import ch.unibas.medizin.osce.client.RotationRefreshServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.CircuitDetailsPlace;
@@ -3320,6 +3317,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						
 						// Highlight onViolation	
 						Log.info(""+osceDayViewImpl.osceDayMap.size());
+						final OsceDayProxy newOsceDayProxy=osceDayProxy;
 						osceDayReq.persist().using(osceDayProxy).fire(new OSCEReceiver<Void>(osceDayViewImpl.osceDayMap) {
 						// E Highlight onViolation
 							
@@ -3327,7 +3325,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							public void onSuccess(Void response) {
 								final MessageConfirmationDialogBox dialogbox=new MessageConfirmationDialogBox(constants.success());								
 								dialogbox.showConfirmationDialog(constants.osceDaySuccess());
-								Log.info("Osce Day Saved successfully");
+								Log.info("Osce Day Saved successfully with Osce Day Proxy:  "  + newOsceDayProxy.getId());
+								
+								osceDayViewImpl.setOsceDayProxy(newOsceDayProxy);
 								
 								// Module 5 bug Report Change
 								/* if osce day for any osce is not defined and click on generate button give warning osce day not defined

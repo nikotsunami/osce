@@ -332,8 +332,24 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 					return;
 				}
 			}
+			VerticalPanel backUpVP=patientDropedIn.getBackUpVP();
+			for(int i=0;i<backUpVP.getWidgetCount();i++)
+			{
+				PatientInRoleSubViewImpl patientView=(PatientInRoleSubViewImpl)((backUpVP).getWidget(i));
+				if(patientView.getPatientInRoleProxy().getPatientInSemester().getStandardizedPatient().getId()==onDragPatientID)
+				{
+					count++;
 			
-			
+				}
+				if(count==2)
+				{
+					//reverse change
+					patientDroped.removeFromParent();
+					sourceRoleView.getPatientInRoleVP().insert(patientDroped,sourceRoleView.getPatientInRoleVP().getWidgetCount());
+					delegate.showApplicationLoading(false);
+					return;
+				}
+			}
 			patientDroped.setRoleSubView(patientDropedIn);
 			//this.refreshCountLabel();
 			OscePostProxy newPost=patientDropedIn.getPostProxy();
