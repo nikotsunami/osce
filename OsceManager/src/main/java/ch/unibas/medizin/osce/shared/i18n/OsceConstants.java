@@ -1094,6 +1094,8 @@ public interface OsceConstants extends Constants {
 	public String osceAssignments();
 	public String assignmentsOutput();
 	public String afterTheOsce();
+	public String statisticsEvaluation();
+	public String statisticsEvaluationPlace();
 	
 }
 

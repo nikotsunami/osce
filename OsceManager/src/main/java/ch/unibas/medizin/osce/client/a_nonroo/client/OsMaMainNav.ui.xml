@@ -29,10 +29,11 @@
       font-weight: bold;
       min-height:17px !important;
       margin-top: 5px;
+      padding-left: 10px;
     }
-.paddingLeft8px
+.paddingLeft28px
 {
-	padding-left:8px !important;
+	padding-left:28px !important;
 }
 
 </ui:style>
@@ -111,30 +112,31 @@
 			</g:HorizontalPanel> 
 		<!-- G: SPEC END = -->	
 		
-			<g:Label ui:field="createOsceHeader" addStyleNames="{style.label}" height="15px">Create Osce</g:Label>			
+			<g:Label ui:field="createOsceHeader" addStyleNames="{style.label}">Create Osce</g:Label>			
 				<g:VerticalPanel >
-					<g:Anchor ui:field="osces" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
-					<g:Anchor ui:field="circuit"  addStyleNames="{style.paddingLeft8px}"></g:Anchor>
-					<g:Anchor ui:field="students" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+					<g:Anchor ui:field="osces" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="circuit"  addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="statisticsEvaluation" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="students" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 				</g:VerticalPanel>
 				
 			<g:Label ui:field="osceAssignmentsHeader" addStyleNames="{style.label}">Osce Assignments</g:Label>
 			<g:VerticalPanel>
-				<g:Anchor ui:field="examinationSchedule" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
-				<g:Anchor ui:field="roleAssignment" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="examinationSchedule" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="roleAssignment" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 			</g:VerticalPanel>
 		
 			<g:Label ui:field="assignmentsOutputHeader" addStyleNames="{style.label}">Assignments Output</g:Label>
 			<g:VerticalPanel>
-				<g:Anchor ui:field="exportOSCE" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
-				<g:Anchor ui:field="summonings" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
-				<g:Anchor ui:field="individualSchedules" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
-				<g:Anchor ui:field="bellSchedule" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="exportOSCE" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="summonings" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="individualSchedules" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="bellSchedule" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 			</g:VerticalPanel>
 		
 			<g:Label ui:field="afterTheOsceHeader" addStyleNames="{style.label}">After the OSCE</g:Label>
 			<g:VerticalPanel>				
-				<g:Anchor ui:field="importeOSCE" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="importeOSCE" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 			</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>

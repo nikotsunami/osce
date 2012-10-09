@@ -24,6 +24,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
@@ -157,7 +159,13 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new IndividualSchedulesActivity(requests, placeController,(IndividualSchedulesPlace)place);
 			// E Module10 Create plans
 		}
-
+		
+		if (place instanceof StatisticalEvaluationPlace) {
+			Log.debug("is StatisticalEvaluationPlace");			
+			return new StatisticalEvaluationActivity(requests, placeController,(StatisticalEvaluationPlace)place);
+		}
+		
+		
 		if (place instanceof BellSchedulePlace) {
 			Log.debug("is BellSchedulePlace");
 			return new BellScheduleActivity(requests, placeController, (BellSchedulePlace) place);

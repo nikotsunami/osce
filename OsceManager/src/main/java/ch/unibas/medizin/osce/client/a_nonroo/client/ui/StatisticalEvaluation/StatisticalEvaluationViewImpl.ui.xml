@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	 
+	<ui:style src="../../styles.css">
+.tabPanel{
+	margin-left: 20px;
+}
+</ui:style>
+	<g:HTMLPanel ui:field="mainHTMLPanel" >
+		<g:HorizontalPanel ui:field="horizontalStatisticalEvaluationTabPanel">
+	
+		<my:ScrolledTabLayoutPanel ui:field="statisticalEvaluationTabPanel" barHeight="40" width="100%" >
+		<!--  <g:tab>
+                    <g:header>
+                        <b>+</b>
+                        
+                    </g:header> 
+                    <g:Label>Add Tab</g:Label>
+                  
+          </g:tab> -->
+		</my:ScrolledTabLayoutPanel>
+	
+		</g:HorizontalPanel>
+			
+	</g:HTMLPanel>
+</ui:UiBinder> 

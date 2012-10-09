@@ -43,6 +43,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguageDetails
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
@@ -210,12 +212,21 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return (IndividualSchedulesPlace) place;
 		
 		// Module10 Create plans
-		if (place instanceof IndividualSchedulesDetailsPlace)
+				if (place instanceof IndividualSchedulesDetailsPlace)
+				{			
+					IndividualSchedulesDetailsPlace individualSchedulesDetailsPlace = (IndividualSchedulesDetailsPlace) place;
+					return new IndividualSchedulesPlace(individualSchedulesDetailsPlace.getToken());
+				}
+				// E Module10 Create plans
+				
+		if (place instanceof StatisticalEvaluationPlace)
+			return (StatisticalEvaluationPlace) place;
+		
+		if (place instanceof StatisticalEvaluationDetailsPlace)
 		{			
-			IndividualSchedulesDetailsPlace individualSchedulesDetailsPlace = (IndividualSchedulesDetailsPlace) place;
-			return new IndividualSchedulesPlace(individualSchedulesDetailsPlace.getToken());
-		}
-		// E Module10 Create plans
+			StatisticalEvaluationDetailsPlace statisticalEvaluationDetailsPlace = (StatisticalEvaluationDetailsPlace) place;
+			return new StatisticalEvaluationPlace(statisticalEvaluationDetailsPlace.getToken());
+		}		
 
 		if (place instanceof BellSchedulePlace)
 			return (BellSchedulePlace) place;

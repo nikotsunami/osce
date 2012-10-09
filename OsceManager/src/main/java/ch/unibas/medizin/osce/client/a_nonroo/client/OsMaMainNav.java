@@ -28,6 +28,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
@@ -549,6 +551,8 @@ public class OsMaMainNav extends Composite {
 		labelSemester.setText(constants.semester() + ":");
 		osces.setText(constants.manageOsces());
 		circuit.setText(constants.circuit());
+		statisticsEvaluation.setText(constants.statisticsEvaluation());
+		
 		students.setText(constants.students());
 		examinationSchedule.setText(constants.examinationSchedule());
 		summonings.setText(constants.sendSummonings());
@@ -586,6 +590,7 @@ public class OsMaMainNav extends Composite {
 						ExaminationSchedulePlace.semesterProxy=lstSemester.getValue();
 						CircuitPlace.semesterProxy=lstSemester.getValue();
 						RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
+						StatisticalEvaluationPlace.semesterProxy=lstSemester.getValue();
 						placeHistoryHandler.handleCurrentHistory();
 				}
 		});
@@ -620,6 +625,7 @@ public class OsMaMainNav extends Composite {
 		ExaminationSchedulePlace.handler=handlerManager;
 		CircuitPlace.handler=handlerManager;
 		RoleAssignmentPlace.handler=handlerManager;
+		StatisticalEvaluationPlace.handler=handlerManager;
 		
 		// G: SPEC END =		
 	}
@@ -763,6 +769,10 @@ public class OsMaMainNav extends Composite {
 	Anchor osces;					// OSCEs
 	@UiField
 	Anchor circuit;					// Postenlauf
+	
+	@UiField
+	Anchor statisticsEvaluation;
+	
 	@UiField
 	Anchor students;				// Studenten
 	@UiField
@@ -972,6 +982,26 @@ public class OsMaMainNav extends Composite {
 		 else
 		     placeController.goTo(new CircuitPlace("CircuitPlace",handlerManager,lstSemester.getValue()));
 	}
+
+	@UiHandler("statisticsEvaluation")
+	void statisticsEvaluationClicked(ClickEvent event) 
+	{
+		Log.info("Click on statisticsEvaluationClicked");
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		StatisticalEvaluationPlace.handler=handlerManager;
+		StatisticalEvaluationPlace.semesterProxy=lstSemester.getValue();
+		
+		 if (placeController.getWhere() instanceof StatisticalEvaluationDetailsPlace) {		      
+		      return;
+		    }
+		 else
+			 placeController.goTo(new StatisticalEvaluationPlace("StatisticalEvaluationPlace", handlerManager, lstSemester.getValue()));
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
+	
+	}
+	
 
 	@UiHandler("students")
 	void studentsClicked(ClickEvent event) {

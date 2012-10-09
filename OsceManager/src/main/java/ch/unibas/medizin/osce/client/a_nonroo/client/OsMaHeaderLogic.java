@@ -29,6 +29,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
@@ -246,6 +247,8 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			placeDescription = constants.examinationSchedule();
 		} else if (place instanceof IndividualSchedulesPlace) {
 			placeDescription = constants.printIndividualSchedules();
+		}else if (place instanceof StatisticalEvaluationPlace) {
+				placeDescription = constants.statisticsEvaluationPlace();
 		} else if (place instanceof LogPlace) {
 			placeDescription = constants.log();
 		} else if (place instanceof NationalityPlace) {

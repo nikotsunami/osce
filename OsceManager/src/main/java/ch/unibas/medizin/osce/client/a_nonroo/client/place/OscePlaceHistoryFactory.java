@@ -44,6 +44,9 @@ public class OscePlaceHistoryFactory {
 	//module 8
 	private final ExaminationSchedulePlace.Tokenizer examinationSchedulePlaceTokenizer;
 	private final ExaminationScheduleDetailPlace.Tokenizer examinationScheduleDetailPlaceTokenizer;
+	
+	private final StatisticalEvaluationPlace.Tokenizer statisticalEvaluationPlaceTokenizer;
+	private final StatisticalEvaluationDetailsPlace.Tokenizer statisticalEvaluationDetailsPlaceTokenizer;
 	//module 8]
 	private final SummoningsPlace.Tokenizer summoningsTokenizer;
 	private final IndividualSchedulesPlace.Tokenizer individualSchedulesPlaceTokenizer;
@@ -122,6 +125,7 @@ public class OscePlaceHistoryFactory {
 		
 		this.summoningsTokenizer = new SummoningsPlace.Tokenizer(requestFactory);
 		this.individualSchedulesPlaceTokenizer = new IndividualSchedulesPlace.Tokenizer(requestFactory);
+		
 		this.bellSchedulePlaceTokenizer = new BellSchedulePlace.Tokenizer(requestFactory);
 		
 		this.rolePlaceTokenizer = new RolePlace.Tokenizer(requestFactory);
@@ -146,6 +150,8 @@ public class OscePlaceHistoryFactory {
         this.examinationSchedulePlaceTokenizer = new ExaminationSchedulePlace.Tokenizer(requestFactory);
         this.examinationScheduleDetailPlaceTokenizer = new ExaminationScheduleDetailPlace.Tokenizer(requestFactory);
 		
+        this.statisticalEvaluationPlaceTokenizer=new StatisticalEvaluationPlace.Tokenizer(requestFactory);
+        this.statisticalEvaluationDetailsPlaceTokenizer=new StatisticalEvaluationDetailsPlace.Tokenizer(requestFactory);
         //Module 8]
 	}
 	
@@ -267,6 +273,14 @@ public class OscePlaceHistoryFactory {
 	
 	public PlaceTokenizer<IndividualSchedulesPlace> getIndividualSchedulesPlaceTokenizer() {
 		return individualSchedulesPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<StatisticalEvaluationPlace> getStatisticalEvaluationPlaceTokenizer() {
+		return statisticalEvaluationPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<StatisticalEvaluationDetailsPlace> getStatisticalEvaluationDetailsPlaceTokenizer() {
+		return statisticalEvaluationDetailsPlaceTokenizer;
 	}
 	
 	public PlaceTokenizer<BellSchedulePlace> getBellSchedulePlaceTokenizer() {
