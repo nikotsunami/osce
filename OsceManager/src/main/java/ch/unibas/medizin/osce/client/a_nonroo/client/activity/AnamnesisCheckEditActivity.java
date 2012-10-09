@@ -296,8 +296,13 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		if (view.getSelectedPreviousQuestion() != null
 				&& !view.getSelectedPreviousQuestion().equals("")
 				&& view.getSelectedPreviousQuestion().length() != 0) {
-			previousSortOder = Integer.valueOf(view
-					.getSelectedPreviousQuestion());
+			
+			System.out.println("inside if--"+view.getSelectedPreviousQuestion());
+			System.out.println("inside if--"+Integer.valueOf(view.getSelectedPreviousQuestion()));
+			//TODO: If remove comment then null pointer exceptin occurs from server side. Need to check in detail.  
+			/*previousSortOder = Integer.valueOf(view
+					.getSelectedPreviousQuestion());*/
+			
 		}
 		// GWT.log("@@@@@@@@@@@@@@@@@@anamnesisCheckBefore = "+anamnesisCheckBefore.getAnamnesisCheckTitle().getText());
 		if (place.getOperation() == Operation.EDIT
@@ -325,6 +330,9 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 					});
 		} else {
 			GWT.log("################call insertAnamnesisCheck ");
+			System.out.println("sort order--"+previousSortOder);
+			System.out.println("id--"+anamnesisCheck.getId());
+			
 			requests.anamnesisCheckRequestNonRoo().insertAnamnesisCheck(
 					previousSortOder).using(anamnesisCheck).fire(
 					new Receiver<Void>() {
