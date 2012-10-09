@@ -20,15 +20,7 @@
 			max-width: 70%;
 		}
 		
-		.exp{
-			background: #B8A9A2 !important;
-
-			cursor: pointer !important;
-		}
 		
-		.exp:hover{
-			background: #8E7676 !important;
-		}
 	</ui:style>
 
 	<g:HTMLPanel>
@@ -153,8 +145,8 @@
 									<g:HorizontalPanel spacing="10" ui:field="addTopicHP">		
 											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
 											
-											<my:IconButton icon="plusthick" ui:field="addCheckListTopicButton" addStyleNames="{style.exp}"> </my:IconButton>
-											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" addStyleNames="{style.exp}"></my:IconButton>
+											<my:IconButton icon="plusthick" ui:field="addCheckListTopicButton" > </my:IconButton>
+											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" ></my:IconButton>
 										
 										</g:HorizontalPanel>
 								</g:VerticalPanel>

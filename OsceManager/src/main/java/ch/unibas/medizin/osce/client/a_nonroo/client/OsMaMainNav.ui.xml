@@ -25,6 +25,15 @@
 	vertical-align: middle;
 	margin: 6px 0 0 12px;
 }
+.label {      
+      font-weight: bold;
+      min-height:17px !important;
+      margin-top: 5px;
+    }
+.paddingLeft8px
+{
+	padding-left:8px !important;
+}
 
 </ui:style>
 
@@ -101,20 +110,37 @@
 				<s:IconButton ui:field="btnAddSem" icon="plusthick"></s:IconButton> 
 			</g:HorizontalPanel> 
 		<!-- G: SPEC END = -->	
-				<g:Anchor ui:field="importeOSCE"></g:Anchor>
-				<g:Anchor ui:field="exportOSCE"></g:Anchor>
-				<g:Anchor ui:field="osces"></g:Anchor>
-				<g:Anchor ui:field="circuit"></g:Anchor>
-				<g:Anchor ui:field="students"></g:Anchor>
-				<g:Anchor ui:field="examinationSchedule"></g:Anchor>
-				<g:Anchor ui:field="summonings"></g:Anchor>
-				<g:Anchor ui:field="individualSchedules"></g:Anchor>
-				<g:Anchor ui:field="bellSchedule"></g:Anchor>
+		
+			<g:Label ui:field="createOsceHeader" addStyleNames="{style.label}" height="15px">Create Osce</g:Label>			
+				<g:VerticalPanel >
+					<g:Anchor ui:field="osces" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+					<g:Anchor ui:field="circuit"  addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+					<g:Anchor ui:field="students" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				</g:VerticalPanel>
+				
+			<g:Label ui:field="osceAssignmentsHeader" addStyleNames="{style.label}">Osce Assignments</g:Label>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="examinationSchedule" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="roleAssignment" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+			</g:VerticalPanel>
+		
+			<g:Label ui:field="assignmentsOutputHeader" addStyleNames="{style.label}">Assignments Output</g:Label>
+			<g:VerticalPanel>
+				<g:Anchor ui:field="exportOSCE" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="summonings" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="individualSchedules" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+				<g:Anchor ui:field="bellSchedule" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+			</g:VerticalPanel>
+		
+			<g:Label ui:field="afterTheOsceHeader" addStyleNames="{style.label}">After the OSCE</g:Label>
+			<g:VerticalPanel>				
+				<g:Anchor ui:field="importeOSCE" addStyleNames="{style.paddingLeft8px}"></g:Anchor>
+			</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 	
                 <!-- module: 3  SPEC START = -->
-		<g:DisclosurePanel ui:field="roleAssignmentPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
+		<!-- <g:DisclosurePanel ui:field="roleAssignmentPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
 					<g:Label ui:field="roleAssignmentPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
@@ -124,7 +150,7 @@
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="roleAssignment"></g:Anchor>				
 			</g:VerticalPanel>
-		</g:DisclosurePanel>
+		</g:DisclosurePanel> -->
 		<!-- module: 3  SPEC END = -->
 		
 		<g:DisclosurePanel ui:field="administrationPanel" width="182px" open="false" addStyleNames='{style.mainNavPanel}'>

@@ -11,9 +11,12 @@ import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 
 public interface RoleFileSubView extends IsWidget{
 	
@@ -47,6 +50,11 @@ public interface RoleFileSubView extends IsWidget{
 	// Highlight onViolation
     Map getFileMap();
 	// E Highlight onViolation
+    
+    //SPEC Change
+	Button getNewButton();
+	FileUpload getFileUpload();
+	TextBox getFileDescription();
     
 //    String getMediaContent();
 

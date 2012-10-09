@@ -422,6 +422,13 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		importTopicButton.setText(constants.importTopic());
 		//Assignment E start]
 		
+		//SPEC Change
+		
+		addCheckListTopicButton.addStyleName("expTopicButton");
+		importTopicButton.addStyleName("expTopicButton");
+		
+		//SPEC Change
+		
 		roleTemplateValueButon.setText(constants.selectRoleTemplate());
 		
 		// Highlight onViolation

@@ -128,9 +128,44 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	@UiField
 	Image up;
 	
+	
+	
 //	@UiField
 //	public Label draglbl;
 	
+	public IconButton getDelete() {
+		return delete;
+	}
+
+	public void setDelete(IconButton delete) {
+		this.delete = delete;
+	}
+
+	public IconButton getEdit() {
+		return edit;
+	}
+
+	public void setEdit(IconButton edit) {
+		this.edit = edit;
+	}
+
+	public Image getDown() {
+		return down;
+	}
+
+	public void setDown(Image down) {
+		this.down = down;
+	}
+
+	public Image getUp() {
+		return up;
+	}
+
+	public void setUp(Image up) {
+		this.up = up;
+	}
+
+
 	@UiField
 	public AbsolutePanel topicAP;
 	
@@ -238,6 +273,11 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		addCheckListQuestionButton.setTitle(constants.addCheckListQuestion());
 		addCheckListQuestionButton.setText(constants.addCheckListQuestion());
 		importQuestionButton.setText(constants.roleImportQuestion());
+		
+		//SPEC Change
+		addCheckListQuestionButton.addStyleName("expbtn");
+		importQuestionButton.addStyleName("expbtn");
+		//SPEC Change
 		
 		topicView=this;
 		

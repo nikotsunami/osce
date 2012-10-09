@@ -12,9 +12,11 @@ import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 
 public interface RoleOtherSearchCriteriaView extends IsWidget{
 	
@@ -44,6 +46,12 @@ public interface RoleOtherSearchCriteriaView extends IsWidget{
 	//SimplePanel getDetailsPanel();
     void setPresenter(Presenter systemStartActivity);
 	Map getSimpleSearchCriteriaMap();
+    
+	// SPEC Change
+	Button getAddSimpleSearch();
+	TextBox getSearchName();
+	TextBox getSearchValue();
+	// SPEC Change
     
     //void setListBoxItem(String length);
     

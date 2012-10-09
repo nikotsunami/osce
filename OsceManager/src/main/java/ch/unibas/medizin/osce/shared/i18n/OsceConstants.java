@@ -1089,5 +1089,12 @@ public interface OsceConstants extends Constants {
 	public String accessNotification();
 
 	public String csvFileError();
+
+	public String createOsce();	
+	public String osceAssignments();
+	public String assignmentsOutput();
+	public String afterTheOsce();
+	
 }
+
 

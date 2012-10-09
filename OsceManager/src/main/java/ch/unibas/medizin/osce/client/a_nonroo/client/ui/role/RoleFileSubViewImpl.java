@@ -88,6 +88,22 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 	FormPanel uploadFormPanel;
 	
 	//SPEC Change
+	@Override
+	public Button getNewButton() {
+		return newButton;
+	}
+
+	@Override
+	public FileUpload getFileUpload() {
+		return fileUpload;
+	}
+
+	@Override
+	public TextBox getFileDescription() {
+		return fileDescription;
+	}
+	
+	//SPEC Change
 	private MessageConfirmationDialogBox confirmationDialogBox;
 	
 	// Highlight onViolation
@@ -311,6 +327,16 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 				return renderer.render(object.getDescription());
 			}
 		}, constants.fileDescription());
+		
+		addLastThreColumns();
+		table.addColumnStyleName(2, "iconCol");
+
+		// initList();
+	}
+
+	// SPEC Change
+	
+	public void addLastThreColumns(){
 		addColumn(new ActionCell<FileProxy>(OsMaConstant.DOWN_ICON,
 				new ActionCell.Delegate<FileProxy>() {
 					public void execute(FileProxy proxy) {
@@ -401,6 +427,19 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		C getValue(FileProxy proxy);
 	}
 
+	// SPEC Change
+	public void removeLastThreeColumns(){
+		
+		if(table != null){
+			if(table.getColumnCount() > 4){
+				table.removeColumn( table.getColumnCount()-1);
+				table.removeColumn( table.getColumnCount()-1);
+				table.removeColumn( table.getColumnCount()-1);
+			}
+		}
+		
+	}
+	
 	@Override
 	public CellTable<FileProxy> getTable() {
 		return table;

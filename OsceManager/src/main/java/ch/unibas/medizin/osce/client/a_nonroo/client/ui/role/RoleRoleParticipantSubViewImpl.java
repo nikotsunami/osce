@@ -167,6 +167,31 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 			}
 		}, constants.reviewer());
 		
+		addAuthorLastColumn();
+		
+		addReviewerLastColumn();
+			
+	}
+	//SPEC Change
+	public void removeAuthorLastColumn() {
+		if(authorTable != null){
+			if(authorTable.getColumnCount() > 1){
+				authorTable.removeColumn(authorTable.getColumnCount()-1);
+			}
+		}
+	}
+	
+	//SPEC Change
+	public void removeReviewerLastColumn() {
+		if(reviewerTable != null){
+			if(reviewerTable.getColumnCount() > 1){
+				reviewerTable.removeColumn(reviewerTable.getColumnCount()-1);
+			}
+		}
+	}
+	
+	//SPEC Change
+	public void addAuthorLastColumn() {
 		addColumn(new ActionCell<RoleParticipantProxy>(OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleParticipantProxy>() 
 		{
 					public void execute(final RoleParticipantProxy roleParticipantProxy) {
@@ -207,7 +232,10 @@ public class RoleRoleParticipantSubViewImpl extends Composite implements RoleRol
 					}
 		}, null);
 		authorTable.addColumnStyleName(1, "iconCol");
+	}
 		
+	//SPEC Change
+	public void addReviewerLastColumn() {
 		addColumnRe(new ActionCell<RoleParticipantProxy>(OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleParticipantProxy>() 
 				{
 							public void execute(final RoleParticipantProxy roleParticipantProxy) {
