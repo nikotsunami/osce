@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -20,12 +21,14 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -136,9 +139,34 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		}, constants.location());
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
-					public void execute(ScarProxy scar) {
-						if(Window.confirm("wirklich löschen?"))
-							delegate.deleteScarClicked(scar);
+					public void execute(final ScarProxy scar) {
+						/*if(Window.confirm("wirklich löschen?"))
+							delegate.deleteScarClicked(scar);*/
+						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");
+									
+									delegate.deleteScarClicked(scar);
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
 					}
 				}), "", new GetValue<ScarProxy>() {
 			public ScarProxy getValue(ScarProxy scar) {

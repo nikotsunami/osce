@@ -41,5 +41,6 @@ public interface ScarView extends IsWidget{
     
  // Highlight onViolation
     Map getScarMap();
+    Map getScarEditMap();
  // E Highlight onViolation
 }

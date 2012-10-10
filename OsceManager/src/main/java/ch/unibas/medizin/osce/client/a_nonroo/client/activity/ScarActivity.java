@@ -1,12 +1,14 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.List;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.Paging;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -15,9 +17,11 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TraitTypes;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -29,6 +33,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
+import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -50,7 +56,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	private PlaceController placeControler;
 	private AcceptsOneWidget widget;
 	private ScarView view;
-	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	/*celltable changes start*/
 	//private CellTable<ScarProxy> table;
 	private AdvanceCellTable<ScarProxy> table;
@@ -305,11 +311,30 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	
 	@Override
 	public void deleteClicked(ScarProxy scar) {
-		requests.scarRequest().remove().using(scar).fire(new Receiver<Void>() {
+		requests.scarRequest().remove().using(scar).fire(new OSCEReceiver<Void>() {
+			@Override
 			public void onSuccess(Void ignore) {
 				Log.debug("Sucessfully deleted");
 				setInserted(false);
 				init();
+			}
+			
+			
+			@Override
+			public void onViolation(Set<Violation> errors) {
+				// TODO Auto-generated method stub
+				Log.info("onViolation");
+				MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showConfirmationDialog("Scar Could not deleted Beacuse it assign to other");
+			}
+			
+			@Override
+			public void onFailure(ServerFailure error) {
+				// TODO Auto-generated method stub
+				Log.info("onFailure");
+				MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showConfirmationDialog("Scar Could not deleted Beacuse it assign to other");
+			
 			}
 		});
 	}
@@ -333,7 +358,7 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 		proxy.setBodypart(name);
 		proxy.setTraitType(traitTypes);
 		
-		scarReq.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getScarMap()){
+		scarReq.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getScarEditMap()){
 			@Override
 				public void onSuccess(Void arg0) {
 				setInserted(false);

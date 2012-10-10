@@ -132,6 +132,7 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 	
 	// Highlight onViolation
 	Map<String, Widget> scarMap;
+	Map<String, Widget> scarEditMap;
 	// E Highlight onViolation
 	
 	public ScarViewImpl() {
@@ -375,6 +376,10 @@ public Map getScarMap()
 		
 		((ScarEditPopupViewImpl)scarPopupView).setAnimationEnabled(true);
 		
+		scarEditMap=new HashMap<String, Widget>();
+		scarEditMap.put("bodypart",scarPopupView.getLocationTxtBox());
+		scarEditMap.put("traitType", scarPopupView.getTraitTypeBox());
+		
 		scarPopupView.getTraitTypeBox().setValue(scar.getTraitType());
 		
 		scarPopupView.getLocationTxtBox().setText(scar.getBodypart());
@@ -426,5 +431,11 @@ public Map getScarMap()
 		(((ScarEditPopupViewImpl)scarPopupView)).setPopupPosition(left1, top);
 		//(((ScarEditPopupViewImpl)scarPopupView)).getElement().getStyle().setZIndex(2);
 		(((ScarEditPopupViewImpl)scarPopupView)).show();
+	}
+
+	@Override
+	public Map getScarEditMap() {
+		// TODO Auto-generated method stub
+		return this.scarEditMap;
 	}
 }

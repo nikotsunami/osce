@@ -378,7 +378,7 @@ TopicsAndSpecDetailsView.Delegate
 	        //toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecDetailsViewPopupXPosition()),new Integer(constants.TopicsAndSpecDetailsViewPopupYPosition())); 
 	        //toolTip.setPopupPosition(left,top);
 	     // Violation Changes Highlight
-	        toolTip.setPopupPosition(left-180,top+10);
+	        toolTip.setPopupPosition(left-280,top+10);
 		     // E Violation Changes Highlight
 	        // E: Issue Role
 	        toolTip.show();

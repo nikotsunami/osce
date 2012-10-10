@@ -286,8 +286,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			
 			ResultSet rs;
 			
-			long candidateId, criteriaId, optionId, questionId, osmaid, oscepostroomid = 0, examinerid;
-			long tempcandidateid, tempquestionid, tempexaminerid;
+			long candidateId, criteriaId, optionId, questionId, osmaid, oscepostroomid = 0, examinerid = 0;
+			long tempcandidateid, tempquestionid, tempexaminerid = 0;
 			Answer answerTable;
 			
 			while (resultset.next())
@@ -315,19 +315,27 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					criteriaId = 0;
 				
 				//System.out.println("OSMAID OF CRITERIA : " + criteriaId);
+				rs = st.executeQuery("SELECT * FROM question WHERE id = " + tempquestionid);
+				long temptopicid = rs.getInt("topicId");
 				
-				rs = st.executeQuery("SELECT * FROM examiner WHERE firstname = 'Rath'");
+				rs = st.executeQuery("SELECT * FROM topic WHERE id = " + temptopicid);
+				long tempchecklistid = rs.getInt("checklistId");
+				
+				/*rs = st.executeQuery("SELECT * FROM examiner WHERE firstname = 'Rath'");
 				tempexaminerid = rs.getInt("id");
-				examinerid = rs.getInt("osmaId");
+				examinerid = rs.getInt("osmaId");*/
 				//System.out.println("EXAMINER ID : " + tempexaminerid);				
 				
-				rs = st.executeQuery("SELECT osmaId FROM station WHERE candidateId = " + tempcandidateid + " AND examinerId = " + tempexaminerid);
+				rs = st.executeQuery("SELECT osmaId FROM station WHERE candidateId = " + tempcandidateid + " AND checklistId = " + tempchecklistid);
 				if (rs.next())
 				{
 					oscepostroomid = rs.getInt("osmaId");
+					tempexaminerid = rs.getInt("examinerId");
 					//System.out.println("OSMAID OF OSCEPOSTROOM : " + oscepostroomid);
 				}
 				
+				rs = st.executeQuery("SELECT * FROM examiner WHERE id = " + tempexaminerid);
+				examinerid = rs.getInt("osmaId");
 				//System.out.println("OSMAID OF EXAMINER : " + examinerid);
 							
 				Student stud = Student.findStudent(candidateId);
@@ -338,6 +346,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				Doctor doctor = Doctor.findDoctor(examinerid);				
 			
 				answerTable = new Answer();
+				answerTable.setAnswer(resultset.getString("answer"));
 				answerTable.setStudent(stud);
 				answerTable.setChecklistQuestion(checklistQuestion);
 				answerTable.setChecklistOption(checklistOption);				

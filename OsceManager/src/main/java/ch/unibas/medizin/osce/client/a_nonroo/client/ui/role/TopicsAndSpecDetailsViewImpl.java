@@ -187,7 +187,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 					viewPopupMapAdd.put("studyYear",StudyYearListBox);
 				// E Violation Changes Highlight
 		
-		btnSave.addClickHandler(new ClickHandler() 
+		/*btnSave.addClickHandler(new ClickHandler() 
 		{		
 			@Override
 			public void onClick(ClickEvent event) {
@@ -197,7 +197,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 	// Violation Changes Highlight
 				
 				
-				/*if(AddTextBox.getValue()==null || StudyYearListBox.getValue()==null || AddTextBox.getText().equals(""))
+				if(AddTextBox.getValue()==null || StudyYearListBox.getValue()==null || AddTextBox.getText().equals(""))
 				{
 					Window.alert("Please Enter appropriate value for Role Base Item");
 					// Issue Role
@@ -214,7 +214,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 								}
 							});
 					 	//E: Issue Role
-				}*/
+				}
 				//else
 				//{
 				delegate.newClicked(AddTextBox.getValue(),slots_till_change.getValue(slots_till_change.getSelectedIndex()),StudyYearListBox.getValue());
@@ -239,7 +239,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				// E Violation Changes Highlight
 				addRolePopup.hide();
 			}
-		});
+		});*/
 		
 	}
 	
@@ -288,6 +288,35 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 //		FilterButton.setText("Filter");
 		AddButton.setText(constants.addRoleTopic());
 		//todo
+		btnSave.addClickHandler(new ClickHandler() 
+		{		
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Click on Save Role Button.");
+				Log.info("==>" + AddTextBox.getValue()+"==>" + slots_till_change.getValue(slots_till_change.getSelectedIndex())+"==>" + StudyYearListBox.getValue());
+				
+	
+				delegate.newClicked(AddTextBox.getValue(),slots_till_change.getValue(slots_till_change.getSelectedIndex()),StudyYearListBox.getValue());
+				
+			}
+		});
+		
+		btnCancel.addClickHandler(new ClickHandler() 
+		{		
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				Log.info("Click on Cancel Role Button.");
+				// Violation Changes Highlight
+
+				AddTextBox.removeStyleName("higlight_onViolation");
+				slots_till_change.removeStyleName("higlight_onViolation");
+				StudyYearListBox.removeStyleName("higlight_onViolation");
+				
+				// E Violation Changes Highlight
+				addRolePopup.hide();
+			}
+		});
 	}
 	
 	public String getQuery() {

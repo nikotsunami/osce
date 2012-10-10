@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
@@ -27,6 +28,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -145,9 +147,34 @@ public class StandardizedPatientLangSkillSubViewImpl extends Composite implement
 		
 		addColumn(new ActionCell<LangSkillProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<LangSkillProxy>() {
-					public void execute(LangSkillProxy langSkill) {
-						if(Window.confirm(constants.reallyDelete()))
-							delegate.deleteLangSkillClicked(langSkill);
+					public void execute(final LangSkillProxy langSkill) {
+						/*if(Window.confirm(constants.reallyDelete()))
+							delegate.deleteLangSkillClicked(langSkill);*/
+						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();									
+									Log.info("yes click");
+									delegate.deleteLangSkillClicked(langSkill);
+									return;
+
+										}
+									});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									Log.info("no click");
+									return;
+									
+								}
+							});
+
 					}
 				}), "", new GetValue<LangSkillProxy>() {
 					public LangSkillProxy getValue(LangSkillProxy skill) {

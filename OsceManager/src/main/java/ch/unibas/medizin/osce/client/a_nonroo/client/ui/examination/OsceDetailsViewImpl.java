@@ -635,7 +635,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		//filterPanel.show();
 		
 		Log.info("filterPanel width : " + filterPanel.getOffsetWidth());
-		filterPanel.setPopupPosition(left-200, top);		
+		filterPanel.setPopupPosition(left-400, top);		
 		filterPanel.show();
 		
 	}
