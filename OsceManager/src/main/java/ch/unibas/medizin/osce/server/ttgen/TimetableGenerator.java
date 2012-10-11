@@ -782,7 +782,7 @@ public class TimetableGenerator {
 		// total number of rotations is split among sequences, rotationOffset will be incremented
 		// by the number of rotations of a sequence after handling it.
 		// (e.g. and 1 osce-day has 2 sequences with 4 and 3 rotations, rotationOffset will then
-		// first be 0 and 4 after first iteration of sequences)
+		// first be 0 and 4 after first iteration of sequences)	
 		int rotationOffset = 0;
 		
 		int studentIndexLowerBound = 1;
@@ -791,11 +791,12 @@ public class TimetableGenerator {
 		Iterator<OsceDay> itDays = days.iterator();
 		while (itDays.hasNext()) {
 			OsceDay osceDay = (OsceDay) itDays.next();
-			
+								
 			log.info("day " + osceDay.getOsceDate() + " started");
 			
 			Date time = osceDay.getTimeStart();
 			
+			//Osce Day Start Time
 			Date sequenceStartTime = time;
 			
 			// iterate over sequences ("A", "B", etc.)
@@ -808,6 +809,7 @@ public class TimetableGenerator {
 				// number of rotations for current sequence (valid for all parcours in this sequence)
 				int numberRotations = osceSequence.getNumberRotation();
 				
+				// Osce Day Start Time in Sequence Iterator
 				Date parcourStartTime = sequenceStartTime;
 				
 				// iterate over all parcours (red, green, blue, etc.)
@@ -820,6 +822,7 @@ public class TimetableGenerator {
 					
 					int postsSinceSimpatChange = 0;
 					
+					// Osce Day Start Time in Sequence Iterator
 					Date rotationStartTime = parcourStartTime;
 					
 					simAssLastId = new long[numberPosts];
@@ -921,9 +924,7 @@ public class TimetableGenerator {
 								
 								if(postBP != null) {
 									// early start
-									boolean isAnamnesisTherapy = postType.equals(PostType.ANAMNESIS_THERAPY) &&
-											((!earlyStartFirst && !postBP.isFirstPart()) ||
-											(earlyStartFirst && postBP.isFirstPart()));
+									boolean isAnamnesisTherapy = postType.equals(PostType.ANAMNESIS_THERAPY) &&((!earlyStartFirst && !postBP.isFirstPart()) ||(earlyStartFirst && postBP.isFirstPart()));
 									boolean isPreparation = postType.equals(PostType.PREPARATION) && postBP.isFirstPart();
 									if(firstTimeSlot && (isAnamnesisTherapy || isPreparation)) {
 										startTime = dateSubtractMin(startTime, osce.getPostLength());
@@ -1079,7 +1080,10 @@ public class TimetableGenerator {
 //								if(osceDay.getOsceSequences().size() == 1 && (((osceDay.getLunchBreakAfterRotation() == null || osceDay.getLunchBreakAfterRotation() == 0) && halfRotations) ||
 //										(osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber))) {
 								log.warn(osceDay.getLunchBreakAfterRotation() + " " + currRotationNumber);
-								if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber) {
+								//SPEC[ As rotationOffset is start from 0 and actual rotation is start from 1, need to compare accordingly. Also next day current roation is not start from 1 so we have to add rotationOffSet in lunchBreakAfterRotation.
+								//if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber) {
+								if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && (osceDay.getLunchBreakAfterRotation()+rotationOffset) == (currRotationNumber+1)) {
+								//SPEC]
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
 									// trick to make sure postsSinceSimpatChange is 0 after outer loop (is incremented by numberSlotsTotal in outer-loop)
 									postsSinceSimpatChange = -1 * numberSlotsTotal;
