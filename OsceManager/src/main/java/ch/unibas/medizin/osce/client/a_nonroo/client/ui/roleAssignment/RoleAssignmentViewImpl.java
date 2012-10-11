@@ -272,7 +272,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 delegate.showApplicationLoading(true);
 		delegate.setSelectedRoleOsceDay(event.getOsceDayProxy());
 		delegate.setSelectedRole(event.getStandardizedRoleProxy());
-		delegate.initAdvancedSearchByStandardizedRole(event.getStandardizedRoleProxy().getId());
+		delegate.initAdvancedSearchByStandardizedRole(event.getStandardizedRoleProxy().getId(),false);
 	}
 	
 	@Override

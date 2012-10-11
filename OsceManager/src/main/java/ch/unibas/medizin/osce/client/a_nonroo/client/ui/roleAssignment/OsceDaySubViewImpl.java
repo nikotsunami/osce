@@ -88,12 +88,13 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		this.osceProxy = osceProxy;
 	}
 
-	ValueListBox<PatientAveragePerPost> patientAvgPerPost=new ValueListBox<PatientAveragePerPost>(new Renderer<PatientAveragePerPost>() {
+	FocusableValueListBox<PatientAveragePerPost> patientAvgPerPost=new FocusableValueListBox<PatientAveragePerPost>(new Renderer<PatientAveragePerPost>() {
 
 		@Override
 		public String render(PatientAveragePerPost object) {
 			// TODO Auto-generated method stub
-			return object == null ? "" : String.valueOf(object.getTypeId());
+			// Manish changes return object == null ? "" : String.valueOf(object.getTypeId());
+			return object == null ? null : String.valueOf(object.getTypeId());
 		}
 
 		@Override
@@ -108,7 +109,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 			new EnumRenderer<OSCESecurityStatus>() {
 				@Override
 				public String render(OSCESecurityStatus object) {
-					return object == null ? "" : String.valueOf(object.name());
+					return object == null ? null : String.valueOf(object.name());
 				}
 			}
 
@@ -163,11 +164,9 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 
 //		Log.info("temposceDayProxy "+ osceDayProxy.getId());
 //		Log.info("temposceDayProxy "+ osceProxy);
-		final OSCESecurityStatus osceSecurityStatus = patientSecurity
-				.getValue();
+		final OSCESecurityStatus osceSecurityStatus = patientSecurity.getValue();
 		
-		if (osceProxy != null
-				&& osceProxy.getSecurity() != null && osceSecurityStatus != null) {
+		if (osceProxy != null && osceProxy.getSecurity() != null && osceSecurityStatus != null) {
 
 			if (isSecurityStatusChange) {
 				
@@ -195,13 +194,10 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 					dialogBox.showYesNoDialog(constants.roleOSCESecurityChange());
 				}
 			} else {
-				final PatientAveragePerPost patientAveragePerPost = patientAvgPerPost
-						.getValue();
+				final PatientAveragePerPost patientAveragePerPost = patientAvgPerPost.getValue();
 				if (osceProxy.getPatientAveragePerPost() != null) {
-					if (patientAveragePerPost.ordinal() != osceProxy
-							.getPatientAveragePerPost().ordinal()) {
-						delegate.onOSCESecurityChange(osceProxy, null,
-								patientAveragePerPost, false);
+					if (patientAveragePerPost.ordinal() != osceProxy.getPatientAveragePerPost().ordinal()) {
+						delegate.onOSCESecurityChange(osceProxy, null,patientAveragePerPost, false);
 					}
 				} else {
 					delegate.onOSCESecurityChange(osceProxy, null,
@@ -211,11 +207,9 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		} else {
 			if (isSecurityStatusChange) {
 //				Log.info("osceProxy : "+osceProxy.getName());
-				delegate.onOSCESecurityChange(osceProxy,
-						patientSecurity.getValue(), null, true);
+				delegate.onOSCESecurityChange(osceProxy,patientSecurity.getValue(), null, true);
 			} else {
-				delegate.onOSCESecurityChange(osceProxy, null,
-						patientAvgPerPost.getValue(), false);
+				delegate.onOSCESecurityChange(osceProxy, null,patientAvgPerPost.getValue(), false);
 			}
 		}
 	}
@@ -401,7 +395,12 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 				delegate.showApplicationLoading(true);
 				Log.info("OsceProxy Id: " + osceDayProxy.getId());				
 				Log.info("osceProxy"+ osceProxy);
+				//Manish change to prevent call when null selected
+				if(arg0.getValue() !=null)
 				onValueChangeSecurity(false);
+				else
+				patientAvgPerPost.setValue(osceProxy.getPatientAveragePerPost());	
+				
 				delegate.showApplicationLoading(false);
 				
 			}
@@ -414,7 +413,10 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 				delegate.showApplicationLoading(true);
 				Log.info("OsceProxy Id: " + osceDayProxy.getId());
 				Log.info("osceProxy"+ osceProxy);
+				if(arg0.getValue() !=null)
 				onValueChangeSecurity(true);
+				else
+				patientSecurity.setValue(osceProxy.getSecurity());	
 				delegate.showApplicationLoading(false);
 				
 			}

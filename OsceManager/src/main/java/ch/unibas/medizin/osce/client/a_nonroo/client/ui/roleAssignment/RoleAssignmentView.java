@@ -38,7 +38,7 @@ public interface RoleAssignmentView extends IsWidget {
 		public String onAdvancedSearchCriteriaClicked(
 				AdvancedSearchCriteriaProxy advancedSearchCriteriaProxy);
 
-		public void initAdvancedSearchByStandardizedRole(long standardizedRoleID);
+		public void initAdvancedSearchByStandardizedRole(long standardizedRoleID,boolean isNavigationButtonEnable);
 		
 		public void onDeleteButtonClicked(PatientInSemesterData patientInSemesterData);
 		
