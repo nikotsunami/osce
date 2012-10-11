@@ -95,6 +95,34 @@ public class PatientInRole {
     }
  // module 3 bug }
     public static Integer removePatientInRoleByOSCE(Long osceId) {
+    	
+    	Osce osce =Osce.findOsce(osceId);
+    	List<OsceDay> allDaysOfOsce = osce.getOsce_days();
+    	Log.info("Total Days of an Osce Is Is :" + allDaysOfOsce.size());
+    	try{
+    	if(allDaysOfOsce.size() > 0){
+    		
+    		for (Iterator iterator = allDaysOfOsce.iterator(); iterator	.hasNext();) {
+				OsceDay osceDay = (OsceDay) iterator.next();
+				
+				Set<Assignment> allAssignmentsOfDay = osceDay.getAssignments();
+				Log.info("All Assignments of Day  :" + osceDay.getId() + " Is :" + allAssignmentsOfDay.size());
+
+				if(allAssignmentsOfDay.size() > 0){
+					for (Iterator iterator2 = allAssignmentsOfDay.iterator(); iterator2.hasNext();) {
+						Assignment assignment = (Assignment) iterator2.next();
+						
+						assignment.setPatientInRole(null);
+						assignment.persist();
+					}
+				}
+			}
+    	}
+    	}catch (Exception e) {
+			Log.info("Exception when setting PIR of all assignment as null of all deleted PIR");
+			e.printStackTrace();
+			
+		}
         getPatientIRoleList(osceId);
         return 0;
     }
@@ -127,6 +155,19 @@ public class PatientInRole {
     	OsceDay osceDay =getOsceDayBasedonPostId(patientInRole.getId());
     	Log.info("OSceDay Is :" + osceDay.getId());
     	
+    	List<Assignment> assignmentsOfDay =Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(),patientInRole.getId());
+    	Log.info("Assignment of day and Pir is :" + assignmentsOfDay.size());
+    	
+    	try{
+	    	if(assignmentsOfDay.size() > 0) {
+	    		
+		    	for (Iterator iterator = assignmentsOfDay.iterator(); iterator.hasNext();) {
+					Assignment assignment = (Assignment) iterator.next();
+					
+					assignment.setPatientInRole(null);
+					assignment.persist();
+				}
+	    	}
     	Integer count=getTotalTimePatientAssignInRole(osceDay.getId(),patientInRole.getPatientInSemester().getId());
     	Log.info("Number of PatientIn Role Is " +count);
     	
@@ -135,6 +176,11 @@ public class PatientInRole {
     	}
     	else{
     		flag=deletPatientInRoleNormally(patientInRole);
+    	}
+	    	}catch(Exception e){
+    		Log.info("Exception in Deleting PIR");
+    		e.printStackTrace();
+    		return false;
     	}
     	
     	return flag;
@@ -170,6 +216,7 @@ public class PatientInRole {
     	return flag;
     	
     }
+   
     public static OsceDay getOsceDayBasedonPostId(Long pirId){
     	Log.info("Inside getOsceDayBasedonPostId with semesterId " +pirId) ;
     	EntityManager em = entityManager();

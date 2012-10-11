@@ -2803,6 +2803,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							// module 3 bug {
 							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							// module 3 bug }
+							showApplicationLoading(false);
 						}
 						else{
 						

@@ -2,15 +2,10 @@ package ch.unibas.medizin.osce.server;
 /**
  * @author manish
  */
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +16,6 @@ import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
-import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.Semester;
@@ -30,10 +24,7 @@ import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.util;
 
-
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
@@ -286,11 +277,13 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											break;
 										}
 										// TODO: check if SP already has assignment at this sequence. If yes he may not be assigned
-										else if (false)
+										else if (Osce.isPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId()))
 										{
 											
 											break;
 										}
+										
+											
 										else{
 											
 											Set<AdvancedSearchCriteria> setAdvanceSearchCriteria=sortedOscePost.getStandardizedRole().getAdvancedSearchCriteria();
@@ -733,6 +726,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 				
 				OscePost sortedOscePost2=sortedOscePostByTypeAndComplexyList.get(index);
 			
+				if(Osce.isPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId())){
+					break;
+				}
 				Log.info("@@@Getted OscePost is :" + sortedOscePost2.getId());
 				//setAdvanceSearchCriteria=null;
 				
@@ -902,6 +898,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					
 					OscePost sortedOscePost3=sortedOscePostByTypeAndComplexyList.get(index);
 					
+					if(Osce.isPatientAssignInSequence(sortedOscePost3.getOsceSequence().getId(),sortedPatientInSemester1.getId())){
+						break;
+					}
 					//setAdvanceSearchCriteria.clear();
 					
 					Set<AdvancedSearchCriteria> setAdvanceSearchCriteria=sortedOscePost3.getStandardizedRole().getAdvancedSearchCriteria();
@@ -1064,6 +1063,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			allReadyPatientInRole+=1;
 		
 			// Assign SP To Role 2
+			
+			if(sortedOscePost.getOsceSequence().getId()!=sortedOscePost2.getOsceSequence().getId()){
 			if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
 			PatientInRole newPatientAssignInRole2 = new PatientInRole();
 			newPatientAssignInRole2.setFit_criteria(true);
@@ -1073,7 +1074,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			newPatientAssignInRole2.persist();
 			allReadyPatientInRole+=1;
 			}
-			
+			}
 				// Assign with Post NULL
 			Log.info("Assign Role With One Post As Null");
 			PatientInRole newPatientAssignInRole3 = new PatientInRole();
@@ -1096,6 +1097,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			allReadyPatientInRole+=1;
 		
 			// Assign SP To Role 2
+		if(sortedOscePost.getOsceSequence().getId()!=sortedOscePost2.getOsceSequence().getId()){
 		if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
 			PatientInRole newPatientAssignInRole2 = new PatientInRole();
 			newPatientAssignInRole2.setFit_criteria(true);
@@ -1105,6 +1107,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			newPatientAssignInRole2.persist();
 			allReadyPatientInRole+=1;
 		}
+	}
 	}
 
 }

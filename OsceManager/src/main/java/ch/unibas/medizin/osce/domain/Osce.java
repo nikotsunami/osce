@@ -479,7 +479,7 @@ public class Osce {
 		EntityManager em = entityManager();
 		//IF(rt.slotsUntilChange IS NULL OR rt.slotsUntilChange='0',1,0) as slotdes
 		String queryString="select op from OsceSequence as os, OscePost as op,RoleTopic as rt,StandardizedRole as sr,OscePostBlueprint as opb where" +
-		" os.osceDay= "+ osceDayId+" and op.osceSequence=os.id and op.standardizedRole=sr.id and opb.id=op.oscePostBlueprint and opb.postType NOT IN(1)" +
+		" os.osceDay= "+ osceDayId+" and op.osceSequence=os.id and sr.id=op.standardizedRole and opb.id=op.oscePostBlueprint and opb.postType NOT IN(1)" +
 				" and rt.id=sr.roleTopic and sr.roleType NOT IN (2)"+
 		" ORDER BY sr.roleType DESC,rt.slotsUntilChange DESC NULLS FIRST";
 		TypedQuery<OscePost> q = em.createQuery(queryString,OscePost.class);
@@ -730,6 +730,18 @@ public class Osce {
 		Long result  = q.getSingleResult();        
 		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
 		return result; 
+	}
+	
+	public static Boolean isPatientAssignInSequence(Long osceSequenceId,Long PISId){
+		Log.info("Call isPatientAssignInSequence With seq id :" +osceSequenceId + " PatientIn sem Id " + PISId);	
+		EntityManager em = entityManager();		
+		String queryString = "select count(*) from PatientInRole as pir,OscePost as op where op.osceSequence="+osceSequenceId + " and pir.oscePost=op.id and pir.patientInSemester="+PISId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		Long result  = q.getSingleResult();        
+		Log.info("Total Role For this seu is : "+result);
+		return result > 0 ? true : false;
+				
 	}
 
 	//module 3 f }
