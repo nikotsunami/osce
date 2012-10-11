@@ -1164,13 +1164,13 @@ public void roleSelected(RoleSubView roleSubView)
 	osceDayProxy=roleSubView.getOsceDayProxy();
 	requests.getEventBus().fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));	
 	
-	checkFitCriteria(roleSubView);
+	checkFitCriteria(roleSubView,false);
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		
 	showApplicationLoading(false);
 }
 
-public void checkFitCriteria(RoleSubView view)
+public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
 {
 	showApplicationLoading(true);
 	List<AdvancedSearchCriteriaProxy> listAdvanceSearchCirteria=new ArrayList<AdvancedSearchCriteriaProxy>();
@@ -1215,11 +1215,11 @@ public void checkFitCriteria(RoleSubView view)
 				}
 				if(flag && !patientInRoleProxy.getFit_criteria())
 				{
-					setFitCriteria(patientInRoleProxy,true);
+					setFitCriteria(patientInRoleProxy,true,refreshRole,view);
 				}
 				else if(!flag && patientInRoleProxy.getFit_criteria())
 				{
-					setFitCriteria(patientInRoleProxy,false);
+					setFitCriteria(patientInRoleProxy,false,refreshRole,view);
 				}
 				showApplicationLoading(false);
 				showApplicationLoading(false);
@@ -1239,7 +1239,7 @@ public void checkFitCriteria(RoleSubView view)
 	showApplicationLoading(false);
 }
 //change]
-public void setFitCriteria(PatientInRoleProxy patientInRoleProxy,boolean fit_criteria)
+public void setFitCriteria(PatientInRoleProxy patientInRoleProxy,boolean fit_criteria,final boolean refreshRole,final RoleSubView roleSubView)
 {
 	showApplicationLoading(true);
 	Log.info("setFitCriteria :");
@@ -1251,6 +1251,10 @@ public void setFitCriteria(PatientInRoleProxy patientInRoleProxy,boolean fit_cri
 		@Override
 		public void onSuccess(Void response) {
 			Log.info("setFitCriteria success");
+			if(refreshRole)
+			{
+				refreshRoleSubView(roleSubView, roleSubView.isLastRole());
+			}
 			showApplicationLoading(false);		
 		}
 		@Override
@@ -2908,7 +2912,8 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 
 			@Override
 			public void onSuccess(Void response) {
-				refreshRoleSubView(patientViewDragged.getRoleSubView(), patientViewDragged.getRoleSubView().isLastRole());
+				checkFitCriteria(patientViewDragged.getRoleSubView(),true);
+				//refreshRoleSubView(patientViewDragged.getRoleSubView(), patientViewDragged.getRoleSubView().isLastRole());
 				refreshRoleSubView(sourceRoleSubView,sourceRoleSubView.isLastRole());
 		//		patientViewDragged.setPatientInRoleProxy(patientInRoleProxy);			
 				initPatientInSemester(true,false,false);
