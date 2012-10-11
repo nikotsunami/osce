@@ -1026,7 +1026,10 @@ public class TimetableGenerator {
 											
 											Date startTimeNew = endTimeOld;
 											
-											if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber)
+											//SPEC[ As rotationOffset is start from 0 and actual rotation is start from 1, need to compare accordingly. Also next day current roation is not start from 1 so we have to add rotationOffSet in lunchBreakAfterRotation.
+											//if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && osceDay.getLunchBreakAfterRotation() == currRotationNumber)
+											if(osceDay.getOsceSequences().size() == 1 && osceDay.getLunchBreakAfterRotation() != null && osceDay.getLunchBreakAfterRotation() > 0 && (osceDay.getLunchBreakAfterRotation()+rotationOffset) == (currRotationNumber+1))
+											//SPEC]
 												startTimeNew = dateAddMin(endTimeOld, osce.getLunchBreak());
 											else
 												startTimeNew = dateAddMin(endTimeOld, osce.getLongBreak());
