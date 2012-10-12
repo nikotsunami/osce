@@ -31,4 +31,6 @@ public interface StandardizedPatientAdvancedSearchNationalityPopup extends IsWid
 	ValueListBox<NationalityProxy> getNationalityBox();
 	Map getMap();
 
+	// SPEC Change
+	void display(int positionX, int positionY);
 }

@@ -288,6 +288,9 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osce.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
 			osce.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
 			osce.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
+			
+			osce.setLunchBreakRequiredTime(((OsceEditViewImpl)view).lunchBreakRequiredTime.getValue());
+			osce.setLongBreakRequiredTime(((OsceEditViewImpl)view).longBreakRequiredTime.getValue());
 			osce.setMiddleBreak(((OsceEditViewImpl)view).middleBreak.getValue());
 			osce.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
 			
@@ -405,6 +408,8 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			osceProxy.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
 			osceProxy.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
 			osceProxy.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
+			osceProxy.setLunchBreakRequiredTime(((OsceEditViewImpl)view).lunchBreakRequiredTime.getValue());
+			osceProxy.setLongBreakRequiredTime(((OsceEditViewImpl)view).longBreakRequiredTime.getValue());
 			osceProxy.setMiddleBreak(((OsceEditViewImpl)view).middleBreak.getValue());
 			osceProxy.setStudyYear(((OsceEditViewImpl)view).studyYear.getValue());
 			//osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());

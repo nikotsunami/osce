@@ -194,10 +194,27 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 				<td>
 					<span ui:field="lunchBreak" />
 				</td>
+			
+				<td>
+					<span class="{style.label}" ui:field="labelLunchBreakRequiredTime">lunch Break Required Filed:</span>
+				</td>
+				<td>
+					<span ui:field="lunchBreakRequiredTime" />
+				</td>
+				
+			</tr>
+			
+			<tr>
+			<!-- <tr id="lunchBreak"> -->
+				<td>
+					<span class="{style.label}" ui:field="labelLOngBreakRequiredTime">lunch Break:</span>
+				</td>
+				<td>
+					<span ui:field="longBreakRequiredTime" />
+				</td>
 				<td></td>
 				<td></td>
 			</tr>
-			
 			
 			
 			

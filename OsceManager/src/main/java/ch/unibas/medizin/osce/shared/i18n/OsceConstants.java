@@ -1096,7 +1096,8 @@ public interface OsceConstants extends Constants {
 	public String afterTheOsce();
 	public String statisticsEvaluation();
 	public String statisticsEvaluationPlace();
-	
+	public String osceLunchBreakRequiredFiled();
+	public String osceLongBreakRequiredFiled();
 }
 
 

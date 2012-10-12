@@ -30,4 +30,6 @@ public interface StandardizedPatientAdvancedSearchLanguagePopup extends IsWidget
 	void display(Button addLanguage);
 	ValueListBox<SpokenLanguageProxy> getLanguageBox();
 	Map getMap();
+	// SPEC Change
+	void display(int positionX, int positionY);
 }

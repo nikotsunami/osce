@@ -31,4 +31,7 @@ public interface StandardizedPatientAdvancedSearchProfessionPopup extends IsWidg
 //		void setLanguagePickerValues(List<SpokenLanguageProxy> values);
 		ValueListBox<ProfessionProxy> getProfessionBox();
 		Map getAdvanceSearchCriteriaMap();
+		
+		//SPEC Change
+		void display(int positionX, int positionY);
 }

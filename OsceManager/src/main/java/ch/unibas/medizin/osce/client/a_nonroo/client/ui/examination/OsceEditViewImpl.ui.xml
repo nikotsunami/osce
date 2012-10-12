@@ -171,6 +171,23 @@
 				<td>
 				<r:ShortBox ui:field="lunchBreak" />
 				</td>
+				<td id="lunchBreakRequiredTime">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreakRequiredTime">Lunch Break Required Time :</div>
+				</td>
+				
+				<td>
+				<r:ShortBox ui:field="lunchBreakRequiredTime" />
+				</td>
+			</tr>
+			<tr>
+			
+				<td id="longBreakRequiredTime">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelLOngBreakRequiredTime">Long Break Required Time : :</div>
+				</td>
+				
+				<td>
+				<r:ShortBox ui:field="longBreakRequiredTime" />
+				</td>
 				<td></td>
 				<td></td>
 			</tr>	

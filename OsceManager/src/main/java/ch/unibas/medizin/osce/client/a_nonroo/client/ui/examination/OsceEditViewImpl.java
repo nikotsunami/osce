@@ -94,6 +94,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	public ShortBox lunchBreak;
 	
 	@UiField
+	public ShortBox lunchBreakRequiredTime;
+	
+	@UiField
+	public ShortBox longBreakRequiredTime;
+	
+	@UiField
 	public ShortBox middleBreak;
 	
 	// change {
@@ -158,6 +164,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	DivElement labelLongBreak;
 	@UiField
 	DivElement labelLunchBreak;
+	
+	@UiField
+	DivElement labelLunchBreakRequiredTime;
+	@UiField
+	DivElement labelLOngBreakRequiredTime;
+	
 	@UiField
 	DivElement labelStationLength;
 	@UiField
@@ -284,6 +296,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
 		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
 		labelSpStayInPost.setInnerText(constants.osceSpStayInPost());
+		labelLunchBreakRequiredTime.setInnerText(constants.osceLunchBreakRequiredFiled());
+		labelLOngBreakRequiredTime.setInnerText(constants.osceLongBreakRequiredFiled());
+		
 		//remove number post
 		//numberPost.setInnerText(constants.circuitStation() + ":");
 		
@@ -309,6 +324,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		//Issue # 122 : Replace pull down with autocomplete.
 		osceMap.put("middleBreak", middleBreak);
 		osceMap.put("shortBreak", shortBreakSimpatChange);
+		osceMap.put("lunchBreakRequiredTime", lunchBreakRequiredTime);
+		osceMap.put("longBreakRequiredTime", longBreakRequiredTime);
+		
+		
+		
+		
 		// E Highlight onViolation
 		
 		if(isRepeOsce.isChecked()==true)

@@ -149,6 +149,14 @@ public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
 		this.setPopupPosition(addScar.getAbsoluteLeft() - 5, addScar.getAbsoluteTop() - getOffsetHeight()/2 - 4);
 	}
 	
+	//SPEC Change
+	@Override
+	public void display(int positionX,int positionY) {
+		this.show();
+		this.setPopupPosition(positionX,positionY);
+	}
+	//SPEC Change
+	
 	@Override
 	public ValueListBox<ProfessionProxy> getProfessionBox() {
 		return professionBox;

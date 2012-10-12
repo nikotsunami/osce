@@ -2997,7 +2997,15 @@ final int index2 = index;
 		}
 		languagePopup = new StandardizedPatientAdvancedSearchLanguagePopupImpl();
 		languagePopup.setDelegate(this);
-		languagePopup.display(addLanguageButton);
+		
+		//SPEC Change
+		
+//		languagePopup.display(addLanguageButton);
+		int x = addLanguageButton.getAbsoluteLeft() - 235;
+		int y = addLanguageButton.getAbsoluteTop() - addLanguageButton.getOffsetHeight() - 15;
+		languagePopup.display(x,y);
+		
+		//SPEC Change
 		advancedSearchPopup = languagePopup;
 	}
 
@@ -3015,7 +3023,17 @@ final int index2 = index;
 		}
 		nationalityPopup = new StandardizedPatientAdvancedSearchNationalityPopupImpl();
 		nationalityPopup.setDelegate(this);
-		nationalityPopup.display(addNationalityButton);
+		
+		//SPEC Change
+		
+//		nationalityPopup.display(addNationalityButton);
+		int x = addNationalityButton.getAbsoluteLeft() - 235;
+		int y = addNationalityButton.getAbsoluteTop() - addNationalityButton.getOffsetHeight() - 15;
+		nationalityPopup.display(x,y);
+		
+		//SPEC Change
+		
+		
 		advancedSearchPopup = nationalityPopup;
 	}
 
@@ -6257,7 +6275,16 @@ final int index2 = index;
 		}
 		professionPopup = new StandardizedPatientAdvancedSearchProfessionPopupImpl();
 		professionPopup.setDelegate(this);
-		professionPopup.display(parentButton);
+
+		//SPEC Change
+		
+//		professionPopup.display(parentButton);
+		int x = parentButton.getAbsoluteLeft() - 335;
+		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
+		professionPopup.display(x,y);
+		
+		//SPEC Change
+		
 		advancedSearchPopup = professionPopup;
 		
 	}

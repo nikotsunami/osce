@@ -60,6 +60,11 @@ public class Osce {
     
     private Short middleBreak;
     
+    @NotNull
+    private Short lunchBreakRequiredTime;
+    
+    @NotNull
+    private Short longBreakRequiredTime;
     
    //s private Integer numberPosts;
 
