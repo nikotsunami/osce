@@ -53,6 +53,8 @@ public interface RoleAssignmentView extends IsWidget {
 		
 		public void setSelectedRole(StandardizedRoleProxy standardizedRoleProxy);
 		
+		public void getDetailedPatient(PatientInSemesterProxy patientInSemesterProxy,int left, int top);
+		
 	}
 
 	void setDelegate(Delegate delegate);

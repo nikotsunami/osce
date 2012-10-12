@@ -200,61 +200,63 @@ public class PatientInSemesterData {
 
 				Log.info("Index of Patient in semester : " + ((PatientAssignLabel) event.getSource()));
 
-				StringBuffer tempTraining = new StringBuffer();
-				StringBuffer tempOsceDay = new StringBuffer();
-				StringBuffer tempAssignedRole = new StringBuffer();
-
-				if (patientInSemesterProxy.getTrainings() != null) {
-
-					for (Iterator<TrainingProxy> iterator = patientInSemesterProxy.getTrainings().iterator(); iterator.hasNext();) {
-						TrainingProxy trainingProxy = (TrainingProxy) iterator.next();
-						Log.info("TrainingProxy.getName()" + trainingProxy.getName());
-						if (trainingProxy != null) {
-							if (tempTraining.toString().compareTo("") != 0) {
-								tempTraining.append(" ,");
-							}
-							tempTraining.append(trainingProxy.getName());
-						}
-
-					}
-				}
-
-				// DateFormat dateFormat = new SimpleDateFormat("DD-MM-YYYY");
-				if (patientInSemesterProxy.getOsceDays() != null) {
-					for (Iterator<OsceDayProxy> iterator = patientInSemesterProxy.getOsceDays().iterator(); iterator.hasNext();) {
-						OsceDayProxy osceDayProxy = (OsceDayProxy) iterator.next();
-						Log.info("OsceDayProxy.getName()" + osceDayProxy.getOsce().getName());
-						if (osceDayProxy != null) {
-							if (tempOsceDay.toString().compareTo("") != 0) {
-								tempOsceDay.append(" ,");
-							}
-							tempOsceDay.append((osceDayProxy.getOsceDate() != null) ? // dateFormat.format
-							(DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()))
-									: "" + " - " + ((osceDayProxy.getOsce() != null && osceDayProxy.getOsce().getName() != null) ? osceDayProxy.getOsce().getName() : ""));
-						}
-
-					}
-				}
-				if (patientInSemesterProxy.getPatientInRole() != null) {
-
-					for (Iterator<PatientInRoleProxy> iterator = patientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
-						PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
-						Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
-						if (patientInRoleProxy.getOscePost() != null) {
-							if (tempAssignedRole.toString().compareTo("") != 0) {
-								tempAssignedRole.append(" ,");
-							}
-							tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
-						}
-
-					}
-				}
-
-				if ((tempTraining.toString().compareTo("") == 0) && (tempOsceDay.toString().compareTo("") == 0) && (tempAssignedRole.toString().compareTo("") == 0)) {
-					return;
-				}
-
-				RoleAssignmentPopupViewImpl.setPopUpText(tempTraining.toString(), tempOsceDay.toString(), tempAssignedRole.toString(), event.getClientX(), event.getClientY());
+				delegate.getDetailedPatient(patientInSemesterProxy, event.getClientX(), event.getClientY());
+//				
+//				StringBuffer tempTraining = new StringBuffer();
+//				StringBuffer tempOsceDay = new StringBuffer();
+//				StringBuffer tempAssignedRole = new StringBuffer();
+//
+//				if (tempPatientInSemesterProxy.getTrainings() != null) {
+//
+//					for (Iterator<TrainingProxy> iterator = tempPatientInSemesterProxy.getTrainings().iterator(); iterator.hasNext();) {
+//						TrainingProxy trainingProxy = (TrainingProxy) iterator.next();
+//						Log.info("TrainingProxy.getName()" + trainingProxy.getName());
+//						if (trainingProxy != null) {
+//							if (tempTraining.toString().compareTo("") != 0) {
+//								tempTraining.append(" ,");
+//							}
+//							tempTraining.append(trainingProxy.getName());
+//						}
+//
+//					}
+//				}
+//
+//				// DateFormat dateFormat = new SimpleDateFormat("DD-MM-YYYY");
+//				if (tempPatientInSemesterProxy.getOsceDays() != null) {
+//					for (Iterator<OsceDayProxy> iterator = tempPatientInSemesterProxy.getOsceDays().iterator(); iterator.hasNext();) {
+//						OsceDayProxy osceDayProxy = (OsceDayProxy) iterator.next();
+//						Log.info("OsceDayProxy.getName()" + osceDayProxy.getOsce().getName());
+//						if (osceDayProxy != null) {
+//							if (tempOsceDay.toString().compareTo("") != 0) {
+//								tempOsceDay.append(" ,");
+//							}
+//							tempOsceDay.append((osceDayProxy.getOsceDate() != null) ? // dateFormat.format
+//							(DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()))
+//									: "" + " - " + ((osceDayProxy.getOsce() != null && osceDayProxy.getOsce().getName() != null) ? osceDayProxy.getOsce().getName() : ""));
+//						}
+//
+//					}
+//				}
+//				if (tempPatientInSemesterProxy.getPatientInRole() != null) {
+//
+//					for (Iterator<PatientInRoleProxy> iterator = tempPatientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
+//						PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
+//						Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
+//						if (patientInRoleProxy.getOscePost() != null) {
+//							if (tempAssignedRole.toString().compareTo("") != 0) {
+//								tempAssignedRole.append(" ,");
+//							}
+//							tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
+//						}
+//
+//					}
+//				}
+//
+//				if ((tempTraining.toString().compareTo("") == 0) && (tempOsceDay.toString().compareTo("") == 0) && (tempAssignedRole.toString().compareTo("") == 0)) {
+//					return;
+//				}
+//
+//				RoleAssignmentPopupViewImpl.setPopUpText(tempTraining.toString(), tempOsceDay.toString(), tempAssignedRole.toString(), event.getClientX(), event.getClientY());
 
 			}
 

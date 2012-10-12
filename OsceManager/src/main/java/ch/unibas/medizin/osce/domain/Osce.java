@@ -737,15 +737,15 @@ public class Osce {
 		return result; 
 	}
 	
-	public static Boolean isPatientAssignInSequence(Long osceSequenceId,Long PISId){
+	public static Long totalTimesPatientAssignInSequence(Long osceSequenceId,Long PISId){
 		Log.info("Call isPatientAssignInSequence With seq id :" +osceSequenceId + " PatientIn sem Id " + PISId);	
 		EntityManager em = entityManager();		
 		String queryString = "select count(*) from PatientInRole as pir,OscePost as op where op.osceSequence="+osceSequenceId + " and pir.oscePost=op.id and pir.patientInSemester="+PISId;
 		Log.info("Query String: " + queryString);
 		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
 		Long result  = q.getSingleResult();        
-		Log.info("Total Role For this seu is : "+result);
-		return result > 0 ? true : false;
+		Log.info("Total Role For this sequence is : "+result);
+		return result;
 				
 	}
 

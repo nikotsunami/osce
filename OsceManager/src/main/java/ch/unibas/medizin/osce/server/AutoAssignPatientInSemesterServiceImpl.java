@@ -65,6 +65,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			patientInRole.setIs_backup(setIs_backup);
 			patientInRole.setOscePost(setOscePost);
 			patientInRole.setPatientInSemester(patientInSemester);
+			patientInRole.setIs_first_in_sequence(true);
 			patientInRole.persist();
 		}
 	}
@@ -187,6 +188,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 			
 			 			OsceDay sortedOsceDay = sortedOsceDayIterator.next();
 			 			
+			 			Osce osce=sortedOsceDay.getOsce();
+			 			
 			 			List<OscePost> sortedOscePostList = Osce.getSortedOscePost(sortedOsceDay.getId());
 			 			Log.info("SortedOscePostFor OsceDay" + sortedOsceDay.getId() + " is  " + sortedOscePostList.size());
 			 			
@@ -212,10 +215,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								
 								Log.info("Parcour list size IS :" + parcourList.size());
 								
-								if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.simple){
+								if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){
 									neededSp=parcourList.size()*2;
 								}
-								else if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.federal){
+								else if(osce.getOsceSecurityTypes()==OsceSecurityType.federal){
 									neededSp=parcourList.size()+1;
 								}
 								
@@ -225,11 +228,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								int timeSlotsBeforLongBrak=0;
 								int slot_Till_change=sortedOscePost.getStandardizedRole().getRoleTopic().getSlotsUntilChange();
 								
-								int middleBreak = sortedOsceDay.getOsce().getMiddleBreak();
+								int middleBreak = osce.getMiddleBreak();
 								
 								Log.info("Middle Break is :" + middleBreak);
 	
-								int longBreak =sortedOsceDay.getOsce().getLongBreak();
+								int longBreak =osce.getLongBreak();
 								
 								Log.info("Long Break is :" + longBreak);
 								
@@ -277,9 +280,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											break;
 										}
 										// TODO: check if SP already has assignment at this sequence. If yes he may not be assigned
-										else if (Osce.isPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId()))
-										{
-											
+										else if(osce.getOsceSecurityTypes()==OsceSecurityType.federal && (Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=1)){
+											break;
+										}
+										else if(osce.getOsceSecurityTypes()==OsceSecurityType.simple && (Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=2)){
 											break;
 										}
 										
@@ -726,7 +730,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 				
 				OscePost sortedOscePost2=sortedOscePostByTypeAndComplexyList.get(index);
 			
-				if(Osce.isPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId())){
+				
+				if(Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=2){
 					break;
 				}
 				Log.info("@@@Getted OscePost is :" + sortedOscePost2.getId());
@@ -898,7 +903,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					
 					OscePost sortedOscePost3=sortedOscePostByTypeAndComplexyList.get(index);
 					
-					if(Osce.isPatientAssignInSequence(sortedOscePost3.getOsceSequence().getId(),sortedPatientInSemester1.getId())){
+					if(Osce.totalTimesPatientAssignInSequence(sortedOscePost3.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=2){
 						break;
 					}
 					//setAdvanceSearchCriteria.clear();
@@ -1054,26 +1059,70 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 		
 		// Assign SP To Role 1 
 		
+		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
+			if(totalTimePatientAssignInSeq==0){
 			PatientInRole newPatientAssignInRole1 = new PatientInRole();
 			newPatientAssignInRole1.setFit_criteria(true);
 			newPatientAssignInRole1.setIs_backup(false);
 			newPatientAssignInRole1.setOscePost(sortedOscePost);
 			newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
+			newPatientAssignInRole1.setIs_first_in_sequence(true);
 			newPatientAssignInRole1.persist();
 			allReadyPatientInRole+=1;
-		
+			}
+			else{
+	    		
+	    		if(totalTimePatientAssignInSeq==1){
+	    		
+	    			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(sortedPatientInSemester1.getId(),sortedOscePost.getOsceSequence().getId());
+	    			patientInRole.setIs_first_in_sequence(false);
+	    			patientInRole.persist();
+		    		
+	    		}
+	    		PatientInRole newPatientAssignInRole1 = new PatientInRole();
+				newPatientAssignInRole1.setFit_criteria(true);
+				newPatientAssignInRole1.setIs_backup(false);
+				newPatientAssignInRole1.setOscePost(sortedOscePost);
+				newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
+				newPatientAssignInRole1.setIs_first_in_sequence(false);
+				newPatientAssignInRole1.persist();
+				allReadyPatientInRole+=1;
+	    		
+	    	}
 			// Assign SP To Role 2
 			
-			if(sortedOscePost.getOsceSequence().getId()!=sortedOscePost2.getOsceSequence().getId()){
-			if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
-			PatientInRole newPatientAssignInRole2 = new PatientInRole();
-			newPatientAssignInRole2.setFit_criteria(true);
-			newPatientAssignInRole2.setIs_backup(false);
-			newPatientAssignInRole2.setOscePost(sortedOscePost2);
-			newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
-			newPatientAssignInRole2.persist();
-			allReadyPatientInRole+=1;
+			long totalTimePatientAssignInSeq2=Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId());
+			if(totalTimePatientAssignInSeq2==0){
+			if(Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId()) < 2){
+				if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
+				PatientInRole newPatientAssignInRole2 = new PatientInRole();
+				newPatientAssignInRole2.setFit_criteria(true);
+				newPatientAssignInRole2.setIs_backup(false);
+				newPatientAssignInRole2.setOscePost(sortedOscePost2);
+				newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
+				newPatientAssignInRole2.setIs_first_in_sequence(true);
+				newPatientAssignInRole2.persist();
+				allReadyPatientInRole+=1;
+					}
+				}
 			}
+			else{
+				
+				if(totalTimePatientAssignInSeq2==1){
+		    		
+	    			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(sortedPatientInSemester1.getId(),sortedOscePost2.getOsceSequence().getId());
+	    			patientInRole.setIs_first_in_sequence(false);
+	    			patientInRole.persist();
+		    		
+	    		}
+	    		PatientInRole newPatientAssignInRole1 = new PatientInRole();
+				newPatientAssignInRole1.setFit_criteria(true);
+				newPatientAssignInRole1.setIs_backup(false);
+				newPatientAssignInRole1.setOscePost(sortedOscePost2);
+				newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
+				newPatientAssignInRole1.setIs_first_in_sequence(false);
+				newPatientAssignInRole1.persist();
+				allReadyPatientInRole+=1;
 			}
 				// Assign with Post NULL
 			Log.info("Assign Role With One Post As Null");
@@ -1082,32 +1131,76 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			newPatientAssignInRole3.setIs_backup(false);
 			newPatientAssignInRole3.setOscePost(null);
 			newPatientAssignInRole3.setPatientInSemester(sortedPatientInSemester1);
+			newPatientAssignInRole3.setIs_first_in_sequence(false);
 			newPatientAssignInRole3.persist();
 	}
 	public void assignSpInToRole1AndRole2IsRoleAssigningSecondTime(OscePost sortedOscePost,OscePost sortedOscePost2,PatientInSemester sortedPatientInSemester1){
 		
 		// Assign SP To Role 1 
-		
+		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
+		if(totalTimePatientAssignInSeq==0){
 			PatientInRole newPatientAssignInRole1 = new PatientInRole();
 			newPatientAssignInRole1.setFit_criteria(true);
 			newPatientAssignInRole1.setIs_backup(false);
 			newPatientAssignInRole1.setOscePost(sortedOscePost);
 			newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
+			newPatientAssignInRole1.setIs_first_in_sequence(true);
 			newPatientAssignInRole1.persist();
 			allReadyPatientInRole+=1;
-		
+		}
+		else{
+    		
+    		if(totalTimePatientAssignInSeq==1){
+    		
+    			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(sortedPatientInSemester1.getId(),sortedOscePost.getOsceSequence().getId());
+    			patientInRole.setIs_first_in_sequence(false);
+    			patientInRole.persist();
+	    		
+    		}
+    		PatientInRole newPatientAssignInRole1 = new PatientInRole();
+			newPatientAssignInRole1.setFit_criteria(true);
+			newPatientAssignInRole1.setIs_backup(false);
+			newPatientAssignInRole1.setOscePost(sortedOscePost);
+			newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
+			newPatientAssignInRole1.setIs_first_in_sequence(false);
+			newPatientAssignInRole1.persist();
+			allReadyPatientInRole+=1;
+    		
+    	}
 			// Assign SP To Role 2
-		if(sortedOscePost.getOsceSequence().getId()!=sortedOscePost2.getOsceSequence().getId()){
-		if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
-			PatientInRole newPatientAssignInRole2 = new PatientInRole();
-			newPatientAssignInRole2.setFit_criteria(true);
-			newPatientAssignInRole2.setIs_backup(false);
-			newPatientAssignInRole2.setOscePost(sortedOscePost2);
-			newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
-			newPatientAssignInRole2.persist();
+		long totalTimePatientAssignInSeq2=Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId());
+		if(totalTimePatientAssignInSeq2==0){
+			if(Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId()) < 2){
+				if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
+					PatientInRole newPatientAssignInRole2 = new PatientInRole();
+					newPatientAssignInRole2.setFit_criteria(true);
+					newPatientAssignInRole2.setIs_backup(false);
+					newPatientAssignInRole2.setOscePost(sortedOscePost2);
+					newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
+					newPatientAssignInRole2.setIs_first_in_sequence(true);
+					newPatientAssignInRole2.persist();
+					allReadyPatientInRole+=1;
+				}
+			}
+		}
+		else{
+			
+			if(totalTimePatientAssignInSeq2==1){
+	    		
+    			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(sortedPatientInSemester1.getId(),sortedOscePost2.getOsceSequence().getId());
+    			patientInRole.setIs_first_in_sequence(false);
+    			patientInRole.persist();
+	    		
+    		}
+    		PatientInRole newPatientAssignInRole1 = new PatientInRole();
+			newPatientAssignInRole1.setFit_criteria(true);
+			newPatientAssignInRole1.setIs_backup(false);
+			newPatientAssignInRole1.setOscePost(sortedOscePost2);
+			newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
+			newPatientAssignInRole1.setIs_first_in_sequence(false);
+			newPatientAssignInRole1.persist();
 			allReadyPatientInRole+=1;
 		}
-	}
 	}
 
 }

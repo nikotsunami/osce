@@ -147,6 +147,10 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	@UiField
 	FocusPanel roleHeader;
 	
+	public FocusPanel getRoleHeader() {
+		return roleHeader;
+	}
+
 	public StandardizedRoleProxy getRoleProxy() {
 		return roleProxy;
 	}

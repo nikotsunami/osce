@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -87,6 +88,8 @@ public interface RoleSubView extends IsWidget{
 	 public boolean isLastRole() ;
 	 
 	 public void setLastRole(boolean isLastRole);
+	 
+	 public FocusPanel getRoleHeader();
 	 
 	//modul 3 changes }
 }
