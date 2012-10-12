@@ -47,12 +47,12 @@
 					</table>
 				</g:HTMLPanel>
 			</g:Tab>
-			<g:Tab>
+			<!-- <g:Tab>
 				<g:TabHTML></g:TabHTML>
 				<g:HTMLPanel addStyleNames="{style.patientDetails}">
 					<a:DoctorSetEditor ui:field='doctors' />
 				</g:HTMLPanel>
-			</g:Tab>
+			</g:Tab> -->
 		</g:TabPanel>
 		<g:HTMLPanel>
 			<div ui:field='errors' class='{style.errors}'></div>

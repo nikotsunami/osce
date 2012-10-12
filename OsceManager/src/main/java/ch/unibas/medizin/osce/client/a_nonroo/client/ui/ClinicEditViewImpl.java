@@ -53,8 +53,8 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 	TextBox city;
 	@UiField
 	IntegerBox postalCode;
-	@UiField
-	DoctorSetEditor doctors;
+	/*@UiField
+	DoctorSetEditor doctors;*/
 
 	@UiField
 	IconButton cancel;
@@ -82,7 +82,7 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 		clinicPanel.selectTab(0);
 
 		clinicPanel.getTabBar().setTabText(0, constants.generalInformation());
-		clinicPanel.getTabBar().setTabText(1, constants.doctors());
+		//clinicPanel.getTabBar().setTabText(1, constants.doctors());
 
 		TabPanelHelper.moveTabBarToBottom(clinicPanel);
 
@@ -110,7 +110,7 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 		clinicMap.put("street", street);
 		clinicMap.put("city", city);
 		clinicMap.put("postalCode", postalCode);
-		clinicMap.put("doctors", doctors);
+		//clinicMap.put("doctors", doctors);
 		// E Highlight onViolation
 	}
 
@@ -179,12 +179,12 @@ public class ClinicEditViewImpl extends Composite implements ClinicEditView, Edi
 
 	@Override
 	public void setDoctorsPickerValues(Collection<DoctorProxy> values) {
-		doctors.setAcceptableValues(values);
+		//doctors.setAcceptableValues(values);
 	}
 
 	@Override
 	public void setSelectedDetailsTab(int detailsTab) {
-		clinicPanel.selectTab(detailsTab);
+		//clinicPanel.selectTab(detailsTab);
 	}
 
 	@Override
