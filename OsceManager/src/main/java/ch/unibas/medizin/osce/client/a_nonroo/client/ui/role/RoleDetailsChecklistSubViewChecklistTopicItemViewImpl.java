@@ -384,7 +384,8 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
 		checklistQuestionMap.put("instruction", questionPopup.getDescriptionTxtBox());
 		// E Highlight onViolation
-		
+		((CheckListTopicPopupViewImpl)questionPopup).getTopicTxtBox().setText("");
+		((CheckListTopicPopupViewImpl)questionPopup).getDescriptionTxtBox().setText("");
 		((CheckListTopicPopupViewImpl)questionPopup).show();
 	}
 	@UiHandler("delete")

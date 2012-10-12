@@ -267,7 +267,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		private StandardizedPatientAdvancedSearchProfessionPopup professionPopup;
 		private StandardizedPatientAdvancedSearchWorkPermissionPopup workPermissionPopup;
 		private StandardizedPatientAdvancedSearchMaritialStatusPopupView maritialStausPopup;
-		
+		private int srcIndexOnDragStart=0;
 	// SPEC START =
 	
 	// Highlight onViolation
@@ -1885,6 +1885,9 @@ final int index2 = index;
 			
 			RoleDetailsChecklistSubViewChecklistTopicItemView view = new RoleDetailsChecklistSubViewChecklistTopicItemViewImpl();
 			
+			view.getDragController().addDragHandler(roleDetailActivity);
+						
+			
 			view.setDelegate(this);
 			view.setProxy(proxy);
 			((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view).descriptionLbl.setText(proxy.getDescription());
@@ -1978,14 +1981,14 @@ final int index2 = index;
 			questionView.getQuestionItemLbl().setText(proxy.getQuestion());
 			questionView.getQuestionInstruction().setText(proxy.getInstruction());
 			questionView.setProxy(proxy);
-			
-			
+			((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)questionView).getOptionDragController().addDragHandler(this);
+			((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)questionView).getCriteriaDragController().addDragHandler(this);
 			
 			questionView.setDelegate(this);
 			topicView.checkListQuestionVerticalPanel.insert(questionView, topicView.checkListQuestionVerticalPanel.getWidgetCount());
 			topicView.getDragController().makeDraggable(questionView.asWidget(), questionView.getQuestionItemLbl());
-			topicView.getDragController().addDragHandler(roleDetailActivity);
-			topicView.getCheckListQuestionVerticalPanel();
+			//topicView.getDragController().addDragHandler(roleDetailActivity);
+			//topicView.getCheckListQuestionVerticalPanel();
 		//	roleTopicInit(topicView.getProxy(),topicView);
 			Log.info("after View Created");
 	
@@ -2006,6 +2009,7 @@ final int index2 = index;
 			final ChecklistCriteriaProxy proxy=request.create(ChecklistCriteriaProxy.class);
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setCriteria(criteria);
+			proxy.setSequenceNumber(questionView.criteriaHorizontalPanel.getWidgetCount());
 			// Highlight onViolation
 			request.persist().using(proxy).fire(new OSCEReceiver<Void>() {
 			// E Highlight onViolation
@@ -2027,6 +2031,7 @@ final int index2 = index;
 			view.setProxy(proxy);
 			view.setDelegate(this);
 			questionView.getCriteriaDragController().makeDraggable(view.asWidget(),view.getCriteriaLbl());
+			//questionView.getCriteriaDragController().addDragHandler(this);
 			questionView.criteriaHorizontalPanel.insert(view, questionView.criteriaHorizontalPanel.getWidgetCount());
 //			questionView.criteriaHorizontalPanel.insert(new Label(),questionView.criteriaHorizontalPanel.getWidgetCount());
 		}
@@ -2044,7 +2049,7 @@ final int index2 = index;
 			proxy.setOptionName(option);
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setValue(value);
-			
+			proxy.setSequenceNumber(questionView.optionVerticalPanel.getWidgetCount());
 			// Highlight onViolation
 			Log.info("Map Size: " + questionView.getChecklistOptionMap().size());
 			request.persist().using(proxy).fire(new OSCEReceiver<Void>(questionView.getChecklistOptionMap()) 
@@ -5892,7 +5897,11 @@ final int index2 = index;
 @Override
 	public void onDragStart(DragStartEvent event) {
 		// TODO Auto-generated method stub
-
+	if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
+	{	
+		FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
+		srcIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+	}
 		Log.info("in Drag Start");
 	
 		
@@ -5957,16 +5966,60 @@ final int index2 = index;
 		{
 			Log.info("else if called ~~~~");
 			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
+			int dstIndex=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+			if(srcIndexOnDragStart==dstIndex)
+				return;
+			List<Long> optionIdList=new ArrayList<Long>();
+			for(int i=0;i<flowPanel.getWidgetCount();i++)
+			{
 		
+				Log.info("value~~~~"+ i);
+				Log.info("option name" +((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy().getOptionName());
+				optionIdList.add(((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy().getId());
 		
-		for(int i=0;i<flowPanel.getWidgetCount();i++)
+			}
+			requests.checklistOptionRequestNonRooo().updateSequence(optionIdList).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					Log.info("Option sequence updated success :" + response);
+					
+				}
+			});
+			
+			/*int dstIndex=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+			int srcIndex=((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getProxy().getSequenceNumber().intValue();
+			
+			int dstId=((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getProxy().getId().intValue();
+			int srcId=((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget((1+dstIndex))).getProxy().getId().intValue();
+			
+			Log.info("Dst Id :" + dstId + "dst Index: "  + dstIndex + "");
+			Log.info("Src Id :" + srcId + "Src Index: "  + srcIndex + "");
+			
+			if(srcIndex == dstIndex)
+				return;
+			else
+			{
+				
+			
+				requests.checklistOptionRequestNonRooo().updateSequence(dstId, dstIndex, srcId, srcIndex).fire(new OSCEReceiver<Boolean>() {
+	
+					@Override
+					public void onSuccess(Boolean response) {
+						Log.info("Option sequence updated success :" + response);
+						
+					}
+				});
+			}*/
+		/*for(int i=0;i<flowPanel.getWidgetCount();i++)
 		{
 			
 			Log.info("value~~~~"+ i);
+			Log.info("option name" +((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy().getOptionName());
 			updateOptionSequence(((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
 		
 		
-		}
+		}*/
 		}
 		
 		else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)

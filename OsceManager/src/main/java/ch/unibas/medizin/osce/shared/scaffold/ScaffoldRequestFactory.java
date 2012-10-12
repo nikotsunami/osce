@@ -70,4 +70,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	SkillHasApplianceRequestNonRoo skillHasApplianceRequestNonRoo();
 	
 	OscePostRequestNonRoo oscePostRequestNonRoo();
+	
+	ChecklistOptionRequestNonRooo checklistOptionRequestNonRooo();
 }
