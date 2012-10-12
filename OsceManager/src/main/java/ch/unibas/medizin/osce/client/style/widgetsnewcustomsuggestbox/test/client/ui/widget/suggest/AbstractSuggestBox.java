@@ -110,7 +110,7 @@ public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderIt
 		getTextField().setRepresenter(this);
 		//getTextField().setStyleName(SUGGEST_FIELD);
 		getTextField().setDefaultText(defaultText);
-		/*///// scrollPanel.setSize("125px", "130px"); */
+		 scrollPanel.setSize("125px", "150px"); 
 		suggestWidget.setWidget(scrollPanel);
 		
 		//suggestWidget.addStyleName("style.standardTable");
