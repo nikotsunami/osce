@@ -400,7 +400,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 			VerticalPanel osceDaySubViewContainerPanel = view.getOsceDaySubViewContainerPanel();
 			//boolean isopen =true;
 			osceDaySubViewContainerPanel.clear();
-			
+			osceDaySubViewImplList.clear();
 			Set<OsceProxy> setOsceProxy = semesterProxy.getOsces();
 			if(setOsceProxy==null)
 			{
@@ -1172,6 +1172,19 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
 {
 	Log.info("checkFitCriteria ");
 	showApplicationLoading(true);
+	if(view.getPatientInRoleVP().getWidgetCount()==0)
+	{
+		if(view.getBackUpVP() != null && view.getBackUpVP().getWidgetCount()==0)
+		{
+			showApplicationLoading(false);
+			return;
+		}
+		else if(view.getBackUpVP() ==null)
+		{
+			showApplicationLoading(false);
+			return;
+		}
+	}
 	List<AdvancedSearchCriteriaProxy> listAdvanceSearchCirteria=new ArrayList<AdvancedSearchCriteriaProxy>();
 	
 	listAdvanceSearchCirteria.addAll(view.getRoleProxy().getAdvancedSearchCriteria());
@@ -1181,9 +1194,11 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
 		@Override
 		public void onSuccess(Boolean response) {
 			Log.info("checkFitCriteria :" + response);
+			showApplicationLoading(false);
 			
 		}
 	});
+	
 	showApplicationLoading(false);
 }
 //change]

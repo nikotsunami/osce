@@ -195,17 +195,22 @@ public class PatientInSemester {
     	{
     		PatientInRole patientInRole=patientInRoleIterator.next();
     		
+    		boolean isFirstAssigned=false;
+    		
     		for(PatientInSemester p:patientInSemesters)
     		{
     			if(p.getId().equals(patientInRole.getPatientInSemester()))
     			{
-    				patientInRole.setFit_criteria(true);
+    				isFirstAssigned=true;
+    				break;
     			}
-    			else
-    				patientInRole.setFit_criteria(false);
+    			
     			
     		}
-    		
+    		if(isFirstAssigned)
+    			patientInRole.setFit_criteria(true);
+    		else
+    			patientInRole.setFit_criteria(false);
     		patientInRole.persist();
     	}
     	return true;
