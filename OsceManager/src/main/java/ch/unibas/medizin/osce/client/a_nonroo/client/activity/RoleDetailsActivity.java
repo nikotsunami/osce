@@ -156,6 +156,11 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -170,6 +175,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -603,7 +609,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 	@Override
 	public void newFileClicked(String fileName, String fileDescription,
-			final StandardizedRoleProxy proxy) {		
+			final StandardizedRoleProxy proxy,final FormPanel formPanel) {		
 		// TODO Auto-generated method stub
 		
 		Log.info("call newFileClicked");
@@ -633,6 +639,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					//ScrolledTab Changes start
 					//init(proxy.getId(), roleDetailTabPanel.getTabBar().getSelectedTab());
 					init(proxy.getId(), roleDetailTabPanel.getSelectedIndex());
+					formPanel.submit();
 					//ScrolledTab Changes end
 				}
 			});
@@ -6958,6 +6965,17 @@ public void onDragStart(DragStartEvent event) {
 		public void showApplicationLoading(Boolean show) {
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(show));
 
+		}
+		
+		public void downloadFile(final String path)
+		{
+			Log.info(" downloadFile  :" );
+			final String url="/downloadRoleFile?path="+path;
+			
+		   Window.open(url, path, "enabled");
+						 
+
+			
 		}
 	
 }
