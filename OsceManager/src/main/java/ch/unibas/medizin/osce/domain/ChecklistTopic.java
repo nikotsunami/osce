@@ -13,6 +13,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
+import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -102,6 +103,28 @@ public class ChecklistTopic {
 			return null;
 		Log.info("in OrderGreater "+resultList.size());
 		return resultList.get(0);
+	}
+	
+	public static Boolean updateSequence(List<Long> topicid) {
+		
+		try{
+			EntityManager em = entityManager();
+			
+			for(int i=0;i<topicid.size();i++)
+			{
+				ChecklistTopic topic =findChecklistTopic(topicid.get(i));
+				topic.setSort_order(i);
+				topic.persist();
+			}
+			
+			
+			
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	   

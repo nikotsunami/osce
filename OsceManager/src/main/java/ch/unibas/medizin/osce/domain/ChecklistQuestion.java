@@ -1,8 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -12,6 +11,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
+import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -33,11 +33,11 @@ public class ChecklistQuestion {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistQuestion")
 	@OrderBy("sequenceNumber")
-    private Set<ChecklistOption> checkListOptions = new HashSet<ChecklistOption>();
+    private List<ChecklistOption> checkListOptions = new ArrayList<ChecklistOption>();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistQuestion")
 	@OrderBy("sequenceNumber")
-    private Set<ChecklistCriteria> checkListCriterias = new HashSet<ChecklistCriteria>();
+    private List<ChecklistCriteria> checkListCriterias = new ArrayList<ChecklistCriteria>();
 	
 	@Size(max=50)
 	private String instruction;
@@ -98,5 +98,27 @@ public class ChecklistQuestion {
 			return null;
 		Log.info("in OrderGreater "+resultList.size());
 		return resultList.get(0);
+	}
+	
+	public static Boolean updateSequence(List<Long> questionid) {
+		
+		try{
+			EntityManager em = entityManager();
+			
+			for(int i=0;i<questionid.size();i++)
+			{
+				ChecklistQuestion question =findChecklistQuestion(questionid.get(i));
+				question.setSequenceNumber(i);
+				question.persist();
+			}
+			
+			
+			
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

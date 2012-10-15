@@ -267,7 +267,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		private StandardizedPatientAdvancedSearchProfessionPopup professionPopup;
 		private StandardizedPatientAdvancedSearchWorkPermissionPopup workPermissionPopup;
 		private StandardizedPatientAdvancedSearchMaritialStatusPopupView maritialStausPopup;
-		private int srcIndexOnDragStart=0;
+		private int srcOtionIndexOnDragStart=0;
+		private int srcTopicIndexOnDragStart=0;
+		private int srcQuestionIndexOnDragStart=0;
+		private int srcCriteriaIndexOnDragStart=0;
 	// SPEC START =
 	
 	// Highlight onViolation
@@ -5895,17 +5898,33 @@ final int index2 = index;
 	/*	});*/
 
 @Override
-	public void onDragStart(DragStartEvent event) {
-		// TODO Auto-generated method stub
+public void onDragStart(DragStartEvent event) {
+	
 	if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
 	{	
 		FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
-		srcIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+		srcOtionIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+		
+	}else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl){
+	
+		VerticalPanel vpQ=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource()).getParent());
+		srcQuestionIndexOnDragStart=vpQ.getWidgetIndex((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource());
+		
+	}else if (event.getSource() instanceof RoleDetailsChecklistSubViewChecklistTopicItemViewImpl ){
+		
+		VerticalPanel vp=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource()).getParent());
+		srcTopicIndexOnDragStart=vp.getWidgetIndex((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource());
+		
+	}else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl){
+		
+		FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource()).getParent());
+		srcCriteriaIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource());
+		
 	}
 		Log.info("in Drag Start");
 	
 		
-	}
+}
 
 	@Override
 	public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
@@ -5934,16 +5953,29 @@ final int index2 = index;
 			Log.info("if called ~~~~~~");
 			VerticalPanel vpQ=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource()).getParent());
 			
+			int dstIndex=vpQ.getWidgetIndex((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource());
+			if(srcQuestionIndexOnDragStart==dstIndex)
+				return;
+			
+			List<Long> questionIdList=new ArrayList<Long>();
 			
 			for(int i=0;i<vpQ.getWidgetCount();i++)
 			{
 				Log.info("value~~~~"+ i);
 				
-				updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,false,null,null);
-			
+				//updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,false,null,null);
+				questionIdList.add(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy().getId());
 			
 				
 			}
+			requests.checklistQuestionRequestNonRoo().updateSequence(questionIdList).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					Log.info("Option sequence updated success :" + response);
+					
+				}
+			});
 		
 		
 			}
@@ -5952,14 +5984,27 @@ final int index2 = index;
 			Log.info("else if called ~~~~");
 			VerticalPanel vp=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource()).getParent());
 		
-		
+			int dstIndex=vp.getWidgetIndex((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource());
+			if(srcTopicIndexOnDragStart==dstIndex)
+				return;
+			
+			List<Long> topicIdList=new ArrayList<Long>();
 		for(int i=0;i<vp.getWidgetCount();i++)
 		{
 			
 			Log.info("value~~~~"+ i);
 			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
+//			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy().getId());
 		
 		}
+//			requests.checklistTopicRequestNonRoo().updateSequence(topicIdList).fire(new OSCEReceiver<Boolean>() {
+//
+//				@Override
+//				public void onSuccess(Boolean response) {
+//					Log.info("Option sequence updated success :" + response);
+//					
+//				}
+//			});
 		}
 		
 		else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
@@ -5967,7 +6012,7 @@ final int index2 = index;
 			Log.info("else if called ~~~~");
 			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
 			int dstIndex=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
-			if(srcIndexOnDragStart==dstIndex)
+			if(srcOtionIndexOnDragStart==dstIndex)
 				return;
 			List<Long> optionIdList=new ArrayList<Long>();
 			for(int i=0;i<flowPanel.getWidgetCount();i++)
@@ -6027,15 +6072,26 @@ final int index2 = index;
 			Log.info("else if called ~~~~");
 			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource()).getParent());
 		
-		
+			int dstIndex=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource());
+			if(srcCriteriaIndexOnDragStart==dstIndex)
+				return;
+			List<Long> criteriaIdList=new ArrayList<Long>();
 		for(int i=0;i<flowPanel.getWidgetCount();i++)
 		{
 			
 			Log.info("value~~~~"+ i);
-			updateCriteriaSequence(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
-		
+			//updateCriteriaSequence(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
+			criteriaIdList.add(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy().getId());
 		
 		}
+		requests.checklistCriteriaRequestNonRooo().updateSequence(criteriaIdList).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				Log.info("Option sequence updated success :" + response);
+				
+			}
+		});
 		}
 		else{
 			Log.info("no selected event");
@@ -6812,6 +6868,11 @@ final int index2 = index;
 			
 			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
 			dialogBox.showConfirmationDialog(constants.confirmationMajorSkillAdded());		
+		}else{
+			
+			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+			dialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
+			
 		}
 
 			// SPEC Change
@@ -6856,6 +6917,11 @@ final int index2 = index;
 			
 			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.success());
 			dialogBox.showConfirmationDialog(constants.confirmationMinorSkillAdded());	
+			}else{
+				
+				MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+				dialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
+				
 			}
 
 			//SPEC Change

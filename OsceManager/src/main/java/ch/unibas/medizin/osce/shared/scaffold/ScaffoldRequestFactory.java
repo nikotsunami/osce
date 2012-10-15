@@ -72,4 +72,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	OscePostRequestNonRoo oscePostRequestNonRoo();
 	
 	ChecklistOptionRequestNonRooo checklistOptionRequestNonRooo();
+	
+	ChecklistCriteriaRequestNonRooo checklistCriteriaRequestNonRooo();
 }
