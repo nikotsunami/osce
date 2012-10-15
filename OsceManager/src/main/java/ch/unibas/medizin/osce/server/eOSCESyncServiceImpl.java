@@ -388,16 +388,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				timeslot = osceList.get(i).getOscePostBlueprints().size();
 				
 				List<OsceDay> osceDayList = OsceDay.findOsceDayByOsce(osceList.get(i).getId());
+				int startrotation = 0;
+				int totalrotation = 0;
 				
 				for (int j=0; j<osceDayList.size(); j++)
 				{
 					List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
 					System.out.println("SEQUENCE LIST : " + sequenceList.size());
 					
-					int totalrotation = 0;
-					int startrotation = 0;
 					for (int k=0; k<sequenceList.size(); k++)
 					{
+						startrotation = totalrotation;
 						totalrotation = totalrotation + sequenceList.get(k).getNumberRotation();
 						int rotationoffset = 0;
 						for (int l=startrotation; l<totalrotation; l++)
@@ -423,7 +424,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								xml = xml + "<number>" + oscePostRoomList.get(n).getRoom().getRoomNumber() + "</number>" + "\n";
 								xml = xml + "</room>" + "\n";
 								
-								List<Assignment> assignmentlist = Assignment.findAssignmentByOscePostRoom(oscePostRoomList.get(n).getId(), rotationoffset,timeslot);
+								List<Assignment> assignmentlist = Assignment.findAssignmentByOscePostRoom(oscePostRoomList.get(n).getId(), rotationoffset,timeslot, osceList.get(i).getId());
 								//System.out.println("Student assignment list size : " + assignmentlist.size());
 								
 								List<Assignment> examinerAssList = new ArrayList<Assignment>();
@@ -431,7 +432,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								{
 									Date timestart = assignmentlist.get(0).getTimeStart();
 									Date timeend = assignmentlist.get(assignmentlist.size()-1).getTimeStart();
-									examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoomList.get(n).getId(), timestart, timeend);
+									examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoomList.get(n).getId(), osceList.get(i).getId());
 								}
 								
 								xml = xml + "<examiners>" + "\n";
@@ -562,7 +563,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									BufferedWriter bufWriter = new BufferedWriter(new FileWriter(file));
 									bufWriter.write(xml);
 									bufWriter.close();
-									System.out.println("* * *" + file.getName() + " IS CREATED * * *");
+									//System.out.println("* * *" + file.getName() + " IS CREATED * * *");
 								}
 							}
 							xml = "";

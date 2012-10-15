@@ -693,20 +693,22 @@ public class Assignment {
 
 	// Module : 15
 	
-	public static List<Assignment> findAssignmentByOscePostRoom(Long id, int rotationoffset, int timeslot)
+	public static List<Assignment> findAssignmentByOscePostRoom(Long id, int rotationoffset, int timeslot, Long osceId)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 0 ORDER BY timeStart";
+    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 0 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
     	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
     	q.setFirstResult(rotationoffset);
     	q.setMaxResults(timeslot);
     	return q.getResultList();
     }
     
-    public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Date time_start, Date time_end)
+    public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Long osceId)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
+    	//String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
+    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+    	//System.out.println("EXAMINER QUERY : " + query);
     	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
     	return q.getResultList();
     }
