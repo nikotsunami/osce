@@ -13,6 +13,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -30,10 +31,12 @@ public interface RoleFileSubView extends IsWidget{
 		void fileMoveUp(FileProxy proxy,StandardizedRoleProxy standardizedRoleProxy);
 		void fileMoveDown(FileProxy proxy,StandardizedRoleProxy standardizedRoleProxy);
 		void fileDeleteClicked(FileProxy proxy,StandardizedRoleProxy standardizedRoleProxy);
-		void newFileClicked(String fileName,String fileDescription,StandardizedRoleProxy standardizedRoleProxy);
+		void newFileClicked(String fileName,String fileDescription,StandardizedRoleProxy standardizedRoleProxy,FormPanel formPanel);
 		//void performSearch(String q);
 		//void changeNumRowShown(String selectedValue);
 		void changeFilterTitleShown(String selectedTitle);
+		
+		public void downloadFile(String path);
 
 	}
 

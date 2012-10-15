@@ -26,8 +26,12 @@ import ch.unibas.medizin.osce.shared.Sorting;
 @SuppressWarnings("deprecation")
 @Service(Keyword.class)
 public interface KeywordRequestNonRoo extends RequestContext 
-{	
-	abstract Request<List<KeywordProxy>> findKeywordByStandRole(StandardizedRoleProxy id);
+{
+	
+	abstract Request<Long> findKeywordByStandRoleCount(StandardizedRoleProxy id);
+	abstract Request<List<KeywordProxy>> findKeywordByStandRole(StandardizedRoleProxy id,int startrange,int length);
+	
+	//zabstract Request<List<KeywordProxy>> findKeywordByStandRole(StandardizedRoleProxy id);
 	abstract Request<List<KeywordProxy>> findKeywordByStandardizedRoleID (Long standardizedRoleProxy, int firstResult, int maxResults);
 }
 

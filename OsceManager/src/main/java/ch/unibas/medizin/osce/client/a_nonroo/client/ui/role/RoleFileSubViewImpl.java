@@ -186,7 +186,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		
 		if(Validator.isNotNull(fileUpload.getFilename(),fileDescription.getValue())){
 			
-		delegate.newFileClicked(fileUpload.getFilename(),fileDescription.getValue(), this.getValue());		
+		delegate.newFileClicked(fileUpload.getFilename(),fileDescription.getValue(), this.getValue(),uploadFormPanel);	
+		
 		fileDescription.setValue("");
 		}else{
 			confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
@@ -228,7 +229,7 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 		fileUpload.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				uploadFormPanel.submit();
+			//	uploadFormPanel.submit();
 			}
 		});
 
@@ -254,6 +255,8 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 					public void onSubmitComplete(SubmitCompleteEvent event) {
 						Log.info("PS Submit is Complete " + event.getResults());
 						// Issue Role
+						uploadFormPanel.reset();
+						
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
 						 dialogBox.showConfirmationDialog(constants.fileUploadSuccess());
 						 
@@ -399,7 +402,18 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 				return file;
 			}
 		}, null);
-
+		
+		addColumn(new ActionCell<FileProxy>(OsMaConstant.DOWNLOAD_ICON,
+				new ActionCell.Delegate<FileProxy>() {
+					public void execute(FileProxy proxy) {
+						delegate.downloadFile(proxy.getPath());
+					}
+				}), "", new GetValue<FileProxy>() {
+			public FileProxy getValue(FileProxy proxy) {
+				return proxy;
+			}
+		}, null);
+		
 		table.addColumnStyleName(2, "iconCol");
 
 		// initList();

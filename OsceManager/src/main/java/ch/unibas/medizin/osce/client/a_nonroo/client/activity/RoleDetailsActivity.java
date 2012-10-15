@@ -156,6 +156,11 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -170,6 +175,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -603,7 +609,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 	@Override
 	public void newFileClicked(String fileName, String fileDescription,
-			final StandardizedRoleProxy proxy) {		
+			final StandardizedRoleProxy proxy,final FormPanel formPanel) {		
 		// TODO Auto-generated method stub
 		
 		Log.info("call newFileClicked");
@@ -633,6 +639,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 					//ScrolledTab Changes start
 					//init(proxy.getId(), roleDetailTabPanel.getTabBar().getSelectedTab());
 					init(proxy.getId(), roleDetailTabPanel.getSelectedIndex());
+					formPanel.submit();
 					//ScrolledTab Changes end
 				}
 			});
@@ -1169,7 +1176,68 @@ final int index2 = index;
 
 				});
 
-		requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<List<KeywordProxy>>()						 
+		requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<Long>()						 
+		{
+				@Override
+				public void onSuccess(Long response) 
+				{									
+					Log.info("~Success Call....");
+					Log.info("~findKeywordByStandRole()");
+					Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.intValue());
+					
+					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.intValue(), true);
+					
+					/*Range keywordTableRange= standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);
+					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+					
+					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);*/
+					//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+				
+		final Range keywordRange = standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+		requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[innerindex].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()						 
+				{
+						@Override
+						public void onSuccess(List<KeywordProxy> response) 
+						{									
+							Log.info("~Success Call....");
+							Log.info("~findKeywordByStandRole()");
+							Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
+							
+							
+							
+							//Range keywordTableRange= standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+							//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);
+							//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+							//table.setRowData(range.getStart(), values);
+							standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
+							//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+						}
+				});
+				}
+		});
+		standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[innerindex].getValue()).fire(new Receiver<Long>()						 
+						{
+								@Override
+								public void onSuccess(Long response) 
+								{									
+									Log.info("~Success Call....");
+									Log.info("~findKeywordByStandRole()");
+									Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.intValue());
+									
+									standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.intValue(), true);
+									
+									/*Range keywordTableRange= standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+									standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);
+									standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+									
+									standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);*/
+									//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+								
+						final Range keywordRange = standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+						requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[innerindex].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()						 
 		{
 				@Override
 				public void onSuccess(List<KeywordProxy> response) 
@@ -1177,7 +1245,21 @@ final int index2 = index;
 					Log.info("~Success Call....");
 					Log.info("~findKeywordByStandRole()");
 					Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
-					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+											
+											
+											
+											//Range keywordTableRange= standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+											//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);
+											//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+											//table.setRowData(range.getStart(), values);
+											//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
+											standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
+											//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+										}
+								});
+								}
+						});
+				
 				}
 		});
 
@@ -1538,10 +1620,12 @@ final int index2 = index;
 									@Override
 									public void onSuccess(
 											List<RoleTableItemValueProxy> response) {
+										if(response!=null)
+										{
 										Range range = roleBaseTableItemViewImpl.getTable().getVisibleRange();										
 										roleBaseTableItemViewImpl.getTable().setRowCount(response.size());
 										roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(),response);
-										
+										}
 										
 									}
 								});
@@ -4119,7 +4203,27 @@ final int index2 = index;
 								
 								// REFRESH KEYWORD TABLE DATA
 								
-								requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<List<KeywordProxy>>()
+										requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<Long>()
+												{
+														@Override
+														public void onSuccess(Long response) 
+														{
+															Log.info("~Success Call....");
+															Log.info("~REFRESH KEYWORD TABLE DATA");
+															Log.info("~findKeywordByStandRole()");
+															Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.intValue());
+															Log.info("~Fetch/SET Table Data");
+															//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+															//Range keywordTableRange= standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+															//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+															standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.intValue(),true);
+															//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+															
+														}
+												});
+								
+									final Range keywordRange = standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+									requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
 								{
 										@Override
 										public void onSuccess(List<KeywordProxy> response) 
@@ -4129,7 +4233,11 @@ final int index2 = index;
 											Log.info("~findKeywordByStandRole()");
 											Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
 											Log.info("~Fetch/SET Table Data");
-											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+											//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+											//Range keywordTableRange= standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+											/*standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);*/
+											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
 											
 										}
 								});	
@@ -4240,7 +4348,27 @@ final int index2 = index;
 				refreshRelationshipProxy();
 				
 				// REFRESH KEYWORD TABLE DATA
-				requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<List<KeywordProxy>>()
+				
+				requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<Long>()
+				{
+						@Override
+						public void onSuccess(Long response) 
+						{
+							Log.info("~Success Call....");
+							Log.info("~REFRESH KEYWORD TABLE DATA");
+							Log.info("~findKeywordByStandRole()");
+							Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.intValue());
+							Log.info("~Fetch/SET Table Data");									
+							//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+							//Range keywordTableRange= standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+							standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.intValue(),true);
+							//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+							//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+						}
+				});	
+				
+				final Range keywordRange = standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+				requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
 				{
 						@Override
 						public void onSuccess(List<KeywordProxy> response) 
@@ -4250,7 +4378,11 @@ final int index2 = index;
 							Log.info("~findKeywordByStandRole()");
 							Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
 							Log.info("~Fetch/SET Table Data");									
-							standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+											//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+											//Range keywordTableRange= standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+											//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);
+											//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+											standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
 						}
 				});	
 			}
@@ -5231,7 +5363,24 @@ final int index2 = index;
 
 				});
 
-		requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<List<KeywordProxy>>()						 
+		requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<Long>()						 
+		{
+				@Override
+				public void onSuccess(Long response) 
+				{									
+					Log.info("~Success Call....");
+					Log.info("~findKeywordByStandRole()");
+					Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.intValue());
+					//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+				//	Range keywordTableRange= standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.intValue(),true);
+			//		standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+				//	standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+				}
+		});
+		
+		final Range keywordRange = standardizedRoleDetailsView[index].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+		requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[index].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
 		{
 				@Override
 				public void onSuccess(List<KeywordProxy> response) 
@@ -5239,9 +5388,15 @@ final int index2 = index;
 					Log.info("~Success Call....");
 					Log.info("~findKeywordByStandRole()");
 					Log.info("~Set Data In Keyword Table:" + "Resp. Size: " + response.size());
-					standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+				//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
+				//Range keywordTableRange= standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
+				//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowCount(response.size(),true);
+				//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setPageSize(5);
+				standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
 				}
 		});
+
+	
 
 		requests.keywordRequest().findAllKeywords().fire(new Receiver<List<KeywordProxy>>() 
 		{
@@ -5993,18 +6148,18 @@ public void onDragStart(DragStartEvent event) {
 		{
 			
 			Log.info("value~~~~"+ i);
-			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
-//			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy().getId());
+//			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
+			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy().getId());
 		
 		}
-//			requests.checklistTopicRequestNonRoo().updateSequence(topicIdList).fire(new OSCEReceiver<Boolean>() {
-//
-//				@Override
-//				public void onSuccess(Boolean response) {
-//					Log.info("Option sequence updated success :" + response);
-//					
-//				}
-//			});
+			requests.checklistTopicRequestNonRoo().updateSequence(topicIdList).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					Log.info("Option sequence updated success :" + response);
+					
+				}
+			});
 		}
 		
 		else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
@@ -6958,6 +7113,17 @@ public void onDragStart(DragStartEvent event) {
 		public void showApplicationLoading(Boolean show) {
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(show));
 
+		}
+		
+		public void downloadFile(final String path)
+		{
+			Log.info(" downloadFile  :" );
+			final String url="/downloadRoleFile?path="+path;
+			
+		   Window.open(url, path, "enabled");
+						 
+
+			
 		}
 	
 }
