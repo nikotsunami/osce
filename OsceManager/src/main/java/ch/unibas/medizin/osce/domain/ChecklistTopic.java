@@ -17,6 +17,7 @@ import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -39,6 +40,15 @@ public class ChecklistTopic {
 	
 	@Size(max=50)
 	private String description;
+	
+	@Transactional
+	public ChecklistTopic save()
+	{
+		 if (this.entityManager == null) this.entityManager = entityManager();
+	        this.entityManager.persist(this);
+	        
+	      return this;
+	}
 	
 	public static Integer findMaxSortOrder()
 	{
@@ -105,14 +115,14 @@ public class ChecklistTopic {
 		return resultList.get(0);
 	}
 	
-	public static Boolean updateSequence(List<Long> topicid) {
+	public static Boolean updateSequence(List<ChecklistTopic> topicid) {
 		
 		try{
 			EntityManager em = entityManager();
 			
 			for(int i=0;i<topicid.size();i++)
 			{
-				ChecklistTopic topic =findChecklistTopic(topicid.get(i));
+				ChecklistTopic topic =topicid.get(i);
 				topic.setSort_order(i);
 				topic.persist();
 			}

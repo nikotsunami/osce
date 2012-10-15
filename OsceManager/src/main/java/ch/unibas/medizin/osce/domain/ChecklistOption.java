@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -33,14 +34,23 @@ public class ChecklistOption {
 	
 	private Integer sequenceNumber;
 	
-	public static Boolean updateSequence(List<Long> optionid) {
+	@Transactional
+	public ChecklistOption save()
+	{
+		 if (this.entityManager == null) this.entityManager = entityManager();
+	        this.entityManager.persist(this);
+	        
+	      return this;
+	}
+	
+	public static Boolean updateSequence(List<ChecklistOption> optionid) {
 		
 		try{
 			EntityManager em = entityManager();
 			
 			for(int i=0;i<optionid.size();i++)
 			{
-				ChecklistOption option=findChecklistOption(optionid.get(i));
+				ChecklistOption option=optionid.get(i);
 				option.setSequenceNumber(i);
 				option.persist();
 			}

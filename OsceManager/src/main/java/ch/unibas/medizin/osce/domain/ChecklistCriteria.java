@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 @RooJavaBean
 @RooToString
@@ -23,20 +24,19 @@ public class ChecklistCriteria {
 	
 	private Integer sequenceNumber;
 	
-	public static Boolean updateSequence(List<Long> criteriaid) {
-		
+	
+	
+	public static Boolean updateSequence(List<ChecklistCriteria> criterias)
+	{
 		try{
-			EntityManager em = entityManager();
 			
-			for(int i=0;i<criteriaid.size();i++)
+			int i=0;
+			for(ChecklistCriteria c:criterias)
 			{
-				ChecklistCriteria criteria =findChecklistCriteria(criteriaid.get(i));
-				criteria.setSequenceNumber(i);
-				criteria.persist();
+				c.setSequenceNumber(i);
+				c.persist();
+				i++;
 			}
-			
-			
-			
 			return true;
 		}
 		catch (Exception e) {
@@ -44,4 +44,6 @@ public class ChecklistCriteria {
 			return false;
 		}
 	}
+	
+	
 }

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
 
@@ -21,5 +22,7 @@ public interface ChecklistTopicRequestNonRoo extends RequestContext{
 	public abstract InstanceRequest<ChecklistTopicProxy, Void> topicMoveDown(long checklistID);
 	public abstract Request<ChecklistTopicProxy> findTopicsByOrderSmaller(int sort_order,long checklistID);
 	public abstract Request<ChecklistTopicProxy> findTopicsByOrderGreater(int sort_order,long checklistID);
-	public abstract Request<Boolean> updateSequence(List<Long> ids);
+	public abstract Request<Boolean> updateSequence(List<ChecklistTopicProxy> ids);
+	
+
 }

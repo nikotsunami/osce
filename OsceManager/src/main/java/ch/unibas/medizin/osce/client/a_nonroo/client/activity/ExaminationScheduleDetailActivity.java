@@ -53,6 +53,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -475,7 +476,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
 							
 							//insert break if any after the student slot
-							if((long)osceProxy.getShortBreakSimpatChange()==breakTime)
+							if((long)osceProxy.getShortBreak()==breakTime)
+							{
+								studentView.getStudentPanel().getElement().getStyle().setProperty("borderBottomWidth", breakTime+"px");
+							}
+							else if((long)osceProxy.getShortBreakSimpatChange()==breakTime)
 							{
 								
 								studentSlotLength--;
@@ -1594,6 +1599,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							refreshExaminerView(view);
 						}
 					});
+				}
+				else{
+					
+					//refresh ExaminerView;
+					refreshExaminerView(view);
 				}
 				((PopupViewImpl)view.getPopupView()).hide();
 			}

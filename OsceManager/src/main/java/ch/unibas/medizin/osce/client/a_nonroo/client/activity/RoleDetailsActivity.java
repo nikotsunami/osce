@@ -142,6 +142,7 @@ import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 import ch.unibas.medizin.osce.shared.ViewType;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.scaffold.ChecklistOptionRequestNonRooo;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -6112,14 +6113,14 @@ public void onDragStart(DragStartEvent event) {
 			if(srcQuestionIndexOnDragStart==dstIndex)
 				return;
 			
-			List<Long> questionIdList=new ArrayList<Long>();
+			List<ChecklistQuestionProxy> questionIdList=new ArrayList<ChecklistQuestionProxy>();
 			
 			for(int i=0;i<vpQ.getWidgetCount();i++)
 			{
 				Log.info("value~~~~"+ i);
 				
 				//updateQueSequence(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy(),i,false,null,null);
-				questionIdList.add(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy().getId());
+				questionIdList.add(((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)vpQ.getWidget(i)).getProxy());
 			
 				
 			}
@@ -6143,13 +6144,13 @@ public void onDragStart(DragStartEvent event) {
 			if(srcTopicIndexOnDragStart==dstIndex)
 				return;
 			
-			List<Long> topicIdList=new ArrayList<Long>();
+			List<ChecklistTopicProxy> topicIdList=new ArrayList<ChecklistTopicProxy>();
 		for(int i=0;i<vp.getWidgetCount();i++)
 		{
 			
 			Log.info("value~~~~"+ i);
-//			updateSequence(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy(),i,false,null,null);
-			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy().getId());
+			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy());
+//			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy().getId());
 		
 		}
 			requests.checklistTopicRequestNonRoo().updateSequence(topicIdList).fire(new OSCEReceiver<Boolean>() {
@@ -6169,13 +6170,13 @@ public void onDragStart(DragStartEvent event) {
 			int dstIndex=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
 			if(srcOtionIndexOnDragStart==dstIndex)
 				return;
-			List<Long> optionIdList=new ArrayList<Long>();
+			List<ChecklistOptionProxy> optionIdList=new ArrayList<ChecklistOptionProxy>();
 			for(int i=0;i<flowPanel.getWidgetCount();i++)
 			{
 		
 				Log.info("value~~~~"+ i);
 				Log.info("option name" +((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy().getOptionName());
-				optionIdList.add(((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy().getId());
+				optionIdList.add(((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy());
 		
 			}
 			requests.checklistOptionRequestNonRooo().updateSequence(optionIdList).fire(new OSCEReceiver<Boolean>() {
@@ -6230,13 +6231,14 @@ public void onDragStart(DragStartEvent event) {
 			int dstIndex=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource());
 			if(srcCriteriaIndexOnDragStart==dstIndex)
 				return;
-			List<Long> criteriaIdList=new ArrayList<Long>();
+			List<ChecklistCriteriaProxy> criteriaIdList=new ArrayList<ChecklistCriteriaProxy>();
+			
 		for(int i=0;i<flowPanel.getWidgetCount();i++)
 		{
 			
 			Log.info("value~~~~"+ i);
 			//updateCriteriaSequence(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
-			criteriaIdList.add(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy().getId());
+			criteriaIdList.add(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy());
 		
 		}
 		requests.checklistCriteriaRequestNonRooo().updateSequence(criteriaIdList).fire(new OSCEReceiver<Boolean>() {

@@ -15,6 +15,7 @@ import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.allen_sauer.gwt.log.client.Log;
 
@@ -41,6 +42,9 @@ public class ChecklistQuestion {
 	
 	@Size(max=50)
 	private String instruction;
+	
+	
+	
 	
 	public void questionMoveUp(long checklisTopictID) {
 		if (this.entityManager == null) {
@@ -100,14 +104,14 @@ public class ChecklistQuestion {
 		return resultList.get(0);
 	}
 	
-	public static Boolean updateSequence(List<Long> questionid) {
+	public static Boolean updateSequence(List<ChecklistQuestion> questionid) {
 		
 		try{
 			EntityManager em = entityManager();
 			
 			for(int i=0;i<questionid.size();i++)
 			{
-				ChecklistQuestion question =findChecklistQuestion(questionid.get(i));
+				ChecklistQuestion question =questionid.get(i);
 				question.setSequenceNumber(i);
 				question.persist();
 			}
