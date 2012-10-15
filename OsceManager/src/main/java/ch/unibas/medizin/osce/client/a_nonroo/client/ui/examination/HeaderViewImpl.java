@@ -78,7 +78,7 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 			colorLabel.addStyleName("colorPickerPopupLabelStyle");
 			Log.info("Color: " + ColorPicker.getConstByIndex(i).name());
 			colorLabel.setText("");
-			colorLabel.setTitle(ColorPicker.getConstByIndex(i).name());
+			//colorLabel.setTitle(ColorPicker.getConstByIndex(i).name());
 			Log.info("accordion-title-selected"+ColorPicker.getConstByIndex(i).name());
 			colorLabel.addStyleName("accordion-title-selected"+ColorPicker.getConstByIndex(i).name());
 			hpColor.add(colorLabel);

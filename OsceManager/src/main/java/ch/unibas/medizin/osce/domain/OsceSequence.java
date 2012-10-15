@@ -133,7 +133,7 @@ public class OsceSequence {
 				newOscePost.setOscePostBlueprint(oldOscePost.getOscePostBlueprint());
 				newOscePost.setOsceSequence(newOsceSequence);
 				newOscePost.setSequenceNumber(oldOscePost.getSequenceNumber());
-				newOscePost.setStandardizedRole(oldOscePost.getStandardizedRole());
+				//newOscePost.setStandardizedRole(oldOscePost.getStandardizedRole());
 				posts.add(newOscePost);
 			}
 			

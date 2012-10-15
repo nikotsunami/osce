@@ -220,7 +220,7 @@ public class RotationRefreshServiceImpl extends RemoteServiceServlet implements 
 								newOscePost.setSequenceNumber(oscePost.getSequenceNumber());
 								newOscePost.setOscePostBlueprint(oscePost.getOscePostBlueprint());
 								newOscePost.setOsceSequence(newOsceSequence);
-								newOscePost.setStandardizedRole(oscePost.getStandardizedRole());
+								//newOscePost.setStandardizedRole(oscePost.getStandardizedRole());
 								newOscePost.persist();								
 							}
 						}

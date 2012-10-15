@@ -686,6 +686,12 @@ AccordianPanelView.ParcourDelegate
 									//	sequenceOsceSubViewImpl=new SequenceOsceSubViewImpl(osceSeqProxy);
 										
 									sequenceOsceSubViewImpl = new SequenceOsceSubViewImpl();
+									
+									if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
+									{
+										sequenceOsceSubViewImpl.spliteSequence.setVisible(false);
+									}
+									
 									RotationRefreshEvent.register(requests.getEventBus(), (SequenceOsceSubViewImpl)sequenceOsceSubViewImpl);
 									//	sequenceOsceSubViewImpl=sequenceOsceSubViewImpl2;
 									//	sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
@@ -750,7 +756,7 @@ AccordianPanelView.ParcourDelegate
 								
 								//Module 5 Bug Report Solution
 								if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
-								{
+								{									
 									osceDayViewImpl.dateTextBox.setEnabled(false);
 									osceDayViewImpl.startTimeTextBox.setEnabled(false);
 									osceDayViewImpl.endTimeTextBox.setEnabled(false);
@@ -4968,10 +4974,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 				@Override
 				public void shiftLucnkBreakPrevClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImplTemp) {
-					
-					try
+						
+					/*try
 					{
-						if (osceDayProxy.getLunchBreakAfterRotation() != null || osceDayProxy.getLunchBreakAfterRotation() != 0)
+						*/						
+						//if (osceDayProxy.getLunchBreakAfterRotation() != null || osceDayProxy.getLunchBreakAfterRotation() != 0)
+						//if (i != null?(i != 0?true:false):false)						
+						if (osceDayProxy.getLunchBreakAfterRotation() != null?(osceDayProxy.getLunchBreakAfterRotation() != 0?true:false):false)
 						{
 							// Module 5 Bug Test Change
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
@@ -5242,12 +5251,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							});
 						}
 						
-
+/*
 					}
 					catch(Exception e)
 					{
 						System.out.println(e.getMessage());
-					}
+						System.out.println(e.getStackTrace());
+					}*/
 										
 				}
 
@@ -5264,10 +5274,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 				@Override
 				public void shiftLucnkBreakNextClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImplTemp) {
-					
-					try
-					{	
-						if (osceDayProxy.getLunchBreakAfterRotation() == null || osceDayProxy.getLunchBreakAfterRotation() == 0)
+										
+					//if (osceDayProxy.getLunchBreakAfterRotation() == null || osceDayProxy.getLunchBreakAfterRotation() == 0)
+					if (osceDayProxy.getLunchBreakAfterRotation() == null? true:(osceDayProxy.getLunchBreakAfterRotation()==0?true:false))
 						{	
 							// Module 5 Bug Test Change
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
@@ -5529,14 +5538,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								}
 							});
 						}
-
-					}
-					catch(Exception e)
-					{
-						System.out.println(e.getMessage());
-					}
 										
-					
 				}
 
           static class OsceProxyVerifier {
@@ -5737,3 +5739,4 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		
 	}
 }
+
