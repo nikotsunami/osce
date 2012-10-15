@@ -114,7 +114,7 @@ public class PatientInRole {
     		for (Iterator iterator = allDaysOfOsce.iterator(); iterator	.hasNext();) {
 				OsceDay osceDay = (OsceDay) iterator.next();
 				
-				Set<Assignment> allAssignmentsOfDay = osceDay.getAssignments();
+				List<Assignment> allAssignmentsOfDay = findAllAssignmentOfOsceDayWithPIRNotNULL(osceDay.getId());
 				Log.info("All Assignments of Day  :" + osceDay.getId() + " Is :" + allAssignmentsOfDay.size());
 
 				if(allAssignmentsOfDay.size() > 0){
@@ -136,6 +136,14 @@ public class PatientInRole {
         return 0;
     }
     
+    public static List<Assignment> findAllAssignmentOfOsceDayWithPIRNotNULL(Long osceDayId){
+    	Log.info("Inside findAllAssignmentOfOsceDayWithPIRNotNULL with dayId " +osceDayId) ;
+    	EntityManager em = entityManager();
+    	String query="select a from Assignment as a where a.osceDay="+osceDayId + " and a.patientInRole IS NOT NULL";
+        TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+        Log.info("Query Is " + query);
+        return q.getResultList();
+    }
     public static TypedQuery<PatientInRole> findPatientInRolesByPatientInSemesterAndOscePostIsNull(PatientInSemester patientInSemester) {
         if (patientInSemester == null) throw new IllegalArgumentException("The patientInSemester argument is required");
         EntityManager em = PatientInRole.entityManager();

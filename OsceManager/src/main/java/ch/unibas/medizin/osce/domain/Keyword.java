@@ -31,7 +31,7 @@ public class Keyword {
     
  // SPEC START =
     
-    public static java.util.List<Keyword> findKeywordByStandRole(StandardizedRole standRole)
+    public static long findKeywordByStandRoleCount(StandardizedRole standRole)
 	{
 		EntityManager em2 = entityManager();
 		Log.info("~QUERY findKeywordByStandRole()");
@@ -41,6 +41,25 @@ public class Keyword {
 		TypedQuery<Keyword> q = em2.createQuery(queryString, Keyword.class);
 		java.util.List<Keyword> result = q.getResultList();
 		Log.info("~QUERY Result : " + result);
+		return result.size();
+		//String queryString="SELECT o from Keyword as o WHERE o.standardizedRoles.id="+standRole.getId();
+		//String queryString="SELECT o FROM Keyword AS o WHERE o.standardizedRoles.id = :standRole";
+		//String queryString="select name from keyword,standardized_role_keywords,standardized_role where keyword.id=standardized_role_keywords.keywords and standardized_role_keywords.standardized_roles=standardized_role.id and standardized_role.id="+standRole;
+		//q.setParameter("standRole", standRole);
+	}
+    
+    public static java.util.List<Keyword> findKeywordByStandRole(StandardizedRole standRole,int startrange,int length)
+   	{
+   		EntityManager em2 = entityManager();
+   		Log.info("~QUERY findKeywordByStandRole()");
+   		Log.info("~QUERY BEFOREE EXECUTION  Stand Role ID  : " + standRole.getId());
+   		String queryString="SELECT o from Keyword as o join o.standardizedRoles sr where sr.id ="+standRole.getId();
+   		Log.info("~QUERY STRING : " +  queryString); 
+   		TypedQuery<Keyword> q = em2.createQuery(queryString, Keyword.class);
+   		q.setFirstResult(startrange);
+    	q.setMaxResults(length);
+   		java.util.List<Keyword> result = q.getResultList();
+   		Log.info("~QUERY Result : " + result);
 		return result;
 		//String queryString="SELECT o from Keyword as o WHERE o.standardizedRoles.id="+standRole.getId();
 		//String queryString="SELECT o FROM Keyword AS o WHERE o.standardizedRoles.id = :standRole";

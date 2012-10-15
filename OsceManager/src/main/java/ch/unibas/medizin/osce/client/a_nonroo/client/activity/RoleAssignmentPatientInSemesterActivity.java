@@ -1158,6 +1158,7 @@ public void roleSelected(RoleSubView roleSubView)
 	view.getDataTable().setNavigationButtonEnable(true);
 	oscePostProxy=roleSubView.getPostProxy();
 	roleSubViewSelected=(RoleSubViewImpl)roleSubView;
+	
 	osceDayProxy=roleSubView.getOsceDayProxy();
 	requests.getEventBus().fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));	
 	
@@ -1329,6 +1330,8 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 	
 	osceDayTimer.cancel();
 	
+	final long semesterId=patientInRoleView.getPatientInRoleProxy().getPatientInSemester().getId();
+	
 	// module 3 bug }
 	Log.info("deletePatientInRole PatientInRoleProxy: " + patientInRoleView.getPatientInRoleProxy().getId());
 	
@@ -1341,12 +1344,37 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 			if(response==true){
 				roleSubViewSelected.getRoleHeader().getWidget().removeStyleName("highlight-role");
 				RoleSubView roleSubView=patientInRoleView.getRoleSubView();
-				
+				patientInRoleView.removeFromParent();
 				//refreshOsceSequences(patientInRoleView.getRoleSubView().getOsceDayProxy(), patientInRoleView.getRoleSubView().getOsceDaySubViewImpl());
-				if(roleSubView.getOsceDaySubViewImpl().getOsceProxy().getOsceSecurityTypes()==OsceSecurityType.simple)
-					refreshAllRoleSubeView(roleSubView.getOsceDaySubViewImpl(),	roleSubView.getOsceSequenceProxy());
+				HorizontalPanel roleHP=(HorizontalPanel)(roleSubView.getRoleParent());
+				int count=0;
+				for(int i=1;i<roleHP.getWidgetCount();i++)
+				{
+					RoleSubView roleSubview=(RoleSubView)roleHP.getWidget(i);
+					VerticalPanel patientVP=roleSubview.getPatientInRoleVP();
+					VerticalPanel backupVP=roleSubview.getBackUpVP();
+					
+					for(int j=0;j<patientVP.getWidgetCount();j++)
+					{
+						PatientInRoleProxy patientInRoleProxy=((PatientInRoleSubView)patientVP.getWidget(j)).getPatientInRoleProxy();
+						Log.info("patientInSemesterProxy  :" + semesterId);
+						if(patientInRoleProxy.getPatientInSemester().getId().equals(semesterId))
+							count++;
+					}
+					for(int j=0;j<backupVP.getWidgetCount();j++)
+					{
+						PatientInRoleProxy patientInRoleProxy=((PatientInRoleSubView)backupVP.getWidget(j)).getPatientInRoleProxy();
+						if(patientInRoleProxy.getPatientInSemester().getId()==semesterId)
+							count++;
+					}
+					if(count>1)
+						break;
+				
+				}
+				if(count==1)
+					refreshAllRoleSubeView(roleSubViewSelected.getOsceDaySubViewImpl(), roleSubViewSelected.getOsceSequenceProxy());
 				else
-					refreshRoleSubView(roleSubView, roleSubView.isLastRole());
+					refreshRoleSubView(roleSubViewSelected, roleSubViewSelected.isLastRole());
 				
 				initPatientInSemester(true,false,false);
 				
@@ -2503,6 +2531,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			// module 3 bug {
 			
 			osceDayTimer.cancel();
+			OsceDayProxy osceDay=roleSubViewSelected.getOsceDaySubViewImpl().getOsceDayProxy();
 			
 			// module 3 bug }
 			// change {
@@ -2510,7 +2539,15 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			// change }
 			Log.info("Inside roleSelectedevent() at RoleAssignmentPatientInSemesterActivity.java");
 			
-			requests.osceDayRequestNooRoo().findRoleAssignedInOsceDay(standardizedRoleProxy.getId(),osceDaySubViewImpl.getOsceDayProxy().getId()).fire(new OSCEReceiver<Boolean>() {
+			if(osceDay.getId().longValue() == roleSelectedInOsceDay.getId().longValue()){
+				osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("highlight-role");
+			}
+			else{
+				osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
+			}
+			
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			/*requests.osceDayRequestNooRoo().findRoleAssignedInOsceDay(standardizedRoleProxy.getId(),osceDaySubViewImpl.getOsceDayProxy().getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -2529,7 +2566,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					
 					// module 3 bug }
 				}
-			});
+			});*/
 			
 		}
 

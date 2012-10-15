@@ -305,7 +305,7 @@ AccordianPanelView.ParcourDelegate
 						
 						oSCENewSubViewImpl=new OSCENewSubViewImpl();//.getOSCENewSubViewImpl();
 						 
-						view.getGenerateVP().add(new Label(enumConstants.getString(osceProxy.getOsceStatus().toString())));
+						//view.getGenerateVP().add(new Label(enumConstants.getString(osceProxy.getOsceStatus().toString())));
 						view.getGenerateVP().insert(oSCENewSubViewImpl, view.getGenerateVP().getWidgetCount());
 						//oSCENewSubViewImpl.
 						((CircuitDetailsViewImpl)view).oSCENewSubViewImpl=oSCENewSubViewImpl;
@@ -880,7 +880,7 @@ AccordianPanelView.ParcourDelegate
 								 //Module 5 Bug Report Solution
 								//osceDayViewImpl.getOsceDayLabel().setText("Day " + osceDayProxy.getId());
 								//changes for osce day Label
-								osceDayViewImpl.getOsceDayLabel().setText("Day " + dayvalue);
+								osceDayViewImpl.getOsceDayLabel().setText(constants.circuitDay() + dayvalue);
 								//changes for osce day Label
 								 //E Module 5 Bug Report Solution
 								osceDayViewImpl.init();
@@ -4429,12 +4429,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					popUpEditSequence.addStyleName("osceSequencePopupPanelSize");
 					name.addStyleName("osceSequencePopuplable");
 					//chaneNameOfSequence.addStyleName("osceSequencePopupComboBox");
-					chaneNameOfSequence.setWidth("55px");
+					chaneNameOfSequence.setWidth("60px");
 					chaneNameOfSequence.setStyleName("osceSequencePopupComboBox");
-					saveOsceSequence.setWidth("70px");
+					saveOsceSequence.setWidth("75px");
 					//saveOsceSequence.addStyleName("osceSequencePopupSaveButton");
 					saveOsceSequence.setStyleName("osceSequencePopupSaveButton");
-					closeOsceSequence.setWidth("70px");
+					closeOsceSequence.setWidth("75px");
 					//saveOsceSequence.addStyleName("osceSequencePopupSaveButton");
 					closeOsceSequence.setStyleName("osceSequencePopupCloseButton");
 					
