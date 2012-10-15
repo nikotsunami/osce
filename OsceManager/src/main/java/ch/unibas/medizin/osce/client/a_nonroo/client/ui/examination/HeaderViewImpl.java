@@ -57,7 +57,26 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 		top=event.getClientY();
 		initColorPickerPopupPanel(left,top);
 	}
+	private class ModifiedLabel extends Label{
+		String mTitle;
+		public String getmTitle() {
+			return mTitle;
+		}
+
+		public void setmTitle(String mTitle) {
+			this.mTitle = mTitle;
+		}
+
+		public ModifiedLabel() {
+		super();
+		}
 		
+		public ModifiedLabel(String mTitle) {
+			super();
+			this.mTitle=mTitle;
+		}
+		
+	}
 	private void initColorPickerPopupPanel(int left, int top) 
 	{
 		final PopupPanel colorPickerPopup=new PopupPanel(true);
@@ -74,11 +93,11 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 		
 		for(int i=0;i<colorPicker.length;i++)
 		{							
-			final Label colorLabel=new Label();					
+			final ModifiedLabel colorLabel=new ModifiedLabel();					
 			colorLabel.addStyleName("colorPickerPopupLabelStyle");
 			Log.info("Color: " + ColorPicker.getConstByIndex(i).name());
 			colorLabel.setText("");
-			//colorLabel.setTitle(ColorPicker.getConstByIndex(i).name());
+			colorLabel.setmTitle(ColorPicker.getConstByIndex(i).name());
 			Log.info("accordion-title-selected"+ColorPicker.getConstByIndex(i).name());
 			colorLabel.addStyleName("accordion-title-selected"+ColorPicker.getConstByIndex(i).name());
 			hpColor.add(colorLabel);
@@ -96,8 +115,8 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 				@Override
 				public void onClick(ClickEvent event) 
 				{
-					Log.info("Color Label: " + colorLabel.getTitle());
-					delegate.colorChanged(view,colorLabel.getTitle());
+					Log.info("Color Label: " + colorLabel.getmTitle());
+					delegate.colorChanged(view,colorLabel.getmTitle());
 					colorPickerPopup.hide();					
 				}
 			});
