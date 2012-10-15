@@ -288,5 +288,14 @@
 		<url-pattern>/osMaEntry/summonings</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>downloadRoleFile</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.upload.DownloadRoleFileServlet</servlet-class>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>downloadRoleFile</servlet-name>
+		<url-pattern>/downloadRoleFile</url-pattern>
+	</servlet-mapping>
  
 </web-app>
