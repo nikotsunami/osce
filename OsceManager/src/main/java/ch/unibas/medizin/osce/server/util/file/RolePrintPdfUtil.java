@@ -503,7 +503,7 @@ public class RolePrintPdfUtil {
 
 				PdfPTable criteriaTable = new PdfPTable(1);
 
-				Set<ChecklistCriteria> checklistQuestionSet = checklistQuestion
+				List<ChecklistCriteria> checklistQuestionSet = checklistQuestion
 						.getCheckListCriterias();
 
 				Log.info("checklistQuestionSet size : "
@@ -562,7 +562,7 @@ public class RolePrintPdfUtil {
 				// optionTable.addCell(getPdfCellBold(constants.name()));
 				optionTable.addCell(getPdfCellBold(constants.roleOptionValue()));
 
-				Set<ChecklistOption> checklistOptions = checklistQuestion
+				List<ChecklistOption> checklistOptions = checklistQuestion
 						.getCheckListOptions();
 				for (ChecklistOption checklistOption : checklistOptions) {
 
