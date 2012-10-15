@@ -71,6 +71,7 @@ public class PatientInSemester {
 		return resultList;
 	}
 	
+	
 	public static List<StandardizedPatient> findAvailableSPBySemester(Long semesterId) {
 		if (semesterId == null)
 			return new ArrayList<StandardizedPatient>();
@@ -181,6 +182,39 @@ public class PatientInSemester {
         return resultList;
     }
     
+    public static Boolean checkAndSetFitCriteriaOfRole(OscePost post,Long semesterId, List<AdvancedSearchCriteria> searchCriteria)
+    {
+    	
+    	try
+    	{
+    	List<PatientInSemester> patientInSemesters=findPatientInSemesterByAdvancedCriteria(semesterId,searchCriteria);
+    	
+    	 Iterator<PatientInRole> patientInRoleIterator=post.getPatientInRole().iterator();
+    	
+    	while(patientInRoleIterator.hasNext())
+    	{
+    		PatientInRole patientInRole=patientInRoleIterator.next();
+    		
+    		for(PatientInSemester p:patientInSemesters)
+    		{
+    			if(p.getId().equals(patientInRole.getPatientInSemester()))
+    			{
+    				patientInRole.setFit_criteria(true);
+    			}
+    			else
+    				patientInRole.setFit_criteria(false);
+    			
+    		}
+    		
+    		patientInRole.persist();
+    	}
+    	return true;
+    	}
+    	catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
     
     public static List<PatientInSemester> findPatientInSemesterByOsceDayAdvancedCriteria(Long semesterId,Long osceDayId,Boolean useOsceDay, List<AdvancedSearchCriteria> searchCriteria) {
 //        if(useOsceDay){

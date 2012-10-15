@@ -1170,69 +1170,20 @@ public void roleSelected(RoleSubView roleSubView)
 
 public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
 {
+	Log.info("checkFitCriteria ");
 	showApplicationLoading(true);
 	List<AdvancedSearchCriteriaProxy> listAdvanceSearchCirteria=new ArrayList<AdvancedSearchCriteriaProxy>();
 	
 	listAdvanceSearchCirteria.addAll(view.getRoleProxy().getAdvancedSearchCriteria());
 	
-	for(int i=0;i<view.getPatientInRoleVP().getWidgetCount();i++)
-	{
-		final PatientInSemesterProxy semester=((PatientInRoleSubView)view.getPatientInRoleVP().getWidget(i)).getPatientInRoleProxy().getPatientInSemester();
-		final PatientInRoleProxy patientInRoleProxy=((PatientInRoleSubView)view.getPatientInRoleVP().getWidget(i)).getPatientInRoleProxy();
-		Log.info("Semester Id :" + semester.getId());
-		if(listAdvanceSearchCirteria.size()!=0)
-		Log.info("Advance Search : " + listAdvanceSearchCirteria.get(0).getId());
-		
-		showApplicationLoading(true);
-		requests.patientInSemesterRequestNonRoo().findPatientInSemesterByAdvancedCriteria(semesterProxy.getId(),listAdvanceSearchCirteria).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+	requests.patientInSemesterRequestNonRoo().checkAndSetFitCriteriaOfRole(view.getPostProxy(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
 
-			@Override
-			public void onSuccess(List<PatientInSemesterProxy> response) {
-				showApplicationLoading(true);
-				Log.info("" +response);
-				boolean flag=false;
-				if(response==null)
-				{
-					Log.info(" onSuccess response null");
-				}
-				else
-				for(PatientInSemesterProxy p:response)
-				{
-					if(p.getStandardizedPatient().getId()==semester.getStandardizedPatient().getId()) //&& !patientInRoleProxy.getFit_criteria())
-					{
-						//setFitCriteria(patientInRoleProxy,true);
-						flag=true;
-						break;
-					}
-					/*else if(p.getStandardizedPatient().getId()!=semester.getStandardizedPatient().getId() && patientInRoleProxy.getFit_criteria())
-					{
-						setFitCriteria(patientInRoleProxy,false);
-						break;
-					}*/
-				}
-				if(flag && !patientInRoleProxy.getFit_criteria())
-				{
-					setFitCriteria(patientInRoleProxy,true,refreshRole,view);
-				}
-				else if(!flag && patientInRoleProxy.getFit_criteria())
-				{
-					setFitCriteria(patientInRoleProxy,false,refreshRole,view);
-				}
-				showApplicationLoading(false);
-				showApplicationLoading(false);
-			}
-			@Override
-					public void onFailure(ServerFailure error) {
-					showApplicationLoading(false);
-						super.onFailure(error);
-					}
-			@Override
-					public void onViolation(Set<Violation> errors) {
-					showApplicationLoading(false);
-						super.onViolation(errors);
-					}
-		});
-	}
+		@Override
+		public void onSuccess(Boolean response) {
+			Log.info("checkFitCriteria :" + response);
+			
+		}
+	});
 	showApplicationLoading(false);
 }
 //change]
@@ -1719,7 +1670,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 //							}
 //
 //						}
-
+						if(manualStdPatientInSemesterAssignmentPopupViewImpl==null)
 						manualStdPatientInSemesterAssignmentPopupViewImpl = new ManualStandardizedPatientInSemesterAssignmentPopupViewImpl();
 
 						manualStdPatientInSemesterAssignmentPopupViewImpl

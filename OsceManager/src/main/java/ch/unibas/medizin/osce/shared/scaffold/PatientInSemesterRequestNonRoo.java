@@ -3,9 +3,9 @@ package ch.unibas.medizin.osce.shared.scaffold;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 
 import com.google.gwt.requestfactory.shared.Request;
@@ -27,5 +27,7 @@ public interface PatientInSemesterRequestNonRoo extends RequestContext {
 	abstract Request<List<StandardizedPatientProxy>> findAvailableSPBySemester(Long semesterId);
 
 	abstract Request<Boolean> findAvailableSPActiveBySemester(Long semesterId);
+	
+	abstract Request<Boolean> checkAndSetFitCriteriaOfRole(OscePostProxy post,Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
 
 }
