@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
 import ch.unibas.medizin.osce.client.IndividualScheduleServiceAsync;
@@ -36,6 +37,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -136,7 +139,7 @@ IndividualSchedulesDetailsView.Delegate
 				
 		private void init() 
 		{
-			Log.info("Call Init()");
+			Log.info("Call Init()");			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			
 			requests.find(place.getProxyId()).fire(new OSCEReceiver<Object>() {
@@ -152,6 +155,18 @@ IndividualSchedulesDetailsView.Delegate
 							initExaminor(osceProxy.getId()); // Initialize View for Doctor		
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						}
+				}
+				@Override
+				public void onFailure(ServerFailure error) {
+					// TODO Auto-generated method stub
+					super.onFailure(error);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					// TODO Auto-generated method stub
+					super.onViolation(errors);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 
 			});
@@ -238,6 +253,7 @@ IndividualSchedulesDetailsView.Delegate
 		private void initSP(final OsceProxy osceProxy) 
 		{			
 			Log.info("Call initSP for Osce Id: " + osceProxy.getId());
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));			
 			lstChkSp=new ArrayList<CheckBox>();
 			lstStandPatProxy=new ArrayList<StandardizedPatientProxy>();			
 			/*lstSPTempStartTime=new ArrayList<String>();
@@ -371,14 +387,27 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});
 						}
-						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
+				}
+				@Override
+				public void onFailure(ServerFailure error) {
+					// TODO Auto-generated method stub
+					super.onFailure(error);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					// TODO Auto-generated method stub
+					super.onViolation(errors);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 			});
 		}
 		
 		private void initStudent(Long id) 
-		{
+		{		
 			Log.info("Call initStudent for Osce Id: " + id);
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			lstChkStud=new ArrayList<CheckBox>();
 			lstStudentProxy=new ArrayList<StudentProxy>();	
 			
@@ -436,6 +465,19 @@ IndividualSchedulesDetailsView.Delegate
 							}
 						});
 					}
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+				@Override
+				public void onFailure(ServerFailure error) {
+					// TODO Auto-generated method stub
+					super.onFailure(error);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					// TODO Auto-generated method stub
+					super.onViolation(errors);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 			});
 		}
@@ -443,6 +485,7 @@ IndividualSchedulesDetailsView.Delegate
 		private void initExaminor(Long id) 
 		{
 			Log.info("Call initExaminor for Osce Id: " + id);
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			lstChkExaminor=new ArrayList<CheckBox>();
 			lstExaminerProxy=new ArrayList<DoctorProxy>();	
 			requests.doctorRequestNonRoo().findDoctorByOsceId(id).fire(new OSCEReceiver<List<DoctorProxy>>() 
@@ -498,6 +541,19 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});
 						}
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+				@Override
+				public void onFailure(ServerFailure error) {
+					// TODO Auto-generated method stub
+					super.onFailure(error);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					// TODO Auto-generated method stub
+					super.onViolation(errors);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 			});
 		}	
@@ -632,6 +688,7 @@ IndividualSchedulesDetailsView.Delegate
 		@Override
 		public void printCopyforStud(ClickEvent event) 
 		{
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			Log.info("Call printCopyforStud()");			
 						
 			studId=new ArrayList<Long>();
@@ -652,18 +709,21 @@ IndividualSchedulesDetailsView.Delegate
 				
 				if(studId.size()>0)
 				{
-					initStudPopup();	
+					initStudPopup();
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 				else
 				{
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					MessageConfirmationDialogBox dialogStud=new MessageConfirmationDialogBox(constants.warning());
 					dialogStud.showConfirmationDialog(constants.warningSelectStudent());
 				}
-				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 			}
 			
 			else
 			{
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
 				dialog.showConfirmationDialog(constants.warningSelectStudent());
 			}
@@ -674,7 +734,7 @@ IndividualSchedulesDetailsView.Delegate
 		{
 			
 			Log.info("Call initStudPopup");
-			
+			//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			final PrintTemplatePopupViewImpl popupStud=new PrintTemplatePopupViewImpl();							
 			Log.info("get Stud Template Content.");
 			
@@ -689,12 +749,13 @@ IndividualSchedulesDetailsView.Delegate
 								{
 									osceProxyforTemplate=(OsceProxy) osceProxyIterator.next();
 									popupStud.getOsceList().addItem(osceProxyforTemplate.getName());
-								}
+								}								
 								//popupSP.getOsceList().addItem(response.get(0).getName());
-						}
+								//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						}						
 			});
 			
-			Log.info("Selected Osce: " + osceProxy.getName());
+			Log.info("Selected Osce: " + osceProxy.getName());			
 			//Feature : 154
 //			final String templateName="UpdatedTemplateStud"+osceProxy.getId()+".txt";
 			
@@ -708,12 +769,14 @@ IndividualSchedulesDetailsView.Delegate
 						Log.info("Go to Success..");
 						if(!"".equals(html[0]))
 						{
-							popupStud.setMessageContent(html[1]);	
+							popupStud.setMessageContent(html[1]);
+							/*requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));*/
 						}
 						else
 						{
+							/*requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));*/
 							MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
-							dialog.showConfirmationDialog(constants.errorTplNotFound());
+							dialog.showConfirmationDialog(constants.errorTplNotFound());							
 							
 						}
 						
@@ -723,8 +786,10 @@ IndividualSchedulesDetailsView.Delegate
 					@Override
 					public void onFailure(Throwable arg0) 
 					{
+						/*requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));*/
 						Log.info("Go to Failure.." + arg0.getMessage());											
 					}
+										
 			});
 
 				popupStud.center();

@@ -255,7 +255,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								
 								//if(tempSp==0)
 								//{
-									tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+									if(assignmentStandardizedPatient.getOscePostRoom()!=null)
+										tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+									else
+										tempOsceDayContent=tempOsceDayContent.replace("[ROLE]","");
 									
 									Long roleItemAccessId=findIdforRoleItemAccessByName(standardizedPatient.getName());
 									Log.info("Role Item Access for Standardized Patient: " + standardizedPatient.getName() + "is " + roleItemAccessId);
@@ -277,8 +280,17 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								tempScheduleContent=tempScheduleContent.replace("[START TIME]", startTime);
 								tempScheduleContent=tempScheduleContent.replace("[END TIME]", endTime);	
 								
-								tempScheduleContent=tempScheduleContent.replace("[POST]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getId().toString());
-								tempScheduleContent=tempScheduleContent.replace("[ROOM]", assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber().toString());
+								if(assignmentStandardizedPatient.getOscePostRoom()!=null)
+								{
+									tempScheduleContent=tempScheduleContent.replace("[POST]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getId().toString());
+									tempScheduleContent=tempScheduleContent.replace("[ROOM]", assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber().toString());
+								}
+								else
+								{
+									tempScheduleContent=tempScheduleContent.replace("[POST]", "");
+									tempScheduleContent=tempScheduleContent.replace("[ROOM]", "");									
+								}
+									
 								
 								scheduleContent=scheduleContent+tempScheduleContent;
 							}
@@ -537,9 +549,16 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								
 								tempScheduleContentStud=tempScheduleContentStud.replace("[START TIME]", startTime);
 								tempScheduleContentStud=tempScheduleContentStud.replace("[END TIME]", endTime);	
-								
-								tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", assignment.getOscePostRoom().getOscePost().getId().toString());
-								tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", assignment.getOscePostRoom().getRoom().getRoomNumber().toString());
+								if(assignment.getOscePostRoom()!=null)
+								{
+									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", assignment.getOscePostRoom().getOscePost().getId().toString());
+									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", assignment.getOscePostRoom().getRoom().getRoomNumber().toString());
+								}
+								else
+								{
+									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", "");
+									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", "");
+								}
 								
 								scheduleContentStud=scheduleContentStud+tempScheduleContentStud;
 							}
@@ -727,7 +746,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 														
 							Assignment assignmentExaminer=(Assignment)assignmentIterator.next();
 							Log.info("Assignment: "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in PatientInRole " + patientInRoleId);
-							tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]",""+assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());							
+							if(assignmentExaminer.getOscePostRoom()!=null)
+								tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]",""+assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());							
+							else
+								tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]","");
 							
 							tempScheduleContentExaminer=tempMailMessage.substring(tempMailMessage.indexOf("[SCHEDULE SEPARATOR]"), tempMailMessage.indexOf("[SCHEDULE SEPARATOR.]"));
 							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[SCHEDULE SEPARATOR]", "");
@@ -739,8 +761,16 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[START TIME]", startTime);
 							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[END TIME]", endTime);	
 							
-							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[POST]", assignmentExaminer.getOscePostRoom().getOscePost().getId().toString());
-							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", assignmentExaminer.getOscePostRoom().getRoom().getRoomNumber().toString());
+							if(assignmentExaminer.getOscePostRoom()!=null)
+							{
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[POST]", assignmentExaminer.getOscePostRoom().getOscePost().getId().toString());
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", assignmentExaminer.getOscePostRoom().getRoom().getRoomNumber().toString());
+							}
+							else
+							{
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[POST]", "");
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", "");
+							}
 							
 							scheduleContentExaminer=scheduleContentExaminer+tempScheduleContentExaminer;
 						}
@@ -773,7 +803,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								
 								//Long roleItemAccessId=1L;
 								//scriptDetail+=createRoleScriptDetails(assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
-								createRoleScriptDetails(assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+								if(assignmentExaminer.getOscePostRoom()!=null)
+									createRoleScriptDetails(assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);								
 								Log.info("Script Detail1 : " + scriptDetail);
 								
 							}
