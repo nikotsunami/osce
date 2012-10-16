@@ -79,6 +79,10 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	}
 	boolean isBackUpOnDragStart=false;
 	
+	private VerticalPanel patientVPOnDragStart;
+	
+
+	
 	StandardizedRoleProxy roleProxy;
 	
 	OscePostProxy postProxy;
@@ -286,6 +290,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		//Not Backup On End
 		if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof AbsolutePanel && isBackUpOnDragStart)
 		{
+			
 			this.getDragController2().makeNotDraggable(((PatientInRoleSubView)event.getSource()).asWidget());
 			this.getDragController1().makeDraggable(((PatientInRoleSubView)event.getSource()).asWidget(), ((PatientInRoleSubView)event.getSource()).getPatientInRoleLbl());
 			
@@ -302,6 +307,8 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		// drag to backup / drag to any other role view
 		else if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof SimplePanel && !isBackUpOnDragStart)
 		{
+			
+			
 			this.getDragController1().makeNotDraggable(((PatientInRoleSubView)event.getSource()).asWidget());
 			this.getDragController2().makeDraggable(((PatientInRoleSubView)event.getSource()).asWidget(), ((PatientInRoleSubView)event.getSource()).getPatientInRoleLbl());
 			refreshCountLabel();
@@ -318,6 +325,12 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 			Log.info("Patient Drop Target Widget Count"+((VerticalPanel)event.getContext().finalDropController.getDropTarget()).getWidgetCount());
 			PatientInRoleSubViewImpl patientDroped=(PatientInRoleSubViewImpl)event.getSource();
 			RoleSubViewImpl patientDropedIn=(RoleSubViewImpl)((VerticalPanel)((AbsolutePanel)((AbsolutePanel)((VerticalPanel)patientDroped.getParent()).getParent()).getParent()).getParent()).getParent();
+			
+			if(patientVPOnDragStart.equals(patientDropedIn.getPatientInRoleVP()))
+			{
+				delegate.showApplicationLoading(false);
+				return;
+			}
 			int count=0;
 			for(int i=0;i<patientDropedIn.getPatientInRoleVP().getWidgetCount();i++)
 			{
@@ -408,17 +421,20 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		{
 			onDragPatientID=((PatientInRoleSubViewImpl)event.getSource()).getPatientInRoleProxy().getPatientInSemester().getStandardizedPatient().getId();
 			sourceRoleView=(RoleSubViewImpl)((PatientInRoleSubViewImpl)event.getSource()).getRoleSubView();
+			patientVPOnDragStart=sourceRoleView.getPatientInRoleVP();
 		}
 		
 		//Log.info("Parent Widget Count on Start :" +((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getWidgetCount());
 		if(((VerticalPanel)((PatientInRoleSubViewImpl)event.getSource()).getParent()).getParent() instanceof AbsolutePanel)
 		{
 			Log.info("Not Back On Start");
+			patientVPOnDragStart=((PatientInRoleSubViewImpl)event.getSource()).getRoleSubView().getPatientInRoleVP();
 			isBackUpOnDragStart=false;
 		}
 		else
 		{
 			Log.info("Back On Start");
+			
 			isBackUpOnDragStart=true;
 		}
 	}

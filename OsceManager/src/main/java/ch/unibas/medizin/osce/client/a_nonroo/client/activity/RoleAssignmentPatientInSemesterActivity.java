@@ -1189,6 +1189,12 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
 	
 	listAdvanceSearchCirteria.addAll(view.getRoleProxy().getAdvancedSearchCriteria());
 	
+	if(listAdvanceSearchCirteria.size()==0)
+	{
+		showApplicationLoading(false);
+		return;
+	}
+	
 	requests.patientInSemesterRequestNonRoo().checkAndSetFitCriteriaOfRole(view.getPostProxy(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
@@ -1244,8 +1250,13 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 	
 	proxy=patientInRoleRequest.edit(proxy);
 	proxy.setIs_backup(isBackUp);
-	
+	proxy.setIs_first_in_sequence(false);
 	showApplicationLoading(true);
+
+	//when drag to backup HP
+	
+
+	
 	patientInRoleRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
 
 		@Override
@@ -1254,6 +1265,17 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 		
 //modul 3 changes {
 			
+			if(patientInRoleSubView.getPatientInRoleProxy().getFit_criteria())
+			{
+				//((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
+				((PatientInRoleSubViewImpl)patientInRoleSubView).removeStyleName("count-red");
+			}
+			else
+			{
+				((PatientInRoleSubViewImpl)patientInRoleSubView).addStyleName("count-red");
+				((PatientInRoleSubViewImpl)patientInRoleSubView).removeStyleName("count-yellow");
+			}
+			//when patient drag to backup
 			if(isBackUp)
 			{
 				//add patient in Role Sub View To Back Up
@@ -1279,7 +1301,164 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 			
 			//modul 3 changes }
 			//refreshOsceSequences(view.getOsceDayProxy(), view.getOsceDaySubViewImpl());
-			refreshAllRoleSubeView(patientInRoleSubView.getRoleSubView().getOsceDaySubViewImpl(), patientInRoleSubView.getRoleSubView().getOsceSequenceProxy());
+			//refreshAllRoleSubeView(patientInRoleSubView.getRoleSubView().getOsceDaySubViewImpl(), patientInRoleSubView.getRoleSubView().getOsceSequenceProxy());
+			
+			HorizontalPanel roleHP=view.getRoleParent();
+			if(isBackUp)
+			{
+				int count =0;
+				PatientInRoleProxy patientInRoleProxyFirstAssigned=null;
+				PatientInRoleSubView patientInRoleSubViewFirstAssigned=null;
+				for(int i=1;i<roleHP.getWidgetCount();i++)
+				{
+					RoleSubView roleSubView=(RoleSubView)roleHP.getWidget(i);
+					
+					for(int j=0;j<roleSubView.getPatientInRoleVP().getWidgetCount();j++)
+					{
+						PatientInRoleSubView patientInRoleView=(PatientInRoleSubView)roleSubView.getPatientInRoleVP().getWidget(j);
+						if(patientInRoleView.getPatientInRoleProxy().getPatientInSemester().getId().equals(patientInRoleSubView.getPatientInRoleProxy().getPatientInSemester().getId()))
+						{
+							patientInRoleSubViewFirstAssigned=patientInRoleView;
+							patientInRoleProxyFirstAssigned=patientInRoleView.getPatientInRoleProxy();
+							count++;
+						}
+					}
+					if(count >1)
+						break;
+				}
+				
+				if(count==1)
+				{
+					final PatientInRoleSubView patientInRoleSubView1=patientInRoleSubViewFirstAssigned;
+					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					patientInRoleProxyFirstAssigned=patientRequest.edit(patientInRoleProxyFirstAssigned);
+					patientInRoleProxyFirstAssigned.setIs_first_in_sequence(true);
+					patientRequest.persist().using(patientInRoleProxyFirstAssigned).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							
+							if(patientInRoleSubView1.getPatientInRoleProxy().getFit_criteria())
+							{
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-red");
+							}
+							else
+							{
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-red");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-yellow");
+							}
+							
+						}
+					});
+				}
+			}
+			//when dragged from backup to patientVP
+			else
+			{
+				int count =0;
+				PatientInRoleProxy patientInRoleProxyFirstAssigned=null;
+				PatientInRoleSubView patientInRoleSubViewFirstAssigned=null;
+				List<PatientInRoleSubView> patientViews=new ArrayList<PatientInRoleSubView>();
+				for(int i=1;i<roleHP.getWidgetCount();i++)
+				{
+					RoleSubView roleSubView=(RoleSubView)roleHP.getWidget(i);
+					
+					for(int j=0;j<roleSubView.getPatientInRoleVP().getWidgetCount();j++)
+					{
+						PatientInRoleSubView patientInRoleView=(PatientInRoleSubView)roleSubView.getPatientInRoleVP().getWidget(j);
+						if(patientInRoleView.getPatientInRoleProxy().getPatientInSemester().getId().equals(patientInRoleSubView.getPatientInRoleProxy().getPatientInSemester().getId()))
+						{
+							Log.info("patient in role id : " + patientInRoleProxy.getId().longValue() +" and " + (patientInRoleView.getPatientInRoleProxy().getId().longValue()));
+							if(!(patientInRoleProxy.getId().longValue()==(patientInRoleView.getPatientInRoleProxy().getId().longValue())))
+								patientViews.add(patientInRoleView);
+							
+							patientInRoleSubViewFirstAssigned=patientInRoleView;
+							patientInRoleProxyFirstAssigned=patientInRoleView.getPatientInRoleProxy();
+							count++;
+						}
+					}
+					if(count >2)
+						break;
+				}
+				
+				if(count==1)
+				{
+					final PatientInRoleSubView patientInRoleSubView1=patientInRoleSubViewFirstAssigned;
+					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					patientInRoleProxyFirstAssigned=patientRequest.edit(patientInRoleProxyFirstAssigned);
+					patientInRoleProxyFirstAssigned.setIs_first_in_sequence(true);
+					patientRequest.persist().using(patientInRoleProxyFirstAssigned).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							
+							if(patientInRoleSubView1.getPatientInRoleProxy().getFit_criteria())
+							{
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-red");
+							}
+							else
+							{
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-red");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-yellow");
+							}
+							
+						}
+					});
+				}
+				else if(count==2)
+				{
+					final PatientInRoleSubView patientInRoleSubView1=patientViews.get(0);
+					PatientInRoleProxy patientInRoleProxy1=patientInRoleSubView1.getPatientInRoleProxy();
+					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					patientInRoleProxy1=patientRequest.edit(patientInRoleProxy1);
+					patientInRoleProxy1.setIs_first_in_sequence(false);
+					patientRequest.persist().using(patientInRoleProxy1).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							
+							if(patientInRoleSubView1.getPatientInRoleProxy().getFit_criteria())
+							{
+								//((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-yellow");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-red");
+							}
+							else
+							{
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-red");
+								((PatientInRoleSubViewImpl)patientInRoleSubView1).removeStyleName("count-yellow");
+							}
+							
+						}
+					});
+					
+					/*final PatientInRoleSubView patientInRoleSubView2=patientViews.get(1);
+					PatientInRoleProxy patientInRoleProxy2=patientInRoleSubView2.getPatientInRoleProxy();
+					PatientInRoleRequest patientRequest2=requests.patientInRoleRequest();
+					patientInRoleProxy2=patientRequest2.edit(patientInRoleProxy2);
+					patientInRoleProxy2.setIs_first_in_sequence(false);
+					patientRequest2.persist().using(patientInRoleProxy2).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							
+							if(patientInRoleSubView2.getPatientInRoleProxy().getFit_criteria())
+							{
+								//((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
+								((PatientInRoleSubViewImpl)patientInRoleSubView2).removeStyleName("count-red");
+							}
+							else
+							{
+								((PatientInRoleSubViewImpl)patientInRoleSubView2).addStyleName("count-red");
+								((PatientInRoleSubViewImpl)patientInRoleSubView2).removeStyleName("count-yellow");
+							}
+							
+						}
+					});*/
+				}
+			}
 			showApplicationLoading(false);
 		}
 	});
@@ -1308,7 +1487,9 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 		public void onSuccess(Boolean response) {
 			Log.info("PatientInRole Deleted Successfully :" + response);
 			if(response==true){
-				roleSubViewSelected.getRoleHeader().getWidget().removeStyleName("highlight-role");
+				if(roleSubViewSelected != null)
+					roleSubViewSelected.getRoleHeader().getWidget().removeStyleName("highlight-role");
+				
 				RoleSubView roleSubView=patientInRoleView.getRoleSubView();
 				patientInRoleView.removeFromParent();
 				//refreshOsceSequences(patientInRoleView.getRoleSubView().getOsceDayProxy(), patientInRoleView.getRoleSubView().getOsceDaySubViewImpl());
@@ -1327,20 +1508,20 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 						if(patientInRoleProxy.getPatientInSemester().getId().equals(semesterId))
 							count++;
 					}
-					for(int j=0;j<backupVP.getWidgetCount();j++)
+					/*for(int j=0;j<backupVP.getWidgetCount();j++)
 					{
 						PatientInRoleProxy patientInRoleProxy=((PatientInRoleSubView)backupVP.getWidget(j)).getPatientInRoleProxy();
 						if(patientInRoleProxy.getPatientInSemester().getId()==semesterId)
 							count++;
-					}
+					}*/
 					if(count>1)
 						break;
 				
 				}
 				if(count==1)
-					refreshAllRoleSubeView(roleSubViewSelected.getOsceDaySubViewImpl(), roleSubViewSelected.getOsceSequenceProxy());
+					refreshAllRoleSubeView(roleSubView.getOsceDaySubViewImpl(), roleSubView.getOsceSequenceProxy());
 				else
-					refreshRoleSubView(roleSubViewSelected, roleSubViewSelected.isLastRole());
+					refreshRoleSubView(roleSubView, roleSubView.isLastRole());
 				
 				initPatientInSemester(true,false,false);
 				
@@ -1384,7 +1565,7 @@ public void deleteBackupRoles(RoleSubView view,PatientInRoleProxy patientInRoleP
 	int totalBackupRoles=view.getBackUpRoleView().getPatientInRoleVP().getWidgetCount();
 	for(int count=0;count<totalBackupRoles;count++){
 		Log.info("patientInRoleProxy Id  backup :" +((PatientInRoleSubView)backupRoleView.getPatientInRoleVP().getWidget(count)).getPatientInRoleProxy().getId());
-		if((long)((PatientInRoleSubView)backupRoleView.getPatientInRoleVP().getWidget(count)).getPatientInRoleProxy().getId()==(long)patientInRoleProxy.getId()){
+		if(((PatientInRoleSubView)backupRoleView.getPatientInRoleVP().getWidget(count)).getPatientInRoleProxy().getId().longValue()==patientInRoleProxy.getId().longValue()){
 			((PatientInRoleSubViewImpl)backupRoleView.getPatientInRoleVP().getWidget(count)).removeFromParent();
 			break;
 		}
@@ -2187,7 +2368,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					initPatientInSemester(false, true, isNavigationButtonEnable);
 				}
 				
-				initPatientInSemester(false,true,false);
+			//	initPatientInSemester(false,true,false);
 				showApplicationLoading(false);
 								
 				//Module 3 : Assignment E : Stop

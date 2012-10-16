@@ -740,7 +740,7 @@ public class Osce {
 	public static Long totalTimesPatientAssignInSequence(Long osceSequenceId,Long PISId){
 		Log.info("Call isPatientAssignInSequence With seq id :" +osceSequenceId + " PatientIn sem Id " + PISId);	
 		EntityManager em = entityManager();		
-		String queryString = "select count(*) from PatientInRole as pir,OscePost as op where op.osceSequence="+osceSequenceId + " and pir.oscePost=op.id and pir.patientInSemester="+PISId;
+		String queryString = "select count(*) from PatientInRole as pir,OscePost as op where op.osceSequence="+osceSequenceId + " and pir.oscePost=op.id and pir.patientInSemester="+PISId +" and pir.is_backup=false";
 		Log.info("Query String: " + queryString);
 		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
 		Long result  = q.getSingleResult();        
