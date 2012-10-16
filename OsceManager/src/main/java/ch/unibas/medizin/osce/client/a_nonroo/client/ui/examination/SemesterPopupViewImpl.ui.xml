@@ -37,11 +37,11 @@
 		<g:VerticalPanel>
 			 <g:HorizontalPanel>
 				<g:VerticalPanel spacing="2">
-					<g:Label styleName="{style.topPadding}" ui:field="labelYear">Year</g:Label>
-					<g:Label styleName="{style.topPadding}" ui:field="labelSemester">Semester</g:Label>
-					<g:Label styleName="{style.topPadding}" ui:field="labelMaxYearEarning">Max Year Earning</g:Label>
-					<g:Label styleName="{style.topPadding}" ui:field="labelPriceStatist">Price statist</g:Label>
-					<g:Label styleName="{style.topPadding}" ui:field="labelPriceSimpat">Price Standardized Patient</g:Label>				
+					<g:Label styleName="{style.topPadding}" ui:field="labelYear" />
+					<g:Label styleName="{style.topPadding}" ui:field="labelSemester" />
+					<g:Label styleName="{style.topPadding}" ui:field="labelMaxYearEarning" />
+					<g:Label styleName="{style.topPadding}" ui:field="labelPriceStatist" />
+					<g:Label styleName="{style.topPadding}" ui:field="labelPriceSimpat" />				
 				</g:VerticalPanel>
 				<g:VerticalPanel styleName="{style.panelPadding}" spacing="4">
 					<g:TextBox pixelSize="100,20" styleName="{style.listBoxStyle}{style.textBoxPadding}" ui:field="txtYear"></g:TextBox>				

@@ -119,10 +119,10 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 		// E Highlight onViolation
 		
 		labelYear.setText(constants.year());
-		labelYear.setText(constants.semester());
-		labelYear.setText(constants.maxYearlySalary());
-		labelYear.setText(constants.salarySimpat());
-		labelYear.setText(constants.salaryExtra());
+		labelSemester.setText(constants.semester());
+		labelMaxYearEarning.setText(constants.maxYearlySalary());
+		labelPriceStatist.setText(constants.salarySimpat());
+		labelPriceSimpat.setText(constants.salaryExtra());
 		
 		btnSave.setText(constants.save());
 		btnClose.setText(constants.close());

@@ -1083,9 +1083,9 @@ public class OsMaMainNav extends Composite {
 		{
 			// Role Module Issue V4
 			//Window.alert("Please Select Semester to Edit.....");	
-			final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+			final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 			
-			 dialogBox.showConfirmationDialog("Please Select Semester to Edit.....");
+			 dialogBox.showConfirmationDialog(constants.warningSelectSemester());
 			 
 			 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				
@@ -1143,7 +1143,7 @@ public class OsMaMainNav extends Composite {
 				{
 					// Role Module Issue V4
 					//Window.alert("Please Enter Semester" );					
-					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 					
 					 dialogBox.showConfirmationDialog(constants.warningEnterSemester());
 					 
@@ -1164,7 +1164,7 @@ public class OsMaMainNav extends Composite {
 					{
 						// Issue Role Module V4
 						//Window.alert("Please Enter Year");
-						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						
 						 dialogBox.showConfirmationDialog(constants.warningEnterYear());
 						 
@@ -1257,7 +1257,7 @@ public class OsMaMainNav extends Composite {
 							// Role Module Issue V4
 							
 							//Window.alert("Please Enter Valid Data");
-							final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+							final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 							
 							 dialogBox.showConfirmationDialog(constants.warningValidValue());
 							 
@@ -1266,7 +1266,7 @@ public class OsMaMainNav extends Composite {
 								@Override
 								public void onClick(ClickEvent event) {
 									dialogBox.hide();							
-									Log.info("ok click");	
+									Log.info("ok click");
 										}
 									});	
 							
