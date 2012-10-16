@@ -1290,6 +1290,17 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				patientInRoleView.setRoleSubView(view);
 				view.getBackUpRoleView().getPatientInRoleVP().add(patientInRoleView);
 				
+				if(patientInRoleSubView.getPatientInRoleProxy().getFit_criteria())
+				{
+					((PatientInRoleSubViewImpl)patientInRoleSubView).removeStyleName("count-yellow");
+					((PatientInRoleSubViewImpl)patientInRoleSubView).removeStyleName("count-red");
+				}
+				else
+				{
+					((PatientInRoleSubViewImpl)patientInRoleSubView).addStyleName("count-red");
+					((PatientInRoleSubViewImpl)patientInRoleSubView).removeStyleName("count-yellow");
+				}
+				
 			}
 			else
 			{

@@ -368,6 +368,8 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 				}
 			}
 			patientDroped.setRoleSubView(patientDropedIn);
+			sourceRoleView.getDragController1().makeNotDraggable(patientDroped);
+			patientDropedIn.getDragController1().makeDraggable(patientDroped,patientDroped.getPatientInRoleLbl());
 			//this.refreshCountLabel();
 			OscePostProxy newPost=patientDropedIn.getPostProxy();
 			delegate.updatePostOfPatient(newPost, this.getPostProxy(), patientDroped,patientDroped.getPatientInRoleProxy(),sourceRoleView);
