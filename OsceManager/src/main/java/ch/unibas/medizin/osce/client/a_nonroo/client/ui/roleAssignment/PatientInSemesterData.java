@@ -80,7 +80,7 @@ public class PatientInSemesterData {
 		StringBuffer tempAssignedRole = new StringBuffer();
 		for (Iterator<PatientInRoleProxy> iterator = tempPatientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
 			PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
-			Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
+//			Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
 			if (patientInRoleProxy.getOscePost() != null) {
 				if (tempAssignedRole.toString().compareTo("") != 0) {
 					tempAssignedRole.append(" ,");

@@ -163,8 +163,9 @@ public class PatientInRole {
     public static Integer getTotalTimePatientAssignInRole(Long osceDayId,Long patientInSemesterId){
     	Log.info("Inside getTotalTimePatientAssignInRole with OsceDay Id" + osceDayId + " and Semester Id :" + patientInSemesterId);
     	EntityManager em = entityManager();
-    	String query="select count(pir) from PatientInRole as pir,OsceSequence as os,OscePost as op  where pir.patientInSemester="+patientInSemesterId +" and pir.oscePost=op.id" 
-    	 +" and op.osceSequence=os.id and os.osceDay="+osceDayId;
+    	/*String query="select count(pir) from PatientInRole as pir,OsceSequence as os,OscePost as op  where pir.patientInSemester="+patientInSemesterId +" and pir.oscePost=op.id" 
+    	 +" and op.osceSequence=os.id and os.osceDay="+osceDayId;*/
+    	String query="select count(pir) from PatientInRole as pir where pir.patientInSemester="+patientInSemesterId + " and pir.oscePost IS NOT NULL";
         TypedQuery<Long> q = em.createQuery(query, Long.class);
         Log.info("Query Is " + query);
         Integer result = q.getSingleResult() != null && q.getSingleResult() != 0 ? q.getSingleResult().intValue() : 0 ;
@@ -183,13 +184,13 @@ public class PatientInRole {
     	OsceDay osceDay =getOsceDayBasedonPostId(patientInRole.getId());
     	Log.info("OSceDay Is :" + osceDay.getId());
     	
-    	List<Assignment> assignmentsOfDay =Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(),patientInRole.getId());
-    	Log.info("Assignment of day and Pir is :" + assignmentsOfDay.size());
+    	Set<Assignment> assignments =patientInRole.getAssignments();
+    	Log.info("Assignment of day and Pir is :" + assignments.size());
     	
     	try{
-	    	if(assignmentsOfDay.size() > 0) {
+	    	if(assignments.size() > 0) {
 	    		
-		    	for (Iterator iterator = assignmentsOfDay.iterator(); iterator.hasNext();) {
+		    	for (Iterator iterator = assignments.iterator(); iterator.hasNext();) {
 					Assignment assignment = (Assignment) iterator.next();
 					
 					assignment.setPatientInRole(null);
@@ -233,6 +234,7 @@ public class PatientInRole {
     	Boolean flag=false;
     	Boolean flag2=false;
     	PatientInSemester patientInsem = patientInRole.getPatientInSemester();
+    	    	
     	Log.info("PatientInSem Is " + patientInsem.getId());
     	
     	PatientInRole patientInRolenew =patientInRole;

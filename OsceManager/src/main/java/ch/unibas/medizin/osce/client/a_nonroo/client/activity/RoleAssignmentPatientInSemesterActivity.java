@@ -2600,7 +2600,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 						for (Iterator<TrainingProxy> iterator = patientInSemesterProxy.getTrainings().iterator(); iterator.hasNext();) {
 							TrainingProxy trainingProxy = (TrainingProxy) iterator.next();
-							Log.info("TrainingProxy.getName()" + trainingProxy.getName());
+//							Log.info("TrainingProxy.getName()" + trainingProxy.getName());
 							if (trainingProxy != null) {
 								if (tempTraining.toString().compareTo("") != 0) {
 									tempTraining.append(" ,");
@@ -2615,7 +2615,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					if (patientInSemesterProxy.getOsceDays() != null) {
 						for (Iterator<OsceDayProxy> iterator = patientInSemesterProxy.getOsceDays().iterator(); iterator.hasNext();) {
 							OsceDayProxy osceDayProxy = (OsceDayProxy) iterator.next();
-							Log.info("OsceDayProxy.getName()" + osceDayProxy.getOsce().getName());
+//							Log.info("OsceDayProxy.getName()" + osceDayProxy.getOsce().getName());
 							if (osceDayProxy != null) {
 								if (tempOsceDay.toString().compareTo("") != 0) {
 									tempOsceDay.append(" ,");
@@ -2631,7 +2631,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 						for (Iterator<PatientInRoleProxy> iterator = patientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
 							PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
-							Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
+//							Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
 							if (patientInRoleProxy.getOscePost() != null) {
 								if (tempAssignedRole.toString().compareTo("") != 0) {
 									tempAssignedRole.append(" ,");
@@ -2678,6 +2678,12 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			// module 3 bug {
 			
 			osceDayTimer.cancel();
+			if(roleSubViewSelected.getOsceDaySubViewImpl().getOsceDayProxy()==null){
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
+				Log.info("Selected View Does not have osceDay");
+				return;
+			}
 			OsceDayProxy osceDay=roleSubViewSelected.getOsceDaySubViewImpl().getOsceDayProxy();
 			
 			// module 3 bug }
