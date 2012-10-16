@@ -7,7 +7,9 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -31,7 +33,7 @@ public interface RoleBaseTableItemValueView extends IsWidget {
 		// todo
 //		void newClicked(String itemName, int item_defination);
 
-		void addRichTextAreaValue(RoleBaseItemProxy roleBaseItemProxy, RichTextArea description,int i, Map<String, Widget> roleSubItemValueMap);
+		void addRichTextAreaValue(RoleBaseItemProxy roleBaseItemProxy, RichTextArea description,int i, Map<String, Widget> roleSubItemValueMap,DivElement descriptionValue,IconButton saveButton);
 
 		
 //		void addRoleScriptTableItemValue(RoleTableItemProxy roleTableItem,Long id,CellTable<RoleTableItemValueProxy> table);

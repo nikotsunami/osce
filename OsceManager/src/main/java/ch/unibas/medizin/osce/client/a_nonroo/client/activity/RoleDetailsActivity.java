@@ -151,6 +151,7 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -1359,7 +1360,9 @@ final int index2 = index;
 		
 		
 		roleBaseTableItemViewImpl[index] = new RoleBaseTableItemViewImpl();
+		
 		roleBaseTableItemViewImpl[index].setDelegate(roleDetailActivity);
+		
 		final int standarDizedViewIndex=index;
 		requests.roleTemplateRequest().findAllRoleTemplates().fire(new Receiver<List<RoleTemplateProxy>>() {
 			;
@@ -1603,6 +1606,7 @@ final int index2 = index;
 							final RoleBaseTableItemValueViewImpl roleBaseTableItemViewImpl=new RoleBaseTableItemValueViewImpl();
 							roleBaseTableItemViewImpl.description.setEnabled(false);
 							roleBaseTableItemViewImpl.setDelegate(roleDetailActivity);
+							roleBaseTableItemViewImpl.description.setEnabled(false);
 							RoleBaseItemProxy roleBaseItemProxy = listRoleBaseItemProxy.next();
 							
 							if(roleBaseItemProxy.getItem_defination().name().equals("table_item"))
@@ -1615,7 +1619,7 @@ final int index2 = index;
 								
 								
 								standardizedRoleDetailsView[index].getRoleBaseItemVerticalPanel().add(roleBaseTableItemViewImpl);
-							
+								roleBaseTableItemViewImpl.description.setEnabled(false);
 								requests.roleTableItemValueRequestNonRoo().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[index].getValue().getId(), roleBaseItemProxy.getId()).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
 		
 									@Override
@@ -1626,6 +1630,7 @@ final int index2 = index;
 										Range range = roleBaseTableItemViewImpl.getTable().getVisibleRange();										
 										roleBaseTableItemViewImpl.getTable().setRowCount(response.size());
 										roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(),response);
+										roleBaseTableItemViewImpl.description.setEnabled(false);
 										}
 										
 									}
@@ -1636,13 +1641,14 @@ final int index2 = index;
 								roleBaseTableItemViewImpl.toolbar.removeFromParent();
 								roleBaseTableItemViewImpl.description.removeFromParent();
 								roleBaseTableItemViewImpl.addRichTextAreaValue.removeFromParent();
-								
+								roleBaseTableItemViewImpl.description.setEnabled(false);
 								// To Add Access Values	
 								addAccessValue(roleBaseItemProxy,roleBaseTableItemViewImpl);
 							}
 							else
 							{
 								Log.info("Found Role_RichText_Area");
+								roleBaseTableItemViewImpl.description.setEnabled(false);
 								if(roleBaseItemProxy.getDeleted())
 									continue;
 								roleBaseTableItemViewImpl.setValue(roleBaseItemProxy);
@@ -1651,6 +1657,8 @@ final int index2 = index;
 								if(roleBaseItemProxy.getRoleSubItem() != null)
 								{
 									//roleBaseTableItemViewImpl.description.setText(roleBaseItemProxy.getRoleSubItem().iterator().next().getItemText());
+									roleBaseTableItemViewImpl.description.setEnabled(false);
+									roleBaseTableItemViewImpl.descriptionValue.setInnerHTML(roleBaseItemProxy.getRoleSubItem().iterator().next().getItemText());
 									roleBaseTableItemViewImpl.description.setHTML(roleBaseItemProxy.getRoleSubItem().iterator().next().getItemText());
 									roleBaseTableItemViewImpl.description.setEnabled(false);
 								}
@@ -1660,7 +1668,7 @@ final int index2 = index;
 								roleBaseTableItemViewImpl.table.removeFromParent();
 								
 								//	view.getTableItem().add(roleBaseTableItemViewImpl);
-								
+								roleBaseTableItemViewImpl.description.setEnabled(false);
 								standardizedRoleDetailsView[index].getRoleBaseItemVerticalPanel().add(roleBaseTableItemViewImpl);
 								
 								
@@ -1669,17 +1677,19 @@ final int index2 = index;
 							}
 							
 							//SPEC Change
-							
+							roleBaseTableItemViewImpl.description.setEnabled(false);
 							if(isPrevious){
 //								roleBaseTableItemViewImpl.toolbar.setVisible(false);
-//								roleBaseTableItemViewImpl.description.setEnabled(false);
+								roleBaseTableItemViewImpl.description.setEnabled(false);
 								roleBaseTableItemViewImpl.addRichTextAreaValue.setEnabled(false);
 								roleBaseTableItemViewImpl.saveRichTextArea.setEnabled(false);
 							}
 							
 							//SPEC Change
+							roleBaseTableItemViewImpl.description.setEnabled(false);
 						}
 	
+					
 					}
 					/*else{
 						if(create)
@@ -4924,11 +4934,12 @@ final int index2 = index;
 		//roleBaseTableAccssViewImpl.setDelegate(roleDetailActivity);
 		Set<RoleItemAccessProxy> setroleItemAccess = roleBaseItemProxy.getRoleItemAccess();
 		Iterator<RoleItemAccessProxy> listRoleItemAccesProxy = setroleItemAccess.iterator();
-		
+		roleBaseTableItemViewImpl.description.setEnabled(false);
 		while(listRoleItemAccesProxy.hasNext())
 		{
 			roleBaseTableAccssViewImpl.accessDataLabel.setText(listRoleItemAccesProxy.next().getName());
 			roleBaseTableItemViewImpl.accessDataPanel.add(roleBaseTableAccssViewImpl);
+			roleBaseTableItemViewImpl.description.setEnabled(false);
 			roleBaseTableAccssViewImpl.accessDataCloseButton.setVisible(false);
 		}
 	}
@@ -5540,6 +5551,7 @@ final int index2 = index;
 		
 		
 		roleBaseTableItemViewImpl[index] = new RoleBaseTableItemViewImpl();
+		
 		roleBaseTableItemViewImpl[index].setDelegate(roleDetailActivity);
 		final int standarDizedViewIndex=index;
 		requests.roleTemplateRequest().findAllRoleTemplates().fire(new Receiver<List<RoleTemplateProxy>>() {
@@ -5724,7 +5736,7 @@ final int index2 = index;
 	
 	// Highlight onViolation
 	@Override
-	public void addRichTextAreaValue(final RoleBaseItemProxy roleBaseItemProxy,final RichTextArea description,int majorOrMinar, final Map roleSubItemValueMap) {
+	public void addRichTextAreaValue(final RoleBaseItemProxy roleBaseItemProxy,final RichTextArea description,int majorOrMinar, final Map roleSubItemValueMap,final DivElement descriptionValue,final IconButton saveRichTextArea) {
 	// E Highlight onViolation
 		
 		//description.setEnabled(false);
@@ -5767,6 +5779,8 @@ final int index2 = index;
 				}
 			});
 	
+			Log.info("Html size--"+description.getHTML().length());
+	
 	RoleSubItemValueRequest roleSubItemValueReq = requests.roleSubItemValueRequest();
 	RoleSubItemValueProxy roleSubItemValueProxy = roleSubItemValueReq.edit(roleBaseItemProxy.getRoleSubItem().iterator().next());
 			roleSubItemValueProxy.setItemText(description.getHTML());
@@ -5781,7 +5795,33 @@ final int index2 = index;
 				public void onSuccess(Void response) {
 					Log.info("RichTextArea Value edited succeessfully");
 				//	Window.alert("Rich Text Value Set Successfully");
+					
 					standardizedRoleDetailsView[selectedtab].setValue(standardizedRoleProxy);
+					descriptionValue.setInnerHTML(description.getHTML());
+					description.setEnabled(false);
+					
+				}
+				@Override
+				public void onViolation(Set<Violation> errors) {
+					System.out.println("violate");
+					description.setVisible(true);
+					descriptionValue.setInnerHTML("");
+					/*Iterator<Violation> iter = errors.iterator();
+					String message = "";
+					while (iter.hasNext()) {
+						message += iter.next().getMessage() + "<br>";
+					}
+					Log.warn(" in rich text -" + message);*/
+					saveRichTextArea.setVisible(true);
+				}
+				@Override
+				public void onFailure(ServerFailure error) {
+					// TODO Auto-generated method stub
+					System.out.println("failure");
+					description.setVisible(true);
+					descriptionValue.setInnerHTML("");
+					saveRichTextArea.setVisible(true);
+					
 				}
 			});
 			
@@ -5802,6 +5842,7 @@ final int index2 = index;
 					RoleSubItemValueProxy roleSubItemValueProxy = roleSubItemValueReq.edit(roleBaseItemProxy.getRoleSubItem().iterator().next());
 					//roleSubItemValueProxy.setItemText(description.getText());
 					roleSubItemValueProxy.setItemText(description.getHTML());
+					final String text=roleSubItemValueProxy.getItemText();
 					roleSubItemValueProxy.setStandardizedRole(newCreatedStandardizedRoleProxy);
 					standardizedRoleDetailsView[selectedtab].setValue(newCreatedStandardizedRoleProxy);
 					// Highlight onViolation
@@ -5810,17 +5851,33 @@ final int index2 = index;
 						@Override
 						public void onSuccess(Void response) {
 							Log.info("RichTextArea Value edited succeessfully");
+							description.setEnabled(false);
+							descriptionValue.setInnerHTML(description.getHTML());
 						//	Window.alert("Rich Text Value Set Successfully");
 						}
 						@Override
 						public void onViolation(Set<Violation> errors) {
 							System.out.println("violate");
+							/*description.setVisible(true);
+							descriptionValue.setInnerHTML("");
 							Iterator<Violation> iter = errors.iterator();
 							String message = "";
 							while (iter.hasNext()) {
 								message += iter.next().getMessage() + "<br>";
 							}
-							Log.warn(" in rich text -" + message);
+							Log.warn(" in rich text -" + message);*/
+							saveRichTextArea.setVisible(true);
+						}
+						
+						
+						@Override
+						public void onFailure(ServerFailure error) {
+							// TODO Auto-generated method stub
+							System.out.println("failure");
+							description.setVisible(true);
+							descriptionValue.setInnerHTML("");
+							saveRichTextArea.setVisible(true);
+							
 						}
 					});
 

@@ -20,6 +20,7 @@ import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -81,6 +82,8 @@ RoleBaseTableItemValueView {
 	@UiField(provided=true)
 	public RichTextArea description;
 	
+	@UiField
+	public DivElement descriptionValue;
 //	@UiField 
 //	HTMLPanel dynamicItemTable;
 	
@@ -141,6 +144,12 @@ RoleBaseTableItemValueView {
 	//role template spec
 		saveRichTextArea.setVisible(true);
 		description.setEnabled(true);
+		descriptionValue.setInnerText("");		
+		description.setVisible(true);
+
+		/*descriptionValue.setInnerText("");
+					
+		description.setVisible(true);*/
 		//delegate.addRichTextAreaValue(roleBasedItemProxy,description);
 	}
 	
@@ -150,6 +159,9 @@ RoleBaseTableItemValueView {
 	public void addRichTextAreaValue(ClickEvent event){
 		Log.info("Call addRichTextAreaValue");
 	//role template spec
+		/*saveRichTextArea.setVisible(false);
+		description.setVisible(false);
+		*/
 		//int majorOrMinor=getMajorMinorChange();
 		//Log.info("Major or minar click--"+majorOrMinor);
 		showPopup();
@@ -214,11 +226,15 @@ RoleBaseTableItemValueView {
 		description.setSize("100%", "14em");
 		description.setEnabled(false);
 		toolbar = new RichTextToolbar(description);
+		
 		description.setEnabled(false);
+		description.setVisible(false);
+		
 		toolbar.setWidth("100%");
 		initWidget(uiBinder.createAndBindUi(this));
 		saveRichTextArea.setVisible(false);
 		//toolbar description
+		
 		description.setEnabled(false);
 		
 		init();
@@ -318,7 +334,7 @@ RoleBaseTableItemValueView {
 			}, null);
 			table.addColumnStyleName(1, "iconCol");
 
-			
+			description.setEnabled(false);
 		}	
 		
 		
@@ -435,15 +451,18 @@ RoleBaseTableItemValueView {
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					
+					saveRichTextArea.setVisible(false);
+					description.setVisible(false);
 				
 					minorClick=true;
 					
 					// Highlight onViolation
-					delegate.addRichTextAreaValue(roleBasedItemProxy,description,0,roleSubItemValueMap);
+					delegate.addRichTextAreaValue(roleBasedItemProxy,description,0,roleSubItemValueMap,descriptionValue,saveRichTextArea);
 					// E Highlight onViolation
 					saveRichTextArea.setVisible(false);
 					popupPanel.hide();
+					
+					
 					
 					
 				}
@@ -454,16 +473,16 @@ RoleBaseTableItemValueView {
 				@Override
 				public void onClick(ClickEvent event) {
 					
-					
+					saveRichTextArea.setVisible(false);
+					description.setVisible(false);
 				
 					minorClick=false;
 					// Highlight onViolation
-					delegate.addRichTextAreaValue(roleBasedItemProxy,description,1,roleSubItemValueMap);
+					delegate.addRichTextAreaValue(roleBasedItemProxy,description,1,roleSubItemValueMap,descriptionValue,saveRichTextArea);
 					// E Highlight onViolation
 					saveRichTextArea.setVisible(false);
 					
 					popupPanel.hide();
-					
 					
 					
 					

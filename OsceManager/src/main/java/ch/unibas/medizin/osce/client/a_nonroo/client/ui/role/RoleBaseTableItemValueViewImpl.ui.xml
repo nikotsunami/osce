@@ -70,6 +70,8 @@
    							border: 1px solid #AAA; 
    							border-top: 0; 
    						padding: 4px">
+   						<div  ui:field="descriptionValue"> </div>
+   						
    					<g:RichTextArea ui:field='description' enabled="false"/>
    					</div>
 							
