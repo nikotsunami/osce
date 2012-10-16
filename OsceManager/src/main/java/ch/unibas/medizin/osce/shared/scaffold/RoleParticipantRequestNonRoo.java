@@ -28,8 +28,8 @@ import ch.unibas.medizin.osce.shared.Sorting;
 @Service(RoleParticipant.class)
 public interface RoleParticipantRequestNonRoo extends RequestContext 
 {	
-	abstract Request<List<RoleParticipantProxy>> findDoctorWithStandardizedRoleAndRoleTopic(Long id,Integer type);
-	
+	abstract Request<List<RoleParticipantProxy>> findDoctorWithStandardizedRoleAndRoleTopic(Long id,Integer type,int start,int length);
+	abstract Request<Long> countDoctorWithStandardizedRoleAndRoleTopic(Long id,Integer type);
 	abstract Request<List<RoleParticipantProxy>> findRoleParticipatentByDoctor(DoctorProxy proxy);
 }
 
