@@ -1091,8 +1091,24 @@ final int index2 = index;
 		
 		final int innerindex = index;
 		final int getStandardizedRole = Integer	.parseInt(standardizedRoleDetailsView[index].getValue().getId().toString());
+		//auther and reviewer table changes start
 		
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		
+		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+		{
+				@Override
+				public void onSuccess(Long response) 
+				{
+						Log.info("~Success Call....");
+						Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+						Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response);
+						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowCount(response.intValue(),true);
+					}
+		});
+		
+		final Range autherRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
+		
+		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 		{
 				@Override
 				public void onSuccess(List<RoleParticipantProxy> response) 
@@ -1100,12 +1116,24 @@ final int index2 = index;
 						Log.info("~Success Call....");
 						Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 						Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
-						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(autherRange.getStart(),response);
 				}
 		});
 
+		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+				{
+					@Override
+					public void onSuccess(Long response) 
+					{
+						Log.info("~Success Call....");
+						Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+						Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response);
+						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowCount(response.intValue(),true);
+					}
+				});
 		
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		final Range reviewerRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
+		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 		{
 			@Override
 			public void onSuccess(List<RoleParticipantProxy> response) 
@@ -1113,10 +1141,72 @@ final int index2 = index;
 				Log.info("~Success Call....");
 				Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 				Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
-				standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(reviewerRange.getStart(),response);
 			}
 		});
 
+		
+		standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+						{
+							@Override
+							public void onSuccess(Long response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response);
+								standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowCount(response.intValue(),true);
+							}
+						});
+				
+				final Range reviewerRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
+				requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+				{
+					@Override
+					public void onSuccess(List<RoleParticipantProxy> response) 
+					{
+						Log.info("~Success Call....");
+						Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+						Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
+						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(reviewerRange.getStart(),response);
+					}
+				});
+				
+				}
+		});
+		
+		standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+						{
+								@Override
+								public void onSuccess(Long response) 
+								{
+										Log.info("~Success Call....");
+										Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+										Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response);
+										standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowCount(response.intValue(),true);
+									}
+						});
+						
+						final Range autherRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
+						
+						requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+						{
+								@Override
+								public void onSuccess(List<RoleParticipantProxy> response) 
+								{
+										Log.info("~Success Call....");
+										Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+										Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
+										standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(autherRange.getStart(),response);
+								}
+						});
+				
+				}
+		});
+		//auther and reviewer table changes end
 		
 		//Log.info("==>>>Index: "+ innerindex+ " ID Pass: "+ ((RoleTopicProxy) response).getId()+ "SR ID: "+ standardizedRoleDetailsView[innerindex].getValue().getId());
 
@@ -4028,7 +4118,22 @@ final int index2 = index;
 							refreshDoctorList();
 							
 							// REFRESH Author Table
-							requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+							//auther table pager changes
+							requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+									{
+											@Override
+											public void onSuccess(Long response) 
+											{																																
+												Log.info("~Success Call....");
+												Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+												Log.info("~Set Data In Author Table: Resp Size: "+ response);														
+												standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowCount(response.intValue(),true);
+											}
+									});
+							
+							final Range autherRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
+							
+							requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 							{
 									@Override
 									public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4036,9 +4141,11 @@ final int index2 = index;
 										Log.info("~Success Call....");
 										Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 										Log.info("~Set Data In Author Table: Resp Size: "+ response.size());														
-										standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);
+										standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(autherRange.getStart(),response);
 									}
 							});
+							
+							//auther table pager changes
 								
 						}
 				});
@@ -4120,7 +4227,23 @@ final int index2 = index;
 					refreshDoctorList();
 					
 					// REFRESH Reviewer Table
-					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					
+					//reviewer table pager changes start
+					requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+					{
+							@Override
+							public void onSuccess(Long response) 
+							{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: Resp Size: "+ response);																							
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowCount(response.intValue(),true);
+								//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.removeFromParent();
+							}
+					});
+					
+					final Range reviewerRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
+					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4128,10 +4251,12 @@ final int index2 = index;
 								Log.info("~Success Call....");
 								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 								Log.info("~Set Data In Reviewer Table: Resp Size: "+ response.size());																							
-								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(reviewerRange.getStart(),response);
 								//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.removeFromParent();
 							}
-					});						
+					});
+					
+					//reviewer table pager changes end
 				}				
 		});
 			
@@ -4525,7 +4650,21 @@ final int index2 = index;
 				if(flag==0) // Author Deleted
 				{
 					// REFRESH Author Table
-					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					
+					//auther table pager change start
+					requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+						{
+								@Override
+								public void onSuccess(Long response) 
+								{
+									Log.info("~Success Call....");
+									Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+									Log.info("~Set Data In Author Table: Resp Size: "+ response);														
+									standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowCount(response.intValue(),true);								
+								}
+						});
+					final Range autherRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
+					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4533,15 +4672,30 @@ final int index2 = index;
 								Log.info("~Success Call....");
 								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 								Log.info("~Set Data In Author Table: Resp Size: "+ response.size());														
-								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);								
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(autherRange.getStart(),response);								
 							}
-					});	
+					});
+					
+					//auther table pager change end
 					
 				}
 				else	// REVIEWER DELETED
 				{
 					// REFRESH Reviewer Table
-					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					
+					requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+							{
+									@Override
+									public void onSuccess(Long response) 
+									{
+										Log.info("~Success Call....");
+										Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+										Log.info("~Set Data In Reviewer Table: Resp Size: "+ response);																							
+										standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowCount(response.intValue(),true);								
+									}
+							});		
+					final Range reviewerRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
+					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4549,7 +4703,7 @@ final int index2 = index;
 								Log.info("~Success Call....");
 								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 								Log.info("~Set Data In Reviewer Table: Resp Size: "+ response.size());																							
-								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);								
+								standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(reviewerRange.getStart(),response);								
 							}
 					});		
 				}
@@ -5389,7 +5543,22 @@ final int index2 = index;
 		final int innerindex = index;
 		final int getStandardizedRole = Integer	.parseInt(standardizedRoleDetailsView[index].getValue().getId().toString());
 		
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+				{
+						@Override
+						public void onSuccess(Long response) 
+						{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response);
+								standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowCount(response.intValue(),true);
+						}
+				});
+
+		
+		final Range autherRange = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
+		
+		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 		{
 				@Override
 				public void onSuccess(List<RoleParticipantProxy> response) 
@@ -5397,22 +5566,34 @@ final int index2 = index;
 						Log.info("~Success Call....");
 						Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
 						Log.info("~Set Data In Author Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
-						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.setRowData(autherRange.getStart(),response);
 				}
 		});
 
+		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+				{
+						@Override
+						public void onSuccess(Long response) 
+						{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response);
+								standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowCount(response.intValue(),true);
+						}
+				});
+		final Range reviewerRange = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
+		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+				{
+						@Override
+						public void onSuccess(List<RoleParticipantProxy> response) 
+						{
+								Log.info("~Success Call....");
+								Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
+								Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
+								standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(reviewerRange.getStart(),response);
+						}
+				});
 		
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
-		{
-			@Override
-			public void onSuccess(List<RoleParticipantProxy> response) 
-			{
-				Log.info("~Success Call....");
-				Log.info("~findDoctorWithStandardizedRoleAndRoleTopic()");
-				Log.info("~Set Data In Reviewer Table: " +"SR: " + getStandardizedRole+ "Resp Size: "+ response.size());
-				standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.setRowData(response);
-			}
-		});
 
 		
 	//	Log.info("==>>>Index: "+ innerindex+ " ID Pass: "+ ((RoleTopicProxy) response).getId()+ "SR ID: "+ standardizedRoleDetailsView[innerindex].getValue().getId());

@@ -35,7 +35,7 @@ public class RoleParticipant {
     
  // SPEC START =
     
-    public static java.util.List<RoleParticipant> findDoctorWithStandardizedRoleAndRoleTopic(Long standRole, Integer type)	 // Fill Auhtor/ Reviewer Table
+    public static java.util.List<RoleParticipant> findDoctorWithStandardizedRoleAndRoleTopic(Long standRole, Integer type,int start,int length)	 // Fill Auhtor/ Reviewer Table
 	{
 		EntityManager em1 = entityManager();
 		Log.info("~QUERY findDoctorWithStandardizedRoleAndRoleTopic()");
@@ -43,11 +43,29 @@ public class RoleParticipant {
 		String queryString="SELECT rp  from  RoleParticipant rp JOIN rp.standardizedRole sr WHERE sr.id="+standRole+" AND rp.type="+type;
 		Log.info("~QUERY STRING : " + queryString); 
 		TypedQuery<RoleParticipant> q = em1.createQuery(queryString, RoleParticipant.class);
-		java.util.List<RoleParticipant> result = q.getResultList();
-		Log.info("~QUERY Result : " + result);
-		return result;
+		//java.util.List<RoleParticipant> result = q.getResultList();
+		//Log.info("~QUERY Result : " + result);
+		
+		q.setFirstResult(start);
+    	q.setMaxResults(length);
+		return q.getResultList();
+		//return result;
 		//String queryString="SELECT doc from Doctor doc JOIN doc.roleParticipants rp JOIN rp.standardizedRole sr WHERE sr.id="+standRole+"AND rp.type="+type;
 	}
+    
+    public static long countDoctorWithStandardizedRoleAndRoleTopic(Long standRole, Integer type)	 // Fill Auhtor/ Reviewer Table
+  	{
+  		EntityManager em1 = entityManager();
+  		Log.info("~QUERY findDoctorWithStandardizedRoleAndRoleTopic()");
+  		Log.info("~QUERY BEFOREE EXECUTION  Stand Role ID  : " + standRole + " Type : " + type );
+  		String queryString="SELECT rp  from  RoleParticipant rp JOIN rp.standardizedRole sr WHERE sr.id="+standRole+" AND rp.type="+type;
+  		Log.info("~QUERY STRING : " + queryString); 
+  		TypedQuery<RoleParticipant> q = em1.createQuery(queryString, RoleParticipant.class);
+  		java.util.List<RoleParticipant> result = q.getResultList();
+  		Log.info("~QUERY Result : " + result);
+  		return result.size();
+  		//String queryString="SELECT doc from Doctor doc JOIN doc.roleParticipants rp JOIN rp.standardizedRole sr WHERE sr.id="+standRole+"AND rp.type="+type;
+  	}
 	
     // SPEC END =
     
