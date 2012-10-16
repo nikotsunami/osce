@@ -14,5 +14,6 @@ import com.google.gwt.requestfactory.shared.Service;
 @Service(MainSkill.class)
 public interface MainSkillRequestNonRoo extends RequestContext {
 
-	abstract Request<List<MainSkillProxy>> findMainSkillEntriesByRoleID(long value);	
+	abstract Request<List<MainSkillProxy>> findMainSkillEntriesByRoleID(long value,int start,int end);
+	abstract Request<Long> countMainSkillEntriesByRoleID(long value);
 }

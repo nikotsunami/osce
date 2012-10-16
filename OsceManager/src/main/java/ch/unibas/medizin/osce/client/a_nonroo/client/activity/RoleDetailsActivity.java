@@ -1281,17 +1281,115 @@ final int index2 = index;
 		
 		final int innerindex2 = index;
 		
-		requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+		//main skill change
+		
+		requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 			@Override
-			public void onSuccess(List<MainSkillProxy> response) {								
-				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
-				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());
+			public void onSuccess(Long response) {								
+				/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.intValue(),true);
 				Log.info("~~DATA SET");
 			}
 		});
-						
-		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+		final Range mainSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
+		requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+
+			@Override
+			public void onSuccess(List<MainSkillProxy> response) {								
+			/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(mainSkillRange.getStart(),response);
+				Log.info("~~DATA SET");
+			}
+		});
+					
+		standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				
+				requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+					@Override
+					public void onSuccess(Long response) {								
+						/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.intValue(),true);
+						Log.info("~~DATA SET");
+					}
+				});
+				final Range mainSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
+				requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<MainSkillProxy> response) {								
+					/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(mainSkillRange.getStart(),response);
+						Log.info("~~DATA SET");
+					}
+				});
+				
+				}
+		});
+
+		//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
+		//main skill change end
+		
+		
+		//minor skill start
+		requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+			@Override
+			public void onSuccess(Long response) {								
+				/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowCount(response.intValue(),true);
+				Log.info("~~DATA SET");
+			}
+		});
+		final Range minorSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
+		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+
+			@Override
+			public void onSuccess(List<MinorSkillProxy> response) {								
+			/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowData(minorSkillRange.getStart(),response);
+				Log.info("~~DATA SET");
+			}
+		});
+					
+		standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				
+				requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+					@Override
+					public void onSuccess(Long response) {								
+						/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowCount(response.intValue(),true);
+						Log.info("~~DATA SET");
+					}
+				});
+				final Range minorSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
+				requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<MinorSkillProxy> response) {								
+					/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowData(minorSkillRange.getStart(),response);
+						Log.info("~~DATA SET");
+					}
+				});
+				
+				}
+		});
+
+		
+/*		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {
@@ -1299,7 +1397,9 @@ final int index2 = index;
 				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowCount(response.size());
 				Log.info("DATA IS SET FOR MINOR TABLE");
 			}
-		});				
+		});			
+		*/
+		//minor skill end
 		// SPEC END =
 		
 		//Assignment E[
@@ -5426,7 +5526,8 @@ final int index2 = index;
 		
 		final int innerindex2 = index;
 		
-		requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+		
+		/*requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MainSkillProxy> response) {								
@@ -5435,8 +5536,36 @@ final int index2 = index;
 				Log.info("~~DATA SET");
 			}
 		});
-						
-		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+*/
+		//main skill change
+		
+				requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+					@Override
+					public void onSuccess(Long response) {								
+						/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.intValue(),true);
+						Log.info("~~DATA SET");
+					}
+				});
+				final Range mainSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
+				requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<MainSkillProxy> response) {								
+					/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(mainSkillRange.getStart(),response);
+						Log.info("~~DATA SET");
+					}
+				});
+							
+				//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
+				//main skill change end
+	
+		//minor sikk start		
+		/*requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {
@@ -5444,7 +5573,31 @@ final int index2 = index;
 				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowCount(response.size());
 				Log.info("DATA IS SET FOR MINOR TABLE");
 			}
-		});				
+		});		*/	
+				requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+					@Override
+					public void onSuccess(Long response) {								
+						/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowCount(response.intValue(),true);
+						Log.info("~~DATA SET");
+					}
+				});
+				final Range minorSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
+				requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<MinorSkillProxy> response) {								
+					/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.setRowData(mainSkillRange.getStart(),response);
+						Log.info("~~DATA SET");
+					}
+				});
+						
+		
+		//minor sikk end
 		// SPEC END =
 		
 		//Assignment E[
@@ -6548,20 +6701,47 @@ public void onDragStart(DragStartEvent event) {
 	
 	public void refreshMainSkillData()
 	{
-		requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+		/*requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MainSkillProxy> response) {
 				standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().majorTable.setRowData(response);
 				standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());
 			}
-		});
+		});*/
+		//main skill change
+		
+				requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+					@Override
+					public void onSuccess(Long response) {								
+						/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().majorTable.setRowCount(response.intValue(),true);
+						Log.info("~~DATA SET");
+					}
+				});
+				final Range mainSkillRange = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
+				requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<MainSkillProxy> response) {								
+					/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+						standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+						standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().majorTable.setRowData(mainSkillRange.getStart(),response);
+						Log.info("~~DATA SET");
+					}
+				});
+							
+				//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.setRowData(keywordRange.getStart(),response);
+				//main skill change end
 
 	}
 	
 	public void refreshMinorSkillData()
 	{
-		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+		//minor changes changes
+/*		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {
@@ -6569,6 +6749,30 @@ public void onDragStart(DragStartEvent event) {
 				standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().minorTable.setRowCount(response.size());
 			}
 		});
+		*/
+		requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+
+			@Override
+			public void onSuccess(Long response) {								
+				/*standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+				standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().minorTable.setRowCount(response.intValue(),true);
+				Log.info("~~DATA SET");
+			}
+		});
+		final Range minorSkillRange = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
+		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+
+			@Override
+			public void onSuccess(List<MinorSkillProxy> response) {								
+			/*	standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowData(response);
+				standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.setRowCount(response.size());*/
+				standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().minorTable.setRowData(minorSkillRange.getStart(),response);
+				Log.info("~~DATA SET");
+			}
+		});
+				
+		//minor chanes end
 
 	}
 	

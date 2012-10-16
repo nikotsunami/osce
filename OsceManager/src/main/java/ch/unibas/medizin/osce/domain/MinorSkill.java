@@ -10,6 +10,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 
 @RooJavaBean
 @RooToString
@@ -21,11 +23,28 @@ public class MinorSkill {
 	@ManyToOne
 	private Skill skill;	
 	
-	public static List<MinorSkill> findMinorSkillEntriesByRoleID(long roleId)
+	public static List<MinorSkill> findMinorSkillEntriesByRoleID(long roleId,int start,int length)
 	{
+		
 		EntityManager em = entityManager();		
 		String s = "SELECT m FROM MinorSkill m WHERE m.role.id = " + roleId;
 		TypedQuery<MinorSkill> q = em.createQuery(s, MinorSkill.class);
+		q.setFirstResult(start);
+    	q.setMaxResults(length);
+    	Log.info("find query");
 		return q.getResultList();
+	}
+	
+	public static long countMinorSkillEntriesByRoleID(long value)
+	{
+		EntityManager em = entityManager();		
+		String s = "SELECT m FROM MinorSkill m WHERE m.role.id = " + value;
+		TypedQuery<MinorSkill> q = em.createQuery(s, MinorSkill.class);
+		java.util.List<MinorSkill> result = q.getResultList();
+		Log.info("count query");
+		return result.size();
+		
+		
+		//return q.getResultList().size();
 	}
 }

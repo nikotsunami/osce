@@ -10,6 +10,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -21,12 +23,24 @@ public class MainSkill {
 	@ManyToOne 
 	private Skill skill;
 	
-	public static List<MainSkill> findMainSkillEntriesByRoleID(long value)
+	public static List<MainSkill> findMainSkillEntriesByRoleID(long value,int start,int length)
 	{
 		EntityManager em = entityManager();		
 		String s = "SELECT m FROM MainSkill m WHERE m.role.id = " + value;
 		TypedQuery<MainSkill> q = em.createQuery(s, MainSkill.class);
+		q.setFirstResult(start);
+    	q.setMaxResults(length);
 		return q.getResultList();
 	}
 
+	public static long countMainSkillEntriesByRoleID(long value)
+	{
+		EntityManager em = entityManager();		
+		String s = "SELECT m FROM MainSkill m WHERE m.role.id = " + value;
+		TypedQuery<MainSkill> q = em.createQuery(s, MainSkill.class);
+		java.util.List<MainSkill> result = q.getResultList();
+		
+		return result.size();
+		//return q.getResultList().size();
+	}
 }
