@@ -1109,6 +1109,8 @@ public interface OsceConstants extends Constants {
 	public String yes();
 	
 	public String numberOfRotationsInThisSequence();
+	
+	public String notAvailable();
 
 }
 
