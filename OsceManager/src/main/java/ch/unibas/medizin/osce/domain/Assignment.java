@@ -192,9 +192,14 @@ public class Assignment {
     }
 
     public static List<Assignment> retrieveAssignmenstOfTypeStudent(Long osceDayId, Long osceSequenceId, Long courseId, Long oscePostId) {
+    	
+    	
+    	
         Log.info("retrieveAssignmenstOfTypeStudent :");
         EntityManager em = entityManager();
-        String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
+        //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
+        String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
+        
         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
         List<Assignment> assignmentList = query.getResultList();
         Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);

@@ -414,6 +414,18 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					List<Date> longstartTimeList=new ArrayList<Date>();
 					Map<Date, Long> dateBreakTimeMap=new HashMap<Date, Long>();
 					List<Date> anyendTimeList=new ArrayList<Date>();
+					
+					//1. calculate early start time duration
+					if(response.get(0).getTimeStart().before(accordianPanelViewImpl.getOsceDayProxy().getTimeStart()))
+					{
+						long earlyStart=calculateTimeInMinute(accordianPanelViewImpl.getOsceDayProxy().getTimeStart(), response.get(0).getTimeStart());
+						if(getEarlyStart() < earlyStart)
+							setEarlyStart(earlyStart);
+						
+						if(getEarlyStart() != 0)
+						earlyStartPost.add(oscePostProxy);
+					}
+					
 					for(int j=0;j<response.size();j++)
 					{
 						 AssignmentProxy assignmentProxy=response.get(j);
@@ -429,18 +441,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							}*/
 							
 							
-							
+						 	if(j==response.size()-1)
+								insertEarlyStartSlot(contentView,isLastPost1);
 						 	
-						 	//1. calculate early start time duration
-							if(assignmentProxy.getTimeStart().before(accordianPanelViewImpl.getOsceDayProxy().getTimeStart()))
-							{
-								long earlyStart=calculateTimeInMinute(accordianPanelViewImpl.getOsceDayProxy().getTimeStart(), assignmentProxy.getTimeStart());
-								if(getEarlyStart() < earlyStart)
-									setEarlyStart(earlyStart);
-								
-								if(getEarlyStart() != 0)
-								earlyStartPost.add(oscePostProxy);
-							}
+						 	
 							
 							
 							//create student view
@@ -1082,8 +1086,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							
 							
 							
-							if(j==response.size()-1)
-								insertEarlyStartSlot(contentView,isLastPost1);
+							
 					}
 				
 					requests.getEventBus().fireEvent(
@@ -1159,8 +1162,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			}
 			
 			
-			setEarlyStart(0);
-			earlyStartPost.clear();
+			//setEarlyStart(0);
+			//earlyStartPost.clear();
 			
 		}
 	}
@@ -1627,6 +1630,26 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 				Log.info("onSuccess retrieveContent : response size :" + response.size());
 				
+				
+				//add earlystart if there
+				
+				if(!response.get(0).getTimeStart().before(examinationViewOld.getOsceDayProxy().getTimeStart()))
+				{
+					
+					if(earlyStart > 0)
+					{
+						SPView simpatBreak=new SPViewImpl();
+						simpatBreak.getSpPanel().addStyleName("empty-bg");
+						simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+
+						//simpatBreak.setDelegate(activity);
+						simpatBreak.getSpPanel().setHeight(getEarlyStart()+"px");
+						simpatBreak.getSpPanel().setWidth("30px");
+						
+						oscePostView.getExaminerVP().insert(simpatBreak, 0);
+					}
+				}
+				
 				//create examination slot 
 
 			//	if(response.get(response.size()-1).getTimeEnd().equals(examinerTimeEnd))
@@ -1642,6 +1665,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						 }
 						 else*/							
 							 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
+						
+						
 					 	 
 						//examinerSlotLength=examinerSlotLength/60000;
 						examinerSlotLength--;
