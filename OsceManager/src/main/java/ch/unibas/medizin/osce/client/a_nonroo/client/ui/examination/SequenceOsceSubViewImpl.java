@@ -42,6 +42,8 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 
 	private Delegate delegate;
 	
+	private static final OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	private SequenceOsceSubViewImpl sequenceOsceSubViewImpl;
 
 	protected Set<String> paths = new HashSet<String>();
@@ -231,14 +233,14 @@ public class SequenceOsceSubViewImpl extends Composite implements SequenceOsceSu
 				Log.info("Current Sequence Found");
 				Log.info("Current Sequence Id: "+ event.getCurrentSequenceId());
 				this.sequenceRotation.setText(event.getPreviousSequenceRotation());		
-				this.sequenceRotation.setTitle(event.getPreviousSequenceRotation());
+				this.sequenceRotation.setTitle(constants.numberOfRotationsInThisSequence());
 			}
 			else if(osceSequenceProxy.getId().equals(Long.valueOf(event.getNextSequenceId())))
 			{
 				Log.info("Next Sequence Found");
 				Log.info("Next Sequence Id: "+ event.getNextSequenceId());
 				this.sequenceRotation.setText(event.getNextSequenceRotation());
-				this.sequenceRotation.setTitle(event.getNextSequenceRotation());
+				this.sequenceRotation.setTitle(constants.numberOfRotationsInThisSequence());
 			}	
 		}
 		

@@ -687,7 +687,7 @@ AccordianPanelView.ParcourDelegate
 										
 									sequenceOsceSubViewImpl = new SequenceOsceSubViewImpl();
 									
-									if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
+									if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED || osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED)
 									{
 										sequenceOsceSubViewImpl.spliteSequence.setVisible(false);
 									}
@@ -703,7 +703,8 @@ AccordianPanelView.ParcourDelegate
 									//Module 5 Bug Report Solution
 									//sequenceOsceSubViewImpl.sequenceRotation.setText(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
 									sequenceOsceSubViewImpl.getSequenceRotationLable().setText(getLabelString(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString()));
-									sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
+									//sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
+									sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 									//E Module 5 Bug Report Solution
 
 									// Module 5 bug Report Change
@@ -5033,9 +5034,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																	int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
 																	int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
 																	firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																	firstSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(firstRotation));
+																	//firstSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(firstRotation));
+																	firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																	secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																	secondSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(secondRotation));
+																	secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																}
 																
 															}
@@ -5177,9 +5179,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																				int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
 																				int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
 																				firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																				firstSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(firstRotation));
+																				firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																				secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																				secondSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(secondRotation));
+																				secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																			}
 																		}
 																		// Module 5 Bug Test Change
@@ -5343,9 +5345,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																				int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
 																				int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
 																				firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																				firstSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(firstRotation));
+																				firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																				secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																				secondSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(secondRotation));
+																				secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																			}
 																		}
 																		// Module 5 Bug Test Change
@@ -5460,9 +5462,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
 																int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
 																firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																firstSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(firstRotation));
+																firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 																secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																secondSequenceOsce.getSequenceRotationLable().setTitle(String.valueOf(secondRotation));
+																secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
 															}
 															// Module 5 Bug Test Change
 															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
