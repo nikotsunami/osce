@@ -204,7 +204,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("edit");
 			//spec start
 			Log.info("Proxy ID : " + place.getProxyId());
-			requests.find(place.getProxyId()).with("roleSubItemValue","roleTableItemValue","oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
+			requests.find(place.getProxyId()).with("roleSubItemValue","roleSubItemValue.roleBaseItem","roleTableItemValue","roleTableItemValue.roleTableItem","oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","advancedSearchCriteria.field","advancedSearchCriteria.bindType","advancedSearchCriteria.comparation","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -963,9 +963,6 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												roleSubItemValueProxy.setRoleBaseItem(oldRoleSubItemValueProxy.getRoleBaseItem());
 												roleSubItemValueProxy.setStandardizedRole(proxy);
 												roleSubItemValueProxy.setItemText(oldRoleSubItemValueProxy.getItemText());
-												
-												
-												
 												roleSubItemValueRequest.persist().using(roleSubItemValueProxy).fire();
 												
 												

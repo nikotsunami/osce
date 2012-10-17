@@ -121,7 +121,7 @@ public class StandardizedRole {
 
 	   
 	   
-	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId) {
+	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId,Integer roleSubItemValueId,String value) {
 		   
 		   Log.info("call create");
 		   StandardizedRole  oldStandardizedRole= StandardizedRole.findStandardizedRole(standardizedRoleId);
@@ -163,7 +163,7 @@ public class StandardizedRole {
 		   newStandardizedRole.setRoleTableItemValue(roleTableItemValue);
 		   
 		   
-		   Set<RoleSubItemValue>  roleSubItemValue= insertForRoleSubItemValue(oldStandardizedRole,newStandardizedRole);
+		   Set<RoleSubItemValue>  roleSubItemValue= insertForRoleSubItemValue(oldStandardizedRole,newStandardizedRole,roleSubItemValueId,value);
 		   newStandardizedRole.setRoleSubItemValue(roleSubItemValue);
 		   
 		   
@@ -263,15 +263,29 @@ public class StandardizedRole {
 			return roleTableItemValue;
 	   }
 	   
-	   private  static Set<RoleSubItemValue> insertForRoleSubItemValue(StandardizedRole oldRole, StandardizedRole newRole) {
+	   private  static Set<RoleSubItemValue> insertForRoleSubItemValue(StandardizedRole oldRole, StandardizedRole newRole,Integer roleSubItemvalueId,String Value) {
 			Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
 			
 			for(RoleSubItemValue oldrsiv:oldRole.getRoleSubItemValue()) {
 				RoleSubItemValue rsiv=new RoleSubItemValue();
+				
 				rsiv.setItemText(oldrsiv.getItemText());
 				rsiv.setRoleBaseItem(oldrsiv.getRoleBaseItem());
 				rsiv.setStandardizedRole(newRole);
+				Log.info("id--"+oldrsiv.getId()+" --id--"+roleSubItemvalueId);
 				
+				
+				if(Integer.valueOf(oldrsiv.getId())== Integer.valueOf(roleSubItemvalueId))
+				{
+					Log.info("inside if");
+					
+					Log.info("if part--"+Value);
+					rsiv.setItemText(Value);	
+				}
+				else
+				{
+					Log.info("else part");
+				}
 				roleSubItemValue.add(rsiv);
 			}
 			return roleSubItemValue;

@@ -3987,6 +3987,7 @@ final int index2 = index;
 		
 		if(standardizedRoleProxy!=null)
 		{
+			
 			showApplicationLoading(true);
 		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("previousVersion","previousVersion.oscePosts","previousVersion.roleTopic","previousVersion.simpleSearchCriteria","previousVersion.roleParticipants","previousVersion.advancedSearchCriteria","previousVersion.roleTemplate","previousVersion.keywords","previousVersion.previousVersion","previousVersion.checkList","previousVersion.checkList.checkListTopics","previousVersion.checkList.checkListTopics.checkListQuestions","previousVersion.checkList.checkListTopics.checkListQuestions.checkListCriterias","previousVersion.checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new Receiver<StandardizedRoleProxy>() {
 			
@@ -5210,7 +5211,7 @@ final int index2 = index;
 		
 		toolTip= new PopupPanel(true);
 		
-		toolTip.setWidth("180px");
+		toolTip.setWidth("200px");
 		toolTip.setHeight("40px");
 	    toolTip.setAnimationEnabled(true);
 	    
@@ -5229,7 +5230,7 @@ final int index2 = index;
 		toolTipChange = new IconButton(constants.save());
 		toolTipChange.setIcon("disk");
 	 
-		toolTipChange.setWidth("40px");
+		toolTipChange.setWidth("60px");
 		toolTipChange.setHeight("25px");       
 		
 		int x=table.getAbsoluteLeft();
@@ -5252,7 +5253,7 @@ final int index2 = index;
 		//toolTip.setPopupPosition(left,top);
 		
 		// Issue Role V2
-		toolTip.setPopupPosition(left-40,top);
+		toolTip.setPopupPosition(left-150,top);
 		// E: Issue Role V2
 		
 	        toolTip.show();
@@ -6133,6 +6134,7 @@ final int index2 = index;
 					standardizedRoleDetailsView[selectedtab].setValue(standardizedRoleProxy);
 					descriptionValue.setInnerHTML(description.getHTML());
 					description.setEnabled(false);
+					refreshSelectedTab();
 					
 				}
 				@Override
@@ -6165,19 +6167,36 @@ final int index2 = index;
 			Log.info("major changes");
 			
 			
-			requests.standardizedRoleRequestNonRoo().createStandardizedRoleMajorVersion(standardizedRoleProxy.getId()).fire(new OSCEReceiver<StandardizedRoleProxy>() {
+			requests.standardizedRoleRequestNonRoo().createStandardizedRoleMajorVersion(standardizedRoleProxy.getId(),(roleBaseItemProxy.getRoleSubItem().iterator().next()).getId(), description.getHTML()).fire(new OSCEReceiver<StandardizedRoleProxy>() {
 
 				@Override
 				public void onSuccess(StandardizedRoleProxy newCreatedStandardizedRoleProxy) {
 					// TODO Auto-generated method stub
 					Log.info("successfully role created--"+newCreatedStandardizedRoleProxy.getId());
-	
-					RoleSubItemValueRequest roleSubItemValueReq = requests.roleSubItemValueRequest();
+					standardizedRoleDetailsView[selectedtab].setValue(newCreatedStandardizedRoleProxy);
+					Log.info("RichTextArea Value edited succeessfully");
+					description.setEnabled(false);
+					descriptionValue.setInnerHTML(description.getHTML());
+						refreshSelectedTab();
+				//	RoleSubItemValueRequest roleSubItemValueReq=requests.roleSubItemValueRequest();
+				//	final RoleSubItemValueProxy roleSubItemValueProxy=roleSubItemValueReq.create(RoleSubItemValueProxy.class);
+					
+					//change for major version 17-10-2012 start
+					/*RoleSubItemValueRequest roleSubItemValueReq = requests.roleSubItemValueRequest();
 					RoleSubItemValueProxy roleSubItemValueProxy = roleSubItemValueReq.edit(roleBaseItemProxy.getRoleSubItem().iterator().next());
+					
+					//change for major version 17-10-2012 end
 					//roleSubItemValueProxy.setItemText(description.getText());
+
+
+					//final String text=roleSubItemValueProxy.getItemText();
+					//roleBaseItemProxy.getRoleSubItem().iterator().next()
 					roleSubItemValueProxy.setItemText(description.getHTML());
-					final String text=roleSubItemValueProxy.getItemText();
-					roleSubItemValueProxy.setStandardizedRole(newCreatedStandardizedRoleProxy);
+				//	roleSubItemValueProxy.setStandardizedRole(newCreatedStandardizedRoleProxy);
+				//	roleSubItemValueProxy.setStandardizedRole(standardizedRoleProxy);
+					//change for major minor start 17-10-2012
+					//roleSubItemValueProxy.setRoleBaseItem(roleBaseItemProxy);
+					//change for major minor end 17-10-2012
 					standardizedRoleDetailsView[selectedtab].setValue(newCreatedStandardizedRoleProxy);
 					// Highlight onViolation
 					roleSubItemValueReq.persist().using(roleSubItemValueProxy).fire(new OSCEReceiver<Void>(roleSubItemValueMap) {
@@ -6187,19 +6206,20 @@ final int index2 = index;
 							Log.info("RichTextArea Value edited succeessfully");
 							description.setEnabled(false);
 							descriptionValue.setInnerHTML(description.getHTML());
+							refreshSelectedTab();
 						//	Window.alert("Rich Text Value Set Successfully");
 						}
 						@Override
 						public void onViolation(Set<Violation> errors) {
 							System.out.println("violate");
-							/*description.setVisible(true);
+							description.setVisible(true);
 							descriptionValue.setInnerHTML("");
 							Iterator<Violation> iter = errors.iterator();
 							String message = "";
 							while (iter.hasNext()) {
 								message += iter.next().getMessage() + "<br>";
 							}
-							Log.warn(" in rich text -" + message);*/
+							Log.warn(" in rich text -" + message);
 							saveRichTextArea.setVisible(true);
 						}
 						
@@ -6214,7 +6234,7 @@ final int index2 = index;
 							
 						}
 					});
-
+*/
 				}
 			});
 			//create new proxy
