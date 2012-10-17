@@ -187,6 +187,23 @@ public class PatientInSemester {
     	
     	try
     	{
+    		
+    		if(searchCriteria.size()==0)
+	    	{
+	    		Iterator<PatientInRole> patientInRoleIterator=post.getPatientInRole().iterator();
+	        	
+	        	while(patientInRoleIterator.hasNext())
+	        	{
+	        		PatientInRole patientInRole=patientInRoleIterator.next();
+	        		
+	
+	        		patientInRole.setFit_criteria(true);
+	        	
+	        		patientInRole.persist();
+	        	}
+	        	return true;
+	    	}
+    		
     	List<PatientInSemester> patientInSemesters=findPatientInSemesterByAdvancedCriteria(semesterId,searchCriteria);
     	
     	 Iterator<PatientInRole> patientInRoleIterator=post.getPatientInRole().iterator();
@@ -199,7 +216,7 @@ public class PatientInSemester {
     		
     		for(PatientInSemester p:patientInSemesters)
     		{
-    			if(p.getId().equals(patientInRole.getPatientInSemester()))
+    			if(p.getId().longValue()==patientInRole.getPatientInSemester().getId().longValue())
     			{
     				isFit=true;
     				break;

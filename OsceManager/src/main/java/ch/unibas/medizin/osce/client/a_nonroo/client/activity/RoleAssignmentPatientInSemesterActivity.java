@@ -1162,13 +1162,13 @@ public void roleSelected(RoleSubView roleSubView)
 	osceDayProxy=roleSubView.getOsceDayProxy();
 	requests.getEventBus().fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));	
 	
-	checkFitCriteria(roleSubView,false);
+	checkFitCriteria(roleSubView,false,null);
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		
 	showApplicationLoading(false);
 }
 
-public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
+public void checkFitCriteria(final RoleSubView view,final boolean refreshRole,final PatientInRoleSubViewImpl patientInRoleSubViewImpl)
 {
 	Log.info("checkFitCriteria ");
 	showApplicationLoading(true);
@@ -1189,17 +1189,21 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole)
 	
 	listAdvanceSearchCirteria.addAll(view.getRoleProxy().getAdvancedSearchCriteria());
 	
-	if(listAdvanceSearchCirteria.size()==0)
+	/*if(listAdvanceSearchCirteria.size()==0)
 	{
 		showApplicationLoading(false);
 		return;
-	}
+	}*/
 	
 	requests.patientInSemesterRequestNonRoo().checkAndSetFitCriteriaOfRole(view.getPostProxy(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
 		public void onSuccess(Boolean response) {
 			Log.info("checkFitCriteria :" + response);
+			if(patientInRoleSubViewImpl!=null )
+			{
+				refreshRoleSubView(patientInRoleSubViewImpl.getRoleSubView(), patientInRoleSubViewImpl.getRoleSubView().isLastRole());
+			}
 			showApplicationLoading(false);
 			
 		}
@@ -1488,6 +1492,8 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 	
 	final long semesterId=patientInRoleView.getPatientInRoleProxy().getPatientInSemester().getId();
 	
+	final boolean isBackUp=patientInRoleView.getPatientInRoleProxy().getIs_backup();
+	
 	// module 3 bug }
 	Log.info("deletePatientInRole PatientInRoleProxy: " + patientInRoleView.getPatientInRoleProxy().getId());
 	
@@ -1506,18 +1512,22 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 				//refreshOsceSequences(patientInRoleView.getRoleSubView().getOsceDayProxy(), patientInRoleView.getRoleSubView().getOsceDaySubViewImpl());
 				HorizontalPanel roleHP=(HorizontalPanel)(roleSubView.getRoleParent());
 				int count=0;
+				PatientInRoleSubView patientInRoleSubViewFirstAssigned=null;
 				for(int i=1;i<roleHP.getWidgetCount();i++)
 				{
 					RoleSubView roleSubview=(RoleSubView)roleHP.getWidget(i);
 					VerticalPanel patientVP=roleSubview.getPatientInRoleVP();
-					VerticalPanel backupVP=roleSubview.getBackUpVP();
+					
 					
 					for(int j=0;j<patientVP.getWidgetCount();j++)
 					{
 						PatientInRoleProxy patientInRoleProxy=((PatientInRoleSubView)patientVP.getWidget(j)).getPatientInRoleProxy();
 						Log.info("patientInSemesterProxy  :" + semesterId);
 						if(patientInRoleProxy.getPatientInSemester().getId().equals(semesterId))
+						{
+							patientInRoleSubViewFirstAssigned=((PatientInRoleSubView)patientVP.getWidget(j));
 							count++;
+						}
 					}
 					/*for(int j=0;j<backupVP.getWidgetCount();j++)
 					{
@@ -1529,10 +1539,24 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 						break;
 				
 				}
-				if(count==1)
-					refreshAllRoleSubeView(roleSubView.getOsceDaySubViewImpl(), roleSubView.getOsceSequenceProxy());
-				else
-					refreshRoleSubView(roleSubView, roleSubView.isLastRole());
+				if(count==1 && !isBackUp)
+				{
+					if(patientInRoleSubViewFirstAssigned.getPatientInRoleProxy().getFit_criteria())
+					{
+						((PatientInRoleSubViewImpl)patientInRoleSubViewFirstAssigned).addStyleName("count-yellow");
+						((PatientInRoleSubViewImpl)patientInRoleSubViewFirstAssigned).removeStyleName("count-red");
+					}
+					else
+					{
+						((PatientInRoleSubViewImpl)patientInRoleSubViewFirstAssigned).addStyleName("count-red");
+						((PatientInRoleSubViewImpl)patientInRoleSubViewFirstAssigned).removeStyleName("count-yellow");
+					}
+					//refreshAllRoleSubeView(roleSubView.getOsceDaySubViewImpl(), roleSubView.getOsceSequenceProxy());
+				}
+				//else
+					//refreshRoleSubView(roleSubView, roleSubView.isLastRole());
+				patientInRoleView.removeFromParent();
+				roleSubView.refreshCountLabel();
 				
 				initPatientInSemester(true,false,false);
 				
@@ -2686,9 +2710,32 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		public void roleSelectedevent(StandardizedRoleProxy standardizedRoleProxy,
 				final OsceDaySubViewImpl osceDaySubViewImpl) {
 			
+			osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
+				
+				VerticalPanel sequenceVP=osceDaySubViewImpl.getSequenceVP();
+				for(int i=0;i<(sequenceVP.getWidgetCount());i=i=i+2)
+				{
+				//	if(i%2==0)
+					{
+						HorizontalPanel mainHP=(HorizontalPanel)sequenceVP.getWidget(i);
+						AbsolutePanel roleAP=(AbsolutePanel)mainHP.getWidget(0);
+						HorizontalPanel roleHP=(HorizontalPanel)roleAP.getWidget(0);
+						for(int j=1;j<roleHP.getWidgetCount();j++)
+						{
+							RoleSubViewImpl roleSubView=(RoleSubViewImpl)roleHP.getWidget(j);
+							if(roleSubView.getRoleProxy().getId().longValue()==roleSubViewSelected.getRoleProxy().getId().longValue())
+							{
+								osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("highlight-role");
+							}
+						}
+					}
+				}
+				Log.info("Complete execution");
+			
+			
 			// module 3 bug {
 			
-			osceDayTimer.cancel();
+		/*	osceDayTimer.cancel();
 			if(roleSubViewSelected.getOsceDaySubViewImpl().getOsceDayProxy()==null){
 				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
@@ -2710,7 +2757,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
 			}
 			
-			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);*/
 			/*requests.osceDayRequestNooRoo().findRoleAssignedInOsceDay(standardizedRoleProxy.getId(),osceDaySubViewImpl.getOsceDayProxy().getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
@@ -3070,7 +3117,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 
 			@Override
 			public void onSuccess(Void response) {
-				checkFitCriteria(patientViewDragged.getRoleSubView(),true);
+				checkFitCriteria(patientViewDragged.getRoleSubView(),true,patientViewDragged);
 				//refreshRoleSubView(patientViewDragged.getRoleSubView(), patientViewDragged.getRoleSubView().isLastRole());
 				refreshRoleSubView(sourceRoleSubView,sourceRoleSubView.isLastRole());
 		//		patientViewDragged.setPatientInRoleProxy(patientInRoleProxy);			
