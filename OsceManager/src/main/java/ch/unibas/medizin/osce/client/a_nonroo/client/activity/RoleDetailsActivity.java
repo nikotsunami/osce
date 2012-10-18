@@ -139,10 +139,8 @@ import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
-import ch.unibas.medizin.osce.shared.ViewType;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.scaffold.ChecklistOptionRequestNonRooo;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -158,11 +156,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -1820,6 +1813,14 @@ final int index2 = index;
 										Range range = roleBaseTableItemViewImpl.getTable().getVisibleRange();										
 										roleBaseTableItemViewImpl.getTable().setRowCount(response.size());
 										roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(),response);
+										
+										//SPEC Change
+										
+										if(isPrevious){
+											roleBaseTableItemViewImpl.removeLastColumn();
+										}
+										//SPEC Change
+										
 										roleBaseTableItemViewImpl.description.setEnabled(false);
 										}
 										
