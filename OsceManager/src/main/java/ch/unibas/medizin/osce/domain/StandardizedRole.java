@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -309,6 +310,24 @@ public class StandardizedRole {
 		return StandardizedPatient.fetchContextPath() + fileName;
 			//Feature : 154
 	}
+	
+	public static String getRolesPrintPdfBySearchUsingServlet(Long standardizedRoleId, List<String> itemsList, Long roleItemAccessId,String locale,OutputStream out) {
+		String fileName = OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
+		try {
+			StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
+			RolePrintPdfUtil rolePrintPdfUtil = new RolePrintPdfUtil(locale);
+			Log.info("Message received in Pdf role print by : " + standardizedRole.longName);
+			fileName = standardizedRole.longName + "_" + standardizedRole.studyYear + "_ " + OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
+			rolePrintPdfUtil.writeFile(standardizedRole, itemsList, roleItemAccessId,out);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.error("Error in Std. Role getRolesPrintPdfBySearch: " + e.getMessage());
+		}
+
+		return fileName;
+			//Feature : 154
+	}
+	
 	// Issue : 120
 	   
 }

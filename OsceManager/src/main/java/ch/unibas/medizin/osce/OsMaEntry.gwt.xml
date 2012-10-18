@@ -22,6 +22,7 @@
 	
 	 <inherits name="de.novanic.eventservice.GWTEventService"/>
 	
+	 <inherits name="com.google.gwt.http.HTTP"/>	
 	 <!--ServerPush event  } -->
 	 
 	  <!-- servlet>
@@ -53,7 +54,7 @@
   
   
   
-  <inherits name="com.allen_sauer.gwt.log.gwt-log-ERROR" />
+  <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO" />
   <!-- <extend-property name="log_level" values="DEBUG"/> -->
 	
 
@@ -66,7 +67,7 @@
 	
 	
 	<inherits name='com.allen_sauer.gwt.log.gwt-log-RemoteLogger' />
-	<set-property name="gwt.logging.enabled" value="FALSE"/>
+	<set-property name="gwt.logging.enabled" value="TRUE"/>
 	<set-property name="gwt.logging.logLevel" value="SEVERE"/>
 	<set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
 	<set-property name="gwt.logging.developmentModeHandler" value="ENABLED"/>

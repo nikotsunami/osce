@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.server.util.file;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -122,6 +123,33 @@ public class PdfUtil {
 		}
 	}
 
+	public void writeFile(StandardizedPatient standardizedPatient,
+			OutputStream out) {
+		try {
+			stdPat = standardizedPatient;
+			anamnesisFormId = stdPat.getAnamnesisForm().getId();
+			title = constants.standardizedPatient() + " "
+					+ standardizedPatient.getName() + " "
+					+ standardizedPatient.getPreName();
+			writer = PdfWriter.getInstance(document, out);
+			document.open();
+			addMetaData();
+			addHeader();
+			addContactDetails();
+			addDetails();
+			addBankAccount();
+			addTraits();
+			addAnamnesis();
+
+			// createOtherDetailsTable(document);
+			// addEmptyLine(preface, 5);
+			// addSignature(document);
+
+			document.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	private void addSignature(Document document) {
 		try {
 			Paragraph signPara = new Paragraph(

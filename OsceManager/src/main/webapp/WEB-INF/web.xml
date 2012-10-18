@@ -298,4 +298,14 @@
 		<url-pattern>/downloadRoleFile</url-pattern>
 	</servlet-mapping>
  
+	<servlet>
+		<servlet-name>resourceDownloaderServlet</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.util.resourcedownloader.ResourceDownloaderServlet</servlet-class>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>resourceDownloaderServlet</servlet-name>
+		<url-pattern>/downloadFile</url-pattern>
+	</servlet-mapping>
+ 
 </web-app>

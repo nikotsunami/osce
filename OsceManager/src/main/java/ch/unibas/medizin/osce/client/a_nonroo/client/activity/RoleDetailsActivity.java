@@ -131,6 +131,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
@@ -138,6 +139,7 @@ import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -156,6 +158,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -2000,13 +2003,31 @@ final int index2 = index;
 							.getSelectedRoleItemAccess().getId();
 		}
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-		requests.standardizedRoleRequestNonRoo()
-				.getRolesPrintPdfBySearch(
-						standardizedRolePrintFilterViewImpl
-								.getStandardizedRoleProxy().getId(),
-						standardizedRolePrintFilterViewImpl.getFilters(),
-						selectedRoleItemAccess,locale)
-				.fire(new StandardizedRolePdfFileReceiver());
+				
+		StringBuilder requestData = new StringBuilder();
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ResourceDownloadProps.Entity.STANDARDIZED_ROLE).append("&")
+					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(standardizedRolePrintFilterViewImpl
+								.getStandardizedRoleProxy().getId().toString())).append("&");
+					
+		for (String filter : standardizedRolePrintFilterViewImpl.getFilters()) {
+			requestData.append(ResourceDownloadProps.FILTER).append("=").append(URL.encodeQueryString(filter)).append("&");	
+		}
+		requestData.append(ResourceDownloadProps.SELECTED_ROLE_ITEM_ACCESS).append("=").append(URL.encodeQueryString(selectedRoleItemAccess.toString())).append("&");
+		requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+		
+		String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData.toString(); 
+		Log.info("--> url is : " +url);
+		Window.open(url, "", "");
+		
+		
+		
+//		requests.standardizedRoleRequestNonRoo()
+//				.getRolesPrintPdfBySearch(
+//						standardizedRolePrintFilterViewImpl
+//								.getStandardizedRoleProxy().getId(),
+//						standardizedRolePrintFilterViewImpl.getFilters(),
+//						selectedRoleItemAccess,locale)
+//				.fire(new StandardizedRolePdfFileReceiver());
 	}
 
 	private class StandardizedRolePdfFileReceiver extends OSCEReceiver<String> {
