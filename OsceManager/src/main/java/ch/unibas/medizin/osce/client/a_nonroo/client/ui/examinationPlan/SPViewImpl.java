@@ -74,12 +74,12 @@ public class SPViewImpl extends Composite implements SPView{
 		if(assignmentProxy == null)
 			return;
 		
-		if( assignmentProxy.getPatientInRole()==null)
+		/*if( assignmentProxy.getPatientInRole()==null)
 		{
 			MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 			dialogBox.showConfirmationDialog(constants.patientNotAssigned());
 		}
-		else	
+		else*/	
 			showSPPanelPopup();
 	}
 	public void showSPPanelPopup()
@@ -114,12 +114,18 @@ public class SPViewImpl extends Composite implements SPView{
 			});
 			
 			
-			//setDAta
-			popupView.getNameValue().setText(assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName());
-			popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
-			popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
 			
 		}
+		
+		//setDAta
+		
+		if(assignmentProxy.getPatientInRole()!=null)
+			popupView.getNameValue().setText(assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName());
+		else
+			popupView.getNameValue().setText(constants.notAssigned());
+		popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
+		popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
+		
 		
 		((PopupViewImpl)popupView).show();
 		

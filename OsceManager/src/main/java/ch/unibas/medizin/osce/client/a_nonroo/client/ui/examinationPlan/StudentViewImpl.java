@@ -70,12 +70,15 @@ public class StudentViewImpl extends Composite implements StudentView{
 	public void studentPanelClicked(ClickEvent event)
 	{
 		Log.info("studentPanel Clicked");
-		if(assignmentProxy.getStudent()==null)
+		if(assignmentProxy == null)
+			return;
+		
+		/*if(assignmentProxy.getStudent()==null)
 		{
 			MessageConfirmationDialogBox dialgoBox=new MessageConfirmationDialogBox(constants.warning());
 			dialgoBox.showConfirmationDialog(constants.studentNotAssigned());
 		}
-		else
+		else*/
 		{
 			showStudentPopupView();
 			
@@ -113,14 +116,19 @@ public class StudentViewImpl extends Composite implements StudentView{
 			});
 			
 			
-			//setDAta
-			popupView.getNameValue().setText(assignmentProxy.getStudent().getName());
-			popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
-			Log.info("student end time " + assignmentProxy.getTimeEnd());
-			popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
+			
+			
 			
 		}
+		//setDAta
+		if(assignmentProxy.getStudent()!=null)
+			popupView.getNameValue().setText(assignmentProxy.getStudent().getName());
+		else
+			popupView.getNameValue().setText(constants.notAssigned());
 		
+		popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
+		Log.info("student end time " + assignmentProxy.getTimeEnd());
+		popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
 		((PopupViewImpl)popupView).show();
 		
 	}

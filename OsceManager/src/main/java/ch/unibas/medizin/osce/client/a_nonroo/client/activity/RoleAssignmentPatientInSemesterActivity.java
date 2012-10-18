@@ -751,7 +751,7 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 						view.setOsceDaySubViewImpl(osceDaySubViewImpl);
 						view.setRoleParent(roleHP);
 						//view.setBoundaryPanel(roleAp);
-						
+						roleHP.add(view);
 						if(!postIterator.hasNext())
 						{
 							view.setLastRole(true);
@@ -762,7 +762,7 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 									createRoleSubView(view, postProxy, false);
 							
 						roleHP.setSpacing(10);
-						roleHP.add(view);
+						
 					}
 			//OscePostProxy postProxy=postIterator.next();
 			//StandardizedRoleProxy roleProxy=postProxy.getStandardizedRole();
@@ -1063,9 +1063,9 @@ public void refreshAllRoleSubeView(OsceDaySubViewImpl osceDaySubViewImpl,OsceSeq
 			RoleSubView roleSubView=((RoleSubView)((HorizontalPanel)((AbsolutePanel)((HorizontalPanel)osceDaySubViewImpl.getSequenceVP().getWidget(i)).getWidget(0)).getWidget(0)).getWidget(j));
 			if(roleSubView.getOsceSequenceProxy().getId()==osceSequenceProxy.getId())
 			{
-				if(j==((HorizontalPanel)((AbsolutePanel)((HorizontalPanel)osceDaySubViewImpl.getSequenceVP().getWidget(i)).getWidget(0)).getWidget(0)).getWidgetCount()-1)
-					refreshRoleSubView(roleSubView,true);
-				else
+			//	if(j==((HorizontalPanel)((AbsolutePanel)((HorizontalPanel)osceDaySubViewImpl.getSequenceVP().getWidget(i)).getWidget(0)).getWidget(0)).getWidgetCount()-1)
+			//		refreshRoleSubView(roleSubView,true);
+			//	else
 					refreshRoleSubView(roleSubView,false);
 			}
 			else
@@ -1204,7 +1204,7 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole,fi
 			Log.info("checkFitCriteria :" + response);
 			if(patientInRoleSubViewImpl!=null )
 			{
-				refreshRoleSubView(patientInRoleSubViewImpl.getRoleSubView(), patientInRoleSubViewImpl.getRoleSubView().isLastRole());
+				refreshRoleSubView(patientInRoleSubViewImpl.getRoleSubView(), false);
 			}
 			showApplicationLoading(false);
 			
@@ -1228,7 +1228,7 @@ public void setFitCriteria(PatientInRoleProxy patientInRoleProxy,boolean fit_cri
 			Log.info("setFitCriteria success");
 			if(refreshRole)
 			{
-				refreshRoleSubView(roleSubView, roleSubView.isLastRole());
+				refreshRoleSubView(roleSubView, false);
 			}
 			showApplicationLoading(false);		
 		}
@@ -2159,7 +2159,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 											if(count==1)
 												refreshAllRoleSubeView(roleSubViewSelected.getOsceDaySubViewImpl(), roleSubViewSelected.getOsceSequenceProxy());
 											else
-												refreshRoleSubView(roleSubViewSelected, roleSubViewSelected.isLastRole());
+												refreshRoleSubView(roleSubViewSelected, false);
 											//For reload whole table pass (true , false) else reload only selected patient pass (false , true) and third argument true for make Navigation button enable. 
 											//initPatientInSemester(false,true);		
 	//										initPatientInSemester(true,false,true);
@@ -3146,7 +3146,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			public void onSuccess(Void response) {
 				checkFitCriteria(patientViewDragged.getRoleSubView(),true,patientViewDragged);
 				//refreshRoleSubView(patientViewDragged.getRoleSubView(), patientViewDragged.getRoleSubView().isLastRole());
-				refreshRoleSubView(sourceRoleSubView,sourceRoleSubView.isLastRole());
+				refreshRoleSubView(sourceRoleSubView,false);
 		//		patientViewDragged.setPatientInRoleProxy(patientInRoleProxy);			
 				initPatientInSemester(true,false,false);
 				showApplicationLoading(false);
