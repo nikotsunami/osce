@@ -5,6 +5,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.domain.Doctor;
+import ch.unibas.medizin.osce.shared.Sorting;
 
 import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Request;
@@ -17,7 +18,7 @@ public interface DoctorRequestNonRoo extends RequestContext {
 	
 	abstract Request<Long> countDoctorsBySearch(String q);
 	
-	abstract Request<List<DoctorProxy>> findDoctorsBySearch(String q, int firstResult, int maxResults);
+	abstract Request<List<DoctorProxy>> findDoctorsBySearch(String q, int firstResult, int maxResults, Sorting sortorder, String sortFiled);
 	
 	// SPEC START =
 	abstract Request<List<DoctorProxy>> findDoctorWithRoleTopic(Long standroleid);

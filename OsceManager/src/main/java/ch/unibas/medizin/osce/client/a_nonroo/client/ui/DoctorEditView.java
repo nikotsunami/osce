@@ -26,7 +26,7 @@ public interface DoctorEditView extends IsWidget {
 		void storeDisplaySettings();
 	}
 
-	RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> createEditorDriver();
+	//RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> createEditorDriver();
 	void setPresenter(Presenter doctorEditActivity);
 	void setClinicPickerValues(Collection<ClinicProxy> emptyList);
 	
@@ -38,6 +38,8 @@ public interface DoctorEditView extends IsWidget {
 	Map getDoctorMap();
 	int getSelectedTab();
 	// E Highlight onViolation
+	public void setValueForEdit(DoctorProxy proxy);
+	public DoctorEditViewImpl getDoctorEditViewImpl();
 
 
 }

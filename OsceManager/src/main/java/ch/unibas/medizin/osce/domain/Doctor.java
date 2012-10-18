@@ -11,6 +11,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 import com.allen_sauer.gwt.log.client.Log;
 
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.Sorting;
+
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -72,10 +74,12 @@ public class Doctor {
         return query.getSingleResult();
     }
 
-    public static List<Doctor> findDoctorsBySearch(String q, int firstResult, int maxResults) {
+    public static List<Doctor> findDoctorsBySearch(String q, int firstResult, int maxResults,Sorting sortorder,String sortFiled) {
         if (q == null) throw new IllegalArgumentException("The q argument is required");
         EntityManager em = entityManager();
-        TypedQuery<Doctor> query = em.createQuery("SELECT o FROM Doctor AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Doctor.class);
+        String queryString="SELECT o FROM Doctor AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q ORDER BY "+sortFiled + " " +sortorder;
+       // TypedQuery<Doctor> query = em.createQuery("SELECT o FROM Doctor AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Doctor.class);
+        TypedQuery<Doctor> query = em.createQuery(queryString, Doctor.class);
         query.setParameter("q", "%" + q + "%");
         query.setFirstResult(firstResult);
         query.setMaxResults(maxResults);

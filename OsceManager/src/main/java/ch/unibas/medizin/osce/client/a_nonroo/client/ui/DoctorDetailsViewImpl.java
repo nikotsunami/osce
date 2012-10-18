@@ -211,7 +211,30 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		clinic.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getName()));
-		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy));
+		if(proxy!=null)
+		{
+			String header=" ";
+			if(proxy.getTitle()!=null)
+			{
+				header=header+proxy.getTitle();
+			}
+			
+			if(proxy.getPreName()!=null)
+			{
+				header=header+" "+ proxy.getPreName();
+			}
+			if(proxy.getName()!=null)
+			{
+				header=header+" "+proxy.getName();
+			}
+			displayRenderer.setInnerText(header);
+		}
+		else
+		{
+			displayRenderer.setInnerText(" ");
+		}
+		//displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy));
+		//displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.DoctorProxyRenderer.instance().render(proxy));
 	}
 
 	@Override

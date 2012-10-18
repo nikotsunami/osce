@@ -1,6 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.DoctorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -13,14 +18,18 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -34,10 +43,12 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -64,7 +75,13 @@ DoctorView.Presenter, DoctorView.Delegate {
 	private HandlerRegistration placeChangeHandlerRegistration;
 	int x;
 	int y;
-
+	public String columnHeader;
+	public String cellValue;
+	public List<String> path = new ArrayList<String>();
+	Map<String, String> columnName;
+	 public String sortname = "name";
+	 public Sorting sortorder = Sorting.ASC;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	public DoctorActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
     	this.placeController = placeController;
@@ -100,6 +117,8 @@ DoctorView.Presenter, DoctorView.Delegate {
 		this.view = systemStartView;
 		widget.setWidget(systemStartView.asWidget());
 		setTable(view.getTable());
+		columnName=view.getSortMap();
+		addColumnOnMouseout();
 		
 		//celltable changes start
 		table.addHandler(new MouseDownHandler() {
@@ -140,7 +159,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 					@Override
 					public void onMouseOut(MouseOutEvent event) {
 						// TODO Auto-generated method stub
-						//addColumnOnMouseout();
+						addColumnOnMouseout();
 						table.getPopup().hide();
 						
 					}
@@ -164,6 +183,23 @@ DoctorView.Presenter, DoctorView.Delegate {
 							table.getPopup().show();
 
 						} 
+						 else {
+								
+							
+								// path = systemStartView.getPaths();
+								Log.info("call for sort " + path.size() + "--index--"+ index);
+								sortname = path.get(index);
+
+								sortorder = (event.isSortAscending()) ? Sorting.ASC: Sorting.DESC;
+								// By SPEC]end
+								// RoleActivity.this.init2("");
+								Log.info("Call Init Search from addColumnSortHandler--"+sortname+"--"+sortorder);
+								// filter.hide();
+								initFilterTitleFill();
+								initSearch();
+
+								
+							}
 					}
 				});
 				/*celltable changes end*/
@@ -347,7 +383,8 @@ DoctorView.Presenter, DoctorView.Delegate {
 	
 	protected Request<List<DoctorProxy>> createRangeRequest(String q, Range range) {
 //		return requests.doctorRequest().findDoctorEntries(range.getStart(), range.getLength());
-		return requests.doctorRequestNonRoo().findDoctorsBySearch(q, range.getStart(), range.getLength());
+		//final Range newRange = table.getVisibleRange();
+		return requests.doctorRequestNonRoo().findDoctorsBySearch(q, range.getStart(), range.getLength(),sortorder,sortname);
 	}
 
 	protected void fireCountRequest(String q, Receiver<Long> callback) {
@@ -396,9 +433,11 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {
-					view.getTable().setRowCount(response.size());
+				/*	view.getTable().setRowCount(response.size());
 					view.getTable().setRowData(response);
-				
+				*/
+					table.setRowCount(response.size());
+					table.setRowData(response);
 				}
 			});
 		}
@@ -408,13 +447,147 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {
-					view.getTable().setRowCount(response.size());
+					/*view.getTable().setRowCount(response.size());
 					view.getTable().setRowData(response);
-					view.getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
+					view.getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);*/
+					table.setRowCount(response.size());
+					table.setRowData(response);
+					table.setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
 				}
 			});
 		}
 		
+	}
+	
+	public void addColumnOnMouseout()
+	{
+		Set<String> selectedItems = table.getPopup().getMultiSelectionModel().getSelectedSet();
+
+		
+		int j = table.getColumnCount();
+		while (j > 0) {
+			
+			table.removeColumn(0);
+			j--;
+		}
+
+		path.clear();
+
+		Iterator<String> i;
+		if (selectedItems.size() == 0) {
+
+			i = table.getPopup().getDefaultValue().iterator();
+
+		} else {
+			i = selectedItems.iterator();
+		}
+
+		Set mySet = new HashSet(view.getSortMap().keySet());
+		//Iterator<String> i1=mySet.iterator();
+		Iterator<String> i1=view.getColumnSortSet().iterator();
+		/*System.out.println("key set is--"+view.getColumnSortSet());
+		System.out.println("key set is--"+selectedItems);
+		*/
+		while (i1.hasNext()) {
+		
+			
+			String colValue=i1.next();
+			/*System.out.println("Initlist--"+table.getInitList());*/
+			Log.info("colvalue--"+colValue);
+			if(selectedItems.contains(colValue) || table.getInitList().contains(colValue))
+			{
+				
+				if(table.getInitList().contains(colValue))
+				{
+					table.getInitList().remove(colValue);
+				}
+			
+			columnHeader = colValue;
+			Log.info("colheader--"+columnHeader);
+			String colName=(String)columnName.get(columnHeader);
+			Log.info("colname--"+colName);	
+			path.add(colName.toString());
+				path.add(" ");
+				
+				
+			
+
+			table.addColumn(new TextColumn<DoctorProxy>() {
+
+				{
+					this.setSortable(true);
+				}
+
+				Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+					public String render(java.lang.String obj) {
+						return obj == null ? "" : String.valueOf(obj);
+					}
+				};
+
+				String tempColumnHeader = columnHeader;
+
+				@Override
+				public String getValue(DoctorProxy object) {
+
+					
+
+					if (tempColumnHeader == constants.name()) {
+						
+						return renderer.render(object.getName()!=null?object.getName():"");
+					} else if (tempColumnHeader == constants.preName()) {
+						
+						return renderer.render(object.getPreName()!=null?object.getPreName():"");
+					} else if (tempColumnHeader == constants.email()) {
+						
+						return renderer.render(object.getEmail()!=null?object.getEmail():"");
+					} else if (tempColumnHeader == constants.title()) {
+						
+						return renderer.render(object.getTitle()!=null?object.getTitle():"");
+					} else if (tempColumnHeader == constants.telephone()) {
+						
+						return renderer.render(object.getTelephone()!=null?object.getTelephone():"");
+						
+					} else if (tempColumnHeader == constants.clinic()) {
+						return renderer.render(object.getClinic()!=null?object.getClinic().getName():"");
+						
+					}/*else if (tempColumnHeader == constants.officeDetails()) {
+						if(object.getOffice()!=null)
+						{
+							String officeDetail=" ";
+							if(object.getOffice().getTitle()!=null)
+							{
+								officeDetail=officeDetail+object.getOffice().getTitle();
+							}
+							if(object.getOffice().getName()!=null)
+							{
+								officeDetail=officeDetail+" "+object.getOffice().getName();
+							}
+							if(object.getOffice().getPreName()!=null)
+							{
+								officeDetail=officeDetail+" "+object.getOffice().getPreName();
+							}
+							return renderer.render(officeDetail);
+						}
+						else
+						{
+							return renderer.render("");
+						}
+						
+						//return renderer.render(object.getOffice()!=null?object.getOffice().getName():"");
+						
+					} */
+					else {
+						return "";
+					}
+
+					// return renderer.render(cellValue);
+				}
+			}, columnHeader, false);
+			//path.add(" ");
+		}
+		}
+
 	}
 	
 /*	@Override
