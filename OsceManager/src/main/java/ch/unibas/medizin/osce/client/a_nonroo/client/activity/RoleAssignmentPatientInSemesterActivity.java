@@ -65,6 +65,7 @@ import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
+import ch.unibas.medizin.osce.shared.scaffold.PatientInRoleRequestNonRoo;
 
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
@@ -1195,7 +1196,7 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole,fi
 		return;
 	}*/
 	
-	requests.patientInSemesterRequestNonRoo().checkAndSetFitCriteriaOfRole(view.getPostProxy(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
+	requests.patientInSemesterRequestNonRoo().checkAndSetFitCriteriaOfRole(view.getPostProxy().getId(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
 		public void onSuccess(Boolean response) {
@@ -1250,8 +1251,9 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 	
 	// module 3 bug }
 	final PatientInRoleProxy patientInRoleProxy=proxy;
-	PatientInRoleRequest patientInRoleRequest=requests.patientInRoleRequest();
-	
+	//PatientInRoleRequest patientInRoleRequest=requests.patientInRoleRequest();
+	PatientInRoleRequestNonRoo patientInRoleRequest=requests.patientInRoleRequestNonRoo();
+	Log.info("SP name : " + proxy.getPatientInSemester().getStandardizedPatient().getName());
 	proxy=patientInRoleRequest.edit(proxy);
 	proxy.setIs_backup(isBackUp);
 	proxy.setIs_first_in_sequence(false);
@@ -1261,14 +1263,14 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 	
 
 	
-	patientInRoleRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+	patientInRoleRequest.save().using(proxy).with("patientInSemester","patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<PatientInRoleProxy>() {
 
 		@Override
-		public void onSuccess(Void response) {
+		public void onSuccess(PatientInRoleProxy response) {
 			Log.info("editBackUpFlag : onSuccess");
 		
 //modul 3 changes {
-			
+			patientInRoleSubView.setPatientInRoleProxy(response);
 			if(patientInRoleSubView.getPatientInRoleProxy().getFit_criteria())
 			{
 				//((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
@@ -1345,14 +1347,16 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				if(count==1)
 				{
 					final PatientInRoleSubView patientInRoleSubView1=patientInRoleSubViewFirstAssigned;
-					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					//PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					PatientInRoleRequestNonRoo patientRequest=requests.patientInRoleRequestNonRoo();
 					patientInRoleProxyFirstAssigned=patientRequest.edit(patientInRoleProxyFirstAssigned);
 					patientInRoleProxyFirstAssigned.setIs_first_in_sequence(true);
-					patientRequest.persist().using(patientInRoleProxyFirstAssigned).fire(new OSCEReceiver<Void>() {
+					patientRequest.save().using(patientInRoleProxyFirstAssigned).with("patientInSemester","patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<PatientInRoleProxy>() {
 
 						@Override
-						public void onSuccess(Void response) {
+						public void onSuccess(PatientInRoleProxy response) {
 							
+							patientInRoleSubView1.setPatientInRoleProxy(response);
 							if(patientInRoleSubView1.getPatientInRoleProxy().getFit_criteria())
 							{
 								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
@@ -1400,14 +1404,16 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				if(count==1)
 				{
 					final PatientInRoleSubView patientInRoleSubView1=patientInRoleSubViewFirstAssigned;
-					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					//PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					PatientInRoleRequestNonRoo patientRequest=requests.patientInRoleRequestNonRoo();
 					patientInRoleProxyFirstAssigned=patientRequest.edit(patientInRoleProxyFirstAssigned);
+					Log.info("Backup falg :" + patientInRoleProxyFirstAssigned.getIs_backup());
 					patientInRoleProxyFirstAssigned.setIs_first_in_sequence(true);
-					patientRequest.persist().using(patientInRoleProxyFirstAssigned).fire(new OSCEReceiver<Void>() {
+					patientRequest.save().using(patientInRoleProxyFirstAssigned).with("patientInSemester","patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<PatientInRoleProxy>() {
 
 						@Override
-						public void onSuccess(Void response) {
-							
+						public void onSuccess(PatientInRoleProxy response) {
+							patientInRoleSubView1.setPatientInRoleProxy(response);
 							if(patientInRoleSubView1.getPatientInRoleProxy().getFit_criteria())
 							{
 								((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");
@@ -1426,14 +1432,15 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				{
 					final PatientInRoleSubView patientInRoleSubView1=patientViews.get(0);
 					PatientInRoleProxy patientInRoleProxy1=patientInRoleSubView1.getPatientInRoleProxy();
-					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					//PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
+					PatientInRoleRequestNonRoo patientRequest=requests.patientInRoleRequestNonRoo();
 					patientInRoleProxy1=patientRequest.edit(patientInRoleProxy1);
 					patientInRoleProxy1.setIs_first_in_sequence(false);
-					patientRequest.persist().using(patientInRoleProxy1).fire(new OSCEReceiver<Void>() {
+					patientRequest.save().using(patientInRoleProxy1).with("patientInSemester","patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<PatientInRoleProxy>() {
 
 						@Override
-						public void onSuccess(Void response) {
-							
+						public void onSuccess(PatientInRoleProxy response) {
+							patientInRoleSubView1.setPatientInRoleProxy(response);
 							if(patientInRoleSubView1.getPatientInRoleProxy().getFit_criteria())
 							{
 								//((PatientInRoleSubViewImpl)patientInRoleSubView1).addStyleName("count-yellow");

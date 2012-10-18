@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 
+import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
@@ -24,4 +25,6 @@ public interface PatientInRoleRequestNonRoo extends RequestContext {
 	public abstract Request<Boolean> deletePatientInRole(PatientInRoleProxy patientInRole);
 	 public abstract Request<Void> savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId);
 	// change }
+	 
+	 abstract InstanceRequest<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy, ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy> save();
 }

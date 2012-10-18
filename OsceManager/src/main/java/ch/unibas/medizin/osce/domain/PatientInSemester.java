@@ -182,11 +182,12 @@ public class PatientInSemester {
         return resultList;
     }
     
-    public static Boolean checkAndSetFitCriteriaOfRole(OscePost post,Long semesterId, List<AdvancedSearchCriteria> searchCriteria)
+    public static Boolean checkAndSetFitCriteriaOfRole(Long postId,Long semesterId, List<AdvancedSearchCriteria> searchCriteria)
     {
     	
     	try
     	{
+    		OscePost post=OscePost.findOscePost(postId);
     		
     		if(searchCriteria.size()==0)
 	    	{

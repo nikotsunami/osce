@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
@@ -49,6 +50,14 @@ public class PatientInRole {
  	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInRole")
      private Set<Assignment> assignments = new HashSet<Assignment>();
  	// E Module10 Create plans
+ 	
+ 	@Transactional
+ 	public PatientInRole save()
+ 	{
+ 		if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+        return this;
+ 	}
  	
  // module 3 bug {
  	 public static Integer getTotalCountPatientAssignInRole(Long osceId,Long patientInSemesterId){
@@ -154,7 +163,7 @@ public class PatientInRole {
     public static PatientInRole findPIRBasedOnSem(Long semId,Long seqId){
     	Log.info("In side findPIRBasedOnPostAndSem with sem :" + semId);
     	EntityManager em = entityManager();
-    	String query = "select pir from PatientInRole as pir,OscePost as op where pir.patientInSemester="+semId +" and pir.oscePost IS NOT NULL and pir.oscePost=op.id"
+    	String query = "select pir from PatientInRole as pir,OscePost as op where pir.patientInSemester="+semId +" and pir.oscePost IS NOT NULL and pir.is_backup=false and pir.oscePost=op.id"
     			+ " and op.osceSequence="+seqId;
     	TypedQuery<PatientInRole> q = em.createQuery(query,PatientInRole.class);
     	return q.getSingleResult();
