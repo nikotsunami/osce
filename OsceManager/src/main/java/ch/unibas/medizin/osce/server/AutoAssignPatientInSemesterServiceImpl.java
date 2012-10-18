@@ -216,8 +216,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							
 								Log.info("OsceDay is For which OsceSecurity Is Checked Iterator:" + sortedOsceDay.getId());
 								
-								List<Course> parcourList = Osce.getAllParcoursForThisOsceDay(sortedOsceDay);
+								// Manish Now changed Query to get Assignment Of Sequence not of OsceDay Commented below line and query 
+								//List<Course> parcourList = Osce.getAllParcoursForThisOsceDay(sortedOsceDay);
 								
+								List<Course> parcourList=Osce.getAllParcoursForThisSequence(sortedOscePost.getOsceSequence().getId());
 								Log.info("Parcour list size IS :" + parcourList.size());
 								
 								if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){

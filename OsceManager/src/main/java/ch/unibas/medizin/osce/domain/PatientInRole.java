@@ -351,15 +351,30 @@ public class PatientInRole {
     	return true;
     }
     //spec bug sol
-    public static void savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId){
+    public static String savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId){
+    	Log.info("Inside savePatientInRole");
     	
+    	boolean isAssigned=false;
+    	boolean isPatientInSemesterFulfill = false;
     	try{
     	OsceDay osceDay= OsceDay.findOsceDay(osceDayId);
     	OscePost oscePost = OscePost.findOscePost(oscePostId);
     	PatientInSemester patientInSemester = PatientInSemester.findPatientInSemester(patientInsemesterId);
     	StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
 	
-		boolean isPatientInSemesterFulfill = false;
+    	Set<PatientInRole> patientInRoles =oscePost.getPatientInRole();
+    	for (Iterator iterator = patientInRoles.iterator(); iterator.hasNext();) {
+			PatientInRole patientInRole = (PatientInRole) iterator.next();
+			
+			if(patientInRole.getPatientInSemester().getId().longValue()==patientInSemester.getId().longValue()){
+				Log.info("Returned assigned");
+				isAssigned=true;
+			}
+			
+		}
+    	Log.info("Process Ahead");
+		
+    	if(!isAssigned){
 
 		if (standardizedRole != null && standardizedRole.getAdvancedSearchCriteria().size() > 0) {
 
@@ -381,10 +396,15 @@ public class PatientInRole {
 				isPatientInSemesterFulfill = true;
 				onPersistPatientInRole(osceDay,oscePost,patientInSemester,isPatientInSemesterFulfill);
 			}
+    	}
     	}catch (Exception e) {
     		Log.info("Error during saving PIR");
 			e.printStackTrace();
+			return "error";
 		}
+    	Log.info("Returned success");
+    	
+    	return isAssigned ? "assigned" : "success";
 }
     public static void onPersistPatientInRole(OsceDay osceDay,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
 

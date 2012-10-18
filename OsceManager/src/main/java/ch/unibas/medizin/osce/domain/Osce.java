@@ -541,10 +541,17 @@ public class Osce {
 
 	}
 
-	public static List<Course>getAllParcoursForThisOsceDay(OsceDay osceDay){
+	/*public static List<Course>getAllParcoursForThisOsceDay(OsceDay osceDay){
 		
 		EntityManager em = entityManager();
 		String queryString="select co from OsceSequence as os,Course as co where os.osceDay="+ osceDay.getId()+" and co.osceSequence=os.id";
+		TypedQuery<Course> q = em.createQuery(queryString,Course.class);
+		return q.getResultList();
+	}*/
+	public static List<Course>getAllParcoursForThisSequence(Long sequenceId){
+		
+		EntityManager em = entityManager();
+		String queryString="select co from Course as co where co.osceSequence="+sequenceId;
 		TypedQuery<Course> q = em.createQuery(queryString,Course.class);
 		return q.getResultList();
 	}

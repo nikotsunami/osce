@@ -23,7 +23,7 @@ public interface PatientInRoleRequestNonRoo extends RequestContext {
 	// change {
 	public abstract Request<Integer> getTotalTimePatientAssignInRole(Long osceDayId,Long patientInsemesterId);
 	public abstract Request<Boolean> deletePatientInRole(PatientInRoleProxy patientInRole);
-	 public abstract Request<Void> savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId);
+	 public abstract Request<String> savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId);
 	// change }
 	 
 	 abstract InstanceRequest<ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy, ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy> save();
