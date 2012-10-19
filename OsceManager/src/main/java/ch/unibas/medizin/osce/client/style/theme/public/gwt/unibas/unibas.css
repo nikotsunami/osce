@@ -2451,7 +2451,7 @@ background: rgb(201,201,253)  ;
 .accordion-title-selectedcolor_1 {
  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6d4a3', endColorstr='#fdf0dd'); /* for IE */
 	background: -webkit-gradient(linear, left top, left bottom, from(#f6d4a3), to(#fdf0dd)); /* for webkit browsers */
-	background: -moz-linear-gradient(top, #f6d4a3, #fdf0dd); /* for firefox 3.6+ */
+	background: -moz-linear-gradient(top, #f6d4a3, #fdf0dd); /* for firefox 3.6+ */	
 }
 .accordion-title-selectedcolor_2 {
  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeee8c', endColorstr='#fcfcd1'); /* for IE */
@@ -3549,3 +3549,10 @@ color: #f1b532;
 	background: #8E7676 !important;
 }
 /* SPEC Change */
+
+/* Export OSCE Issue Change*/
+.exportAnchor{
+	float: right;
+    margin-left: 120px;
+    margin-top: 5px;
+}

@@ -72,6 +72,7 @@ public class Assignment {
 
     private Integer sequenceNumber;
     
+    private Integer rotationNumber;
     /**
 	 * Create new student assignment
 	 * @param osceDay day on which this assignment takes place
@@ -79,9 +80,10 @@ public class Assignment {
 	 * @param studentIndex student which is examined in this assignment
 	 * @param startTime time when the assignment starts
 	 * @param endTime time when the assignment ends
+	 * @param rotation is in which rotation this student is assigned
 	 * @return
 	 */
-	public static Assignment createStudentAssignment(OsceDay osceDay, OscePostRoom oscePR, int studentIndex, Date startTime, Date endTime) {
+	public static Assignment createStudentAssignment(OsceDay osceDay, OscePostRoom oscePR, int studentIndex, Date startTime, Date endTime, int rotation) {
 		Assignment ass2 = new Assignment();
 		ass2.setType(AssignmentTypes.STUDENT);
 		ass2.setOsceDay(osceDay);
@@ -89,6 +91,7 @@ public class Assignment {
 		ass2.setTimeStart(startTime);
 		ass2.setTimeEnd(endTime);
 		ass2.setOscePostRoom(oscePR);
+		ass2.setRotationNumber(rotation);
 		return ass2;
 	}
 
@@ -698,13 +701,11 @@ public class Assignment {
 
 	// Module : 15
 	
-	public static List<Assignment> findAssignmentByOscePostRoom(Long id, int rotationoffset, int timeslot, Long osceId)
+		public static List<Assignment> findAssignmentByOscePostRoom(Long id, Long osceId, int rotationNumber)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 0 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 0 AND a.osceDay.osce.id = " + osceId + " and a.rotationNumber = " + rotationNumber + " ORDER BY a.timeStart";
     	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
-    	q.setFirstResult(rotationoffset);
-    	q.setMaxResults(timeslot);
     	return q.getResultList();
     }
     
@@ -725,4 +726,6 @@ public class Assignment {
     	TypedQuery<Assignment> q = em.createQuery(sql, Assignment.class);
     	return q.getResultList();
     }
+    
+   
 } 

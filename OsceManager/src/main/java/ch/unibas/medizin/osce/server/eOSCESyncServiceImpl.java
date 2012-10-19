@@ -3,7 +3,9 @@ package ch.unibas.medizin.osce.server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -46,6 +48,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.sun.mail.iap.ByteArray;
 public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCESyncService {
 
 	/**
@@ -401,8 +404,10 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						startrotation = totalrotation;
 						totalrotation = totalrotation + sequenceList.get(k).getNumberRotation();
 						int rotationoffset = 0;
+						int rotationStart = startrotation;
 						for (int l=startrotation; l<totalrotation; l++)
 						{
+							
 							xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n";
 							xml = xml + "<rotation>" + "\n";
 							//System.out.println("Rotation [" + (l+1) +"] Start");							
@@ -424,7 +429,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								xml = xml + "<number>" + oscePostRoomList.get(n).getRoom().getRoomNumber() + "</number>" + "\n";
 								xml = xml + "</room>" + "\n";
 								
-								List<Assignment> assignmentlist = Assignment.findAssignmentByOscePostRoom(oscePostRoomList.get(n).getId(), rotationoffset,timeslot, osceList.get(i).getId());
+								//by spec[ check
+								List<Assignment> assignmentlist = Assignment.findAssignmentByOscePostRoom(oscePostRoomList.get(n).getId(), osceList.get(i).getId(), l);
 								//System.out.println("Student assignment list size : " + assignmentlist.size());
 								
 								List<Assignment> examinerAssList = new ArrayList<Assignment>();
@@ -557,14 +563,16 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								File file = new File(fileName);
 								Boolean check = file.exists();
 								
-								if (!check)
+								if (check)
 								{
+									file.delete();
+								}
+								
 									FileUtils.touch(file);
 									BufferedWriter bufWriter = new BufferedWriter(new FileWriter(file));
 									bufWriter.write(xml);
 									bufWriter.close();
-									//System.out.println("* * *" + file.getName() + " IS CREATED * * *");
-								}
+								System.out.println("* * *" + file.getName() + " IS CREATED * * *");								
 							}
 							xml = "";
 							fileName = "";

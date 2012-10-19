@@ -1115,5 +1115,7 @@ public interface OsceConstants extends Constants {
 	public String pirAssignmentErrorMessage();
 	
 	public String notAssigned();
+	
+	public String download();
 }
 

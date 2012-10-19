@@ -14,17 +14,25 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -161,6 +169,19 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					{
 						CheckBox checkBox = new CheckBox();
 						Label label = new Label();
+						final Anchor anchor = new Anchor(constants.download());
+						
+						anchor.addClickHandler(new ClickHandler() {							
+							@Override
+							public void onClick(ClickEvent event) {
+								downloadFile(anchor.getName(), true);
+							}
+						});
+						
+						anchor.setName(result.get(i));
+						
+						anchor.addStyleName("exportAnchor");
+						
 						label.setText(result.get(i));
 						checkBox.setFormValue(result.get(i));
 						
@@ -169,6 +190,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 						HorizontalPanel horizontalPanel = new HorizontalPanel();
 						horizontalPanel.add(checkBox);
 						horizontalPanel.add(label);
+						horizontalPanel.add(anchor);
 						label.addStyleName("eOSCElable");
 						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
 						//view.getFileListPanel().insert(horizontalPanel, view.getFileListPanel().getWidgetCount() + 1);
@@ -214,6 +236,21 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					{
 						CheckBox checkBox = new CheckBox();
 						Label label = new Label();
+						
+						final Anchor anchor = new Anchor(constants.download());
+						
+						anchor.addClickHandler(new ClickHandler() {							
+							@Override
+							public void onClick(ClickEvent event) {
+								downloadFile(anchor.getName(), false);
+							}
+						});
+						
+						anchor.setName(result.get(i));
+						
+						anchor.addStyleName("exportAnchor");
+						
+						
 						label.setText(result.get(i));
 						checkBox.setFormValue(result.get(i));
 						
@@ -222,6 +259,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 						HorizontalPanel horizontalPanel = new HorizontalPanel();
 						horizontalPanel.add(checkBox);
 						horizontalPanel.add(label);
+						horizontalPanel.add(anchor);
 						label.addStyleName("eOSCElable");
 						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
 						//view.getFileListPanel().insert(horizontalPanel, view.getFileListPanel().getWidgetCount() + 1);
@@ -310,5 +348,13 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		}
 		
 		return flag;
+	}
+	
+	//issue change
+	public void downloadFile(String filename, Boolean flag)
+	{
+		final String url="/downloadExportOsceFile?path="+filename+"&flag="+flag;
+		
+		Window.open(url, filename, "enabled");
 	}
 }

@@ -71,6 +71,10 @@ public class OsceDay {
 	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "osceDays")
 	private Set<PatientInSemester> patientInSemesters = new HashSet<PatientInSemester>();
 	
+	//ttGen Change By Spec
+	private String breakByRotation;
+	//ttGen Change By Spec
+	
 	/**
 	 * Sum up number of rotations of sequences belonging to this OSCE day
 	 * @return
