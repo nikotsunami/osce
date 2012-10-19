@@ -47,13 +47,14 @@ public class PatientInSemesterData {
 	public PatientInSemesterData() {
 	}
 
-	public PatientInSemesterData(PatientInSemesterProxy tempPatientInSemesterProxy, int rowNumber, RoleAssignmentView.Delegate tempdelegate) {
+	public PatientInSemesterData(PatientInSemesterProxy tempPatientInSemesterProxy,final int rowNumber, RoleAssignmentView.Delegate tempdelegate) {
 
 		// setIndex(index);
 		this.delegate = tempdelegate;
 		delegate.showApplicationLoading(true);
 		patientInSemesterData = this;
-		this.patientInSemesterProxy = tempPatientInSemesterProxy;
+//		this.patientInSemesterProxy = tempPatientInSemesterProxy;
+		this.setPatientInSemesterProxy(tempPatientInSemesterProxy);
 
 		this.name = ((tempPatientInSemesterProxy.getStandardizedPatient().getPreName() != null) ? tempPatientInSemesterProxy.getStandardizedPatient().getPreName() : "") + ", " + tempPatientInSemesterProxy.getStandardizedPatient().getName();
 
@@ -71,36 +72,38 @@ public class PatientInSemesterData {
 				// boolean accepted = (!((patientInSemesterProxy.getAccepted()
 				// != null) ? patientInSemesterProxy
 				// .getAccepted().booleanValue() : false));
+				delegate.onRowSelected(PatientInSemesterData.this.rowNumber);
 				delegate.onAcceptedClick(patientInSemesterData);// getIndex(),
 																// accepted);
 
 			}
 		});
-
-		StringBuffer tempAssignedRole = new StringBuffer();
-		for (Iterator<PatientInRoleProxy> iterator = tempPatientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
-			PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
-//			Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
-			if (patientInRoleProxy.getOscePost() != null) {
-				if (tempAssignedRole.toString().compareTo("") != 0) {
-					tempAssignedRole.append(" ,");
-				}
-				tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
-			}
-
-		}
-
-		this.assignedTo = new PatientAssignLabel(util.getFormatedString(tempAssignedRole.toString(),30));
-		this.assignedTo.addStyleName("flexTableLabel");
+//
+//		StringBuffer tempAssignedRole = new StringBuffer();
+//		for (Iterator<PatientInRoleProxy> iterator = tempPatientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
+//			PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
+////			Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
+//			if (patientInRoleProxy.getOscePost() != null) {
+//				if (tempAssignedRole.toString().compareTo("") != 0) {
+//					tempAssignedRole.append(" ,");
+//				}
+//				tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
+//			}
+//
+//		}
+//
+//		this.assignedTo = new PatientAssignLabel(util.getFormatedString(tempAssignedRole.toString(),30));
+//		this.assignedTo.addStyleName("flexTableLabel");
 		// ,getIndex());
-
-		this.setPatientInSemesterProxy(tempPatientInSemesterProxy);
+		this.assignedTo = new PatientAssignLabel("");
+		setAssignToLabel();
 		this.navigationButton = new Button();
 		this.navigationButton.setHTML(OsMaConstant.SEEK_FIRST_ICON);		
 		this.navigationButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent arg0) {
+				delegate.onRowSelected(PatientInSemesterData.this.rowNumber);
 				delegate.onDetailViewClicked(patientInSemesterData);
 
 			}
@@ -113,7 +116,7 @@ public class PatientInSemesterData {
 
 			@Override
 			public void onClick(ClickEvent arg0) {
-				
+				delegate.onRowSelected(PatientInSemesterData.this.rowNumber);
 				if (patientInSemesterProxy.getPatientInRole() != null && patientInSemesterProxy.getPatientInRole().size() > 0) {
 
 					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
@@ -142,6 +145,31 @@ public class PatientInSemesterData {
 		// Module 3 Task B
 	}
 
+	public void setAssignToLabel(){
+
+		StringBuffer tempAssignedRole = new StringBuffer();
+		for (Iterator<PatientInRoleProxy> iterator = this.patientInSemesterProxy.getPatientInRole().iterator(); iterator.hasNext();) {
+			PatientInRoleProxy patientInRoleProxy = (PatientInRoleProxy) iterator.next();
+//			Log.info("patientInRoleProxy.getOscePost()" + patientInRoleProxy.getOscePost());
+			if (patientInRoleProxy.getOscePost() != null) {
+				if (tempAssignedRole.toString().compareTo("") != 0) {
+					tempAssignedRole.append(" ,");
+				}
+				tempAssignedRole.append(patientInRoleProxy.getOscePost().getStandardizedRole().getShortName());
+			}
+
+		}
+
+//		Log.info("check for tempAssignedRole is : " + tempAssignedRole.toString());
+		
+		this.assignedTo.setText(util.getFormatedString(tempAssignedRole.toString(),30));
+		this.assignedTo.addStyleName("flexTableLabel");
+	}
+	
+	
+	
+	
+	
 	public void setNavigationButton(boolean enabled){
 		navigationButton.setEnabled(enabled);
 		if (!enabled) {

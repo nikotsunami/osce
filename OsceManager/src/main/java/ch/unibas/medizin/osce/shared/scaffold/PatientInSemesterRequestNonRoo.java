@@ -31,6 +31,6 @@ public interface PatientInSemesterRequestNonRoo extends RequestContext {
 	
 	abstract Request<Boolean> checkAndSetFitCriteriaOfRole(Long post,Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
 	
-	
+	abstract Request<PatientInSemesterProxy> findPisBySemesterSp(Long semesterId,Long standardizedPatientId);
 
 }
