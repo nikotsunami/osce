@@ -214,7 +214,10 @@ public class StandardizedRole {
 			for(Keyword oldKeyword:oldRole.getKeywords()) {
 				Keyword k=new Keyword();
 				k.setName(oldKeyword.getName());
-				k.setStandardizedRoles((Set<StandardizedRole>)newRole);
+				Set<StandardizedRole> roleSet = new HashSet<StandardizedRole>();
+				roleSet.add(newRole);
+				//k.setStandardizedRoles((Set<StandardizedRole>)newRole);
+				k.setStandardizedRoles(roleSet);
 				newkeyword.add(k);
 			}
 			return newkeyword;

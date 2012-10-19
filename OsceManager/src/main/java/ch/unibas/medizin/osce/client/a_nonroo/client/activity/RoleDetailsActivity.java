@@ -1500,7 +1500,7 @@ final int index2 = index;
 		Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
 //		RoleDetailsChecklistSubViewChecklistQuestionItemView queView[]=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl[proxy.getCheckList().getCheckListTopics().size()];
 		//create Topic View
-		
+		standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getDragController().addDragHandler(roleDetailActivity);
 		while(topicIterator.hasNext())
 		{
 			ChecklistTopicProxy topicProxy=topicIterator.next();
@@ -2205,7 +2205,7 @@ final int index2 = index;
 			standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.insert(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view), standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.getWidgetCount());
 			standardizedRoleDetailsView[selectedTab].checkListTopicView.add(view);
 			standardizedRoleDetailsView[selectedTab].getDragController().makeDraggable(view.asWidget(),view.getDraglbl());
-			standardizedRoleDetailsView[selectedTab].getDragController().addDragHandler(roleDetailActivity);
+			//standardizedRoleDetailsView[selectedTab].getDragController().addDragHandler(roleDetailActivity);
 			view.getTopicsdiscloserVP();
 			
 			Log.info("MAKE draggable~~~~");
