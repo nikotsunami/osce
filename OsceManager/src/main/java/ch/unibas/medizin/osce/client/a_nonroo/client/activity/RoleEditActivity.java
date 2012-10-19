@@ -927,6 +927,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												simpleSearchCriteriaProxy.setStandardizedRole(proxy1);
 												simpleSearchCriteriaProxy.setValue(oldSimpleSearchProxy.getValue());
 												
+												
 												simpleSearchCriteriaRequest.persist().using(simpleSearchCriteriaProxy).fire();
 												
 												
@@ -942,7 +943,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												RoleTableItemValueProxy roleTableItemValueProxy=roleTableItemValueRequest.create(RoleTableItemValueProxy.class);
 												
 												roleTableItemValueProxy.setRoleTableItem(oldRoleTableItemValueProxy.getRoleTableItem());
-												roleTableItemValueProxy.setStandardizedRole(proxy);
+												roleTableItemValueProxy.setStandardizedRole(proxy1);
 												roleTableItemValueProxy.setValue(oldRoleTableItemValueProxy.getValue());
 												
 												
@@ -961,7 +962,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												RoleSubItemValueProxy roleSubItemValueProxy=roleSubItemValueRequest.create(RoleSubItemValueProxy.class);
 												
 												roleSubItemValueProxy.setRoleBaseItem(oldRoleSubItemValueProxy.getRoleBaseItem());
-												roleSubItemValueProxy.setStandardizedRole(proxy);
+												roleSubItemValueProxy.setStandardizedRole(proxy1);
 												roleSubItemValueProxy.setItemText(oldRoleSubItemValueProxy.getItemText());
 												roleSubItemValueRequest.persist().using(roleSubItemValueProxy).fire();
 												
