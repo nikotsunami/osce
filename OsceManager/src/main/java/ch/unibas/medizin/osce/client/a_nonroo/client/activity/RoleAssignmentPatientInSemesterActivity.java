@@ -1909,7 +1909,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 //							}
 //
 //						}
-						if(manualStdPatientInSemesterAssignmentPopupViewImpl==null)
+//						if(manualStdPatientInSemesterAssignmentPopupViewImpl==null)
 						manualStdPatientInSemesterAssignmentPopupViewImpl = new ManualStandardizedPatientInSemesterAssignmentPopupViewImpl();
 
 						manualStdPatientInSemesterAssignmentPopupViewImpl
