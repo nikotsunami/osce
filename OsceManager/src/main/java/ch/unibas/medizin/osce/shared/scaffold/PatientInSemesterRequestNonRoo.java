@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 
+import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
@@ -28,6 +29,8 @@ public interface PatientInSemesterRequestNonRoo extends RequestContext {
 
 	abstract Request<Boolean> findAvailableSPActiveBySemester(Long semesterId);
 	
-	abstract Request<Boolean> checkAndSetFitCriteriaOfRole(OscePostProxy post,Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
+	abstract Request<Boolean> checkAndSetFitCriteriaOfRole(Long post,Long semesterId, List<AdvancedSearchCriteriaProxy> searchCriteria);
+	
+	abstract Request<PatientInSemesterProxy> findPisBySemesterSp(Long semesterId,Long standardizedPatientId);
 
 }

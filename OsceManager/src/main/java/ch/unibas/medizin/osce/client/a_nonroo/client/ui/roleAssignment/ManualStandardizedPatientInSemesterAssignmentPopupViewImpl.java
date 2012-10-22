@@ -203,6 +203,7 @@ public class ManualStandardizedPatientInSemesterAssignmentPopupViewImpl extends
 			Delegate delegate, Button parentButton) {
 
 		this.setDelegate(delegate);
+//		this.standardizedPatientSugestionBox = new DefaultSuggestBox<StandardizedPatientProxy, EventHandlingValueHolderItem<StandardizedPatientProxy>>();
 		this.setStandizedPatientAutocompleteValue(standardizedPatientProxies);
 		this.standardizedPatientProxies = standardizedPatientProxies;
 

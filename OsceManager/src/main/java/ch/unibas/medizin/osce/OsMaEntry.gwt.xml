@@ -22,6 +22,7 @@
 	
 	 <inherits name="de.novanic.eventservice.GWTEventService"/>
 	
+	 <inherits name="com.google.gwt.http.HTTP"/>	
 	 <!--ServerPush event  } -->
 	 
 	  <!-- servlet>

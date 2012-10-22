@@ -10,8 +10,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ch.unibas.medizin.osce.domain.Administrator;
 
@@ -43,18 +45,19 @@ public class AuthenticationFilter implements Filter {
 		{
 			String attributeName = names.nextElement();
 			Log.info(attributeName + " : " + request.getAttribute(attributeName));
-		}*/
+		}
 		
-		String userId = request.getHeader("uniqueID");
+	
 		
-		/*Cookie[] cookies = request.getCookies();
+		Cookie[] cookies = request.getCookies();
 		Log.info("Cookies are:");
 		int index = 0;
 		while(index > cookies.length)
 		{			
 			Log.info(cookies[index].getName() + " : " + cookies[index].getValue());
-		}*/
-		
+		}
+		*/
+
 		/*Administrator administrator = Administrator.findAdministratorsByEmail("foo@bar.com");
 		
 		Log.info("Administrator : " + administrator);
@@ -64,13 +67,62 @@ public class AuthenticationFilter implements Filter {
 			Log.info("Login successfully" );
 			filterChain.doFilter(servletRequest, servletResponse);
 		}*/
+		
+		/* for production uniqueID and for testing uid */
+		String userId = request.getHeader("uniqueID");
+		//String userId = request.getHeader("uid");
 		Log.info("User Id : " + userId);
 		boolean flag = false;
+		// Session Management
+		HttpSession session = request.getSession(false);
+		
+		if(session != null) {
+			String sessionUserId = (String) session.getAttribute("userId");
+			if(userId.equals(sessionUserId)) {
+				Log.info("----> Authenticated using session");
+				flag = true;
+			}else {
+				flag = authenticationUsingDB(servletResponse, userId);
+				if(flag == true) {
+					session.setAttribute("userId", userId);
+					Log.info("----> Authenticated using DB");
+				}
+			}
+		}else {
+			Log.info("----> Authenticated using New Session");
+			flag = authenticationUsingDB(servletResponse, userId);
+			if(flag == true){
+				session = request.getSession();
+				session.setAttribute("userId", userId);
+			}		
+		}
+		
+		
+		if(flag)
+			filterChain.doFilter(servletRequest, servletResponse);
+		else
+			((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, userId + " is not authorized to oscemanager.");
+		
+		/*Log.info("User Id : " + userId);
+		if(userId == null || !userId.trim().equals("myself"))		
+			((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, userId + " is not authorized to oscemanager.");
+		else
+			filterChain.doFilter(servletRequest, servletResponse);*/
+	}
+
+	private boolean authenticationUsingDB(ServletResponse servletResponse,
+			String userId) {
+		boolean flag = false;
+		
 		try{
 			List<Administrator> listAdministrator = Administrator.findAllAdministrators();
 			if(userId !=null && userId.equals("210760@vho-switchaai.ch"))
 			{
 				Log.info("Login successfully by 210760@vho-switchaai.ch" );
+				flag=true;
+			}
+			else if(userId !=null && userId.equals("myself")){
+				Log.info("Login successfully by myself" );
 				flag=true;
 			}
 			else if(listAdministrator != null)
@@ -96,16 +148,7 @@ public class AuthenticationFilter implements Filter {
 		{
 			flag=false;
 		}
-		if(flag)
-			filterChain.doFilter(servletRequest, servletResponse);
-		else
-			((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, userId + " is not authorized to oscemanager.");
-		
-		/*Log.info("User Id : " + userId);
-		if(userId == null || !userId.trim().equals("myself"))		
-			((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, userId + " is not authorized to oscemanager.");
-		else
-			filterChain.doFilter(servletRequest, servletResponse);*/
+		return flag;
 	}
 
 	@Override

@@ -8,6 +8,12 @@
 		margin: 6px 6px;
 	}
 	
+	.borderradius
+	{
+		border-radius:16px;
+	
+	}
+	
 	.popupCheckboxes {
 		width: 120px;
 	}
@@ -20,26 +26,56 @@
 	.floatRight {
 		float: right;
 	}
+	.closeButton {
+		position: absolute;
+		top: -7px;
+		right: -7px;
+		border-radius: 7px;
+		border-color: #676767;
+		border-width: 2px;
+		font-size: small;
+	}
+		
+	.popupStyle {
+		width: 280px;
+		height: 300px;
+		border-width: 2px;
+		border-color: #676767;
+		border-style: solid;
+		border-radius: 6px;
+	}
+	
+	.contentPanelStyle {
+			padding: 0px;
+			margin: 20px;
+			-moz-border-radius: 16px;
+		}
 	</ui:style>
 	
 	
 	
+			<g:HTMLPanel addStyleNames="{style.popupStyle}" >
+				<div>
+				<!-- <span ui:field="title">Types Of changes</span> -->
+	
+				<my:IconButton ui:field="closeButton"  icon="closethick" addStyleNames="{style.closeButton}"></my:IconButton>
+			</div>
 			
-			
-			<g:VerticalPanel>
-			<g:VerticalPanel ui:field="minor" styleName="{style.popUpBorder}" horizontalAlignment="center">
+			<g:VerticalPanel width="80%" horizontalAlignment="center" addStyleNames="{style.contentPanelStyle}">
+			<!-- <my:IconButton ui:field="closeButton"  icon="closethick" addStyleNames="{style.closeButton}"></my:IconButton> -->
+			<g:VerticalPanel ui:field="minor" styleName="{style.popUpBorder}" horizontalAlignment="center" width="80%">
 			<g:HTMLPanel>
 				<g:Label ui:field="minorLbl">Minor Changes ?</g:Label>
 			</g:HTMLPanel>
 			
 			</g:VerticalPanel>
-			<g:VerticalPanel ui:field="major" styleName="{style.popUpBorder}" horizontalAlignment="center">
+			<g:VerticalPanel ui:field="major" styleName="{style.popUpBorder}" horizontalAlignment="center" width="80%">
 				
 				<g:Label ui:field="majorLbl">Major Changes ?</g:Label>
 			</g:VerticalPanel>
 			
 			</g:VerticalPanel>
-			
+			</g:HTMLPanel>
 	
 	
 	

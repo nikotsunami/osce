@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -121,7 +122,7 @@ public class StandardizedRole {
 
 	   
 	   
-	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId) {
+	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId,Integer roleSubItemValueId,String value) {
 		   
 		   Log.info("call create");
 		   StandardizedRole  oldStandardizedRole= StandardizedRole.findStandardizedRole(standardizedRoleId);
@@ -163,7 +164,7 @@ public class StandardizedRole {
 		   newStandardizedRole.setRoleTableItemValue(roleTableItemValue);
 		   
 		   
-		   Set<RoleSubItemValue>  roleSubItemValue= insertForRoleSubItemValue(oldStandardizedRole,newStandardizedRole);
+		   Set<RoleSubItemValue>  roleSubItemValue= insertForRoleSubItemValue(oldStandardizedRole,newStandardizedRole,roleSubItemValueId,value);
 		   newStandardizedRole.setRoleSubItemValue(roleSubItemValue);
 		   
 		   
@@ -213,7 +214,10 @@ public class StandardizedRole {
 			for(Keyword oldKeyword:oldRole.getKeywords()) {
 				Keyword k=new Keyword();
 				k.setName(oldKeyword.getName());
-				k.setStandardizedRoles((Set<StandardizedRole>)newRole);
+				Set<StandardizedRole> roleSet = new HashSet<StandardizedRole>();
+				roleSet.add(newRole);
+				//k.setStandardizedRoles((Set<StandardizedRole>)newRole);
+				k.setStandardizedRoles(roleSet);
 				newkeyword.add(k);
 			}
 			return newkeyword;
@@ -263,15 +267,29 @@ public class StandardizedRole {
 			return roleTableItemValue;
 	   }
 	   
-	   private  static Set<RoleSubItemValue> insertForRoleSubItemValue(StandardizedRole oldRole, StandardizedRole newRole) {
+	   private  static Set<RoleSubItemValue> insertForRoleSubItemValue(StandardizedRole oldRole, StandardizedRole newRole,Integer roleSubItemvalueId,String Value) {
 			Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
 			
 			for(RoleSubItemValue oldrsiv:oldRole.getRoleSubItemValue()) {
 				RoleSubItemValue rsiv=new RoleSubItemValue();
+				
 				rsiv.setItemText(oldrsiv.getItemText());
 				rsiv.setRoleBaseItem(oldrsiv.getRoleBaseItem());
 				rsiv.setStandardizedRole(newRole);
+				Log.info("id--"+oldrsiv.getId()+" --id--"+roleSubItemvalueId);
 				
+				
+				if(Integer.valueOf(oldrsiv.getId())== Integer.valueOf(roleSubItemvalueId))
+				{
+					Log.info("inside if");
+					
+					Log.info("if part--"+Value);
+					rsiv.setItemText(Value);	
+				}
+				else
+				{
+					Log.info("else part");
+				}
 				roleSubItemValue.add(rsiv);
 			}
 			return roleSubItemValue;
@@ -295,6 +313,24 @@ public class StandardizedRole {
 		return StandardizedPatient.fetchContextPath() + fileName;
 			//Feature : 154
 	}
+	
+	public static String getRolesPrintPdfBySearchUsingServlet(Long standardizedRoleId, List<String> itemsList, Long roleItemAccessId,String locale,OutputStream out) {
+		String fileName = OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
+		try {
+			StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
+			RolePrintPdfUtil rolePrintPdfUtil = new RolePrintPdfUtil(locale);
+			Log.info("Message received in Pdf role print by : " + standardizedRole.longName);
+			fileName = standardizedRole.longName + "_" + standardizedRole.studyYear + "_ " + OsMaFilePathConstant.ROLE_FILE_NAME_PDF_FORMAT;
+			rolePrintPdfUtil.writeFile(standardizedRole, itemsList, roleItemAccessId,out);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.error("Error in Std. Role getRolesPrintPdfBySearch: " + e.getMessage());
+		}
+
+		return fileName;
+			//Feature : 154
+	}
+	
 	// Issue : 120
 	   
 }

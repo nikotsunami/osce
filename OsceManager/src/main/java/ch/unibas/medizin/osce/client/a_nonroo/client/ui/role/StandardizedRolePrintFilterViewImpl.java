@@ -98,9 +98,12 @@ public class StandardizedRolePrintFilterViewImpl extends PopupPanel {
 	private void resetAllCheckBox() {
 		Iterator<CheckBoxItem> iter = fields.iterator();
 		while (iter.hasNext()) {
-			iter.next().checkbox.setValue(false);
+			CheckBoxItem checkBoxItem = iter.next();
+			checkBoxItem.checkbox.setValue(false);
+			checkBoxItem.checkbox.setEnabled(true);
 		}
 		fields.get(0).checkbox.setValue(true);
+		fields.get(0).checkbox.setEnabled(false);
 
 	}
 

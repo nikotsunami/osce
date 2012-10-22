@@ -9,6 +9,8 @@ import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -195,7 +197,10 @@ public class RotationRefreshServiceImpl extends RemoteServiceServlet implements 
 						
 						OsceDay newOsceday=new OsceDay();
 						newOsceday.setLunchBreakStart(osceDayProxy.getLunchBreakStart());
-						newOsceday.setOsceDate(osceDayProxy.getOsceDate());
+						Calendar cal = Calendar.getInstance();
+						cal.setTime(osceDayProxy.getOsceDate());
+						cal.add(Calendar.DAY_OF_MONTH, 1);
+						newOsceday.setOsceDate(cal.getTime());
 						newOsceday.setTimeEnd(osceDayProxy.getTimeEnd());
 						newOsceday.setTimeStart(osceDayProxy.getTimeStart());
 						newOsceday.setValue(osceDayProxy.getValue());
@@ -302,7 +307,14 @@ public class RotationRefreshServiceImpl extends RemoteServiceServlet implements 
     	try {    		
     		OsceDay osceDay = OsceDay.findOsceDay(osceDayIdFrom);
     		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osceDay.getOsce());
+    	
+    		//by spec[
+    		if (osceDayIdTo == null)
+    			optGen.updateTimesAfterRotationShiftByRemoveDay(osceDayIdFrom);
+    		else
         	optGen.updateTimesAfterRotationShift(osceDayIdFrom, osceDayIdTo);
+    		//by spec]
+    		
     	} catch(Exception e) {
     		e.printStackTrace();
     		return false;
@@ -388,6 +400,7 @@ public class RotationRefreshServiceImpl extends RemoteServiceServlet implements 
 								finalSuccessPreponeMap.put("PreviousDaySequenceId", ""+updateOsceSequence.getId());
 								finalSuccessPreponeMap.put("PreviousDaySequenceRotation", ""+(updateOsceSequence.getNumberRotation()+1));
 								finalSuccessPreponeMap=removeOsceSequenceCourseDay(osceSequences.get(0),osceDay,updateOsceSequence);															
+								
 								if(finalSuccessPreponeMap.get("Message").compareToIgnoreCase("SuccessfullyPreponeWithDelete")==0)
 								{
 									Log.info("Update Osce Sequence Rotation Successfully.");
@@ -400,6 +413,12 @@ public class RotationRefreshServiceImpl extends RemoteServiceServlet implements 
 									{
 										e.printStackTrace();
 									}	*/
+									
+									//by spec[
+									System.out.println("~~~ID : " + previousOsceDay.getId());
+									updateTimesAfterRotationShift(previousOsceDay.getId(), null);
+									//by spec]
+									
 									return finalSuccessPreponeMap;
 								}
 								//Map<String, String> rotationOneMap=new HashMap<String, String>();

@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.server.util.file;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 import java.util.List;
@@ -102,6 +103,62 @@ public class RolePrintPdfUtil {
 					+ standardizedRole.getLongName();
 			writer = PdfWriter.getInstance(document, new FileOutputStream(
 					fileName));
+			document.open();
+			addMetaData();
+			addHeader();
+
+			for (String items : itemsList) {
+				Log.info("items is : " + items);
+				Log.info("basicData"
+						+ (items.compareToIgnoreCase(constants.basicData()) == 0));
+				Log.info("checkList"
+						+ (items.compareToIgnoreCase(constants.checkList()) == 0));
+				Log.info("roomMaterials"
+						+ (items.compareToIgnoreCase(constants.roomMaterials()) == 0));
+				Log.info("fileDetail"
+						+ (items.compareToIgnoreCase(constants.fileDetail()) == 0));
+
+				if (items.compareToIgnoreCase(constants.basicData()) == 0) {
+					Log.info("items is : addDetails");
+					addDetails();
+				} else if (items.compareTo(constants.checkList()) == 0) {
+					Log.info("items is : addCheckList");
+					addCheckListDetails();
+				} else if (items.compareTo(constants.roomMaterials()) == 0) {
+					Log.info("items is : addRoomMaterial");
+					addRoomMaterialDetails();
+				} else if (items.compareTo(constants.fileDetail()) == 0) {
+					Log.info("items is : addFiles");
+					addFileDetails();
+				}
+			}
+
+			// Log.info("@@@@@ roleItemAccessId " + roleItemAccessId);
+			if (roleItemAccessId >= 0L) {
+				addRoleScriptDetials();
+			}
+
+			Paragraph preface = new Paragraph();
+			addEmptyLine(preface, 5);
+			// addSignature(document);
+
+			document.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void writeFile(StandardizedRole standardizedRole,
+			List<String> itemsList, Long roleItemAccessId,OutputStream out) {
+		try {
+			this.standardizedRole = standardizedRole;
+			// this.itemsList = itemsList;
+			this.roleItemAccessId = roleItemAccessId;
+			this.isValueAvailable = new boolean[4];
+
+			title = constants.standardizedRole() + " "
+					+ standardizedRole.getLongName();
+			writer = PdfWriter.getInstance(document, out);
 			document.open();
 			addMetaData();
 			addHeader();

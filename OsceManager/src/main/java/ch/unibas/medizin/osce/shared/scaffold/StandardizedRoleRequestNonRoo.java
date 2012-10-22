@@ -15,7 +15,7 @@ public interface StandardizedRoleRequestNonRoo extends RequestContext
 {
 	
 	//abstract Request<Long> countKeywordsByStandRole(Long standardizedRoleProxy);	
-	abstract Request<StandardizedRoleProxy> createStandardizedRoleMajorVersion(Long standardizedRoleId);
+	abstract Request<StandardizedRoleProxy> createStandardizedRoleMajorVersion(Long standardizedRoleId,Integer roleSubItemValueId,String value);
 	//Issue : 120
 	abstract Request<String> getRolesPrintPdfBySearch(Long standardizedRoleId , List<String> itemsList,Long roleItemAccessId,String locale);
 	//Issue : 120

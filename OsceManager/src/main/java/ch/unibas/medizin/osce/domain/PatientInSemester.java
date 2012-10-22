@@ -182,11 +182,12 @@ public class PatientInSemester {
         return resultList;
     }
     
-    public static Boolean checkAndSetFitCriteriaOfRole(OscePost post,Long semesterId, List<AdvancedSearchCriteria> searchCriteria)
+    public static Boolean checkAndSetFitCriteriaOfRole(Long postId,Long semesterId, List<AdvancedSearchCriteria> searchCriteria)
     {
     	
     	try
     	{
+    		OscePost post=OscePost.findOscePost(postId);
     		
     		if(searchCriteria.size()==0)
 	    	{
@@ -300,4 +301,18 @@ public class PatientInSemester {
         }
         return standardizedPatientId.toString();
     }
+    
+    public static PatientInSemester findPisBySemesterSp(Long semesterId,Long standardizedPatientId){
+    	
+         if (semesterId == null || standardizedPatientId ==null) {
+             Log.info("Return as null");
+             return null;
+         }
+        
+         TypedQuery<PatientInSemester> query = entityManager().createQuery(selectBase + queryBase + whereBase+ " o.standardizedPatient.id = " + standardizedPatientId + " and o.semester.id = "+semesterId, PatientInSemester.class);
+         
+         return query.getSingleResult();
+    	
+    }
+    
 }

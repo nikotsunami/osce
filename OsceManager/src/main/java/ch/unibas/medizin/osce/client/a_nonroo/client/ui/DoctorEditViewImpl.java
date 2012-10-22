@@ -62,23 +62,23 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	SpanElement header;
 	
 	@UiField(provided = true)
-    ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
+    public ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
     	EnumRenderer<Gender> renderer = new EnumRenderer<Gender>();
         public String render(ch.unibas.medizin.osce.shared.Gender obj) {
             return obj == null ? "" : renderer.render(obj);
         }
-    });
+    }); 
 	
+	@UiField 
+	public TextBox title;
 	@UiField
-	TextBox title;
+	public TextBox name;
 	@UiField
-	TextBox name;
+	public TextBox preName;
 	@UiField
-	TextBox preName;
+	public TextBox email;
 	@UiField
-	TextBox email;
-	@UiField
-	TextBox telephone;
+	public TextBox telephone;
 	
 	//Issue # 122 : Replace pull down with autocomplete.
 	
@@ -91,8 +91,11 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	//Issue # 122 : Replace pull down with autocomplete.
 	
 	
-	@UiField
+	/*@UiField
 	SimplePanel officePanel;
+	*/
+	@UiField
+	public OfficeEditViewImpl officeEditViewImpl;
 	
 	@UiField
     SpanElement labelGender;
@@ -166,16 +169,20 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		doctorMap.put("telephone", telephone);
 		doctorMap.put("clinic", clinic);
 		
+				
+		
+		
+		
 		// E Highlight onViolation
 	}
 
 
-	@Override
+	/*@Override
 	public RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> createEditorDriver() {
 		RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> driver = GWT.create(Driver.class);
 		driver.initialize(this);
 		return driver;
-	}
+	}*/
 
 	public void setCreating(boolean creating) {
 		if (creating) {
@@ -215,9 +222,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	interface Binder extends UiBinder<Widget, DoctorEditViewImpl> {
 	}
 
-	interface Driver extends RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> {
+	/*interface Driver extends RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> {
 	}
-
+*/
 	@Override
 	public void setEditTitle(boolean edit) {
 		
@@ -263,7 +270,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	
 	@Override
 	public SimplePanel getOfficePanel(){
-		return officePanel;
+		//return officePanel;
+		return null;
+		
 	}
 
 
@@ -289,6 +298,37 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		
 		return this.selTab;
 	}
+
+
+	/*@Override
+	public RequestFactoryEditorDriver<DoctorProxy, DoctorEditViewImpl> createEditorDriver() {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
 	
+	@Override
+	public void setValueForEdit(DoctorProxy proxy)
+	{
+		title.setValue(proxy.getTitle());
+		name.setValue(proxy.getName());
+		preName.setValue(proxy.getPreName());
+		gender.setValue(proxy.getGender());
+		email.setValue(proxy.getEmail());
+		telephone.setValue(proxy.getTelephone());
+		clinic.setSelected(proxy.getClinic());
+		officeEditViewImpl.title.setValue(proxy.getOffice().getTitle());
+		officeEditViewImpl.name.setValue(proxy.getOffice().getName());
+		officeEditViewImpl.preName.setValue(proxy.getOffice().getPreName());
+		officeEditViewImpl.gender.setValue(proxy.getOffice().getGender());
+		officeEditViewImpl.email.setValue(proxy.getOffice().getEmail());
+		officeEditViewImpl.telephone.setValue(proxy.getOffice().getTelephone());
+		
+	}
+	
+	@Override
+	public DoctorEditViewImpl getDoctorEditViewImpl()
+	{
+		return this;
+	}
 	// E Highlight onViolation
 }

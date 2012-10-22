@@ -318,24 +318,41 @@ RoleBaseTableItemValueView {
 			table.addColumn(slotColumn,constants.itemValue());
 			
 			
-			addColumn(new ActionCell<RoleTableItemValueProxy>(
-					OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoleTableItemValueProxy>() {
-						public void execute(final RoleTableItemValueProxy roleTableItemValueProxy) {
-						//Window.alert("Edit clicked");
-						//delegate.addRoleScriptTableItemValue(roleTableItemValueProxy,roleBasedItemProxy.getId(),table,left,top);
-							// Issue Role V1
-							delegate.addRoleScriptTableItemValue(roleTableItemValueProxy,roleBasedItemProxy.getId(),table,left,top);
-							// E: Issue Role V1
-						}
-					}), "", new GetValue<RoleTableItemValueProxy>() {
-				public RoleTableItemValueProxy getValue(RoleTableItemValueProxy roleTableItem) {
-					return roleTableItem;
-				}
-			}, null);
+			addLastColumn(); // SPEC Change
 			table.addColumnStyleName(1, "iconCol");
 
 			description.setEnabled(false);
-		}	
+		}
+
+	// SPEC Change
+	
+	
+	public void removeLastColumn() {
+		if(table != null){
+			if(table.getColumnCount() > 2){
+				table.removeColumn(table.getColumnCount()-1);
+			}
+		}
+	}
+	
+	// SPEC Change
+	
+	public void addLastColumn() {
+		addColumn(new ActionCell<RoleTableItemValueProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoleTableItemValueProxy>() {
+					public void execute(final RoleTableItemValueProxy roleTableItemValueProxy) {
+					//Window.alert("Edit clicked");
+					//delegate.addRoleScriptTableItemValue(roleTableItemValueProxy,roleBasedItemProxy.getId(),table,left,top);
+						// Issue Role V1
+						delegate.addRoleScriptTableItemValue(roleTableItemValueProxy,roleBasedItemProxy.getId(),table,left,top);
+						// E: Issue Role V1
+					}
+				}), "", new GetValue<RoleTableItemValueProxy>() {
+			public RoleTableItemValueProxy getValue(RoleTableItemValueProxy roleTableItem) {
+				return roleTableItem;
+			}
+		}, null);
+	}	
 		
 		
 	private <C> void addColumn(Cell<C> cell, String headerText,

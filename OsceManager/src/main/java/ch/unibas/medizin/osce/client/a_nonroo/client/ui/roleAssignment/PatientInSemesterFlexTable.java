@@ -12,6 +12,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 	// private String selectedStyle;
 	private List<PatientInSemesterData> patientInSemesterDatas;
 	private int lastSelectedRowIndex = 1;
+	private boolean setNavigationButton = false;
 
 	// private RoleAssignmentView.Delegate delegate;
 
@@ -31,6 +32,14 @@ public class PatientInSemesterFlexTable extends FlexTable {
 	// // sinkEvents(Event.ONMOUSEDOWN | Event.ONMOUSEUP | Event.ONMOUSEOVER
 	// // | Event.ONMOUSEOUT);
 	// }
+
+	public int getLastSelectedRowIndex() {
+		return lastSelectedRowIndex;
+	}
+
+	public void setLastSelectedRowIndex(int lastSelectedRowIndex) {
+		this.lastSelectedRowIndex = lastSelectedRowIndex;
+	}
 
 	public PatientInSemesterFlexTable() {
 		super();
@@ -52,12 +61,58 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		}
 
 		this.patientInSemesterDatas = patientInSemesterDatas;
-		int row = 0;
+		this.setHeaderStyle(headers);
+		this.setTableStyle();
+		// setStyleFlexTable();
+
+		this.setPatientInSemesterDatas(patientInSemesterDatas);
+	}
+
+	public void reSetTableStyle(){
+		int rows = patientInSemesterDatas.size();
+		PatientInSemesterData patientInSemesterData;
+		for (int i = 0; i < rows; i++) {
+			patientInSemesterData = patientInSemesterDatas.get(i);
+			this.getRowFormatter().removeStyleName(i + 1, patientInSemesterData.getRowSetColor());
+			patientInSemesterData.setRowSetColor((i % 2 == 0) ? "flexTableEvenRow" : "flexTableOddRow");
+			patientInSemesterData.setRowNumber(i);
+			this.getRowFormatter().addStyleName(i + 1, patientInSemesterData.getRowSetColor());
+		}
+	}
+	
+	public void setNewPatient(PatientInSemesterProxy tempPatientInSemesterProxy, RoleAssignmentView.Delegate tempdelegate) {
+		int i = patientInSemesterDatas.size();
+
+		PatientInSemesterData patientInSemesterData = new PatientInSemesterData(tempPatientInSemesterProxy, i, tempdelegate);
+		
+		patientInSemesterData.setNavigationButton(setNavigationButton);
+
+		patientInSemesterData.setRowSetColor((i % 2 == 0) ? "flexTableEvenRow" : "flexTableOddRow");
+		this.setText(i + 1, 0, patientInSemesterData.name);
+		// this.setWidget(row, 1, patientInSemesterData.acceptedImage);
+		this.setWidget(i + 1, 1, patientInSemesterData.acceptedIconBtn);
+
+		this.setWidget(i + 1, 2, patientInSemesterData.assignedTo);
+		this.setWidget(i + 1, 3, patientInSemesterData.navigationButton);
+
+		// Module 3 Task B
+		this.setWidget(i + 1, 4, patientInSemesterData.deleteButton);
+		//			this.getRowFormatter().addStyleName(row, "flexTableRow");
+		//			this.getCellFormatter().addStyleName(row, 0, patientInSemesterData.getRowSetColor());
+
+		//		for (int j = 0; j < headers.length; j++) {
+		//				RowFormatter rowFormatter = new RowFormatter();
+		this.getRowFormatter().addStyleName(i + 1, patientInSemesterData.getRowSetColor());
+		patientInSemesterDatas.add(patientInSemesterData);
+		
+		
+	}
+	
+	public void setTableStyle() {
+		
+		
 		// String[] headers = source.getHeaderRow();
-		if (headers != null) {
-			for (int i = 0; i < headers.length; i++) {
-				this.setText(row, i, headers[i]);
-			}
+	
 
 			// Element headerTr = DOM.createTR();
 			// DOM.insertChild(this.getElement(), head, 0);
@@ -68,29 +123,28 @@ public class PatientInSemesterFlexTable extends FlexTable {
 			// Element tBody = getBodyElement();
 			// DOM.setElementAttribute(tBody, "style",
 			// "overflow:auto;text-align: left;");
-			row++;
-		}
+		
 		int rows = patientInSemesterDatas.size();
 		PatientInSemesterData patientInSemesterData;
 
-		for (int i = 0; i < rows; i++,row++) {
+		for (int i = 0; i < rows; i++) {
 			patientInSemesterData = patientInSemesterDatas.get(i);
 			patientInSemesterData.setRowSetColor((i % 2 == 0) ? "flexTableEvenRow" : "flexTableOddRow");
-			this.setText(row, 0, patientInSemesterData.name);
+			this.setText(i+1, 0, patientInSemesterData.name);
 			// this.setWidget(row, 1, patientInSemesterData.acceptedImage);
-			this.setWidget(row, 1, patientInSemesterData.acceptedIconBtn);
+			this.setWidget(i+1, 1, patientInSemesterData.acceptedIconBtn);
 
-			this.setWidget(row, 2, patientInSemesterData.assignedTo);
-			this.setWidget(row, 3, patientInSemesterData.navigationButton);
+			this.setWidget(i+1, 2, patientInSemesterData.assignedTo);
+			this.setWidget(i+1, 3, patientInSemesterData.navigationButton);
 			
 			// Module 3 Task B
-			this.setWidget(row, 4, patientInSemesterData.deleteButton);
+			this.setWidget(i+1, 4, patientInSemesterData.deleteButton);
 			//			this.getRowFormatter().addStyleName(row, "flexTableRow");
 			//			this.getCellFormatter().addStyleName(row, 0, patientInSemesterData.getRowSetColor());
 
 //			for (int j = 0; j < headers.length; j++) {
 				//				RowFormatter rowFormatter = new RowFormatter();
-				this.getRowFormatter().addStyleName(row, patientInSemesterData.getRowSetColor());
+				this.getRowFormatter().addStyleName(i+1, patientInSemesterData.getRowSetColor());
 
 				//				this.setRowFormatter(rowFormatter);
 				//				this.getCellFormatter().addStyleName(row, j, patientInSemesterData.getRowSetColor());
@@ -102,13 +156,29 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		//	row++;
 		}
 
-		applyTableStyle();
-		// setStyleFlexTable();
-
-		this.setPatientInSemesterDatas(patientInSemesterDatas);
 	}
 
-	private void applyTableStyle() {
+	public void setRowData( PatientInSemesterProxy patientInSemesterProxy){
+		
+		PatientInSemesterData patientInSemesterData = patientInSemesterDatas.get(this.lastSelectedRowIndex - 1);
+		patientInSemesterData.setPatientInSemesterProxy(patientInSemesterProxy);
+//		this.getWidget(this.lastSelectedRowIndex - 1, 2).removeFromParent();
+		patientInSemesterData.setAssignToLabel();
+//		this.removeCell(this.lastSelectedRowIndex - 1, 2);
+		
+//		this.setWidget(this.lastSelectedRowIndex - 1, 2, patientInSemesterData.assignedTo);
+		patientInSemesterDatas.set(this.lastSelectedRowIndex - 1, patientInSemesterData);
+
+	}
+
+	
+	private void setHeaderStyle(String[] headers) {
+
+		if (headers != null) {
+			for (int i = 0; i < headers.length; i++) {
+				this.setText(0, i, headers[i]);
+			}
+		}
 
 		this.getRowFormatter().addStyleName(0, "flexTableHeader");
 		// this.getColumnFormatter().addStyleName(0, "flexTableFirstColumn");
@@ -180,6 +250,7 @@ public class PatientInSemesterFlexTable extends FlexTable {
 
 	public void setNavigationButtonEnable(boolean enabled) {
 //		Log.info("Check for Button");
+		this.setNavigationButton = enabled;
 		if (this.patientInSemesterDatas != null && this.patientInSemesterDatas.size() > 0) {
 			int rows = this.patientInSemesterDatas.size();
 			PatientInSemesterData patientInSemesterData;

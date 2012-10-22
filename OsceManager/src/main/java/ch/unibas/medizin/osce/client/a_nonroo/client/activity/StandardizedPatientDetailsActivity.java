@@ -8,6 +8,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -37,8 +38,10 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.client.style.widgets.SimpleShowErrorDialogBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
@@ -48,6 +51,11 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -683,9 +691,19 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	public void printPatientClicked(){
 		Log.info("Print clicked");
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-		requests.standardizedPatientRequestNonRoo()
-				.getPdfPatientsBySearch(standardizedPatientProxy.getId(),locale)
-				.fire(new StandardizedPatientPdfFileReceiver());
+		StringBuilder requestData = new StringBuilder();
+		
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT).append("&")
+				.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(standardizedPatientProxy.getId().toString())).append("&")
+				.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+
+		String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData;
+		Log.info("--> url is : " +url);
+		Window.open(url, "", "");
+	    
+//		requests.standardizedPatientRequestNonRoo()
+//				.getPdfPatientsBySearch(standardizedPatientProxy.getId(),locale)
+//				.fire(new StandardizedPatientPdfFileReceiver());
 
 	}
 	//	by SPEC ] End

@@ -131,6 +131,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
@@ -138,11 +139,10 @@ import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
-import ch.unibas.medizin.osce.shared.ViewType;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.scaffold.ChecklistOptionRequestNonRooo;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -158,10 +158,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
@@ -1504,7 +1500,7 @@ final int index2 = index;
 		Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
 //		RoleDetailsChecklistSubViewChecklistQuestionItemView queView[]=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl[proxy.getCheckList().getCheckListTopics().size()];
 		//create Topic View
-		
+		standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getDragController().addDragHandler(roleDetailActivity);
 		while(topicIterator.hasNext())
 		{
 			ChecklistTopicProxy topicProxy=topicIterator.next();
@@ -1820,6 +1816,14 @@ final int index2 = index;
 										Range range = roleBaseTableItemViewImpl.getTable().getVisibleRange();										
 										roleBaseTableItemViewImpl.getTable().setRowCount(response.size());
 										roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(),response);
+										
+										//SPEC Change
+										
+										if(isPrevious){
+											roleBaseTableItemViewImpl.removeLastColumn();
+										}
+										//SPEC Change
+										
 										roleBaseTableItemViewImpl.description.setEnabled(false);
 										}
 										
@@ -1999,13 +2003,31 @@ final int index2 = index;
 							.getSelectedRoleItemAccess().getId();
 		}
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-		requests.standardizedRoleRequestNonRoo()
-				.getRolesPrintPdfBySearch(
-						standardizedRolePrintFilterViewImpl
-								.getStandardizedRoleProxy().getId(),
-						standardizedRolePrintFilterViewImpl.getFilters(),
-						selectedRoleItemAccess,locale)
-				.fire(new StandardizedRolePdfFileReceiver());
+				
+		StringBuilder requestData = new StringBuilder();
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ResourceDownloadProps.Entity.STANDARDIZED_ROLE).append("&")
+					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(standardizedRolePrintFilterViewImpl
+								.getStandardizedRoleProxy().getId().toString())).append("&");
+					
+		for (String filter : standardizedRolePrintFilterViewImpl.getFilters()) {
+			requestData.append(ResourceDownloadProps.FILTER).append("=").append(URL.encodeQueryString(filter)).append("&");	
+		}
+		requestData.append(ResourceDownloadProps.SELECTED_ROLE_ITEM_ACCESS).append("=").append(URL.encodeQueryString(selectedRoleItemAccess.toString())).append("&");
+		requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+		
+		String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData.toString(); 
+		Log.info("--> url is : " +url);
+		Window.open(url, "", "");
+		
+		
+		
+//		requests.standardizedRoleRequestNonRoo()
+//				.getRolesPrintPdfBySearch(
+//						standardizedRolePrintFilterViewImpl
+//								.getStandardizedRoleProxy().getId(),
+//						standardizedRolePrintFilterViewImpl.getFilters(),
+//						selectedRoleItemAccess,locale)
+//				.fire(new StandardizedRolePdfFileReceiver());
 	}
 
 	private class StandardizedRolePdfFileReceiver extends OSCEReceiver<String> {
@@ -2183,7 +2205,7 @@ final int index2 = index;
 			standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.insert(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view), standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.getWidgetCount());
 			standardizedRoleDetailsView[selectedTab].checkListTopicView.add(view);
 			standardizedRoleDetailsView[selectedTab].getDragController().makeDraggable(view.asWidget(),view.getDraglbl());
-			standardizedRoleDetailsView[selectedTab].getDragController().addDragHandler(roleDetailActivity);
+			//standardizedRoleDetailsView[selectedTab].getDragController().addDragHandler(roleDetailActivity);
 			view.getTopicsdiscloserVP();
 			
 			Log.info("MAKE draggable~~~~");
@@ -3987,6 +4009,7 @@ final int index2 = index;
 		
 		if(standardizedRoleProxy!=null)
 		{
+			
 			showApplicationLoading(true);
 		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("previousVersion","previousVersion.oscePosts","previousVersion.roleTopic","previousVersion.simpleSearchCriteria","previousVersion.roleParticipants","previousVersion.advancedSearchCriteria","previousVersion.roleTemplate","previousVersion.keywords","previousVersion.previousVersion","previousVersion.checkList","previousVersion.checkList.checkListTopics","previousVersion.checkList.checkListTopics.checkListQuestions","previousVersion.checkList.checkListTopics.checkListQuestions.checkListCriterias","previousVersion.checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new Receiver<StandardizedRoleProxy>() {
 			
@@ -5210,7 +5233,7 @@ final int index2 = index;
 		
 		toolTip= new PopupPanel(true);
 		
-		toolTip.setWidth("180px");
+		toolTip.setWidth("200px");
 		toolTip.setHeight("40px");
 	    toolTip.setAnimationEnabled(true);
 	    
@@ -5229,7 +5252,7 @@ final int index2 = index;
 		toolTipChange = new IconButton(constants.save());
 		toolTipChange.setIcon("disk");
 	 
-		toolTipChange.setWidth("40px");
+		toolTipChange.setWidth("60px");
 		toolTipChange.setHeight("25px");       
 		
 		int x=table.getAbsoluteLeft();
@@ -5252,7 +5275,7 @@ final int index2 = index;
 		//toolTip.setPopupPosition(left,top);
 		
 		// Issue Role V2
-		toolTip.setPopupPosition(left-40,top);
+		toolTip.setPopupPosition(left-150,top);
 		// E: Issue Role V2
 		
 	        toolTip.show();
@@ -6133,6 +6156,7 @@ final int index2 = index;
 					standardizedRoleDetailsView[selectedtab].setValue(standardizedRoleProxy);
 					descriptionValue.setInnerHTML(description.getHTML());
 					description.setEnabled(false);
+					refreshSelectedTab();
 					
 				}
 				@Override
@@ -6165,19 +6189,36 @@ final int index2 = index;
 			Log.info("major changes");
 			
 			
-			requests.standardizedRoleRequestNonRoo().createStandardizedRoleMajorVersion(standardizedRoleProxy.getId()).fire(new OSCEReceiver<StandardizedRoleProxy>() {
+			requests.standardizedRoleRequestNonRoo().createStandardizedRoleMajorVersion(standardizedRoleProxy.getId(),(roleBaseItemProxy.getRoleSubItem().iterator().next()).getId(), description.getHTML()).fire(new OSCEReceiver<StandardizedRoleProxy>() {
 
 				@Override
 				public void onSuccess(StandardizedRoleProxy newCreatedStandardizedRoleProxy) {
 					// TODO Auto-generated method stub
 					Log.info("successfully role created--"+newCreatedStandardizedRoleProxy.getId());
-	
-					RoleSubItemValueRequest roleSubItemValueReq = requests.roleSubItemValueRequest();
+					standardizedRoleDetailsView[selectedtab].setValue(newCreatedStandardizedRoleProxy);
+					Log.info("RichTextArea Value edited succeessfully");
+					description.setEnabled(false);
+					descriptionValue.setInnerHTML(description.getHTML());
+						refreshSelectedTab();
+				//	RoleSubItemValueRequest roleSubItemValueReq=requests.roleSubItemValueRequest();
+				//	final RoleSubItemValueProxy roleSubItemValueProxy=roleSubItemValueReq.create(RoleSubItemValueProxy.class);
+					
+					//change for major version 17-10-2012 start
+					/*RoleSubItemValueRequest roleSubItemValueReq = requests.roleSubItemValueRequest();
 					RoleSubItemValueProxy roleSubItemValueProxy = roleSubItemValueReq.edit(roleBaseItemProxy.getRoleSubItem().iterator().next());
+					
+					//change for major version 17-10-2012 end
 					//roleSubItemValueProxy.setItemText(description.getText());
+
+
+					//final String text=roleSubItemValueProxy.getItemText();
+					//roleBaseItemProxy.getRoleSubItem().iterator().next()
 					roleSubItemValueProxy.setItemText(description.getHTML());
-					final String text=roleSubItemValueProxy.getItemText();
-					roleSubItemValueProxy.setStandardizedRole(newCreatedStandardizedRoleProxy);
+				//	roleSubItemValueProxy.setStandardizedRole(newCreatedStandardizedRoleProxy);
+				//	roleSubItemValueProxy.setStandardizedRole(standardizedRoleProxy);
+					//change for major minor start 17-10-2012
+					//roleSubItemValueProxy.setRoleBaseItem(roleBaseItemProxy);
+					//change for major minor end 17-10-2012
 					standardizedRoleDetailsView[selectedtab].setValue(newCreatedStandardizedRoleProxy);
 					// Highlight onViolation
 					roleSubItemValueReq.persist().using(roleSubItemValueProxy).fire(new OSCEReceiver<Void>(roleSubItemValueMap) {
@@ -6187,19 +6228,20 @@ final int index2 = index;
 							Log.info("RichTextArea Value edited succeessfully");
 							description.setEnabled(false);
 							descriptionValue.setInnerHTML(description.getHTML());
+							refreshSelectedTab();
 						//	Window.alert("Rich Text Value Set Successfully");
 						}
 						@Override
 						public void onViolation(Set<Violation> errors) {
 							System.out.println("violate");
-							/*description.setVisible(true);
+							description.setVisible(true);
 							descriptionValue.setInnerHTML("");
 							Iterator<Violation> iter = errors.iterator();
 							String message = "";
 							while (iter.hasNext()) {
 								message += iter.next().getMessage() + "<br>";
 							}
-							Log.warn(" in rich text -" + message);*/
+							Log.warn(" in rich text -" + message);
 							saveRichTextArea.setVisible(true);
 						}
 						
@@ -6214,7 +6256,7 @@ final int index2 = index;
 							
 						}
 					});
-
+*/
 				}
 			});
 			//create new proxy

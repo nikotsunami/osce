@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -543,6 +544,39 @@ public class StandardizedPatient {
 		return fetchContextPath() + fileName;
 			//Feature : 154
 	}
+
+	public static String getPdfPatientsBySearchUsingServlet(Long standardizedPatientId,String locale,OutputStream out) {
+//		Log.info("Before FileName");
+		String fileName = OsMaFilePathConstant.FILE_NAME_PDF_FORMAT;
+//		Log.info("Afetr FileName");
+		try {
+			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
+			PdfUtil pdfUtil = new PdfUtil(locale);
+			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
+
+			fileName = standardizedPatient.name + "_" + standardizedPatient.preName + "_" + fileName;
+			//	realFilePath = realPath + fileName;
+			//	contextFilePath = path + contextFileSeparator + fileName;
+
+//			String realFilePath = fetchRealPath() + fileName;
+//			String contextFilePath = fetchContextPath() + fileName;
+//
+//			Log.info("realFilePath: " + realFilePath);
+//			Log.info("contextFilePath: " + contextFilePath);
+
+			pdfUtil.writeFile(standardizedPatient,out);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.error("Error in Std. Patient getPdfPatientsBySearch: " + e.getMessage());
+		}
+
+		return fileName + ".pdf"; 
+		//return fetchContextPath() + fileName;
+			//Feature : 154
+	}
+	
+	
 
         //By Spec]End
 

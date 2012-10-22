@@ -209,15 +209,17 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 			
 			 			for (Iterator sortedOscePostListIterator = sortedOscePostList.iterator(); sortedOscePostListIterator.hasNext();) {
 							OscePost sortedOscePost = (OscePost) sortedOscePostListIterator.next();
-									
+
 							//David: resort list after SP's were added, because the previosly added are now at the end
 						 	List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay,semester.getId());
 						 	Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
 							
 								Log.info("OsceDay is For which OsceSecurity Is Checked Iterator:" + sortedOsceDay.getId());
 								
-								List<Course> parcourList = Osce.getAllParcoursForThisOsceDay(sortedOsceDay);
+								// Manish Now changed Query to get Assignment Of Sequence not of OsceDay Commented below line and query 
+								//List<Course> parcourList = Osce.getAllParcoursForThisOsceDay(sortedOsceDay);
 								
+								List<Course> parcourList=Osce.getAllParcoursForThisSequence(sortedOscePost.getOsceSequence().getId());
 								Log.info("Parcour list size IS :" + parcourList.size());
 								
 								if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){
@@ -265,7 +267,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								
 								//int allReadyPatientInRole =sortedOscePost.getPatientInRole().size();
 								
-								allReadyPatientInRole=Osce.getTotalRoleAssignInPost(sortedOscePost.getId());
+								// Manish : Commented below line As David added this in SP iteration
+								//allReadyPatientInRole=Osce.getTotalRoleAssignInPost(sortedOscePost.getId());
 								
 								Log.info("allReadyPatientInRole Is :" + allReadyPatientInRole);
 								for (Iterator sortedPatientInSemesterIt = patientInSemesterList1.iterator(); sortedPatientInSemesterIt.hasNext();) {
@@ -286,10 +289,12 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 										}
 										// TODO: check if SP already has assignment at this sequence. If yes he may not be assigned
 										else if(osce.getOsceSecurityTypes()==OsceSecurityType.federal && (Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=1)){
-											break;
+											//break;
+											continue;
 										}
 										else if(osce.getOsceSecurityTypes()==OsceSecurityType.simple && (Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=2)){
-											break;
+											//break;
+											continue;
 										}
 										
 											
@@ -737,7 +742,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			
 				
 				if(Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=2){
-					break;
+					//break;
+					continue;
 				}
 				Log.info("@@@Getted OscePost is :" + sortedOscePost2.getId());
 				//setAdvanceSearchCriteria=null;
@@ -909,7 +915,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					OscePost sortedOscePost3=sortedOscePostByTypeAndComplexyList.get(index);
 					
 					if(Osce.totalTimesPatientAssignInSequence(sortedOscePost3.getOsceSequence().getId(),sortedPatientInSemester1.getId())>=2){
-						break;
+						//break;
+						continue;
 					}
 					//setAdvanceSearchCriteria.clear();
 					

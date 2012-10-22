@@ -67,7 +67,8 @@
 			</g:Tab>
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
-				<g:SimplePanel ui:field="officePanel" />
+				<!-- <g:SimplePanel ui:field="officePanel" /> -->
+				<l:OfficeEditViewImpl ui:field="officeEditViewImpl"></l:OfficeEditViewImpl>
 			</g:Tab>
 		</g:TabPanel>
 		<g:HTMLPanel>

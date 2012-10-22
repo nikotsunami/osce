@@ -1,9 +1,14 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Label;
@@ -18,6 +23,9 @@ public class MajorMinorPopupPanelViewImpl extends PopupPanel{
 			UiBinder<Widget, MajorMinorPopupPanelViewImpl> {
 	}
 	
+	@UiField 
+	IconButton closeButton;
+	
 	@UiField
 	 VerticalPanel major;
 	
@@ -29,8 +37,9 @@ public class MajorMinorPopupPanelViewImpl extends PopupPanel{
 	
 	@UiField
 	Label minorLbl;
-	
-	
+	/*
+	@UiField
+	SpanElement title;*/
 	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
@@ -40,6 +49,14 @@ public class MajorMinorPopupPanelViewImpl extends PopupPanel{
 		add(uiBinder.createAndBindUi(this));
 		minorLbl.setText(constants.minorLbl());
 		majorLbl.setText(constants.majorLbl());
+		closeButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+			hide();	
+			}
+		});
 		
 		
 	}

@@ -11,15 +11,20 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView.Presenter;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
@@ -45,7 +50,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 	private DoctorDetailsPlace place;
 	private DoctorProxy doctorProxy;
 	private OfficeDetailsView officeDetailsView;
-	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	DoctorDetailsView doctorDetailsView;
 	private UserPlaceSettings userSettings;
 	
@@ -146,10 +151,36 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 
 	@Override
 	public void deleteClicked() {
-		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
+		
+		final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+		messageConfirmationDialogBox.showYesNoDialog("Really delete this entry? You cannot undo this change.");
+		
+		messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+			@Override
+			public void onClick(ClickEvent event) {
+				messageConfirmationDialogBox.hide();
+				requests.doctorRequest().remove().using(doctorProxy).fire(new Receiver<Void>() {
+
+					public void onSuccess(Void ignore) {
+						if (widget == null) {
+							return;
+						}
+						placeController.goTo(new DoctorPlace("DoctorPlace!DELETED"));
+					}
+				});	
+			}
+		});
+		
+		messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+			@Override
+			public void onClick(ClickEvent event) {
+							return;	
+			}
+		});
+		/*if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
 			return;
-		}
-		requests.doctorRequest().remove().using(doctorProxy).fire(new Receiver<Void>() {
+		}*/
+		/*requests.doctorRequest().remove().using(doctorProxy).fire(new Receiver<Void>() {
 
 			public void onSuccess(Void ignore) {
 				if (widget == null) {
@@ -157,7 +188,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 				}
 				placeController.goTo(new DoctorPlace("DoctorPlace!DELETED"));
 			}
-		});
+		});*/
 	}
 	
 

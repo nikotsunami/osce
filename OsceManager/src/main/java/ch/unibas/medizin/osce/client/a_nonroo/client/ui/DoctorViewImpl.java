@@ -3,7 +3,11 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
@@ -26,6 +30,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -102,6 +107,10 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 	int widthSize=OsMaConstant.WIDTH_SIZE,decreaseSize=0;
 	Timer timer;
 	
+	Map<String, String> columnName=new HashMap<String, String>();
+	List<String> columnNameorder = new ArrayList<String>();
+
+	
 
 	@UiHandler ("newButton")
 	public void newButtonClicked(ClickEvent event) {
@@ -151,7 +160,7 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 		/*CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<DoctorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		*/
-		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new AdvanceCellTable<DoctorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 
 		// cell table changes end
@@ -264,6 +273,8 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 //            }
 //        }, "Title");
 		paths.add("name");
+		columnName.put(constants.name(), "name");
+		columnNameorder.add(constants.name());
 		table.addColumn(new TextColumn<DoctorProxy>() {
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
@@ -278,7 +289,11 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 				return renderer.render(object.getName());
 			}
 		}, constants.name());
+		
 		paths.add("preName");
+		columnName.put(constants.preName(), "preName");
+		columnNameorder.add(constants.preName());
+		
 		table.addColumn(new TextColumn<DoctorProxy>() {
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
@@ -293,47 +308,93 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 				return renderer.render(object.getPreName());
 			}
 		}, constants.preName());
-//        paths.add("email");
-//        table.addColumn(new TextColumn<DoctorProxy>() {
-//
-//            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-//
-//                public String render(java.lang.String obj) {
-//                    return obj == null ? "" : String.valueOf(obj);
-//                }
-//            };
-//
-//            @Override
-//            public String getValue(DoctorProxy object) {
-//                return renderer.render(object.getEmail());
-//            }
-//        }, "Email");
-//        paths.add("telephone");
-//        table.addColumn(new TextColumn<DoctorProxy>() {
-//
-//            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-//
-//                public String render(java.lang.String obj) {
-//                    return obj == null ? "" : String.valueOf(obj);
-//                }
-//            };
-//
-//            @Override
-//            public String getValue(DoctorProxy object) {
-//                return renderer.render(object.getTelephone());
-//            }
-//        }, "Telephone");
-//        paths.add("clinic");
-//        table.addColumn(new TextColumn<DoctorProxy>() {
-//
-//            Renderer<ch.unibas.medizin.osce.client.managed.request.ClinicProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance();
-//
-//            @Override
-//            public String getValue(DoctorProxy object) {
-//                return renderer.render(object.getClinic());
-//            }
-//        }, "Clinic");
-		paths.add("office");
+		
+		
+		paths.add("title");
+		
+		columnName.put(constants.title(), "title");
+		columnNameorder.add(constants.title());
+		
+		table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                	
+                    return String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(DoctorProxy object) {
+            	Log.info("title--"+object.getTitle());
+            	if(object.getTitle()==null)
+            	{
+            		return renderer.render("");
+            	}
+            	else
+            	{
+            		return renderer.render(object.getTitle());
+            	}
+            }
+        }, constants.title());
+        
+		
+		paths.add("email");
+		columnName.put(constants.email(), "email");
+		columnNameorder.add(constants.email());
+		
+		table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getEmail());
+            }
+        }, constants.email(),false);
+       
+		paths.add("telephone");
+		columnName.put(constants.telephone(), "telephone");
+		columnNameorder.add(constants.telephone());
+		
+		table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+                public String render(java.lang.String obj) {
+                    return obj == null ? "" : String.valueOf(obj);
+                }
+            };
+
+            @Override
+            public String getValue(DoctorProxy object) {
+            	Log.info("telephone--"+object.getTelephone());
+                return renderer.render(object.getTelephone());
+            }
+        }, constants.telephone(),false);
+       
+		paths.add("clinic");
+		columnName.put(constants.clinic(), "clinic.name");
+		columnNameorder.add(constants.clinic());
+        table.addColumn(new TextColumn<DoctorProxy>() {
+
+            Renderer<ch.unibas.medizin.osce.client.managed.request.ClinicProxy> renderer = ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance();
+
+            @Override
+            public String getValue(DoctorProxy object) {
+                return renderer.render(object.getClinic());
+            }
+        }, constants.clinic(),false);
+        
+		/*paths.add("office");
+		columnName.put(constants.officeDetails(), "office.title");
+		columnNameorder.add(constants.officeDetails());
 		table.addColumn(new TextColumn<DoctorProxy>() {
 			
 			@Override
@@ -354,7 +415,8 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 				}
 				return sb.toString();
 			}
-		}, constants.officeDetails());
+		}, constants.officeDetails(),false);*/
+		
 	}
 
 	@Override
@@ -459,6 +521,19 @@ public class DoctorViewImpl extends Composite implements  DoctorView,RecordChang
 //		}
 			
 	}
+	
+	@Override
+	public Map getSortMap() {
+		// TODO Auto-generated method stub
+		return columnName;
+	}
+	
+	@Override
+	public List<String> getColumnSortSet()
+	{
+		return columnNameorder;
+	}
+	
 
 
 	//Issue # 122 : Replace pull down with autocomplete.

@@ -27,7 +27,7 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
 	private static final Binder BINDER = GWT.create(Binder.class);
 	
 	@UiField(provided=true)
-	ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
+	public ValueListBox<Gender> gender = new ValueListBox<Gender>(new AbstractRenderer<ch.unibas.medizin.osce.shared.Gender>() {
 		EnumRenderer<Gender> renderer = new EnumRenderer<Gender>();
         public String render(ch.unibas.medizin.osce.shared.Gender obj) {
             return obj == null ? "" : renderer.render(obj);
@@ -35,15 +35,15 @@ public class OfficeEditViewImpl extends Composite implements OfficeEditView, Edi
     });
 
     @UiField
-    TextBox title;
+   public  TextBox title;
     @UiField
-    TextBox name;
+    public TextBox name;
     @UiField
-    TextBox preName;
+    public TextBox preName;
     @UiField
-    TextBox email;
+    public TextBox email;
     @UiField
-    TextBox telephone;
+    public TextBox telephone;
     
     @UiField
 	SpanElement labelGender;
