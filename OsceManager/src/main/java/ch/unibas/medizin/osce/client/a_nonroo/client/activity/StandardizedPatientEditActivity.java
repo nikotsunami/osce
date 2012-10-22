@@ -142,7 +142,7 @@ StandardizedPatientEditView.Delegate {
 		view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
 		bankaccountView.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
 		
-		requests.nationalityRequest().findNationalityEntries(0, 50).
+		/*requests.nationalityRequest().findNationalityEntries(0, 50).
 				with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).
 				fire(new OSCEReceiver<List<NationalityProxy>>() {
 
@@ -167,6 +167,32 @@ StandardizedPatientEditView.Delegate {
 				view.setProfessionPickerValues(values);
 			}
 		});
+*/
+		requests.nationalityRequest().findAllNationalitys().
+		with(ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().getPaths()).
+		fire(new OSCEReceiver<List<NationalityProxy>>() {
+
+	public void onSuccess(List<NationalityProxy> response) {
+		List<NationalityProxy> values = new ArrayList<NationalityProxy>();
+		values.add(null);
+		values.addAll(response);
+		view.setNationalityPickerValues(values);
+		bankaccountView.setCountryPickerValues(values);
+	}
+});
+
+view.setProfessionPickerValues(Collections.<ProfessionProxy>emptyList());
+requests.professionRequest().findAllProfessions().
+		with(ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().getPaths()).
+		fire(new OSCEReceiver<List<ProfessionProxy>>() {
+
+	public void onSuccess(List<ProfessionProxy> response) {
+		List<ProfessionProxy> values = new ArrayList<ProfessionProxy>();
+		values.add(null);
+		values.addAll(response);
+		view.setProfessionPickerValues(values);
+	}
+});
 
 //		view.setBankaccountPickerValues(Collections.<BankaccountProxy>emptyList());
 //		requests.bankaccountRequest().findBankaccountEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.BankaccountProxyRenderer.instance().getPaths()).fire(new Receiver<List<BankaccountProxy>>() {
