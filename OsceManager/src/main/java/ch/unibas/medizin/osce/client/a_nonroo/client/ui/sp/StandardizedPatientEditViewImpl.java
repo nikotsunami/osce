@@ -113,8 +113,11 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	TextBox street;
 	@UiField
 	TextBox city;
+	
+	/*@UiField
+	IntegerBox postalCode;*/
 	@UiField
-	IntegerBox postalCode;
+	TextBox postalCode;
 	@UiField
 	TextBox telephone;
 	@UiField

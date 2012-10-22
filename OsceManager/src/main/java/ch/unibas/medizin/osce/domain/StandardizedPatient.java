@@ -80,7 +80,10 @@ public class StandardizedPatient {
     @Size(max = 30)
     private String city;
 
-    private Integer postalCode;
+    @Size(max = 15)
+    private String postalCode;
+
+    /*private Integer postalCode;*/
 
     @Size(max = 30)
     private String telephone;
@@ -758,7 +761,10 @@ public class StandardizedPatient {
         			}
         			else if (searchThrough.get(i).equals("postalCode"))
         			{
-        				try
+        				field = from.get("postalCode");
+        				predicate = criteriaBuilder.like(field, "%" + str[j] + "%");
+        				
+        				/*try
         				{
         					field = from.get("postalCode");
         					int postalCodeVal = Integer.parseInt(searchWord);
@@ -767,7 +773,7 @@ public class StandardizedPatient {
         				catch(NumberFormatException e)
         				{
         					
-        				}
+        				}*/
         			}        				
         			else
         			{
