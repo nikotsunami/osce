@@ -634,7 +634,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
         returnData = "{\"class\":\"sp_portal.local.StandardizedPatient\",\"id\":23,\"anamnesisForm\":{\"class\":\"sp_portal.local.AnamnesisForm\",\"id\":5,\"createDate\":\"2009-09-18T16:00:00Z\",\"origId\":6,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"bankaccount\":{\"class\":\"sp_portal.local.Bankaccount\",\"id\":5,\"bankName\":\"KTS\",\"bic\":\"BENDSFF1JEV\",\"city\":null,\"iban\":\"CH78 5685 7565 4364 7\",\"origId\":31,\"ownerName\":null,\"postalCode\":null,\"standardizedPatients\":[{\"_ref\":\"../..\",\"class\":\"sp_portal.local.StandardizedPatient\"}]},\"birthday\":\"1965-09-23T16:00:00Z\",\"city\":\"PaulVille\",\"description\":null,\"email\":\"beddebu@hss.ch\",\"gender\":1,\"height\":182,\"immagePath\":null,\"maritalStatus\":null,\"mobile\":\"078 586 29 84\",\"name\":\"Buser\",\"nationality\":{\"class\":\"sp_portal.local.Nationality\",\"id\":2,\"nationality\":\"Deutschland\",\"origId\":6},\"origId\":23,\"postalCode\":4051,\"preName\":\"Bettina\",\"profession\":{\"class\":\"sp_portal.local.Profession\",\"id\":5,\"origId\":6,\"profession\":\"Florist/in\"},\"socialInsuranceNo\":null,\"street\":\"Rankenbergweg 1\",\"telephone\":\"9999999999\",\"telephone2\":null,\"videoPath\":null,\"weight\":82,\"workPermission\":null}";
 		String excptedData = null;
 		try {
-		    String url = instance2.getHostAddress() + "/sp_portal/DataImportExport/importSP";
+		    String url = instance2.getHostAddress() + "/DataImportExport/importSP";
 			excptedData = instance2.sendData(returnData,url);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

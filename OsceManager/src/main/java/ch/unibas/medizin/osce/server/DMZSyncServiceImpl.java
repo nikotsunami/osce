@@ -118,7 +118,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				}catch(Exception e){
 					throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
 				}
-				url = getHostAddress() + "/sp_portal/DataImportExport/importSP";	
+				url = getHostAddress() + "/DataImportExport/importSP";	
 				String returnJson = sendData(json,url);
 				errorMessages = getSendReturnErrorMessage(returnJson);
 			}else{
@@ -227,7 +227,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	public String sync(String locale) throws DMZSyncException{
 	
 		String json = getSyncJsonData(locale);
-		String url = getHostAddress() + "/sp_portal/OsceSync/syncJson";
+		String url = getHostAddress() + "/OsceSync/syncJson";
 		//Send OSCE data to DMZ and return DMZ data
 		String returnJson = sendData(json,url);
 		//System.out.println(">>>>>>>> return json: "+returnJson);
@@ -1318,7 +1318,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		String ret = null;
 
 		HttpClient httpClient = new HttpClient();
-		String url = getHostAddress() + "/sp_portal/DataImportExport/exportSP?id="	+ standardizedPatientId;
+		String url = getHostAddress() + "/DataImportExport/exportSP?id="	+ standardizedPatientId;
 		GetMethod getMethod = new GetMethod(url);
 
 		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
