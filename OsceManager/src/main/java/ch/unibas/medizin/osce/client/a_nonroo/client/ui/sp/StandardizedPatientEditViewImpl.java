@@ -744,5 +744,16 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		return this.selectedTab;
 	}
 	
+	@Override
+	public DefaultSuggestBox<ProfessionProxy, EventHandlingValueHolderItem<ProfessionProxy>> getProfrssion()
+	{
+		return profession;
+	}
+	
+	@Override
+	public DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getNationality()
+	{
+		return nationality;
+	}
 	// E Highlight onViolation
 }

@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationRequest;
@@ -46,6 +47,7 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -53,11 +55,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.inject.Inject;
 
 public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAndSpecView.Presenter, TopicsAndSpecView.Delegate {
@@ -306,7 +310,9 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		selectionModel = new SingleSelectionModel<SpecialisationProxy>(keyProvider);
 		table.setSelectionModel(selectionModel);
 		
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+		//Commented below code so when user click on delete button no detail view will be displayed and added code after commented code to handle table click handler
+		
+		/*selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
 				SpecialisationProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject != null) {
@@ -320,9 +326,33 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 					view.setDetailPanel(false);
 				}
 			}
+		});*/
+		
+		table.addCellPreviewHandler(new Handler<SpecialisationProxy>() {
+
+			@Override
+			public void onCellPreview(CellPreviewEvent<SpecialisationProxy> event) {
+				
+				boolean isClicked="click".equals(event.getNativeEvent().getType());
+				if(isClicked){
+				//Window.alert("Column Clicked :"+ event.getColumn());
+				if(event.getColumn()!=2 && event.getColumn() !=3 ){
+				SpecialisationProxy selectedObject = selectionModel.getSelectedObject();
+		
+				if (selectedObject != null) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
+					showDetails(selectedObject);
+				}
+				else{
+					view.setDetailPanel(false);
+				 }
+				}
+				}	
+			}
 		});
-		
-		
 		view.setDelegate(this);
 		
 		
@@ -547,13 +577,13 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		Log.info("ToolTip opened");
 			toolTip= new PopupPanel(true);
 			
-			toolTip.setWidth("180px");
+			toolTip.setWidth("210px");
 			toolTip.setHeight("40px");
 		    toolTip.setAnimationEnabled(true);
 		    
 			toolTipContentPanel=new HorizontalPanel();
 			
-			toolTipContentPanel.setWidth("160px");
+			toolTipContentPanel.setWidth("200px");
 			toolTipContentPanel.setHeight("22px");
 			toolTipContentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			toolTipContentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -565,7 +595,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			toolTipChange = new IconButton(constants.save());
 			toolTipChange.setIcon("disk");
 		 
-			toolTipChange.setWidth("40px");
+			toolTipChange.setWidth("70px");
 			toolTipChange.setHeight("25px");       
 			
 			// Violation Changes Highlight

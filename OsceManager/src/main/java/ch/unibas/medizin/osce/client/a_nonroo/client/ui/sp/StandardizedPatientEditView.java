@@ -10,6 +10,8 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
@@ -67,5 +69,7 @@ public interface StandardizedPatientEditView extends IsWidget {
 	Map getStandardizedPatientMap();
 	int getSelectedTab();
 	// E Highlight onViolation
+	DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getNationality();
+	DefaultSuggestBox<ProfessionProxy, EventHandlingValueHolderItem<ProfessionProxy>> getProfrssion();
 
 }

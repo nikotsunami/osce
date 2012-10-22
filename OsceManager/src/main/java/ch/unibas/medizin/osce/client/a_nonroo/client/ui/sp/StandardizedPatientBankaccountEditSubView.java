@@ -5,6 +5,8 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
@@ -28,4 +30,6 @@ public interface StandardizedPatientBankaccountEditSubView extends IsWidget {
 	// Highlight onViolation
 	Map getBankAccountMap();
 	// E Highlight onViolation
+
+	DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getCountry();
 }

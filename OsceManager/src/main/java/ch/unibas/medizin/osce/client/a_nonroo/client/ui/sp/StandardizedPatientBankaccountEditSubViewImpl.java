@@ -148,4 +148,11 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 		//return null;
 		return bankAccountMap;
 	}
+	
+	@Override
+	public DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getCountry()
+	{
+		return country;
+	}
+	
 }

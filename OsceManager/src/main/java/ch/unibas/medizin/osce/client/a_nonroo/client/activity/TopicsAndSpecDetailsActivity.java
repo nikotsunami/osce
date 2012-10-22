@@ -322,7 +322,7 @@ TopicsAndSpecDetailsView.Delegate
 
 			toolTip=new PopupPanel(true);
 			
-			toolTip.setWidth("300px");
+			toolTip.setWidth("335px");
 	        toolTip.setHeight("40px");
 	        
 			toolTipContentPanel=new HorizontalPanel();
@@ -358,7 +358,7 @@ TopicsAndSpecDetailsView.Delegate
 		   
 		   IconButton toolTipChange = new IconButton(constants.save());
 		   toolTipChange.setIcon("disk");
-	       toolTipChange.setWidth("55px");
+	       toolTipChange.setWidth("73px");
 	       toolTipChange.setHeight("22px");
 	         // newButton.setWidth();
 	       

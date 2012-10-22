@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy
 import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MaterialListRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
@@ -44,12 +45,15 @@ import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 public class RoomMaterialsActivity extends AbstractActivity implements
 		RoomMaterialsView.Presenter, RoomMaterialsView.Delegate {
@@ -247,7 +251,10 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 		});
 		
 //cell table chanes
-		selectionModel
+	 
+	 //Commented below code so when user click on delete button no detail view will be displayed and added code after commented code to handle table click handler
+	
+	 /*selectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						MaterialListProxy selectedObject = selectionModel
@@ -263,6 +270,32 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 							view.setDetailPanel(false);
 						}
 					}
+				});*/
+
+	 table.addCellPreviewHandler(new Handler<MaterialListProxy>() {
+
+			@Override
+			public void onCellPreview(CellPreviewEvent<MaterialListProxy> event) {
+				
+				boolean isClicked="click".equals(event.getNativeEvent().getType());
+				if(isClicked){
+				//Window.alert("Column Clicked :"+ event.getColumn());
+				if(event.getColumn()!=8){
+					MaterialListProxy selectedObject = selectionModel.getSelectedObject();
+				
+				if (selectedObject != null) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+					view.setDetailPanel(true);
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					
+					showDetails(selectedObject);
+				}
+				else{
+					view.setDetailPanel(false);
+				 }
+				}
+				}	
+			}
 				});
 
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {

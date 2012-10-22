@@ -258,6 +258,10 @@ StandardizedPatientEditView.Delegate {
 			view.setEditTitle(true);
 		//	view.setPatientId(""+standardizedPatient.getId());
 			Log.info("edit");
+			
+			view.getNationality().setSelected(standardizedPatient.getNationality());
+			view.getProfrssion().setSelected(standardizedPatient.getProfession());
+			bankaccountView.getCountry().setSelected(standardizedPatient.getBankAccount().getCountry()); //standardizedPatient.getBankAccount().setCountry(bankaccountView.getCountry().getSelected());
 		}
 		
 		Log.info("edit");
@@ -332,6 +336,9 @@ StandardizedPatientEditView.Delegate {
 		cal.setYear(view.getYear());
 		cal.setDay(view.getDay());
 		standardizedPatient.setBirthday(cal.getDate());
+		standardizedPatient.setProfession(view.getProfrssion().getSelected());
+		standardizedPatient.setNationality(view.getNationality().getSelected());
+		standardizedPatient.getBankAccount().setCountry(bankaccountView.getCountry().getSelected());
 		// Highlight onViolation
 	
 		Map<String, Widget> tempMap=new HashMap<String, Widget>();
