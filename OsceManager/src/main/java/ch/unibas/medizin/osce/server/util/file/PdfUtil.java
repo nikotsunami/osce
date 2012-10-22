@@ -48,14 +48,14 @@ public class PdfUtil {
 	private static final float titleTableSpacing = 0.0f;
     private static Logger log = Logger.getLogger(StandardizedPatient.class);
 
+	private Font headerFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private Font defaultFont = new Font(Font.FontFamily.HELVETICA, 10);
 	private Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
 	private Font italicFont = new Font(Font.FontFamily.HELVETICA, 10,
 			Font.ITALIC);
 	private Font paragraphTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 14,
 			Font.BOLD);
-	private Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
-	private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+	private Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLDITALIC);
 	private Font smallFont = new Font(Font.FontFamily.HELVETICA, 9);
 	private Font emailFont = new Font(Font.FontFamily.HELVETICA, 9,
 			Font.UNDERLINE);
@@ -150,7 +150,7 @@ public class PdfUtil {
 	private void addHeader() {
 		Paragraph preface = new Paragraph();
 		addEmptyLine(preface, 2);
-		Paragraph headerParagraph = new Paragraph(title, catFont);
+		Paragraph headerParagraph = new Paragraph(title, headerFont);
 		headerParagraph.setAlignment(Element.ALIGN_CENTER
 				| Element.ALIGN_MIDDLE);
 		preface.add(headerParagraph);
@@ -266,8 +266,10 @@ public class PdfUtil {
 			}
 			anamnesis.add(new Chunk(titleText, subTitleFont));
 			PdfPTable table = createAnamnesisTableForTitle(title.getId());
-			table.setSpacingBefore(titleTableSpacing);
+			table.setSpacingBefore(0.0f);
+			table.setSpacingAfter(20.0f);
 			anamnesis.add(table);
+			
 		}
 		
 		addEmptyLine(anamnesis, 1);
@@ -292,7 +294,7 @@ public class PdfUtil {
 				String type = enumConstants.getString(scar.getTraitType()
 						.toString());
 
-				table.addCell(getPdfCellBold(location));
+				table.addCell(getPdfCellItalic(location));
 				table.addCell(getPdfCell(type));
 			}
 		}
@@ -306,11 +308,20 @@ public class PdfUtil {
 		
 		List<AnamnesisChecksValue> values = AnamnesisChecksValue.
 				findAnamnesisChecksValuesByAnamnesisFormAndTitle(anamnesisFormId, titleId, "", 0, 1024);
+		int numValues = values.size();
+		int i = 0;
 		for (AnamnesisChecksValue value : values) {
 			AnamnesisCheck check = value.getAnamnesischeck();
+			i++;
 			if (check != null) {
-				table.addCell(getPdfCellBold(check.getText()));
-				table.addCell(getAnswerCell(value));
+				PdfPCell questionCell = getPdfCellItalic(check.getText());
+				PdfPCell answerCell = getAnswerCell(value);
+				if (i < numValues) {
+					questionCell.setBorder(Rectangle.BOTTOM);
+					answerCell.setBorder(Rectangle.BOTTOM);
+				}
+				table.addCell(questionCell);
+				table.addCell(answerCell);
 			}
 		}
 
@@ -467,6 +478,7 @@ public class PdfUtil {
 				if (isRadio) {
 					field = box.getRadioField();
 					group.addKid(field);
+					group.setFieldFlags(PdfFormField.FF_READ_ONLY);
 				} else {
 					field = box.getCheckField();
 					writer.addAnnotation(field);
@@ -737,6 +749,11 @@ public class PdfUtil {
 
 	private PdfPCell getPdfCellBold(String text) {
 		return getPdfCell(text, boldFont, 0, 0);
+	}
+	
+
+	private PdfPCell getPdfCellItalic(String text) {
+		return getPdfCell(text, italicFont, 0, 0);
 	}
 
 	private PdfPCell getPdfCell(String text) {
