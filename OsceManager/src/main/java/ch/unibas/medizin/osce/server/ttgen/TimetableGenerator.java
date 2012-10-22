@@ -33,9 +33,9 @@ public class TimetableGenerator {
 	static Logger log = Logger.getLogger(TimetableGenerator.class);
 	
 	// insert a long in the middle of a rotation if time of rotation (breaks excluded) exceeds this threshold
-	private static final int LONG_BREAK_MIDDLE_THRESHOLD = 150;
+	private static int LONG_BREAK_MIDDLE_THRESHOLD = 150;
 	//SPEC[
-	private static final int LUNCH_BREAK_MIDDLE_THRESHOLD = 360;
+	private static int LUNCH_BREAK_MIDDLE_THRESHOLD = 360;
 	//SPEC]
 	
 	private Osce osce;
@@ -78,6 +78,12 @@ public class TimetableGenerator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		if (osce.getLongBreakRequiredTime() != null)
+			LONG_BREAK_MIDDLE_THRESHOLD = osce.getShortBreakSimpatChange().intValue();
+		
+		if (osce.getLunchBreakRequiredTime() != null)
+			LUNCH_BREAK_MIDDLE_THRESHOLD =  osce.getLunchBreakRequiredTime().intValue();
 		
 		
 		// max number of courses (decrease while looking for optimum)
