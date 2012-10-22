@@ -705,7 +705,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
         sp.setPreName("preName" + value);
         sp.setStreet("street" + value);
         sp.setCity("city" + value);
-        sp.setPostalCode(value);
+        sp.setPostalCode(String.valueOf(value));
         sp.setTelephone("telephone" + value);
         sp.setTelephone2("telephone2" + value);
         sp.setMobile("mobile" + value);
