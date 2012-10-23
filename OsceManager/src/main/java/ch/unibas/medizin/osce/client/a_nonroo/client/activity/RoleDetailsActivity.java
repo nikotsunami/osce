@@ -3569,9 +3569,9 @@ final int index2 = index;
 		final int selectedTab = roleDetailTabPanel.getSelectedIndex();
 		//ScrolledTab Changes end
 		searchCriteriaProxy
-				.setStandardizedRole((StandardizedRoleProxy) standardizedRoleProxies[selectedTab]);
-		final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
-				.getId();
+				.setStandardizedRole(standardizedRoleDetailsView[selectedTab].getValue());
+		final Long stRoleId = standardizedRoleDetailsView[selectedTab].getValue().getId();
+			
 
 		Log.info("Stand role Proxy ID: " + stRoleId);
 		// Log.info("Stand Role Topoc Id : "+ S);
