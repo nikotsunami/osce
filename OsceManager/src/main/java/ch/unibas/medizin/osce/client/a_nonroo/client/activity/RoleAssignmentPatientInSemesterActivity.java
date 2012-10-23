@@ -2172,12 +2172,12 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 													if(patientInRoleProxy.getPatientInSemester().getId().equals(patientInSemesterProxy.getId()))
 														count++;
 												}
-												for(int j=0;j<backupVP.getWidgetCount();j++)
+												/*for(int j=0;j<backupVP.getWidgetCount();j++)
 												{
 													PatientInRoleProxy patientInRoleProxy=((PatientInRoleSubView)backupVP.getWidget(j)).getPatientInRoleProxy();
 													if(patientInRoleProxy.getPatientInSemester().getId()==patientInSemesterProxy.getId())
 														count++;
-												}
+												}*/
 												if(count>1)
 													break;
 												
