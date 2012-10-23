@@ -4435,7 +4435,7 @@ final int index2 = index;
 						
 						setKeyworkdProxy.add(keywordProxy);
 						stRoleProxy.setKeywords(setKeyworkdProxy);
-						
+						final StandardizedRoleProxy role=stRoleProxy;
 						// Highlight onViolation
 						srRequest.persist().using(stRoleProxy).fire(new OSCEReceiver<Void>()
 						// E Highlight onViolation
@@ -4455,7 +4455,9 @@ final int index2 = index;
 								// E Highlight onViolation
 									
 								// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
-								refreshRelationshipProxy();
+								//change for bug
+								standardizedRoleDetailsView[selectedTabId].setValue(role);
+								//refreshRelationshipProxy();
 								
 								//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setText(null);
 								//Log.info("Remove TextBox Value : " + standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue());
@@ -4594,6 +4596,7 @@ final int index2 = index;
 			}
 		}
 		stRoleProxy.setKeywords(setKeyworkdProxy);
+		final StandardizedRoleProxy role=stRoleProxy;
 		srRequest.persist().using(stRoleProxy).fire(new Receiver<Void>()
 		{
 			@Override
@@ -4604,7 +4607,9 @@ final int index2 = index;
 				Log.info("~srRequest.persist()");
 				
 				// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
-				refreshRelationshipProxy();
+				//change for bug
+				standardizedRoleDetailsView[selectedTabId].setValue(role);
+				//refreshRelationshipProxy();
 				
 				// REFRESH KEYWORD TABLE DATA
 				

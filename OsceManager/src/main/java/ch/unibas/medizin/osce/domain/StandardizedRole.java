@@ -167,6 +167,27 @@ public class StandardizedRole {
 		   Set<RoleSubItemValue>  roleSubItemValue= insertForRoleSubItemValue(oldStandardizedRole,newStandardizedRole,roleSubItemValueId,value);
 		   newStandardizedRole.setRoleSubItemValue(roleSubItemValue);
 		   
+		   //changes start
+		   
+		   Set<MainSkill>  mainSkill= insertForMainSkill(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setMainSkills(mainSkill);
+		   
+		   Set<MinorSkill>  minorSkill= insertForMinorSkill(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setMinorSkills(minorSkill);
+		   
+		   Set<File>  file= insertForFile(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setFiles(file);
+		   
+		   Set<UsedMaterial>  usedMaterial= insertForUsedMaterials(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setUsedMaterials(usedMaterial);
+		   /*
+		   Set<OscePost>  oscePost= insertForOscePost(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setOscePosts(oscePost);*/
+		   
+		   
+		   //changes end
+		   
+		   
 		   
 		 /*  if(oldStandardizedRole.getAdvancedSearchCriteria()!=null)
 		   {
@@ -222,8 +243,90 @@ public class StandardizedRole {
 			}
 			return newkeyword;
 	   }
+	   //changes start
+	   private  static Set<MainSkill> insertForMainSkill(StandardizedRole oldRole, StandardizedRole newRole) {
+			Set<MainSkill> newmainSkill = new HashSet<MainSkill>();
+			
+			for(MainSkill oldMainSkill:oldRole.getMainSkills()) {
+				MainSkill skill=new MainSkill();
+				
+				skill.setSkill(oldMainSkill.getSkill());
+				skill.setRole(newRole);
+				
+				
+				newmainSkill.add(skill);
+			}
+			return newmainSkill;
+	   }
 	   
+	   private  static Set<MinorSkill> insertForMinorSkill(StandardizedRole oldRole, StandardizedRole newRole) {
+			Set<MinorSkill> newminorSkill = new HashSet<MinorSkill>();
+			
+			for(MinorSkill oldMinorSkill:oldRole.getMinorSkills()) {
+				MinorSkill skill=new MinorSkill();
+				
+				skill.setSkill(oldMinorSkill.getSkill());
+				skill.setRole(newRole);
+				
+				
+				newminorSkill.add(skill);
+			}
+			return newminorSkill;
+	   }
 	   
+	   private  static Set<File> insertForFile(StandardizedRole oldRole, StandardizedRole newRole) {
+			Set<File> newFile = new HashSet<File>();
+			
+			for(File oldFile:oldRole.getFiles()) {
+				File file=new File();
+	   
+				file.setDescription(oldFile.getDescription());
+				file.setPath(oldFile.getPath());
+				file.setSortOrder(oldFile.getSortOrder());
+				file.setStandardizedRole(newRole);
+	   
+				
+				
+				newFile.add(file);
+			}
+			return newFile;
+	   }
+	   
+	   private  static Set<UsedMaterial> insertForUsedMaterials(StandardizedRole oldRole, StandardizedRole newRole) {
+			Set<UsedMaterial> newUsedMaterial = new HashSet<UsedMaterial>();
+			
+			for(UsedMaterial oldUsedMaterial:oldRole.getUsedMaterials()) {
+				UsedMaterial usedMaterial=new UsedMaterial();
+				
+				usedMaterial.setMaterialCount(oldUsedMaterial.getMaterialCount());
+				usedMaterial.setMaterialList(oldUsedMaterial.getMaterialList());
+				usedMaterial.setSort_order(oldUsedMaterial.getSort_order());
+				usedMaterial.setStandardizedRole(newRole);
+				usedMaterial.setUsed_from(oldUsedMaterial.getUsed_from());
+				
+				newUsedMaterial.add(usedMaterial);
+			}
+			return newUsedMaterial;
+	   }
+	   /*
+	   private  static Set<OscePost> insertForOscePost(StandardizedRole oldRole, StandardizedRole newRole) {
+			Set<OscePost> newOscePost = new HashSet<OscePost>();
+			
+			for(OscePost oldOscePost:oldRole.getOscePosts()) {
+				OscePost oscePost=new OscePost();
+				oscePost.setOscePostBlueprint(oldOscePost.getOscePostBlueprint());
+				oscePost.setOscePostRooms(oldOscePost.getOscePostRooms());
+				oscePost.setOsceSequence(oldOscePost.getOsceSequence());
+				oscePost.setPatientInRole(oldOscePost.getPatientInRole());
+				oscePost.setSequenceNumber(oldOscePost.getSequenceNumber());
+				oscePost.setStandardizedRole(newRole);
+				oscePost.setValue(oldOscePost.getValue());
+				
+				newOscePost.add(oldOscePost);
+			}
+			return newOscePost;
+	   }*/
+	   //changes end
 	   private  static Set<SimpleSearchCriteria> insertForSimpleSearchCriteria(StandardizedRole oldRole, StandardizedRole newRole) {
 			Set<SimpleSearchCriteria> simpleCriteria = new HashSet<SimpleSearchCriteria>();
 			
