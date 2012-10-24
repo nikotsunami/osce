@@ -65,10 +65,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			patientInRole.setIs_backup(setIs_backup);
 			patientInRole.setOscePost(setOscePost);
 			patientInRole.setPatientInSemester(patientInSemester);
-			
-			if(setOscePost !=null)
-			patientInRole.setIs_first_in_sequence(true);
-			else
 			patientInRole.setIs_first_in_sequence(false);	
 			
 			patientInRole.persist();

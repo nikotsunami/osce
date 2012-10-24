@@ -1518,6 +1518,8 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 				HorizontalPanel roleHP=(HorizontalPanel)(roleSubView.getRoleParent());
 				int count=0;
 				PatientInRoleSubView patientInRoleSubViewFirstAssigned=null;
+				
+				if(roleSubView.getOsceDayProxy().getOsce().getSecurity()==OSCESecurityStatus.SIMPLE){
 				for(int i=1;i<roleHP.getWidgetCount();i++)
 				{
 					RoleSubView roleSubview=(RoleSubView)roleHP.getWidget(i);
@@ -1543,6 +1545,7 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 					if(count>1)
 						break;
 				
+				}
 				}
 				if(count==1 && !isBackUp)
 				{
@@ -2371,6 +2374,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 		}
 
+		this.showApplicationLoading(true);
 		final OSCEReceiver<List<PatientInSemesterProxy>> callback = new OSCEReceiver<List<PatientInSemesterProxy>>() {
 			@Override
 			public void onSuccess(
@@ -2383,15 +2387,18 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				}
 				initPatientInSemesterData(patientInSemesterProxies,true);
 				showApplicationLoading(false);
+				showApplicationLoading(false);
 
 			}
 			@Override
 			public void onFailure(ServerFailure error) {
 				showApplicationLoading(false);
+				showApplicationLoading(false);
 				super.onFailure(error);
 			}
 			@Override
 			public void onViolation(Set<Violation> errors) {
+				showApplicationLoading(false);
 				showApplicationLoading(false);
 				super.onViolation(errors);
 			}
@@ -2454,8 +2461,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		// module 3 bug }
 	}
 
-	protected void onRangeChangedAdvancedSearchCriteriaTable(
-			long standardizedRoleID,final boolean isNavigationButtonEnable) {
+	protected void onRangeChangedAdvancedSearchCriteriaTable(long standardizedRoleID,final boolean isNavigationButtonEnable) {
 		showApplicationLoading(true);
 		final Range range = view.getAdvancedSearchCriteriaTable()
 				.getVisibleRange();
@@ -2467,33 +2473,37 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					// This activity is dead
 					return;
 				}
-				view.getAdvancedSearchCriteriaTable().setRowData(
-						range.getStart(), values);
+				view.getAdvancedSearchCriteriaTable().setRowData(range.getStart(), values);
 				advancedSearchCriteriaProxies = values;
-				initAdvanceSearchCriteriaList(advancedSearchCriteriaProxies
-						.size());
+				initAdvanceSearchCriteriaList(advancedSearchCriteriaProxies.size());
 				//Module 3 : Assignment E : Start
 				// 
 				if(isNavigationButtonEnable){
 					showApplicationLoading(true);
-				requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId()).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
-					@Override
-					public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
+//				requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId())/*.with(withStatement)*/.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+//					@Override
+//					public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
 						//  
-						allPatientInSemesterProxies = patientInSemesterProxies;
+//						allPatientInSemesterProxies = patientInSemesterProxies;
 						// Module 3 : Assignment E : Stop
 						//  
 						//	System.out.println("response : " + patientInSemesterProxies.size());
-						Log.info("response : " + patientInSemesterProxies.size());
+//						Log.info("response : " + patientInSemesterProxies.size());
 						
-//						initPatientInSemesterData(patientInSemesterProxies, false);
+// madam						initPatientInSemesterData(patientInSemesterProxies, false);
 						initPatientInSemester(false, true, isNavigationButtonEnable);
+
 						showApplicationLoading(false);
-					}
-				});
+	                                        showApplicationLoading(false);
+
+//					}
+//				});
 				}else{
 					initPatientInSemester(false, true, isNavigationButtonEnable);
+					showApplicationLoading(false);
+					
+
 				}
 				
 			//	initPatientInSemester(false,true,false);
@@ -2506,8 +2516,19 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					widget.setWidget(view.asWidget());
 				}
 			}
+			@Override
+			public void onFailure(ServerFailure error) {
+				showApplicationLoading(false);
+				super.onFailure(error);
+			}
+			@Override
+			public void onViolation(Set<Violation> errors) {
+				showApplicationLoading(false);
+				super.onViolation(errors);
+			}
 		};
 
+		showApplicationLoading(true);
 		fireAdvancedSearchRangeRequest(standardizedRoleID, range, callback);
 		showApplicationLoading(false);
 	}

@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.OsceSecurityType;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.requestfactory.shared.ServerFailure;
@@ -191,6 +193,8 @@ public class PatientInRole {
     	PatientInSemester patientInSemester = patientInRole.getPatientInSemester();
     	
     	OsceDay osceDay =getOsceDayBasedonPostId(patientInRole.getId());
+    	Osce osce=Osce.findOsce(osceDay.getOsce().getId());
+    	
     	Log.info("OSceDay Is :" + osceDay.getId());
     	
     	Set<Assignment> assignments =patientInRole.getAssignments();
@@ -212,24 +216,31 @@ public class PatientInRole {
     	if(count==1){
     		flag=deletPatientInRoleAlongWithPostNull(patientInRole);
     		
-    		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
-    		
-    		if(totalTimePatientAssignInSeq==1){
-    			
-    			PatientInRole PIR=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
-    			PIR.setIs_first_in_sequence(true);
-    			PIR.persist();
+    		if(osce.getSecurity()==OSCESecurityStatus.SIMPLE){
+	    		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
+	    		
+	    		if(totalTimePatientAssignInSeq==1){
+	    			
+	    			PatientInRole PIR=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
+	    			PIR.setIs_first_in_sequence(true);
+	    			PIR.persist();
+	    		}
     		}
     	}
     	else{
     		flag=deletPatientInRoleNormally(patientInRole);
-    		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
-    		if(totalTimePatientAssignInSeq==1){
+    		
+    		if(osce.getSecurity()==OSCESecurityStatus.SIMPLE){
     			
-    			PatientInRole PIR=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
-    			PIR.setIs_first_in_sequence(true);
-    			PIR.persist();
-    		}
+	    		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
+	    		
+	    		if(totalTimePatientAssignInSeq==1){
+	    			
+	    			PatientInRole PIR=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
+	    			PIR.setIs_first_in_sequence(true);
+	    			PIR.persist();
+	    		}
+	    	}
     	}
 	    	}catch(Exception e){
     		Log.info("Exception in Deleting PIR");
@@ -409,17 +420,20 @@ public class PatientInRole {
     public static void onPersistPatientInRole(OsceDay osceDay,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
 
     	Log.info("onPersistPatientInRole Osce Day :" + osceDay.getId());
-		
+    	
 		try{
+			
+		Osce osce=Osce.findOsce(osceDay.getOsce().getId());
+		
     	Integer response=PatientInRole.getTotalTimePatientAssignInRole(osceDay.getId(), patientInSemester.getId());
 
 		Log.info("Total Times Role Assifn Is :" + response);
 						
 		if(response > 0){
-			assignPatientInRoleNormally(oscePost,patientInSemester,isPatientInSemesterFulfill);
+			assignPatientInRoleNormally(osce,oscePost,patientInSemester,isPatientInSemesterFulfill);
 	   	}
 		else if(response==0){
-			assignPatientInRoleWithOnePostNull(oscePost,patientInSemester,isPatientInSemesterFulfill);
+			assignPatientInRoleWithOnePostNull(osce,oscePost,patientInSemester,isPatientInSemesterFulfill);
 		}
 		}catch (Exception e) {
 			Log.info("Error during saving PIR");
@@ -427,75 +441,62 @@ public class PatientInRole {
 		}
 		
     }
-    public static void assignPatientInRoleNormally(OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
+    public static void assignPatientInRoleNormally(Osce osce,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
     	
     	try{
-    	long totalTimePatientAssignInSeq =Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
     	
-    	if(totalTimePatientAssignInSeq==0){
-    		PatientInRole PIR = new PatientInRole();
-    		PIR.setPatientInSemester(patientInSemester);
-    		PIR.setOscePost(oscePost);
-    		PIR.setFit_criteria(isPatientInSemesterFulfill);
-    		PIR.setIs_backup(false);
-    		PIR.setIs_first_in_sequence(true);
-    		PIR.persist();
-    	}
-    	else{
-    		
-    		if(totalTimePatientAssignInSeq==1){
-    		
-    			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
-    			patientInRole.setIs_first_in_sequence(false);
-    			patientInRole.persist();
-	    		
+    		if(osce.getOsceSecurityTypes()==OsceSecurityType.federal){
+    			PatientInRole PIR = new PatientInRole();
+        		PIR.setPatientInSemester(patientInSemester);
+        		PIR.setOscePost(oscePost);
+        		PIR.setFit_criteria(isPatientInSemesterFulfill);
+        		PIR.setIs_backup(false);
+        		PIR.setIs_first_in_sequence(false);
+        		PIR.persist();
     		}
-    		PatientInRole PIR = new PatientInRole();
-    		PIR.setPatientInSemester(patientInSemester);
-    		PIR.setOscePost(oscePost);
-    		PIR.setFit_criteria(isPatientInSemesterFulfill);
-    		PIR.setIs_backup(false);
-    		PIR.setIs_first_in_sequence(false);
-    		PIR.persist();
-    		
-    	}
+    		else{
+		    	long totalTimePatientAssignInSeq =Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
+		    	
+		    	if(totalTimePatientAssignInSeq==0){
+		    		PatientInRole PIR = new PatientInRole();
+		    		PIR.setPatientInSemester(patientInSemester);
+		    		PIR.setOscePost(oscePost);
+		    		PIR.setFit_criteria(isPatientInSemesterFulfill);
+		    		PIR.setIs_backup(false);
+		    		PIR.setIs_first_in_sequence(true);
+		    		PIR.persist();
+		    	}
+		    	else{
+		    		
+		    		if(totalTimePatientAssignInSeq==1){
+		    		
+		    			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
+		    			patientInRole.setIs_first_in_sequence(false);
+		    			patientInRole.persist();
+			    		
+		    		}
+		    		PatientInRole PIR = new PatientInRole();
+		    		PIR.setPatientInSemester(patientInSemester);
+		    		PIR.setOscePost(oscePost);
+		    		PIR.setFit_criteria(isPatientInSemesterFulfill);
+		    		PIR.setIs_backup(false);
+		    		PIR.setIs_first_in_sequence(false);
+		    		PIR.persist();
+		    		
+		    	}
+    		}
     	}catch (Exception e) {
     		Log.info("Erroe during saving PIR");
     		e.printStackTrace();
 		}
     	
 }
-    public static void assignPatientInRoleWithOnePostNull(OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
+    public static void assignPatientInRoleWithOnePostNull(Osce osce,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
     	
        	try{
-        	long totalTimePatientAssignInSeq =Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
-        	
-        	if(totalTimePatientAssignInSeq==0){
-        		PatientInRole PIR = new PatientInRole();
-        		PIR.setPatientInSemester(patientInSemester);
-        		PIR.setOscePost(oscePost);
-        		PIR.setFit_criteria(isPatientInSemesterFulfill);
-        		PIR.setIs_backup(false);
-        		PIR.setIs_first_in_sequence(true);
-        		PIR.persist();
-        		
-        		PatientInRole PIR2 = new PatientInRole();
-        		PIR2.setPatientInSemester(patientInSemester);
-        		PIR2.setOscePost(null);
-        		PIR2.setFit_criteria(isPatientInSemesterFulfill);
-        		PIR2.setIs_backup(false);
-        		PIR2.setIs_first_in_sequence(false);
-        		PIR2.persist();
-        	}
-        	else{
-        		
-        		if(totalTimePatientAssignInSeq==1){
-	        		
-        			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
-        			patientInRole.setIs_first_in_sequence(false);
-        			patientInRole.persist();
-        		}
-        		PatientInRole PIR = new PatientInRole();
+       		
+       		if(osce.getOsceSecurityTypes()==OsceSecurityType.federal){
+       			PatientInRole PIR = new PatientInRole();
         		PIR.setPatientInSemester(patientInSemester);
         		PIR.setOscePost(oscePost);
         		PIR.setFit_criteria(isPatientInSemesterFulfill);
@@ -510,8 +511,55 @@ public class PatientInRole {
         		PIR2.setIs_backup(false);
         		PIR2.setIs_first_in_sequence(false);
         		PIR2.persist();
-        		
-        	}
+       			
+       		}
+       		else{
+       			
+	        	long totalTimePatientAssignInSeq =Osce.totalTimesPatientAssignInSequence(oscePost.getOsceSequence().getId(),patientInSemester.getId());
+	        	
+	        	if(totalTimePatientAssignInSeq==0){
+	        		PatientInRole PIR = new PatientInRole();
+	        		PIR.setPatientInSemester(patientInSemester);
+	        		PIR.setOscePost(oscePost);
+	        		PIR.setFit_criteria(isPatientInSemesterFulfill);
+	        		PIR.setIs_backup(false);
+	        		PIR.setIs_first_in_sequence(true);
+	        		PIR.persist();
+	        		
+	        		PatientInRole PIR2 = new PatientInRole();
+	        		PIR2.setPatientInSemester(patientInSemester);
+	        		PIR2.setOscePost(null);
+	        		PIR2.setFit_criteria(isPatientInSemesterFulfill);
+	        		PIR2.setIs_backup(false);
+	        		PIR2.setIs_first_in_sequence(false);
+	        		PIR2.persist();
+	        	}
+	        	else{
+	        		
+	        		if(totalTimePatientAssignInSeq==1){
+		        		
+	        			PatientInRole patientInRole=PatientInRole.findPIRBasedOnSem(patientInSemester.getId(),oscePost.getOsceSequence().getId());
+	        			patientInRole.setIs_first_in_sequence(false);
+	        			patientInRole.persist();
+	        		}
+	        		PatientInRole PIR = new PatientInRole();
+	        		PIR.setPatientInSemester(patientInSemester);
+	        		PIR.setOscePost(oscePost);
+	        		PIR.setFit_criteria(isPatientInSemesterFulfill);
+	        		PIR.setIs_backup(false);
+	        		PIR.setIs_first_in_sequence(false);
+	        		PIR.persist();
+	        		
+	        		PatientInRole PIR2 = new PatientInRole();
+	        		PIR2.setPatientInSemester(patientInSemester);
+	        		PIR2.setOscePost(null);
+	        		PIR2.setFit_criteria(isPatientInSemesterFulfill);
+	        		PIR2.setIs_backup(false);
+	        		PIR2.setIs_first_in_sequence(false);
+	        		PIR2.persist();
+	        		
+	        	}
+       		}
         	}catch (Exception e) {
         		Log.info("Erroe during saving PIR");
         		e.printStackTrace();
