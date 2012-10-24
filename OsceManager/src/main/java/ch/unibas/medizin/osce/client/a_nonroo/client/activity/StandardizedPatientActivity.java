@@ -58,6 +58,7 @@ import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -66,6 +67,9 @@ import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.autobean.shared.AutoBean;
+import com.google.gwt.autobean.shared.AutoBeanCodex;
+import com.google.gwt.autobean.shared.AutoBeanUtils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -78,6 +82,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
@@ -643,14 +648,65 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			@Override
 			public void onClick(ClickEvent arg0) {
 				Range range = table.getVisibleRange();
+								
+/*
 				requests.standardizedPatientRequestNonRoo()
 						.getCSVMapperFindPatientsByAdvancedSearchAndSort(
 								"name", Sorting.ASC, quickSearchTerm,
 								searchThrough, searchCriteria // , filePath
 								,range.getStart(),range.getLength()								
 						).fire(new StandardizedPatientCsvFileReceiver());
+*/
+/*				
+				requests.standardizedPatientRequestNonRoo()
+				.getCSVMapperFindPatientsByAdvancedSearchAndSortUsingSession(
+						"name", Sorting.ASC, quickSearchTerm,
+						searchThrough, searchCriteria // , filePath
+						,range.getStart(),range.getLength()								
+				).fire(new Receiver<Void>() {
+					@Override
+					public void onSuccess(Void response) {
+						String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT_EXPORT.ordinal()));
+						String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal);
+						Log.info("--> url is : " +url);
+						Window.open(url, "", "");
+					}
+				});
+*/				
+				
+				List<StandardizedPatientProxy>  items = table.getVisibleItems();
+				List<Long> spIdList = new ArrayList<Long>();
+				for (StandardizedPatientProxy standardizedPatientProxy : items) {
+					
+					spIdList.add(standardizedPatientProxy.getId());
+				}
+				requests.standardizedPatientRequestNonRoo().getCSVMapperForStandardizedPatientUsingServlet(spIdList).fire(new Receiver<Void>() {
+						@Override
+						public void onSuccess(Void response) {
+							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT_EXPORT.ordinal()));
+							String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal);
+							Log.info("--> url is : " +url);
+							Window.open(url, "", "");
+						}
+				});
+						
 
 			}
+
+//			private String join(List<String> stringList, String separator) {
+//
+//			  StringBuffer buf = new StringBuffer();
+//
+//		        for (int i = 0; i < stringList.size(); i++) {
+//		            if (i > 0) {
+//		                buf.append(separator);
+//		            }
+//		            if (stringList.get(i) != null) {
+//		                buf.append(stringList.get(i));
+//		            }
+//		        }
+//		        return buf.toString();	
+//			}
 		});
 
 		// BY SPEC v(Stop)

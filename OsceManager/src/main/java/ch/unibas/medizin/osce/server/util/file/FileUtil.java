@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
@@ -43,6 +44,14 @@ public class FileUtil {
 				appendMode));
 	}
 
+	/**
+	 * Uses given buffer to write
+	 * @param outputStream
+	 */
+	public void open(OutputStream os) {
+		out = new BufferedWriter(new OutputStreamWriter(os));
+	}
+	
 	/**
 	 * write string into the file.
 	 * 

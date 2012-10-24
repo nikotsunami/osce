@@ -27,6 +27,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -49,6 +50,7 @@ import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
@@ -500,6 +502,92 @@ public class StandardizedPatient {
 		return fetchContextPath() + OsMaFilePathConstant.FILENAME;
 
     }
+
+    public static String getCSVMapperFindPatientsByAdvancedSearchAndSortUsingServlet(
+            String sortColumn, Sorting order, String searchWord,
+            List<String> searchThrough,
+            List<AdvancedSearchCriteria> searchCriteria// , String filePath
+                        ,int firstResult, int maxResults, OutputStream os
+    ) {
+
+        List<StandardizedPatient> standardizedPatients = findPatientsByAdvancedSearchAndSort(
+                sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults);
+
+        try {
+            CsvUtil csvUtil = new CsvUtil();
+            csvUtil.setSeparater(",");
+			//Feature : 154
+			//csvUtil.open(fetchRealPath() + OsMaFilePathConstant.FILENAME, false);
+			csvUtil.open(os);
+            csvUtil.writeCsv(standardizedPatients, true, true);
+            csvUtil.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+			//Feature : 154
+		return OsMaFilePathConstant.FILENAME;
+
+    }
+    
+//    public static void getCSVMapperFindPatientsByAdvancedSearchAndSortUsingSession(
+//            String sortColumn, Sorting order, String searchWord,
+//            List<String> searchThrough,
+//            List<AdvancedSearchCriteria> searchCriteria// , String filePath
+//                        ,int firstResult, int maxResults
+//    ) {
+//
+//        
+//		HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
+//		
+//		session.setAttribute(ResourceDownloadProps.NAME, sortColumn);
+//		session.setAttribute(ResourceDownloadProps.SORT_ORDER, order);
+//		session.setAttribute(ResourceDownloadProps.QUICK_SEARCH_TERM, searchWord);
+//		session.setAttribute(ResourceDownloadProps.SEARCH_THROUGH_KEY, searchThrough);
+//		session.setAttribute(ResourceDownloadProps.SEARCH_CRITERIA_MASTER_KEY, searchCriteria);
+//		session.setAttribute(ResourceDownloadProps.RANGE_START, firstResult);
+//		session.setAttribute(ResourceDownloadProps.RANGE_LENGTH, maxResults);
+//
+//    }
+    
+    public static void getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids) {
+    	HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
+		
+		session.setAttribute(ResourceDownloadProps.SP_LIST, ids);
+    }
+    
+    public static String getCSVMapperFindPatientsByAdvancedSearchAndSortForSP(
+    		List<Long> ids, OutputStream os
+    ) {
+    	 List<StandardizedPatient> standardizedPatients = findPatientsByids(ids);
+          try {
+            CsvUtil csvUtil = new CsvUtil();
+            csvUtil.setSeparater(",");
+			//Feature : 154
+			//csvUtil.open(fetchRealPath() + OsMaFilePathConstant.FILENAME, false);
+			csvUtil.open(os);
+            csvUtil.writeCsv(standardizedPatients, true, true);
+            csvUtil.close();
+        } catch (Exception e) {
+        	log.error("Error while generating csv for StandardizedPatient ", e);
+            //e.printStackTrace();
+        }
+			//Feature : 154
+		return OsMaFilePathConstant.FILENAME;
+
+    }
+    
+	public static List<StandardizedPatient> findPatientsByids(List<Long> ids) {
+		
+		List<StandardizedPatient> result  = new ArrayList<StandardizedPatient>();
+		if(ids.size() > 0) {
+			String idList = org.apache.commons.lang.StringUtils.join(ids,",");
+			String SQL = "select sp from StandardizedPatient as sp where sp.id in ("+idList+")";
+			TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(SQL,StandardizedPatient.class);
+			log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+			result  = typedQuery.getResultList();
+		}
+		return result;
+	}
 
 	//	public static String getContextPath() {
 	//Feature : 154 Used in Assignment and StandardizedRole

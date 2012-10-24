@@ -2005,7 +2005,8 @@ final int index2 = index;
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 				
 		StringBuilder requestData = new StringBuilder();
-		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ResourceDownloadProps.Entity.STANDARDIZED_ROLE).append("&")
+		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_ROLE.ordinal()));
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
 					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(standardizedRolePrintFilterViewImpl
 								.getStandardizedRoleProxy().getId().toString())).append("&");
 					
