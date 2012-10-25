@@ -119,11 +119,6 @@ public class TimetableGenerator {
 		return optGen;
 	}
 	
-	public void initValue()
-	{
-		
-	}
-	
 	@SuppressWarnings("unchecked")
 	public TimetableGenerator(Osce osce, int nBreakPosts, int nParcours) {
 		
@@ -164,7 +159,10 @@ public class TimetableGenerator {
 		
 		int maxRotations = numberStudents / (nPosts * numberParcours);
 		
-		rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) / (numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak());
+		//SPEC[
+		//rotationsPerDay = (numberMinsDayMax - osce.getLunchBreak()) / (numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak());
+		rotationsPerDay = (numberMinsDayMax ) / (numberPosts * postLength + (numberPosts - 1) * osce.getShortBreak());
+		//SPEC]
 		
 		// init all rotations of parcours with number of break posts
 		for(int i = 0; i < numberParcours; i++) {
@@ -213,7 +211,7 @@ public class TimetableGenerator {
 	/**
 	 * Calculate the overall time needed for performing the whole OSCE
 	 */
-	public void calcTimeNeeded() {
+	/*public void calcTimeNeeded() {
 		boolean numberDaysVerified = false;
 		
 		while(numberDaysVerified == false) {
@@ -262,6 +260,47 @@ public class TimetableGenerator {
 				numberDaysVerified = true;
 			}
 		}
+	}*/
+	
+	public void calcTimeNeeded() {
+		numberDays = (int) Math.ceil((double) rotations[0].size() / (double) rotationsPerDay);
+		log.info("calculating time needed (" + numberDays + " day(s)");
+		
+		int rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;		
+		
+		rotationsByDay.clear();
+		timeNeededByDay.clear();
+		timeNeeded = 0;
+		int i = 0;
+		int estimatedRotationPerDay = rotationsMax;
+		int rotationRemainsLastDay = rotations[0].size();
+		int totalProcessRotation = 0;
+		
+		while (i < numberDays && totalProcessRotation != rotations[0].size())
+		{	
+			rotationsByDay.add(i, estimatedRotationPerDay);
+			
+			calcDayTimeByDayIndex(i, 0);
+			
+			if(numberMinsDayMax < timeNeededByDay.get(i)) {
+				estimatedRotationPerDay--;
+			}
+			else
+			{
+				totalProcessRotation += rotationsByDay.get(i);
+				rotationRemainsLastDay-=rotationsByDay.get(i);
+				
+				if (rotationsMax > rotationRemainsLastDay)
+					estimatedRotationPerDay = rotationRemainsLastDay;
+				else
+					estimatedRotationPerDay = rotationsMax;
+				
+				if (i == (numberDays-1) && rotationRemainsLastDay > 0)
+					numberDays++;
+				i++;
+			}
+						
+		}
 	}
 
 	/**
@@ -278,7 +317,10 @@ public class TimetableGenerator {
 		
 		// take information from DB if OSCE scaffold has already been generated
 		if(osce.getOsceStatus().equals(OsceStatus.OSCE_BLUEPRINT))
-			rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;
+			//by spec[
+			rotationsMax = rotationsByDay.get(i); // otherwise it start every day with more number rotation
+			//by spec]
+			//rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;			
 		else
 			rotationsMax = rotationsByDay.get(i);
 		
@@ -287,6 +329,7 @@ public class TimetableGenerator {
 		int timeNeededCurrentDay = 0;
 		
 		int timeUntilLongORLunchBreak = 0;
+		int timeUntilLastLongBreak = 0;
 		List<Integer> rotationTime = new ArrayList<Integer>();
 		int checkBreak = 0;
 		
@@ -295,7 +338,14 @@ public class TimetableGenerator {
 		//SPEC[
 		int estimatedTimeDay = 0;
 		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
-			int numberBreakPostsThisRotation = rotations[0].get(j);
+			//int numberBreakPostsThisRotation = rotations[0].get(j);
+			
+			int numberBreakPostsThisRotation = 0;
+			
+			if (rotations[0].size() > j)
+				numberBreakPostsThisRotation = rotations[0].get(j);
+			else 
+				rotations[0].add(j, 0);
 			
 			// add break posts to regular posts
 			int nPostsGeneral = numberPosts + numberBreakPosts;
@@ -312,7 +362,11 @@ public class TimetableGenerator {
 		
 		boolean lunchBreakRequered = false;
 		lunchBreakRequered = estimatedTimeDay > LUNCH_BREAK_MIDDLE_THRESHOLD;
-		int lunchBreakRotation = (rotationsByDay.get(i) % 2) > 0 ? (rotationsByDay.get(i) / 2) + 1 : (rotationsByDay.get(i) /2) ;
+		
+		int lunchBreakRotation = 0;
+		
+		if (lunchBreakRequered)
+			lunchBreakRotation = (int) Math.floor((double)rotationsByDay.get(i) / (double)2);
 				
 		//SPEC]
 		
@@ -368,10 +422,16 @@ public class TimetableGenerator {
 			//spec[
 			boolean isLongBreakBetweenTwoRotation = false;
 			timeUntilLongORLunchBreak += timeNeededCurrentDay;
+			timeUntilLongORLunchBreak -= timeUntilLastLongBreak;
 			if(!lastRotation)
 			{
 				int nextNumberSlotsTotal = nPostsGeneral + rotations[0].get(j+1);
-				isLongBreakBetweenTwoRotation = ((nPostsThisRotation + nextNumberSlotsTotal ) * osce.getPostLength() ) +  ((nPostsThisRotation + nextNumberSlotsTotal -2) * osce.getShortBreak()) + (osce.getMiddleBreak()) > LONG_BREAK_MIDDLE_THRESHOLD;
+				int totalTimeForLongBreak = ((nextNumberSlotsTotal * osce.getPostLength()) +  ((nextNumberSlotsTotal - 1) * osce.getShortBreak()) + osce.getMiddleBreak());
+				totalTimeForLongBreak += timeUntilLongORLunchBreak;
+				isLongBreakBetweenTwoRotation = totalTimeForLongBreak > LONG_BREAK_MIDDLE_THRESHOLD;
+				
+				if (isLongBreakBetweenTwoRotation)
+					timeUntilLastLongBreak = totalTimeForLongBreak;
 			}
 			//]spec
 			
@@ -379,12 +439,15 @@ public class TimetableGenerator {
 			if(!lastRotation) {				
 				//SPEC[
 				//if((lunchBreakAfterRotation > 0 && (j + 1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j + 1) % rotationsMax))) {
-				if(lunchBreakRequered && ((lunchBreakAfterRotation > 0 && (j + 1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j ) % rotationsMax)))) {
+				//if(lunchBreakRequered && ((lunchBreakAfterRotation > 0 && (j+1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j ) % rotationsMax)))) {
+				if(lunchBreakRequered && j == ( ( lunchBreakRotation + (i * rotationsMax) ) ) - 1) {
+					
 					timeUntilLongORLunchBreak=0;
 					//SPEC]
 					lunchBreakByDay.add(i, dateAddMin(osceDayRef.getTimeStart(), timeNeededCurrentDay));
 					slotsSinceLastSimpatChange = 0;
 					timeNeededCurrentDay += osce.getLunchBreak();
+					timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when lunch break added
 					log.info("  lunch break");
 					breakByRoatation.add(j, (int) osce.getLunchBreak());
 				//SPEC[
@@ -393,10 +456,12 @@ public class TimetableGenerator {
 					{
 						if(isLongBreakBetweenTwoRotation) {
 						//if(timeUntilLongORLunchBreak>LONG_BREAK_MIDDLE_THRESHOLD) {
+							//timeUntilLastLongBreak = timeUntilLongORLunchBreak;
 							timeUntilLongORLunchBreak=0;
 				//SPEC]
 							slotsSinceLastSimpatChange = 0;
 							timeNeededCurrentDay += osce.getLongBreak();
+							timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when long break added 
 							log.info("  long break");
 							breakByRoatation.add(j, (int) osce.getLongBreak());
 						} else {
@@ -423,6 +488,9 @@ public class TimetableGenerator {
 		
 		lunchBreakRequiredByDay.add(i, lunchBreakRequered);
 		
+		if (!lunchBreakRequered)
+			lunchBreakByDay.add(i, osceDayRef.getTimeStart());
+		
 		timeNeeded += timeNeededCurrentDay;
 	}
 	
@@ -438,9 +506,19 @@ public class TimetableGenerator {
 	public void updateLunchBreakAfterRotation(long osceDayId, int lunchBreakAfterRotation) {
 		
 		OsceDay thisDay = OsceDay.findOsceDay(osceDayId);
+		
+		List<OsceSequence> osceSeqList = thisDay.getOsceSequences();
+		int totalRotation = 0;
+		
+		for (OsceSequence osceSeq : osceSeqList)
+		{
+			totalRotation += osceSeq.getNumberRotation();
+		}
+		
 		int thisIndex = getOsceDayIndex(thisDay);
 		
-		calcDayTimeByDayIndex(thisIndex, lunchBreakAfterRotation);
+		//calcDayTimeByDayIndex(thisIndex, lunchBreakAfterRotation);
+		updateRotationByLunchBreak(thisIndex, lunchBreakAfterRotation, totalRotation);
 		
 		thisDay.setLunchBreakAfterRotation(lunchBreakAfterRotation);
 		thisDay.setLunchBreakStart(lunchBreakByDay.get(thisIndex));
@@ -452,6 +530,148 @@ public class TimetableGenerator {
 		//by spec]
 		
 		thisDay.flush();
+	}
+	
+	public void updateRotationByLunchBreak(int i, int lunchBreakAfterRotation, int totalRotation)
+	{
+		int rotationsMax;
+		
+		String rotationStr = "";
+		
+		rotationsMax = totalRotation;
+		
+		int slotsSinceLastSimpatChange = 0;
+		int timeNeededCurrentDay = 0;
+		
+		int timeUntilLongORLunchBreak = 0;
+		int timeUntilLastLongBreak = 0;
+		
+		boolean lunchBreakRequered = true;
+		
+		int lunchBreakRotation = lunchBreakAfterRotation;
+		
+		int ctr = 0;
+		
+		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsMax); j++) {
+			int numberBreakPostsThisRotation = rotations[0].get(j);
+			
+			// add break posts to regular posts
+			int nPostsGeneral = numberPosts + numberBreakPosts;
+			int nPostsThisRotation = nPostsGeneral + numberBreakPostsThisRotation;
+			
+			// index where a SP needs to be changed during the rotation (in the middle if there is
+			// only one change, after number of slots of most complicated role otherwise)
+			int changeIndex = nPostsThisRotation / numberSlotsUntilSPChange > 1 ? numberSlotsUntilSPChange : nPostsThisRotation / 2 + 1;
+			
+
+			boolean longBreakInRotationHalf = ((nPostsThisRotation * osce.getPostLength()) + ((nPostsThisRotation -1) * osce.getShortBreak())) > LONG_BREAK_MIDDLE_THRESHOLD;
+
+			
+			log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
+			
+			// posts
+			for(int k = 0; k < nPostsThisRotation; k++) {
+				boolean halfTimeSlots = k == nPostsThisRotation / 2 - 1;
+				
+				timeNeededCurrentDay += postLength;
+				
+				if(longBreakInRotationHalf && halfTimeSlots) {
+					slotsSinceLastSimpatChange = 0;
+					timeNeededCurrentDay += osce.getLongBreak();
+					//SPEC[
+					timeUntilLongORLunchBreak=0;
+					//SPEC]
+				} else {
+					if(simpatChangeWithinSlots(slotsSinceLastSimpatChange) && k % changeIndex == changeIndex - 1) {
+						slotsSinceLastSimpatChange = 0;
+						timeNeededCurrentDay += osce.getShortBreakSimpatChange();
+					} else {
+						if(k < nPostsThisRotation - 1)
+							timeNeededCurrentDay += osce.getShortBreak();
+					}
+				}
+				
+				slotsSinceLastSimpatChange++;
+			}
+			
+			log.info("  rotation " + j + " end: " + timeNeededCurrentDay);
+			
+			
+			boolean lastRotation = (j % rotationsMax) == rotationsMax - 1;
+			
+			//spec[
+			boolean isLongBreakBetweenTwoRotation = false;
+			timeUntilLongORLunchBreak += timeNeededCurrentDay;
+			timeUntilLongORLunchBreak -= timeUntilLastLongBreak;
+			if(!lastRotation)
+			{
+				int nextNumberSlotsTotal = nPostsGeneral + rotations[0].get(j+1);
+				int totalTimeForLongBreak = ((nextNumberSlotsTotal * osce.getPostLength()) +  ((nextNumberSlotsTotal - 1) * osce.getShortBreak()) + osce.getMiddleBreak());
+				totalTimeForLongBreak += timeUntilLongORLunchBreak;
+				isLongBreakBetweenTwoRotation = totalTimeForLongBreak > LONG_BREAK_MIDDLE_THRESHOLD;
+				
+				if (isLongBreakBetweenTwoRotation)
+					timeUntilLastLongBreak = totalTimeForLongBreak;
+			}
+			//]spec
+			
+			// additional breaks
+			if(!lastRotation) {				
+				//SPEC[
+				//if((lunchBreakAfterRotation > 0 && (j + 1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j + 1) % rotationsMax))) {
+				//if(lunchBreakRequered && ((lunchBreakAfterRotation > 0 && (j+1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j ) % rotationsMax)))) {
+				if(lunchBreakRequered && j == ( ( lunchBreakRotation + (i * rotationsMax) ) ) - 1) {
+					
+					timeUntilLongORLunchBreak=0;
+					//SPEC]
+					lunchBreakByDay.add(i, dateAddMin(osceDayRef.getTimeStart(), timeNeededCurrentDay));
+					slotsSinceLastSimpatChange = 0;
+					timeNeededCurrentDay += osce.getLunchBreak();
+					timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when lunch break added
+					log.info("  lunch break");
+					breakByRoatation.add(j, (int) osce.getLunchBreak());
+				//SPEC[
+				//} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1)) || longBreakInRotationHalf) {
+				} else 
+					{
+						if(isLongBreakBetweenTwoRotation) {
+						//if(timeUntilLongORLunchBreak>LONG_BREAK_MIDDLE_THRESHOLD) {
+							//timeUntilLastLongBreak = timeUntilLongORLunchBreak;
+							timeUntilLongORLunchBreak=0;
+				//SPEC]
+							slotsSinceLastSimpatChange = 0;
+							timeNeededCurrentDay += osce.getLongBreak();
+							timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when long break added 
+							log.info("  long break");
+							breakByRoatation.add(j, (int) osce.getLongBreak());
+						} else {
+							timeNeededCurrentDay += osce.getMiddleBreak();
+							log.info("  middle break");
+							breakByRoatation.add(j, (int) osce.getMiddleBreak());
+						}
+					//SPEC[
+					}
+					//SPEC]
+			}
+			else
+			{
+				breakByRoatation.add(j, 0);
+			}
+			
+			
+			rotationStr = rotationStr + ctr + ":" + breakByRoatation.get(j) + "-";
+			ctr++;
+		}
+	
+		timeNeededByDay.add(i, timeNeededCurrentDay);
+		breakPerRotationByDay.add(i, rotationStr);
+		
+		lunchBreakRequiredByDay.add(i, lunchBreakRequered);
+		
+		if (!lunchBreakRequered)
+			lunchBreakByDay.add(i, osceDayRef.getTimeStart());
+		
+		timeNeeded += timeNeededCurrentDay;
 	}
 
 	/**
@@ -971,10 +1191,10 @@ public class TimetableGenerator {
 		// number of rotations we still have to assign to further days
 		int rotationsLeft = rotations[0].size() - rotationsMax;
 		
-		if(numberDays > 1 && rotationsLeft > 0) {
+		//if(numberDays > 1 && rotationsLeft > 0) {
 			// create new days and corresponding sequences and parcours
 			for(int i = 1; i < numberDays; i++) {
-				rotationsByDay.set(i, rotationsLeft);
+				//rotationsByDay.set(i, rotationsLeft);
 				dayCal.add(Calendar.DATE, 1);
 				
 				OsceDay day = new OsceDay();
@@ -1016,7 +1236,7 @@ public class TimetableGenerator {
 				
 				rotationsLeft -= rotationsPerDay;
 			}
-		}
+		//}
 		
 		if(lunchBreakByDay.size() > 0)
 		{
@@ -1035,9 +1255,9 @@ public class TimetableGenerator {
 			}
 		}
 		
-		
+		day0.setTimeStart(dayCal.getTime());
 		day0.setBreakByRotation(breakPerRotationByDay.get(0));
-		day0.setTimeEnd(dateAddMin(day0.getTimeStart(), (long) timeNeededByDay.get(0)));
+		day0.setTimeEnd(dateAddMin(dayCal.getTime(), (long) timeNeededByDay.get(0)));
 		day0.flush();
 		
 		return days;
@@ -1696,9 +1916,9 @@ public class TimetableGenerator {
 					for(int currRotationNumber = rotationOffset; currRotationNumber < (rotationOffset + numberRotations); currRotationNumber++) {
 						
 						String s = "";
-						if (rotationStr.length > rotationOffset)
+						/*if (rotationStr.length > rotationOffset)
 							s = rotationStr[currRotationNumber];
-						else	
+						else	*/
 							s = rotationStr[currRotationNumber - rotationOffset];
 						
 						String[] temp = s.split(":");
@@ -1706,7 +1926,7 @@ public class TimetableGenerator {
 						int breakValue = 0;
 						if (temp.length > 1)						
 							breakValue = Integer.parseInt(temp[1]);
-						
+				
 						int numberBreakPosts = rotations[parcourIndex].get(currRotationNumber);
 						int numberSlotsTotal = posts.size() + numberBreakPosts;
 						
@@ -1730,8 +1950,11 @@ public class TimetableGenerator {
 						boolean isLongBreakBetweenTwoRotation = false;
 						if(!lastRotation)
 						{
-							int nextNumberSlotsTotal = posts.size() + rotations[parcourIndex].get(currRotationNumber+1);
-							isLongBreakBetweenTwoRotation = ((numberSlotsTotal + nextNumberSlotsTotal ) * osce.getPostLength() ) > LONG_BREAK_MIDDLE_THRESHOLD;
+							if ((currRotationNumber+1) != rotations[parcourIndex].size())
+							{
+								int nextNumberSlotsTotal = posts.size() + rotations[parcourIndex].get(currRotationNumber+1);
+								isLongBreakBetweenTwoRotation = ((numberSlotsTotal + nextNumberSlotsTotal ) * osce.getPostLength() ) > LONG_BREAK_MIDDLE_THRESHOLD;
+							}
 						}
 						//]spec
 						
@@ -1741,7 +1964,7 @@ public class TimetableGenerator {
 						
 						// calculate slots that this and next rotation have and check whether a SP change after the rotation is necessary
 						int numberSlotsThisAndNextRotation = numberSlotsTotal + numberPosts;
-						if(currRotationNumber < (rotationOffset + numberRotations) - 1) {
+						if(currRotationNumber < (rotationOffset + numberRotations) - 1 && ((currRotationNumber+1) != rotations[parcourIndex].size())) {
 							numberSlotsThisAndNextRotation += rotations[parcourIndex].get(currRotationNumber + 1);
 						}
 						
