@@ -87,6 +87,10 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField
 	Button addManuallyBtn;
 
+	@UiField
+	Button clearSelectionBtn;
+			
+	
 	private Presenter presenter;
 
 	private List<PatientInSemesterData> patientInSemesterDataList;
@@ -109,6 +113,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		surveyImpBtn.setText(constants.roleSurveyImport());
 		autoAssignmentBtn.setText(constants.roleAutoAssign());
 		addManuallyBtn.setText(constants.roleAddManually());
+		clearSelectionBtn.setText(constants.clearSelection());
 		headers = new String[] { constants.name(), constants.roleAccepted(),
 				constants.roleAssignTo(), "", "" };
 
@@ -133,6 +138,10 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 	}
 
+	@UiHandler("clearSelectionBtn")
+	public void onClearSelectionBtnClicked(ClickEvent event){
+		delegate.onClearSelectionBtnClicked();
+	}
 	@UiHandler("addManuallyBtn")
 	public void onAddManuallyBtnClicked(ClickEvent event) {
 

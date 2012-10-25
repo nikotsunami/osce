@@ -1117,5 +1117,7 @@ public interface OsceConstants extends Constants {
 	public String notAssigned();
 	
 	public String download();
+	
+	public String clearSelection();
 }
 

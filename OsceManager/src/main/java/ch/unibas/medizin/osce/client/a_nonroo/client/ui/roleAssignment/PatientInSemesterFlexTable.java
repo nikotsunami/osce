@@ -267,12 +267,14 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		PatientInSemesterData patientInSemesterData = null;
 		//		Cell selectedCell = this.getCellForEvent(event);		
 		if (selectedRow > 0) {
-			if(patientInSemesterDatas.size() >= this.lastSelectedRowIndex ){
-			patientInSemesterData = patientInSemesterDatas.get(this.lastSelectedRowIndex - 1);
+			Log.info("lastSelectedRowIndex is : " + lastSelectedRowIndex);
+			Log.info("patientInSemesterDatas.size() is : " + patientInSemesterDatas.size());
+			
+			if(patientInSemesterDatas.size() >= this.lastSelectedRowIndex && this.lastSelectedRowIndex != 0){
+			
 			Log.info("lastSelectedRowIndex is : " + lastSelectedRowIndex);
 
-			this.getRowFormatter().removeStyleName(this.lastSelectedRowIndex, "flexTableSelectedRow");
-			this.getRowFormatter().addStyleName(this.lastSelectedRowIndex, patientInSemesterData.getRowSetColor());
+			removeSelectedStyle(this.lastSelectedRowIndex);
 			}
 
 			this.lastSelectedRowIndex = selectedRow;
@@ -284,4 +286,17 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		return patientInSemesterData.getPatientInSemesterProxy();
 
 	}
+	
+	public void removeSelectedStyle(int row){
+		if(row > 0){
+			Log.info("lastSelectedRowIndex is : " + row);
+			Log.info("patientInSemesterDatas.size() is : " + patientInSemesterDatas.size());
+			
+			PatientInSemesterData patientInSemesterData = patientInSemesterDatas.get(row - 1);
+			this.getRowFormatter().removeStyleName(row, "flexTableSelectedRow");
+			this.getRowFormatter().addStyleName(row,patientInSemesterData.getRowSetColor());
+		}
+		
+	}
+	
 }

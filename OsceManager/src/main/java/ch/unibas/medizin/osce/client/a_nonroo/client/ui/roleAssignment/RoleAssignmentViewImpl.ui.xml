@@ -30,7 +30,7 @@
 
 						<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
 						<my:IconButton icon="plusthick" ui:field="addManuallyBtn"></my:IconButton>
-
+						<my:IconButton icon="plusthick" ui:field="clearSelectionBtn"></my:IconButton>
 					</g:HorizontalPanel>
 					<!-- Module 3 Start -->
 					<g:VerticalPanel spacing="5">

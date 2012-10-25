@@ -56,6 +56,12 @@ public interface RoleAssignmentView extends IsWidget {
 		public void setSelectedRole(StandardizedRoleProxy standardizedRoleProxy);
 		
 		public void getDetailedPatient(PatientInSemesterProxy patientInSemesterProxy,int left, int top);
+
+		public void onClearSelectionBtnClicked();
+		
+		public void onDeleteClicked(int row);
+		
+		public int getSelectedRow();
 		
 	}
 

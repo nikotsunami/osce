@@ -120,7 +120,8 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	private List<PatientInSemesterProxy> patientInSemesterProxies;
 	private OsceDayProxy selectedRolsOsceDayProxy;
 	private StandardizedRoleProxy selectedRoleProxy;
-	private String withStatement[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","osceDays", "osceDays.osce"};/*, "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole"*/
+	/*private String withStatement[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","osceDays", "osceDays.osce"};/*, "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole"*/
+	private String withStatement[] = {"standardizedPatient","patientInRole.oscePost.standardizedRole","osceDays"};/*, "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole"*/
 	private String withStatementTrain[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","trainings","osceDays", "osceDays.osce"};
 //	private String withSelectedEvent[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","osceDays", "osceDays.osce"};
 	
@@ -1567,7 +1568,11 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 				roleSubView.refreshCountLabel();
 				
 				//initPatientInSemester(true,false,false);
-				refreshFlexTableRow(patientInRoleView.getPatientInRoleProxy().getPatientInSemester());
+				try{
+					refreshFlexTableRow(patientInRoleView.getPatientInRoleProxy().getPatientInSemester());
+				}catch(Exception e){
+					
+				}
 				//modul 3 changes {
 				
 				Log.info("Removing Role From Backup Panel");
@@ -1644,6 +1649,14 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	public void onRowSelected(Integer rowSelected){
 		Log.info("patientInSemesterData.getRowNumber() : " + rowSelected);
 		view.getDataTable().setLastSelectedRowIndex(rowSelected+1);
+	}
+	
+	public void onDeleteClicked(int row){
+		view.getDataTable().removeSelectedStyle(row);
+	}
+	
+	public int getSelectedRow(){
+		return view.getDataTable().getLastSelectedRowIndex();
 	}
 	
 	@Override
@@ -1823,10 +1836,11 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				// + patientInSemesterProxy.getStandardizedPatient());
 
 //				Log.info("semesterProxy.getId()" + semesterProxy.getId());
-				if (patientInSemesterProxy.getSemester() != null) {
+				// changes commented if condition
+//				if (patientInSemesterProxy.getSemester() != null) {
 					//					Log.info("patientInSemesterProxy.getId()" + patientInSemesterProxy.getSemester().getId());
 					patientInSemesterDataList.add(new PatientInSemesterData(patientInSemesterProxy, i, spRoleAssignmentActivity));
-				}
+//				}
 				//				else {
 				//					Log.info("semesterProxy is null ...");
 				//				}
@@ -2099,12 +2113,10 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 //		} else 
 			//As per discussion with client : accepted_osce_day information will be given completely by the DMZ as on 16/July/2012
 			
-            {
-			Log.info("patientInRoleProxy saved successfully" + patientInSemesterData
-					.getPatientInSemesterProxy().getOsceDays().size());
-			firePatientInSemesterSelectedEvent(patientInSemesterData
-					.getPatientInSemesterProxy());
-		}
+            
+			//Log.info("patientInRoleProxy saved successfully" + patientInSemesterData.getPatientInSemesterProxy().getOsceDays().size());
+			firePatientInSemesterSelectedEvent(patientInSemesterData.getPatientInSemesterProxy());
+		
 	} else {
 			MessageConfirmationDialogBox msg=new MessageConfirmationDialogBox(constants.warning());
 			msg.showConfirmationDialog(constants.warningPatientIsNotAccepted());
@@ -2291,8 +2303,9 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		// module 3 bug }
 	}
 
-	public void refreshFlexTableRow(PatientInSemesterProxy patientInSemesterProxy)
+	public void refreshFlexTableRow(PatientInSemesterProxy patientInSemesterProxy)  
 	{
+		
 		final int row=allPatientInSemesterProxies.indexOf(patientInSemesterProxy);
 		
 		requests.patientInSemesterRequest().findPatientInSemester(patientInSemesterProxy.getId()).with(withStatement).fire(new OSCEReceiver<PatientInSemesterProxy>() {
@@ -2300,11 +2313,15 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		@Override
 		public void onSuccess(PatientInSemesterProxy response) {
 			Log.info("row :" +row);
-			PatientInSemesterData rowData=patientInSemesterDataList.get(row);
+			PatientInSemesterData rowData=null;
+			if(row >= 0){
+			 rowData=patientInSemesterDataList.get(row);
+			
 			allPatientInSemesterProxies.set(row, response);
 			
 			rowData.setPatientInSemesterProxy(response);
-			rowData.setAssignToLabel();			
+			rowData.setAssignToLabel();
+			}
 		}
 
 		
@@ -2480,27 +2497,33 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				// 
 				if(isNavigationButtonEnable){
 					showApplicationLoading(true);
-//				requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId())/*.with(withStatement)*/.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
-//					@Override
-//					public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
+//manish				requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId())/*.with(withStatement)*/.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+//manish					@Override
+//manish					public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
 						//  
-//						allPatientInSemesterProxies = patientInSemesterProxies;
+//manish						allPatientInSemesterProxies = patientInSemesterProxies;
 						// Module 3 : Assignment E : Stop
 						//  
 						//	System.out.println("response : " + patientInSemesterProxies.size());
-//						Log.info("response : " + patientInSemesterProxies.size());
+//manish						Log.info("response : " + patientInSemesterProxies.size());
 						
 // madam						initPatientInSemesterData(patientInSemesterProxies, false);
-						initPatientInSemester(false, true, isNavigationButtonEnable);
-
+					// change Manish comment initPatientInSemester(false,true,isNavigationButtonEnabled) method and added refreshPatientInSemesterTable(); method to reduce Pir select event time
+					
+					//initPatientInSemester(false, true, isNavigationButtonEnable);
+					refreshPatientInSemesterTable();
+						
 						showApplicationLoading(false);
-	                                        showApplicationLoading(false);
+	                    showApplicationLoading(false);
 
 //					}
 //				});
 				}else{
-					initPatientInSemester(false, true, isNavigationButtonEnable);
+					// change Manish comment initPatientInSemester(false,true,isNavigationButtonEnabled) method and added refreshPatientInSemesterTable(); mehtod to resuce Pir sel event time
+					
+					//initPatientInSemester(false, true, isNavigationButtonEnable);
+					refreshPatientInSemesterTable();
 					showApplicationLoading(false);
 					
 
@@ -2655,7 +2678,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	
 	// Module 3 d {
 	
-		public void patientInSemesterSelected(PatientInSemesterProxy patientInSemesterProxy,final Set<OsceDayProxy> setOsceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl)
+		public void patientInSemesterSelected(PatientInSemesterProxy patientInSemesterProxy,final Set<OsceDayProxy> setOsceDayProxy,final OsceDaySubViewImpl osceDaySubViewImpl)
 		{
 			showApplicationLoading(true);
 			// module 3 bug {
@@ -2714,8 +2737,11 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 								Log.info("Role is " + role.getShortName());
 							}*/	
 								/*Event Fire Code */
-								
-								requests.getEventBus().fireEvent(new RoleFulfilCriteriaEvent(setOsceDayProxy,oDProxy,response));
+							
+							highlightFitRoleOfOsceDay(osceDaySubViewImpl, response);
+							
+							//requests.getEventBus().fireEvent(new RoleFulfilCriteriaEvent(setOsceDayProxy,oDProxy,response));
+							
 								showApplicationLoading(false);
 						}
 					});
@@ -2734,7 +2760,28 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			// module 3 bug }	
 	}
 		
-		
+		public void highlightFitRoleOfOsceDay(OsceDaySubViewImpl osceDaySubViewImpl,List<StandardizedRoleProxy> roleProxies)
+		{
+			VerticalPanel sequenceVP=osceDaySubViewImpl.getSequenceVP();
+			for(int i=0;i<(sequenceVP.getWidgetCount());i=i=i+2)
+			{
+			//	if(i%2==0)
+				{
+					HorizontalPanel mainHP=(HorizontalPanel)sequenceVP.getWidget(i);
+					AbsolutePanel roleAP=(AbsolutePanel)mainHP.getWidget(0);
+					HorizontalPanel roleHP=(HorizontalPanel)roleAP.getWidget(0);
+					for(int j=1;j<roleHP.getWidgetCount();j++)
+					{
+						RoleSubViewImpl roleSubView=(RoleSubViewImpl)roleHP.getWidget(j);
+						roleSubView.getRoleHeader().getWidget().removeStyleName("highlight-role");
+						if(roleProxies.contains(roleSubView.getRoleProxy()))
+						{
+							roleSubView.getRoleHeader().getWidget().addStyleName("highlight-role");
+						}
+					}
+				}
+			}	
+		}
 		public void getDetailedPatient(PatientInSemesterProxy tempPatientInSemesterProxy,final int left, final int top){
 			requests.patientInSemesterRequest().findPatientInSemester(tempPatientInSemesterProxy.getId())
 			.with(withStatementTrain).fire(new OSCEReceiver<PatientInSemesterProxy>() {
@@ -2986,8 +3033,9 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						public void onSuccess(Void ignore) {
 							Log.debug("Sucessfully deleted");
 							int row=view.getDataTable().getLastSelectedRowIndex();
+							view.getDataTable().removeSelectedStyle(row);
 							view.getDataTable().removeRow(view.getDataTable().getLastSelectedRowIndex());
-							view.getDataTable().getPatientInSemesterDatas().remove(view.getDataTable().getLastSelectedRowIndex()-1);
+							view.getDataTable().getPatientInSemesterDatas().remove(view.getDataTable().getLastSelectedRowIndex()-1);							
 							view.getDataTable().setLastSelectedRowIndex(0);
 							view.getDataTable().reSetTableStyle();
 							allPatientInSemesterProxies.remove(row-1);
@@ -3242,7 +3290,11 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				refreshRoleSubView(sourceRoleSubView,false);
 		//		patientViewDragged.setPatientInRoleProxy(patientInRoleProxy);			
 				//initPatientInSemester(true,false,false);
-				refreshFlexTableRow(patientViewDragged.getPatientInRoleProxy().getPatientInSemester());
+				try{
+					refreshFlexTableRow(patientViewDragged.getPatientInRoleProxy().getPatientInSemester());
+				}catch(ArrayIndexOutOfBoundsException e){
+					
+				}
 				showApplicationLoading(false);
 //				view.getDataTable().setNavigationButtonEnable(false);
 			}
@@ -3264,6 +3316,19 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	@Override
 	public void setSelectedRole(StandardizedRoleProxy standardizedRoleProxy) {
 		this.selectedRoleProxy=standardizedRoleProxy;
+		
+	}
+
+	@Override
+	public void onClearSelectionBtnClicked() {
+		if(roleSubViewSelected != null)
+		roleSubViewSelected.getRoleHeader().getWidget().removeStyleName("highlight-role");
+		
+		if(roleSubViewSelected !=null)
+		roleSubViewSelected.getOsceDaySubViewImpl().simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
+		
+		init();
+		//initPatientInSemester(true, false, false);
 		
 	}
 

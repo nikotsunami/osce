@@ -96,7 +96,9 @@ public class PatientInSemesterData {
 //		this.assignedTo.addStyleName("flexTableLabel");
 		// ,getIndex());
 		this.assignedTo = new PatientAssignLabel("");
+		
 		setAssignToLabel();
+		
 		this.navigationButton = new Button();
 		this.navigationButton.setHTML(OsMaConstant.SEEK_FIRST_ICON);		
 		this.navigationButton.addClickHandler(new ClickHandler() {
@@ -116,6 +118,7 @@ public class PatientInSemesterData {
 
 			@Override
 			public void onClick(ClickEvent arg0) {
+				final int row = delegate.getSelectedRow();
 				delegate.onRowSelected(PatientInSemesterData.this.rowNumber);
 				if (patientInSemesterProxy.getPatientInRole() != null && patientInSemesterProxy.getPatientInRole().size() > 0) {
 
@@ -130,6 +133,7 @@ public class PatientInSemesterData {
 
 						@Override
 						public void onClick(ClickEvent arg0) {
+							delegate.onDeleteClicked(row);
 							delegate.onDeleteButtonClicked(patientInSemesterData);
 							dialogBox.hide();
 						}
