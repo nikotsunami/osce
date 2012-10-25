@@ -576,7 +576,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		//ToolTip Function Added by spec
 		Log.info("ToolTip opened");
 			toolTip= new PopupPanel(true);
-			
+
 			toolTip.setWidth("210px");
 			toolTip.setHeight("40px");
 		    toolTip.setAnimationEnabled(true);
@@ -616,7 +616,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 			// Issue Role
 			
 						//toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
-						toolTip.setPopupPosition(left,top);
+						toolTip.setPopupPosition(left,top-40);
 						
 						// E: Issue Role
 		    

@@ -61,7 +61,7 @@ public class PatientInSemester {
 			return new ArrayList<PatientInSemester>();
 
 		EntityManager em = entityManager();
-		TypedQuery<PatientInSemester> query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId", PatientInSemester.class);
+		TypedQuery<PatientInSemester> query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId order by o.standardizedPatient.preName,name", PatientInSemester.class);
 		query.setParameter("semesterId", semesterId);
 
 		List<PatientInSemester> resultList = query.getResultList();
@@ -77,7 +77,7 @@ public class PatientInSemester {
 			return new ArrayList<StandardizedPatient>();
 
 		EntityManager em = entityManager();
-		String strQuery = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id not in ( SELECT tempPIS.standardizedPatient.id FROM PatientInSemester AS tempPIS where tempPIS.semester.id = " + semesterId +")";
+		String strQuery = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id not in ( SELECT tempPIS.standardizedPatient.id FROM PatientInSemester AS tempPIS where tempPIS.semester.id = " + semesterId +") order by sp.preName,name";
 		Log.info("Query is : "+ strQuery);
 		TypedQuery<StandardizedPatient> query = em.createQuery(strQuery, StandardizedPatient.class);
 
@@ -128,7 +128,7 @@ public class PatientInSemester {
  		EntityManager em = entityManager();
  		TypedQuery<PatientInSemester> query = em
  				.createQuery(
- 						"SELECT o FROM PatientInSemester AS o WHERE o.standardizedPatient.id = :standardizedPatientId and o.semester.id = :semesterId",
+ 						"SELECT o FROM PatientInSemester AS o WHERE o.standardizedPatient.id = :standardizedPatientId and o.semester.id = :semesterId order by o.standardizedPatient.preName,name",
  						PatientInSemester.class);
  		query.setParameter("standardizedPatientId", standardizedPatientId);
  		query.setParameter("semesterId", semesterId);
@@ -165,7 +165,7 @@ public class PatientInSemester {
             Log.info("Return as null");
             return new ArrayList<PatientInSemester>();
         }
-        TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
+        TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery +" order by o.standardizedPatient.preName,name", PatientInSemester.class);
         query.setParameter("semesterId", semesterId);
         Log.info("!!!!! Query is : " + selectBase + queryBase + whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery + semesterId);
 		
@@ -248,7 +248,7 @@ public class PatientInSemester {
             Log.info("Return as null");
             return new ArrayList<PatientInSemester>();
         }
-		TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery, PatientInSemester.class);
+		TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery +" order by o.standardizedPatient.preName,name", PatientInSemester.class);
         query.setParameter("semesterId", semesterId);
         query.setParameter("oDayId", osceDayId);
         

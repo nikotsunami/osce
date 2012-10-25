@@ -25,6 +25,14 @@ import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicRequest;
+import ch.unibas.medizin.osce.client.managed.request.FileProxy;
+import ch.unibas.medizin.osce.client.managed.request.FileRequest;
+import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
+import ch.unibas.medizin.osce.client.managed.request.KeywordRequest;
+import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.MainSkillRequest;
+import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
+import ch.unibas.medizin.osce.client.managed.request.MinorSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantRequest;
 import ch.unibas.medizin.osce.client.managed.request.RoleSubItemValueProxy;
@@ -38,6 +46,8 @@ import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.SimpleSearchCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
+import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.client.managed.ui.RoleTopicProxyRenderer;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
@@ -204,7 +214,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("edit");
 			//spec start
 			Log.info("Proxy ID : " + place.getProxyId());
-			requests.find(place.getProxyId()).with("roleSubItemValue","roleSubItemValue.roleBaseItem","roleTableItemValue","roleTableItemValue.roleTableItem","oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","advancedSearchCriteria.field","advancedSearchCriteria.bindType","advancedSearchCriteria.comparation","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
+			requests.find(place.getProxyId()).with("files","minorSkills","minorSkills.skill","mainSkills","mainSkills.skill","usedMaterials","usedMaterials.used_from","usedMaterials.materialList","roleSubItemValue","roleSubItemValue.roleBaseItem","roleTableItemValue","roleTableItemValue.roleTableItem","oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","roleParticipants.standardizedRole","roleParticipants.doctor","roleParticipants.type","advancedSearchCriteria","advancedSearchCriteria.field","advancedSearchCriteria.bindType","advancedSearchCriteria.comparation","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions")
 					.fire(new Receiver<Object>() {
 
 						public void onFailure(ServerFailure error) {
@@ -933,6 +943,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												
 											}
 											
+										
+
 											//create role table item value
 											Iterator<RoleTableItemValueProxy> roleTableItemValueIterator=standardizedRole.getRoleTableItemValue().iterator();
 											while(roleTableItemValueIterator.hasNext())
@@ -950,6 +962,76 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												roleTableItemValueRequest.persist().using(roleTableItemValueProxy).fire();
 												
 												
+											}
+											//copy minor skill
+											Iterator<MinorSkillProxy> minorSkillProxyIterator=standardizedRole.getMinorSkills().iterator();
+											while(minorSkillProxyIterator.hasNext())
+											{
+												MinorSkillProxy oldMinorSkillProxy=minorSkillProxyIterator.next();
+												MinorSkillRequest minorSkillRequest=requests.minorSkillRequest();
+												
+												MinorSkillProxy minorSkillProxy=minorSkillRequest.create(MinorSkillProxy.class);
+												
+												minorSkillProxy.setRole(proxy1);
+												minorSkillProxy.setSkill(oldMinorSkillProxy.getSkill());
+													
+												minorSkillRequest.persist().using(minorSkillProxy).fire();
+											}
+											
+											//copy main skill
+											
+											Iterator<MainSkillProxy> mainSkillProxyIterator=standardizedRole.getMainSkills().iterator();
+											while(mainSkillProxyIterator.hasNext())
+											{
+												MainSkillProxy oldMainSkillProxy=mainSkillProxyIterator.next();
+												MainSkillRequest mainSkillRequest=requests.mainSkillRequest();
+												
+						 						MainSkillProxy mainSkillProxy=mainSkillRequest.create(MainSkillProxy.class);
+												
+						 						mainSkillProxy.setRole(proxy1);
+						 						mainSkillProxy.setSkill(oldMainSkillProxy.getSkill());
+						 						
+													
+						 						mainSkillRequest.persist().using(mainSkillProxy).fire();
+											}
+											
+											//copy room facilities
+											Iterator<UsedMaterialProxy> usedMaterialProxyIterator=standardizedRole.getUsedMaterials().iterator();
+											while(usedMaterialProxyIterator.hasNext())
+											{
+												UsedMaterialProxy oldUsedMaterialProxy=usedMaterialProxyIterator.next();
+												UsedMaterialRequest usedMaterialRequest=requests.usedMaterialRequest();
+												
+												UsedMaterialProxy usedMaterialProxy=usedMaterialRequest.create(UsedMaterialProxy.class);
+												
+												usedMaterialProxy.setMaterialCount(oldUsedMaterialProxy.getMaterialCount());
+												usedMaterialProxy.setMaterialList(oldUsedMaterialProxy.getMaterialList());
+												usedMaterialProxy.setSort_order(oldUsedMaterialProxy.getSort_order());
+												usedMaterialProxy.setStandardizedRole(proxy1);
+												usedMaterialProxy.setUsed_from(oldUsedMaterialProxy.getUsed_from());
+												
+						 						
+													
+												usedMaterialRequest.persist().using(usedMaterialProxy).fire();
+											}
+											
+											//copy file
+											Iterator<FileProxy> fileProxyIterator=standardizedRole.getFiles().iterator();
+											while(fileProxyIterator.hasNext())
+											{
+												FileProxy oldFileProxy=fileProxyIterator.next();
+												FileRequest fileRequest=requests.fileRequest();
+												
+												FileProxy fileProxy=fileRequest.create(FileProxy.class);
+												
+												fileProxy.setDescription(oldFileProxy.getDescription());
+												fileProxy.setPath(oldFileProxy.getPath());
+												fileProxy.setSortOrder(oldFileProxy.getSortOrder());
+												fileProxy.setStandardizedRole(proxy1);
+												
+						 						
+													
+												fileRequest.persist().using(fileProxy).fire();
 											}
 											
 											//create role sub item value
@@ -969,7 +1051,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												
 											}
 											
-											
+											Log.info("Role Participant size :" + standardizedRole.getRoleParticipants().size());
 											Iterator<RoleParticipantProxy> roleParticipantProxyIterator=standardizedRole.getRoleParticipants().iterator();
 											while(roleParticipantProxyIterator.hasNext())
 											{

@@ -499,7 +499,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 			   
 				// Issue Role Module
 				//toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
-				toolTip.setPopupPosition(event.getClientX(),event.getClientY());
+				toolTip.setPopupPosition(event.getClientX(),event.getClientY()-45);
 			    
 			        toolTip.show();
 			        

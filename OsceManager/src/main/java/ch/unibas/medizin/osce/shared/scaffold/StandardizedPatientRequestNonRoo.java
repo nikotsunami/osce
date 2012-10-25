@@ -50,5 +50,14 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 		//SPEC[
 		
         abstract Request<Boolean> copyImageAndVideo(String imagePath,String videoPath);
+        
+        
+//        abstract Request<Void>getCSVMapperFindPatientsByAdvancedSearchAndSortUsingSession(
+//    			String sortColumn, Sorting order, String searchWord,
+//    			List<String> searchThrough,
+//    			List<AdvancedSearchCriteriaProxy> searchCriteria
+//                             , int firstResult, int maxResults
+//    	);
+        abstract Request<Void> getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids);
          //SPEC]
 }

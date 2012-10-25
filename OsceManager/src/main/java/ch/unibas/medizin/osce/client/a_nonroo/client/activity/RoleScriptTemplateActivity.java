@@ -307,6 +307,8 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 		
 		// RoleTemplate Bug {
+		
+		//Added below code so when user click on edit and delete button no detail view will be displayed and commented code after added code to handle table click handler	
 		table.addCellPreviewHandler(new Handler<RoleTemplateProxy>() {
 
 			@Override
@@ -334,6 +336,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 				}	
 			}
 		});
+		
 		
 		/*selectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
@@ -707,7 +710,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 	//	toolTip.setPopupPosition(new Integer(constants.TopicsAndSpecViewPopupXPosition()),new Integer(constants.TopicsAndSpecViewPopupYPosition()));
 // Issue Role Module
-		toolTip.setPopupPosition(left,top);
+		toolTip.setPopupPosition(left,top+10);
 		// Issue Role Module
 
 		toolTip.show();

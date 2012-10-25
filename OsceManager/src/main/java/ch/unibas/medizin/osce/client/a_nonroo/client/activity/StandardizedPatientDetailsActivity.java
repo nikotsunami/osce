@@ -693,7 +693,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		StringBuilder requestData = new StringBuilder();
 		
-		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT).append("&")
+		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT.ordinal()));
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
 				.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(standardizedPatientProxy.getId().toString())).append("&")
 				.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
 

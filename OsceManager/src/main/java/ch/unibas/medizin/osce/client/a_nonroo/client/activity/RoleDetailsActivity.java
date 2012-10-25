@@ -2005,7 +2005,8 @@ final int index2 = index;
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 				
 		StringBuilder requestData = new StringBuilder();
-		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ResourceDownloadProps.Entity.STANDARDIZED_ROLE).append("&")
+		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_ROLE.ordinal()));
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
 					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(standardizedRolePrintFilterViewImpl
 								.getStandardizedRoleProxy().getId().toString())).append("&");
 					
@@ -3569,9 +3570,9 @@ final int index2 = index;
 		final int selectedTab = roleDetailTabPanel.getSelectedIndex();
 		//ScrolledTab Changes end
 		searchCriteriaProxy
-				.setStandardizedRole((StandardizedRoleProxy) standardizedRoleProxies[selectedTab]);
-		final Long stRoleId = ((StandardizedRoleProxy) standardizedRoleProxies[selectedTab])
-				.getId();
+				.setStandardizedRole(standardizedRoleDetailsView[selectedTab].getValue());
+		final Long stRoleId = standardizedRoleDetailsView[selectedTab].getValue().getId();
+			
 
 		Log.info("Stand role Proxy ID: " + stRoleId);
 		// Log.info("Stand Role Topoc Id : "+ S);
@@ -4435,7 +4436,7 @@ final int index2 = index;
 						
 						setKeyworkdProxy.add(keywordProxy);
 						stRoleProxy.setKeywords(setKeyworkdProxy);
-						
+						final StandardizedRoleProxy role=stRoleProxy;
 						// Highlight onViolation
 						srRequest.persist().using(stRoleProxy).fire(new OSCEReceiver<Void>()
 						// E Highlight onViolation
@@ -4455,7 +4456,9 @@ final int index2 = index;
 								// E Highlight onViolation
 									
 								// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
-								refreshRelationshipProxy();
+								//change for bug
+								standardizedRoleDetailsView[selectedTabId].setValue(role);
+								//refreshRelationshipProxy();
 								
 								//standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.setText(null);
 								//Log.info("Remove TextBox Value : " + standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordSugestionBox.getValue());
@@ -4594,6 +4597,7 @@ final int index2 = index;
 			}
 		}
 		stRoleProxy.setKeywords(setKeyworkdProxy);
+		final StandardizedRoleProxy role=stRoleProxy;
 		srRequest.persist().using(stRoleProxy).fire(new Receiver<Void>()
 		{
 			@Override
@@ -4604,7 +4608,9 @@ final int index2 = index;
 				Log.info("~srRequest.persist()");
 				
 				// REFRESH LOGICAL (RELATIONSHIP) TABLE DATA [PROXY]
-				refreshRelationshipProxy();
+				//change for bug
+				standardizedRoleDetailsView[selectedTabId].setValue(role);
+				//refreshRelationshipProxy();
 				
 				// REFRESH KEYWORD TABLE DATA
 				

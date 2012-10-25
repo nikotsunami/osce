@@ -59,8 +59,8 @@ public class TimetableGenerator {
 	
 	//spec[
 	public List<Integer> breakByRoatation = new ArrayList<Integer>();
-	private List<Boolean> lunchBreakRequiredByDay;
-	private List<String> breakPerRotationByDay;
+	public List<Boolean> lunchBreakRequiredByDay;// = new ArrayList<Boolean>();
+	public List<String> breakPerRotationByDay;// = new ArrayList<String>();
 	//spec]
 	
 	/**
@@ -80,7 +80,7 @@ public class TimetableGenerator {
 		}
 		
 		if (osce.getLongBreakRequiredTime() != null)
-			LONG_BREAK_MIDDLE_THRESHOLD = osce.getShortBreakSimpatChange().intValue();
+			LONG_BREAK_MIDDLE_THRESHOLD = osce.getLongBreakRequiredTime();
 		
 		if (osce.getLunchBreakRequiredTime() != null)
 			LUNCH_BREAK_MIDDLE_THRESHOLD =  osce.getLunchBreakRequiredTime().intValue();
@@ -119,14 +119,22 @@ public class TimetableGenerator {
 		return optGen;
 	}
 	
+	public void initValue()
+	{
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	public TimetableGenerator(Osce osce, int nBreakPosts, int nParcours) {
 		
 		rotationsByDay = new ArrayList<Integer>();
 		timeNeededByDay = new ArrayList<Integer>();
+		
 		lunchBreakRequiredByDay = new ArrayList<Boolean>();
 		lunchBreakByDay = new ArrayList<Date>();
+		
 		//breakByRoatation = new ArrayList<Integer>();
+		
 		breakPerRotationByDay = new ArrayList<String>();
 				
 		this.osce = osce;

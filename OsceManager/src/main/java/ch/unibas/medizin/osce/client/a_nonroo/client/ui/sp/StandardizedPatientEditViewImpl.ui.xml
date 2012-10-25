@@ -45,7 +45,8 @@
 						<td><span class="{style.label}" ui:field="labelStreet" /></td>
 						<td><g:TextBox ui:field='street'/></td>
 						<td><span class="{style.label}" ui:field="labelPLZCity" /></td>
-						<td><g:IntegerBox ui:field='postalCode' width="40px" /> <g:TextBox ui:field='city'/></td>
+						<td><g:TextBox ui:field='postalCode' width="40px" /> <g:TextBox ui:field='city'/></td>
+						<!-- <td><g:IntegerBox ui:field='postalCode' width="40px" /> <g:TextBox ui:field='city'/></td> -->
 					</tr>
 					<tr id="telephone">
 						<td><span class="{style.label}" ui:field="labelTelephone" /></td>
