@@ -532,6 +532,7 @@ public class TimetableGenerator {
 		thisDay.flush();
 	}
 	
+	//by spec[
 	public void updateRotationByLunchBreak(int i, int lunchBreakAfterRotation, int totalRotation)
 	{
 		int rotationsMax;
@@ -673,6 +674,7 @@ public class TimetableGenerator {
 		
 		timeNeeded += timeNeededCurrentDay;
 	}
+	//by spec]
 
 	/**
 	 * Find OSCE day index in list
@@ -712,11 +714,15 @@ public class TimetableGenerator {
 		List<Integer> osceDaysToUpdate = new ArrayList<Integer>();
 		osceDaysToUpdate.add(getOsceDayIndex(dayFrom));
 		
-		for (int i=0; i<osceDaysToUpdate.size(); i++)
+		Iterator<OsceDay> itr = osce.getOsce_days().iterator();
+		int j = 0;
+		while (itr.hasNext())
 		{
-			rotationsByDay.add(i, 0);
-			timeNeededByDay.add(i, 0);
-			lunchBreakByDay.add(i, new Date());
+			OsceDay osceDay = itr.next();
+			rotationsByDay.add(j, 0);
+			timeNeededByDay.add(j, 0);
+			lunchBreakByDay.add(j, new Date());
+			j++;
 		}
 		
 		for (int i=0; i<osceDaysToUpdate.size(); i++)
@@ -748,11 +754,12 @@ public class TimetableGenerator {
 			}
 			else
 			{
-				Date date = lunchBreakByDay.get(osceDayIndex);
-				date.setHours(0);
-				date.setMinutes(0);
-				date.setSeconds(0);
-				thisDay.setLunchBreakStart(date);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(lunchBreakByDay.get(osceDayIndex));
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				thisDay.setLunchBreakStart(cal.getTime());
 				thisDay.setLunchBreakAfterRotation(0);
 			}
 			
@@ -777,12 +784,16 @@ public class TimetableGenerator {
 		osceDaysToUpdate.add(getOsceDayIndex(dayFrom));
 		osceDaysToUpdate.add(getOsceDayIndex(dayTo));
 		
-		for (int i=0; i<osceDaysToUpdate.size(); i++)
+		int j = 0;
+		Iterator<OsceDay> itr = osce.getOsce_days().iterator();
+		while(itr.hasNext())
 		{
-			rotationsByDay.add(i, 0);
-			timeNeededByDay.add(i, 0);
-			lunchBreakByDay.add(i, new Date());
-			breakPerRotationByDay.add(i, "");
+			OsceDay osceDay = itr.next();
+			rotationsByDay.add(j, 0);
+			timeNeededByDay.add(j, 0);
+			lunchBreakByDay.add(j, new Date());
+			breakPerRotationByDay.add(j, "");
+			j++;
 		}
 		
 		for (int i=0; i<osceDaysToUpdate.size(); i++)
@@ -801,12 +812,19 @@ public class TimetableGenerator {
 				lunchBreakAfterRotation = thisDay.getLunchBreakAfterRotation();
 				
 			rotationsByDay.add(osceDayIndex, getNumberRotationByDay(thisDay));
+			
+			//by spec
+			osceDayRef = thisDay;
+			//by spec
+			
 			calcDayTimeByDayIndex(osceDayIndex, lunchBreakAfterRotation);
 			
 			//by spec[
 			
 			thisDay.setBreakByRotation(breakPerRotationByDay.get(osceDayIndex));
 			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(osceDayIndex)));
+			
+			Date timeStartTemp = thisDay.getTimeStart();
 			
 			if (lunchBreakRequiredByDay.get(osceDayIndex))
 			{
@@ -815,16 +833,17 @@ public class TimetableGenerator {
 			}
 			else
 			{
-				Date date = lunchBreakByDay.get(osceDayIndex);
-				date.setHours(0);
-				date.setMinutes(0);
-				date.setSeconds(0);
-				thisDay.setLunchBreakStart(date);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(lunchBreakByDay.get(osceDayIndex));
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				thisDay.setLunchBreakStart(cal.getTime());
 				thisDay.setLunchBreakAfterRotation(0);
 			}
 			
 			//by spec]
-			
+			//thisDay.setTimeStart(timeStartTemp);
 			//thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(osceDayIndex)));
 			thisDay.flush();
 		}
@@ -1215,16 +1234,15 @@ public class TimetableGenerator {
 				}
 				else
 				{
-					Date date;
+					Calendar cal = Calendar.getInstance();
 					if (lunchBreakByDay.size() > i)
-						date = lunchBreakByDay.get(i);
+						cal.setTime(lunchBreakByDay.get(i));
 					else
-						date = dayCal.getTime();
-					
-					date.setHours(0);
-					date.setMinutes(0);
-					date.setSeconds(0);
-					day.setLunchBreakStart(date);
+						cal.setTime(dayCal.getTime());
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					day.setLunchBreakStart(cal.getTime());
 					day.setLunchBreakAfterRotation(0);
 				}
 				
@@ -1247,15 +1265,14 @@ public class TimetableGenerator {
 			}
 			else
 			{
-				Date date = lunchBreakByDay.get(0);
-				date.setHours(0);
-				date.setMinutes(0);
-				date.setSeconds(0);
-				day0.setLunchBreakStart(date);
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				day0.setLunchBreakStart(cal.getTime());
 			}
 		}
 		
-		day0.setTimeStart(dayCal.getTime());
 		day0.setBreakByRotation(breakPerRotationByDay.get(0));
 		day0.setTimeEnd(dateAddMin(dayCal.getTime(), (long) timeNeededByDay.get(0)));
 		day0.flush();

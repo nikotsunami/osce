@@ -2798,6 +2798,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					Log.info("oscePostSubViewImpledit" + oscePostSubViewImplok.oscePostBlueprintProxy.getId());	
 					
 					OscePostBlueprintProxy oscePostBlueprintProxy=oscePostSubViewImplok.oscePostBlueprintProxy;
+									
 					//Issue # 122 : Replace pull down with autocomplete.
 					//final RoleTopicProxy roleTopicProxy=(RoleTopicProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getListBox().getValue();
 					final RoleTopicProxy roleTopicProxy=(RoleTopicProxy)oscePostSubViewImplok.getListBoxPopupViewImpl().getNewListBox().getSelected();
@@ -4723,6 +4724,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 													requests.getEventBus().fireEvent(new RotationRefreshEvent(currentDaySequenceRotaton, previousDaySequenceRotation, currentDaySequenceId, previousDaySequenceId));
 													requests.getEventBus().fireEvent(new RotationRefreshEvent(currentDay,previousDay));
 													
+													refreshCircuitDetailsPlace(osceDayProxy);
 													//goTo(new CircuitDetailsPlace(osceToRefreshPlace.stableId(),Operation.DETAILS));
 												}
 												return;
