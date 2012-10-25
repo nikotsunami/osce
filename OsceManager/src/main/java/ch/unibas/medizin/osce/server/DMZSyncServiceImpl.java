@@ -1271,6 +1271,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		NameValuePair[] registerInform = new NameValuePair[1];
 		registerInform[0] = new NameValuePair("data", json);
 
+		postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 		postMethod.setRequestBody(registerInform);
 
 		int statusCode = 0;
@@ -1320,6 +1321,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		HttpClient httpClient = new HttpClient();
 		String url = getHostAddress() + "/DataImportExport/exportSP?id="	+ standardizedPatientId;
 		GetMethod getMethod = new GetMethod(url);
+
+		// TODO: does this make sense?
+		getMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 
 		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler());
