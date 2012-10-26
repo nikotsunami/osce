@@ -392,6 +392,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		@Override
 		public void onSuccess(Object response) {
 			showApplicationLoading(true);
+
 			Log.info("Semester Id " + ((SemesterProxy)response).getId());
 			Log.info("OSCE Size " + ((SemesterProxy)response).getOsces().size());
 			
@@ -512,16 +513,27 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 			}
 		}
 			showApplicationLoading(false);
+			
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	}
 		@Override
 		public void onFailure(ServerFailure error) {
 		showApplicationLoading(false);
-			super.onFailure(error);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		
+		super.onFailure(error);
 		}
 		@Override
 		public void onViolation(Set<Violation> errors) {
 		showApplicationLoading(false);
-			super.onViolation(errors);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		
+		super.onViolation(errors);
 		}
 		
 });
@@ -530,20 +542,26 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		@Override
 		public void onFailure(ServerFailure error) {
 		showApplicationLoading(false);
-			super.onFailure(error);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		
+		super.onFailure(error);
 		}
 		@Override
 		public void onViolation(Set<Violation> errors) {
 		showApplicationLoading(false);
-			super.onViolation(errors);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+	
+		super.onViolation(errors);
 		}
 });
 	
 		this.showApplicationLoading(false);
 	
 	// module 3 bug {
-	if(osceDayTimer!=null)
-	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	showApplicationLoading(false);
 	// module 3 bug }
 }
@@ -604,24 +622,31 @@ public void createOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewIm
 		
 		@Override
 		public void onSuccess(OsceDayProxy response) {
-			
 			createSequences(response,osceDaySubViewImpl);
-			
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		}
 		@Override
 		public void onFailure(ServerFailure error) {
 		showApplicationLoading(false);
-			super.onFailure(error);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		
+		super.onFailure(error);
 		}
 		@Override
 		public void onViolation(Set<Violation> errors) {
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);	
+		
 		showApplicationLoading(false);
-			super.onViolation(errors);
+		
+		super.onViolation(errors);
 		}
 	});
 	// module 3 bug {
-	if(osceDayTimer!=null)
-	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+	
 }
 //Module 3:Assignment D[
 public void refreshOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewImpl osceDaySubViewImpl) 
@@ -639,29 +664,38 @@ public void refreshOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewI
 		public void onSuccess(OsceDayProxy response) {
 			
 			createSequences(response,osceDaySubViewImpl);
-			
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		}
 		@Override
 		public void onFailure(ServerFailure error) {
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		
 		showApplicationLoading(false);
-			super.onFailure(error);
+		
+		super.onFailure(error);
 		}
 		@Override
 		public void onViolation(Set<Violation> errors) {
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		
 		showApplicationLoading(false);
-			super.onViolation(errors);
+		
+		super.onViolation(errors);
 		}
 	});
-	// module 3 bug {
-	if(osceDayTimer!=null)
-	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-			
-	// module 3 bug }
+
 }
 
 public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDaySubViewImpl)
 {
-		this.showApplicationLoading(true);
+	if(osceDayTimer !=null)
+	osceDayTimer.cancel();
+	
+	this.showApplicationLoading(true);
 	//create Roles
 	
 	// module 3 bug {
@@ -856,6 +890,9 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 	if(osceDaySubViewImpl.getSequenceVP().getWidgetCount()>0)
 		osceDaySubViewImpl.getSequenceVP().remove(osceDaySubViewImpl.getSequenceVP().getWidgetCount()-1);
 		this.showApplicationLoading(false);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 }
 
 //modul 3 changes {
@@ -888,6 +925,9 @@ public void assignAllBackUpRolesToBackupPanel(OscePostProxy oscePostPrtoxy,RoleS
 
 public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,boolean isLast)
 {
+	if(osceDayTimer!=null)
+	osceDayTimer.cancel();
+	
 	this.showApplicationLoading(true);
 	
 	final RoleSubView roleSubView1=roleSubView;
@@ -1044,7 +1084,11 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 			}
 		}
 		this.showApplicationLoading(false);
+		
 	}
+	
+	if(osceDayTimer!=null)
+	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 }
 
 //change
@@ -1078,9 +1122,14 @@ public void refreshAllRoleSubeView(OsceDaySubViewImpl osceDaySubViewImpl,OsceSeq
 public void refreshRoleSubView(final RoleSubView roleSubView,final boolean isLast)
 {
 	
+	if(osceDayTimer!=null)
+	osceDayTimer.cancel();
 	//modul 3 changes {
 	
 		if(roleSubView.getIsBackupPanel()==true){
+			
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			return;
 		}
 		
@@ -1105,14 +1154,21 @@ public void refreshRoleSubView(final RoleSubView roleSubView,final boolean isLas
 				spRoleAssignmentActivity.showApplicationLoading(false);
 			}
 			
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			
 		}
 		@Override
 			public void onFailure(ServerFailure error) {
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			showApplicationLoading(false);
 				super.onFailure(error);
 			}
 		@Override
 			public void onViolation(Set<Violation> errors) {
+			if(osceDayTimer!=null)
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			showApplicationLoading(false);
 			super.onViolation(errors);
 			}
@@ -1163,6 +1219,8 @@ public void roleSelected(RoleSubView roleSubView)
 	requests.getEventBus().fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));	
 	
 	checkFitCriteria(roleSubView,false,null);
+	
+	if(osceDayTimer!=null)
 	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		
 	showApplicationLoading(false);
@@ -1267,7 +1325,6 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 		@Override
 		public void onSuccess(PatientInRoleProxy response) {
 			Log.info("editBackUpFlag : onSuccess");
-		
 //modul 3 changes {
 			patientInRoleSubView.setPatientInRoleProxy(response);
 			if(patientInRoleSubView.getPatientInRoleProxy().getFit_criteria())
@@ -1481,9 +1538,19 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				}
 			}
 			showApplicationLoading(false);
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+		}
+		@Override
+		public void onFailure(ServerFailure error) {
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			super.onFailure(error);
+		}
+		@Override
+		public void onViolation(Set<Violation> errors) {
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			super.onViolation(errors);
 		}
 	});
-	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	showApplicationLoading(false);
 }
 //change {
@@ -1571,7 +1638,7 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 				try{
 					refreshFlexTableRow(patientInRoleView.getPatientInRoleProxy().getPatientInSemester());
 				}catch(Exception e){
-					
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				}
 				//modul 3 changes {
 				
@@ -1582,21 +1649,22 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 				deleteBackupRoles(patientInRoleView.getRoleSubView(), patientInRoleProxy);
 				showApplicationLoading(false);
 			}
-			
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		}
 		@Override
 		public void onFailure(ServerFailure error) {
 		showApplicationLoading(false);
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			super.onFailure(error);
 		}
 		@Override
 		public void onViolation(Set<Violation> errors) {
 		showApplicationLoading(false);
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			super.onViolation(errors);
 		}
 	});
 	
-	osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	showApplicationLoading(false);
 }	
 
@@ -1674,7 +1742,6 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 					@Override
 					public void onSuccess(Object arg0) {
-
 						PatientInSemesterRequest patientInSemesterRequest = requests
 								.patientInSemesterRequest();
 						PatientInSemesterProxy tempPatientInSemesterProxy = patientInSemesterRequest
@@ -1701,10 +1768,12 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 													@Override
 													public void onSuccess(
 															Object arg0) {
+													
 														patientInSemesterData
 																.setPatientInSemesterProxy((PatientInSemesterProxy) arg0);
 														patientInSemesterData
 																.setAcceptedImage();
+														osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 													}
 												});
 										// init();
@@ -1728,11 +1797,6 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 								});
 					}
 				});
-		// module 3 bug {
-		
-		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-		
-		// module 3 bug }
 
 	}
 
@@ -1766,6 +1830,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
 						//  
+						
 						allPatientInSemesterProxies = patientInSemesterProxies;
 						// Module 3 : Assignment E : Stop
 						//  
@@ -1782,15 +1847,18 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						// Module 3 : Assignment E : Stop
 						//  
 						showApplicationLoading(false);
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					}
 					@Override
 					public void onFailure(ServerFailure error) {
 					showApplicationLoading(false);
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					super.onFailure(error);
 					}
 					@Override
 					public void onViolation(Set<Violation> errors) {
 					showApplicationLoading(false);
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					super.onViolation(errors);
 					}
 				});
@@ -1802,17 +1870,16 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		if(resetTable){
 			refreshPatientInSemesterTable();
 		}
-
-		// module 3 bug {
-		if(osceDayTimer!=null)
 		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-		
 		showApplicationLoading(false);
-		// module 3 bug }
+
 	}
 
 	public void initPatientInSemesterData(List<PatientInSemesterProxy> patientInSemesterProxies, boolean setDataInTable) {
 		showApplicationLoading(true);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.cancel();
 		
 		if (patientInSemesterProxies != null && patientInSemesterProxies.size() >= 0) {
 			this.patientInSemesterProxies = patientInSemesterProxies;
@@ -1865,6 +1932,9 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			//Change  
 		}
 		showApplicationLoading(false);
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 
 	}
 
@@ -1934,27 +2004,25 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 						manualStdPatientInSemesterAssignmentPopupViewImpl
 								.setDetails(response,
-										spRoleAssignmentActivity,									view.getAddManuallyBtn());
+										spRoleAssignmentActivity,view.getAddManuallyBtn());
 
 						showApplicationLoading(false);
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 
 					}
 					@Override
 					public void onFailure(ServerFailure error) {
 					showApplicationLoading(false);
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						super.onFailure(error);
 					}
 					@Override
 					public void onViolation(Set<Violation> errors) {
 					showApplicationLoading(false);
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						super.onViolation(errors);
 					}//}
 				});
-		// module 3 bug {
-		
-		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-		
-		// module 3 bug }
 
 	}
 
@@ -1971,6 +2039,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		// module 3 bug }
 		if(standardizedPatientProxy==null)
 		{
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			return;
 		}
 		Log.info("StandardizedPatientProxy " + standardizedPatientProxy.getName());
@@ -1998,15 +2067,18 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 								allPatientInSemesterProxies.add(patientInSemesterProxy);
 								view.getDataTable().setNewPatient(patientInSemesterProxy, spRoleAssignmentActivity);
 								showApplicationLoading(false);
+								osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							}
 							@Override
 							public void onFailure(ServerFailure error) {
 							showApplicationLoading(false);
+							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							super.onFailure(error);
 							}
 							@Override
 							public void onViolation(Set<Violation> errors) {
 							showApplicationLoading(false);
+							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							super.onViolation(errors);
 							}
 							
@@ -2016,21 +2088,18 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						manualStdPatientInSemesterAssignmentPopupViewImpl
 								.hide();
 						showApplicationLoading(false);
-						
-						// module 3 bug {
-						
-						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-						
-						// module 3 bug }
+					
 					}
 					@Override
 					public void onFailure(ServerFailure error) {
 					showApplicationLoading(false);
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					super.onFailure(error);
 					}
 					@Override
 					public void onViolation(Set<Violation> errors) {
 					showApplicationLoading(false);
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					super.onViolation(errors);
 					}
 				});
@@ -2218,15 +2287,31 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 												MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(constants.warning());
 												msg.showConfirmationDialog(constants.pirAssignmentErrorMessage());
 												showApplicationLoading(false);
+												
 										 }
 										else if(response.equals("assigned")){
 												view.getDataTable().setNavigationButtonEnable(true);
 												MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(constants.warning());
 												msg.showConfirmationDialog(constants.warningPatientAlreadyAssigned());
 												showApplicationLoading(false);
+												
 										}
-											
+										
+											osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 										}
+										@Override
+										public void onFailure(
+												ServerFailure error) {
+											osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+											super.onFailure(error);
+										}
+										@Override
+										public void onViolation(
+												Set<Violation> errors) {
+											osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+											super.onViolation(errors);
+										}
+										
 									});
 									/*
 									
@@ -2293,12 +2378,12 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			view.getDataTable().setNavigationButtonEnable(false);
 			MessageConfirmationDialogBox msg = new MessageConfirmationDialogBox(constants.warning());
 			msg.showConfirmationDialog(constants.warningPleaseSelectRole());
+			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		}
 		// Module 3 :   Change
 		// init();
 		// module 3 bug {
 		
-		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		showApplicationLoading(false);
 		// module 3 bug }
 	}
@@ -2344,7 +2429,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		// module 3 bug }
 		// if
 		// (advancedSearchCriteriaProxies.contains(advancedSearchCriteriaProxy))
-		{
+		
 			// Log.info("!!!Size of advancedSearchCriteriaProxies"
 			// + advancedSearchCriteriaProxies.size());
 			// Log.info("!!!Size of advanceSearchCriteriaList"
@@ -2368,15 +2453,13 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			// module 3 bug }
 			return ((advanceSearchCriteriaList.get(i).booleanValue()) ? OsMaConstant.CHECK_ICON
 					.asString() : OsMaConstant.UNCHECK_ICON.asString());
-			
-			
-		}
-
-		
 
 	}
 
 	public void refreshPatientInSemesterTable() {
+		
+		if(osceDayTimer!=null)
+		osceDayTimer.cancel();
 		
 		this.showApplicationLoading(true);
 		List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
@@ -2406,17 +2489,23 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				showApplicationLoading(false);
 				showApplicationLoading(false);
 
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			}
 			@Override
 			public void onFailure(ServerFailure error) {
 				showApplicationLoading(false);
 				showApplicationLoading(false);
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				super.onFailure(error);
 			}
 			@Override
 			public void onViolation(Set<Violation> errors) {
 				showApplicationLoading(false);
 				showApplicationLoading(false);
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				super.onViolation(errors);
 			}
 		};
@@ -2449,6 +2538,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					public void onSuccess(Long response) {
 						if (view == null) {
 							// This activity is dead
+							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							return;
 						}
 						// Log.debug("Advanced search init: " + response);
@@ -2457,22 +2547,23 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 						onRangeChangedAdvancedSearchCriteriaTable(standardizedRoleID,isNavigationButtonEnable);
 						showApplicationLoading(false);
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					}
 					
 					@Override
 					public void onFailure(ServerFailure error) {
 						showApplicationLoading(false);
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						super.onFailure(error);
 					}
 					@Override
 					public void onViolation(Set<Violation> errors) {
 						showApplicationLoading(false);
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						super.onViolation(errors);
 					}
 				});
 		// module 3 bug {
-		
-		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		showApplicationLoading(false);
 		
 		// module 3 bug }
@@ -2495,8 +2586,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				initAdvanceSearchCriteriaList(advancedSearchCriteriaProxies.size());
 				//Module 3 : Assignment E : Start
 				// 
-				if(isNavigationButtonEnable){
-					showApplicationLoading(true);
+//manish				if(isNavigationButtonEnable){
+//manish					showApplicationLoading(true);
 //manish				requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId())/*.with(withStatement)*/.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 //manish					@Override
 //manish					public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
@@ -2519,18 +2610,18 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 //					}
 //				});
-				}else{
+//manish				}else{
 					// change Manish comment initPatientInSemester(false,true,isNavigationButtonEnabled) method and added refreshPatientInSemesterTable(); mehtod to resuce Pir sel event time
 					
 					//initPatientInSemester(false, true, isNavigationButtonEnable);
-					refreshPatientInSemesterTable();
-					showApplicationLoading(false);
+//					refreshPatientInSemesterTable();
+//					showApplicationLoading(false);
 					
 
-				}
+//				}
 				
 			//	initPatientInSemester(false,true,false);
-				showApplicationLoading(false);
+//				showApplicationLoading(false);
 								
 				//Module 3 : Assignment E : Stop
 				// 
@@ -2699,13 +2790,11 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			//Module 3 :   
 			Log.info("patientInSemesterProxy is :"+ patientInSemesterProxy.getId());
 			if(patientInSemesterProxy.getOsceDays() !=null){
-			Log.info("patientInSemesterProxy is size:"+ patientInSemesterProxy.getOsceDays().size());}
+			Log.info("patientInSemesterProxy is size:"+ patientInSemesterProxy.getOsceDays().size());
+			}
 			//Module 3 :  
 			
 			final List<StandardizedRoleProxy> listStandardizedRole = new ArrayList<StandardizedRoleProxy>();
-			
-					
-			Log.info("Set Size :" + setOsceDayProxy.size());
 			
 			Iterator<OsceDayProxy> itOsceDayProxy = setOsceDayProxy.iterator();
 			
@@ -2743,6 +2832,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 							//requests.getEventBus().fireEvent(new RoleFulfilCriteriaEvent(setOsceDayProxy,oDProxy,response));
 							
 								showApplicationLoading(false);
+								osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 						}
 					});
 					
@@ -2783,11 +2873,14 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			}	
 		}
 		public void getDetailedPatient(PatientInSemesterProxy tempPatientInSemesterProxy,final int left, final int top){
+			
+			if(osceDayTimer!=null)
+			osceDayTimer.cancel();
+
 			requests.patientInSemesterRequest().findPatientInSemester(tempPatientInSemesterProxy.getId())
 			.with(withStatementTrain).fire(new OSCEReceiver<PatientInSemesterProxy>() {
 				@Override
 			public void onSuccess(PatientInSemesterProxy patientInSemesterProxy) {
-					
 					StringBuffer tempTraining = new StringBuffer();
 					StringBuffer tempOsceDay = new StringBuffer();
 					StringBuffer tempAssignedRole = new StringBuffer();
@@ -2844,15 +2937,21 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 					RoleAssignmentPopupViewImpl.setPopUpText(tempTraining.toString(), tempOsceDay.toString(), tempAssignedRole.toString(),left,top);
 
+					if(osceDayTimer!=null)
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				}
 				@Override
 				public void onFailure(ServerFailure error) {
 				showApplicationLoading(false);
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				super.onFailure(error);
 				}
 				@Override
 				public void onViolation(Set<Violation> errors) {
 				showApplicationLoading(false);
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				super.onViolation(errors);
 				}
 			});
@@ -2884,6 +2983,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						for(int j=1;j<roleHP.getWidgetCount();j++)
 						{
 							RoleSubViewImpl roleSubView=(RoleSubViewImpl)roleHP.getWidget(j);
+							Log.info("Selecyed role is :" + roleSubViewSelected);
+							Log.info("Role is :" + roleSubView);
 							if(roleSubView.getRoleProxy().getId().longValue()==roleSubViewSelected.getRoleProxy().getId().longValue())
 							{
 								osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("highlight-role");
@@ -2960,6 +3061,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			@Override
 			public void onSuccess(Boolean response) {
 				if (response) {
+					
 					Log.info("Value saved successfully");
 					//					initPatientInSemester(false,false);
 					initPatientInSemester(true, false,false);
@@ -2967,18 +3069,25 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					manualStdPatientInSemesterAssignmentPopupViewImpl.hide();
 
 					// module 3 bug {
-
-					
 				}
 				else{
 					showApplicationLoading(false);
 					manualStdPatientInSemesterAssignmentPopupViewImpl.hide();
 
 					// module 3 bug {
-
 				
 				}
-osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			}
+			@Override
+			public void onFailure(ServerFailure error) {
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				super.onFailure(error);
+			}
+			@Override
+			public void onViolation(Set<Violation> errors) {
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				super.onViolation(errors);
 			}
 		});
 					
@@ -2995,7 +3104,6 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		//			}
 			// module 3 bug {
 			
-			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 			
 			// module 3 bug }
 		//		}
@@ -3024,7 +3132,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		// dialogBox.showConfirmationDialog(constants.onDeleteRoleAssignedToPatient());
 		//
 		// } else
-		{
+		
 			this.showApplicationLoading(true);
 			requests.patientInSemesterRequest().remove()
 					.using(patientInSemesterProxy)
@@ -3041,25 +3149,26 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							allPatientInSemesterProxies.remove(row-1);
 //						//	initPatientInSemester(true, false,false);
 						// module 3 bug {
-							
-						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+						
 						showApplicationLoading(false);
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							
 						// module 3 bug }
 						}
 	@Override
 				public void onFailure(ServerFailure error) {
-					// TODO Auto-generated method stub
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					super.onFailure(error);
 					showApplicationLoading(false);
 				}
 
 				public void onViolation(java.util.Set<Violation> errors) {
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					showApplicationLoading(false);
 				}
 
 					});
-		}
+		
 		this.showApplicationLoading(false);
 		
 	}
@@ -3121,6 +3230,7 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 													.setNavigationButtonEnable(
 															false);
 											showApplicationLoading(false);
+											osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 										}
 										
 										public void onViolation(java.util.Set<com.google.gwt.requestfactory.shared.Violation> errors) {
@@ -3147,12 +3257,13 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							initOsceDaySubView();
 							showApplicationLoading(false);
 						}
+						osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 					}
 	
 				});
 		// module 3 bug {
 		
-		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+	
 		
 		// module 3 bug }
 	}
@@ -3207,13 +3318,10 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 							
 							
 							initPatientInSemester(true,false,false);
-							
+							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 								}
 							});
 							
-							// module 3 bug {
-							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
-							// module 3 bug }
 							showApplicationLoading(false);
 						}
 						else{
@@ -3275,6 +3383,9 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 	public void updatePostOfPatient(OscePostProxy newProxy,OscePostProxy oldProxy,final PatientInRoleSubViewImpl patientViewDragged, PatientInRoleProxy patientInRoleProxy,final RoleSubView sourceRoleSubView)
 	{
 		showApplicationLoading(true);
+		if(osceDayTimer!=null)
+		osceDayTimer.cancel();
+		
 		PatientInRoleRequest patientInRoleRequest=requests.patientInRoleRequest();
 		
 		 patientInRoleProxy= patientInRoleRequest.edit(patientInRoleProxy);
@@ -3293,10 +3404,26 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				try{
 					refreshFlexTableRow(patientViewDragged.getPatientInRoleProxy().getPatientInSemester());
 				}catch(ArrayIndexOutOfBoundsException e){
-					
+			
+					if(osceDayTimer!=null)
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 				}
 				showApplicationLoading(false);
 //				view.getDataTable().setNavigationButtonEnable(false);
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			}
+			@Override
+			public void onFailure(ServerFailure error) {
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				super.onFailure(error);
+			}
+			@Override
+			public void onViolation(Set<Violation> errors) {
+				if(osceDayTimer!=null)
+				osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+				super.onViolation(errors);
 			}
 		});
 		 showApplicationLoading(false);
@@ -3321,6 +3448,9 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 
 	@Override
 	public void onClearSelectionBtnClicked() {
+		if(osceDayTimer!=null)
+		osceDayTimer.cancel();
+
 		if(roleSubViewSelected != null)
 		roleSubViewSelected.getRoleHeader().getWidget().removeStyleName("highlight-role");
 		
@@ -3328,6 +3458,8 @@ osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		roleSubViewSelected.getOsceDaySubViewImpl().simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
 		
 		init();
+		if(osceDayTimer!=null)
+		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		//initPatientInSemester(true, false, false);
 		
 	}
