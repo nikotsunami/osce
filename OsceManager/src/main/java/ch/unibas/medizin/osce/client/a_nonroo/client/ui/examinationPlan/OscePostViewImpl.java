@@ -129,6 +129,8 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 			
 			//setDAta
 			popupView.getNameValue().setText(enumConstants.getString(oscePostProxy.getOscePostBlueprint().getPostType().name()));
+			
+			if(oscePostProxy.getStandardizedRole() !=null)
 			popupView.getStartTimeValue().setText(oscePostProxy.getStandardizedRole().getRoleTopic().getName());
 		}
 		

@@ -359,7 +359,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			 boolean isLastPost=false;
 			
-			
+			Log.info("post type:" + oscePostProxy.getOscePostBlueprint().getPostType());
 			if(i==oscePostProxies.size()-1)
 				isLastPost=true;
 			
@@ -390,7 +390,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					
 					
 					
-					
+					Log.info("Post Type :" + oscePostProxy.getOscePostBlueprint().getPostType());
+					if(response.size()==0 && oscePostProxy.getOscePostBlueprint().getPostType()==PostType.BREAK)
+					{
+						insertEarlyStartSlot(contentView,isLastPost1);
+					}
 					if(response.size()==0)
 					{
 						requests.getEventBus().fireEvent(
@@ -422,7 +426,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						if(getEarlyStart() < earlyStart)
 							setEarlyStart(earlyStart);
 						
-						if(getEarlyStart() != 0)
+					//	if(getEarlyStart() != 0)
 						earlyStartPost.add(oscePostProxy);
 					}
 					
@@ -1162,8 +1166,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			}
 			
 			
-			//setEarlyStart(0);
-			//earlyStartPost.clear();
+			setEarlyStart(0);
+			earlyStartPost.clear();
 			
 		}
 	}
