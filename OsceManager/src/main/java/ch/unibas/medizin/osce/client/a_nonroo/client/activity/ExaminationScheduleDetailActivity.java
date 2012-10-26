@@ -1402,6 +1402,22 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	public void createExaminerAssignmnet(final ExaminationViewImpl view)
 	{
 		
+		DoctorProxy doctorProxy=null;
+		for(DoctorProxy dp:doctorList)
+		{
+			if(dp.getName().equals(view.getPopupView().getExaminerSuggestionBox().getValue()))
+			{
+				doctorProxy=dp;
+				break;
+			}
+		}
+		if(doctorProxy==null)
+		{
+			MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+			dialogBox.showConfirmationDialog(constants.examinerDoesNotExist());
+			return;
+		}
+		
 		AssignmentRequest assignmentRequest=requests.assignmentRequest();
 		AssignmentProxy assignmentProxy=null;
 		 int sequenceNumber=0;
@@ -1418,15 +1434,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			assignmentProxy=assignmentRequest.edit(view.getAssignmentProxy());
 		}
 		
-		DoctorProxy doctorProxy=null;
-		for(DoctorProxy dp:doctorList)
-		{
-			if(dp.getName().equals(view.getPopupView().getExaminerSuggestionBox().getValue()))
-			{
-				doctorProxy=dp;
-				break;
-			}
-		}
+		
 		assignmentProxy.setExaminer(doctorProxy);
 		
 		//assignmentProxy.setTimeStart(DateTimeFormat.getShortDateTimeFormat().parse(view.getPopupView().getStartTimeValue().getText()));

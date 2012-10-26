@@ -1119,5 +1119,46 @@ public interface OsceConstants extends Constants {
 	public String download();
 	
 	public String clearSelection();
+	
+	//Module 16[
+			public String sequence();
+			
+			public String post();
+			
+			public String sumPerParcour();
+			
+			public String sumPerSequence();
+			
+			public String sumPerStudent();
+			
+			public String missings();
+			
+			public String average();
+			
+			public String stdDeviation();
+			
+			public String points();
+			
+			public String frequency();
+			
+			public String cronbachsAlpha();
+			
+			public String calculate();
+			
+			public String studentCount();
+			
+			public String pass();
+			
+			public String fail();
+			
+			public String passingGrade();
+			
+			public String minimum();
+			
+			public String maximum();
+			
+			public String examinerDoesNotExist();
+			
+			//Module 16]
 }
 
