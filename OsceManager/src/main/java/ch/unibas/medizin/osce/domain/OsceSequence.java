@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -194,4 +195,21 @@ public class OsceSequence {
 				}
 			}
 		 }
+		
+    //by spec[
+	public static int countRotationByOsceBeforeOsceDay(Date osceDate, Long osceId)
+	{
+		EntityManager em = entityManager();	
+		String queryString="SELECT os FROM OsceSequence os WHERE os.osceDay IN (SELECT od.id FROM OsceDay AS od WHERE od.osce = "+ osceId +" AND od.osceDate < '"+ osceDate +"')";
+		TypedQuery<OsceSequence> q = em.createQuery(queryString, OsceSequence.class);
+		Iterator<OsceSequence> itr = q.getResultList().iterator();
+		int totalRotation = 0;
+		while (itr.hasNext())
+		{
+			OsceSequence osceSeq = itr.next();
+			totalRotation += osceSeq.numberRotation;
+		}
+		return totalRotation;
+	}
+	//by spec]
 }

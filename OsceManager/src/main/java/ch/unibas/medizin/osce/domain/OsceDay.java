@@ -93,17 +93,20 @@ public class OsceDay {
 	
 	/**
 	 * Set lunch_break after a specified number of rotations.
+	 * flag is used to know that shift lunch break earlier or later
+	 * value for flag is : 1 for Earlier and 2 For Later
 	 */
-	public static Boolean updateLunchBreak(Long osceDayId, Integer afterRotation) {
+	public static Boolean updateLunchBreak(Long osceDayId, Integer afterRotation, Integer flag) {
     	try {
     		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
     		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osceDay.getOsce());
-    		optGen.updateLunchBreakAfterRotation(osceDayId, afterRotation);
+    		Boolean test = optGen.updateLunchBreakAfterRotation(osceDayId, afterRotation, flag);
+    		return test;
     	} catch(Exception e) {
     		e.printStackTrace();
     		return false;
     	}
-    	return true;
+    	
     }
 	
 	public static Boolean updateTimesAfterRotationShift(Long osceDayIdFrom, Long osceDayIdTo) {

@@ -1160,5 +1160,10 @@ public interface OsceConstants extends Constants {
 			public String examinerDoesNotExist();
 			
 			//Module 16]
+	
+			//by spec TTGen Change[
+			public String earlierLunchError();
+			public String laterLunchError();
+			//by spec TTGen Change
 }
 

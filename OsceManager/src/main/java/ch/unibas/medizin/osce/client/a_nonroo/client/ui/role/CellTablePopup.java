@@ -74,14 +74,14 @@ public class CellTablePopup extends PopupPanel {
 		//spec  start
 		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesCustom.class);
 
-		RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
+		/*RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
 
 			@Override
 			public void onContextMenu(ContextMenuEvent event) {
 				event.preventDefault();
 				event.stopPropagation();
 			}
-		}, ContextMenuEvent.getType());
+		}, ContextMenuEvent.getType());*/
 	
 		cellTable = new CellTable<String>(15, tableResources);
 		

@@ -2274,7 +2274,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																					Object response) {
 																				Log.info("~Success Call....");	
 																				//Module 5 bug Report Change	
-																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response)),""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
+																				//newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response)),""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
+																				//spec[
+																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, oscePostBlueprintProxyNew,""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
+																				//spec]
 																				//E Module 5 bug Report Change	
 																			}
 																	
@@ -5013,12 +5016,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							// E Module 5 Bug Test Change
 							
-							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()-1)).fire(new OSCEReceiver<Boolean>() {
+							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()-1), 1).fire(new OSCEReceiver<Boolean>() {
 
 								@Override
 								public void onSuccess(Boolean response1) {
 									
-									requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+									if (response1)
+									{
+										requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
 
 										@Override
 										public void onSuccess(
@@ -5103,28 +5108,37 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												{
 													requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 												}
-										}
+											}
 										
-										@Override
-										public void onFailure(
-												ServerFailure error) {
-											// TODO Auto-generated method stub
-											super.onFailure(error);
-											// Module 5 Bug Test Change
-											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-											// E Module 5 Bug Test Change
-										}
-										
-										@Override
-										public void onViolation(
-												Set<Violation> errors) {
-											// TODO Auto-generated method stub
-											super.onViolation(errors);
-											// Module 5 Bug Test Change
-											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-											// E Module 5 Bug Test Change
-										}
-									});
+											@Override
+											public void onFailure(
+													ServerFailure error) {
+												// TODO Auto-generated method stub
+												super.onFailure(error);
+												// Module 5 Bug Test Change
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												// E Module 5 Bug Test Change
+											}
+											
+											@Override
+											public void onViolation(
+													Set<Violation> errors) {
+												// TODO Auto-generated method stub
+												super.onViolation(errors);
+												// Module 5 Bug Test Change
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												// E Module 5 Bug Test Change
+											}
+										});
+									}
+									else
+									{
+										requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+										dialogBox.showConfirmationDialog(constants.earlierLunchError());
+									}
+									
+									
 								}
 								
 								@Override
@@ -5161,108 +5175,118 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									{
 										OsceSequenceProxy osceSequenceProxy = response.get(0);
 										
-										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1)).fire(new OSCEReceiver<Boolean>() {
+										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1), 1).fire(new OSCEReceiver<Boolean>() {
 
 											@Override
 											public void onSuccess(Boolean response1) {
-												Log.info("shiftLucnkBreakPrevClicked Response : " + response1);
 												
-												requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
-
-													@Override
-													public void onSuccess(
-															OsceDayProxy osceDayProxyTemp) {
-															
-														int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
-														int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
-														
-														int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+												if (response1)
+												{
+													Log.info("shiftLucnkBreakPrevClicked Response : " + response1);
 													
+													requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
 
-														int newhr=(totalMinute/60);
-														int newmin=(totalMinute%60);
-												
-														
-														// spec [
-														//osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
-														setLunchbreakStart(osceDayViewImplTemp,osceDayProxyTemp.getLunchBreakStart(),newhr,newmin);														
-														// spec ]
-
-														
-															//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
-														
-															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+														@Override
+														public void onSuccess(
+																OsceDayProxy osceDayProxyTemp) {
+																
+															int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
+															int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
 															
-															SequenceOsceSubViewImpl firstSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-															
-															if (Integer.parseInt(firstSequenceOsce1.getSequenceRotationLable().getText()) > 1)
-															{
-																requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+															int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+														
 
-																	@Override
-																	public void onSuccess(
-																			Boolean response) {																
-																		Log.info("Done Successfully");
-																		
-																		if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-																		{
-																			SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-																			SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															int newhr=(totalMinute/60);
+															int newmin=(totalMinute%60);
+													
+															
+															// spec [
+															//osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
+															setLunchbreakStart(osceDayViewImplTemp,osceDayProxyTemp.getLunchBreakStart(),newhr,newmin);														
+															// spec ]
+
+															
+																//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+															
+																osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+																
+																SequenceOsceSubViewImpl firstSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																
+																if (Integer.parseInt(firstSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+																{
+																	requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+
+																		@Override
+																		public void onSuccess(
+																				Boolean response) {																
+																			Log.info("Done Successfully");
 																			
-																			if (Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																			if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
 																			{
-																				int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
-																				int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
-																				firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																				firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
-																				secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																				secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																				SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																				SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																				
+																				if (Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																				{
+																					int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																					int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																					firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																					firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																					secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																					secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																				}
 																			}
+																			// Module 5 Bug Test Change
+																			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																			// E Module 5 Bug Test Change
 																		}
-																		// Module 5 Bug Test Change
-																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																		// E Module 5 Bug Test Change
-																	}
-																	
-																	public void onFailure(ServerFailure error) {
-																		// Module 5 Bug Test Change
-																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																		// E Module 5 Bug Test Change
-																	};
-																	
-																	@Override
-																	public void onViolation(
-																			Set<Violation> errors) {
-																		// TODO Auto-generated method stub
-																		super.onViolation(errors);
-																		// Module 5 Bug Test Change
-																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																		// E Module 5 Bug Test Change
-																	}
-																});
-															}
-															else
-															{
-																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-															}
-													}
-													
-													public void onFailure(ServerFailure error) {
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													
-													@Override
-													public void onViolation(
-															Set<Violation> errors) {
-														// TODO Auto-generated method stub
-														super.onViolation(errors);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-												});
+																		
+																		public void onFailure(ServerFailure error) {
+																			// Module 5 Bug Test Change
+																			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																			// E Module 5 Bug Test Change
+																		};
+																		
+																		@Override
+																		public void onViolation(
+																				Set<Violation> errors) {
+																			// TODO Auto-generated method stub
+																			super.onViolation(errors);
+																			// Module 5 Bug Test Change
+																			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																			// E Module 5 Bug Test Change
+																		}
+																	});
+																}
+																else
+																{
+																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																}
+														}
+														
+														public void onFailure(ServerFailure error) {
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+														
+														@Override
+														public void onViolation(
+																Set<Violation> errors) {
+															// TODO Auto-generated method stub
+															super.onViolation(errors);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+													});
+												}
+												else
+												{
+													requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+													MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+													dialogBox.showConfirmationDialog(constants.earlierLunchError());
+												}
 											}
 										});
 									}				
@@ -5327,118 +5351,127 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									{
 										OsceSequenceProxy osceSequenceProxy = response.get(0);
 										
-										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1)).fire(new OSCEReceiver<Boolean>() {
+										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1), 2).fire(new OSCEReceiver<Boolean>() {
 
 											@Override
 											public void onSuccess(Boolean response1) {
 												
-												requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+												if (response1)
+												{
+													requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
 
-													@Override
-													public void onSuccess(
-															OsceDayProxy osceDayProxyTemp) {
+														@Override
+														public void onSuccess(
+																OsceDayProxy osceDayProxyTemp) {
+															
+															int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
+															int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
+															
+															int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
 														
-														int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
-														int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
-														
-														int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+
+															int newhr=(totalMinute/60);
+															int newmin=(totalMinute%60);
 													
-
-														int newhr=(totalMinute/60);
-														int newmin=(totalMinute%60);
-												
-														
-														// spec [
-														//osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
-														setLunchbreakStart(osceDayViewImplTemp,osceDayProxyTemp.getLunchBreakStart(),newhr,newmin);																											
-														// spec ]
-
-														//	osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
-														
-															osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
 															
-															SequenceOsceSubViewImpl secondSequenceOsce1 = new SequenceOsceSubViewImpl();
-															
-															if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)															
-																secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
-															else 
-																secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-															
-															if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
-															{
-																requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+															// spec [
+															//osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
+															setLunchbreakStart(osceDayViewImplTemp,osceDayProxyTemp.getLunchBreakStart(),newhr,newmin);																											
+															// spec ]
 
-																	@Override
-																	public void onSuccess(
-																			Boolean response) {
-																		
-																		Log.info("Done Successfully");
-																		
-																		if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-																		{
-																			SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-																			SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+															//	osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+															
+																osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+																
+																SequenceOsceSubViewImpl secondSequenceOsce1 = new SequenceOsceSubViewImpl();
+																
+																if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)															
+																	secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																else 
+																	secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																
+																if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+																{
+																	requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+																		@Override
+																		public void onSuccess(
+																				Boolean response) {
 																			
-																			if (Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																			Log.info("Done Successfully");
+																			
+																			if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
 																			{
-																				int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
-																				int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
-																				firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																				firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
-																				secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																				secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																				SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																				SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																				
+																				if (Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) > 1)
+																				{
+																					int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																					int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																					firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																					firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																					secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																					secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																				}
 																			}
+																			// Module 5 Bug Test Change
+																			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																			// E Module 5 Bug Test Change
 																		}
-																		// Module 5 Bug Test Change
-																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																		// E Module 5 Bug Test Change
-																	}
-																	
-																	@Override
-																	public void onFailure(
-																			ServerFailure error) {
-																		// TODO Auto-generated method stub
-																		super.onFailure(error);
-																		// Module 5 Bug Test Change
-																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																		// E Module 5 Bug Test Change
-																	}
-																	
-																	@Override
-																	public void onViolation(
-																			Set<Violation> errors) {
-																		// TODO Auto-generated method stub
-																		super.onViolation(errors);
-																		// Module 5 Bug Test Change
-																		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-																		// E Module 5 Bug Test Change
-																	}
-																});
-															}
-															else
-															{
-																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-															}
-													}
-													@Override
-													public void onFailure(
-															ServerFailure error) {
-														// TODO Auto-generated method stub
-														super.onFailure(error);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-													@Override
-													public void onViolation(
-															Set<Violation> errors) {
-														// TODO Auto-generated method stub
-														super.onViolation(errors);
-														// Module 5 Bug Test Change
-														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-														// E Module 5 Bug Test Change
-													}
-												});
+																		
+																		@Override
+																		public void onFailure(
+																				ServerFailure error) {
+																			// TODO Auto-generated method stub
+																			super.onFailure(error);
+																			// Module 5 Bug Test Change
+																			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																			// E Module 5 Bug Test Change
+																		}
+																		
+																		@Override
+																		public void onViolation(
+																				Set<Violation> errors) {
+																			// TODO Auto-generated method stub
+																			super.onViolation(errors);
+																			// Module 5 Bug Test Change
+																			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																			// E Module 5 Bug Test Change
+																		}
+																	});
+																}
+																else
+																{
+																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																}
+														}
+														@Override
+														public void onFailure(
+																ServerFailure error) {
+															// TODO Auto-generated method stub
+															super.onFailure(error);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+														@Override
+														public void onViolation(
+																Set<Violation> errors) {
+															// TODO Auto-generated method stub
+															super.onViolation(errors);
+															// Module 5 Bug Test Change
+															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+															// E Module 5 Bug Test Change
+														}
+													});
+												}
+												else
+												{
+													requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+													MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+													dialogBox.showConfirmationDialog(constants.laterLunchError());
+												}
 											}
 										});
 
@@ -5452,117 +5485,126 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							// E Module 5 Bug Test Change
 							
-							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()+1)).fire(new OSCEReceiver<Boolean>() {
+							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()+1), 2).fire(new OSCEReceiver<Boolean>() {
 
 								@Override
 								public void onSuccess(Boolean response1) {
-								
-									requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
-
-										@Override
-										public void onSuccess(
-												OsceDayProxy osceDayProxyTemp) {
-											
-											int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
-											int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
-											
-											int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
-										
-
-											int newhr=(totalMinute/60);
-											int newmin=(totalMinute%60);
 									
+									if (response1)
+									{
+										requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+
+											@Override
+											public void onSuccess(
+													OsceDayProxy osceDayProxyTemp) {
+												
+												int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
+												int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
+												
+												int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
 											
-											// spec [
-											//osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
-											setLunchbreakStart(osceDayViewImplTemp,osceDayProxyTemp.getLunchBreakStart(),newhr,newmin);											
-											// spec ]
 
-
-												//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
-											
-												osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
-												
-												SequenceOsceSubViewImpl secondSequenceOsce1 = new SequenceOsceSubViewImpl();
-												
-												if(osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)												
-													secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
-												else
-													secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-												
-												if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
-												{
-													requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
-
-														@Override
-														public void onSuccess(
-																Boolean response) {
-															
-															Log.info("Done Successfully");
-															if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
-															{
-																SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
-																SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
-																int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
-																int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
-																firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
-																firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
-																secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
-																secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
-															}
-															// Module 5 Bug Test Change
-															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-															// E Module 5 Bug Test Change
-														}
-														
-														@Override
-														public void onFailure(
-																ServerFailure error) {
-															// TODO Auto-generated method stub
-															super.onFailure(error);
-															// Module 5 Bug Test Change
-															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-															// E Module 5 Bug Test Change
-														}
-														
-														@Override
-														public void onViolation(
-																Set<Violation> errors) {
-															// TODO Auto-generated method stub
-															super.onViolation(errors);
-															// Module 5 Bug Test Change
-															requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-															// E Module 5 Bug Test Change
-														}
-														
-													});
-													
-												}
-												else
-												{
-													requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-												}
-										}	
-										@Override
-										public void onFailure(
-												ServerFailure error) {
-											// TODO Auto-generated method stub
-											super.onFailure(error);
-											// Module 5 Bug Test Change
-											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-											// E Module 5 Bug Test Change
-										}
+												int newhr=(totalMinute/60);
+												int newmin=(totalMinute%60);
 										
-										@Override
-										public void onViolation(
-												Set<Violation> errors) {
-											// TODO Auto-generated method stub
-											super.onViolation(errors);
-											// Module 5 Bug Test Change
-											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-											// E Module 5 Bug Test Change
-										}
-									});
+												
+												// spec [
+												//osceDayViewImplTemp.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
+												setLunchbreakStart(osceDayViewImplTemp,osceDayProxyTemp.getLunchBreakStart(),newhr,newmin);											
+												// spec ]
+
+
+													//osceDayViewImplTemp.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxyTemp.getLunchBreakStart()).substring(0,5));
+												
+													osceDayViewImplTemp.setOsceDayProxy(osceDayProxyTemp);
+													
+													SequenceOsceSubViewImpl secondSequenceOsce1 = new SequenceOsceSubViewImpl();
+													
+													if(osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)												
+														secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+													else
+														secondSequenceOsce1 = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+													
+													if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
+													{
+														requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+
+															@Override
+															public void onSuccess(
+																	Boolean response) {
+																
+																Log.info("Done Successfully");
+																if (osceDayViewImplTemp.getSequenceOsceSubViewImplList().size() == 2)
+																{
+																	SequenceOsceSubViewImpl firstSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(0);
+																	SequenceOsceSubViewImpl secondSequenceOsce = osceDayViewImplTemp.getSequenceOsceSubViewImplList().get(1);
+																	int firstRotation = Integer.parseInt(firstSequenceOsce.getSequenceRotationLable().getText()) + 1;
+																	int secondRotation = Integer.parseInt(secondSequenceOsce.getSequenceRotationLable().getText()) - 1;
+																	firstSequenceOsce.getSequenceRotationLable().setText(String.valueOf(firstRotation));
+																	firstSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																	secondSequenceOsce.getSequenceRotationLable().setText(String.valueOf(secondRotation));
+																	secondSequenceOsce.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+																}
+																// Module 5 Bug Test Change
+																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																// E Module 5 Bug Test Change
+															}
+															
+															@Override
+															public void onFailure(
+																	ServerFailure error) {
+																// TODO Auto-generated method stub
+																super.onFailure(error);
+																// Module 5 Bug Test Change
+																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																// E Module 5 Bug Test Change
+															}
+															
+															@Override
+															public void onViolation(
+																	Set<Violation> errors) {
+																// TODO Auto-generated method stub
+																super.onViolation(errors);
+																// Module 5 Bug Test Change
+																requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+																// E Module 5 Bug Test Change
+															}
+															
+														});
+														
+													}
+													else
+													{
+														requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+													}
+											}	
+											@Override
+											public void onFailure(
+													ServerFailure error) {
+												// TODO Auto-generated method stub
+												super.onFailure(error);
+												// Module 5 Bug Test Change
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												// E Module 5 Bug Test Change
+											}
+											
+											@Override
+											public void onViolation(
+													Set<Violation> errors) {
+												// TODO Auto-generated method stub
+												super.onViolation(errors);
+												// Module 5 Bug Test Change
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												// E Module 5 Bug Test Change
+											}
+										});
+									}
+									else
+									{
+										requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+										dialogBox.showConfirmationDialog(constants.laterLunchError());
+									}	
 								}
 								
 								@Override

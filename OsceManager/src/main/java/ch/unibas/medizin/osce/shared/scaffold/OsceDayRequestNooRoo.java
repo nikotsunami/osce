@@ -20,7 +20,7 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 	
 	abstract Request<java.util.List<OsceDayProxy>> findOsceDayByDoctorAssignment(DoctorProxy proxy);
 	
-	public abstract Request<Boolean> updateLunchBreak(Long osceDayId, Integer afterRotation);
+	public abstract Request<Boolean> updateLunchBreak(Long osceDayId, Integer afterRotation, Integer flag);
 	public abstract Request<Boolean> updateTimesAfterRotationShift(Long osceDayIdFrom, Long osceDayIdTo);
 	
 	//Module 5 Bug Report Solution

@@ -405,14 +405,14 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
 		
-		RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
+		/*RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
 
 				@Override
 				public void onContextMenu(ContextMenuEvent event) {
 					event.preventDefault();
 					event.stopPropagation();
 				}
-			}, ContextMenuEvent.getType());
+			}, ContextMenuEvent.getType());*/
 		
 		final StandardizedPatientView systemStartView = new StandardizedPatientViewImpl();
 		this.table = (AdvanceCellTable<StandardizedPatientProxy>)view.getTable();

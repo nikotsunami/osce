@@ -503,37 +503,62 @@ public class TimetableGenerator {
 	 * @param osceDayId OSCE day to shift lunch break
 	 * @param lunchBreakAfterRotation rotation after which should the lunch break be placed
 	 */
-	public void updateLunchBreakAfterRotation(long osceDayId, int lunchBreakAfterRotation) {
+	public boolean updateLunchBreakAfterRotation(long osceDayId, int lunchBreakAfterRotation, int flag) {
 		
 		OsceDay thisDay = OsceDay.findOsceDay(osceDayId);
 		
-		List<OsceSequence> osceSeqList = thisDay.getOsceSequences();
-		int totalRotation = 0;
-		
-		for (OsceSequence osceSeq : osceSeqList)
+		String[] str = thisDay.getBreakByRotation().split("-");
+		Boolean check = false;
+		if (flag == 1)
 		{
-			totalRotation += osceSeq.getNumberRotation();
+			String temp = str[0];
+			check = temp.contains(thisDay.getOsce().getLunchBreak().toString());
+		}
+		else if (flag == 2)
+		{
+			String temp = str[str.length - 2];
+			check = temp.contains(thisDay.getOsce().getLunchBreak().toString());
 		}
 		
-		int thisIndex = getOsceDayIndex(thisDay);
-		
-		//calcDayTimeByDayIndex(thisIndex, lunchBreakAfterRotation);
-		updateRotationByLunchBreak(thisIndex, lunchBreakAfterRotation, totalRotation);
-		
-		thisDay.setLunchBreakAfterRotation(lunchBreakAfterRotation);
-		thisDay.setLunchBreakStart(lunchBreakByDay.get(thisIndex));
-		thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(thisIndex)));
+		if (!check)
+		{
+			List<OsceSequence> osceSeqList = thisDay.getOsceSequences();
+			int thisDayRotation = 0;
+			
+			for (OsceSequence osceSeq : osceSeqList)
+			{
+				thisDayRotation += osceSeq.getNumberRotation();
+			}
+			
+			int thisIndex = getOsceDayIndex(thisDay);
+			
+			int startRotation = OsceSequence.countRotationByOsceBeforeOsceDay(thisDay.getOsceDate(), thisDay.getOsce().getId()); 
+			
+			//calcDayTimeByDayIndex(thisIndex, lunchBreakAfterRotation);
+			int totalRotation = thisDayRotation + startRotation;
+			updateRotationByLunchBreak(thisIndex, lunchBreakAfterRotation, startRotation, totalRotation);
+			
+			thisDay.setLunchBreakAfterRotation(lunchBreakAfterRotation);
+			thisDay.setLunchBreakStart(lunchBreakByDay.get(thisIndex));
+			thisDay.setTimeEnd(dateAddMin(thisDay.getTimeStart(), timeNeededByDay.get(thisIndex)));
 
-		//by spec[
-		thisDay.setBreakByRotation(breakPerRotationByDay.get(thisIndex));
-		
-		//by spec]
-		
-		thisDay.flush();
+			//by spec[
+			thisDay.setBreakByRotation(breakPerRotationByDay.get(thisIndex));
+			
+			//by spec]
+			
+			thisDay.flush();
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	//by spec[
-	public void updateRotationByLunchBreak(int i, int lunchBreakAfterRotation, int totalRotation)
+	public void updateRotationByLunchBreak(int i, int lunchBreakAfterRotation, int start, int totalRotation)
 	{
 		int rotationsMax;
 		
@@ -553,7 +578,7 @@ public class TimetableGenerator {
 		
 		int ctr = 0;
 		
-		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsMax); j++) {
+		for(int j = start; j < totalRotation; j++) {
 			int numberBreakPostsThisRotation = rotations[0].get(j);
 			
 			// add break posts to regular posts
@@ -598,7 +623,7 @@ public class TimetableGenerator {
 			log.info("  rotation " + j + " end: " + timeNeededCurrentDay);
 			
 			
-			boolean lastRotation = (j % rotationsMax) == rotationsMax - 1;
+			boolean lastRotation = j == totalRotation - 1;
 			
 			//spec[
 			boolean isLongBreakBetweenTwoRotation = false;
@@ -621,7 +646,7 @@ public class TimetableGenerator {
 				//SPEC[
 				//if((lunchBreakAfterRotation > 0 && (j + 1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j + 1) % rotationsMax))) {
 				//if(lunchBreakRequered && ((lunchBreakAfterRotation > 0 && (j+1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j ) % rotationsMax)))) {
-				if(lunchBreakRequered && j == ( ( lunchBreakRotation + (i * rotationsMax) ) ) - 1) {
+				if(lunchBreakRequered && j == ( ( lunchBreakRotation + start ) ) - 1) {
 					
 					timeUntilLongORLunchBreak=0;
 					//SPEC]
