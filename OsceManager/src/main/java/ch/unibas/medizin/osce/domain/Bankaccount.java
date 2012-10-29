@@ -24,7 +24,8 @@ public class Bankaccount {
     @Size(max = 40)
     private String ownerName;
     
-    private Integer postalCode;
+    @Size(max = 15)
+    private String postalCode;
     
     @Size(max = 30)
     private String city;
