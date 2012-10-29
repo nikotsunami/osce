@@ -76,6 +76,10 @@ public class RoleFulfilCriteriaEvent extends
 		return eventBus.addHandler(TYPE, handler);
 	}
 
+	public static Type<RoleFulfilCriteriaHandler> getType(){
+		return TYPE;
+	}
+	
 	public List<StandardizedRoleProxy> refreshPanels() {
 		// TODO : TO be Implemented for RoleFulfilCriteriaEvent.
 		return null;

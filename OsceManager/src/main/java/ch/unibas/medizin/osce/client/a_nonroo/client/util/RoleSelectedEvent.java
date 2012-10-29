@@ -22,6 +22,9 @@ public class RoleSelectedEvent extends GwtEvent<RoleSelectedHandler> {
 	private OsceDayProxy osceDayProxy;
 	
 
+	public static Type<RoleSelectedHandler> getType(){
+		return TYPE;
+	}
 	// TODO: Replace this view by Detailed View ...
 
 	public OsceDayProxy getOsceDayProxy() {
@@ -56,8 +59,6 @@ public class RoleSelectedEvent extends GwtEvent<RoleSelectedHandler> {
 	public RoleSelectedEvent() {
 
 	}
-
-	@Override
 	public Type<RoleSelectedHandler> getAssociatedType() {
 
 		return TYPE;
@@ -65,7 +66,7 @@ public class RoleSelectedEvent extends GwtEvent<RoleSelectedHandler> {
 
 	@Override
 	protected void dispatch(RoleSelectedHandler handler) {
-		handler.onRoleSelectedEventReceived(this);
+			handler.onRoleSelectedEventReceived(this);
 	}
 
 	public RoleAssignmentViewImpl getAssignmentViewImpl() {

@@ -150,6 +150,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	
 	//change
 	private List<OsceDaySubViewImpl> osceDaySubViewImplList=new ArrayList<OsceDaySubViewImpl>();
+	private List<RoleSubView> roleSubViewList = new ArrayList<RoleSubView>();
 //	private DisclosurePanel disCloserPanel;
 	private StudentsActivity activity;
 	private boolean isAssignedFirst =false;
@@ -304,6 +305,17 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		osceDayTimer.cancel();
 		osceDayTimer=null;
 		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);
+		
+			for(int i=0;i<osceDaySubViewImplList.size();i++)
+			{
+			handlerManager.removeHandler(RoleSelectedEvent.getType(), osceDaySubViewImplList.get(i));
+			handlerManager.removeHandler(PatientInSemesterSelectedEvent.getType(),  osceDaySubViewImplList.get(i));
+			}
+			for(int i=0;i<roleSubViewList.size();i++){
+				handlerManager.removeHandler(RoleSelectedEvent.getType(),(RoleSubViewImpl) roleSubViewList.get(i));
+				handlerManager.removeHandler(RoleFulfilCriteriaEvent.getType(),(RoleSubViewImpl) roleSubViewList.get(i));
+			}
+		
 		// module 3 bug }
 	}
 
@@ -317,7 +329,10 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 		dmxSyncService = DMZSyncService.ServiceFactory.instance();
 		view = new RoleAssignmentViewImpl();
 		view.setDelegate(this);
-		RoleSelectedEvent.register(requests.getEventBus(), view);
+		
+		//RoleSelectedEvent.register(requests.getEventBus(), view);
+		handlerManager.addHandler(RoleSelectedEvent.getType(), view);
+		
 		spRoleAssignmentActivity = this;
 
 		MenuClickEvent.register(requests.getEventBus(), (RoleAssignmentViewImpl) view);
@@ -401,6 +416,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 			//boolean isopen =true;
 			osceDaySubViewContainerPanel.clear();
 			osceDaySubViewImplList.clear();
+			
 			Set<OsceProxy> setOsceProxy = semesterProxy.getOsces();
 			if(setOsceProxy==null)
 			{
@@ -457,8 +473,10 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					// Module 3 d {
 					
 					//register events
-					PatientInSemesterSelectedEvent.register(requests.getEventBus(), osceDaySubViewImpl);
-					RoleSelectedEvent.register(requests.getEventBus(), osceDaySubViewImpl);
+					//PatientInSemesterSelectedEvent.register(requests.getEventBus(), osceDaySubViewImpl);
+					handlerManager.addHandler(PatientInSemesterSelectedEvent.getType(), osceDaySubViewImpl);
+					//RoleSelectedEvent.register(requests.getEventBus(), osceDaySubViewImpl);
+					handlerManager.addHandler(RoleSelectedEvent.getType(), osceDaySubViewImpl);
 					
 					// Module 3 d }
 					
@@ -613,7 +631,7 @@ public void createOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewIm
 	if(osceDayTimer!=null)
 	 osceDayTimer.cancel();
 	// module 3 bug }
-	
+	showApplicationLoading(true);
 	Log.info("refreshOsceSequences: osceDayProxy " +osceDayProxy.getId());
 	
 	osceDaySubViewImpl.getSequenceVP().clear();
@@ -625,6 +643,7 @@ public void createOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewIm
 			createSequences(response,osceDaySubViewImpl);
 			if(osceDayTimer!=null)
 			osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+			showApplicationLoading(false);
 		}
 		@Override
 		public void onFailure(ServerFailure error) {
@@ -763,7 +782,7 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 			backUpHp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		}
 			
-			
+         roleSubViewList.clear();	
 			 //module 3 changes]
 		while(postIterator.hasNext())
 		{
@@ -775,8 +794,12 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 					{
 				RoleSubView view=new RoleSubViewImpl(roleAp);
 				view.setBackUpRoleView(backUpView);
-				RoleFulfilCriteriaEvent.register(requests.getEventBus(), (RoleSubViewImpl)view);
-				RoleSelectedEvent.register(requests.getEventBus(), (RoleSubViewImpl)view);
+				roleSubViewList.add(view);
+				//RoleFulfilCriteriaEvent.register(requests.getEventBus(), (RoleSubViewImpl)view);
+				handlerManager.addHandler(RoleFulfilCriteriaEvent.getType(), (RoleSubViewImpl)view);
+				//RoleSelectedEvent.register(requests.getEventBus(), (RoleSubViewImpl)view);
+				handlerManager.addHandler(RoleSelectedEvent.getType(), (RoleSubViewImpl)view);
+				
 						view.setPostProxy(postProxy);
 						view.setOsceDayProxy(osceDayProxy);
 						view.setOsceSequenceProxy(sequenceProxy);
@@ -1216,7 +1239,8 @@ public void roleSelected(RoleSubView roleSubView)
 	roleSubViewSelected=(RoleSubViewImpl)roleSubView;
 	
 	osceDayProxy=roleSubView.getOsceDayProxy();
-	requests.getEventBus().fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));	
+	//requests.getEventBus().fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));	
+	handlerManager.fireEvent(new RoleSelectedEvent(roleSubView.getRoleProxy(), roleSubView.getOsceDayProxy()));
 	
 	checkFitCriteria(roleSubView,false,null);
 	
@@ -1940,7 +1964,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 	public void firePatientInSemesterRowSelectedEvent(PatientInSemesterProxy patientInSemesterProxy) {
 		showApplicationLoading(true);
-		requests.getEventBus().fireEvent(new PatientInSemesterSelectedEvent(patientInSemesterProxy, patientInSemesterProxy.getOsceDays()));
+		//requests.getEventBus().fireEvent(new PatientInSemesterSelectedEvent(patientInSemesterProxy, patientInSemesterProxy.getOsceDays()));
+		handlerManager.fireEvent(new PatientInSemesterSelectedEvent(patientInSemesterProxy, patientInSemesterProxy.getOsceDays()));
 		showApplicationLoading(false);
 	}
 	
@@ -2983,7 +3008,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						for(int j=1;j<roleHP.getWidgetCount();j++)
 						{
 							RoleSubViewImpl roleSubView=(RoleSubViewImpl)roleHP.getWidget(j);
-							Log.info("Selecyed role is :" + roleSubViewSelected);
+							Log.info("Selected role is :" + roleSubViewSelected);
 							Log.info("Role is :" + roleSubView);
 							if(roleSubView.getRoleProxy().getId().longValue()==roleSubViewSelected.getRoleProxy().getId().longValue())
 							{
@@ -3451,12 +3476,12 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		if(osceDayTimer!=null)
 		osceDayTimer.cancel();
 
-		if(roleSubViewSelected != null)
+/*		if(roleSubViewSelected != null)
 		roleSubViewSelected.getRoleHeader().getWidget().removeStyleName("highlight-role");
 		
 		if(roleSubViewSelected !=null)
 		roleSubViewSelected.getOsceDaySubViewImpl().simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
-		
+*/		
 		init();
 		if(osceDayTimer!=null)
 		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);

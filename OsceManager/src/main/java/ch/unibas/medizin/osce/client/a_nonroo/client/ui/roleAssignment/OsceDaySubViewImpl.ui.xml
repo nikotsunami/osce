@@ -12,7 +12,8 @@
 	</ui:style>
 	
 	<g:HTMLPanel>
-	<my:DisclosurePanel ui:field="simpleDiscloserPanel" addStyleNames='{style.mainNavPanel}' width="710px">
+	<!--privious width of my:Disclosure panel width="710px"  -->
+	<my:DisclosurePanel ui:field="simpleDiscloserPanel" addStyleNames='{style.mainNavPanel}' width="100%">
 				
 		<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'
 			height="100px" ui:field="sequenceVP" />

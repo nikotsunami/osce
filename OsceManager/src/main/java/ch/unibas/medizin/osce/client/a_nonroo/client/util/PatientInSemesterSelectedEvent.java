@@ -25,6 +25,9 @@ public class PatientInSemesterSelectedEvent extends
 
 	private Set<OsceDayProxy> osceDayProxies;
 
+	public static Type<PatientInSemesterSelectedHandler> getType(){
+		return TYPE;
+	}
 	/**
 	 * Register a handler for PatientInSemesterSelectedEvent events on the
 	 * eventbus.
