@@ -129,8 +129,8 @@ public class Doctor {
     {
 		Log.info("Call findDoctorByOsceId for id" + osceId);	
 		EntityManager em = entityManager();
-		String queryString = "select distinct d from Doctor as d, OsceDay as od, Assignment as assi, Osce as o " +
-				"where o.id=od.osce and od.id=assi.osceDay and assi.examiner=d.id and o.id=" + osceId;
+		//String queryString = "select distinct d from Doctor as d, OsceDay as od, Assignment as assi, Osce as o " + "where o.id=od.osce and od.id=assi.osceDay and assi.examiner=d.id and o.id=" + osceId;
+                String queryString = "select d from Doctor as d where d.id in (select distinct assi.examiner from Assignment as assi where assi.osceDay in(select od.id from OsceDay as od where od.osce=" + osceId + ") and assi.examiner is not null)";
 		Log.info("Query String: " + queryString);
 		TypedQuery<Doctor> q = em.createQuery(queryString,Doctor.class);		
 		List<Doctor> result  = q.getResultList();        

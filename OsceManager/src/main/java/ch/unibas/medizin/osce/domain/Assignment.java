@@ -430,11 +430,11 @@ public class Assignment {
         return result;    	    
     }
     
-    public static List<Long> findDistinctOsceDayByStudentId(long studId)
+    public static List<Long> findDistinctOsceDayByStudentId(long osceId, long studId)
     {
-    	Log.info("Call findDistinctOsceDayByStudentId for Student id" + studId);	
+    	Log.info("Call findDistinctOsceDayByStudentId for osce Id: "+osceId +"Student id: " + studId);	
 		EntityManager em = entityManager();		
-		String queryString = "select distinct osceDay.id from Assignment where student="+studId;
+		String queryString = "select distinct osceDay.id from Assignment where osceDay in (select distinct od.id from OsceDay as od where od.osce="+osceId + ") and student="+studId+" order by osceDay";		
 		Log.info("Query String: " + queryString);
 		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
 		List<Long> result  = q.getResultList();        
@@ -446,7 +446,9 @@ public class Assignment {
     {
 		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +studentId);	
 		EntityManager em = entityManager();		
-		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + "and student= " + studentId;
+		//[SPEC String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + "and student= " + studentId;
+		String queryString = "select assi from Assignment assi where assi.osceDay="+osceDayId +" and student= " + studentId + " and assi.type=0 order by assi.timeStart";
+		
 		Log.info("Query String: " + queryString);
 		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
 		List<Assignment> result  = q.getResultList();        
@@ -454,11 +456,13 @@ public class Assignment {
         return result;    	    
     }
     
-    public static List<Long> findDistinctOsceDayByExaminerId(long examinerId)
+    public static List<Long> findDistinctOsceDayByExaminerId(long examinerId,long osceId)
     {
-    	Log.info("Call findDistinctOsceDayByExaminerId for Student id" + examinerId);	
+    	Log.info("Call findDistinctOsceDayByExaminerId for Student id" + examinerId + " OsceId: " + osceId);	
 		EntityManager em = entityManager();		
-		String queryString = "select distinct osceDay.id from Assignment where examiner="+examinerId;
+		//String queryString = "select distinct osceDay.id from Assignment where examiner="+examinerId;
+		 
+		String queryString = "select distinct osceDay.id from Assignment where osceDay in (select distinct od.id from OsceDay as od where od.osce="+osceId + ") and examiner="+examinerId+" order by osceDay";
 		Log.info("Query String: " + queryString);
 		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
 		List<Long> result  = q.getResultList();        
@@ -480,7 +484,7 @@ public class Assignment {
     
     public static List<Long> findDistinctPIRByOsceDayAndExaminer(long osceDayId,long examinerId)
     {
-		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +examinerId);	
+		Log.info("Call findDistinctPIRByOsceDayAndExaminer for OsceDay id" + osceDayId + "for Student" +examinerId);	
 		EntityManager em = entityManager();		
 		//select distinct patient_in_role from assignment where osce_day=1 and examiner=5;
 		String queryString = "select distinct patientInRole.id from Assignment where osceDay= "+osceDayId + "and examiner= " + examinerId;
@@ -519,7 +523,7 @@ public class Assignment {
     
     public static List<Long> findDistinctoscePostRoomByOsceDayAndExaminer(long osceDayId,long examinerId)
     {
-		Log.info("Call findAssignmentsByOsceDayAndStudent for OsceDay id" + osceDayId + "for Student" +examinerId);	
+		Log.info("Call findDistinctoscePostRoomByOsceDayAndExaminer for OsceDay id" + osceDayId + "for Student" +examinerId);	
 		EntityManager em = entityManager();		
 		//select distinct patient_in_role from assignment where osce_day=1 and examiner=5;
 		String queryString = "select distinct oscePostRoom.id from Assignment where osceDay= "+osceDayId + "and examiner= " + examinerId;
@@ -726,6 +730,40 @@ public class Assignment {
     	TypedQuery<Assignment> q = em.createQuery(sql, Assignment.class);
     	return q.getResultList();
     }
+    
+    public static List<Assignment> findAssignmentsByOsceDayExaminer(long osceDayId,long examinerId)
+    {
+		Log.info("Call findAssignmentsByOsceDayExaminerAndPIR for OsceDay id" + osceDayId + "for Examiner" +examinerId);	
+		EntityManager em = entityManager();		
+		//String queryString = "select assi from Assignment assi where assi.osceDay in (select distinct od.id from OsceDay as od where od.osce="+osceId + ") and student= " + studentId + " and assi.type=0 order by assi.timeStart";
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.type=2 order by assi.timeStart";
+		//String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.oscePostRoom= "+ pirId;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    
+    public static List<Assignment> findAssignmentBasedOnGivenOsceDayExaminerAndOscePostRoom(long osceDayId,long examinerId,long oscePostRoomId)
+    {
+		Log.info("Call findAssignmentBasedOnGivenOsceDayExaminerAndOscePostRoom for OsceDay id" + osceDayId + "for Examiner" +examinerId +"and OscePostRoom Id: " + oscePostRoomId);	
+		EntityManager em = entityManager();		 
+		//String queryString = "select assi from Assignment assi where assi.osceDay in (select distinct od.id from OsceDay as od where od.osce="+osceId + ") and student= " + studentId + " and assi.type=0 order by assi.timeStart";
+		//String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.type=2 order by assi.timeStart";
+		//String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.oscePostRoom= "+ pirId;
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId + " and assi.examiner= " + examinerId +" and assi.oscePostRoom="+oscePostRoomId+" and assi.type=2 order by assi.timeStart";
+		//select * from assignment where osce_day=97 and examiner=61 and osce_post_room=3121 and type=2;
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    
+    
     
    
 } 

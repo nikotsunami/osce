@@ -409,4 +409,18 @@ public class OscePostRoom {
 		return oprQuery.getResultList().iterator();
     }
     
+    public static List<OscePostRoom> findOscePostRoomByOsceDayAndExaminer(long osceDayId,long examinerId)
+    {
+		Log.info("Call findOscePostRoomByOsceDayAndExaminer for OsceDay id" + osceDayId + "for Examiner" +examinerId);	
+		EntityManager em = entityManager();		 		
+		String queryString = "select opr from OscePostRoom as opr where opr.id in (select distinct assi.oscePostRoom from Assignment as assi where assi.osceDay = "+osceDayId + " and assi.examiner= " + examinerId+ " and assi.type=2 order by assi.timeStart)";
+		
+		Log.info("Query String: " + queryString);
+		TypedQuery<OscePostRoom> q = em.createQuery(queryString,OscePostRoom.class);		
+		List<OscePostRoom> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }
+    
+    
 }

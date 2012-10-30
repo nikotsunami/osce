@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Doctor;
+import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
@@ -126,6 +127,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		String tempMailMessage=null;
 		String tempSPPatientInRole=null;
 			
+		Osce osce=Osce.findOsce(Long.valueOf(osceId));	
+		
 		int index = 0;
 		try {
 			
@@ -256,7 +259,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								//if(tempSp==0)
 								//{
 									if(assignmentStandardizedPatient.getOscePostRoom()!=null)
-										tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+										//tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+										tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+patientInRole.getOscePost().getStandardizedRole().getLongName());
 									else
 										tempOsceDayContent=tempOsceDayContent.replace("[ROLE]","");
 									
@@ -277,8 +281,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								String startTime=""+(assignmentStandardizedPatient.getTimeStart().getHours())+":"+(assignmentStandardizedPatient.getTimeStart().getMinutes())+":"+(assignmentStandardizedPatient.getTimeStart().getSeconds());
 								String endTime=""+(assignmentStandardizedPatient.getTimeEnd().getHours())+":"+(assignmentStandardizedPatient.getTimeEnd().getMinutes())+":"+(assignmentStandardizedPatient.getTimeEnd().getSeconds());
 								
-								tempScheduleContent=tempScheduleContent.replace("[START TIME]", startTime);
-								tempScheduleContent=tempScheduleContent.replace("[END TIME]", endTime);	
+								tempScheduleContent=tempScheduleContent.replace("[START TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeStart()));
+								tempScheduleContent=tempScheduleContent.replace("[END TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeEnd()));	
 								
 								if(assignmentStandardizedPatient.getOscePostRoom()!=null)
 								{
@@ -412,7 +416,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	public String generateStudentPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> studId, Long semesterId)
 	{
 		Log.info("Call generateStudentPDFUsingTemplate : " + studId.size());
-		Log.info("Semester Proxy ID: " + semesterId);
+		System.out.println("Service Osce Proxy Id:" + osceId);
+		System.out.println("Service Student List: " + studId.size());
 		
 		Document document = null;
 		File file = null;
@@ -431,6 +436,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		String tempBreakContentStud; //[BREAK SEPARATOR]
 		String breakContentStud; //[BREAK SEPARATOR]
 		
+		Osce osce=Osce.findOsce(Long.valueOf(osceId));
 
 		int index = 0;
 		try {
@@ -458,8 +464,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			
 			for(int i=0;i<studId.size();i++)
 			{							
-				Log.info("File Content: " + fileContents);
-				Log.info("After Modification: " + mailMessage);
+				//Log.info("File Content: " + fileContents);
+				//Log.info("After Modification: " + mailMessage);
 								
 				Student student= Student.findStudent(studId.get(i));
 				
@@ -504,7 +510,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						Assignment studAssignment = (Assignment) iterator.next();
 						Log.info("Assignment Id:" + studAssignment.getId());	*/
 						
-						List<Long> distinctOsceDay = Assignment.findDistinctOsceDayByStudentId(student.getId());
+						List<Long> distinctOsceDay = Assignment.findDistinctOsceDayByStudentId(osce.getId(),student.getId());
+						// Or Else Find OsceDay By Osce and Then Check Student is not Null
+						
 						Log.info("Total "+ distinctOsceDay.size()+"Distinct Osce Day for Student "+ student.getId());
 						
 						Iterator distinctOsceDayIterator=distinctOsceDay.iterator();
@@ -532,7 +540,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							Log.info("Date "+date+" for Osce Day: " + osceDayEntity.getId());
 							tempOsceDayContentStud=tempOsceDayContentStud.replace("[DATE]",date);														
 							osceDayContentStud=osceDayContentStud+tempOsceDayContentStud;
-							Log.info("OSCE DAY CONTENT: " + osceDayContentStud);
+							//Log.info("OSCE DAY CONTENT: " + osceDayContentStud);
 							mailMessage=mailMessage+osceDayContentStud;
 														
 							while(assignmentIterator.hasNext())
@@ -547,8 +555,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								String startTime=""+(assignment.getTimeStart().getHours())+":"+(assignment.getTimeStart().getMinutes())+":"+(assignment.getTimeStart().getSeconds());
 								String endTime=""+(assignment.getTimeEnd().getHours())+":"+(assignment.getTimeEnd().getMinutes())+":"+(assignment.getTimeEnd().getSeconds());
 								
-								tempScheduleContentStud=tempScheduleContentStud.replace("[START TIME]", startTime);
-								tempScheduleContentStud=tempScheduleContentStud.replace("[END TIME]", endTime);	
+								tempScheduleContentStud=tempScheduleContentStud.replace("[START TIME]", setTimeInTwoDigit(assignment.getTimeStart()));
+								tempScheduleContentStud=tempScheduleContentStud.replace("[END TIME]", setTimeInTwoDigit(assignment.getTimeEnd()));	
 								if(assignment.getOscePostRoom()!=null)
 								{
 									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", assignment.getOscePostRoom().getOscePost().getId().toString());
@@ -605,6 +613,38 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		
 	}
 	
+	public String setTimeInTwoDigit(java.util.Date date) 
+	{
+		System.out.println("Date : " + date);
+						
+		String hour=""+date.getHours();
+		String minute=""+date.getMinutes();
+		String second=""+date.getSeconds();
+		
+		System.out.println(hour+":"+minute+":"+second);
+		
+		String time="";
+		String seperator=":";
+		
+		if(hour.length()==1)
+			time="0"+hour;
+		else
+			time=hour;
+		
+		if(minute.length()==1)
+			time=time+seperator+"0"+minute;
+		else
+			time=time+seperator+minute;
+		
+		if(second.length()==1)
+			time=time+seperator+"0"+second;
+		else
+			time=time+seperator+second;
+		
+		return time;	
+		
+	}
+	
 	@Override
 	@SuppressWarnings("rawtypes")
 	public String generateExaminerPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> examinerId, Long semesterId)
@@ -632,6 +672,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		String breakContentExaminer; //[BREAK SEPARATOR]
 		
 		String scriptDetail=new String();
+		Osce osce=Osce.findOsce(Long.valueOf(osceId));
 		
 		try
 		{
@@ -695,7 +736,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 				mailMessage=titleContentExaminer;				
 				writeInPDFFile(titleContentExaminer,document);
 				
-				List<Long> distinctOsceDay = Assignment.findDistinctOsceDayByExaminerId(examiner.getId());
+				List<Long> distinctOsceDay = Assignment.findDistinctOsceDayByExaminerId(examiner.getId(),osce.getId());
 				Log.info("Total "+ distinctOsceDay.size()+"Distinct Osce Day for Examiner "+ examiner.getId());
 				
 				Iterator distinctOsceDayIterator=distinctOsceDay.iterator();				
@@ -705,19 +746,22 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					Long osceDay=(Long)distinctOsceDayIterator.next();					
 					
 					//&&List<Long> distinctPatientInRoleByOsceDayAndExaminer=Assignment.findDistinctPIRByOsceDayAndExaminer(osceDay,  examiner.getId());
-					List<Long> distinctPatientInRoleByOsceDayAndExaminer=Assignment.findDistinctoscePostRoomByOsceDayAndExaminer(osceDay,  examiner.getId());
-					Iterator distinctPatientInRoleByOsceDayAndExaminerIterator=distinctPatientInRoleByOsceDayAndExaminer.iterator();
+					//List<Long> distinctPatientInRoleByOsceDayAndExaminer=Assignment.findDistinctoscePostRoomByOsceDayAndExaminer(osceDay,  examiner.getId());
+					long newOsceId=Osce.findOsce(Long.valueOf(osceId)).getId();
+					//List<StandardizedRole> standardizedRoleByOsceAndExaminer=StandardizedRole.findStandardizedRoleByOsceIdandExaminerId(newOsceId,  examiner.getId());
+					
+					//Iterator distinctPatientInRoleByOsceDayAndExaminerIterator=distinctPatientInRoleByOsceDayAndExaminer.iterator();
+					//Iterator<StandardizedRole> distinctStandardizedRoleByOsceAndExaminerIterator=standardizedRoleByOsceAndExaminer.iterator();
 					
 					int xyz=0;
-					while(distinctPatientInRoleByOsceDayAndExaminerIterator.hasNext())
-					{
+					//while(distinctStandardizedRoleByOsceAndExaminerIterator.hasNext())
+					//{
 						osceDayContentExaminer="";	
-						scriptDetail="";
+						//scriptDetail="";
 						
-						Long patientInRoleId=(Long)distinctPatientInRoleByOsceDayAndExaminerIterator.next();
-								
-						Log.info("~~~Distinct PatientInRole By OsceDayAndExaminer" + patientInRoleId + "Osce Day: " + osceDay);
+						//StandardizedRole standardizedRole=distinctStandardizedRoleByOsceAndExaminerIterator.next();
 						
+						//Log.info("~~~Distinct StandardizedRole By OsceAndExaminer" + standardizedRole.getId() + "Osce : " + newOsceId);						
 						Log.info("~~~~OSCE DAY: " + osceDay);
 						
 						OsceDay osceDayEntity=OsceDay.findOsceDay(osceDay);
@@ -735,8 +779,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[DATE]",date);
 
 						//&&List<Assignment> assignment=Assignment.findAssignmentsByOsceDayExaminerAndPIR(osceDay, examiner.getId(),patientInRoleId);
-						List<Assignment> assignment=Assignment.findAssignmentsByOsceDayExaminerAndOscePostRoomId(osceDay, examiner.getId(),patientInRoleId);
-						
+						List<Assignment> assignment=Assignment.findAssignmentsByOsceDayExaminer(osceDay, examiner.getId());
+												
 						//List<Assignment> assignment=Assignment.findAssignmentsByOsceDayExaminerAndPIR(osceDay, examiner.getId(),3);
 						Iterator assignmentIterator=assignment.iterator();
 									
@@ -745,7 +789,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						{
 														
 							Assignment assignmentExaminer=(Assignment)assignmentIterator.next();
-							Log.info("Assignment: "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in PatientInRole " + patientInRoleId);
+							//Log.info("Assignment: "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in PatientInRole " + patientInRoleId);
 							if(assignmentExaminer.getOscePostRoom()!=null)
 								tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]",""+assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());							
 							else
@@ -758,8 +802,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							String startTime=""+(assignmentExaminer.getTimeStart().getHours())+":"+(assignmentExaminer.getTimeStart().getMinutes())+":"+(assignmentExaminer.getTimeStart().getSeconds());
 							String endTime=""+(assignmentExaminer.getTimeEnd().getHours())+":"+(assignmentExaminer.getTimeEnd().getMinutes())+":"+(assignmentExaminer.getTimeEnd().getSeconds());
 							
-							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[START TIME]", startTime);
-							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[END TIME]", endTime);	
+							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[START TIME]", setTimeInTwoDigit(assignmentExaminer.getTimeStart()));
+							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[END TIME]", setTimeInTwoDigit(assignmentExaminer.getTimeEnd()));	
 							
 							if(assignmentExaminer.getOscePostRoom()!=null)
 							{
@@ -794,7 +838,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						{
 														
 							Assignment assignmentExaminer=(Assignment)assignmentIterator1.next();
-							Log.info("Assignment1 : "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in PatientInRole " + patientInRoleId);
+							////Log.info("Assignment1 : "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in StandardizedRole " + standardizedRole.getId());
 							Log.info("tempEx1 : " + tempEx1);
 							if(tempEx1==0)
 							{								
@@ -813,7 +857,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						
 						//scriptDetail=scriptDetail.replace("[]","");
 						//mailMessage=mailMessage+scriptDetail;
-					}
+					//}
 															
 					
 				}

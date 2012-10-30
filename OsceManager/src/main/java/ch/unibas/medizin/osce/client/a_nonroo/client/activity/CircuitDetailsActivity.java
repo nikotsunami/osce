@@ -2272,12 +2272,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																			@Override
 																			public void onSuccess(
 																					Object response) {
-																				Log.info("~Success Call....");	
+																				Log.info("~Success Call...." + ((OscePostBlueprintProxy)response).getId());	
 																				//Module 5 bug Report Change	
-																				//newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response)),""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
-																				//spec[
-																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, oscePostBlueprintProxyNew,""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
-																				//spec]
+																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response)),""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
 																				//E Module 5 bug Report Change	
 																			}
 																	
@@ -2464,15 +2461,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					oscePostViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR MAIN POST VIEW	
 					
 					oscePostViewImpl.getPostTypeLbl().setText(enumConstants.getString(oscePostBlueprintProxy.getPostType().name()));	
-					if(oscePostSubViewImpl == null){
+					/*if(oscePostSubViewImpl == null){
 						oscePostSubViewImpl = new ArrayList<OscePostSubViewImpl>();
-					}
-					oscePostSubViewImpl.add(tempOscePostSubViewImpl);	
+					}*/
+					
 					tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity);
-					tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
-					//oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW						
+					/////tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
+					/*oscePostSubViewImpl.add(tempOscePostSubViewImpl);	*/
+//oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW						
 					oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImpl);	// ADD SUBVIEW IN POSTVIEW
-					oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	
+					/*oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	*/
 					oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
 					
 					if(oscePostBlueprintProxy.getPostType()==PostType.ANAMNESIS_THERAPY || oscePostBlueprintProxy.getPostType()==PostType.PREPARATION)
@@ -2480,24 +2478,30 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						Log.info("~Anemnis");				
 							
 						OscePostSubViewImpl tempOscePostSubViewImplNext=new OscePostSubViewImpl();
+							tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
+							tempOscePostSubViewImplNext.setDelegate(circuitDetailsActivity);
+							
 							tempOscePostSubViewImplNext.enableDisableforBluePrintStatus();	
 							tempOscePostSubViewImplNext.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR SUBVIEW
 							tempOscePostSubViewImplNext.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxyNext.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxyNext.getSpecialisation().getName()));
 							tempOscePostSubViewImplNext.getSpecializationLbl().setTitle(oscePostBlueprintProxyNext.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxyNext.getSpecialisation().getName());
 							tempOscePostSubViewImplNext.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName()));
 							tempOscePostSubViewImplNext.getRoleTopicLbl().setTitle(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName());
-							oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
+							
+							////oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
 							
 							setProxy(tempOscePostSubViewImplNext, oscePostBlueprintProxyNext.getSpecialisation());
 							setProxy(tempOscePostSubViewImplNext, oscePostBlueprintProxyNext.getRoleTopic());
 							
 							tempOscePostSubViewImplNext.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostBlueprintProxyNext.getSequenceNumber()));
 							tempOscePostSubViewImplNext.getPostNameLbl().setTitle(constants.circuitStation() + " " + oscePostBlueprintProxyNext.getSequenceNumber());
-							tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
+							//tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
 							Log.info("OsceBluerint Next Id: " + oscePostBlueprintProxyNext.getId());												
-							oscePostSubViewImpl.add(tempOscePostSubViewImplNext);	
-							oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity);
-							innerindex++;																							
+							/*oscePostSubViewImpl.add(tempOscePostSubViewImplNext);	
+							oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxyNext;
+							oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
+							oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity);*/
+							//innerindex++;																							
 							
 							//Module 5 bug Report Change	
 							Log.info("Post Type: " + postType);					
@@ -2516,10 +2520,12 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							Log.info("Total Widget Before Adding: " + oscePostViewImpl.getOscePostSubViewHP().getWidgetCount());
 							//E Module 5 bug Report Change
 							oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImplNext);	// ADD SUBVIEW IN POSTVIEW	
-							oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
-							oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-							oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;	
-							
+							/*/////oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
+							/////oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;*/
+							/////oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW							
+							/////oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxyNext;
+							/////oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;	
+							innerindex++;
 																																											
 					}	
 					
@@ -2533,6 +2539,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				{
 					
 					Log.info("~specializationEditClicked() from Activity");
+					Log.info("~OscePostBlueprint: " + oscePostSubViewImpledit.oscePostBlueprintProxy.getId());					
 					
 					// Module 5 bug Report Change
 						//oscePostSubViewImpledit.oscePostBlueprintProxy=this.oscePostBlueprintProxy;
