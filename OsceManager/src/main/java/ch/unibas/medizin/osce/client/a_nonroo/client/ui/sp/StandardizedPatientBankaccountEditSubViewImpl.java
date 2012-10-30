@@ -52,7 +52,7 @@ public class StandardizedPatientBankaccountEditSubViewImpl extends Composite imp
 	@UiField
 	TextBox IBAN;
 	@UiField
-	IntegerBox postalCode;
+	TextBox postalCode;
 	@UiField
 	TextBox city;
 	
