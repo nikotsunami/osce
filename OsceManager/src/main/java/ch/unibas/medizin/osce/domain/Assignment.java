@@ -762,7 +762,34 @@ public class Assignment {
         return result;    	    
     }
     
+    //by spec[
+    public static void updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT a FROM Assignment AS a WHERE a.osceDay = " + osceDayId +" AND a.timeEnd > " + endTimeSlot;
+    	TypedQuery<Assignment> q = em.createQuery(sql, Assignment.class);
+    	
+    	Iterator<Assignment> assList = q.getResultList().iterator();
+    	
+    	while (assList.hasNext())
+    	{
+    		Assignment ass = assList.next();
+    		
+    		Date timeStartDt = dateAddMin(ass.getTimeStart(), diff);
+    		Date timeEndDt = dateAddMin(ass.getTimeEnd(), diff);
+    		
+    		ass.setTimeStart(timeStartDt);
+    		ass.setTimeEnd(timeEndDt);
+    		
+    		ass.persist();    		
+    	}
+    	
+    }
     
+    public static Date dateAddMin(Date date, long minToAdd) {
+		return new Date((long) (date.getTime() + minToAdd * 60 * 1000));
+	}
+    //by spec]
     
     
    

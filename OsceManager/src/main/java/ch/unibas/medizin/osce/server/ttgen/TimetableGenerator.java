@@ -192,8 +192,15 @@ public class TimetableGenerator {
 		int parcourIndex = 0;
 		int rotationIndex = 0;
 		for(int i = 0; i < diff; i++) {
-			rotations[parcourIndex].set(rotationIndex, numberPostsNew);
-
+			//rotations[parcourIndex].set(rotationIndex, numberPostsNew);
+			
+			//by spec bug fix[
+			if (rotations[parcourIndex].size() > (rotationIndex + 1))
+				rotations[parcourIndex].set(rotationIndex, numberPostsNew);
+			else
+				rotations[parcourIndex].add(rotationIndex, numberPostsNew);
+			//by spec bug fix]
+			
 			if(parcourIndex >= rotations.length - 1) {
 				parcourIndex = 0;
 
@@ -988,7 +995,10 @@ public class TimetableGenerator {
 		List<OsceSequence> osceSequences = new ArrayList<OsceSequence>();
 		
 		// only one day --> seq A in the morning, seq B in the afternoon
-		if(days.size() == 1) {
+		//by spec bug fix[
+		if(days.size() == 1 && rotationsByDay.get(0) > 1) {
+		//by spec bug fix]
+		//if(days.size() == 1) {
 			OsceDay osceDay = days.iterator().next();
 			
 			log.info("rotations for day 0:" + rotationsByDay.get(0));
@@ -1126,7 +1136,13 @@ public class TimetableGenerator {
 			{
 				log.info("remove Day going to be deleted");
 				osce.getOsce_days().remove(rmOsceDay);
-				rmOsceDay.remove();
+				
+				//by spec bug fix
+				if (rmOsceDay != null)
+					rmOsceDay.remove();
+				//by spec bug fix
+
+				//rmOsceDay.remove();
 				log.info("OSCEday removed");
 			}
 			
@@ -1903,6 +1919,10 @@ public class TimetableGenerator {
 		// first be 0 and 4 after first iteration of sequences)	
 		int rotationOffset = 0;
 		
+		//by spec split change[
+		int rotationOffsetPrev = 0;
+		//by spec split change]
+		
 		int studentIndexLowerBound = 1;
 		
 		// iterate over all days
@@ -1924,6 +1944,10 @@ public class TimetableGenerator {
 			
 			// iterate over sequences ("A", "B", etc.)
 			Iterator<OsceSequence> itSeq = osceDay.getOsceSequences().iterator();
+			
+			//by spec split change[
+			rotationOffsetPrev = 0;
+			//by spec split change]
 			while (itSeq.hasNext()) {
 				OsceSequence osceSequence = (OsceSequence) itSeq.next();
 				
@@ -1961,7 +1985,13 @@ public class TimetableGenerator {
 						/*if (rotationStr.length > rotationOffset)
 							s = rotationStr[currRotationNumber];
 						else	*/
+						
+						//by spec split change[
+						if (rotationOffset > 0 && osceDay.getOsceSequences().size() == 2)
+							s = rotationStr[currRotationNumber - rotationOffsetPrev];
+						else
 							s = rotationStr[currRotationNumber - rotationOffset];
+						//by spec split change]
 						
 						String[] temp = s.split(":");
 						
@@ -1971,6 +2001,11 @@ public class TimetableGenerator {
 				
 						int numberBreakPosts = rotations[parcourIndex].get(currRotationNumber);
 						int numberSlotsTotal = posts.size() + numberBreakPosts;
+					
+						//by spec bug fix[
+						if (numberSlotsTotal > osce.getMaxNumberStudents())
+							numberSlotsTotal = osce.getMaxNumberStudents();
+						//by spec bug fix]
 						
 						Set<Assignment> assThisRotation = new HashSet<Assignment>();
 						
@@ -2296,7 +2331,10 @@ public class TimetableGenerator {
 				// add lunch break after sequence one (WARNING: more than two sequences a day is not taken into account!)
 				if(osceDay.getOsceSequences().size() > 1)
 					sequenceStartTime = dateAddMin(time, osce.getLunchBreak());
-				
+
+				//by spec split change[
+				rotationOffsetPrev = rotationOffset;
+				//by spec split change]
 				rotationOffset += osceSequence.getNumberRotation();
 			}
 			

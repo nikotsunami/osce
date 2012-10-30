@@ -51,13 +51,48 @@ public class OsceSequence {
 			
 		 	log.info("Inside splitSequence");
 		 	
+		 	//by spec split change[
+		 	int lunchBreak = osceSequence.getOsceDay().getOsce().getLunchBreak();
+		 	String rotationStr = osceSequence.getOsceDay().getBreakByRotation();
+		 	int numberRotation = 0;
+		 	//by spec split change]
+		 	
 		 	OsceSequence newOsceSequence = new OsceSequence();
 			newOsceSequence.setLabel(osceSequence.getLabel());
 			//Module 5 Bug Report Solution
 			//newOsceSequence.setNumberRotation(osceSequence.getNumberRotation());
-			osceSequence.setNumberRotation((osceSequence.getNumberRotation()-1));
+			
+			//by spec split change[
+			if (rotationStr.contains(String.valueOf(lunchBreak)))
+			{
+				String[] str = rotationStr.split("-");
+				
+				for (int i=0; i<rotationStr.length(); i++)
+				{
+					String temp = str[i];
+					if (temp.contains(String.valueOf(lunchBreak)))
+					{
+						numberRotation = i + 1;
+						break;
+					}
+				}
+				int temp = osceSequence.getNumberRotation();
+				osceSequence.setNumberRotation(numberRotation);
+				osceSequence.persist();
+				newOsceSequence.setNumberRotation(temp - numberRotation);
+			}
+			else
+			{
+				numberRotation = osceSequence.getNumberRotation();
+				osceSequence.setNumberRotation((numberRotation / 2));
+				osceSequence.persist();
+				newOsceSequence.setNumberRotation(numberRotation - (numberRotation / 2));
+			}			
+			//by spec split change]
+			
+			/*osceSequence.setNumberRotation((osceSequence.getNumberRotation()-1));
 			osceSequence.persist();
-			newOsceSequence.setNumberRotation(1);
+			newOsceSequence.setNumberRotation(1);*/
 			//E Module 5 Bug Report Solution
 			
 			/*// Module 5 bug Report Change
