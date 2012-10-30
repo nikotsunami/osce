@@ -26,7 +26,7 @@
 		</tr>
 		<tr>
 			<td><span class="{style.label}" ui:field="labelBankPlz" /></td>
-			<td><g:IntegerBox ui:field="postalCode" /></td>
+			<td><g:TextBox ui:field="postalCode" /></td>
 			<td><span class="{style.label}" ui:field="labelBankCity" /></td>
 			<td><g:TextBox ui:field="city" /></td>
 		</tr>
