@@ -233,7 +233,7 @@ public class Assignment {
     }
     
     //retrieve Logical break post
-    public static List<Assignment> retrieveAssignmentOfLogicalBreakPost(Long osceDayId,Long osceSequenceId,Long courseId)
+    public static List<Assignment> retrieveAssignmentOfLogicalBreakPost(Long osceDayId,Long osceSequenceId)
     {
     	Log.info("retrieveAssignmentOfLogicalBreakPost :");
     	 EntityManager em = entityManager();

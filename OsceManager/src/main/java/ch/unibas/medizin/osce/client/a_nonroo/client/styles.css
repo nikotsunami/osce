@@ -601,7 +601,7 @@ body {
 	max-height: 20px;
 	min-height: 20px;
 	padding-left: 8px;
-	padding-right: 8px;
+	/*padding-right: 8px;*/
 	padding-top: 3px;
 	/*margin-bottom: 5px;*/
 	border-color: #808080;
@@ -679,5 +679,85 @@ body {
 	border-radius: 19px 19px 19px 19px;
 	background-color: white;
 }
-
+.sequenceVP{
+		margin-top:80px;
+		margin-right:10px;
+}
 /*  E Change in ParcourView */
+
+/* module 16 start*/
+
+.icon{
+		margin: 3px;
+		width: 10px;
+		min-width: 13px;
+	}
+	.sequenceHeader{
+		border: none;
+		border-radius:0px;
+		background-color: rgb(74,149,171);
+		max-height: 25px;
+		min-height: 20px;
+		
+	}
+	.itemHeader{
+		border: 1px;
+		border-radius:0px;
+		background-color: rgb(189,217,225);
+		max-height: 25px;
+		min-height: 20px;
+		border-color: #4A95AB !important;
+		margin: 1px;
+	}
+	.sequenceContent{
+		border: none;
+		border-radius:0px;
+		background-color: rgb(74,149,171);
+	}
+	.sequenceLabel{
+		color: white;
+		text-transform:capitalize;
+		font-size:14px;
+		width :100%;
+		/*min-width: 515px;*/
+		/*max-width: 515px;*/
+	}
+	.sequenceHeader :HOVER {
+		background-color: rgb(70,138,174);
+		cursor: pointer;
+	}
+	
+	.postViewHP{
+	position:absolute;
+	left: 486px;
+	top: 0px;
+	
+	}
+	.postDataHP{
+	
+		
+	}
+	.postData{
+	
+		border: none;
+		margin-right:4px;
+		background-color: rgb(132,183,198);
+		width: 70px;
+		min-width: 70px;
+		max-width: 70px;
+		padding: 5px;
+		height: 100%;
+		border-bottom: 0px;
+		border-top: 0px;
+		text-align: center;
+		
+	}
+	.postData:HOVER {
+		background-color: rgb(132,183,198) !important;
+		cursor: default !important;
+	}
+	.sumPerSequenceLbl{
+		min-width: 200px;
+		text-transform:capitalize;
+	}
+/* module 16 end */
