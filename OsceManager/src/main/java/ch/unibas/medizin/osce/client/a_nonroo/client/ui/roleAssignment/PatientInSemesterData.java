@@ -72,7 +72,10 @@ public class PatientInSemesterData {
 				// boolean accepted = (!((patientInSemesterProxy.getAccepted()
 				// != null) ? patientInSemesterProxy
 				// .getAccepted().booleanValue() : false));
+				
+				final int row = delegate.getSelectedRow();
 				delegate.onRowSelected(PatientInSemesterData.this.rowNumber);
+				delegate.onDeleteClicked(row);
 				delegate.onAcceptedClick(patientInSemesterData);// getIndex(),
 																// accepted);
 
