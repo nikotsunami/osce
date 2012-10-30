@@ -1781,7 +1781,6 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 									@Override
 									public void onSuccess(Void response) {
 										Log.info("In Success");
-
 										requests.find(
 												patientInSemesterData
 														.getPatientInSemesterProxy()
@@ -2803,6 +2802,21 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			// module 3 bug }
 
 			osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("mainNavPanel");
+			VerticalPanel sequenceVP=osceDaySubViewImpl.getSequenceVP();
+			for(int i=0;i<(sequenceVP.getWidgetCount());i=i=i+2)
+			{
+			//	if(i%2==0)
+				{
+					HorizontalPanel mainHP=(HorizontalPanel)sequenceVP.getWidget(i);
+					AbsolutePanel roleAP=(AbsolutePanel)mainHP.getWidget(0);
+					HorizontalPanel roleHP=(HorizontalPanel)roleAP.getWidget(0);
+					for(int j=1;j<roleHP.getWidgetCount();j++)
+					{
+						RoleSubViewImpl roleSubView=(RoleSubViewImpl)roleHP.getWidget(j);
+						roleSubView.getRoleHeader().getWidget().removeStyleName("highlight-role");
+					}
+				}
+			}	
 			 /*
 				Registration of RoleFulfill Criteria Event
 				
@@ -2888,7 +2902,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					for(int j=1;j<roleHP.getWidgetCount();j++)
 					{
 						RoleSubViewImpl roleSubView=(RoleSubViewImpl)roleHP.getWidget(j);
-						roleSubView.getRoleHeader().getWidget().removeStyleName("highlight-role");
+	//					roleSubView.getRoleHeader().getWidget().removeStyleName("highlight-role");
 						if(roleProxies.contains(roleSubView.getRoleProxy()))
 						{
 							roleSubView.getRoleHeader().getWidget().addStyleName("highlight-role");
