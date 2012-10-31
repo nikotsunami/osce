@@ -30,6 +30,36 @@ public class StudentViewImpl extends Composite implements StudentView{
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
+	private Long osceDayId;
+	
+	public Long getOsceDayId() {
+		return osceDayId;
+	}
+
+	public void setOsceDayId(Long osceDayId) {
+		this.osceDayId = osceDayId;
+	}
+
+	private Long breakDuration;
+	
+	public Long getBreakDuration() {
+		return breakDuration;
+	}
+
+	public void setBreakDuration(Long breakDuration) {
+		this.breakDuration = breakDuration;
+	}
+
+	private AssignmentProxy previousAssignment;
+	
+	public AssignmentProxy getPreviousAssignment() {
+		return previousAssignment;
+	}
+
+	public void setPreviousAssignment(AssignmentProxy previousAssignment) {
+		this.previousAssignment = previousAssignment;
+	}
+
 	@UiField
 	Label studentLbl;
 	
@@ -70,6 +100,12 @@ public class StudentViewImpl extends Composite implements StudentView{
 	public void studentPanelClicked(ClickEvent event)
 	{
 		Log.info("studentPanel Clicked");
+		
+		
+		if(previousAssignment !=null)
+		{
+			showBreakBurationPopupView();
+		}
 		if(assignmentProxy == null)
 			return;
 		
@@ -79,10 +115,72 @@ public class StudentViewImpl extends Composite implements StudentView{
 			dialgoBox.showConfirmationDialog(constants.studentNotAssigned());
 		}
 		else*/
+		else
 		{
 			showStudentPopupView();
 			
 		}
+	}
+	
+	public void showBreakBurationPopupView()
+	{
+		if(popupView==null)
+		{
+			popupView=new PopupViewImpl();
+			popupView.createEditBreakDurationPopupView();
+			
+			((PopupViewImpl)popupView).setAnimationEnabled(true);
+		
+			
+			
+			
+			//((PopupViewImpl)popupView).setWidth("150px");
+
+		
+			RootPanel.get().add(((PopupViewImpl)popupView));
+			
+			
+			
+			
+			popupView.getOkButton().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					//validate Entered Data
+					if(previousAssignment!=null)
+					{
+						if(popupView.getBreakDuration().getValue()==null || popupView.getBreakDuration().getValue() <0)
+						{
+							MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+							dialogBox.showConfirmationDialog(constants.newBreakDurationNotNull());
+						}
+						else
+						{
+							delegate.shiftBreak(osceDayId,previousAssignment.getTimeEnd(),(popupView.getBreakDuration().getValue()-breakDuration.intValue()),popupView);
+						}
+					}
+					
+					
+				}
+			});
+			
+			popupView.getCancelButton().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					((PopupViewImpl)popupView).hide();
+					
+				}
+			});
+			
+			
+			((PopupViewImpl)popupView).getExaminerNameValue().setWidth("80px");
+			
+			
+		}
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-135);
+		((PopupViewImpl)popupView).getExaminerNameValue().setText(breakDuration+"");
+		((PopupViewImpl)popupView).show();
 	}
 	public void showStudentPopupView()
 	{

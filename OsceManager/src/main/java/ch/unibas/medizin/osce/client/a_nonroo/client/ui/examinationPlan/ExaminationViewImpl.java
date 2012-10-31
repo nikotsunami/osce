@@ -14,6 +14,10 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -23,7 +27,9 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class ExaminationViewImpl extends Composite implements  ExaminationView{
 
@@ -295,7 +301,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 				}
 			});
 			//set data in information popup view
-			examInfoPopupView.getExaminerNameValue().setText(assignmentProxy.getExaminer().getName());
+			examInfoPopupView.getExaminerNameValue().setText(assignmentProxy.getExaminer().getPreName()+" "+assignmentProxy.getExaminer().getName());
 		
 			examInfoPopupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
 			examInfoPopupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
@@ -351,6 +357,8 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 					((PopupViewImpl)popupView).hide();
 				}
 			});
+			
+			
 		}
 		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-180);
 		((PopupViewImpl)popupView).show();

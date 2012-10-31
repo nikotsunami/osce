@@ -3604,3 +3604,10 @@ color: #f1b532;
 		background-color: rgb(151,197,210) !important;
 	}
 /* Module 16 end*/
+
+.empty-bg-student{
+	background-color: rgb(229,238,255) !important;
+}
+.empty-bg-student:HOVER{
+	background-color: rgb(196,217,255) !important;
+}

@@ -766,9 +766,9 @@ public class Assignment {
     public static void updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot)
     {
     	EntityManager em = entityManager();
-    	String sql = "SELECT a FROM Assignment AS a WHERE a.osceDay = " + osceDayId +" AND a.timeEnd > " + endTimeSlot;
+    	String sql = "SELECT a FROM Assignment AS a WHERE a.osceDay = " + osceDayId +" AND a.timeEnd > :endTimeSlot";
     	TypedQuery<Assignment> q = em.createQuery(sql, Assignment.class);
-    	
+    	q.setParameter("endTimeSlot", endTimeSlot);
     	Iterator<Assignment> assList = q.getResultList().iterator();
     	
     	while (assList.hasNext())

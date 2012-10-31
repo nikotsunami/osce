@@ -5,6 +5,7 @@ import java.util.Date;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -49,4 +50,8 @@ public interface PopupView extends IsWidget {
 	public Label getExaminerNameValue() ;
 	
 	public Button getSaveBtn();
+	
+	public void createEditBreakDurationPopupView();
+	
+	public IntegerBox getBreakDuration() ;
 }

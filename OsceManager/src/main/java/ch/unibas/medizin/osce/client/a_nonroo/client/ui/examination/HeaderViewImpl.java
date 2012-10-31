@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,6 +48,8 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 	ContentView contentView;
 	
 	HeaderViewImpl view;
+	
+	public SimplePanel contentSp;
 	
 	@UiHandler("btnColorPicker")
 	public void btnColorPickerClicked(ClickEvent event)

@@ -117,9 +117,10 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 		header.setStylePrimaryName(getStylePrimaryName()+"-title");
 		header.addStyleName("tabStyle");
 		header.addStyleName("patientTopContainer");
+		
 		sp=new SimplePanel();
 		sp.setWidget(content);
-		
+		((HeaderViewImpl)header).contentSp=sp;
 		final SimplePanel contentSP=sp;
 	/*	header.addHandler(new ClickHandler() {
 			

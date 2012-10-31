@@ -29,7 +29,7 @@
 	<g:HorizontalPanel spacing="10" width="100%">
 		<g:Label ui:field="nameLbl" visible="false" addStyleNames="{style.label}"></g:Label>
 		<g:Label ui:field="nameValue" visible="false" addStyleNames="{style.label}"></g:Label>
-		
+		<g:IntegerBox ui:field="breakDuration"></g:IntegerBox>
 	</g:HorizontalPanel>
 	<g:HorizontalPanel spacing="10" width="100%">
 		<g:Label ui:field="startTimeLbl" visible="false" addStyleNames="{style.label}"></g:Label>
