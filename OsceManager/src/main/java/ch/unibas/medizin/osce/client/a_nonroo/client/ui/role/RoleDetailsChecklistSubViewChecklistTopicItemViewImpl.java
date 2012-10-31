@@ -476,8 +476,8 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					{*/
 											
 					//SPEC Change
-					if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue())){
-					
+					//if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue())){
+					if(Validator.isNotNull(topicPopup.getTopicTxtBox().getValue())){
 					delegate.updateCheckListTopic(proxy,topicPopup.getTopicTxtBox().getValue(),topicPopup.getDescriptionTxtBox().getValue(),topicView);
 					}else{
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());

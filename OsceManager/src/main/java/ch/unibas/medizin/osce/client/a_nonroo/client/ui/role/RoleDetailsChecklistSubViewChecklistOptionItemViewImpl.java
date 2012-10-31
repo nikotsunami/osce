@@ -50,16 +50,16 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 		this.optionLbl = optionLbl;
 	}
 
-	public Label getOptionValueLbl() {
+	/*public Label getOptionValueLbl() {
 		return optionValueLbl;
 	}
 
 	public void setOptionValueLbl(Label optionValueLbl) {
 		this.optionValueLbl = optionValueLbl;
-	}
+	}*/
 
-	@UiField
-	Label optionValueLbl;
+	/*@UiField
+	Label optionValueLbl;*/
 	
 	@UiField
 	IconButton deleteBtn;

@@ -49,17 +49,28 @@
 		padding-left: 3px;
 		padding-right: 2px;
 	}
+	.patientControlsnew {
+	border-radius: 12px 12px 12px 12px;
+	background-color: #EBEBEB;
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	
+	margin-bottom: 8px;
+}
 </ui:style>
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
 
 
 <g:HTMLPanel styleName="{style.criteria}">
-	<g:HorizontalPanel addStyleNames="{style.patientControls}"
+	<g:HorizontalPanel addStyleNames="{style.patientControlsnew}"
 	spacing="4" ui:field="opinionHP">
-	<g:VerticalPanel height="50px">
-		<g:Label ui:field="optionLbl" width="75px" wordWrap="true"></g:Label>
-		<g:Label ui:field="optionValueLbl" addStyleNames="{style.optionLbl}"
-			width="25px"></g:Label>
+	<g:VerticalPanel height="25px">
+		<g:Label ui:field="optionLbl" width="75px" wordWrap="true" height="10px"></g:Label>
+		<!-- <g:Label ui:field="optionValueLbl" addStyleNames="{style.optionLbl}"
+			width="25px" height="10px"></g:Label> -->
 	</g:VerticalPanel>
 	<my:IconButton ui:field="editBtn" icon="pencil"></my:IconButton>
 	<my:IconButton ui:field="deleteBtn" icon="trash"></my:IconButton>

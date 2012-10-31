@@ -23,7 +23,7 @@ public interface RoleDetailsChecklistSubViewChecklistOptionItemView  extends IsW
 	}
  Label getOptionLbl();
 	
-	public Label getOptionValueLbl();
+	//public Label getOptionValueLbl();
 	
 	public ChecklistOptionProxy getProxy();
 	

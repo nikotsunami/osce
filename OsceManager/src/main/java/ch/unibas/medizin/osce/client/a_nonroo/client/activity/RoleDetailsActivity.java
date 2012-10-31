@@ -142,6 +142,7 @@ import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
@@ -2338,7 +2339,10 @@ final int index2 = index;
 		public void createCriteriaView(int selectedTab,ChecklistCriteriaProxy proxy,RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
 		{
 			RoleDetailsChecklistSubViewChecklistCriteriaItemView view=new RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl();
-			view.getCriteriaLbl().setText(proxy.getCriteria());
+			//view.getCriteriaLbl().setText(proxy.getCriteria());
+			//change for design 
+			view.getCriteriaLbl().setText(util.getFormatedString(proxy.getCriteria(),10));
+			view.getCriteriaLbl().setTitle(proxy.getCriteria());
 			view.setProxy(proxy);
 			view.setDelegate(this);
 			questionView.getCriteriaDragController().makeDraggable(view.asWidget(),view.getCriteriaLbl());
@@ -2382,7 +2386,19 @@ final int index2 = index;
 		{
 			RoleDetailsChecklistSubViewChecklistOptionItemView view=new RoleDetailsChecklistSubViewChecklistOptionItemViewImpl();
 			view.getOptionLbl().setText(optionProxy.getOptionName());
-			view.getOptionValueLbl().setText(optionProxy.getValue());
+			//change for design 
+			//util.getFormatedString(text, length);
+			view.getOptionLbl().setText(util.getFormatedString(optionProxy.getOptionName(), 10));
+			view.getOptionLbl().setTitle(optionProxy.getOptionName());
+			if(optionProxy.getValue()!=null)
+			{
+				//view.getOptionLbl().setText(view.getOptionLbl().getText() +"("+ optionProxy.getValue() +")");
+				view.getOptionLbl().setText(util.getFormatedString(optionProxy.getOptionName()+"("+ optionProxy.getValue() +")", 10));
+				view.getOptionLbl().setTitle(optionProxy.getOptionName()+"("+ optionProxy.getValue() +")");
+				//view.getOptionLbl().setTitle(view.getOptionLbl().getText());
+			}
+			//change for design
+			//view.getOptionValueLbl().setText(optionProxy.getValue());
 			view.setProxy(optionProxy);
 			view.setDelegate(this);
 			questionView.getOptionDragController().makeDraggable(view.asWidget(), view.getOptionLbl());
@@ -2426,7 +2442,7 @@ final int index2 = index;
 					
 					proxy.setTitle(topicname);
 					proxy.setDescription(description);
-					
+					final ChecklistTopicProxy finalProxy=proxy;
 					Log.info("Map Size: " + topicView.getChecklistTopicMap().size());
 					checklisttopicreq.persist().using(proxy).fire(new OSCEReceiver<Void>(topicView.getChecklistTopicMap()) 
 					{
@@ -2435,6 +2451,7 @@ final int index2 = index;
 						public void onSuccess(Void arg0) {
 							// TODO Auto-generated method stub
 							((CheckListTopicPopupViewImpl)topicView.topicPopup).hide(true);
+							topicView.setProxy(finalProxy);
 							topicView.checkListTopicLbl.setText(topicname);
 							topicView.descriptionLbl.setText(description);
 							Log.debug("Record Updated Successfully");
@@ -3037,6 +3054,8 @@ final int index2 = index;
 			questionProxy.setInstruction(instruction);
 			// Highlight onViolation	
 			Log.info("Map Size: " + questionView.getChecklistQuestionMap().size());
+			 final ChecklistQuestionProxy finalquestionProxy=questionProxy;
+				
 			request.persist().using(questionProxy).fire(new OSCEReceiver<Void>(questionView.getChecklistQuestionMap()) {
 			// E Highlight onViolation
 				
@@ -3044,6 +3063,7 @@ final int index2 = index;
 				public void onSuccess(Void response) {
 					questionView.questionItemLbl.setText(question);
 					questionView.questionInstruction.setText(instruction);
+					questionView.setProxy(finalquestionProxy);
 					// Highlight onViolation	
 					((CheckListTopicPopupViewImpl)(questionView.editquestionpopup)).hide();
 					// E Highlight onViolation
@@ -7122,8 +7142,18 @@ public void onDragStart(DragStartEvent event) {
 				Log.info("Option Saved Successfully");	
 				// E Highlight onViolation
 				//createOptionView(selectedtab,proxy,questionView);
-				optionView.getOptionLbl().setText(topic);
-				optionView.getOptionValueLbl().setText(description);
+				//optionView.getOptionLbl().setText(topic);
+				optionView.getOptionLbl().setText(util.getFormatedString(topic, 10));
+				//change for design
+				optionView.getOptionLbl().setTitle(topic);
+				if(description!=null)
+				{
+				/*optionView.getOptionLbl().setText(optionView.getOptionLbl().getText() +"("+ description +")");
+				optionView.getOptionLbl().setTitle(optionView.getOptionLbl().getText() );*/
+					optionView.getOptionLbl().setText(util.getFormatedString(topic +"("+ description +")",10));
+					optionView.getOptionLbl().setTitle(topic +"("+ description +")");
+				}
+				//optionView.getOptionValueLbl().setText(description);
 			}
 		});
 		
@@ -7144,7 +7174,10 @@ public void onDragStart(DragStartEvent event) {
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Criteria Saved Successfully");
-				criteriaView.getCriteriaLbl().setText(criteria);
+				//criteriaView.getCriteriaLbl().setText(criteria);
+				//change for design
+				criteriaView.getCriteriaLbl().setText(util.getFormatedString(criteria,10));
+				criteriaView.getCriteriaLbl().setTitle(criteria);
 			}
 		});
 		criteriaView.setProxy(proxy);
