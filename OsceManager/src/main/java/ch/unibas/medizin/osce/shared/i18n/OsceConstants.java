@@ -96,6 +96,8 @@ public interface OsceConstants extends Constants {
 
 	public String author();
 
+	public String average();
+
 	public String aviableRole();
 
 	public String bank();
@@ -138,6 +140,8 @@ public interface OsceConstants extends Constants {
 
 	public String bmi();
 
+	public String calculate();
+
 	public String cancel();
 
 	public String changesDiscarded();
@@ -179,6 +183,8 @@ public interface OsceConstants extends Constants {
 	public String classiTopic();
 
 	public String clearAll();
+
+	public String clearSelection();
 
 	public String clinic();
 
@@ -248,6 +254,8 @@ public interface OsceConstants extends Constants {
 
 	public String criterion();
 
+	public String cronbachsAlpha();
+
 	public String csvFileError();
 
 	public String dataPastDateWarning();
@@ -275,6 +283,10 @@ public interface OsceConstants extends Constants {
 	public String dmzShowReply();
 
 	public String doctors();
+
+	public String download();
+
+	public String earlierLunchError();
 
 	public String edit();
 
@@ -327,6 +339,8 @@ public interface OsceConstants extends Constants {
 	public String examinationSchedule();
 
 	public String examiner();
+
+	public String examinerDoesNotExist();
 
 	public String examinerName();
 
@@ -388,6 +402,8 @@ public interface OsceConstants extends Constants {
 
 	public String exportWarningAlreadyExported();
 
+	public String fail();
+
 	public String female();
 
 	public String field();
@@ -403,6 +419,8 @@ public interface OsceConstants extends Constants {
 	public String filterTitle();
 
 	public String fixedButtonString();
+
+	public String frequency();
 
 	public String from();
 
@@ -468,6 +486,8 @@ public interface OsceConstants extends Constants {
 
 	public String languageSkills();
 
+	public String laterLunchError();
+
 	public String learning();
 
 	public String location();
@@ -494,15 +514,21 @@ public interface OsceConstants extends Constants {
 
 	public String masterData();
 
+	public String maximum();
+
 	public String maxYearlySalary();
 
 	public String messages();
 
 	public String min();
 
+	public String minimum();
+
 	public String minorBtnLbl();
 
 	public String minorLbl();
+
+	public String missings();
 
 	public String mobile();
 
@@ -520,7 +546,13 @@ public interface OsceConstants extends Constants {
 
 	public String noMatter();
 
+	public String notAssigned();
+
+	public String notAvailable();
+
 	public String noTitle();
+
+	public String numberOfRotationsInThisSequence();
 
 	public String officeDetails();
 
@@ -588,6 +620,10 @@ public interface OsceConstants extends Constants {
 
 	public String ownerName();
 
+	public String pass();
+
+	public String passingGrade();
+
 	public String patient();
 
 	public String patientHas();
@@ -598,13 +634,19 @@ public interface OsceConstants extends Constants {
 
 	public String persons();
 
+	public String pirAssignmentErrorMessage();
+
 	public String pleaseEnterWarning();
 
 	public String plz();
 
 	public String plzCity();
 
+	public String points();
+
 	public String possibleAnswers();
+
+	public String post();
 
 	public String postType();
 
@@ -790,6 +832,8 @@ public interface OsceConstants extends Constants {
 
 	public String sendSummonings();
 
+	public String sequence();
+
 	public String shiftLunchBreakNext();
 
 	public String ShiftLunchBreakPrev();
@@ -846,7 +890,11 @@ public interface OsceConstants extends Constants {
 
 	public String statisticsEvaluationPlace();
 
+	public String stdDeviation();
+
 	public String street();
+
+	public String studentCount();
 
 	public String studentNotAssigned();
 
@@ -898,6 +946,12 @@ public interface OsceConstants extends Constants {
 
 	public String summoningsVarTo();
 
+	public String sumPerParcour();
+
+	public String sumPerSequence();
+
+	public String sumPerStudent();
+
 	public String tableSize();
 
 	public String telephone();
@@ -915,14 +969,6 @@ public interface OsceConstants extends Constants {
 	public String topicLbl();
 
 	public String topicsAndSpec();
-
-	public String TopicsAndSpecDetailsViewPopupXPosition();
-
-	public String TopicsAndSpecDetailsViewPopupYPosition();
-
-	public String TopicsAndSpecViewPopupXPosition();
-
-	public String TopicsAndSpecViewPopupYPosition();
 
 	public String tplDescDate();
 
@@ -1107,63 +1153,6 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
-	
-	public String numberOfRotationsInThisSequence();
-	
-	public String notAvailable();
 
-	public String pirAssignmentErrorMessage();
-	
-	public String notAssigned();
-	
-	public String download();
-	
-	public String clearSelection();
-	
-	//Module 16[
-			public String sequence();
-			
-			public String post();
-			
-			public String sumPerParcour();
-			
-			public String sumPerSequence();
-			
-			public String sumPerStudent();
-			
-			public String missings();
-			
-			public String average();
-			
-			public String stdDeviation();
-			
-			public String points();
-			
-			public String frequency();
-			
-			public String cronbachsAlpha();
-			
-			public String calculate();
-			
-			public String studentCount();
-			
-			public String pass();
-			
-			public String fail();
-			
-			public String passingGrade();
-			
-			public String minimum();
-			
-			public String maximum();
-			
-			public String examinerDoesNotExist();
-			
-			//Module 16]
-	
-			//by spec TTGen Change[
-			public String earlierLunchError();
-			public String laterLunchError();
-			//by spec TTGen Change
 }
 
