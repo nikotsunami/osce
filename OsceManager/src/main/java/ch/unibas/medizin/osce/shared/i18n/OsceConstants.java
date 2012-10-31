@@ -1153,6 +1153,15 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
+	
+	
+	//module 8[
+	public String breakDuration();
+	
+	public String newBreakDuration();
+	
+	public String newBreakDurationNotNull();
+	//module 8]
 
 }
 

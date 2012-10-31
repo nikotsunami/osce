@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
+import java.util.Date;
+
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -11,7 +13,7 @@ public interface StudentView extends IsWidget{
 	 /* * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		// TODO define methods to be delegated!
+		public void shiftBreak(Long osceDayId,Date endDate,int diff,PopupView popupView);
 	}
 	
 	void setDelegate(Delegate delegate);
@@ -23,5 +25,17 @@ public interface StudentView extends IsWidget{
 	public void setAssignmentProxy(AssignmentProxy assignmentProxy);
 	
 	public FocusPanel getStudentPanel();
+	
+	public Long getBreakDuration();
+
+	public void setBreakDuration(Long breakDuration);
+	
+	public AssignmentProxy getPreviousAssignment();
+
+	public void setPreviousAssignment(AssignmentProxy previousAssignment);
+	
+	public Long getOsceDayId();
+
+	public void setOsceDayId(Long osceDayId);
 
 }

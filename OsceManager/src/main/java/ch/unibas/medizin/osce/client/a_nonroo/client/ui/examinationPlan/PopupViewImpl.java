@@ -15,6 +15,7 @@ import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -97,7 +98,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 							new AbstractRenderer<DoctorProxy>() {
 								@Override
 								public String render(DoctorProxy object) {
-									return object.getName() ;
+									return object.getPreName() +" "+ object.getName();
 								}
 							}// ));
 							, ",;:. \t?!_-/\\"));
@@ -149,11 +150,54 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	@UiField
 	Label endTimeValue;
 	
+	@UiField
+	IntegerBox breakDuration;
+	
+	public IntegerBox getBreakDuration() {
+		return breakDuration;
+	}
+	
 	public PopupViewImpl()
 	{
 		super(true);
 		add(BINDER.createAndBindUi(this));
 	}
+	
+	public void createEditBreakDurationPopupView()
+	{
+		examinerNameLbl.setVisible(true);
+		examinerNameLbl.setText(constants.breakDuration());
+		examinerNameValue.setVisible(true);
+		examinerSuggestionBox.removeFromParent();
+		edit.removeFromParent();
+		
+		
+		nameLbl.setVisible(true);
+		nameValue.removeFromParent();
+		nameValue.setVisible(true);
+		breakDuration.setVisible(true);
+		nameLbl.setText(constants.newBreakDuration());
+		
+		startTimeLbl.removeFromParent();	
+		startTimeValue.removeFromParent();	
+	
+		
+		endTimeLbl.removeFromParent();	
+		endTimeValue.removeFromParent();	
+		
+		//endTimeValue.removeFromParent();
+		endTimeListBox.removeFromParent();
+		
+		
+		saveBtn.removeFromParent();
+		
+		okButton.setVisible(true);
+		cancelButton.setVisible(true);	
+		okButton.setText(constants.okBtn());
+		okButton.setIcon("check");
+		cancelButton.setText(constants.cancel());
+	}
+	
 	public void createSPPopupView()
 	{
 		examinerNameLbl.removeFromParent();
@@ -178,6 +222,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		okButton.setText(constants.close());
 		cancelButton.setVisible(false);
 		saveBtn.removeFromParent();
+		breakDuration.removeFromParent();
 	}
 	public void createOscePostPopupView()
 	{
@@ -200,7 +245,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeListBox.removeFromParent();
 		endTimeValue.removeFromParent();
 		saveBtn.removeFromParent();
-		
+		breakDuration.removeFromParent();
 		
 	}
 	public void createExaminerInfoPopupView()
@@ -229,6 +274,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeListBox.removeFromParent();
 		endTimeValue.setVisible(true);
 		endTimeLbl.setText(constants.circuitEndTime());
+		breakDuration.removeFromParent();
 	}
 	
 	public void createExaminerAssignPopupView() {
@@ -260,7 +306,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeValue.removeFromParent();
 		saveBtn.removeFromParent();
 		
-		
+		breakDuration.removeFromParent();
 		
 	}
 	public void setDelegate(Delegate delegate) {

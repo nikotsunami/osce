@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.shared.scaffold;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,5 +62,7 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	// Module : 15
 	
 	public abstract Request<List<AssignmentProxy>> findAssignedDoctorBySpecialisation(Long specialisationId, Long clinicId);
+	
+	public abstract Request<Void> updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot);
 
 }
