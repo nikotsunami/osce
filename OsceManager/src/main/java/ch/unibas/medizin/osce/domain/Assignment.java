@@ -784,6 +784,10 @@ public class Assignment {
     		ass.persist();    		
     	}
     	
+    	OsceDay osceDay=OsceDay.findOsceDay(osceDayId);
+    	osceDay.setIsTimeSlotShifted(true);
+    	osceDay.persist();
+    	
     }
     
     public static Date dateAddMin(Date date, long minToAdd) {

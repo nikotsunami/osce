@@ -59,6 +59,9 @@ public class OsceDay {
 	private Osce osce;
 	
 	private Integer value=0;
+	
+	
+	private Boolean isTimeSlotShifted=false;
 
 	
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
