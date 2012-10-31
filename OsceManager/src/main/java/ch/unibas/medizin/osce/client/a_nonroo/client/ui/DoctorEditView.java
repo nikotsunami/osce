@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
@@ -40,6 +41,7 @@ public interface DoctorEditView extends IsWidget {
 	// E Highlight onViolation
 	public void setValueForEdit(DoctorProxy proxy);
 	public DoctorEditViewImpl getDoctorEditViewImpl();
+	public void setSpecialisationPickerValues(Collection<SpecialisationProxy> specialisationList);
 
 
 }

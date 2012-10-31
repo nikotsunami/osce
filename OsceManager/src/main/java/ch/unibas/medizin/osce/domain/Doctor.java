@@ -67,14 +67,36 @@ public class Doctor {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
-    public static Long countDoctorsBySearch(String q) {
+ /*   public static Long countDoctorsBySearch(String q) {
         EntityManager em = entityManager();
+       
+        
         TypedQuery<Long> query = em.createQuery("SELECT COUNT(o) FROM Doctor o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Long.class);
+        query.setParameter("q", "%" + q + "%");
+        return query.getSingleResult();
+    }*/
+
+    public static Long countDoctorsBySearchWithClinic(String q,Long id) {
+        EntityManager em = entityManager();
+        String queryString="";
+        if(id==null)
+        {
+        	queryString="SELECT COUNT(o) FROM Doctor o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q";
+        }
+        else
+        {
+        	queryString="SELECT COUNT(o) FROM Doctor o WHERE (o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q ) and o.clinic.id=" +id;
+        }
+        //TypedQuery<Long> query = em.createQuery("SELECT COUNT(o) FROM Doctor o WHERE (o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q ) and o.clinic.id=" +id, Long.class);
+        TypedQuery<Long> query = em.createQuery(queryString, Long.class);
         query.setParameter("q", "%" + q + "%");
         return query.getSingleResult();
     }
 
-    public static List<Doctor> findDoctorsBySearch(String q, int firstResult, int maxResults,Sorting sortorder,String sortFiled) {
+   
+    
+    
+    /*public static List<Doctor> findDoctorsBySearch(String q, int firstResult, int maxResults,Sorting sortorder,String sortFiled) {
         if (q == null) throw new IllegalArgumentException("The q argument is required");
         EntityManager em = entityManager();
         String queryString="SELECT o FROM Doctor AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q ORDER BY "+sortFiled + " " +sortorder;
@@ -85,7 +107,27 @@ public class Doctor {
         query.setMaxResults(maxResults);
         return query.getResultList();
     }
-    
+    */
+    public static List<Doctor> findDoctorsBySearchWithClinic(String q,Long id, int firstResult, int maxResults,Sorting sortorder,String sortFiled) {
+        if (q == null) throw new IllegalArgumentException("The q argument is required");
+        EntityManager em = entityManager();
+       String queryString="";
+        if(id==null)
+        {
+        	queryString="SELECT o FROM Doctor AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q ORDER BY "+sortFiled + " " +sortorder;
+        }
+        else
+        {
+        	queryString="SELECT o FROM Doctor AS o WHERE (o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q) and o.clinic.id="+id +" ORDER BY "+sortFiled + " " +sortorder;
+        }
+        //String queryString="SELECT o FROM Doctor AS o WHERE (o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q) and o.clinic.id="+id +" ORDER BY "+sortFiled + " " +sortorder;
+       // TypedQuery<Doctor> query = em.createQuery("SELECT o FROM Doctor AS o WHERE o.name LIKE :q OR o.preName LIKE :q OR o.email LIKE :q", Doctor.class);
+        TypedQuery<Doctor> query = em.createQuery(queryString, Doctor.class);
+        query.setParameter("q", "%" + q + "%");
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        return query.getResultList();
+    }
     
     // SPEC START =
    	public static java.util.List<Doctor> findDoctorWithRoleTopic(Long stadRoleid)  // Fill Doctor Name in Value List Box

@@ -16,9 +16,15 @@ import com.google.gwt.requestfactory.shared.Service;
 @Service(Doctor.class)
 public interface DoctorRequestNonRoo extends RequestContext {
 	
-	abstract Request<Long> countDoctorsBySearch(String q);
+	//abstract Request<Long> countDoctorsBySearch(String q);
 	
-	abstract Request<List<DoctorProxy>> findDoctorsBySearch(String q, int firstResult, int maxResults, Sorting sortorder, String sortFiled);
+	//abstract Request<List<DoctorProxy>> findDoctorsBySearch(String q, int firstResult, int maxResults, Sorting sortorder, String sortFiled);
+	
+	
+	abstract Request<Long> countDoctorsBySearchWithClinic(String q,Long id);
+	
+	abstract Request<List<DoctorProxy>> findDoctorsBySearchWithClinic(String q,Long id, int firstResult, int maxResults, Sorting sortorder, String sortFiled);
+	
 	
 	// SPEC START =
 	abstract Request<List<DoctorProxy>> findDoctorWithRoleTopic(Long standroleid);

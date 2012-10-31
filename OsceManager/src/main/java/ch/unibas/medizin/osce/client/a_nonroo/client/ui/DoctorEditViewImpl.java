@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
@@ -88,6 +89,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	@UiField
 	public DefaultSuggestBox<ClinicProxy, EventHandlingValueHolderItem<ClinicProxy>> clinic;
 
+	@UiField
+	public DefaultSuggestBox<SpecialisationProxy, EventHandlingValueHolderItem<SpecialisationProxy>> specialisation;
+
 	//Issue # 122 : Replace pull down with autocomplete.
 	
 	
@@ -112,6 +116,9 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
     @UiField
     SpanElement labelClinic;
 	
+    @UiField
+    SpanElement labelSpecialisation;
+    
 	private Delegate delegate;
 
 	private Presenter presenter;
@@ -144,6 +151,7 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		labelEmail.setInnerText(constants.email() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelClinic.setInnerText(constants.clinic() + ":");
+		labelSpecialisation.setInnerText(constants.specification() + ":");
 		
 		doctorPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			
@@ -168,6 +176,7 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		doctorMap.put("email", email);
 		doctorMap.put("telephone", telephone);
 		doctorMap.put("clinic", clinic);
+		doctorMap.put("specialisation", specialisation);
 		
 				
 		
@@ -269,6 +278,33 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 	}
 	
 	@Override
+	public void setSpecialisationPickerValues(Collection<SpecialisationProxy> specialisationList) {
+		
+		//Issue # 122 : Replace pull down with autocomplete.
+		DefaultSuggestOracle<SpecialisationProxy> suggestOracle1 = (DefaultSuggestOracle<SpecialisationProxy>) specialisation.getSuggestOracle();
+		suggestOracle1.setPossiblilities((List)specialisationList);
+		specialisation.setSuggestOracle(suggestOracle1);
+		//clinic.setRenderer(new ClinicProxyRenderer());
+		specialisation.setRenderer(new AbstractRenderer<SpecialisationProxy>() {
+
+			@Override
+			public String render(SpecialisationProxy object) {
+				// TODO Auto-generated method stub
+				if(object!=null)
+				{
+				return object.getName();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+		//clinic.setAcceptableValues(clinicList);
+		//Issue # 122 : Replace pull down with autocomplete.
+	}
+	
+	@Override
 	public SimplePanel getOfficePanel(){
 		//return officePanel;
 		return null;
@@ -316,6 +352,8 @@ public class DoctorEditViewImpl extends Composite implements DoctorEditView, Edi
 		email.setValue(proxy.getEmail());
 		telephone.setValue(proxy.getTelephone());
 		clinic.setSelected(proxy.getClinic());
+		specialisation.setSelected(proxy.getSpecialisation());
+		
 		officeEditViewImpl.title.setValue(proxy.getOffice().getTitle());
 		officeEditViewImpl.name.setValue(proxy.getOffice().getName());
 		officeEditViewImpl.preName.setValue(proxy.getOffice().getPreName());

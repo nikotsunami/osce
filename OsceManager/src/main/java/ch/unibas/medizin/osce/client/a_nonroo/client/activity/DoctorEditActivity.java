@@ -25,6 +25,7 @@ import ch.unibas.medizin.osce.client.managed.request.DoctorRequest;
 import ch.unibas.medizin.osce.client.managed.request.OfficeProxy;
 import ch.unibas.medizin.osce.client.managed.request.OfficeRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
+import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -131,7 +132,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 		officeRequest1=requests.officeRequest();
 		
 		view.setClinicPickerValues(Collections.<ClinicProxy>emptyList());
-		requests.clinicRequest().findClinicEntries(0, 50).with(ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance().getPaths()).fire(new Receiver<List<ClinicProxy>>() {
+		requests.clinicRequest().findAllClinics().with(ch.unibas.medizin.osce.client.managed.ui.ClinicProxyRenderer.instance().getPaths()).fire(new Receiver<List<ClinicProxy>>() {
 
 			public void onSuccess(List<ClinicProxy> response) {
 				List<ClinicProxy> values = new ArrayList<ClinicProxy>();
@@ -141,6 +142,17 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 			}
 		});
 
+		requests.specialisationRequest().findAllSpecialisations().fire(new Receiver<List<SpecialisationProxy>>() {
+
+			@Override
+			public void onSuccess(List<SpecialisationProxy> response) {
+				// TODO Auto-generated method stub
+				List<SpecialisationProxy> values = new ArrayList<SpecialisationProxy>();
+				values.add(null);
+				values.addAll(response);
+				view.setSpecialisationPickerValues(values);
+			}
+		});
 		eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
 			public void onPlaceChange(PlaceChangeEvent event) {
 				//updateSelection(event.getNewPlace());
@@ -151,7 +163,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("office","clinic").fire(new Receiver<Object>() {
+			requests.find(place.getProxyId()).with("office","clinic","specialisation").fire(new Receiver<Object>() {
 
 				public void onFailure(ServerFailure error){
 					Log.error(error.getMessage());
@@ -165,6 +177,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 						doctor = (DoctorProxy)response;
 						office=((DoctorProxy)response).getOffice();
 						view.setValueForEdit(doctor);
+						
 						//init();
 					}
 				}
@@ -291,6 +304,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 			doctor1.setEmail(view.getDoctorEditViewImpl().email.getValue());
 			doctor1.setTelephone(view.getDoctorEditViewImpl().telephone.getValue());
 			doctor1.setClinic(view.getDoctorEditViewImpl().clinic.getSelected());
+			doctor1.setSpecialisation(view.getDoctorEditViewImpl().specialisation.getSelected());
 			Log.info("after doctor value set");
 			doctor1.setOffice(office1);
 			final DoctorProxy newdoctor=doctor1;
@@ -354,6 +368,7 @@ DoctorEditView.Presenter, DoctorEditView.Delegate, OfficeEditView.Delegate {
 			doctorProxy.setEmail(view.getDoctorEditViewImpl().email.getValue());
 			doctorProxy.setTelephone(view.getDoctorEditViewImpl().telephone.getValue());
 			doctorProxy.setClinic(view.getDoctorEditViewImpl().clinic.getSelected());
+			doctorProxy.setSpecialisation(view.getDoctorEditViewImpl().specialisation.getSelected());
 			doctorProxy.setOffice(office);
 			Log.info("office--"+doctorProxy.getOffice());
 			doctorRequest.persist().using(doctorProxy).fire(new OSCEReceiver<Void>(view.getDoctorMap()) {

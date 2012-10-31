@@ -52,6 +52,15 @@
 							<td><span class="{style.label}" ui:field="labelTelephone" /></td>
 							<td><g:TextBox ui:field="telephone" /></td>
 						</tr>
+						<tr id="specialisation">
+							<td><span class="{style.label}" ui:field="labelSpecialisation" /></td>
+							<td>
+							<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+							<!-- <g:ValueListBox ui:field="clinic" /> -->
+							<i:DefaultSuggestBox ui:field="specialisation"></i:DefaultSuggestBox>
+							<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+							</td>
+						</tr>
 						<tr id="clinic">
 							<td><span class="{style.label}" ui:field="labelClinic" /></td>
 							<td>
@@ -61,6 +70,7 @@
 							<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 							</td>
 						</tr>
+						
 					</tbody>
 					</table>
 				</g:HTMLPanel>

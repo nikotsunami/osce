@@ -82,6 +82,10 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
     SpanElement telephone;
     @UiField
     SpanElement clinic;
+    
+    @UiField
+    SpanElement specialisation;
+    
     @UiField
     SimplePanel officePanel;
     
@@ -99,6 +103,9 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
     SpanElement labelTelephone;
     @UiField
     SpanElement labelClinic;
+    
+    @UiField
+    SpanElement labelSpecialisation;
     
     //Module : 6
     @UiField (provided = true)
@@ -173,6 +180,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		labelEmail.setInnerText(constants.email() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelClinic.setInnerText(constants.clinic() + ":");
+		labelSpecialisation.setInnerText(constants.specification() + ":");
 		
 		doctorPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			
@@ -211,6 +219,8 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		clinic.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getName()));
+		specialisation.setInnerText(proxy.getSpecialisation() == null ? "" : String.valueOf(proxy.getSpecialisation().getName()));
+		
 		if(proxy!=null)
 		{
 			String header=" ";

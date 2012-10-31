@@ -384,12 +384,30 @@ DoctorView.Presenter, DoctorView.Delegate {
 	protected Request<List<DoctorProxy>> createRangeRequest(String q, Range range) {
 //		return requests.doctorRequest().findDoctorEntries(range.getStart(), range.getLength());
 		//final Range newRange = table.getVisibleRange();
-		return requests.doctorRequestNonRoo().findDoctorsBySearch(q, range.getStart(), range.getLength(),sortorder,sortname);
+		if(view.getSuggestBox().getSelected()==null)
+		{
+			//return requests.doctorRequestNonRoo().findDoctorsBySearch(q, range.getStart(), range.getLength(),sortorder,sortname);
+			return requests.doctorRequestNonRoo().findDoctorsBySearchWithClinic(q,null, range.getStart(), range.getLength(),sortorder,sortname);
+		}
+		else
+		{
+			return requests.doctorRequestNonRoo().findDoctorsBySearchWithClinic(q,view.getSuggestBox().getSelected().getId(), range.getStart(), range.getLength(),sortorder,sortname);
+		}
 	}
 
 	protected void fireCountRequest(String q, Receiver<Long> callback) {
 //		requests.doctorRequest().countDoctors().fire(callback);
-		requests.doctorRequestNonRoo().countDoctorsBySearch(q).fire(callback);
+		if(view.getSuggestBox().getSelected()==null)
+		{
+			//requests.doctorRequestNonRoo().countDoctorsBySearch(q).fire(callback);
+			requests.doctorRequestNonRoo().countDoctorsBySearchWithClinic(q,null).fire(callback);
+		}
+		else
+		{
+		
+			requests.doctorRequestNonRoo().countDoctorsBySearchWithClinic(q,view.getSuggestBox().getSelected().getId()).fire(callback);
+		}
+		
 	}
 
 	private void setTable(CellTable<DoctorProxy> table) {
@@ -424,18 +442,19 @@ DoctorView.Presenter, DoctorView.Delegate {
 	//Issue # 122 : Replace pull down with autocomplete.
 	@Override
 	public void changeFilterTitleShown(ClinicProxy selectedTitle) {
-	
+		initFilterTitleFill();
+		initSearch();
 		
-		if (selectedTitle != null)
+		/*if (selectedTitle != null)
 		{
 		
 			requests.doctorRequestNonRoo().findDoctorByClinicID(selectedTitle.getId()).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {
-				/*	view.getTable().setRowCount(response.size());
+					view.getTable().setRowCount(response.size());
 					view.getTable().setRowData(response);
-				*/
+				
 					table.setRowCount(response.size());
 					table.setRowData(response);
 				}
@@ -447,15 +466,15 @@ DoctorView.Presenter, DoctorView.Delegate {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {
-					/*view.getTable().setRowCount(response.size());
+					view.getTable().setRowCount(response.size());
 					view.getTable().setRowData(response);
-					view.getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);*/
+					view.getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
 					table.setRowCount(response.size());
 					table.setRowData(response);
 					table.setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
 				}
 			});
-		}
+		}*/
 		
 	}
 	

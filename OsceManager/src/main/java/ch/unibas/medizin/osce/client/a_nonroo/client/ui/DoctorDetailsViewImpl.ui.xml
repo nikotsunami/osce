@@ -48,10 +48,15 @@
 				                <td><span class="{style.label}" ui:field="labelTelephone"></span></td>
 				                <td><span ui:field="telephone"/></td>
 				            </tr>
-				      <tr id="clinic">
+				            <tr id="specialisation">
+				           <td><span class="{style.label}" ui:field="labelSpecialisation"></span></td>
+				          <td><span ui:field="specialisation"/></td>
+				       </tr>
+				       <tr id="clinic">
 				           <td><span class="{style.label}" ui:field="labelClinic"></span></td>
 				          <td><span ui:field="clinic"/></td>
 				       </tr>
+				      
 					</tbody>
 				</table>
 			</g:HTMLPanel>

@@ -77,7 +77,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 		view.setDelegate(this);
 		loadDisplaySettings();
 
-		requests.find(place.getProxyId()).with("office", "clinic").fire(new Receiver<Object>() {
+		requests.find(place.getProxyId()).with("office", "clinic","specialisation").fire(new Receiver<Object>() {
 
 			public void onFailure(ServerFailure error){
 				Log.error(error.getMessage());
