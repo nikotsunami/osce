@@ -561,7 +561,8 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 					
 					// SPEC Change
 					
-					if(Validator.isNotNull(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue()))
+					//if(Validator.isNotNull(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue()))
+					if(Validator.isNotNull(editquestionpopup.getTopicTxtBox().getValue()))
 					{	
 						delegate.editOption(editquestionpopup.getTopicTxtBox().getValue(),editquestionpopup.getDescriptionTxtBox().getValue(),questionView);						
 						//delegate.e

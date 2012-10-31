@@ -142,7 +142,9 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 											
 				if(currentlyExpanded!=contentSP && osceDayProxy !=null)
 				{
-					retrieveContent( header, contentSP.getWidget());
+					
+					if(((HeaderViewImpl)header).getContentView().getCourseProxy() != null)
+						retrieveContent( header, contentSP.getWidget());
 					
 					expand(header, contentSP);
 				}
@@ -192,6 +194,13 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 	{
 		delegate.retrieveContent(this,header,sp);
 	}
+	
+	
+	public void retrieveLogicalBreak(Widget header,Widget sp)
+	{
+		//delegate.createLogicalBreakOfSP(this,(ContentView)sp);
+	}
+	
 	public void expand(final Widget header, final Widget content) {
 	
 		if(currentlyExpanded != null)

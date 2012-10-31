@@ -19,13 +19,18 @@
 	}
 .padleft5
 	{
-		padding-left: 3px;
+		padding-left: 1px;
 		padding-right: 8px;
 	}
 	.standardTable input {
 		width: 90%;
 		opacity: 0.8;
 	}
+	.labelSize {
+	max-height : 15px;
+	min-height: 10px;
+	font-weight: bold;
+}
 	
 	.borderDP{
 	
@@ -50,16 +55,30 @@ background-color:#B8A9A2;
 	}
 	
 	.maxWidth {
-		margin-bottom: 8px;
+		margin-bottom: 3px;
 		width: 100%;
 	}
 	
 	
 	
 	.marginQue{
-	margin-left:9px;
+	margin-left:1px;
 	margin-right:9px;
 	}
+	
+	.patientControlsnew {
+	border-radius: 12px 12px 12px 12px;
+	background-color: #EBEBEB;
+	height: 20px;
+	max-height: 30px;
+	min-height: 20px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	margin-bottom: 8px;
+}
+	
+	
 </ui:style>
 
  <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>	
@@ -75,8 +94,8 @@ background-color:#B8A9A2;
 			<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
 			</g:HorizontalPanel>
 			<g:VerticalPanel>
-				<g:Label  addStyleNames="{style.label} {style.lableHeader}" ui:field="checkListTopicLbl" width="550px"> </g:Label>
-				<g:Label  addStyleNames="{style.label}" ui:field="descriptionLbl" ></g:Label>
+				<g:Label  addStyleNames="{style.labelSize} {style.lableHeader}" ui:field="checkListTopicLbl" width="550px"> </g:Label>
+				<g:Label  addStyleNames="{style.labelSize}" ui:field="descriptionLbl" ></g:Label>
 			</g:VerticalPanel>
 			<g:HTMLPanel>
 				<div  class="{style.controlsright}">
@@ -98,9 +117,9 @@ background-color:#B8A9A2;
 
 	<g:AbsolutePanel ui:field="queAP" >
 
-	<g:HorizontalPanel  spacing="4" styleName="{style.marginQue}">
+	<g:HorizontalPanel  spacing="2" styleName="{style.marginQue}">
 
-	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel" spacing="5">
+	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel" spacing="2">
 	</g:VerticalPanel>
 
 
@@ -110,12 +129,12 @@ background-color:#B8A9A2;
 	</g:DisclosurePanel>
 	</g:AbsolutePanel>
 	
-	<g:HorizontalPanel  borderWidth="0" spacing="5">
+	<g:HorizontalPanel  borderWidth="0" spacing="2">
 	<g:VerticalPanel ui:field="questionButtonVP">
 			
 			</g:VerticalPanel>
-		<g:VerticalPanel spacing="5" ui:field="addQuestionHP">
-		<g:HorizontalPanel spacing="8">
+		<g:VerticalPanel spacing="2" ui:field="addQuestionHP">
+		<g:HorizontalPanel spacing="3">
 			<my:IconButton icon="plusthick" ui:field="addCheckListQuestionButton" ></my:IconButton>
 			<my:IconButton icon="arrowthickstop-1-s" ui:field="importQuestionButton" ></my:IconButton>
 		</g:HorizontalPanel>

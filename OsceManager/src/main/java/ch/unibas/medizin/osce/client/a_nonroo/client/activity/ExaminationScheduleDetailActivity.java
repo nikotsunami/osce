@@ -85,7 +85,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	private Map<OscePostProxy, List<Date>> postEndTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	
 	private List<DoctorProxy> doctorList;
-
+	
+	private int SPBreakWidth=0;
 
 	public void setOsceProxy(OsceProxy osceProxy) {
 		this.osceProxy = osceProxy;
@@ -272,6 +273,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								
 							}
 							osceSequenceView.getAccordianHP().insert(accordianView, osceSequenceView.getAccordianHP().getWidgetCount());
+							
+							
+							
+							createLogicalBreakOfSP(osceSequenceView,osceDayProxy,oscesequenceProxy);
+							
 							examinationScheduleDetailView.getSequenceVP().insert(osceSequenceView, examinationScheduleDetailView.getSequenceVP().getWidgetCount());
 						}
 						
@@ -374,8 +380,28 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				oscePostView.getOscePostPanel().addStyleName("oscePost-leftTop-radius");
 			}
 			
+			if(i==oscePostProxies.size()-1)
+				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
 			
 			
+			boolean isFirstPartOfPreparation1=false;
+			
+			if(i==0)
+			{
+				if(oscePostProxies.get(i).getOscePostBlueprint().getPostType()==PostType.PREPARATION)
+				{
+					isFirstPartOfPreparation1=true;
+				}
+			}
+			else
+			{
+				if(oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION && oscePostProxies.get(i-1).getOscePostBlueprint().getPostType()!=PostType.PREPARATION)
+				{
+					isFirstPartOfPreparation1=true;
+				}
+			}
+			
+			final boolean isFirstPartOfPreparation=isFirstPartOfPreparation1;
 			
 			//retrieve student data of particular post and course from assignment table.
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
@@ -741,7 +767,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					postEndTimeMap.put(oscePostProxy, endTimeList);
 					
 					//create Examiners Slots/ Create Examiner view inside oscePostView
-					if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK)
+					
+					
+					if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK && !isFirstPartOfPreparation)
 					requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeExaminer(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 					.with("examiner").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
@@ -1110,7 +1138,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 		
 		//create logical Sp Break
-		createLogicalBreakOfSP(accordianPanelViewImpl, contentView);
+		
+		//createLogicalBreakOfSP(accordianPanelViewImpl, logicalBreakContentView);
 		
 		
 		requests.getEventBus().fireEvent(
@@ -1182,14 +1211,25 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		return false;
 	}
 	//create Logical break for each parcor
-	public void createLogicalBreakOfSP(final AccordianPanelViewImpl accordianPanelViewImpl,final ContentView contentView)
+	public void createLogicalBreakOfSP(final OsceSequenceView osceSequenceView,final OsceDayProxy osceDayProxy,final OsceSequenceProxy osceSequenceProxy)
 	{
 		//create logical break post
 		//retrieve data of logical sp break and create slots.
-		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId()).with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceDayProxy.getId()).with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
+				SPBreakWidth=0;
+				
+				if(response.size()==0)
+				{
+					
+					return;
+				}
+			
+				
+				
+				
 				Log.info("retrieveAssignmentOfLogicalBreakPost Success Assignment Size :" + response.size());
 				
 				requests.getEventBus().fireEvent(
@@ -1204,6 +1244,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 				oscePostView.getOscePostPanel().addStyleName("oscePost-bg");
 				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
+				oscePostView.getOscePostPanel().addStyleName("oscePost-leftTop-radius");
 				//create all slots of SP which are in logical break
 				
 				for(int j=0;j<response.size();j++)
@@ -1245,9 +1286,17 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							if((k+1)<response.size() && response.get(k+1).getTimeStart().getTime()!= response.get(k).getTimeStart().getTime())
 							{
 								j=k;
+								if(SPBreakWidth < spHp.getWidgetCount())
+								{
+									SPBreakWidth=spHp.getWidgetCount();
+								}
 								break;
 							}
 							j=k;
+							if(SPBreakWidth < spHp.getWidgetCount())
+							{
+								SPBreakWidth=spHp.getWidgetCount();
+							}
 							
 						}
 							
@@ -1355,7 +1404,52 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						*/
 					 
 				}
+				
+				//create logical SP Break per sequence
+				
+				AccordianPanelView accordianViewForSPBreak=new AccordianPanelViewImpl(true);
+				accordianViewForSPBreak.setDelegate(activity);
+				accordianViewForSPBreak.setOsceDayProxy(osceDayProxy);
+				accordianViewForSPBreak.setOsceSequenceProxy(osceSequenceProxy);
+				
+				HeaderView headerView=new HeaderViewImpl();
+				//headerView.getColorPicker().setValue(color);
+				//headerView.getDeleteBtn().setVisible(false);
+				headerView.getColorPicker().setVisible(false);
+				headerView.getHeaderPanel().setHeight("360px");
+				headerView.getHeaderSimplePanel().setHeight("330px");
+				headerView.getHeaderLabel().setText(constants.exaPlanBreakPost());
+				
+				ContentView contentView=new ContentViewImpl();
+				contentView.setDelegate(activity);
+			//	contentView.setCourseProxy(courseProxy);
+				contentView.getOscePostHP().setHeight("350px");
+				contentView.getScrollPanel().setHeight("350px");
+				
+				// Change in ParcourView
+				headerView.setContentView(contentView);
+				// E Change in ParcourView
+				//accordianView.setContentView(contentView);
+				//OscePostView oscePostView=new OscePostViewImpl();
+				
+				//((ContentViewImpl)contentView).getOscePostHP().insert(oscePostView, ((ContentViewImpl)contentView).getOscePostHP().getWidgetCount());
+				//add content and header to accordian
+				accordianViewForSPBreak.add(headerView.asWidget(), contentView.asWidget());
+				//((HeaderViewImpl)headerView).changeHeaderColor(color);
+				
+				osceSequenceView.getAccordianHP().insert(accordianViewForSPBreak, osceSequenceView.getAccordianHP().getWidgetCount());
+				
+				Log.info("SPBreakWidth :" +SPBreakWidth*26);
+				int n=SPBreakWidth;
+				SPBreakWidth=((SPBreakWidth*30)-8)+(n-1)*2;
+				oscePostView.getOscePostPanel().setWidth(SPBreakWidth + "px");
+				//((OscePostViewImpl) oscePostView).getElement().getStyle().setWidth(SPBreakWidth*26, Unit.PX);
+				//((OscePostViewImpl) oscePostView).getOscePostLbl().setWidth(SPBreakWidth*26 + "px");
+				//((OscePostViewImpl) oscePostView).setWidth(SPBreakWidth*20 + "px");
 				contentView.getOscePostHP().insert(oscePostView, contentView.getOscePostHP().getWidgetCount());
+				
+				
+				((AccordianPanelViewImpl)accordianViewForSPBreak).expand((HeaderViewImpl)headerView, ((AccordianPanelViewImpl)accordianViewForSPBreak).sp);
 				
 				requests.getEventBus().fireEvent(
 						new ApplicationLoadingScreenEvent(false));

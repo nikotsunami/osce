@@ -9,7 +9,7 @@
 	<g:HTMLPanel>
 	
 	<g:VerticalPanel>
-			<g:FocusPanel ui:field="oscePostPanel" width="78px" height="30px" addStyleNames="{style.oscePost-rect} ">
+			<g:FocusPanel ui:field="oscePostPanel" width="86px" height="30px" addStyleNames="{style.oscePost-rect} ">
 				<g:Label ui:field="oscePostLbl" ></g:Label>
 			</g:FocusPanel>
 			

@@ -14,6 +14,9 @@ public interface AccordianPanelView extends IsWidget{
 	
 	interface Delegate {
 		public void retrieveContent(AccordianPanelViewImpl view,Widget header,Widget sp);
+		
+		//public void createLogicalBreakOfSP( AccordianPanelViewImpl accordianPanelViewImpl, ContentView contentView);
+		
 	}
 	
 	interface ParcourDelegate {
