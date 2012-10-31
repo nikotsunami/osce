@@ -35,10 +35,10 @@
 							<span ui:field="displayRenderer"></span>
 						</h3>
 						<my:IconButton ui:field="print" icon="print" />
-						<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
-						<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
-						<my:IconButton ui:field="previous"  icon="triangle-1-w">Previous</my:IconButton>
-						<my:IconButton ui:field="home" icon="home" >Actual</my:IconButton>
+						<my:IconButton ui:field="edit" icon="pencil" />
+						<my:IconButton ui:field="delete" icon="trash" />
+						<my:IconButton ui:field="previous"  icon="triangle-1-w" />
+						<my:IconButton ui:field="home" icon="home" />
 					</div>
 				</g:HTMLPanel>
 			</g:HorizontalPanel>
@@ -129,7 +129,7 @@
 					<!--  Assignment E		start	-->		
 				<g:Tab>
 					
-				<g:TabHTML><!-- CheckList --></g:TabHTML>
+				<g:TabHTML></g:TabHTML>
 					
 								
 								
@@ -154,7 +154,7 @@
 				</g:Tab>
 				<!--  Assignment E		end	-->	
 				<g:Tab>
-					<g:TabHTML><!-- Search Criteria --></g:TabHTML>
+					<g:TabHTML></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<g:VerticalPanel width="100%">
 							<o:StandartizedPatientAdvancedSearchSubViewImpl
@@ -179,7 +179,7 @@
 				</g:Tab>
 
 				<g:Tab>
-					<g:TabHTML><!-- Room Materials --></g:TabHTML>
+					<g:TabHTML></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<g:Label><!-- Room Materials -->
 						</g:Label>
@@ -189,7 +189,7 @@
 				</g:Tab>
 
 				<g:Tab>
-					<g:TabHTML><!-- File --></g:TabHTML>
+					<g:TabHTML></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<m:RoleFileSubViewImpl ui:field="roleFileSubViewImpl"></m:RoleFileSubViewImpl>
 						<!-- <g:Label class="{style.label}" ui:field="labelRoomMaterials" /> -->
@@ -198,7 +198,7 @@
 				</g:Tab>
 
 				<g:Tab>
-					<g:TabHTML><!-- Role Script --></g:TabHTML>
+					<g:TabHTML></g:TabHTML>
 					<g:HTMLPanel addStyleNames="{style.patientDetails}">
 						<!-- g:Label>Role Script</g:Label-->
 						<g:VerticalPanel ui:field="roleBaseItemPanel" addStyleNames="{style.tabStyle}" spacing="10">

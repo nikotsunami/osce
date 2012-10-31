@@ -316,15 +316,12 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 			popupPanel.setPopupPosition(500, 300);
 			popupPanel.setGlassEnabled(true);
 			
-			DecoratorPanel dp=new DecoratorPanel();
-			
-			VerticalPanel vp=new VerticalPanel();
-			Label minorLbl=new Label("Minor Change ?");
-			Label majorLbl=new Label("Major Change ?");
-			
-			
-			Button minorBtn=new Button("Minor Change");
-			Button majorBtn=new Button("Major Change");
+			IconButton minorBtn = new IconButton(constants.minorLbl());
+			minorBtn.setIcon("battery-1");
+			minorBtn.setWidth("100%");
+			IconButton majorBtn = new IconButton(constants.majorLbl());
+			majorBtn.setIcon("battery-3");
+			majorBtn.setWidth("100%");
 			
 			minorBtn.addClickHandler(new ClickHandler() {
 				

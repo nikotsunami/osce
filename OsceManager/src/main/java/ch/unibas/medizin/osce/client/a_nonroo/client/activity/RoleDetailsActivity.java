@@ -1495,7 +1495,7 @@ final int index2 = index;
 		if(proxy.getCheckList()!=null)
 		{
 			
-		((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? "Checklist" : "Checklist "+proxy.getCheckList().getTitle());					
+		((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? constants.checkList() : constants.checkList() + " " + proxy.getCheckList().getTitle());					
 		
 		Log.info("checklisttopic Proxy Size:" + proxy.getCheckList().getCheckListTopics().size());
 		Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
@@ -5836,7 +5836,7 @@ final int index2 = index;
 		if(proxy.getCheckList()!=null)
 		{
 			
-		((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? "Checklist" : "Checklist "+proxy.getCheckList().getTitle());					
+		((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? constants.checkList() : constants.checkList() + " "+proxy.getCheckList().getTitle());					
 		
 		Log.info("checklisttopic Proxy Size:" + proxy.getCheckList().getCheckListTopics().size());
 		Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();

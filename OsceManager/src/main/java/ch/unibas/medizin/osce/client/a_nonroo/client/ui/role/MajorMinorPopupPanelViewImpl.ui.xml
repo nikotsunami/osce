@@ -52,31 +52,14 @@
 		}
 	</ui:style>
 	
-	
-	
-			<g:HTMLPanel addStyleNames="{style.popupStyle}" >
-				<div>
-				<!-- <span ui:field="title">Types Of changes</span> -->
-	
-				<my:IconButton ui:field="closeButton"  icon="closethick" addStyleNames="{style.closeButton}"></my:IconButton>
-			</div>
-			
-			<g:VerticalPanel width="80%" horizontalAlignment="center" addStyleNames="{style.contentPanelStyle}">
-			<!-- <my:IconButton ui:field="closeButton"  icon="closethick" addStyleNames="{style.closeButton}"></my:IconButton> -->
-			<g:VerticalPanel ui:field="minor" styleName="{style.popUpBorder}" horizontalAlignment="center" width="80%">
-			<g:HTMLPanel>
-				<g:Label ui:field="minorLbl">Minor Changes ?</g:Label>
-			</g:HTMLPanel>
-			
-			</g:VerticalPanel>
-			<g:VerticalPanel ui:field="major" styleName="{style.popUpBorder}" horizontalAlignment="center" width="80%">
-				
-				<g:Label ui:field="majorLbl">Major Changes ?</g:Label>
-			</g:VerticalPanel>
-			
-			</g:VerticalPanel>
-			</g:HTMLPanel>
-	
-	
-	
+	<g:HTMLPanel addStyleNames="{style.popupStyle}" >
+		<div>
+			<my:IconButton ui:field="closeButton"  icon="closethick" addStyleNames="{style.closeButton}"></my:IconButton>
+		</div>
+		
+		<g:VerticalPanel width="80%" horizontalAlignment="center" addStyleNames="{style.contentPanelStyle}">
+			<g:VerticalPanel ui:field="minor" styleName="{style.popUpBorder}" horizontalAlignment="center" width="95%" />
+			<g:VerticalPanel ui:field="major" styleName="{style.popUpBorder}" horizontalAlignment="center" width="95%" />
+		</g:VerticalPanel>
+	</g:HTMLPanel>
 </ui:UiBinder> 

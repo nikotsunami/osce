@@ -31,12 +31,6 @@ public class MajorMinorPopupPanelViewImpl extends PopupPanel{
 	
 	@UiField
 	VerticalPanel minor;
-	
-	@UiField
-	Label majorLbl;
-	
-	@UiField
-	Label minorLbl;
 	/*
 	@UiField
 	SpanElement title;*/
@@ -47,8 +41,6 @@ public class MajorMinorPopupPanelViewImpl extends PopupPanel{
 	public MajorMinorPopupPanelViewImpl() {
 		super(true);
 		add(uiBinder.createAndBindUi(this));
-		minorLbl.setText(constants.minorLbl());
-		majorLbl.setText(constants.majorLbl());
 		closeButton.addClickHandler(new ClickHandler() {
 			
 			@Override
