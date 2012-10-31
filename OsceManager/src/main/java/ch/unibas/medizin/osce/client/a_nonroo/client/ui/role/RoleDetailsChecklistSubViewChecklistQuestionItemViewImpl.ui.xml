@@ -59,7 +59,7 @@
 	.iconnew
 	{
 		vertical-align: top;
-		padding-left: 2px;
+		padding-left: 0px;
 		padding-top: 6px;
 		margin-right: 5px;
 		
@@ -208,7 +208,7 @@ border-bottom-color:#808080;
 			
 		  
 			<g:AbsolutePanel ui:field="optionBoundryPanel">
-			<g:FlowPanel ui:field="optionVerticalPanel" addStyleNames="{style.criteria}" width="480px">
+			<g:FlowPanel ui:field="optionVerticalPanel" addStyleNames="{style.criteria}" width="460px">
 			</g:FlowPanel>
 			</g:AbsolutePanel>
 			</g:HorizontalPanel>   
@@ -228,7 +228,7 @@ border-bottom-color:#808080;
 			</g:HorizontalPanel> 
 		<g:AbsolutePanel ui:field="criteriaBoundryPanel">
 			<g:FlowPanel ui:field="criteriaHorizontalPanel" styleName="style.criteria"
-				width="480px">
+				width="460px">
 				<!-- <g:HorizontalPanel  addStyleNames="{style.patientControls}" spacing="4" >
 				<g:Image styleName="{style.optionIcon}" resource="{uiIcons.criteria}"></g:Image>
 				<g:Label ui:field="criteriaLbl"></g:Label>
