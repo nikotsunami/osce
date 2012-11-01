@@ -3,13 +3,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-	<ui:style src="../../styles.css" />
-		
+	<ui:style src="../../styles.css">
+		.anamnesisTabStyle {
+			min-height: 420px;
+		}
+	</ui:style>
 		<!-- //ScrolledTab Changes start -->
 	<g:HTMLPanel>
 	 <g:HorizontalPanel ui:field="horizontalanamnesisPanel"> 
 	 	<!--  <g:HTMLPanel> -->
-	<g:TabLayoutPanel ui:field="anamnesisTabs"  barHeight="40"  >
+	<g:TabLayoutPanel ui:field="anamnesisTabs" addStyleNames="{style.anamnesisTabStyle}" barHeight="40"  >
 		<!-- //ScrolledTab Changes end -->
 	</g:TabLayoutPanel>
 			<!--  </g:HTMLPanel> -->

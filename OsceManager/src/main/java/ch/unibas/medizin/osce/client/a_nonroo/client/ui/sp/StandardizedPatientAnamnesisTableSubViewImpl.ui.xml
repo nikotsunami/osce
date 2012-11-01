@@ -6,9 +6,9 @@
 	<ui:style src="../../styles.css">
 	</ui:style>
 	<g:HTMLPanel>
-		<b:CellTable pageSize="8" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
-		<div class="{style.controls}">
+		<b:CellTable pageSize="200" ui:field="table" width="100%"  addStyleNames="{style.standardTable}"/>
+		<!-- <div class="{style.controls}">
 			<b:SimplePager display="{table}" ui:field="pager" />
-		</div>
+		</div> -->
 	</g:HTMLPanel>
 </ui:UiBinder>

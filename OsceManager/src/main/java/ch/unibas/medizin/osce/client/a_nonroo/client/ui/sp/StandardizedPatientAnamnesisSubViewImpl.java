@@ -67,11 +67,6 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	*/
 	//ScrolledTab Changes end
 
-	
-
-	
-
-
 	@UiField(provided = true)
 	QuickSearchBox searchBox;
 
@@ -86,7 +81,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 		initWidget(uiBinder.createAndBindUi(this));
 		horizontalanamnesisPanel.addStyleName("horizontalPanelStyle");
 		horizontalanamnesisPanel.add(anamnesisTabs);
-		anamnesisTabs.setHeight("300px");
+		/*anamnesisTabs.setHeight("300px");*/
 		initCheckBoxes();
 	}
 

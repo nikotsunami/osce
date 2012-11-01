@@ -44,9 +44,6 @@ public class StandardizedPatientAnamnesisTableSubViewImpl extends Composite
 	@UiField (provided = true)
 	CellTable<AnamnesisChecksValueProxy> table;
 	
-	@UiField (provided = true)
-	SimplePager pager;
-
 	private Set<String> paths = new HashSet<String>();
 	private Timer changeRequestTimer = new ChangeRequestTimer();
 	private Delegate delegate;
@@ -55,8 +52,7 @@ public class StandardizedPatientAnamnesisTableSubViewImpl extends Composite
 
 	public StandardizedPatientAnamnesisTableSubViewImpl() {
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
-		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
-		table = new CellTable<AnamnesisChecksValueProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		table = new CellTable<AnamnesisChecksValueProxy>(200, tableResources);
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		initTable();
