@@ -13,10 +13,18 @@
 <ui:style src="../../styles.css" >
 	.headerLabel
 	{
-		font-size: 16px;
-		 padding-bottom: 0px; 
+		font-size: 13px;
+		 padding-bottom: 0px;
+		 min-height: 10px;
+		 max-height: 13px; 
 	}
-	
+	.heightSet
+	{
+	font-size:11px;
+	max-height: 13px;
+	min-height: 5px;
+
+	}
 .noOutline {
 		outline-style: none;
 		overflow: hidden;	
@@ -24,9 +32,9 @@
 .padleft5
 	{
 		vertical-align: top;
-		padding-left: 3px;
-		padding-top: 6px;
-		margin-right: 10px;
+		padding-left: 0px;
+		padding-top: 10px;
+		margin-right: 0px;
 		
 	}
 	.standardTable input {
@@ -52,7 +60,7 @@
 		vertical-align: top;
 		padding-left: 3px;
 		padding-top: 6px;
-		margin-right: 10px;
+		margin-right: 3px;
 				
 	}
 	
@@ -62,9 +70,14 @@
 		padding-left: 0px;
 		padding-top: 6px;
 		margin-right: 5px;
-		
+		height: 9px !important;
 				
 	}
+	
+	.iconnew:hover {
+		cursor: pointer;
+	}
+	
 	
 	.icon:hover {
 		cursor: pointer;
@@ -138,15 +151,16 @@ border-bottom-color:#808080;
 			<g:VerticalPanel width="100%" verticalAlignment="middle" horizontalAlignment="center">
 			
 
- 	<g:SimplePanel height="40px">
-<g:HorizontalPanel   spacing="5">
-	<g:VerticalPanel  spacing="5">
-		<g:HorizontalPanel  >
-		<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+ 	<g:SimplePanel height="28px" width="99%">
+<g:HorizontalPanel  spacing="1" >
+	<g:VerticalPanel  >
+		<g:HorizontalPanel  horizontalAlignment="right" verticalAlignment="middle" >
+		<!-- url="/osMaEntry/gwt/unibas/images/arrowdownselect.png" -->
+		<g:Image ui:field="arrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}" ></g:Image>
 		<g:Image  styleName="{style.icon} " resource="{uiIcons.question}"></g:Image>			
 			<g:VerticalPanel>
-				<g:Label addStyleNames="{style.headerLabel}" ui:field="questionItemLbl" width="500px"></g:Label>
-				<g:Label ui:field="questionInstruction" ></g:Label>
+				<g:Label addStyleNames="{style.headerLabel}" ui:field="questionItemLbl" width="535px"></g:Label>
+				<g:Label ui:field="questionInstruction" width="530" addStyleNames="{style.heightSet}"></g:Label>
 			</g:VerticalPanel>
 			
 			<g:HorizontalPanel width="1px" horizontalAlignment="right" verticalAlignment="middle"  >
@@ -154,7 +168,7 @@ border-bottom-color:#808080;
 							<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>
 						</g:VerticalPanel>
 						<g:VerticalPanel verticalAlignment="middle">
-							<my:IconButton ui:field="delete" icon="trash" addStyleNames="{style.padleft5}"></my:IconButton>
+							<my:IconButton ui:field="delete" icon="trash" ></my:IconButton>
 						</g:VerticalPanel>
 					<g:Image ui:field="down" styleName="{style.iconnew}" resource="{uiIcons.triangle1South}"></g:Image>
 					<g:Image ui:field="up" styleName="{style.iconnew} " resource="{uiIcons.triangle1North}"></g:Image>
