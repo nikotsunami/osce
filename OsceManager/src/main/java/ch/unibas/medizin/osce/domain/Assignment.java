@@ -566,7 +566,7 @@ public class Assignment {
    	{
    		EntityManager em = entityManager();
    		
-   		String queryString="select sp ";
+   		String queryString="select distinct sp ";
    		queryString += "from Assignment a, StandardizedPatient sp, PatientInSemester pis, PatientInRole pir ";
    		queryString += "where pis.semester = "+semesterId+" ";
    		queryString += "and pis.id = pir.patientInSemester ";
@@ -582,7 +582,7 @@ public class Assignment {
    	{
    		EntityManager em = entityManager();
    		
-   		String queryString="select d ";
+   		String queryString="select distinct d ";
    		queryString += "from Assignment a, Osce o, OsceDay od, Doctor d ";
    		queryString += "where o.semester = "+semesterId+" ";
    		queryString += "and o.id = od.osce ";

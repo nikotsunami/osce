@@ -146,7 +146,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 	
 	@SuppressWarnings("deprecation")
 	private void init() {
-		Log.info("Patient in Semester : "+place.getSemesterProxy());
+		Log.info("Patient in Semester : "+place.getSemesterProxy().getId());
 		
 		lstChkSp=new ArrayList<CheckBox>(0);
 		lstChkExaminor=new ArrayList<CheckBox>(0);
@@ -208,6 +208,23 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 							}
 						});
 					}
+					
+					view.getExaminerRb().addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							//Log.info("~~~Total Widget view.getVpSP().getWidgetCount()"+ view.getVpStudent().getWidgetCount());
+							if(view.getVpExaminor().getWidgetCount()>0) {
+								Log.info("True");
+								if(chkAllExaminor.isChecked()==true ) {
+									view.getExaminerAllRb().setChecked(true);
+								}
+							}
+							else {
+								Log.info("False");
+							}
+						}
+					});
+					
 				}else{
 					
 					view.getVpExaminor().clear();
@@ -230,8 +247,6 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 						Iterator<StandardizedPatientProxy> iteratorSP=response.iterator();												
 						if(response.size()>0)
 						{
-
-							Log.info("asd");
 							chkAllSP=new CheckBox(constants.all());
 							
 							view.getVpSP().clear();
@@ -275,7 +290,21 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 								
 							}
 
-							
+							view.getSpRb().addClickHandler(new ClickHandler() {
+								@Override
+								public void onClick(ClickEvent event) {
+									
+									if(view.getVpSP().getWidgetCount()>0) {
+										Log.info("True");
+										if(chkAllSP.isChecked()==true ) {
+											view.getSpAllRb().setChecked(true);
+										}
+									}
+									else {
+										Log.info("False");
+									}
+								}
+							});
 							
 						}else{
 							view.getVpSP().clear();
@@ -711,7 +740,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 
 
 
-summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,true, 
+				summoningsServiceAsync.getTemplateContent(selectedValue,true,true, 
 						new AsyncCallback<String[]>() {
 							
 							@Override
@@ -944,7 +973,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			//Feature : 154
-					summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,false, 
+					summoningsServiceAsync.getTemplateContent(selectedValue,false,false, 
 							new AsyncCallback<String[]>() {
 								
 								@Override
@@ -1172,7 +1201,7 @@ summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,
 					  
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			//Feature : 154
-					summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),true,false, 
+					summoningsServiceAsync.getTemplateContent(selectedValue,true,false, 
 							new AsyncCallback<String[]>() {
 								
 								@Override

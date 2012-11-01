@@ -9,11 +9,21 @@ import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ch.unibas.medizin.osce.client.SummoningsService;
 import ch.unibas.medizin.osce.client.util.email.EmailService;
@@ -24,7 +34,6 @@ import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
@@ -36,6 +45,8 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 @SuppressWarnings("serial")
 public class SummoningsServiceImpl extends RemoteServiceServlet implements SummoningsService{
+	
+	private static Logger log = Logger.getLogger(SummoningsServiceImpl.class);
 
 	private EmailService emailService;
 	
@@ -45,11 +56,19 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		this.emailService = new EmailServiceImpl();
 	}
 	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+		((EmailServiceImpl)emailService).setSender(applicationContext.getBean(JavaMailSenderImpl.class));
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public String generateSPMailPDF(Long semesterId,List<Long> spIds){
 		
 		StandardizedPatient patient = null;
+		PatientInSemester patientInSemester = null;
 		
 		final Map templateVariables = new HashMap();
 		
@@ -57,6 +76,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		List<String> fromNames = null;
 		List<String> assignments = null;
 		List<List<String>> assignmentList = null;
+		List<Assignment> assignments2 = null;
 		
 		SimpleDateFormat dateFormat = null;
 		SimpleDateFormat timeFormat = null;
@@ -68,45 +88,50 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			assignmentList = new ArrayList<List<String>>(0);
 			
 			dateFormat = new SimpleDateFormat("dd MMM yyyy");
-			timeFormat = new SimpleDateFormat("hh:mm");
+			timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			for(Long id : spIds){
 				
 				patient = StandardizedPatient.findStandardizedPatient(id);
-				Log.info("PatientInSemester : "+patient.getPatientInSemester());
+				log.info("StandardizedPatient ID : "+id);
 				
-				for(PatientInSemester patientInSemester : patient.getPatientInSemester()){
+				patientInSemester = PatientInSemester.findPisBySemesterSp(semesterId, id);
+				
+//				for(PatientInSemester patientInSemester : patient.getPatientInSemester()){
 					
-					Log.info("PatientInRole : "+patientInSemester.getPatientInRole());
+					assignments = new ArrayList<String>(0);
 					
-					for(PatientInRole patientInRole : patientInSemester.getPatientInRole()){
-						
-						Log.info("Assignments : "+patientInRole.getAssignments());
-						
-						assignments = new ArrayList<String>(0);
+					if(patientInSemester.getPatientInRole() != null && patientInSemester.getPatientInRole().size() >0){
 						
 						assignments.add( "Date"
 								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 								+ "Start Time"
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 								+ "End Time"
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 								+ "Role<br/>");
 						
-						for(Assignment assignment : patientInRole.getAssignments()){
+						for(PatientInRole patientInRole : patientInSemester.getPatientInRole()){
 							
-							Log.info("Assignment : "+assignment);
+							log.info("PatientInRole  inner : "+patientInRole.getId());
 							
-							assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
-									+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-									+timeFormat.format(assignment.getOsceDay().getTimeStart())
-									+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-									+timeFormat.format(assignment.getOsceDay().getTimeEnd())
-									+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-									+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName());
+							assignments2 = getSortedAssignmentList(patientInRole.getAssignments());
+							
+							for(Assignment assignment : assignments2){
+								
+								log.info("Assignment : "+assignment.getId());
+								
+								assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+timeFormat.format(assignment.getTimeStart())
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+timeFormat.format(assignment.getTimeEnd())
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName());
+							}
 						}
 					}
-				}
+//				}
 				
 				toNames.add(patient.getName()+" "+patient.getPreName());
 				fromNames.add(OsMaFilePathConstant.FROM_NAME);
@@ -122,7 +147,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			return this.generateMailPDFUsingTemplate(semesterId.toString(),false, templateVariables);
 			
 		} catch (Exception e) {
-			Log.error("ERROR : "+e.getMessage());
+			log.error("ERROR : "+e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{
@@ -132,6 +157,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			fromNames = null;
 			assignments = null;
 			assignmentList = null;
+			assignments2 = null;
 			
 			dateFormat = null;
 			timeFormat = null;
@@ -151,6 +177,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		List<String> fromNames = null;
 		List<String> assignments = null;
 		List<List<String>> assignmentList = null;
+		List<Assignment> assignments3 = null;
 		
 		DateFormat dateFormat = null;
 		DateFormat timeFormat = null;
@@ -162,36 +189,38 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			assignmentList = new ArrayList<List<String>>(0);
 			
 			dateFormat = new SimpleDateFormat("dd MMM yyyy");
-			timeFormat = new SimpleDateFormat("hh:mm");
+			timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			for(Long id : examinerIds){
 				
 				examiner = Doctor.findDoctor(id);
-				Log.info("Assignments : "+examiner.getAssignments());
 				
 				assignments = new ArrayList<String>(0);
 				
 				assignments.add( "Date"
 						+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Start Time"
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "End Time"
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Role"
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Room Number<br/>");
 				
-				for(Assignment assignment : examiner.getAssignments()){			
-					Log.info("Assignment : "+assignment);
+				assignments3 = getSortedAssignmentList(examiner.getAssignments());
+				
+				
+				for(Assignment assignment : assignments3 ){			
+					log.info("Assignment : "+assignment.getId());
 					
 					assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-							+timeFormat.format(assignment.getOsceDay().getTimeStart())
-							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-							+timeFormat.format(assignment.getOsceDay().getTimeEnd())
+							+timeFormat.format(assignment.getTimeStart())
+							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+							+timeFormat.format(assignment.getTimeEnd())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 //Feature : 154 
-							+((assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName() == null && (assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName().compareTo("")== 0 ))?"":assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName())
+							+((assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName() == null && (assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName().compareTo("")== 0 ))?"":assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName())
 //Feature : 154 
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 							+assignment.getOscePostRoom().getRoom().getRoomNumber());
@@ -211,7 +240,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			return this.generateMailPDFUsingTemplate(semesterId.toString(),true, templateVariables);
 			
 		} catch (Exception e) {
-			Log.error("ERROR : "+e.getMessage());
+			log.error("ERROR : "+e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{
@@ -221,11 +250,30 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			fromNames = null;
 			assignments = null;
 			assignmentList = null;
+			assignments3 = null;
 			
 			dateFormat = null;
 			timeFormat = null;
 			
 		}
+	}
+
+	private List<Assignment> getSortedAssignmentList(Set<Assignment> assignments) {
+		List<Assignment> assignmentList = new ArrayList<Assignment>(assignments);
+		Collections.sort(assignmentList, new Comparator<Assignment>() {
+
+			@Override
+			public int compare(Assignment assignment1, Assignment assignment2) {
+				
+				int result = assignment1.getOsceDay().getOsceDate().compareTo(assignment2.getOsceDay().getOsceDate());
+				if(result != 0)
+					return result;
+				
+				return assignment1.getTimeStart().compareTo(assignment2.getTimeStart());
+										
+			}
+		});
+		return assignmentList;
 	}
 	
 	@Override
@@ -289,7 +337,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			return fetchContextPath(true)+ OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT;
 
 		} catch (Exception e) {
-			Log.error("in SummoningsServiceImpl.generateMailPDFUsingTemplate: "
+			log.error("in SummoningsServiceImpl.generateMailPDFUsingTemplate: "
 					+ e.getMessage());
 			e.printStackTrace();
 			return null;
@@ -311,12 +359,15 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		
 		StandardizedPatient patient = null;
 		
+		PatientInSemester patientInSemester = null;
+		
 		final Map templateVariables = new HashMap();
 		
 		List<String> toNames = null;
 		List<String> fromNames = null;
 		List<String> assignments = null;
 		List<List<String>> assignmentList = null;
+		List<Assignment> assignments2 = null;
 		
 		List<String> toMailIds = null;
 		String fromMailId = null;
@@ -332,7 +383,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			assignmentList = new ArrayList<List<String>>(0);
 			
 			dateFormat = new SimpleDateFormat("dd MMM yyyy");
-			timeFormat = new SimpleDateFormat("hh:mm");
+			timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			toMailIds = new ArrayList<String>(0);
 			fromMailId = OsMaFilePathConstant.FROM_MAIL_ID;
@@ -341,42 +392,49 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			for(Long id : spIds){
 				
 				patient = StandardizedPatient.findStandardizedPatient(id);
-				Log.info("PatientInSemester : "+patient.getPatientInSemester());
 				
-				for(PatientInSemester patientInSemester : patient.getPatientInSemester()){
+				patientInSemester = PatientInSemester.findPisBySemesterSp(semesterId, id);
+				
+//				for(PatientInSemester patientInSemester : patient.getPatientInSemester()){
 					
-					Log.info("PatientInRole : "+patientInSemester.getPatientInRole());
+					assignments = new ArrayList<String>(0);
 					
-					for(PatientInRole patientInRole : patientInSemester.getPatientInRole()){
-						
-						Log.info("Assignments : "+patientInRole.getAssignments());
-						
-						assignments = new ArrayList<String>(0);
+					if(patientInSemester.getPatientInRole() != null && patientInSemester.getPatientInRole().size() >0){
 						
 						assignments.add( "Date"
 								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 								+ "Start Time"
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 								+ "End Time"
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 								+ "Role<br/>");
 						
-						for(Assignment assignment : patientInRole.getAssignments()){
+						
+						for(PatientInRole patientInRole : patientInSemester.getPatientInRole()){
 							
-							Log.info("Assignment : "+assignment);
+							assignments2 = getSortedAssignmentList(patientInRole.getAssignments());
 							
-							assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
-									+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-									+timeFormat.format(assignment.getOsceDay().getTimeStart())
-									+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-									+timeFormat.format(assignment.getOsceDay().getTimeEnd())
-									+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-									+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName());
-							
-							
+							for(Assignment assignment : assignments2){
+								
+								log.info("Assignment : "+assignment.getId());
+								
+								assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+timeFormat.format(assignment.getTimeStart())
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+timeFormat.format(assignment.getTimeEnd())
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName());
+								
+								
+							}
 						}
+						
 					}
-				}
+					
+					
+					
+//				}
 				
 				toNames.add(patient.getName()+" "+patient.getPreName());
 				fromNames.add(OsMaFilePathConstant.FROM_NAME);
@@ -398,16 +456,18 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			return this.sendMailUsingTemplate(semesterId.toString(),false, templateVariables);
 			
 		} catch (Exception e) {
-			Log.error("ERROR : "+e.getMessage());
+			log.error("ERROR : "+e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{
 			patient = null;
+			patientInSemester = null;
 			
 			toNames = null;
 			fromNames = null;
 			assignments = null;
 			assignmentList = null;
+			assignments2 = null;
 			
 			toMailIds = null;
 			fromMailId = null;
@@ -430,6 +490,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		List<String> fromNames = null;
 		List<String> assignments = null;
 		List<List<String>> assignmentList = null;
+		List<Assignment> assignment2  = null;
 		
 		DateFormat dateFormat;
 		DateFormat timeFormat;
@@ -444,8 +505,9 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			fromNames = new ArrayList<String>(0);
 			assignmentList = new ArrayList<List<String>>(0);
 			
+			
 			dateFormat = new SimpleDateFormat("dd MMM yyyy");
-			timeFormat = new SimpleDateFormat("hh:mm");
+			timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			toMailIds = new ArrayList<String>(0);
 			fromMailId = OsMaFilePathConstant.FROM_MAIL_ID;
@@ -454,32 +516,34 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			for(Long id : examinerIds){
 				
 				examiner = Doctor.findDoctor(id);
-				
-				Log.info("Assignments : "+examiner.getAssignments());
 						
 				assignments = new ArrayList<String>(0);
 				
 				assignments.add( "Date"
 						+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Start Time"
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "End Time"
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Role"
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Room Number<br/>");
 				
-				for(Assignment assignment : examiner.getAssignments()){
+				
+				assignment2 = getSortedAssignmentList(examiner.getAssignments());
+				
+				for(Assignment assignment : assignment2){
 							
-					Log.info("Assignment : "+assignment);
+					log.info("Assignment : "+assignment.getId());
 					
 					assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-							+timeFormat.format(assignment.getOsceDay().getTimeStart())
-							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-							+timeFormat.format(assignment.getOsceDay().getTimeEnd())
+							+timeFormat.format(assignment.getTimeStart())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-							+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName()
+							+timeFormat.format(assignment.getTimeEnd())
+							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+							//+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName()
+							+((assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName() == null && (assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName().compareTo("")== 0 ))?"":assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 							+assignment.getOscePostRoom().getRoom().getRoomNumber());
 							
@@ -506,7 +570,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			return this.sendMailUsingTemplate(semesterId.toString(),true, templateVariables);
 			
 		} catch (Exception e) {
-			Log.error("ERROR : "+e.getMessage());
+			log.error("ERROR : "+e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{
@@ -516,6 +580,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			fromNames = null;
 			assignments = null;
 			assignmentList = null;
+			assignment2 = null;
 			
 			dateFormat = null;
 			timeFormat = null;
@@ -534,7 +599,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 //
 //			System.out.println("Finding servlet context");
 //			
-//				Log.info("real Path for template is :" + getServletContext());
+//				log.info("real Path for template is :" + getServletContext());
 //		}catch(Exception e){
 //				e.printStackTrace();
 //			}
@@ -558,39 +623,39 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 
 	}
 	
-	public  void fetchTemplateRealPath() {
-
-		String fileSeparator = System.getProperty("file.separator");
-		
-		try {
-
-			System.out.println("Finding servlet context");
-			try{
-				Log.info("real Path for template is :" + getServletContext());
-//				Log.info("real Path for template is :" + RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
-//				return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator;
-				
-//				Log.info("real Path for template is :" + RequestFactoryServlet);
-						
-				Log.info("@@@real Path for template is :" + getServletContext().getRealPath(fileSeparator));
-				Log.info("real Path for template is :" + getThreadLocalRequest().getSession());
-				Log.info("!!!!real Path for template is :" + getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			
-//			ServletContext servletContext = perThreadRequest.get().getSession().getServletContext();
+//	public  void fetchTemplateRealPath() {
 //
-//			if (servletContext != null) {
-//				String checkRealPath = servletContext.getRealPath(fileSeparator);
-//				Log.info("checkRealPath is : " + checkRealPath);
-//			} else {
-//				Log.info("checkRealPath is : null...");
+//		String fileSeparator = System.getProperty("file.separator");
+//		
+//		try {
+//
+//			System.out.println("Finding servlet context");
+//			try{
+//				log.info("real Path for template is :" + getServletContext());
+////				log.info("real Path for template is :" + RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
+////				return RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator;
+//				
+////				log.info("real Path for template is :" + RequestFactoryServlet);
+//						
+//				log.info("@@@real Path for template is :" + getServletContext().getRealPath(fileSeparator));
+//				log.info("real Path for template is :" + getThreadLocalRequest().getSession());
+//				log.info("!!!!real Path for template is :" + getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
+//			}catch(Exception e){
+//				e.printStackTrace();
 //			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//			
+////			ServletContext servletContext = perThreadRequest.get().getSession().getServletContext();
+////
+////			if (servletContext != null) {
+////				String checkRealPath = servletContext.getRealPath(fileSeparator);
+////				log.info("checkRealPath is : " + checkRealPath);
+////			} else {
+////				log.info("checkRealPath is : null...");
+////			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 //Feature : 154 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -610,6 +675,10 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		String subject = null;
 		
 		int index = 0;
+		
+		// SPEC Change
+		boolean success = false;
+		
 		try {
 			toNames = (List<String>) templateVariables.get("toNames");
 			toMailIds = (List<String>) templateVariables.get("toMailIds");
@@ -621,6 +690,9 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			assignments = (List<List<String>>) templateVariables.get("assignments");
 			//Feature : 154 
 			fileContents = this.getTemplateContent(semesterId, isExaminer, true)[1];
+			
+			// SPEC Change
+			success = true;
 			
 			for(index=0; index < toNames.size(); index++){
 				
@@ -637,15 +709,16 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				mailMessage = mailMessage.replace("[assignment]", assignmentString);
 				mailMessage = mailMessage.replace("[fromName]", fromNames.get(index));
 				
-				Log.info("emailService = " + emailService);
+				log.info("emailService = " + emailService);
 				
-				emailService.sendMail(new String[]{toMailIds.get(index)}, fromMailId, subject, mailMessage);
+				if(!emailService.sendMail(new String[]{toMailIds.get(index)}, fromMailId, subject, mailMessage))
+					success = false;
 				
 			}
 			
-			return true;
+			return success;
 		} catch (Exception e) {
-			Log.error(e.getMessage());
+			log.error(e.getMessage());
 			e.printStackTrace();
 			return false;
 		}finally{
@@ -678,7 +751,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				
 				file = new File( fetchRealPath(false) +OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE);
 				
-				Log.info("FILE PATH ==== " + file.getAbsolutePath());
+				log.info("FILE PATH ==== " + file.getAbsolutePath());
 				
 				if(file.isFile())
 					return new String[]{ fetchRealPath(false)+ OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE,FileUtils.readFileToString(file),"not_found"};
@@ -689,7 +762,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				
 			
 		} catch (Exception e) {
-			Log.error(e.getMessage());
+			log.error(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{
@@ -739,7 +812,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);
 			else
-				Log.error("Template file does not exist. New File will be created.");
+				log.error("Template file does not exist. New File will be created.");
 			
 			FileUtils.touch(file);
 			FileUtils.writeStringToFile(file, templateContent);
@@ -747,7 +820,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 			
 		} catch (Exception e) {
-			Log.error(e.getMessage());
+			log.error(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{
@@ -769,12 +842,12 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			if(file.isFile())
 				FileUtils.deleteQuietly(file);
 			else
-				Log.error("Template file does not exist.");
+				log.error("Template file does not exist.");
 			
 			return true;
 			
 		} catch (Exception e) {
-			Log.error(e.getMessage());
+			log.error(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}finally{

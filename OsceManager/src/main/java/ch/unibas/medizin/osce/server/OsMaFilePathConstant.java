@@ -67,7 +67,7 @@ public class OsMaFilePathConstant {
 	public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "usr/oscemanager/eosce/export/unprocessed/";
 	// public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
 
-	public static String DEFAULT_MAIL_TEMPLATE_PATH = "usr/oscemanager/Templates/mailTemplates/";
+	public static String DEFAULT_MAIL_TEMPLATE_PATH = "/usr/oscemanager/Templates/mailTemplates/";
 	// public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\oscemanager\\Templates\\mailTemplates\\";
 
 	public static String PRINT_SCHEDULE_TEMPLATE = "usr/oscemanager/Templates/";
