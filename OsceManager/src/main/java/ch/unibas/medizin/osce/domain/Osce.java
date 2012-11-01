@@ -258,10 +258,23 @@ public class Osce {
     
     public static Boolean autoAssignPatientInRole(Long osceId) {
     	try {
-    		SPAllocator spAlloc = new SPAllocator(Osce.findOsce(osceId));
+    		/*SPAllocator spAlloc = new SPAllocator(Osce.findOsce(osceId));
     		spAlloc.getSolution();
     		spAlloc.printSolution();
-    		spAlloc.saveSolution();
+    		spAlloc.saveSolution();*/
+    		
+    		//spec[
+    		Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+    		
+    		while (itr.hasNext())
+    		{
+    			OsceDay osceDay = itr.next();
+    			SPAllocator spAlloc = new SPAllocator(osceDay);    			
+        		spAlloc.getSolution();
+        		spAlloc.printSolution();
+        		spAlloc.saveSolution();
+    		}    		
+    		//spec]
     	} catch(Exception e) {
     		e.printStackTrace();
     	}
@@ -711,7 +724,7 @@ public class Osce {
 		// String
 		// query="select pis from PatientInSemester as pis where pis.semester="+semesterId
 		// + " and pis.id in (select psod from pis.osceDays psod)";
-		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId);
+		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId,true);
 
 		Set<OsceDay> osceDays;
 		

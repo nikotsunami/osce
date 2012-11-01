@@ -310,7 +310,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											  
 								 			Log.info("Search Criteria For Sorted Lists : " +listAdvanceSearchCirteria.size());
 												 
-								 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria);
+								 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
 								 						 				
 								 			Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria.size());			 				
 								 				 
@@ -824,7 +824,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					  
 		 			Log.info("Search Criteria For Simple Security is : " +listAdvanceSearchCirteria.size());
 						 
-		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria);
+		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
 		 			
 		 			Log.info("Size of listOfPatientInSemesterSatisfyCriteria IS :  " + listOfPatientInSemesterSatisfyCriteria.size());
 		 			
@@ -989,7 +989,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					  
 		 			Log.info("Search Criteria When SP not fit in Role is : " +listAdvanceSearchCirteria.size());
 						 
-		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria);
+		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
 		 			
 		 			Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria.size());
 		 			

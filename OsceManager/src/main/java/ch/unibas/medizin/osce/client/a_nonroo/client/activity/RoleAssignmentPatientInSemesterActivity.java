@@ -1829,6 +1829,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 		this.showApplicationLoading(true);
 
+		view.getIgnoreOsceDaycheckBox().setChecked(true);
 		initPatientInSemester(true, false,false);
 		initOsceDaySubView();
 		setAutoAssignmentBtnProperty();
@@ -1848,12 +1849,11 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	if (isFirstData) {
 		showApplicationLoading(true);
 		//showApplicationLoading(true);
-			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId()).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId(),view.getIgnoreOsceDaycheckBox().isChecked()).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 					@Override
 				public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
 						//  
-						
 						allPatientInSemesterProxies = patientInSemesterProxies;
 						// Module 3 : Assignment E : Stop
 						//  
@@ -2482,6 +2482,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 	public void refreshPatientInSemesterTable() {
 		
+		
 		if(osceDayTimer!=null)
 		osceDayTimer.cancel();
 		
@@ -2538,7 +2539,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		this.showApplicationLoading(true);
 			requests.patientInSemesterRequestNonRoo()
 					.findPatientInSemesterByOsceDayAdvancedCriteria(
-							semesterProxy.getId(),selectedRolsOsceDayProxy.getId(),isCriteriaAvailable, searchCriteria)
+							semesterProxy.getId(),selectedRolsOsceDayProxy.getId(),isCriteriaAvailable, searchCriteria,view.getIgnoreOsceDaycheckBox().isChecked())
 					.with(withStatement)
 					.fire(callback);
 //		}
@@ -3500,6 +3501,28 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		if(osceDayTimer!=null)
 		osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 		//initPatientInSemester(true, false, false);
+		
+	}
+
+	@Override
+	public void ignoreOsceDayCheckBoxselected() {
+		if(view.getIgnoreOsceDaycheckBox().isChecked()){
+			if(roleSubViewSelected !=null){
+				refreshPatientInSemesterTable();
+			}
+			else{
+				initPatientInSemester(true, false, false);
+			}
+		}
+		else{
+			if(roleSubViewSelected!=null){
+			refreshPatientInSemesterTable();
+			}
+			else{
+				
+				initPatientInSemester(true, false, false);
+			}
+		}
 		
 	}
 

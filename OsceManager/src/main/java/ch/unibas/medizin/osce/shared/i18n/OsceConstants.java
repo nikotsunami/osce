@@ -1161,6 +1161,8 @@ public interface OsceConstants extends Constants {
 	public String newBreakDuration();
 	
 	public String newBreakDurationNotNull();
+	
+	public String ignoreAcceptedOsceDay();
 	//module 8]
 
 }

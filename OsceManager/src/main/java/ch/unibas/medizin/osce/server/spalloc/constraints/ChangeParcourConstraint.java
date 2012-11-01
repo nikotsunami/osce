@@ -40,7 +40,10 @@ public class ChangeParcourConstraint extends AssignmentConstraint {
 			}
 			
 			// if time between two assignments is larger than shortBreakSimpatChange, the change occurs during a rotation
-			boolean isDuringRotation = diffInMinutes > model.getOsce().getShortBreakSimpatChange();
+			//boolean isDuringRotation = diffInMinutes > model.getOsce().getShortBreakSimpatChange();
+			//spec[
+			boolean isDuringRotation = diffInMinutes > model.getOsceDay().getOsce().getShortBreakSimpatChange();
+			//spec]
 			
 			if(p.getPatient().equals(patient.getPatient()) &&
 					isDuringRotation &&

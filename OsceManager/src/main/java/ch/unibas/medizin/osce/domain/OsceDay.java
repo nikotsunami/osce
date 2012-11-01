@@ -790,4 +790,18 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 	return true;
 }
 
+	//spec[
+	public int simpatAssignmentSlots() {
+	    List<Assignment> assignments = Assignment.retrieveAssignmentsOfTypeSPByOsceDay(this);
+	    if (assignments.get(0) != null) {
+	        Assignment assignment = assignments.get(0);
+	        long secs = (assignment.getTimeEnd().getTime() - assignment.getTimeStart().getTime()) / 1000;
+	        int assignmentMinutes = (int) (secs / 60);
+	        int assignmentSlots = assignmentMinutes / (this.osce.getPostLength() + 1);
+	        return assignmentSlots;
+	    }
+	    return 0;
+	}
+	//spec]
+
 }
