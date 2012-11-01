@@ -9,11 +9,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 import ch.unibas.medizin.osce.shared.RoleTypes;
 
@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.shared.RoleTypes;
 @RooEntity(finders = { "findOscePostsByOscePostBlueprintAndOsceSequence" })
 public class OscePost {
 
+	private static Logger Log = Logger.getLogger(OscePost.class);
     @ManyToOne
     private OscePostBlueprint oscePostBlueprint;
 

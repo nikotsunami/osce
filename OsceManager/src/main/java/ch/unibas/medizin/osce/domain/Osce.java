@@ -23,7 +23,6 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
 import com.google.gwt.i18n.client.Constants.DefaultIntValue;
 import com.google.gwt.user.client.AsyncProxy.DefaultValue;
@@ -110,7 +109,7 @@ public class Osce {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Task> tasks = new HashSet<Task>();
-    private static Logger log = Logger.getLogger(Osce.class);
+    private static Logger Log = Logger.getLogger(Osce.class);
     // dk, 2012-02-10: split up m to n relationship since students
     // need flag whether they are enrolled or not
     //
@@ -244,10 +243,10 @@ public class Osce {
     			TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
     	    	System.out.println(optGen.toString());
     	    	
-    	    	log.info("calling createAssignments()...");
+    	    	Log.info("calling createAssignments()...");
     	    	
     	    	Set<Assignment> assignments = optGen.createAssignments();
-    	    	log.info("number of assignments created: " + assignments.size());
+    	    	Log.info("number of assignments created: " + assignments.size());
     		}
 	    	
     	} catch(Exception e) {
@@ -349,7 +348,7 @@ public class Osce {
     
  public static List<Osce> findAllOsceOnSemesterId(Long semesterId){
 		
-    	log.info("Inside Osce class To retrive all Osce Based On semesterId");
+    	Log.info("Inside Osce class To retrive all Osce Based On semesterId");
 		EntityManager em = entityManager();
 		TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId ,Osce.class);
 		return q.getResultList();
@@ -836,7 +835,7 @@ public class Osce {
 					Log.info("Assignment " + assignment.getId() + "is going to remove");
 					osceDay.getAssignments().remove(assignment);
 					assignment.remove();
-					log.info("assignment removed");
+					Log.info("assignment removed");
 				}
 				
 				

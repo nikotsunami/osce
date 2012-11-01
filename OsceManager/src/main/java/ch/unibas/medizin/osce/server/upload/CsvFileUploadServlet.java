@@ -16,6 +16,7 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.StudentsActivity;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
@@ -25,7 +26,6 @@ import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.csvreader.CsvReader;
 import com.google.gwt.user.client.Cookies;
 
@@ -35,7 +35,9 @@ import com.google.gwt.user.client.Cookies;
 
 @SuppressWarnings("serial")
 public class CsvFileUploadServlet extends HttpServlet {
-
+	
+	private static Logger Log = Logger.getLogger(CsvFileUploadServlet.class);
+	
 	public String fetchRealPath(HttpServletRequest request) {
 
 		String fileSeparator = System.getProperty("file.separator");

@@ -15,13 +15,14 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 public class UploadServlet extends HttpServlet {
 
+	private static Logger Log = Logger.getLogger(UploadServlet.class);
 	//private static String UPLOAD_DIRECTORY="d://sp//images";
 	
 	//SPEC[Start

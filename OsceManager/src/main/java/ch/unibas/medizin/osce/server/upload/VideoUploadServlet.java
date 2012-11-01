@@ -16,17 +16,18 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 
 import ch.unibas.medizin.osce.domain.MediaContent;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 public class VideoUploadServlet extends HttpServlet{
 	
 	
 	//private static String UPLOAD_DIRECTORY=".";
+	private static Logger Log = Logger.getLogger(VideoUploadServlet.class);
 	
 		//SPEC[Start
 		private static String appUploadDirectory=OsMaFilePathConstant.appVideoUploadDirectory;

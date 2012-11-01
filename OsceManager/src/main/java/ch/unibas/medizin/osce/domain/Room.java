@@ -1,10 +1,10 @@
 package ch.unibas.medizin.osce.domain;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,6 +24,8 @@ import javax.persistence.TypedQuery;
 @RooEntity
 public class Room {
 
+	private static Logger Log = Logger.getLogger(Room.class);
+	
     @NotNull
     @Size(min = 1, max = 20)
     private String roomNumber;

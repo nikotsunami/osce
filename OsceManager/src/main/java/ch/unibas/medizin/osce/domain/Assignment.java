@@ -24,6 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -31,13 +32,14 @@ import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity(finders = { "findAssignmentsByOscePostRoomAndOsceDayAndTypeAndSequenceNumber" })
 public class Assignment {
 
+	private static Logger Log = Logger.getLogger(Assignment.class);
+	
     @Enumerated
     private AssignmentTypes type;
 

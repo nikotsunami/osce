@@ -11,16 +11,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity(table = "role_table_item")
 public class RoleTableItem {
+	
+	private static Logger Log = Logger.getLogger(RoleTableItem.class);
 	
 	@Column(name="item_name")
 	private String itemName;

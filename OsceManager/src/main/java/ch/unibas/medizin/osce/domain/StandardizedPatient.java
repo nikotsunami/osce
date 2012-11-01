@@ -56,7 +56,6 @@ import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
 
@@ -65,7 +64,7 @@ import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 @RooEntity
 public class StandardizedPatient {
 
-    private static Logger log = Logger.getLogger(StandardizedPatient.class);
+    private static Logger Log = Logger.getLogger(StandardizedPatient.class);
 
     @Enumerated
     private Gender gender;
@@ -568,7 +567,7 @@ public class StandardizedPatient {
             csvUtil.writeCsv(standardizedPatients, true, true);
             csvUtil.close();
         } catch (Exception e) {
-        	log.error("Error while generating csv for StandardizedPatient ", e);
+        	Log.error("Error while generating csv for StandardizedPatient ", e);
             //e.printStackTrace();
         }
 			//Feature : 154
@@ -583,7 +582,7 @@ public class StandardizedPatient {
 			String idList = org.apache.commons.lang.StringUtils.join(ids,",");
 			String SQL = "select sp from StandardizedPatient as sp where sp.id in ("+idList+")";
 			TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(SQL,StandardizedPatient.class);
-			log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+			Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
 			result  = typedQuery.getResultList();
 		}
 		return result;

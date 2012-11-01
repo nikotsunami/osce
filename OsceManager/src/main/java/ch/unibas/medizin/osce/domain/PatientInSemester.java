@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-import com.allen_sauer.gwt.log.client.Log;
 import ch.unibas.medizin.osce.domain.Semester;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -25,6 +26,8 @@ import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 @RooEntity(finders = { "findPatientInSemestersBySemester" })
 public class PatientInSemester {
 
+	private static Logger Log = Logger.getLogger(PatientInSemester.class);
+	
     @ManyToOne
     private Semester semester;
 

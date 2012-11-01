@@ -7,8 +7,7 @@ import java.util.Set;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-
-import com.allen_sauer.gwt.log.client.Log;
+import org.apache.log4j.Logger;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -22,6 +21,8 @@ import javax.validation.constraints.Size;
 @RooEntity
 public class Keyword {
 
+	private static Logger Log = Logger.getLogger(Keyword.class);
+	
     @NotNull
     @Size(min = 2, max = 255)
     private String name;

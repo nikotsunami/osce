@@ -8,15 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 
-import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.core.client.GWT;
 
 public class ResourceDownloaderServlet extends HttpServlet {
-		
+	
+	private static Logger Log = Logger.getLogger(ResourceDownloaderServlet.class);
+	
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException {

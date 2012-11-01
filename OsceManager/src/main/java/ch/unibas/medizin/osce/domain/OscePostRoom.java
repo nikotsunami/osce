@@ -7,7 +7,6 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 import ch.unibas.medizin.osce.domain.Room;
 import javax.persistence.ManyToOne;
@@ -38,7 +37,7 @@ import javax.persistence.criteria.Root;
 @RooToString
 @RooEntity(finders = { "findOscePostRoomsByCourseAndOscePost", "findOscePostRoomsByOscePost", "findOscePostRoomsByRoomAndCourse" })
 public class OscePostRoom {
-	private static Logger log = Logger.getLogger(OscePostRoom.class);
+	private static Logger Log = Logger.getLogger(OscePostRoom.class);
 
     @ManyToOne
     private Room room;

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
@@ -24,7 +25,6 @@ import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.util;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
@@ -34,7 +34,9 @@ import de.novanic.eventservice.service.RemoteEventServiceServlet;
 @SuppressWarnings("serial")
 @Transactional
 public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceServlet implements AutoAssignPatientInSemesterService,Runnable{
-
+	
+	private static Logger Log = Logger.getLogger(AutoAssignPatientInSemesterServiceImpl.class);
+	
 	Long semesterId;
 	private static final Domain DOMAIN = DomainFactory.getDomain("localhost");
 	private int neededSp = 0;

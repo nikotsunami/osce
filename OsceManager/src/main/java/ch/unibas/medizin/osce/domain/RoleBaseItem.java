@@ -18,18 +18,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.shared.ItemDefination;
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity(table = "role_base_item")
 public class RoleBaseItem {
  
+	private static Logger Log = Logger.getLogger(RoleBaseItem.class);
+	
 	@Column(name = "item_defination")
 	@Enumerated
 	private ItemDefination item_defination;

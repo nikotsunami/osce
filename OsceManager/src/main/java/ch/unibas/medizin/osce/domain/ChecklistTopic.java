@@ -18,13 +18,14 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.allen_sauer.gwt.log.client.Log;
+import org.apache.log4j.Logger;
 
 @RooJavaBean
 @RooToString
 @RooEntity
 public class ChecklistTopic {
+	
+	private static Logger Log = Logger.getLogger(ChecklistTopic.class);
 	
 	private Integer sort_order;
 	

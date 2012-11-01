@@ -9,13 +9,14 @@ import javax.persistence.TypedQuery;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-
-import com.allen_sauer.gwt.log.client.Log;
+import org.apache.log4j.Logger;
 
 @RooJavaBean
 @RooToString
 @RooEntity
 public class MainSkill {
+	
+	private static Logger log = Logger.getLogger(MainSkill.class);
 	
 	@ManyToOne
 	private StandardizedRole role;
