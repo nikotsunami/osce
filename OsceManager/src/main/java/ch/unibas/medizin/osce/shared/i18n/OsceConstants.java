@@ -140,6 +140,8 @@ public interface OsceConstants extends Constants {
 
 	public String bmi();
 
+	public String breakDuration();
+
 	public String calculate();
 
 	public String cancel();
@@ -444,6 +446,8 @@ public interface OsceConstants extends Constants {
 
 	public String iban();
 
+	public String ignoreAcceptedOsceDay();
+
 	public String importBtn();
 
 	public String importeosce();
@@ -539,6 +543,10 @@ public interface OsceConstants extends Constants {
 	public String nationality();
 
 	public String nationaltiyWarning();
+
+	public String newBreakDuration();
+
+	public String newBreakDurationNotNull();
 
 	public String newRole();
 
@@ -1153,17 +1161,6 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
-	
-	
-	//module 8[
-	public String breakDuration();
-	
-	public String newBreakDuration();
-	
-	public String newBreakDurationNotNull();
-	
-	public String ignoreAcceptedOsceDay();
-	//module 8]
 
 }
 
