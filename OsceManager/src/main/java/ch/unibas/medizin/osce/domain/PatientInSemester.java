@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-import com.allen_sauer.gwt.log.client.Log;
 import ch.unibas.medizin.osce.domain.Semester;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -25,6 +26,8 @@ import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 @RooEntity(finders = { "findPatientInSemestersBySemester" })
 public class PatientInSemester {
 
+	private static Logger Log = Logger.getLogger(PatientInSemester.class);
+	
     @ManyToOne
     private Semester semester;
 
@@ -56,15 +59,27 @@ public class PatientInSemester {
         return resultList.get(0);
     }
     
-	public static List<PatientInSemester> findPatientInSemesterBySemester(Long semesterId) {
+	public static List<PatientInSemester> findPatientInSemesterBySemester(Long semesterId,boolean ignoreAcceptedOsceDay) {
 		if (semesterId == null)
 			return new ArrayList<PatientInSemester>();
 
 		EntityManager em = entityManager();
-		TypedQuery<PatientInSemester> query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId order by o.standardizedPatient.preName,name", PatientInSemester.class);
+		TypedQuery<PatientInSemester> query;
+		
+		if(ignoreAcceptedOsceDay){
+		
+			query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId order by o.standardizedPatient.preName,name", PatientInSemester.class);
+			query.setParameter("semesterId", semesterId);
+		}
+		else{
+			
+			query=em.createQuery("select ps from PatientInSemester as ps join ps.osceDays od where ps.semester = od.osce.semester and ps.semester.id = :semesterId and od.osce.semester.id = :semesterId order by ps.standardizedPatient.preName",PatientInSemester.class);
 		query.setParameter("semesterId", semesterId);
+		}
+		
 
 		List<PatientInSemester> resultList = query.getResultList();
+		Log.info("Patient In Semester IS :" + resultList.size());
 		if (resultList == null || resultList.size() == 0)
 			return new ArrayList<PatientInSemester>();
 
@@ -240,7 +255,7 @@ public class PatientInSemester {
 		}
     }
     
-    public static List<PatientInSemester> findPatientInSemesterByOsceDayAdvancedCriteria(Long semesterId,Long osceDayId,Boolean useOsceDay, List<AdvancedSearchCriteria> searchCriteria) {
+    public static List<PatientInSemester> findPatientInSemesterByOsceDayAdvancedCriteria(Long semesterId,Long osceDayId,Boolean useOsceDay, List<AdvancedSearchCriteria> searchCriteria,boolean isIgnoreAcceptedOsceDay) {
 //        if(useOsceDay){
     	EntityManager em = entityManager();
         String stanardizedPatientString = getStanardizedPatientIDList(searchCriteria);
@@ -248,9 +263,20 @@ public class PatientInSemester {
             Log.info("Return as null");
             return new ArrayList<PatientInSemester>();
         }
-		TypedQuery<PatientInSemester> query = em.createQuery(selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery +" order by o.standardizedPatient.preName,name", PatientInSemester.class);
+        TypedQuery<PatientInSemester> query;
+        
+        if(isIgnoreAcceptedOsceDay){
+        	
+        	query = em.createQuery(selectBase + queryBase +  whereBase + patientBase + stanardizedPatientString + semesterCriteriaQuery +" order by o.standardizedPatient.preName,name", PatientInSemester.class);
+        	query.setParameter("semesterId", semesterId);
+        }
+        else{	
+        	query = em.createQuery(selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery +" order by o.standardizedPatient.preName,name", PatientInSemester.class);
         query.setParameter("semesterId", semesterId);
         query.setParameter("oDayId", osceDayId);
+        }
+        
+       
         
         Log.info("!!!!! Query is : " +selectBase + queryBase + joinBase + whereBase + joinQueryBase + patientBase + stanardizedPatientString + semesterCriteriaQuery + semesterId);
 		

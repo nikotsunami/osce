@@ -15,12 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import ch.unibas.medizin.osce.domain.Administrator;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 public class AuthenticationFilter implements Filter {
-
+	
+	private static Logger Log = Logger.getLogger(AuthenticationFilter.class);
+	
 	@Override
 	public void destroy() {		
 		Log.info("Inside destroy");

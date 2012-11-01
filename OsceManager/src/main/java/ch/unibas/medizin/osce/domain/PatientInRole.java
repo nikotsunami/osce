@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -21,7 +22,6 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 
@@ -35,7 +35,9 @@ import javax.persistence.TypedQuery;
 @RooToString
 @RooEntity
 public class PatientInRole {
-
+	
+	private static Logger Log = Logger.getLogger(PatientInRole.class);
+	
     @ManyToOne
     private PatientInSemester patientInSemester;
 
@@ -355,11 +357,23 @@ public class PatientInRole {
     	while(itr.hasNext())
     	{
     		PatientInRole patientInRole = itr.next();
-    		
+    		removePatientInRoleOfNullEntry(patientInRole.getPatientInSemester().getId());
     		patientInRole.remove();
     	}
     	
     	return true;
+    }
+    
+    public static void removePatientInRoleOfNullEntry(Long pisId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT pir FROM PatientInRole AS pir WHERE pir.patientInSemester = " + pisId + " AND pir.oscePost IS NULL";
+    	TypedQuery<PatientInRole> q = em.createQuery(sql, PatientInRole.class);
+    	if (q.getResultList().size() == 1)
+    	{
+    		PatientInRole pir = q.getSingleResult();
+    		pir.remove();
+    	}
     }
     //spec bug sol
     public static String savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId){
@@ -566,4 +580,23 @@ public class PatientInRole {
     		}
     	
     }
+    
+    //spec[
+    public static List<PatientInRole> findPatientInRoleByOsceDay(Long osceDayId)
+    {
+    	EntityManager em = entityManager();
+    	//select pr.* from patient_in_role pr, osce_post op, osce_sequence os,osce_day od where 
+    	//od.id = os.osce_day
+    	//and os.id = op.osce_sequence
+    	//and op.id= pr.osce_post
+    	//and od.id = 125;
+    	String sql = "SELECT pir FROM PatientInRole AS pir, OscePost AS op, OsceSequence AS os, OsceDay AS od WHERE" +
+    			" od.id = os.osceDay" +
+    			" AND os.id = op.osceSequence" +
+    			" AND op.id = pir.oscePost" +
+    			" AND od.id = " + osceDayId;
+    	TypedQuery<PatientInRole> q = em.createQuery(sql, PatientInRole.class);
+    	return q.getResultList();
+    }
+    //spec]
 }

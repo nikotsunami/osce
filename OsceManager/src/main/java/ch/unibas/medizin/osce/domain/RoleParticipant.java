@@ -1,10 +1,10 @@
 package ch.unibas.medizin.osce.domain;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 
@@ -22,6 +22,8 @@ import javax.validation.constraints.NotNull;
 @RooEntity
 public class RoleParticipant {
 
+	private static Logger Log = Logger.getLogger(RoleParticipant.class);
+	
     @ManyToOne
     @NotNull
     private StandardizedRole standardizedRole;

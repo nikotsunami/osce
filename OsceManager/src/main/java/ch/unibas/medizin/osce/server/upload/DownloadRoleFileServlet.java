@@ -9,11 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 public class DownloadRoleFileServlet extends HttpServlet {
+	
+	private static Logger Log = Logger.getLogger(DownloadRoleFileServlet.class);
 	
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 

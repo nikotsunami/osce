@@ -19,7 +19,6 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
@@ -182,7 +181,7 @@ public class OsceSequence {
 			//Log.info("~~Inside findOsceSequenceByOsceDay Method");
 			EntityManager em = entityManager();	
 			String queryString="select os from OsceSequence os where os.osceDay= "+osceDayId;
-			Log.info("~QUERY String: " + queryString);
+			log.info("~QUERY String: " + queryString);
 			TypedQuery<OsceSequence> q = em.createQuery(queryString, OsceSequence.class);
 			java.util.List<OsceSequence> result = q.getResultList();
 			//Log.info("~QUERY Result : " + result);

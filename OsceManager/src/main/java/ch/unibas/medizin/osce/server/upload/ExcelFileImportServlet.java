@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -34,14 +35,13 @@ import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.shared.i18n.LearningObjective;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 /**
  * Servlet implementation class XlsFileImportServlet
  */
 public class ExcelFileImportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-   
+	private static Logger Log = Logger.getLogger(ExcelFileImportServlet.class);
 
 //	 private static String appUploadDirectory=OsMaFilePathConstant.EXCEL_FILEPATH;
 	public String fetchRealPath(HttpServletRequest request) {

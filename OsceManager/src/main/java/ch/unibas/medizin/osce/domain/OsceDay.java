@@ -18,25 +18,26 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Window;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity
 public class OsceDay {
 
+	private static Logger Log = Logger.getLogger(OsceDay.class);
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date osceDate;
@@ -788,5 +789,19 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 	}
 	return true;
 }
+
+	//spec[
+	public int simpatAssignmentSlots() {
+	    List<Assignment> assignments = Assignment.retrieveAssignmentsOfTypeSPByOsceDay(this);
+	    if (assignments.get(0) != null) {
+	        Assignment assignment = assignments.get(0);
+	        long secs = (assignment.getTimeEnd().getTime() - assignment.getTimeStart().getTime()) / 1000;
+	        int assignmentMinutes = (int) (secs / 60);
+	        int assignmentSlots = assignmentMinutes / (this.osce.getPostLength() + 1);
+	        return assignmentSlots;
+	    }
+	    return 0;
+	}
+	//spec]
 
 }

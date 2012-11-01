@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
 import ch.unibas.medizin.osce.domain.Assignment;
@@ -34,7 +35,6 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.itextpdf.text.Chunk;
@@ -53,7 +53,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 @SuppressWarnings("serial")
 public class IndividualScheduleServiceImpl extends RemoteServiceServlet implements IndividualScheduleService
 {
-	
+	private static Logger Log = Logger.getLogger(IndividualScheduleServiceImpl.class);
 	static Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 11,Font.BOLD);
 	static Font paragraphTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 14,Font.BOLD);
 	

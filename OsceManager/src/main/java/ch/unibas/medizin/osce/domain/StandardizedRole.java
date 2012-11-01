@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -23,13 +24,14 @@ import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity
 public class StandardizedRole {
 
+	private static Logger Log = Logger.getLogger(StandardizedRole.class);
+	
 	@NotNull
 	@Size(min = 2, max = 20)
 	private String shortName;

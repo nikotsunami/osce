@@ -7,8 +7,7 @@ import java.util.Set;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-
-import com.allen_sauer.gwt.log.client.Log;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.Sorting;
@@ -30,6 +29,8 @@ import ch.unibas.medizin.osce.domain.Specialisation;
 @RooToString
 @RooEntity
 public class Doctor {
+	
+	private static Logger Log = Logger.getLogger(Doctor.class);
 
     @Enumerated
     private Gender gender;

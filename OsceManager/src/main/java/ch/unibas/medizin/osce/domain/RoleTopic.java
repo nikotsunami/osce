@@ -17,6 +17,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -40,13 +41,14 @@ import ch.unibas.medizin.osce.domain.Specialisation;
 
 
 import javax.persistence.ManyToOne;
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity
 public class RoleTopic {
 
+	private static Logger Log = Logger.getLogger(RoleTopic.class);
+	
     @NotNull
     @Size(min = 3, max = 45)
     private String name;

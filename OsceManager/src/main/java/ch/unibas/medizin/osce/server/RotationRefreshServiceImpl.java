@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.client.RotationRefreshService;
 import ch.unibas.medizin.osce.client.SummoningsService;
@@ -36,7 +37,6 @@ import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.itextpdf.text.Document;
@@ -50,7 +50,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 @SuppressWarnings("serial")
 public class RotationRefreshServiceImpl extends RemoteServiceServlet implements RotationRefreshService
 {	
-
+	private static Logger Log = Logger.getLogger(RotationRefreshServiceImpl.class);
+	
 	public RotationRefreshServiceImpl() 
 	{
 		super();

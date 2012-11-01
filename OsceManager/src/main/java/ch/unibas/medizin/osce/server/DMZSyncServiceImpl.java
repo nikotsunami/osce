@@ -74,7 +74,6 @@ import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import flexjson.JSONDeserializer;
@@ -92,7 +91,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private static Logger Log = Logger.getLogger(DMZSyncServiceImpl.class);
 	
 	@Override
 	public List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException {
@@ -924,7 +923,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				return null;
 			}
 		} catch (ParseException e) {
-			Log.error("Date format in JSON string incorrect. Date string was " + dateStr ,e.getMessage());
+			Log.error("Date format in JSON string incorrect. Date string was " + dateStr ,e);
 				
 			throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
 			

@@ -11,13 +11,13 @@ import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.shared.Sorting;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 
 import javax.persistence.CascadeType;
@@ -29,7 +29,9 @@ import javax.validation.constraints.Size;
 @RooToString
 @RooEntity
 public class Specialisation {
-
+	
+	private static Logger Log = Logger.getLogger(Specialisation.class);
+	
     @NotNull
     @Size(min = 2, max = 255)
     private String name;

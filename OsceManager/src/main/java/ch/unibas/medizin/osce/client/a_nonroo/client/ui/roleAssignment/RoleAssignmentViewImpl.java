@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -35,8 +36,11 @@ import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -90,6 +94,23 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField
 	Button clearSelectionBtn;
 			
+	@UiField
+	public CheckBox ignoreOsceDaycheckBox;
+	
+	@UiHandler("ignoreOsceDaycheckBox")
+	public void ignoreOsceDayCheckBoxselected(ClickEvent event){
+		delegate.ignoreOsceDayCheckBoxselected();
+	}
+	public CheckBox getIgnoreOsceDaycheckBox() {
+		return ignoreOsceDaycheckBox;
+	}
+
+	public void setIgnoreOsceDaycheckBox(CheckBox ignoreOsceDaycheckBox) {
+		this.ignoreOsceDaycheckBox = ignoreOsceDaycheckBox;
+	}
+
+	@UiField
+	Label ignoreOsceDaycheckBoxLabel;
 	
 	private Presenter presenter;
 
@@ -114,6 +135,8 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		autoAssignmentBtn.setText(constants.roleAutoAssign());
 		addManuallyBtn.setText(constants.roleAddManually());
 		clearSelectionBtn.setText(constants.clearSelection());
+		ignoreOsceDaycheckBoxLabel.setText(constants.ignoreAcceptedOsceDay());
+		ignoreOsceDaycheckBox.setStyleName("ignoreAcceptedOsceDayPadding");
 		headers = new String[] { constants.name(), constants.roleAccepted(),
 				constants.roleAssignTo(), "", "" };
 

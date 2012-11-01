@@ -24,6 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -31,13 +32,14 @@ import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 @RooJavaBean
 @RooToString
 @RooEntity(finders = { "findAssignmentsByOscePostRoomAndOsceDayAndTypeAndSequenceNumber" })
 public class Assignment {
 
+	private static Logger Log = Logger.getLogger(Assignment.class);
+	
     @Enumerated
     private AssignmentTypes type;
 
@@ -145,6 +147,23 @@ public class Assignment {
         }
     }
     
+    //spec[
+    public static void clearSPBreakAssignmentsByOsceDay(OsceDay osceDay) {
+    	EntityManager em = entityManager();
+    	String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay = :osceDay AND o.type = :type AND oscePostRoom IS NULL";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osceDay", osceDay);
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        List<Assignment> assignmentList = q.getResultList();
+        
+        Iterator<Assignment> it = assignmentList.iterator();
+        while (it.hasNext()) {
+        	Assignment assignment = (Assignment) it.next();
+        	assignment.remove();
+        }
+    }
+    //spec]
+    
     public static List<Assignment> retrieveAssignmentsOfTypeStudent(Long osceId) {
         EntityManager em = entityManager();
         String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce.id = :osceId AND o.type = :type";
@@ -166,6 +185,19 @@ public class Assignment {
         List<Assignment> assignmentList = q.getResultList();
         return assignmentList;
     }
+    
+    //spec[
+    public static List<Assignment> retrieveAssignmentsOfTypeSPUniqueTimesByOsceDay(OsceDay osceDay) {
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay = :osceDay AND o.type = :type AND o.oscePostRoom.oscePost.oscePostBlueprint.postType = :postType GROUP BY o.timeStart ORDER BY o.timeStart";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osceDay", osceDay);
+        q.setParameter("postType", PostType.NORMAL);
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        List<Assignment> assignmentList = q.getResultList();
+        return assignmentList;
+    }
+  //spec]
     
     public Assignment retrieveAssignmentNeighbourOfTypeSP(int neighbour) {
         EntityManager em = Assignment.entityManager();
@@ -809,6 +841,19 @@ public class Assignment {
  		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
          return flag; 
  	}
+    
+    public static List<Assignment> retrieveAssignmentsOfTypeSPByOsceDay(OsceDay osceDay) {
+        Log.info("retrieveAssignmenstOfTypeSP :");
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay = :osceDay AND o.type = :type AND o.oscePostRoom IS NOT NULL";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osceDay", osceDay);
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        List<Assignment> assignmentList = q.getResultList();
+        Log.info("retrieveAssignmenstOfTypeSP query String :" + queryString);
+        Log.info("Assignment List Size :" + assignmentList.size());
+        return assignmentList;
+    }
     //by spec]
     
     

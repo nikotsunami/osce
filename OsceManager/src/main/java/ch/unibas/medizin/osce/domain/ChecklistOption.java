@@ -8,17 +8,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.allen_sauer.gwt.log.client.Log;
-
 @RooJavaBean
 @RooToString
 @RooEntity
 public class ChecklistOption {
+	
+	private static Logger log = Logger.getLogger(ChecklistOption.class);
 	
 	@Size(max=50)
 	private String optionName;

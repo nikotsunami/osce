@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
@@ -37,7 +38,6 @@ import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -55,6 +55,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static Logger Log = Logger.getLogger(eOSCESyncServiceImpl.class);
 	private static String appUploadDirectory= OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH;
 	
 	

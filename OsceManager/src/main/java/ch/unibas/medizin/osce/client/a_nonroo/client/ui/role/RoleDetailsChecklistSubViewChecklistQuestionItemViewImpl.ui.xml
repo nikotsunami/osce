@@ -151,7 +151,7 @@ border-bottom-color:#808080;
 			<g:VerticalPanel width="100%" verticalAlignment="middle" horizontalAlignment="center">
 			
 
- 	<g:SimplePanel height="28px" width="99%">
+ 	<g:SimplePanel height="29px" width="99%">
 <g:HorizontalPanel  spacing="1" >
 	<g:VerticalPanel  >
 		<g:HorizontalPanel  horizontalAlignment="right" verticalAlignment="middle" >

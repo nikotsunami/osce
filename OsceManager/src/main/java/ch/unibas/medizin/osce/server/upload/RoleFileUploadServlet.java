@@ -17,14 +17,15 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.MediaContent;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 public class RoleFileUploadServlet extends HttpServlet {
 
+	private static Logger Log = Logger.getLogger(RoleFileUploadServlet.class);
 	// private static String UPLOAD_DIRECTORY="d://sp//images";
 
 	// SPEC[Start

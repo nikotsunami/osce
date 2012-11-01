@@ -10,6 +10,7 @@ import java.util.Set;
 
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
@@ -42,7 +43,11 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	private static final int weightSingleAssignments = 2;
 	private static final int weightAllAssignments = 2;
 	
-	private Osce osce;
+	//private Osce osce;
+	//spec[
+	private OsceDay osceDay;
+	//spec]
+	
 	private List<Assignment> assignments;
 	private List<PatientInRole> patients;
 	private Map<StandardizedPatient, Map<Integer, Assignment>> patientAssignments;
@@ -52,10 +57,16 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	// does not have to be called on each cp-solver iteration (slow!)
 	private int nrStudentSlotsCoveredBySPSlot;
 	
-	public OsceModel(Osce osce) {
-		this.osce = osce;
+	//public OsceModel(Osce osce) {
+	public OsceModel(OsceDay osceDay) {
+		//this.osce = osce;
+
+		//spec[
+		this.osceDay = osceDay;
+		nrStudentSlotsCoveredBySPSlot = osceDay.simpatAssignmentSlots();
+		//spec]
 		
-		nrStudentSlotsCoveredBySPSlot = osce.simpatAssignmentSlots();
+		//nrStudentSlotsCoveredBySPSlot = osce.simpatAssignmentSlots();
 		
 		patientAssignments = new HashMap<StandardizedPatient, Map<Integer, Assignment>>();
 		loadAssignments();
@@ -67,9 +78,17 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 * Get OSCE object
 	 * @return OSCE object
 	 */
-	public Osce getOsce() {
+	/*public Osce getOsce() {
 		return osce;
+	}*/
+	
+	//spec[
+	public OsceDay getOsceDay()
+	{
+		return osceDay;
 	}
+	
+	//spec]
 	
 	/**
 	 * Get number of student-slots that are covered by one SimPat-slot
@@ -83,7 +102,10 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 * Load assignments for this OSCE
 	 */
 	public void loadAssignments() {
-		this.assignments = Assignment.retrieveAssignmentsOfTypeSP(osce);
+		//this.assignments = Assignment.retrieveAssignmentsOfTypeSP(osce);
+		//spec[
+		this.assignments = Assignment.retrieveAssignmentsOfTypeSPByOsceDay(osceDay);
+		//spec]
 	}
 	
 	/**
@@ -92,12 +114,19 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	public void loadPatients() {
 		List<PatientInRole> patients = new ArrayList<PatientInRole>();
 		
-		List<PatientInSemester> patientsInSemester = PatientInSemester.findPatientInSemestersBySemester(osce.getSemester()).getResultList();
+		/*List<PatientInSemester> patientsInSemester = PatientInSemester.findPatientInSemestersBySemester(osce.getSemester()).getResultList();
 		
 		// get all roles used in this osce
-		Set<StandardizedRole> roles = osce.usedRoles();
+		Set<StandardizedRole> roles = osce.usedRoles();*/
 		
-		Iterator<PatientInRole> it = PatientInRole.findAllPatientInRoles().iterator();
+		//spec[
+		//List<PatientInSemester> patientsInSemester = PatientInSemester.findPatientInSemestersBySemester(osceDay.getOsce().getSemester()).getResultList();
+		
+		// get all roles used in this osce
+		Set<StandardizedRole> roles = osceDay.getOsce().usedRoles();
+		//spec]
+		
+		/*Iterator<PatientInRole> it = PatientInRole.findAllPatientInRoles().iterator();
 		while (it.hasNext()) {
 			PatientInRole patientInRole = (PatientInRole) it.next();
 			
@@ -108,7 +137,20 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 				
 				allPatients.add(patientInRole.getPatientInSemester().getStandardizedPatient());
 			}
+		}*/
+		
+		//spec[
+		Iterator<PatientInRole> it = PatientInRole.findPatientInRoleByOsceDay(osceDay.getId()).iterator();
+		while (it.hasNext()) {
+			PatientInRole patientInRole = (PatientInRole) it.next();
+			
+			if(patientInRole.getOscePost() != null) {
+				patients.add(patientInRole);
+				
+				allPatients.add(patientInRole.getPatientInSemester().getStandardizedPatient());
+			}
 		}
+		//spec]
 		
 		this.patients = patients;
 	}
@@ -192,6 +234,21 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 		
 		for(Assignment a : assignments) {
 			if(a.getSequenceNumber() > numberSlotsMax)
+				numberSlotsMax = a.getSequenceNumber();
+		}
+		
+		return numberSlotsMax;
+	}
+	
+	/**
+	 * Get lowest slot number in all assignments of osceday
+	 * @return number of slots
+	 */
+	public int getLowestNumberSlots() {
+		int numberSlotsMax = 9999;
+		
+		for(Assignment a : assignments) {
+			if(a.getSequenceNumber() < numberSlotsMax)
 				numberSlotsMax = a.getSequenceNumber();
 		}
 		

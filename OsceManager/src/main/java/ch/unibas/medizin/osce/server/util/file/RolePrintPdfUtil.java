@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
@@ -27,7 +29,6 @@ import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -43,6 +44,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 //import com.mattbertolini.hermes.Hermes;
 
 public class RolePrintPdfUtil {
+	private static Logger Log = Logger.getLogger(RolePrintPdfUtil.class);
+	
 	private static final float titleTableSpacing = 0.0f;
 
 	private Font defaultFont = new Font(Font.FontFamily.HELVETICA, 10);

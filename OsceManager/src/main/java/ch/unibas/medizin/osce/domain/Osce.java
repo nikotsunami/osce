@@ -23,7 +23,6 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
 import com.google.gwt.i18n.client.Constants.DefaultIntValue;
 import com.google.gwt.user.client.AsyncProxy.DefaultValue;
@@ -110,7 +109,7 @@ public class Osce {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private Set<Task> tasks = new HashSet<Task>();
-    private static Logger log = Logger.getLogger(Osce.class);
+    private static Logger Log = Logger.getLogger(Osce.class);
     // dk, 2012-02-10: split up m to n relationship since students
     // need flag whether they are enrolled or not
     //
@@ -244,10 +243,10 @@ public class Osce {
     			TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
     	    	System.out.println(optGen.toString());
     	    	
-    	    	log.info("calling createAssignments()...");
+    	    	Log.info("calling createAssignments()...");
     	    	
     	    	Set<Assignment> assignments = optGen.createAssignments();
-    	    	log.info("number of assignments created: " + assignments.size());
+    	    	Log.info("number of assignments created: " + assignments.size());
     		}
 	    	
     	} catch(Exception e) {
@@ -259,10 +258,23 @@ public class Osce {
     
     public static Boolean autoAssignPatientInRole(Long osceId) {
     	try {
-    		SPAllocator spAlloc = new SPAllocator(Osce.findOsce(osceId));
+    		/*SPAllocator spAlloc = new SPAllocator(Osce.findOsce(osceId));
     		spAlloc.getSolution();
     		spAlloc.printSolution();
-    		spAlloc.saveSolution();
+    		spAlloc.saveSolution();*/
+    		
+    		//spec[
+    		Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+    		
+    		while (itr.hasNext())
+    		{
+    			OsceDay osceDay = itr.next();
+    			SPAllocator spAlloc = new SPAllocator(osceDay);    			
+        		spAlloc.getSolution();
+        		spAlloc.printSolution();
+        		spAlloc.saveSolution();
+    		}    		
+    		//spec]
     	} catch(Exception e) {
     		e.printStackTrace();
     	}
@@ -349,7 +361,7 @@ public class Osce {
     
  public static List<Osce> findAllOsceOnSemesterId(Long semesterId){
 		
-    	log.info("Inside Osce class To retrive all Osce Based On semesterId");
+    	Log.info("Inside Osce class To retrive all Osce Based On semesterId");
 		EntityManager em = entityManager();
 		TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId ,Osce.class);
 		return q.getResultList();
@@ -712,7 +724,7 @@ public class Osce {
 		// String
 		// query="select pis from PatientInSemester as pis where pis.semester="+semesterId
 		// + " and pis.id in (select psod from pis.osceDays psod)";
-		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId);
+		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId,true);
 
 		Set<OsceDay> osceDays;
 		
@@ -836,7 +848,7 @@ public class Osce {
 					Log.info("Assignment " + assignment.getId() + "is going to remove");
 					osceDay.getAssignments().remove(assignment);
 					assignment.remove();
-					log.info("assignment removed");
+					Log.info("assignment removed");
 				}
 				
 				

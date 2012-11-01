@@ -3611,3 +3611,6 @@ color: #f1b532;
 .empty-bg-student:HOVER{
 	background-color: rgb(196,217,255) !important;
 }
+.ignoreAcceptedOsceDayPadding{
+	padding-left: 160px
+}

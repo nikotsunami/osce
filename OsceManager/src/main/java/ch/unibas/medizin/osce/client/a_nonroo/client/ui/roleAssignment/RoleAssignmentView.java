@@ -63,6 +63,8 @@ public interface RoleAssignmentView extends IsWidget {
 		
 		public int getSelectedRow();
 		
+		public void ignoreOsceDayCheckBoxselected();
+		
 	}
 
 	void setDelegate(Delegate delegate);

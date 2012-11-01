@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
@@ -23,12 +24,13 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 
-import com.allen_sauer.gwt.log.client.Log;
 
 import flexjson.JSONDeserializer;
 
 public class ResourceUtil {
-
+	
+	private static Logger Log = Logger.getLogger(ResourceUtil.class);
+	
 	public static void setResource(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
