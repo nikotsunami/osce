@@ -124,8 +124,6 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	Label lunchBreakEndTimeLabel;
 	@UiField
 	Label lunchBreakLabel;
-	
-	
 	@UiField
 	Label dateContentValueLabel;
 	@UiField
@@ -390,6 +388,21 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	public Label getLunchBreakEndTimeValueLabel()
 	{
 		return this.lunchBreakEndTimeValueLabel;
+	}
+	public Label getLunchBreakEndTimeLabel() {
+		return lunchBreakEndTimeLabel;
+	}
+
+	public void setLunchBreakEndTimeLabel(Label lunchBreakEndTimeLabel) {
+		this.lunchBreakEndTimeLabel = lunchBreakEndTimeLabel;
+	}
+
+	public Label getLunchBreakLabel() {
+		return lunchBreakLabel;
+	}
+
+	public void setLunchBreakLabel(Label lunchBreakLabel) {
+		this.lunchBreakLabel = lunchBreakLabel;
 	}
 	
 	

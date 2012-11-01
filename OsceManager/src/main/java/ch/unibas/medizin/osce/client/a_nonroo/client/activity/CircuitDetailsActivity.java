@@ -813,6 +813,17 @@ AccordianPanelView.ParcourDelegate
 								
 								osceDayViewImpl.setOsceDayProxy(osceDayProxy);
 								
+								if(osceDayProxy.getIsTimeSlotShifted()!=null)
+								{
+									if(osceDayProxy.getIsTimeSlotShifted()==true)
+									{
+										osceDayViewImpl.getLunchBreakValueLabel().setVisible(false);
+										osceDayViewImpl.getLunchBreakEndTimeValueLabel().setVisible(false);
+										osceDayViewImpl.getLunchBreakLabel().setVisible(false);
+										osceDayViewImpl.getLunchBreakEndTimeLabel().setVisible(false);									
+									}
+								}
+								
 								//bug solve start
 								if(osceDayProxy.getOsceDate()==null)
 								{
@@ -2021,8 +2032,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		public void clearAll(OsceProxy proxy) {
 			// Highlight onViolation
 			CircuitOsceSubViewImpl circuitOsceSubViewImp = view.getcircuitOsceSubViewImpl();
-			// E Highlight onViolation
-			
+			// E Highlight onViolation			
 			OsceRequest osceReq = requests.osceRequest();
 			proxy = osceReq.edit(proxy);			
 			proxy.setOsceStatus(OsceStatus.OSCE_BLUEPRINT);		
@@ -2035,6 +2045,31 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				public void onSuccess(Void response) {
 					Log.info("Osce Value Updated");
 					setOsceFixedButtonStyle(circuitOsceSubViewImpl, osceProxy);
+
+					List<OsceDayProxy> osceDaysList=osceProxy.getOsce_days();
+					if(osceDaysList.size()>0)
+					{
+						Iterator<OsceDayProxy> osceDayIterator=osceDaysList.iterator();											
+						while(osceDayIterator.hasNext())
+						{
+							OsceDayProxy osceDay=osceDayIterator.next();
+							System.out.println("OsceDay Set Flag False: " + osceDay.getId());
+							
+							OsceDayRequest osceDayRequest=requests.osceDayRequest();
+							osceDay=osceDayRequest.edit(osceDay);
+							osceDay.setIsTimeSlotShifted(false);
+							osceDayRequest.persist().using(osceDay).fire(new OSCEReceiver<Object>() 
+							{
+								@Override
+								public void onSuccess(Object response) 
+								{
+									//System.out.println("Successfully Updated, Flag set to false");
+								}
+							});
+						}
+								
+					}
+					
 					// Module 5 bug Report Change
 						goTo(new CircuitDetailsPlace(osceProxy.stableId(),Operation.DETAILS));
 					// E Module 5 bug Report Change
@@ -4132,6 +4167,31 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									public void onSuccess(Boolean response) {
 										// TODO Auto-generated method stub
 										Log.info("Assignment Remove Successfully");
+										
+										List<OsceDayProxy> osceDaysList=osceProxy.getOsce_days();
+										if(osceDaysList.size()>0)
+										{
+											Iterator<OsceDayProxy> osceDayIterator=osceDaysList.iterator();											
+											while(osceDayIterator.hasNext())
+											{
+												OsceDayProxy osceDay=osceDayIterator.next();
+												System.out.println("OsceDay Set Flag False: " + osceDay.getId());
+												
+												OsceDayRequest osceDayRequest=requests.osceDayRequest();
+												osceDay=osceDayRequest.edit(osceDay);
+												osceDay.setIsTimeSlotShifted(false);
+												osceDayRequest.persist().using(osceDay).fire(new OSCEReceiver<Object>() 
+												{
+
+													@Override
+													public void onSuccess(Object response) 
+													{
+														System.out.println("Successfully Updated, Flag set to false");
+													}
+												});
+											}
+													
+										}
 										
 										// Module 5 Bug Test Change
 

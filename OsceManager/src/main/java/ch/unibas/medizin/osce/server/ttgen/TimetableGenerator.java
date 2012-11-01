@@ -1264,6 +1264,9 @@ public class TimetableGenerator {
 				day.setTimeEnd(dateAddMin(dayCal.getTime(), timeNeededByDay.get(i)));
 				day.setBreakByRotation(breakPerRotationByDay.get(i));
 				
+				//spec issue change
+				day.setIsTimeSlotShifted(false);
+				//spec issue chnage
 				
 				/*SPEC-INDIA */
 				 int check = timeNeededByDay.get(i);
@@ -1314,6 +1317,7 @@ public class TimetableGenerator {
 			}
 		}
 		
+		day0.setIsTimeSlotShifted(false);
 		day0.setBreakByRotation(breakPerRotationByDay.get(0));
 		day0.setTimeEnd(dateAddMin(dayCal.getTime(), (long) timeNeededByDay.get(0)));
 		day0.flush();
@@ -2045,7 +2049,8 @@ public class TimetableGenerator {
 							numberSlotsThisAndNextRotation += rotations[parcourIndex].get(currRotationNumber + 1);
 						}
 						
-						boolean changeSimpatAfterRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsThisAndNextRotation);
+						//boolean changeSimpatAfterRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsThisAndNextRotation);
+						boolean changeSimpatAfterRotation = true;
 												
 						Date nextRotationStartTime = null;
 						
@@ -2353,4 +2358,5 @@ public class TimetableGenerator {
 		return assignments;
 	}
 	//SPEC]
+	
 }

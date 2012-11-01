@@ -793,6 +793,22 @@ public class Assignment {
     public static Date dateAddMin(Date date, long minToAdd) {
 		return new Date((long) (date.getTime() + minToAdd * 60 * 1000));
 	}
+    
+    public static boolean isSPinOsceDay(PatientInSemester ps, Assignment assignment)
+ 	{
+     	Log.info("Call isSPinOsceDay for Patient in Semester id" + ps.getId() + " of assignment id " + assignment.getId());	
+     	boolean flag = false;
+     	EntityManager em = entityManager();		 
+ 		String queryString = "select assi from Assignment assi where assi.type=1 and assi.osceDay= " + assignment.getOsceDay().getId() + " and assi.patientInRole in ( select id from PatientInRole pr where pr.patientInSemester = " + ps.getId() +")";
+ 		//select * from assignment where osce_day=97 and examiner=61 and osce_post_room=3121 and type=2;
+ 		Log.info("Query String: " + queryString);
+ 		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+ 		List<Assignment> result  = q.getResultList();		
+ 		if(result!=null && result.size()>0)
+ 			flag=true;
+ 		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+         return flag; 
+ 	}
     //by spec]
     
     

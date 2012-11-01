@@ -198,7 +198,8 @@ public class SPAllocator {
 			PatientInSemester sp = (PatientInSemester) it.next();
 			
 			for(int i = 1; i <= numberSlots; i++) {
-				if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null) {
+				//if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null) {
+				if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null && Assignment.isSPinOsceDay(sp,refAssignments.get(i - 1))) {
 					createSPBreakAssignment(sp, i);
 					log.info(sp.getStandardizedPatient().getName() + ", " + sp.getStandardizedPatient().getPreName() + " added break for patient " + sp.getId() + " and slot " + i);
 				}
