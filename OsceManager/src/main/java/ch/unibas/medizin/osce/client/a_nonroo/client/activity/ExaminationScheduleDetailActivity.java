@@ -451,6 +451,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
 			
 			
+			contentView.getOscePostHP().insert(oscePostView, contentView.getOscePostHP().getWidgetCount());
+			
 			boolean isFirstPartOfPreparation1=false;
 			
 			if(i==0)
@@ -1237,7 +1239,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			
 			
-			contentView.getOscePostHP().insert(oscePostView, contentView.getOscePostHP().getWidgetCount());
+			
 			
 			
 
@@ -1311,7 +1313,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		for(OscePostProxy earlyPost: earlyStartPost)
 		{
-			if(earlyPost.getId() == postProxy.getId())
+			if(earlyPost.getId().longValue() == postProxy.getId().longValue())
 				return true;
 		}
 		
