@@ -113,7 +113,7 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 			RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-157);
+			
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -133,7 +133,7 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 			if(oscePostProxy.getStandardizedRole() !=null)
 			popupView.getStartTimeValue().setText(oscePostProxy.getStandardizedRole().getRoleTopic().getName());
 		}
-		
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-157);
 		((PopupViewImpl)popupView).show();
 		
 	}

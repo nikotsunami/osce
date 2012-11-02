@@ -424,7 +424,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		}
 		contentView.getOscePostHP().clear();
 		
-		
+		requests.assignmentRequestNonRoo().minmumStartTime(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId()).fire(new OSCEReceiver<Date>() {
+
+			@Override
+			public void onSuccess(final Date startTime) {
+				Log.info("minmumStartTime success :" + startTime);
 		for(int i=0;i<oscePostProxies.size();i++)
 		{	
 			final OscePostProxy oscePostProxy=oscePostProxies.get(i);
@@ -472,6 +476,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			final boolean isFirstPartOfPreparation=isFirstPartOfPreparation1;
 			
+			
+					
+				
+			
 			//retrieve student data of particular post and course from assignment table.
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 			.with("student","oscePostRoom").fire(new OSCEReceiver<List<AssignmentProxy>>() {
@@ -515,15 +523,16 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					List<Date> anyendTimeList=new ArrayList<Date>();
 					
 					//1. calculate early start time duration
-					if(response.get(0).getTimeStart().before(accordianPanelViewImpl.getOsceDayProxy().getTimeStart()))
+					if(!response.get(0).getTimeStart().after(startTime))
 					{
-						long earlyStart=calculateTimeInMinute(accordianPanelViewImpl.getOsceDayProxy().getTimeStart(), response.get(0).getTimeStart());
-						if(getEarlyStart() < earlyStart)
-							setEarlyStart(earlyStart);
+						
 						
 					//	if(getEarlyStart() != 0)
 						earlyStartPost.add(oscePostProxy);
 					}
+					long earlyStart=calculateTimeInMinute(response.get(0).getTimeStart(),startTime);
+					if(getEarlyStart() < earlyStart)
+						setEarlyStart(earlyStart);
 					
 					for(int j=0;j<response.size();j++)
 					{
@@ -1240,11 +1249,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			
 			
-			
+				
 			
 
 		}
-		
+				
+			
+			}
+		});
 		
 		//create logical Sp Break
 		
@@ -1262,9 +1274,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		//insert earlyStart empty slot
 		if(isLastPost && getEarlyStart() != 0)
 		{	
+			if(osceProxy.getPostLength() < 10)
+				earlyStart = earlyStart *2;
 			
-			
-			earlyStart--;
+		//	earlyStart--;
 			for(int k=0;k<contentView.getOscePostHP().getWidgetCount();k++)
 			{
 				OscePostView postView=(OscePostView)contentView.getOscePostHP().getWidget(k);
