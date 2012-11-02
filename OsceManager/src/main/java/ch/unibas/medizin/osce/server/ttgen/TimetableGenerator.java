@@ -2195,16 +2195,39 @@ public class TimetableGenerator {
 										else
 											endTimeNew = dateAddMin(endTime, osce.getShortBreakSimpatChange());
 										
-										if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
-											changeSP(i, osceDay, endTime, endTimeNew, oscePR);
+										//if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
+										
+										if (post != null &&  post.requiresSimpat())
+										{
+											if (simAssLastId.length > i)
+												changeSP(i, osceDay, endTime, endTimeNew, oscePR);
+											else
+												changeSP((i-1), osceDay, endTime, endTimeNew, oscePR);
+												
 											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
 										}
 										
+										//}
+										
 										endTime = endTimeNew;
 									} else {
-										
+										//by spec issue change[
 										if(halfTimeSlots && longBreakInRotationHalf)
+										{
+											Date oldEndTime = endTime;
+											//by spec issue change]
 											endTime = dateAddMin(endTime, osce.getLongBreak());
+											//by spec issue change[
+											
+											if (post != null && post.requiresSimpat())
+											{
+												if (simAssLastId.length > i)
+													changeSP(i, osceDay, oldEndTime, endTime, oscePR);
+												else
+													changeSP((i - 1), osceDay, oldEndTime, endTime, oscePR);
+											}
+										}
+										//by spec issue change]
 										else
 											endTime = dateAddMin(endTime, osce.getShortBreak());
 									}
@@ -2250,10 +2273,14 @@ public class TimetableGenerator {
 							// STUDENTS END
 							
 							// calculate time when next rotation starts
-							nextRotationStartTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()) - osce.getShortBreak());
+							//nextRotationStartTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()) - osce.getShortBreak());
+							
+							//spec issue change
+							nextRotationStartTime = time;
+							//spec issue change
 							
 							// if SP was changed during rotation, add the SP change-break
-							if(changeSimpatDuringRotation) {
+							/*if(changeSimpatDuringRotation) {
 								int numberBreakDuringRotation = numberSlotsTotal / numberSlotsUntilSPChange;
 								if(numberSlotsTotal % numberSlotsUntilSPChange == 0)
 									numberBreakDuringRotation -= 1;
@@ -2269,7 +2296,7 @@ public class TimetableGenerator {
 							
 							if(longBreakInRotationHalf)
 								nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak() - osce.getShortBreak());
-							
+							*/
 							// add middle break at the end of each rotation (except for last rotation, where either
 							// lunch break or nothing is added)
 							
