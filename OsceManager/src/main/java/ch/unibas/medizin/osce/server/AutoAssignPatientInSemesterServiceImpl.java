@@ -1100,7 +1100,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	    		
 	    	}
 			// Assign SP To Role 2
-			
+			if((Osce.getTotalRoleAssignInPost(sortedOscePost2.getId()) < neededSp))
 			if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
 				if(Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId()) < 2){
 				
@@ -1113,7 +1113,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 						newPatientAssignInRole2.setIs_first_in_sequence(true);
 						newPatientAssignInRole2.persist();
-						allReadyPatientInRole+=1;
+					//	allReadyPatientInRole+=1;
 						}
 					else{
 						
@@ -1131,7 +1131,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
 						newPatientAssignInRole1.setIs_first_in_sequence(false);
 						newPatientAssignInRole1.persist();
-						allReadyPatientInRole+=1;
+					//	allReadyPatientInRole+=1;
 					}
 				}
 			}
@@ -1181,7 +1181,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
     	}
 			// Assign SP To Role 2
 		
-			
+		if((Osce.getTotalRoleAssignInPost(sortedOscePost2.getId()) < neededSp))
 			if(Osce.getTotalRolesFroOscePost(sortedOscePost2.getId(),sortedPatientInSemester1.getId())==0){
 				if(Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId()) < 2){
 					long totalTimePatientAssignInSeq2=Osce.totalTimesPatientAssignInSequence(sortedOscePost2.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1193,7 +1193,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 						newPatientAssignInRole2.setIs_first_in_sequence(true);
 						newPatientAssignInRole2.persist();
-						allReadyPatientInRole+=1;
+					//	allReadyPatientInRole+=1;
 					}
 				else{
 					
@@ -1211,7 +1211,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						newPatientAssignInRole1.setPatientInSemester(sortedPatientInSemester1);
 						newPatientAssignInRole1.setIs_first_in_sequence(false);
 						newPatientAssignInRole1.persist();
-						allReadyPatientInRole+=1;
+					//	allReadyPatientInRole+=1;
 					}	
 			}
 		}
