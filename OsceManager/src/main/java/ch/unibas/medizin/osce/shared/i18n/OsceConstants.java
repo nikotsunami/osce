@@ -1161,6 +1161,9 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
-
+	
+	//payment
+	public String payment();
+	//payment
 }
 

@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
@@ -323,6 +324,13 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			return new ExportOsceActivity(requests, placeController, (ExportOscePlace)place);
 		}
 
+		//payment
+		if (place instanceof PaymentPlace)
+		{
+			Log.info("is PaymentPlace");
+			return new PaymentActivity(requests, placeController, (PaymentPlace)place);
+		}
+		//payment
 		return null;
 	}
 

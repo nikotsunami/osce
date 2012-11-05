@@ -80,9 +80,15 @@ public class OscePlaceHistoryFactory {
 	//by eosce
 	
 	private final ExportOscePlace.Tokenizer exportOSCETokenizer;
+	
+	//payment
+	private final PaymentPlace.Tokenizer paymentPlaceTokenizer;
+	//payment
 
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
+		this.paymentPlaceTokenizer = new PaymentPlace.Tokenizer(requestFactory);
+		
 		this.exportOSCETokenizer = new ExportOscePlace.Tokenizer(requestFactory);
 		
 		this.importeOSCETokenizer = new ImporteOSCEPlace.Tokenizer(requestFactory);
@@ -346,6 +352,7 @@ public class OscePlaceHistoryFactory {
 		return importObjectiveTokenizer;
 	}
 	
-	
-
+	public PlaceTokenizer<PaymentPlace> getPaymentPlaceTokenizer() {
+		return paymentPlaceTokenizer;
+	}
 }

@@ -4,8 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -26,10 +28,12 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
 
@@ -875,6 +879,114 @@ public class Assignment {
      
     //by spec]
     
-    
+     //payment module
+     public static String findAssignmentByPatinetInRole(Long semesterId) 
+     {
+     	String fileName = "";
+     	try
+     	{
+     		ExcelUtil excelUtil = new ExcelUtil();
+         	
+         	List<Osce> osceList = Osce.findAllOsceBySemster(semesterId);
+         	
+         	for (Osce osce : osceList)
+         	{
+         		Map<Long, List<Long>> mainMap = new HashMap<Long, List<Long>>();
+         		
+         		EntityManager em = entityManager();
+             	
+             	String sql = "SELECT ps.standardizedPatient.id AS stdpat, a.osceDay AS assOsDay, pr.oscePost AS prOsPt, sr.roleType AS srRoTy, MIN(a.timeStart) AS minTimeSt, MAX(a.timeEnd) AS maxTimeEnd" +
+         				" FROM Assignment AS a, PatientInRole AS pr, PatientInSemester AS ps, OscePost AS op, StandardizedRole AS sr " +
+         				" WHERE a.type = 1 AND a.osceDay IN (SELECT od FROM OsceDay od WHERE od.osce = " + osce.getId() + ")" +
+         				" AND a.patientInRole = pr.id" +
+         				" AND pr.patientInSemester = ps.id" +
+         				" AND pr.oscePost = op.id " +
+         				" AND op.standardizedRole = sr.id" +
+         				" GROUP BY ps.standardizedPatient, a.osceDay, pr.oscePost, sr.roleType";
+             	
+             	javax.persistence.Query query = em.createQuery(sql);
+             	List list = query.getResultList();    	
+             	
+             	Long spHrs = 0l;
+         		Long statistHrs = 0l;
+             	
+         		for (int i=0; i<list.size(); i++)
+             	{
+             		Object[] custom = (Object[]) list.get(i);
+             	
+             		Long newSp = (Long)custom[0];
+             	            		
+             		Date startDate = (Date)custom[4];
+             		Date endDate = (Date)custom[5];
+             		
+             		Long min = (endDate.getTime() - startDate.getTime()) / (60 * 1000);
+             		
+             		if (checkLunchBreak(startDate, endDate,((OsceDay)custom[1]).getLunchBreakStart()))
+             		{
+             			min = min - osce.getLunchBreak();
+             		}
+             		
+             		//System.out.println("SP : " + oldSp + "  ~~MIN : " + min);
+             		
+             		if (((RoleTypes)custom[3]) == RoleTypes.Simpat)
+             			spHrs = spHrs + min;
+             		else if (((RoleTypes)custom[3]) == RoleTypes.Statist)
+             			statistHrs = statistHrs + min;
+             		
+             		//System.out.println("SPHRS : " + spHrs);
+             		if (i == 0)
+             		{
+             			List<Long> hrsList = new ArrayList<Long>();
+             			hrsList.add(spHrs);
+             			hrsList.add(statistHrs);
+             			
+             			mainMap.put(newSp, hrsList);
+             			
+             			spHrs = 0l;
+             			statistHrs = 0l;
+             		}
+             		
+             		if (i > 0)
+             		{
+             			Object[] oldObject = (Object[]) list.get(i-1);
+             			Long id = (Long) oldObject[0];
+             			if (!newSp.equals(id))
+             			{
+             				//System.out.println("SP : " + newSp + "  ~~SP : " + spHrs + " ~~STATIST : " + statistHrs);
+             				
+             				List<Long> hrsList = new ArrayList<Long>();
+                 			hrsList.add(spHrs);
+                 			hrsList.add(statistHrs);
+                 			
+                 			mainMap.put(newSp, hrsList);
+                 			
+                 			spHrs = 0l;
+                 			statistHrs = 0l;
+             			}
+             		}
+             	}
+             	
+             	excelUtil.writeSheet(mainMap, osce.getName(), semesterId);
+             	
+         	}
+         	
+         	Semester semester = Semester.findSemester(semesterId);
+         	fileName = semester.getCalYear().toString() + ".xls";
+         	excelUtil.writeExcel(fileName);
+     	}
+     	catch(Exception e)
+     	{
+     		Log.info("ERROR : " + e.getMessage());
+     	}
+     	
+     	return StandardizedPatient.fetchContextPath() + fileName;
+     }
+     
+     public static boolean checkLunchBreak(Date timeStart, Date timeEnd, Date startLunchBreak)
+     {
+     	Boolean test = (startLunchBreak.after(timeStart) && startLunchBreak.before(timeEnd));    	
+     	return test;	
+     }
+     //payment module
    
 } 
