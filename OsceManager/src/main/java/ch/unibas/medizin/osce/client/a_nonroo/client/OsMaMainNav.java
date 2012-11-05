@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.ApplicationMainActivitiesMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
@@ -591,6 +592,7 @@ public class OsMaMainNav extends Composite {
 						CircuitPlace.semesterProxy=lstSemester.getValue();
 						RoleAssignmentPlace.semesterProxy=lstSemester.getValue();
 						StatisticalEvaluationPlace.semesterProxy=lstSemester.getValue();
+						ApplicationMainActivitiesMapper.semesterProxy = lstSemester.getValue();
 						placeHistoryHandler.handleCurrentHistory();
 				}
 		});
@@ -626,6 +628,7 @@ public class OsMaMainNav extends Composite {
 		CircuitPlace.handler=handlerManager;
 		RoleAssignmentPlace.handler=handlerManager;
 		StatisticalEvaluationPlace.handler=handlerManager;
+		ApplicationMainActivitiesMapper.handler = handlerManager;
 		
 		// G: SPEC END =		
 	}
