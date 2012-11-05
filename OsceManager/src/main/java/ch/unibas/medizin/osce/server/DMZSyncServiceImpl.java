@@ -621,7 +621,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 		sb.append("],");
 		
-		List<Osce> osces = Osce.findAllOscesGroupByCopiedOsce();
+		List<Osce> osces = Osce.findAllOsces();
 		sb.append("\"osces\":[");
 		int osceCount = 0;
 		for(Osce osce : osces){
