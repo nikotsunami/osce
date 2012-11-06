@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -52,6 +53,9 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	
 	@UiField
 	Label longBreakValue;
+	
+	@UiField
+	Button exportButton;
 	
 	public Label getShortBreakSimPatChangeValue() {
 		return shortBreakSimPatChangeValue;
@@ -157,6 +161,7 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		shortBreakSimPatChangeTxt.setText(constants.exaPlanChangeBreak());
 		longBreakTxt.setText(constants.exaPlanLongBreak());
 		
+		exportButton.setText(constants.export());
 		int height = ResolutionSettings.getRightWidgetHeight() - 55;
 		scrollPanel.setHeight(height+"px");		
 	}
@@ -192,5 +197,11 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		scrollPanel.setHeight(height+"px");
 	}
 	
+	@UiHandler("exportButton")
+	public void exportButtonClicked(ClickEvent event)
+	{
+		Log.info("exportButton");
+		delegate.exportAssignment(osceProxy.getId());
+	}
 
 }

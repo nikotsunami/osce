@@ -92,7 +92,12 @@ public class OsMaFilePathConstant {
 
 	public static String realVideoPath = "";//
 	// public static String videosrcPath="/osMaEntry/gwt/unibas/sp/videos/";
-
+	
+	public static String assignmentXslPath="/osMaEntry/gwt/unibas/xsl/assignment.xsl";
+	
+	public static String assignmentHTML="/osMaEntry/gwt/unibas/";
 	// Module 8]
+	
+	
 
 }

@@ -36,6 +36,7 @@
 			<g:HorizontalPanel horizontalAlignment="right" verticalAlignment="top" spacing="10">
 				<my:IconButton ui:field="studentAssignmentButton" icon="person"/>
 				<my:IconButton ui:field="spAssignmentButton" icon="contact" />
+				<my:IconButton ui:field="exportButton" icon="extlink"/>
 			</g:HorizontalPanel>
 		</g:HorizontalPanel>
 		

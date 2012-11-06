@@ -61,6 +61,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -2185,6 +2186,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			}
 		});
 		
+	}
+	
+	public void exportAssignment(Long osceId)
+	{
+		Log.info("exportAssignment");
+		Log.info(" exportAssignment  :" );
+		final String url="/exportAssignment?osceId="+osceId;
+		
+	   Window.open(url, osceId.toString(), "enabled");
 	}
 	
 	public void showLoadingScreen(boolean flag)
