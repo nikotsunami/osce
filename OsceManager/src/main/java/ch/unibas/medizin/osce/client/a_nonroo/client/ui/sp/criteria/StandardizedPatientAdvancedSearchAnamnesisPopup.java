@@ -30,4 +30,5 @@ public interface StandardizedPatientAdvancedSearchAnamnesisPopup extends IsWidge
 	void display(Button parentButton);
 	SuggestBox getAnamnesisQuestionSuggestBox();
 	Map getMap();
+	void display(int positionX, int positionY);
 }

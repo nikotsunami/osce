@@ -340,9 +340,17 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	@Override
 	public void display(Button parentButton) {
 		this.show();
-		this.setPopupPosition(parentButton.getAbsoluteLeft() - 5, parentButton.getAbsoluteTop() - getOffsetHeight()/2 - 6);
+		this.setPopupPosition(parentButton.getAbsoluteLeft() - 250, parentButton.getAbsoluteTop() - getOffsetHeight()/2 - 34);
 	}
 
+	//change for advance search
+		@Override
+		public void display(int positionX,int positionY) {
+			this.show();
+			this.setPopupPosition(positionX-175,positionY-34);
+		}
+		//change for advance search
+		
 	@Override
 	public SuggestBox getAnamnesisQuestionSuggestBox() {
 		return anamnesisQuestionSuggestBox;

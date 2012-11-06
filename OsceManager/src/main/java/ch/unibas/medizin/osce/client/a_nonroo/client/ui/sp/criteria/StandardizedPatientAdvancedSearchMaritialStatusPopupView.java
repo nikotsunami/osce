@@ -29,5 +29,6 @@ public interface StandardizedPatientAdvancedSearchMaritialStatusPopupView extend
 //	void setLanguagePickerValues(List<SpokenLanguageProxy> values);
 	ValueListBox<MaritalStatus> getMaritialStatusBox();
 	Map getAdvanceSearchCriteriaMap();
+	void display(int positionX, int positionY);
 }
 

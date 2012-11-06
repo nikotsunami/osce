@@ -33,6 +33,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import com.google.gwt.i18n.client.NumberFormat;
+
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Doctor;
@@ -194,7 +196,7 @@ public class ExportAssignment  extends HttpServlet {
 							
 		
 							Element startEndTimeElement=createEmptyChildNode("startEndTime",doc,startEndTimesElement);
-							String timeStartValue=timeStart.getHours() +":" + timeStart.getMinutes();
+							String timeStartValue=NumberFormat.getFormat("00").format(timeStart.getHours()) +":" + NumberFormat.getFormat("00").format(timeStart.getMinutes());
 							
 							Element studentsElement=createEmptyChildNode("students",doc,startEndTimeElement);
 							
@@ -260,7 +262,7 @@ public class ExportAssignment  extends HttpServlet {
 							}
 							
 							
-							timeStartValue=timeStartValue +"-"+endTime.getHours() + ":" + endTime.getMinutes();
+							timeStartValue=timeStartValue +"-"+NumberFormat.getFormat("00").format(endTime.getHours()) + ":" + NumberFormat.getFormat("00").format(endTime.getMinutes());
 							createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
 						}
 					}
