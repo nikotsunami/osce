@@ -988,5 +988,58 @@ public class Assignment {
      	return test;	
      }
      //payment module
+     
+     public static Assignment findExaminersRoationAndCourseWise(Long osceDayId,int rotation,Long courseId,Long postId)
+     {
+    	 Log.info("findExaminersRoationAndCourseWise :");
+         EntityManager em = entityManager();
+         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
+         String queryString = "SELECT  a FROM Assignment as a where a.osceDay="+osceDayId+"  and type=2 and " +
+         		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost="+postId+" and opr.course="+courseId+" )" +
+         		"and timeStart <=(select min(timeStart) from Assignment as a where type=0  and osceDay="+osceDayId+" and rotationNumber="+rotation+" and " +
+         		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost ="+postId+" and "+
+         		"rm.course= "+courseId+" and rm.version<999) and opr.course="+courseId+" )) and timeEnd >= (select max(timeEnd) from Assignment as a where type=0  and osceDay="+osceDayId+" and rotationNumber="+rotation+" and "+
+         		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom "+
+         		"as rm where rm.oscePost = "+postId+" and rm.course="+courseId+"  and rm.version<999) and opr.course="+courseId+" ))";
+         
+         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         Assignment assignmentList=null;
+         if(query.getResultList().size() > 0)
+          assignmentList = query.getResultList().get(0);
+         Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+     }
+     
+     public static List<Assignment> findAssignmentRotationAndCourseWise(Long osceDayId,int rotation,Long courseId)
+     {
+    	 Log.info("findAssignmentRotationAndCourseWise");
+    	 String queryString="select a from Assignment as a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
+    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
+    	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) order by timeStart";
+    	 
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         List<Assignment> assignmentList = query.getResultList();
+         Log.info("findAssignmentRotationAndCourseWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+
+    	
+     }
+     
+     public static List<Date> findDistinctTimeStartRotationWise(Long osceDayId,int rotation)
+     {
+    	 Log.info("findDistinctTimeStartRotationWise");
+    	 String queryString="select distinct (timeStart) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);
+         List<Date> assignmentList = query.getResultList();
+         Log.info("findDistinctTimeStartRotationWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+    	
+     }
    
 } 
