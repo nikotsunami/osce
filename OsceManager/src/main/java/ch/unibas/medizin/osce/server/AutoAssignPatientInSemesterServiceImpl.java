@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.server;
  * @author manish
  */
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -24,8 +25,6 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.util;
-
-
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.service.RemoteEventServiceServlet;
@@ -162,6 +161,17 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					 			
 					 				ArrayList<AdvancedSearchCriteria>  listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 								  
+									java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
+										
+					        			@Override
+					        			public int compare(AdvancedSearchCriteria o1,
+					        					AdvancedSearchCriteria o2) {
+					        				
+					        				return o1.getId().compareTo(o2.getId());
+					        			}
+						        			  
+					        		} );  
+								  
 							    Log.info("Search Criteria Size : " +listAdvanceSearchCirteria.size());
 									 
 					 			
@@ -211,8 +221,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							//David: resort list after SP's were added, because the previosly added are now at the end
 						 	List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay,semester.getId());
 						 	Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
-							
-								Log.info("OsceDay is For which OsceSecurity Is Checked Iterator:" + sortedOsceDay.getId());
+							Log.info("OsceDay is For which OsceSecurity Is Checked Iterator:" + sortedOsceDay.getId());
 								
 								// Manish Now changed Query to get Assignment Of Sequence not of OsceDay Commented below line and query 
 								//List<Course> parcourList = Osce.getAllParcoursForThisOsceDay(sortedOsceDay);
@@ -300,6 +309,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											
 											Set<AdvancedSearchCriteria> setAdvanceSearchCriteria=sortedOscePost.getStandardizedRole().getAdvancedSearchCriteria();
 											
+
 											if(setAdvanceSearchCriteria== null || setAdvanceSearchCriteria.size() <= 0){
 											 //continue;
 												SPfitForRole(sortedOsceDay,sortedPatientInSemester1,sortedOscePost,sortedOscePostByTypeAndComplexyList,semester);
@@ -308,6 +318,17 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											
 											ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 											  
+											java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
+												
+							        			@Override
+							        			public int compare(AdvancedSearchCriteria o1,
+							        					AdvancedSearchCriteria o2) {
+							        				
+							        				return o1.getId().compareTo(o2.getId());
+							        			}
+								        			  
+							        		} );  
+											
 								 			Log.info("Search Criteria For Sorted Lists : " +listAdvanceSearchCirteria.size());
 												 
 								 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
@@ -648,7 +669,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	}
 
 	public void SPfitForRole(OsceDay sortedOsceDay,PatientInSemester sortedPatientInSemester1,OscePost sortedOscePost,List<OscePost> sortedOscePostByTypeAndComplexyList,Semester semester){
-
 		
 		List<PatientInSemester> listOfPatientInSemesterSatisfyCriteria = new ArrayList<PatientInSemester>();
 		boolean spFitInCriteria=false;
@@ -712,17 +732,13 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 		}
 		
 		else if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.simple){
-			
-			
 			int total_Count =sortedOscePostByTypeAndComplexyList.size();
 			
 			Log.info("Total_Count is :" + total_Count);
 			
-			
 			int role_Position=(sortedOscePostByTypeAndComplexyList.indexOf(sortedOscePost)) + 1;
 			
 			Log.info("role_Position is :" + role_Position);
-			
 			int mid_position=(total_Count/2);
 			
 			Log.info("Mid_Position is :" + mid_position);
@@ -731,6 +747,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			
 			Log.info("Start Index is :" + start_index);
 			
+
 			for(int index=start_index;index >= 0;index--){
 				
 				if(allReadyPatientInRole>=neededSp)
@@ -760,6 +777,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							
 	 						spFitInCriteria=true;
 	 						assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+	 						
 	 						//allReadyPatientInRole+=2;
 	 						/*// Assign SP To Role 1 
 	 						
@@ -795,6 +813,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					
  								spFitInCriteria=true;
  								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+ 								
  								//allReadyPatientInRole+=2;
 		 						/*// Assign SP To Role 1 
 		 						
@@ -822,6 +841,17 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					//listAdvanceSearchCirteria=null;
 					ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 					  
+					java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
+						
+	        			@Override
+	        			public int compare(AdvancedSearchCriteria o1,
+	        					AdvancedSearchCriteria o2) {
+	        				
+	        				return o1.getId().compareTo(o2.getId());
+	        			}
+		        			  
+	        		} );  
+					
 		 			Log.info("Search Criteria For Simple Security is : " +listAdvanceSearchCirteria.size());
 						 
 		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
@@ -830,6 +860,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 		 			
 		 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
 		 				
+
 						if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1) && (getTotalRolesFroOscePost==0)){
 				
 						//	if (listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester1)){
@@ -840,7 +871,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							
 									
 			 						spFitInCriteria=true;
+
 			 						assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+			 						
 			 						//allReadyPatientInRole+=2;
 			 						/*// Assign SP To Role 1 
 			 						
@@ -876,6 +909,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							
 		 								spFitInCriteria=true;
 		 								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
+		 								
 		 								//allReadyPatientInRole+=2;
 				 						/*// Assign SP To Role 1 
 				 						
@@ -905,7 +939,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			if(!spFitInCriteria){
 			
 				Log.info("No Search Cietria Found For Role Two So Checking fro start To Middle");
-				for(int index=start_index+1;index < mid_position;index++){
+				for(int index=start_index+1;index <= mid_position;index++){
 					
 					if(allReadyPatientInRole>=neededSp)
 						return;
@@ -927,7 +961,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							if(getTotalTimePatientAssignInRole==0){
 	 							Log.info("Assign Patient In Role With One Post As NULL");
 	 							
+
 	 							assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+	 							
 	 							//allReadyPatientInRole+=2;
 			 					/*// Assign SP To Role 1 
 			 						
@@ -977,7 +1013,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 						newPatientAssignInRole2.setOscePost(sortedOscePost3);
 			 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 			 						newPatientAssignInRole2.persist();*/
+
 								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+								
 								//allReadyPatientInRole+=2;
 			 						break;
 			 					}
@@ -986,6 +1024,18 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					else{
 					//listAdvanceSearchCirteria.clear();
 					ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
+					  
+					
+					java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
+						
+	        			@Override
+	        			public int compare(AdvancedSearchCriteria o1,
+	        					AdvancedSearchCriteria o2) {
+	        				
+	        				return o1.getId().compareTo(o2.getId());
+	        			}
+		        			  
+	        		} );  
 					  
 		 			Log.info("Search Criteria When SP not fit in Role is : " +listAdvanceSearchCirteria.size());
 						 
@@ -1052,7 +1102,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	 						newPatientAssignInRole2.setOscePost(sortedOscePost3);
 	 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 	 						newPatientAssignInRole2.persist();*/
+	 								
 	 						assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
+	 						
 	 						//allReadyPatientInRole+=2;
 	 						break;
 	 					}
@@ -1068,7 +1120,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	public void assignSpInToRole1AndRole2IsRoleAssigningFirstTime(OscePost sortedOscePost,OscePost sortedOscePost2,PatientInSemester sortedPatientInSemester1){
 		
 		// Assign SP To Role 1 
-		
 		long totalTimePatientAssignInSeq=Osce.totalTimesPatientAssignInSequence(sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
 			if(totalTimePatientAssignInSeq==0){
 			PatientInRole newPatientAssignInRole1 = new PatientInRole();
