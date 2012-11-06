@@ -22,7 +22,7 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 		
 		public void autoAssignStudent(long id);
 		
-		public void exportAssignment(Long osceId);
+		public void exportAssignment(Long osceId,int type);
 	}
 	
 	 void setDelegate(Delegate delegate);

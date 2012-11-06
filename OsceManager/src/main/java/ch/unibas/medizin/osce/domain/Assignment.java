@@ -1011,13 +1011,18 @@ public class Assignment {
          return assignmentList;
      }
      
-     public static List<Assignment> findAssignmentRotationAndCourseWise(Long osceDayId,int rotation,Long courseId)
+     public static List<Assignment> findAssignmentRotationAndCourseWise(Long osceDayId,int rotation,Long courseId,int type)
      {
     	 Log.info("findAssignmentRotationAndCourseWise");
-    	 String queryString="select a from Assignment as a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
+    	 String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
     	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
     	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) order by timeStart";
     	 
+    	 if(type ==1)
+    	 {
+    		 queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and  " +
+    	    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course="+courseId+" ) order by timeStart";
+    	 }
     	 EntityManager em = entityManager();
     	 TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
          List<Assignment> assignmentList = query.getResultList();
@@ -1028,10 +1033,16 @@ public class Assignment {
     	
      }
      
-     public static List<Date> findDistinctTimeStartRotationWise(Long osceDayId,int rotation)
+     public static List<Date> findDistinctTimeStartRotationWise(Long osceDayId,int rotation,int type)
      {
     	 Log.info("findDistinctTimeStartRotationWise");
-    	 String queryString="select distinct (timeStart) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 String queryString="";
+    	 if(type==0)
+    	  queryString="select distinct (timeStart) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 if(type==1)
+    		 queryString="select distinct (timeEnd) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
     	 
     	 EntityManager em = entityManager();
     	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);

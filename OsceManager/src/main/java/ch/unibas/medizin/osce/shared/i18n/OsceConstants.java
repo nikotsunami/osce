@@ -1165,5 +1165,9 @@ public interface OsceConstants extends Constants {
 	//payment
 	public String payment();
 	//payment
+	
+	public String exportStudent();
+	
+	public String exportSP();
 }
 

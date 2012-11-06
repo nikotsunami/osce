@@ -65,7 +65,12 @@
 				               	<td><xsl:value-of select="postName" /></td>
 				               </xsl:for-each>
 				            </tr>
-				            
+				            <tr class="postTR">
+				            <td></td>
+				              <xsl:for-each select="posts/post">
+				               	<td><xsl:value-of select="standardizedRole" /></td>
+				               </xsl:for-each>
+				            </tr>
 		            
 		            
 		            <xsl:for-each select="rotations/rotation">            

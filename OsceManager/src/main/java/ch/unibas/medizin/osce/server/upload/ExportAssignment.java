@@ -42,6 +42,7 @@ import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -56,7 +57,8 @@ public class ExportAssignment  extends HttpServlet {
 		Log.info("ExportAssignment doGet :osceId :" + request.getParameter("osceId"));
 		
 		String osceId=request.getParameter("osceId");
-		String fileName=createHtml(new Long(osceId));
+		String type=request.getParameter("type");
+		String fileName=createHtml(new Long(osceId), new Integer(type));
 		
 		try{
 			
@@ -95,7 +97,7 @@ public class ExportAssignment  extends HttpServlet {
 		
 	}
 	
-	public  String createHtml(Long osceId)
+	public  String createHtml(Long osceId,int type)
 	{
 		Osce osce=Osce.findOsce(osceId);
 		
@@ -151,7 +153,7 @@ public class ExportAssignment  extends HttpServlet {
 					{
 						Element postElement=createEmptyChildNode("post",doc,postsElement);
 						createChildNode("postName", "Post " +oscePost.getSequenceNumber(), doc, postElement);
-						createChildNode("postType", oscePost.getOscePostBlueprint().getPostType().toString(), doc, postElement);
+						createChildNode("standardizedRole", oscePost.getStandardizedRole().getLongName(), doc, postElement);
 					}
 					
 					//find examiners, rotation and course wise from Assignment table			
@@ -163,7 +165,7 @@ public class ExportAssignment  extends HttpServlet {
 					for(int j=startRotation;j<(rotationOffSet);j++)
 					{
 						
-						List<Date> timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j);
+						
 						
 						Element rotationElement=createEmptyChildNode("rotation",doc,rotationsElement);
 						createChildNode("rotationId", "rotation "+(j+1), doc, rotationElement);
@@ -186,13 +188,23 @@ public class ExportAssignment  extends HttpServlet {
 							createChildNode("examinerName", examinerName, doc, examinerElement);
 						}
 						
+						List<Date> timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+						List<Date> timeEnds=null;
+						if(type==1)
+						{
+							timeEnds=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+						}
+						
 						//retrieve startEndtimes and student for particular course and rotation
-						List<Assignment> assignments=Assignment.findAssignmentRotationAndCourseWise(osceDay.getId(), j, course.getId());
+						List<Assignment> assignments=Assignment.findAssignmentRotationAndCourseWise(osceDay.getId(), j, course.getId(),type);
 						Element startEndTimesElement=createEmptyChildNode("startEndTimes",doc,rotationElement);
-						for(Date timeStart:timeStarts)
+						for(int d=0;d<timeStarts.size();d++)
 						{
 							
-							
+							Date timeStart=timeStarts.get(d);
+							Date timeEnd=null;
+							if(type==1)
+								timeEnd=timeEnds.get(d);
 							
 		
 							Element startEndTimeElement=createEmptyChildNode("startEndTime",doc,startEndTimesElement);
@@ -212,29 +224,50 @@ public class ExportAssignment  extends HttpServlet {
 									OscePost assignmentPost=assignment.getOscePostRoom().getOscePost();
 									
 								
-										boolean movetoNext= false;
+										
 										
 										
 											
 											
-										
-											if(oscePost.getId() == assignmentPost.getId() && assignment.getTimeStart().equals(timeStart))
+											//for student
+											if(oscePost.getId() == assignmentPost.getId() && assignment.getTimeStart().equals(timeStart) && type ==0)
 											{
 												Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 												Student student=assignment.getStudent();
 												String studentName="-";
 												if(student != null)
-													studentName=student.getPreName() + student.getName();
+													studentName=student.getPreName() +" "+ student.getName();
 												else
 													studentName="s"+assignment.getSequenceNumber();
 												
 												endTime=assignment.getTimeEnd();
 												
 												createChildNode("studentName", studentName, doc, studentElement);
-												movetoNext=true;
+											
 												found=true;
 												break;
 											}
+											
+											//for SP
+											if(timeEnd != null && oscePost.getId() == assignmentPost.getId() && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)) && type ==1)
+											{
+												Element studentElement=createEmptyChildNode("student",doc,studentsElement);
+												PatientInRole patientInRole=assignment.getPatientInRole();
+												String studentName="-";
+												if(patientInRole != null)
+													studentName=patientInRole.getPatientInSemester().getStandardizedPatient().getPreName() + " " + patientInRole.getPatientInSemester().getStandardizedPatient().getName();
+												else
+													studentName="SP"+assignment.getSequenceNumber();
+												
+												endTime=assignment.getTimeEnd();
+												
+												createChildNode("studentName", studentName, doc, studentElement);
+												
+												found=true;
+												break;
+											}
+											
+											
 										/*	else
 											{
 												Element studentElement=createEmptyChildNode("student",doc,studentsElement);

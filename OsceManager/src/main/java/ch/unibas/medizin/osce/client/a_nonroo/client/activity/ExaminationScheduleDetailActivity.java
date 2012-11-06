@@ -2188,11 +2188,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 	}
 	
-	public void exportAssignment(Long osceId)
+	public void exportAssignment(Long osceId,int type)
 	{
 		Log.info("exportAssignment");
 		Log.info(" exportAssignment  :" );
-		final String url="/exportAssignment?osceId="+osceId;
+		final String url="/exportAssignment?osceId="+osceId+"&type="+type;
 		
 	   Window.open(url, osceId.toString(), "enabled");
 	}

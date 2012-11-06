@@ -55,7 +55,10 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	Label longBreakValue;
 	
 	@UiField
-	Button exportButton;
+	Button exportButtonStudent;
+	
+	@UiField
+	Button exportButtonSP;
 	
 	public Label getShortBreakSimPatChangeValue() {
 		return shortBreakSimPatChangeValue;
@@ -161,7 +164,8 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		shortBreakSimPatChangeTxt.setText(constants.exaPlanChangeBreak());
 		longBreakTxt.setText(constants.exaPlanLongBreak());
 		
-		exportButton.setText(constants.export());
+		exportButtonStudent.setText(constants.exportStudent());
+		exportButtonSP.setText(constants.exportSP());
 		int height = ResolutionSettings.getRightWidgetHeight() - 55;
 		scrollPanel.setHeight(height+"px");		
 	}
@@ -197,11 +201,18 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		scrollPanel.setHeight(height+"px");
 	}
 	
-	@UiHandler("exportButton")
-	public void exportButtonClicked(ClickEvent event)
+	@UiHandler("exportButtonStudent")
+	public void exportButtonStudentClicked(ClickEvent event)
 	{
 		Log.info("exportButton");
-		delegate.exportAssignment(osceProxy.getId());
+		delegate.exportAssignment(osceProxy.getId(),0);
+	}
+	
+	@UiHandler("exportButtonSP")
+	public void exportButtonSPClicked(ClickEvent event)
+	{
+		Log.info("exportButton");
+		delegate.exportAssignment(osceProxy.getId(),1);
 	}
 
 }
