@@ -70,7 +70,7 @@ public class OsMaFilePathConstant {
 	public static String DEFAULT_MAIL_TEMPLATE_PATH = "/usr/oscemanager/Templates/mailTemplates/";
 	// public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\oscemanager\\Templates\\mailTemplates\\";
 
-	public static String PRINT_SCHEDULE_TEMPLATE = "usr/oscemanager/Templates/";
+	public static String PRINT_SCHEDULE_TEMPLATE = "/usr/oscemanager/Templates/";
 	// public static final String PRINT_SCHEDULE_TEMPLATE = "C:\\oscemanager\\Templates\\";
 
 	// Module 8 (Assessment Plan)[

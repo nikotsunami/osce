@@ -61,6 +61,11 @@ public class ResourceUtil {
 			break;
 		}
 
+		case INDIVIDUAL_SCHEDULE : {
+			fileName = setIndividualScheduleResouce(request,os);
+			break;
+		}
+		
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -69,6 +74,25 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setIndividualScheduleResouce(
+			HttpServletRequest request, ByteArrayOutputStream os) throws IOException {
+		
+		HttpSession session = request.getSession();
+		String fileName = "default.pdf";
+		String key = request.getParameter(ResourceDownloadProps.INDIVIDUAL_SCHEDULE_KEY);
+		
+		
+		if(StringUtils.isNotBlank(key) && session.getAttribute(key) != null) {
+			try{
+				fileName = key;
+				os.write(((ByteArrayOutputStream)session.getAttribute(key)).toByteArray());
+			}finally {
+				session.removeAttribute(key);
+			}
+		}
+		return fileName;
 	}
 
 	private static String setSummoningsResouce(HttpServletRequest request, ByteArrayOutputStream os) throws IOException {

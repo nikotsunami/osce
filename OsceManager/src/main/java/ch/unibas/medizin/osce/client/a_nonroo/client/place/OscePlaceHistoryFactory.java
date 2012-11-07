@@ -50,6 +50,8 @@ public class OscePlaceHistoryFactory {
 	//module 8]
 	private final SummoningsPlace.Tokenizer summoningsTokenizer;
 	private final IndividualSchedulesPlace.Tokenizer individualSchedulesPlaceTokenizer;
+	private final IndividualSchedulesDetailsPlace.Tokenizer individualSchedulesDetailsPlaceTokenizer;
+	
 	private final BellSchedulePlace.Tokenizer bellSchedulePlaceTokenizer;
 	
 	private final RolePlace.Tokenizer rolePlaceTokenizer;
@@ -130,7 +132,9 @@ public class OscePlaceHistoryFactory {
 		this.studentsPlaceTokenizer = new StudentsPlace.Tokenizer(requestFactory);
 		
 		this.summoningsTokenizer = new SummoningsPlace.Tokenizer(requestFactory);
+		
 		this.individualSchedulesPlaceTokenizer = new IndividualSchedulesPlace.Tokenizer(requestFactory);
+		this.individualSchedulesDetailsPlaceTokenizer= new IndividualSchedulesDetailsPlace.Tokenizer(requestFactory);
 		
 		this.bellSchedulePlaceTokenizer = new BellSchedulePlace.Tokenizer(requestFactory);
 		
@@ -279,6 +283,10 @@ public class OscePlaceHistoryFactory {
 	
 	public PlaceTokenizer<IndividualSchedulesPlace> getIndividualSchedulesPlaceTokenizer() {
 		return individualSchedulesPlaceTokenizer;
+	}
+	
+	public PlaceTokenizer<IndividualSchedulesDetailsPlace> getIndividualSchedulesDetailsPlaceTokenizer() {
+		return individualSchedulesDetailsPlaceTokenizer;
 	}
 	
 	public PlaceTokenizer<StatisticalEvaluationPlace> getStatisticalEvaluationPlaceTokenizer() {

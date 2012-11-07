@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.server;
  * @author manish
  */
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -161,36 +160,26 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					 			
 					 				ArrayList<AdvancedSearchCriteria>  listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 								  
-									java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
-										
-					        			@Override
-					        			public int compare(AdvancedSearchCriteria o1,
-					        					AdvancedSearchCriteria o2) {
-					        				
-					        				return o1.getId().compareTo(o2.getId());
-					        			}
-						        			  
-					        		} );  
 								  
-							    Log.info("Search Criteria Size : " +listAdvanceSearchCirteria.size());
+					 				Log.info("Search Criteria Size : " +listAdvanceSearchCirteria.size());
 									 
-					 			
-							   listOfPatientInSemesterSatisfyCriteria= patientInsemester.findPatientInSemesterByAdvancedCriteria(semester.getId(),listAdvanceSearchCirteria);
-					 						 				
-							   Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria.size());
-					 				 
-					 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
-					 				
-					 					if (listOfPatientInSemesterSatisfyCriteria.contains(patientInsemester))
-					 					{
-					 						patientInsemester.setValue(util.checkInteger(patientInsemester.getValue())+1);
-					 						patientInsemester.persist();
-					 						
-					 						oscePost.setValue(util.checkInteger(oscePost.getValue())+1);
-					 						oscePost.persist();
-					 					}
-					 				 }
-					 		}
+						 			
+								   listOfPatientInSemesterSatisfyCriteria= patientInsemester.findPatientInSemesterByAdvancedCriteria(semester.getId(),listAdvanceSearchCirteria);
+						 						 				
+								   Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria.size());
+						 				 
+						 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
+						 				
+						 					if (listOfPatientInSemesterSatisfyCriteria.contains(patientInsemester))
+						 					{
+						 						patientInsemester.setValue(util.checkInteger(patientInsemester.getValue())+1);
+						 						patientInsemester.persist();
+						 						
+						 						oscePost.setValue(util.checkInteger(oscePost.getValue())+1);
+						 						oscePost.persist();
+						 					}
+						 				 }
+						 		}
 				 }
 				 }
 			 
@@ -318,17 +307,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											
 											ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 											  
-											java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
-												
-							        			@Override
-							        			public int compare(AdvancedSearchCriteria o1,
-							        					AdvancedSearchCriteria o2) {
-							        				
-							        				return o1.getId().compareTo(o2.getId());
-							        			}
-								        			  
-							        		} );  
-											
 								 			Log.info("Search Criteria For Sorted Lists : " +listAdvanceSearchCirteria.size());
 												 
 								 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
@@ -841,17 +819,6 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					//listAdvanceSearchCirteria=null;
 					ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
 					  
-					java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
-						
-	        			@Override
-	        			public int compare(AdvancedSearchCriteria o1,
-	        					AdvancedSearchCriteria o2) {
-	        				
-	        				return o1.getId().compareTo(o2.getId());
-	        			}
-		        			  
-	        		} );  
-					
 		 			Log.info("Search Criteria For Simple Security is : " +listAdvanceSearchCirteria.size());
 						 
 		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
@@ -1024,19 +991,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					else{
 					//listAdvanceSearchCirteria.clear();
 					ArrayList<AdvancedSearchCriteria> listAdvanceSearchCirteria = new ArrayList<AdvancedSearchCriteria>(setAdvanceSearchCriteria);
-					  
-					
-					java.util.Collections.sort(listAdvanceSearchCirteria,new Comparator<AdvancedSearchCriteria>() {
-						
-	        			@Override
-	        			public int compare(AdvancedSearchCriteria o1,
-	        					AdvancedSearchCriteria o2) {
-	        				
-	        				return o1.getId().compareTo(o2.getId());
-	        			}
-		        			  
-	        		} );  
-					  
+										  
 		 			Log.info("Search Criteria When SP not fit in Role is : " +listAdvanceSearchCirteria.size());
 						 
 		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);

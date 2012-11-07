@@ -584,13 +584,13 @@ public class Assignment {
     
     public static List<Assignment> findAssignmentsByOsceDayAndPIRId(long osceDayId,long pirId)
     {
-		Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
+		//Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
 		EntityManager em = entityManager();		
-		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole= "+ pirId;
-		Log.info("Query String: " + queryString);
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole= "+ pirId + "order by assi.timeStart";
+		//Log.info("Query String: " + queryString);
 		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
 		List<Assignment> result  = q.getResultList();        
-		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+		//Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
         return result;    	    
     }
         
