@@ -147,7 +147,7 @@ public class ExportAssignment  extends HttpServlet {
 					Course course=courses.get(i);
 					Element parcourElement=createEmptyChildNode("parcour",doc,parcoursElement);
 					//createChildNode("parcourCss", "accordion-title-selected"+course.getColor(), doc, parcourElement);
-				//	createChildNode("parcourColor", course.getColor(), doc, parcourElement);
+					createChildNode("parcourColor", course.getColor(), doc, parcourElement);
 					
 					Element postsElement=createEmptyChildNode("posts",doc,parcourElement);
 					
@@ -188,6 +188,8 @@ public class ExportAssignment  extends HttpServlet {
 							String examinerName="-";
 							if(examiner !=null)
 								examinerName=examiner.getPreName() +" "+ examiner.getName();
+							else
+								examinerName="NA";
 							
 							createChildNode("examinerName", examinerName, doc, examinerElement);
 						}
@@ -212,7 +214,7 @@ public class ExportAssignment  extends HttpServlet {
 							
 		
 							Element startEndTimeElement=createEmptyChildNode("startEndTime",doc,startEndTimesElement);
-							createChildNode("parcourColor", course.getColor(), doc, startEndTimeElement);
+							//createChildNode("parcourColor", course.getColor(), doc, startEndTimeElement);
 							String timeStartValue=String.format("%tR", timeStart);
 									//NumberFormat.getFormat("00").format(timeStart.getHours()) +":" + NumberFormat.getFormat("00").format(timeStart.getMinutes());
 							
@@ -296,12 +298,12 @@ public class ExportAssignment  extends HttpServlet {
 								if(!found && type==0)
 								{
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
-									createChildNode("studentName", "-", doc, studentElement);
+									createChildNode("studentName", "NA", doc, studentElement);
 								}
 								else if(!found && endTime !=null )
 								{
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
-									createChildNode("studentName", "-", doc, studentElement);
+									createChildNode("studentName", "NA", doc, studentElement);
 								}
 							}
 							if(type==0)

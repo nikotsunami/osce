@@ -133,10 +133,10 @@
       
          <xsl:for-each select="osceDays/osceDay">
             <table class="dayTable" border="1px" cellSpacing="0" align="center">
-            <tr class="dayTD">
+            <tr >
            
                   
-                  <td><xsl:value-of select="osceDayID" /></td>
+                  <td bgColor="#9EB4FE"><xsl:value-of select="osceDayID" /></td>
                  
             </tr>
             <xsl:for-each select="parcours/parcour">
@@ -149,20 +149,246 @@
 	               <td class="parcourTD"><xsl:value-of select="parcourColor" /></td>
 	            </tr>
           -->
-	            	
-				            <tr class="postTR">
-				            <td></td>
-				              <xsl:for-each select="posts/post">
-				               	<td><xsl:value-of select="postName" /></td>
-				               </xsl:for-each>
-				            </tr>
-				            <tr class="postTR">
-				            <td></td>
-				              <xsl:for-each select="posts/post">
-				               	<td><xsl:value-of select="standardizedRole" /></td>
-				               </xsl:for-each>
-				            </tr>
-		            
+	            	<xsl:choose>
+       						<xsl:when test="parcourColor = 'color_1'">
+					            <tr >
+					            <td  bgColor="#f6d4a3"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#f6d4a3"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#f6d4a3"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#f6d4a3"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_2'">
+					            <tr >
+					            <td  bgColor="#eeee8c"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#eeee8c"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#eeee8c"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#eeee8c"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_3'">
+					            <tr >
+					            <td  bgColor="#fadce7"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#fadce7"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#fadce7"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#fadce7"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_4'">
+					            <tr >
+					            <td  bgColor="#cfe3d4"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#cfe3d4"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#cfe3d4"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#cfe3d4"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_5'">
+					            <tr >
+					            <td  bgColor="#d1cee1"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#d1cee1"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#d1cee1"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#d1cee1"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_6'">
+					            <tr >
+					            <td  bgColor="#f2cec6"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#f2cec6"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#f2cec6"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#f2cec6"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_7'">
+					            <tr >
+					            <td  bgColor="#e5d9c9"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#e5d9c9"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#e5d9c9"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#e5d9c9"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_8'">
+					            <tr >
+					            <td  bgColor="#c4dbfe"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#c4dbfe"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#c4dbfe"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#c4dbfe"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_9'">
+					            <tr >
+					            <td  bgColor="#ccccff"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#ccccff"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#ccccff"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#ccccff"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_10'">
+					            <tr >
+					            <td  bgColor="#fce0a0"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#fce0a0"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#fce0a0"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#fce0a0"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_11'">
+					            <tr >
+					            <td  bgColor="#c3f4ad"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#c3f4ad"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#c3f4ad"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#c3f4ad"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_12'">
+					            <tr >
+					            <td  bgColor="#ccffff"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#ccffff"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#ccffff"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#ccffff"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_13'">
+					            <tr >
+					            <td  bgColor="#d7d6d6"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#d7d6d6"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#d7d6d6"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#d7d6d6"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_14'">
+					            <tr >
+					            <td  bgColor="#e1c7fd"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#e1c7fd"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#e1c7fd"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#e1c7fd"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_15'">
+					            <tr >
+					            <td  bgColor="#c1cfcd"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#c1cfcd"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#c1cfcd"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#c1cfcd"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:when test="parcourColor = 'color_16'">
+					            <tr >
+					            <td  bgColor="#d1d5a0"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#d1d5a0"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr  >
+					            <td bgColor="#d1d5a0"></td>
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#d1d5a0"><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:when>
+		            		<xsl:otherwise>
+		            			<tr class="postTR">
+					            <td></td>
+					              <xsl:for-each select="posts/post">
+					               	<td><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr class="postTR">
+					            <td></td>
+					              <xsl:for-each select="posts/post">
+					               	<td><xsl:value-of select="standardizedRole" /></td>
+					               </xsl:for-each>
+					            </tr>
+		            		</xsl:otherwise>
+		            </xsl:choose>
 		            
 		            <xsl:for-each select="rotations/rotation">            
 						            <tr>
@@ -176,166 +402,18 @@
 				           
 				            
 						            <xsl:for-each select="startEndTimes/startEndTime">  
-						            	<xsl:choose>
-       										 <xsl:when test="parcourColor = 'color_4'">
-	            								<tr class="accordion-title-selectedcolor_4">
-	            									<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_3'">
-	            								<tr class="accordion-title-selectedcolor_3">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_2'">
-	            								<tr class="accordion-title-selectedcolor_2">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_1'">
-	            								<tr class="accordion-title-selectedcolor_1">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									   <xsl:when test="parcourColor = 'color_5'">
-           									  <tr class="accordion-title-selectedcolor_5">
-	            									<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_6'">
-	            								<tr class="accordion-title-selectedcolor_6">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_7'">
-	            								<tr class="accordion-title-selectedcolor_7">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_8'">
-	            								<tr class="accordion-title-selectedcolor_8">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									   <xsl:when test="parcourColor = 'color_9'">
-           									  <tr class="accordion-title-selectedcolor_9">
-	            									<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_10'">
-	            								<tr class="accordion-title-selectedcolor_10">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_11'">
-	            								<tr class="accordion-title-selectedcolor_11">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_12'">
-	            								<tr class="accordion-title-selectedcolor_12">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									   <xsl:when test="parcourColor = 'color_13'">
-           									  <tr class="accordion-title-selectedcolor_13">
-	            									<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_14'">
-	            								<tr class="accordion-title-selectedcolor_14">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_15'">
-	            								<tr class="accordion-title-selectedcolor_15">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
-           									  <xsl:when test="parcourColor = 'color_16'">
-	            								<tr class="accordion-title-selectedcolor_16">
-													<td><xsl:value-of select="startEndTimeValue" /></td>
-									                
-									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
-									                </xsl:for-each>
-						           			 	</tr>
-           									  </xsl:when>
+						            	
            									   
-           									  <xsl:otherwise>
-           									  	<tr class="studentTR">
-           									  		<td><xsl:value-of select="startEndTimeValue" /></td>
+           									 
+           									  	<tr >
+           									  		<td bgColor="#E5EBEB"><xsl:value-of select="startEndTimeValue" /></td>
 									                
 									                <xsl:for-each select="students/student">
-									                   <td><xsl:value-of select="studentName" /></td>
+									                   <td bgColor="#E5EBEB"><xsl:value-of select="studentName" /></td>
 									                </xsl:for-each>
 						           			 	</tr>
-           									  </xsl:otherwise>
-          								 </xsl:choose> 
+           									 
+          							
 						            
 						               
 									               

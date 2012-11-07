@@ -900,6 +900,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							 	examinationView.getExaminerPanel().addStyleName("border-bottom-red");
 							 	examinationView.setOscePostProxy(oscePostProxy);
 								examinationView.setDelegate(activity);
+								((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 								if(examinerSlotLength>=0)
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 								
@@ -942,7 +943,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									examinationView.setOscePostProxy(oscePostProxy);
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 									examinationView.setOscePostView(oscePostView);
-									
+									((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 									if(j==response.size()-1 && oscePostProxy.getId()==oscePostProxies.get(oscePostProxies.size()-1).getId())
 										examinationView.getExaminerPanel().addStyleName("rightBottom-radius");
 									
@@ -1920,7 +1921,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
 					 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
 					 	examinationView.setOscePostRoomProxy(examinationViewOld.getOscePostRoomProxy());
-				
+					 	
+					 	((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 						
 						
 						if(j>0)
