@@ -65,7 +65,10 @@ public class ExportAssignment  extends HttpServlet {
 				servletConfig=getServletConfig();
 				
 				 response.setContentType("application/x-download");
-				    response.setHeader("Content-Disposition", "attachment; filename=" + "assignment.html");
+				 if(new Integer(type) ==0)
+				    response.setHeader("Content-Disposition", "attachment; filename=" + "assignment_student_"+osceId+".html");
+				 else
+					 response.setHeader("Content-Disposition", "attachment; filename=" + "assignment_sp_"+osceId+".html");
 				   
 
 				Log.info("path :" + fileName);
@@ -143,7 +146,8 @@ public class ExportAssignment  extends HttpServlet {
 				{
 					Course course=courses.get(i);
 					Element parcourElement=createEmptyChildNode("parcour",doc,parcoursElement);
-					createChildNode("parcourColor", course.getColor(), doc, parcourElement);
+					//createChildNode("parcourCss", "accordion-title-selected"+course.getColor(), doc, parcourElement);
+				//	createChildNode("parcourColor", course.getColor(), doc, parcourElement);
 					
 					Element postsElement=createEmptyChildNode("posts",doc,parcourElement);
 					
@@ -183,7 +187,7 @@ public class ExportAssignment  extends HttpServlet {
 							
 							String examinerName="-";
 							if(examiner !=null)
-								examinerName=examiner.getPreName() + examiner.getName();
+								examinerName=examiner.getPreName() +" "+ examiner.getName();
 							
 							createChildNode("examinerName", examinerName, doc, examinerElement);
 						}
@@ -208,6 +212,7 @@ public class ExportAssignment  extends HttpServlet {
 							
 		
 							Element startEndTimeElement=createEmptyChildNode("startEndTime",doc,startEndTimesElement);
+							createChildNode("parcourColor", course.getColor(), doc, startEndTimeElement);
 							String timeStartValue=String.format("%tR", timeStart);
 									//NumberFormat.getFormat("00").format(timeStart.getHours()) +":" + NumberFormat.getFormat("00").format(timeStart.getMinutes());
 							
@@ -288,16 +293,27 @@ public class ExportAssignment  extends HttpServlet {
 									*/
 								}
 								
-								if(!found)
+								if(!found && type==0)
+								{
+									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
+									createChildNode("studentName", "-", doc, studentElement);
+								}
+								else if(!found && endTime !=null )
 								{
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "-", doc, studentElement);
 								}
 							}
-							
-							
-							timeStartValue=timeStartValue +"-"+ String.format("%tR", endTime);
-							createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
+							if(type==0)
+							{
+								timeStartValue=timeStartValue +"-"+ String.format("%tR", endTime);
+								createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
+							}
+							else if(endTime !=null)
+							{
+								timeStartValue=timeStartValue +"-"+ String.format("%tR", endTime);
+								createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
+							}
 						}
 					}
 				}

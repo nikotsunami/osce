@@ -39,6 +39,93 @@
           	background:rgb(229,235,235);
           	color:rgb(137,120,164);
           }
+          
+          <!--  /* Color Shade */-->
+		.accordion-title-selectedcolor_1 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6d4a3', endColorstr='#fdf0dd'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#f6d4a3), to(#fdf0dd)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #f6d4a3, #fdf0dd) !important; /* for firefox 3.6+ */	
+		}
+		.accordion-title-selectedcolor_2 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeee8c', endColorstr='#fcfcd1'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#eeee8c), to(#fcfcd1)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #eeee8c, #fcfcd1) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_3 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fadce7', endColorstr='#f9eaea'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#fadce7), to(#f9eaea)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #fadce7, #f9eaea) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_4 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cfe3d4', endColorstr='#e8f5eb'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#cfe3d4), to(#e8f5eb)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #cfe3d4, #e8f5eb) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_5 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d1cee1', endColorstr='#e9e8f4'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#d1cee1), to(#e9e8f4)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #d1cee1, #e9e8f4) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_6 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2cec6', endColorstr='#fcf4f2'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#f2cec6), to(#fcf4f2)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #f2cec6, #fcf4f2) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_7 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5d9c9', endColorstr='#fffbf5'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#e5d9c9), to(#fffbf5)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #e5d9c9, #fffbf5) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_8 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c4dbfe', endColorstr='#f3f7fd'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#c4dbfe), to(#f3f7fd)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #c4dbfe, #f3f7fd) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_9 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccccff', endColorstr='#e6e8fd'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#ccccff), to(#e6e8fd)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #ccccff, #e6e8fd) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_10 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fce0a0', endColorstr='#fcf1d9'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#fce0a0), to(#fcf1d9)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #fce0a0, #fcf1d9) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_11 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c3f4ad', endColorstr='#e6fcdc'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#c3f4ad), to(#e6fcdc)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #c3f4ad, #e6fcdc) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_12 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccffff', endColorstr='#ebfefe'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#ccffff), to(#ebfefe)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #ccffff, #ebfefe) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_13 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d7d6d6', endColorstr='#f7f7f7'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#d7d6d6), to(#f7f7f7)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #d7d6d6, #f7f7f7) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_14 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e1c7fd', endColorstr='#f7f1fe'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#e1c7fd), to(#f7f1fe)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #e1c7fd, #f7f1fe) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_15 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c1cfcd', endColorstr='#e4e9e8'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#c1cfcd), to(#e4e9e8)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #c1cfcd, #e4e9e8) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_16 {
+		 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d1d5a0', endColorstr='#f7f8e5'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#d1d5a0), to(#f7f8e5)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #d1d5a0, #f7f8e5) !important; /* for firefox 3.6+ */
+		}
+		.accordion-title-selectedcolor_1:hover, .accordion-title-selectedcolor_2:hover, .accordion-title-selectedcolor_3:hover, .accordion-title-selectedcolor_4:hover, .accordion-title-selectedcolor_5:hover, .accordion-title-selectedcolor_6:hover, .accordion-title-selectedcolor_7:hover, .accordion-title-selectedcolor_8:hover, .accordion-title-selectedcolor_9:hover, .accordion-title-selectedcolor_10:hover, .accordion-title-selectedcolor_11:hover, .accordion-title-selectedcolor_12:hover, .accordion-title-selectedcolor_13:hover, .accordion-title-selectedcolor_14:hover, .accordion-title-selectedcolor_15:hover, .accordion-title-selectedcolor_16:hover {
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c1c1c1', endColorstr='#ededed'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#c1c1c1), to(#ededed)) !important; /* for webkit browsers */
+			background: -moz-linear-gradient(top, #c1c1c1, #ededed) !important; /* for firefox 3.6+ */
+		}
       </style>
    </head>
 
@@ -53,11 +140,15 @@
                  
             </tr>
             <xsl:for-each select="parcours/parcour">
+           
+         
+        
+     <!--  
 	            <tr >
 	               
 	               <td class="parcourTD"><xsl:value-of select="parcourColor" /></td>
 	            </tr>
-            
+          -->
 	            	
 				            <tr class="postTR">
 				            <td></td>
@@ -85,13 +176,169 @@
 				           
 				            
 						            <xsl:for-each select="startEndTimes/startEndTime">  
-						            <tr class="studentTR">
+						            	<xsl:choose>
+       										 <xsl:when test="parcourColor = 'color_4'">
+	            								<tr class="accordion-title-selectedcolor_4">
+	            									<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_3'">
+	            								<tr class="accordion-title-selectedcolor_3">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_2'">
+	            								<tr class="accordion-title-selectedcolor_2">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_1'">
+	            								<tr class="accordion-title-selectedcolor_1">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									   <xsl:when test="parcourColor = 'color_5'">
+           									  <tr class="accordion-title-selectedcolor_5">
+	            									<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_6'">
+	            								<tr class="accordion-title-selectedcolor_6">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_7'">
+	            								<tr class="accordion-title-selectedcolor_7">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_8'">
+	            								<tr class="accordion-title-selectedcolor_8">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									   <xsl:when test="parcourColor = 'color_9'">
+           									  <tr class="accordion-title-selectedcolor_9">
+	            									<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_10'">
+	            								<tr class="accordion-title-selectedcolor_10">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_11'">
+	            								<tr class="accordion-title-selectedcolor_11">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_12'">
+	            								<tr class="accordion-title-selectedcolor_12">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									   <xsl:when test="parcourColor = 'color_13'">
+           									  <tr class="accordion-title-selectedcolor_13">
+	            									<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_14'">
+	            								<tr class="accordion-title-selectedcolor_14">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_15'">
+	            								<tr class="accordion-title-selectedcolor_15">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									  <xsl:when test="parcourColor = 'color_16'">
+	            								<tr class="accordion-title-selectedcolor_16">
+													<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:when>
+           									   
+           									  <xsl:otherwise>
+           									  	<tr class="studentTR">
+           									  		<td><xsl:value-of select="startEndTimeValue" /></td>
+									                
+									                <xsl:for-each select="students/student">
+									                   <td><xsl:value-of select="studentName" /></td>
+									                </xsl:for-each>
+						           			 	</tr>
+           									  </xsl:otherwise>
+          								 </xsl:choose> 
+						            
 						               
-						               <td><xsl:value-of select="startEndTimeValue" /></td>
-						                <xsl:for-each select="students/student">
-						                   <td><xsl:value-of select="studentName" /></td>
-						                </xsl:for-each>
-						            </tr>
+									               
 						             </xsl:for-each>
            		 </xsl:for-each>
             
