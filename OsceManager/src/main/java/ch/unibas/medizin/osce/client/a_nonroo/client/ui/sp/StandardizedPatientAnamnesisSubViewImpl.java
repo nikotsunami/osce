@@ -50,7 +50,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	
 
 	@UiField
-	HorizontalPanel horizontalanamnesisPanel;
+	public HorizontalPanel horizontalanamnesisPanel;
 
 	/*// Panels
 	@UiField
@@ -59,7 +59,7 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	
 	
 	@UiField(provided=true)
-	ScrolledTabLayoutPanel anamnesisTabs=new ScrolledTabLayoutPanel(40L, u, icon1, icon2);
+	public ScrolledTabLayoutPanel anamnesisTabs=new ScrolledTabLayoutPanel(40L, u, icon1, icon2);
 	
 	
 	/*@UiField
