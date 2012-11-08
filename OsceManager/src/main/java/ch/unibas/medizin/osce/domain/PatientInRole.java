@@ -599,4 +599,15 @@ public class PatientInRole {
     	return q.getResultList();
     }
     //spec]
+
+ public static List<PatientInRole> findPatientInRoleByPatientInSemesterOrderById(Long patientInSemesterId)
+    {    
+     	EntityManager em = entityManager();     
+     	//String queryString="select pir from PatientInRole as pir where pir.patientInSemester="+patientInSemesterId + "order by pir.id";
+     	String queryString="select pir from PatientInRole as pir where pir.patientInSemester="+patientInSemesterId + "and pir.id in (select distinct assi.patientInRole from Assignment assi) order by pir.id";
+     	TypedQuery<PatientInRole> q = em.createQuery(queryString,PatientInRole.class);		
+		List<PatientInRole> result  = q.getResultList();        		
+        return result;         	   
+     }
+    
 }

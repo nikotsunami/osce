@@ -552,7 +552,9 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 							//System.out.println("Rotation [" + (l+1) +"] End");
 							//System.out.println("#################################");
 							
-							fileName = (l+1) + osceList.get(i).getName() + osceList.get(i).getStudyYear() + ".xml";
+							//fileName = (l+1) + osceList.get(i).getName() + osceList.get(i).getStudyYear() + ".xml";
+							String rotNum = String.format("%02d", (l+1));
+							fileName = String.valueOf(osceList.get(i).getSemester().getCalYear()) + osceList.get(i).getStudyYear() + osceList.get(i).getName() + rotNum + ".xml";
 							
 							String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
 							File processfile = new File(processedFileName);

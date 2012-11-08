@@ -33,10 +33,17 @@
 			<g:Label ui:field="numOfRoomsValue"></g:Label>
 			</g:HorizontalPanel>
 			
-			<g:HorizontalPanel horizontalAlignment="right" verticalAlignment="top" spacing="10">
-				<my:IconButton ui:field="studentAssignmentButton" icon="person"/>
-				<my:IconButton ui:field="spAssignmentButton" icon="contact" />
-			</g:HorizontalPanel>
+			<g:VerticalPanel horizontalAlignment="left" verticalAlignment="top" spacing="0">
+				<g:HorizontalPanel spacing="5" horizontalAlignment="left">
+					<my:IconButton ui:field="studentAssignmentButton" icon="person"/>
+					<my:IconButton ui:field="spAssignmentButton" icon="contact" />
+					
+				</g:HorizontalPanel>
+				<g:HorizontalPanel spacing="5" horizontalAlignment="left">
+					<my:IconButton ui:field="exportButtonStudent" icon="extlink"/>
+					<my:IconButton ui:field="exportButtonSP" icon="extlink"/>
+				</g:HorizontalPanel>	
+			</g:VerticalPanel>
 		</g:HorizontalPanel>
 		
 		

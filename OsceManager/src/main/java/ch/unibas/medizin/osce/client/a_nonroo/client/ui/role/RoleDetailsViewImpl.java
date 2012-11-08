@@ -7,6 +7,7 @@ import java.awt.Label;
 
 import org.apache.bcel.generic.GOTO;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubViewImpl;
@@ -191,7 +192,9 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 		horizontalRoleDetailPanel.addStyleName("horizontalPanelStyle");
 		//horizontalRoleDetailPanel.getElement().getStyle().setHeight(Integer.parseInt(this.getElement().getStyle().getHeight()), Unit.PX);
 		//horizontalRoleDetailPanel.add(roleDetailPanel);
-		roleDetailPanel.setHeight("714px");
+		//roleDetailPanel.setHeight("714px");
+		
+		roleDetailPanel.setHeight(ResolutionSettings.getRightWidgetHeight()+"px");
 		//roleDetailPanel.addStyleName("autoHeight");
 		//roleDetailPanel.setWidth("700px");
 		//roleDetailPanel.addStyleName("autoHeight");

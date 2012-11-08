@@ -23,7 +23,7 @@
 		padding-right: 8px;
 	}
 	.standardTable input {
-		width: 90%;
+		width: 98%;
 		opacity: 0.8;
 	}
 	.labelSize {
@@ -85,7 +85,7 @@ background-color:#B8A9A2;
 <g:HTMLPanel width="100%">
 
 		
-		<g:VerticalPanel ui:field="topicsdiscloserVP" verticalAlignment="middle">
+		<g:VerticalPanel ui:field="topicsdiscloserVP" verticalAlignment="middle" width="100%">
 			<g:VerticalPanel addStyleNames="{style.tabStyle} {style.patientTopContainer} {style.maxWidth}" ui:field="discloserVP">
 		
 
@@ -111,15 +111,15 @@ background-color:#B8A9A2;
 			</g:HTMLPanel>
 		</g:HorizontalPanel>
 
-		<g:AbsolutePanel ui:field="topicAP">
-	<g:DisclosurePanel  animationEnabled="true" open="true" styleName="{style.borderDP} {style.maxWidth} " ui:field="checkListTopicDisclosurePanel"   >
+		<g:AbsolutePanel ui:field="topicAP" width="100%">
+	<g:DisclosurePanel  animationEnabled="true" open="true" styleName="{style.borderDP} {style.maxWidth} " ui:field="checkListTopicDisclosurePanel"  width="100%" >
 	
 
-	<g:AbsolutePanel ui:field="queAP" >
+	<g:AbsolutePanel ui:field="queAP"  width="100%">
 
-	<g:HorizontalPanel  spacing="2" styleName="{style.marginQue}">
+	<g:HorizontalPanel  spacing="2" styleName="{style.marginQue}" width="100%">
 
-	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel" spacing="2">
+	<g:VerticalPanel ui:field="checkListQuestionVerticalPanel" spacing="2" width="100%">
 	</g:VerticalPanel>
 
 
@@ -129,11 +129,11 @@ background-color:#B8A9A2;
 	</g:DisclosurePanel>
 	</g:AbsolutePanel>
 	
-	<g:HorizontalPanel  borderWidth="0" spacing="2">
-	<g:VerticalPanel ui:field="questionButtonVP">
+	<g:HorizontalPanel  borderWidth="0" spacing="2" width="98%">
+	<g:VerticalPanel ui:field="questionButtonVP" width="98%">
 			
 			</g:VerticalPanel>
-		<g:VerticalPanel spacing="2" ui:field="addQuestionHP">
+		<g:VerticalPanel spacing="2" ui:field="addQuestionHP" width="98%">
 		<g:HorizontalPanel spacing="3">
 			<my:IconButton icon="plusthick" ui:field="addCheckListQuestionButton" ></my:IconButton>
 			<my:IconButton icon="arrowthickstop-1-s" ui:field="importQuestionButton" ></my:IconButton>

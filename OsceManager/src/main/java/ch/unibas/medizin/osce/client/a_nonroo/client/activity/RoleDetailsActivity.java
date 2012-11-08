@@ -3274,7 +3274,15 @@ final int index2 = index;
 
 		basicCriteriaPopUp = new StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl();
 		basicCriteriaPopUp.setDelegate(this);
-		basicCriteriaPopUp.display(addBasicData);
+		//basicCriteriaPopUp.display(addBasicData);
+		
+		int x = addBasicData.getAbsoluteLeft() - 235;
+		int y = addBasicData.getAbsoluteTop() - addBasicData.getOffsetHeight() - 15;
+		basicCriteriaPopUp.display(x,y);
+		
+		//SPEC Change
+		
+		
 		advancedSearchPopup = basicCriteriaPopUp;
 	}
 
@@ -3297,7 +3305,13 @@ final int index2 = index;
 		}
 		scarPopup = new StandardizedPatientAdvancedSearchScarPopupImpl();
 		scarPopup.setDelegate(this);
-		scarPopup.display(parentButton);
+		//scarPopup.display(parentButton);
+
+		int x = parentButton.getAbsoluteLeft() - 235;
+		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
+		scarPopup.display(x,y);
+		
+		
 		advancedSearchPopup = scarPopup;
 	}
 
@@ -3315,7 +3329,11 @@ final int index2 = index;
 		}
 		anamnesisPopup = new StandardizedPatientAdvancedSearchAnamnesisPopupImpl();
 		anamnesisPopup.setDelegate(this);
-		anamnesisPopup.display(parentButton);
+		//anamnesisPopup.display(parentButton);
+		
+		int x = parentButton.getAbsoluteLeft() - 235;
+		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
+		anamnesisPopup.display(x,y);
 		advancedSearchPopup = anamnesisPopup;
 	}
 
@@ -7075,7 +7093,10 @@ public void onDragStart(DragStartEvent event) {
 		}
 		workPermissionPopup = new StandardizedPatientAdvancedSearchWorkPermissionPopupImpl();
 		workPermissionPopup.setDelegate(this);
-		workPermissionPopup.display(parentButton);
+		//workPermissionPopup.display(parentButton);
+		int x = parentButton.getAbsoluteLeft() - 335;
+		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
+		workPermissionPopup.display(x,y);
 		advancedSearchPopup = workPermissionPopup;		
 	}
 
@@ -7089,7 +7110,11 @@ public void onDragStart(DragStartEvent event) {
 		}
 		maritialStausPopup = new StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl();
 		maritialStausPopup.setDelegate(this);
-		maritialStausPopup.display(parentButton);
+		
+		int x = parentButton.getAbsoluteLeft() - 335;
+		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
+		maritialStausPopup.display(x,y);
+		//maritialStausPopup.display(parentButton);
 		advancedSearchPopup = maritialStausPopup;		
 	}
 

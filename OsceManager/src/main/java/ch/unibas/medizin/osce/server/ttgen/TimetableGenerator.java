@@ -2085,6 +2085,7 @@ public class TimetableGenerator {
 								
 								boolean firstTimeSlot = j == 0;
 								boolean halfTimeSlots = j == numberSlotsTotal / 2 - 1;
+								
 								boolean lastTimeSlot = j == numberSlotsTotal - 1;
 								
 								// calculate student index for current time slot j in post i
@@ -2184,27 +2185,64 @@ public class TimetableGenerator {
 									j++;
 								}
 								
+								//by spec issue sol
+								if (postType != null && postType.equals(PostType.ANAMNESIS_THERAPY) && ((numberSlotsTotal % 2) == 0))
+									halfTimeSlots = j == numberSlotsTotal / 2 - 1;
+								//by spec issue sol
+									
 								if(!lastTimeSlot) {
 									// add short break between posts
 									// if, for example, there is a maximum of 8 posts and the most difficult role-topic needs a SimPat change after
 									// 5 students, there is only one possible SimPat change during a rotation (best placed in the middle)
-									if(changeSimpatDuringRotation && (j % changeIndex == changeIndex - 1)) {
+									//by spec issue sol[
+									int checkChangeIndex = 0;
+									if (postType != null && postType.equals(PostType.ANAMNESIS_THERAPY) && numberSlotsTotal % 2 == 0 && numberBreakPosts != 0)
+										checkChangeIndex = changeIndex;
+									else
+										checkChangeIndex = changeIndex - 1;
+									
+									//if(changeSimpatDuringRotation && (j % changeIndex == changeIndex - 1)) {
+									if(changeSimpatDuringRotation && (j == checkChangeIndex)) {
+									//by spec issue sol]
 										Date endTimeNew;
 										if(halfTimeSlots && longBreakInRotationHalf)
 											endTimeNew = dateAddMin(endTime, osce.getLongBreak());
 										else
 											endTimeNew = dateAddMin(endTime, osce.getShortBreakSimpatChange());
 										
-										if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
-											changeSP(i, osceDay, endTime, endTimeNew, oscePR);
+										//if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
+										
+										if (post != null &&  post.requiresSimpat())
+										{
+											if (simAssLastId.length > i)
+												changeSP(i, osceDay, endTime, endTimeNew, oscePR);
+											else
+												changeSP((i-1), osceDay, endTime, endTimeNew, oscePR);
+												
 											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
 										}
 										
+										//}
+										
 										endTime = endTimeNew;
 									} else {
-										
+										//by spec issue change[
 										if(halfTimeSlots && longBreakInRotationHalf)
+										{
+											Date oldEndTime = endTime;
+											//by spec issue change]
 											endTime = dateAddMin(endTime, osce.getLongBreak());
+											//by spec issue change[
+											
+											if (post != null && post.requiresSimpat())
+											{
+												if (simAssLastId.length > i)
+													changeSP(i, osceDay, oldEndTime, endTime, oscePR);
+												else
+													changeSP((i - 1), osceDay, oldEndTime, endTime, oscePR);
+											}
+										}
+										//by spec issue change]
 										else
 											endTime = dateAddMin(endTime, osce.getShortBreak());
 									}
@@ -2250,10 +2288,14 @@ public class TimetableGenerator {
 							// STUDENTS END
 							
 							// calculate time when next rotation starts
-							nextRotationStartTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()) - osce.getShortBreak());
+							//nextRotationStartTime = dateAddMin(rotationStartTime, maxPostsCurrentRotation * (osce.getPostLength() + osce.getShortBreak()) - osce.getShortBreak());
+							
+							//spec issue change
+							nextRotationStartTime = time;
+							//spec issue change
 							
 							// if SP was changed during rotation, add the SP change-break
-							if(changeSimpatDuringRotation) {
+							/*if(changeSimpatDuringRotation) {
 								int numberBreakDuringRotation = numberSlotsTotal / numberSlotsUntilSPChange;
 								if(numberSlotsTotal % numberSlotsUntilSPChange == 0)
 									numberBreakDuringRotation -= 1;
@@ -2269,7 +2311,7 @@ public class TimetableGenerator {
 							
 							if(longBreakInRotationHalf)
 								nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLongBreak() - osce.getShortBreak());
-							
+							*/
 							// add middle break at the end of each rotation (except for last rotation, where either
 							// lunch break or nothing is added)
 							
@@ -2286,7 +2328,11 @@ public class TimetableGenerator {
 								//SPEC]
 									//nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
 									// trick to make sure postsSinceSimpatChange is 0 after outer loop (is incremented by numberSlotsTotal in outer-loop)
-									postsSinceSimpatChange = -1 * numberSlotsTotal;
+									
+									//postsSinceSimpatChange = -1 * numberSlotsTotal;
+									//spec issue sol[
+									postsSinceSimpatChange = 0;
+									//spec issue sol]
 								} else {
 									// also insert long break after rotation if there was a long break in the middle of the rotation (SP change!)
 									//SPEC[

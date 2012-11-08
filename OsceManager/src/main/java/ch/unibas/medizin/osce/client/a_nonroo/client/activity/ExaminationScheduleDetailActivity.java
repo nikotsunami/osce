@@ -61,6 +61,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -424,7 +425,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		}
 		contentView.getOscePostHP().clear();
 		
-		
+		requests.assignmentRequestNonRoo().minmumStartTime(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId()).fire(new OSCEReceiver<Date>() {
+
+			@Override
+			public void onSuccess(final Date startTime) {
+				Log.info("minmumStartTime success :" + startTime);
 		for(int i=0;i<oscePostProxies.size();i++)
 		{	
 			final OscePostProxy oscePostProxy=oscePostProxies.get(i);
@@ -451,6 +456,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
 			
 			
+			contentView.getOscePostHP().insert(oscePostView, contentView.getOscePostHP().getWidgetCount());
+			
 			boolean isFirstPartOfPreparation1=false;
 			
 			if(i==0)
@@ -469,6 +476,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			}
 			
 			final boolean isFirstPartOfPreparation=isFirstPartOfPreparation1;
+			
+			
+					
+				
 			
 			//retrieve student data of particular post and course from assignment table.
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
@@ -513,15 +524,16 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					List<Date> anyendTimeList=new ArrayList<Date>();
 					
 					//1. calculate early start time duration
-					if(response.get(0).getTimeStart().before(accordianPanelViewImpl.getOsceDayProxy().getTimeStart()))
+					if(!response.get(0).getTimeStart().after(startTime))
 					{
-						long earlyStart=calculateTimeInMinute(accordianPanelViewImpl.getOsceDayProxy().getTimeStart(), response.get(0).getTimeStart());
-						if(getEarlyStart() < earlyStart)
-							setEarlyStart(earlyStart);
+						
 						
 					//	if(getEarlyStart() != 0)
 						earlyStartPost.add(oscePostProxy);
 					}
+					long earlyStart=calculateTimeInMinute(response.get(0).getTimeStart(),startTime);
+					if(getEarlyStart() < earlyStart)
+						setEarlyStart(earlyStart);
 					
 					for(int j=0;j<response.size();j++)
 					{
@@ -888,6 +900,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							 	examinationView.getExaminerPanel().addStyleName("border-bottom-red");
 							 	examinationView.setOscePostProxy(oscePostProxy);
 								examinationView.setDelegate(activity);
+								((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 								if(examinerSlotLength>=0)
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 								
@@ -930,7 +943,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									examinationView.setOscePostProxy(oscePostProxy);
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 									examinationView.setOscePostView(oscePostView);
-									
+									((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 									if(j==response.size()-1 && oscePostProxy.getId()==oscePostProxies.get(oscePostProxies.size()-1).getId())
 										examinationView.getExaminerPanel().addStyleName("rightBottom-radius");
 									
@@ -1237,12 +1250,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			
 			
-			contentView.getOscePostHP().insert(oscePostView, contentView.getOscePostHP().getWidgetCount());
 			
+				
 			
 
 		}
-		
+				
+			
+			}
+		});
 		
 		//create logical Sp Break
 		
@@ -1260,9 +1276,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		//insert earlyStart empty slot
 		if(isLastPost && getEarlyStart() != 0)
 		{	
+			if(osceProxy.getPostLength() < 10)
+				earlyStart = earlyStart *2;
 			
-			
-			earlyStart--;
+		//	earlyStart--;
 			for(int k=0;k<contentView.getOscePostHP().getWidgetCount();k++)
 			{
 				OscePostView postView=(OscePostView)contentView.getOscePostHP().getWidget(k);
@@ -1311,7 +1328,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		for(OscePostProxy earlyPost: earlyStartPost)
 		{
-			if(earlyPost.getId() == postProxy.getId())
+			if(earlyPost.getId().longValue() == postProxy.getId().longValue())
 				return true;
 		}
 		
@@ -1904,7 +1921,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
 					 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
 					 	examinationView.setOscePostRoomProxy(examinationViewOld.getOscePostRoomProxy());
-				
+					 	
+					 	((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 						
 						
 						if(j>0)
@@ -2170,6 +2188,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			}
 		});
 		
+	}
+	
+	public void exportAssignment(Long osceId,int type)
+	{
+		Log.info("exportAssignment");
+		Log.info(" exportAssignment  :" );
+		final String url="/exportAssignment?osceId="+osceId+"&type="+type;
+		
+	   Window.open(url, osceId.toString(), "enabled");
 	}
 	
 	public void showLoadingScreen(boolean flag)

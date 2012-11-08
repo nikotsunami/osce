@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
@@ -299,7 +300,11 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		else if (place instanceof ExportOscePlace){
 			placeDescription = "ExportOSCEPlace";
 		}
-		
+		//payment
+		else if (place instanceof PaymentPlace){
+			placeDescription = "PaymentPlace";
+		}
+		//payment
 		//By spec Role Management]
 		else {
 			Log.warn("Unknown instance of place");

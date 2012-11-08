@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
@@ -35,15 +36,17 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Inject;
 
 public class ApplicationMainActivitiesMapper implements ActivityMapper {
 	
+   public static HandlerManager handler;
    private OsMaRequestFactory requests;
    private PlaceController placeController;
-   private SemesterProxy semesterProxy;
+   public static SemesterProxy semesterProxy;
    
 
 	@Inject
@@ -123,6 +126,16 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 
 				if (place instanceof OscePlace) {
 					Log.debug("is OscePlace");
+					
+					OscePlace oscePlace = (OscePlace) place;
+					if(oscePlace.handler == null) {
+						oscePlace.handler = handler;	
+					}
+					
+					if(oscePlace.semesterProxy == null) {
+						oscePlace.semesterProxy = semesterProxy;	
+					}
+					
 					return new OsceActivity(requests, placeController,(OscePlace)place);
 				}
 				
@@ -132,16 +145,44 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 
 		if (place instanceof CircuitPlace) {
 			Log.debug("is CircuitPlace");
+			
+			if(CircuitPlace.handler == null) {
+				CircuitPlace.handler = handler;	
+			}
+
+			if(CircuitPlace.semesterProxy == null) {
+				CircuitPlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new CircuitActivity(requests, placeController,(CircuitPlace)place);
 		}
 
 		if (place instanceof StudentsPlace) {
 			Log.debug("is StudentsPlace");
+			
+			StudentsPlace studentsPlace = (StudentsPlace) place;
+			if(studentsPlace.handler == null) {
+				studentsPlace.handler = handler;	
+			}
+
+			if(studentsPlace.semesterProxy == null) {
+				studentsPlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new StudentsActivity(requests, placeController,(StudentsPlace)place);
 		}
 
 		if (place instanceof ExaminationSchedulePlace) {
 			Log.debug("is ExaminationSchedulePlace");
+			
+			if(ExaminationSchedulePlace.handler == null) {
+				ExaminationSchedulePlace.handler = handler;	
+			}
+
+			if(ExaminationSchedulePlace.semesterProxy == null) {
+				ExaminationSchedulePlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new ExaminationScheduleActivity(requests, placeController,(ExaminationSchedulePlace)place);
 			
 		}
@@ -149,6 +190,15 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof SummoningsPlace) {
 			Log.debug("is SummoningsPlace");
 //			return new SummoningsActivity(requests, placeController);
+			SummoningsPlace summoningsPlace = (SummoningsPlace)place;
+			if(summoningsPlace.handlerManager == null) {
+				summoningsPlace.handlerManager = handler;	
+			}
+			
+			if(summoningsPlace.semesterProxy == null) {
+				summoningsPlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new SummoningsActivity((SummoningsPlace)place, requests, placeController);
 		}
 
@@ -156,18 +206,46 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 			Log.debug("is IndividualSchedulesPlace");
 			//return new IndividualSchedulesActivity(requests, placeController);
 			// Module10 Create plans
+			IndividualSchedulesPlace individualSchedulesPlace = (IndividualSchedulesPlace) place;
+			if(individualSchedulesPlace.handler == null) {
+				individualSchedulesPlace.handler = handler;	
+			}
+
+			if(individualSchedulesPlace.semesterProxy == null) {
+				individualSchedulesPlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new IndividualSchedulesActivity(requests, placeController,(IndividualSchedulesPlace)place);
 			// E Module10 Create plans
 		}
 		
 		if (place instanceof StatisticalEvaluationPlace) {
-			Log.debug("is StatisticalEvaluationPlace");			
+ 			Log.debug("is StatisticalEvaluationPlace");			
+			
+			if(StatisticalEvaluationPlace.handler == null) {
+				StatisticalEvaluationPlace.handler = handler;	
+			}
+
+			if(StatisticalEvaluationPlace.semesterProxy == null) {
+				StatisticalEvaluationPlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new StatisticalEvaluationActivity(requests, placeController,(StatisticalEvaluationPlace)place);
 		}
 		
 		
 		if (place instanceof BellSchedulePlace) {
 			Log.debug("is BellSchedulePlace");
+			
+			BellSchedulePlace bellSchedulePlace = (BellSchedulePlace) place;
+			if(bellSchedulePlace.handler == null) {
+				bellSchedulePlace.handler = handler;	
+			}
+
+			if(bellSchedulePlace.semesterProxy == null) {
+				bellSchedulePlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new BellScheduleActivity(requests, placeController, (BellSchedulePlace) place);
 		}
 
@@ -201,6 +279,15 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 
 		if (place instanceof RoleAssignmentPlace) {
 			Log.debug("is SPRoleAssignmentPlace");
+			
+			if(RoleAssignmentPlace.handler == null) {
+				RoleAssignmentPlace.handler = handler;	
+			}
+
+			if(RoleAssignmentPlace.semesterProxy == null) {
+				RoleAssignmentPlace.semesterProxy = semesterProxy;	
+			}
+			
 			return new RoleAssignmentPatientInSemesterActivity(requests,
 					placeController, (RoleAssignmentPlace) place);
 		}
@@ -225,9 +312,25 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		if (place instanceof ExportOscePlace)
 		{
 			Log.info("is ExportOscePlace");
+			
+			ExportOscePlace exportOscePlace = (ExportOscePlace) place;
+			if(exportOscePlace.handlerManager == null) {
+				exportOscePlace.handlerManager = handler;	
+			}
+
+			if(exportOscePlace.semesterProxy == null) {
+				exportOscePlace.semesterProxy = semesterProxy;	
+			}
 			return new ExportOsceActivity(requests, placeController, (ExportOscePlace)place);
 		}
 
+		//payment
+		if (place instanceof PaymentPlace)
+		{
+			Log.info("is PaymentPlace");
+			return new PaymentActivity(requests, placeController, (PaymentPlace)place);
+		}
+		//payment
 		return null;
 	}
 

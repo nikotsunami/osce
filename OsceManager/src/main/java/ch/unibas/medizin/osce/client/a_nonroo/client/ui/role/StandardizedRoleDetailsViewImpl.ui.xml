@@ -135,8 +135,8 @@
 								
 							<g:HTMLPanel addStyleNames="{style.patientDetails}">
 							<!--  Assignment E			-->		
-								<g:VerticalPanel width="80%"><g:AbsolutePanel ui:field="checkListAP">
-										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="80%">
+								<g:VerticalPanel width="100%"><g:AbsolutePanel ui:field="checkListAP">
+										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="100%">
 										
 										
 										

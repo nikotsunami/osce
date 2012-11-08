@@ -11,6 +11,7 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 	
     public interface Presenter {
         void goTo(Place place);
+        
     }
 	/**
 	 * Implemented by the owner of the view.
@@ -20,6 +21,8 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 		public void autoAssignSP(long id);
 		
 		public void autoAssignStudent(long id);
+		
+		public void exportAssignment(Long osceId,int type);
 	}
 	
 	 void setDelegate(Delegate delegate);

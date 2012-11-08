@@ -29,4 +29,5 @@ public interface StandardizedPatientAdvancedSearchWorkPermissionPopup extends Is
 //	void setLanguagePickerValues(List<SpokenLanguageProxy> values);
 	ValueListBox<WorkPermission> getWokPermissionBox();
 	Map getAdvanceSearchCriteriaMap();
+	void display(int positionX, int positionY);
 }
