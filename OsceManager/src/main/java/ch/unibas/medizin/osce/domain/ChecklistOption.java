@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class ChecklistOption {
+public class ChecklistOption implements Comparable<ChecklistOption> {
 	
 	private static Logger log = Logger.getLogger(ChecklistOption.class);
 	
@@ -65,5 +65,15 @@ public class ChecklistOption {
 			return false;
 		}
 	}
-	
+
+	@Override
+	public int compareTo(ChecklistOption o) {
+		if (this.sequenceNumber < o.sequenceNumber) {
+			return -1;
+		} else if (this.sequenceNumber == o.sequenceNumber) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
 }

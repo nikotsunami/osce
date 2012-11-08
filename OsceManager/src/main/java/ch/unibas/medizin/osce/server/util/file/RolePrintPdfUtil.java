@@ -4,6 +4,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -43,23 +45,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 //import com.mattbertolini.hermes.Hermes;
 
-public class RolePrintPdfUtil {
-	private static Logger Log = Logger.getLogger(RolePrintPdfUtil.class);
-	
-	private static final float titleTableSpacing = 0.0f;
-
-	private Font defaultFont = new Font(Font.FontFamily.HELVETICA, 10);
-	private Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
-	private Font italicFont = new Font(Font.FontFamily.HELVETICA, 10,
-			Font.ITALIC);
-	private Font paragraphTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 14,
-			Font.BOLD);
-	private Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 11,
-			Font.BOLD);
-	private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-	private Font smallFont = new Font(Font.FontFamily.HELVETICA, 9);
-	private Font emailFont = new Font(Font.FontFamily.HELVETICA, 9,
-			Font.UNDERLINE);
+public class RolePrintPdfUtil extends PdfUtil {
 
 	private StandardizedRole standardizedRole;
 
@@ -71,27 +57,17 @@ public class RolePrintPdfUtil {
 	// private List<String> itemsList;
 	private Long roleItemAccessId;
 	private boolean isValueAvailable[];
-
+	
 	public RolePrintPdfUtil() {
-		this(new Locale("de"));
+		super();
 	}
 
-	public RolePrintPdfUtil(String locale) {
-		this(new Locale(locale));
+	public RolePrintPdfUtil(String locale){
+		super(locale);
 	}
 	
 	public RolePrintPdfUtil(Locale locale) {
-		try {
-			// Feature : 154
-			constants = GWTI18N.create(OsceConstants.class, locale.toString());
-			enumConstants = GWTI18N.create(OsceConstantsWithLookup.class, locale.toString());
-			// Feature : 154
-		} catch (IOException e) {
-			Log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
-		} catch (Exception e) {
-			Log.error("PdfUtil() -- Error loading translations: " + e.getMessage());
-		}
-
+		super(locale);
 	}
 
 	public void writeFile(String fileName, StandardizedRole standardizedRole,
@@ -111,32 +87,32 @@ public class RolePrintPdfUtil {
 			addHeader();
 
 			for (String items : itemsList) {
-				Log.info("items is : " + items);
-				Log.info("basicData"
+				log.info("items is : " + items);
+				log.info("basicData"
 						+ (items.compareToIgnoreCase(constants.basicData()) == 0));
-				Log.info("checkList"
+				log.info("checkList"
 						+ (items.compareToIgnoreCase(constants.checkList()) == 0));
-				Log.info("roomMaterials"
+				log.info("roomMaterials"
 						+ (items.compareToIgnoreCase(constants.roomMaterials()) == 0));
-				Log.info("fileDetail"
+				log.info("fileDetail"
 						+ (items.compareToIgnoreCase(constants.fileDetail()) == 0));
 
 				if (items.compareToIgnoreCase(constants.basicData()) == 0) {
-					Log.info("items is : addDetails");
+					log.info("items is : addDetails");
 					addDetails();
 				} else if (items.compareTo(constants.checkList()) == 0) {
-					Log.info("items is : addCheckList");
+					log.info("items is : addCheckList");
 					addCheckListDetails();
 				} else if (items.compareTo(constants.roomMaterials()) == 0) {
-					Log.info("items is : addRoomMaterial");
+					log.info("items is : addRoomMaterial");
 					addRoomMaterialDetails();
 				} else if (items.compareTo(constants.fileDetail()) == 0) {
-					Log.info("items is : addFiles");
+					log.info("items is : addFiles");
 					addFileDetails();
 				}
 			}
 
-			// Log.info("@@@@@ roleItemAccessId " + roleItemAccessId);
+			// log.info("@@@@@ roleItemAccessId " + roleItemAccessId);
 			if (roleItemAccessId >= 0L) {
 				addRoleScriptDetials();
 			}
@@ -167,32 +143,32 @@ public class RolePrintPdfUtil {
 			addHeader();
 
 			for (String items : itemsList) {
-				Log.info("items is : " + items);
-				Log.info("basicData"
+				log.info("==========> items is : " + items);
+				log.info("basicData:     "
 						+ (items.compareToIgnoreCase(constants.basicData()) == 0));
-				Log.info("checkList"
+				log.info("checkList:     "
 						+ (items.compareToIgnoreCase(constants.checkList()) == 0));
-				Log.info("roomMaterials"
+				log.info("roomMaterials: "
 						+ (items.compareToIgnoreCase(constants.roomMaterials()) == 0));
-				Log.info("fileDetail"
+				log.info("fileDetail:    "
 						+ (items.compareToIgnoreCase(constants.fileDetail()) == 0));
 
 				if (items.compareToIgnoreCase(constants.basicData()) == 0) {
-					Log.info("items is : addDetails");
+					log.info("items is : addDetails");
 					addDetails();
 				} else if (items.compareTo(constants.checkList()) == 0) {
-					Log.info("items is : addCheckList");
+					log.info("items is : addCheckList");
 					addCheckListDetails();
 				} else if (items.compareTo(constants.roomMaterials()) == 0) {
-					Log.info("items is : addRoomMaterial");
+					log.info("items is : addRoomMaterial");
 					addRoomMaterialDetails();
 				} else if (items.compareTo(constants.fileDetail()) == 0) {
-					Log.info("items is : addFiles");
+					log.info("items is : addFiles");
 					addFileDetails();
 				}
 			}
 
-			// Log.info("@@@@@ roleItemAccessId " + roleItemAccessId);
+			// log.info("@@@@@ roleItemAccessId " + roleItemAccessId);
 			if (roleItemAccessId >= 0L) {
 				addRoleScriptDetials();
 			}
@@ -225,14 +201,14 @@ public class RolePrintPdfUtil {
 	//
 	// document.add(signPara);
 	// } catch (DocumentException e) {
-	// Log.error("In addSignature of Pdf Creation:" + e.getMessage());
+	// log.error("In addSignature of Pdf Creation:" + e.getMessage());
 	// }
 	//
 	// }
 
 	private void addMetaData() {
 		document.addTitle(title);
-		document.addSubject("Role Details");
+		document.addSubject(constants.roleDetail());
 		document.addAuthor(System.getProperty("user.name"));
 		document.addCreator(System.getProperty("user.name"));
 		document.addCreationDate();
@@ -241,41 +217,35 @@ public class RolePrintPdfUtil {
 	private void addHeader() {
 		Paragraph preface = new Paragraph();
 		addEmptyLine(preface, 2);
-		Paragraph headerParagraph = new Paragraph(title, catFont);
+		Paragraph headerParagraph = new Paragraph(title, headerFont);
 		headerParagraph.setAlignment(Element.ALIGN_CENTER
 				| Element.ALIGN_MIDDLE);
 		preface.add(headerParagraph);
-		Paragraph confidentialityParagraph = new Paragraph(
-				constants.handledConfidentially(), smallFont);
-		preface.add(confidentialityParagraph);
+//		Paragraph confidentialityParagraph = new Paragraph(
+//				constants.handledConfidentially(), smallFont);
+//		preface.add(confidentialityParagraph);
 		addEmptyLine(preface, 1);
 
 		try {
 			document.add(preface);
 		} catch (Exception e) {
-			Log.error("In addStatndadizedPatientImage: " + e.getMessage());
-		}
-	}
-
-	private void addEmptyLine(Paragraph paragraph, int number) {
-		for (int i = 0; i < number; i++) {
-			paragraph.add(new Paragraph(" "));
+			log.error("In addStatndadizedPatientImage: " + e.getMessage());
 		}
 	}
 
 	private void addDetails() {
-		Paragraph details = new Paragraph();
-		PdfPTable table = createDetailsTable();
 		if (isValueAvailable[0]) {
+			Paragraph details = new Paragraph();
+			PdfPTable table = createDetailsTable();
 			table.setSpacingBefore(titleTableSpacing);
-			details.add(new Chunk(constants.details(), paragraphTitleFont));
+			details.add(new Chunk(constants.roleDetail(), paragraphTitleFont));
 			details.add(table);
 			addEmptyLine(details, 1);
 
 			try {
 				document.add(details);
 			} catch (DocumentException e) {
-				Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 		}
 	}
@@ -292,7 +262,7 @@ public class RolePrintPdfUtil {
 			try {
 				document.add(details);
 			} catch (DocumentException e) {
-				Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 
 			createRoleScriptDetails();
@@ -304,7 +274,7 @@ public class RolePrintPdfUtil {
 		List<RoleBaseItem> roleBaseItems = standardizedRole.getRoleTemplate()
 				.getRoleBaseItem();
 
-		Log.info("roleBaseItems size " + roleBaseItems.size());
+		log.info("roleBaseItems size " + roleBaseItems.size());
 
 		if (roleBaseItems.size() > 0) {
 			isValueAvailable[2] = true;
@@ -320,9 +290,9 @@ public class RolePrintPdfUtil {
 							.iterator(); iterator.hasNext();) {
 						RoleItemAccess roleItemAccess = (RoleItemAccess) iterator
 								.next();
-						// Log.info("```````````roleItemAccess.getId()"
+						// log.info("```````````roleItemAccess.getId()"
 						// + roleItemAccess.getId());
-						// Log.info("`````````````roleItemAccessId"
+						// log.info("`````````````roleItemAccessId"
 						// + roleItemAccessId);
 						if (roleItemAccess.getId().longValue() == roleItemAccessId
 								.longValue()) {
@@ -332,7 +302,7 @@ public class RolePrintPdfUtil {
 
 					}
 				}
-				Log.info("isAccessGiven : " + isAccessGiven);
+				log.info("isAccessGiven : " + isAccessGiven);
 				if (isAccessGiven) {
 					String itemName = (roleBaseItem.getItem_name() != null) ? roleBaseItem
 							.getItem_name() : "-";
@@ -346,7 +316,7 @@ public class RolePrintPdfUtil {
 					try {
 						document.add(details);
 					} catch (DocumentException e) {
-						Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+						log.error("in PdfUtil.addDetails(): " + e.getMessage());
 					}
 
 					if (roleBaseItem.getItem_defination() == ItemDefination.table_item) {
@@ -399,7 +369,7 @@ public class RolePrintPdfUtil {
 							try {
 								document.add(createPara(roleScriptTable, ""));
 							} catch (DocumentException e) {
-								Log.error("in PdfUtil.addDetails(): "
+								log.error("in PdfUtil.addDetails(): "
 										+ e.getMessage());
 							}
 						}
@@ -417,7 +387,7 @@ public class RolePrintPdfUtil {
 									.longValue()) {
 
 								String string = roleSubItemValue.getItemText();
-								Log.error("getItemText : " + string);
+								log.error("getItemText : " + string);
 
 								HTMLWorker htmlWorker = new HTMLWorker(document);
 								try {
@@ -428,7 +398,7 @@ public class RolePrintPdfUtil {
 									document.add(details);
 
 								} catch (Exception e) {
-									Log.error("in PdfUtil.addDetails(): "
+									log.error("in PdfUtil.addDetails(): "
 											+ e.getMessage());
 								}
 
@@ -457,7 +427,7 @@ public class RolePrintPdfUtil {
 			try {
 				document.add(details);
 			} catch (DocumentException e) {
-				Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 		}
 	}
@@ -475,7 +445,7 @@ public class RolePrintPdfUtil {
 			try {
 				document.add(details);
 			} catch (DocumentException e) {
-				Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 		}
 	}
@@ -485,19 +455,21 @@ public class RolePrintPdfUtil {
 				&& (standardizedRole.getCheckList().getCheckListTopics() != null)
 				&& (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) {
 			Paragraph details = new Paragraph();
+			
+			String checkListTitle = (standardizedRole.getCheckList().getTitle() != null) 
+					? " " + standardizedRole.getCheckList().getTitle() : "";
 
-			details.add(new Chunk(constants.checkList() + " "
-					+ constants.details(), paragraphTitleFont));
+			details.add(new Chunk(constants.checkList()
+					+ checkListTitle, paragraphTitleFont));
 			// addEmptyLine(details, 1);
 
 			try {
 				document.add(details);
 			} catch (DocumentException e) {
-				Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 			createCheckListDetailsTable();
 		}
-
 	}
 
 	private Paragraph createPara(PdfPTable pdfPTable, String header) {
@@ -510,157 +482,64 @@ public class RolePrintPdfUtil {
 		details.add(pdfPTable);
 		return details;
 	}
-
-	private void createCheckTopicQuesDetailsTable(
-			List<ChecklistQuestion> checklistQuestions) {
-
-		if (checklistQuestions.size() > 0) {
-			Paragraph details = new Paragraph();
-
-			details.add(new Chunk(constants.roleQuestionName() + " "
-					+ constants.details(), subTitleFont));
-			// addEmptyLine(details, 1);
-
-			try {
-				document.add(details);
-			} catch (DocumentException e) {
-				Log.error("in PdfUtil.addDetails(): " + e.getMessage());
-			}
-
-			Log.info("checklistQuestions size " + checklistQuestions.size());
-			for (ChecklistQuestion checklistQuestion : checklistQuestions) {
-
-				String question = (checklistQuestion.getQuestion() != null) ? checklistQuestion
-						.getQuestion() : "-";
-				String instruction = (checklistQuestion.getInstruction() != null) ? ""
-						+ checklistQuestion.getInstruction()
-						: "-";
-
-				// Log.info(" ~~ question " + question);
-				// Log.info(" ~~~~~~ instruction " + instruction);
-				PdfPTable chkListQuesTable = new PdfPTable(4);
-
-				chkListQuesTable.addCell(getPdfCellBold(constants
-						.roleQuestionName()));
-				chkListQuesTable.addCell(getPdfCell(question));
-				chkListQuesTable.addCell(getPdfCellBold(constants
-						.roleQuestionInstruction()));
-				chkListQuesTable.addCell(getPdfCell(instruction, italicFont, 0,
-						0));
-
-				chkListQuesTable.setWidthPercentage(100);
-				// chkListQuesTable.setSpacingBefore(titleTableSpacing);
-
-				try {
-					details = new Paragraph();
-					addEmptyLine(details, 1);
-					document.add(details);
-
-					document.add(createPara(chkListQuesTable, ""));
-				} catch (DocumentException e) {
-					Log.error("in PdfUtil.addDetails(): " + e.getMessage());
-				}
-
-				PdfPTable criteriaTable = new PdfPTable(1);
-
-				List<ChecklistCriteria> checklistQuestionSet = checklistQuestion
-						.getCheckListCriterias();
-
-				Log.info("checklistQuestionSet size : "
-						+ checklistQuestionSet.size());
-				StringBuffer criteriaBuffer = new StringBuffer("");
-
-				boolean isFirst = false;
-				for (ChecklistCriteria checklistCriteria : checklistQuestionSet) {
-
-					String criteria = (checklistCriteria.getCriteria() != null) ? ""
-							+ checklistCriteria.getCriteria()
-							: "-";
-					if (isFirst) {
-						criteriaBuffer.append(", ");
-					} else {
-						isFirst = true;
+	
+	private PdfPCell getAnswerCell(String question, List<ChecklistOption> options) {
+		Collections.sort(options);
+		String[] answers = new String[options.size()];
+		for (int i=0; i < options.size(); i++) {
+			ChecklistOption option = options.get(i);
+			answers[i] = option.getOptionName() + " (" + option.getValue() + ")";
+		}
+		return getCheckBoxCell(question, answers, null);
+	}
+	
+	private PdfPTable createCheckListQuestionTable(List<ChecklistQuestion> questions) {
+		if (questions != null && questions.size() > 0) {
+			PdfPTable table = new PdfPTable(new float[] { 0.5f, 0.5f });
+			
+			int i = 0;
+			for (ChecklistQuestion question: questions) {
+				String questionText = question.getQuestion();
+				if (questionText != null) {
+					Chunk questionChunk = new Chunk(questionText, boldFont);
+					Chunk criteriaChunk = null;
+					Chunk instructionChunk = null;
+					
+					if (question.getInstruction() != null) {
+						instructionChunk = new Chunk(question.getInstruction(), italicFont);
 					}
 
-					Log.info(" ~~~~~~ criteria " + criteria);
-					criteriaBuffer.append(criteria);
-
+					if (question.getCheckListCriterias().size() > 0) {
+						StringBuilder sb = new StringBuilder(questionText + "\n");
+						List<ChecklistCriteria> criteria = question.getCheckListCriterias();
+						Collections.sort(criteria);
+						for (ChecklistCriteria criterion : criteria) {
+							sb.append(criterion.getCriteria() + ", ");
+						}
+						sb.replace(sb.length() - 2, sb.length(), "");
+						criteriaChunk = new Chunk(sb.toString(), smallItalicFont);
+					}
+					
+					Paragraph questionParagraph = new Paragraph(questionChunk);
+					if (instructionChunk != null)
+						questionParagraph.add(instructionChunk);
+					if (criteriaChunk != null)
+						questionParagraph.add(criteriaChunk);
+					
+					PdfPCell questionCell = getPdfCell(questionParagraph, 1, 1);
+					PdfPCell answerCell = getAnswerCell(questionText, question.getCheckListOptions());
+					if (i < questions.size()) {
+						questionCell.setBorder(Rectangle.BOTTOM);
+						answerCell.setBorder(Rectangle.BOTTOM);
+					}
+					table.addCell(questionCell);
+					table.addCell(answerCell);
 				}
-
-				criteriaTable.addCell(getPdfCell(criteriaBuffer.toString(),
-						italicFont, 0, 0));
-
-				Paragraph paragraph = new Paragraph();
-				// pdfPTable.setSpacingBefore(titleTableSpacing);
-				// addEmptyLine(details, 1);
-
-				paragraph.add(constants.criterion() + " : "
-						+ criteriaBuffer.toString());
-
-				// PdfPCell pdfPCell = new PdfPCell(createPara(criteriaTable,
-				// ""));
-				// pdfPCell.setBorder(Rectangle.NO_BORDER);
-				//
-				// chkListQuesTable.addCell(pdfPCell);
-
-				try {
-					// document.add(createPara(criteriaTable,
-					// constants.criterion()));
-
-					document.add(paragraph);
-				} catch (DocumentException e) {
-					Log.error("in PdfUtil.addDetails(): " + e.getMessage());
-				}
-
-				// PdfPTable optionTable = new PdfPTable(3);
-				PdfPTable optionTable = new PdfPTable(2);
-
-				Log.info("getCheckListOptions size : "
-						+ checklistQuestion.getCheckListOptions().size());
-
-				optionTable.addCell(getPdfCellBold(constants.roleOptionName()));
-				// optionTable.addCell(getPdfCellBold(constants.name()));
-				optionTable.addCell(getPdfCellBold(constants.roleOptionValue()));
-
-				List<ChecklistOption> checklistOptions = checklistQuestion
-						.getCheckListOptions();
-				for (ChecklistOption checklistOption : checklistOptions) {
-
-					String optionName = (checklistOption.getOptionName() != null) ? ""
-							+ checklistOption.getOptionName()
-							: "-";
-					// String name = (checklistOption.getName() != null) ? ""
-					// + checklistOption.getName() : "-";
-					String value = (checklistOption.getValue() != null) ? ""
-							+ checklistOption.getValue() : "-";
-
-					Log.info("optionName " + optionName);
-					// Log.info("name " + name);
-					Log.info("value " + value);
-
-					optionTable
-							.addCell(getPdfCell(optionName, italicFont, 0, 0));
-					// optionTable.addCell(getPdfCell(name, italicFont, 0, 0));
-					optionTable.addCell(getPdfCell(value, italicFont, 0, 0));
-
-				}
-				// chkListQuesTable.addCell(optionTable);
-
-				// pdfPCell = new PdfPCell(createPara(optionTable, ""));
-				// pdfPCell.setBorder(Rectangle.NO_BORDER);
-				//
-				// chkListQuesTable.addCell(pdfPCell);
-
-				try {
-					document.add(createPara(optionTable,
-							constants.optionDetail()));
-				} catch (DocumentException e) {
-					Log.error("in PdfUtil.addDetails(): " + e.getMessage());
-				}
-
 			}
+			table.setWidthPercentage(100.0f);
+			return table;
 		}
-
+		return null;
 	}
 
 	private PdfPTable createRoomMaterialDetailsTable() {
@@ -669,7 +548,7 @@ public class RolePrintPdfUtil {
 
 		List<UsedMaterial> usedMaterials = UsedMaterial
 				.findUsedMaterialsByStandardizedRoleIDpdf(standardizedRole.getId());
-		Log.info("usedMaterials size " + usedMaterials.size());
+		log.info("usedMaterials size " + usedMaterials.size());
 
 		roomMaterialTable.addCell(getPdfCellBold(constants.roomMaterialName()));
 		roomMaterialTable.addCell(getPdfCellBold(constants.roomMaterialNumber()));
@@ -704,51 +583,46 @@ public class RolePrintPdfUtil {
 	}
 
 	private void createCheckListDetailsTable() {
+		isValueAvailable[3] = true;
+		CheckList checkList = standardizedRole.getCheckList();
 
-		if ((standardizedRole.getCheckList() != null)
-				&& (standardizedRole.getCheckList().getCheckListTopics() != null)) {
+		List<ChecklistTopic> checklistTopics = checkList
+				.getCheckListTopics();
 
-			isValueAvailable[3] = true;
-			CheckList checkList = standardizedRole.getCheckList();
+		log.info("CheckList size " + checklistTopics.size());
+		
+		Paragraph checklistDetails = new Paragraph();
 
-			List<ChecklistTopic> checklistTopics = checkList
-					.getCheckListTopics();
-
-			Log.info("CheckList size " + checklistTopics.size());
-
-			for (ChecklistTopic checklistTopic : checklistTopics) {
-
-				String chkListTitle = (checklistTopic.getTitle() != null) ? checklistTopic
-						.getTitle() : "-";
-				String chkListDesc = (checklistTopic.getDescription() != null) ? checklistTopic
-						.getDescription() : "-";
-
-				PdfPTable checkListTable = new PdfPTable(4);
-
-				checkListTable.addCell(getPdfCellBold(constants.title()));
-				checkListTable.addCell(getPdfCell(chkListTitle));
-				checkListTable.addCell(getPdfCellBold(constants
-						.topicDescription()));
-				checkListTable.addCell(getPdfCell(chkListDesc));
-				checkListTable.addCell(getPdfCellBold(""));
-				checkListTable.addCell(getPdfCellBold(""));
-
-				checkListTable.setSpacingBefore(titleTableSpacing);
-
-				checkListTable.setWidthPercentage(100);
-
+		for (ChecklistTopic checklistTopic : checklistTopics) {
+			String chkListTitle = checklistTopic.getTitle();
+			if (chkListTitle != null) {
+				Paragraph titleParagraph = new Paragraph(new Chunk(chkListTitle, subTitleFont));
 				try {
-					Paragraph details = new Paragraph();
-					addEmptyLine(details, 1);
-					document.add(details);
-
-					document.add(checkListTable);
-
+					document.add(titleParagraph);
 				} catch (DocumentException e) {
-					Log.error("in PdfUtil.addDetails(): " + e.getMessage());
+					log.error("in RolePrintPdfUtil.createCheckListDetailsTable(): " + e.getMessage());
 				}
-				createCheckTopicQuesDetailsTable(checklistTopic
-						.getCheckListQuestions());
+			}
+			
+			String chkListDesc = checklistTopic.getDescription();
+			if (chkListDesc != null) {
+				Paragraph descriptionParagraph = new Paragraph(new Chunk(chkListDesc, defaultFont));
+				addEmptyLine(descriptionParagraph, 1);
+				try {
+					document.add(descriptionParagraph);
+				} catch (DocumentException e) {
+					log.error("in PdfUtil.addDetails(): " + e.getMessage());
+				}
+			}
+			
+			PdfPTable table = createCheckListQuestionTable(checklistTopic.getCheckListQuestions());
+			table.setSpacingBefore(0.0f);
+			table.setSpacingAfter(20.0f);
+			
+			try {
+				document.add(table);
+			} catch (DocumentException ex) {
+				log.error("in RolePrintPdfUtil.createCheckListDetailsTable(): " + ex.getMessage());
 			}
 		}
 	}
@@ -759,7 +633,7 @@ public class RolePrintPdfUtil {
 
 		List<File> files = File.getFilesByStandardizedRoleID(standardizedRole
 				.getId());
-		Log.info("File size " + files.size());
+		log.info("File size " + files.size());
 		if (files.size() > 0) {
 			isValueAvailable[1] = true;
 
@@ -818,22 +692,144 @@ public class RolePrintPdfUtil {
 		table.setWidthPercentage(100);
 		return table;
 	}
-
-	private PdfPCell getPdfCellBold(String text) {
-		return getPdfCell(text, boldFont, 0, 0);
-	}
-
-	private PdfPCell getPdfCell(String text) {
-		return getPdfCell(text, defaultFont, 0, 0);
-	}
-
-	private PdfPCell getPdfCell(String text, Font font, int colSpan, int rowSpan) {
-		PdfPCell c2 = new PdfPCell(new Phrase(text, font));
-		if (colSpan > 0)
-			c2.setColspan(colSpan);
-		if (rowSpan > 0)
-			c2.setRowspan(rowSpan);
-		c2.setBorder(Rectangle.NO_BORDER);
-		return c2;
-	}
+	
+//	private void createCheckTopicQuesDetailsTable(
+//	List<ChecklistQuestion> checklistQuestions) {
+//
+//if (checklistQuestions != null && checklistQuestions.size() > 0) {
+//	log.info("checklistQuestions size " + checklistQuestions.size());
+//	
+//	for (ChecklistQuestion checklistQuestion : checklistQuestions) {
+//		String question = (checklistQuestion.getQuestion() != null) ? checklistQuestion
+//				.getQuestion() : "-";
+//		String instruction = (checklistQuestion.getInstruction() != null) ? ""
+//				+ checklistQuestion.getInstruction()
+//				: "-";
+//
+//		// log.info(" ~~ question " + question);
+//		// log.info(" ~~~~~~ instruction " + instruction);
+//		PdfPTable chkListQuesTable = new PdfPTable(4);
+//
+//		chkListQuesTable.addCell(getPdfCellBold(constants
+//				.roleQuestionName()));
+//		chkListQuesTable.addCell(getPdfCell(question));
+//		chkListQuesTable.addCell(getPdfCellBold(constants
+//				.roleQuestionInstruction()));
+//		chkListQuesTable.addCell(getPdfCell(instruction, italicFont, 0,
+//				0));
+//
+//		chkListQuesTable.setWidthPercentage(100);
+//		// chkListQuesTable.setSpacingBefore(titleTableSpacing);
+//
+//		try {
+//			Paragraph details = new Paragraph();
+//			addEmptyLine(details, 1);
+//			document.add(details);
+//
+//			document.add(createPara(chkListQuesTable, ""));
+//		} catch (DocumentException e) {
+//			log.error("in PdfUtil.addDetails(): " + e.getMessage());
+//		}
+//
+//		PdfPTable criteriaTable = new PdfPTable(1);
+//
+//		List<ChecklistCriteria> checklistQuestionSet = checklistQuestion
+//				.getCheckListCriterias();
+//
+//		log.info("checklistQuestionSet size : "
+//				+ checklistQuestionSet.size());
+//		StringBuffer criteriaBuffer = new StringBuffer("");
+//
+//		boolean isFirst = false;
+//		for (ChecklistCriteria checklistCriteria : checklistQuestionSet) {
+//
+//			String criteria = (checklistCriteria.getCriteria() != null) ? ""
+//					+ checklistCriteria.getCriteria()
+//					: "-";
+//			if (isFirst) {
+//				criteriaBuffer.append(", ");
+//			} else {
+//				isFirst = true;
+//			}
+//
+//			log.info(" ~~~~~~ criteria " + criteria);
+//			criteriaBuffer.append(criteria);
+//
+//		}
+//
+//		criteriaTable.addCell(getPdfCell(criteriaBuffer.toString(),
+//				italicFont, 0, 0));
+//
+//		Paragraph paragraph = new Paragraph();
+//		// pdfPTable.setSpacingBefore(titleTableSpacing);
+//		// addEmptyLine(details, 1);
+//
+//		paragraph.add(constants.criterion() + " : "
+//				+ criteriaBuffer.toString());
+//
+//		// PdfPCell pdfPCell = new PdfPCell(createPara(criteriaTable,
+//		// ""));
+//		// pdfPCell.setBorder(Rectangle.NO_BORDER);
+//		//
+//		// chkListQuesTable.addCell(pdfPCell);
+//
+//		try {
+//			// document.add(createPara(criteriaTable,
+//			// constants.criterion()));
+//
+//			document.add(paragraph);
+//		} catch (DocumentException e) {
+//			log.error("in PdfUtil.addDetails(): " + e.getMessage());
+//		}
+//
+//		// PdfPTable optionTable = new PdfPTable(3);
+//		PdfPTable optionTable = new PdfPTable(2);
+//
+//		log.info("getCheckListOptions size : "
+//				+ checklistQuestion.getCheckListOptions().size());
+//
+//		optionTable.addCell(getPdfCellBold(constants.roleOptionName()));
+//		// optionTable.addCell(getPdfCellBold(constants.name()));
+//		optionTable.addCell(getPdfCellBold(constants.roleOptionValue()));
+//
+//		List<ChecklistOption> checklistOptions = checklistQuestion
+//				.getCheckListOptions();
+//		for (ChecklistOption checklistOption : checklistOptions) {
+//
+//			String optionName = (checklistOption.getOptionName() != null) ? ""
+//					+ checklistOption.getOptionName()
+//					: "-";
+//			// String name = (checklistOption.getName() != null) ? ""
+//			// + checklistOption.getName() : "-";
+//			String value = (checklistOption.getValue() != null) ? ""
+//					+ checklistOption.getValue() : "-";
+//
+//			log.info("optionName " + optionName);
+//			// log.info("name " + name);
+//			log.info("value " + value);
+//
+//			optionTable
+//					.addCell(getPdfCell(optionName, italicFont, 0, 0));
+//			// optionTable.addCell(getPdfCell(name, italicFont, 0, 0));
+//			optionTable.addCell(getPdfCell(value, italicFont, 0, 0));
+//
+//		}
+//		// chkListQuesTable.addCell(optionTable);
+//
+//		// pdfPCell = new PdfPCell(createPara(optionTable, ""));
+//		// pdfPCell.setBorder(Rectangle.NO_BORDER);
+//		//
+//		// chkListQuesTable.addCell(pdfPCell);
+//
+//		try {
+//			document.add(createPara(optionTable,
+//					constants.optionDetail()));
+//		} catch (DocumentException e) {
+//			log.error("in PdfUtil.addDetails(): " + e.getMessage());
+//		}
+//
+//	}
+//}
+//
+//}
 }

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class ChecklistCriteria {
+public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	
 	@Size(max=50)
 	private String criteria;
@@ -42,6 +42,17 @@ public class ChecklistCriteria {
 		catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	@Override
+	public int compareTo(ChecklistCriteria o) {
+		if (this.sequenceNumber < o.sequenceNumber) {
+			return -1;
+		} else if (this.sequenceNumber == o.sequenceNumber) {
+			return 0;
+		} else {
+			return 1;
 		}
 	}
 	

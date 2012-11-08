@@ -43,6 +43,7 @@ import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
 import ch.unibas.medizin.osce.server.util.file.FileUtil;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
+import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPrintUtil;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
@@ -611,7 +612,7 @@ public class StandardizedPatient {
 //		Log.info("Afetr FileName");
 		try {
 			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
-			PdfUtil pdfUtil = new PdfUtil(locale);
+			StandardizedPatientPrintUtil pdfUtil = new StandardizedPatientPrintUtil(locale);
 			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
 
 			fileName = standardizedPatient.name + "_" + standardizedPatient.preName + "_" + fileName;
@@ -641,7 +642,7 @@ public class StandardizedPatient {
 //		Log.info("Afetr FileName");
 		try {
 			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
-			PdfUtil pdfUtil = new PdfUtil(locale);
+			StandardizedPatientPrintUtil pdfUtil = new StandardizedPatientPrintUtil(locale);
 			Log.info("Message received in Pdfpatient by Search : " + standardizedPatient.name);
 
 			fileName = standardizedPatient.name + "_" + standardizedPatient.preName + "_" + fileName;
