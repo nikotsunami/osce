@@ -66,5 +66,9 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	public abstract Request<Void> updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot);
 	
 	public abstract Request<Date> minmumStartTime(Long osceDayId,Long osceSequenceId,Long courseId);
+	
+	//payment 
+	public abstract Request<String> findAssignmentByPatinetInRole(Long semesterId);
+	//payment
 
 }

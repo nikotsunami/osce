@@ -61,6 +61,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -899,6 +900,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							 	examinationView.getExaminerPanel().addStyleName("border-bottom-red");
 							 	examinationView.setOscePostProxy(oscePostProxy);
 								examinationView.setDelegate(activity);
+								((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 								if(examinerSlotLength>=0)
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 								
@@ -941,7 +943,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									examinationView.setOscePostProxy(oscePostProxy);
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 									examinationView.setOscePostView(oscePostView);
-									
+									((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 									if(j==response.size()-1 && oscePostProxy.getId()==oscePostProxies.get(oscePostProxies.size()-1).getId())
 										examinationView.getExaminerPanel().addStyleName("rightBottom-radius");
 									
@@ -1919,7 +1921,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
 					 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
 					 	examinationView.setOscePostRoomProxy(examinationViewOld.getOscePostRoomProxy());
-				
+					 	
+					 	((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
 						
 						
 						if(j>0)
@@ -2185,6 +2188,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			}
 		});
 		
+	}
+	
+	public void exportAssignment(Long osceId,int type)
+	{
+		Log.info("exportAssignment");
+		Log.info(" exportAssignment  :" );
+		final String url="/exportAssignment?osceId="+osceId+"&type="+type;
+		
+	   Window.open(url, osceId.toString(), "enabled");
 	}
 	
 	public void showLoadingScreen(boolean flag)

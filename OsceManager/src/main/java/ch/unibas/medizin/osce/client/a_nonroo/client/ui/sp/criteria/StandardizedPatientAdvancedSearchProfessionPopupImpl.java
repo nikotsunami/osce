@@ -146,14 +146,14 @@ public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
 	@Override
 	public void display(Button addScar) {
 		this.show();
-		this.setPopupPosition(addScar.getAbsoluteLeft() - 5, addScar.getAbsoluteTop() - getOffsetHeight()/2 - 4);
+		this.setPopupPosition(addScar.getAbsoluteLeft() +addScar.getOffsetWidth()+170- this.getOffsetWidth()-150, addScar.getAbsoluteTop() - getOffsetHeight()/2 - 32);
 	}
 	
 	//SPEC Change
 	@Override
 	public void display(int positionX,int positionY) {
 		this.show();
-		this.setPopupPosition(positionX,positionY);
+		this.setPopupPosition(positionX-120,positionY-32);
 	}
 	//SPEC Change
 	

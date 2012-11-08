@@ -29,4 +29,5 @@ public interface StandardizedPatientAdvancedSearchScarPopup extends IsWidget, St
 //		void setLanguagePickerValues(List<SpokenLanguageProxy> values);
 		ValueListBox<ScarProxy> getScarBox();
 		Map getAdvanceSearchCriteriaMap();
+		void display(int positionX, int positionY);
 }

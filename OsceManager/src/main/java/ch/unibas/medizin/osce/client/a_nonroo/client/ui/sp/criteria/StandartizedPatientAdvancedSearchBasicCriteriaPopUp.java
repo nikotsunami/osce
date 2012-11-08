@@ -29,4 +29,5 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
 	// Highlight onViolation
 	Map getAdvanceSearchCriteriaMap();
 	// E Highlight onViolation
+	void display(int positionX, int positionY);
 }

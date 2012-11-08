@@ -3430,6 +3430,7 @@ color: #f1b532;
 .eOSCElable
 {
 	padding-top: 6px;
+	width: 200px;
 }
 .eOSCEHorizontalPanel
 {
@@ -3566,7 +3567,6 @@ color: #f1b532;
 /* Export OSCE Issue Change*/
 .exportAnchor{
 	float: right;
-    margin-left: 120px;
     margin-top: 5px;
 }
 

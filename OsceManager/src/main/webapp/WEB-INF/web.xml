@@ -315,5 +315,14 @@
 		<servlet-name>downloadExportOsceFile</servlet-name>
 		<url-pattern>/downloadExportOsceFile</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>exportAssignment</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.upload.ExportAssignment</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>exportAssignment</servlet-name>
+		<url-pattern>/exportAssignment</url-pattern>
+	</servlet-mapping>
  
 </web-app>

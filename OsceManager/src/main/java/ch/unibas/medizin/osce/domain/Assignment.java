@@ -4,8 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -26,10 +28,12 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
 
@@ -580,13 +584,13 @@ public class Assignment {
     
     public static List<Assignment> findAssignmentsByOsceDayAndPIRId(long osceDayId,long pirId)
     {
-		Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
+		//Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
 		EntityManager em = entityManager();		
-		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole= "+ pirId;
-		Log.info("Query String: " + queryString);
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole= "+ pirId + "order by assi.timeStart";
+		//Log.info("Query String: " + queryString);
 		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
 		List<Assignment> result  = q.getResultList();        
-		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+		//Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
         return result;    	    
     }
         
@@ -875,6 +879,178 @@ public class Assignment {
      
     //by spec]
     
-    
+     //payment module
+     public static String findAssignmentByPatinetInRole(Long semesterId) 
+     {
+     	String fileName = "";
+     	try
+     	{
+     		ExcelUtil excelUtil = new ExcelUtil();
+         	
+         	List<Osce> osceList = Osce.findAllOsceBySemster(semesterId);
+         	
+         	for (Osce osce : osceList)
+         	{
+         		Map<Long, List<Long>> mainMap = new HashMap<Long, List<Long>>();
+         		
+         		EntityManager em = entityManager();
+             	
+             	String sql = "SELECT ps.standardizedPatient.id AS stdpat, a.osceDay AS assOsDay, pr.oscePost AS prOsPt, sr.roleType AS srRoTy, MIN(a.timeStart) AS minTimeSt, MAX(a.timeEnd) AS maxTimeEnd" +
+         				" FROM Assignment AS a, PatientInRole AS pr, PatientInSemester AS ps, OscePost AS op, StandardizedRole AS sr " +
+         				" WHERE a.type = 1 AND a.osceDay IN (SELECT od FROM OsceDay od WHERE od.osce = " + osce.getId() + ")" +
+         				" AND a.patientInRole = pr.id" +
+         				" AND pr.patientInSemester = ps.id" +
+         				" AND pr.oscePost = op.id " +
+         				" AND op.standardizedRole = sr.id" +
+         				" GROUP BY ps.standardizedPatient, a.osceDay, pr.oscePost, sr.roleType";
+             	
+             	javax.persistence.Query query = em.createQuery(sql);
+             	List list = query.getResultList();    	
+             	
+             	Long spHrs = 0l;
+         		Long statistHrs = 0l;
+             	
+         		for (int i=0; i<list.size(); i++)
+             	{
+             		Object[] custom = (Object[]) list.get(i);
+             	
+             		Long newSp = (Long)custom[0];
+             	            		
+             		Date startDate = (Date)custom[4];
+             		Date endDate = (Date)custom[5];
+             		
+             		Long min = (endDate.getTime() - startDate.getTime()) / (60 * 1000);
+             		
+             		if (checkLunchBreak(startDate, endDate,((OsceDay)custom[1]).getLunchBreakStart()))
+             		{
+             			min = min - osce.getLunchBreak();
+             		}
+             		
+             		//System.out.println("SP : " + oldSp + "  ~~MIN : " + min);
+             		
+             		if (((RoleTypes)custom[3]) == RoleTypes.Simpat)
+             			spHrs = spHrs + min;
+             		else if (((RoleTypes)custom[3]) == RoleTypes.Statist)
+             			statistHrs = statistHrs + min;
+             		
+             		//System.out.println("SPHRS : " + spHrs);
+             		if (i == 0)
+             		{
+             			List<Long> hrsList = new ArrayList<Long>();
+             			hrsList.add(spHrs);
+             			hrsList.add(statistHrs);
+             			
+             			mainMap.put(newSp, hrsList);
+             			
+             			spHrs = 0l;
+             			statistHrs = 0l;
+             		}
+             		
+             		if (i > 0)
+             		{
+             			Object[] oldObject = (Object[]) list.get(i-1);
+             			Long id = (Long) oldObject[0];
+             			if (!newSp.equals(id))
+             			{
+             				//System.out.println("SP : " + newSp + "  ~~SP : " + spHrs + " ~~STATIST : " + statistHrs);
+             				
+             				List<Long> hrsList = new ArrayList<Long>();
+                 			hrsList.add(spHrs);
+                 			hrsList.add(statistHrs);
+                 			
+                 			mainMap.put(newSp, hrsList);
+                 			
+                 			spHrs = 0l;
+                 			statistHrs = 0l;
+             			}
+             		}
+             	}
+             	
+             	excelUtil.writeSheet(mainMap, osce.getName(), semesterId);
+             	
+         	}
+         	
+         	Semester semester = Semester.findSemester(semesterId);
+         	fileName = semester.getCalYear().toString() + ".xls";
+         	excelUtil.writeExcel(fileName);
+     	}
+     	catch(Exception e)
+     	{
+     		Log.info("ERROR : " + e.getMessage());
+     	}
+     	
+     	return StandardizedPatient.fetchContextPath() + fileName;
+     }
+     
+     public static boolean checkLunchBreak(Date timeStart, Date timeEnd, Date startLunchBreak)
+     {
+     	Boolean test = (startLunchBreak.after(timeStart) && startLunchBreak.before(timeEnd));    	
+     	return test;	
+     }
+     //payment module
+     
+     public static Assignment findExaminersRoationAndCourseWise(Long osceDayId,int rotation,Long courseId,Long postId)
+     {
+    	 Log.info("findExaminersRoationAndCourseWise :");
+         EntityManager em = entityManager();
+         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
+         String queryString = "SELECT  a FROM Assignment as a where a.osceDay="+osceDayId+"  and type=2 and " +
+         		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost="+postId+" and opr.course="+courseId+" )" +
+         		"and timeStart <=(select min(timeStart) from Assignment as a where type=0  and osceDay="+osceDayId+" and rotationNumber="+rotation+" and " +
+         		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost ="+postId+" and "+
+         		"rm.course= "+courseId+" and rm.version<999) and opr.course="+courseId+" )) and timeEnd >= (select max(timeEnd) from Assignment as a where type=0  and osceDay="+osceDayId+" and rotationNumber="+rotation+" and "+
+         		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom "+
+         		"as rm where rm.oscePost = "+postId+" and rm.course="+courseId+"  and rm.version<999) and opr.course="+courseId+" ))";
+         
+         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         Assignment assignmentList=null;
+         if(query.getResultList().size() > 0)
+          assignmentList = query.getResultList().get(0);
+         Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+     }
+     
+     public static List<Assignment> findAssignmentRotationAndCourseWise(Long osceDayId,int rotation,Long courseId,int type)
+     {
+    	 Log.info("findAssignmentRotationAndCourseWise");
+    	 String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
+    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
+    	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) order by timeStart";
+    	 
+    	 if(type ==1)
+    	 {
+    		 queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and  " +
+    	    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course="+courseId+" ) order by timeStart";
+    	 }
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         List<Assignment> assignmentList = query.getResultList();
+         Log.info("findAssignmentRotationAndCourseWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+
+    	
+     }
+     
+     public static List<Date> findDistinctTimeStartRotationWise(Long osceDayId,int rotation,int type)
+     {
+    	 Log.info("findDistinctTimeStartRotationWise");
+    	 
+    	 String queryString="";
+    	 if(type==0)
+    	  queryString="select distinct (timeStart) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 if(type==1)
+    		 queryString="select distinct (timeEnd) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);
+         List<Date> assignmentList = query.getResultList();
+         Log.info("findDistinctTimeStartRotationWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+    	
+     }
    
 } 

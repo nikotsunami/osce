@@ -18,8 +18,10 @@ public final class ResourceDownloadProps {
 	public static final String RANGE_LENGTH = "c";							// rangeLength
 
 	public static final String SP_LIST = "d";
+	public static final String SUMMONING_KEY = "e";
+	public static final String INDIVIDUAL_SCHEDULE_KEY = "f";
 
 	public enum Entity {
-		STANDARDIZED_PATIENT,STANDARDIZED_ROLE, STANDARDIZED_PATIENT_EXPORT
+		STANDARDIZED_PATIENT,STANDARDIZED_ROLE, STANDARDIZED_PATIENT_EXPORT, SUMMONINGS, INDIVIDUAL_SCHEDULE
 	}
 }

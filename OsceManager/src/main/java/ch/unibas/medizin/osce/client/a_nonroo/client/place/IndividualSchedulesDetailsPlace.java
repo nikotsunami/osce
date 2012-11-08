@@ -72,7 +72,7 @@ public class IndividualSchedulesDetailsPlace extends OsMaDetailsPlace {
 			String bits[] = token.split(SEPARATOR);
 			Operation operation = Operation.valueOf(bits[1]);
 			if (Operation.DETAILS == operation) {
-				return new IndividualSchedulesDetailsPlace(/*requests.getProxyId(bits[0]), */Operation.DETAILS);
+				return new IndividualSchedulesDetailsPlace(requests.getProxyId(bits[0]), Operation.DETAILS);
 			}
 /*			if (Operation.EDIT == operation) {
 				return new CircuitDetailsPlace(requests.getProxyId(bits[0]), Operation.EDIT);
@@ -89,7 +89,7 @@ public class IndividualSchedulesDetailsPlace extends OsMaDetailsPlace {
 		public String getToken(IndividualSchedulesDetailsPlace place) {
 			Log.debug("CircuitDetailsPlace.Tokenizer.getToken");
 			if (Operation.DETAILS == place.getOperation()) {
-				return /*place.getProxyId() + */SEPARATOR + Operation.DETAILS.toString();
+				return place.getProxyId() + SEPARATOR + Operation.DETAILS.toString();
 			}
 /*			if (Operation.EDIT == place.getOperation()) {
 				return place.getProxyId() + SEPARATOR + Operation.EDIT;

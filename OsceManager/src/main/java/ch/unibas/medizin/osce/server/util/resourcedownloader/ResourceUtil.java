@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
@@ -55,7 +56,16 @@ public class ResourceUtil {
 			fileName = setStandardizedRoleResource(request, os);
 			break;
 		}
+		case SUMMONINGS : {
+			fileName = setSummoningsResouce(request,os);
+			break;
+		}
 
+		case INDIVIDUAL_SCHEDULE : {
+			fileName = setIndividualScheduleResouce(request,os);
+			break;
+		}
+		
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -64,6 +74,43 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setIndividualScheduleResouce(
+			HttpServletRequest request, ByteArrayOutputStream os) throws IOException {
+		
+		HttpSession session = request.getSession();
+		String fileName = "default.pdf";
+		String key = request.getParameter(ResourceDownloadProps.INDIVIDUAL_SCHEDULE_KEY);
+		
+		
+		if(StringUtils.isNotBlank(key) && session.getAttribute(key) != null) {
+			try{
+				fileName = key;
+				os.write(((ByteArrayOutputStream)session.getAttribute(key)).toByteArray());
+			}finally {
+				session.removeAttribute(key);
+			}
+		}
+		return fileName;
+	}
+
+	private static String setSummoningsResouce(HttpServletRequest request, ByteArrayOutputStream os) throws IOException {
+		
+		HttpSession session = request.getSession();
+		String fileName = "default.pdf";
+		String key = request.getParameter(ResourceDownloadProps.SUMMONING_KEY);
+		
+		
+		if(StringUtils.isNotBlank(key) && session.getAttribute(key) != null) {
+			try{
+				fileName = key;
+				os.write(((ByteArrayOutputStream)session.getAttribute(key)).toByteArray());
+			}finally {
+				session.removeAttribute(key);
+			}
+		}
+		return fileName;
 	}
 
 //	private static String setStandardizedPatientExportResource(
@@ -191,7 +238,9 @@ public class ResourceUtil {
 		response.addHeader("Content-Disposition", "inline; filename=\""
 				+ fileName + "\"");
 		response.setContentLength((int) resource.length);
-		stream.write(resource);
+		if(resource.length > 0) {
+			stream.write(resource);
+		}
 		stream.close();
 	}
 
