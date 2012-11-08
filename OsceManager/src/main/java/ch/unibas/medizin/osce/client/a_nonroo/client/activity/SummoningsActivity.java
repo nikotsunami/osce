@@ -21,6 +21,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -31,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
@@ -1017,7 +1019,12 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 						public void onSuccess(String response) {
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							popupView.hide();
-							Window.open(response, "_blank", "enabled");
+							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
+							String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+									.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
+							Log.info("--> url is : " +url);
+							Window.open(url, "", "");
+							//Window.open(response, "_blank", "enabled");
 						}
 						
 						@Override
@@ -1244,7 +1251,12 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 						public void onSuccess(String response) {
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							popupView.hide();
-							Window.open(response, "_blank", "enabled");
+							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
+							String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+									.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
+							Log.info("--> url is : " +url);
+							Window.open(url, "", "");
+							//Window.open(response, "_blank", "enabled");
 						}
 						
 						@Override

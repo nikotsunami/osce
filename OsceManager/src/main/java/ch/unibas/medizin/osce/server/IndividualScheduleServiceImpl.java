@@ -7,12 +7,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
@@ -31,6 +34,7 @@ import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.ItemDefination;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
@@ -119,9 +123,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		PdfWriter writer =null;
 		HTMLWorker htmlWorker = null;
-		
-		
-		
+		ByteArrayOutputStream os = null;
+				
 		String fileContents = null;
 		String mailMessage = null;	
 		String tempMailMessage=null;
@@ -134,8 +137,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			
 			document = new Document();
 //Feature : 154
-			file = new File(fetchRealPath(true) + OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT);
-			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			//file = new File(fetchRealPath(true) + OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT);
+			os = new ByteArrayOutputStream();
+			writer = PdfWriter.getInstance(document, os);
 			
 			document.open();
 			
@@ -197,9 +201,301 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 				
 				writeInPDFFile(titleContent,document);
 				
-				mailMessage=titleContent;
+				//mailMessage=titleContent;
 
-				List<PatientInSemester> patientInSemesters=PatientInSemester.findPatientInSemesterBySemesterPatient(standardizedPatient.getId(), semesterId);							
+				List<OsceDay> osceDayList=OsceDay.findOsceDayByOsce(osce.getId());
+				if(osceDayList.size()>0)
+				{
+					Iterator<OsceDay> osceDayIteratror=osceDayList.iterator();
+					while(osceDayIteratror.hasNext())
+					{
+						OsceDay osceDay=osceDayIteratror.next();
+						Log.info("Osce Day: " + osceDay.getId());	
+						
+						osceDayContent="";	
+						scheduleContent="";	
+																		
+						List<PatientInSemester> patientInSemesters=PatientInSemester.findPatientInSemesterBySemesterPatient(standardizedPatient.getId(), semesterId);							
+						//Log.info("patientInSemesters Size:" + patientInSemesters.size());					
+						
+						Iterator pisIterator = patientInSemesters.iterator();				
+					    while(pisIterator.hasNext())
+					    {
+					    	PatientInSemester patientInSemester=(PatientInSemester) pisIterator.next();
+					    	Log.info("Patient In Semester: " + patientInSemester.getId());
+					    	//Set<PatientInRole> lstPatientInRole=patientInSemester.getPatientInRole();
+					    	List<PatientInRole> lstPatientInRole=PatientInRole.findPatientInRoleByPatientInSemesterOrderById(patientInSemester.getId());
+					    	
+					    	//Log.info("Total Patient In Role " + lstPatientInRole.size() + " for Semester: " + patientInSemester.getId());
+					    	Iterator pirIterator = lstPatientInRole.iterator();					    	
+					    	while ( pirIterator.hasNext()) 
+					    	{
+					    		PatientInRole patientInRole = (PatientInRole) pirIterator.next();
+					    		Log.info("Patient In Role: " + patientInRole.getId());
+					    		
+					    		osceDayContent="";	
+					    		scheduleContent="";	
+												    		
+					    		tempOsceDayContent=tempMailMessage.substring(tempMailMessage.indexOf("[OSCE_DAY SEPARATOR]"), tempMailMessage.indexOf("[OSCE_DAY SEPARATOR.]"));
+								tempOsceDayContent=tempOsceDayContent.replace("[OSCE_DAY SEPARATOR]","");
+								tempOsceDayContent=tempOsceDayContent.replace("[OSCE_DAY SEPARATOR.]","");
+								
+								//tempOsceDayContent=tempOsceDayContent.replace("[OSCE]",osceDayEntity.getOsce().getName());
+								String osceLable = osceDay.getOsce().getStudyYear()==null?"":osceDay.getOsce().getStudyYear() + "." + osceDay.getOsce().getSemester().getSemester().name();
+								tempOsceDayContent=tempOsceDayContent.replace("[OSCE]",osceLable);
+								String date=""+osceDay.getOsceDate().getDate()+"-"+(osceDay.getOsceDate().getMonth()+1) +"-"+(osceDay.getOsceDate().getYear()+1900);						
+								tempOsceDayContent=tempOsceDayContent.replace("[DATE]",date);	
+					    		
+					    		if(patientInRole!=null?patientInRole.getOscePost()!=null?patientInRole.getOscePost().getStandardizedRole()!=null?true:false:false:false)					    			
+					    			tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+patientInRole.getOscePost().getStandardizedRole().getLongName());
+								else
+									tempOsceDayContent=tempOsceDayContent.replace("[ROLE]","");
+					    		
+					    		List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), patientInRole.getId());
+					    		Iterator assignmentIterator = spAssignment.iterator();
+					    		
+					    		
+					    		 //Comment Below Code, to Display OsceDayContent in PDF (when assignment for patient_in_role is not assign).
+					    		if(spAssignment.size()<=0)
+					    		{
+					    			osceDayContent="";
+					    			tempOsceDayContent="";
+					    		}
+					    		
+					    		//int tempSp1=0;
+					    		while(assignmentIterator.hasNext())
+								{	
+					    			
+									Assignment assignmentStandardizedPatient=(Assignment)assignmentIterator.next();
+									Log.info("Assignment: " + assignmentStandardizedPatient.getId());
+									
+									tempScheduleContent=tempMailMessage.substring(tempMailMessage.indexOf("[SCHEDULE SEPARATOR]"), tempMailMessage.indexOf("[SCHEDULE SEPARATOR.]"));
+									tempScheduleContent=tempScheduleContent.replace("[SCHEDULE SEPARATOR]", "");
+									tempScheduleContent=tempScheduleContent.replace("[SCHEDULE SEPARATOR.]", "");
+									
+									String startTime=""+(assignmentStandardizedPatient.getTimeStart().getHours())+":"+(assignmentStandardizedPatient.getTimeStart().getMinutes())+":"+(assignmentStandardizedPatient.getTimeStart().getSeconds());
+									String endTime=""+(assignmentStandardizedPatient.getTimeEnd().getHours())+":"+(assignmentStandardizedPatient.getTimeEnd().getMinutes())+":"+(assignmentStandardizedPatient.getTimeEnd().getSeconds());
+									
+									tempScheduleContent=tempScheduleContent.replace("[START TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeStart()));
+									tempScheduleContent=tempScheduleContent.replace("[END TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeEnd()));	
+									
+									if(assignmentStandardizedPatient.getOscePostRoom()!=null)
+									{
+										tempScheduleContent=tempScheduleContent.replace("[POST]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getId().toString());
+										tempScheduleContent=tempScheduleContent.replace("[ROOM]", assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber().toString());
+									}
+									else
+									{
+										tempScheduleContent=tempScheduleContent.replace("[POST]", "");
+										tempScheduleContent=tempScheduleContent.replace("[ROOM]", "");									
+									}
+									
+									scheduleContent=scheduleContent+tempScheduleContent;
+									
+									/*if(tempSp1==0)
+									{
+										//tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+										
+										Long roleItemAccessId=findIdforRoleItemAccessByName(standardizedPatient.getName());
+										Log.info("Role Item Access for Standardized Patient1 : " + standardizedPatient.getName() + "is " + roleItemAccessId);
+										
+										//Long roleItemAccessId=1L;
+										//scriptDetail+=createRoleScriptDetails(assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+										if(assignmentStandardizedPatient.getOscePostRoom()!=null)
+										createRoleScriptDetails(assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+										Log.info("Script Detail1 : " + scriptDetail);
+																			
+									}
+									tempSp1++;	*/
+									
+									
+								}
+					    		
+					    		Log.info("Osce Day Content: " + osceDayContent);
+								osceDayContent=osceDayContent+tempOsceDayContent;
+								//mailMessage=mailMessage+osceDayContent;
+								
+								writeInPDFFile(osceDayContent,document);
+								
+								Log.info("Schedule Content: " + scheduleContent);
+								//mailMessage=mailMessage+scheduleContent;
+								writeInPDFFile(scheduleContent,document);
+								
+								Iterator spAssignmentIterator=spAssignment.iterator();
+								Iterator nextSpAssignmentIterator=spAssignment.iterator();
+								if(nextSpAssignmentIterator.hasNext()) {
+									nextSpAssignmentIterator.next();	
+								}
+								
+								List<String> lunchBreak=new ArrayList<String>();
+								List<String> longBreak=new ArrayList<String>();
+								
+								while(spAssignmentIterator.hasNext())
+								{
+									Assignment spCurrentAssignment=(Assignment)spAssignmentIterator.next();								
+									boolean hasLongBreak = false;
+									boolean hasLunchBreak = false;
+									
+									if(nextSpAssignmentIterator.hasNext())
+									{
+										Assignment nextAssignment=(Assignment)nextSpAssignmentIterator.next();
+										System.out.println("Assignment " + spCurrentAssignment.getId());
+									/*
+										tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");*/
+										
+										hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLongBreak());
+										if(hasLongBreak==true)
+										{
+											System.out.println("Assignment has longBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+											/*tempBreakContent=tempBreakContent.replace("[LONG BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+											longBreak.add(String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+										}
+/*										else
+										{
+											tempBreakContent=tempBreakContent.replace("[LONG BREAK]","");
+										}
+*/											
+										hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
+										if(hasLunchBreak==true)
+										{
+											System.out.println("Assignment has lunchBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+/*											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+											lunchBreak.add(String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+											
+										}
+/*										else
+										{
+											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]","");
+										}
+*/										/*if(hasLongBreak||hasLunchBreak)
+										{
+											breakContent=tempBreakContent;
+											Paragraph roleTemplateEL = new Paragraph();							
+											addEmptyLine(roleTemplateEL, 1);
+											document.add(roleTemplateEL);
+											writeInPDFFile(breakContent,document);
+											Log.info("BREAK CONTENTa: " + breakContent);
+											//mailMessage=mailMessage+breakContent;											
+																						
+										}*/
+									}
+										}
+								
+								if(lunchBreak.size()>0||longBreak.size()>0)
+								{
+									tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+									tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
+									tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");
+									if(longBreak.size()>0)
+										tempBreakContent=tempBreakContent.replace("[LONG BREAK]", StringUtils.join(longBreak, ","));
+									else
+										tempBreakContent=tempBreakContent.replace("[LONG BREAK]", "No Break");
+									if(lunchBreak.size()>0)
+										tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", StringUtils.join(lunchBreak, ","));
+									else
+										tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", "No Break");
+									
+									breakContent=tempBreakContent;
+									Paragraph roleTemplateEL = new Paragraph();							
+									addEmptyLine(roleTemplateEL, 1);
+									document.add(roleTemplateEL);
+									writeInPDFFile(breakContent,document);
+									Log.info("BREAK CONTENTa: " + breakContent);
+									//mailMessage=mailMessage+breakContent;																													
+									}
+								else if((lunchBreak.size()==0 || longBreak.size()==0)&&(spAssignment.size()>0))								
+								{
+									tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+									tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
+									tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");
+									tempBreakContent=tempBreakContent.replace("[LONG BREAK]", "No Break");
+									tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", "No Break");
+									breakContent=tempBreakContent;
+									Paragraph roleTemplateEL = new Paragraph();							
+									addEmptyLine(roleTemplateEL, 1);
+									document.add(roleTemplateEL);
+									writeInPDFFile(breakContent,document);
+									Log.info("BREAK CONTENTb: " + breakContent);									
+								}
+								
+								
+								//List<Assignment> tempAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), patientInRole.getId());
+					    		Iterator tempAssignmentIterator = spAssignment.iterator();
+					    		
+					    		int tempSp1=0;
+					    		while(tempAssignmentIterator.hasNext())
+								{	
+					    			
+									Assignment tempAssignmentStandardizedPatient=(Assignment)tempAssignmentIterator.next();
+									Log.info("Assignment: " + tempAssignmentStandardizedPatient.getId());
+															
+									if(tempSp1==0)
+									{
+										//tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+										
+										Long roleItemAccessId=findIdforRoleItemAccessByName(standardizedPatient.getName());
+										Log.info("Role Item Access for Standardized Patient1 : " + standardizedPatient.getName() + "is " + roleItemAccessId);
+										
+										//Long roleItemAccessId=1L;
+										//scriptDetail+=createRoleScriptDetails(assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+										if(tempAssignmentStandardizedPatient.getOscePostRoom()!=null)
+											createRoleScriptDetails(tempAssignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+										Log.info("Script Detail1 : " + scriptDetail);
+																			
+									}
+									tempSp1++;														
+								}
+					    		
+					    		scriptDetail=scriptDetail.replace("[]","");
+								//mailMessage=mailMessage+scriptDetail;
+
+								writeInPDFFile(scriptDetail,document);
+								
+								Paragraph roleTemplateEL = new Paragraph();							
+								addEmptyLine(roleTemplateEL, 1);
+								document.add(roleTemplateEL);
+					    		
+					    	}
+					    	
+					    }
+						
+						/*Iterator assignmentIterator1 = assignment.iterator();
+						int tempSp1=0;	
+						while(assignmentIterator1.hasNext())
+						{								
+							Assignment assignmentStandardizedPatient=(Assignment)assignmentIterator1.next();
+							Log.info("Assignment1 : "+ assignmentStandardizedPatient.getId() + " on OSCE DAY: " + osceDayId + " for SPorPIR "+ patientInRole.getId());
+							
+							if(tempSp1==0)
+							{
+								//tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());
+								
+								Long roleItemAccessId=findIdforRoleItemAccessByName(standardizedPatient.getName());
+								Log.info("Role Item Access for Standardized Patient1 : " + standardizedPatient.getName() + "is " + roleItemAccessId);
+								
+								//Long roleItemAccessId=1L;
+								//scriptDetail+=createRoleScriptDetails(assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+								createRoleScriptDetails(assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
+								Log.info("Script Detail1 : " + scriptDetail);
+																	
+							}
+							tempSp1++;																
+						}*/
+																	
+					/*
+						scriptDetail=scriptDetail.replace("[]","");
+						mailMessage=mailMessage+scriptDetail;*/
+						
+						
+					} 
+					
+					
+				}
+				
+				//========================================
+				/*List<PatientInSemester> patientInSemesters=PatientInSemester.findPatientInSemesterBySemesterPatient(standardizedPatient.getId(), semesterId);							
 				Log.info("patientInSemesters Size:" + patientInSemesters.size());					
 				
 				Iterator pisIterator = patientInSemesters.iterator();				
@@ -313,7 +609,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							addEmptyLine(roleTemplateEL, 1);
 							document.add(roleTemplateEL);
 						
-							/*Iterator assignmentIterator1 = assignment.iterator();
+							Iterator assignmentIterator1 = assignment.iterator();
 							int tempSp1=0;	
 							while(assignmentIterator1.hasNext())
 							{								
@@ -334,7 +630,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 																		
 								}
 								tempSp1++;																
-							}*/
+							}
 							
 													
 							
@@ -348,7 +644,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						
 						
 					}
-			    }
+			    }*/
+				//========================================
 				
 				Log.info("File Content: " + fileContents);
 				Log.info("After Modification: " + mailMessage);
@@ -359,8 +656,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			}
 			
 			document.close();
+			setToSession(OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT, os);
 			//Feature : 154
-			return fetchContextPath(true) +  OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT;
+			//return fetchContextPath(true) +  OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT;
+			return OsMaFilePathConstant.PATIENT_FILE_NAME_PDF_FORMAT;
 
 		} catch (Exception e) {
 			Log.error("in SummoningsServiceImpl.generateMailPDFUsingTemplate: "	+ e.getMessage());
@@ -372,6 +671,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			writer =null;
 			htmlWorker = null;
 			fileContents = null;
+			os = null;
 		}
 	}
 	
@@ -386,7 +686,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		} 
 		catch (Exception e) 
 		{
-			Log.error("in SummoningsServiceImpl.generateMailPDFUsingTemplate: "	+ e.getMessage());
+			Log.error("in IndividualServiceImpl.generateMailPDFUsingTemplate: "	+ e.getMessage());
 		}
 		finally
 		{
@@ -423,6 +723,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		PdfWriter writer =null;
 		HTMLWorker htmlWorker = null;
+		ByteArrayOutputStream os = null;
 		
 		String fileContents = null;
 		String mailMessage = null;	
@@ -443,8 +744,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			
 			document = new Document();
 //Feature : 154
-			file = new File( fetchRealPath(true)+ OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT);
-			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			//file = new File( fetchRealPath(true)+ OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT);
+			os = new ByteArrayOutputStream();
+			writer = PdfWriter.getInstance(document, os);
 			
 			document.open();
 			
@@ -489,7 +791,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 				titleContentStud=titleContentStud.replace("[TITLE SEPARATOR]","");
 				titleContentStud=titleContentStud.replace("[TITLE SEPARATOR.]","");
 				tempOsceDayContentStud=tempOsceDayContentStud.replace("[OSCE_DAY SEPARATOR]","");
-				tempOsceDayContentStud=tempOsceDayContentStud.replace("[OSCE_DAY SEPARATOR.]","");
+				tempOsceDayContentStud=tempOsceDayContentStud.replace("[OSCE_DAY SEPARATOR.]","");				
 				tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
 				tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR.]", "");
 				tempScheduleContentStud=tempScheduleContentStud.replace("[SCHEDULE SEPARATOR]", "");
@@ -497,7 +799,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										
 				titleContentStud = titleContentStud.replace("[NAME]",util.getEmptyIfNull(student.getName()));
 				titleContentStud = titleContentStud.replace("[PRENAME]",util.getEmptyIfNull(student.getPreName()));									
-				mailMessage=titleContentStud;
+				writeInPDFFile(titleContentStud, document);
+				//mailMessage=titleContentStud;
 								
 			/*	Set<Assignment> assignment=student.getAssignments();
 				Log.info("Total "+assignment.size()+" assignment found for Student " + student.getId());
@@ -525,6 +828,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							List<Assignment> assignmentsByOsceDayForParticularStudent=Assignment.findAssignmentsByOsceDayAndStudent(osceDay, student.getId());
 							//Log.info("Assignment for Osce Day " +osceDay +" Total "+assignmentsByOsceDayForParticularStudent.size());
 							Iterator assignmentIterator=assignmentsByOsceDayForParticularStudent.iterator();
+							/*Iterator nextAssignmentIterator=assignmentsByOsceDayForParticularStudent.iterator();*/
 							
 							OsceDay osceDayEntity=OsceDay.findOsceDay(osceDay);
 							
@@ -541,11 +845,27 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							tempOsceDayContentStud=tempOsceDayContentStud.replace("[DATE]",date);														
 							osceDayContentStud=osceDayContentStud+tempOsceDayContentStud;
 							//Log.info("OSCE DAY CONTENT: " + osceDayContentStud);
-							mailMessage=mailMessage+osceDayContentStud;
+							writeInPDFFile(osceDayContentStud, document);
+							//mailMessage=mailMessage+osceDayContentStud;
+							/*if(nextAssignmentIterator.hasNext()) {
+								nextAssignmentIterator.next();	
+							}*/
 														
 							while(assignmentIterator.hasNext())
 							{
 								Assignment assignment=(Assignment)assignmentIterator.next();
+					
+								/*boolean hasLunchBreak = false;
+								if(nextAssignmentIterator.hasNext())
+								{
+									Assignment nextAssignment=(Assignment)nextAssignmentIterator.next();
+									System.out.println("Assignment " + assignment.getId());
+									hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLongBreak());
+									if(hasLunchBreak==true)
+										System.out.println("Assignment has lunchBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+								}*/
+							
+								
 								Log.info("assignment Id: " + assignment.getId());
 								
 								tempScheduleContentStud=tempMailMessage.substring(tempMailMessage.indexOf("[SCHEDULE SEPARATOR]"), tempMailMessage.indexOf("[SCHEDULE SEPARATOR.]"));
@@ -572,13 +892,113 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							}
 							
 							Log.info("SCHEDULE CONTENT: " + scheduleContentStud);
-							mailMessage=mailMessage+scheduleContentStud+"<br>";		
+							writeInPDFFile(scheduleContentStud, document);
+							//mailMessage=mailMessage+scheduleContentStud+"<br>";		
 							
-							tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", osceDayEntity.getOsce().getLongBreak().toString());
+							/*tempBreakContentStud=mailMessage.substring(mailMessage.indexOf("[BREAK SEPARATOR]"), mailMessage.indexOf("[BREAK SEPARATOR.]"));
+							tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
+							tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR.]", "");*/
+							assignmentIterator=assignmentsByOsceDayForParticularStudent.iterator();
+							Iterator nextAssignmentIterator=assignmentsByOsceDayForParticularStudent.iterator();
+							if(nextAssignmentIterator.hasNext()) {
+								nextAssignmentIterator.next();	
+							}
+								
+							List<String> lunchBreak=new ArrayList<String>();
+							List<String> longBreak=new ArrayList<String>();
+							while(assignmentIterator.hasNext())
+							{
+								Assignment assignment=(Assignment)assignmentIterator.next();								
+								boolean hasLongBreak = false;
+								boolean hasLunchBreak = false;
+								if(nextAssignmentIterator.hasNext())
+								{
+									Assignment nextAssignment=(Assignment)nextAssignmentIterator.next();
+									System.out.println("Assignment " + assignment.getId());
+								/*
+									tempBreakContentStud=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+									tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
+									tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR.]", "");*/
+									
+									hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLongBreak());
+									if(hasLongBreak==true)
+									{
+										System.out.println("Assignment has longBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+										longBreak.add(String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
+										/*tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));*/									
+									}
+									/*else
+									{
+										tempBreakContentStud=tempBreakContentStud.replace("Kaffee break is between [LONG BREAK] and ","");
+									}*/
+										
+									hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLunchBreak());
+									if(hasLunchBreak==true)
+									{
+										System.out.println("Assignment has lunchBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+										lunchBreak.add(String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
+										/*tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+									}
+									/*else
+									{
+										tempBreakContentStud=tempBreakContentStud.replace(" and lunchbreak is between [LUNCH BREAK]","");
+									}
+									if(hasLongBreak||hasLunchBreak)
+									{
+										breakContentStud=tempBreakContentStud;
+										Log.info("BREAK CONTENT: " + breakContentStud);
+										Paragraph roleTemplateEL = new Paragraph();							
+										addEmptyLine(roleTemplateEL, 1);
+										document.add(roleTemplateEL);
+										writeInPDFFile(breakContentStud, document);
+										//mailMessage=mailMessage+breakContentStud;
+									}*/
+									}
+								}
+							
+							if(lunchBreak.size()>0||longBreak.size()>0)
+							{
+								tempBreakContentStud=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+								tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
+								tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR.]", "");
+								if(longBreak.size()>0)
+									tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", StringUtils.join(longBreak, ","));
+								else
+									tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", "No Break");
+								if(lunchBreak.size()>0)
+									tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", StringUtils.join(lunchBreak, ","));
+								else
+									tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", "No Break");
+								
+								breakContentStud=tempBreakContentStud;
+								Paragraph roleTemplateEL = new Paragraph();							
+								addEmptyLine(roleTemplateEL, 1);
+								document.add(roleTemplateEL);
+								writeInPDFFile(breakContentStud,document);
+								Log.info("BREAK CONTENTa: " + breakContentStud);
+								//mailMessage=mailMessage+breakContent;																													
+							}
+							else
+							{
+								tempBreakContentStud=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+								tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
+								tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR.]", "");
+								tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", "No Break");
+								tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", "No Break");
+								breakContentStud=tempBreakContentStud;
+								Paragraph roleTemplateEL = new Paragraph();							
+								addEmptyLine(roleTemplateEL, 1);
+								document.add(roleTemplateEL);
+								writeInPDFFile(breakContentStud,document);
+								Log.info("BREAK CONTENTb: " + breakContentStud);
+								
+							}
+							
+							/*tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", osceDayEntity.getOsce().getLongBreak().toString());
 							tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", osceDayEntity.getOsce().getLunchBreak().toString());
 							breakContentStud=tempBreakContentStud;
 							Log.info("BREAK CONTENT: " + breakContentStud);
-							mailMessage=mailMessage+breakContentStud;
+							mailMessage=mailMessage+breakContentStud;*/
 						}
 				/*	}
 				}
@@ -588,13 +1008,15 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 				}*/
 				
 				
-				htmlWorker.parse(new StringReader(mailMessage));
+				////htmlWorker.parse(new StringReader(mailMessage));
 				document.newPage();
 			}
 						
 			document.close();
+			setToSession(OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT, os);
 			//Feature : 154
-			return fetchContextPath(true)+ OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT;
+			//return fetchContextPath(true)+ OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT;
+			return OsMaFilePathConstant.STUDENT_FILE_NAME_PDF_FORMAT;
 
 			
 		}
@@ -608,11 +1030,23 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 				writer =null;
 				htmlWorker = null;
 				fileContents = null;
+				os = null;
 			}
 			
 		
 	}
 	
+	private boolean getAssignmentBreak(Date timeEnd, Date timeStart,int breakTime) 
+	{
+		int timeDifference=(int) (timeEnd.getTime() - timeStart.getTime()) / (60 * 1000);
+		if(timeDifference==breakTime)
+		{			
+			return true;
+		}
+		return false;
+		
+	}
+
 	public String setTimeInTwoDigit(java.util.Date date) 
 	{
 		System.out.println("Date : " + date);
@@ -658,6 +1092,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		File file = null;
 		PdfWriter writer =null;
 		HTMLWorker htmlWorker = null;
+		ByteArrayOutputStream os = null;
 		
 		String fileContents = null;
 		String mailMessage = null;	
@@ -679,8 +1114,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			
 			document = new Document();
 //Feature : 154
-			file = new File(fetchRealPath(true)+OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT);
-			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			//file = new File(fetchRealPath(true)+OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT);
+			os = new ByteArrayOutputStream();
+			writer = PdfWriter.getInstance(document, os);
 			
 			document.open();
 			
@@ -733,7 +1169,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 				titleContentExaminer = titleContentExaminer.replace("[NAME]",util.getEmptyIfNull(examiner.getName()));
 				titleContentExaminer = titleContentExaminer.replace("[PRENAME]",util.getEmptyIfNull(examiner.getPreName()));									
 				
-				mailMessage=titleContentExaminer;				
+				//mailMessage=titleContentExaminer;				
 				writeInPDFFile(titleContentExaminer,document);
 				
 				List<Long> distinctOsceDay = Assignment.findDistinctOsceDayByExaminerId(examiner.getId(),osce.getId());
@@ -747,7 +1183,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					
 					//&&List<Long> distinctPatientInRoleByOsceDayAndExaminer=Assignment.findDistinctPIRByOsceDayAndExaminer(osceDay,  examiner.getId());
 					//List<Long> distinctPatientInRoleByOsceDayAndExaminer=Assignment.findDistinctoscePostRoomByOsceDayAndExaminer(osceDay,  examiner.getId());
-					long newOsceId=Osce.findOsce(Long.valueOf(osceId)).getId();
+					//long newOsceId=Osce.findOsce(Long.valueOf(osceId)).getId();
 					//List<StandardizedRole> standardizedRoleByOsceAndExaminer=StandardizedRole.findStandardizedRoleByOsceIdandExaminerId(newOsceId,  examiner.getId());
 					
 					//Iterator distinctPatientInRoleByOsceDayAndExaminerIterator=distinctPatientInRoleByOsceDayAndExaminer.iterator();
@@ -786,8 +1222,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									
 						scheduleContentExaminer="";						
 						while(assignmentIterator.hasNext())
-						{
-														
+						{														
 							Assignment assignmentExaminer=(Assignment)assignmentIterator.next();
 							//Log.info("Assignment: "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in PatientInRole " + patientInRoleId);
 							if(assignmentExaminer.getOscePostRoom()!=null)
@@ -820,17 +1255,115 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						}
 						Log.info("Osce Day Content: " + osceDayContentExaminer);
 						osceDayContentExaminer=osceDayContentExaminer+tempOsceDayContentExaminer;
-						mailMessage=mailMessage+osceDayContentExaminer;
+						//mailMessage=mailMessage+osceDayContentExaminer;
 						writeInPDFFile(osceDayContentExaminer,document);
 						
 						Log.info("Schedule Content: " + scheduleContentExaminer);
-						mailMessage=mailMessage+scheduleContentExaminer;
+						//mailMessage=mailMessage+scheduleContentExaminer;
 						writeInPDFFile(scheduleContentExaminer,document);
-						
+						/*
 						Paragraph roleTemplateEL = new Paragraph();							
 						addEmptyLine(roleTemplateEL, 1);
 						document.add(roleTemplateEL);
+						*/
+						Iterator examinerAssignmentIterator=assignment.iterator();
+						Iterator nextExaminerAssignmentIterator=assignment.iterator();
+						if(nextExaminerAssignmentIterator.hasNext()) {
+							nextExaminerAssignmentIterator.next();	
+						}
 						
+						
+						List<String> lunchBreak=new ArrayList<String>();
+						List<String> longBreak=new ArrayList<String>();
+						while(examinerAssignmentIterator.hasNext())
+						{
+							Assignment examinerCurrentAssignment=(Assignment)examinerAssignmentIterator.next();								
+							boolean hasLongBreak = false;
+							boolean hasLunchBreak = false;
+							
+							if(nextExaminerAssignmentIterator.hasNext())
+							{
+								Assignment nextAssignment=(Assignment)nextExaminerAssignmentIterator.next();
+								System.out.println("Assignment " + examinerCurrentAssignment.getId());
+						
+								/*tempBreakContentExaminer=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+								tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR]", "");
+								tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR.]", "");								
+								*/
+								hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),osce.getLongBreak());
+								
+								if(hasLongBreak==true)
+								{
+									System.out.println("Assignment has longBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+									/*tempBreakContentExaminer=tempBreakContentExaminer.replace("[LONG BREAK]", String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+									longBreak.add(String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+								}
+								/*else
+								{
+									tempBreakContentExaminer=tempBreakContentExaminer.replace("Kaffee break is between [LONG BREAK] and","");
+								}*/
+									
+								hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
+								if(hasLunchBreak==true)
+								{
+									System.out.println("Assignment has lunchBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+									/*tempBreakContentExaminer=tempBreakContentExaminer.replace("[LUNCH BREAK]", String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+									lunchBreak.add(String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+								}
+								/*else
+								{
+									tempBreakContentExaminer=tempBreakContentExaminer.replace(" and lunchbreak is between [LUNCH BREAK]","");
+								}
+								if(hasLongBreak||hasLunchBreak)
+								{
+									breakContentExaminer=tempBreakContentExaminer;
+									Log.info("BREAK CONTENT: " + breakContentExaminer);
+									Paragraph roleTemplateEL = new Paragraph();							
+									addEmptyLine(roleTemplateEL, 1);
+									document.add(roleTemplateEL);
+									//mailMessage=mailMessage+breakContentExaminer;
+									writeInPDFFile(breakContentExaminer,document);
+								}*/
+							}
+						}
+						
+						if(lunchBreak.size()>0||longBreak.size()>0)
+						{
+							tempBreakContentExaminer=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+							tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR]", "");
+							tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR.]", "");
+							if(longBreak.size()>0)
+								tempBreakContentExaminer=tempBreakContentExaminer.replace("[LONG BREAK]", StringUtils.join(longBreak, ","));
+							else
+								tempBreakContentExaminer=tempBreakContentExaminer.replace("[LONG BREAK]", "No Break");
+							if(lunchBreak.size()>0)
+								tempBreakContentExaminer=tempBreakContentExaminer.replace("[LUNCH BREAK]", StringUtils.join(lunchBreak, ","));
+							else
+								tempBreakContentExaminer=tempBreakContentExaminer.replace("[LUNCH BREAK]", "No Break");
+							
+							breakContentExaminer=tempBreakContentExaminer;
+							Paragraph roleTemplateEL = new Paragraph();							
+							addEmptyLine(roleTemplateEL, 1);
+							document.add(roleTemplateEL);
+							writeInPDFFile(breakContentExaminer,document);
+							Log.info("BREAK CONTENTa: " + breakContentExaminer);
+							//mailMessage=mailMessage+breakContent;																													
+						}
+						else
+						{
+							tempBreakContentExaminer=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+							tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR]", "");
+							tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR.]", "");
+							tempBreakContentExaminer=tempBreakContentExaminer.replace("[LONG BREAK]", "No Break");
+							tempBreakContentExaminer=tempBreakContentExaminer.replace("[LUNCH BREAK]", "No Break");
+							breakContentExaminer=tempBreakContentExaminer;
+							Paragraph roleTemplateEL = new Paragraph();							
+							addEmptyLine(roleTemplateEL, 1);
+							document.add(roleTemplateEL);
+							writeInPDFFile(breakContentExaminer,document);
+							Log.info("BREAK CONTENTb: " + breakContentExaminer);
+							
+						}
 						
 						int tempEx1=0;
 						Iterator assignmentIterator1=assignment.iterator();
@@ -839,7 +1372,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 														
 							Assignment assignmentExaminer=(Assignment)assignmentIterator1.next();
 							////Log.info("Assignment1 : "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in StandardizedRole " + standardizedRole.getId());
-							Log.info("tempEx1 : " + tempEx1);
+							Log.info("tempEx1 : " + tempEx1 + " Assignment: "+ assignmentExaminer.getId());
 							if(tempEx1==0)
 							{								
 								Long roleItemAccessId=findIdforRoleItemAccessByName(examiner.getName());
@@ -855,7 +1388,13 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							tempEx1++;														
 						}
 						
-						//scriptDetail=scriptDetail.replace("[]","");
+						scriptDetail=scriptDetail.replace("[]","");
+						writeInPDFFile(scriptDetail, document);
+						
+						Paragraph roleTemplateEL = new Paragraph();					
+						addEmptyLine(roleTemplateEL, 1);
+						document.add(roleTemplateEL);
+						
 						//mailMessage=mailMessage+scriptDetail;
 					//}
 															
@@ -867,8 +1406,11 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			}
 			
 			document.close();
+			
+			setToSession(OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT,os);
 //Feature : 154
-			return fetchContextPath(true)+ OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT;
+			//return fetchContextPath(true)+ OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT;
+			return OsMaFilePathConstant.EXAMINER_FILE_NAME_PDF_FORMAT;
 		}
 		catch (Exception e) 
 		{
@@ -883,10 +1425,17 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			writer =null;
 			htmlWorker = null;
 			fileContents = null;
+			os = null;
 		}		
 		
 	}
 	
+	private void setToSession(String key,
+			ByteArrayOutputStream os) {
+		
+		this.getThreadLocalRequest().getSession().setAttribute(key, os);
+	}
+
 	private void createRoleScriptDetails(StandardizedRole standardizedRole, Long roleItemAccessId, Document document) 
 	{
 		String scriptDetail=new String();
@@ -894,6 +1443,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		Paragraph detailsTemplate = new Paragraph();
 		if (standardizedRole.getRoleTemplate() != null) 
 		{
+			addEmptyLine(detailsTemplate, 1);
 			detailsTemplate.add(new Chunk("Role Script Template" + ": "
 					+ standardizedRole.getRoleTemplate().getTemplateName(),
 					paragraphTitleFont));

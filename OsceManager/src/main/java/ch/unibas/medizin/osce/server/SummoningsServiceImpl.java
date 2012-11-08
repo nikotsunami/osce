@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.server;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.context.WebApplicationContext;
@@ -291,6 +293,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		List<String> toNames = null;
 		List<List<String>> assignments = null;
 		List<String> fromNames = null;
+		ByteArrayOutputStream os = null;
 		
 		int index = 0;
 		try {
@@ -302,8 +305,9 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			assignmentString = "";
 			document = new Document();
 //Feature : 154 
-			file = new File(fetchRealPath(true)+OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT);
-			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			//file = new File(fetchRealPath(true)+OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT);
+			os = new ByteArrayOutputStream();
+			writer = PdfWriter.getInstance(document, os);
 			
 			document.open();
 			
@@ -333,8 +337,10 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 			document.close();
 
+			saveFileToSession(OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT,os);
 			//Feature : 154 
-			return fetchContextPath(true)+ OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT;
+			//return fetchContextPath(true)+ OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT;
+			return OsMaFilePathConstant.INVITATION_FILE_NAME_PDF_FORMAT;
 
 		} catch (Exception e) {
 			log.error("in SummoningsServiceImpl.generateMailPDFUsingTemplate: "
@@ -347,12 +353,17 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			writer =null;
 			htmlWorker = null;
 			fileContents = null;
+			os = null;
 		}
 		
 		
 	}
 	
 	
+	private void saveFileToSession(String key, OutputStream os) {
+		this.getThreadLocalRequest().getSession().setAttribute(key, os);
+	}
+
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Boolean sendSPMail(Long semesterId,List<Long> spIds){

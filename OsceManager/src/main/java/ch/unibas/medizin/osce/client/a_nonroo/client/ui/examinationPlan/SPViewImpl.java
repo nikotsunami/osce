@@ -100,7 +100,7 @@ public class SPViewImpl extends Composite implements SPView{
 			RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
+			
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -117,6 +117,7 @@ public class SPViewImpl extends Composite implements SPView{
 			
 		}
 		
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
 		//setDAta
 		
 		if(assignmentProxy.getPatientInRole()!=null)

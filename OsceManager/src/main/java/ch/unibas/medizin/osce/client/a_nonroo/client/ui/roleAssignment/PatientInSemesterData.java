@@ -128,6 +128,8 @@ public class PatientInSemesterData {
 					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
 					dialogBox.showConfirmationDialog(constants.warningPatientHasRole());
 
+					delegate.onRowSelected(row-1);
+					
 				} else {
 
 					final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.reallyDelete());
@@ -139,6 +141,14 @@ public class PatientInSemesterData {
 							delegate.onDeleteClicked(row);
 							delegate.onDeleteButtonClicked(patientInSemesterData);
 							dialogBox.hide();
+						}
+					});
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+						
+							delegate.onRowSelected(row-1);
 						}
 					});
 				

@@ -150,14 +150,14 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 	@Override
 	public void display(Button addLanguage) {
 		this.show();
-		this.setPopupPosition(addLanguage.getAbsoluteLeft() - 5, addLanguage.getAbsoluteTop() - getOffsetHeight()/2 - 4);
+		this.setPopupPosition(addLanguage.getAbsoluteLeft() - this.getOffsetWidth(), addLanguage.getAbsoluteTop() - getOffsetHeight()/2 - 32);
 	}
 
 	//SPEC Change
 	@Override
 	public void display(int positionX,int positionY) {
 		this.show();
-		this.setPopupPosition(positionX,positionY);
+		this.setPopupPosition(positionX-300,positionY-32);
 	}
 	//SPEC Change
 	

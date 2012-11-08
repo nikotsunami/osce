@@ -127,7 +127,8 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 	public PopupView getExamInfoPopupView() {
 		return examInfoPopupView;
 	}
-
+	
+	public int height;
 	PopupPanel editPopup;
 	
 	public PopupPanel getEditPopup() {
@@ -308,7 +309,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 		}
 		
 		examInfoPopupView.createExaminerInfoPopupView();
-		((PopupViewImpl)examInfoPopupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-200);
+		((PopupViewImpl)examInfoPopupView).setPopupPosition(this.getAbsoluteLeft()-45, (this.getAbsoluteTop()+(height/2))-200);
 		((PopupViewImpl)examInfoPopupView).show();
 	}
 	public void showExaminerPopupView()
@@ -360,7 +361,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 			
 			
 		}
-		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-180);
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, (this.getAbsoluteTop()+(height/2))-180);
 		((PopupViewImpl)popupView).show();
 		
 	}

@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -777,7 +778,6 @@ public class StandardizedPatient {
     	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria));
 		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
 		
-		
 		List<StandardizedPatient> result  = typedQuery.getResultList();
        
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
@@ -917,9 +917,28 @@ public class StandardizedPatient {
     		        		
         		Predicate predicate1 = null;
         		
+        		/*
+        		java.util.Collections.sort(searchCriteria,new Comparator<AdvancedSearchCriteria>() {
+	
+        			@Override
+        			public int compare(AdvancedSearchCriteria o1,
+        					AdvancedSearchCriteria o2) {
+								
+        				if(o1.getField().compareTo(o2.getField()) != 0) {
+        					return o1.getField().compareTo(o2.getField());
+        				}
+        				
+        				return o1.getValue().compareTo(o2.getValue());
+        			}
+	        			  
+        		} );*/
+        		  
+        		  
+        		  
     			for (int i=0; i<searchCriteria.size(); i++)
     			{
     				Log.info("~~Criteria Size : " + searchCriteria.size());
+    				
     				
     				searchCr = searchCriteria.get(i);
     				
@@ -1152,6 +1171,12 @@ public class StandardizedPatient {
     						predicate1 = criteriaBuilder.notEqual(from.get("maritalStatus"), MaritalStatus.valueOf(val));
     				}
     				
+    				if (i == 0)
+    				{
+    					advPredicate = predicate1;
+    				}
+    				else
+    				{
     				if (searchCr.getBindType() == BindType.AND)
     				{
     					if (advPredicate == null)
@@ -1166,6 +1191,9 @@ public class StandardizedPatient {
     					else
     						advPredicate = criteriaBuilder.or(advPredicate, predicate1);
     				}
+    			}
+    			
+    				
     			}
     			
     			criteriaQuery.where(advPredicate);

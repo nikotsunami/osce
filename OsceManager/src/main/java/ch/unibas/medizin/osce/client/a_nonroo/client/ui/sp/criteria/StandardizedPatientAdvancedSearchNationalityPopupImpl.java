@@ -146,14 +146,14 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 	@Override
 	public void display(Button sourceButton) {
 		this.show();
-		this.setPopupPosition(sourceButton.getAbsoluteLeft() - 5, sourceButton.getAbsoluteTop() - getOffsetHeight()/2 - 4);
+		this.setPopupPosition(sourceButton.getAbsoluteLeft() -this.getOffsetWidth(), sourceButton.getAbsoluteTop() - getOffsetHeight()/2 - 32);
 	}
 
 	//SPEC Change
 	@Override
 	public void display(int positionX,int positionY) {
 		this.show();
-		this.setPopupPosition(positionX,positionY);
+		this.setPopupPosition(positionX-200,positionY-32);
 	}
 	//SPEC Change
 	@Override

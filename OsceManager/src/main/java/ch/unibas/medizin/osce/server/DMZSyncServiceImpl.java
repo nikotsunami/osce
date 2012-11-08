@@ -227,6 +227,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	public String sync(String locale) throws DMZSyncException{
 	
 		String json = getSyncJsonData(locale);
+		System.out.println("getSyncJsonData################################# "+json);
 		String url = getHostAddress() + "/OsceSync/syncJson";
 		//Send OSCE data to DMZ and return DMZ data
 		String returnJson = sendData(json,url);
@@ -605,6 +606,24 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	protected String getSyncJsonData(String locale){
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+		List<PatientInSemester> pis = PatientInSemester.findAllPatientInSemesters() ;
+		sb.append("\"patients\":[");
+		List<StandardizedPatient> patients = new ArrayList<StandardizedPatient>();
+		int count = 0;
+		for(PatientInSemester p : pis){
+			count ++;
+			
+			if(!patients.contains(p.getStandardizedPatient())){
+				sb.append(getStandardizedPatientJsonStr(p));
+				
+				if(count != pis.size()){
+					sb.append(",");
+				}
+				patients.add(p.getStandardizedPatient());
+			}
+		}
+		sb.append("],");
+		patients = null;
 		
 				
 		List<Semester> semesters = Semester.findAllSemesters();
@@ -621,7 +640,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 		sb.append("],");
 		
-		List<Osce> osces = Osce.findAllOscesGroupByCopiedOsce();
+		List<Osce> osces = Osce.findAllOsces();
 		sb.append("\"osces\":[");
 		int osceCount = 0;
 		for(Osce osce : osces){
@@ -654,6 +673,18 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			j++;
 			sb.append(getTrainingJsonStr(training));
 			if(j != trainings.size()){
+				sb.append(",");
+			}
+		}
+		sb.append("],");
+		
+		List<PatientInSemester> patientInSemesters = PatientInSemester.findAllPatientInSemesters();
+		sb.append("\"patientInSemester\":[");
+		int p = 0; 
+		for(PatientInSemester patientInSemester : patientInSemesters){
+			p++;
+			sb.append(getPatientInSemester(patientInSemester));
+			if(p!= patientInSemesters.size()){
 				sb.append(",");
 			}
 		}
@@ -755,6 +786,20 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 //		}
 //		sb.append("]");
 		sb.append("}");
+		return sb.toString();
+	}
+	
+	private String getPatientInSemester(PatientInSemester pis){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("\"semester\":"+pis.getSemester().getId());
+		sb.append(",");
+		sb.append("\"standardizedPatient\":"+pis.getStandardizedPatient().getId());
+		sb.append(",");
+		
+		sb.append("\"accepted\":"+pis.getAccepted());
+		sb.append("}");
+		
 		return sb.toString();
 	}
 	
@@ -888,6 +933,66 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 		sb.append("}");
 		
+		
+		return sb.toString();
+	}
+	
+	
+	private String getStandardizedPatientJsonStr(PatientInSemester patient){
+	StringBuilder sb = new StringBuilder();
+	StandardizedPatient sp=patient.getStandardizedPatient();
+		sb.append("{");	
+		sb.append("\"id\":"+sp.getId());
+		sb.append(",");
+		sb.append("\"gender\":"+sp.getGender().ordinal());
+		sb.append(",");
+		sb.append("\"name\":"+"\""+sp.getName()+"\"");
+		sb.append(",");
+		sb.append("\"preName\":"+"\""+sp.getPreName()+"\"");
+		sb.append(",");
+		sb.append("\"street\":"+"\""+sp.getStreet()+"\"");
+		sb.append(",");
+		sb.append("\"city\":"+"\""+sp.getCity()+"\"");
+		sb.append(",");
+		sb.append("\"postalCode\":"+"\""+sp.getPostalCode()+"\"");
+		sb.append(",");
+		sb.append("\"telephone\":"+"\""+sp.getTelephone()+"\"");
+		sb.append(",");
+		sb.append("\"telephone2\":"+"\""+sp.getTelephone2()+"\"");
+		sb.append(",");
+		sb.append("\"mobile\":"+"\""+sp.getMobile()+"\"");
+		sb.append(",");
+		sb.append("\"height\":"+sp.getHeight());
+		sb.append(",");
+		sb.append("\"weight\":"+sp.getWeight());
+		sb.append(",");
+		sb.append("\"immagePath\":"+"\""+sp.getImmagePath()+"\"");
+		sb.append(",");
+		sb.append("\"videoPath\":"+"\""+sp.getVideoPath()+"\"");
+		sb.append(",");
+		//sb.append("\"nationality\":"+sp.getNationality());
+		//sb.append(",");
+		//sb.append("\"profession\":"+sp.getProfession());
+		//sb.append(",");
+		sb.append("\"birthday\":"+"\""+convertToString(sp.getBirthday())+"\"");
+		sb.append(",");
+		sb.append("\"email\":"+"\""+sp.getEmail()+"\"");
+		sb.append(",");
+		//sb.append("\"descriptions\":"+sp.getDescriptions());
+		//sb.append(",");
+		//sb.append("\"bankAccount\":"+sp.getBankAccount());
+		//sb.append(",");
+		sb.append("\"maritalStatus\":"+sp.getMaritalStatus().ordinal());
+		sb.append(",");
+		sb.append("\"workPermission\":"+sp.getWorkPermission().ordinal());
+		sb.append(",");
+		sb.append("\"status\":"+sp.getStatus().ordinal());
+		sb.append(",");
+		sb.append("\"socialInsuranceNo\":"+"\""+sp.getSocialInsuranceNo()+"\"");
+		//sb.append(",");
+		//sb.append("\"anamnesisForm\":"+sp.getAnamnesisForm());
+		//sb.append(",");
+		sb.append("}");
 		
 		return sb.toString();
 	}
@@ -1470,7 +1575,6 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	
 	HttpServletRequest getRequest(){
 		HttpServletRequest ret = getThreadLocalRequest();
-		
 		return ret;
 	}
 	

@@ -25,6 +25,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -35,6 +36,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
@@ -70,16 +72,16 @@ IndividualSchedulesDetailsView.Delegate
 		List<Long> spId;
 		List<Long> studId;
 		List<Long> examinorId;
-		List<String> lstSPStandPatName;
-		List<String> lstSPStandPatPreName;
-		List<String> lstSPOsce;
-		List<Long> lstSPTempPatientInRole;
-		List<List<Long>> lstSPPatientInRole;
+		//List<String> lstSPStandPatName;
+		//List<String> lstSPStandPatPreName;
+		//List<String> lstSPOsce;
+		//List<Long> lstSPTempPatientInRole;
+		//List<List<Long>> lstSPPatientInRole;
 		/*List<String> lstSPTempStartTime;
 		List<List<String>> lstSPStartTime;
 		List<String> lstSPTempEndTime;
 		List<List<String>> lstSPEndTime;*/
-		List<AssignmentProxy> lstAssignment;
+		//List<AssignmentProxy> lstAssignment;
 		//SummoningsPopupViewImpl popupStud;
 		
 		List<DoctorProxy> lstExaminerProxy;
@@ -295,6 +297,8 @@ IndividualSchedulesDetailsView.Delegate
 							
 							final StandardizedPatientProxy sp =iteratorSP.next();
 																												
+							Log.info("SP ID: " + sp.getId());																					
+							
 							lstStandPatProxy.add(sp);
 							//lstSPStandPatName.add(util.getEmptyIfNull(sp.getName()));
 							//lstSPStandPatPreName.add(util.getEmptyIfNull(sp.getPreName()));								
@@ -959,7 +963,12 @@ IndividualSchedulesDetailsView.Delegate
 											{
 													Log.info("Call Stud Success... Generate PDF");													
 													popupStud.hide();								
-													Window.open(response, "_blank", "enabled");
+													String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.INDIVIDUAL_SCHEDULE.ordinal()));          
+													String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+															.concat("&").concat(ResourceDownloadProps.INDIVIDUAL_SCHEDULE_KEY).concat("=").concat(URL.encodeQueryString(response));
+													Log.info("--> url is : " +url);
+													Window.open(url, "", "");
+													//Window.open(response, "_blank", "enabled");
 											}
 										});	
 										
@@ -1026,11 +1035,11 @@ IndividualSchedulesDetailsView.Delegate
 		public void printCopyforSP(ClickEvent event) 
 		{  
 			Log.info("Call printCopyforSP()");
-			lstSPStandPatName=new ArrayList<String>();
-			lstSPStandPatPreName=new ArrayList<String>();
-			lstSPOsce=new ArrayList<String>();						
-			lstAssignment=new ArrayList<AssignmentProxy>();			
-			lstSPPatientInRole=new ArrayList<List<Long>>();
+			//lstSPStandPatName=new ArrayList<String>();
+			//lstSPStandPatPreName=new ArrayList<String>();
+			//lstSPOsce=new ArrayList<String>();						
+			//lstAssignment=new ArrayList<AssignmentProxy>();			
+			//lstSPPatientInRole=new ArrayList<List<Long>>();
 			
 			spId=new ArrayList<Long>();
 				if(lstChkSp.size()>0 && lstStandPatProxy.size()>0) // Check that SP is Checked Or Not
@@ -1059,7 +1068,7 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});*/
 														
-							
+						/*
 							requests.patientInRoleRequestNonRoo().findPatientsInRoleForAssignmentBySPIdandSemesterId(lstStandPatProxy.get(i).getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<PatientInRoleProxy>>() 
 							{
 
@@ -1083,13 +1092,14 @@ IndividualSchedulesDetailsView.Delegate
 											PatientInRoleProxy pir=iteratorPatientInRole.next();
 											Log.info("PatientInRoleId: " + pir.getId());
 											lstSPTempPatientInRole.add(pir.getId().toString());
-										}*/
+										}
 										Log.info("PatientInRole List Size: " + lstSPTempPatientInRole.size());
 										lstSPPatientInRole.add(lstSPTempPatientInRole);
 										
 									}									
 								}
-							});
+							}); */
+							
 						}
 					}
 					Log.info("Total Number of Plans to Print " + spId.size());
@@ -1117,9 +1127,9 @@ IndividualSchedulesDetailsView.Delegate
 		{			
 			Log.info("Call initSPPopup");
 						
-			Log.info("Standardized Patient Name List Size: " + lstSPStandPatName.size());
-			Log.info("Standardized Patient Pre Name Size: " + lstSPStandPatPreName.size());
-			Log.info("Standardized Patient Osce Size: " + lstSPOsce.size());
+			//Log.info("Standardized Patient Name List Size: " + lstSPStandPatName.size());
+			//Log.info("Standardized Patient Pre Name Size: " + lstSPStandPatPreName.size());
+			//Log.info("Standardized Patient Osce Size: " + lstSPOsce.size());
 			//Log.info("Standardized Patient Role Size: " + lstSPRole.size());
 			
 	//		final String templateName="UpdatedTemplateSP"+osceProxy.getId()+".txt";
@@ -1305,7 +1315,12 @@ IndividualSchedulesDetailsView.Delegate
 								{
 									Log.info("Call Success... Generate PDF");	
 									popupSP.hide();
-									Window.open(response, "_blank", "enabled");										
+									String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.INDIVIDUAL_SCHEDULE.ordinal()));          
+									String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+											.concat("&").concat(ResourceDownloadProps.INDIVIDUAL_SCHEDULE_KEY).concat("=").concat(URL.encodeQueryString(response));
+									Log.info("--> url is : " +url);
+									Window.open(url, "", "");
+									//Window.open(response, "_blank", "enabled");										
 								}
 							});							
 						}
@@ -1594,7 +1609,14 @@ IndividualSchedulesDetailsView.Delegate
 												{
 														Log.info("Call Stud Success... Generate PDF");	
 														popupExaminer.hide();
-														Window.open(response, "_blank", "enabled");
+														
+														String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.INDIVIDUAL_SCHEDULE.ordinal()));          
+														String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+																.concat("&").concat(ResourceDownloadProps.INDIVIDUAL_SCHEDULE_KEY).concat("=").concat(URL.encodeQueryString(response));
+														Log.info("--> url is : " +url);
+														Window.open(url, "", "");
+														
+														//Window.open(response, "_blank", "enabled");
 												}
 											});	
 																		

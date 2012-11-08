@@ -554,7 +554,8 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 								
 								TaskProxy addTask=taskRequest.create(TaskProxy.class);
 								addTask.setDeadline(tp.getDeadline());
-								addTask.setIsDone(tp.getIsDone());
+								addTask.setIsDone(false);
+								//addTask.setIsDone(tp.getIsDone());
 								addTask.setName(tp.getName());
 								addTask.setAdministrator(tp.getAdministrator());
 								addTask.setOsce(response);

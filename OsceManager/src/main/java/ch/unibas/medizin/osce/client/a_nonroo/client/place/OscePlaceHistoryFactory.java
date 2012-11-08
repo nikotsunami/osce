@@ -50,6 +50,8 @@ public class OscePlaceHistoryFactory {
 	//module 8]
 	private final SummoningsPlace.Tokenizer summoningsTokenizer;
 	private final IndividualSchedulesPlace.Tokenizer individualSchedulesPlaceTokenizer;
+	private final IndividualSchedulesDetailsPlace.Tokenizer individualSchedulesDetailsPlaceTokenizer;
+	
 	private final BellSchedulePlace.Tokenizer bellSchedulePlaceTokenizer;
 	
 	private final RolePlace.Tokenizer rolePlaceTokenizer;
@@ -80,9 +82,15 @@ public class OscePlaceHistoryFactory {
 	//by eosce
 	
 	private final ExportOscePlace.Tokenizer exportOSCETokenizer;
+	
+	//payment
+	private final PaymentPlace.Tokenizer paymentPlaceTokenizer;
+	//payment
 
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
+		this.paymentPlaceTokenizer = new PaymentPlace.Tokenizer(requestFactory);
+		
 		this.exportOSCETokenizer = new ExportOscePlace.Tokenizer(requestFactory);
 		
 		this.importeOSCETokenizer = new ImporteOSCEPlace.Tokenizer(requestFactory);
@@ -124,7 +132,9 @@ public class OscePlaceHistoryFactory {
 		this.studentsPlaceTokenizer = new StudentsPlace.Tokenizer(requestFactory);
 		
 		this.summoningsTokenizer = new SummoningsPlace.Tokenizer(requestFactory);
+		
 		this.individualSchedulesPlaceTokenizer = new IndividualSchedulesPlace.Tokenizer(requestFactory);
+		this.individualSchedulesDetailsPlaceTokenizer= new IndividualSchedulesDetailsPlace.Tokenizer(requestFactory);
 		
 		this.bellSchedulePlaceTokenizer = new BellSchedulePlace.Tokenizer(requestFactory);
 		
@@ -275,6 +285,10 @@ public class OscePlaceHistoryFactory {
 		return individualSchedulesPlaceTokenizer;
 	}
 	
+	public PlaceTokenizer<IndividualSchedulesDetailsPlace> getIndividualSchedulesDetailsPlaceTokenizer() {
+		return individualSchedulesDetailsPlaceTokenizer;
+	}
+	
 	public PlaceTokenizer<StatisticalEvaluationPlace> getStatisticalEvaluationPlaceTokenizer() {
 		return statisticalEvaluationPlaceTokenizer;
 	}
@@ -346,6 +360,7 @@ public class OscePlaceHistoryFactory {
 		return importObjectiveTokenizer;
 	}
 	
-	
-
+	public PlaceTokenizer<PaymentPlace> getPaymentPlaceTokenizer() {
+		return paymentPlaceTokenizer;
+	}
 }

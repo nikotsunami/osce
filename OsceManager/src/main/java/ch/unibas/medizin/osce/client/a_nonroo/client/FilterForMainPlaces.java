@@ -26,6 +26,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPla
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetailsPlace;
@@ -289,6 +290,11 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 		
 		if (place instanceof ExportOscePlace)
 			return (ExportOscePlace) place;
+		
+		//payment
+		if (place instanceof PaymentPlace)
+			return (PaymentPlace) place;
+		//payment
 
 		return null;
 	}

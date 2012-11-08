@@ -200,7 +200,7 @@ public class StudentViewImpl extends Composite implements StudentView{
 			RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
+			
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -218,6 +218,8 @@ public class StudentViewImpl extends Composite implements StudentView{
 			
 			
 		}
+		
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
 		//setDAta
 		if(assignmentProxy.getStudent()!=null)
 			popupView.getNameValue().setText(assignmentProxy.getStudent().getName());

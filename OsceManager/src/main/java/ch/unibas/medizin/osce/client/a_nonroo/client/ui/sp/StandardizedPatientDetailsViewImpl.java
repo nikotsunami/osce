@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
+
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -106,7 +108,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiField 
 	StandardizedPatientScarSubViewImpl standardizedPatientScarSubViewImpl;
 	@UiField
-	StandardizedPatientAnamnesisSubViewImpl standardizedPatientAnamneisSubViewImpl;
+	public StandardizedPatientAnamnesisSubViewImpl standardizedPatientAnamneisSubViewImpl;
 	@UiField
 	StandardizedPatientLangSkillSubViewImpl standardizedPatientLangSkillSubViewImpl;
 	@UiField
@@ -549,8 +551,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	public void handleClick(ClickEvent e) {
 		if (patientDisclosurePanel.isOpen()) {
 			setPatientDisclosurePanelOpen(false);
+			standardizedPatientAnamneisSubViewImpl.anamnesisTabs.setHeight((ResolutionSettings.getRightWidgetHeight()-200)+"px");
+			
+			
 		} else {
 			setPatientDisclosurePanelOpen(true);
+			standardizedPatientAnamneisSubViewImpl.anamnesisTabs.setHeight((ResolutionSettings.getRightWidgetHeight()/2)+"px");
 		}
 		storeDisplaySettings();
 	}

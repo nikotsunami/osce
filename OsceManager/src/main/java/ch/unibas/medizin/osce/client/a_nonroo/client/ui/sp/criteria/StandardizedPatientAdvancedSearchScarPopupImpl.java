@@ -142,9 +142,16 @@ public class StandardizedPatientAdvancedSearchScarPopupImpl extends PopupPanel
 	@Override
 	public void display(Button addScar) {
 		this.show();
-		this.setPopupPosition(addScar.getAbsoluteLeft() - 5, addScar.getAbsoluteTop() - getOffsetHeight()/2 - 4);
+		this.setPopupPosition(addScar.getAbsoluteLeft() - 250, addScar.getAbsoluteTop() - getOffsetHeight()/2 - 32);
 	}
 	
+	//change for advance search
+	@Override
+	public void display(int positionX,int positionY) {
+		this.show();
+		this.setPopupPosition(positionX-240,positionY-32);
+	}
+	//change for advance search
 	@Override
 	public ValueListBox<ScarProxy> getScarBox() {
 		return scarBox;

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -310,6 +311,17 @@ public class PatientInSemester {
     }
 
     private static String getStanardizedPatientIDList(List<AdvancedSearchCriteria> searchCriteria) {
+
+    	java.util.Collections.sort(searchCriteria,new Comparator<AdvancedSearchCriteria>() {
+			
+			@Override
+			public int compare(AdvancedSearchCriteria o1,
+					AdvancedSearchCriteria o2) {
+				
+				return o1.getId().compareTo(o2.getId());
+			}
+    			  
+		} );  
         List<StandardizedPatient> standardizedPatientList = StandardizedPatient.findPatientsByAdvancedCriteria(searchCriteria);
         if (standardizedPatientList == null || standardizedPatientList.size() == 0) {
             Log.info("Return as null");
