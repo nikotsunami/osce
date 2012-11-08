@@ -2085,6 +2085,7 @@ public class TimetableGenerator {
 								
 								boolean firstTimeSlot = j == 0;
 								boolean halfTimeSlots = j == numberSlotsTotal / 2 - 1;
+								
 								boolean lastTimeSlot = j == numberSlotsTotal - 1;
 								
 								// calculate student index for current time slot j in post i
@@ -2184,11 +2185,25 @@ public class TimetableGenerator {
 									j++;
 								}
 								
+								//by spec issue sol
+								if (postType != null && postType.equals(PostType.ANAMNESIS_THERAPY) && ((numberSlotsTotal % 2) == 0))
+									halfTimeSlots = j == numberSlotsTotal / 2 - 1;
+								//by spec issue sol
+									
 								if(!lastTimeSlot) {
 									// add short break between posts
 									// if, for example, there is a maximum of 8 posts and the most difficult role-topic needs a SimPat change after
 									// 5 students, there is only one possible SimPat change during a rotation (best placed in the middle)
-									if(changeSimpatDuringRotation && (j % changeIndex == changeIndex - 1)) {
+									//by spec issue sol[
+									int checkChangeIndex = 0;
+									if (postType != null && postType.equals(PostType.ANAMNESIS_THERAPY) && numberSlotsTotal % 2 == 0 && numberBreakPosts != 0)
+										checkChangeIndex = changeIndex;
+									else
+										checkChangeIndex = changeIndex - 1;
+									
+									//if(changeSimpatDuringRotation && (j % changeIndex == changeIndex - 1)) {
+									if(changeSimpatDuringRotation && (j == checkChangeIndex)) {
+									//by spec issue sol]
 										Date endTimeNew;
 										if(halfTimeSlots && longBreakInRotationHalf)
 											endTimeNew = dateAddMin(endTime, osce.getLongBreak());
@@ -2313,7 +2328,11 @@ public class TimetableGenerator {
 								//SPEC]
 									//nextRotationStartTime = dateAddMin(nextRotationStartTime, osce.getLunchBreak());
 									// trick to make sure postsSinceSimpatChange is 0 after outer loop (is incremented by numberSlotsTotal in outer-loop)
-									postsSinceSimpatChange = -1 * numberSlotsTotal;
+									
+									//postsSinceSimpatChange = -1 * numberSlotsTotal;
+									//spec issue sol[
+									postsSinceSimpatChange = 0;
+									//spec issue sol]
 								} else {
 									// also insert long break after rotation if there was a long break in the middle of the rotation (SP change!)
 									//SPEC[
