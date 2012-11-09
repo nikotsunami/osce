@@ -281,7 +281,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	// Highlight onViolation
 	public int mapVar=0;
 	// E Highlight onViolation
-	
+	//public static RoleActivity roleActivity;
 RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemViewImpl;
 	public RoleRoleParticipantSubViewImpl roleRoleParticipantSubViewImpl;
 	public RoleDetailsViewImpl roleDetailsViewImpl;
@@ -2104,6 +2104,36 @@ final int index2 = index;
 		RoleEditActivity.setSelectedTab(roleDetailTabPanel.getSelectedIndex());
 		goTo(new RoleDetailsPlace(standardizedRoleProxy.stableId(),
 				Operation.EDIT));
+	}
+	
+	
+	@Override
+	public void copyRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
+		Log.info("copy clicked");
+		
+		requests.standardizedRoleRequestNonRoo().copyStandardizedRole(standardizedRoleProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+			
+
+			@Override
+			public void onSuccess(Boolean response) {
+				// TODO Auto-generated method stub
+				Log.info("successfully role created--"+response);
+				Log.info(" StandardizedRole created succeessfully");
+				RoleEditActivity.roleActivity.setInserted(false);
+				RoleEditActivity.roleActivity.initSearch();
+				goTo(new RoleDetailsPlace(roleTopicProxy.stableId(),	Operation.DETAILS));
+			}
+		});
+		//ScrolledTab Changes start
+		/*System.out.println("==>"
+				+ roleDetailTabPanel.getTabBar().getSelectedTab());
+		int selTabID = roleDetailTabPanel.getTabBar().getSelectedTab();
+		*/
+		
+		
+		//ScrolledTab Changes end
+		
 	}
 
 	@Override
@@ -6000,6 +6030,8 @@ final int index2 = index;
 		
 		standardizedRoleDetailsView.edit.setEnabled(enable);
 		standardizedRoleDetailsView.delete.setEnabled(enable);
+		standardizedRoleDetailsView.copy.setEnabled(enable);
+		
 		standardizedRoleDetailsView.getImportTopicButton().setEnabled(enable);
 		standardizedRoleDetailsView.addCheckListTopicButton.setEnabled(enable);
 		

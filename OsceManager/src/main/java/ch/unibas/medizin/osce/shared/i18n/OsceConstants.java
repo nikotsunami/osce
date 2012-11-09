@@ -1169,5 +1169,7 @@ public interface OsceConstants extends Constants {
 	public String exportStudent();
 	
 	public String exportSP();
+	
+	public String copy();
 }
 

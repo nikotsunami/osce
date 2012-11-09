@@ -153,6 +153,10 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	// Buttons
 	@UiField
 	IconButton print;
+	
+	@UiField
+	public IconButton copy;
+	
 	@UiField
 	public IconButton edit;
 	@UiField
@@ -404,6 +408,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		TabPanelHelper.moveTabBarToBottom(rolePanel);
 
 		print.setText(constants.print());
+		copy.setText(constants.copy());
 		edit.setText(constants.edit());
 		delete.setText(constants.delete());
 		previous.setText(constants.previousRole());
@@ -551,6 +556,15 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		System.out
 				.println("============================Call delegate.editPatientClciked=========================");
 		delegate.editRoleClicked(this.getValue());
+	}
+
+	@UiHandler("copy")
+	public void onCopyClicked(ClickEvent e) {
+		System.out
+				.println("============================Click copy Button=========================");
+		System.out
+				.println("============================Call delegate.copyPatientClciked=========================");
+		delegate.copyRoleClicked(this.getValue());
 	}
 
 	@UiHandler("arrow")

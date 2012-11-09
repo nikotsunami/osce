@@ -25,7 +25,9 @@ public interface RoleDetailsView extends IsWidget{
 
 		void createRole();
 //		void printRoleClicked();
-		void editRoleClicked(StandardizedRoleProxy proxy);
+		
+		void copyRoleClicked(StandardizedRoleProxy proxy);
+		
 		void deleteRoleClicked(StandardizedRoleProxy proxy);
 		
 		public void refreshSelectedTab();

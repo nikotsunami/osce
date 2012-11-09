@@ -122,6 +122,75 @@ public class StandardizedRole {
 	private RoleTemplate roleTemplate;
 
 
+	public static boolean copyStandardizedRole(Long standardizedRoleId) {
+		   
+		   Log.info("copy call ");
+		   StandardizedRole  oldStandardizedRole= StandardizedRole.findStandardizedRole(standardizedRoleId);
+		  
+		   
+		   StandardizedRole newStandardizedRole=new StandardizedRole();
+		   
+		   newStandardizedRole.setShortName(oldStandardizedRole.getShortName());
+		   newStandardizedRole.setLongName(oldStandardizedRole.getLongName());
+		   newStandardizedRole.setStudyYear(oldStandardizedRole.getStudyYear());
+		   newStandardizedRole.setRoleType(oldStandardizedRole.getRoleType());
+		   newStandardizedRole.setMainVersion(0);
+		   newStandardizedRole.setSubVersion(0);
+		   newStandardizedRole.setActive(true);
+		   
+		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());
+		   newStandardizedRole.setCheckList(oldStandardizedRole.getCheckList());//spec
+		   newStandardizedRole.setRoleTopic(oldStandardizedRole.getRoleTopic());
+		   newStandardizedRole.setRoleTemplate(oldStandardizedRole.getRoleTemplate());
+		   newStandardizedRole.setCaseDescription(oldStandardizedRole.getCaseDescription());
+		   
+		   Log.info("total advance search size--"+oldStandardizedRole.getAdvancedSearchCriteria().size());
+		   
+		   Set<AdvancedSearchCriteria>  advancedSearchCriteria= insertForAdvancedSearchCriteria(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setAdvancedSearchCriteria(advancedSearchCriteria);
+		   
+		   Set<Keyword>  newKeyword= insertForKeyword(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setKeywords(newKeyword);
+		   
+		   Set<SimpleSearchCriteria>  simpleSearchCriteria= insertForSimpleSearchCriteria(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setSimpleSearchCriteria(simpleSearchCriteria);
+		   
+		   Set<RoleParticipant>  roleParticipant= insertForRoleParticipant(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setRoleParticipants(roleParticipant);
+		   
+		   Set<RoleTableItemValue>  roleTableItemValue= insertForRoleTableItemValue(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setRoleTableItemValue(roleTableItemValue);
+		   
+		   
+		   Set<RoleSubItemValue>  roleSubItemValue= copyForRoleSubItemValue(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setRoleSubItemValue(roleSubItemValue);
+		   
+		   //changes start
+		   
+		   Set<MainSkill>  mainSkill= insertForMainSkill(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setMainSkills(mainSkill);
+		   
+		   Set<MinorSkill>  minorSkill= insertForMinorSkill(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setMinorSkills(minorSkill);
+		   
+		   Set<File>  file= insertForFile(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setFiles(file);
+		   
+		   Set<UsedMaterial>  usedMaterial= insertForUsedMaterials(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setUsedMaterials(usedMaterial);
+		   /*
+		   Set<OscePost>  oscePost= insertForOscePost(oldStandardizedRole,newStandardizedRole);
+		   newStandardizedRole.setOscePosts(oscePost);*/
+		   
+		   
+		  
+		   Log.info("new StandardizedRole---"+newStandardizedRole);
+		   newStandardizedRole.persist();
+
+		   Log.info("New StandardizedRole create");
+		   
+		   return true;
+	   }
 	   
 	   
 	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId,Integer roleSubItemValueId,String value) {
@@ -395,6 +464,20 @@ public class StandardizedRole {
 				{
 					Log.info("else part");
 				}
+				roleSubItemValue.add(rsiv);
+			}
+			return roleSubItemValue;
+	   }
+
+	   private  static Set<RoleSubItemValue> copyForRoleSubItemValue(StandardizedRole oldRole, StandardizedRole newRole) {
+			Set<RoleSubItemValue> roleSubItemValue = new HashSet<RoleSubItemValue>();
+			
+			for(RoleSubItemValue oldrsiv:oldRole.getRoleSubItemValue()) {
+				RoleSubItemValue rsiv=new RoleSubItemValue();
+				
+				rsiv.setItemText(oldrsiv.getItemText());
+				rsiv.setRoleBaseItem(oldrsiv.getRoleBaseItem());
+				rsiv.setStandardizedRole(newRole);
 				roleSubItemValue.add(rsiv);
 			}
 			return roleSubItemValue;

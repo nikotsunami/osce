@@ -35,6 +35,7 @@
 							<span ui:field="displayRenderer"></span>
 						</h3>
 						<my:IconButton ui:field="print" icon="print" />
+						<my:IconButton ui:field="copy" icon="copy" />
 						<my:IconButton ui:field="edit" icon="pencil" />
 						<my:IconButton ui:field="delete" icon="trash" />
 						<my:IconButton ui:field="previous"  icon="triangle-1-w" />

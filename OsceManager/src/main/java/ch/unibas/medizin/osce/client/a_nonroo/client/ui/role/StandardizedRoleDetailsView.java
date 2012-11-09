@@ -20,6 +20,7 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 		void editClicked();
 
 		void editRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
+		void copyRoleClicked(StandardizedRoleProxy standardizedRoleProxy);
 
 		// Edit Clicked from StandardizedRoleDetailViewImpl implementation in
 		// RoleDetailActivity
