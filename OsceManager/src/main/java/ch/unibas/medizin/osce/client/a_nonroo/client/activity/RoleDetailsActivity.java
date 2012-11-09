@@ -43,6 +43,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleKeywordSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleLearningPopUpView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleLearningSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOsceSemesterSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOtherSearchCriteriaView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleOtherSearchCriteriaViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleRoleParticipantSubView;
@@ -100,6 +101,7 @@ import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.MinorSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
@@ -225,7 +227,7 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		StandardizedPatientAdvancedSearchProfessionPopup.Delegate, 
 		StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,
 		StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate,
-		LearningObjectiveView.Delegate		
+		LearningObjectiveView.Delegate,RoleOsceSemesterSubView.Delegate		
 
 {
 
@@ -357,6 +359,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		 private Long applianceId = null;
 		 
 		 private LearningObjectiveView learningObjectiveView;
+		 private RoleOsceSemesterSubView roleOsceSemesterSubView; 
 		 
 		 private List<LearningObjectiveData> learningObjectiveData = new ArrayList<LearningObjectiveData>();
 		 private LearningObjectiveData learningObjective;
@@ -462,6 +465,9 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		if (rangeChangeHandler != null) {
 			rangeChangeHandler.removeHandler();
 		}
+		
+		roleOsceSemesterSubView = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleOsceSemesterSubViewImpl();
+		roleOsceSemesterSubView.setDelegate(this);
 
 		fireCountRequest(StandardizedRoleID, new Receiver<Long>() {
 			@Override
@@ -1078,6 +1084,26 @@ final int index2 = index;
 		
 		
 		// SPEC START =
+		
+		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+
+			@Override
+			public void onSuccess(List<OsceProxy> response) {
+				// TODO Auto-generated method stub
+				if(response!=null)
+				{
+					
+				
+				roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
+				roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
+				}
+				else
+				{
+					Log.info("record not found");
+				}
+				
+			}
+		});
 		
 		standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().setDelegate(roleDetailActivity);
 		standardizedRoleDetailsView[index].getRoleKeywordSubViewImpl().setDelegate(roleDetailActivity);
@@ -5630,6 +5656,27 @@ final int index2 = index;
 		
 		// SPEC START =
 		
+		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+
+			@Override
+			public void onSuccess(List<OsceProxy> response) {
+				// TODO Auto-generated method stub
+				if(response!=null)
+				{
+					
+				
+				roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
+				roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
+				}
+				else
+				{
+					Log.info("record not found");
+				}
+				
+			}
+		});
+
+		
 		standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().setDelegate(roleDetailActivity);
 		standardizedRoleDetailsView[index].getRoleKeywordSubViewImpl().setDelegate(roleDetailActivity);
 		authorTable = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().authorTable; // ==>
@@ -7223,6 +7270,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		ChecklistCriteriaRequest request = requests.checklistCriteriaRequest();		
 		ChecklistCriteriaProxy proxy=criteriaView.getProxy();
+		
 		proxy = request.edit(proxy);
 		proxy.setCriteria(criteria);
 		// Highlight onViolation
@@ -7247,6 +7295,7 @@ public void onDragStart(DragStartEvent event) {
 			
 			learningObjectiveView = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().getLearningObjectiveViewImpl();
 			
+			 
 			//RecordChangeEvent.register(requests.getEventBus(), (LearningObjectiveViewImpl) learningObjectiveView);
 			
 			learningObjectiveView.setDelegate(this);		
@@ -7263,6 +7312,19 @@ public void onDragStart(DragStartEvent event) {
 					learningObjectiveView.getTable().setRowCount(response);
 				}
 			});
+			
+			
+			
+			/*requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).fire(new OSCEReceiver<List<OsceProxy>>() {
+
+				@Override
+				public void onSuccess(List<OsceProxy> response) {
+					// TODO Auto-generated method stub
+					
+				}
+			});*/
+			
+			
 			
 			requests.skillRequestNonRoo().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
 

@@ -93,6 +93,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 	// E Highlight onViolation
 
 	public RoleLearningSubViewImpl getRoleLearningSubViewImpl();
+
+	RoleOsceSemesterSubViewImpl getRoleOsceSemesterSubViewImpl();
 	
 	
 

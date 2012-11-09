@@ -1181,5 +1181,7 @@ public interface OsceConstants extends Constants {
 	public String room();
 	
 	public String roomAlreadyAssignWantToExcahnge();
+	
+	public String osceSemester();
 }
 

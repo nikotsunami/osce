@@ -145,6 +145,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	RoleLearningSubViewImpl roleLearningSubViewImpl;
 	
+	@UiField
+	RoleOsceSemesterSubViewImpl roleOsceSemesterSubViewImpl; 
 	// Panels
 
 	@UiField
@@ -452,6 +454,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		rolePanel.getTabBar().setTabText(1, constants.roleParticipants());
 		rolePanel.getTabBar().setTabText(2, constants.keyword());
 		rolePanel.getTabBar().setTabText(3, constants.learning());
+		rolePanel.getTabBar().setTabText(4, constants.osceSemester());
 		
 		roleSubPanel.getTabBar().setTabText(0, constants.checkList());
 		roleSubPanel.getTabBar().setTabText(1, constants.searchCriteria());
@@ -780,5 +783,11 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		public RoleLearningSubViewImpl getRoleLearningSubViewImpl() {
 			return roleLearningSubViewImpl;
 		}
+		
+		@Override
+		public RoleOsceSemesterSubViewImpl getRoleOsceSemesterSubViewImpl() {
+			return roleOsceSemesterSubViewImpl;
+		}
+	
 	
 }

@@ -367,7 +367,19 @@ public class Osce {
 		return q.getResultList();
 				
 	}
-	
+
+ 
+ public static List<Osce> findAllOsceSemester(Long roleId){
+		
+ 	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
+		EntityManager em = entityManager();
+		String query="select o from Osce o, OscePost op, OscePostBlueprint opb where o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
+		System.out.println("Query: " +query);
+		TypedQuery<Osce> q = em.createQuery(query  ,Osce.class);
+		return q.getResultList();
+				
+	}
+
 	//public static List<Osce> findAllOscesGroupByCopiedOsce() {
  //       return entityManager().createQuery("SELECT o FROM Osce o GROUP BY o.copiedOsce", Osce.class).getResultList();
  //   }

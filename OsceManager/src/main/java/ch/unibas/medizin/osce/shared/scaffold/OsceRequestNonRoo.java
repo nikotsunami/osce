@@ -19,6 +19,9 @@ public interface OsceRequestNonRoo extends RequestContext{
 	
 	public abstract Request<List<OsceProxy>> findAllOsceOnSemesterId(Long id);
 	
+	public abstract Request<List<OsceProxy>> findAllOsceSemester(Long id);
+	
+	
 	public abstract Request<Boolean> generateOsceScaffold(Long osceId);
 	
 	public abstract Request<Boolean> generateAssignments(Long osceId);
@@ -26,6 +29,7 @@ public interface OsceRequestNonRoo extends RequestContext{
 	public abstract Request<Integer> initOsceBySecurity();	
 	
 	public abstract Request<Boolean> autoAssignPatientInRole(Long osceId);
+	
 	
 	public abstract Request<Boolean> autoAssignStudent(Long osceId);
 	

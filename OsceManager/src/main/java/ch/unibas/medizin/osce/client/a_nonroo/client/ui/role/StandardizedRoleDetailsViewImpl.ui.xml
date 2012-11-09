@@ -107,6 +107,8 @@
 						<!-- SPEC END = -->						
 					</g:HTMLPanel>
 					</g:Tab>
+					
+					
 
 					<g:Tab>
 						<g:TabHTML><!-- Keyword --></g:TabHTML>
@@ -121,6 +123,14 @@
 						<g:TabHTML><!-- Learning --></g:TabHTML>
 						<g:HTMLPanel addStyleNames="{style.patientDetails}">
 							<r:RoleLearningSubViewImpl ui:field="roleLearningSubViewImpl"></r:RoleLearningSubViewImpl>
+						</g:HTMLPanel>
+					</g:Tab>
+					
+					<g:Tab>
+						<g:TabHTML><!-- Learning --></g:TabHTML>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<r:RoleOsceSemesterSubViewImpl ui:field="roleOsceSemesterSubViewImpl"></r:RoleOsceSemesterSubViewImpl>
+							<!-- <r:RoleLearningSubViewImpl ui:field="roleLearningSubViewImpl"></r:RoleLearningSubViewImpl> -->
 						</g:HTMLPanel>
 					</g:Tab>
 				</g:TabPanel>
