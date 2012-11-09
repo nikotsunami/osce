@@ -3,8 +3,12 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
+import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 
@@ -17,6 +21,9 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -24,6 +31,8 @@ import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.text.shared.Renderer;
+import com.google.gwt.text.shared.AbstractRenderer;
 
 /**
  * @author niko2
@@ -74,7 +83,10 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	@UiField
 	SpanElement displayRenderer;
 
+	@UiField(provided = true)
+	CellTable<DoctorProxy> lecturersTable;
 
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 		
 	int selectedTab = 0 ;
 	/**
@@ -88,12 +100,14 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	 */
 	public ClinicDetailsViewImpl() {
 		OsceConstants constants = GWT.create(OsceConstants.class);
+		createLecturersDetails();
 		initWidget(uiBinder.createAndBindUi(this));
 
 		clinicPanel.selectTab(selectedTab);
 
 		clinicPanel.getTabBar().setTabText(0, constants.generalInformation());
 		clinicPanel.getTabBar().setTabText(1, constants.doctors());
+		clinicPanel.getTabBar().setTabText(2, constants.participants());
 
 		TabPanelHelper.moveTabBarToBottom(clinicPanel);
 
@@ -193,5 +207,56 @@ public class ClinicDetailsViewImpl extends Composite implements ClinicDetailsVie
 	@Override
 	public void setSelectedDetailsTab(int detailsTab) {
 		clinicPanel.selectTab(detailsTab);
+	}
+	
+	public CellTable<DoctorProxy> getLecturersTable() {
+		return lecturersTable;
+	}
+
+	private void createLecturersDetails() {
+		// create cell table
+				
+		final CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
+		lecturersTable = new CellTable<DoctorProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+
+		//paths.add("name");
+		TextColumn<DoctorProxy> nameCol = new TextColumn<DoctorProxy>() {
+
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(DoctorProxy object) {
+				//	Log.info("get value here "+ object.getStudent().getName());
+				return renderer.render(object.getName());
+
+			}
+		};
+		
+		lecturersTable.addColumn(nameCol, constants.name());
+		lecturersTable.setColumnWidth(nameCol, "200px");
+
+		//paths.add("Prename");
+		TextColumn<DoctorProxy> preNameCol = new TextColumn<DoctorProxy>() {
+
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(DoctorProxy object) {
+				return renderer.render(object.getPreName());
+			}
+		};
+		
+		lecturersTable.addColumn(preNameCol, constants.preName());
+		lecturersTable.setColumnWidth(preNameCol, "200px");		
 	}
 }

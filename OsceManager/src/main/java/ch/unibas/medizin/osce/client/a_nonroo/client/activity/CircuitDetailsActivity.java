@@ -477,10 +477,10 @@ AccordianPanelView.ParcourDelegate
 										tempOscePostSubViewImpl=new OscePostSubViewImpl();										
 										tempOscePostSubViewImpl.enableDisableforBluePrintStatus();
 										tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-										tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
-										tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());								
-										tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
-										tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+										tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
+										tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());								
+										tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
+										tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
 										
 										setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getSpecialisation());
 										setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getRoleTopic());
@@ -558,10 +558,10 @@ AccordianPanelView.ParcourDelegate
 												
 												tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR SUBVIEW
 										
-												tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
-												tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
-												tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
-												tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
+												tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
+												tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+												tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
+												tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
 												tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber()));
 												tempOscePostSubViewImpl.getPostNameLbl().setTitle(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber());
 												
@@ -1546,9 +1546,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				
 			}
 			else
-		 	        oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
+		 	        oscePostSubView.getStandardizedRoleLbl().setText(constants.role()+": ");
 
-			oscePostSubView.getRoomLbl().setText(constants.select());
+			oscePostSubView.getRoomLbl().setText(constants.room()+": ");
 			// E Change in ParcourView
 			
 				oscePostSubView.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " +oscePostProxy.getSequenceNumber()));
@@ -1611,7 +1611,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			{
 				Log.info("Osce is in Closed Status, Role Edit Disabled.");			
 				oscePostSubView.getStandardizedRoleEdit().setVisible(false);
-				oscePostSubView.getRoomedit().setVisible(false);
+				//oscePostSubView.getRoomedit().setVisible(false);
 			}
 			// E Change in ParcourView
 					
@@ -1633,8 +1633,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				// E Module 5 Bug Test Change
 			}
 			else
-		         	oscePostSubViewNext.getStandardizedRoleLbl().setText(constants.select());
-			oscePostSubViewNext.getRoomLbl().setText(constants.select());
+		         	oscePostSubViewNext.getStandardizedRoleLbl().setText(constants.role()+": ");
+			oscePostSubViewNext.getRoomLbl().setText(constants.room()+": ");
 			// E Change in ParcourView
 			
 			oscePostSubViewNext.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " +oscePostProxyNext.getSequenceNumber()));
@@ -1685,7 +1685,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			{
 				Log.info("Osce is in Closed Status, Role Edit Disabled.");			
 				oscePostSubViewNext.getStandardizedRoleEdit().setVisible(false);
-				oscePostSubViewNext.getRoomedit().setVisible(false);
+				//oscePostSubViewNext.getRoomedit().setVisible(false);
 			}
 			// E Change in ParcourView
 								
@@ -1741,8 +1741,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			}
 			
 			// Change in ParcourView
-			oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
-			oscePostSubView.getRoomLbl().setText(constants.select());
+			oscePostSubView.getStandardizedRoleLbl().setText(constants.role()+": ");
+			oscePostSubView.getRoomLbl().setText(constants.room()+": ");
 			// E Change in ParcourView
 			
 			
@@ -1807,7 +1807,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				oscePostSubView.getStandardizedRoleEdit().setVisible(false);
 
 				// Change in ParcourView
-				oscePostSubView.getRoomedit().setVisible(false);
+				//oscePostSubView.getRoomedit().setVisible(false);
 				// E Change in ParcourView
 			}
 			//E Module 5 Bug Report Solution
@@ -1842,8 +1842,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			}
 			
 			// Change in ParcourView
-			oscePostSubView.getStandardizedRoleLbl().setText(constants.select());
-			oscePostSubView.getRoomLbl().setText(constants.select());
+			oscePostSubView.getStandardizedRoleLbl().setText(constants.role()+": ");
+			oscePostSubView.getRoomLbl().setText(constants.room()+": ");
 			// E Change in ParcourView
 			
 			oscePostSubView.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostProxy.getSequenceNumber()));												
@@ -1909,7 +1909,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			{			
 				oscePostSubView.getStandardizedRoleEdit().setVisible(false);
 				// Change in ParcourView
-				oscePostSubView.getRoomedit().setVisible(false);
+				//oscePostSubView.getRoomedit().setVisible(false);
 				// E Change in ParcourView
 			}
 			//E Module 5 Bug Report Solution
@@ -2413,10 +2413,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " "+oscePostBlueprintProxy.getSequenceNumber()));
 						tempOscePostSubViewImpl.getPostNameLbl().setTitle(constants.circuitStation() + " "+oscePostBlueprintProxy.getSequenceNumber());
 						tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-						tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
-						tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
-						tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));			
-						tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+						tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
+						tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
+						tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));			
+						tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
 						
 						setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
 						setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());
@@ -2478,10 +2478,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber()));
 					tempOscePostSubViewImpl.getPostNameLbl().setTitle(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber());
 					tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-					tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
-					tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
-					tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));			
-					tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+					tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
+					tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
+					tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));			
+					tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
 					
 					setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
 					setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());
@@ -2518,10 +2518,10 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 							tempOscePostSubViewImplNext.enableDisableforBluePrintStatus();	
 							tempOscePostSubViewImplNext.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR SUBVIEW
-							tempOscePostSubViewImplNext.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxyNext.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxyNext.getSpecialisation().getName()));
-							tempOscePostSubViewImplNext.getSpecializationLbl().setTitle(oscePostBlueprintProxyNext.getSpecialisation()==null?constants.select()+": ":oscePostBlueprintProxyNext.getSpecialisation().getName());
-							tempOscePostSubViewImplNext.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName()));
-							tempOscePostSubViewImplNext.getRoleTopicLbl().setTitle(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.select()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName());
+							tempOscePostSubViewImplNext.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxyNext.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxyNext.getSpecialisation().getName()));
+							tempOscePostSubViewImplNext.getSpecializationLbl().setTitle(oscePostBlueprintProxyNext.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxyNext.getSpecialisation().getName());
+							tempOscePostSubViewImplNext.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName()));
+							tempOscePostSubViewImplNext.getRoleTopicLbl().setTitle(oscePostBlueprintProxyNext.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxyNext.getRoleTopic().getName());
 							
 							////oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
 							
@@ -2827,7 +2827,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 							oscePostSubViewImplok.listBoxPopupViewImpl.hide();					
 							//Window.alert("The Role Topic for Specialisation " + specialisationProxy.getName()+" is deleted, You need to Select thr Role.");
-							oscePostSubViewImplok.getRoleTopicLbl().setText(constants.select()+":");
+							oscePostSubViewImplok.getRoleTopicLbl().setText(constants.topic()+":");
 							oscePostSubViewImplok.listBoxPopupViewImpl.hide();	
 						}
 					
@@ -4960,7 +4960,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											// TODO Auto-generated method stub
 									}
 								});
-	                                                        opsv.popupView.getNewListBox().setSelected(((OscePostSubViewImpl)opsv).getRoomProxy());	
+								opsv.popupView.getNewListBox().setSelected(((OscePostSubViewImpl)opsv).getRoomProxy());	
 							}
 					});											
 				}
@@ -4984,13 +4984,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						@Override
 						public void onSuccess(OscePostProxy oscePostResult) {
 							
-									requests.oscePostRoomRequestNonRoo().findOscePostRoomByRoom(oscePostResult.getOsceSequence().getId(),roomProxy.getId()).fire(new OSCEReceiver<Integer>() {
+									requests.oscePostRoomRequestNonRoo().findOscePostRoomByRoom(oscePostResult.getOsceSequence().getId(),roomProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 										@Override
-										public void onSuccess(Integer roomCount) {
-											if (roomCount.equals(0))
+										public void onSuccess(final List<OscePostRoomProxy> oscePostRoom) {
+											if (oscePostRoom.size()<=0)
 											{
-												requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+												requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+											{												
 
 													@Override
 													public void onSuccess(OscePostRoomProxy response) 
@@ -5035,9 +5036,42 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											else
 											{
 												Log.info("Room Already Exist");
+												
+												// [ SPEC Change Parcour
+												//if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED)
+												//{
+													final MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
+													dialog.showYesNoDialog(constants.roomAlreadyAssignWantToExcahnge());
+													dialog.getYesBtn().addClickHandler(new ClickHandler() {
+														
+														@Override
+														public void onClick(ClickEvent event) 
+														{
+															dialog.hide();
+															exchangeRooms(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy(),view,roomProxy,oscePostRoom,oscePostSubViewImpl,view);
+
+														}
+														
+													});
+													dialog.getNoBtnl().addClickHandler(new ClickHandler() {
+														
+														@Override
+														public void onClick(ClickEvent event) 
+														{
+															dialog.hide();
+														}
+													});
+												//}
+												/*else
+												{
+												// SPEC Change Parcour ]
+													
 												MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
 												dialog.showConfirmationDialog(constants.roomAssignedWarning());
-											}
+												// [ SPEC Change Parcour
+												}
+												// SPEC Change Parcour ]
+*/											}
 										}
 									});
 							}
@@ -5069,6 +5103,83 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 				//spec issue sol
 
+				// [ SPEC Change Parcour				
+				//private void exchangeRooms(final OscePostSubViewImpl oscePostSubViewImpl, final ListBoxPopupView view, final RoomProxy roomProxy, List<OscePostRoomProxy> oscePostRoom)
+				private void exchangeRooms(CourseProxy courseProxy,OscePostProxy oscePostProxy,ListBoxPopupView view,RoomProxy roomProxy,List<OscePostRoomProxy> oscePostRoom, final OscePostSubViewImpl oscePostSubViewImpl, final ListBoxPopupView listBoxPopupView) 				
+				{
+					System.out.println("Exchanging Rooms");
+					Iterator<OscePostRoomProxy> oscePostRoomIterator=oscePostRoom.iterator();
+					OscePostRoomProxy tempnewOscePostRoomProxy=null;
+					while(oscePostRoomIterator.hasNext())
+					{
+						OscePostRoomProxy newOscePostRoom= oscePostRoomIterator.next();
+						//System.out.println("List of New Id of Osce_Post_Room which is Replaced by Selected Room" +newOscePostRoom.getId());
+						tempnewOscePostRoomProxy=newOscePostRoom;
+					}
+					final OscePostRoomProxy newOscePostRoomProxy=tempnewOscePostRoomProxy;
+					
+					requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy,oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+					{
+								@Override
+								public void onSuccess(OscePostRoomProxy response) 
+								{
+									if (response != null)
+									{
+										//System.out.println("Old Osce_Post_Room Id which is Updated: " + response.getId());										
+										replaceRooms(response,newOscePostRoomProxy,osceProxy.getId(),oscePostSubViewImpl,listBoxPopupView);
+									}																											
+								}
+							});
+				}
+				protected void replaceRooms(final OscePostRoomProxy selectedRoom,OscePostRoomProxy newOscePostRoomProxy,final long osceId, final OscePostSubViewImpl oscePostSubViewImpl, final ListBoxPopupView view) 
+				{
+					System.out.println("replaceRoomsCall");
+					//System.out.println("Replace " + selectedRoom.getId() + "With " + newOscePostRoomProxy.getId());
+					
+					requests.oscePostRoomRequest().findOscePostRoom(newOscePostRoomProxy.getId()).with("room","oscePost","course").fire(new OSCEReceiver<OscePostRoomProxy>() {
+
+						@Override
+						public void onSuccess(OscePostRoomProxy newOscePostRoom) 
+						{						
+							final RoomProxy oldRoomProxy=selectedRoom.getRoom();
+							final RoomProxy newRoomProxy=newOscePostRoom.getRoom();
+							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+							requests.oscePostRoomRequestNonRoo().replaceRoom(selectedRoom.getId(),osceId,newRoomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+
+								@Override
+								public void onSuccess(List<OscePostRoomProxy> response) 
+								{
+									
+									oscePostSubViewImpl.setRoomProxy(newRoomProxy);															
+									((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(newRoomProxy);										
+									requests.getEventBus().fireEvent(new RoomRefreshEvent(response, newRoomProxy.getRoomNumber()));									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+									
+								}
+							});
+							
+							requests.oscePostRoomRequestNonRoo().replaceRoom(newOscePostRoom.getId(),osceId,oldRoomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+
+								@Override
+								public void onSuccess(List<OscePostRoomProxy> response) 
+								{
+									
+									oscePostSubViewImpl.setRoomProxy(oldRoomProxy);															
+									((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(oldRoomProxy);
+									requests.getEventBus().fireEvent(new RoomRefreshEvent(response, oldRoomProxy.getRoomNumber()));
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								}
+							});							
+							
+							
+						}
+					});
+				}
+
+				// SPEC Change Parcour ]
+				
 				@Override
 				public void shiftLucnkBreakPrevClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImplTemp) {
 						

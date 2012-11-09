@@ -125,13 +125,14 @@ public class OscePostRoom {
         		        	
         }
     
-    public static Integer findOscePostRoomByRoom(Long osceSequenceId, Long roomId)
+    public static List<OscePostRoom> findOscePostRoomByRoom(Long osceSequenceId, Long roomId)
     {
     	EntityManager em = entityManager();
     	String sql = "SELECT o FROM OscePostRoom o WHERE o.room.id = " + roomId + " AND o.oscePost IN(SELECT os FROM OscePost AS os WHERE os.osceSequence.id = " + osceSequenceId +")";
     	System.out.println("~~ROOM QUERY : " + sql.toString());
     	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
-    	return q.getResultList().size();
+    	//return q.getResultList().size();
+    	return q.getResultList();
     }
     
     public static Integer countOscePostRoomByCriteria(Long osceid)
@@ -420,6 +421,24 @@ public class OscePostRoom {
 		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
         return result;    	    
     }
+    public static List<OscePostRoom> replaceRoom(long postRoomId,long osceId,Room room)
+    {
+    	List<OscePostRoom> oscePostRoomList;
+    	try
+    	{
+			OscePostRoom oldOscePostRoom=OscePostRoom.findOscePostRoom(postRoomId);
+			oscePostRoomList=insertRoomVertically(osceId, oldOscePostRoom.course, oldOscePostRoom.oscePost.getId(), room);
+    	}
+    	catch (Exception e) 
+    	{
+    		System.out.println(e.getMessage());
+    		return null;
+		}
+		
+    	return oscePostRoomList;
+    }
+    
+    
     
     
 }

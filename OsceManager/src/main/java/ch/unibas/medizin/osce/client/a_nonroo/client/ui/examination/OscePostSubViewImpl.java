@@ -367,6 +367,7 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView, R
 				if (oscePostRoomList.get(i).getOscePost().equals(oscePostProxy) && oscePostRoomList.get(i).getCourse().equals(courseProxy))
 				{
 					delegate.refreshRoomValue(this, roomValue);
+					this.getRoomLbl().setTitle(roomValue);
 				}
 			}
 		}

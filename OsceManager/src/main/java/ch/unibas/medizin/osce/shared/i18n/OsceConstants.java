@@ -286,6 +286,8 @@ public interface OsceConstants extends Constants {
 
 	public String doctors();
 
+	public String participants();
+	
 	public String download();
 
 	public String earlierLunchError();
@@ -1171,5 +1173,13 @@ public interface OsceConstants extends Constants {
 	public String exportSP();
 	
 	public String copy();
+	
+	public String discipline();
+	
+	public String topic();
+	
+	public String room();
+	
+	public String roomAlreadyAssignWantToExcahnge();
 }
 

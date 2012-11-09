@@ -24,13 +24,15 @@ public interface OscePostRoomRequestNonRoo extends RequestContext
 {	 
 	abstract Request<OscePostRoomProxy> findOscePostRoomByOscePostAndCourse(CourseProxy course, OscePostProxy oscePost);
 	
-	abstract Request<Integer> findOscePostRoomByRoom(Long osceSequenceId, Long roomId);
+	abstract Request<List<OscePostRoomProxy>> findOscePostRoomByRoom(Long osceSequenceId, Long roomId);
 	
 	abstract Request<Integer> countOscePostRoomByCriteria(Long osceid);
 	
 	abstract Request<List<OscePostRoomProxy>> findListOfOscePostRoomByOsce(Long osceId);
 	
 	abstract Request<List<OscePostRoomProxy>> insertRoomVertically(Long osceid, CourseProxy course, Long oscePostid, RoomProxy room);
+	
+	abstract Request<List<OscePostRoomProxy>> replaceRoom(long oldPostRoomId,long osceId,RoomProxy room);
 }
 
 

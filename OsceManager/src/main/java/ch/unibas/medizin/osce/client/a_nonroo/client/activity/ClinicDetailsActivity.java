@@ -234,6 +234,20 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 	*/
 			view.setValue(clinicProxy);
 			view.setDelegate(this);
+			initDoctorsDetails(clinicProxy.getId());
+		
+	}
+
+	private void initDoctorsDetails(Long clinicId) {
+		
+		requests.doctorRequestNonRoo().findDoctorByClinicID(clinicProxy.getId()).fire(new OSCEReceiver<List<DoctorProxy>>() {
+
+			@Override
+			public void onSuccess(List<DoctorProxy> response) {
+			
+				view.getLecturersTable().setRowData(response);	
+			}
+		});
 	}
 
 	@Override

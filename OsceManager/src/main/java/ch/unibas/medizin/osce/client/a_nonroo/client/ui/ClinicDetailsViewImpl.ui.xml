@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style src="../styles.css" />
 		
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
@@ -43,6 +43,14 @@
 				</g:HTMLPanel>
 			</g:Tab>
 
+			<g:Tab>
+				<g:TabHTML></g:TabHTML>
+				<g:HTMLPanel>
+				<!--  cell table for currently selected clinic doctors details -->
+					<c:CellTable ui:field="lecturersTable" width="100%" addStyleNames="{style.standardTable}" />
+				</g:HTMLPanel>	
+
+			</g:Tab>
 			<g:Tab>
 				<g:TabHTML></g:TabHTML>
 			<!-- 	<g:StackPanel ui:field="specialTabPanel" width="100%">
