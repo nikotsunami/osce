@@ -1053,4 +1053,66 @@ public class Assignment {
     	
      }
    
+     //by spec change[
+     public static Boolean exchangeStudent(Assignment ass, Long studentId)
+     {
+    	 Student oldStudent = ass.getStudent();
+    	 Student exchangeStudent = Student.findStudent(studentId);
+    	 
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.student = " + oldStudent.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId();
+    	 TypedQuery<Assignment> oldStudQuery = em.createQuery(sql, Assignment.class);
+    	 Iterator<Assignment> oldStudItr = oldStudQuery.getResultList().iterator();
+    	 
+    	 sql = "SELECT a FROM Assignment a WHERE a.student = " + studentId + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId();
+    	 TypedQuery<Assignment> exchangeStudQuery = em.createQuery(sql, Assignment.class);
+    	 Iterator<Assignment> exchangeStudItr = exchangeStudQuery.getResultList().iterator();
+    	 
+    	 while (oldStudItr.hasNext())
+    	 {
+    		 Assignment assignment = oldStudItr.next();
+    		 assignment.setStudent(exchangeStudent);
+    		 assignment.persist();
+    	 }   	 
+    	 
+    	 while (exchangeStudItr.hasNext())
+    	 {
+    		 Assignment assignment = exchangeStudItr.next();
+    		 assignment.setStudent(oldStudent);
+    		 assignment.persist();
+    	 }
+    	 
+    	 return true;
+    	 
+     }
+     
+     public static Boolean exchangeStandardizedPatient(Assignment ass, PatientInRole exchangePir)
+     {
+    	 PatientInRole oldSp = ass.getPatientInRole();
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + ass.getPatientInRole().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+    	 TypedQuery<Assignment> oldSpQuery = em.createQuery(sql, Assignment.class);
+    	 Iterator<Assignment> oldSpItr = oldSpQuery.getResultList().iterator();
+    	 
+    	 sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + exchangePir.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+    	 TypedQuery<Assignment> exchangeSpQuery = em.createQuery(sql, Assignment.class);
+    	 Iterator<Assignment> exchangeSpItr = exchangeSpQuery.getResultList().iterator();
+    	 
+    	 while (oldSpItr.hasNext())
+    	 {
+    		 Assignment assignment = oldSpItr.next();
+    		 assignment.setPatientInRole(exchangePir);
+    		 assignment.persist();
+    	 }
+    	 
+    	 while (exchangeSpItr.hasNext())
+    	 {
+    		 Assignment assignment = exchangeSpItr.next();
+    		 assignment.setPatientInRole(oldSp);
+    		 assignment.persist();
+    	 }
+    	 
+    	 return true;
+     }
+     //by spec change]
 } 

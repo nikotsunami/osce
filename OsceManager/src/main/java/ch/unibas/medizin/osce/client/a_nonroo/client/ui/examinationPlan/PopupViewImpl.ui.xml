@@ -6,7 +6,7 @@
   xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
   xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
   xmlns:b='urn:import:com.google.gwt.user.cellview.client'
-  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
 <ui:style src="../../styles.css" />
 
@@ -41,6 +41,20 @@
 		<g:Label ui:field="endTimeValue" visible="false" addStyleNames="{style.label}"></g:Label>
 		<g:ValueListBox ui:field="endTimeListBox" visible="false"></g:ValueListBox>
 	</g:HorizontalPanel>
+	
+	<!-- by spec change -->
+	
+	<g:HorizontalPanel spacing="10" width="50%">
+		<g:Label ui:field="exchangeStudLbl" visible="false" addStyleNames="{style.label}"></g:Label>
+		<i:DefaultSuggestBox ui:field="exchangeStudentListBox" visible="false"></i:DefaultSuggestBox>
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel spacing="10" width="50%">
+		<g:Label ui:field="exchangeSPLbl" visible="false" addStyleNames="{style.label}"></g:Label>
+		<i:DefaultSuggestBox ui:field="exchangeSpListBox" visible="false"></i:DefaultSuggestBox>
+	</g:HorizontalPanel>
+	
+	<!-- by spec change -->
 	
 	<g:HorizontalPanel spacing="10" horizontalAlignment="center" width="100%">
 		<my:IconButton ui:field="okButton" icon="closethick" visible="false" />

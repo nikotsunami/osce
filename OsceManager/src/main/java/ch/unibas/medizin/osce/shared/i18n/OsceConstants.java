@@ -1183,5 +1183,13 @@ public interface OsceConstants extends Constants {
 	public String roomAlreadyAssignWantToExcahnge();
 	
 	public String osceSemester();
+	
+	//spec issue change
+	public String exchange();
+	
+	public String exchangeSpError();
+	
+	public String exchangeStudError();
+	//spec issue change
 }
 
