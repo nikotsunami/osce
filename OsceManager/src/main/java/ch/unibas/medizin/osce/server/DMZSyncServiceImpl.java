@@ -96,7 +96,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException {
 			StandardizedPatient patient = findPatient(standardizedPatientId);
-			AnamnesisChecksValue.fillAnamnesisChecksValues(patient.getAnamnesisForm().getId());
+			//AnamnesisChecksValue.fillAnamnesisChecksValues(patient.getAnamnesisForm().getId());
 			String json = "";
 			String url = "";
 			List<String> errorMessages = null;
@@ -943,10 +943,12 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	StandardizedPatient sp=patient.getStandardizedPatient();
 		sb.append("{");	
 		sb.append("\"id\":"+sp.getId());
+		if (sp.getGender() != null) {
+			sb.append(",");
+			sb.append("\"gender\":"+ sp.getGender().ordinal());
+		}
 		sb.append(",");
-		sb.append("\"gender\":"+sp.getGender().ordinal());
-		sb.append(",");
-		sb.append("\"name\":"+"\""+sp.getName()+"\"");
+		sb.append("\"name\":"+"\"" +sp.getName()+"\"");
 		sb.append(",");
 		sb.append("\"preName\":"+"\""+sp.getPreName()+"\"");
 		sb.append(",");
@@ -977,16 +979,22 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		sb.append("\"birthday\":"+"\""+convertToString(sp.getBirthday())+"\"");
 		sb.append(",");
 		sb.append("\"email\":"+"\""+sp.getEmail()+"\"");
-		sb.append(",");
+		//sb.append(",");
 		//sb.append("\"descriptions\":"+sp.getDescriptions());
 		//sb.append(",");
 		//sb.append("\"bankAccount\":"+sp.getBankAccount());
-		//sb.append(",");
-		sb.append("\"maritalStatus\":"+sp.getMaritalStatus().ordinal());
-		sb.append(",");
-		sb.append("\"workPermission\":"+sp.getWorkPermission().ordinal());
-		sb.append(",");
-		sb.append("\"status\":"+sp.getStatus().ordinal());
+		if (sp.getMaritalStatus() != null) {
+			sb.append(",");
+			sb.append("\"maritalStatus\":"+sp.getMaritalStatus().ordinal());
+		}
+		if (sp.getWorkPermission() != null) {
+			sb.append(",");
+			sb.append("\"workPermission\":"+sp.getWorkPermission().ordinal());
+		}
+		if (sp.getStatus() != null) {
+			sb.append(",");
+			sb.append("\"status\":"+sp.getStatus().ordinal());
+		}
 		sb.append(",");
 		sb.append("\"socialInsuranceNo\":"+"\""+sp.getSocialInsuranceNo()+"\"");
 		//sb.append(",");

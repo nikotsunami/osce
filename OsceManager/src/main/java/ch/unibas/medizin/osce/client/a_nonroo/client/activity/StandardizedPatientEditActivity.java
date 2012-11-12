@@ -46,6 +46,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.gwt.requestfactory.shared.EntityProxy;
+import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -389,11 +391,23 @@ requests.professionRequest().findAllProfessions().
 			// E Highlight onViolation
 			@Override
 			public void onSuccess(Void response) {
-				Log.info("StandardizedPatient successfully saved.");
-				
-				save = true;
-				placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.NEW));
-				//saveDescription();
+				requests.find(standardizedPatient.stableId()).with("anamnesisForm").fire(new OSCEReceiver<Object>() {
+
+					@Override
+					public void onSuccess(Object response) {
+						if (response instanceof StandardizedPatientProxy) {
+							AnamnesisFormProxy form = ((StandardizedPatientProxy) response).getAnamnesisForm();
+							Long anamnesisFormId = form.getId();
+							requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisFormId).fire();
+							Log.info("StandardizedPatient successfully saved.");
+							save = true;
+							placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.NEW));
+							//saveDescription();
+						} else {
+							Log.warn("on saving standardizedpatient, requesting the resulting simPat failed");
+						}
+					}
+				});
 			}
 		});
 	}
