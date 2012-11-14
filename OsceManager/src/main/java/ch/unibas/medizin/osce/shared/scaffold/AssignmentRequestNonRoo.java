@@ -9,8 +9,10 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.domain.Assignment;
+import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
@@ -71,4 +73,8 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	public abstract Request<String> findAssignmentByPatinetInRole(Long semesterId);
 	//payment
 
+	//by spec change[
+	public abstract Request<Boolean> exchangeStudent(AssignmentProxy ass, Long studentId);
+	public abstract Request<Boolean> exchangeStandardizedPatient(AssignmentProxy ass, PatientInRoleProxy exchangePir);
+	//by spec change]
 }

@@ -2,7 +2,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 import java.util.Date;
 
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IntegerBox;
@@ -54,4 +59,14 @@ public interface PopupView extends IsWidget {
 	public void createEditBreakDurationPopupView();
 	
 	public IntegerBox getBreakDuration() ;
+	
+	//by spec change[
+	public void createExchangeStudentPopupView();
+	
+	public Label getExchangeStudLbl();
+	public Label getExchangeSPLbl();
+	public DefaultSuggestBox<StudentProxy, EventHandlingValueHolderItem<StudentProxy>> getExchangeStudentListBox();
+	public DefaultSuggestBox<PatientInRoleProxy, EventHandlingValueHolderItem<PatientInRoleProxy>> getExchangeSpListBox();
+	public void createExchangeSPPopupView();
+	//by spec change]
 }

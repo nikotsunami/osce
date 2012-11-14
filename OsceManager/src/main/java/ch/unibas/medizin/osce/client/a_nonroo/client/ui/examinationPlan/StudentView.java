@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 import java.util.Date;
 
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -14,6 +15,12 @@ public interface StudentView extends IsWidget{
 	 */
 	interface Delegate {
 		public void shiftBreak(Long osceDayId,Date endDate,int diff,PopupView popupView);
+		
+		//by spec change[
+		public void showExchangeStudentPopup(PopupView popupView, AssignmentProxy ass);
+		
+		public void exchangeStudentClicked(AssignmentProxy ass, StudentProxy exchangeStudent);
+		//by spec change]
 	}
 	
 	void setDelegate(Delegate delegate);
@@ -37,5 +44,7 @@ public interface StudentView extends IsWidget{
 	public Long getOsceDayId();
 
 	public void setOsceDayId(Long osceDayId);
+	
+	
 
 }

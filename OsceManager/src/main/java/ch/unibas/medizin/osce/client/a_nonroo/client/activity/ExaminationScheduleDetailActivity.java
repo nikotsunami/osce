@@ -39,11 +39,15 @@ import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentRequest;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.MainClassificationProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.PostType;
@@ -61,6 +65,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -2204,5 +2209,93 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(flag));
 	}
-    		
+
+	//by spec change[
+	@Override
+	public void showExchangeStudentPopup(final PopupView popupView, final AssignmentProxy ass) {
+		requests.studentRequestNonRoo().findStudnetByAssignment(ass.getId()).fire(new OSCEReceiver<List<StudentProxy>>() {
+
+			@Override
+			public void onSuccess(List<StudentProxy> response) {
+				popupView.getNameValue().setText(ass.getStudent().getName());
+				popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(ass.getTimeStart()));
+				popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(ass.getTimeEnd()));
+				
+				DefaultSuggestOracle<StudentProxy> suggestOracle1 = (DefaultSuggestOracle<StudentProxy>) popupView.getExchangeStudentListBox().getSuggestOracle();
+				suggestOracle1.setPossiblilities(response);
+				popupView.getExchangeStudentListBox().setSuggestOracle(suggestOracle1);
+				
+				popupView.getExchangeStudentListBox().setRenderer(new AbstractRenderer<StudentProxy>() {
+
+					@Override
+					public String render(StudentProxy object) {
+						if (object != null)
+							return object.getName();
+						else
+							return "";
+					}
+				});
+				
+				((PopupViewImpl)popupView).show();
+			}
+		});
+	}
+
+	@Override
+	public void exchangeStudentClicked(AssignmentProxy ass, StudentProxy exchangeStudent) {
+		showLoadingScreen(true);
+		requests.assignmentRequestNonRoo().exchangeStudent(ass, exchangeStudent.getId()).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				init();
+				showLoadingScreen(false);
+			}
+		});
+	}
+
+	@Override
+	public void showExchangeSpPopup(final PopupView popupView, AssignmentProxy assignment) {
+		requests.patientInRoleRequestNonRoo().findPatientInRoleByRotation(assignment).with("patientInSemester", "patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<PatientInRoleProxy>>() {
+
+			@Override
+			public void onSuccess(List<PatientInRoleProxy> response) {
+				
+				DefaultSuggestOracle<PatientInRoleProxy> suggestOracle1 = (DefaultSuggestOracle<PatientInRoleProxy>) popupView.getExchangeSpListBox().getSuggestOracle();
+				suggestOracle1.setPossiblilities(response);
+				popupView.getExchangeSpListBox().setSuggestOracle(suggestOracle1);
+				
+				popupView.getExchangeSpListBox().setRenderer(new AbstractRenderer<PatientInRoleProxy>() {
+
+					@Override
+					public String render(PatientInRoleProxy object) {
+						if (object != null)
+							return object.getPatientInSemester().getStandardizedPatient().getName();
+						else 
+							return "";
+					}
+				});
+				
+				((PopupViewImpl)popupView).show();
+			}
+		});
+		
+	}
+
+	@Override
+	public void exchangeSpClicked(AssignmentProxy assignment,
+			PatientInRoleProxy pir) {
+		showLoadingScreen(true);
+		requests.assignmentRequestNonRoo().exchangeStandardizedPatient(assignment, pir).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				init();
+				showLoadingScreen(false);
+			}
+		});
+	}
+	
+	
+	//by spec change]		
 }

@@ -4,8 +4,14 @@ import java.io.IOException;
 import java.util.Date;
 
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.MainClassificationProxy;
+import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -153,6 +159,22 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	@UiField
 	IntegerBox breakDuration;
 	
+	//by spec change[
+	
+	@UiField
+	Label exchangeStudLbl;
+	
+	@UiField
+	Label exchangeSPLbl;
+	
+	@UiField
+	DefaultSuggestBox<StudentProxy, EventHandlingValueHolderItem<StudentProxy>> exchangeStudentListBox;
+	
+	@UiField
+	DefaultSuggestBox<PatientInRoleProxy, EventHandlingValueHolderItem<PatientInRoleProxy>> exchangeSpListBox;
+	
+	//by spec change]	
+	
 	public IntegerBox getBreakDuration() {
 		return breakDuration;
 	}
@@ -196,6 +218,18 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		okButton.setText(constants.okBtn());
 		okButton.setIcon("check");
 		cancelButton.setText(constants.cancel());
+		
+		//by spec change[
+		exchangeSPLbl.setVisible(false);
+		exchangeSpListBox.setVisible(false);
+		exchangeStudLbl.setVisible(false);
+		exchangeStudentListBox.setVisible(false);
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		//by spec change]
 	}
 	
 	public void createSPPopupView()
@@ -223,6 +257,18 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		cancelButton.setVisible(false);
 		saveBtn.removeFromParent();
 		breakDuration.removeFromParent();
+		
+		//by spec change[
+		exchangeSPLbl.setVisible(false);
+		exchangeSpListBox.setVisible(false);
+		exchangeStudLbl.setVisible(false);
+		exchangeStudentListBox.setVisible(false);
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		//by spec change]
 	}
 	public void createOscePostPopupView()
 	{
@@ -247,6 +293,17 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		saveBtn.removeFromParent();
 		breakDuration.removeFromParent();
 		
+		//by spec change[
+		exchangeSPLbl.setVisible(false);
+		exchangeSpListBox.setVisible(false);
+		exchangeStudLbl.setVisible(false);
+		exchangeStudentListBox.setVisible(false);
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		//by spec change]
 	}
 	public void createExaminerInfoPopupView()
 	{
@@ -275,6 +332,18 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		endTimeValue.setVisible(true);
 		endTimeLbl.setText(constants.circuitEndTime());
 		breakDuration.removeFromParent();
+		
+		//by spec change[
+		exchangeSPLbl.setVisible(false);
+		exchangeSpListBox.setVisible(false);
+		exchangeStudLbl.setVisible(false);
+		exchangeStudentListBox.setVisible(false);
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		//by spec change]
 	}
 	
 	public void createExaminerAssignPopupView() {
@@ -308,11 +377,123 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		breakDuration.removeFromParent();
 		
-	}
+		//by spec change[
+		exchangeSPLbl.setVisible(false);
+		exchangeSpListBox.setVisible(false);
+		exchangeStudLbl.setVisible(false);
+		exchangeStudentListBox.setVisible(false);
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		//by spec change]
+	}	
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
 	}
 	
 	interface Binder extends UiBinder<Widget, PopupViewImpl> {
 	}
+
+	//by spec change[
+	public Label getExchangeStudLbl() {
+		return exchangeStudLbl;
+	}
+	public void setExchangeStudLbl(Label exchangeStudLbl) {
+		this.exchangeStudLbl = exchangeStudLbl;
+	}
+	public Label getExchangeSPLbl() {
+		return exchangeSPLbl;
+	}
+	public void setExchangeSPLbl(Label exchangeSPLbl) {
+		this.exchangeSPLbl = exchangeSPLbl;
+	}
+	public DefaultSuggestBox<StudentProxy, EventHandlingValueHolderItem<StudentProxy>> getExchangeStudentListBox() {
+		return exchangeStudentListBox;
+	}
+	public void setExchangeStudentListBox(
+			DefaultSuggestBox<StudentProxy, EventHandlingValueHolderItem<StudentProxy>> exchangeStudentListBox) {
+		this.exchangeStudentListBox = exchangeStudentListBox;
+	}
+	public DefaultSuggestBox<PatientInRoleProxy, EventHandlingValueHolderItem<PatientInRoleProxy>> getExchangeSpListBox() {
+		return exchangeSpListBox;
+	}
+	public void setExchangeSpListBox(
+			DefaultSuggestBox<PatientInRoleProxy, EventHandlingValueHolderItem<PatientInRoleProxy>> exchangeSpListBox) {
+		this.exchangeSpListBox = exchangeSpListBox;
+	}
+	
+	public void createExchangeStudentPopupView()
+	{
+		examinerNameLbl.removeFromParent();
+		examinerSuggestionBox.removeFromParent();
+		edit.removeFromParent();
+		
+		nameLbl.setVisible(true);
+		nameValue.setVisible(true);
+		nameLbl.setText(constants.spName());
+		
+		startTimeLbl.setVisible(true);		
+		startTimeValue.setVisible(true);
+		startTimeLbl.setText(constants.circuitStart());
+		
+		endTimeLbl.setVisible(true);
+		endTimeValue.setVisible(true);
+		endTimeLbl.setText(constants.circuitEndTime());
+		//endTimeValue.removeFromParent();
+		endTimeListBox.removeFromParent();
+		
+		exchangeStudLbl.setVisible(true);
+		exchangeStudLbl.setText(constants.students());
+		
+		exchangeStudentListBox.setVisible(true);
+		
+		okButton.setVisible(true);
+		okButton.setText(constants.exchange());
+		cancelButton.setVisible(false);
+		saveBtn.removeFromParent();
+		breakDuration.removeFromParent();
+	}
+	
+	public void createExchangeSPPopupView()
+	{
+		examinerNameLbl.removeFromParent();
+		examinerSuggestionBox.removeFromParent();
+		edit.removeFromParent();
+		
+		nameLbl.setVisible(true);
+		nameValue.setVisible(true);
+		nameLbl.setText(constants.spName());
+		
+		startTimeLbl.setVisible(true);		
+		startTimeValue.setVisible(true);
+		startTimeLbl.setText(constants.circuitStart());
+		
+		endTimeLbl.setVisible(true);
+		endTimeValue.setVisible(true);
+		endTimeLbl.setText(constants.circuitEndTime());
+		//endTimeValue.removeFromParent();
+		endTimeListBox.removeFromParent();
+		
+		exchangeSPLbl.setVisible(true);
+		exchangeSPLbl.setText(constants.standardizedPatient());
+		
+		exchangeSpListBox.setVisible(true);
+		
+		okButton.setVisible(true);
+		okButton.setText(constants.exchange());
+		cancelButton.setVisible(false);
+		saveBtn.removeFromParent();
+		breakDuration.removeFromParent();
+		
+		//by spec change[
+		exchangeStudLbl.setVisible(false);
+		exchangeStudentListBox.setVisible(false);
+		
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		//by spec change]
+	}
+	//by spec change]
 }

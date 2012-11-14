@@ -609,5 +609,22 @@ public class PatientInRole {
 		List<PatientInRole> result  = q.getResultList();        		
         return result;         	   
      }
-    
+ 
+ 	public static List<PatientInRole> findPatientInRoleByRotation(Assignment ass)
+ 	{
+ 		EntityManager em = entityManager();     
+     	String queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
+     			" a.patientInRole = pir.id" +
+     			" AND pir.id != " + ass.getPatientInRole().getId() + " AND" +
+     			" pir.oscePost IS NOT NULL AND" +
+     			" pir.patientInSemester = pis.id AND" +
+     			" pis.standardizedPatient = sp.id AND" +
+     			" a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND" +
+     			" a.sequenceNumber = " + ass.getSequenceNumber();
+     	
+     	System.out.println("~~QUERY : " + queryString);
+     			
+     	TypedQuery<PatientInRole> q = em.createQuery(queryString,PatientInRole.class);		
+     	return q.getResultList();
+ 	}
 }
