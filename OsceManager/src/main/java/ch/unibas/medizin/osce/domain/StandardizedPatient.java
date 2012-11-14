@@ -136,8 +136,7 @@ public class StandardizedPatient {
     @Enumerated
     private StandardizedPatientStatus status;
 
-    @Size(max = 16)
-    @Pattern(regexp = "^[0-9]{3,3}\\.[0-9]{4,4}\\.[0-9]{4,4}\\.[0-9]{2,2}$")
+    @Size(max = 20)
     private String socialInsuranceNo;
 
     @OneToOne(cascade = CascadeType.ALL)
