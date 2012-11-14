@@ -96,7 +96,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException {
 			StandardizedPatient patient = findPatient(standardizedPatientId);
-			//AnamnesisChecksValue.fillAnamnesisChecksValues(patient.getAnamnesisForm().getId());
+			AnamnesisChecksValue.fillAnamnesisChecksValues(patient.getAnamnesisForm().getId());
 			String json = "";
 			String url = "";
 			List<String> errorMessages = null;
