@@ -7,6 +7,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.Sorting;
+
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -130,4 +132,48 @@ public class Student {
     	return q.getResultList();
     }
     //by spec issue change]
+ public static List<Student> getStudents(String sortColumn, Sorting order, Integer firstResult, Integer maxResults,boolean isFirstTime) {
+    		Log.info("Inside getStudents()");
+ 
+    		EntityManager em = entityManager();
+        	
+    		String query="SELECT s FROM Student AS s order by "+sortColumn + " "+ order;
+            
+    		TypedQuery<Student> q = em.createQuery(query, Student.class);
+             
+    		if(!isFirstTime){
+             q.setFirstResult(firstResult);
+             q.setMaxResults(maxResults);
+    		}
+
+             List<Student> result = q.getResultList();
+        
+             return result;
+      //  return result;
+        	
+        }
+    public static Long getCountOfStudent(String sortColumn,Sorting order){
+    	
+    	Log.info("Inside getCountOfStudent()");
+    	 
+		EntityManager em = entityManager();
+    	
+		String query="SELECT count(s) FROM Student AS s order by "+sortColumn + " "+ order;
+        
+		TypedQuery<Long> q = em.createQuery(query, Long.class);
+         
+		return q.getSingleResult();
+    }
+    public static List<Osce> findOsceBasedOnStudent(Long studentID){
+    	
+    	Log.info("Inside findOsceBasedOnStudent() with Student" + studentID );
+   	 
+		EntityManager em = entityManager();
+    	
+		String query="select o  from Osce as o, StudentOsces as so where o.id = so.osce and so.student="+studentID;
+
+		TypedQuery<Osce> q = em.createQuery(query, Osce.class);
+         
+		return q.getResultList();
+    }
 }

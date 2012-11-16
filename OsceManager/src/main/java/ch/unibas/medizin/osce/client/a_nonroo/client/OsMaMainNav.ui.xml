@@ -171,6 +171,8 @@
 				<g:Anchor ui:field="log"></g:Anchor>
 				<g:Anchor ui:field="importObjective"></g:Anchor>
 				<g:Anchor ui:field="payment"></g:Anchor>
+				<g:Anchor ui:field="StudentManagment"></g:Anchor>
+				
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		

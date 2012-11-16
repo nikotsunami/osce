@@ -46,6 +46,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentManagementDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentManagementPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
@@ -296,6 +298,14 @@ public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
 			return (PaymentPlace) place;
 		//payment
 
+		if(place instanceof StudentManagementPlace)
+			return (StudentManagementPlace) place;
+			
+		if (place instanceof StudentManagementDetailsPlace)
+		{			
+			StudentManagementDetailsPlace studentManagementDetailsPlace = (StudentManagementDetailsPlace) place;
+			return new StudentManagementPlace(studentManagementDetailsPlace.getToken());
+		}
 		return null;
 	}
 

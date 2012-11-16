@@ -32,6 +32,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentManagementPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
@@ -571,7 +572,10 @@ public class OsMaMainNav extends Composite {
 		
 		//payment
 		payment.setText(constants.payment());
+		
 		//payment
+		
+		StudentManagment.setText(constants.StudentDetailsPlace());
 		
 		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
@@ -819,6 +823,9 @@ public class OsMaMainNav extends Composite {
 	@UiField
 	Label afterTheOsceHeader;
 	
+	@UiField
+	Anchor StudentManagment;
+	
 	/* commented by spec
 	@UiField
 	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
@@ -938,6 +945,13 @@ public class OsMaMainNav extends Composite {
 	}
 	//payment module
 
+	//Student Detail managment
+	@UiHandler("StudentManagment")
+	void studentDetailsClicked(ClickEvent event){
+		placeController.goTo(new StudentManagementPlace("StudentManagementPlace", handlerManager));
+	}
+	
+	//Student Detail managment
 	//By Spec[
 	@UiHandler("topicsAndSpec")
 	void topicsAndSpecClicked(ClickEvent event) {

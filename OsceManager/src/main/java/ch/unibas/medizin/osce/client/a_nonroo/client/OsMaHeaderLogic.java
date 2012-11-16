@@ -21,23 +21,23 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RolePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleScriptTemplatePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentManagementPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
@@ -49,6 +49,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.shared.Locale;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -59,9 +60,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.inject.Inject;
@@ -183,7 +182,15 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 				if (proxy.getPreName() != null && proxy.getName() != null) {
 					desc += proxy.getPreName() + " " + proxy.getName();
 				}
-			} else {
+			}else if(response instanceof StudentProxy){
+				StudentProxy proxy =(StudentProxy) response;
+				if(proxy.getName() !=null && proxy.getPreName() !=null){
+					desc += proxy.getPreName() + " " + proxy.getName();
+				}
+			} 
+			
+			
+			else {
 				Log.warn("unknown proxy: " + response.toString());
 			}
 			crumb.setDescription(desc);
@@ -306,6 +313,9 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		}
 		//payment
 		//By spec Role Management]
+		else if(place instanceof StudentManagementPlace){
+			placeDescription ="StudentManagementPlace";
+		}
 		else {
 			Log.warn("Unknown instance of place");
 			placeDescription = "?";

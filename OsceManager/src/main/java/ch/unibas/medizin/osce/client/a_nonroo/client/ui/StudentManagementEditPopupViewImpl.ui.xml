@@ -1,0 +1,54 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="../styles.css">
+		.noOutline {
+			outline-style: none;
+			overflow: hidden;
+		}
+		
+		.padleft5 {
+			padding-left: 5px;
+		}
+		
+		.standardTable input {
+			width: 100%;
+			opacity: 0.8;
+		}
+		
+		.icon {
+			float: left;
+			margin: 4px;
+		}
+		
+		.icon:hover {
+			cursor: pointer;
+		}
+		
+		.maxWidth {
+			margin-bottom: 8px;
+			width: 680px;
+		}
+		
+		.right {
+			float: right;
+		}
+		
+		.paddRight {
+			float: right;
+		}
+		
+		.left {
+			float: left;
+		}
+	</ui:style>
+
+	<g:HorizontalPanel spacing="10">
+		<g:TextBox ui:field="newName"></g:TextBox>
+		<g:TextBox ui:field="newPreName"></g:TextBox>
+		<g:TextBox ui:field="newEmail"></g:TextBox>
+		<g:Button ui:field="okBtn"></g:Button>
+		<g:Button ui:field="cancelBtn"></g:Button>
+	</g:HorizontalPanel>
+
+</ui:UiBinder> 

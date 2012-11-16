@@ -1191,5 +1191,7 @@ public interface OsceConstants extends Constants {
 	
 	public String exchangeStudError();
 	//spec issue change
+
+        public String StudentDetailsPlace();
 }
 
