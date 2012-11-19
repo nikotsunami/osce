@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.domain;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -369,13 +371,31 @@ public class Osce {
 	}
 
  
- public static List<Osce> findAllOsceSemester(Long roleId){
+ public static List<Osce> findAllOsceSemester(Long roleId , Date startDate, Date endDate){
 		
  	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
 		EntityManager em = entityManager();
-		String query="select o from Osce o, OscePost op, OscePostBlueprint opb where o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
+		Log.info("start date--"+startDate);
+		Log.info("end date--"+endDate);
+		String query="";
+		TypedQuery<Osce> q;
+		if(startDate==null && endDate==null)
+		{
+			Log.info("start and end date null");
+			 query="select o from Osce o, OscePost op,  OscePostBlueprint opb where  o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId;
+			 q = em.createQuery(query  ,Osce.class);
+		}
+		else
+		{
+			Log.info("start and end date not null");
+			 query="select distinct o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>= :startdate  and od.osceDate<=:enddate and  o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId;
+			 q = em.createQuery(query  ,Osce.class);
+			 q.setParameter("startdate", startDate, TemporalType.TIMESTAMP);
+			 q.setParameter("enddate", endDate, TemporalType.TIMESTAMP);
+		}
+		//String query="select o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>="+startDate +" and od.osceDate<="+ endDate +" o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
 		System.out.println("Query: " +query);
-		TypedQuery<Osce> q = em.createQuery(query  ,Osce.class);
+		
 		return q.getResultList();
 				
 	}

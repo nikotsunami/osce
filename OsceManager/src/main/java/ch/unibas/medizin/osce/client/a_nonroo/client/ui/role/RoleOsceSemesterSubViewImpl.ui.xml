@@ -2,11 +2,32 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:dom="urn:import:com.google.gwt.dom.client">
 	<ui:style src="../../styles.css"></ui:style>
 
 
 	<g:HTMLPanel addStyleNames="{style.patientDetails}">
-		<b:CellTable ui:field="osceSemesterTable" width="100%" addStyleNames="{style.standardTable}"/>					
+	<g:VerticalPanel width="100%">
+	
+	<g:HorizontalPanel>
+	<g:HTMLPanel>
+	<table>
+	<tr>
+	<td>
+	 <!-- <g:Label ui:field="labelStartDate"></g:Label></td> -->
+	 <!-- <dom:SpanElement class="{style.label}" ui:field="labelStartDate" /> -->
+	<span class="{style.label}" ui:field="labelStartDate" /></td>
+	<td><d:DateBox ui:field="startDate"></d:DateBox></td>
+	 <!-- <dom:SpanElement class="{style.label}" ui:field="labelEndDate" />  -->
+	 <!-- <td><g:Label ui:field="labelEndDate"> </g:Label></td>  -->
+	 <td><span class="{style.label}" ui:field="labelEndDate" /></td>
+	<td><d:DateBox ui:field="endDate"></d:DateBox></td>
+	<td> <my:IconButton ui:field="searchButton" icon="search"></my:IconButton> </td>
+	</tr>
+	</table> 
+	</g:HTMLPanel>
+	</g:HorizontalPanel>
+		<b:CellTable ui:field="osceSemesterTable" width="100%" addStyleNames="{style.standardTable}"/>
+	</g:VerticalPanel>					
 	</g:HTMLPanel>
 </ui:UiBinder> 

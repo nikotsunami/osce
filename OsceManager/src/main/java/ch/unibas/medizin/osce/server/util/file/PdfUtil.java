@@ -244,7 +244,8 @@ public abstract class PdfUtil {
 			cell.setCellEvent(new CheckBoxGroupEvent(writer, group));
 		}
 
-		PdfPTable subTable = new PdfPTable(new float[] { 0.05f, 0.95f });
+		//PdfPTable subTable = new PdfPTable(new float[] { 0.05f, 0.95f });
+		PdfPTable subTable = new PdfPTable(new float[] { 0.10f, 0.90f });
 
 		for (int i = 0; i < possibleAnswers.length; i++) {
 			boolean isSelected = false;

@@ -1196,5 +1196,9 @@ public interface OsceConstants extends Constants {
 	public String StudentDetailsPlace();
 	
 	public String anonymize();
+	
+	 public String startDate();
+	   public String endDate();
+	   public String osceSemesterMessage();
 }
 
