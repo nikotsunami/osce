@@ -122,6 +122,12 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		        	Log.info("studentPanel Clicked");
 		    		
 		    		///event.getNativeEvent().get
+		        	
+		        	if (exchangePopupView != null && ((PopupViewImpl)exchangePopupView).isShowing())
+					{
+						((PopupViewImpl)exchangePopupView).hide();
+					}
+		        	
 		    		if(previousAssignment !=null)
 		    		{
 		    			showBreakBurationPopupView();

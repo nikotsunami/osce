@@ -91,6 +91,11 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 				{
 					Log.info("spPanel Clicked");
 					
+					if (exchangePopupView != null && ((PopupViewImpl)exchangePopupView).isShowing())
+					{
+						((PopupViewImpl)exchangePopupView).hide();
+					}
+					
 					if(assignmentProxy == null)
 						return;
 					
