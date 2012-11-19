@@ -29,6 +29,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
+import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -114,6 +115,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	private DMZSyncServiceAsync dmxSyncService = null;
 	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
 	private static final OsceConstants constants = GWT.create(OsceConstants.class);
+	private String stringForAnonymize = new String("XXX");
+	private int intForAnomize = 1000;
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -747,6 +750,56 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 
 				});
 
+	}
+	
+	public void onAnonymizeClicked(){
+		StandardizedPatientRequest standardizedPatientRequest = requests
+				.standardizedPatientRequest();
+		standardizedPatientProxy = standardizedPatientRequest
+				.edit(standardizedPatientProxy);
+		standardizedPatientProxy
+				.setStatus(StandardizedPatientStatus.ANONYMIZED);
+		
+		//Fields which are not include : Nationality,Professional,Description,imagePath,videoPath,birthday,email,Bank.Nationality
+		standardizedPatientProxy.setName(standardizedPatientProxy.getName().concat(stringForAnonymize));
+		standardizedPatientProxy.setPreName(standardizedPatientProxy.getPreName().concat(stringForAnonymize));
+		standardizedPatientProxy.setStreet(standardizedPatientProxy.getStreet().concat(stringForAnonymize));
+		standardizedPatientProxy.setCity(standardizedPatientProxy.getCity().concat(stringForAnonymize));
+		standardizedPatientProxy.setPostalCode(standardizedPatientProxy.getPostalCode().concat(stringForAnonymize));
+		standardizedPatientProxy.setTelephone(standardizedPatientProxy.getTelephone().concat(stringForAnonymize));
+		
+		standardizedPatientProxy.setTelephone2((standardizedPatientProxy.getTelephone2() !=null)? standardizedPatientProxy.getTelephone2().concat(stringForAnonymize):stringForAnonymize);
+		standardizedPatientProxy.setMobile(standardizedPatientProxy.getMobile().concat(stringForAnonymize));
+		
+//		standardizedPatientProxy.setHeight(standardizedPatientProxy.getHeight()*intForAnomize);
+//		standardizedPatientProxy.setWeight(standardizedPatientProxy.getWeight()*intForAnomize);
+		
+//		standardizedPatientProxy.getNationality().setNationality(standardizedPatientProxy.getNationality().getNationality().concat(stringForAnonymize));
+//		standardizedPatientProxy.getProfession().setProfession(standardizedPatientProxy.getProfession().getProfession().concat(stringForAnonymize));
+//		standardizedPatientProxy.getDescriptions().setDescription(standardizedPatientProxy.getDescriptions().getDescription().concat(stringForAnonymize));
+		
+		standardizedPatientProxy.getBankAccount().setBankName(standardizedPatientProxy.getBankAccount().getBankName().concat(stringForAnonymize));
+		standardizedPatientProxy.getBankAccount().setIBAN(standardizedPatientProxy.getBankAccount().getIBAN().concat(stringForAnonymize));
+		standardizedPatientProxy.getBankAccount().setBIC(standardizedPatientProxy.getBankAccount().getBIC().concat(stringForAnonymize));
+		standardizedPatientProxy.getBankAccount().setOwnerName(standardizedPatientProxy.getBankAccount().getOwnerName().concat(stringForAnonymize)) ;
+		standardizedPatientProxy.getBankAccount().setPostalCode(standardizedPatientProxy.getBankAccount().getPostalCode().concat(stringForAnonymize)) ;
+		standardizedPatientProxy.getBankAccount().setCity(standardizedPatientProxy.getBankAccount().getCity().concat(stringForAnonymize)) ;
+		
+		standardizedPatientProxy.setSocialInsuranceNo(standardizedPatientProxy.getSocialInsuranceNo().concat(stringForAnonymize));
+		
+		standardizedPatientRequest.persist()
+				.using(standardizedPatientProxy)
+				.fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void arg0) {
+						// init();
+					
+						view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
+						placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(), Operation.NEW));
+					}
+
+				});
 	}
 	
 	@Override
