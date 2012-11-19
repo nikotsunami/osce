@@ -9,8 +9,10 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.RoleAssignmentPatientInSemesterActivity;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupViewImpl;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
@@ -22,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 @SuppressWarnings("deprecation")
 public abstract class OSCEReceiver<T> extends Receiver<T> 
 {
+	private final OsceConstants mConstants = GWT.create(OsceConstants.class);
 	// SPEC START =	
 	OSCEReceiverPopupViewImpl osceReceiverPopupView=null;
 	Map<String, Widget> localViewMap;
@@ -121,7 +124,7 @@ public abstract void onSuccess(T response);
 		  {				
 			  
 			  	String str=iter.next().getPath();
-			  	errorBuffor.append("Please specify appropriate value of " + str + "<br>");
+			  	errorBuffor.append(mConstants.pleaseEnterWarning() + str + "<br>");
 			  	violationMessageBuffor.append(str+",");				  				 
 		  }
 		  showMessage(errorBuffor.toString());

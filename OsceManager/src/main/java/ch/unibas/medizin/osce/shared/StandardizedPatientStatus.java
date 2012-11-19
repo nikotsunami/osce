@@ -7,6 +7,5 @@ package ch.unibas.medizin.osce.shared;
  * 
  */
 public enum StandardizedPatientStatus {
-	INACTIVE, ACTIVE, EXPORTED, ANONYMIZED;
-
+	INACTIVE, ACTIVE, EXPORTED, ANONYMIZED, EXPORTED_FOR_SCHEDULING;
 }
