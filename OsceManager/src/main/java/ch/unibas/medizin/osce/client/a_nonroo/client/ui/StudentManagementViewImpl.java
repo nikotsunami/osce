@@ -202,7 +202,7 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 	}
 	
 
-	private void editPopupView(final StudentProxy studentProxy) {
+	public void editPopupView(final StudentProxy studentProxy) {
 		
 		studentManagementEditPopupView = new StudentManagementEditPopupViewImpl();
 		

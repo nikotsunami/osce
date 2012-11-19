@@ -29,6 +29,7 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -49,7 +50,7 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 	
 	private SingleSelectionModel<OsceProxy> selectionModel;
 	
-	private AdvanceCellTable<OsceProxy> table;
+	private CellTable<OsceProxy> table;
 	
 	private StudentManagementDetailsActivity studentManagementDetailsActivity;
 	
@@ -83,7 +84,7 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 
 		widget.setWidget(studentManagementDetailsViewImpl.asWidget());
 		
-		this.table = (AdvanceCellTable<OsceProxy>)view.getTable();
+		this.table = view.getTable();
 		
 		view.setDelegate(this);
 		
@@ -106,7 +107,9 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 					studentDetailsViewImpl.Prename.setText(util.getEmptyIfNull(studentProxy.getPreName()));
 					studentDetailsViewImpl.Street.setText(util.getEmptyIfNull(studentProxy.getStreet()));
 					studentDetailsViewImpl.City.setText(util.getEmptyIfNull(studentProxy.getCity()));
-					studentDetailsViewImpl.Gender.setText(util.getEmptyIfNull(studentProxy.getGender().name().toLowerCase()));
+					studentDetailsViewImpl.Gender.setText(util.getEmptyIfNull(studentProxy.getGender()==null?null:studentProxy.getGender().name().toLowerCase()));
+
+//					studentDetailsViewImpl.Gender.setText(util.getEmptyIfNull(studentProxy.getGender().name().toLowerCase()));
 					studentDetailsViewImpl.Email.setText(util.getEmptyIfNull(studentProxy.getEmail()));
 					
 					showOsceParticipation(studentProxy);

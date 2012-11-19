@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -81,12 +82,12 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 	public Label Email;
 	
 	@UiField(provided = true)
-	public AdvanceCellTable<OsceProxy> table;
+	public CellTable<OsceProxy> table;
 	
 	public StudentManagementDetailsViewImpl() {
 		
-		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		table = new AdvanceCellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new CellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
@@ -115,7 +116,7 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getName());
 			}
-		}, constants.name());
+		}, constants.osce());
 		
 		paths.add("semester");
 		table.addColumn(new TextColumn<OsceProxy>() {
@@ -133,10 +134,10 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getSemester().getCalYear().toString());
 			}
-		}, constants.preName());
+		}, constants.semester());
 		
 		addColumn(new ActionCell<OsceProxy>(
-				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<OsceProxy>() {
+				OsMaConstant.PRINT_ICON, new ActionCell.Delegate<OsceProxy>() {
 					public void execute(OsceProxy osceProxy) {
 						//showEditPopUp(nation);
 					}
@@ -197,7 +198,7 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 
 
 	@Override
-	public AdvanceCellTable<OsceProxy> getTable() {
+	public CellTable<OsceProxy> getTable() {
 		return table;
 	}
 

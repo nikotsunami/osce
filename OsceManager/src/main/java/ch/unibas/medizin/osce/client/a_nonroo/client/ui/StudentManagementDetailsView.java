@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface StudentManagementDetailsView extends IsWidget {
@@ -25,7 +26,7 @@ public interface StudentManagementDetailsView extends IsWidget {
 
 	void setStudentProxy(StudentProxy studentProxy);
 
-	AdvanceCellTable<OsceProxy> getTable();
+	CellTable<OsceProxy> getTable();
 
 	List<String> getPaths();
 

@@ -16,7 +16,7 @@ public class OsMaConstant {
 	public static final SafeHtml UNCHECK_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-close\"></span>").toSafeHtml();
 	public static final SafeHtml SEEK_FIRST_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-seek-next\"></span>").toSafeHtml();
 	public static final SafeHtml DOWN_ICONFORCELLTABLE = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon-triangle-1-s1\"></span>").toSafeHtml();
-	
+	public static final SafeHtml PRINT_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-print\"></span>").toSafeHtml();
 	
 	public static final SafeHtml DOWNLOAD_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-arrowthickstop-1-s\"></span>").toSafeHtml();
 	

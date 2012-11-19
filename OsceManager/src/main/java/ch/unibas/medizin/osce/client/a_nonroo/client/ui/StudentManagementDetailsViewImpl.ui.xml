@@ -47,7 +47,7 @@
 	<g:Tab ui:field="tab2">
 		<g:TabHTML>Osce Participation</g:TabHTML>
 		<g:HTMLPanel height="100%">
-		<r:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}" />
+		<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
 		</g:HTMLPanel>
 	</g:Tab>
 	<g:Tab ui:field="tab3">

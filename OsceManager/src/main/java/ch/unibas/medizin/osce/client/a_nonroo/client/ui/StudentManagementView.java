@@ -42,5 +42,6 @@ public interface StudentManagementView extends IsWidget {
 
 	AcceptsOneWidget getDetailsPanel();
 
-	StudentManagementEditPopupView getStudentManagementEditPopView();	    
+	StudentManagementEditPopupView getStudentManagementEditPopView();
+	public void editPopupView(final StudentProxy studentProxy);
 }

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentManagementEditPop
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentManagementEditPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentManagementView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentManagementViewImpl;
+
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
@@ -65,6 +67,8 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
@@ -134,7 +138,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 			
 		 path = systemStartView.getPaths();
 			
-		//addColumnOnMouseout();
+		addColumnOnMouseout();
 		
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
@@ -460,6 +464,22 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 			//path.add(" ");
 		}
 		}
+		
+		
+		path.add("edit");
+		addColumn(new ActionCell<StudentProxy>(
+				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<StudentProxy>() {
+					public void execute(StudentProxy studentProxy) {
+						view.editPopupView(studentProxy);
+						//delegate.editStudentData(studentProxy);
+						
+					}
+				}), "", new GetValue<StudentProxy>() {
+			public StudentProxy getValue(StudentProxy studentProxy) {
+				return studentProxy;
+			}
+		}, null);
+		
 
 	}
 
@@ -528,4 +548,55 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 		
 		
 	}
+	
+/*	public void editPopupView(final StudentProxy studentProxy) {
+		
+		studentManagementEditPopupView = new StudentManagementEditPopupViewImpl();
+		
+		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setAnimationEnabled(true);
+		
+		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setWidth("200px");
+		
+		studentManagementEditPopupView.getNewName().setValue(studentProxy.getName());
+		studentManagementEditPopupView.getNewPreName().setValue(studentProxy.getPreName());
+		studentManagementEditPopupView.getNewEmail().setValue(studentProxy.getEmail());
+		
+		RootPanel.get().add(((StudentManagementEditPopupViewImpl)studentManagementEditPopupView));
+		
+		// Highlight onViolation
+		
+		studentManagementMap=new HashMap<String, Widget>();
+		studentManagementMap.put("name",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewName());
+		studentManagementMap.put("prename",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewPreName());
+		studentManagementMap.put("email",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail());
+		
+		
+		// E Highlight onViolation
+		
+		studentManagementEditPopupView.getOkBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+			
+					
+					
+					delegate.editStudentData(studentProxy, studentManagementEditPopupView.getNewName().getValue(),studentManagementEditPopupView.getNewPreName().getValue(),studentManagementEditPopupView.getNewEmail().getValue());
+									
+			}
+		});
+
+		studentManagementEditPopupView.getCancelBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				
+				
+				((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).hide(true);
+			}
+		});
+		
+		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setPopupPosition(left-450, top - 50);
+		
+		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).show();
+	}*/
 }
