@@ -3603,6 +3603,23 @@ color: #f1b532;
 	.studentContent{
 		background-color: rgb(151,197,210) !important;
 	}
+	.redButton{
+		border-radius:12px;
+		border-color: red;
+		background-color: red;
+		border-width: 1px;
+		width: 12px;
+		height: 12px;
+	}
+	
+	.greenButton{
+		border-radius:12px;
+		border-color: green;
+		background-color: green;
+		border-width: 1px;
+		width: 12px;
+		height: 12px;
+	}
 /* Module 16 end*/
 
 .empty-bg-student{

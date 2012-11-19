@@ -124,6 +124,11 @@
 		<version>1.2.0</version>
 	</dependency>
 		
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-math</artifactId>
+		<version>2.0</version>
+	</dependency>
     <!--GwtEvent Service Dependency (server Push event) } -->
 <!--     FOR GWTRPC-SPRING -->
     	<dependency>
@@ -798,18 +803,15 @@
                 <configuration>
                     <logLevel>INFO</logLevel>
                     <style>PRETTY</style>
-                    <runTarget>/OsMaEntry.html</runTarget>
+                    <runTarget>/ApplicationScaffold.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <modules>
-                        <module>${project.groupId}.OsMaEntry</module>
+                        <module>${project.groupId}.ApplicationScaffold</module>
                     </modules>
                     <copyWebapp>true</copyWebapp>
                 </configuration>
                 <executions>
                     <execution>
-                    	<configuration>
-                    		<extraJvmArgs>-Xmx12g</extraJvmArgs>
-                    	</configuration>
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>
