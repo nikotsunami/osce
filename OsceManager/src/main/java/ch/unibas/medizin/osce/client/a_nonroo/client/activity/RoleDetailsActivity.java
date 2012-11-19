@@ -6102,7 +6102,9 @@ final int index2 = index;
 		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddScar().setEnabled(enable);
 		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddWorkPermission().setEnabled(enable);
 
-		
+		roleOsceSemesterSubView.getStartDate().setEnabled(enable);
+		roleOsceSemesterSubView.getEndDate().setEnabled(enable);
+		roleOsceSemesterSubView.getSearchButton().setEnabled(enable);
 		if(enable){
 			
 			standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("disableButton");

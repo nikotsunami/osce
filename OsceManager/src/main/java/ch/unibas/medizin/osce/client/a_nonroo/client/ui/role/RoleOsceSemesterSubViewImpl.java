@@ -184,6 +184,11 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 		// TODO Auto-generated method stub
 		return endDate;
 	}
+	@Override
+	public IconButton getSearchButton() {
+		// TODO Auto-generated method stub
+		return searchButton;
+	}
 	
 	
 	

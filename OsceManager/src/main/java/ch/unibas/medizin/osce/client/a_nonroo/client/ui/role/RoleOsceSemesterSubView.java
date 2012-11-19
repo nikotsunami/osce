@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
 import ch.unibas.medizin.osce.client.managed.request.TopicProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 
 public interface RoleOsceSemesterSubView {
@@ -28,7 +29,8 @@ public interface RoleOsceSemesterSubView {
 	
 	public DateBox getStartDate();
 	public DateBox getEndDate();
-	
+	public IconButton getSearchButton();
+
 	
 	//learning
 				
