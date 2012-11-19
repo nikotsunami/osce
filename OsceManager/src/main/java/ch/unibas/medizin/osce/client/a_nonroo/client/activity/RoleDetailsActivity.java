@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1085,7 +1086,7 @@ final int index2 = index;
 		
 		// SPEC START =
 		
-		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
@@ -5656,7 +5657,7 @@ final int index2 = index;
 		
 		// SPEC START =
 		
-		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
@@ -6101,7 +6102,9 @@ final int index2 = index;
 		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddScar().setEnabled(enable);
 		standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().getAddWorkPermission().setEnabled(enable);
 
-		
+		roleOsceSemesterSubView.getStartDate().setEnabled(enable);
+		roleOsceSemesterSubView.getEndDate().setEnabled(enable);
+		roleOsceSemesterSubView.getSearchButton().setEnabled(enable);
 		if(enable){
 			
 			standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("disableButton");
@@ -7770,6 +7773,34 @@ public void onDragStart(DragStartEvent event) {
 			
 		}
 	
+		@Override
+		public void changeDasteValueForOsceSemesterCall() {
+			// TODO Auto-generated method stub
+			
+			requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+
+				@Override
+				public void onSuccess(List<OsceProxy> response) {
+					// TODO Auto-generated method stub
+					if(response!=null)
+					{
+						
+					
+					roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
+					roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
+					}
+					else
+					{
+						Log.info("record not found");
+					}
+					
+				}
+			});
+			
+			
+		}
+
+		
 }
 
 	

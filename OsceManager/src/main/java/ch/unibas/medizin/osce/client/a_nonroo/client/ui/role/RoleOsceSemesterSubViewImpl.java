@@ -2,42 +2,28 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LearningObjectiveViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
-import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
-import com.google.gwt.cell.client.ActionCell;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSemesterSubView {
 
@@ -61,6 +47,41 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 	@UiField (provided = true)
 	public CellTable<OsceProxy> osceSemesterTable;
 			
+	@UiField
+	public DateBox startDate;
+	
+	@UiField
+	public DateBox endDate;
+	
+	/*@UiField
+	Label labelStartDate;
+	@UiField
+	Label labelEndDate;*/
+	
+	@UiField
+	SpanElement labelStartDate;
+	
+	@UiField
+	SpanElement labelEndDate;
+	
+	@UiField
+	IconButton searchButton;
+	
+	public void onSearchButtonClick()
+	{
+		if(startDate.getValue()==null ||  endDate.getValue()==null)
+		{
+			MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			confirmationDialogBox.showConfirmationDialog(constants.osceSemesterMessage());
+			
+		}
+		else 
+		{
+			
+			delegate.changeDasteValueForOsceSemesterCall();
+		}
+		
+	}
 	public RoleOsceSemesterSubViewImpl() 
 	{
 		/*SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);*/
@@ -69,6 +90,22 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 		osceSemesterTable = new CellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		initWidget(uiBinder.createAndBindUi(this));	
 		
+		labelStartDate.setInnerText(constants.startDate() + ":");
+		labelEndDate.setInnerText(constants.endDate() + ":");
+		endDate.getTextBox().setReadOnly(true);
+		startDate.getTextBox().setReadOnly(true);
+		
+		searchButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				onSearchButtonClick();
+			}
+		});
+		
+		/*labelStartDate.setText(constants.startDate() + ":");
+		labelEndDate.setText(constants.endDate() + ":");*/
 		osceSemesterTable.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
@@ -134,6 +171,23 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 	public CellTable<OsceProxy> getOsceSemesterTable() {
 		// TODO Auto-generated method stub
 		return osceSemesterTable;
+	}
+
+	@Override
+	public DateBox getStartDate() {
+		// TODO Auto-generated method stub
+		return startDate;
+	}
+
+	@Override
+	public DateBox getEndDate() {
+		// TODO Auto-generated method stub
+		return endDate;
+	}
+	@Override
+	public IconButton getSearchButton() {
+		// TODO Auto-generated method stub
+		return searchButton;
 	}
 	
 	

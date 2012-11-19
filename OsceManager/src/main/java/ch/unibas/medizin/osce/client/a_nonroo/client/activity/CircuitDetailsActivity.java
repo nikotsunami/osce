@@ -5021,7 +5021,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 																		@Override
 																		public void onSuccess(List<OscePostRoomProxy> response) {
-																				requests.getEventBus().fireEvent(new RoomRefreshEvent(response, roomProxy.getRoomNumber()));
+																				requests.getEventBus().fireEvent(new RoomRefreshEvent(response, roomProxy));
 																			}
 																		});
 																	
@@ -5040,7 +5040,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												// [ SPEC Change Parcour
 												//if(osceProxy.getOsceStatus()==OsceStatus.OSCE_CLOSED)
 												//{
-													final MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.error());
+													final MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
 													dialog.showYesNoDialog(constants.roomAlreadyAssignWantToExcahnge());
 													dialog.getYesBtn().addClickHandler(new ClickHandler() {
 														
@@ -5152,9 +5152,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								public void onSuccess(List<OscePostRoomProxy> response) 
 								{
 									
-									oscePostSubViewImpl.setRoomProxy(newRoomProxy);															
-									((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(newRoomProxy);										
-									requests.getEventBus().fireEvent(new RoomRefreshEvent(response, newRoomProxy.getRoomNumber()));									
+									//oscePostSubViewImpl.setRoomProxy(newRoomProxy);															
+									//((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(newRoomProxy);										
+									requests.getEventBus().fireEvent(new RoomRefreshEvent(response, newRoomProxy));									
 									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 									
 								}
@@ -5166,9 +5166,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								public void onSuccess(List<OscePostRoomProxy> response) 
 								{
 									
-									oscePostSubViewImpl.setRoomProxy(oldRoomProxy);															
-									((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(oldRoomProxy);
-									requests.getEventBus().fireEvent(new RoomRefreshEvent(response, oldRoomProxy.getRoomNumber()));
+									//oscePostSubViewImpl.setRoomProxy(oldRoomProxy);															
+									//((OscePostSubViewImpl)view.getOscePostSubView()).setRoomProxy(oldRoomProxy);
+									requests.getEventBus().fireEvent(new RoomRefreshEvent(response, oldRoomProxy));
 									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								}
 							});							

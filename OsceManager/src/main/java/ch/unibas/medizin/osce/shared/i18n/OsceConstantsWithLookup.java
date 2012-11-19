@@ -273,6 +273,9 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String WORKPERMISSION_EQUALS();
 
 	public String WORKPERMISSION_NOT_EQUALS();
-
+	
+	public String item_analysis();
+	
+	public String post_analysys();
 }
 

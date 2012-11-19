@@ -331,6 +331,17 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		// payment
 		if (place instanceof PaymentPlace) {
 			Log.info("is PaymentPlace");
+			 
+			PaymentPlace paymentPlace = (PaymentPlace) place;
+
+			if(paymentPlace.handlerManager == null) {
+				paymentPlace.handlerManager = handler;	
+			}
+
+			if(paymentPlace.semesterProxy == null) {
+				paymentPlace.semesterProxy = semesterProxy;	
+			}
+
 			return new PaymentActivity(requests, placeController,
 					(PaymentPlace) place);
 		}

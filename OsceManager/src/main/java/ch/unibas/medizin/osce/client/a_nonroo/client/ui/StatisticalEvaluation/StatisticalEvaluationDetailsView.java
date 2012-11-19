@@ -1,12 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation;
 
-import com.google.gwt.event.dom.client.ClickEvent;
+import ch.unibas.medizin.osce.shared.AnalysisType;
+
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
@@ -23,10 +20,12 @@ public interface StatisticalEvaluationDetailsView extends IsWidget{
 	 */
 	interface Delegate 
 	{
+		public void analysisListBoxValueChanged(AnalysisType a);
 		
+		public void calculate();
 	}
 
-    String[] getPaths();
+	public VerticalPanel getSequenceVP();
     
     void setDelegate(Delegate delegate);
     

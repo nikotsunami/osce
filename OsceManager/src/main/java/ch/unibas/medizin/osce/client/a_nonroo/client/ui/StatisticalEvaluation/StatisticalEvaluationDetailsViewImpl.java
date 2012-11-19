@@ -3,32 +3,28 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.shared.AnalysisType;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -46,14 +42,36 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 
 	private Delegate delegate;
 
-	protected Set<String> paths = new HashSet<String>();
+	
 
 	private Presenter presenter;
-		
+	
+	OsceConstants constants = GWT.create(OsceConstants.class);
+	
+	//@UiField
+	//Button importBtn;
+	
 	@UiField
 	ScrollPanel scrollPanel;
 	
+	@UiField
+	VerticalPanel sequenceVP;
 	
+	@UiField(provided=true)
+	FocusableValueListBox<AnalysisType> analysisListBox = new FocusableValueListBox<AnalysisType>(new EnumRenderer<AnalysisType>());
+	
+	@UiField
+	Button calculateBtn;
+	
+	public VerticalPanel getSequenceVP() {
+		return sequenceVP;
+	}
+
+	
+
+
+
+
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -69,25 +87,67 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 	{
 		Log.info("Call StatisticalEvaluationDetailsViewImpl");
 		initWidget(uiBinder.createAndBindUi(this));
+		analysisListBox.setAcceptableValues(Arrays.asList(AnalysisType.values()));
 		
-		int height = ResolutionSettings.getRightWidgetHeight() - 55;
-		scrollPanel.setHeight(height+"px");
-		
-		init();
-	}
-
-	public String[] getPaths() 
-	{
-		return paths.toArray(new String[paths.size()]);
-	}
-
-	public void init() 
-	{
-
-		OsceConstants constants = GWT.create(OsceConstants.class);
-		
+		analysisListBox.addValueChangeHandler(new ValueChangeHandler<AnalysisType>() {
 			
+			@Override
+			public void onValueChange(ValueChangeEvent<AnalysisType> event) {
+				analysisListBoxValueChangedEvent(event);
+				
+			}
+		});
+		
+		analysisListBox.setValue(AnalysisType.item_analysis,true);
+	
+		
+		
+		
+		calculateBtn.setText(constants.export());
+		int height = ResolutionSettings.getRightWidgetHeight() - 55;
+		
+		scrollPanel.setHeight(height+"px");
+		//importBtn.setText(constants.importBtn());
+		
+		sequenceVP.setWidth(ResolutionSettings.getRightWidgetWidth()-60+"px");
+		
 	}
+	
+	public StatisticalEvaluationDetailsViewImpl(Delegate delegate) 
+	{
+		Log.info("Call StatisticalEvaluationDetailsViewImpl");
+		initWidget(uiBinder.createAndBindUi(this));
+		
+		this.delegate=delegate;
+		
+		analysisListBox.setAcceptableValues(Arrays.asList(AnalysisType.values()));
+		
+		analysisListBox.addValueChangeHandler(new ValueChangeHandler<AnalysisType>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<AnalysisType> event) {
+				analysisListBoxValueChangedEvent(event);
+				
+			}
+		});
+		
+		analysisListBox.setValue(AnalysisType.item_analysis,true);
+	
+		
+		
+		
+		calculateBtn.setText(constants.calculate());
+		int height = ResolutionSettings.getRightWidgetHeight() - 55;
+		
+		scrollPanel.setHeight(height+"px");
+		//importBtn.setText(constants.importBtn());
+		
+		sequenceVP.setWidth(ResolutionSettings.getRightWidgetWidth()-60+"px");
+		
+	}
+
+
+	
 	
 
 	@Override
@@ -100,7 +160,22 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 		this.presenter = presenter;
 	}
 
+	@UiHandler("calculateBtn")
+	public void calcuateButtonClicked(ClickEvent event)
+	{
+		Log.info("calcuateButtonClicked");
+		delegate.calculate();
+	}
 	
+	
+	public void analysisListBoxValueChangedEvent(ValueChangeEvent<AnalysisType> event)
+	{
+		Log.info("analysisListBoxValueChangedEvent :" + event.getValue());
+		if(event.getValue() == null)
+			return;
+		
+		delegate.analysisListBoxValueChanged(event.getValue());
+	}
 	
 	@Override
 	public void onMenuClicked(MenuClickEvent event) {

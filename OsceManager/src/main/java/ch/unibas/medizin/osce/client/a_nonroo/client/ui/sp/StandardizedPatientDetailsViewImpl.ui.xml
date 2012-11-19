@@ -63,6 +63,7 @@
 			<my:IconButton ui:field="send" icon="extlink"/>
 			<my:IconButton ui:field="pull" icon="arrowthickstop-1-s"/>
 			<my:IconButton ui:field="status" visible="false"/>
+			<my:IconButton ui:field="anonymize" visible="false"/>
 		</div>
 	</g:HTMLPanel>
 

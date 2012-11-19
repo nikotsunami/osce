@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
-	xmlns:d="urn:import:com.google.gwt.dom.client">
+	xmlns:d="urn:import:com.google.gwt.dom.client" xmlns:S="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation">
 
 	<ui:style src="../../styles.css">
 		.panelStyle {
@@ -31,10 +31,28 @@
 
 
 	<g:HTMLPanel>	
-	<g:ScrollPanel  ui:field="scrollPanel" ><!-- Assignment E:Module 5 -->
-	 <g:HorizontalPanel> 	
-		<g:Label>Tab Content</g:Label>
-		 </g:HorizontalPanel> 
+		<g:ScrollPanel  ui:field="scrollPanel" >
+		<g:HTMLPanel width="100%">	
+						
+						
+						
+						<div style="float:right;">
+							<g:HorizontalPanel spacing="5" horizontalAlignment="right" >
+								<my:FocusableValueListBox ui:field="analysisListBox"></my:FocusableValueListBox>
+								<g:Button ui:field="calculateBtn"></g:Button>
+							</g:HorizontalPanel>
+						</div>
+						<br /><br />
+						<div style="width:100%">
+							<g:VerticalPanel ui:field="sequenceVP" horizontalAlignment="center" addStyleNames="{style.sequenceVP}">
+							<!--  	<S:StatisticalEvaluationDetailSequenceViewImpl></S:StatisticalEvaluationDetailSequenceViewImpl> -->
+							</g:VerticalPanel>
+						</div>
+					
+				<!--  <g:Button ui:field="importBtn"></g:Button> -->
+			
+			
+			</g:HTMLPanel>
 		</g:ScrollPanel>	
 	</g:HTMLPanel>
 	

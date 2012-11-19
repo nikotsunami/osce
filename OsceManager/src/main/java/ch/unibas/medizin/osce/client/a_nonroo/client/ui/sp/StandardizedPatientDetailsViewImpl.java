@@ -131,6 +131,9 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiField
 	IconButton status;
 	
+	@UiField
+	IconButton anonymize;
+	
 	// Labels (Fieldnames)
 	@UiField
 	SpanElement labelStreet;
@@ -402,6 +405,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 		// Module 3 Task B
 		setStatusIcon(proxy.getStatus());
+		setAnonymizeButton(proxy.getStatus());
 		// Module 3 Task B
 	}
 	
@@ -471,6 +475,18 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		delegate.showApplicationLoading(false);
 	}
 	
+	// Module 3 Task B
+	@UiHandler("anonymize")
+	public void onAnonymizeClicked(ClickEvent e) {
+		delegate.showApplicationLoading(true);
+		Log.info("onAnonymizeClicked");
+
+		anonymize.setVisible(false);
+		delegate.onAnonymizeClicked();
+		delegate.showApplicationLoading(false);
+
+	}
+
 	@Override
 	public void setStatusIcon(
 			StandardizedPatientStatus standardizedPatientStatus) {
@@ -489,12 +505,22 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 			status.setVisible(true);
 		}
 		setDmzEditOnStatus(standardizedPatientStatus);
+		setAnonymizeButton(standardizedPatientStatus);
+	}
+	
+	public void setAnonymizeButton(StandardizedPatientStatus standardizedPatientStatus) {
+		anonymize.setEnabled(standardizedPatientStatus == StandardizedPatientStatus.INACTIVE);	
+		anonymize.setVisible(standardizedPatientStatus == StandardizedPatientStatus.INACTIVE);
+		anonymize.setText(constants.anonymize());
+		anonymize.setIcon("cancel");
+//		setDmzEditOnStatus(standardizedPatientStatus);
 	}
 	
 	private void setDmzEditOnStatus(StandardizedPatientStatus standardizedPatientStatus) {
 		boolean isEnable= (standardizedPatientStatus != null &&  standardizedPatientStatus == StandardizedPatientStatus.ACTIVE);			
 			edit.setEnabled(isEnable);
 			send.setEnabled(isEnable);	
+			pull.setEnabled(isEnable);
 	}
 	
 	// Module 3 Task B

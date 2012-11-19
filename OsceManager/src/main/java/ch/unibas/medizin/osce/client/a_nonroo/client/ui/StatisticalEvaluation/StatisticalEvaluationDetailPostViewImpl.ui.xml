@@ -1,0 +1,28 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:d="urn:import:com.google.gwt.dom.client">
+
+	<ui:style src="../../styles.css">
+	.postName{
+		border: 1px solid  rgb(158,183,190);
+		margin-right:3px;
+		background-color: rgb(228,240,243);
+		width: 81px;
+		height: 100px;
+		margin-bottom: 8px;
+	}
+	.lblStyle{
+		word-wrap:break-word;
+		max-width: 80px;
+	}
+	</ui:style>
+	
+	 <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
+
+	<g:HorizontalPanel ui:field="postNameHP" addStyleNames="{style.postName}" horizontalAlignment="center" verticalAlignment="bottom" spacing="0">
+		<g:Label ui:field="postNameLbl" wordWrap="true" width="80%" addStyleNames="{style.lblStyle}" >Post 1</g:Label>		
+	</g:HorizontalPanel>
+	
+</ui:UiBinder> 

@@ -1,0 +1,43 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:d="urn:import:com.google.gwt.dom.client">
+
+	<ui:style src="../../styles.css">
+	
+	
+	</ui:style>
+	
+	 <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
+	<!-- Item/Examiner Header Panel -->
+	<g:HTMLPanel width="99%" >
+				<table class="{style.itemHeader}"  width="100%" ui:field="sequenceHeader">
+						
+						<tbody>
+						<tr valign="middle">
+						<!--  	<td width="2%"><g:Image ui:field="minMaxImage" addStyleNames="{style.icon}" resource="{uiIcons.triangle1East}"></g:Image></td> -->
+							<td width="24%"><g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label>
+											</td>
+											
+							<td width="1%"><g:Label ui:field="dot" addStyleNames="{style.greenButton}"></g:Label></td>
+							
+							<td>
+									<g:HorizontalPanel ui:field="postDataHP" addStyleNames="{style.postDataHP}">
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+									</g:HorizontalPanel>
+							</td>
+							<td width="13%">
+								<g:Label ui:field="sumPerSequenceLbl">Sum per Sequence</g:Label>
+							</td>
+						</tr>
+						
+						</tbody>
+					</table>
+				</g:HTMLPanel>
+	
+</ui:UiBinder> 

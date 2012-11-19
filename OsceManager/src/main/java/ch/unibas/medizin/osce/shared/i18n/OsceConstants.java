@@ -1190,8 +1190,15 @@ public interface OsceConstants extends Constants {
 	public String exchangeSpError();
 	
 	public String exchangeStudError();
+
 	//spec issue change
 
-        public String StudentDetailsPlace();
+	public String StudentDetailsPlace();
+	
+	public String anonymize();
+	
+	 public String startDate();
+	   public String endDate();
+	   public String osceSemesterMessage();
 }
 

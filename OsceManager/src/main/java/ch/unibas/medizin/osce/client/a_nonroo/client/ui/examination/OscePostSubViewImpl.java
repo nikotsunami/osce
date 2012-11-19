@@ -360,7 +360,8 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView, R
 		@Override
 		public void onRoomChanged(RoomRefreshEvent event) {
 			List<OscePostRoomProxy> oscePostRoomList = event.getOscePostRoomList();
-			String roomValue = event.getRoomValue();
+			RoomProxy room = event.getRoomProxy();
+			String roomValue = room.getRoomNumber();
 			
 			for (int i=0; i<oscePostRoomList.size(); i++)
 			{
@@ -368,6 +369,7 @@ public class OscePostSubViewImpl extends Composite implements OscePostSubView, R
 				{
 					delegate.refreshRoomValue(this, roomValue);
 					this.getRoomLbl().setTitle(roomValue);
+					this.setRoomProxy(room);	
 				}
 			}
 		}
