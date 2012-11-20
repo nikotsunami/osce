@@ -15,15 +15,20 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -454,6 +459,8 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		cancelButton.setVisible(false);
 		saveBtn.removeFromParent();
 		breakDuration.removeFromParent();
+		
+		disableContextMenu();
 	}
 	
 	public void createExchangeSPPopupView()
@@ -494,6 +501,20 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		
+		disableContextMenu();
+	}
+	
+	private void disableContextMenu()
+	{
+		this.addDomHandler(new ContextMenuHandler() {
+
+			@Override
+			public void onContextMenu(ContextMenuEvent event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+		}, ContextMenuEvent.getType());
 	}
 	//by spec change]
 }
