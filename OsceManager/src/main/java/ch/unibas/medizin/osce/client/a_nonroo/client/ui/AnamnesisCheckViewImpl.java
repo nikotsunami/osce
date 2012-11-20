@@ -90,6 +90,8 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	@UiField
 	SimplePanel detailsPanel;
 	
+	
+	public AnamnesisCheckTable anamnesisCheckTable;
 	//Issue # 122 : Replace pull down with autocomplete.
 	/*
 	@UiField
@@ -184,7 +186,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	// Highlight onViolation
 	Map<String, Widget> anamnesisCheckTitleMap;
 	// E Highlight onViolation
-	
+	public CellTable<AnamnesisCheckProxy> cellTable;
 	public AnamnesisCheckViewImpl() {
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
@@ -460,7 +462,9 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	
 	public void addAnamnesisCheckTitle(final AnamnesisCheckTitleProxy title, boolean isOpen) {
 		Log.debug("addAnamnesisCheckTitle(): " + title.getText());
-		AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(title);
+		
+		 //AnamnesisCheckTable anamnesisCheckTable = new AnamnesisCheckTable(title);
+		 anamnesisCheckTable = new AnamnesisCheckTable(title);
 		final ListDataProvider<AnamnesisCheckProxy> dataProvider = new ListDataProvider<AnamnesisCheckProxy>();
 		final SingleSelectionModel<AnamnesisCheckProxy> selectionModel = new SingleSelectionModel<AnamnesisCheckProxy>();
 		anamnesisCheckTable.setDataProvider(dataProvider);
@@ -475,7 +479,11 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 				}
 			}
 		});
-		CellTable<AnamnesisCheckProxy> cellTable = anamnesisCheckTable.initTable();
+		//CellTable<AnamnesisCheckProxy> cellTable = anamnesisCheckTable.initTable();
+		 cellTable = anamnesisCheckTable.initTable();
+		Log.info("before pager size set--");
+		cellTable.setPageSize(25);
+		Log.info("before pager size set--");
 		DisclosurePanel advancedDisclosure = new DisclosurePanel();
 		HorizontalPanel headerPanel = getHeaderPanelForTitle(title, advancedDisclosure);
 		advancedDisclosure.setHeader(headerPanel);
@@ -568,6 +576,18 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 //				splitLayoutPanel.setWidgetSize(splitLayoutPanel.getWidget(0), 1220);
 //		}
 			
+	}
+
+	@Override
+	public CellTable<AnamnesisCheckProxy> getTable() {
+		// TODO Auto-generated method stub
+		return cellTable;
+	}
+	
+	@Override
+	public void  setTableSize(int size) {
+		// TODO Auto-generated method stub
+		 cellTable.setPageSize(size);
 	}
 }
 

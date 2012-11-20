@@ -8,9 +8,12 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
+import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
+import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -36,7 +39,7 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 public class AnamnesisCheckTable {
 
-	CellTable<AnamnesisCheckProxy> cellTable = new CellTable<AnamnesisCheckProxy>();
+	public CellTable<AnamnesisCheckProxy> cellTable = new CellTable<AnamnesisCheckProxy>();
 	ListDataProvider<AnamnesisCheckProxy> dataProvider = null;
 
 	List<AnamnesisCheckProxy> anamnesisCheckProxyList = new ArrayList<AnamnesisCheckProxy>();
@@ -55,7 +58,13 @@ public class AnamnesisCheckTable {
 	public CellTable<AnamnesisCheckProxy> initTable() {
 		CellTable.Resources tableResources = GWT
 		.create(AnamnesisTableResources.class);
-		cellTable = new CellTable<AnamnesisCheckProxy>(15, tableResources);
+		
+		/*CellTable.Resources tableResources = GWT.create(MyCellTableResourcesNoSortArrow.class);
+		table = new AdvanceCellTable<RoleTopicProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		*/
+		
+		cellTable = new CellTable<AnamnesisCheckProxy>(5, tableResources);
+		
 		cellTable.addStyleName("standardTable");
 		cellTable.addStyleName("narrowInput");
 		cellTable.setSelectionModel(selectionModel);
@@ -118,6 +127,7 @@ public class AnamnesisCheckTable {
 		cellTable.setColumnWidth(cellTable.getColumn(5), "16px");
 		
 		dataProvider.addDataDisplay(cellTable);
+		
 		dataProvider.setList(anamnesisCheckProxyList);
 		
 		

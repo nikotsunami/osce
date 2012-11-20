@@ -68,7 +68,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     
     private Integer sort_order = 0;
 	private String title = "";
-    
+	 public AnamnesisCheckView innerSystemStartView; 
     private List<AnamnesisCheckTitleProxy> anamnesisCheckTitles = new ArrayList<AnamnesisCheckTitleProxy>();
 
     public AnamnesisCheckActivity(OsMaRequestFactory requests,
@@ -129,6 +129,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         Log.info("SystemStartActivity.start()");
         AnamnesisCheckView systemStartView = new AnamnesisCheckViewImpl();
+        innerSystemStartView= systemStartView;
 //        AnamnesisCheckView systemStartView = getAnamnesisCheckView();
         systemStartView.setPresenter(this);
         this.widget = panel;
@@ -460,9 +461,18 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			Log.debug("setQuestionTableData() - sueccess and response size = " + response.size());
 			Log.debug("dataProvider.getList().size() = " + dataProvider.getList().size());
 			
+			
 			dataProvider.getList().clear();
 			dataProvider.getList().addAll(response);
+			//AnamnesisCheckActivity.this.view.getTable().setPageSize(dataProvider.getList().size());
+			AnamnesisCheckActivity.this.view.setTableSize(dataProvider.getList().size());
+			Log.info("page size--"+AnamnesisCheckActivity.this.view.getTable().getPageSize());
+			AnamnesisCheckActivity.this.view.getTable().redraw();
 			dataProvider.refresh();
+			AnamnesisCheckActivity.this.view.getTable().redraw();
+			//innerSystemStartView.getTable().cellTable.setPageSize(25);
+			//anamnesisCheckTable.cellTable.setPageSize(25);
+			Log.info("data provider--"+dataProvider.getList().size());
 		}
     }
     
