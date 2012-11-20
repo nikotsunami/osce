@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -80,4 +81,8 @@ public interface AnamnesisCheckView extends IsWidget{
 	DefaultSuggestBox<AnamnesisCheckTitleProxy, EventHandlingValueHolderItem<AnamnesisCheckTitleProxy>> getNewFilterTitle();
 	//Issue # 122 : Replace pull down with autocomplete.
 
+	public CellTable<AnamnesisCheckProxy> getTable();
+
+	void setTableSize(int size);
+	
 }
