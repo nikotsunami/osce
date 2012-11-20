@@ -153,7 +153,7 @@ public class AnamnesisChecksValue{
     	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
     			"WHERE anamnesisform = :anamnesisForm " +
     			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
-    			"AND o.anamnesischeck.text LIKE :needle", AnamnesisChecksValue.class);
+    			"AND o.anamnesischeck.text LIKE :needle ORDER BY sort_order", AnamnesisChecksValue.class);
     	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
     	q.setParameter("needle","%" + needle + "%");
@@ -177,7 +177,7 @@ public class AnamnesisChecksValue{
     			"WHERE anamnesisform = :anamnesisForm " +
     			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
     			"AND truth = NULL AND anamnesisChecksValue = NULL " +
-    			"AND o.anamnesischeck.text LIKE :needle", AnamnesisChecksValue.class);
+    			"AND o.anamnesischeck.text LIKE :needle ORDER BY sort_order", AnamnesisChecksValue.class);
     	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));
     	q.setParameter("needle","%" + needle + "%");
@@ -200,7 +200,7 @@ public class AnamnesisChecksValue{
     			"WHERE anamnesisform = :anamnesisForm " +
     			"AND o.anamnesischeck.anamnesisCheckTitle = :anamnesisTitle " +
     			"AND (truth <> NULL OR anamnesisChecksValue <> NULL) " +
-    			"AND o.anamnesischeck.text LIKE :needle", 
+    			"AND o.anamnesischeck.text LIKE :needle ORDER BY sort_order", 
     			AnamnesisChecksValue.class);
     	q.setParameter("anamnesisTitle", AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisTitleId));
     	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(anamnesisFormId));

@@ -488,8 +488,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	}
 
 	@Override
-	public void setStatusIcon(
-			StandardizedPatientStatus standardizedPatientStatus) {
+	public void setStatusIcon(StandardizedPatientStatus standardizedPatientStatus) {
 		status.setEnabled(true);
 		if (standardizedPatientStatus == StandardizedPatientStatus.ANONYMIZED) {
 			status.setVisible(false);
@@ -498,10 +497,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 				status.setEnabled(false);
 			}
 			Log.info("proxy.getStatus() : " + proxy.getStatus());
-			status.setText((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? constants
-					.spInactive() : constants.spActive());
-			status.setIcon((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? "close"
-					: "check");
+			status.setText((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? constants.spInactive() : constants.spActive());
+			status.setIcon((standardizedPatientStatus == StandardizedPatientStatus.ACTIVE) ? "close" : "check");
 			status.setVisible(true);
 		}
 		setDmzEditOnStatus(standardizedPatientStatus);
@@ -517,10 +514,32 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	}
 	
 	private void setDmzEditOnStatus(StandardizedPatientStatus standardizedPatientStatus) {
-		boolean isEnable= (standardizedPatientStatus != null &&  standardizedPatientStatus == StandardizedPatientStatus.ACTIVE);			
-			edit.setEnabled(isEnable);
-			send.setEnabled(isEnable);	
-			pull.setEnabled(isEnable);
+		switch(standardizedPatientStatus) {
+		case ACTIVE:
+			edit.setEnabled(true);
+			send.setEnabled(true);
+			pull.setEnabled(false);
+			break;
+		case ANONYMIZED:
+			edit.setEnabled(false);
+			send.setEnabled(false);
+			pull.setEnabled(false);
+			break;
+		case EXPORTED:
+			edit.setEnabled(false);
+			send.setEnabled(false);
+			pull.setEnabled(true);
+			break;
+		case EXPORTED_FOR_SCHEDULING:
+		case INACTIVE:
+			edit.setEnabled(true);
+			send.setEnabled(false);
+			pull.setEnabled(false);
+		}
+//		boolean isEnable= (standardizedPatientStatus != null &&  standardizedPatientStatus == StandardizedPatientStatus.ACTIVE);			
+//			edit.setEnabled(isEnable);
+//			send.setEnabled(isEnable);	
+//			pull.setEnabled(isEnable);
 	}
 	
 	// Module 3 Task B
