@@ -51,7 +51,8 @@ public class PatientInRole {
     Boolean is_first_in_sequence;
     
  // Module10 Create plans
- 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInRole")
+ 	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInRole")
+    @OneToMany(mappedBy = "patientInRole")
      private Set<Assignment> assignments = new HashSet<Assignment>();
  	// E Module10 Create plans
  	
