@@ -52,7 +52,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 
 	private StandardizedRole standardizedRole;
 
-	private Document document = new Document();
+	//private Document document = new Document();
 	private OsceConstants constants;
 	private OsceConstantsWithLookup enumConstants;
 	private String title;
@@ -645,12 +645,15 @@ public class RolePrintPdfUtil extends PdfUtil {
 				}
 			}
 			
-			PdfPTable table = createCheckListQuestionTable(checklistTopic.getCheckListQuestions());
-			table.setSpacingBefore(05.0f);
-			table.setSpacingAfter(20.0f);
-			
+						
 			try {
-				document.add(table);
+				if(checklistTopic.getCheckListQuestions()!=null && checklistTopic.getCheckListQuestions().size()>0)
+				{
+					PdfPTable table = createCheckListQuestionTable(checklistTopic.getCheckListQuestions());
+					table.setSpacingBefore(05.0f);
+					table.setSpacingAfter(20.0f);
+					document.add(table);
+				}
 			} catch (DocumentException ex) {
 				log.error("in RolePrintPdfUtil.createCheckListDetailsTable(): " + ex.getMessage(),ex);
 			}
