@@ -2028,6 +2028,10 @@ public class TimetableGenerator {
 						boolean longBreakInRotationHalf = numberSlotsTotal * osce.getPostLength() > LONG_BREAK_MIDDLE_THRESHOLD;
 						
 						//spec[
+						
+						if (longBreakInRotationHalf)
+							changeSimpatDuringRotation = false;
+						
 						boolean isLongBreakBetweenTwoRotation = false;
 						if(!lastRotation)
 						{
