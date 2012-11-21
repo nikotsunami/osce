@@ -1,19 +1,24 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -21,6 +26,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
+import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
@@ -517,6 +523,42 @@ public class StandardizedRole {
 
 		return fileName;
 			//Feature : 154
+	}
+
+
+	public static String getRolePrintPDFByStudentUsingServlet(Long studentId,String locale, ByteArrayOutputStream os) 
+	{
+		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
+		System.out.println("Id: " + studentId + " Locale: " + locale);
+		//Student student=Student.findStudent(studentId);	
+		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId);
+		StudentManagementPrintPdfUtil studentRolePrintPdfUtil = new StudentManagementPrintPdfUtil(locale);
+		System.out.println("Standardized Role Size for Student : " + standardizedRoleList.size());		
+		if(standardizedRoleList.size()>0)
+		{			
+			/*Iterator<StandardizedRole> standardizedRoleIterator=standardizedRoleList.iterator();
+			while(standardizedRoleIterator.hasNext())
+			{			
+				System.out.println("Standardized_Role Id : " + standardizedRoleIterator.next().getId());				
+			}*/
+			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+		}
+		
+		return fileName;
+	}
+	
+	public static List<StandardizedRole> findRoleByStudentUsingAnswer(Long studentId)
+	{
+		//select distinct sr.* from standardized_role sr,answer ans,osce_post_room opr,osce_post op where sr.id=op.standardized_role and op.id=opr.osce_post and opr.id=ans.osce_post_room and ans.student=1;		
+		EntityManager em = entityManager();
+		Log.info("~QUERY findRoleByStudentUsingAnswer()");
+		String queryString="select distinct sr from StandardizedRole as sr,Answer as ans,OscePostRoom as opr,OscePost as op where sr.id=op.standardizedRole and op.id=opr.oscePost and opr.id=ans.oscePostRoom and ans.student="+studentId;
+		//String queryString = "Select d from OsceDay d";
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<StandardizedRole> q = em.createQuery(queryString, StandardizedRole.class);
+		java.util.List<StandardizedRole> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);
+		return result;
 	}
 	
 	// Issue : 120

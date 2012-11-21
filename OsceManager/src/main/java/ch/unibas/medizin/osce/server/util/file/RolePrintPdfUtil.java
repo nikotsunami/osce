@@ -87,7 +87,8 @@ public class RolePrintPdfUtil extends PdfUtil {
 			this.roleItemAccessId = roleItemAccessId;
 			this.isValueAvailable = new boolean[4];
 
-			title = constants.standardizedRole() + " "+ standardizedRole.getLongName();
+			//title = constants.standardizedRole() + " "+ standardizedRole.getLongName();
+			title = "";
 			writer = PdfWriter.getInstance(document, new FileOutputStream(
 					fileName));
 			document.open();
@@ -134,7 +135,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void writeFile(StandardizedRole standardizedRole,
 			List<String> itemsList, Long roleItemAccessId,OutputStream out) {
 		try {
@@ -142,7 +143,8 @@ public class RolePrintPdfUtil extends PdfUtil {
 			// this.itemsList = itemsList;
 			this.roleItemAccessId = roleItemAccessId;
 			this.isValueAvailable = new boolean[4];			
-			title = constants.standardizedRole() + " "+ util.getEmptyIfNull(standardizedRole.getLongName());
+			//title = constants.standardizedRole() + " "+ util.getEmptyIfNull(standardizedRole.getLongName());
+			title = "";
 			writer = PdfWriter.getInstance(document, out);
 			document.open();
 			addMetaData();
@@ -456,6 +458,12 @@ public class RolePrintPdfUtil extends PdfUtil {
 	}
 
 	private void addCheckListDetails() {
+		
+		Paragraph titleDetails = new Paragraph();
+		Font roleTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
+		titleDetails.add(new Chunk(constants.standardizedRole()+": "+ util.getEmptyIfNull(standardizedRole.getLongName()), roleTitleFont));
+		addEmptyLine(titleDetails, 1);
+		
 		if ((standardizedRole.getCheckList() != null)
 				&& (standardizedRole.getCheckList().getCheckListTopics() != null)
 				&& (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) {
@@ -464,11 +472,11 @@ public class RolePrintPdfUtil extends PdfUtil {
 			String checkListTitle = (standardizedRole.getCheckList().getTitle() != null) 
 					? " " + standardizedRole.getCheckList().getTitle() : "";
 					
-			details.add(new Chunk(constants.checkList()
-					+ checkListTitle, paragraphTitleFont));			
+			details.add(new Chunk(constants.checkList() + ": " + checkListTitle, paragraphTitleFont));			
 			// addEmptyLine(details, 1);
 
 			try {
+				document.add(titleDetails);
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());

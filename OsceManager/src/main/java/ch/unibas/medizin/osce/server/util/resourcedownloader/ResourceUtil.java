@@ -66,6 +66,11 @@ public class ResourceUtil {
 			break;
 		}
 		
+		case STUDENT_MANAGEMENT : {
+			fileName = setStudentManagementResouce(request,os);
+			break;
+		}
+		
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -74,6 +79,16 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setStudentManagementResouce(HttpServletRequest request, ByteArrayOutputStream os) 
+	{
+	
+		Long studentId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		String fileName = StandardizedRole.getRolePrintPDFByStudentUsingServlet(studentId, locale, os);
+		return fileName;
 	}
 
 	private static String setIndividualScheduleResouce(
@@ -223,9 +238,7 @@ public class ResourceUtil {
 				.getParameter(ResourceDownloadProps.SELECTED_ROLE_ITEM_ACCESS));
 
 		String fileName = StandardizedRole
-				.getRolesPrintPdfBySearchUsingServlet(id,
-						Arrays.asList(filter), selectedRoleItemAccess, locale,
-						os);
+				.getRolesPrintPdfBySearchUsingServlet(id,Arrays.asList(filter), selectedRoleItemAccess, locale,os);
 
 		return fileName;
 	}

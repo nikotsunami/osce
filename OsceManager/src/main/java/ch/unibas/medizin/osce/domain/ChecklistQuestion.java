@@ -18,6 +18,8 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 
 @RooJavaBean
 @RooToString
@@ -126,5 +128,18 @@ public class ChecklistQuestion {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public static List<ChecklistQuestion> findCheckListQuestionByCheckListTopic(long chkListTopicId) 
+	{
+		EntityManager em = entityManager();
+		Log.info("~QUERY findCheckListQuestionByCheckListTopic()");
+		//select distinct chkque.* from checklist_question chkque,answer ans where chkque.id=ans.checklist_question and  chkque.check_list_topic=1;
+		String queryString="select distinct chkque from ChecklistQuestion as chkque, Answer as ans where chkque.id=ans.checklistQuestion and chkque.checkListTopic="+chkListTopicId;
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<ChecklistQuestion> q = em.createQuery(queryString, ChecklistQuestion.class);			
+		List<ChecklistQuestion> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);		
+		return result;		
 	}
 }

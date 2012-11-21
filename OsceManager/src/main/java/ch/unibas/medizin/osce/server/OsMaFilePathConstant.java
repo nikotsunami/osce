@@ -9,6 +9,7 @@ public class OsMaFilePathConstant {
 	public static String FILENAME = "StandardizedPatientList.csv";
 	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
 	public static String ROLE_FILE_NAME_PDF_FORMAT = "StandardizedRoleDetails.pdf";
+	public static String ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT = "StudentRoleDetails.pdf";
 
 	public static String PATIENT_FILE_NAME_PDF_FORMAT = "StandardizedPatient.pdf";
 	public static String STUDENT_FILE_NAME_PDF_FORMAT = "Student.pdf";

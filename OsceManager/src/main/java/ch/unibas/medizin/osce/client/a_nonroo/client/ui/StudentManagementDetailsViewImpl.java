@@ -140,6 +140,7 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 				OsMaConstant.PRINT_ICON, new ActionCell.Delegate<OsceProxy>() {
 					public void execute(OsceProxy osceProxy) {
 						//showEditPopUp(nation);
+						delegate.printCheckList(osceProxy,studentProxy);
 					}
 				}), "", new GetValue<OsceProxy>() {
 			public OsceProxy getValue(OsceProxy osceProxy) {

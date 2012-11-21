@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -23,6 +24,8 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.gargoylesoftware.htmlunit.html.Util;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
@@ -135,6 +138,28 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 		});
 	}
 	private void init() {	
+		
+	}
+
+	@Override
+	public void printCheckList(OsceProxy osceProxy,StudentProxy studentProxy) 
+	{
+		Log.info("printCheckList Call");
+		Log.info("Osce: " + osceProxy.getId()+" Student: " + studentProxy.getId());
+		Log.info("Standardized Role: ");
+		
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();	
+		StringBuilder requestData = new StringBuilder();
+		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STUDENT_MANAGEMENT.ordinal()));
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
+					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(studentProxy.getId().toString())).append("&");
+					
+		requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+		
+		String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData.toString(); 
+		Log.info("--> url is : " +url);
+		Window.open(url, "", "");
+		
 		
 	}
 

@@ -20,7 +20,7 @@ public interface StudentManagementDetailsView extends IsWidget {
 	 void setPresenter(Presenter systemStartActivity);
 
 	 interface Delegate {
-
+		 public void printCheckList(OsceProxy osceProxy,StudentProxy studentProxy);
 		
 	 }
 
@@ -30,7 +30,7 @@ public interface StudentManagementDetailsView extends IsWidget {
 
 	List<String> getPaths();
 
-		    
+	
 }
 
 

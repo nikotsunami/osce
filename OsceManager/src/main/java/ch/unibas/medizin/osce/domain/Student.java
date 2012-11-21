@@ -53,6 +53,9 @@ public class Student {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private Set<StudentOsces> studentOsces = new HashSet<StudentOsces>();
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
+    private Set<Answer> answer = new HashSet<Answer>();
+    
     public static List<Student> findStudentByStudentIdAndByEmail(String studid, String email)
     {
     	EntityManager em = entityManager();
