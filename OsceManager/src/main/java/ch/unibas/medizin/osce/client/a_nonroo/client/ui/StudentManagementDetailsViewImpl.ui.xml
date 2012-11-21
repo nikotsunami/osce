@@ -14,6 +14,10 @@
 			width: 100%;
 			height: 100%;
 		}	
+		
+		.myLabel {
+	      font-weight: bold;
+	    }
 	 </ui:style>
 	
 	
@@ -24,7 +28,33 @@
 	<g:Tab ui:field="tab1">
 		<g:TabHTML>General Information</g:TabHTML>
 		<g:HTMLPanel height="100%">
-		<g:HorizontalPanel  ui:field="generalInformationHorizontalPanel">
+		<table cellspacing="10">
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="nameLbl"></g:Label></td>
+				<td><g:Label ui:field="Name"></g:Label></td>
+			</tr>
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="prenameLbl"></g:Label></td>
+				<td><g:Label ui:field="Prename"></g:Label></td>
+			</tr>
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="streetLbl"></g:Label></td>
+				<td><g:Label ui:field="Street"></g:Label></td>
+			</tr>
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="cityLbl"></g:Label></td>
+				<td><g:Label ui:field="City"></g:Label></td>
+			</tr>
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="genderLbl"></g:Label></td>
+				<td><g:Label ui:field="Gender"></g:Label></td>
+			</tr>
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="emailLbl"></g:Label></td>
+				<td><g:Label ui:field="Email"></g:Label></td>
+			</tr>
+		</table>
+		<!-- <g:HorizontalPanel  ui:field="generalInformationHorizontalPanel">
 		<g:VerticalPanel spacing="15" ui:field="generalInformationHorizontalVerticalPanel1">
 		<g:Label>Name : </g:Label>
 		<g:Label>Prename : </g:Label>
@@ -41,7 +71,7 @@
 		<g:Label ui:field="Gender"></g:Label>
 		<g:Label ui:field="Email"></g:Label>
 		</g:VerticalPanel>
-		</g:HorizontalPanel>
+		</g:HorizontalPanel> -->
 		</g:HTMLPanel>
 	</g:Tab>
 	<g:Tab ui:field="tab2">

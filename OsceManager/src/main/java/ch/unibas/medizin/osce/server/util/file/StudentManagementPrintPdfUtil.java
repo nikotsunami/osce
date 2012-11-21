@@ -196,17 +196,23 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 	}
 
-	
-
 	private void addCheckListDetails(long studId) {
 		Paragraph titleDetails = new Paragraph();
 		Font roleTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
 		titleDetails.add(new Chunk(constants.standardizedRole()+": "+ util.getEmptyIfNull(standardizedRole.getLongName()), roleTitleFont));
 		addEmptyLine(titleDetails, 1);
-			
-		if ((standardizedRole.getCheckList() != null)
-				&& (standardizedRole.getCheckList().getCheckListTopics() != null)
-				&& (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) {
+		
+		
+		try {
+			document.add(titleDetails);
+		} catch (DocumentException e) {
+			log.error(e.getMessage(),e);
+		}
+		
+		
+		
+		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getCheckListTopics() != null) && (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) 
+		{
 			Paragraph details = new Paragraph();
 			
 			String checkListTitle = (standardizedRole.getCheckList().getTitle() != null)? " " + standardizedRole.getCheckList().getTitle() : "";					
@@ -215,14 +221,15 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			// addEmptyLine(details, 1);
 
 			try {
-				document.add(titleDetails);
+				//document.add(titleDetails);
 				
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 			createCheckListDetailsTable(studId);
-		}
+		}	
+		
 	}
 
 	private Paragraph createPara(PdfPTable pdfPTable, String header) {

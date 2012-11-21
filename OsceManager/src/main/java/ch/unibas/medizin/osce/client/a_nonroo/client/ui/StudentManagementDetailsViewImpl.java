@@ -54,14 +54,15 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 	
 	@UiField
 	TabPanel studentDetailPanel;
-	@UiField
+	
+	/*@UiField
 	HorizontalPanel generalInformationHorizontalPanel;
 	
 	@UiField
 	VerticalPanel generalInformationHorizontalVerticalPanel1;
 	
 	@UiField
-	VerticalPanel generalInformationHorizontalVerticalPanel2;
+	VerticalPanel generalInformationHorizontalVerticalPanel2;*/
 	
 	@UiField
 	public Label Name;
@@ -81,6 +82,24 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 	@UiField
 	public Label Email;
 	
+	@UiField
+	public Label nameLbl;
+	
+	@UiField
+	public Label prenameLbl;
+	
+	@UiField
+	public Label streetLbl;
+	
+	@UiField
+	public Label cityLbl;
+	
+	@UiField
+	public Label genderLbl;
+	
+	@UiField
+	public Label emailLbl;
+	
 	@UiField(provided = true)
 	public CellTable<OsceProxy> table;
 	
@@ -96,6 +115,13 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 
 
 	public void init(){
+		
+		nameLbl.setText(constants.name().concat(":"));
+		prenameLbl.setText(constants.preName().concat(":"));
+		streetLbl.setText(constants.street().concat(":"));
+		cityLbl.setText(constants.city().concat(":"));
+		genderLbl.setText(constants.gender().concat(":"));
+		emailLbl.setText(constants.email().concat(":"));
 		
 		studentDetailPanel.setVisible(true);
 		studentDetailPanel.getTabBar().selectTab(0);
