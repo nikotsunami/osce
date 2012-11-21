@@ -91,8 +91,8 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			title = "";
 			writer = PdfWriter.getInstance(document, out);
 			addMetaData();
-			addHeader();
 			document.open();
+			addHeader();			
 			this.isValueAvailable = new boolean[4];
 			while(standardizedRoleIterator.hasNext())
 			{				
@@ -107,7 +107,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}		
 	}
 	public void noDataFound(OutputStream os)
@@ -116,8 +116,8 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		try {
 			writer = PdfWriter.getInstance(document, os);
 			addMetaData();
-			addHeader();
 			document.open();
+			addHeader();			
 			document.add(new Chunk(constants.noDataFound()));
 			document.close();
 		} catch (DocumentException e) {
