@@ -526,12 +526,12 @@ public class StandardizedRole {
 	}
 
 
-	public static String getRolePrintPDFByStudentUsingServlet(Long studentId,String locale, ByteArrayOutputStream os) 
+	public static String getRolePrintPDFByStudentUsingServlet(Long studentId, Long osceId, String locale, ByteArrayOutputStream os) 
 	{
 		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
 		System.out.println("Id: " + studentId + " Locale: " + locale);
 		//Student student=Student.findStudent(studentId);	
-		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId);
+		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId, osceId);
 		StudentManagementPrintPdfUtil studentRolePrintPdfUtil = new StudentManagementPrintPdfUtil(locale);
 		System.out.println("Standardized Role Size for Student : " + standardizedRoleList.size());		
 		if(standardizedRoleList.size()>0)
@@ -540,19 +540,30 @@ public class StandardizedRole {
 			while(standardizedRoleIterator.hasNext())
 			{			
 				System.out.println("Standardized_Role Id : " + standardizedRoleIterator.next().getId());				
-			}*/
-			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+			}*/	
+		studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+		}
+		else
+		{
+			studentRolePrintPdfUtil.noDataFound(os);
 		}
 		
 		return fileName;
+		
 	}
 	
-	public static List<StandardizedRole> findRoleByStudentUsingAnswer(Long studentId)
+	public static List<StandardizedRole> findRoleByStudentUsingAnswer(Long studentId, Long osceId)
 	{
 		//select distinct sr.* from standardized_role sr,answer ans,osce_post_room opr,osce_post op where sr.id=op.standardized_role and op.id=opr.osce_post and opr.id=ans.osce_post_room and ans.student=1;		
 		EntityManager em = entityManager();
 		Log.info("~QUERY findRoleByStudentUsingAnswer()");
-		String queryString="select distinct sr from StandardizedRole as sr,Answer as ans,OscePostRoom as opr,OscePost as op where sr.id=op.standardizedRole and op.id=opr.oscePost and opr.id=ans.oscePostRoom and ans.student="+studentId;
+		//String queryString="select distinct sr from StandardizedRole as sr,Answer as ans,OscePostRoom as opr,OscePost as op where sr.id=op.standardizedRole and op.id=opr.oscePost and opr.id=ans.oscePostRoom and ans.student="+studentId;
+		String queryString="select distinct sr from StandardizedRole as sr,Answer as ans,OscePostRoom as opr,OscePost as op where " +
+				"sr.id=op.standardizedRole and " +
+				"op.id=opr.oscePost " +
+				"AND op.osceSequence.osceDay.osce = " + osceId + 
+				" AND opr.id=ans.oscePostRoom and " +
+				"ans.student="+studentId;
 		//String queryString = "Select d from OsceDay d";
 		Log.info("~QUERY String: " + queryString);
 		TypedQuery<StandardizedRole> q = em.createQuery(queryString, StandardizedRole.class);

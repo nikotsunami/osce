@@ -21,6 +21,8 @@ public final class ResourceDownloadProps {
 	public static final String SUMMONING_KEY = "e";
 	public static final String INDIVIDUAL_SCHEDULE_KEY = "f";
 
+	public static final String OSCE_ID = "g";
+
 	public enum Entity {
 		STANDARDIZED_PATIENT,STANDARDIZED_ROLE, STANDARDIZED_PATIENT_EXPORT, SUMMONINGS, INDIVIDUAL_SCHEDULE, STUDENT_MANAGEMENT
 	}

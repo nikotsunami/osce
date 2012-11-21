@@ -85,9 +85,12 @@ public class ResourceUtil {
 	{
 	
 		Long studentId = Long
-				.parseLong(request.getParameter(ResourceDownloadProps.ID));
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));		
+		Long osceId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.OSCE_ID));
 		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
-		String fileName = StandardizedRole.getRolePrintPDFByStudentUsingServlet(studentId, locale, os);
+		
+		String fileName = StandardizedRole.getRolePrintPDFByStudentUsingServlet(studentId, osceId, locale, os);
 		return fileName;
 	}
 

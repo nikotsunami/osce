@@ -108,7 +108,22 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		catch (Exception e) 
 		{
 			e.printStackTrace();
+		}		
+	}
+	public void noDataFound(OutputStream os)
+	{
+		title = "";
+		try {
+			writer = PdfWriter.getInstance(document, os);
+			addMetaData();
+			addHeader();
+			document.open();
+			document.add(new Chunk(constants.noDataFound()));
+			document.close();
+		} catch (DocumentException e) {
+			log.error(e.getMessage(),e);
 		}
+		
 		
 	}
 	
@@ -292,12 +307,12 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				subTable.addCell(subCell);
 				if(isSelected)
 				{
-					System.out.println("Selected Answer Bold: " + answer);
+					//System.out.println("Selected Answer Bold: " + answer);
 					subTable.addCell(getPdfCell(answer,boldFont,0,0));
 				}
 				else
 				{
-					System.out.println("Selected Answer: " + answer);
+					//System.out.println("Selected Answer: " + answer);
 					subTable.addCell(getPdfCell(answer));
 				}
 			
@@ -351,15 +366,15 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 					{																													
 						questionParagraph.add(criteriaChunk);						
 					}
-					
-					System.out.println("StudentId: "+studId+ " Question Id: " + question.getId());					
+				
+					/*//System.out.println("StudentId: "+studId+ " Question Id: " + question.getId());					
 					Iterator<ChecklistOption> checklistAnswerList=question.getCheckListOptions().iterator();
 					while(checklistAnswerList.hasNext())
 					{
 						System.out.println("Answer: " + checklistAnswerList.next().getId());
-					}
+					}*/
 					List<Long> checklistOptionList=Answer.findCheckListOptionsByStudentIdAndQuestionId(studId,question.getId());
-					System.out.println("Answer Selected By User: " + checklistOptionList.size());
+					//System.out.println("Answer Selected By User: " + checklistOptionList.size());
 					
 					PdfPCell questionCell = getPdfCell(questionParagraph, 1, 1);						
 					PdfPCell answerCell = getAnswerCell(questionText, question.getCheckListOptions(),checklistOptionList);	

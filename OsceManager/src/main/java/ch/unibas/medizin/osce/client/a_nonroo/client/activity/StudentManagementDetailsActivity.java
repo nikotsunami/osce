@@ -152,7 +152,8 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 		StringBuilder requestData = new StringBuilder();
 		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STUDENT_MANAGEMENT.ordinal()));
 		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
-					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(studentProxy.getId().toString())).append("&");
+					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(studentProxy.getId().toString())).append("&")
+					.append(ResourceDownloadProps.OSCE_ID).append("=").append(URL.encodeQueryString(osceProxy.getId().toString())).append("&");
 					
 		requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
 		
