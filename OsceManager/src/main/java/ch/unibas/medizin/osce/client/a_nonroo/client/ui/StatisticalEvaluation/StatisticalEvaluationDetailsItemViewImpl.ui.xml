@@ -19,8 +19,8 @@
 						<!--  	<td width="2%"><g:Image ui:field="minMaxImage" addStyleNames="{style.icon}" resource="{uiIcons.triangle1East}"></g:Image></td> -->
 							<td width="24%"><g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label>
 											</td>
-											
-							<td width="1%"><g:Label ui:field="dot" addStyleNames="{style.greenButton}"></g:Label></td>
+										
+							<td width="1%"><g:ToggleButton ui:field="onOffButton" ></g:ToggleButton></td>
 							
 							<td>
 									<g:HorizontalPanel ui:field="postDataHP" addStyleNames="{style.postDataHP}">
@@ -32,7 +32,9 @@
 									</g:HorizontalPanel>
 							</td>
 							<td width="13%">
+								<g:HorizontalPanel ui:field="fourthColumnHP" horizontalAlignment="left">
 								<g:Label ui:field="sumPerSequenceLbl">Sum per Sequence</g:Label>
+								</g:HorizontalPanel>
 							</td>
 						</tr>
 						

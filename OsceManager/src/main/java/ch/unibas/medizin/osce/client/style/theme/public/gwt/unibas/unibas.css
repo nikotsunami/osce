@@ -3620,6 +3620,40 @@ color: #f1b532;
 		width: 12px;
 		height: 12px;
 	}
+	.green-ToggleButton
+{
+    background-color            :    green  ; 
+    border-width:1px;
+    border-color:green;
+    cursor                      :    pointer;
+    font-size                   :    75%;
+    width                       :    12px;
+   border-radius:12px;
+    height: 12px;
+
+}
+.green-ToggleButton-up-hovering
+{
+ 	background-color            :    rgb(28,142,62);   
+    border-width:1px;
+    border-color:green;
+    cursor                      :    hand;
+    font-size                   :    75%;
+    width                       :    12px;
+      border-radius:12px;
+    height: 12px;
+}
+.green-ToggleButton-down, .green-ToggleButton-down-hovering
+{
+    background-color	:    red  ; 
+    border-width:1px;
+    border-color:green;
+    cursor                      :    hand;
+    font-size                   :    75%;
+    width                       :    12px;
+      border-radius:12px;
+    height: 12px;
+}
 /* Module 16 end*/
 
 .empty-bg-student{

@@ -142,8 +142,14 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 	@UiField
 	TableElement sequenceHeader;
 	
+	@UiField
+	HorizontalPanel fourthColumnHP;
 	
-	
+	public HorizontalPanel getFourthColumnHP() {
+		return fourthColumnHP;
+	}
+
+
 	public TableElement getSequenceHeader() {
 		return sequenceHeader;
 	}
@@ -248,6 +254,7 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 	
 	public Label createPostDataLabel()
 	{
+		
 		Label l=new Label();
 		l.addStyleName("postData");
 		l.setWordWrap(true);

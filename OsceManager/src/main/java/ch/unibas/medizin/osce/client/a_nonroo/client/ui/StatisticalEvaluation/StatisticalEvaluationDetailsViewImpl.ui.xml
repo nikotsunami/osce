@@ -34,8 +34,9 @@
 		<g:ScrollPanel  ui:field="scrollPanel" >
 		<g:HTMLPanel width="100%">	
 						
-						
-						
+						<div style="float:left;">
+							<g:Button ui:field="exportBtn"></g:Button>
+						</div>
 						<div style="float:right;">
 							<g:HorizontalPanel spacing="5" horizontalAlignment="right" >
 								<my:FocusableValueListBox ui:field="analysisListBox"></my:FocusableValueListBox>

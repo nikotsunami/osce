@@ -1,9 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.MapEnvelopProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
@@ -26,6 +28,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
+import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -42,6 +45,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -69,8 +73,11 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		private  List<String> itemAnalysisColumnName=new ArrayList<String>();
 		private List<String> postAnalysisColumnName=new ArrayList<String>();
 		private AnalysisType analysisType=null;
+		private Set<Long> missingItemId=new HashSet<Long>();
 		
 		private List<MapEnvelopProxy> itemAnalysisData=null;
+		private List<MapEnvelopProxy> postAnalysisData=null;
+		
 		public StatisticalEvaluationDetailsActivity(StatisticalEvaluationDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) 
 		{
 			Log.info("Call StatisticalEvaluationDetailsPlace(3arg)");
@@ -196,6 +203,16 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			view.getSequenceVP().clear();
 			
+			if(analysisType.equals(AnalysisType.item_analysis))
+			{
+				view.getExportBtn().setVisible(false);
+			}
+			else if(analysisType.equals(AnalysisType.post_analysys))
+			{
+				view.getExportBtn().setVisible(true);
+				view.getExportBtn().setText(constants.export());
+			}
+			
 			Iterator<OsceDayProxy> osceDayProxyIterator=osceProxy.getOsce_days().iterator();
 			while(osceDayProxyIterator.hasNext())
 			{
@@ -219,8 +236,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			sequenceView.setDelegate(this);
 			sequenceView.setOsceSequenceProxy(osceSequenceProxy);
 			sequenceView.setOsceDayProxy(osceDayProxy);
-			sequenceView.getSequenceLbl().setText(constants.sequence()+osceSequenceProxy.getLabel());
-			sequenceView.getSumPerSequenceLbl().setText(constants.sumPerSequence());
+			sequenceView.getSequenceLbl().setText(constants.sequence()+" "+osceSequenceProxy.getLabel());
+			//sequenceView.getSumPerSequenceLbl().setText(constants.sumPerSequence());
 			sequenceView.setSequencePanel(true);
 			view.getSequenceVP().add(sequenceView.asWidget());
 			
@@ -228,6 +245,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			sequenceView.getPostViewHP().clear();
 			sequenceView.getPostDataHP().clear();
 			
+			if(analysisType.equals(AnalysisType.post_analysys))
+			sequenceView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).setPropertyString("width", "28%");
 			
 			
 			if(analysisType.equals(AnalysisType.item_analysis))
@@ -237,6 +256,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				{
 					createPostDataLabel(sequenceView, "-");
 				}
+				
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
@@ -276,6 +296,10 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					StatisticalEvaluationDetailPostView header=new StatisticalEvaluationDetailPostViewImpl();
 					header.setDelegate(this);
 					header.getPostNameLbl().setText(headerName);
+					if(sequenceView.getPostViewHP().getWidgetCount()==0 || sequenceView.getPostViewHP().getWidgetCount()==3 || sequenceView.getPostViewHP().getWidgetCount()==5)
+					{
+						header.asWidget().getElement().getStyle().setProperty("borderLeftWidth", "3px");
+					}
 					sequenceView.getPostViewHP().add(header.asWidget());
 				}
 			}
@@ -326,6 +350,15 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					label.setWidth("52px");
 				}
 				label.setText(data.toString());
+				
+				if(analysisType.equals(AnalysisType.item_analysis))
+				{
+					if(sequenceView.getPostDataHP().getWidgetCount() ==0)
+					{
+						label.getElement().getStyle().setProperty("borderLeftWidth", "3px");
+						label.getElement().getStyle().setProperty("borderColor", "#9EB7BE");
+					}
+				}
 				sequenceView.getPostDataHP().add(label);
 				
 			}
@@ -417,7 +450,19 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys) && statisticalEvaluationDetailSequenceViewImpl.isPostPanel())
 			{
-				
+				Log.info("create all item panel");
+				requests.answerRequestNonRoo().retrieveDistinctExaminer(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<DoctorProxy>>() {
+
+					@Override
+					public void onSuccess(List<DoctorProxy> response) {
+						Log.info("create all item panel success :" +response.size());
+						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
+						for(DoctorProxy doctorProxy:response)
+						{
+							createExaminerPanel(doctorProxy, statisticalEvaluationDetailSequenceViewImpl);
+						}
+					}
+				});
 			}
 			/* For Sum
 			requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("courses").fire(new OSCEReceiver<OsceSequenceProxy>() {
@@ -435,6 +480,57 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				}
 			});*/
 		}
+		
+		public void createExaminerPanel(DoctorProxy doctorProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
+		{
+			Log.info("createExaminerPanel");
+			StatisticalEvaluationDetailsItemView examinerView=new StatisticalEvaluationDetailsItemViewImpl();
+			examinerView.setDelegate(this);
+			examinerView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
+			examinerView.getSequenceLbl().getElement().getStyle().setFontSize(12, Unit.PX);
+			examinerView.getSequenceLbl().setWidth("248px");
+			examinerView.getOnOffButton().setVisible(false);
+			examinerView.setDoctorProxy(doctorProxy);
+			examinerView.getSequenceLbl().setText(doctorProxy.getPreName() + " " + doctorProxy.getName());
+			examinerView.getSumPerSequenceLbl().setText("");
+			
+			examinerView.getFourthColumnHP().clear();
+			
+			examinerView.getFourthColumnHP().add(examinerView.createAddPointButton());
+			if(analysisType.equals(AnalysisType.post_analysys))
+			{
+				examinerView.getSumPerSequenceLbl().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
+				examinerView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
+				//examinerView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).setPropertyString("width", "28%");
+			}
+			
+			statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().add(examinerView.asWidget());
+			examinerView.getPostDataHP().clear();
+			
+			for(int i=0;i<statisticalEvaluationDetailSequenceViewImpl.getPostDataHP().getWidgetCount();i++)
+			{
+				createPostDataLabel(examinerView, "-");
+			}
+			
+			if(analysisType.equals(AnalysisType.post_analysys) && postAnalysisData != null)
+			{
+				String examinerKey="e"+statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()+examinerView.getDoctorProxy().getId();
+				
+				Log.info("key :" +examinerKey);
+				
+				List<String> examinerValues=getValue(postAnalysisData, examinerKey);
+				
+				for(int l=0;l<examinerValues.size();l++)
+				{
+					String examinerValue=examinerValues.get(l);
+					
+					
+					((Label)examinerView.getPostDataHP().getWidget(l)).setText(examinerValue);
+				}
+			}
+		}
+		
+		
 		//create question/item panel
 		public void createQuestionPanel(ChecklistQuestionProxy checklistQuestionProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
 		{
@@ -458,6 +554,11 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			questionView.getSumPerSequenceLbl().setText("");
 			//questionView.getSequenceHeader().addClassName("parcourHeader");
 			
+			
+				if(missingItemId.contains(checklistQuestionProxy.getId()))
+				{
+					questionView.getOnOffButton().setDown(true);
+				}
 			
 			
 			statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().add(questionView.asWidget());
@@ -493,7 +594,18 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				for(int l=0;l<questionView.getPostDataHP().getWidgetCount();l++)
 				{
-					((Label)questionView.getPostDataHP().getWidget(l)).setText(itemValues.get(l));
+					String itemValue=itemValues.get(l);
+					if(l==0)
+					{
+						
+						String temp[]=itemValue.split("/");
+						if(new Double(temp[0]) != 0)
+						{
+							((Label)questionView.getPostDataHP().getWidget(l)).getElement().getStyle().setColor("red");
+						}
+					}
+					
+					((Label)questionView.getPostDataHP().getWidget(l)).setText(itemValue);
 				}
 			}
 		}
@@ -508,6 +620,16 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			Log.info("createPostPanel td"+postView.getSequenceLbl().getElement().getParentElement());
 			
 			postView.getMainPanel().setWidth("99%");
+			
+			postView.setPostPanel(true);
+			postView.setOscePostProxy(oscePostProxy);
+			postView.getSequenceLbl().setText(constants.post()+oscePostProxy.getSequenceNumber());
+			postView.getSumPerSequenceLbl().setText("");
+			postView.getSequenceHeader().addClassName("parcourHeader");
+			postView.getSequenceDisclosurePanel().addStyleName("parcourContent");
+			postView.setOsceDayProxy(statisticalEvaluationDetailSequenceViewImpl.getOsceDayProxy());
+			postView.setDelegate(this);
+			
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
 				postView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(24, Unit.PCT);
@@ -517,15 +639,19 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			{
 				postView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
 				postView.getSequenceLbl().setWidth("248px");
+				postView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
+				//postView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).setPropertyString("width", "28%");
+				
+				//postView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).getStyle().setWidth(28, Unit.PCT);
+				
+				postView.getFourthColumnHP().clear();
+				Button clearBtn=new Button();
+				clearBtn.setText(constants.clear());
+				
+				
+				
+				postView.getFourthColumnHP().add(clearBtn);
 			}
-			postView.setPostPanel(true);
-			postView.setOscePostProxy(oscePostProxy);
-			postView.getSequenceLbl().setText(constants.post()+oscePostProxy.getSequenceNumber());
-			postView.getSumPerSequenceLbl().setText("");
-			postView.getSequenceHeader().addClassName("parcourHeader");
-			postView.getSequenceDisclosurePanel().addStyleName("parcourContent");
-			postView.setOsceDayProxy(statisticalEvaluationDetailSequenceViewImpl.getOsceDayProxy());
-			postView.setDelegate(this);
 			
 			statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().add(postView.asWidget());
 			
@@ -545,6 +671,20 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				List<String> postValues=getValue(itemAnalysisData, postKey);
 				
 				for(int k=0;k<(postView.getPostDataHP().getWidgetCount()/2);k++)
+				{
+					((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
+				}
+			}
+			
+			if(analysisType.equals(AnalysisType.post_analysys)  && postAnalysisData != null)
+			{
+				String postKey="p"+postView.getOscePostProxy().getId();
+				
+				Log.info("key :" +postKey);
+				
+				List<String> postValues=getValue(postAnalysisData, postKey);
+				
+				for(int k=0;k<postValues.size();k++)
 				{
 					((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
 				}
@@ -641,7 +781,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
-				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+				showApplicationLoading(true);
+				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0,missingItemId).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 	
 					@Override
 					public void onSuccess(List<MapEnvelopProxy> response) {
@@ -705,6 +846,15 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 											
 											for(int l=0;l<itemView.getPostDataHP().getWidgetCount();l++)
 											{
+												if(l==0)
+												{
+													String itemValue=itemValues.get(l);
+													String temp[]=itemValue.split("/");
+													if(new Double(temp[0]) != 0)
+													{
+														(itemView.getPostDataHP().getWidget(l)).getElement().getStyle().setColor("red");
+													}
+												}
 												((Label)itemView.getPostDataHP().getWidget(l)).setText(itemValues.get(l));
 											}
 										}
@@ -714,8 +864,92 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 							
 						}
 					
+						showApplicationLoading(false);
 					}
 				});
+			}
+			else if(analysisType.equals(AnalysisType.post_analysys))
+			{
+				showApplicationLoading(true);
+					requests.answerRequestNonRoo().calculate(osceProxy.getId(), 1, null).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+
+						@Override
+						public void onSuccess(List<MapEnvelopProxy> response) {
+							
+							postAnalysisData=response;
+							
+							Log.info("calculate success :" +response.size());
+						/*	for(String key:response.getKeys())
+							{
+								Log.info("key :" + key);
+								List<List<String>> values=response.getValues();
+								for(List<String> valueList:values)
+								{
+									for(String value:valueList)
+									Log.info("value :" + value);
+								}
+							}
+							*/
+							VerticalPanel vp=view.getSequenceVP();
+							for(int i=0;i<vp.getWidgetCount();i++)
+							{
+								StatisticalEvaluationDetailSequenceViewImpl seqView=((StatisticalEvaluationDetailSequenceViewImpl)(vp.getWidget(i)));
+								//MapEnvelopProxy mapProxy=response.get(i);
+								//List<String> standardDevialtion=mapProxy.getValue();
+							//	String seqKey="s"+seqView.getOsceSequenceProxy().getId();
+							//	Log.info("key :" +seqKey);
+							//	List<String> standardDevialtion=getValue(response, seqKey);
+							//	((Label)seqView.getPostDataHP().getWidget(2)).setText(standardDevialtion.get(0));
+								
+								VerticalPanel postVP=seqView.getDisclosureVP();
+								
+								if(seqView.getSequenceDisclosurePanel().isOpen())
+								{
+									for(int j=0;j<postVP.getWidgetCount();j++)
+									{
+										StatisticalEvaluationDetailSequenceViewImpl postView=((StatisticalEvaluationDetailSequenceViewImpl)(postVP.getWidget(j)));
+										String postKey="p"+postView.getOscePostProxy().getId();
+										
+										Log.info("key :" +postKey);
+										
+										List<String> postValues=getValue(response, postKey);
+										
+										for(int k=0;k<postValues.size();k++)
+										{
+											((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
+										}
+										
+										VerticalPanel itemVP=postView.getDisclosureVP();
+										
+										if(postView.getSequenceDisclosurePanel().isOpen())
+										{
+											for(int k=0;k<itemVP.getWidgetCount();k++)
+											{
+												StatisticalEvaluationDetailsItemViewImpl itemView=(StatisticalEvaluationDetailsItemViewImpl)itemVP.getWidget(k);
+												
+												String itemKey="e"+postView.getOscePostProxy().getId()+itemView.getDoctorProxy().getId();
+												
+												Log.info("key :" +itemKey);
+												
+												List<String> itemValues=getValue(response, itemKey);
+												
+												for(int l=0;l<itemValues.size();l++)
+												{
+													
+													((Label)itemView.getPostDataHP().getWidget(l)).setText(itemValues.get(l));
+												}
+											}
+										}
+									}
+								}
+								
+							}
+						
+							showApplicationLoading(false);
+						}
+					});
+					
+					
 			}
 		}
 		
@@ -731,5 +965,13 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			}
 			
 			return null;
+		}
+		
+		public void onOffButtonClicked(Long id,Boolean missing)
+		{
+			if(missing)
+				missingItemId.add(id);
+			else
+				missingItemId.remove(id);
 		}
 }

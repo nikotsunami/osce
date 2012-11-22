@@ -1203,5 +1203,15 @@ public interface OsceConstants extends Constants {
 	   public String osceSemesterMessage();
 
 	public String noDataFound();
+	
+	 public String clear();
+     
+     public String addPoint();
+     
+     public String minmum();
+     
+     public String max();
+     
+     public String minMaxNotNull();
 }
 

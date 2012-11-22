@@ -1,13 +1,14 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.math.stat.StatUtils;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -57,7 +58,7 @@ public class Answer {
 	
 	public static List<ChecklistQuestion> retrieveDistinctQuestion(Long postId)
 	{
-		 	Log.info("retrieveStudent :");
+		 	Log.info("retrieveDistinctQuestion :");
 	        EntityManager em = entityManager();
 	        String queryString = "SELECT  distinct a.checklistQuestion FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost=" + postId + " ) order by a.checklistQuestion.sequenceNumber asc";
 	        
@@ -68,6 +69,21 @@ public class Answer {
 	        Log.info("retrieveQuestion query String :" + queryString);
 	        Log.info("Assignment List Size :" + questionList.size());
 	        return questionList;
+	}
+	
+	public static List<Doctor> retrieveDistinctExaminer(Long postId)
+	{
+		Log.info("retrieveDistinctExaminer :");
+        EntityManager em = entityManager();
+        String queryString = "SELECT  distinct a.doctor FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost=" + postId + " ) order by a.checklistQuestion.sequenceNumber asc";
+        
+        TypedQuery<Doctor> query = em.createQuery(queryString, Doctor.class);
+        List<Doctor> questionList = query.getResultList();
+        
+       
+        Log.info("retrieveQuestion query String :" + queryString);
+        Log.info("Assignment List Size :" + questionList.size());
+        return questionList;
 	}
 	
 	public static List<Answer> retrieveQuestionPerPostAndItem(Long postId,Long itemId)
@@ -104,9 +120,9 @@ public class Answer {
 	
 	public static int countAnswerTableRow(long postId,long itemId)
 	{
-		Log.info("countStudent :");
+		Log.info("countAnswerTableRow :");
         EntityManager em = entityManager();
-        String queryString = "SELECT  count(a) FROM Answer as a where a.checklistQuestion"+itemId+"  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost=" + postId + " ) ";
+        String queryString = "SELECT  count(a) FROM Answer as a where a.checklistQuestion="+itemId+"  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost=" + postId + " ) ";
         
         TypedQuery<Student> query = em.createQuery(queryString, Student.class);
         List<Student> assignmentList = query.getResultList();
@@ -117,13 +133,44 @@ public class Answer {
 		return assignmentList.size();
 	}
 	
+	public static int numOfDistinctStudentExamined(Long examinerId,Long postId)
+	{
+		Log.info("numOfDistinctStudentExamined :");
+        EntityManager em = entityManager();
+        String queryString = "SELECT  count(a) FROM Answer as a where a.doctor="+examinerId+"  and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost=" + postId + " ) ";
+        
+        TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+     
+        Log.info("numOfDistinctStudentExamined query String :" + queryString);
+     //   Log.info("Assignment List Size :" + assignmentList.size());
+       
+		
+		return query.getResultList().get(0).intValue();
+	}
 	
-	public static List<MapEnvelop> calculate(Long osceId,int analyticType)
+	public static List<Answer> retrieveDistinctStudentExamined(Long examinerId,Long postId)
+	{
+		Log.info("retrieveDistinctStudentExamined :");
+        EntityManager em = entityManager();
+        String queryString = "SELECT  a FROM Answer as a where a.doctor="+examinerId+" and checklistOption!=null and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost=" + postId + " ) ";
+        
+        TypedQuery<Answer> query = em.createQuery(queryString, Answer.class);
+     
+        Log.info("numOfDistinctStudentExamined query String :" + queryString);
+     //   Log.info("Assignment List Size :" + assignmentList.size());
+       
+		
+		return query.getResultList();
+	}
+	
+	public static List<MapEnvelop> calculate(Long osceId,int analyticType,Set<Long> missingItemId)
 	{
 		//List<Map<String,List<String>>> data=new ArrayList<Map<String,List<String>>>();
 		
 		List<MapEnvelop> data=new ArrayList<MapEnvelop>();
 		
+		if(analyticType==0)//item analysis
+		{
 		Osce osce=Osce.findOsce(osceId);
 		List<OsceDay> days=osce.getOsce_days();
 		
@@ -135,10 +182,7 @@ public class Answer {
 			//sequence wise calculation
 			for(OsceSequence seq:sequences)
 			{
-				//Map<String,List<String>> seqMap=new HashMap<String, List<String>>();
-				
-				
-			//	data.add(seqMap);
+
 				List<String> seqLevelList=new ArrayList<String>();
 				
 				List<OscePost> posts=seq.getOscePosts();
@@ -147,13 +191,13 @@ public class Answer {
 				
 				ArrayList<Double> sumOfPoinstAtSeqLevel=new ArrayList<Double>();
 				
+				//post wise calculation
 				for(int l=0;l<posts.size();l++)
 				{
 					OscePost post=posts.get(l);
 					
-					//post wise calculation
-				//	Map<String,List<String>> postMap=new HashMap<String, List<String>>();
-				//	data.add(postMap);
+					
+			
 					List<String> postLevelList=new ArrayList<String>();
 					
 					//retrieve distict item for this post
@@ -162,7 +206,8 @@ public class Answer {
 					//total num of student from assignment table
 					int totalStudent=countStudent(day.getId());
 					Log.info("Total number of student :" + totalStudent);
-					//total number (expected num of rows in answer table if all student are present)= num of student * num of distinct question for particular post
+					
+					//total number of student per post(expected num of rows in answer table if all student are present)= num of student * num of distinct question for particular post
 					int totalPerPost=(totalStudent*items.size());
 					
 					//total number of points per item(sum of points/marks per item)
@@ -190,9 +235,11 @@ public class Answer {
 						missingAtPostLevel=missingAtPostLevel+missingAtItemLevel;
 						double missingPercentageAtItemLevel=0;
 						if(totalStudent != 0)
-							missingPercentageAtItemLevel= percentage(missingAtPostLevel,totalStudent);
+							missingPercentageAtItemLevel= percentage(missingAtItemLevel,totalStudent);
 						
-						String missingItem=missingAtItemLevel+"/"+missingPercentageAtItemLevel;
+						missingPercentageAtItemLevel=roundTwoDecimals(missingPercentageAtItemLevel);
+						
+						String missingItem=missingAtItemLevel+"/"+missingPercentageAtItemLevel+"%";
 						questionList.add(missingItem);
 						
 						//2. calculate average at item level
@@ -200,7 +247,23 @@ public class Answer {
 						Double pointAvg=new Double(0);
 						String optionValues="";
 						String frequency="";
-						 double [] points = new double[itemAnswers.size()];
+						
+						double [] points =null;
+						boolean isMissing = false; 
+						for(int i=0;i<missingItemId.size();i++)
+						{
+							if(missingItemId.contains(item.getId()))
+							{
+								isMissing=true;
+								break;
+							}
+						}
+						
+						if(isMissing)
+							points = new double[itemAnswers.size()];
+						else
+						    points = new double[totalStudent];
+						
 						int [] optionCounts=new int[item.getCheckListOptions().size()]; 
 						List<String> optionValuesList=new ArrayList<String>();
 						for(int i=0;i<item.getCheckListOptions().size();i++)
@@ -238,15 +301,19 @@ public class Answer {
 				//		point=point/itemAnswers.size();
 						pointAvg=StatUtils.sum(points);
 						Log.info("Avg of point at item level :" + pointAvg);
-						sumOfPoinstAtSeqLevel.add(pointAvg);
-						totalPointsPerItem[k]=pointAvg;
+					//	sumOfPoinstAtSeqLevel.add(pointAvg);
+					//	totalPointsPerItem[k]=pointAvg;
 						pointAvg=pointAvg/points.length;
+						pointAvg=roundTwoDecimals(pointAvg);
 						average=average+pointAvg;
 						questionList.add(pointAvg.toString());
 						
 						
 						//3.calculate S.D at item level
 						Double pointSD=Math.sqrt(StatUtils.variance(points));
+						pointSD=roundTwoDecimals(pointSD);
+						totalPointsPerItem[k]=pointSD;
+						
 						questionList.add(pointSD.toString());
 						
 						//4. Point / Option Values
@@ -256,9 +323,9 @@ public class Answer {
 						for(int j=0;j<optionValuesList.size();j++)
 						{
 							if(frequency.equals(""))
-								frequency=frequency+percentage(optionCounts[j],itemAnswers.size());
+								frequency=frequency+roundTwoDecimals(percentage(optionCounts[j],itemAnswers.size()));
 							else
-								frequency=frequency+"/"+percentage(optionCounts[j],itemAnswers.size());
+								frequency=frequency+"/"+roundTwoDecimals(percentage(optionCounts[j],itemAnswers.size()));
 							
 						}
 						questionList.add(frequency);
@@ -276,7 +343,10 @@ public class Answer {
 					double missingPercentageAtPostLevel=0;
 					if(totalPerPost!=0)
 						missingPercentageAtPostLevel= percentage(missingAtPostLevel,totalPerPost);
-					String missing=missingAtPostLevel+"/"+missingPercentageAtPostLevel;
+					
+				//	missingPercentageAtPostLevel=roundTwoDecimals(missingPercentageAtPostLevel);
+					
+					String missing=missingAtPostLevel+"/"+totalPerPost;
 					postLevelList.add(missing);
 					
 					Log.info("missing :" + "p"+post.getId() + "  " +missing);
@@ -286,20 +356,25 @@ public class Answer {
 					
 					
 					if(average.isNaN())
-						postLevelList.add("0");
+						postLevelList.add("0.0");
 					else
+					{
+						average=roundTwoDecimals(average);
 						postLevelList.add(average.toString());
-						
+					}
 					
 					// 3. standard deviation
 					if(totalPointsPerItem.length != 0)
 					{
 						Double sdPerPost=Math.sqrt(StatUtils.variance(totalPointsPerItem));
+						sdPerPost=roundTwoDecimals(sdPerPost);
+						sumOfPoinstAtSeqLevel.add(sdPerPost);
 						postLevelList.add(sdPerPost.toString());
 					}
 					else
 					{
-						postLevelList.add("0");
+						postLevelList.add("0.0");
+						sumOfPoinstAtSeqLevel.add(0.0);
 					}
 					totalPointsPerPost[l]=totalPointsPerPost[l]+StatUtils.sum(totalPointsPerItem);
 					
@@ -323,11 +398,12 @@ public class Answer {
 				if(totalPointsPerSum.length !=0)
 				{
 					Double sdPerSequence=Math.sqrt(StatUtils.variance(totalPointsPerSum));
+					sdPerSequence=roundTwoDecimals(sdPerSequence);
 					seqLevelList.add(sdPerSequence.toString());
 				}
 				else
 				{
-					seqLevelList.add("0");
+					seqLevelList.add("0.0");
 				}
 				MapEnvelop seqMap=new MapEnvelop();
 			
@@ -337,27 +413,174 @@ public class Answer {
 			
 		}
 		
-		
+		}
+		else if(analyticType==1)//post analysis
+		{
+			Osce osce=Osce.findOsce(osceId);
+			List<OsceDay> days=osce.getOsce_days();
+			
+			for(OsceDay day:days)
+			{
+				List<OsceSequence> sequences=day.getOsceSequences();
+				
+				
+				//sequence wise calculation
+				for(OsceSequence seq:sequences)
+				{
+
+					
+					
+					List<OscePost> posts=seq.getOscePosts();
+					
+					
+					
+					//post wise calculation
+					for(int l=0;l<posts.size();l++)
+					{
+						OscePost post=posts.get(l);
+						
+						List<Doctor> doctors=retrieveDistinctExaminer(post.getId());
+						
+						List<String> postLevelList=new ArrayList<String>();
+						
+						Integer numOfStudentPerPost=0;
+						
+						Double averagePerPost=0.0;
+						double sdPerDoctor[]=new double[doctors.size()];
+						double minPerDoctor[]=new double[doctors.size()];
+						double maxPerDoctor[]=new double[doctors.size()];
+						for(int a=0;a<doctors.size();a++)
+						{
+							Doctor doctor=doctors.get(a);
+							List<String> examinerLevelList=new ArrayList<String>();
+							
+							//student count
+							List<Answer> answers=retrieveDistinctStudentExamined(doctor.getId(),post.getId());
+							numOfStudentPerPost=numOfStudentPerPost+answers.size();
+							examinerLevelList.add(new Integer(answers.size()).toString());
+							
+							//pass
+							examinerLevelList.add("0");
+							
+							//fail
+							examinerLevelList.add("0");
+							
+							//passing grade
+							examinerLevelList.add("0");
+							
+							//average
+							double points[]=new double[answers.size()];
+							for(int i=0;i<answers.size();i++)
+							{
+								points[i]=new Double(answers.get(i).getChecklistOption().getValue());
+								
+							}
+							Double average=StatUtils.mean(points);
+							if(!average.isNaN())
+							average=roundTwoDecimals(average);
+							averagePerPost=averagePerPost+average;
+							examinerLevelList.add(String.valueOf(average));
+							
+							//sd
+							Double sd=Math.sqrt(StatUtils.variance(points));
+							sdPerDoctor[a]=sd;
+							if(!sd.isNaN())
+							sd=roundTwoDecimals(sd);
+							examinerLevelList.add(String.valueOf(sd));
+							
+							//minimum
+							double min=StatUtils.min(points);
+							minPerDoctor[a]=min;
+							examinerLevelList.add(String.valueOf((int)min));
+							
+							//maximum
+							double max=StatUtils.max(points);
+							maxPerDoctor[a]=max;
+							examinerLevelList.add(String.valueOf((int)max));
+							
+							MapEnvelop examinerMap=new MapEnvelop();
+							examinerMap.put("e"+post.getId()+doctor.getId(), examinerLevelList);
+							data.add(examinerMap);
+						}
+						
+						//student count
+						postLevelList.add(numOfStudentPerPost.toString());
+						
+						//pass
+						postLevelList.add("0");
+						
+						//fail
+						postLevelList.add("0");
+						
+						//passing grade
+						postLevelList.add("0");
+						
+						//average
+						averagePerPost=averagePerPost/doctors.size();
+						
+						if(averagePerPost.isNaN())
+						{
+							postLevelList.add("0");
+						}
+						else
+						{
+							averagePerPost=roundTwoDecimals(averagePerPost);
+							postLevelList.add(averagePerPost.toString());
+						}
+						
+						//sd
+						Double sdPerPost=Math.sqrt(StatUtils.variance(sdPerDoctor));
+						
+						if(sdPerPost.isNaN())
+						{
+							postLevelList.add("0");
+						}
+						else
+						{
+							sdPerPost=roundTwoDecimals(sdPerPost);
+							postLevelList.add(String.valueOf(sdPerPost));
+						}
+						//min
+						Double min=StatUtils.min(minPerDoctor);
+						if(min.isNaN())
+						{
+							postLevelList.add("0");
+						}
+						else
+							postLevelList.add(String.valueOf(min.intValue()));
+						
+						//max
+						Double max=StatUtils.min(maxPerDoctor);
+						if(max.isNaN())
+						{
+							postLevelList.add("0");
+						}
+						else 
+							postLevelList.add(String.valueOf(max.intValue()));
+						
+						MapEnvelop postMap=new MapEnvelop();
+						postMap.put("p"+post.getId(), postLevelList);
+						data.add(postMap);
+					}
+				}
+			}
+		}
 		
 		return data;
 	}
 	public static double percentage(int a,int b)
 	{
+		double c=a;
+		double d=b;
 		if(b==0)
 			return 0;
 		else
-			return ((a/b)*100);
+			return ((c/d)*100);
 	}
-
-	public static List<Long> findCheckListOptionsByStudentIdAndQuestionId(long studId, Long questionId) 
+	
+	public static  double roundTwoDecimals(double d) 
 	{
-		EntityManager em = entityManager();
-		Log.info("~QUERY findCheckListOptionsByStudentIdAndQuestionId()");
-		String queryString="select ans.checklistOption.id from Answer as ans where ans.student="+studId+" and ans.checklistQuestion="+questionId;
-		Log.info("~QUERY String: " + queryString);
-		TypedQuery<Long> q = em.createQuery(queryString, Long.class);			
-		List<Long> result = q.getResultList();
-		Log.info("~QUERY Result : " + result);		
-		return result;		
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
 	}
 }

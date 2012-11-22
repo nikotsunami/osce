@@ -63,6 +63,18 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 	@UiField
 	Button calculateBtn;
 	
+	@UiField
+	Button exportBtn;
+	
+	public Button getExportBtn() {
+		return exportBtn;
+	}
+
+
+
+
+
+
 	public VerticalPanel getSequenceVP() {
 		return sequenceVP;
 	}

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation;
 import ch.unibas.medizin.osce.shared.AnalysisType;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -31,5 +32,6 @@ public interface StatisticalEvaluationDetailsView extends IsWidget{
     
     void setPresenter(Presenter systemStartActivity);
     
+    public Button getExportBtn();
    
 }

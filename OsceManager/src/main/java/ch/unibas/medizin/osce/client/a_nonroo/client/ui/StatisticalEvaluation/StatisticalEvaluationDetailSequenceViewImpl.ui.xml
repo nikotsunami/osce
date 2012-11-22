@@ -57,7 +57,9 @@
 									</g:HorizontalPanel>
 							</td>
 							<td width="13%">
-								<g:Label ui:field="sumPerSequenceLbl">Sum per Sequence</g:Label>
+								<g:HorizontalPanel ui:field="fourthColumnHP">
+									<g:Label ui:field="sumPerSequenceLbl"></g:Label>
+								</g:HorizontalPanel>
 							</td>
 						</tr>
 						

@@ -84,4 +84,6 @@ public interface StatisticalEvaluationDetailSequenceView {
 
 
 		public void setPostPanel(boolean isPostPanel);
+		
+		public HorizontalPanel getFourthColumnHP();
 }
