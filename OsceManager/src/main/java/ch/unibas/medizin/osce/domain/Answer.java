@@ -583,4 +583,16 @@ public class Answer {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         return Double.valueOf(twoDForm.format(d));
 	}
+	
+		public static List<Long> findCheckListOptionsByStudentIdAndQuestionId(long studId, Long questionId) 
+	{
+		EntityManager em = entityManager();
+		Log.info("~QUERY findCheckListOptionsByStudentIdAndQuestionId()");
+		String queryString="select ans.checklistOption.id from Answer as ans where ans.student="+studId+" and ans.checklistQuestion="+questionId;
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString, Long.class);			
+		List<Long> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);		
+		return result;		
+	}
 }
