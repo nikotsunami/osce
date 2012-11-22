@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RooEntity
 public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	
-	@Size(max=50)
+	@Size(max=255)
 	private String criteria;
 	
 	@ManyToOne

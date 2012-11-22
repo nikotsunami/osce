@@ -181,16 +181,20 @@ public class UploadPopupViewImpl extends PopupPanel  implements UploadPopupView 
     	
     	
     	//validate type for mozilla firefox
-    	if(browser.equalsIgnoreCase("Firefox") && browserVersion >= 4)
+    	/*if(browser.equalsIgnoreCase("Firefox") && browserVersion >= 4)
     	{
     		//check valid file type
-    		if(extension.equalsIgnoreCase("WebM") || extension.equalsIgnoreCase("Ogv"))
+    	*/	
+    	if(extension.equalsIgnoreCase("WebM") || extension.equalsIgnoreCase("ogv") || extension.equalsIgnoreCase("mp4")  )
+    	{
     			return true;
-    		else
+    	}
+    	else
+    	{
     			return false;
     	}
     	
-    	return true;
+    	//return true;
 	}
 	
 	public UploadPopupViewImpl(boolean isVideo)

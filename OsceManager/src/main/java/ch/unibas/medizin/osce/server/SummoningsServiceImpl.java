@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -122,14 +123,17 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 							for(Assignment assignment : assignments2){
 								
 								log.info("Assignment : "+assignment.getId());
+								String day = checkNotNull(assignment,"getOsceDay","getOsceDate")==true?""+dateFormat.format(assignment.getOsceDay().getOsceDate()):"";
+								String shortName = checkNotNull(assignment,"getPatientInRole","getOscePost","getStandardizedRole","getShortName") != true ? "" : assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName();
+								String assignmentInfo = day
+								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+								+timeFormat.format(assignment.getTimeStart())
+								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+								+timeFormat.format(assignment.getTimeEnd())
+								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+								+ shortName;
 								
-								assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
-										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-										+timeFormat.format(assignment.getTimeStart())
-										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-										+timeFormat.format(assignment.getTimeEnd())
-										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-										+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName());
+								assignments.add(assignmentInfo);
 							}
 						}
 					}
@@ -149,8 +153,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			return this.generateMailPDFUsingTemplate(semesterId.toString(),false, templateVariables);
 			
 		} catch (Exception e) {
-			log.error("ERROR : "+e.getMessage());
-			e.printStackTrace();
+			log.error("ERROR : "+e.getMessage(),e);
+			//e.printStackTrace();
 			return null;
 		}finally{
 			patient = null;
@@ -167,6 +171,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		
 	}
 	
+
+
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String generateExaminerMailPDF(Long semesterId,List<Long> examinerIds){
@@ -215,7 +221,23 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				for(Assignment assignment : assignments3 ){			
 					log.info("Assignment : "+assignment.getId());
 					
-					assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
+					String day = checkNotNull(assignment,"getOsceDay","getOsceDate")==true?dateFormat.format(assignment.getOsceDay().getOsceDate()):"";
+					String shortName = checkNotNull(assignment,"getPatientInRole","getOscePost","getStandardizedRole","getShortName") != true ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName();
+					String room = checkNotNull(assignment, "getOscePostRoom","getRoom","getRoomNumber")==true?assignment.getOscePostRoom().getRoom().getRoomNumber():"";
+					
+					String assignmentInfo = day
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+timeFormat.format(assignment.getTimeStart())
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+timeFormat.format(assignment.getTimeEnd())
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+ shortName
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+room;	
+					
+					assignments.add(assignmentInfo);
+					
+					/*assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 							+timeFormat.format(assignment.getTimeStart())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -225,7 +247,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 							+((assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName() == null && (assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName().compareTo("")== 0 ))?"":assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName())
 //Feature : 154 
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-							+assignment.getOscePostRoom().getRoom().getRoomNumber());
+							+assignment.getOscePostRoom().getRoom().getRoomNumber());*/
 				}
 				
 				toNames.add(examiner.getName()+" "+examiner.getPreName());
@@ -429,14 +451,26 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 								
 								log.info("Assignment : "+assignment.getId());
 								
-								assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
+								String day = checkNotNull(assignment,"getOsceDay","getOsceDate")==true?""+dateFormat.format(assignment.getOsceDay().getOsceDate()):"";
+								String shortName = checkNotNull(assignment,"getPatientInRole","getOscePost","getStandardizedRole","getShortName") != true ? "" : assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName();
+								String assignmentInfo = day
+								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+								+timeFormat.format(assignment.getTimeStart())
+								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+								+timeFormat.format(assignment.getTimeEnd())
+								+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+								+ shortName;
+								
+								assignments.add(assignmentInfo);
+								
+								/*assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
 										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 										+timeFormat.format(assignment.getTimeStart())
 										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 										+timeFormat.format(assignment.getTimeEnd())
 										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 										+assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName());
-								
+								*/
 								
 							}
 						}
@@ -547,6 +581,23 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 							
 					log.info("Assignment : "+assignment.getId());
 					
+					String day = checkNotNull(assignment,"getOsceDay","getOsceDate")==true?""+dateFormat.format(assignment.getOsceDay().getOsceDate()):"";
+					String shortName = checkNotNull(assignment,"getPatientInRole","getOscePost","getStandardizedRole","getShortName") != true ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : assignment.getPatientInRole().getOscePost().getStandardizedRole().getShortName();
+					String room = checkNotNull(assignment, "getOscePostRoom","getRoom","getRoomNumber")==true?assignment.getOscePostRoom().getRoom().getRoomNumber():"";
+					
+					String assignmentInfo = day
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+timeFormat.format(assignment.getTimeStart())
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+timeFormat.format(assignment.getTimeEnd())
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+ shortName
+					+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					+room;	
+					
+					assignments.add(assignmentInfo);
+					
+					/*
 					assignments.add(dateFormat.format(assignment.getOsceDay().getOsceDate())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 							+timeFormat.format(assignment.getTimeStart())
@@ -557,7 +608,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 							+((assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName() == null && (assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName().compareTo("")== 0 ))?"":assignment.getOscePostRoom().getOscePost().getStandardizedRole().getShortName())
 							+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 							+assignment.getOscePostRoom().getRoom().getRoomNumber());
-							
+					*/		
 				}
 			
 				
@@ -868,6 +919,23 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+	
+	public static boolean checkNotNull(Object obj, String... methodNames) 
+	{
+		try 
+		{
+			for (String methodName : methodNames) 
+			{
+				Method method = obj.getClass().getMethod(methodName);
+				obj = method.invoke(obj);
+			}
+		} catch (Exception e) 
+		{
+			// System.out.println(e);
+			return false;
+		}
+		return true;
 	}
 	
 }
