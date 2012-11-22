@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -28,6 +29,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -680,15 +682,18 @@ public class Assignment {
 			// asc ;
 			// and op.osce_sequence=1;
 
-			String queryString = "SELECT a FROM Assignment as a where a.type=0 and a.osceDay.osce.semester.id="
+			/*String queryString = "SELECT distinct a FROM Assignment as a where a.type=0 and a.osceDay.osce.semester.id="
 					+ semesterId
 					+ " and a.osceDay.id="
 					+ osceDay.getId()
-					+ "  and a.oscePostRoom.id in(select opr.id from OscePostRoom opr where opr.oscePost.id="
-					+ oscePost.getId()
-					+ " and opr.course.id="
-					+ course.getId()
-					+ " ) order by a.osceDay asc,a.osceDay.osceDate asc,a.timeStart asc ";
+//					+ "  and a.oscePostRoom.id in(select opr.id from OscePostRoom opr where opr.oscePost.id="
+//					+ oscePost.getId()
+//					+ " and opr.course.id="
+//					+ course.getId()
+//					+ " ) " 
+					+"order by a.osceDay asc,a.osceDay.osceDate asc,a.timeStart asc ";*/
+			String queryString = "SELECT distinct a FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.semester.id = " + semesterId + " AND a.osceDay.id = " + osceDay.getId() + " GROUP BY a.timeStart ORDER BY a.osceDay, a.timeStart ASC";
+			
 			TypedQuery<Assignment> query = em.createQuery(queryString,
 					Assignment.class);
 
@@ -1100,19 +1105,29 @@ public class Assignment {
     	 
     	 while (oldSpItr.hasNext())
     	 {
+    		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL";
+    		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+    		 PatientInRole exchangePatientInRole = pirQuery.getSingleResult();
+    		 
     		 Assignment assignment = oldSpItr.next();
-    		 assignment.setPatientInRole(exchangePir);
+    		 assignment.setPatientInRole(exchangePatientInRole);
     		 assignment.persist();
     	 }
     	 
     	 while (exchangeSpItr.hasNext())
     	 {
+    		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + oldSp.getPatientInSemester().getId() + " AND pir.oscePost IS NULL";
+    		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+    		 PatientInRole oldPatientInRole = pirQuery.getSingleResult();
+    		 
     		 Assignment assignment = exchangeSpItr.next();
-    		 assignment.setPatientInRole(oldSp);
+    		 assignment.setPatientInRole(oldPatientInRole);
     		 assignment.persist();
     	 }
     	 
     	 return true;
      }
+     
+     
      //by spec change]
 } 

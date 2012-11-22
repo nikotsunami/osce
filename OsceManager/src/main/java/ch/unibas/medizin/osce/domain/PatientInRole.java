@@ -617,13 +617,14 @@ public class PatientInRole {
      	String queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
      			" a.patientInRole = pir.id" +
      			" AND pir.id != " + ass.getPatientInRole().getId() + " AND" +
-     			" pir.oscePost IS NOT NULL AND" +
+     			" pir.oscePost IS NULL AND" +
      			" pir.patientInSemester = pis.id AND" +
      			" pis.standardizedPatient = sp.id AND" +
+     			" a.oscePostRoom IS NULL AND" +
      			" a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND" +
      			" a.sequenceNumber = " + ass.getSequenceNumber();
      	
-     	System.out.println("~~QUERY : " + queryString);
+     	Log.info("~~QUERY : " + queryString);
      			
      	TypedQuery<PatientInRole> q = em.createQuery(queryString,PatientInRole.class);		
      	return q.getResultList();
