@@ -2199,7 +2199,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		Log.info("exportAssignment");
 		Log.info(" exportAssignment  :" );
-		final String url="/exportAssignment?osceId="+osceId+"&type="+type;
+		final String url=GWT.getHostPageBaseURL()+"exportAssignment?osceId="+osceId+"&type="+type;
 		
 	   Window.open(url, osceId.toString(), "enabled");
 	}
