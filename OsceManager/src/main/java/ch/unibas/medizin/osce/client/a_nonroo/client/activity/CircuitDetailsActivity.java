@@ -3178,7 +3178,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				public boolean checkStarttimeValidation(){
 					boolean dayStartTimeValidflag=true;
 					String sTimeValue=osceDayViewImpl.startTimeTextBox.getValue();
-					if(! sTimeValue.matches("^[]0-9]{2}\\:[0-9]{2}$"))
+					if(! sTimeValue.matches("^[0-9]{2}\\:[0-9]{2}$"))
 					{
 						// Module 5 bug Report Change
 							//Window.alert("please Enter valid formatted Time Valid format is HH:MM");
@@ -3220,7 +3220,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				public boolean checkEndTimeValidation(){
 					boolean dayEndTimeValidFlag=true;
 					String sTimeValue=osceDayViewImpl.endTimeTextBox.getValue();
-					if(! sTimeValue.matches("^[]0-9]{2}\\:[0-9]{2}$")){
+					if(! sTimeValue.matches("^[0-9]{2}\\:[0-9]{2}$")){
 						// Module 5 bug Report Change
 						//Window.alert("please Enter valid formatted Time Valid format is HH:MM");
 						MessageConfirmationDialogBox startTimedialog=new MessageConfirmationDialogBox(constants.warning());
