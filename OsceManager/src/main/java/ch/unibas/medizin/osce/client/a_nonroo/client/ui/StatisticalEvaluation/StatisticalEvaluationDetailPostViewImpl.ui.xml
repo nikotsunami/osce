@@ -6,9 +6,10 @@
 
 	<ui:style src="../../styles.css">
 	.postName{
-		border: 1px solid  rgb(158,183,190);
+		border: 1px solid  rgb(183,144,65);
+		border-radius:4px;
 		margin-right:3px;
-		background-color: rgb(228,240,243);
+		background-color: rgb(231,211,160);
 		width: 81px;
 		height: 100px;
 		margin-bottom: 8px;

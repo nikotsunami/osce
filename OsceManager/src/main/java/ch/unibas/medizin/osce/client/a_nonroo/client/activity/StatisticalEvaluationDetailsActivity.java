@@ -298,7 +298,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					header.getPostNameLbl().setText(headerName);
 					if(sequenceView.getPostViewHP().getWidgetCount()==0 || sequenceView.getPostViewHP().getWidgetCount()==3 || sequenceView.getPostViewHP().getWidgetCount()==5)
 					{
-						header.asWidget().getElement().getStyle().setProperty("borderLeftWidth", "3px");
+						//header.asWidget().getElement().getStyle().setProperty("borderLeftWidth", "3px");
 					}
 					sequenceView.getPostViewHP().add(header.asWidget());
 				}
@@ -355,8 +355,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				{
 					if(sequenceView.getPostDataHP().getWidgetCount() ==0)
 					{
-						label.getElement().getStyle().setProperty("borderLeftWidth", "3px");
-						label.getElement().getStyle().setProperty("borderColor", "#9EB7BE");
+						//label.getElement().getStyle().setProperty("borderLeftWidth", "3px");
+						//label.getElement().getStyle().setProperty("borderColor", "#9EB7BE");
 					}
 				}
 				sequenceView.getPostDataHP().add(label);

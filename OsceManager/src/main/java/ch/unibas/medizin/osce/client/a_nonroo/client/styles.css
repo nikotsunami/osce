@@ -682,6 +682,7 @@ body {
 .sequenceVP{
 		margin-top:80px;
 		margin-right:10px;
+	
 }
 /*  E Change in ParcourView */
 
@@ -695,7 +696,7 @@ body {
 	.sequenceHeader{
 		border: none;
 		border-radius:0px;
-		background-color: rgb(74,149,171);
+		background-color: rgb(178,142,54);
 		max-height: 25px;
 		min-height: 20px;
 		
@@ -703,19 +704,19 @@ body {
 	.itemHeader{
 		border: 1px;
 		border-radius:0px;
-		background-color: rgb(189,217,225);
+		background-color: rgb(229,194,102);
 		max-height: 25px;
 		min-height: 20px;
-		border-color: #4A95AB !important;
+		border-color: rgb(178,142,54) !important;
 		margin: 1px;
 	}
 	.sequenceContent{
-		border: none;
-		border-radius:0px;
-		background-color: rgb(74,149,171);
+		
+	
+		background-color: rgb(178,142,54);
 	}
 	.sequenceLabel{
-		color: white;
+		color: black;
 		text-transform:capitalize;
 		font-size:14px;
 		width :100%;
@@ -723,7 +724,7 @@ body {
 		/*max-width: 515px;*/
 	}
 	.sequenceHeader :HOVER {
-		background-color: rgb(70,138,174);
+		background-color: rgb(166,132,51);
 		cursor: pointer;
 	}
 	
@@ -741,7 +742,7 @@ body {
 	
 		border: none;
 		margin-right:4px;
-		background-color: rgb(132,183,198);
+		background-color: rgb(231,211,160);
 		width: 70px;
 		min-width: 70px;
 		max-width: 70px;
@@ -753,7 +754,7 @@ body {
 		
 	}
 	.postData:HOVER {
-		background-color: rgb(132,183,198) !important;
+		
 		cursor: default !important;
 	}
 	.sumPerSequenceLbl{

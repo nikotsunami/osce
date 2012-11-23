@@ -296,13 +296,15 @@ a:hover, .gwt-Anchor:hover {
 	
 }
 .custom-disclosure .content{
-	border-color: #4A95AB !important;
+	border-color: rgb(178,142,54) !important;
 	border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+    /*border-radius:2px;*/
 }
 .custom-disclosure .header, .custom-disclosure .header:hover, .custom-disclosure .header:active{
-	border-color: #4A95AB !important;
+	border-color: rgb(178,142,54) !important;
 	border-radius:0px !important;
+	 
 }
 .gwt-DisclosurePanel-open .header {
 	background: url("images/ui-bg_glass_65_d3ae50_1x400.png") repeat-x scroll 50% 50% #D3AE50;
@@ -3575,7 +3577,7 @@ color: #f1b532;
 	
 		border: none;
 		margin-right:4px;
-		background-color: rgb(132,183,198);
+		background-color: rgb(231,211,160);
 		width: 70px;
 		/*min-width: 70px;*/
 		max-width: 70px;
@@ -3584,18 +3586,18 @@ color: #f1b532;
 		border-bottom: 0px;
 		border-top: 0px;
 		text-align: center;
-		
+		border-radius:4px;
 	}
 	.postData:HOVER {
-		background-color: rgb(132,183,198) !important;
+		
 		cursor: default !important;
 	}
 	
 	.parcourHeader{
-		background-color: rgb(145,193,217) !important;
+		background-color: rgb(215,181,94) !important;
 	}
 	.parcourContent{
-		background-color: rgb(145,193,217) !important;
+		background-color: rgb(215,181,94) !important;
 	}
 	.studentHeader{
 		background-color: rgb(151,197,210) !important;
