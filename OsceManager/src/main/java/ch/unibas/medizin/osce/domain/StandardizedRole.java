@@ -24,9 +24,13 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
+
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
+import ch.unibas.medizin.osce.server.util.file.XmlUtil;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
@@ -573,6 +577,16 @@ public class StandardizedRole {
 	}
 	
 	// Issue : 120
-	   
+	
+	//export checklist
+	public static String exportChecklistByStandardizedRole(Long standardizedRoleId)
+	{
+		XmlUtil xmlUtil = new XmlUtil();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		String fileName = xmlUtil.writeXml(standardizedRoleId,os);
+		RequestFactoryServlet.getThreadLocalRequest().getSession().setAttribute(fileName, os);
+		return fileName;
+	}
+	//export checklist
 }
 

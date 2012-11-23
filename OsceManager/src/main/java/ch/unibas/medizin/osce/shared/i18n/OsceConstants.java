@@ -1213,5 +1213,9 @@ public interface OsceConstants extends Constants {
      public String max();
      
      public String minMaxNotNull();
+     
+     //export checklist
+     public String exportChecklist();
+     //export checklist
 }
 

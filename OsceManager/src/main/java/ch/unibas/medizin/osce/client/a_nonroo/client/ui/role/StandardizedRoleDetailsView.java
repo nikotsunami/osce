@@ -46,6 +46,10 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 			//spec
 		
 		public void setSpecialisationListBox(final ImportTopicPopupView popupView);
+		
+		//export checklist
+		public void exportChecklistClicked(StandardizedRoleProxy standardizedRoleProxy);
+		//export checklist
 	}
 
 	/*

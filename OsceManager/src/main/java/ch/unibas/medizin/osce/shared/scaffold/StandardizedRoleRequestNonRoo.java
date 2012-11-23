@@ -21,6 +21,10 @@ public interface StandardizedRoleRequestNonRoo extends RequestContext
 	//Issue : 120
 	abstract Request<String> getRolesPrintPdfBySearch(Long standardizedRoleId , List<String> itemsList,Long roleItemAccessId,String locale);
 	//Issue : 120
+	
+	//export checklist
+	abstract Request<String> exportChecklistByStandardizedRole(Long standardizedRoleId);
+	//export checklist
 }
 
 

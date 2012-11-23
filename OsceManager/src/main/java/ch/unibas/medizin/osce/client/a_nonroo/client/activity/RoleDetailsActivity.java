@@ -7800,7 +7800,48 @@ public void onDragStart(DragStartEvent event) {
 			
 		}
 
-		
+		//spec change[
+		@Override
+		public void clearSearchCriteriaButtonClicked() {
+			mainClassificationId = null;	
+			classificaitonTopicId = null;
+			topicId = null;
+			skillLevelId = null;
+			applianceId = null;
+			
+			learningObjectiveView.getMainClassificationSuggestBox().setSelected(null);
+			learningObjectiveView.getClassificationTopicSuggestBox().setSelected(null);
+			learningObjectiveView.getTopicSuggestBox().setSelected(null);
+			learningObjectiveView.getSkillLevelSuggestBox().setSelected(null);
+			learningObjectiveView.getApplianceSuggestBox().setSelected(null);
+			
+			onLearningObjectiveRangeChanged();
+		}
+		//spec change]	
+
+		//checklist change
+		@Override
+		public void exportChecklistClicked(
+				StandardizedRoleProxy standardizedRoleProxy) {
+			showApplicationLoading(true);
+			
+			requests.standardizedRoleRequestNonRoo().exportChecklistByStandardizedRole(standardizedRoleProxy.getId()).fire(new OSCEReceiver<String>() {
+
+				@Override
+				public void onSuccess(String response) {
+					showApplicationLoading(false);
+				
+					String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.CHECKLIST.ordinal()));          
+					String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+							.concat("&").concat(ResourceDownloadProps.NAME).concat("=").concat(URL.encodeQueryString(response));
+					Log.info("--> url is : " +url);
+					Window.open(url, "", "");
+					//Window.open(response, "_blank", "enabled");
+				}
+			});
+			
+		}
+		//checklist change
 }
 
 	

@@ -1,5 +1,10 @@
 package ch.unibas.medizin.osce.server.util.resourcedownloader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -15,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -71,6 +78,10 @@ public class ResourceUtil {
 			break;
 		}
 		
+		case CHECKLIST : {
+			fileName = setChecklistResouce(request,os);
+			break;
+		}
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -79,6 +90,23 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setChecklistResouce(HttpServletRequest request,
+			ByteArrayOutputStream os) throws FileNotFoundException, IOException {
+		
+		HttpSession session = request.getSession();
+		String fileName = request.getParameter(ResourceDownloadProps.NAME);
+		
+		if(StringUtils.isNotBlank(fileName) && session.getAttribute(fileName) != null) {
+			try{	
+				os.write(((ByteArrayOutputStream)session.getAttribute(fileName)).toByteArray());
+			}finally {
+				session.removeAttribute(fileName);
+			}
+		}
+		
+		return fileName;
 	}
 
 	private static String setStudentManagementResouce(HttpServletRequest request, ByteArrayOutputStream os) 

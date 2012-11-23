@@ -401,6 +401,11 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		Map<String, Widget> standardizedRoleTemplateMap;
 	// E Highlight onViolation
 	
+	//export checklist change
+	@UiField
+	public IconButton exportChecklist;
+	//export checklist change
+	
 	public StandardizedRoleDetailsViewImpl() {
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -447,6 +452,12 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		dropController = new VerticalPanelDropController(checkListsVerticalPanel);
 		dragController.registerDropController(dropController);
 		dragController.setBehaviorScrollIntoView(true);
+		
+		//export checklist change
+		exportChecklist.setText(constants.exportChecklist());
+		exportChecklist.addStyleName("expTopicButton");
+		//export checklist change
+		
 	}
 	
 	private void setTabTexts() {
@@ -789,5 +800,12 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			return roleOsceSemesterSubViewImpl;
 		}
 	
-	
+	//export checklist change
+		@UiHandler("exportChecklist")
+		public void exportChecklistClicked(ClickEvent event)
+		{
+			Log.info("exportChecklistClicked");
+			delegate.exportChecklistClicked(this.getValue());
+		}	
+	//export checklist change
 }
