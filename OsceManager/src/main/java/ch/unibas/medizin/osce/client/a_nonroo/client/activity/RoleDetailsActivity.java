@@ -7801,7 +7801,7 @@ public void onDragStart(DragStartEvent event) {
 		}
 
 		//spec change[
-		@Override
+		/*@Override
 		public void clearSearchCriteriaButtonClicked() {
 			mainClassificationId = null;	
 			classificaitonTopicId = null;
@@ -7816,7 +7816,7 @@ public void onDragStart(DragStartEvent event) {
 			learningObjectiveView.getApplianceSuggestBox().setSelected(null);
 			
 			onLearningObjectiveRangeChanged();
-		}
+		}*/
 		//spec change]	
 
 		//checklist change
