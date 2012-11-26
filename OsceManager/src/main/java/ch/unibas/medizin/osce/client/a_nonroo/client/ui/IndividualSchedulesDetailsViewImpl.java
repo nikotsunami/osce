@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -89,7 +90,7 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	RadioButton rbAllExaminor;
 	
 	@UiField(provided = true)
-    ValueListBox<CourseProxy> parcourListBox = new ValueListBox<CourseProxy>(new CourseProxyRenderer());
+    ValueListBox<CourseProxy> parcourListBox = new ValueListBox<CourseProxy>((Renderer<CourseProxy>) GWT.create(CourseProxyRenderer.class));
 	
 	
 	/*@UiField
