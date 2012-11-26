@@ -87,6 +87,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField
 	Button surveyImpBtn;
 	@UiField
+	Button getImpBtn;
+	
+	@UiField
 	public Button autoAssignmentBtn;
 	@UiField
 	Button addManuallyBtn;
@@ -132,6 +135,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		surveyImpBtn.setText(constants.roleSurveyImport());
+		getImpBtn.setText(constants.roleGetImport());
 		autoAssignmentBtn.setText(constants.roleAutoAssign());
 		addManuallyBtn.setText(constants.roleAddManually());
 		clearSelectionBtn.setText(constants.clearSelection());
@@ -148,6 +152,12 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	public void onSurveyImpBtnClicked(ClickEvent event) {
 		// TODO : import patient detail logic
 		delegate.surveyImpBtnClicked();
+	}
+	
+	@UiHandler("getImpBtn")
+	public void onGetImpBtnClicked(ClickEvent event) {
+		// TODO : import patient detail logic
+		delegate.getImpBtnClicked();
 	}
 
 	@UiHandler("autoAssignmentBtn")

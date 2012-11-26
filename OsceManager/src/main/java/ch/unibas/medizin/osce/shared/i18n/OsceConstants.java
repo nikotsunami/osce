@@ -1202,6 +1202,9 @@ public interface OsceConstants extends Constants {
 	   public String endDate();
 	   public String osceSemesterMessage();
 
+		public String roleGetImport();
+
+
 	public String noDataFound();
 	
 	 public String clear();

@@ -7,5 +7,7 @@ import java.util.List;
 public interface DMZSyncServiceAsync {
 	void pushToDMZ(Long standardizedPatientId,String locale, AsyncCallback<List<String>> cb);
 	void pullFromDMZ(Long standardizedPatientId, AsyncCallback<Void> cb);
-	void sync(String locale,AsyncCallback<String> cb);
+	void sendSync(String locale,AsyncCallback<String> cb);
+	void getSync(String locale,AsyncCallback<Void> cb);
+	
 }

@@ -12,7 +12,8 @@ public interface DMZSyncService extends RemoteService {
 	List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException;
 	void pullFromDMZ(Long standardizedPatientId) throws DMZSyncException;
 	
-	String sync(String locale) throws DMZSyncException;
+	String sendSync(String locale) throws DMZSyncException;
+	void getSync(String locale) throws DMZSyncException;
 	
 	public static class ServiceFactory {
 		private static DMZSyncServiceAsync instance = null; 

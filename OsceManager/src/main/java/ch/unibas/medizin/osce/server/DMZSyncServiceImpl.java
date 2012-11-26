@@ -84,7 +84,7 @@ import flexjson.transformer.DateTransformer;
 import ch.unibas.medizin.osce.shared.Semesters;
 
 
-public class DMZSyncServiceImpl extends RemoteServiceServlet implements
+public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		DMZSyncService {
 
 	/**
@@ -174,7 +174,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	
 	@Override
 	public void pullFromDMZ(Long standardizedPatientId)  throws DMZSyncException {
-		String data = getDMZDataForPatient(standardizedPatientId);
+		String url = getHostAddress() + "/DataImportExport/exportSP?id="	+ standardizedPatientId;
+		String data = getDMZData(url);
 		
 		data =preProcessData(data);
 		JSONDeserializer deserializer = new JSONDeserializer()
@@ -224,22 +225,21 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
      *Synchronise OsceDay,Training and PatientInSemester
      */
 	@Override
-	public String sync(String locale) throws DMZSyncException{
-	
+	public String sendSync(String locale) throws DMZSyncException{
+	//send json
 		String json = getSyncJsonData(locale);
 		System.out.println("getSyncJsonData################################# "+json);
 		String url = getHostAddress() + "/OsceSync/syncJson";
 		//Send OSCE data to DMZ and return DMZ data
-		String returnJson = sendData(json,url);
+		//dmz json
+		
 		//System.out.println(">>>>>>>> return json: "+returnJson);
 		String message = "";
 		if(!json.equals("")){	
+			String returnJson = sendData(json,url);
 			try{
 				JSONObject myjson = new JSONObject(returnJson);
-				syncOsceDayAndTraining(myjson);
 				message = getReturnMessage(myjson);
-			}catch(DMZSyncException e){
-				throw e;
 			}catch(JSONException e){
 				
 				Log.error(e.getMessage());
@@ -259,7 +259,35 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 		return message;
 	}
+	@Override
+	public void getSync(String locale) throws DMZSyncException {
+		// TODO Auto-generated method stub
+		String url = getHostAddress() + "/OsceSync/getSyncJson";
+		String data = getDMZData(url);
 	
+		try{
+			JSONObject myjson = new JSONObject(data);
+			syncOsceDayAndTraining(myjson);
+		}catch(DMZSyncException e){
+			throw e;
+		}catch(JSONException e){
+			
+			Log.error(e.getMessage());
+			e.printStackTrace();
+			
+			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,e.getMessage());
+			
+		}catch(Exception e){
+			
+			Log.error(e.getMessage());
+			e.printStackTrace();
+			
+			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,e.getMessage());
+		}
+	}
+	
+
+//	
 	/**
 	 * get the return message	
 	 */
@@ -413,6 +441,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			if(jsonObject.get("standarizedPatientId")!=JSONObject.NULL){
 				patientId = jsonObject.getLong("standarizedPatientId");  
 				patient = StandardizedPatient.findStandardizedPatient(patientId);
+				//add getDMZ patient status
+				patient.setStatus(StandardizedPatientStatus.ACTIVE);
+				patient.persist();
 			}
 			if(patient != null){
 				PatientInSemester semester =PatientInSemester.findPatientInSemesterByStandardizedPatient(patient);
@@ -619,6 +650,9 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				if(count != pis.size()){
 					sb.append(",");
 				}
+				// add sendDMZ  status
+				p.getStandardizedPatient().setStatus(StandardizedPatientStatus.EXPORTED_FOR_SCHEDULING);
+				p.getStandardizedPatient().persist();
 				patients.add(p.getStandardizedPatient());
 			}
 		}
@@ -1305,6 +1339,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				return StandardizedPatientStatus.EXPORTED;
 			} else if(valueI == 3){
 				return StandardizedPatientStatus.ANONYMIZED;
+			}else if(valueI == 4){
+				return StandardizedPatientStatus.EXPORTED_FOR_SCHEDULING;
 			} else {
 				return null;
 			}
@@ -1428,11 +1464,11 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 * Request data from the DMZ
 	 * @throws DMZSyncException 
 	 */
-	protected String getDMZDataForPatient(Long standardizedPatientId) throws DMZSyncException {
+	protected String getDMZData(String url) throws DMZSyncException {
 		String ret = null;
 
 		HttpClient httpClient = new HttpClient();
-		String url = getHostAddress() + "/DataImportExport/exportSP?id="	+ standardizedPatientId;
+		
 		GetMethod getMethod = new GetMethod(url);
 
 		// TODO: does this make sense?
@@ -1462,6 +1498,7 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 		return ret;
 	}
+	
 
 	/**
 	 * Save a patient
@@ -1585,6 +1622,8 @@ public class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		HttpServletRequest ret = getThreadLocalRequest();
 		return ret;
 	}
+
+
 	
 
 	

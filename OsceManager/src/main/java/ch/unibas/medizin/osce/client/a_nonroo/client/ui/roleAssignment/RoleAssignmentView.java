@@ -34,6 +34,7 @@ public interface RoleAssignmentView extends IsWidget {
 				PatientInSemesterData patientInSemesterData);
 		
 		public void surveyImpBtnClicked();
+		public void getImpBtnClicked();
 		
 		public void onRowSelected(Integer rowSelected);
 

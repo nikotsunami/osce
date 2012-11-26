@@ -25,6 +25,7 @@
 				<g:VerticalPanel spacing="5">
 				<g:HorizontalPanel spacing="8" verticalAlignment="middle">
 					<my:IconButton icon="arrowthickstop-1-s" ui:field="surveyImpBtn"></my:IconButton>
+					<my:IconButton ui:field="getImpBtn" icon="extlink"/>
 					<g:CheckBox ui:field="ignoreOsceDaycheckBox" width="30px" height="200px"></g:CheckBox>
 					<g:Label ui:field="ignoreOsceDaycheckBoxLabel"></g:Label>
 				</g:HorizontalPanel>

@@ -2673,13 +2673,13 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	}
 
 	@Override
-	public void surveyImpBtnClicked(){
+	public void getImpBtnClicked(){
 		
 		// module 3 bug {
 		osceDayTimer.cancel();
 		// module 3 bug }
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-		dmxSyncService.sync(locale,new AsyncCallback<String>(){
+		dmxSyncService.sendSync(locale,new AsyncCallback<String>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -2698,10 +2698,10 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 			@Override
 			public void onSuccess(String result) {
-				GWT.log("################onSuccess result = "+result);
+			GWT.log("################onSuccess result = "+result);
 				
 				String[] messages = result.split("#&"); 
-				GWT.log("################onSuccess messages = "+messages);				
+				GWT.log("################onSuccess messages = "+messages);	
 				DialogBox dialogBox = createDialogBox(messages);
 				dialogBox.center();
 				dialogBox.show();
@@ -2713,6 +2713,41 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			}
 			
 		});
+	}
+	
+	@Override
+	public void surveyImpBtnClicked(){
+		// module 3 bug {
+		osceDayTimer.cancel();
+		// module 3 bug }
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+		dmxSyncService.getSync(locale,new AsyncCallback<Void>(){
+	
+			@Override
+			public void onFailure(Throwable caught) {
+			
+			   try {
+				   // module 3 bug {
+					osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
+					// module 3 bug }
+		          throw caught;
+		        } catch (DMZSyncException e) {
+		        	Window.alert(messageLookup.serverReturndError()+messageLookup.getString(e.getType())+e.getMessage());
+		        } catch (Throwable e) {
+		        	Window.alert(messageLookup.serverReturndError()+e.getMessage());
+		        }
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert(messageLookup.importSussessful());
+
+			}
+			
+		});
+		
+		
 	}
 	
 	
