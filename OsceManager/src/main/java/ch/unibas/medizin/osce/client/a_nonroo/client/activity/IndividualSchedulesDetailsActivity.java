@@ -437,8 +437,11 @@ IndividualSchedulesDetailsView.Delegate
 							public void onValueChange(ValueChangeEvent<CourseProxy> courseProxyValueChangeEvent) 
 							{
 								CourseProxy selectedCourseProxy=courseProxyValueChangeEvent.getValue();
-								System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
-								initStudentByParcour(osceId,selectedCourseProxy.getId());
+								if(selectedCourseProxy!=null)
+								{
+									System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
+									initStudentByParcour(osceId,selectedCourseProxy.getId());
+								}
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							}
 						});

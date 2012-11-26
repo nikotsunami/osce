@@ -149,6 +149,9 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		        }
 
 		        if (button == NativeEvent.BUTTON_RIGHT) {
+		        	if (assignmentProxy == null)
+		        		return;
+		        	
 		        	event.preventDefault();
 		        	showExchangeStudentPopup();
 		         }

@@ -110,6 +110,9 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 				
 				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
 				{
+					if (assignmentProxy == null)
+		        		return;
+					
 					event.preventDefault();
 					showExchangeSpPopup();
 				}
