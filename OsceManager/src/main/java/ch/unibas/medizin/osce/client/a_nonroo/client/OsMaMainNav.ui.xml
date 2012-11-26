@@ -116,7 +116,7 @@
 				<g:VerticalPanel >
 					<g:Anchor ui:field="osces" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 					<g:Anchor ui:field="circuit"  addStyleNames="{style.paddingLeft28px}"></g:Anchor>
-					<g:Anchor ui:field="statisticsEvaluation" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					
 					<g:Anchor ui:field="students" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 				</g:VerticalPanel>
 				
@@ -137,6 +137,8 @@
 			<g:Label ui:field="afterTheOsceHeader" addStyleNames="{style.label}">After the OSCE</g:Label>
 			<g:VerticalPanel>				
 				<g:Anchor ui:field="importeOSCE" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="payment" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="statisticsEvaluation" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 			</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
@@ -170,7 +172,7 @@
 				<g:Anchor ui:field="rooms"></g:Anchor>
 				<g:Anchor ui:field="log"></g:Anchor>
 				<g:Anchor ui:field="importObjective"></g:Anchor>
-				<g:Anchor ui:field="payment"></g:Anchor>
+				
 				<g:Anchor ui:field="StudentManagment"></g:Anchor>
 				
 			</g:VerticalPanel>

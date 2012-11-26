@@ -1,11 +1,40 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	
-	<ui:style src="../styles.css" />
+	<ui:style src="../styles.css" >
+	.divStyle
+	{
+		width: 300px;
+		margin-left: 875px;	
+	}
+	</ui:style>
 	
-	<g:HTMLPanel>
-		<s:IconButton ui:field="exportButton" icon="extlink"></s:IconButton>
-	</g:HTMLPanel>
+
+<g:SplitLayoutPanel ui:field="splitLayoutPanel">
+	<g:west size="600">
+		<g:ScrollPanel>
+			<g:VerticalPanel width="100%">
+				<g:HTMLPanel>
+					<div>
+						<div style="float:left;">
+							<s:IconButton ui:field="exportButton" icon="extlink"></s:IconButton>
+							<s:IconButton ui:field="printButton" icon="print"></s:IconButton>
+						</div>
+
+						<div class="{style.divStyle} {style.controls} {style.controlsleft}">
+							<c:SimplePager display="{table}" ui:field="pager"></c:SimplePager>
+						</div>
+					</div>
+
+					<c:CellTable ui:field="table" addStyleNames="{style.standardTable}"></c:CellTable>
+
+				</g:HTMLPanel>
+			</g:VerticalPanel>
+		</g:ScrollPanel>
+	</g:west>
+</g:SplitLayoutPanel>
+	
+	
 	
 </ui:UiBinder> 

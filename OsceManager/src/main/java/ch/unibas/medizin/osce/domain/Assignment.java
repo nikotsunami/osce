@@ -1156,4 +1156,45 @@ public class Assignment {
          
          return query.getResultList(); 
      }
+     
+   //payment change
+     public static Long countStandardizedPatientBySemester(Long semesterId)
+     {
+    	 EntityManager em = entityManager();
+    	 
+    	 String sql = "SELECT DISTINCT ps.standardizedPatient" +
+  				" FROM Assignment AS a, PatientInRole AS pr, PatientInSemester AS ps, OscePost AS op, StandardizedRole AS sr " +
+  				" WHERE a.type = 1 AND a.osceDay IN (SELECT od FROM OsceDay od WHERE od.osce IN (" +
+  				" SELECT id FROM Osce WHERE semester = " + semesterId + "))" +
+  				" AND a.patientInRole = pr.id" +
+  				" AND pr.patientInSemester = ps.id" +
+  				" AND pr.oscePost = op.id " +
+  				" AND op.standardizedRole = sr.id" +
+  				" GROUP BY ps.standardizedPatient, a.osceDay, pr.oscePost, sr.roleType";
+    	 
+    	 TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);
+    	 
+    	 return (long) query.getResultList().size();
+     }
+     
+     public static List<StandardizedPatient> findStandardizedPatientBySemester(int start, int max, Long semesterId)
+     {
+    	 EntityManager em = entityManager();
+    	 
+    	 String sql = "SELECT DISTINCT ps.standardizedPatient" +
+  				" FROM Assignment AS a, PatientInRole AS pr, PatientInSemester AS ps, OscePost AS op, StandardizedRole AS sr " +
+  				" WHERE a.type = 1 AND a.osceDay IN (SELECT od FROM OsceDay od WHERE od.osce IN (" +
+  				" SELECT id FROM Osce WHERE semester = " + semesterId + "))" +
+  				" AND a.patientInRole = pr.id" +
+  				" AND pr.patientInSemester = ps.id" +
+  				" AND pr.oscePost = op.id " +
+  				" AND op.standardizedRole = sr.id" +
+  				" GROUP BY ps.standardizedPatient, a.osceDay, pr.oscePost, sr.roleType";
+    	 
+    	 TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);    	 
+    	 query.setFirstResult(start);
+    	 query.setMaxResults(max);    	 
+    	 return query.getResultList();
+     }
+     //payment change
 } 
