@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
@@ -35,6 +36,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
@@ -408,15 +411,48 @@ IndividualSchedulesDetailsView.Delegate
 			});
 		}
 		
-		private void initStudent(Long id) 
-		{		
-			Log.info("Call initStudent for Osce Id: " + id);
+		private void initStudent(final Long osceId) 
+		{					
+			Log.info("Call initStudent for Osce Id: " + osceId);
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			lstChkStud=new ArrayList<CheckBox>();
 			lstStudentProxy=new ArrayList<StudentProxy>();	
 			
-			requests.studentRequestNonRoo().findStudentByOsceId(id).fire(new OSCEReceiver<List<StudentProxy>>() {
-				
+			requests.courseRequestNonRoo().findCourseByOsce(osceId).fire(new OSCEReceiver<List<CourseProxy>>() 
+			{
+				@Override
+				public void onSuccess(List<CourseProxy> courseProxyList) 
+				{					
+					if(courseProxyList.size()>0)
+					{
+						view.getParcourListBox().setValue(courseProxyList.get(0));
+						/*view.getParcourListBox()(constants.all());*/
+						view.getParcourListBox().setAcceptableValues(courseProxyList);
+						view.getParcourListBox().addValueChangeHandler(new ValueChangeHandler<CourseProxy>() 
+						{
+							@Override
+							public void onValueChange(ValueChangeEvent<CourseProxy> courseProxyValueChangeEvent) 
+							{
+								CourseProxy selectedCourseProxy=courseProxyValueChangeEvent.getValue();
+								System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
+								initStudentByParcour(osceId,selectedCourseProxy.getId());
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
+							}
+						});
+					}
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				}
+			});
+			
+			
+		}
+		
+		private void initStudentByParcour(Long osceId, Long courseId) 
+		{
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				//requests.studentRequestNonRoo().findStudentByOsceId(osceId).fire(new OSCEReceiver<List<StudentProxy>>() {
+				requests.studentRequestNonRoo().findStudentByOsceIdAndCourseId(osceId,courseId).fire(new OSCEReceiver<List<StudentProxy>>() 
+				{
 				@Override
 				public void onSuccess(List<StudentProxy> response) 
 				{
@@ -425,23 +461,24 @@ IndividualSchedulesDetailsView.Delegate
 					Iterator<StudentProxy> iteratorStud=response.iterator();		
 					if(response.size()>0)
 					{
+						
 						chkAllStud=new CheckBox(constants.all());							
 						view.getDataVPStud().addStyleName("schedulePanelStyle");
 						view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.students());
 						
 						view.getVpStudent().insert(chkAllStud, view.getVpStudent().getWidgetCount());
-						chkAllStud.addClickHandler(new ClickHandler() 
-						{
-							@Override
-							public void onClick(ClickEvent event) 
+							chkAllStud.addClickHandler(new ClickHandler() 
 							{
-								Log.info("Select/Deselect All Stud");
-								//checkedAllStud();
-								checkedUncheckedAll(lstChkStud,chkAllStud);
-							}
-						});
+								@Override
+								public void onClick(ClickEvent event) 
+								{
+									Log.info("Select/Deselect All Stud");
+									//checkedAllStud();
+									checkedUncheckedAll(lstChkStud,chkAllStud);
+								}
+							});
 					}
-					
+					view.getVpStudent().clear();
 					while(iteratorStud.hasNext())
 					{
 						Log.info("Panel Widget: " + view.getVpStudent().getWidgetCount());
@@ -454,6 +491,7 @@ IndividualSchedulesDetailsView.Delegate
 						lstChkStud.add(chkStud);
 						lstStudentProxy.add(s);
 												
+						/**/
 						view.getVpStudent().insert(chkStud, view.getVpStudent().getWidgetCount());	
 						
 						chkStud.addClickHandler(new ClickHandler() {
@@ -470,7 +508,7 @@ IndividualSchedulesDetailsView.Delegate
 						});
 					}
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-				}
+				}				
 				@Override
 				public void onFailure(ServerFailure error) {
 					// TODO Auto-generated method stub
@@ -484,8 +522,9 @@ IndividualSchedulesDetailsView.Delegate
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 			});
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
 		}
-		
+
 		private void initExaminor(Long id) 
 		{
 			Log.info("Call initExaminor for Osce Id: " + id);

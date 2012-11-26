@@ -48,5 +48,17 @@ public class Course {
   		Log.info("~QUERY Result : " + result);
   		return result;
   	}
+  	
+  	public static java.util.List<Course> findCourseByOsce(Long osceId)
+  	{
+  		Log.info("~~Inside findCourseByOsce Method");
+  		EntityManager em = entityManager();		
+  		String queryString="select c from Course c where c.osce= "+osceId;		
+  		Log.info("~QUERY String: " + queryString);
+  		TypedQuery<Course> q = em.createQuery(queryString, Course.class);
+  		java.util.List<Course> result = q.getResultList();
+  		Log.info("~QUERY Result : " + result);
+  		return result;
+  	}
   	  //E Module 5 Bug Report Solution
 }

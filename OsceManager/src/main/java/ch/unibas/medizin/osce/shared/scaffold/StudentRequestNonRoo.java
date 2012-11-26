@@ -33,5 +33,6 @@ public interface StudentRequestNonRoo extends RequestContext{
 	abstract Request<Long> getCountOfStudent(String sortCoiumn,Sorting order);
 	
 	abstract Request<List<OsceProxy>> findOsceBasedOnStudent(Long studentID);
+	abstract Request<List<StudentProxy>> findStudentByOsceIdAndCourseId(long oscetID, long courseId);
 
 }

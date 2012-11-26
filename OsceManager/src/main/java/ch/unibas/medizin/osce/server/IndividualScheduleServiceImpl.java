@@ -4,8 +4,8 @@
 package ch.unibas.medizin.osce.server;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.StringReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -34,12 +34,9 @@ import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.ItemDefination;
-import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
 
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -218,9 +215,11 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						List<PatientInSemester> patientInSemesters=PatientInSemester.findPatientInSemesterBySemesterPatient(standardizedPatient.getId(), semesterId);							
 						//Log.info("patientInSemesters Size:" + patientInSemesters.size());					
 						
-						Iterator pisIterator = patientInSemesters.iterator();				
+						Iterator pisIterator = patientInSemesters.iterator();
+						List<PatientInRole> listOfPatientInRole=new ArrayList<PatientInRole>();
 					    while(pisIterator.hasNext())
 					    {
+					    	
 					    	PatientInSemester patientInSemester=(PatientInSemester) pisIterator.next();
 					    	Log.info("Patient In Semester: " + patientInSemester.getId());
 					    	//Set<PatientInRole> lstPatientInRole=patientInSemester.getPatientInRole();
@@ -228,30 +227,54 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					    	
 					    	//Log.info("Total Patient In Role " + lstPatientInRole.size() + " for Semester: " + patientInSemester.getId());
 					    	Iterator pirIterator = lstPatientInRole.iterator();					    	
-					    	while ( pirIterator.hasNext()) 
+					    	tempOsceDayContent=tempMailMessage.substring(tempMailMessage.indexOf("[OSCE_DAY SEPARATOR]"), tempMailMessage.indexOf("[OSCE_DAY SEPARATOR.]"));
+							tempOsceDayContent=tempOsceDayContent.replace("[OSCE_DAY SEPARATOR]","");
+							tempOsceDayContent=tempOsceDayContent.replace("[OSCE_DAY SEPARATOR.]","");
+							
+							osceDayContent="";	
+				    		scheduleContent="";	
+							
+							String osceLable = osceDay.getOsce().getStudyYear()==null?"":osceDay.getOsce().getStudyYear() + "." + osceDay.getOsce().getSemester().getSemester().name();
+							tempOsceDayContent=tempOsceDayContent.replace("[OSCE]",osceLable);
+							String date=""+osceDay.getOsceDate().getDate()+"."+(osceDay.getOsceDate().getMonth()+1) +"."+(osceDay.getOsceDate().getYear()+1900);						
+							tempOsceDayContent=tempOsceDayContent.replace("[DATE]",date);	
+							
+							listOfPatientInRole.addAll(lstPatientInRole);
+							
+							/*while ( pirIterator.hasNext()) 
 					    	{
 					    		PatientInRole patientInRole = (PatientInRole) pirIterator.next();
 					    		Log.info("Patient In Role: " + patientInRole.getId());
 					    		
-					    		osceDayContent="";	
-					    		scheduleContent="";	
-												    		
-					    		tempOsceDayContent=tempMailMessage.substring(tempMailMessage.indexOf("[OSCE_DAY SEPARATOR]"), tempMailMessage.indexOf("[OSCE_DAY SEPARATOR.]"));
-								tempOsceDayContent=tempOsceDayContent.replace("[OSCE_DAY SEPARATOR]","");
-								tempOsceDayContent=tempOsceDayContent.replace("[OSCE_DAY SEPARATOR.]","");
-								
-								//tempOsceDayContent=tempOsceDayContent.replace("[OSCE]",osceDayEntity.getOsce().getName());
-								String osceLable = osceDay.getOsce().getStudyYear()==null?"":osceDay.getOsce().getStudyYear() + "." + osceDay.getOsce().getSemester().getSemester().name();
-								tempOsceDayContent=tempOsceDayContent.replace("[OSCE]",osceLable);
-								String date=""+osceDay.getOsceDate().getDate()+"-"+(osceDay.getOsceDate().getMonth()+1) +"-"+(osceDay.getOsceDate().getYear()+1900);						
-								tempOsceDayContent=tempOsceDayContent.replace("[DATE]",date);	
+					    		listOfPatientInRole.add(patientInRole);	
 					    		
-					    		if(patientInRole!=null?patientInRole.getOscePost()!=null?patientInRole.getOscePost().getStandardizedRole()!=null?true:false:false:false)					    			
-					    			tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+patientInRole.getOscePost().getStandardizedRole().getLongName());
+												    		
+								//tempOsceDayContent=tempOsceDayContent.replace("[OSCE]",osceDayEntity.getOsce().getName());
+					    		if(patientInRole!=null?patientInRole.getOscePost()!=null?patientInRole.getOscePost().getStandardizedRole()!=null?true:false:false:false)
+					    			if(lstPatientInRole.size()>cntr)
+					    				if(cntr==0)
+					    					tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+patientInRole.getOscePost().getStandardizedRole().getLongName());
+					    				else
+					    					tempOsceDayContent=tempOsceDayContent.concat(","+patientInRole.getOscePost().getStandardizedRole().getLongName());
 								else
 									tempOsceDayContent=tempOsceDayContent.replace("[ROLE]","");
-					    		
-					    		List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), patientInRole.getId());
+					    	//////
+					    		}*/
+					    	//////
+					    }
+					    List<String> patientInRoleNameList=new ArrayList<String>();					    
+					    for (PatientInRole patientInRole : listOfPatientInRole) 
+					    {	
+					    	if(checkNotNull(patientInRole,"getOscePost","getStandardizedRole","getLongName")==true)
+					    		patientInRoleNameList.add(patientInRole.getOscePost().getStandardizedRole().getLongName());
+						}
+					    
+					    tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+StringUtils.join(patientInRoleNameList, ", "));
+					    	
+					    		//List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), patientInRole.getId());
+					    	if(listOfPatientInRole.size()>0)
+					    	{
+					    		List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), listOfPatientInRole);
 					    		Iterator assignmentIterator = spAssignment.iterator();
 					    		
 					    		
@@ -279,17 +302,27 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									tempScheduleContent=tempScheduleContent.replace("[START TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeStart()));
 									tempScheduleContent=tempScheduleContent.replace("[END TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeEnd()));	
 									
-									if(assignmentStandardizedPatient.getOscePostRoom()!=null)
-									{
-										tempScheduleContent=tempScheduleContent.replace("[POST]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getId().toString());
-										tempScheduleContent=tempScheduleContent.replace("[ROOM]", assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber().toString());
-									}
+									/*if(assignmentStandardizedPatient.getOscePostRoom()!=null)
+									{	*/
+									String standardizedRole = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getOscePost","getStandardizedRole")==true?assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName().toString():"";
+									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Break";
+									
+									if(standardizedRole!="")
+										tempScheduleContent=tempScheduleContent.replace("[ROLE]", standardizedRole);
 									else
 									{
-										tempScheduleContent=tempScheduleContent.replace("[POST]", "");
+										tempScheduleContent=tempScheduleContent.replace("[ROLE]", "");
+										tempScheduleContent=tempScheduleContent.replace("for ", "");
+									}									
+										tempScheduleContent=tempScheduleContent.replace("[ROOM]", room);
+																		
+									/*}
+									else
+									{
+										tempScheduleContent=tempScheduleContent.replace("[ROLE]", "");
 										tempScheduleContent=tempScheduleContent.replace("[ROOM]", "");									
 									}
-									
+*/									
 									scheduleContent=scheduleContent+tempScheduleContent;
 									
 									/*if(tempSp1==0)
@@ -440,7 +473,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										
 										//Long roleItemAccessId=1L;
 										//scriptDetail+=createRoleScriptDetails(assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
-										if(tempAssignmentStandardizedPatient.getOscePostRoom()!=null)
+										if(tempAssignmentStandardizedPatient.getOscePostRoom()!=null && tempAssignmentStandardizedPatient.getOscePostRoom().getOscePost()!=null && tempAssignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole()!=null)
 											createRoleScriptDetails(tempAssignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole(),roleItemAccessId,document);
 										Log.info("Script Detail1 : " + scriptDetail);
 																			
@@ -457,9 +490,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								addEmptyLine(roleTemplateEL, 1);
 								document.add(roleTemplateEL);
 					    		
-					    	}
+					    	//////}
+						}
 					    	
-					    }
+					    //////}
 						
 						/*Iterator assignmentIterator1 = assignment.iterator();
 						int tempSp1=0;	
@@ -766,7 +800,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			
 			for(int i=0;i<studId.size();i++)
 			{							
-				//Log.info("File Content: " + fileContents);
+				Log.info("File Content: " + fileContents);
 				//Log.info("After Modification: " + mailMessage);
 								
 				Student student= Student.findStudent(studId.get(i));
@@ -840,7 +874,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							String osceLable = osceDayEntity.getOsce().getStudyYear()==null?"":osceDayEntity.getOsce().getStudyYear() + "." + osceDayEntity.getOsce().getSemester().getSemester().name();
 							tempOsceDayContentStud=tempOsceDayContentStud.replace("[OSCE]",osceLable);
 							
-							String date=""+osceDayEntity.getOsceDate().getDate()+"-"+(osceDayEntity.getOsceDate().getMonth()+1) +"-"+(osceDayEntity.getOsceDate().getYear()+1900);
+							String date=""+osceDayEntity.getOsceDate().getDate()+"."+(osceDayEntity.getOsceDate().getMonth()+1) +"."+(osceDayEntity.getOsceDate().getYear()+1900);
 							Log.info("Date "+date+" for Osce Day: " + osceDayEntity.getId());
 							tempOsceDayContentStud=tempOsceDayContentStud.replace("[DATE]",date);														
 							osceDayContentStud=osceDayContentStud+tempOsceDayContentStud;
@@ -877,15 +911,16 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								
 								tempScheduleContentStud=tempScheduleContentStud.replace("[START TIME]", setTimeInTwoDigit(assignment.getTimeStart()));
 								tempScheduleContentStud=tempScheduleContentStud.replace("[END TIME]", setTimeInTwoDigit(assignment.getTimeEnd()));	
-								if(assignment.getOscePostRoom()!=null)
+								if(assignment.getOscePostRoom()!=null && assignment.getOscePostRoom().getOscePost()!=null && assignment.getOscePostRoom().getOscePost().getOscePostBlueprint()!=null)
 								{
-									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", assignment.getOscePostRoom().getOscePost().getId().toString());
+									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", "P"+ assignment.getOscePostRoom().getOscePost().getOscePostBlueprint().getSequenceNumber().toString());
 									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", assignment.getOscePostRoom().getRoom().getRoomNumber().toString());
 								}
 								else
 								{
 									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", "");
-									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", "");
+									tempScheduleContentStud=tempScheduleContentStud.replace("for", " ");
+									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", " Break");
 								}
 								
 								scheduleContentStud=scheduleContentStud+tempScheduleContentStud;
@@ -1053,9 +1088,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						
 		String hour=""+date.getHours();
 		String minute=""+date.getMinutes();
-		String second=""+date.getSeconds();
+		/*String second=""+date.getSeconds();*/
 		
-		System.out.println(hour+":"+minute+":"+second);
+		System.out.println(hour+":"+minute);
 		
 		String time="";
 		String seperator=":";
@@ -1070,10 +1105,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		else
 			time=time+seperator+minute;
 		
-		if(second.length()==1)
+		/*if(second.length()==1)
 			time=time+seperator+"0"+second;
 		else
-			time=time+seperator+second;
+			time=time+seperator+second;*/
 		
 		return time;	
 		
@@ -1211,7 +1246,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 						String osceLable = osceDayEntity.getOsce().getStudyYear()==null?"":osceDayEntity.getOsce().getStudyYear() + "." + osceDayEntity.getOsce().getSemester().getSemester().name();
 						tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[OSCE]",osceLable);
 						
-						String date=""+osceDayEntity.getOsceDate().getDate()+"-"+(osceDayEntity.getOsceDate().getMonth()+1) +"-"+(osceDayEntity.getOsceDate().getYear()+1900);
+						String date=""+osceDayEntity.getOsceDate().getDate()+"."+(osceDayEntity.getOsceDate().getMonth()+1) +"."+(osceDayEntity.getOsceDate().getYear()+1900);
 						tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[DATE]",date);
 
 						//&&List<Assignment> assignment=Assignment.findAssignmentsByOsceDayExaminerAndPIR(osceDay, examiner.getId(),patientInRoleId);
@@ -1219,16 +1254,22 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 												
 						//List<Assignment> assignment=Assignment.findAssignmentsByOsceDayExaminerAndPIR(osceDay, examiner.getId(),3);
 						Iterator assignmentIterator=assignment.iterator();
-									
+						
+						// Day Not Passed Because Assignement List is By OsceDay 
+						
+						List<String> patientInRoleName= new ArrayList<String>();					
+						
 						scheduleContentExaminer="";						
 						while(assignmentIterator.hasNext())
 						{														
 							Assignment assignmentExaminer=(Assignment)assignmentIterator.next();
+							String standardizedRoleName=checkNotNull(assignmentExaminer,"getPatientInRole","getOscePost","getStandardizedRole")?assignmentExaminer.getPatientInRole().getOscePost().getStandardizedRole().getLongName():"";
+							patientInRoleName.add(standardizedRoleName);
 							//Log.info("Assignment: "+ assignmentExaminer.getId() + " on OSCE DAY: " + osceDay + " for Examiner " + examiner.getId() + " in PatientInRole " + patientInRoleId);
-							if(assignmentExaminer.getOscePostRoom()!=null)
+							/*if(assignmentExaminer.getOscePostRoom()!=null)
 								tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]",""+assignmentExaminer.getOscePostRoom().getOscePost().getStandardizedRole().getLongName());							
 							else
-								tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]","");
+								tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]","");*/
 							
 							tempScheduleContentExaminer=tempMailMessage.substring(tempMailMessage.indexOf("[SCHEDULE SEPARATOR]"), tempMailMessage.indexOf("[SCHEDULE SEPARATOR.]"));
 							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[SCHEDULE SEPARATOR]", "");
@@ -1239,22 +1280,34 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							
 							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[START TIME]", setTimeInTwoDigit(assignmentExaminer.getTimeStart()));
 							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[END TIME]", setTimeInTwoDigit(assignmentExaminer.getTimeEnd()));	
-							
+						/*	
 							if(assignmentExaminer.getOscePostRoom()!=null)
+							{*/
+							//String role=checkNotNull(assignmentExaminer,"getOscePostRoom","getOscePost","getStandardizedRole")==true?assignmentExaminer.getPatientInRole().getOscePost().getStandardizedRole().getLongName():"";
+							String room=checkNotNull(assignmentExaminer,"getOscePostRoom","getRoom","getRoomNumber")==true?assignmentExaminer.getOscePostRoom().getRoom().getRoomNumber():" BREAK";
+							
+							if(standardizedRoleName!="")
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROLE]", standardizedRoleName);
+							else
 							{
-								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[POST]", assignmentExaminer.getOscePostRoom().getOscePost().getId().toString());
-								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", assignmentExaminer.getOscePostRoom().getRoom().getRoomNumber().toString());
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace(" for","" );
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROLE]", "");
 							}
+							
+							tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", room);
+							/*}
 							else
 							{
 								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[POST]", "");
 								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", "");
-							}
+							}*/
 							
 							scheduleContentExaminer=scheduleContentExaminer+tempScheduleContentExaminer;
-						}
-						Log.info("Osce Day Content: " + osceDayContentExaminer);
+						}						
+						
+						tempOsceDayContentExaminer=tempOsceDayContentExaminer.replace("[ROLE]",StringUtils.join(patientInRoleName, ", "));						
 						osceDayContentExaminer=osceDayContentExaminer+tempOsceDayContentExaminer;
+						Log.info("Osce Day Content: " + osceDayContentExaminer);
 						//mailMessage=mailMessage+osceDayContentExaminer;
 						writeInPDFFile(osceDayContentExaminer,document);
 						
@@ -1903,6 +1956,23 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		}
 	}
 
+	public static boolean checkNotNull(Object obj, String... methodNames) 
+	{
+		try 
+		{
+			for (String methodName : methodNames) 
+			{
+				Method method = obj.getClass().getMethod(methodName);
+				obj = method.invoke(obj);
+			}
+		} catch (Exception e) 
+		{
+			// System.out.println(e);
+			return false;
+		}
+		return true;
+	}
+	
 
 
 

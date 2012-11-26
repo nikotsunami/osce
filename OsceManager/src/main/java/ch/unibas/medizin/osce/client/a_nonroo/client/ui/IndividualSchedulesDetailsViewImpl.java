@@ -6,10 +6,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
+import ch.unibas.medizin.osce.client.managed.ui.CourseProxyRenderer;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -18,18 +20,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -89,9 +88,22 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	@UiField
 	RadioButton rbAllExaminor;
 	
+	@UiField(provided = true)
+    ValueListBox<CourseProxy> parcourListBox = new ValueListBox<CourseProxy>(new CourseProxyRenderer());
+	
+	
 	/*@UiField
 	SplitLayoutPanel splitLayoutPanel;*/
-	
+	@Override
+	public ValueListBox<CourseProxy> getParcourListBox() {
+		return parcourListBox;
+	}
+
+	@Override
+	public void setParcourListBox(ValueListBox<CourseProxy> parcourListBox) {
+		this.parcourListBox = parcourListBox;
+	}
+
 	@UiField
 	VerticalPanel dataPanelVPStud;
 	

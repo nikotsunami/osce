@@ -121,6 +121,26 @@ public class Student {
 		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result;    	    
     }
+    
+    public static List<Student> findStudentByOsceIdAndCourseId(long osceId,long courseId)
+    {
+		Log.info("Call findStudentByOsceId for id" + osceId);	
+		EntityManager em = entityManager();
+		//String queryString = "select distinct stud from Student as stud, OsceDay as od, Assignment as assi, Osce as o " +"where o.id=od.osce and od.id=assi.osceDay and assi.student=stud.id and o.id=" + osceId;
+		
+		// Fetch All The Student Which are in this OSCE
+		//String queryString="select id from student where id in (select id  from student_osces where osce="+osceId+")";
+		
+		// Fetch All The Student which are in this OSCE and has a ASSIGNMENT
+		//String queryString="select distinct stud from Student as stud where stud.id in (select assi.student from Assignment as assi where assi.osceDay in(select id from OsceDay where osce=" + osceId + ") and assi.oscePostRoom.course="+ courseId +" and assi.student is not null)";
+		//select distinct  student from assignment where osce_post_room in (select id from osce_post_room where course=127) and student is not null and osce_day = 18 order by id;
+		String queryString="select distinct assi.student from Assignment as assi where assi.osceDay.osce = " + osceId + " and assi.oscePostRoom.course = " + courseId + " and assi.student is not null";
+		Log.info("Query String: " + queryString);
+		TypedQuery<Student> q = em.createQuery(queryString,Student.class);		
+		List<Student> result  = q.getResultList();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+        return result;    	    
+    }
  // E Module10 Create plans
    
     //by spec issue change[

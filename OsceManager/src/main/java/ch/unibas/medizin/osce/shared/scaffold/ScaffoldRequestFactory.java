@@ -76,4 +76,5 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	ChecklistCriteriaRequestNonRooo checklistCriteriaRequestNonRooo();
 	
 	AnswerRequestNonRoo answerRequestNonRoo();
+	CourseRequestNonRoo courseRequestNonRoo();
 }

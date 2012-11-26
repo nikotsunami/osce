@@ -3,6 +3,8 @@ package ch.unibas.medizin.osce.domain;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -584,13 +586,26 @@ public class Assignment {
         return result;    	    
     }
     
-    public static List<Assignment> findAssignmentsByOsceDayAndPIRId(long osceDayId,long pirId)
+    /*public static List<Assignment> findAssignmentsByOsceDayAndPIRId(long osceDayId,long pirId)
     {
 		//Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
 		EntityManager em = entityManager();		
 		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole= "+ pirId + "order by assi.timeStart";
 		//Log.info("Query String: " + queryString);
 		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);		
+		List<Assignment> result  = q.getResultList();        
+		//Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+        return result;    	    
+    }*/
+    
+    public static List<Assignment> findAssignmentsByOsceDayAndPIRId(long osceDayId,List<PatientInRole> pirList)
+    {
+		//Log.info("Call findAssignmentsByOsceDayAndPIRId for OsceDay id " + osceDayId +" PIR Id " + pirId);	
+		EntityManager em = entityManager();		
+		String queryString = "select assi from Assignment assi where assi.osceDay= "+osceDayId +" and assi.patientInRole in (:patientInRoleList) order by assi.timeStart";
+		Log.info("Query String: " + queryString);
+		TypedQuery<Assignment> q = em.createQuery(queryString,Assignment.class);
+		q.setParameter("patientInRoleList", pirList);
 		List<Assignment> result  = q.getResultList();        
 		//Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
         return result;    	    
@@ -1130,4 +1145,15 @@ public class Assignment {
      
      
      //by spec change]
+     
+     public static List<Assignment> findAssignmentByExaminerAndSemester(Long semesterId,Long examinerId) {
+    	 
+    	 Log.info("findAssignmentByStudentAndSemester :");
+         EntityManager em = entityManager();
+         String queryString = "select a from Assignment as a where a.examiner = " +examinerId+ " and a.osceDay.osce.semester = " +semesterId + " order by a.timeStart"; 
+         
+         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         
+         return query.getResultList(); 
+     }
 } 

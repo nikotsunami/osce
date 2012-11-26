@@ -90,7 +90,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			fromNames = new ArrayList<String>(0);
 			assignmentList = new ArrayList<List<String>>(0);
 			
-			dateFormat = new SimpleDateFormat("dd MMM yyyy");
+			dateFormat = new SimpleDateFormat("dd.M.yyyy");
 			timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			for(Long id : spIds){
@@ -215,7 +215,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ "Room Number<br/>");
 				
-				assignments3 = getSortedAssignmentList(examiner.getAssignments());
+				//assignments3 = getSortedAssignmentList(examiner.getAssignments());
+				assignments3 = Assignment.findAssignmentByExaminerAndSemester(semesterId, examiner.getId());
 				
 				
 				for(Assignment assignment : assignments3 ){			
@@ -575,7 +576,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 						+ "Room Number<br/>");
 				
 				
-				assignment2 = getSortedAssignmentList(examiner.getAssignments());
+				//assignment2 = getSortedAssignmentList(examiner.getAssignments());
+				assignment2 = Assignment.findAssignmentByExaminerAndSemester(semesterId, examiner.getId());
 				
 				for(Assignment assignment : assignment2){
 							
