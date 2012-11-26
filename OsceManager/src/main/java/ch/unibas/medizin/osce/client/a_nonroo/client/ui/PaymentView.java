@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.List;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
@@ -26,7 +27,7 @@ public interface PaymentView extends IsWidget {
 	 
 	 public CellTable<StandardizedPatientProxy> getTable();
 	 
-	 public Set<String> getPaths();
+	 public List<String> getPaths();
 	 
 	 public MultiSelectionModel<StandardizedPatientProxy> getMultiselectionModel();
 }

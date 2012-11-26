@@ -1,7 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.hibernate.mapping.Array;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
@@ -72,7 +76,7 @@ public class PaymentViewImpl extends Composite implements PaymentView, RecordCha
     @UiField (provided = true)
     CellTable<StandardizedPatientProxy> table;
     
-    protected Set<String> paths = new HashSet<String>();
+    protected List<String> paths = new ArrayList<String>();
     
     public MultiSelectionModel<StandardizedPatientProxy> multiselectionModel;
 
@@ -144,6 +148,8 @@ public class PaymentViewImpl extends Composite implements PaymentView, RecordCha
 		
 		paths.add("name");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+			{ this.setSortable(true); }
+			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
 				public String render(java.lang.String obj) {
@@ -157,8 +163,10 @@ public class PaymentViewImpl extends Composite implements PaymentView, RecordCha
 			}
 		}, constants.name());
 		
-		paths.add("prename");
+		paths.add("preName");
 		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+			{ this.setSortable(true); }
+			
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
 
 				public String render(java.lang.String obj) {
@@ -202,11 +210,11 @@ public class PaymentViewImpl extends Composite implements PaymentView, RecordCha
 		this.table = table;
 	}
 
-	public Set<String> getPaths() {
+	public List<String> getPaths() {
 		return paths;
 	}
 
-	public void setPaths(Set<String> paths) {
+	public void setPaths(List<String> paths) {
 		this.paths = paths;
 	}
 

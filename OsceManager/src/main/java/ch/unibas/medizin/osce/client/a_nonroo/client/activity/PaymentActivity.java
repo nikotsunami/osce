@@ -18,9 +18,11 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -29,6 +31,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.Range;
@@ -43,6 +47,8 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 	private PaymentView view;
 	private AcceptsOneWidget widget;
 	private SelectChangeHandler removeHandler;
+	public Sorting sortorder = Sorting.ASC;
+	public String sortname = "name";
 	
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 
@@ -69,7 +75,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			@Override
 			public void onSelectionChange(SelectChangeEvent event) {
 				semesterProxy = event.getSemesterProxy();
-				
+				init();
 				//System.out.println("SEMESTER ID : " + semesterProxy.getId());
 			}
 		});
@@ -79,6 +85,20 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			@Override
 			public void onRangeChange(RangeChangeEvent event) {
 				onRangeChanged();
+			}
+		});
+		
+		view.getTable().addColumnSortHandler(new ColumnSortEvent.Handler() {
+			
+			@Override
+			public void onColumnSort(ColumnSortEvent event) {
+				Column<StandardizedPatientProxy, String> col = (Column<StandardizedPatientProxy, String>) event.getColumn();				
+				
+				int index = view.getTable().getColumnIndex(col);
+				sortname = view.getPaths().get(index-1);
+				sortorder = (event.isSortAscending()) ? Sorting.ASC: Sorting.DESC;
+				
+				init();
 			}
 		});
 		
@@ -97,7 +117,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			}
 		});
 		
-		requests.assignmentRequestNonRoo().findStandardizedPatientBySemester(0, OsMaConstant.TABLE_PAGE_SIZE, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+		requests.assignmentRequestNonRoo().findStandardizedPatientBySemester(0, OsMaConstant.TABLE_PAGE_SIZE, sortname, sortorder, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> response) {
@@ -124,7 +144,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			}
 		});
 		
-		requests.assignmentRequestNonRoo().findStandardizedPatientBySemester(range.getStart(), range.getLength(), semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+		requests.assignmentRequestNonRoo().findStandardizedPatientBySemester(range.getStart(), range.getLength(), sortname, sortorder, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> response) {

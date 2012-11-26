@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
+import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
 import com.google.gwt.requestfactory.shared.Request;
@@ -81,6 +82,6 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	
 	//payment change
 	public abstract Request<Long> countStandardizedPatientBySemester(Long semesterId);
-	public abstract Request<List<StandardizedPatientProxy>> findStandardizedPatientBySemester(int start, int max, Long semesterId);
+	public abstract Request<List<StandardizedPatientProxy>> findStandardizedPatientBySemester(int start, int max, String colName, Sorting sortType, Long semesterId);
 	//payment change
 }
