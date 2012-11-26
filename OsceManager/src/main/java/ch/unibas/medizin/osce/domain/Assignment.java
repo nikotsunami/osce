@@ -38,6 +38,7 @@ import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
+import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
 
@@ -1177,7 +1178,7 @@ public class Assignment {
     	 return (long) query.getResultList().size();
      }
      
-     public static List<StandardizedPatient> findStandardizedPatientBySemester(int start, int max, Long semesterId)
+     public static List<StandardizedPatient> findStandardizedPatientBySemester(int start, int max, String colName, Sorting sortType, Long semesterId)
      {
     	 EntityManager em = entityManager();
     	 
@@ -1189,7 +1190,8 @@ public class Assignment {
   				" AND pr.patientInSemester = ps.id" +
   				" AND pr.oscePost = op.id " +
   				" AND op.standardizedRole = sr.id" +
-  				" GROUP BY ps.standardizedPatient, a.osceDay, pr.oscePost, sr.roleType";
+  				" GROUP BY ps.standardizedPatient, a.osceDay, pr.oscePost, sr.roleType" +
+  				" ORDER BY ps.standardizedPatient." + colName + " " + sortType + " ";
     	 
     	 TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);    	 
     	 query.setFirstResult(start);

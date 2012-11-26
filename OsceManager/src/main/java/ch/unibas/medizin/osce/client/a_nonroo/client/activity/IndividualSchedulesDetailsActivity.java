@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -154,11 +155,11 @@ IndividualSchedulesDetailsView.Delegate
 						{						
 							osceProxy=(OsceProxy)response;
 							Log.info("Get Response in Detail with Size: " + osceProxy.getId());
-							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							initSP(osceProxy); // Initialize View for SP
 							initStudent(osceProxy.getId()); // Initialize View for Student
 							initExaminor(osceProxy.getId()); // Initialize View for Doctor		
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							
 						}
 				}
 				@Override
@@ -415,8 +416,8 @@ IndividualSchedulesDetailsView.Delegate
 		{					
 			Log.info("Call initStudent for Osce Id: " + osceId);
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-			lstChkStud=new ArrayList<CheckBox>();
-			lstStudentProxy=new ArrayList<StudentProxy>();	
+			//lstChkStud=new ArrayList<CheckBox>();
+			//lstStudentProxy=new ArrayList<StudentProxy>();	
 			
 			requests.courseRequestNonRoo().findCourseByOsce(osceId).fire(new OSCEReceiver<List<CourseProxy>>() 
 			{
@@ -425,9 +426,11 @@ IndividualSchedulesDetailsView.Delegate
 				{					
 					if(courseProxyList.size()>0)
 					{
-						view.getParcourListBox().setValue(courseProxyList.get(0));
 						/*view.getParcourListBox()(constants.all());*/
 						view.getParcourListBox().setAcceptableValues(courseProxyList);
+						//view.getParcourListBox().setAcceptableValues(Arrays.asList(courseProxyList,"ALL"));
+						view.getParcourListBox().setValue(courseProxyList.get(0));
+						initStudentByParcour(osceId,courseProxyList.get(0).getId());
 						view.getParcourListBox().addValueChangeHandler(new ValueChangeHandler<CourseProxy>() 
 						{
 							@Override
@@ -436,7 +439,7 @@ IndividualSchedulesDetailsView.Delegate
 								CourseProxy selectedCourseProxy=courseProxyValueChangeEvent.getValue();
 								System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
 								initStudentByParcour(osceId,selectedCourseProxy.getId());
-								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 							}
 						});
 					}
@@ -448,24 +451,27 @@ IndividualSchedulesDetailsView.Delegate
 		}
 		
 		private void initStudentByParcour(Long osceId, Long courseId) 
-		{
-			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		{		
 				//requests.studentRequestNonRoo().findStudentByOsceId(osceId).fire(new OSCEReceiver<List<StudentProxy>>() {
+		
 				requests.studentRequestNonRoo().findStudentByOsceIdAndCourseId(osceId,courseId).fire(new OSCEReceiver<List<StudentProxy>>() 
 				{
 				@Override
 				public void onSuccess(List<StudentProxy> response) 
 				{
-					Log.info("Get List of Student with Size: " + response.size());		
-					
+					Log.info("Get List of Student with Size: " + response.size());
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+					view.getVpStudent().clear();					
 					Iterator<StudentProxy> iteratorStud=response.iterator();		
 					if(response.size()>0)
 					{
 						
-						chkAllStud=new CheckBox(constants.all());							
-						view.getDataVPStud().addStyleName("schedulePanelStyle");
-						view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.students());
+						chkAllStud=new CheckBox(constants.all());
+						lstChkStud=new ArrayList<CheckBox>();
+						lstStudentProxy=new ArrayList<StudentProxy>();
 						
+						view.getDataVPStud().addStyleName("schedulePanelStyle");
+						view.getDisclosureStudentPanel().getHeaderTextAccessor().setText(constants.students());						
 						view.getVpStudent().insert(chkAllStud, view.getVpStudent().getWidgetCount());
 							chkAllStud.addClickHandler(new ClickHandler() 
 							{
@@ -478,9 +484,9 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});
 					}
-					view.getVpStudent().clear();
+					
 					while(iteratorStud.hasNext())
-					{
+					{						
 						Log.info("Panel Widget: " + view.getVpStudent().getWidgetCount());
 						
 						final CheckBox chkStud=new CheckBox();								
