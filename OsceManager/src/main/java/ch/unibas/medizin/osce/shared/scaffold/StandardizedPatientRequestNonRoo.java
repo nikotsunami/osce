@@ -60,4 +60,6 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
 //    	);
         abstract Request<Void> getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids);
          //SPEC]
+
+		abstract Request<Void> setStandardizedPatientListToSession(List<Long> stdPatIdList, String sortname, Sorting sortorder);
 }

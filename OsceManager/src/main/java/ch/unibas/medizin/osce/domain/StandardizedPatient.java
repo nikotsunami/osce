@@ -1247,4 +1247,26 @@ public class StandardizedPatient {
    
  // E Module10 Create plans
     
+    public static void setStandardizedPatientListToSession(List<Long>  ids, String sortname, Sorting sortorder) {
+    	HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
+		session.setAttribute(ResourceDownloadProps.SP_LIST, ids);
+		session.setAttribute(ResourceDownloadProps.COLUMN_NAME, sortname);
+		session.setAttribute(ResourceDownloadProps.SORT_ORDER, sortorder);
+		
+    }
+
+	public static List<StandardizedPatient> findPatientsByidsAndSortByColumn(
+			List<Long> ids, String column, Sorting sortOrder) {
+		List<StandardizedPatient> result  = new ArrayList<StandardizedPatient>();
+		
+		if(ids.size() > 0) {
+			String idList = org.apache.commons.lang.StringUtils.join(ids,",");
+			String SQL = "select sp from StandardizedPatient as sp where sp.id in ("+idList+") ORDER BY sp." + column + " " + sortOrder+ " ";;
+			TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(SQL,StandardizedPatient.class);
+			Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
+			result  = typedQuery.getResultList();
+		}
+		return result;
+	}
+
 }

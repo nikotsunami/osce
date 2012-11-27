@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 
@@ -80,6 +81,11 @@ public class ResourceUtil {
 		
 		case CHECKLIST : {
 			fileName = setChecklistResouce(request,os);
+			break;
+		}
+		
+		case STANDARDIZED_PATIENT_PAYMENT : {
+			fileName = setStandardizedPatientPaymentResource(request, response, os);
 			break;
 		}
 		default: {
@@ -274,6 +280,41 @@ public class ResourceUtil {
 		return fileName;
 	}
 
+	
+	private static String setStandardizedPatientPaymentResource(
+			HttpServletRequest request, HttpServletResponse response,
+			ByteArrayOutputStream os) throws IOException {
+		
+		HttpSession session = request.getSession();
+		String fileName = "default.pdf";
+		
+		if(session.getAttribute(ResourceDownloadProps.SP_LIST) != null) {
+			
+			final List<Long> ids = (List<Long>) session.getAttribute(ResourceDownloadProps.SP_LIST);
+			final String column = (String) session.getAttribute(ResourceDownloadProps.COLUMN_NAME);
+			final Sorting sortOrder = (Sorting) session.getAttribute(ResourceDownloadProps.SORT_ORDER);
+			final List<StandardizedPatient> spList; 
+			if(StringUtils.isNotBlank(column) && sortOrder != null) {
+				spList = StandardizedPatient.findPatientsByidsAndSortByColumn(ids,column,sortOrder);
+			}else{
+				spList = StandardizedPatient.findPatientsByids(ids);	
+			}
+				
+			
+			
+			if(spList != null & spList.size() > 0) {
+				StandardizedPatientPaymentUtil paymentUtil =  new StandardizedPatientPaymentUtil(spList,os,session);
+				fileName = paymentUtil.createPDF();
+			}
+			
+			session.removeAttribute(ResourceDownloadProps.SP_LIST);
+			session.removeAttribute(ResourceDownloadProps.COLUMN_NAME);
+			session.removeAttribute(ResourceDownloadProps.SORT_ORDER);
+		}
+		
+		return fileName;
+	}
+	
 	private static void sendFile(HttpServletResponse response, byte[] resource,
 			String fileName) throws IOException {
 		ServletOutputStream stream = null;

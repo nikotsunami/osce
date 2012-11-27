@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -30,6 +31,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
@@ -176,6 +178,20 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 		}
 		
 		//stdPatIdList is List of Selected Standardized Patient
+		
+		requests.standardizedPatientRequestNonRoo().setStandardizedPatientListToSession(stdPatIdList,sortname,sortorder).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				
+				String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT_PAYMENT.ordinal()));
+				String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal);
+				Log.info("--> url is : " +url);
+				Window.open(url, "", "");
+				
+			}
+			
+		});
 	}
 	
 }

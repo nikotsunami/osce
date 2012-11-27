@@ -146,7 +146,7 @@ public class QwtUtil extends FileUtil {
 		return (new Date(timeInMinute));
 	}
 
-	public static List<BellAssignmentType> getBellAssignmentType(
+	/*public static List<BellAssignmentType> getBellAssignmentType(
 			List<Assignment> assignmentProxyList, Integer time,
 			TimeBell isPlusTime, Semester semester) {
 
@@ -354,5 +354,132 @@ public class QwtUtil extends FileUtil {
 		//
 		// return bellAssignmentTypes;
 
+	}*/
+	
+	public static List<BellAssignmentType> getBellAssignmentType(
+			List<Assignment> assignmentProxyList, Integer time,
+			TimeBell isPlusTime, Semester semester) {
+		
+
+		List<BellAssignmentType> bellAssignmentTypes = new ArrayList<BellAssignmentType>();
+		
+		if (assignmentProxyList != null && assignmentProxyList.size() > 0) {
+			
+			Iterator<Assignment> iterator = assignmentProxyList.iterator();
+			int rotationNumber = 0;
+			int preparationRing = (semester.getPreparationRing() == null) ? 0
+					: semester.getPreparationRing()
+							* BellAssignmentType.MILLISECONDTOMINUTE;
+			
+			BellTone lastTone = null;
+			
+			Assignment assignment = iterator.next();
+			Assignment assignmentNext = null;
+			
+			if (assignmentProxyList.size() == 1)
+			{
+				BellAssignmentType startBellAssignmentType = new BellAssignmentType();				
+				startBellAssignmentType = getBellAssignmentType(assignment
+						.getOsceDay().getOsceDate(), assignment.getOsceDay()
+						.getOsce().getName());
+				if ((lastTone == null || lastTone == BellTone.TONE_8) && preparationRing != 0)
+				{
+					startBellAssignmentType.setBellTone(BellTone.TONE_8);
+					startBellAssignmentType.setOsceTime(getNewDate(
+							assignment.getTimeStart(), time, preparationRing, isPlusTime));
+				}
+				else
+				{
+					startBellAssignmentType.setBellTone(BellTone.TONE_2);
+					startBellAssignmentType.setOsceTime(getNewDate(
+							assignment.getTimeStart(), time, 0, isPlusTime));
+				}
+				bellAssignmentTypes.add(startBellAssignmentType);
+				
+				
+				BellAssignmentType endBellAssignmentType = new BellAssignmentType();				
+				endBellAssignmentType = getBellAssignmentType(assignment
+						.getOsceDay().getOsceDate(), assignment.getOsceDay()
+						.getOsce().getName());
+				endBellAssignmentType.setOsceTime(getNewDate(
+						assignment.getTimeEnd(), time, 0, isPlusTime));
+				endBellAssignmentType.setBellTone(BellTone.TONE_4);				
+				bellAssignmentTypes.add(endBellAssignmentType);
+			}
+			else
+			{
+				while (iterator.hasNext())
+				{	
+					if ((lastTone == null || lastTone == BellTone.TONE_8) && preparationRing > 0)
+					{
+						BellAssignmentType earlyStartBellAssignmentType = new BellAssignmentType();					
+						earlyStartBellAssignmentType = getBellAssignmentType(assignment.getOsceDay().getOsceDate(), assignment.getOsceDay().getOsce().getName());					
+						earlyStartBellAssignmentType.setBellTone(BellTone.TONE_8);
+						earlyStartBellAssignmentType.setOsceTime(getNewDate(assignment.getTimeStart(), time, preparationRing, isPlusTime));
+						bellAssignmentTypes.add(earlyStartBellAssignmentType);
+						lastTone = BellTone.TONE_2;
+					}
+					
+					BellAssignmentType startBellAssignmentType = new BellAssignmentType();					
+					startBellAssignmentType = getBellAssignmentType(assignment.getOsceDay().getOsceDate(), assignment.getOsceDay().getOsce().getName());					
+					startBellAssignmentType.setBellTone(BellTone.TONE_2);
+					startBellAssignmentType.setOsceTime(getNewDate(assignment.getTimeStart(), time, 0, isPlusTime));
+					bellAssignmentTypes.add(startBellAssignmentType);
+					
+					BellAssignmentType endBellAssignmentType = new BellAssignmentType();					
+					endBellAssignmentType = getBellAssignmentType(assignment.getOsceDay().getOsceDate(), assignment.getOsceDay().getOsce().getName());
+					endBellAssignmentType.setOsceTime(getNewDate(assignment.getTimeEnd(), time, 0, isPlusTime));
+
+					if (iterator.hasNext())
+					{
+						assignmentNext = iterator.next();
+						if (rotationNumber != assignmentNext.getRotationNumber())
+						{
+							endBellAssignmentType.setBellTone(BellTone.TONE_8);
+							rotationNumber = assignmentNext.getRotationNumber();
+							lastTone = BellTone.TONE_8;
+						}
+						else
+						{
+							endBellAssignmentType.setBellTone(BellTone.TONE_4);
+							lastTone = BellTone.TONE_4;
+						}
+						
+						assignment = assignmentNext;
+						assignmentNext = null;
+					}
+					else
+					{
+						endBellAssignmentType.setBellTone(BellTone.TONE_4);
+						lastTone = BellTone.TONE_4;
+					}
+					
+					bellAssignmentTypes.add(endBellAssignmentType);
+				}
+				
+				if (assignmentNext != null)
+				{
+					BellAssignmentType startBellAssignmentType = new BellAssignmentType();				
+					startBellAssignmentType = getBellAssignmentType(assignmentNext
+							.getOsceDay().getOsceDate(), assignmentNext.getOsceDay()
+							.getOsce().getName());
+					startBellAssignmentType.setBellTone(BellTone.TONE_2);
+					startBellAssignmentType.setOsceTime(getNewDate(
+							assignmentNext.getTimeStart(), time, 0, isPlusTime));
+					bellAssignmentTypes.add(startBellAssignmentType);
+					
+					
+					BellAssignmentType endBellAssignmentType = new BellAssignmentType();				
+					endBellAssignmentType = getBellAssignmentType(assignmentNext
+							.getOsceDay().getOsceDate(), assignmentNext.getOsceDay()
+							.getOsce().getName());
+					endBellAssignmentType.setOsceTime(getNewDate(
+							assignmentNext.getTimeEnd(), time, 0, isPlusTime));
+					endBellAssignmentType.setBellTone(BellTone.TONE_4);				
+					bellAssignmentTypes.add(endBellAssignmentType);
+				}
+			}
+		}	
+		return bellAssignmentTypes;
 	}
 }

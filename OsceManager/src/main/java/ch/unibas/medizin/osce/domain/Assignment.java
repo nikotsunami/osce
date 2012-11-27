@@ -652,7 +652,14 @@ public class Assignment {
     
 	// Module : 15
 
-	public static List<Assignment> getAssignmentsBySemester(Long semesterId) {
+    public static List<Assignment> getAssignmentsBySemester(Long semesterId){
+    	EntityManager em = entityManager();
+    	String sql = "SELECT a FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.semester.id = "+ semesterId +" GROUP BY a.timeStart ORDER BY a.osceDay, a.timeStart";
+    	TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	return query.getResultList();
+    }
+    
+	/*public static List<Assignment> getAssignmentsBySemester(Long semesterId) {
 		Log.info("retrieveAssignmenstOfTypeExaminer :");
 		EntityManager em = entityManager();
 
@@ -698,7 +705,7 @@ public class Assignment {
 			// asc ;
 			// and op.osce_sequence=1;
 
-			/*String queryString = "SELECT distinct a FROM Assignment as a where a.type=0 and a.osceDay.osce.semester.id="
+			String queryString = "SELECT distinct a FROM Assignment as a where a.type=0 and a.osceDay.osce.semester.id="
 					+ semesterId
 					+ " and a.osceDay.id="
 					+ osceDay.getId()
@@ -707,7 +714,7 @@ public class Assignment {
 //					+ " and opr.course.id="
 //					+ course.getId()
 //					+ " ) " 
-					+"order by a.osceDay asc,a.osceDay.osceDate asc,a.timeStart asc ";*/
+					+"order by a.osceDay asc,a.osceDay.osceDate asc,a.timeStart asc ";
 			String queryString = "SELECT distinct a FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.semester.id = " + semesterId + " AND a.osceDay.id = " + osceDay.getId() + " GROUP BY a.timeStart ORDER BY a.osceDay, a.timeStart ASC";
 			
 			TypedQuery<Assignment> query = em.createQuery(queryString,
@@ -721,13 +728,13 @@ public class Assignment {
 		}
 		// return bellAssignmentTypes;
 		return assignmentList;
-	}
+	}*/
 
 	public static Integer getCountAssignmentsBySemester(Long semesterId) {
 		return new Integer(getAssignmentsBySemester(semesterId).size());
 	}
 
-	public static String getQwtBellSchedule(// List<Assignment> assignments,
+	/*public static String getQwtBellSchedule(// List<Assignment> assignments,
 			Long semesterId, Integer time, TimeBell isPlusTime) {
 		try {
 			List<Assignment> assignments = getAssignmentsBySemester(semesterId);
@@ -758,8 +765,43 @@ public class Assignment {
 		}
 		// return OsMaConstant.FILENAME;
 		return "";
+	}*/
+
+	public static String getQwtBellSchedule(// List<Assignment> assignments,
+			Long semesterId, Integer time, TimeBell isPlusTime) {
+		try {
+			QwtUtil qwtUtil = new QwtUtil();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = new Date();
+
+			String fileName = new String(dateFormat.format(date) + ".qwt");
+			//Feature : 154
+			qwtUtil.open(StandardizedPatient.fetchRealPath() + fileName, false);			
+			
+			
+			List<Assignment> assignments = getAssignmentsBySemester(semesterId);
+			Semester semester = Semester.findSemester(semesterId);			
+
+			List<BellAssignmentType> bellAssignmentTypes = QwtUtil
+					.getBellAssignmentType(assignments, time, isPlusTime,
+							semester);
+			qwtUtil.writeQwt(bellAssignmentTypes);
+
+			// qwtUtil.writeQwt(assignments);
+
+			qwtUtil.close();
+			//Feature : 154
+			return StandardizedPatient.fetchContextPath() + fileName;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// return OsMaConstant.FILENAME;
+		return "";
 	}
 
+	
 	// Module : 15
 	
 		public static List<Assignment> findAssignmentByOscePostRoom(Long id, Long osceId, int rotationNumber)
