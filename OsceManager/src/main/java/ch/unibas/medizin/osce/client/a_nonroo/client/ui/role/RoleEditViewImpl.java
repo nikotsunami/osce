@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -87,6 +88,11 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 
 	private boolean minorClick=false;
 	
+	@UiField(provided = true)
+	public ListBox sum=new ListBox();
+	
+	@UiField(provided = true)
+	public ListBox factor=new ListBox();
 	
 	
 	public StandardizedRoleProxy getStandardizedRoleProxy() {
@@ -138,6 +144,12 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	
 	@UiField
 	public SpanElement labelActive;
+	
+	@UiField
+	public SpanElement labelSum;
+	
+	@UiField
+	public SpanElement labelFactor;
 		
 	//Issue # 122 : Replace pull down with autocomplete.	
 	@UiField
@@ -189,16 +201,34 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		setTabTexts();
 		setLabelTexts();
 		
+		
 		rolePanel.selectTab(0);
 		roleDetailPanel.selectTab(0);
 		
 		// Highlight onViolation
+		for(int i=0;i<=10;i++)
+		{
+			factor.addItem(i+"");
+		}
+	//	factor.setSelectedIndex(0);
+
+		for(int i=1;i<=5;i++)
+		{
+			sum.addItem(i+"");
+		}
+	//	sum.setSelectedIndex(0);
+
+		
 		standardizedRoleMap=new HashMap<String, Widget>();
 		standardizedRoleMap.put("shortName", shortName);
 		standardizedRoleMap.put("longName", longName);
 		standardizedRoleMap.put("roleType", roleType);
 		standardizedRoleMap.put("studyYear", studyYear);
 		standardizedRoleMap.put("active", active);
+		standardizedRoleMap.put("factor", factor);
+		standardizedRoleMap.put("sum", sum);
+		
+		
 		// E Highlight onViolation
 		
 		
@@ -216,6 +246,8 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		labelstudyYear.setInnerText(constants.studyYear() + ":");
 		labelRoleTopic.setInnerText(constants.roleTopic());//spec
 		labelActive.setInnerText(constants.roleActive());
+		labelSum.setInnerText(constants.sum());
+		labelFactor.setInnerText(constants.factor());
 	}
 	
 	public void setCreating(boolean creating) {

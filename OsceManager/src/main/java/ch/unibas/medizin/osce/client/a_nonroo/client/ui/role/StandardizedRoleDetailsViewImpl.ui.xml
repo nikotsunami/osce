@@ -95,6 +95,25 @@
 										</td>
 										<!--<td><my:FocusableValueListBox ui:field="studyYear" /></td> -->
 									</tr>
+									<tr id="sum">
+										<td>
+											<span class="{style.label}" ui:field="labelSum" />
+										</td>
+										<td>
+											<span class="{style.label}" ui:field="sum" />
+										</td>
+										<!--<td><my:FocusableValueListBox ui:field="studyYear" /></td> -->
+									</tr>
+									<tr id="factor">
+										<td>
+											<span class="{style.label}" ui:field="labelFactor" />
+										</td>
+										<td>
+											<span class="{style.label}" ui:field="factor" />
+										</td>
+										<!--<td><my:FocusableValueListBox ui:field="studyYear" /></td> -->
+									</tr>
+									
 								</tbody>
 							</table>
 						</g:HTMLPanel>

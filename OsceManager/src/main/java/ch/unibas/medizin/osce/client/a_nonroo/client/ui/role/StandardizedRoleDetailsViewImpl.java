@@ -183,6 +183,12 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	SpanElement labelstudyYear;
 	
 	@UiField
+	SpanElement labelSum;
+	
+	@UiField
+	SpanElement labelFactor;
+	
+	@UiField
 	Label labelOtherCriteria;
 
 	// Temp Fields
@@ -216,6 +222,13 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	public SpanElement studyYear;
 
+	@UiField
+	public SpanElement factor;
+
+	@UiField
+	public SpanElement sum;
+
+	
 	@UiField
 	public TabPanel roleSubPanel;
 	/*
@@ -480,6 +493,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		labellongName.setInnerText(constants.name() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");
 		labelstudyYear.setInnerText(constants.studyYear() + ":");
+		labelFactor.setInnerText(constants.factor() + ":");
+		labelSum.setInnerText(constants.sum() + ":");
 		
 		labelOtherCriteria.setText(constants.furtherCriteria());
 	}

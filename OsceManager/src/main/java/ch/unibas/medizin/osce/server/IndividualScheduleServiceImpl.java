@@ -383,7 +383,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										{
 											System.out.println("Assignment has longBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 											/*tempBreakContent=tempBreakContent.replace("[LONG BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
-											longBreak.add(String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+											longBreak.add(String.format("%tR to %tR", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										}
 /*										else
 										{
@@ -395,7 +395,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										{
 											System.out.println("Assignment has lunchBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 /*											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
-											lunchBreak.add(String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+											lunchBreak.add(String.format("%tR to %tR", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 											
 										}
 /*										else
@@ -959,7 +959,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									if(hasLongBreak==true)
 									{
 										System.out.println("Assignment has longBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
-										longBreak.add(String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
+										longBreak.add(String.format("%tR to %tR", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										/*tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));*/									
 									}
 									/*else
@@ -971,7 +971,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									if(hasLunchBreak==true)
 									{
 										System.out.println("Assignment has lunchBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
-										lunchBreak.add(String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
+										lunchBreak.add(String.format("%tR to %tR", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										/*tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
 									}
 									/*else
@@ -1349,7 +1349,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								{
 									System.out.println("Assignment has longBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 									/*tempBreakContentExaminer=tempBreakContentExaminer.replace("[LONG BREAK]", String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
-									longBreak.add(String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+									longBreak.add(String.format("%tR to %tR", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 								}
 								/*else
 								{
@@ -1361,7 +1361,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								{
 									System.out.println("Assignment has lunchBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 									/*tempBreakContentExaminer=tempBreakContentExaminer.replace("[LUNCH BREAK]", String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
-									lunchBreak.add(String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
+									lunchBreak.add(String.format("%tR to %tR", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 								}
 								/*else
 								{

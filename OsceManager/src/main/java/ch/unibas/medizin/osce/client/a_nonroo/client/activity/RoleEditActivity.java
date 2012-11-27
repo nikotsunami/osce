@@ -71,6 +71,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class RoleEditActivity extends AbstractActivity implements RoleEditView.Presenter, RoleEditView.Delegate,RoleEditCheckListSubView.Delegate,RoleEditCheckListSubView.Presenter {
@@ -268,6 +269,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 									});
 
 									((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
+									//standardizedRole.setFactor(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+									//standardizedRole.setSum(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex()))));
+									
+									/*((RoleEditViewImpl)view).factor.setSelectedIndex(Integer.parseInt(standardizedRole.getFactor().toString()));
+									((RoleEditViewImpl)view).sum.setSelectedIndex(Integer.parseInt(standardizedRole.getSum().toString())-1);*/
 									//Issue # 122 : Replace pull down with autocomplete.
 									
 									Log.info("value--"+((RoleEditViewImpl)view).roleTopic.getSelected());
@@ -393,9 +399,18 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			System.out
 					.println("====================standardizedRole not null in RoleEditActivity=============");
 			standardizedRole = request.edit(standardizedRole);
-			
+			/*standardizedRole.setFactor(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+			standardizedRole.setSum(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex()))));
+			*/
 			Log.info("roletopic befor =====--"+ standardizedRole.getRoleTopic());
-			
+			Log.info("st role factor--"+standardizedRole.getFactor());
+
+			((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(standardizedRole.getFactor().toString()));
+			//((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString()))-1);
+			((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString()))-1);
+			//standardizedRole.setFactor(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(standardizedRole.getFactor().toString()));
+			//Log.info("st role sum--"+standardizedRole.getSum());
+			//standardizedRole.setSum(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString())));
 		//	((RoleEditViewImpl)view).roleTopic.setRenderer(new roletopicre)
 		//	((RoleEditViewImpl)view).roleTopic.setSelected(standardizedRole.getRoleTopic())
 		//	((RoleEditViewImpl)view).roleTopic.setText(standardizedRole.getRoleTopic().getName());
@@ -476,6 +491,9 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		//Issue # 122 : Replace pull down with autocomplete.
 		//standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
 		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getSelected());
+		standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
+		//standardizedRole.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
 		//Issue # 122 : Replace pull down with autocomplete.
 //		checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 //		standardizedRole.setCheckList(checkListProxy);//spec
@@ -513,6 +531,14 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					proxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+					//add factor and sum
+					proxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+					proxy.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
+					
+					
+					//proxy.setFactor(((RoleEditViewImpl)view).factor.getValue();
+					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+					
 					
 					proxy.setPreviousVersion(standardizedRole);
 					
@@ -549,6 +575,9 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					oldProxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					oldProxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
 						
+					oldProxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+					oldProxy.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
+					
 						//proxy1.setPreviousVersion(standardizedRole);
 						//proxy1.setMainVersion(standardizedRole.getMainVersion()+1);
 					oldProxy.setMainVersion(1);
@@ -600,7 +629,11 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		proxy.setLongName(srp.getLongName());
 		proxy.setStudyYear(srp.getStudyYear());
 		proxy.setRoleType(srp.getRoleType());
+		proxy.setFactor(srp.getFactor());
+		proxy.setSum(srp.getSum());
+		
 		proxy.setPreviousVersion(srp);
+		
 		proxy.setMainVersion(srp.getMainVersion()+1);
 		proxy.setSubVersion(1);
 		
