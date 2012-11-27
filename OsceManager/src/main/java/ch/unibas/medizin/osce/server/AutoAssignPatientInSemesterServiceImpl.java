@@ -229,7 +229,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									neededSp=parcourList.size()*2;
 								}
 								else if(osce.getOsceSecurityTypes()==OsceSecurityType.federal){
-									neededSp=(parcourList.size()*sortedOscePost.getStandardizedRole().getFactor())+ sortedOscePost.getStandardizedRole().getSum();
+									neededSp=(parcourList.size()*util.checkInteger(sortedOscePost.getStandardizedRole().getFactor()))+ util.checkInteger(sortedOscePost.getStandardizedRole().getSum());
 								}
 								
 								//@Todo
