@@ -770,7 +770,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											PatientInSemester key = keyList.get(i);
 											System.out.println("~~SORTED MAP KEY : " + key.getId() + "  ~~SIZE : " + valueList.get(i).size());
 											
-											if(valueList.get(i).get(maximnamBackupSP)!=null){
+											if(maximnamBackupSP >valueList.get(i).size() && valueList.get(i).get(maximnamBackupSP)!=null){
 												if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
 													
 													// Persist with one post as null
