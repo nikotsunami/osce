@@ -77,6 +77,27 @@
 									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
 								</tr>
+								
+								<tr id="sum">
+									<td><span class="{style.label}" ui:field="labelSum" /></td>
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									<td><g:ListBox ui:field="sum"></g:ListBox></td> 
+									
+									<!-- <my:FocusableValueListBox ui:field="roleTopic" /> -->
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
+								</tr>
+								
+								<tr id="factor">
+									<td><span class="{style.label}" ui:field="labelFactor" /></td>
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									
+								 	<td><g:ListBox ui:field="factor"></g:ListBox></td> 
+									
+									<!-- <my:FocusableValueListBox ui:field="roleTopic" /> -->
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
+								</tr>
 								</tbody>
 							</table>
 						</g:HTMLPanel>

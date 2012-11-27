@@ -904,6 +904,9 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		// Issue Role
 		standardizedRoleDetailsView[index].roleType.setInnerText(proxy.getRoleType() == null ? "": proxy.getRoleType().name()); // ADDED
 		standardizedRoleDetailsView[index].studyYear.setInnerText(proxy.getStudyYear() == null ? "": proxy.getStudyYear().name()); // ADDED
+		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
+		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
+		
 		// E: Issue Role
 		standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
 
@@ -5475,6 +5478,9 @@ final int index2 = index;
 		// Issue Role
 		standardizedRoleDetailsView[index].roleType.setInnerText(proxy.getRoleType() == null ? "": proxy.getRoleType().name()); // ADDED
 		standardizedRoleDetailsView[index].studyYear.setInnerText(proxy.getStudyYear() == null ? "": proxy.getStudyYear().name()); // ADDED
+		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
+		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
+		
 		// E: Issue Role
 		standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
 

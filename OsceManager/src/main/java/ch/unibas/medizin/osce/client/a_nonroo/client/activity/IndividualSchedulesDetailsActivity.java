@@ -45,6 +45,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -161,6 +162,7 @@ IndividualSchedulesDetailsView.Delegate
 							initExaminor(osceProxy.getId()); // Initialize View for Doctor		
 							
 						}
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}
 				@Override
 				public void onFailure(ServerFailure error) {
@@ -272,6 +274,7 @@ IndividualSchedulesDetailsView.Delegate
 				@Override
 				public void onSuccess(List<StandardizedPatientProxy> response) 
 				{
+					
 					Log.info("Get List of SP with Size: " + response.size());		
 					
 						Iterator<StandardizedPatientProxy> iteratorSP=response.iterator();												
@@ -289,10 +292,13 @@ IndividualSchedulesDetailsView.Delegate
 								public void onClick(ClickEvent event) 
 								{
 									Log.info("Select/Deselect All SP");									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
 									checkedUncheckedAll(lstChkSp,chkAllSP);
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
 								}								
 							});
 						}
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));	
 						while(iteratorSP.hasNext())
 						{
 							Log.info("Panel Widget: " + view.getVpSP().getWidgetCount());
@@ -428,8 +434,19 @@ IndividualSchedulesDetailsView.Delegate
 					{
 						/*view.getParcourListBox()(constants.all());*/
 						view.getParcourListBox().setAcceptableValues(courseProxyList);
-						//view.getParcourListBox().setAcceptableValues(Arrays.asList(courseProxyList,"ALL"));
+						
+						for(int i=0;i<courseProxyList.size();i++)
+						{
+							String c="accordion-title-selected"+courseProxyList.get(i).getColor().toString(); 
+							System.out.println("Style Add: " + c);
+							DOM.getChild(view.getParcourListBox().getElement(), i).setClassName(c);
+						}
+						
 						view.getParcourListBox().setValue(courseProxyList.get(0));
+						String c="accordion-title-selected"+courseProxyList.get(0).getColor().toString(); 
+						view.getParcourListBox().addStyleName(c);
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						initStudentByParcour(osceId,courseProxyList.get(0).getId());
 						view.getParcourListBox().addValueChangeHandler(new ValueChangeHandler<CourseProxy>() 
 						{
@@ -440,6 +457,8 @@ IndividualSchedulesDetailsView.Delegate
 								if(selectedCourseProxy!=null)
 								{
 									System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
+									String c="accordion-title-selected"+selectedCourseProxy.getColor().toString(); 
+									view.getParcourListBox().addStyleName(c);
 									initStudentByParcour(osceId,selectedCourseProxy.getId());
 								}
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
@@ -456,7 +475,7 @@ IndividualSchedulesDetailsView.Delegate
 		private void initStudentByParcour(Long osceId, Long courseId) 
 		{		
 				//requests.studentRequestNonRoo().findStudentByOsceId(osceId).fire(new OSCEReceiver<List<StudentProxy>>() {
-		
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				requests.studentRequestNonRoo().findStudentByOsceIdAndCourseId(osceId,courseId).fire(new OSCEReceiver<List<StudentProxy>>() 
 				{
 				@Override
@@ -487,11 +506,12 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});
 					}
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					
 					while(iteratorStud.hasNext())
 					{						
 						Log.info("Panel Widget: " + view.getVpStudent().getWidgetCount());
-						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 						final CheckBox chkStud=new CheckBox();								
 						StudentProxy s =iteratorStud.next();						
 						
@@ -515,6 +535,7 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							}
 						});
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					}
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				}				
@@ -613,6 +634,7 @@ IndividualSchedulesDetailsView.Delegate
 		private void checkedUncheckedAll(List<CheckBox> list, CheckBox chkbox) 
 		{
 			Log.info("Call checkedUncheckedAll");		
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));	
 			if(list.size()>0)
 			{
 					if(chkbox.isChecked()==true)
@@ -662,6 +684,7 @@ IndividualSchedulesDetailsView.Delegate
 						}
 					}
 			}			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 		}
 		
 		@Override

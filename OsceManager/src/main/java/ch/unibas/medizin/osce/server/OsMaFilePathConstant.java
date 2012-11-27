@@ -100,5 +100,5 @@ public class OsMaFilePathConstant {
 	// Module 8]
 	
 	
-
+	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
 }

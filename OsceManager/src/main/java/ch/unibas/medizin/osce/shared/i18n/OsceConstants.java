@@ -1219,6 +1219,13 @@ public interface OsceConstants extends Constants {
      
      //export checklist
      public String exportChecklist();
+
      //export checklist
+     public String sum();
+    public String factor();
+
+     public String paymentInstitute();
+     
+     public String paymentName();
 }
 

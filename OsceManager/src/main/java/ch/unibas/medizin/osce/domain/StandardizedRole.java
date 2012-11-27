@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -66,6 +67,14 @@ public class StandardizedRole {
 	@ManyToOne
 	private RoleTopic roleTopic;
 
+	
+	private Integer factor ;
+	
+	private Integer sum ;
+	
+	
+
+	
 	/*
 	 * @NotNull
 	 * 
@@ -144,6 +153,8 @@ public class StandardizedRole {
 		   newStandardizedRole.setLongName(oldStandardizedRole.getLongName());
 		   newStandardizedRole.setStudyYear(oldStandardizedRole.getStudyYear());
 		   newStandardizedRole.setRoleType(oldStandardizedRole.getRoleType());
+		   newStandardizedRole.setFactor(oldStandardizedRole.getFactor());
+		   newStandardizedRole.setSum(oldStandardizedRole.getSum());
 		   newStandardizedRole.setMainVersion(0);
 		   newStandardizedRole.setSubVersion(0);
 		   newStandardizedRole.setActive(true);
@@ -219,6 +230,9 @@ public class StandardizedRole {
 		   newStandardizedRole.setRoleType(oldStandardizedRole.getRoleType());
 		   newStandardizedRole.setMainVersion(oldStandardizedRole.mainVersion + 1);
 		   newStandardizedRole.setSubVersion(0);
+		   newStandardizedRole.setFactor(oldStandardizedRole.getFactor());
+		   newStandardizedRole.setSum(oldStandardizedRole.getSum());
+		   
 		   newStandardizedRole.setActive(true);
 		   newStandardizedRole.setPreviousVersion(oldStandardizedRole);
 		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());
