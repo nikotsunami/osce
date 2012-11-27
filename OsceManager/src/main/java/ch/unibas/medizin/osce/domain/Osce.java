@@ -578,11 +578,29 @@ public class Osce {
 				"where pis.id IN(''"+ getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
 				" and pis.semester="+semesterId +" and pis.accepted=1 GROUP BY pis.id " + 
 				" ORDER BY pis.value DESC , count(pir.patientInSemester) ";
+		/*String queryString="select pis from PatientInSemester as pis where pis.id not in (select patientInSemester from PatientInRole) " +
+				"and pis.id in ('' " +getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
+				"and pis.accepted=1 and pis.semester="+semesterId;*/
 					Log.info(queryString);
 				TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
 				 
 				return q.getResultList();
 
+	}
+	public static List<PatientInSemester> getAcceptedPISAndNotAssignForThatDay(OsceDay osceDay,Long semesterID){
+		
+		EntityManager em = entityManager();
+		
+		Log.info("Inside getAcceptedPISAndNotAssignForThatDay () with day " + osceDay.getId() + " Sem id :" + semesterID);	
+	
+		String queryString="select ps from PatientInSemester as ps where ps.id in ('' " +getPatientInSemesterIDList(osceDay.getPatientInSemesters()) +") " +
+		"and ps.id not in (select pr.patientInSemester from PatientInRole as pr, OscePost as op, OsceSequence as os, OsceDay  as od where od.id="+osceDay.getId() +" and os.osceDay= od.id "+
+		" and op.osceSequence = os.id 	and pr.oscePost = op.id)";
+		
+		Log.info(queryString);
+		TypedQuery<PatientInSemester> q = em.createQuery(queryString,PatientInSemester.class);
+		return q.getResultList();
+		
 	}
 
 	/*public static List<Course>getAllParcoursForThisOsceDay(OsceDay osceDay){
@@ -608,6 +626,55 @@ public class Osce {
 		return q.getResultList();
 	}
 
+	/*public static List<OscePost> findOscePostsinWhichSPFits(Long semesterId,List<OscePost>allOscePostOfThisDay,PatientInSemester sortedPatientInSemester2){
+		
+		Log.info("Semester Id AT findOscePostsinWhichSPFits() Is :" +semesterId );
+		List<PatientInSemester> listOfPatientInSemesterSatisfyCriteria = new ArrayList<PatientInSemester>();
+		Set<AdvancedSearchCriteria> setAdvanceSearchCriteria = new HashSet<AdvancedSearchCriteria>();
+		List<AdvancedSearchCriteria> listAdvanceSearchCriteria = new ArrayList<AdvancedSearchCriteria>();
+		
+		List<OscePost> resultList =new ArrayList<OscePost>();
+		
+		OscePost oscePost;
+		StandardizedRole standardizedRole;
+		Iterator<OscePost> oscePostIterator = allOscePostOfThisDay.iterator();
+		
+		while(oscePostIterator.hasNext()){
+			
+			setAdvanceSearchCriteria.clear();
+			listOfPatientInSemesterSatisfyCriteria.clear();
+			listAdvanceSearchCriteria.clear();
+			
+			oscePost=oscePostIterator.next();
+			
+			standardizedRole=oscePost.getStandardizedRole();
+			
+			setAdvanceSearchCriteria=standardizedRole.getAdvancedSearchCriteria();
+			
+			Log.info("Search Criteria size :" + setAdvanceSearchCriteria.size());
+			
+			if(setAdvanceSearchCriteria==null || setAdvanceSearchCriteria.size() <=0 ){
+				//continue;
+				resultList.add(oscePost);
+			}
+			else{
+			listAdvanceSearchCriteria.addAll(setAdvanceSearchCriteria);
+			
+			listOfPatientInSemesterSatisfyCriteria=PatientInSemester.findPatientInSemesterByAdvancedCriteria(semesterId,listAdvanceSearchCriteria);
+			
+			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0){
+				
+				if(listOfPatientInSemesterSatisfyCriteria.contains(sortedPatientInSemester2)){
+					resultList.add(oscePost);
+				}
+				
+			}
+		}
+		}
+		Log.info("Criteria Setisfy For Roles Is :"+resultList.size()+" For Patient :" +sortedPatientInSemester2.getId());
+		
+		return resultList;
+	}*/
 	public static List<List<OscePost>>  findPersentageOfRoleFitsForDay(Long semesterId,List<OscePost>allOscePostOfThisDay,PatientInSemester sortedPatientInSemester2){
 		
 		Log.info("Semester Id AT findPersentageOfRoleFitsForDay() Is :" +semesterId );

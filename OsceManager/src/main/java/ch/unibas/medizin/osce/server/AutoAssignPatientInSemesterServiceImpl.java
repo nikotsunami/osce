@@ -3,12 +3,17 @@ package ch.unibas.medizin.osce.server;
  * @author manish
  */
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.gwt.dev.util.collect.HashSet;
 
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
@@ -39,7 +44,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	private static final Domain DOMAIN = DomainFactory.getDomain("localhost");
 	private int neededSp = 0;
 	private long allReadyPatientInRole = 0;
-	
+	private int maximnamBackupSP=0;
 	
 	@Override
 	
@@ -201,8 +206,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 	// moved		List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay,semester.getId());
 			 	// moved		Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
 			 			
-						List<PatientInSemester> patientInSemesterList2 =  Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueDESC(sortedOsceDay,semester.getId());
-			 			Log.info("SortedPatientInSemester Based on RoleCount Asc And Value DESC for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList2.size());
+			 		// Commented below line by Manish now for backup task we need not to get SP in this way make changes in query but not in query name  	
+						
+			 			//List<PatientInSemester> patientInSemesterList2 =  Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueDESC(sortedOsceDay,semester.getId());
+			 			//Log.info("SortedPatientInSemester Based on RoleCount Asc And Value DESC for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList2.size());
 			 			
 			 			for (Iterator sortedOscePostListIterator = sortedOscePostList.iterator(); sortedOscePostListIterator.hasNext();) {
 							OscePost sortedOscePost = (OscePost) sortedOscePostListIterator.next();
@@ -222,12 +229,14 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									neededSp=parcourList.size()*2;
 								}
 								else if(osce.getOsceSecurityTypes()==OsceSecurityType.federal){
-									neededSp=parcourList.size()+1;
+									neededSp=(parcourList.size()*sortedOscePost.getStandardizedRole().getFactor())+ sortedOscePost.getStandardizedRole().getSum();
 								}
 								
 								//@Todo
 								
-								int timeSlotsBeforMiddleBrak=0;
+								// Commented by Manish now there is no need of this calculation because needed sp considered based on factor and sum
+								
+							/*	int timeSlotsBeforMiddleBrak=0;
 								int timeSlotsBeforLongBrak=0;
 								int slot_Till_change=sortedOscePost.getStandardizedRole().getRoleTopic().getSlotsUntilChange();
 								
@@ -257,7 +266,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								if(slot_Till_change < timeSlotsBeforMiddleBrak || slot_Till_change < timeSlotsBeforLongBrak){
 									neededSp = (parcourList.size()*2) + 1;
 							  }
-															
+	*/														
 								
 								Log.info("Needed SP is : " + neededSp);
 								
@@ -335,7 +344,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								 List <OscePost> currentSpAccptedCriteriaList = new ArrayList<OscePost>();
 								 List<OscePost> currentSpUnAccptedCriteriaList= new ArrayList<OscePost>();
 								 
-								 if(sortedOsceDay.getOsce().getOsceSecurityTypes()==OsceSecurityType.simple){
+								 if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){
 									 
 									 Log.info("When Security is Simple for BacKup Task :");
 									 int basicValue=2, backupValue =2;
@@ -434,12 +443,12 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																
 																Log.info("Assigning SP in role In which Sp fits without post null");
 														
-														/*PatientInRole patientInRole = new PatientInRole();
-														patientInRole.setFit_criteria(true);
-														patientInRole.setIs_backup(true);
-														patientInRole.setOscePost(post);
-														patientInRole.setPatientInSemester(sortedPatientInSemester2);
-														patientInRole.persist();
+	//																	PatientInRole patientInRole = new PatientInRole();
+	//																	patientInRole.setFit_criteria(true);
+	//																	patientInRole.setIs_backup(true);
+	//																	patientInRole.setOscePost(post);
+	//																	patientInRole.setPatientInSemester(sortedPatientInSemester2);
+	//																	patientInRole.persist();
 															
 																persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 														
@@ -492,22 +501,22 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																			
 																			
 																			Log.info("%%Assigning SP To All Breaks and To Role In Which Satisfied Also With Post Null");
-																			/*PatientInRole patientInRole2 = new PatientInRole();
-																			patientInRole2.setFit_criteria(true);
-																			patientInRole2.setIs_backup(true);
-																			patientInRole2.setOscePost(post);
-																			patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																			patientInRole2.persist();
+		//																	PatientInRole patientInRole2 = new PatientInRole();
+		//																	patientInRole2.setFit_criteria(true);
+		//																	patientInRole2.setIs_backup(true);
+		//																	patientInRole2.setOscePost(post);
+	   //																	patientInRole2.setPatientInSemester(sortedPatientInSemester2);
+	//																		patientInRole2.persist();
 																			
 																			persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																			
 																			// Assign With Post Null
-																			/*PatientInRole patientInRole3 = new PatientInRole();
-																			patientInRole3.setFit_criteria(true);
-																			patientInRole3.setIs_backup(true);
-																			patientInRole3.setOscePost(null);
-																			patientInRole3.setPatientInSemester(sortedPatientInSemester2);
-																			patientInRole3.persist();
+		//																	PatientInRole patientInRole3 = new PatientInRole();
+		//																	patientInRole3.setFit_criteria(true);
+		//																	patientInRole3.setIs_backup(true);
+		//																	patientInRole3.setOscePost(null);
+		//																	patientInRole3.setPatientInSemester(sortedPatientInSemester2);
+		//																	patientInRole3.persist();
 
 																			persisitPatientInRole(true,true,null,sortedPatientInSemester2);
 																			ifFits=true;
@@ -516,12 +525,12 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																				
 																				
 																			Log.info("%%Assigning SP To All Breaks and To Role In Which Satisfied");
-																			/*PatientInRole patientInRole2 = new PatientInRole();
-																			patientInRole2.setFit_criteria(true);
-																			patientInRole2.setIs_backup(true);
-																			patientInRole2.setOscePost(post);
-																			patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																			patientInRole2.persist();
+	//																		PatientInRole patientInRole2 = new PatientInRole();
+	//																		patientInRole2.setFit_criteria(true);
+	//																		patientInRole2.setIs_backup(true);
+	//																		patientInRole2.setOscePost(post);
+	//																		patientInRole2.setPatientInSemester(sortedPatientInSemester2);
+	//																		patientInRole2.persist();
 																			
 																			persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																			
@@ -543,7 +552,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																else{
 															listAdvanceSearchCriteria2.addAll(setAdvanceSearchCriteria2);
 															
-																		listOfPatientInSemesterSatisfyCriteria2=PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true, listAdvanceSearchCriteria2);
+																		listOfPatientInSemesterSatisfyCriteria2=PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true, listAdvanceSearchCriteria2,false);
 															
 																Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria2.size());
 															
@@ -556,22 +565,22 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																		
 																
 																	Log.info("%%Assigning SP To All Breaks and To Role In Which Satisfied Also With Post Null");
-																	/*PatientInRole patientInRole2 = new PatientInRole();
-																	patientInRole2.setFit_criteria(true);
-																	patientInRole2.setIs_backup(true);
-																	patientInRole2.setOscePost(post);
-																	patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																	patientInRole2.persist();
+																	//			PatientInRole patientInRole2 = new PatientInRole();
+																	//			patientInRole2.setFit_criteria(true);
+																	//			patientInRole2.setIs_backup(true);
+																	//			patientInRole2.setOscePost(post);
+																	//			patientInRole2.setPatientInSemester(sortedPatientInSemester2);
+																	//			patientInRole2.persist();
 																	
 																	persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																	
 																	// Assign With Post Null
-																	/*PatientInRole patientInRole3 = new PatientInRole();
-																	patientInRole3.setFit_criteria(true);
-																	patientInRole3.setIs_backup(true);
-																	patientInRole3.setOscePost(null);
-																	patientInRole3.setPatientInSemester(sortedPatientInSemester2);
-																	patientInRole3.persist();
+																	//			PatientInRole patientInRole3 = new PatientInRole();
+																	//			patientInRole3.setFit_criteria(true);
+																	//			patientInRole3.setIs_backup(true);
+																	//			patientInRole3.setOscePost(null);
+																	//			patientInRole3.setPatientInSemester(sortedPatientInSemester2);
+																	//			patientInRole3.persist();
 																	
 																	persisitPatientInRole(true,true,null,sortedPatientInSemester2);
 																	
@@ -580,12 +589,12 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 																	}
 																	else{
 																	Log.info("%%Assigning SP To All Breaks and To Role In Which Satisfied");
-																	/*PatientInRole patientInRole2 = new PatientInRole();
-																	patientInRole2.setFit_criteria(true);
-																	patientInRole2.setIs_backup(true);
-																	patientInRole2.setOscePost(post);
-																	patientInRole2.setPatientInSemester(sortedPatientInSemester2);
-																	patientInRole2.persist();
+																//				PatientInRole patientInRole2 = new PatientInRole();
+																//				patientInRole2.setFit_criteria(true);
+																//				patientInRole2.setIs_backup(true);
+																//				patientInRole2.setOscePost(post);
+																//				patientInRole2.setPatientInSemester(sortedPatientInSemester2);
+																//				patientInRole2.persist();
 																	
 																	persisitPatientInRole(true,true,post,sortedPatientInSemester2);
 																	ifFits=true;
@@ -633,6 +642,162 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									 
 									 Log.info("Out Side Basic Value in Not With Value Also Basic Value Incremented Is now : "+ basicValue);
 								} */
+			 				}
+								if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){
+									 
+									//Map<PatientInSemester,Integer> spCountMap = new HashMap<PatientInSemester,Integer>();
+									Map<PatientInSemester,List<OscePost>> spPostMap = new HashMap<PatientInSemester, List<OscePost>>();
+									
+									// List Of SP accepted in osce day but not assign for that day and also status is true for backup task
+									
+									List<PatientInSemester> notAssignedpatientInSemsterList =  Osce.getAcceptedPISAndNotAssignForThatDay(sortedOsceDay,semester.getId());
+									
+									List<PatientInSemester> acceptedPis = new ArrayList<PatientInSemester>();
+									
+									 Log.info("When Security is Simple for BacKup Task Not assigned SP List size :" + notAssignedpatientInSemsterList.size());
+									
+									 List<OscePost> allOscePostOfThisDay =Osce.findAllOscePostOfDay(sortedOsceDay.getId());
+									 
+									 Log.info("Total OScePosts For OSceDay :"+sortedOsceDay.getId()+" Is : " + allOscePostOfThisDay.size());
+									 
+									for (Iterator iterator = allOscePostOfThisDay.iterator(); iterator.hasNext();) {
+										OscePost oscePost = (OscePost) iterator.next();
+										
+										acceptedPis.clear();
+										
+										Set<AdvancedSearchCriteria> advancedSearchCriteriaSet = oscePost.getStandardizedRole().getAdvancedSearchCriteria();
+										
+										if(advancedSearchCriteriaSet==null){
+											 
+											acceptedPis =notAssignedpatientInSemsterList;
+										}
+										else{
+											
+											List<PatientInSemester> pisSatisfiesCriterias = PatientInSemester.findPatientInSemesterByAdvancedCriteria(semester.getId(),new ArrayList<AdvancedSearchCriteria>(advancedSearchCriteriaSet));
+											
+											acceptedPis = pisSatisfiesCriterias;
+											for (PatientInSemester patientInSemester : notAssignedpatientInSemsterList) {
+												
+												if(pisSatisfiesCriterias.contains(patientInSemester)){
+													acceptedPis.add(patientInSemester);
+												}
+											}
+										}
+										
+										for (Iterator acceptedPisIt = acceptedPis.iterator(); acceptedPisIt.hasNext();) {
+											PatientInSemester acceptedPIS = (PatientInSemester) acceptedPisIt.next();
+											
+											if(spPostMap.containsKey(acceptedPIS)){
+												
+												/*Integer value= spCountMap.get(acceptedPIS);
+												value++;
+												spCountMap.remove(acceptedPIS);
+												spCountMap.put(acceptedPIS, value);*/
+												
+												List<OscePost> oscePosts = spPostMap.get(acceptedPIS);
+												oscePosts.add(oscePost);
+												//spPostMap.remove(acceptedPIS);
+												spPostMap.put(acceptedPIS, oscePosts);
+											}
+											else{
+												//spCountMap.put(acceptedPIS, 1);
+												
+												List<OscePost> oscePostList = new ArrayList<OscePost>();
+												oscePostList.add(oscePost);
+												spPostMap.put(acceptedPIS,oscePostList);
+											}
+											
+										}
+										
+									}
+								
+									 
+										// map.put(sortedPatientInSemester2, oscePostListinWhichSPFits);
+									
+									 
+									 List<Integer> tempList = new ArrayList<Integer>();
+										
+										List<PatientInSemester> keyList = new ArrayList<PatientInSemester>();
+										List<List<OscePost>> valueList = new ArrayList<List<OscePost>>();
+										
+										Iterator<PatientInSemester> itr = spPostMap.keySet().iterator();
+										
+										while (itr.hasNext())
+										{
+											PatientInSemester key = itr.next();
+											
+											tempList.add(spPostMap.get(key).size());
+											
+											System.out.println("~~MAP KEY : " + key.getId() + "  ~~SIZE : " + spPostMap.get(key).size());
+										}
+										
+										Collections.sort(tempList, Collections.reverseOrder());
+										
+										
+										maxover : for (Integer integer : tempList) {
+
+											itr = spPostMap.keySet().iterator();
+											
+											while (itr.hasNext())
+											{
+												PatientInSemester key = itr.next();
+												int size = spPostMap.get(key).size();
+												
+												if (size == integer)
+												{
+													System.out.println("key : " + key.getId());
+													if(!keyList.contains(key)){
+														
+														if(keyList.size() >= 4)
+															break maxover;
+														
+														keyList.add(key);
+														valueList.add(spPostMap.get(key));
+													}
+												}
+											}
+										}
+										
+										System.out.println("Key list is :" + keyList.size());
+										System.out.println("Value list is :" + valueList.size());
+										
+										maximnamBackupSP=0;
+										for (int i=0; i<keyList.size(); i++)
+										{
+											System.out.println("Inside persist");
+											if(maximnamBackupSP>=4)
+												break;
+											PatientInSemester key = keyList.get(i);
+											System.out.println("~~SORTED MAP KEY : " + key.getId() + "  ~~SIZE : " + valueList.get(i).size());
+											
+											if(valueList.get(i).get(maximnamBackupSP)!=null){
+												if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
+													
+													// Persist with one post as null
+													persisitPatientInRole(true, true,valueList.get(i).get(maximnamBackupSP), key);
+													persisitPatientInRole(true, true, null, key);
+												}
+												else{
+													
+														// Persist normally 
+														persisitPatientInRole(true, true,valueList.get(i).get(maximnamBackupSP), key);
+													}
+											}
+											else{
+											
+													if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
+														// Persist with one post as null
+														persisitPatientInRole(true, true, valueList.get(i).get(0), key);
+														persisitPatientInRole(true, true, null, key);
+													}
+													else{
+														// Persist normally
+														persisitPatientInRole(true, true, valueList.get(i).get(0), key);
+													}
+											}
+											
+											maximnamBackupSP++;
+										}
 			 				}
 			 		}
 	
