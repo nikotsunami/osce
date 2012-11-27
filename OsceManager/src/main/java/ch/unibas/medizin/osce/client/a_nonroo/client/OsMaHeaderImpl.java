@@ -58,7 +58,9 @@ public class OsMaHeaderImpl extends Composite implements OsMaHeader {
 		// Note: this is not an EnumRenderer bc. translations of language names would be futile.
 		@Override
 		public String render(Locale locale) {
-			return locale.getLanguageName();
+			if (locale != null)
+				return locale.getLanguageName();
+			return "null";
 		}
 	});
 

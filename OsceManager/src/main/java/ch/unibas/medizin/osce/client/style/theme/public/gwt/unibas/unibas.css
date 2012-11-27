@@ -58,7 +58,7 @@ a:hover, .gwt-Anchor:hover {
 .gwt-Button {
 	outline-style: none !important;
 	margin: 0;
-	padding: 3px 6px 3px 0;
+	padding: 3px 6px 3px 19px;
 	text-decoration: none !important;
 	cursor: pointer;
 	cursor: hand;
@@ -1836,7 +1836,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 .gwt-Button .ui-icon {
 	float: left;
-	margin-left: 4px;
+	margin-left: -15px;
     margin-right: 4px;
     margin-top: 1px;
 }

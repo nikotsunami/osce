@@ -663,13 +663,6 @@ INSERT INTO `anamnesis_check` (id,sort_order,text,type,user_specified_order,valu
 
 
 -- Regex... \([0-9]{3,4},(NULL|'[Üa-zA-Z0-9,/ _-]+'),NULL,('\\0'|1|NULL),0,[0-9]{1,2},[0-9]{1,2}\),
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (2,NULL,NULL,NULL,0,2,139);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (3,NULL,NULL,NULL,0,3,139);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (4,NULL,NULL,NULL,0,4,139);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (5,NULL,NULL,NULL,0,5,139);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (6,NULL,NULL,NULL,0,6,139);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (7,NULL,NULL,NULL,0,7,139);
-INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (8,NULL,NULL,NULL,0,8,139);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (9,NULL,NULL,NULL,0,2,1);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (10,'Erfahrung mit Rollenspielen',NULL,NULL,0,3,1);
 INSERT INTO `anamnesis_checks_value` (id,anamnesis_checks_value,comment,truth,version,anamnesischeck,anamnesisform) VALUES (11,NULL,NULL,NULL,0,4,1);
