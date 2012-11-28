@@ -438,6 +438,15 @@ public class OscePostRoom {
     	return oscePostRoomList;
     }
     
+    public static OscePostRoom  findPostRoom(Long postId,Long courseId)
+    {
+    	EntityManager em = entityManager();		
+    	String query="select p from OscePostRoom p where oscePost="+postId+" and course="+courseId;
+    	TypedQuery<OscePostRoom> q=em.createQuery(query, OscePostRoom.class);
+    	
+    	 return q.getResultList().get(0);
+    }
+    
     
     
     

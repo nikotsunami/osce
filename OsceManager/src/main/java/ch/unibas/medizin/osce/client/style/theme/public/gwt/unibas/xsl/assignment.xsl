@@ -157,6 +157,13 @@
 					               	<td  bgColor="#f6d4a3"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#f6d4a3"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#f6d4a3"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#f6d4a3"></td>
 					              <xsl:for-each select="posts/post">
@@ -169,6 +176,13 @@
 					            <td  bgColor="#eeee8c"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#eeee8c"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr >
+					            <td  bgColor="#eeee8c"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#eeee8c"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -185,6 +199,13 @@
 					               	<td  bgColor="#fadce7"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr class="postTR">
+					            <td bgColor="#fadce7"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#fadce7"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#fadce7"></td>
 					              <xsl:for-each select="posts/post">
@@ -197,6 +218,13 @@
 					            <td  bgColor="#cfe3d4"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#cfe3d4"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr class="postTR">
+					            <td bgColor="#cfe3d4"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#cfe3d4"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -213,6 +241,13 @@
 					               	<td  bgColor="#d1cee1"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr class="postTR">
+					            <td bgColor="#d1cee1"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#d1cee1"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#d1cee1"></td>
 					              <xsl:for-each select="posts/post">
@@ -225,6 +260,13 @@
 					            <td  bgColor="#f2cec6"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#f2cec6"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr >
+					            <td  bgColor="#f2cec6"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#f2cec6"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -241,6 +283,13 @@
 					               	<td  bgColor="#e5d9c9"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#e5d9c9"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#e5d9c9"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#e5d9c9"></td>
 					              <xsl:for-each select="posts/post">
@@ -253,6 +302,13 @@
 					            <td  bgColor="#c4dbfe"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#c4dbfe"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr >
+					            <td bgColor="#c4dbfe"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#c4dbfe"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -269,6 +325,13 @@
 					               	<td  bgColor="#ccccff"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#ccccff"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#ccccff"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#ccccff"></td>
 					              <xsl:for-each select="posts/post">
@@ -281,6 +344,13 @@
 					            <td  bgColor="#fce0a0"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#fce0a0"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr >
+					            <td bgColor="#fce0a0"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#fce0a0"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -297,6 +367,13 @@
 					               	<td  bgColor="#c3f4ad"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#c3f4ad"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#c3f4ad"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#c3f4ad"></td>
 					              <xsl:for-each select="posts/post">
@@ -309,6 +386,13 @@
 					            <td  bgColor="#ccffff"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#ccffff"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr >
+					            <td bgColor="#ccffff"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#ccffff"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -325,6 +409,13 @@
 					               	<td  bgColor="#d7d6d6"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#d7d6d6"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#d7d6d6"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#d7d6d6"></td>
 					              <xsl:for-each select="posts/post">
@@ -337,6 +428,13 @@
 					            <td  bgColor="#e1c7fd"></td>
 					              <xsl:for-each select="posts/post">
 					               	<td  bgColor="#e1c7fd"><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr >
+					            <td  bgColor="#e1c7fd"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td  bgColor="#e1c7fd"><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr  >
@@ -353,6 +451,13 @@
 					               	<td  bgColor="#c1cfcd"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#c1cfcd"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#c1cfcd"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#c1cfcd"></td>
 					              <xsl:for-each select="posts/post">
@@ -367,6 +472,13 @@
 					               	<td  bgColor="#d1d5a0"><xsl:value-of select="postName" /></td>
 					               </xsl:for-each>
 					            </tr>
+					            <tr >
+					            <td bgColor="#d1d5a0"></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td bgColor="#d1d5a0"><xsl:value-of select="postRoom" /></td>
+					               </xsl:for-each>
+					            </tr>
 					            <tr  >
 					            <td bgColor="#d1d5a0"></td>
 					              <xsl:for-each select="posts/post">
@@ -379,6 +491,13 @@
 					            <td></td>
 					              <xsl:for-each select="posts/post">
 					               	<td><xsl:value-of select="postName" /></td>
+					               </xsl:for-each>
+					            </tr>
+					            <tr class="postTR">
+					            <td></td>
+					            
+					              <xsl:for-each select="posts/post">
+					               	<td><xsl:value-of select="postRoom" /></td>
 					               </xsl:for-each>
 					            </tr>
 					            <tr class="postTR">

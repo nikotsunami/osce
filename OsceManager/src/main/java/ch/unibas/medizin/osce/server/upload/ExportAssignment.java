@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
+import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.Student;
@@ -115,7 +117,9 @@ public class ExportAssignment  extends HttpServlet {
 			OsceDay osceDay=osceDays.get(c);
 			Element osceDayElement=createEmptyChildNode("osceDay",doc,root);
 			
-			String osceDayIDNodeValue="Day "+osceDay.getId().toString();
+			
+			
+			String osceDayIDNodeValue="Day "+new SimpleDateFormat("dd.MM.yyyy").format(osceDay.getOsceDate());
 			
 			createChildNode("osceDayID", osceDayIDNodeValue, doc, osceDayElement);
 			
@@ -154,6 +158,10 @@ public class ExportAssignment  extends HttpServlet {
 					{
 						Element postElement=createEmptyChildNode("post",doc,postsElement);
 						createChildNode("postName", "Post " +oscePost.getSequenceNumber(), doc, postElement);
+						
+						OscePostRoom postRoom=OscePostRoom.findPostRoom(oscePost.getId(), course.getId());
+						if(postRoom !=null && postRoom.getRoom() != null )
+						createChildNode("postRoom", postRoom.getRoom().getRoomNumber(), doc, postElement);
 						createChildNode("standardizedRole", oscePost.getStandardizedRole().getLongName(), doc, postElement);
 					}
 					

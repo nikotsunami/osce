@@ -285,7 +285,7 @@ public class Osce {
    
     //spec start
     //This method assigns students in Assignment Table.
-    public static Boolean autoAssignStudent(Long osceId)
+    public static Boolean autoAssignStudent(Long osceId,Integer orderBy)
     {
     	EntityManager em = entityManager();
     	
@@ -293,11 +293,18 @@ public class Osce {
     	
     	
     	//retrieve distinct sequence number of student
-    	String seqQuery="select distinct sequenceNumber from Assignment where type=0 and osceDay in (select id from OsceDay where osce="+osceId+") order by sequenceNumber";
+    		String seqQuery="";
+    		if(orderBy==0)
+    			seqQuery="select distinct sequenceNumber from Assignment where type=0 and osceDay in (select id from OsceDay where osce="+osceId+") order by sequenceNumber";
+    		else
+    			seqQuery="select distinct sequenceNumber from Assignment where type=0 and osceDay in (select id from OsceDay where osce="+osceId+") ";
     	
-    	//retrieve studentOsces    	
-    	String studentQuery="SELECT student FROM StudentOsces s where s.isEnrolled=true and osce="+osceId +" order by s.student.name,s.student.preName";
-    	
+    	//retrieve studentOsces  
+    	String studentQuery="";
+    	if(orderBy==0)
+    		studentQuery="SELECT student FROM StudentOsces s where s.isEnrolled=true and osce="+osceId +" order by s.student.name,s.student.preName";
+    	else
+    		studentQuery="SELECT student FROM StudentOsces s where s.isEnrolled=true and osce="+osceId  ;
     	
     	TypedQuery<Integer> seqTypedQuery = em.createQuery(seqQuery, Integer.class);
     	List<Integer> seqList=seqTypedQuery.getResultList();
