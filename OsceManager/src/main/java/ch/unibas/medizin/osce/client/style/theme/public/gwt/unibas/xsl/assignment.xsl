@@ -418,9 +418,53 @@
 						               
 									               
 						             </xsl:for-each>
-           		 </xsl:for-each>
-            
+           			 </xsl:for-each>
+           			 
+           			  <tr>
+				            	<td >
+				            		<xsl:attribute name="colSpan">
+				   					 	<xsl:value-of select="postCount" />
+				 					 </xsl:attribute>
+				 					 
+				 					<xsl:value-of select="spBreak" />
+				 				</td>
+				 				
+				 				
+				            </tr>
+           			 
+           			 <xsl:for-each select="spBreakrotations/rotation"> 
+	           			
+	            
+				            
+						            <tr>
+						            <td>
+						            <xsl:attribute name="colSpan">
+						   					 	<xsl:value-of select="rotationPostCount" />
+						 					 </xsl:attribute>
+						            	
+						            	<b><xsl:value-of select="rotationId" /></b>
+						            	</td>
+						            </tr>
+					            	
+					            	 <xsl:for-each select="startEndTimes/startEndTime">  
+					            	 	<tr >
+		           									  		<td bgColor="#E5EBEB"><xsl:value-of select="startEndTimeValue" /></td>
+											                	
+												             <td bgColor="#E5EBEB">
+												             	 <xsl:attribute name="colSpan">
+						   					 						<xsl:value-of select="spBreakPostCount" />
+						 										 </xsl:attribute>
+												             	<xsl:value-of select="commaSeperatedSpBreak" />
+												             </td>  
+								          </tr>
+					            	 </xsl:for-each>
+				            
+           			   </xsl:for-each>
             </xsl:for-each>
+            	
+           
+			            
+          		
              </table>
          </xsl:for-each>
      

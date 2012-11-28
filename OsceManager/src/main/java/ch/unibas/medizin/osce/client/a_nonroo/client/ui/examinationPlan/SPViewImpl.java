@@ -99,12 +99,12 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 					if(assignmentProxy == null)
 						return;
 					
-					if( assignmentProxy.getPatientInRole()==null)
+				/*	if( assignmentProxy.getPatientInRole()==null)
 					{
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						dialogBox.showConfirmationDialog(constants.patientNotAssigned());
 					}
-					else	
+					else	*/
 						showSPPanelPopup();
 				}
 				

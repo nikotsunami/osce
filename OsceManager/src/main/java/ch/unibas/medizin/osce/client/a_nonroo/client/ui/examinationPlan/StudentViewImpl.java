@@ -259,7 +259,7 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		{
 			popupView=new PopupViewImpl();
 			popupView.createSPPopupView();
-			
+			((PopupViewImpl)popupView).nameLbl.setText(constants.studentName());
 			((PopupViewImpl)popupView).setAnimationEnabled(true);
 			
 			//((PopupViewImpl)popupView).setWidth("150px");

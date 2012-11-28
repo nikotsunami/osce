@@ -1227,5 +1227,9 @@ public interface OsceConstants extends Constants {
      public String paymentInstitute();
      
      public String paymentName();
+     
+     public String studentName();
+     
+     public String studentLogicalBreak();
 }
 

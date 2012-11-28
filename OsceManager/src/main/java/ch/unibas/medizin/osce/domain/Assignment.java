@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -279,6 +280,19 @@ public class Assignment {
     	Log.info("retrieveAssignmentOfLogicalBreakPost :");
     	 EntityManager em = entityManager();
          String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom=null  order by a.timeStart asc ";
+         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         List<Assignment> assignmentList = query.getResultList();
+         Log.info("retrieveAssignmentOfLogicalBreakPost query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList.size());
+         return assignmentList;
+    }
+    
+  //retrieve Logical break post
+    public static List<Assignment> retreiveSPBreak(Long osceDayId,Long osceSequenceId,int rotationId)
+    {
+    	Log.info("retrieveAssignmentOfLogicalBreakPost :");
+    	 EntityManager em = entityManager();
+         String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom=null and rotationNumber="+rotationId+"  order by a.timeStart asc ";
          TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
          List<Assignment> assignmentList = query.getResultList();
          Log.info("retrieveAssignmentOfLogicalBreakPost query String :" + queryString);
@@ -876,8 +890,12 @@ public class Assignment {
     		
     		Date timeStartDt = dateAddMin(ass.getTimeStart(), diff);
     		Date timeEndDt = dateAddMin(ass.getTimeEnd(), diff);
+    		if(ass.getTimeStart().before(endTimeSlot) && ass.getType().equals(AssignmentTypes.EXAMINER))
+    		{
     		
-    		ass.setTimeStart(timeStartDt);
+    		}
+    		else
+    	 	    ass.setTimeStart(timeStartDt);
     		ass.setTimeEnd(timeEndDt);
     		
     		ass.persist();    		
@@ -1079,7 +1097,7 @@ public class Assignment {
     	 Log.info("findAssignmentRotationAndCourseWise");
     	 String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
     	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
-    	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) order by timeStart";
+    	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";
     	 
     	 if(type ==1)
     	 {
@@ -1116,6 +1134,26 @@ public class Assignment {
     	
      }
    
+     public static List<Date> findDistinctTimeStartForSP(Long osceDayId,int rotation,int type)
+     {
+    	 Log.info("findDistinctTimeStartRotationWise");
+    	 
+    	 String queryString="";
+    	 if(type==0)
+    	  queryString="select distinct (timeStart) from Assignment a where type=1 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 if(type==1)
+    		 queryString="select distinct (timeEnd) from Assignment a where type=1 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);
+         List<Date> assignmentList = query.getResultList();
+         Log.info("findDistinctTimeStartRotationWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+    	
+     }
+     
      //by spec change[
      public static Boolean exchangeStudent(Assignment ass, Long studentId)
      {
@@ -1186,7 +1224,88 @@ public class Assignment {
     	 return true;
      }
      
+
+       /*   public static List<List<Assignment>> retrieveLogicalStudentBreak(Long osceDayId, Long courseId, Long oscePostId)
+     {
+    	 //retrieve distinct rotation
+    	 EntityManager em = entityManager();
+    	 String rotationsSQL="select distinct(rotationNumber) FROM Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in(select id from oscePostRoom where oscePost="+oscePostId+" and course="+courseId+") order by rotationNumber";
+    	 TypedQuery<Long> rotationsQuery = em.createQuery(rotationsSQL, Long.class);
+    	 List<Long> rotations=rotationsQuery.getResultList();
+    	 
+    	 //loop through rotations
+    	 for(int i=0;i<rotations.size();i++)
+    	 {
+    		 	//get set of distinct time start for this rotation		 
+    		 	String timeStartString = "SELECT  distinct(timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) and rotationNumber="+rotations.get(i)+" order by a.timeStart asc";
+    	        
+    	        TypedQuery<Date> query = em.createQuery(timeStartString, Date.class);
+    	        List<Date> distinctTimeStart = query.getResultList();
+    	        
+    	        //get distinct sequence number for this rotation
+    	        String sequenceString = "SELECT  distinct(sequenceNumber) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) and rotationNumber="+rotations.get(i)+" order by a.timeStart asc";
+    	        
+    	        TypedQuery<Long> sequencequery = em.createQuery(sequenceString, Long.class);
+    	        List<Long> distinctSequence = sequencequery.getResultList();
+    	        
+    	        //loop through all timeStart
+    	       
+    	        for(int j=0;j<distinctTimeStart.size();j++)
+    	        {
+    	        	String assignmentsString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) and rotationNumber="+rotations.get(i)+" and timeStart = :timeStart";
+        	        
+        	        TypedQuery<Assignment> assignmentsquery = em.createQuery(assignmentsString, Assignment.class);
+        	        assignmentsquery.setParameter(0, distinctTimeStart.get(j));
+        	       
+        	        List<Assignment> assignments = assignmentsquery.getResultList();
+        	        
+        	        //loop through distinctSequence to find student in break
+        	        
+        	        Set<Integer> sequencesInBreak=new HashSet<Integer>();
+        	        for(int k=0;k<distinctSequence.size();k++)
+        	        {
+        	        	for(int l=0;l<assignments.size();l++)
+        	        	{
+	        	        	if(assignments.get(l).getSequenceNumber().intValue()!=distinctSequence.get(k).intValue())
+	        	        	{
+	        	        		sequencesInBreak.add(distinctSequence.get(k).intValue());
+	        	        		
+	        	        		break;
+	        	        	}
+        	        	}
+        	        }
+        	        
+        	      //get assignments
+        	        List<Assignment> assingmentInBreak=new ArrayList<Assignment>();
+        	        
+        	        for(int m=0;m<sequencesInBreak.size();m++)
+        	        {
+        	        	String assignmentInBreakString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) and rotationNumber="+rotations.get(i)+" and timeStart = :timeStart and sequenceNumber";
+            	        
+        	        }
+        	        
+    	        }
+    	        
+    	        
+    	       
+    	 }
+    	 
+    	 return null;
+    	 
+     }
+     */
+      
      
+        public static List<Assignment> retrieveLogicalStudentInBreak(Long osceDayId,Long courseId)
+     {
+    	 EntityManager em = entityManager();
+    	 String query="SELECT  a FROM Assignment as a where a.osceDay="+osceDayId+"  and type=0 and oscePostRoom is null and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) order by a.timeStart asc";
+    	 TypedQuery<Assignment> typedQuery = em.createQuery(query, Assignment.class);
+    	 List<Assignment> assignments=typedQuery.getResultList();
+    	 Log.info("retrieveLogicalStudentInBreak query :" +query);
+    	 
+    	 return assignments;
+     }
      //by spec change]
      
      public static List<Assignment> findAssignmentByExaminerAndSemester(Long semesterId,Long examinerId) {

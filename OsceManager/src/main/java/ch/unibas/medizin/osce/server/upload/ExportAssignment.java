@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JSpinner.DateEditor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -33,8 +31,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
-
-
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Doctor;
@@ -45,7 +41,6 @@ import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 public class ExportAssignment  extends HttpServlet {
 	
@@ -126,10 +121,12 @@ public class ExportAssignment  extends HttpServlet {
 			
 			List<OsceSequence> osceSequences=osceDay.getOsceSequences();
 			
-			Element parcoursElement=createEmptyChildNode("parcours",doc,osceDayElement);
+			
 			
 			for(int a=0;a<osceSequences.size();a++)
 			{
+				Element parcoursElement=createEmptyChildNode("parcours",doc,osceDayElement);
+				
 				OsceSequence osceSeq=osceSequences.get(a);
 				List<Course> courses=osceSeq.getCourses();
 				
@@ -158,6 +155,13 @@ public class ExportAssignment  extends HttpServlet {
 						Element postElement=createEmptyChildNode("post",doc,postsElement);
 						createChildNode("postName", "Post " +oscePost.getSequenceNumber(), doc, postElement);
 						createChildNode("standardizedRole", oscePost.getStandardizedRole().getLongName(), doc, postElement);
+					}
+					
+					//student break
+					if(type==0)
+					{
+					Element postElement=createEmptyChildNode("post",doc,postsElement);
+					createChildNode("postName", "Student Break", doc, postElement);
 					}
 					
 					//find examiners, rotation and course wise from Assignment table			
@@ -194,7 +198,19 @@ public class ExportAssignment  extends HttpServlet {
 							createChildNode("examinerName", examinerName, doc, examinerElement);
 						}
 						
-						List<Date> timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+						//Student break
+						if(type==0)
+						{
+							Element examinerElement=createEmptyChildNode("examiner",doc,examinersElement);
+							createChildNode("examinerName", "NA", doc, examinerElement);
+							
+						}
+						List<Date> timeStarts=null;
+						if(type==0)
+						 timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+						else
+							timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,0);
+						
 						List<Date> timeEnds=null;
 						if(type==1)
 						{
@@ -221,14 +237,39 @@ public class ExportAssignment  extends HttpServlet {
 							Element studentsElement=createEmptyChildNode("students",doc,startEndTimeElement);
 							
 							Date endTime=null;
-							for(int k=0;k<oscePosts.size();k++)
+							
+							//one more loop because of student break (k=num of post +1)
+							int looplength=0;
+							
+							if(type==0)
 							{
-								OscePost oscePost=oscePosts.get(k);
+								looplength=oscePosts.size()+1;
+							}
+							else
+							{
+								looplength=oscePosts.size();
+							}
+							for(int k=0;k<looplength;k++)
+							{
+								//sp break change
+								OscePost oscePost=null;
+								if((type==0 && oscePosts.size() != k) || type ==1)
+									oscePost=oscePosts.get(k);
+								
 								boolean found=false;
+								
+								String spBreakName="";
+								
+								
+								
 								for(int b=0;b<assignments.size();b++)
 								{
 									Assignment assignment=assignments.get(b);
-									OscePost assignmentPost=assignment.getOscePostRoom().getOscePost();
+									
+									//student break
+									OscePost assignmentPost=null;
+									if((oscePosts.size()  != k  && type==0 && assignment.getOscePostRoom() != null) || type ==1)
+									  assignmentPost=assignment.getOscePostRoom().getOscePost();
 									
 								
 										
@@ -237,7 +278,7 @@ public class ExportAssignment  extends HttpServlet {
 											
 											
 											//for student
-											if(oscePost.getId() == assignmentPost.getId() && assignment.getTimeStart().equals(timeStart) && type ==0)
+											if(type ==0 && assignment.getOscePostRoom() !=null && assignmentPost != null && oscePost !=null && oscePost.getId() == assignmentPost.getId() && assignment.getTimeStart().equals(timeStart)  )
 											{
 												Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 												Student student=assignment.getStudent();
@@ -256,7 +297,7 @@ public class ExportAssignment  extends HttpServlet {
 											}
 											
 											//for SP
-											if(timeEnd != null && oscePost.getId() == assignmentPost.getId() && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)) && type ==1)
+											 if(type ==1 && timeEnd != null && assignmentPost != null && oscePost !=null &&  oscePost.getId() == assignmentPost.getId() && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
 											{
 												Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 												PatientInRole patientInRole=assignment.getPatientInRole();
@@ -274,6 +315,26 @@ public class ExportAssignment  extends HttpServlet {
 												break;
 											}
 											
+											//for student break
+												if(assignment.getOscePostRoom() == null && oscePost== null && assignmentPost == null && (assignment.getTimeStart().equals(timeStart)) && type ==0)
+												{
+													
+													Element studentElement=createEmptyChildNode("student",doc,studentsElement);
+													Student student=assignment.getStudent();
+													String studentName="-";
+													if(student != null)
+														studentName=student.getPreName() +" "+ student.getName();
+													else
+														studentName="s"+assignment.getSequenceNumber();
+													
+													endTime=assignment.getTimeEnd();
+													
+													createChildNode("studentName", studentName, doc, studentElement);
+												
+													found=true;
+													break;
+													
+												}
 											
 										/*	else
 											{
@@ -295,6 +356,13 @@ public class ExportAssignment  extends HttpServlet {
 									*/
 								}
 								
+								// for sp break
+							/*	if(oscePost==null && type==1)
+								{
+									Element spBreakElement=createEmptyChildNode("student",doc,studentsElement);
+									createChildNode("studentName", spBreakName, doc, spBreakElement);
+								}
+								*/
 								if(!found && type==0)
 								{
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
@@ -313,12 +381,101 @@ public class ExportAssignment  extends HttpServlet {
 							}
 							else if(endTime !=null)
 							{
-								timeStartValue=timeStartValue +"-"+ String.format("%tR", endTime);
+								timeStartValue=timeStartValue +"-"+ String.format("%tR", timeEnd);
 								createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
 							}
 						}
 					}
+					
+					//after all rotations and when parcour is last than insert SP Break
+					if(i==courses.size()-1 && type==1)
+					{
+						List<Assignment> spBreakAssignments=Assignment.retrieveAssignmentOfLogicalBreakPost(osceDay.getId(), osceSeq.getId());
+						
+						
+				//		Element spBreakRotationElement=createEmptyChildNode("spBreakRotation",doc,parcourElement);
+						if(spBreakAssignments.size() > 0)
+						{
+						//post count to set column span of sp break
+						createChildNode("postCount", String.valueOf(osceSeq.getOscePosts().size() + 1), doc, parcourElement);
+						createChildNode("spBreak", "SP Break", doc, parcourElement);
+						
+						Element spBreakRotationsElement=createEmptyChildNode("spBreakrotations",doc,parcourElement);
+						
+							for(int j=startRotation;j<(rotationOffSet);j++)
+							{
+								Element rotationElement=createEmptyChildNode("rotation",doc,spBreakRotationsElement);
+								
+								createChildNode("rotationPostCount", String.valueOf(osceSeq.getOscePosts().size()+1), doc, rotationElement);
+								createChildNode("rotationId", "rotation "+(j+1), doc, rotationElement);
+							//	List<Assignment> spBreakAssignments=Assignment.retrieveAssignmentOfLogicalBreakPost(osceDay.getId(), osceSeq.getId());
+								
+								//rotation
+								List<Date> timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,0);
+								List<Date> timeEnds=null;
+								
+									timeEnds=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,1);
+							
+								
+								//time start and sp in break
+								Element startEndTimesElement=createEmptyChildNode("startEndTimes",doc,rotationElement);
+								for(int l=0;l<timeStarts.size();l++)
+								{
+									Date timeStart=timeStarts.get(l);
+									Date timeEnd=null;
+									
+										timeEnd=timeEnds.get(l);
+									Element startEndTimeElement=createEmptyChildNode("startEndTime",doc,startEndTimesElement);
+									
+									//Assignment assignment=spBreakAssignments.get(l);
+									
+									//Date timeStart=assignment.getTimeStart();
+									//Date timeEnd=assignment.getTimeEnd();
+									createChildNode("startEndTimeValue", String.format("%tR", timeStart) +"-" + String.format("%tR", timeEnd), doc, startEndTimeElement);
+									createChildNode("spBreakPostCount", String.valueOf(osceSeq.getOscePosts().size()), doc, startEndTimeElement);
+									String commaSeperatedSpBreak="";
+									
+									for(int k=0;k<spBreakAssignments.size();k++)
+									{
+										Assignment assignment=spBreakAssignments.get(k);
+										if((assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
+										//if(assignment.getTimeStart().equals(timeStart))
+										{
+											if(commaSeperatedSpBreak.equals(""))
+											{
+												if(assignment.getPatientInRole() !=null )
+													commaSeperatedSpBreak=assignment.getPatientInRole().getPatientInSemester().getStandardizedPatient().getPreName() +" "+ assignment.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName();
+												else
+													commaSeperatedSpBreak="SP"+assignment.getSequenceNumber();
+											}
+											else
+											{
+												if(assignment.getPatientInRole() !=null )
+													commaSeperatedSpBreak=commaSeperatedSpBreak+", "+assignment.getPatientInRole().getPatientInSemester().getStandardizedPatient().getPreName() +" "+ assignment.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName();
+												else
+													commaSeperatedSpBreak=commaSeperatedSpBreak+", "+"SP"+assignment.getSequenceNumber();
+											}
+										}
+									/*	if(!(k!=spBreakAssignments.size()-1 && assignment.getTimeStart().equals(spBreakAssignments.get(k).getTimeStart())))
+										{
+											l=k;
+											break;
+										}
+										*/
+									}
+									
+									createChildNode("commaSeperatedSpBreak", commaSeperatedSpBreak, doc, startEndTimeElement);
+								}
+							}
+						}
+					}
 				}
+				
+				
+				
+				//insert SP Break
+			//	if(spBreakAssignments.size() > 0)
+				
 			}
 			
 			
@@ -382,8 +539,8 @@ public class ExportAssignment  extends HttpServlet {
 	            Transformer transformer = tFactory.newTransformer(xslDoc);
 	            transformer.transform(xmlDoc, new StreamResult(htmlFile));
 	            htmlFile.close();
-	            File xmlFile=new File(fileName);
-	            xmlFile.delete();
+	        //    File xmlFile=new File(fileName);
+	        //    xmlFile.delete();
 	           return outputFileName;
 	        }
 	        catch(Exception e)
