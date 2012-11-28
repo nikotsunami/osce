@@ -1711,7 +1711,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		//create logical break post
 		//retrieve data of logical sp break and create slots.
-		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceDayProxy.getId()).with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceSequenceProxy.getId()).with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
@@ -2352,7 +2352,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						}
 						//any break
 						else if((long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
-								|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime)
+								|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime || breakTime > 0)
 						{
 							//insert simpat change break
 							breakTime--;

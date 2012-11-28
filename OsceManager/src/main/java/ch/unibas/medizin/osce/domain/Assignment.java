@@ -279,8 +279,21 @@ public class Assignment {
     {
     	Log.info("retrieveAssignmentOfLogicalBreakPost :");
     	 EntityManager em = entityManager();
-         String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom=null  order by a.timeStart asc ";
+    	 OsceSequence seq=OsceSequence.findOsceSequence(osceSequenceId);
+    	 Long courseId=seq.getCourses().get(0).getId();
+    	 
+    	 String maxTimeStartString= "SELECT  max(a.timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course=" + courseId + " ) order by a.timeStart asc";
+    	 TypedQuery<Date> maxTimeStartquery = em.createQuery(maxTimeStartString, Date.class);
+    	 Date maxTimeStart=maxTimeStartquery.getResultList().get(0);
+    	 
+    	 String minTimeStartString= "SELECT  min(a.timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course=" + courseId + " ) order by a.timeStart asc";
+    	 TypedQuery<Date> minTimeStartquery = em.createQuery(minTimeStartString, Date.class);
+    	 Date minTimeStart=minTimeStartquery.getResultList().get(0);
+    	 
+         String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom=null and a.timeStart <= :maxtimeStart and a.timeStart >= :mintimeStart order by a.timeStart asc ";
          TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         query.setParameter("maxtimeStart", maxTimeStart);
+         query.setParameter("mintimeStart", minTimeStart);
          List<Assignment> assignmentList = query.getResultList();
          Log.info("retrieveAssignmentOfLogicalBreakPost query String :" + queryString);
          Log.info("Assignment List Size :" + assignmentList.size());

@@ -282,7 +282,7 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
 		//setDAta
 		if(assignmentProxy.getStudent()!=null)
-			popupView.getNameValue().setText(assignmentProxy.getStudent().getName());
+			popupView.getNameValue().setText(assignmentProxy.getStudent().getPreName() +" "+assignmentProxy.getStudent().getName());
 		else
 			popupView.getNameValue().setText(constants.notAssigned());
 		
