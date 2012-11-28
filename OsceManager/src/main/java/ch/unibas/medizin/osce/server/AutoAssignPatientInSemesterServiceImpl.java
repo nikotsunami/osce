@@ -13,11 +13,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.gwt.dev.util.collect.HashSet;
-
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
-import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
@@ -648,6 +645,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									//Map<PatientInSemester,Integer> spCountMap = new HashMap<PatientInSemester,Integer>();
 									Map<PatientInSemester,List<OscePost>> spPostMap = new HashMap<PatientInSemester, List<OscePost>>();
 									
+									spPostMap.clear();
+									
 									// List Of SP accepted in osce day but not assign for that day and also status is true for backup task
 									
 									List<PatientInSemester> notAssignedpatientInSemsterList =  Osce.getAcceptedPISAndNotAssignForThatDay(sortedOsceDay,semester.getId());
@@ -675,7 +674,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											
 											List<PatientInSemester> pisSatisfiesCriterias = PatientInSemester.findPatientInSemesterByAdvancedCriteria(semester.getId(),new ArrayList<AdvancedSearchCriteria>(advancedSearchCriteriaSet));
 											
-											acceptedPis = pisSatisfiesCriterias;
+										
 											for (PatientInSemester patientInSemester : notAssignedpatientInSemsterList) {
 												
 												if(pisSatisfiesCriterias.contains(patientInSemester)){
@@ -689,10 +688,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											
 											if(spPostMap.containsKey(acceptedPIS)){
 												
-												/*Integer value= spCountMap.get(acceptedPIS);
-												value++;
-												spCountMap.remove(acceptedPIS);
-												spCountMap.put(acceptedPIS, value);*/
+											//	/*Integer value= spCountMap.get(acceptedPIS);
+											//	value++;
+											//	spCountMap.remove(acceptedPIS);
+											//	spCountMap.put(acceptedPIS, value);
 												
 												List<OscePost> oscePosts = spPostMap.get(acceptedPIS);
 												oscePosts.add(oscePost);
@@ -728,7 +727,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											
 											tempList.add(spPostMap.get(key).size());
 											
-											System.out.println("~~MAP KEY : " + key.getId() + "  ~~SIZE : " + spPostMap.get(key).size());
+											//System.out.println("~~MAP KEY : " + key.getId() + "  ~~SIZE : " + spPostMap.get(key).size());
 										}
 										
 										Collections.sort(tempList, Collections.reverseOrder());
@@ -745,7 +744,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 												
 												if (size == integer)
 												{
-													System.out.println("key : " + key.getId());
+													//System.out.println("key : " + key.getId());
 													if(!keyList.contains(key)){
 														
 														if(keyList.size() >= 4)
@@ -758,19 +757,19 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											}
 										}
 										
-										System.out.println("Key list is :" + keyList.size());
-										System.out.println("Value list is :" + valueList.size());
+										//System.out.println("Key list is :" + keyList.size());
+										//System.out.println("Value list is :" + valueList.size());
 										
 										maximnamBackupSP=0;
 										for (int i=0; i<keyList.size(); i++)
 										{
-											System.out.println("Inside persist");
+											//System.out.println("Inside persist");
 											if(maximnamBackupSP>=4)
 												break;
 											PatientInSemester key = keyList.get(i);
-											System.out.println("~~SORTED MAP KEY : " + key.getId() + "  ~~SIZE : " + valueList.get(i).size());
+											//System.out.println("~~SORTED MAP KEY : " + key.getId() + "  ~~SIZE : " + valueList.get(i).size());
 											
-											if(maximnamBackupSP >valueList.get(i).size() && valueList.get(i).get(maximnamBackupSP)!=null){
+											if(maximnamBackupSP < valueList.get(i).size() && valueList.get(i).get(maximnamBackupSP)!=null){
 												if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
 													
 													// Persist with one post as null

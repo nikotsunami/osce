@@ -6,6 +6,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.mail.internet.InternetAddress;
+
+import org.hibernate.validator.constraints.impl.EmailValidator;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -20,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.requestfactory.ui.client.ProxyRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -27,6 +32,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -90,17 +96,19 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	RadioButton rbAllExaminor;
 	
 	@UiField(provided = true)
-    ValueListBox<CourseProxy> parcourListBox = new ValueListBox<CourseProxy>((Renderer<CourseProxy>) GWT.create(CourseProxyRenderer.class));
+    //ValueListBox<Label> parcourListBox = new ValueListBox<Label>((Renderer<Label>) GWT.create(Label.class));
+	ValueListBox<CourseProxy> parcourListBox = new ValueListBox<CourseProxy>(new CourseNameProxyRenderer());	
 	
 	
 	/*@UiField
 	SplitLayoutPanel splitLayoutPanel;*/
-	@Override
+	
+
 	public ValueListBox<CourseProxy> getParcourListBox() {
 		return parcourListBox;
 	}
 
-	@Override
+
 	public void setParcourListBox(ValueListBox<CourseProxy> parcourListBox) {
 		this.parcourListBox = parcourListBox;
 	}
@@ -414,4 +422,33 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 		int height = ResolutionSettings.getRightWidgetHeight() - 55;
 		scrollPanel.setHeight(height+"px");
 	}
+
+	public static class CourseNameProxyRenderer extends ProxyRenderer<CourseProxy> {
+
+	    private static CourseNameProxyRenderer INSTANCE;
+
+	    protected CourseNameProxyRenderer() 
+	    {
+	        super(new String[] { "color" });
+	    }
+
+	    public static CourseNameProxyRenderer instance() {
+	        if (INSTANCE == null) {
+	            INSTANCE = new CourseNameProxyRenderer();
+	        }
+	        return INSTANCE;
+	    }
+
+	    public String render(CourseProxy object) 
+	    {
+	        if (object == null) 
+	        {
+	            return "";
+	        }
+	        return object.getColor();
+	    }
+	}	
 }
+
+
+

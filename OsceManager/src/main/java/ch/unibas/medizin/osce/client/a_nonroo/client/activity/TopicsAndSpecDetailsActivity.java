@@ -340,7 +340,7 @@ TopicsAndSpecDetailsView.Delegate
 			 slotBox.setWidth("45px");
 			 slotBox.setHeight("22px");
 			 
-		    for(int i=1;i<=12;i++)
+		    for(int i=1;i<=20;i++)
 		       {
 		    	   slotBox.addItem(i+"");
 		       }

@@ -29,8 +29,7 @@
 		.listBox
 		{
 			margin-top: 7px;			
-			margin-left: 100px;
-			width:"100px";
+			margin-left: 100px;			
 		}
 		
 	</ui:style>
@@ -51,7 +50,7 @@
 									<g:HorizontalPanel>
 										<g:RadioButton name="RBstudent" ui:field="rbSelectedStud" />
 										<g:RadioButton name="RBstudent" ui:field="rbAllStud" />
-										<g:ValueListBox ui:field="parcourListBox" styleName="{style.listBox}"></g:ValueListBox>
+										<g:ValueListBox ui:field="parcourListBox" styleName="{style.listBox}" width="90px"></g:ValueListBox>
 									</g:HorizontalPanel>
 									<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">															
 										<g:VerticalPanel ui:field="vpStudent">																							
