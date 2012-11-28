@@ -28,9 +28,9 @@ public interface StudentRequestNonRoo extends RequestContext{
 	abstract Request<List<StudentProxy>> findStudnetByAssignment(Long assId);
 	//by spec change]
 
-	abstract Request<List<StudentProxy>> getStudents(String sortColumn, Sorting order, Integer firstResult, Integer maxResults,boolean isFirstTime);
+	abstract Request<List<StudentProxy>> getStudents(String sortColumn, Sorting order, Integer firstResult, Integer maxResults,boolean isFirstTime,String searchValue);
 	
-	abstract Request<Long> getCountOfStudent(String sortCoiumn,Sorting order);
+	abstract Request<Long> getCountOfStudent(String sortCoiumn,Sorting order,String searchValue);
 	
 	abstract Request<List<OsceProxy>> findOsceBasedOnStudent(Long studentID);
 	abstract Request<List<StudentProxy>> findStudentByOsceIdAndCourseId(long oscetID, long courseId);

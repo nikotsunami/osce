@@ -11,9 +11,11 @@ import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
@@ -31,6 +33,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -68,6 +71,20 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 	Map<String, String> columnName=new HashMap<String, String>();
 	List<String> columnNameorder = new ArrayList<String>();
 	
+	@UiField (provided = true)
+	public QuickSearchBox searchBox;
+
+	@Override
+	public QuickSearchBox getSearchBox() {
+		return searchBox;
+	}
+
+	public void setSearchBox(QuickSearchBox searchBox) {
+		this.searchBox = searchBox;
+	}
+
+	
+	
 	@UiField
 	HTMLPanel westPanel;
 	
@@ -96,9 +113,19 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 		SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources, true, OsMaConstant.TABLE_JUMP_SIZE, true);
 		
+
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
+			@Override
+			public void performAction() {
+				delegate.performSearch(searchBox.getValue());
+			}
+		});
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
+		
+		
 	}
 
 	public List<String> getPaths() {
@@ -223,17 +250,32 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 		studentManagementMap.put("prename",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewPreName());
 		studentManagementMap.put("email",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail());
 		
-		
 		// E Highlight onViolation
+		Log.info("email value--"+((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail().getText());
 		
 		studentManagementEditPopupView.getOkBtn().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
-			
-					
-					
+				delegate.editStudentData(studentProxy, studentManagementEditPopupView.getNewName().getValue(),studentManagementEditPopupView.getNewPreName().getValue(),studentManagementEditPopupView.getNewEmail().getValue());
+				/*String email=((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail().getText();
+				if(email=="")
+				{
+					email="";
 					delegate.editStudentData(studentProxy, studentManagementEditPopupView.getNewName().getValue(),studentManagementEditPopupView.getNewPreName().getValue(),studentManagementEditPopupView.getNewEmail().getValue());
+				}
+				else
+				{
+					Pattern p=Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+					Matcher m = p.matcher(email);
+					if(!m.matches())							
+					{
+						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+						dialog.showConfirmationDialog("Please Enter Valid Email Address.");
+					}
+					else
+						delegate.editStudentData(studentProxy, studentManagementEditPopupView.getNewName().getValue(),studentManagementEditPopupView.getNewPreName().getValue(),studentManagementEditPopupView.getNewEmail().getValue());
+				}	*/														
 									
 			}
 		});

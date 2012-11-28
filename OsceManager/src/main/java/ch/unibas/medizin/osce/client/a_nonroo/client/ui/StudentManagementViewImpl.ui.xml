@@ -13,7 +13,9 @@
  	<g:west size="900">
 		 <!-- <g:ScrollPanel ui:field="mainScrollPanel" width="100%" > --> 
 			<g:HTMLPanel ui:field="westPanel" width="100%">
-	 						
+	 			<div class="{style.controls} {style.controlsleft}">
+					<my:QuickSearchBox ui:field="searchBox" />
+				</div>
  			<r:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}" />
  			
  				<div class="{style.controls} {style.controlsleft}">

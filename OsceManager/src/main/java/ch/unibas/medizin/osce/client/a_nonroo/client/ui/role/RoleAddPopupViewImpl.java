@@ -54,7 +54,7 @@ public class RoleAddPopupViewImpl extends PopupPanel implements RoleAddPopupView
 		super(true);
 		add(BINDER.createAndBindUi(this));
 		
-		for(int i=1;i<=12;i++)
+		for(int i=1;i<=20;i++)
 		{
 			slots_till_change.addItem(i+"");
 		}

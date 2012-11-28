@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -27,6 +28,8 @@ public interface StudentManagementView extends IsWidget {
 		void doAnimation(boolean b);
 
 		void editStudentData(StudentProxy studentProxy, String string, String string2, String string3);
+
+		void performSearch(String value);
 		
 	 }
 
@@ -44,4 +47,6 @@ public interface StudentManagementView extends IsWidget {
 
 	StudentManagementEditPopupView getStudentManagementEditPopView();
 	public void editPopupView(final StudentProxy studentProxy);
+
+	QuickSearchBox getSearchBox();
 }

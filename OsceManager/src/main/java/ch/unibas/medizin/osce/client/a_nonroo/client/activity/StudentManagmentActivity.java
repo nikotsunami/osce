@@ -107,6 +107,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 
 	public int x;
 	public int y;
+	public String searchWord="";
 	private AdvanceCellTable<StudentProxy> table;
 	public List<String> path = new ArrayList<String>();
 	Map<String, String> columnName;
@@ -142,7 +143,8 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 		
 		table.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
-				StudentManagmentActivity.this.onRangeChanged(false);
+				//StudentManagmentActivity.this.onRangeChanged(false,view.getSearchBox().getValue());
+				StudentManagmentActivity.this.onRangeChanged(false,searchWord);
 			}
 		});
 		
@@ -183,7 +185,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 						// RoleActivity.this.init2("");
 						Log.info("Call Init Search from addColumnSortHandler");
 						// filter.hide();
-						initSearch(false);
+						initSearch(false,searchWord);
 					}
 				}
 			}
@@ -317,7 +319,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 			}
 		});
 		
-		initSearch(true);
+		initSearch(true,searchWord);
 		
 	}
 	public void onStop(){
@@ -332,11 +334,11 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 		
 		goTo(new StudentManagementDetailsPlace(student.stableId(), Operation.DETAILS));
 	}
-	protected void onRangeChanged(boolean isFirst) {
+	protected void onRangeChanged(boolean isFirst,String searchValue) {
 		
 		final Range range = table.getVisibleRange();
-		
-		requests.studentRequestNonRoo().getStudents(sortname,sortorder,range.getStart(), range.getLength(),isFirst).fire(new OSCEReceiver<List<StudentProxy>>() {
+		//Log.info("search word --"+searchValue);
+		requests.studentRequestNonRoo().getStudents(sortname,sortorder,range.getStart(), range.getLength(),isFirst,searchValue).fire(new OSCEReceiver<List<StudentProxy>>() {
 
 			@Override
 			public void onSuccess(List<StudentProxy> response) {
@@ -347,15 +349,16 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 	}
 
 
-	private void initSearch(final boolean isFirst) {
+	private void initSearch(final boolean isFirst,final String searchValue) {
 		
-		requests.studentRequestNonRoo().getCountOfStudent(sortname,sortorder).fire(new OSCEReceiver<Long>() {
+		requests.studentRequestNonRoo().getCountOfStudent(sortname,sortorder,searchValue).fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {
 				
 				view.getTable().setRowCount(response.intValue(), true);
-				onRangeChanged(isFirst);
+				//onRangeChanged(isFirst,view.getSearchBox().getValue());
+				onRangeChanged(isFirst,searchValue);
 			}
 		});
 	
@@ -533,13 +536,15 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 		studentProxy.setName(name);
 		studentProxy.setPreName(preName);
 		studentProxy.setEmail(email);
-		
-		
+			if(email=="")
+			{
+				studentProxy.setEmail(null);
+			}
 		studentRequest.persist().using(studentProxy).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
-				initSearch(true);
+				initSearch(true,searchWord);
 				
 				((StudentManagementEditPopupViewImpl)view.getStudentManagementEditPopView()).hide(true);
 				
@@ -547,6 +552,15 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 		});
 		
 		
+	}
+
+	@Override
+	public void performSearch(String value) {
+		// TODO Auto-generated method stub
+		searchWord=value;
+		//onRangeChanged(false, searchWord);
+		initSearch(false, searchWord);
+		Log.info("search word--"+value);
 	}
 	
 /*	public void editPopupView(final StudentProxy studentProxy) {

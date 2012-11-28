@@ -36,9 +36,10 @@ public class Student {
 
     private String preName;
 
+    
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
     private String email;
-    
+        
     private String studentId;
     
     private String street;
@@ -155,15 +156,17 @@ public class Student {
     	return q.getResultList();
     }
     //by spec issue change]
- public static List<Student> getStudents(String sortColumn, Sorting order, Integer firstResult, Integer maxResults,boolean isFirstTime) {
+ public static List<Student> getStudents(String sortColumn, Sorting order, Integer firstResult, Integer maxResults,boolean isFirstTime,String searchValue) {
     		Log.info("Inside getStudents()");
  
     		EntityManager em = entityManager();
         	
-    		String query="SELECT s FROM Student AS s order by "+sortColumn + " "+ order;
+    		String query="SELECT s FROM Student AS s where s.name LIKE :name1 order by "+sortColumn + " "+ order;
             
     		TypedQuery<Student> q = em.createQuery(query, Student.class);
-             
+         	q.setParameter("name1", "%" + searchValue + "%");
+
+    		
     		if(!isFirstTime){
              q.setFirstResult(firstResult);
              q.setMaxResults(maxResults);
@@ -175,16 +178,17 @@ public class Student {
       //  return result;
         	
         }
-    public static Long getCountOfStudent(String sortColumn,Sorting order){
+    public static Long getCountOfStudent(String sortColumn,Sorting order, String searchValue){
     	
     	Log.info("Inside getCountOfStudent()");
     	 
 		EntityManager em = entityManager();
     	
-		String query="SELECT count(s) FROM Student AS s order by "+sortColumn + " "+ order;
+		String query="SELECT count(s) FROM Student AS s where s.name LIKE :name1 order by "+sortColumn + " "+ order;
         
 		TypedQuery<Long> q = em.createQuery(query, Long.class);
-         
+		q.setParameter("name1", "%" + searchValue + "%");
+
 		return q.getSingleResult();
     }
     public static List<Osce> findOsceBasedOnStudent(Long studentID){
