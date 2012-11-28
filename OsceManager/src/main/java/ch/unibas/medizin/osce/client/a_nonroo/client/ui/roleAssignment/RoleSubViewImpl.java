@@ -10,6 +10,8 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.util;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -385,9 +387,17 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	{
 		delegate.showApplicationLoading(true);
 		int requiredPatient=0;
+		
+		final OSCESecurityStatus osceSecurityStatus = osceDaySubViewImpl.getPatientSecurity().getValue();
+		
+		if(osceSecurityStatus==OSCESecurityStatus.FEDERAL_EXAM){
+			if(osceSequenceProxy.getCourses() !=null)
+			requiredPatient=-(((osceSequenceProxy.getCourses().size()*util.checkInteger(postProxy.getStandardizedRole().getFactor()))+util.checkInteger(postProxy.getStandardizedRole().getSum()))-this.getPatientInRoleVP().getWidgetCount());
+		}
+		else{	
 		if(osceSequenceProxy.getCourses() !=null)
 			requiredPatient=-((2*osceSequenceProxy.getCourses().size())-this.getPatientInRoleVP().getWidgetCount());
-		
+		}
 		
 		//refresh count
 		this.getCountLbl().setStylePrimaryName("count");

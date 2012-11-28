@@ -118,6 +118,10 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 //	public DefaultSuggestBox<PatientAveragePerPost, EventHandlingValueHolderItem<PatientAveragePerPost>> patientAvgPostSuggestBox = new DefaultSuggestBox<PatientAveragePerPost, EventHandlingValueHolderItem<PatientAveragePerPost>>();
 //	public DefaultSuggestBox<OSCESecurityStatus, EventHandlingValueHolderItem<OSCESecurityStatus>> oSCESecurityStatusSuggestBox = new DefaultSuggestBox<OSCESecurityStatus, EventHandlingValueHolderItem<OSCESecurityStatus>>();
 	
+	public FocusableValueListBox<OSCESecurityStatus> getPatientSecurity() {
+		return patientSecurity;
+	}
+
 	public VerticalPanel getSequenceVP() {
 		return sequenceVP;
 	}

@@ -1829,7 +1829,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 		this.showApplicationLoading(true);
 
-		view.getIgnoreOsceDaycheckBox().setChecked(true);
+		view.getIgnoreOsceDaycheckBox().setChecked(false);
 		initPatientInSemester(true, false,false);
 		initOsceDaySubView();
 		setAutoAssignmentBtnProperty();
