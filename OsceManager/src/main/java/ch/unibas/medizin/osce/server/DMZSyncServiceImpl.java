@@ -505,7 +505,11 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 * */
 	private void setOsceDays(JSONObject jsonObject,PatientInSemester semester)throws JSONException{
 		 JSONArray osceDayArray = jsonObject.getJSONArray("acceptedOsce");
-		 Set<OsceDay> jsonOsceDays = new HashSet<OsceDay>();
+		 Set<OsceDay> jsonOsceDays = semester.getOsceDays();
+		 if (jsonOsceDays == null) {
+			 jsonOsceDays = new HashSet<OsceDay>();
+		 }
+		 
 		 for(int j = 0; j<osceDayArray.length(); j++){
 			OsceDay osceDay = null;
 			if(osceDayArray.getJSONObject(j).get("osceDate")!=JSONObject.NULL){
@@ -518,22 +522,21 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}			
 			
 			 if(osceDay!=null){
-
 				 jsonOsceDays.add(osceDay);
-				 
-			 }
-			 
+			 } 
 		 }
 		 semester.setOsceDays(jsonOsceDays);
-		 
-		 
 	}
+	
 	/**
 	 * save accepted trainings
 	 * */
 	private void setTrainings(JSONObject jsonObject,PatientInSemester semester)throws JSONException{
 		JSONArray trainingArray = jsonObject.getJSONArray("acceptedTrainings");
-		 Set<Training> jsonTrainings = new HashSet<Training>();
+		Set<Training> jsonTrainings = semester.getTrainings();
+		if (jsonTrainings == null) {
+			jsonTrainings = new HashSet<Training>();
+		}
 		 for(int i = 0; i<trainingArray.length(); i++){
 			Training training = null;
 			if(trainingArray.getJSONObject(i).get("trainingDate")!=JSONObject.NULL && 
@@ -563,8 +566,6 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}
 		 }
 		 semester.setTrainings(jsonTrainings);
-
-		
 	}
 	
 	/**
