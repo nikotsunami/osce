@@ -51,7 +51,7 @@
   <extend-property name="locale" values="en"/>
   <extend-property name="locale" values="cn"/>
   <extend-property name="locale" values="de"/>
-  <set-property-fallback name="locale" value="de"/>
+  <set-property-fallback name="locale" value="de_CH"/>
   <!-- <set-property name="locale" value="de" />  -->
   
   
