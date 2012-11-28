@@ -2495,14 +2495,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 	}
 	
-	public void autoAssignStudent(long id)
+	public void autoAssignStudent(long id,Integer orderType)
 	{
 		Log.info("autoAssignStudent Clicked :");
 		
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
 		
-		requests.osceRequestNonRoo().autoAssignStudent(id).fire(new OSCEReceiver<Boolean>() {
+		requests.osceRequestNonRoo().autoAssignStudent(id,orderType).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {

@@ -20,7 +20,7 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 		// TODO define methods to be delegated!
 		public void autoAssignSP(long id);
 		
-		public void autoAssignStudent(long id);
+		public void autoAssignStudent(long id,Integer orderType);
 		
 		public void exportAssignment(Long osceId,int type);
 	}

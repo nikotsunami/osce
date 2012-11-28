@@ -1231,5 +1231,11 @@ public interface OsceConstants extends Constants {
      public String studentName();
      
      public String studentLogicalBreak();
+     
+     public String previousAssignmentWillLost();
+     
+     public String alphabeticOrder();
+     
+     public String scrumbleOrder();
 }
 
