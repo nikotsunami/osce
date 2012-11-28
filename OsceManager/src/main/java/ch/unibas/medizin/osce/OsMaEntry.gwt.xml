@@ -52,7 +52,7 @@
   <extend-property name="locale" values="cn"/>
   <extend-property name="locale" values="de"/>
   <set-property-fallback name="locale" value="de"/>
-  <!-- <set-property name="locale" value="de" />  -->
+  <set-property name="locale" value="de,en,cn" />
   
   
   
