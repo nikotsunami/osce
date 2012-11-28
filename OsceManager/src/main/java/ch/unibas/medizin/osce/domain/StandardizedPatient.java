@@ -979,7 +979,7 @@ public class StandardizedPatient {
     				}
     				else if (searchCr.getField() == PossibleFields.ANAMNESIS)
     				{
-    					Log.info("~~INSIDE SCAR");
+    					Log.info("~~INSIDE ANAMNESIS");
     					
     					val = String.valueOf(searchCr.getObjectId());
     					
@@ -992,18 +992,27 @@ public class StandardizedPatient {
     					Predicate pre1 = criteriaBuilder.equal(join3.get("id"), Integer.parseInt(val));
     					Predicate pre2 = null;
     					
+    					AnamnesisCheck anamnesisCheck = AnamnesisCheck.findAnamnesisCheck(Long.parseLong(val));
+    					AnamnesisCheckTypes type = anamnesisCheck.getType();
+    					
     					Expression<String> anamnesVal = join2.get("anamnesisChecksValue");				
     					
-    					String value = searchCr.getValue();				
-    					
+    					String value = searchCr.getValue();
+    				
     					if (value.length() == 1)
     					{
     						Boolean truthValue = Integer.parseInt(searchCr.getValue()) == 1 ? true : false;
-    						pre2 = criteriaBuilder.equal(join2.get("truth"), truthValue);
+    						if (searchCr.getComparation().equals(Comparison.EQUALS))
+    							pre2 = criteriaBuilder.equal(join2.get("truth"), truthValue);
+    						else if (searchCr.getComparation().equals(Comparison.NOT_EQUALS))
+    							pre2 = criteriaBuilder.notEqual(join2.get("truth"), truthValue);
     					}						
     					else
     					{
-    						pre2 = criteriaBuilder.like(anamnesVal, "%" + value + "%");
+    						if (searchCr.getComparation().equals(Comparison.EQUALS))
+    							pre2 = criteriaBuilder.like(anamnesVal, "%" + value + "%");
+    						else if (searchCr.getComparation().equals(Comparison.NOT_EQUALS))
+    							pre2 = criteriaBuilder.notLike(anamnesVal, "%" + value + "%");
     					}
     					
     					predicate1 = criteriaBuilder.and(pre1,pre2);
