@@ -206,13 +206,13 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		roleDetailPanel.selectTab(0);
 		
 		// Highlight onViolation
-		for(int i=0;i<=10;i++)
+		for(int i=1;i<=5;i++)
 		{
 			factor.addItem(i+"");
 		}
 	//	factor.setSelectedIndex(0);
 
-		for(int i=1;i<=5;i++)
+		for(int i=0;i<=10;i++)
 		{
 			sum.addItem(i+"");
 		}

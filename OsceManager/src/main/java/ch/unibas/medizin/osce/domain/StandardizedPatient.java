@@ -1093,9 +1093,9 @@ public class StandardizedPatient {
     					Calendar cal = Calendar.getInstance();
     					//cal.set(1985, 02, 25);
     					
-    					System.out.println("cal before : " + cal.getTime());
+    				//	System.out.println("cal before : " + cal.getTime());
     					cal.add(Calendar.YEAR, -(Integer.parseInt(val)));
-    					System.out.println("cal after : " + cal.getTime());
+    				//	System.out.println("cal after : " + cal.getTime());
     					
     					Date dt = new Date();
     					try{
@@ -1107,7 +1107,7 @@ public class StandardizedPatient {
     						e.printStackTrace();
     					}
     					
-    					System.out.println("DATE : " + dt);
+    				//	System.out.println("DATE : " + dt);
     					
     					Expression<Date> date = from.get("birthday");
     					if (searchCr.getComparation() == Comparison.EQUALS)

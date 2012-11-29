@@ -801,6 +801,28 @@ public class Osce {
 		
 		return patientInSemesterId.toString();
 	}
+	
+	private static String getOscePostIDList(
+			List<OscePost> oscePostlist) {
+
+		if (oscePostlist == null || oscePostlist.size() == 0) {
+			Log.info("Return as null");
+			return "";
+		}
+		Iterator<OscePost> oscePosstlistIterator = oscePostlist.iterator();
+		StringBuilder oscePostId = new StringBuilder();
+		oscePostId.append(",");
+		while (oscePosstlistIterator.hasNext()) {
+			OscePost oscePost = oscePosstlistIterator.next();
+
+			oscePostId.append(oscePost.getId().toString());
+			if (oscePosstlistIterator.hasNext()) {
+				oscePostId.append(" ,");
+			}
+		}
+		
+		return oscePostId.toString();
+	}
 	private static String getOscePostRoomIdList(Set<OscePostRoom> oscePostRoomSet){
 		
 		if (oscePostRoomSet == null
@@ -874,6 +896,17 @@ public class Osce {
 				
 	}
 
+	public static Long getCountOfSPAssigndAsBackups(List<OscePost> allOscePostOfThisDay){
+		Log.info("Call getCountOfSPAssigndAsBackups");	
+		EntityManager em = entityManager();		
+		String queryString = "select count(*) from PatientInRole as pir where pir.oscePost in (' '" +getOscePostIDList(allOscePostOfThisDay) + " ) and pir.is_backup=1";
+		Log.info("Query String: " + queryString);
+		TypedQuery<Long> q = em.createQuery(queryString,Long.class);		
+		Long result  = q.getSingleResult();        
+		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
+		return result; 
+		
+	}
 	//module 3 f }
 	
 	//Module10 Create plans
