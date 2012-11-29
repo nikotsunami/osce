@@ -405,9 +405,9 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			Log.info("roletopic befor =====--"+ standardizedRole.getRoleTopic());
 			Log.info("st role factor--"+standardizedRole.getFactor());
 
-			((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(standardizedRole.getFactor().toString()));
+			((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?0: Integer.parseInt(standardizedRole.getFactor().toString())-1);
 			//((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString()))-1);
-			((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString()))-1);
+			((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString())));
 			//standardizedRole.setFactor(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(standardizedRole.getFactor().toString()));
 			//Log.info("st role sum--"+standardizedRole.getSum());
 			//standardizedRole.setSum(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString())));
@@ -493,6 +493,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getSelected());
 		standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
+		
 		//standardizedRole.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
 		//Issue # 122 : Replace pull down with autocomplete.
 //		checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
@@ -1113,6 +1114,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
 												((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
 												((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+												((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?0: Integer.parseInt(standardizedRole.getFactor().toString())-1);
+												//((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString()))-1);
+												((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString())));
+												
 												((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
 												//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
 												
@@ -1151,6 +1156,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 															((RoleEditViewImpl)view).longName.setValue(standardizedRole.getLongName());
 															((RoleEditViewImpl)view).roleType.setValue(standardizedRole.getRoleType());
 															((RoleEditViewImpl)view).studyYear.setValue(standardizedRole.getStudyYear());
+															((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?0: Integer.parseInt(standardizedRole.getFactor().toString())-1);
+															//((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString()))-1);
+															((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString())));
+															
 															((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
 															//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
 															

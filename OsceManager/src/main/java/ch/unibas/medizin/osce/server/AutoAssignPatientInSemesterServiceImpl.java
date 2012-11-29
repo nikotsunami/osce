@@ -40,9 +40,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	Long semesterId;
 	private static final Domain DOMAIN = DomainFactory.getDomain("localhost");
 	private int neededSp = 0;
+	private int neededBackupSp=4;
 	private long allReadyPatientInRole = 0;
-	private int maximnamBackupSP=0;
-	
+	private long allreadyAllocatedBackupSP=0;
+	private int postallocationInSeqFlag;
 	@Override
 	
 	public void autoAssignPatientInSemester(Long semesterId) {
@@ -642,6 +643,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 				}
 								if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){
 									 
+									neededBackupSp=4;
+									
 									//Map<PatientInSemester,Integer> spCountMap = new HashMap<PatientInSemester,Integer>();
 									Map<PatientInSemester,List<OscePost>> spPostMap = new HashMap<PatientInSemester, List<OscePost>>();
 									
@@ -653,11 +656,16 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									
 									List<PatientInSemester> acceptedPis = new ArrayList<PatientInSemester>();
 									
-									 Log.info("When Security is Simple for BacKup Task Not assigned SP List size :" + notAssignedpatientInSemsterList.size());
+									 //Log.info("When Security is Simple for BacKup Task Not assigned SP List size :" + notAssignedpatientInSemsterList.size());
 									
 									 List<OscePost> allOscePostOfThisDay =Osce.findAllOscePostOfDay(sortedOsceDay.getId());
 									 
 									 Log.info("Total OScePosts For OSceDay :"+sortedOsceDay.getId()+" Is : " + allOscePostOfThisDay.size());
+
+									 allreadyAllocatedBackupSP=Osce.getCountOfSPAssigndAsBackups(allOscePostOfThisDay);
+									 
+									 if(allreadyAllocatedBackupSP < neededBackupSp){
+										 
 									 
 									for (Iterator iterator = allOscePostOfThisDay.iterator(); iterator.hasNext();) {
 										OscePost oscePost = (OscePost) iterator.next();
@@ -732,6 +740,9 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 										
 										Collections.sort(tempList, Collections.reverseOrder());
 										
+										/*for(int i=0 ;i<tempList.size();i++){
+											System.out.println(tempList.get(i));
+										}*/
 										
 										maxover : for (Integer integer : tempList) {
 
@@ -760,26 +771,26 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 										//System.out.println("Key list is :" + keyList.size());
 										//System.out.println("Value list is :" + valueList.size());
 										
-										maximnamBackupSP=0;
+										postallocationInSeqFlag=0;
 										for (int i=0; i<keyList.size(); i++)
 										{
 											//System.out.println("Inside persist");
-											if(maximnamBackupSP>=4)
+											if(allreadyAllocatedBackupSP>=neededBackupSp)
 												break;
 											PatientInSemester key = keyList.get(i);
 											//System.out.println("~~SORTED MAP KEY : " + key.getId() + "  ~~SIZE : " + valueList.get(i).size());
 											
-											if(maximnamBackupSP < valueList.get(i).size() && valueList.get(i).get(maximnamBackupSP)!=null){
+											if(postallocationInSeqFlag < valueList.get(i).size() && valueList.get(i).get(postallocationInSeqFlag)!=null){
 												if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
 													
 													// Persist with one post as null
-													persisitPatientInRole(true, true,valueList.get(i).get(maximnamBackupSP), key);
+													persisitPatientInRole(true, true,valueList.get(i).get(postallocationInSeqFlag), key);
 													persisitPatientInRole(true, true, null, key);
 												}
 												else{
 													
 														// Persist normally 
-														persisitPatientInRole(true, true,valueList.get(i).get(maximnamBackupSP), key);
+														persisitPatientInRole(true, true,valueList.get(i).get(postallocationInSeqFlag), key);
 													}
 											}
 											else{
@@ -795,9 +806,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 													}
 											}
 											
-											maximnamBackupSP++;
+											postallocationInSeqFlag++;
+											allreadyAllocatedBackupSP++;
 										}
-			 				}
+			 			   	}
+						 }
 			 		}
 	
 		}catch(Exception e){
