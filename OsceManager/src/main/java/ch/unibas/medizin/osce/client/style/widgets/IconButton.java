@@ -67,8 +67,10 @@ public class IconButton extends Button {
 		
 		if (text.length() == 0) {
 			html += ICON_HTML_ICONONLY + ICON_HTML_CLOSE;
+			super.removeStyleName("gwt-Button-WithIconText");
 		} else {
 			html += ICON_HTML_CLOSE + text;
+			super.addStyleName("gwt-Button-WithIconText");
 		}
 		SafeHtmlBuilder builder = new SafeHtmlBuilder();
 		builder.appendHtmlConstant(html);

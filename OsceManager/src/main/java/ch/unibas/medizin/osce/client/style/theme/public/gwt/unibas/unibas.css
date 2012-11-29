@@ -58,7 +58,7 @@ a:hover, .gwt-Anchor:hover {
 .gwt-Button {
 	outline-style: none !important;
 	margin: 0;
-	padding: 3px 6px 3px 19px;
+	padding: 3px 6px 3px 3px;
 	text-decoration: none !important;
 	cursor: pointer;
 	cursor: hand;
@@ -71,6 +71,10 @@ a:hover, .gwt-Anchor:hover {
 	
 	border-radius: 4px;
 	white-space: nowrap;
+}
+
+.gwt-Button-WithIconText {
+	padding-left: 19px !important;
 }
 
 .gwt-Button:active {
@@ -1843,6 +1847,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 .ui-icononly {
 	margin-right: -3px !important;
+	margin-left: 0 !important;
 }
 
 .ui-icon {
