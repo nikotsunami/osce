@@ -12,12 +12,24 @@
         <param-name>defaultHtmlEscape</param-name>
         <param-value>true</param-value>
     </context-param>
-
+    
     <context-param>
         <param-name>DMZ_HOST_ADDRESS</param-name>
-	<param-value>http://sp.medizin.unibas.ch/sp_portal_test</param-value>
+		<param-value>http://sp.medizin.unibas.ch/sp_portal_test</param-value>
     </context-param>
     
+    <!-- 
+    Username / Password are in PM wiki
+    
+    <context-param>
+    	<param-name>DMZ_SYNC_USER</param-name>
+    	<param-value>username</param-value>
+    </context-param>
+    
+    <context-param>
+    	<param-name>DMZ_SYNC_PASS</param-name>
+    	<param-value>password</param-value>
+    </context-param> -->
     
     <context-param>
         <param-name>contextConfigLocation</param-name>

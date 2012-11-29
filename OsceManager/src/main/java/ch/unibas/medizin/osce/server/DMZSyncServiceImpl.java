@@ -21,14 +21,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -1423,6 +1427,8 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
 		postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 		postMethod.setRequestBody(registerInform);
+		
+		authenticate(httpClient, postMethod);
 
 		int statusCode = 0;
 		try {
@@ -1448,42 +1454,23 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * returns the host address
-	 * @throws DMZSyncException 
-	 */
-	protected String getHostAddress() throws DMZSyncException{
-
-		String hostAddress = getRequest().getSession()
-				.getServletContext().getInitParameter("DMZ_HOST_ADDRESS");
-		if(hostAddress == null){
-			throw new DMZSyncException(DMZSyncExceptionType.HOST_ADDRESS_EXCEPTION,"");
-		}
-		return hostAddress;
-	}
-
-	/**
 	 * Request data from the DMZ
 	 * @throws DMZSyncException 
 	 */
 	protected String getDMZData(String url) throws DMZSyncException {
 		String ret = null;
-
 		HttpClient httpClient = new HttpClient();
-		
 		GetMethod getMethod = new GetMethod(url);
 
 		// TODO: does this make sense?
 		getMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-
-		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-				new DefaultHttpMethodRetryHandler());
+		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
+		
+		authenticate(httpClient, getMethod);
+		
 		try {
-			
 			int statusCode = httpClient.executeMethod(getMethod);
-			
-
 			byte[] responseBody = getMethod.getResponseBody();
-
 			ret = new String(responseBody);
 			if (statusCode != HttpStatus.SC_OK) {
 				Log.error("Method failed: " + getMethod.getStatusLine());
@@ -1493,11 +1480,43 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			throw new DMZSyncException(DMZSyncExceptionType.HTTP_EXCEPTION,url+": "+e.getMessage());
 		} catch (IOException e) {
 			throw new DMZSyncException(DMZSyncExceptionType.CONNECT_HOST_ADDRESS_EXCEPTION,url+": "+e.getMessage());
-			
 		} finally {
 			getMethod.releaseConnection();
 		}
 		return ret;
+	}
+
+	/**
+	 * returns the host address
+	 * @throws DMZSyncException 
+	 */
+	protected String getHostAddress() throws DMZSyncException{
+		String hostAddress = getRequest().getSession()
+				.getServletContext().getInitParameter("DMZ_HOST_ADDRESS");
+		if(hostAddress == null){
+			throw new DMZSyncException(DMZSyncExceptionType.HOST_ADDRESS_EXCEPTION,"");
+		}
+		return hostAddress;
+	}
+	
+	/**
+	 * Method that adds authentication to a http request if the corresponding Variables are set
+	 * in the environment. 
+	 * @param client
+	 * @param method
+	 * @throws DMZSyncException
+	 */
+	private void authenticate(HttpClient client, HttpMethodBase method) throws DMZSyncException {
+		ServletContext context = getRequest().getSession().getServletContext();
+		String syncUser = context.getInitParameter("DMZ_SYNC_USER");
+		String syncPass = context.getInitParameter("DMZ_SYNC_PASS");
+		
+		if (syncUser != null && syncPass != null) {
+			client.getState().setCredentials(
+					new AuthScope(null, -1),
+					new UsernamePasswordCredentials(syncUser, syncPass));
+			method.setDoAuthentication(true);
+		}
 	}
 	
 
