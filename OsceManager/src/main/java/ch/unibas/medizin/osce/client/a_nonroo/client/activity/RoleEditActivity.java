@@ -441,7 +441,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		request.persist().using(standardizedRole);
 		
 
-		Log.debug("Create für: " + standardizedRole.getLongName());
+		Log.debug("Create fÃ¼r: " + standardizedRole.getLongName());
 	}
 
 	@Override
@@ -491,9 +491,10 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		//Issue # 122 : Replace pull down with autocomplete.
 		//standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getValue());
 		standardizedRole.setRoleTopic(((RoleEditViewImpl)view).roleTopic.getSelected());
-		standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
-		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
 		
+		/*standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
+		*/
 		//standardizedRole.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
 		//Issue # 122 : Replace pull down with autocomplete.
 //		checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
@@ -533,10 +534,13 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
 					//add factor and sum
+					
 					proxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 					proxy.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
 					
-					
+					/*proxy.setFactor(standardizedRole.getFactor());
+					proxy.setSum(standardizedRole.getSum());
+					*/
 					//proxy.setFactor(((RoleEditViewImpl)view).factor.getValue();
 					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
 					
@@ -610,8 +614,9 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
 			standardizedRole.setCheckList(checkListProxy);//spec
 			System.out.println("Checklist----2: "+checkListProxy.getTitle());
-			
-			//Issue # 122 : Replace pull down with autocomplete.
+			/*standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+			standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
+			*///Issue # 122 : Replace pull down with autocomplete.
 			/*((RoleEditViewImpl)view).roleTopic.setSelected(roleTopic);
 			((RoleEditViewImpl)view).roleTopic.getTextField().advancedTextBox.setText(roleTopic.getName());*/
 			//Issue # 122 : Replace pull down with autocomplete.
@@ -651,6 +656,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		Log.info("Call Final Save()");
 		
 		// Highlight onViolation
+		
+		
 		Log.info("Map Size: " + view.getStandardizedRoleMap().size());
 		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
 			
@@ -712,6 +719,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		//Issue # 122 : Replace pull down with autocomplete.
 		
 		//if(((RoleEditViewImpl)view).roleTopic.getValue().getId()!=roleTopic.getId())
+		standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
+		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
 		
 		if(((RoleEditViewImpl)view).roleTopic.getSelected().getId()!=roleTopic.getId())
 		{

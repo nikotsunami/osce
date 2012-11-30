@@ -77,4 +77,5 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	
 	AnswerRequestNonRoo answerRequestNonRoo();
 	CourseRequestNonRoo courseRequestNonRoo();
+	SemesterRequestNonRoo semesterRequestNonRoo();
 }

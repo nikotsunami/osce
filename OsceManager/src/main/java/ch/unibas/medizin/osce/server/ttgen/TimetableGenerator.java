@@ -2275,7 +2275,11 @@ public class TimetableGenerator {
 													(!earlyStartFirst && postBP.isFirstPart() || earlyStartFirst && !postBP.isFirstPart())) {
 												startTimeNew = dateAddMin(startTimeNew, osce.getShortBreakSimpatChange() - osce.getShortBreak());
 											}*/
-											
+											if (numberBreakPosts == 0)
+											{
+												int postLength = osce.getPostLength() + osce.getShortBreak();
+												startTimeNew = dateAddMin(startTimeNew, postLength);
+											}
 											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
 											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
 										}
@@ -2320,6 +2324,12 @@ public class TimetableGenerator {
 							// lunch break or nothing is added)
 							
 							if(!lastRotation) {
+								
+								if (numberBreakPosts == 0)
+								{
+									int postLength = osce.getPostLength() + osce.getShortBreak();
+									nextRotationStartTime = dateAddMin(nextRotationStartTime, postLength);
+								}
 								
 								nextRotationStartTime = dateAddMin(nextRotationStartTime, breakValue);
 								// add lunch break after half of rotations or after specified number of rotations

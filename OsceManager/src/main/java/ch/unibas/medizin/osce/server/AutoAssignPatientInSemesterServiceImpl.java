@@ -104,11 +104,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			  
 			  allOscePostInSemester= Osce.findAllOscePostInSemester(semester.getId());
 			   
-			  Log.info("OsceRole In Semester Is :" + allOscePostInSemester.size());
+			  //Log.info("OsceRole In Semester Is :" + allOscePostInSemester.size());
 	
 			  allOsceDaysInSemster=Osce.findAllOsceDaysInSemster(semester.getId());
 			 
-			  Log.info("OsceDay in semster Is :" + allOsceDaysInSemster.size());
+			  //Log.info("OsceDay in semster Is :" + allOsceDaysInSemster.size());
 			 
 			  Iterator<PatientInSemester>patientInSemesterIterator = allPatientInSemester.iterator();
 			 
@@ -150,7 +150,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					 			
 					 			Set<AdvancedSearchCriteria> setAdvanceSearchCriteria = standardizedRole.getAdvancedSearchCriteria();
 					 			
-					 			Log.info("setAdvanceSearchCriteria Size :" + setAdvanceSearchCriteria.size());
+					 			//Log.info("setAdvanceSearchCriteria Size :" + setAdvanceSearchCriteria.size());
 					 			
 					 			if(setAdvanceSearchCriteria==null || setAdvanceSearchCriteria.size() <= 0){
 					 				patientInsemester.setValue(util.checkInteger(patientInsemester.getValue())+1);
@@ -187,7 +187,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 				 }
 			 
 			 		sortedOsceDays =Osce.getAllOsceDaysSortByValueAsc(semester.getId());
-			 		Log.info("@@@@Sorted Total OSceDAy Is : " + sortedOsceDays.size());
+			 		//Log.info("@@@@Sorted Total OSceDAy Is : " + sortedOsceDays.size());
 			 		Iterator<OsceDay> sortedOsceDayIterator = sortedOsceDays.iterator();
 			 		while(sortedOsceDayIterator.hasNext()){
 			 			
@@ -196,10 +196,10 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 			Osce osce=sortedOsceDay.getOsce();
 			 			
 			 			List<OscePost> sortedOscePostList = Osce.getSortedOscePost(sortedOsceDay.getId());
-			 			Log.info("SortedOscePostFor OsceDay" + sortedOsceDay.getId() + " is  " + sortedOscePostList.size());
+			 			//Log.info("SortedOscePostFor OsceDay" + sortedOsceDay.getId() + " is  " + sortedOscePostList.size());
 			 			
 			 			List<OscePost> sortedOscePostByTypeAndComplexyList = Osce.getSortedOscePostByTypeAndComlexity(sortedOsceDay.getId());
-			 			Log.info("sortedOscePostsByRoleTypesAndComplexity for osceDay "+ sortedOsceDay.getId()+ " is :" + sortedOscePostByTypeAndComplexyList.size());
+			 			//Log.info("sortedOscePostsByRoleTypesAndComplexity for osceDay "+ sortedOsceDay.getId()+ " is :" + sortedOscePostByTypeAndComplexyList.size());
 			 			
 			 	// moved		List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay,semester.getId());
 			 	// moved		Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
@@ -214,14 +214,14 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 
 							//David: resort list after SP's were added, because the previosly added are now at the end
 						 	List<PatientInSemester> patientInSemesterList1 = Osce.getPatientAccptedInOsceDayByRoleCountAscAndValueASC(sortedOsceDay,semester.getId());
-						 	Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
+						 	//Log.info("SortedPatientInSemester Based on RoleCount Asc And Value Asc for Day:"+sortedOsceDay.getId()+ " Is " + patientInSemesterList1.size());
 							Log.info("OsceDay is For which OsceSecurity Is Checked Iterator:" + sortedOsceDay.getId());
 								
 								// Manish Now changed Query to get Assignment Of Sequence not of OsceDay Commented below line and query 
 								//List<Course> parcourList = Osce.getAllParcoursForThisOsceDay(sortedOsceDay);
 								
 								List<Course> parcourList=Osce.getAllParcoursForThisSequence(sortedOscePost.getOsceSequence().getId());
-								Log.info("Parcour list size IS :" + parcourList.size());
+								//Log.info("Parcour list size IS :" + parcourList.size());
 								
 								if(osce.getOsceSecurityTypes()==OsceSecurityType.simple){
 									neededSp=parcourList.size()*2;
@@ -660,7 +660,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									
 									 List<OscePost> allOscePostOfThisDay =Osce.findAllOscePostOfDay(sortedOsceDay.getId());
 									 
-									 Log.info("Total OScePosts For OSceDay :"+sortedOsceDay.getId()+" Is : " + allOscePostOfThisDay.size());
+									 //Log.info("Total OScePosts For OSceDay :"+sortedOsceDay.getId()+" Is : " + allOscePostOfThisDay.size());
 
 									 allreadyAllocatedBackupSP=Osce.getCountOfSPAssigndAsBackups(allOscePostOfThisDay);
 									 
@@ -1173,7 +1173,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						 
 		 			listOfPatientInSemesterSatisfyCriteria= PatientInSemester.findPatientInSemesterByOsceDayAdvancedCriteria(semester.getId(),sortedOsceDay.getId(),true,listAdvanceSearchCirteria,false);
 		 			
-		 			Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria.size());
+		 			//Log.info("listOfPatientInSemesterSatisfyCriteria Size is :" + listOfPatientInSemesterSatisfyCriteria.size());
 		 			
 		 			if(listOfPatientInSemesterSatisfyCriteria != null && listOfPatientInSemesterSatisfyCriteria.size() > 0 ) {
 		 				
