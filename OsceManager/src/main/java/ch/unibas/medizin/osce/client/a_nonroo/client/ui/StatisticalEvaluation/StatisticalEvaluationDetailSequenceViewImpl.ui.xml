@@ -22,24 +22,39 @@
 		
 		<!--Disclosure Header -->
 							
-		<!--  
-		<g:HorizontalPanel width="100%" verticalAlignment="middle" addStyleNames="{style.sequenceHeader}">
-			<g:Image ui:field="minMaxImage" addStyleNames="{style.icon}" resource="{uiIcons.triangle1East}">
-			<g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label>
-			<g:HorizontalPanel ui:field="postDataHP" addStyleNames="{style.postDataHP}">
-				<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
-				<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
-				<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
-				<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
-				<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
-			</g:HorizontalPanel>
-			<g:Label ui:field="sumPerSequenceLbl" width="507px">Sum per Sequence</g:Label>
-		</g:HorizontalPanel>
-		-->
+		 
+		<g:HTMLPanel width="100%" >
+				<table class="{style.sequenceHeader}"  width="100%" ui:field="sequenceHeader">
+						
+						<tbody>
+						<tr valign="middle">
+							<td width="2%"><g:Image ui:field="minMaxImage" addStyleNames="{style.icon}" resource="{uiIcons.triangle1East}"></g:Image></td>
+							<td width="40%"><g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label></td>
+							<td>
+									<g:HorizontalPanel ui:field="postDataHP" addStyleNames="{style.postDataHP}">
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>
+									</g:HorizontalPanel>
+							</td>
+							<td width="13%">
+								<g:HorizontalPanel ui:field="fourthColumnHP">
+									<g:Label ui:field="sumPerSequenceLbl"></g:Label>
+								</g:HorizontalPanel>
+							</td>
+						</tr>
+						
+						</tbody>
+					</table>
+				</g:HTMLPanel>
+		
 		<!--Disclosure Content -->
 		<g:DisclosurePanel width="100%" animationEnabled="true" ui:field="sequenceDisclosurePanel" addStyleNames="{style.sequenceContent}">
 		
-			<g:customHeader>
+			
+			<!-- 
 				<g:HTMLPanel width="100%" >
 				<table class="{style.sequenceHeader}"  width="100%" ui:field="sequenceHeader">
 						
@@ -66,7 +81,8 @@
 						</tbody>
 					</table>
 				</g:HTMLPanel>
-			</g:customHeader>
+				-->
+			
 		
 			<g:VerticalPanel ui:field="disclosureVP" width="100%" horizontalAlignment="right"  >
 				<g:Label>No Data Available</g:Label>

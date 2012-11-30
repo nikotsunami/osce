@@ -5,8 +5,8 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
-import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
+
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -17,7 +17,10 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
+
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -197,11 +200,35 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 	public StatisticalEvaluationDetailSequenceViewImpl() 
 	{
 		Log.info("Call StatisticalEvaluationDetailSequenceViewImpl");
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		sequenceDisclosurePanel.addStyleName("custom-disclosure");
 		
+		
+		
 	}
-
+	
+	public StatisticalEvaluationDetailSequenceViewImpl(boolean postPanel,boolean postAnalysis) 
+	{
+		Log.info("Call StatisticalEvaluationDetailSequenceViewImpl");
+		initWidget(uiBinder.createAndBindUi(this));
+		sequenceDisclosurePanel.addStyleName("custom-disclosure");
+		
+		
+		final HorizontalPanel headerPanel = new HorizontalPanel() {
+			public void onBrowserEvent(Event event) {
+				switch (DOM.eventGetType(event)) {
+				case Event.ONCLICK:
+					// Prevent link default action.
+					DOM.eventPreventDefault(event);
+					
+				}
+			}
+		};
+		headerPanel.sinkEvents(Event.ONCLICK);
+		getFourthColumnHP().insert(headerPanel,0);
+	}
+	
 
 	@Override
 	public void setDelegate(Delegate delegate) {
@@ -211,7 +238,7 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 	@UiHandler("sequenceLbl")
 	public void sequenceLblClickHandler(ClickEvent event)
 	{
-		/*if(sequenceDisclosurePanel.isOpen())
+		if(sequenceDisclosurePanel.isOpen())
 		{
 			sequenceDisclosurePanel.setOpen(false);
 			minMaxImage.setResource(uiIcons.triangle1East());
@@ -220,13 +247,13 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 		{
 			sequenceDisclosurePanel.setOpen(true);
 			minMaxImage.setResource(uiIcons.triangle1South());
-		}*/
+		}
 	}
 	
 	@UiHandler("minMaxImage")
 	public void minMaxImageClickHandler(ClickEvent event)
 	{
-		/*if(sequenceDisclosurePanel.isOpen())
+		if(sequenceDisclosurePanel.isOpen())
 		{
 			sequenceDisclosurePanel.setOpen(false);
 			minMaxImage.setResource(uiIcons.triangle1East());
@@ -235,7 +262,7 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 		{
 			sequenceDisclosurePanel.setOpen(true);
 			minMaxImage.setResource(uiIcons.triangle1South());
-		}*/
+		}
 	}
 	
 	@UiHandler("sequenceDisclosurePanel")

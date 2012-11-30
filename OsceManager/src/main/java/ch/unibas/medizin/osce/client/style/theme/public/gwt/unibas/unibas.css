@@ -3671,4 +3671,9 @@ color: #f1b532;
 }
 .ignoreAcceptedOsceDayPadding{
 	padding-left: 160px
+}.impressionItemListBox{
+	background-color: white !important;
+}
+.impressionItemListBox:hover {
+	background-color: white !important;
 }

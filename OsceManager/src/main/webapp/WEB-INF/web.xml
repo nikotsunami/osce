@@ -336,5 +336,14 @@
 		<servlet-name>exportAssignment</servlet-name>
 		<url-pattern>/exportAssignment</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>exportStatisticData</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.upload.ExportStatisticData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>exportStatisticData</servlet-name>
+		<url-pattern>/exportStatisticData</url-pattern>
+	</servlet-mapping>
  
 </web-app>

@@ -595,4 +595,36 @@ public class Answer {
 		Log.info("~QUERY Result : " + result);		
 		return result;		
 	}
+		
+		public static List<ChecklistQuestion> retrieveDistinctItems(Long osceId)
+		{
+			EntityManager em = entityManager();
+			
+			String queryString="select distinct ans.checklistQuestion from Answer as ans where ans.oscePostRoom in (select distinct (oscePostRoom) from Assignment as ass where ass.osceDay in (select id from OsceDay where osce="+osceId+"))";
+			TypedQuery<ChecklistQuestion> q = em.createQuery(queryString, ChecklistQuestion.class);	
+			 
+			return q.getResultList();
+		}
+		
+		public static List<Answer> retrieveExportCsvData(Long osceId)
+		{
+			EntityManager em = entityManager();
+			String queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce=17)) order by doctor,student";
+			TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);	
+			 
+			return q.getResultList();
+		}
+		
+		public static Answer findAnswer(Long studentId,Long questionId)
+		{
+			EntityManager em = entityManager();
+			String queryString="SELECT a FROM Answer a where student="+studentId+" and checklistQuestion="+questionId+" and oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce=17)) order by doctor,student";
+			TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);	
+			List<Answer> a=q.getResultList();
+			if(a.size() >0)
+				return q.getResultList().get(0);
+			else
+				return null;
+			
+		}
 }

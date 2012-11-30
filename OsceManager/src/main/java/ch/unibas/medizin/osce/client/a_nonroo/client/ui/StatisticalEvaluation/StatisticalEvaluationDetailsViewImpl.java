@@ -197,4 +197,10 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 		int height = ResolutionSettings.getRightWidgetHeight() - 55;
 		scrollPanel.setHeight(height+"px");
 	}
+	
+	@UiHandler("exportBtn")
+	public void exportBtnClick(ClickEvent event)
+	{
+		delegate.exportStatisticData();
+	}
 }

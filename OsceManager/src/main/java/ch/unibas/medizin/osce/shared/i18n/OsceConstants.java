@@ -1237,5 +1237,9 @@ public interface OsceConstants extends Constants {
      public String alphabeticOrder();
      
      public String scrumbleOrder();
+     
+     public String item();
+     
+     public String impression();
 }
 

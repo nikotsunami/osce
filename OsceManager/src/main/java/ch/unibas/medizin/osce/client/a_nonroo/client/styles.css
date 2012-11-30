@@ -716,10 +716,11 @@ body {
 		background-color: rgb(178,142,54);
 	}
 	.sequenceLabel{
-		color: black;
+		color: #454545;
 		text-transform:capitalize;
 		font-size:14px;
 		width :100%;
+		font-weight: bold;
 		/*min-width: 515px;*/
 		/*max-width: 515px;*/
 	}

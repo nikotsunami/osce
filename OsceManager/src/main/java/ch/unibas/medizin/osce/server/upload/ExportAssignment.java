@@ -547,8 +547,8 @@ public class ExportAssignment  extends HttpServlet {
 	            Transformer transformer = tFactory.newTransformer(xslDoc);
 	            transformer.transform(xmlDoc, new StreamResult(htmlFile));
 	            htmlFile.close();
-	        //    File xmlFile=new File(fileName);
-	        //    xmlFile.delete();
+	            File xmlFile=new File(fileName);
+	            xmlFile.delete();
 	           return outputFileName;
 	        }
 	        catch(Exception e)

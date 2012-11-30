@@ -1022,7 +1022,7 @@ public class OsMaMainNav extends Composite {
 	void statisticsEvaluationClicked(ClickEvent event) 
 	{
 		Log.info("Click on statisticsEvaluationClicked");
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
 		
 		StatisticalEvaluationPlace.handler=handlerManager;
 		StatisticalEvaluationPlace.semesterProxy=lstSemester.getValue();
@@ -1032,7 +1032,7 @@ public class OsMaMainNav extends Composite {
 		    }
 		 else
 			 placeController.goTo(new StatisticalEvaluationPlace("StatisticalEvaluationPlace", handlerManager, lstSemester.getValue()));
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+		
 		
 	
 	}

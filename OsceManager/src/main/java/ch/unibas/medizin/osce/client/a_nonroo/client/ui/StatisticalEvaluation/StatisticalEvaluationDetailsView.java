@@ -24,6 +24,8 @@ public interface StatisticalEvaluationDetailsView extends IsWidget{
 		public void analysisListBoxValueChanged(AnalysisType a);
 		
 		public void calculate();
+		
+		public void exportStatisticData();
 	}
 
 	public VerticalPanel getSequenceVP();

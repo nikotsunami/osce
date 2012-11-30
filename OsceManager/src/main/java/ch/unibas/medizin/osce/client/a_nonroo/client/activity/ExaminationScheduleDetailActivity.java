@@ -139,14 +139,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		requests.getEventBus().fireEvent(
-				new ApplicationLoadingScreenEvent(true));
+		
 		Log.info("ExaminationScheduleDetailActivity.start()");
 		this.widget = panel;
 		
 		init();
-		requests.getEventBus().fireEvent(
-				new ApplicationLoadingScreenEvent(false));
+		
 	}
 	
 	
@@ -159,13 +157,13 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		examinationScheduleDetailView.setDelegate(this);
 		widget.setWidget(examinationScheduleDetailView.asWidget());
 		this.view=examinationScheduleDetailView;
-		
+		requests.getEventBus().fireEvent(
+				new ApplicationLoadingScreenEvent(true));
 		requests.find(place.getProxyId()).with("osce_days","osce_days.osceSequences","osce_days.osceSequences.courses","osce_days.osceSequences.oscePosts","osce_days.osceSequences.oscePosts.oscePostBlueprint","osce_days.osceSequences.oscePosts.standardizedRole","osce_days.osceSequences.oscePosts.standardizedRole.roleTopic").fire(new OSCEReceiver<Object>() {
 
 			@Override
 			public void onSuccess(Object response) {
-				requests.getEventBus().fireEvent(
-						new ApplicationLoadingScreenEvent(true));
+				
 				// TODO Auto-generated method stub
 				OsceProxy osceProxy=(OsceProxy)response;
 				setOsceProxy(osceProxy);
@@ -484,7 +482,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			
 					
-				
+			requests.getEventBus().fireEvent(
+					new ApplicationLoadingScreenEvent(true));
 			
 			//retrieve student data of particular post and course from assignment table.
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
@@ -492,8 +491,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 
 				@Override
 				public void onSuccess(List<AssignmentProxy> response) {
-					requests.getEventBus().fireEvent(
-							new ApplicationLoadingScreenEvent(true));
+					
 					Log.info("onSuccess retrieveContent : response size type Student :" + response.size());
 					Log.info("onSuccess retrieveContent : response size :" + response.size());
 					
@@ -1047,14 +1045,16 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			});
 			//retrieve sp data and creates all slots of sp and add it to oscePostView
 			if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK)
+			{
+				requests.getEventBus().fireEvent(
+						new ApplicationLoadingScreenEvent(true));
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeSP(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 			.with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 				@Override
 				public void onSuccess(List<AssignmentProxy> response) {
 					
-					requests.getEventBus().fireEvent(
-							new ApplicationLoadingScreenEvent(true));
+					
 					
 					Log.info("onSuccess retrieveContent : response size :" + response.size());
 					
@@ -1252,7 +1252,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 			});
 			
-			
+			}
 			
 			
 
@@ -1709,6 +1709,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	//create Logical break for each parcor
 	public void createLogicalBreakOfSP(final OsceSequenceView osceSequenceView,final OsceDayProxy osceDayProxy,final OsceSequenceProxy osceSequenceProxy)
 	{
+		requests.getEventBus().fireEvent(
+				new ApplicationLoadingScreenEvent(true));
 		//create logical break post
 		//retrieve data of logical sp break and create slots.
 		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceSequenceProxy.getId()).with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
@@ -1719,7 +1721,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 				if(response.size()==0)
 				{
-					
+					requests.getEventBus().fireEvent(
+							new ApplicationLoadingScreenEvent(false));
 					return;
 				}
 			
@@ -1728,8 +1731,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 				Log.info("retrieveAssignmentOfLogicalBreakPost Success Assignment Size :" + response.size());
 				
-				requests.getEventBus().fireEvent(
-						new ApplicationLoadingScreenEvent(true));
+		
 				
 				Log.info("onSuccess retrieveAssignmentOfLogicalBreakPost : response size :" + response.size());
 				
