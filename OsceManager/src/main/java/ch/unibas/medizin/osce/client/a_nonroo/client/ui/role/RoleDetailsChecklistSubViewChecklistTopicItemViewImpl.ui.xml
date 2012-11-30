@@ -29,7 +29,7 @@
 	.labelSize {
 	max-height : 15px;
 	min-height: 10px;
-	font-weight: bold;
+	
 }
 	
 	.borderDP{

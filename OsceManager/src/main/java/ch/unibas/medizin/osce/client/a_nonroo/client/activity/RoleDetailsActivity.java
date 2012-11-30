@@ -2350,8 +2350,15 @@ final int index2 = index;
 		public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl createQuestionView(int selectedTab,ChecklistQuestionProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView)
 		{
 			RoleDetailsChecklistSubViewChecklistQuestionItemView questionView=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl();
-			questionView.getQuestionItemLbl().setText(proxy.getQuestion());
-			questionView.getQuestionInstruction().setText(proxy.getInstruction());
+			//questionView.getQuestionItemLbl().setText(proxy.getQuestion());
+			questionView.getQuestionItemLbl().setTitle(proxy.getQuestion());
+			questionView.getQuestionItemLbl().setText(util.getFormatedString(proxy.getQuestion(),60));
+			
+			//view.getCriteriaLbl().setText(util.getFormatedString(proxy.getCriteria(),10));
+			//questionView.getQuestionInstruction().setText(proxy.getInstruction());
+			questionView.getQuestionInstruction().setText(util.getFormatedString(proxy.getInstruction(), 60));
+			questionView.getQuestionInstruction().setTitle(proxy.getInstruction());
+			
 			questionView.setProxy(proxy);
 			((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)questionView).getOptionDragController().addDragHandler(this);
 			((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)questionView).getCriteriaDragController().addDragHandler(this);

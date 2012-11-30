@@ -545,9 +545,10 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			
 			editquestionpopup.getTopicLbl().setText(constants.roleQuestionName());
 			
-		
+			editquestionpopup.getTopicTxtBox().setWidth("300px");
+			editquestionpopup.getDescriptionTxtBox().setWidth("300px");
 			
-			((CheckListTopicPopupViewImpl)editquestionpopup).setWidth("150px");
+			((CheckListTopicPopupViewImpl)editquestionpopup).setWidth("350px");
 
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)editquestionpopup));
@@ -591,7 +592,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			// E: Issue Role
 		
 		} // SPEC Change
-		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(edit.getAbsoluteLeft()-205, edit.getAbsoluteTop()-195); // SPEC Change+
+		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(edit.getAbsoluteLeft()-450, edit.getAbsoluteTop()-195); // SPEC Change+
 		
 		
 		

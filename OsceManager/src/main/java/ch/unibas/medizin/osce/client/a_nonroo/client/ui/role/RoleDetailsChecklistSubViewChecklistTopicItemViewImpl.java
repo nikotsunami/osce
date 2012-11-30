@@ -322,7 +322,12 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			
 			questionPopup.getTopicLbl().setText(constants.roleQuestionName());
 			
-			((CheckListTopicPopupViewImpl)questionPopup).setWidth("150px");
+			questionPopup.getTopicTxtBox().setWidth("300px");
+			questionPopup.getDescriptionTxtBox().setWidth("300px");
+			
+
+			
+			((CheckListTopicPopupViewImpl)questionPopup).setWidth("350px");
 
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)questionPopup));
@@ -378,7 +383,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		}
 		
-		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(addCheckListQuestionButton.getAbsoluteLeft()-165, addCheckListQuestionButton.getAbsoluteTop()-192); //SPEC Change
+		((CheckListTopicPopupViewImpl)questionPopup).setPopupPosition(addCheckListQuestionButton.getAbsoluteLeft()-150, addCheckListQuestionButton.getAbsoluteTop()-192); //SPEC Change
 		// Highlight onViolation
 		checklistQuestionMap=new HashMap<String, Widget>();
 		checklistQuestionMap.put("question", questionPopup.getTopicTxtBox());
@@ -454,8 +459,11 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 			topicPopup.getTopicLbl().setText(constants.checklistTopic());
 			
 			
-			
-			((CheckListTopicPopupViewImpl)topicPopup).setWidth("150px");
+			topicPopup.getTopicTxtBox().setWidth("300px");
+			topicPopup.getDescriptionTxtBox().setWidth("300px");
+			((CheckListTopicPopupViewImpl)topicPopup).setWidth("350px");
+
+//			((CheckListTopicPopupViewImpl)topicPopup).setWidth("150px");
 
 		
 			RootPanel.get().add(((CheckListTopicPopupViewImpl)topicPopup));
@@ -509,7 +517,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		
 		}
 		
-		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-210, y - 195); //SPEC Change+
+		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(x-450, y - 195); //SPEC Change+
 		
 		
 		// Highlight onViolation
