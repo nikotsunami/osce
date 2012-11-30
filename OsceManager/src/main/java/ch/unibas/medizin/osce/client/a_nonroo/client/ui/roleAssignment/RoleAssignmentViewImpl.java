@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedHandler;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -63,6 +64,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField
 	public SimplePanel detailsPanel;
 
+	@UiField (provided = true)
+	public QuickSearchBox searchBox;
+	
 	// Module 3 {
 
 	@UiField
@@ -130,6 +134,12 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 						.create(MySimplePagerResources.class), true,
 				OsMaConstant.TABLE_JUMP_SIZE, true);
 
+		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
+			@Override
+			public void performAction() {
+				delegate.performSearch(searchBox.getValue());
+			}
+		});
 		initWidget(uiBinder.createAndBindUi(this));
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),

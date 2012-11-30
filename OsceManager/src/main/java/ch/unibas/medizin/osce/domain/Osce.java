@@ -852,7 +852,7 @@ public class Osce {
 		// String
 		// query="select pis from PatientInSemester as pis where pis.semester="+semesterId
 		// + " and pis.id in (select psod from pis.osceDays psod)";
-		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId,true);
+		List<PatientInSemester> tempPatientInSemesters = PatientInSemester.findPatientInSemesterBySemester(semesterId,true,"");
 
 		Set<OsceDay> osceDays;
 		

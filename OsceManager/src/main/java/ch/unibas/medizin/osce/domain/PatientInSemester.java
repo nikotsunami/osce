@@ -60,7 +60,7 @@ public class PatientInSemester {
         return resultList.get(0);
     }
     
-	public static List<PatientInSemester> findPatientInSemesterBySemester(Long semesterId,boolean ignoreAcceptedOsceDay) {
+	public static List<PatientInSemester> findPatientInSemesterBySemester(Long semesterId,boolean ignoreAcceptedOsceDay,String searchValue) {
 		if (semesterId == null)
 			return new ArrayList<PatientInSemester>();
 
@@ -69,13 +69,15 @@ public class PatientInSemester {
 		
 		if(ignoreAcceptedOsceDay){
 		
-			query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId order by o.standardizedPatient.preName,name", PatientInSemester.class);
+			query = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester.id = :semesterId and o.standardizedPatient.preName LIKE :prename order by o.standardizedPatient.preName,name", PatientInSemester.class);
 			query.setParameter("semesterId", semesterId);
+			query.setParameter("prename", "%" + searchValue + "%");
 		}
 		else{
 			
-			query=em.createQuery("select ps from PatientInSemester as ps join ps.osceDays od where ps.semester = od.osce.semester and ps.semester.id = :semesterId and od.osce.semester.id = :semesterId order by ps.standardizedPatient.preName",PatientInSemester.class);
+			query=em.createQuery("select ps from PatientInSemester as ps join ps.osceDays od where ps.semester = od.osce.semester and ps.semester.id = :semesterId and od.osce.semester.id = :semesterId and ps.standardizedPatient.preName LIKE :prename order by ps.standardizedPatient.preName",PatientInSemester.class);
 		query.setParameter("semesterId", semesterId);
+		query.setParameter("prename", "%" + searchValue + "%");
 		}
 		
 

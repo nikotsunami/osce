@@ -937,7 +937,7 @@ public void assignAllBackUpRolesToBackupPanel(OscePostProxy oscePostPrtoxy,RoleS
 			patientInRoleView.setDelegate(this);
 			//patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 			patientInRoleView.getPatientInRoleLbl().setText(util.getFormatedString(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName(),8));
-			patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getPreName()+"," +patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 			patientInRoleView.setRoleSubView(roleSubView);
 			roleSubView.getPatientInRoleVP().add(patientInRoleView);
 		}
@@ -1033,7 +1033,7 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 			patientInRoleView.setDelegate(this);
 			//patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 			patientInRoleView.getPatientInRoleLbl().setText(util.getFormatedString(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName(),8));
-			patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+			patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getPreName()+"," +patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 			
 			patientInRoleView.setRoleSubView(roleSubView);
 			
@@ -1372,7 +1372,7 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				patientInRoleView.setDelegate(spRoleAssignmentActivity);
 				//patientInRoleView.getPatientInRoleLbl().setText(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 				patientInRoleView.getPatientInRoleLbl().setText(util.getFormatedString(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName(),8));
-				patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
+				patientInRoleView.getPatientInRoleLbl().setTitle(patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getPreName()+"," +patientInRoleProxy.getPatientInSemester().getStandardizedPatient().getName());
 				patientInRoleView.setRoleSubView(view);
 				view.getBackUpRoleView().getPatientInRoleVP().add(patientInRoleView);
 				
@@ -1830,7 +1830,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		this.showApplicationLoading(true);
 
 		view.getIgnoreOsceDaycheckBox().setChecked(false);
-		initPatientInSemester(true, false,false);
+		initPatientInSemester(true, false,false,"");
 		initOsceDaySubView();
 		setAutoAssignmentBtnProperty();
 
@@ -1838,7 +1838,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		
 	}
 
-	private void initPatientInSemester(final boolean isFirstData,final boolean resetTable,final boolean isNavigationButtonEnable) {
+	private void initPatientInSemester(final boolean isFirstData,final boolean resetTable,final boolean isNavigationButtonEnable,String searchword) {
 		
 		showApplicationLoading(true);
 		// module 3 bug {
@@ -1849,7 +1849,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	if (isFirstData) {
 		showApplicationLoading(true);
 		//showApplicationLoading(true);
-			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId(),view.getIgnoreOsceDaycheckBox().isChecked()).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId(),view.getIgnoreOsceDaycheckBox().isChecked(),searchword).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 					@Override
 				public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
@@ -3139,7 +3139,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					
 					Log.info("Value saved successfully");
 					//					initPatientInSemester(false,false);
-					initPatientInSemester(true, false,false);
+					initPatientInSemester(true, false,false,"");
 					showApplicationLoading(false);
 					manualStdPatientInSemesterAssignmentPopupViewImpl.hide();
 
@@ -3299,7 +3299,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 													+ response.intValue());
 											
 											initOsceDaySubView();
-											initPatientInSemester(true,false,false);	
+											initPatientInSemester(true,false,false,"");	
 
 											view.getDataTable()
 													.setNavigationButtonEnable(
@@ -3392,7 +3392,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 							}
 							
 							
-							initPatientInSemester(true,false,false);
+							initPatientInSemester(true,false,false,"");
 							osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 								}
 							});
@@ -3546,7 +3546,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				refreshPatientInSemesterTable();
 			}
 			else{
-				initPatientInSemester(true, false, false);
+				initPatientInSemester(true, false, false,"");
 			}
 		}
 		else{
@@ -3555,9 +3555,15 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			}
 			else{
 				
-				initPatientInSemester(true, false, false);
+				initPatientInSemester(true, false, false,"");
+			}
 			}
 		}
+		
+	@Override
+	public void performSearch(String value) {
+	
+		initPatientInSemester(true, false, false,value);
 		
 	}
 
