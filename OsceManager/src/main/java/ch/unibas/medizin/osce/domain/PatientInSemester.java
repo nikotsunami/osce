@@ -75,7 +75,7 @@ public class PatientInSemester {
 		}
 		else{
 			
-			query=em.createQuery("select ps from PatientInSemester as ps join ps.osceDays od where ps.semester = od.osce.semester and ps.semester.id = :semesterId and od.osce.semester.id = :semesterId and ps.standardizedPatient.preName LIKE :prename order by ps.standardizedPatient.preName",PatientInSemester.class);
+			query=em.createQuery("select distinct ps from PatientInSemester as ps join ps.osceDays od where ps.semester = od.osce.semester and ps.semester.id = :semesterId and od.osce.semester.id = :semesterId and ps.standardizedPatient.preName LIKE :prename order by ps.standardizedPatient.preName",PatientInSemester.class);
 		query.setParameter("semesterId", semesterId);
 		query.setParameter("prename", "%" + searchValue + "%");
 		}
