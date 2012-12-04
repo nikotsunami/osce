@@ -77,6 +77,9 @@ IndividualSchedulesDetailsView.Delegate
 		List<Long> spId;
 		List<Long> studId;
 		List<Long> examinorId;
+		final String[] STUDENT_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[POST]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[LONG BREAK]","[LUNCH BREAK]","[BREAK SEPARATOR.]"};
+		final String[] SP_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[POST]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[LONG BREAK]","[LUNCH BREAK]","[BREAK SEPARATOR.]","[ROLE]"};
+		final String[] EXAMINER_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[LONG BREAK]","[LUNCH BREAK]","[BREAK SEPARATOR.]","[ROLE]"};
 		//List<String> lstSPStandPatName;
 		//List<String> lstSPStandPatPreName;
 		//List<String> lstSPOsce;
@@ -1001,6 +1004,16 @@ IndividualSchedulesDetailsView.Delegate
 						
 						//spSummoningsServiceAsync.saveTemplate("UpdatedTemplateStud.txt", popupStud.getMessageContent(),new AsyncCallback<Boolean>()
 						//Feature : 154
+						
+						// Check For Validation of Template
+						String templateContent=popupStud.getMessageContent();
+						
+						if(!isValidContent(templateContent,STUDENT_KEYWORDS_LIST))
+						{
+							MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+							dialog.showConfirmationDialog(constants.resetToDefaultTemplate());
+							return;
+						}
 						spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.STUDENT, popupStud.getMessageContent(),new AsyncCallback<Boolean>()
 								{
 
@@ -1100,6 +1113,35 @@ IndividualSchedulesDetailsView.Delegate
 				}
 			});
 				
+		}
+
+		protected boolean isValidContent(String templateContent,String[] KEYWORDS_LIST) 
+		{
+			boolean isValidContent = false; 
+			
+			if(isNotBlank(templateContent)) 
+			{
+				isValidContent = true;
+				for (String keyword : KEYWORDS_LIST) 
+				{
+					if(templateContent.contains(keyword) == false) 
+					{
+						isValidContent = false;
+						System.out.println("Keyword: " + keyword + " Not Found In Template");
+						break;
+					}
+				}
+			}
+						
+			return isValidContent;
+		}
+
+		private boolean isNotBlank(String str) {
+			int strLen;
+	        if (str == null || (strLen = str.length()) == 0 || str.equalsIgnoreCase(" ")) {
+	            return false;
+	        }
+	        return true;
 		}
 
 		@Override
@@ -1354,6 +1396,16 @@ IndividualSchedulesDetailsView.Delegate
 				public void onClick(ClickEvent event)
 				{
 					Log.info("Click Save Button");
+					
+					// Check For Validation of Template
+					String templateContent=popupSP.getMessageContent();
+					
+					if(!isValidContent(templateContent,SP_KEYWORDS_LIST))
+					{
+						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+						dialog.showConfirmationDialog(constants.resetToDefaultTemplate());
+						return;
+					}
 					
 					//Feature : 154
 					spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT, popupSP.getMessageContent(),new AsyncCallback<Boolean>() 
@@ -1646,6 +1698,16 @@ IndividualSchedulesDetailsView.Delegate
 				public void onClick(ClickEvent event)
 				{
 					Log.info("Click Examinor Save Button");
+					
+					// Check For Validation of Template
+					String templateContent=popupExaminer.getMessageContent();
+					
+					if(!isValidContent(templateContent,EXAMINER_KEYWORDS_LIST))
+					{
+						MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+						dialog.showConfirmationDialog(constants.resetToDefaultTemplate());
+						return;
+					}
 					
 					//Feature : 154
 					spSummoningsServiceAsync.saveTemplate(osceProxy.getId().toString(),TemplateTypes.EXAMINER, popupExaminer.getMessageContent(),new AsyncCallback<Boolean>() 

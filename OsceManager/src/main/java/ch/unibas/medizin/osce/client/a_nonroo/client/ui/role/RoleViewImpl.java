@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
@@ -54,6 +56,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
@@ -101,6 +104,10 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	
 	@UiField
 	public IconButton filterButton;
+
+	@UiField
+	public IconButton clearButton;
+	
 	
 	@UiField
 	public IconButton exportButton;
@@ -216,6 +223,16 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	 * implement HasHTML instead of HasText.
 	 */
 	
+	@UiHandler("clearButton")
+	void onClick(ClickEvent e) {
+		Log.info("clear button call");
+		//Window.alert("clear call");
+		searchBox.setText("");
+		delegate.performSearch(searchBox.getValue(), getSearchFilters(),getTableFilters(),getWhereFilters());
+		
+		
+		
+	}
 	
 	@UiHandler("filterButton")
 	public void filterButtonHover(MouseOverEvent event) {
@@ -223,6 +240,8 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 		Log.info("filter panel call");
 			showFilterPanel((Widget) event.getSource());
 	}
+	
+	
 	
 	private void showFilterPanel(Widget eventSource) {
 		int x = eventSource.getAbsoluteLeft();
@@ -259,6 +278,7 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 	public void updateSearch() {
 		String q = searchBox.getValue();
 		delegate.performSearch(q, getSearchFilters(),getTableFilters(),getWhereFilters());
+		
 	}
 
 	public RoleViewImpl() {

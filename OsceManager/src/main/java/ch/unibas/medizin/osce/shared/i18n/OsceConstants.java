@@ -1241,5 +1241,7 @@ public interface OsceConstants extends Constants {
      public String item();
      
      public String impression();
+     
+     public String resetToDefaultTemplate();
 }
 

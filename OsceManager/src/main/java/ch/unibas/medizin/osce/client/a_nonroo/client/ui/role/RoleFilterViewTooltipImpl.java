@@ -340,10 +340,25 @@ public List<String> getWhereFilters() {
 		
 		if(Keyword.isChecked())	
 		{
-				tableFilters.add(" join sr.keywords k ");
+				tableFilters.add(" left join sr.keywords k ");
 				//whereFilters.add(" k.id = srk.keywords ");
 		}
-		if(ItemName.isChecked())
+		if(ItemValue.isChecked() || ItemName.isChecked() ){
+			tableFilters.add(", RoleTableItemValue rtiv");
+			whereFilters.add(" sr.id = rtiv.standardizedRole.id ");
+			/*if(ItemName.isChecked())
+			{
+				//tableFilters.add(" ,RoleTableItem rti ");
+				//	whereFilters.add(" rtiv.standardizedRole = sr.id and rti.id = rtiv.roleTableItem");
+				whereFilters.add(" sr.id = rtiv.standardizedRole.id ");
+			}
+			if(ItemValue.isChecked())
+			{
+				//tableFilters.add(",RoleTableItemValue rtiv");
+				whereFilters.add(" sr.id = rtiv.standardizedRole.id ");
+			}	*/
+		}
+		/*if(ItemName.isChecked())
 		{
 			tableFilters.add(" ,RoleTableItem rti ");
 			//	whereFilters.add(" rtiv.standardizedRole = sr.id and rti.id = rtiv.roleTableItem");
@@ -351,16 +366,17 @@ public List<String> getWhereFilters() {
 		}
 		if(ItemValue.isChecked())
 		{
-//			tableFilters.add(",role_table_item_value rtiv");
+			tableFilters.add(",RoleTableItemValue rtiv");
 			whereFilters.add(" rtiv.standardizedRole.id = sr.id ");
-		}		
-		if(ItemValue.isChecked() || ItemName.isChecked() ){
+		}		*/
+		/*if(ItemValue.isChecked() || ItemName.isChecked() ){
 			tableFilters.add(", RoleTableItemValue rtiv");
-		}
+		}*/
 		if(CheckListItem.isChecked())
 		{
-			tableFilters.add(", CheckList chi");
-			whereFilters.add(" sr.checkList.id = chi.id ");
+			//tableFilters.add(", CheckList chi"); error
+			//tableFilters.add(" left join sr. chi");
+			//whereFilters.add(" sr.checkList.id = chi.id ");
 		}
 		if(RoleName.isChecked())
 		{
@@ -371,7 +387,7 @@ public List<String> getWhereFilters() {
 		if(autherSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
 			
-			tableFilters.add(" join sr.roleParticipants rp_autor ");
+			tableFilters.add(" left join sr.roleParticipants rp_autor ");
 			
 			whereFilters.add("(rp_autor.type = 0  and rp_autor.doctor.name like'%"+autherSugestionBox.getTextField().advancedTextBox.getValue()+"%') ");
 		}
@@ -381,7 +397,7 @@ public List<String> getWhereFilters() {
 		if(reviewerSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
 		
-			tableFilters.add(" join sr.roleParticipants rp_rev ");
+			tableFilters.add(" left join sr.roleParticipants rp_rev ");
 			
 			whereFilters.add("(rp_rev.type = 1  and rp_rev.doctor.name like '%"+reviewerSugestionBox.getTextField().advancedTextBox.getValue()+"%') ");
 		}
@@ -389,7 +405,7 @@ public List<String> getWhereFilters() {
 		//Issue # 122 : Replace pull down with autocomplete.
 		if(SpecificationSugestionBox.getTextField().advancedTextBox.getValue()!="")
 		{
-			tableFilters.add(" join rt.specialisation sp");
+			tableFilters.add(" left join rt.specialisation sp");
 			whereFilters.add(" sp.name like'%"+SpecificationSugestionBox.getTextField().advancedTextBox.getValue() + "%'");
 		}
 		if(KeywordSugestionBox.getTextField().advancedTextBox.getValue()!="")
@@ -400,7 +416,7 @@ public List<String> getWhereFilters() {
 				
 			}
 			else
-			tableFilters.add(" join sr.keywords k");
+			tableFilters.add(" left join sr.keywords k");
 			whereFilters.add("k.name like'%"+KeywordSugestionBox.getTextField().advancedTextBox.getValue()+"%'");
 				
 				

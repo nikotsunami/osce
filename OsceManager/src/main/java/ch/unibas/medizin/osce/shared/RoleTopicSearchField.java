@@ -13,8 +13,8 @@ public enum RoleTopicSearchField {
 	
     name(" rt.name LIKE :q "),
     keyword(" k.name LIKE :q "),
-    itemName(" rti.itemName LIKE :q "),
-    checkListItem(" chi.title LIKE :q "),
+    itemName(" rtiv.roleTableItem.itemName LIKE :q "),
+    checkListItem(" sr.checkList.title LIKE :q "),
     roles(" sr.shortName LIKE :q "),
     itemValue("rtiv.value LIKE :q ");
 	
