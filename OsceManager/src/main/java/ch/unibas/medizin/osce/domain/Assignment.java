@@ -1373,4 +1373,53 @@ public class Assignment {
     	 return query.getResultList();
      }
      //payment change
+     
+   //deactivate student change
+     public static Boolean deactivateStudentFromAssignment(StudentOsces stud)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.osce.id = " + stud.getOsce().getId() + " AND a.student.id = " + stud.getStudent().getId();
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 List<Assignment> assList = query.getResultList();
+    	 
+    	 for (Assignment ass : assList)
+    	 {
+    		 ass.setStudent(null);
+    		 ass.persist();
+    	 }
+    	 
+    	 return true;
+     }
+     public static Boolean activateStudentFromAssignment(StudentOsces stud)
+     {
+    	 EntityManager em = entityManager();
+    	 String strSql = "SELECT DISTINCT a.sequenceNumber FROM Assignment a WHERE a.osceDay.osce.id = " + stud.getOsce().getId() + " AND a.type = 0 " + " AND a.student IS NULL";
+    	 TypedQuery<Integer> query1 = em.createQuery(strSql,Integer.class);
+    	 List<Integer> seqNumList = query1.getResultList();
+    	 
+    	 for (Integer seq : seqNumList)
+    		 System.out.println("~~~SEQ NO : " + seq);
+    	 
+    	 if (seqNumList.size() > 0)
+    	 {
+    		 Integer seqNum = seqNumList.get(0);
+    		 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.osce.id = " + stud.getOsce().getId() + " AND a.type = 0 AND a.sequenceNumber = " + seqNum; 
+        	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+        	 List<Assignment> assList = query.getResultList();
+        	 
+        	 for (Assignment ass : assList)
+        	 {
+        		 ass.setStudent(stud.getStudent());
+        		 ass.persist();
+        	 }
+        	 
+        	 return true;
+    	 }
+    	 else
+    	 {
+    		 return false;
+    	 } 
+     }
+   //deactivate student change
+     
 } 

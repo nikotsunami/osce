@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
+	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
 	<ui:style src="../../styles.css">
 	.standardTable input {
 		width: 100%;
@@ -47,6 +47,14 @@
 	}
 	.Keywordlbl {
 		padding-right: 28px;
+	}
+	.startDatelbl
+	{
+		padding-right: 20px;
+	}
+	.endDateLbl
+	{
+		padding-right: 27px;
 	}
 	
 	</ui:style>
@@ -117,6 +125,16 @@
 					<!-- <g:SuggestBox ui:field="KeywordSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 				<!-- 	<g:ValueListBox ui:field="KeywordListBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:ValueListBox> -->
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel styleName="{style.popupPanel}">
+				<g:Label ui:field="labelStartDate" styleName="{style.startDatelbl}"/>
+				<d:DateBox ui:field="startDate"  pixelSize="160,20" styleName="{style.listBoxStyle}"></d:DateBox>					
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel styleName="{style.popupPanel}">
+				<g:Label ui:field="labelEndDate" styleName="{style.endDateLbl}"/>
+				<d:DateBox ui:field="endDate" pixelSize="160,20" styleName="{style.listBoxStyle}"></d:DateBox>
 			</g:HorizontalPanel>
 			
 			<!-- <g:HorizontalPanel styleName="{style.popupPanel}">				

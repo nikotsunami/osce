@@ -91,7 +91,8 @@ background-color:#B8A9A2;
 
 		<g:HorizontalPanel styleName="{style.patientControls}   {style.maxWidth} {style.exp}" >
 			<g:HorizontalPanel width="10px">
-			<g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+			<g:Image ui:field="arrow" styleName="{style.padleft5}" resource="{uiIcons.triangle1South}"></g:Image>
+			<!-- <g:Image ui:field="arrow" styleName="{style.padleft5}" url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image> -->
 			</g:HorizontalPanel>
 			<g:VerticalPanel>
 				<g:Label  addStyleNames="{style.labelSize} {style.lableHeader}" ui:field="checkListTopicLbl" width="550px"> </g:Label>

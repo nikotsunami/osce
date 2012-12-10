@@ -302,6 +302,12 @@ public class RoleViewImpl extends Composite implements RoleView, RecordChangeHan
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
 				Log.info("filter panel close");
+				if(filterPanel.startDate.isDatePickerShowing())
+					filterPanel.startDate.hideDatePicker();
+				
+				if (filterPanel.endDate.isDatePickerShowing())
+					filterPanel.endDate.hideDatePicker();
+				
 				if (filterPanel.selectionChanged()) {
 					filterPanel.clearSelectionChanged();
 					//delegate.performSearch(searchBox.getValue(), getSearchFilters());

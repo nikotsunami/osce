@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
  * @author dk
@@ -78,5 +79,10 @@ public void setDetailPanel(boolean isDetailPlace);
 //Highlight onViolation
 Map getRoleTopicMap();
 //E Highlight onViolation
+
+//role search change
+/*public DateBox getStartDate();
+public DateBox getEndDate();*/
+//role search change
 
 }
