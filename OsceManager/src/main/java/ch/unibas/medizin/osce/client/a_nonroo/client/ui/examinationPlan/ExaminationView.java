@@ -28,6 +28,8 @@ public interface ExaminationView extends IsWidget{
 		public void retrieveAllExaminers(PopupView view,SuggestBox sb);
 		
 		public void saveExaminer(String value,ExaminationViewImpl view);
+		
+		public void clearExaminerAssignment(Long postId,Long osceDayId,Long courseId,final ExaminationViewImpl examView);
 	}
 	
 	 void setDelegate(Delegate delegate);

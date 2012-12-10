@@ -1245,5 +1245,13 @@ public interface OsceConstants extends Constants {
      public String resetToDefaultTemplate();
      
      public String studActError();
+     
+     
+     
+     public String clearExaminerAssingment();
+     
+     public String clearExaminerAssingmentSuccess();
+     
+     public String clearExaminerAssingmentNotSuccess();
 }
 

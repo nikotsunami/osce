@@ -306,6 +306,33 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 		
 			examInfoPopupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
 			examInfoPopupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
+			
+			examInfoPopupView.getClearButton().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showYesNoDialog(constants.clearExaminerAssingment());
+					dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							delegate.clearExaminerAssignment(oscePostProxy.getId(),osceDayProxy.getId(),courseProxy.getId(),examinationViewImpl);
+							dialogBox.hide();
+							((PopupViewImpl)examInfoPopupView).hide();
+						}
+					});
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							
+						}
+					});
+					
+				}
+			});
 		}
 		
 		examInfoPopupView.createExaminerInfoPopupView();

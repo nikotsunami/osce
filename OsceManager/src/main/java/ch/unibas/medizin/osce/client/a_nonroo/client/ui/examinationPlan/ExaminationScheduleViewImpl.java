@@ -10,12 +10,14 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,7 +41,10 @@ public class ExaminationScheduleViewImpl extends Composite implements Examinatio
 	
 	@UiField
 	public TabPanel osceTabPanel;
-
+	
+	
+	
+	
 	@UiField
 	public HTMLPanel containerHTMLPanel;
 
@@ -47,6 +52,7 @@ public class ExaminationScheduleViewImpl extends Composite implements Examinatio
 		return osceTabPanel;
 	}
 
+	
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other

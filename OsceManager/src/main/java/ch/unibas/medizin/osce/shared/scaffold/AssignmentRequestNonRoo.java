@@ -93,4 +93,6 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	public abstract Request<Boolean> deactivateStudentFromAssignment(StudentOscesProxy stud);
 	public abstract Request<Boolean> activateStudentFromAssignment(StudentOscesProxy stud);
 	//deactivate student change
+	
+	public abstract Request<List<Date>> clearExaminerAssignment(Long osceDayId,Long oscePostId,Long courseId);
 }

@@ -1422,4 +1422,39 @@ public class Assignment {
      }
    //deactivate student change
      
+     public static List<Date> clearExaminerAssignment(Long osceDayId,Long oscePostId,Long courseId)
+     {
+    	 Log.info("clearExaminerAssignment :");
+         EntityManager em = entityManager();
+         try
+         {
+         String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=2 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc ";
+         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+         List<Assignment> assignmentList = query.getResultList();
+         
+         for(Assignment a:assignmentList)
+         {
+        	 a.remove();
+        	 
+         }
+         Log.info("retrieveAssignmenstOfTypeExaminer query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList.size());
+         
+         String queryString1 = "SELECT  max(timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) ";
+         TypedQuery<Date> query1 = em.createQuery(queryString1, Date.class);
+         List<Date> dates=new ArrayList<Date>();
+         dates.add(query1.getResultList().get(0));
+         
+         String queryString2 = "SELECT  max(timeEnd) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) ";
+         TypedQuery<Date> query2 = em.createQuery(queryString2, Date.class);
+         
+         dates.add(query2.getResultList().get(0));
+    	 return dates;
+         }
+         catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+     }
+     
 } 

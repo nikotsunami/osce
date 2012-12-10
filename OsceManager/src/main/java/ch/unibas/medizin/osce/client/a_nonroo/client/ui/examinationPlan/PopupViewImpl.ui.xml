@@ -59,6 +59,7 @@
 	<g:HorizontalPanel spacing="10" horizontalAlignment="center" width="100%">
 		<my:IconButton ui:field="okButton" icon="closethick" visible="false" />
 		<my:IconButton ui:field="cancelButton" icon="closethick" visible="false" />
+		<my:IconButton ui:field="clearButton"  icon="arrowrefresh-1-w" visible="false"></my:IconButton>
 	</g:HorizontalPanel>
 	</g:HTMLPanel>
 </g:VerticalPanel>
