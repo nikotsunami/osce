@@ -8,7 +8,9 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.core.client.GWT;
@@ -119,20 +121,17 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 			@Override
 			public String getValue(OsceProxy object) {
 				String value="";
-				if(object.getStudyYear()!=null)
-				{
-					value=value+object.getStudyYear();
-				}
-				else
-				{
+				
+				if(object.getStudyYear()!=null) {
+					value=(new EnumRenderer<StudyYears>()).render(object.getStudyYear());
+				} else {
 					value=value+" ";
 				}
-				if(object.getSemester()!=null)
-				{
+				
+				if(object.getSemester()!=null) {
 					value=value+" "+object.getSemester().getSemester().name();
 				}
-					return renderer.render(value);
-				
+				return renderer.render(value);
 			}
 		}, constants.osce());
 		

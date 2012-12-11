@@ -293,7 +293,11 @@ public class RoomMaterialsViewImpl extends Composite implements
 				return materialListProxy;
 			}
 		}, null);
-		table.addColumnStyleName(4, "iconCol");
+		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
+		table.addColumnStyleName(5, "iconCol");
+		table.addColumnStyleName(7, "iconCol");
+		table.addColumnStyleName(8, "iconCol");
 	}
 
 	private <C> void addColumn(Cell<C> cell, String headerText,

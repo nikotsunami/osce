@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
@@ -63,12 +64,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	TabPanel oscePanel;
 	
 	@UiField(provided = true)
-	public ValueListBox<StudyYears> studyYear = new ValueListBox<StudyYears>(new AbstractRenderer<ch.unibas.medizin.osce.shared.StudyYears>() {
-
-		public String render(ch.unibas.medizin.osce.shared.StudyYears obj) {
-			return obj == null ? "" : String.valueOf(obj);
-		}
-	});
+	public ValueListBox<StudyYears> studyYear = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
 	
 	@UiField
 	public TextBox name;
@@ -145,7 +141,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	};
 	
 	@UiField
-	DivElement labelOsce;
+	DivElement labelRemark;
 	@UiField
 	DivElement labelMaxParcours;
 	@UiField
@@ -257,6 +253,15 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 	@UiField
 	DivElement errors;
+	
+	@UiField
+	SpanElement labelTitleGeneral;
+
+	@UiField
+	SpanElement labelTitleAttributes;
+
+	@UiField
+	SpanElement labelTitleBreaks;
 
 	
 	private Delegate delegate;
@@ -281,7 +286,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		save.setText(constants.save());
 		//copiedOsce.setEnabled(false);
 		
-		labelOsce.setInnerText(constants.osce() + ":");
+		labelTitleGeneral.setInnerText(constants.general());
+		labelTitleAttributes.setInnerText(constants.attributes());
+		labelTitleBreaks.setInnerText(constants.breaks());
+		
+		labelRemark.setInnerText(constants.remark() + ":");
 		labelMaxParcours.setInnerText(constants.osceMaxCircuits() + ":");
 		labelMaxStudents.setInnerText(constants.osceMaxStudents() + ":");
 		labelStudyYear.setInnerText(constants.studyYear() + ":");

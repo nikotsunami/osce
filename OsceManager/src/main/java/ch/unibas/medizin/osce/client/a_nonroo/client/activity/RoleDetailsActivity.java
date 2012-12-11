@@ -144,6 +144,7 @@ import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -903,7 +904,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		standardizedRoleDetailsView[index].longName.setInnerText(proxy.getLongName() == null ? "": String.valueOf(proxy.getLongName()));
 		// Issue Role
 		standardizedRoleDetailsView[index].roleType.setInnerText(proxy.getRoleType() == null ? "": proxy.getRoleType().name()); // ADDED
-		standardizedRoleDetailsView[index].studyYear.setInnerText(proxy.getStudyYear() == null ? "": proxy.getStudyYear().name()); // ADDED
+		standardizedRoleDetailsView[index].studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear())); // ADDED
 		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
 		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
 		
@@ -5484,7 +5485,7 @@ final int index2 = index;
 		standardizedRoleDetailsView[index].longName.setInnerText(proxy.getLongName() == null ? "": String.valueOf(proxy.getLongName()));
 		// Issue Role
 		standardizedRoleDetailsView[index].roleType.setInnerText(proxy.getRoleType() == null ? "": proxy.getRoleType().name()); // ADDED
-		standardizedRoleDetailsView[index].studyYear.setInnerText(proxy.getStudyYear() == null ? "": proxy.getStudyYear().name()); // ADDED
+		standardizedRoleDetailsView[index].studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear())); // ADDED
 		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
 		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
 		

@@ -242,7 +242,7 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 				return specialization;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
+		table.addColumnStyleName(2, "iconCol");
 
 		// Detete button
 		addColumn(new ActionCell<SpecialisationProxy>(
@@ -286,10 +286,7 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 				return specialization;
 			}
 		}, null);
-		table.addColumnStyleName(1, "iconCol");
-
-	
-	
+		table.addColumnStyleName(3, "iconCol");
 	}
 	
 	private <C> void addColumn(Cell<C> cell, String headerText,

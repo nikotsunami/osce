@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.ManualStandardizedPatientInSemesterAssignmentPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.ManualStandardizedPatientInSemesterAssignmentPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment.OsceDaySubView;
@@ -459,7 +460,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					String name =semesterProxy.getSemester().name();
 
 					if(studyYear != null && name !=null){
-						String header = "" +studyYear +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate());
+						String header = new EnumRenderer<StudyYears>().render(studyYear) +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate());
 //						osceDaySubViewImpl.simpleDiscloserPanel.getHeaderTextAccessor().setText(header);
 						
 						osceDaySubViewImpl.getHeaderPanelForTitle(header);

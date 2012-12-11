@@ -477,9 +477,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	private void setTabTexts() {
 		rolePanel.getTabBar().setTabText(0, constants.roleDetail());
 		rolePanel.getTabBar().setTabText(1, constants.roleParticipants());
-		rolePanel.getTabBar().setTabText(2, constants.keyword());
+		rolePanel.getTabBar().setTabText(2, constants.keywords());
 		rolePanel.getTabBar().setTabText(3, constants.learning());
-		rolePanel.getTabBar().setTabText(4, constants.osceSemester());
+		rolePanel.getTabBar().setTabText(4, constants.roleUsage());
 		
 		roleSubPanel.getTabBar().setTabText(0, constants.checkList());
 		roleSubPanel.getTabBar().setTabText(1, constants.searchCriteria());

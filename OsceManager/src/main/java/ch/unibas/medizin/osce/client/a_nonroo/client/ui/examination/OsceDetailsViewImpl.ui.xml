@@ -64,11 +64,11 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 			<g:HTMLPanel addStyleNames="{style.patientDetails}">
 		<table  class="{style.fields}" >
 		
-		<tr height="10px"><td><u><b>General :</b></u></td> <td></td> <td></td> <td></td></tr>
+		<tr height="10px"><td><u><b><span ui:field="labelTitleGeneral"></span></b></u></td> <td></td> <td></td> <td></td></tr>
 			<!-- <tr id="name"> -->
 			<tr>
 				<td>
-					<span class="{style.label}" ui:field="labelOsce">Name:</span>
+					<span class="{style.label}" ui:field="labelRemark">Name:</span>
 				</td>
 				<td>
 					<span ui:field="name" />
@@ -106,7 +106,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 				</td>
 			</tr> 
 			
-			<tr height="10px"><td><u><b>Attributes :</b></u></td> <td></td> <td></td> <td></td></tr>
+			<tr height="10px"><td><u><b><span ui:field="labelTitleAttributes"></span></b></u></td> <td></td> <td></td> <td></td></tr>
 			
 			<tr>
 			<!-- <tr id="maxNumberStudents"> -->
@@ -146,7 +146,7 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 				</td>
 			</tr>
 			
-			<tr height="10px"><td><u><b>Breaks :</b></u></td> <td></td> <td></td> <td></td></tr>
+			<tr height="10px"><td><u><b><span ui:field="labelTitleBreaks"></span></b></u></td> <td></td> <td></td> <td></td></tr>
 			<tr>
 			<!-- <tr id="shortBreak"> -->
 				<td>

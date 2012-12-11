@@ -17,7 +17,9 @@ import java.util.Set;
 
 
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
@@ -118,13 +120,17 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 			
 		});
 		
-		labelLongNameHeader.setText(constants.manageOsces() + ":" + "should a date be displayed here?");
+		labelLongNameHeader.setText(constants.manageOsces() + ": " + "should a date be displayed here?");
 		
 		/*labelOsce labelStudyYear labelIsRepetion labelRepetitionForOsce labelMaxStudents 
 		labelMaxCircuits  labelMaxRooms labelStationLength labelShortBreak labelShortBreakSPChange labelLunchBreak
 		labelLongBreak labelMediumBreak*/
 		
-		labelOsce.setInnerText(constants.osce());
+		labelTitleGeneral.setInnerText(constants.general());
+		labelTitleAttributes.setInnerText(constants.attributes());
+		labelTitleBreaks.setInnerText(constants.breaks());
+		
+		labelRemark.setInnerText(constants.remark());
 		labelStudyYear.setInnerText(constants.studyYear());
 		labelIsRepetion.setInnerText(constants.osceIsRepe());
 		labelRepetitionForOsce.setInnerText(constants.osceRepe());
@@ -192,6 +198,14 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField
 	DisclosurePanel osceDisclosurePanel;
 	
+	@UiField
+	SpanElement labelTitleGeneral;
+
+	@UiField
+	SpanElement labelTitleAttributes;
+
+	@UiField
+	SpanElement labelTitleBreaks;
 	
 	@UiField
 	SpanElement name;
@@ -251,7 +265,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 	
 	@UiField 
-	SpanElement labelOsce;
+	SpanElement labelRemark;
 	@UiField
 	SpanElement labelStudyYear;
 	
@@ -325,10 +339,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	OsceProxy proxy;
 	TaskProxy editProxy;
 	
-
-	
 	List<TaskProxy> l ;
-	
 	
 	/*shortBreak
 	LongBreak
@@ -724,7 +735,7 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		}
 		
 		
-		studyYear.setInnerText(proxy.getStudyYear() == null ? "" : String.valueOf(proxy.getStudyYear()));
+		studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear()));
 		
 		if(proxy.getIsRepeOsce()==null)
 		{

@@ -70,8 +70,8 @@
 			</g:customHeader>
 			<!-- Style name für VerticalPanel -->
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="clinics"></g:Anchor>
 				<g:Anchor ui:field="doctors"></g:Anchor>
+				<g:Anchor ui:field="clinics"></g:Anchor>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 
@@ -86,9 +86,6 @@
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 				<g:Anchor ui:field="roles"></g:Anchor>
 				<g:Anchor ui:field="topicsAndSpec"></g:Anchor>
-				<g:Anchor ui:field="roleScriptTemplate"></g:Anchor>
-				<g:Anchor ui:field="roomMaterials"></g:Anchor>
-				
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		<!-- By SPec End -->
@@ -169,10 +166,11 @@
 				<g:Anchor ui:field="nationalities"></g:Anchor>
 				<g:Anchor ui:field="languages"></g:Anchor>
 				<g:Anchor ui:field="professions"></g:Anchor>
+				<g:Anchor ui:field="roleScriptTemplate"></g:Anchor>
+				<g:Anchor ui:field="roomMaterials"></g:Anchor>
 				<g:Anchor ui:field="rooms"></g:Anchor>
 				<g:Anchor ui:field="log"></g:Anchor>
 				<g:Anchor ui:field="importObjective"></g:Anchor>
-				
 				<g:Anchor ui:field="StudentManagment"></g:Anchor>
 				
 			</g:VerticalPanel>

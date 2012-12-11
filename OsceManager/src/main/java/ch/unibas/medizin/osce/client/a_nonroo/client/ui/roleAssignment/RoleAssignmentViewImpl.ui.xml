@@ -3,59 +3,69 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment"
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client">
-	<ui:style src="../../styles.css">
-		.cellTableEvenYesRow {
-			width: 500px;
-			min-height: 26px;
-			margin: 4px auto;
+	<ui:style src="../../styles.css">}
+		.alignment{
+			padding-bottom: 10px;
+		}
+		.styleSplit{
+			width: 100%;
 		}
 		
-		.cellTableEvenRow {
-			background: #ffffff;
+		.margin-fix {
+			margin-top: 8px;
+			margin-bottom: 8px;
 		}
-		.alignment{
-		padding-bottom: 10px;
-
+		
+		.checkbox-fix {
+			position: absolute;
+    		right: 0;
+    		top: 6px;
+		}
+		
+		.checkbox-fix label {
+			bottom: 0;
 		}
 	</ui:style>
-
-	<g:SplitLayoutPanel ui:field="splitLayoutPanel">
-		<g:west size="400">
+	
+<g:VerticalPanel>
+	<g:SplitLayoutPanel  ui:field="splitLayoutPanel" addStyleNames="{style.styleSplit}">
+		<g:west size="100">
 			<g:ScrollPanel>
-				<g:VerticalPanel spacing="5">
-				<g:HorizontalPanel spacing="8" verticalAlignment="middle">
-					<my:IconButton icon="arrowthickstop-1-s" ui:field="surveyImpBtn"></my:IconButton>
-					<my:IconButton ui:field="getImpBtn" icon="extlink"/>
-					<my:QuickSearchBox ui:field="searchBox"></my:QuickSearchBox>
-					<!-- <my:QuickSearchBox ui:field="searchBox" /> -->
-					<g:CheckBox ui:field="ignoreOsceDaycheckBox" width="30px" height="200px"></g:CheckBox>
-					<g:Label ui:field="ignoreOsceDaycheckBoxLabel"></g:Label>
-				</g:HorizontalPanel>
+				<!-- <g:VerticalPanel spacing="5"> -->
 					<g:HTMLPanel>
-						<div class="{style.cellTableEvenYesRow}">
-							<n:PatientInSemesterFlexTable
-								ui:field="table"></n:PatientInSemesterFlexTable>
+					
+						<div class="{style.controls}  {style.controlsleft} {style.margin-fix}">
+							<my:IconButton icon="arrowthickstop-1-s" ui:field="surveyImpBtn" />
+							<div class="{style.controlsright}">
+								<my:IconButton ui:field="getImpBtn" icon="extlink"/>
+							</div>
 						</div>
-					</g:HTMLPanel>
-					<g:HorizontalPanel spacing="4">
-
+						<div class="{style.controls}  {style.controlsleft} {style.margin-fix}">
+							<my:QuickSearchBox ui:field="searchBox" />
+							<g:CheckBox addStyleNames="{style.checkbox-fix}" ui:field="ignoreOsceDaycheckBox"  />
+						</div>
+						<n:PatientInSemesterFlexTable addStyleNames="{style.standardTable} {style.margin-fix}" ui:field="table"></n:PatientInSemesterFlexTable>
+						<div class="{style.controls}  {style.controlsleft} {style.margin-fix}">
+							<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
+							<my:IconButton icon="plusthick" ui:field="addManuallyBtn"></my:IconButton>
+							<my:IconButton icon="arrowrefresh-1-w" ui:field="clearSelectionBtn"></my:IconButton>
+						</div>
+					<!-- </g:HTMLPanel> -->
+					<!-- <g:HorizontalPanel spacing="4">
 						<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
 						<my:IconButton icon="plusthick" ui:field="addManuallyBtn"></my:IconButton>
 						<my:IconButton icon="arrowrefresh-1-w" ui:field="clearSelectionBtn"></my:IconButton>
 					</g:HorizontalPanel>
-					<!-- Module 3 Start -->
-					<g:VerticalPanel spacing="5">
-						<b:CellTable pageSize="8" ui:field="advancedSearchCriteriaTable"
-							width="500px" addStyleNames="{style.standardTable}" />
-						<g:HTMLPanel>
-							<div class="{style.controls}">
-								<b:SimplePager ui:field="pager"
-									display="{advancedSearchCriteriaTable}" />
-							</div>
-						</g:HTMLPanel>
-					</g:VerticalPanel>
-					<!-- Module 3 End -->
-				</g:VerticalPanel>
+					
+					Module 3 Start
+					<g:HTMLPanel> -->
+						<b:CellTable pageSize="8" ui:field="advancedSearchCriteriaTable" addStyleNames="{style.standardTable}" />
+						<div class="{style.controls}">
+							<b:SimplePager ui:field="pager" display="{advancedSearchCriteriaTable}" />
+						</div>
+					</g:HTMLPanel>
+				<!-- Module 3 End -->
+				<!-- </g:VerticalPanel> -->
 
 			</g:ScrollPanel>
 		</g:west>
@@ -68,10 +78,10 @@
 							<!-- r:OsceDaySubViewImpl ui:field="osceDaySubViewImpl"></r:OsceDaySubViewImpl -->
 						</g:VerticalPanel>
 						<!-- Module 3 } -->
-
 					</g:HTMLPanel>
 				</g:SimplePanel>
 			</g:ScrollPanel>
 		</g:center>
 	</g:SplitLayoutPanel>
+</g:VerticalPanel>
 </ui:UiBinder> 

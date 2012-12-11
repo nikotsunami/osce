@@ -45,8 +45,6 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		super();
 		this.setCellPadding(1);
 		this.setCellSpacing(0);
-		this.setWidth("100%");
-
 	}
 
 	public void setSource(List<PatientInSemesterData> patientInSemesterDatas, String[] headers) {

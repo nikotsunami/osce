@@ -77,11 +77,11 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 	
 	public PopupPanel popup;
 	
-	public Button addMajor;
+	public IconButton addMajor;
 	
-	public Button addMinor;
+	public IconButton addMinor;
 	
-	public Button clearAll;
+	public IconButton clearAll;
 	
 	public IconButton closeButton;
 	
@@ -101,14 +101,17 @@ public class RoleLearningSubViewImpl extends Composite implements RoleLearningSu
 	
 		btnAdd.setText(constants.addSkill());
 		
-		addMajor = new Button();
-		addMinor = new Button();
-		clearAll = new Button();
+		addMajor = new IconButton();
+		addMinor = new IconButton();
+		clearAll = new IconButton();
 		closeButton = new IconButton();
 		
 		addMajor.setText(constants.majorBtnLbl());
+		addMajor.setIcon("plusthick");
 		addMinor.setText(constants.minorBtnLbl());
+		addMinor.setIcon("plusthick");
 		clearAll.setText(constants.clearAll());
+		clearAll.setIcon("trash");
 		closeButton.setIcon("close");
 		closeButton.addStyleName("learningObjPopupCloseButton");
 		

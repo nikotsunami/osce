@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
@@ -22,6 +23,7 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -220,7 +222,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				while(osceList.hasNext()){
 					
 					final OsceProxy tempOsceProxy = osceList.next();
-					String osceLable = tempOsceProxy.getStudyYear()==null?"":tempOsceProxy.getStudyYear() + "." + tempOsceProxy.getSemester().getSemester().name();
+					String osceLable = new EnumRenderer<StudyYears>().render(tempOsceProxy.getStudyYear()) + "." + tempOsceProxy.getSemester().getSemester().name();
 				
 					final StudentSubDetailsViewImpl studentSubDetailsViewImpl = new StudentSubDetailsViewImpl(tempOsceProxy);
 					subDetailsView[tabIndex]=studentSubDetailsViewImpl;

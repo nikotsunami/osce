@@ -232,7 +232,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 			public String getValue(RoleTemplateProxy object) {
 				return renderer.render(object.getTemplateName());
 			}
-		}, "Role Template");
+		}, constants.roleScriptTemplate());
 		
 		paths.add("date_created");
 		paths.add("");
@@ -327,9 +327,12 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 		}, null);
 
 		table.addColumnStyleName(1, "iconCol");
-		table.addColumnStyleName(2, "iconCol");
+		/*table.addColumnStyleName(2, "iconCol");*/
 		table.addColumnStyleName(3, "iconCol");
-		table.addColumnStyleName(4, "iconCol");
+		/*table.addColumnStyleName(4, "iconCol");*/
+		table.addColumnStyleName(5, "iconCol");
+		table.addColumnStyleName(6, "iconCol");
+		table.addColumnStyleName(7, "iconCol");
 	}
 	
 	@Override

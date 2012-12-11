@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
@@ -118,16 +120,11 @@ public class OsceViewImpl extends Composite implements  OsceView {
 		paths.add("studyYear");
 		table.addColumn(new TextColumn<OsceProxy>() {
 
-			Renderer<String> renderer = new AbstractRenderer<String>() {
-
-				public String render(String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
+			Renderer<StudyYears> renderer = new EnumRenderer<StudyYears>();
 
 			@Override
 			public String getValue(OsceProxy object) {
-				return renderer.render(object.getStudyYear().toString());
+				return renderer.render(object.getStudyYear());
 			}
 		}, constants.studyYear());
 		paths.add("preName");

@@ -105,15 +105,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		}
 	});
 	
-	FocusableValueListBox<OSCESecurityStatus> patientSecurity = new FocusableValueListBox<OSCESecurityStatus>(
-			new EnumRenderer<OSCESecurityStatus>() {
-				@Override
-				public String render(OSCESecurityStatus object) {
-					return object == null ? null : String.valueOf(object.name());
-				}
-			}
-
-	);
+	FocusableValueListBox<OSCESecurityStatus> patientSecurity = new FocusableValueListBox<OSCESecurityStatus>(new EnumRenderer<OSCESecurityStatus>());
 	
 //	public DefaultSuggestBox<PatientAveragePerPost, EventHandlingValueHolderItem<PatientAveragePerPost>> patientAvgPostSuggestBox = new DefaultSuggestBox<PatientAveragePerPost, EventHandlingValueHolderItem<PatientAveragePerPost>>();
 //	public DefaultSuggestBox<OSCESecurityStatus, EventHandlingValueHolderItem<OSCESecurityStatus>> oSCESecurityStatusSuggestBox = new DefaultSuggestBox<OSCESecurityStatus, EventHandlingValueHolderItem<OSCESecurityStatus>>();

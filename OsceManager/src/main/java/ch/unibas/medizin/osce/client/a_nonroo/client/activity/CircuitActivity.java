@@ -12,12 +12,14 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.CircuitViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -150,7 +152,7 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 				
 				Log.info("OSce Proxy index : " + tabIndex);
 				OsceProxy osceProxy = osceList.next();
-				String osceLable = osceProxy.getStudyYear()==null?"":osceProxy.getStudyYear() + "." + osceProxy.getSemester().getSemester().name();
+				String osceLable = new EnumRenderer<StudyYears>().render(osceProxy.getStudyYear()) + "." + osceProxy.getSemester().getSemester().name();
 				view.getCircuitTabPanel().insert(new SimplePanel(), osceLable,tabIndex);
 				tabIndex++;
 				

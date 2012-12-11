@@ -94,6 +94,8 @@ public interface OsceConstants extends Constants {
 	public String answerPending();
 
 	public String assignmentsOutput();
+	
+	public String attributes();
 
 	public String author();
 
@@ -142,6 +144,8 @@ public interface OsceConstants extends Constants {
 	public String bmi();
 
 	public String breakDuration();
+	
+	public String breaks();
 
 	public String calculate();
 
@@ -432,6 +436,8 @@ public interface OsceConstants extends Constants {
 	public String furtherCriteria();
 
 	public String gender();
+	
+	public String general();
 
 	public String generalInformation();
 
@@ -686,6 +692,8 @@ public interface OsceConstants extends Constants {
 	public String questionNotNull();
 
 	public String reallyDelete();
+	
+	public String remark();
 
 	public String reopenButtonString();
 
@@ -1183,7 +1191,7 @@ public interface OsceConstants extends Constants {
 	
 	public String roomAlreadyAssignWantToExcahnge();
 	
-	public String osceSemester();
+	public String roleUsage();
 	
 	//spec issue change
 	public String exchange();

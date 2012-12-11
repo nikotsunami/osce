@@ -115,9 +115,6 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	public void setIgnoreOsceDaycheckBox(CheckBox ignoreOsceDaycheckBox) {
 		this.ignoreOsceDaycheckBox = ignoreOsceDaycheckBox;
 	}
-
-	@UiField
-	Label ignoreOsceDaycheckBoxLabel;
 	
 	private Presenter presenter;
 
@@ -149,8 +146,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		autoAssignmentBtn.setText(constants.roleAutoAssign());
 		addManuallyBtn.setText(constants.roleAddManually());
 		clearSelectionBtn.setText(constants.clearSelection());
-		ignoreOsceDaycheckBoxLabel.setText(constants.ignoreAcceptedOsceDay());
-		ignoreOsceDaycheckBox.setStyleName("ignoreAcceptedOsceDayPadding");
+//		ignoreOsceDaycheckBox.setStyleName("ignoreAcceptedOsceDayPadding");
+		ignoreOsceDaycheckBox.setText(constants.ignoreAcceptedOsceDay());
+		
 		headers = new String[] { constants.name(), constants.roleAccepted(),
 				constants.roleAssignTo(), "", "" };
 

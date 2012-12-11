@@ -3,11 +3,9 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 import java.util.Iterator;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
-import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -18,19 +16,16 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 
-@SuppressWarnings("deprecation")
 public class PatientInSemesterData {
 
 	public String name;
 	// public Image acceptedImage;
-	public Button acceptedIconBtn;
+	public IconButton acceptedIconBtn;
 	public PatientAssignLabel assignedTo;
-	public Button navigationButton;
-	public Button deleteButton;
+	public IconButton navigationButton;
+	public IconButton deleteButton;
 	// private int index;
 
 	private RoleAssignmentView.Delegate delegate;
@@ -61,7 +56,7 @@ public class PatientInSemesterData {
 		// this.acceptedImage = new Image();
 		// this.acceptedImage.setStyleName("ui-icon-squaresmall-close");
 
-		this.acceptedIconBtn = new Button();
+		this.acceptedIconBtn = new IconButton();
 		this.setAcceptedImage();
 		this.rowNumber = rowNumber;
 		this.acceptedIconBtn.addClickHandler(new ClickHandler() {
@@ -102,21 +97,20 @@ public class PatientInSemesterData {
 		
 		setAssignToLabel();
 		
-		this.navigationButton = new Button();
-		this.navigationButton.setHTML(OsMaConstant.SEEK_FIRST_ICON);		
+		this.navigationButton = new IconButton();
+		this.navigationButton.setIcon("seek-next");		
 		this.navigationButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent arg0) {
 				delegate.onRowSelected(PatientInSemesterData.this.rowNumber);
 				delegate.onDetailViewClicked(patientInSemesterData);
-
 			}
 		});
 
 		// Module 3 Task B
-		this.deleteButton = new Button();
-		this.deleteButton.setHTML(OsMaConstant.DELETE_ICON);
+		this.deleteButton = new IconButton();
+		this.deleteButton.setIcon("trash");
 		this.deleteButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -325,14 +319,13 @@ public class PatientInSemesterData {
 	// }
 
 	public void setAcceptedImage() {
-		// this.acceptedImage
-		// .setResource(((patientInSemesterProxy.getAccepted() != null) ?
-		// patientInSemesterProxy
-		// .getAccepted().booleanValue() : false) ? uiIcons
-		// .acceptedYesIcon() : uiIcons.acceptedNoIcon());
-
-		acceptedIconBtn.setHTML(((patientInSemesterProxy.getAccepted() != null) ? patientInSemesterProxy.getAccepted().booleanValue() : false) ? OsMaConstant.CHECK_ICON : OsMaConstant.UNCHECK_ICON);
-
+		if (patientInSemesterProxy.getAccepted() != null) {
+			if (patientInSemesterProxy.getAccepted().booleanValue()) {
+				acceptedIconBtn.setIcon("check");
+			} else {
+				acceptedIconBtn.setIcon("close");
+			}
+		}
 	}
 
 	public String getRowSetColor() {

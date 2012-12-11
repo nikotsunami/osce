@@ -402,18 +402,11 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 		table.addColumn(new TextColumn<RoleTopicProxy>() {
 			{ this.setSortable(true); }
 
-			 Renderer<StudyYears> renderer = new AbstractRenderer<StudyYears>() {
-				 				           
-							@Override
-							public String render(StudyYears object) {
-								 return object == null ? "" : String.valueOf(object);
-								}
-			};
+			 Renderer<StudyYears> renderer = new EnumRenderer<StudyYears>();
 
 			@Override
 			public String getValue(RoleTopicProxy object) {
 				return renderer.render(object.getStudyYear());
-				
 			}
 		},constants.studyYears());
 		

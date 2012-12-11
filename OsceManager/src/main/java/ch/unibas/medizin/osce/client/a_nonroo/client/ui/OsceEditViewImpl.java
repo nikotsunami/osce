@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
@@ -42,12 +43,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	Element createTitle;
 
 	@UiField(provided = true)
-	ValueListBox<StudyYears> studyYear = new ValueListBox<StudyYears>(new AbstractRenderer<ch.unibas.medizin.osce.shared.StudyYears>() {
-
-		public String render(ch.unibas.medizin.osce.shared.StudyYears obj) {
-			return obj == null ? "" : String.valueOf(obj);
-		}
-	});
+	ValueListBox<StudyYears> studyYear = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
 
 	@UiField
 	IntegerBox maxNumberStudents;
