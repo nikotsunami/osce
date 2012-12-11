@@ -68,5 +68,6 @@ public interface PopupView extends IsWidget {
 	public DefaultSuggestBox<StudentProxy, EventHandlingValueHolderItem<StudentProxy>> getExchangeStudentListBox();
 	public DefaultSuggestBox<PatientInRoleProxy, EventHandlingValueHolderItem<PatientInRoleProxy>> getExchangeSpListBox();
 	public void createExchangeSPPopupView();
+	public IconButton getClearButton();
 	//by spec change]
 }

@@ -1302,6 +1302,15 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROOM]", "");
 							}*/
 							
+							if(checkNotNull(assignmentExaminer,"getOscePostRoom")==true)
+							{
+								List<String> studentList=Student.findStudentFromAssignmentByOsceDayRoomAndTime(osceDayEntity,assignmentExaminer.getOscePostRoom().getId(),assignmentExaminer.getTimeStart(),assignmentExaminer.getTimeEnd());
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[STUDENTS]", StringUtils.join(studentList, ", "));
+							}
+							else
+							{
+								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[STUDENTS]", " Student Not Found, Could not find Room");
+							}
 							scheduleContentExaminer=scheduleContentExaminer+tempScheduleContentExaminer;
 						}						
 						
@@ -1780,7 +1789,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			file = new File(fileName);
 			
 			if(file.isFile()){
-				
+				System.out.println(file.getAbsolutePath());
 				return new String[]{fileName,FileUtils.readFileToString(file)};
 			}else{
 				fileName =getDefaultTemplatePath(templateTypes);

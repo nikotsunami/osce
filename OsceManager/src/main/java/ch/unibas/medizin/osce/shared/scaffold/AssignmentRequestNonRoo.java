@@ -11,9 +11,11 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TimeBell;
@@ -86,4 +88,11 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	public abstract Request<Long> countStandardizedPatientBySemester(Long semesterId);
 	public abstract Request<List<StandardizedPatientProxy>> findStandardizedPatientBySemester(int start, int max, String colName, Sorting sortType, Long semesterId);
 	//payment change
+	
+	//deactivate student change
+	public abstract Request<Boolean> deactivateStudentFromAssignment(StudentOscesProxy stud);
+	public abstract Request<Boolean> activateStudentFromAssignment(StudentOscesProxy stud);
+	//deactivate student change
+	
+	public abstract Request<List<Date>> clearExaminerAssignment(Long osceDayId,Long oscePostId,Long courseId);
 }

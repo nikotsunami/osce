@@ -2126,7 +2126,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							Log.info("createExaminerAssignmnet Success Splited Row ");
 							((PopupViewImpl)view.getPopupView()).hide();
 							//refresh ExaminerView;
-							refreshExaminerView(view);
+							refreshExaminerView(view,null,null);
 						}
 					});
 				}
@@ -2163,7 +2163,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							Log.info("createExaminerAssignmnet Success Splited Row ");
 							((PopupViewImpl)view.getPopupView()).hide();
 							//refresh ExaminerView;
-							refreshExaminerView(view);
+							refreshExaminerView(view,null,null);
 						}
 					});
 				}
@@ -2204,14 +2204,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						public void onSuccess(Void response) {
 							Log.info("createExaminerAssignmnet Success Splited Row ");
 							((PopupViewImpl)view.getPopupView()).hide();
-							refreshExaminerView(view);
+							refreshExaminerView(view,null,null);
 						}
 					});
 				}
 				else{
 					
 					//refresh ExaminerView;
-					refreshExaminerView(view);
+					refreshExaminerView(view,null,null);
 				}
 				((PopupViewImpl)view.getPopupView()).hide();
 			}
@@ -2219,7 +2219,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 	}
 	
-	public void refreshExaminerView(final ExaminationViewImpl examinationViewOld)
+	public void refreshExaminerView(final ExaminationViewImpl examinationViewOld,final Date timeStart,final Date timeEnd)
 	{
 		final OscePostProxy oscePostProxy=examinationViewOld.getOscePostProxy();
 		final OsceDayProxy osceDayProxy=examinationViewOld.getOsceDayProxy();
@@ -2235,6 +2235,43 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				
 				Log.info("onSuccess retrieveContent : response size :" + response.size());
 				
+				if(response.size()==0)
+				{
+					//calculate examiner slot length								
+					Long examinerSlotLength=0l;
+					//if(examinerTimeEnd.before(examinerTimeStart))
+					
+				//	if(oscePostProxy.getOscePostBlueprint().getPostType()==PostType.ANAMNESIS_THERAPY || oscePostProxy.getOscePostBlueprint().getPostType()==PostType.PREPARATION)
+				//		examinerSlotLength=calculateTimeInMinute(examinerTimeEnd,examinerStartTime);
+				//	else
+						 examinerSlotLength=calculateTimeInMinute(timeEnd,timeStart);
+						 
+					//	 if(osceProxy.getPostLength() <10)
+					//		 examinerSlotLength=examinerSlotLength*2;
+		
+					//examinerSlotLength=examinerSlotLength/60000;
+					examinerSlotLength--;
+					
+					//create examiner slot view
+				 	ExaminationView examinationView=new ExaminationViewImpl();
+				 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
+				 	examinationView.setOscePostView(oscePostView);
+				 	examinationView.setCourseProxy(examinationViewOld.getCourseProxy());							 								 								 	
+				 	//examinationView.setOscePostRoomProxy(studentAssignmentProxy.get(0).getOscePostRoom());
+				 	examinationView.setTimeStart(timeStart);
+				 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
+				 	examinationView.getExaminerPanel().addStyleName("examiner-bg");
+				 	examinationView.getExaminerPanel().addStyleName("border-bottom-red");
+				 	examinationView.setOscePostProxy(oscePostProxy);
+					examinationView.setDelegate(activity);
+					((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
+					if(examinerSlotLength>=0)
+						examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
+					
+					
+					oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
+					
+				}
 				
 				//add earlystart if there
 				
@@ -2665,6 +2702,47 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		});
 	}
 	
-	
+	public void clearExaminerAssignment(Long oscePostId,Long osceDayId,Long courseId,final ExaminationViewImpl examView)
+	{
+		Log.info("clearExaminerAssignment");
+		requests.assignmentRequestNonRoo().clearExaminerAssignment(osceDayId, oscePostId, courseId).fire(new OSCEReceiver<List<Date>>() {
+
+			@Override
+			public void onSuccess(List<Date> response) {
+				if(response !=null)
+				{
+					final List<Date> dates=response;
+					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());
+					dialogBox.showConfirmationDialog(constants.clearExaminerAssingmentSuccess());
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							init();
+							//refreshExaminerView(examView,dates.get(0),dates.get(1));
+							
+						}
+					});
+				}
+				else
+				{
+					final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showConfirmationDialog(constants.clearExaminerAssingmentNotSuccess());
+					dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							dialogBox.hide();
+							
+							
+						}
+					});
+				}
+				
+			}
+		});
+		
+	}
 	//by spec change]		
 }

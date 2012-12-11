@@ -54,7 +54,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 
 	//private Document document = new Document();
 	private OsceConstants constants;
-	private OsceConstantsWithLookup enumConstants;
+	//private OsceConstantsWithLookup enumConstants;
 	private String title;
 	//private PdfWriter writer;
 	// private List<String> itemsList;
@@ -432,6 +432,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			addEmptyLine(details, 1);
 
 			try {
+				document.newPage();
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
@@ -450,6 +451,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			addEmptyLine(details, 1);
 
 			try {
+				document.newPage();
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
@@ -477,6 +479,10 @@ public class RolePrintPdfUtil extends PdfUtil {
 
 			try {
 				document.add(titleDetails);
+				document.add(createDetailsTable());
+				Paragraph emptyLineParagraph=new Paragraph();
+				addEmptyLine(emptyLineParagraph, 1);
+				document.add(emptyLineParagraph);
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
@@ -705,6 +711,12 @@ public class RolePrintPdfUtil extends PdfUtil {
 		String studyYear = (standardizedRole.getStudyYear() != null) ? enumConstants
 				.getString(standardizedRole.getStudyYear().toString()) : "-";
 
+		String factor = (standardizedRole.getFactor() != null) ? enumConstants
+				.getString(standardizedRole.getFactor().toString()) : "-";
+				
+		String sum = (standardizedRole.getSum() != null) ? enumConstants
+				.getString(standardizedRole.getSum().toString()) : "-";
+
 		table.addCell(getPdfCellBold(constants.roleAcronym() + ":"));
 		// TODO format date
 		table.addCell(getPdfCell(shortName));
@@ -717,6 +729,12 @@ public class RolePrintPdfUtil extends PdfUtil {
 
 		table.addCell(getPdfCellBold(constants.studyYear() + ":"));
 		table.addCell(getPdfCell(studyYear));
+
+		table.addCell(getPdfCellBold(constants.factor() + ":"));
+		table.addCell(getPdfCell(factor));
+		
+		table.addCell(getPdfCellBold(constants.sum() + ":"));
+		table.addCell(getPdfCell(sum));
 
 		table.addCell(getPdfCellBold(" "));
 		table.addCell(getPdfCell(" "));

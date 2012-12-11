@@ -15,6 +15,8 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -73,6 +75,13 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	}
 	public IconButton getEdit() {
 		return edit;
+	}
+	
+	@UiField
+	IconButton clearButton;
+
+	public IconButton getClearButton() {
+		return clearButton;
 	}
 
 	@UiField(provided = true)
@@ -235,6 +244,8 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		
+		clearButton.removeFromParent();
 	}
 	
 	public void createSPPopupView()
@@ -274,6 +285,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		clearButton.removeFromParent();
 	}
 	public void createOscePostPopupView()
 	{
@@ -309,6 +321,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		clearButton.removeFromParent();
 	}
 	public void createExaminerInfoPopupView()
 	{
@@ -349,6 +362,10 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		
+		clearButton.setText(constants.clear());
+		clearButton.setVisible(true);
+		
 	}
 	
 	public void createExaminerAssignPopupView() {
@@ -393,6 +410,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		clearButton.removeFromParent();
 	}	
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
@@ -461,6 +479,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		breakDuration.removeFromParent();
 		
 		disableContextMenu();
+		clearButton.removeFromParent();
 	}
 	
 	public void createExchangeSPPopupView()
@@ -501,6 +520,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
 		//by spec change]
+		clearButton.removeFromParent();
 		
 		disableContextMenu();
 	}

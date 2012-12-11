@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -31,6 +34,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -50,6 +54,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 	
@@ -85,7 +90,8 @@ public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 	private MultiWordSuggestOracle revieweroracle = new MultiWordSuggestOracle();
 	private MultiWordSuggestOracle specificationoracle = new MultiWordSuggestOracle();
 	
-	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
+
 	
 	
 	@UiField
@@ -111,6 +117,18 @@ public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 	
 	@UiField
 	Label Complexity;
+	
+	@UiField
+	Label labelStartDate;
+	
+	@UiField
+	Label labelEndDate;
+	
+	@UiField
+	public DateBox startDate;
+	
+	@UiField
+	public DateBox endDate;
 	
 	@UiField
 	TextBox ComplexityText;
@@ -435,7 +453,32 @@ public List<String> getWhereFilters() {
 		}
 		}
 		
-		
+		//search change
+		if ((!startDate.getTextBox().getText().equals("")) || (!endDate.getTextBox().getText().equals("")))
+		{
+			tableFilters.add(" , OscePost op ");
+			
+			DateTimeFormat df = (DateTimeFormat.getFormat("yyyy-MM-dd"));
+					
+			if ((!startDate.getTextBox().getText().equals("")) && (!endDate.getTextBox().getText().equals("")))
+			{
+				String stDate = df.format(startDate.getValue());
+				String enDate = df.format(endDate.getValue());
+				whereFilters.add(" sr.id = op.standardizedRole.id and op.osceSequence.osceDay.osceDate >= " + stDate + " and op.osceSequence.osceDay.osceDate <= " + enDate);
+			}
+			else if (!startDate.getTextBox().getText().equals("") && (endDate.getTextBox().getText().equals("")))
+			{
+				String stDate = df.format(startDate.getValue());
+				whereFilters.add(" sr.id = op.standardizedRole.id and op.osceSequence.osceDay.osceDate >= " + stDate);
+			}
+			else if (endDate.getTextBox().getText().equals("") && (!startDate.getTextBox().getText().equals("")))
+			{
+				String enDate = df.format(endDate.getValue());
+				whereFilters.add(" sr.id = op.standardizedRole.id and op.osceSequence.osceDay.osceDate <= " + enDate);
+			}
+			
+		}
+		//search change
 		
 		
 		/* by spec code for advance search query 
@@ -522,6 +565,12 @@ public List<String> getWhereFilters() {
 	
 		StudyYearListBox.setAcceptableValues(Arrays.asList(StudyYears.values()));
 		StudyYearListBox.setWidth(Integer.toString(suggestWidth));
+		
+		labelStartDate.setText(constants.startDate());
+		labelEndDate.setText(constants.endDate());
+		/*endDate.getTextBox().setReadOnly(true);
+		startDate.getTextBox().setReadOnly(true);*/
+		
 		
 	
 		ComplexityListBox.setAcceptableValues(Arrays.asList(Comparison.values()));
@@ -1037,6 +1086,22 @@ public List<String> getWhereFilters() {
 	public void setDetailPanel(boolean isDetailPlace) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public DateBox getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(DateBox startDate) {
+		this.startDate = startDate;
+	}
+
+	public DateBox getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(DateBox endDate) {
+		this.endDate = endDate;
 	}
 	
 

@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentSubDetailsViewImp
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StudentsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
@@ -24,10 +25,12 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -85,6 +88,8 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	public int arrarycount = 0;
 	
 	public String searchWord = "";
+	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	public StudentsActivity(OsMaRequestFactory requests, PlaceController placeController,StudentsPlace studentsPlace) 
 	{
@@ -437,14 +442,16 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	@Override
 	public Boolean onRender(StudentOscesProxy studentOscesProxy) {
 		
-		displayLoadingScreen(true);
+			final StudentOscesProxy studProxy = studentOscesProxy;
+		
+			displayLoadingScreen(true);
 		
 			temp = studentOscesProxy.getIsEnrolled();			
 		
 			StudentOscesRequest request = requests.studentOscesRequest();
 			
 			studentOscesProxy = request.edit(studentOscesProxy);
-
+			
 			studentOscesProxy.setIsEnrolled(!studentOscesProxy.getIsEnrolled());
 		
 			request.persist().using(studentOscesProxy).fire(new OSCEReceiver<Void>() {
@@ -453,9 +460,38 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 						public void onSuccess(Void response) {
 							temp = !temp;
 							
-							refreshdata();
-							
-							displayLoadingScreen(false);
+							if (studProxy.getIsEnrolled())
+							{
+								requests.assignmentRequestNonRoo().deactivateStudentFromAssignment(studProxy).fire(new OSCEReceiver<Boolean>() {
+
+									@Override
+									public void onSuccess(Boolean response) {
+										if(response)
+										{
+											refreshdata();
+											displayLoadingScreen(false);
+										}
+										
+									}
+								});
+
+							}
+							else if (!studProxy.getIsEnrolled())
+							{
+								requests.assignmentRequestNonRoo().activateStudentFromAssignment(studProxy).fire(new OSCEReceiver<Boolean>() {
+
+									@Override
+									public void onSuccess(Boolean response) {
+										if (!response)
+										{
+											MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+											dialogBox.showConfirmationDialog(constants.studActError());
+										}
+									}
+								});
+								refreshdata();
+								displayLoadingScreen(false);
+							}
 						}
 					});
 			

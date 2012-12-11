@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Pattern;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
@@ -203,4 +205,22 @@ public class Student {
          
 		return q.getResultList();
     }
+
+	public static List<String> findStudentFromAssignmentByOsceDayRoomAndTime(OsceDay osceDayEntity, Long oscePostRoomId, Date timeStart, Date timeEnd) 
+	{
+		Log.info("Inside findStudentFromAssignmentByOsceDayRoomAndTime() with OsceDay" + osceDayEntity.getId() + " OscePostRoom: " +  oscePostRoomId + "Start Date: " + timeStart + "End Date: " +timeEnd);
+		List<String> nameList=new ArrayList<String>();
+		EntityManager em = entityManager();
+    	TypedQuery<Student> q = em.createQuery("SELECT a.student FROM Assignment as a WHERE a.student is not null and a.osceDay=:osceDay and a.oscePostRoom="+oscePostRoomId+" and a.timeStart>=:startTime and a.timeEnd<=:endTime", Student.class);    	
+     	q.setParameter("osceDay", osceDayEntity);
+     	q.setParameter("startTime", timeStart);
+     	q.setParameter("endTime", timeEnd);
+     	
+     	for(Student s:q.getResultList())
+     	{
+     		nameList.add(s.getPreName()+" "+s.getName());
+     	}
+     	
+     	return nameList;
+	}
 }
